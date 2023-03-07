@@ -301,14 +301,28 @@ const hideArtist = () => {
                 @click.stop="toggleMobilePlayer"
               >
                 <i class="stream icon" />
-                <span v-t="{ path: 'components.audio.Player.meta.position', args: { index: currentIndex + 1, length: queue.length } }" />
+                <i18n-t keypath="components.audio.Player.meta.position">
+                  <template #index>
+                    {{ currentIndex + 1 }}
+                  </template>
+                  <template #length>
+                    {{ queue.length }}
+                  </template>
+                </i18n-t>
               </button>
               <button
                 class="position circular control button desktop-and-below"
                 @click.stop="switchTab"
               >
                 <i class="stream icon" />
-                <span v-t="{ path: 'components.audio.Player.meta.position', args: { index: currentIndex + 1, length: queue.length } }" />
+                <i18n-t keypath="components.audio.Player.meta.position">
+                  <template #index>
+                    {{ currentIndex + 1 }}
+                  </template>
+                  <template #length>
+                    {{ queue.length }}
+                  </template>
+                </i18n-t>
               </button>
 
               <button

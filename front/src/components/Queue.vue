@@ -397,7 +397,14 @@ if (!isWebGLSupported) {
               {{ labels.queue }}
               <div class="sub header">
                 <div>
-                  <span v-t="{ path: 'components.Queue.meta.queuePosition', args: { index: currentIndex + 1, length: queue.length } }" />
+                  <i18n-t keypath="components.Queue.meta.queuePosition">
+                    <template #index>
+                      {{ currentIndex + 1 }}
+                    </template>
+                    <template #length>
+                      {{ queue.length }}
+                    </template>
+                  </i18n-t>
                   <span class="middle pipe symbol" />
                   <span v-t="'components.Queue.meta.end'" />
                   <span :title="labels.duration">
