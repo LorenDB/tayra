@@ -162,7 +162,7 @@
     width: 100%;
     transform-origin: top left;
     will-change: transform;
-    
+
     &.position {
       transform: translate3d(calc(var(--fw-track-progress) - 100%), 0, 0);
     }
@@ -193,7 +193,7 @@
     animation-duration: 2s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
-    
+
     &:not(.buffer) {
       background: transparent !important;
     }
@@ -360,7 +360,7 @@
               opacity: 0;
               transform: translateY(0.5em);
             }
-            
+
             .tooltip {
               z-index: 2;
               pointer-events: all;
