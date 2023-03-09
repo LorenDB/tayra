@@ -101,6 +101,33 @@ export const useTracks = createGlobalState(() => {
         setTimeout(() => playNext(), 0)
       })
 
+      // NOTE: Bump current track to ensure that it lives despite enqueueing 3 tracks as next track:
+      //
+      //       In every queue we have 3 tracks that are cached, in the order, they're being played:
+      //
+      //       A B C
+      //       ^ ^ ^______ C is the next track from the queue that has been preloaded in the 'Preload next track' code section
+      //       \ \________ B is the currently played track
+      //       \__________ A is the previous track
+      //
+      //       Now, let's make an assumption that caching next tracks is more valueable than caching previous tracks.
+      //       To prevent track B from being disposed from the cache after enqueueing D and E tracks as 'next track' twice, we can fetch the track from the cache and bump its counter
+      //       The cache state would be as follows:
+      //
+      //       A B C  --(user enqueues D as next track)->  C B D  --(user enqueues E as next track)->  D B E
+      //
+      //       Note that the queue would be changed as follows:
+      //
+      //       A B C  ->  A B D C  ->  A B E D C
+      //
+      //       This means that the currently playing track (B) is never removed from the cache (and isn't disposed prematurely) during its playback.
+      //       However, we end up in a situation where previous track isn't cached anymore but two next tracks are.
+      //       That implies that when user changes to the previous track ( onlybefore track B ends), a new sound instance would be created,
+      //       which means that there might be some network requests before playback.
+      if (currentTrack.value) {
+        soundCache.get(currentTrack.value.id)
+      }
+
       soundCache.set(track.id, sound)
       soundPromises.delete(track.id)
       return sound
