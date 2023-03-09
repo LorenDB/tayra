@@ -110,7 +110,7 @@ export const useTracks = createGlobalState(() => {
       //       \ \________ B is the currently played track
       //       \__________ A is the previous track
       //
-      //       Now, let's make an assumption that caching next tracks is more valueable than caching previous tracks.
+      //       Now, let's make an assumption that caching next tracks is more valuable than caching previous tracks.
       //       To prevent track B from being disposed from the cache after enqueueing D and E tracks as 'next track' twice, we can fetch the track from the cache and bump its counter
       //       The cache state would be as follows:
       //
