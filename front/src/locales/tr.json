@@ -1,37 +1,378 @@
 {
+  "App": {
+    "loading": "Yükleniyor..."
+  },
   "components": {
-    "auth": {
-      "Authorize": {
-        "header": {
-          "access": "{ app } Funkwhale hesabına erişmek istiyor"
+    "About": {
+      "description": {
+        "findApp": "Funkwhale'ı uygulamalarımızla öteki aygıtlarda kullanın.",
+        "publicContent": "Bu baklada paylaşılan genel albümler ile oynatma listelerini dinleyin.",
+        "quota": "Bu bakladaki kullanıcılar ayrıca kendi içeriklerini yüklemek için {quota} bedava depolama alır!",
+        "signup": "Favorilerinizi izlemek, oynatma listeleri oluşturmak, yeni içerik keşfetmek ve çok daha fazlası için şimdi kaydolun!"
+      },
+      "header": {
+        "aboutPod": "Bu baklaya ilişkin",
+        "findApp": "Uygulama bul",
+        "funkwhale": "Müzik deneyimleyip paylaşmak için sosyal bir platform",
+        "publicContent": "Genel içeriği tara",
+        "signup": "Kaydol"
+      },
+      "help": {
+        "closedRegistrations": "Bu bakla kayıtlara kapalıdır. Aşağıdaki bağlantıyı kullanarak öteki bir baklaya kaydolabilirsiniz."
+      },
+      "link": {
+        "findOtherPod": "Öteki bir bakla bul",
+        "learnMore": "Daha fazla öğren"
+      },
+      "message": {
+        "greeting": "Merhaba {username}",
+        "loggedIn": "Oturumunuz zaten açık!"
+      },
+      "placeholder": {
+        "noDescription": "Açıklama yok"
+      },
+      "stat": {
+        "activeUsers": "{ n } aktif kullanıcı | { n } aktif kullanıcılar",
+        "hoursOfMusic": "{ n } müzik saati | { n } müzik saatleri"
+      },
+      "title": "Hakkında"
+    },
+    "AboutPod": {
+      "feature": {
+        "allowList": "Ak liste",
+        "anonymousAccess": "Anonim erişim",
+        "federation": "Federasyon",
+        "quota": "Yükleme kotası",
+        "registrations": "Kayıtlar",
+        "status": {
+          "closed": "Kapalı",
+          "disabled": "Etkisiz",
+          "enabled": "Etkin",
+          "open": "Açık"
+        },
+        "version": "Funkwhale sürümü"
+      },
+      "header": {
+        "about": "Bu baklaya ilişkin",
+        "contact": "İletişim",
+        "features": "Özellikler",
+        "rules": "Kurallar",
+        "statistics": "İstatistikler",
+        "terms": "Koşullar ile gizlilik politikası"
+      },
+      "link": {
+        "about": "Bu baklaya ilişkin",
+        "features": "Özellikler",
+        "introduction": "Tanıtım",
+        "rules": "Kurallar",
+        "statistics": "İstatistikler",
+        "terms": "Kurallar ile gizlilik politikası"
+      },
+      "message": {
+        "contact": "Bize e-posta gönderin: { contactEmail }"
+      },
+      "placeholder": {
+        "noDescription": "Açıklama yok",
+        "noRules": "Kural yok",
+        "noTerms": "Koşul yok"
+      },
+      "stat": {
+        "activeUsers": "Etkin kullanıcı yok | {n} etkin kullanıcı | {n} etkin kullanıcı",
+        "albumsCount": "0 albüm | {n} albüm | {n} albüm",
+        "artistsCount": "0 sanatçı | {n} sanatçı | {n} sanatçı",
+        "hoursOfMusic": "{ n } müzik saati | { n } müzik saatleri",
+        "listeningsCount": "0 dinleme | {n} dinleme | {n} dinleme",
+        "tracksCount": "0 parça | {n} parça | {n} parça"
+      },
+      "title": "Hakkında"
+    },
+    "Home": {
+      "description": {
+        "quota": "Bu bakladaki kullanıcılar kendi içeriklerini yüklemek için ayrıca {quota} bedava depolama alır!",
+        "signup": "Favorilerinizi izlemek, oynatma listeleri oluşturmak, yeni içerik keşfetmek ve çok daha fazlası için şimdi kaydolun!"
+      },
+      "header": {
+        "about": "Bu Funkwhale baklasına ilişkin",
+        "aboutFunkwhale": "Funkwhale ile ilgili",
+        "contact": "İletişim",
+        "links": "Yararlı bağlantılar",
+        "login": "Oturum aç",
+        "newAlbums": "Son eklenen albümler",
+        "newChannels": "Yeni kanallar",
+        "signup": "Kaydol",
+        "statistics": "İstatistikler",
+        "welcome": "{podName} baklasına hoş geldiniz!"
+      },
+      "help": {
+        "registrationsClosed": "Bu baklaya kayıtlar kapalıdır. Aşağıdaki bağlantıyı kullanarak öteki bir baklaya kaydolabilirsiniz."
+      },
+      "link": {
+        "findOtherPod": "Öteki bir bakla bul",
+        "funkwhale": "funkwhale.audio'yu ziyaret et",
+        "learnMore": "Daha çok öğren",
+        "mobileApps": {
+          "description": "Funkwhale'i uygulamalarımızla öteki aygıtlarda kullanın",
+          "label": "Mobil uygulamalar"
+        },
+        "publicContent": {
+          "description": "Bu baklada paylaşılan genel albümler ile oynatma listelerini dinle.",
+          "label": "Genel içeriği tara"
+        },
+        "rules": "Sunucu kuralları",
+        "userGuides": {
+          "description": "Funkwhale ile özelliklerine ilişkin bilmeniz gereken her şeyi keşfedin",
+          "label": "Kullanıcı kılavuzları"
+        }
+      },
+      "placeholder": {
+        "noDescription": "Açıklama yok"
+      },
+      "stat": {
+        "activeUsers": "{ n } aktif kullanıcı | { n } aktif kullanıcılar",
+        "hoursOfMusic": "{ n } müzik saati | { n } müzik saatleri"
+      },
+      "title": "Anasayfa"
+    },
+    "PageNotFound": {
+      "header": {
+        "pageNotFound": "Sayfa bulunamadı!"
+      },
+      "link": {
+        "home": "Anasayfaya git"
+      },
+      "message": {
+        "pageNotFound": "Üzgünüz, istediğiniz sayfa yok:"
+      },
+      "title": "Sayfa bulunamadı"
+    },
+    "Queue": {
+      "button": {
+        "clear": "Temizle",
+        "close": "Kapat",
+        "stopRadio": "Radyoyu durdur"
+      },
+      "header": {
+        "failure": "Bu parça yüklenemiyor",
+        "noSources": "Bu parçanın kullanılabilir kaynağı yok.",
+        "radio": "Çalan bir radyonuz var"
+      },
+      "label": {
+        "addArtistContentFilter": "Bu sanatçıdan içeriği gizle…",
+        "duration": "Süre",
+        "enterFullscreen": "Tam ekran moduna gir",
+        "exitFullscreen": "Tam ekran modundan çık",
+        "favorite": "Parçayı favorile",
+        "next": "Sıradaki parça",
+        "pause": "Durdur",
+        "play": "Oynat",
+        "populatingRadio": "Radyo parçası alınıyor...",
+        "previous": "Önceki parça",
+        "queue": "Sıra",
+        "remove": "Sil",
+        "restart": "Parçayı yeniden başlat",
+        "selectTrack": "Parça seç",
+        "showCoverArt": "Kapak Resmini Göster",
+        "showVisualizer": "MoonDrop görüntüleyicisini göster"
+      },
+      "message": {
+        "automaticPlay": "Sıradaki parça birkaç saniye içinde otomatikman çalacaktır…",
+        "radio": "Yeni parçalar otomatikman buraya eklenecektir."
+      },
+      "meta": {
+        "startTime": "00:00",
+        "unknownAlbum": "Bilinmeyen Albüm",
+        "unknownArtist": "Bilinmeyen Sanatçı"
+      },
+      "warning": {
+        "connectivity": "Bir bağlantı sorununuz olabilir."
+      }
+    },
+    "RemoteSearchForm": {
+      "button": {
+        "rss": "RSS",
+        "search": "Ara"
+      },
+      "error": {
+        "fetchFailed": "Bu nesne alınamıyor"
+      },
+      "header": {
+        "fetchFailed": "Nesne alınırken hata"
+      },
+      "label": {
+        "rss": {
+          "fieldLabel": "RSS akış konumu",
+          "fieldPlaceholder": "https://website.example.com/rss.xml"
+        }
+      },
+      "warning": {
+        "unsupported": "Bu tür nesne henüz desteklenmiyor"
+      }
+    },
+    "SetInstanceModal": {
+      "button": {
+        "cancel": "İptal",
+        "submit": "Gönder"
+      },
+      "header": {
+        "failure": "Verilen URL'e bağlanılamaz",
+        "suggestions": "Önerilen seçimler"
+      },
+      "help": {
+        "notFunkwhaleServer": "Verilen adres bir Funkwhale sunucusu değil",
+        "serverDown": "Sunucu çökük olabilir"
+      }
+    },
+    "ShortcutsModal": {
+      "button": {
+        "close": "Kapat"
+      },
+      "header": {
+        "modal": "Klavye kısayolları"
+      },
+      "shortcut": {
+        "audio": {
+          "clearQueue": "Sırayı temizle",
+          "decreaseVolume": "Sesi azalt",
+          "expandQueue": "Sıra/çalar görünümünü genişlet",
+          "increaseVolume": "Sesi arttır",
+          "label": "Ses çalar kısayolları",
+          "playNext": "Sıradaki parçayı çal",
+          "playPause": "Şimdiki parçayı durdur/oynat",
+          "playPrevious": "Önceki parçayı çal",
+          "seekBack30": "30s geri sar",
+          "seekBack5": "5s geri sar",
+          "seekForward30": "30s ileri sar",
+          "seekForward5": "5s ileri sar",
+          "shuffleQueue": "Sırayı karıştır"
+        },
+        "general": {
+          "focus": "Arama çubuğuna odaklan",
+          "label": "Genel kısayollar",
+          "show": "Kullanılabilir klavye kısayollarını göster",
+          "unfocus": "Araba çubuğunu odaktan çıkar"
         }
       }
     },
-    "About": {
-      "stat": {
-        "activeUsers": "{ n } aktif kullanıcı | { n } aktif kullanıcılar",
-        "hoursOfMusic": "{ n } müzik saati | { n } müzik saatleri"
+    "Sidebar": {
+      "header": {
+        "administration": "Yönetim",
+        "explore": "Keşfet",
+        "library": "Kütüphanem",
+        "main": "Ana yöngüdüm"
+      },
+      "label": {
+        "add": "İçerik ekle",
+        "administration": "Yönetim",
+        "follows": "Bekleyen takip istekleri",
+        "language": "Dil",
+        "main": "Ana menü",
+        "play": "Bu parçayı çal",
+        "theme": "Tema"
+      },
+      "link": {
+        "about": "Bu baklaya ilişkin",
+        "albums": "Albümler",
+        "artists": "Sanatçılar",
+        "browse": "Tara",
+        "channels": "Kanallar",
+        "createAccount": "Hesap oluştur",
+        "favorites": "Favoriler",
+        "home": "Anasayfa",
+        "library": "Kütüphane",
+        "login": "Oturum aç",
+        "moderation": "Denetim",
+        "playlists": "Oynatma listeleri",
+        "radios": "Radyolar",
+        "search": "Ara",
+        "settings": "Ayarlar",
+        "users": "Kullanıcılar"
       }
     },
-    "Home": {
-      "stat": {
-        "activeUsers": "{ n } aktif kullanıcı | { n } aktif kullanıcılar",
-        "hoursOfMusic": "{ n } müzik saati | { n } müzik saatleri"
+    "admin": {
+      "SettingsGroup": {
+        "button": {
+          "save": "Kaydet"
+        },
+        "header": {
+          "error": "Ayarlar kaydedilirken hata.",
+          "image": "Şimdiki resim"
+        },
+        "message": {
+          "success": "Ayarlar başarıyla güncellendi."
+        }
+      },
+      "SignupFormBuilder": {
+        "button": {
+          "add": "Yeni alan ekle",
+          "edit": "Formu düzenle"
+        },
+        "help": {
+          "additionalFields": "Formda gösterilecek ek form alanları. Yalnızca manuel kayıt doğrulama etkinse gösterilir.",
+          "helpText": "Kayıt formu başında gösterilecek isteğe bağlı bir yazı."
+        },
+        "label": {
+          "additionalField": "Ek alan",
+          "additionalFields": "Ek alanlar",
+          "delete": "Sil",
+          "helpText": "Yardım yazısı",
+          "moveDown": "Aşağı taşı",
+          "moveUp": "Yukarı taşı"
+        },
+        "table": {
+          "additionalFields": {
+            "header": {
+              "actions": "Eylemler",
+              "required": "Zorunlu",
+              "type": "Alan türü"
+            },
+            "type": {
+              "long": "Uzun yazı",
+              "short": "Kısa yazı"
+            }
+          }
+        }
       }
     },
     "audio": {
-      "artist": {
-        "Card": {
-          "meta": {
-            "episodes": "{ n } bölüm | { n } bölümler",
-            "tracks": "{ n } parça | { n } parça"
-          }
-        }
-      },
       "ChannelCard": {
         "meta": {
           "episodes": "{ n } bölüm | { n } bölümler",
           "tracks": "{ n } parça | { n } parça"
+        },
+        "title": "{date} tarihinde güncellendi"
+      },
+      "ChannelEntries": {
+        "help": {
+          "subscribe": "İçeriğini görmek için bu kanala abone olmanız gerekebilir."
+        }
+      },
+      "ChannelForm": {
+        "header": {
+          "error": "Kanal kaydedilirken hata."
+        },
+        "help": {
+          "podcastFields": "Spotify ya da iTunes gibi belli platformlarca istenen itunes:email ile itunes:name alanı için kullanılır."
+        },
+        "label": {
+          "category": "Kategori",
+          "description": "Açıklama",
+          "email": "Sahip e-posta adresi",
+          "image": "Kanal Resmi",
+          "language": "Dil",
+          "name": "Ad",
+          "owner": "Sahip adı",
+          "subcategory": "Alt kategori",
+          "tags": "Etiketler"
+        },
+        "legend": {
+          "purpose": "Bu kanal ne için kullanılacak?"
+        },
+        "loader": {
+          "loading": "Yükleniyor"
+        },
+        "placeholder": {
+          "name": "Harika kanal adı",
+          "username": "harikakanaladi"
         }
       },
       "ChannelSerieCard": {
@@ -39,19 +380,1266 @@
           "episodes": "{ n } bölüm | { n } bölümler"
         }
       },
+      "ChannelSeries": {
+        "button": {
+          "showMore": "Daha çok göster"
+        },
+        "help": {
+          "subscribe": "İçeriğini görmek için bu kanala abone olmanız gerekebilir."
+        }
+      },
+      "ChannelsWidget": {
+        "button": {
+          "showMore": "Daha çok göster"
+        }
+      },
+      "EmbedWizard": {
+        "button": {
+          "copy": "Kopyala"
+        },
+        "header": {
+          "preview": "Önizleme"
+        },
+        "help": {
+          "anonymous": "Lütfen yöneticilerinizle iletişip ilgili ayarı güncellemelerini isteyin.",
+          "embed": "Bu kodu site HTML'inize kopyalayın/yapıştırın",
+          "width": "Duyarlı bir widget için boş bırakın"
+        },
+        "label": {
+          "height": "Widget boyu",
+          "width": "Widget eni"
+        },
+        "message": {
+          "copy": "Yazı panoya kopyalandı!"
+        },
+        "warning": {
+          "anonymous": "Paylaşma çalışmaz çünkü bu bakla, anonim kullanıcıların içeriğe erişmesine izin vermiyor."
+        }
+      },
+      "LibraryFollowButton": {
+        "button": {
+          "cancel": "Takip isteğini iptal et",
+          "follow": "Takip et",
+          "unfollow": "Takipten çık"
+        }
+      },
+      "PlayButton": {
+        "button": {
+          "addToPlaylist": "Oynatma listesine ekle",
+          "addToQueue": "Şimdiki sıraya ekle",
+          "discretePlay": "Oynat",
+          "episodeDetails": "Bölüm ayrıntıları",
+          "hideArtist": "Bu sanatçıdan içeriği gizle",
+          "playAlbum": "Albümü çal",
+          "playArtist": "Sanatçıyı çal",
+          "playNext": "Sırada çal",
+          "playNow": "Şimdi çal",
+          "playPlaylist": "Oynatma listesini çal",
+          "playTrack": "Parçayı çal",
+          "playTracks": "Parçaları çal",
+          "report": "Bildir…",
+          "startRadio": "Benzer şarkılar çal",
+          "trackDetails": "Parça ayrıntıları"
+        },
+        "title": {
+          "unavailable": "Bu parça, erişiminiz olan hiçbir kütüphanede yok"
+        }
+      },
+      "Player": {
+        "header": {
+          "player": "Ses çalar ile kontroller"
+        },
+        "label": {
+          "addArtistContentFilter": "Bu sanatçıdan içeriği gizle…",
+          "audioPlayer": "Medya çalar",
+          "clearQueue": "Sıranızı temizleyin",
+          "expandQueue": "Sırayı genişlet",
+          "loopingDisabled": "Döngüleme etkisiz. Tek parça döngülemeye geçmek için tıklayın.",
+          "loopingSingle": "Tek parça döngüleniyor. Tüm sıra döngülemeye geçmek için tıklayın.",
+          "loopingWholeQueue": "Tüm sıra döngüleniyor. Döngülemeyi etkisizleştirmek için tıklayın.",
+          "nextTrack": "Sıradaki parça",
+          "pause": "Durdur",
+          "play": "Oynat",
+          "previousTrack": "Önceki parça",
+          "shuffleQueue": "Sıranızı karıştırın"
+        },
+        "meta": {
+          "unknownAlbum": "Bilinmeyen Albüm",
+          "unknownArtist": "Bilinmeyen Sanatçı"
+        }
+      },
+      "PlayerControls": {
+        "labels": {
+          "next": "Sıradaki parça",
+          "pause": "Durdur",
+          "play": "Oynat",
+          "previous": "Önceki parça"
+        }
+      },
+      "Search": {
+        "empty": {
+          "noAlbums": "Sorgunuzla hiçbir albüm eşleşmedi",
+          "noArtists": "Sorgunuzla hiçbir sanatçı eşleşmedi"
+        },
+        "header": {
+          "albums": "Albümler",
+          "artists": "Sanatçılar",
+          "search": "Müzik ara"
+        },
+        "placeholder": {
+          "search": "Sanatçı, albüm, parça…"
+        }
+      },
+      "SearchBar": {
+        "empty": {
+          "noResults": "Üzgünüz, bu arama için hiç sonuç yok"
+        },
+        "header": {
+          "noResults": "Hiç eşleşme bulunmadı"
+        },
+        "label": {
+          "album": "Albüm",
+          "artist": "Sanatçı",
+          "category": {
+            "federation": "Federasyon"
+          },
+          "search": "İçerik ara",
+          "tag": "Etiket",
+          "track": "Sanatçı"
+        },
+        "link": {
+          "fediverse": "Fediverse üzerinde ara",
+          "more": "Daha çok sonuç 🡒",
+          "rss": "RSS yoluyla podcast'e abone ol"
+        },
+        "placeholder": {
+          "search": "Sanatçılar, albümler, parçalar arayın…"
+        }
+      },
+      "VolumeControl": {
+        "label": {
+          "slider": "Ses düzeyini ayarla"
+        }
+      },
       "album": {
         "Card": {
           "meta": {
             "tracks": "{ n } parça | { n } parça"
           }
+        },
+        "Widget": {
+          "button": {
+            "more": "Daha çok göster"
+          }
         }
+      },
+      "artist": {
+        "Card": {
+          "meta": {
+            "episodes": "{ n } bölüm | { n } bölümler",
+            "tracks": "{ n } parça | { n } parça"
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": "Daha çok göster"
+          }
+        }
+      },
+      "podcast": {
+        "MobileRow": {
+          "button": {
+            "actions": "Parça eylemlerini göster"
+          }
+        },
+        "Modal": {
+          "button": {
+            "addToFavorites": "Favorilere ekle",
+            "addToPlaylist": "Oynatma listesine ekle",
+            "addToQueue": "Sıraya ekle",
+            "albumDetails": "Albümü görüntüle",
+            "artistDetails": "Sanatçıyı görüntüle",
+            "channelDetails": "Kanalı görüntüle",
+            "episodeDetails": "Bölüm ayrıntıları",
+            "playNext": "Sırada çal",
+            "playNow": "Şimdi çal",
+            "removeFromFavorites": "Favorilerden kaldır",
+            "seriesDetails": "Diziyi görüntüle",
+            "startRadio": "Radyo çal",
+            "trackDetails": "Parça ayrıntıları"
+          }
+        }
+      },
+      "track": {
+        "MobileRow": {
+          "button": {
+            "actions": "Parça eylemlerini göster"
+          }
+        },
+        "Modal": {
+          "button": {
+            "addToFavorites": "Favorilere ekle",
+            "addToPlaylist": "Oynatma listesine ekle",
+            "addToQueue": "Sıraya ekle",
+            "albumDetails": "Albümü görüntüle",
+            "artistDetails": "Sanatçıyı görüntüle",
+            "channelDetails": "Kanalı görüntüle",
+            "episodeDetails": "Bölüm ayrıntıları",
+            "playNext": "Sırada çal",
+            "playNow": "Şimdi çal",
+            "removeFromFavorites": "Favorilerden kaldır",
+            "seriesDetails": "Diziyi görüntüle",
+            "startRadio": "Radyo çal",
+            "trackDetails": "Parça ayrıntıları"
+          }
+        },
+        "Table": {
+          "table": {
+            "header": {
+              "album": "Albüm",
+              "artist": "Sanatçı",
+              "title": "Başlık"
+            }
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": "Daha çok göster"
+          },
+          "empty": {
+            "noResults": "Hiçbir şey bulunmadı"
+          }
+        }
+      }
+    },
+    "auth": {
+      "ApplicationEdit": {
+        "button": {
+          "regenerateToken": "Jetonu yeniden oluştur"
+        },
+        "header": {
+          "appDetails": "Uygulama Ayrıntıları",
+          "appSecretWarning": "Bu jetonun bir kopyasını güvenli bir yerde tutun.",
+          "editApp": "Uygulamayı düzenle"
+        },
+        "label": {
+          "accessToken": "Erişim jetonu"
+        },
+        "link": {
+          "settings": "Ayarlara dön"
+        },
+        "message": {
+          "appSecretWarning": "Bu görüntülükten ayrıldıktan sonra onu bir daha göremeyeceksiniz."
+        },
+        "title": "Uygulamayı düzenle"
+      },
+      "ApplicationForm": {
+        "button": {
+          "create": "Uygulama oluştur",
+          "update": "Uygulamayı güncelle"
+        },
+        "header": {
+          "failure": "Değişikliklerinizi kaydedemiyoruz"
+        },
+        "help": {
+          "redirectUri": "Uygulamanız genelağ üzerinde sunulmuyorsa yönlendirme URI'ı olarak \"urn:ietf:wg:oauth:2.0:oob\" kullanın."
+        },
+        "label": {
+          "name": "Ad",
+          "redirectUri": "Yönlendirme URI'ı",
+          "scopes": {
+            "label": "Kapsamlar",
+            "read": {
+              "description": "Kullanıcı verisine salt okuma erişimi",
+              "label": "Okuma"
+            },
+            "write": {
+              "description": "Kullanıcı verisine salt yazma erişimi",
+              "label": "Yazma"
+            }
+          }
+        }
+      },
+      "ApplicationNew": {
+        "link": {
+          "settings": "Ayarlara dön"
+        },
+        "title": "Yeni uygulama oluştur"
+      },
+      "Authorize": {
+        "button": {
+          "authorize": "{app} uygulamasını yetkilendir"
+        },
+        "header": {
+          "access": "{ app } Funkwhale hesabına erişmek istiyor",
+          "allScopes": "Tümel erişim",
+          "authorize": "Üçüncü kişi uygulamasını yetkilendir",
+          "authorizeFailure": "Uygulama verisi alınırken hata",
+          "fetchFailure": "Uygulama verisi alınırken hata",
+          "readOnly": "Salt okuma",
+          "writeOnly": "Salt yazma"
+        },
+        "help": {
+          "copyCode": "Uygulamaya kopyalayıp yapıştırmanız için size bir kod gösterilecek",
+          "pasteCode": "Uygulamaya şu kodu kopyalayıp yapıştırın:"
+        },
+        "message": {
+          "unknownPermissions": "Uygulama ayrıca şu bilinmeyen izinleri istiyor:"
+        },
+        "title": "Uygulamaya izin ver"
+      },
+      "LoginForm": {
+        "button": {
+          "login": "Oturum aç"
+        },
+        "header": {
+          "loginFailure": "Oturumunuzu açamıyoruz"
+        },
+        "help": {
+          "invalidCredentials": "Lütfen kullanıcı adı ile parola tertipinizin doğru olduğunu yeniden gözden geçirip e-posta adresinizi doğruladığınızdan emin olun."
+        },
+        "label": {
+          "password": "Parola",
+          "username": "Kullanıcı adı ya da e-posta adresi"
+        },
+        "link": {
+          "createAccount": "Hesap oluştur",
+          "resetPassword": "Parolanızı sıfırlayın"
+        },
+        "message": {
+          "redirect": "Yetkilendirmek için {domain} adresine yönlendirileceksiniz"
+        },
+        "placeholder": {
+          "username": "Kullanıcı adınızı ya da e-posta adresinizi girin"
+        }
+      },
+      "Logout": {
+        "button": {
+          "logout": "Evet, oturumumu kapat!"
+        },
+        "header": {
+          "confirm": "Oturumunuzu kapatmak istediğinizden emin misiniz?",
+          "unauthenticated": "Şu anda oturumunuz açık değil"
+        },
+        "link": {
+          "login": "Oturum aç!"
+        },
+        "message": {
+          "loggedIn": "Şu anda oturumunuz {username} olarak açık"
+        },
+        "title": "Oturumu kapat"
+      },
+      "Plugin": {
+        "button": {
+          "save": "Kaydet",
+          "scan": "Tara"
+        },
+        "header": {
+          "failure": "Eklenti kaydedilirken hata"
+        },
+        "label": {
+          "library": "Kütüphane",
+          "pluginEnabled": "Etkin"
+        },
+        "link": {
+          "documentation": "Belgeleme"
+        }
+      },
+      "Settings": {
+        "button": {
+          "delete": "Sil",
+          "deleteAccount": "Hesabımı sil…",
+          "deleteAccountConfirm": "Hesabımı sil",
+          "disableSubsonic": "Erişimi etkisizleştir",
+          "edit": "Düzenle",
+          "password": "Parolayı değiştir",
+          "refresh": "Yenile",
+          "remove": "Kaldır",
+          "removeApp": "Uygulamayı kaldır",
+          "revoke": "Kaldır",
+          "revokeAccess": "Erişimi kaldır",
+          "update": "Güncelle",
+          "updateSettings": "Ayarları güncelle"
+        },
+        "description": {
+          "authorizedApps": "Bu, hesap verinize erişimi olan uygulamaların dizelgesidir.",
+          "changeEmail": "Hesabınıza ilişik e-posta adresini değiştirin. Yeni adrese bir onay göndereceğiz.",
+          "changePassword": {
+            "paragraph1": "Parolanızı değiştirmek istediyseniz Subsonic API parolanızı da değiştirecektir.",
+            "paragraph2": "Bu parolayı kullanan istemcilerinizde parolanızı güncellemeniz gerekecektir."
+          },
+          "contentFilters": "İçerik süzekleri, serviste görmek istemediğiniz içeriği gizlemenize yardım eder.",
+          "deleteAccount": "Hesabınız ve ilgili tüm veriyi kalıcı ve geri dönüşsüz olarak silebilirsiniz. Onayınız istenecektir.",
+          "plugins": "Funkwhale'i genişletip ek özellikler edinmek için eklentiler kullanın.",
+          "yourApps": "Bu, kaydettiğiniz uygulamaların bir dizelgesidir."
+        },
+        "header": {
+          "accountFailure": "Hesabınızı silemiyoruz",
+          "accountSettings": "Hesap ayarları",
+          "authorizedApps": "Yetkili uygulamalar",
+          "avatarFailure": "Avatarınız kaydedilemiyor",
+          "changeEmail": "E-posta adresimi değiştir",
+          "changePassword": "Parolamı değiştir",
+          "contentFilters": "İçerik süzekleri",
+          "deleteAccount": "Hesabımı sil",
+          "emailFailure": "E-posta adresinizi değiştiremiyoruz",
+          "hiddenArtists": "Gizlenen sanatçılar",
+          "noApps": "Hesabınıza bağlı hiçbir uygulamanız yok.",
+          "noPersonalApps": "Henüz hiçbir kayıtlı uygulamanız yok.",
+          "passwordFailure": "Parolanız değiştirilemiyor",
+          "plugins": "Eklentiler",
+          "settingsUpdated": "Ayarlar güncellendi",
+          "updateFailure": "Ayarlarınız güncellenemiyor",
+          "yourApps": "Uygulamalarınız"
+        },
+        "help": {
+          "changePassword": "Lütfen parolanızın doğruluğunu gözden geçirin",
+          "noApps": "Bir üçüncü kişi uygulamasını yetkilendirirseniz bu uygulamalar burada dizelgelenecektir.",
+          "noPersonalApps": "Funkwhale'i üçüncü kişi uygulamalarıyla bütünleştirmek için birini kaydedin."
+        },
+        "label": {
+          "avatar": "Avatar",
+          "currentPassword": "Şimdiki parola",
+          "newEmail": "Yeni e-posta adresi",
+          "newPassword": "Yeni parola",
+          "password": "Parola"
+        },
+        "link": {
+          "managePlugins": "Eklentileri yönet",
+          "newApp": "Yeni uygulama kaydet"
+        },
+        "message": {
+          "confirmDelete": "Silme isteğiniz gönderildi, hesabınız ile içeriği yakında silinecektir",
+          "currentEmail": "Şu an e-posta adresiniz {email}"
+        },
+        "modal": {
+          "changePassword": {
+            "content": {
+              "logout": "Bu oturumdan çıkarılacaksınız ve yenisiyle oturum açmanız gerekecek",
+              "subsonic": "Subsonic parolanız yeni, rastgele bir parolayla değiştirilecektir ve eski Subsonic parolanızı kullanmış aygıtlarda oturumunuz kapanacaktır",
+              "warning": "Parolanızı değiştirmek şu sonuçları doğuracaktır"
+            }
+          },
+          "deleteAccount": {
+            "content": {
+              "warning": "Bu geri dönüşsüzdür ve verinizi sunucularımızdan kalıcı olarak kaldıracaktır. Oturumunuz anında kapanacaktır."
+            },
+            "header": "Hesabınızı silmek istiyor musunuz?"
+          },
+          "deleteApp": {
+            "content": {
+              "warning": "Bu, uygulamayı ve ilgili jetonları kalıcı olarak kaldıracaktır."
+            }
+          },
+          "revokeApp": {
+            "content": {
+              "warning": "Bu, uygulamanın sizin adınıza servise erişmesini önleyecektir."
+            }
+          }
+        },
+        "table": {
+          "artists": {
+            "header": {
+              "creationDate": "Oluşturma tarihi",
+              "name": "Ad"
+            }
+          },
+          "authorizedApps": {
+            "header": {
+              "application": "Uygulama",
+              "permissions": "İzinler"
+            }
+          },
+          "yourApps": {
+            "header": {
+              "application": "Uygulama",
+              "creationDate": "Oluşturma tarihi",
+              "scopes": "Kapsamlar"
+            }
+          }
+        },
+        "title": "Hesap Ayarları",
+        "warning": {
+          "deleteAccount": "Hesabınız birkaç dakika içinde sunucularımızdan silinecektir. Silmeleri için birtakım verinizin kopyasına sahip olabilecek sunucuları da bilgilendireceğiz. Lütfen bu sunuculardan kimilerinin çevrimdışı ya da uymaya isteksiz olabileceğini bilin."
+        }
+      },
+      "SignupForm": {
+        "button": {
+          "create": "Hesabımı oluştur"
+        },
+        "header": {
+          "login": "Funkwhale hesabınıza oturum açın",
+          "signupFailure": "Hesabınız oluşturulamıyor."
+        },
+        "label": {
+          "email": "E-posta adresi",
+          "invitation": "Çağrı kodu",
+          "password": "Parola",
+          "username": "Kullanıcı adı"
+        },
+        "message": {
+          "accountCreated": "Hesabınız başarıyla oluşturuldu. Lütfen oturum açmaya çalışmadan önce e-posta adresinizi doğrulayın.",
+          "awaitingReview": "Hesap isteğiniz başarıyla gönderildi. Denetim ekibimiz isteğinizi değerlendirince e-posta ile bilgilendirileceksiniz.",
+          "requiresReview": "Bu baklaya kayıtlar açıktır, ancak denetçilerce onaydan önce gözden geçirilir."
+        },
+        "placeholder": {
+          "email": "E-posta adresinizi girin",
+          "invitation": "Çağrı kodunuzu girin (büyük–küçük harf duyarsız)",
+          "username": "Kullanıcı adınızı girin"
+        }
+      },
+      "SubsonicTokenForm": {
+        "button": {
+          "confirmDisable": "Erişimi etkisizleştir",
+          "confirmNewPassword": "Parola iste",
+          "disable": "Subsonic erişimini etkisizleştirin",
+          "newPassword": "Yeni parola iste"
+        },
+        "description": {
+          "subsonic": {
+            "paragraph1": "Funkwhale, Subsonic API'ını destekleyen öbür müzik çalarlarla uyumludur.",
+            "paragraph2": "Örneğin akıllı telefonunuzda ya da tabletinizde, çevrimdışı modda oynatma listeniz ile müziğinizi deneyimlemek için bunları kullanabilirsiniz.",
+            "paragraph3": "Ancak, Funkwhale'e bu istemcilerden erişmek aşağıda ayarlayabileceğiniz ayrı bir parola gerektirir."
+          }
+        },
+        "header": {
+          "error": "Hata",
+          "subsonic": "Subsonic API parolanız"
+        },
+        "label": {
+          "subsonicField": "Subsonic API parolanız"
+        },
+        "link": {
+          "apps": "Funkwhale'in öteki uygulamalardan nasıl kullanılacağını keşfedin"
+        },
+        "message": {
+          "accessDisabled": "Erişim etkisizleştirildi",
+          "passwordUpdated": "Parola güncellendi"
+        },
+        "modal": {
+          "disableSubsonic": {
+            "content": {
+              "warning": "Bu, Subsonic API'ının hesabınıza kullanım erişimini tümüyle etkisizleştirecektir."
+            }
+          },
+          "newPassword": {
+            "content": {
+              "warning": "Bu, şimdiki parolanızı kullanan var olan aygıtlarda oturumunuzu kapayacaktır."
+            }
+          }
+        }
+      }
+    },
+    "channels": {
+      "AlbumForm": {
+        "header": {
+          "error": "Oluştururken hata"
+        },
+        "label": {
+          "albumTitle": "Başlık"
+        }
+      },
+      "AlbumModal": {
+        "button": {
+          "cancel": "İptal",
+          "create": "Oluştur"
+        },
+        "header": {
+          "newAlbum": "Yeni albüm",
+          "newSeries": "Yeni dizi"
+        }
+      },
+      "AlbumSelect": {
+        "label": {
+          "album": "Albüm",
+          "series": "Dizi"
+        },
+        "meta": {
+          "tracks": "{ n } parça | { n } parça"
+        },
+        "option": {
+          "none": "Hiçbiri"
+        }
+      },
+      "LicenseSelect": {
+        "label": {
+          "license": "Lisans"
+        },
+        "link": {
+          "license": "Bu lisansa ilişkin"
+        },
+        "option": {
+          "none": "Hiçbiri"
+        }
+      },
+      "SubscribeButton": {
+        "help": {
+          "auth": "Bu kanala abone olmak için oturumunuz açık olmalı"
+        },
+        "title": {
+          "subscribe": "Abone ol",
+          "unsubscribe": "Abonelikten çık"
+        }
+      },
+      "UploadForm": {
+        "button": {
+          "edit": "Düzenle",
+          "ignore": "Yoksay",
+          "remove": "Kaldır",
+          "resume": "Sürdür",
+          "retry": "Yeniden dene"
+        },
+        "description": {
+          "extensions": "Desteklenen uzantılar {extensions}"
+        },
+        "header": {
+          "error": "Yayımlarken hata"
+        },
+        "label": {
+          "channel": "Kanal",
+          "openBrowser": "Tara…"
+        },
+        "message": {
+          "dragAndDrop": "Dosyalarınızı yüklemek için dosyalarınızı buraya sürükleyip bırakın ya da tarayıcınızı açın",
+          "pending": "Yayım bekleyen birtakım taslak yüklemeleriniz var."
+        },
+        "status": {
+          "errored": "Hatalı",
+          "pending": "Beklemede",
+          "uploading": "Yükleniyor"
+        },
+        "warning": {
+          "quota": "Dosyalarınızı yüklemek için hiç boş alanınız yok. Lütfen denetçiler ile iletişin."
+        }
+      },
+      "UploadMetadataForm": {
+        "label": {
+          "description": "Açıklama",
+          "image": "Parça Resmi",
+          "position": "Pozisyon",
+          "tags": "Etiketler",
+          "title": "Başlık"
+        }
+      },
+      "UploadModal": {
+        "button": {
+          "cancel": "İptal",
+          "close": "Kapat",
+          "finishLater": "Daha sonra bitir",
+          "next": "Sıradaki",
+          "previous": "Önceki adım",
+          "publish": "Yayımla",
+          "update": "Güncelle"
+        },
+        "header": {
+          "processing": "Yüklemeler işleniyor",
+          "publish": "Ses yayımla",
+          "uploadDetails": "Yükleme ayrıntıları",
+          "uploadFiles": "Yüklenecek dosyalar"
+        },
+        "meta": {
+          "files": "{ n } dosya | { n } dosyalar",
+          "quota": "Kalan depolama alanı: {space}"
+        }
+      }
+    },
+    "common": {
+      "ActionTable": {
+        "button": {
+          "allSelected": "Seçili öge yok | {n} öge seçili | Tüm {n} öge seçili",
+          "go": "Git",
+          "refresh": "Tablo içeriğini yenile",
+          "select": "Seç",
+          "selectAll": "Tüm ögeleri seç",
+          "selectCurrentPage": "Salt şimdiki sayfayı seç",
+          "selectElement": "Bir öge seç | Tüm {n} ögeyi seç"
+        },
+        "header": {
+          "error": "Eylem uygulanırken hata"
+        },
+        "label": {
+          "actions": "Eylemler",
+          "performAction": "Eylemleri gerçekleştir"
+        },
+        "message": {
+          "needsRefresh": "İçerik güncellendi, güncel içeriği görmek için yineleye tıklayın"
+        }
+      },
+      "AttachmentInput": {
+        "button": {
+          "remove": "Kaldır"
+        },
+        "header": {
+          "failure": "Ekiniz kaydedilemiyor"
+        },
+        "help": {
+          "upload": "PNG ya da JPG. Boyutlar 1400x1400px ile 3000x3000px arasında olmalıdır. İzin verilen maksimum dosya boyutu 5 MB'tır."
+        },
+        "label": {
+          "upload": "Yeni Resim Yükle…"
+        },
+        "loader": {
+          "uploading": "Dosya yükleniyor…"
+        }
+      },
+      "CollapseLink": {
+        "button": {
+          "expand": "Genişlet"
+        }
+      },
+      "ContentForm": {
+        "button": {
+          "preview": "Önizleme",
+          "write": "Yaz"
+        },
+        "placeholder": {
+          "input": "Buraya birkaç sözcük yazın…"
+        }
+      },
+      "CopyInput": {
+        "button": {
+          "copy": "Kopyala"
+        },
+        "message": {
+          "success": "Yazı panoya kopyalandı!"
+        }
+      },
+      "DangerousButton": {
+        "button": {
+          "cancel": "İptal",
+          "confirm": "Onayla"
+        },
+        "header": {
+          "confirm": "Bu eylemi onaylamak istiyor musunuz?"
+        }
+      },
+      "Duration": {
+        "meta": {
+          "hours": "{hours} h {minutes} min",
+          "minutes": "{minutes} min"
+        }
+      },
+      "EmptyState": {
+        "button": {
+          "refresh": "Yenile"
+        },
+        "header": {
+          "noResults": "Hiç sonuç bulunamadı."
+        }
+      },
+      "ExpandableDiv": {
+        "button": {
+          "less": "Daha az göster",
+          "more": "Daha çok göster"
+        }
+      },
+      "InlineSearchBar": {
+        "button": {
+          "clear": "Temizle"
+        },
+        "label": {
+          "search": "Ara"
+        },
+        "placeholder": {
+          "search": "Ara…"
+        }
+      },
+      "LoginModal": {
+        "description": {
+          "noAccess": "Erişiminiz yok"
+        },
+        "link": {
+          "login": "Oturum aç",
+          "signup": "Kaydol"
+        }
+      },
+      "RenderedDescription": {
+        "button": {
+          "cancel": "İptal",
+          "edit": "Düzenle",
+          "less": "Daha az göster",
+          "more": "Daha çok göster",
+          "update": "Açıklamayı güncelle"
+        },
+        "empty": {
+          "noDescription": "Açıklama yok"
+        },
+        "header": {
+          "failure": "Açıklama güncellenirken hata"
+        }
+      },
+      "UserLink": {
+        "link": {
+          "username": "{'@'}{username}"
+        }
+      },
+      "UserMenu": {
+        "label": {
+          "language": "Dili değiştir",
+          "shortcuts": "Klavye kısayolları",
+          "theme": "Temayı değiştir"
+        },
+        "link": {
+          "about": "Hakkında",
+          "chat": "Söyleşi odası",
+          "docs": "Belgeleme",
+          "forum": "Forum",
+          "login": "Oturum aç",
+          "logout": "Oturumu kapat",
+          "notifications": "Bildirimler",
+          "profile": "Profil",
+          "settings": "Ayarlar",
+          "signup": "Kaydol",
+          "support": "Yardım"
+        }
+      },
+      "UserModal": {
+        "header": {
+          "options": "Seçenekler"
+        },
+        "label": {
+          "language": "Dili değiştir",
+          "shortcuts": "Klavye kısayolları",
+          "theme": "Temayı değiştir"
+        },
+        "link": {
+          "about": "Hakkında",
+          "chat": "Söyleşi odası",
+          "docs": "Belgeleme",
+          "forum": "Forum",
+          "login": "Oturum aç",
+          "logout": "Oturumu kapat",
+          "notifications": "Bildirimler",
+          "profile": "Profil",
+          "settings": "Ayarlar",
+          "signup": "Kaydol",
+          "support": "Yardım"
+        }
+      }
+    },
+    "favorites": {
+      "List": {
+        "empty": {
+          "noFavorites": "Favorilerinize henüz hiç parça eklenmedi"
+        },
+        "header": {
+          "favorites": "{ n } favori | { n } favoriler"
+        },
+        "link": {
+          "library": "Kütüphaneyi tara"
+        },
+        "loader": {
+          "loading": "Favorileriniz yükleniyor…"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Artan",
+            "descending": "Azalan",
+            "label": "Sıra"
+          },
+          "label": "Sıralama"
+        },
+        "pagination": {
+          "results": "Sayfa başına sonuçlar"
+        },
+        "title": "Favorileriniz"
+      },
+      "TrackFavoriteIcon": {
+        "button": {
+          "add": "Favorilere ekle",
+          "remove": "Favorilerden kaldır"
+        },
+        "label": {
+          "inFavorites": "Favorilerde"
+        }
+      }
+    },
+    "federation": {
+      "FetchButton": {
+        "button": {
+          "close": "Kapat",
+          "reload": "Kapatıp sayfayı yenile"
+        },
+        "description": {
+          "failure": "Veri yenilemeye çalışılırken bir hata gerçekleşti:",
+          "pending": "Yenileme isteği, sunucumuzca zamanında işlenmedi. Daha sonra işlenecektir."
+        },
+        "header": {
+          "failure": "Yenileme hatası",
+          "pending": "Yenileme beklemede",
+          "saveFailure": "Ayarlar kaydedilirken hata",
+          "skipped": "Yenileme atlandı",
+          "success": "Yenileme başarılı"
+        },
+        "loader": {
+          "awaitingResult": "Sonuç bekleniyor…",
+          "fetchRequest": "Alım isteniyor…"
+        },
+        "table": {
+          "error": {
+            "label": {
+              "detail": "Hata ayrıntısı",
+              "type": "Hata türü"
+            },
+            "value": {
+              "unknownError": "Bilinmeyen hata"
+            }
+          }
+        }
+      },
+      "LibraryWidget": {
+        "button": {
+          "showMore": "Daha çok göster"
+        },
+        "empty": {
+          "noMatch": "Eşleşen kütüphane yok."
+        }
+      }
+    },
+    "forms": {
+      "PasswordInput": {
+        "button": {
+          "copy": "Kopyala"
+        },
+        "message": {
+          "copy": "Yazı panoya kopyalandı!"
+        },
+        "title": "Parolayı göster/gizle"
       }
     },
     "library": {
       "AlbumBase": {
+        "link": {
+          "addDescription": "Açıklama ekle…"
+        },
         "meta": {
           "episodes": "{ n } bölüm | { n } bölümler",
           "tracks": "{ n } parça | { n } parça"
+        },
+        "title": "Albüm"
+      },
+      "AlbumDetail": {
+        "description": {
+          "libraries": "Bu albüm şu kütüphanelerde var:"
+        },
+        "header": {
+          "episodes": "Bölümler",
+          "libraries": "Kullanıcı kütüphaneleri",
+          "tracks": "Parçalar"
+        }
+      },
+      "AlbumDropdown": {
+        "button": {
+          "cancel": "İptal",
+          "delete": "Sil",
+          "edit": "Düzenle"
+        },
+        "link": {
+          "discogs": "Discogs üzerinde ara",
+          "django": "Django yönetiminde görüntüle",
+          "domain": "{domain} adresinde görüntüle",
+          "moderation": "Denetim arayüzünde aç",
+          "musicbrainz": "MusicBrainz'de görüntüle"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "Albüm de ilgili tüm dosyalar ile veri de silinecektir. Bu eylem geri dönüşsüzdür."
+            }
+          }
+        }
+      },
+      "AlbumEdit": {
+        "header": {
+          "edit": "Bu albümü düzenle",
+          "suggest": "Bu albüm üzerinde bir düzenleme öner"
+        },
+        "message": {
+          "remote": "Bu nesne öteki bir sunucuca yönetilir, düzenleyemezsiniz."
+        }
+      },
+      "Albums": {
+        "button": {
+          "search": "Ara"
+        },
+        "empty": {
+          "noResults": "Sorgunuzla eşleşen sonuç yok"
+        },
+        "label": {
+          "search": "Ara",
+          "tags": "Etiketler"
+        },
+        "link": {
+          "addMusic": "Müzik ekle"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Artan",
+            "descending": "Azalan",
+            "label": "Sıralama yönü"
+          },
+          "label": "Sıralama"
+        },
+        "pagination": {
+          "results": "Sayfa başına sonuçlar"
+        },
+        "placeholder": {
+          "search": "Albüm başlığını girin…"
+        },
+        "title": "Albümler"
+      },
+      "ArtistBase": {
+        "button": {
+          "cancel": "İptal",
+          "edit": "Düzenle",
+          "play": "Tüm albümleri çal"
+        },
+        "link": {
+          "discogs": "Discogs üzerinde ara",
+          "django": "Django yönetiminde görüntüle",
+          "domain": "{domain} üzerinde görüntüle",
+          "moderation": "Denetim arayüzünde aç",
+          "musicbrainz": "MusicBrainz üzerinde görüntüle",
+          "wikipedia": "Wikipedia üzerinde ara"
+        },
+        "meta": {
+          "albums": "0 albüm | {n} albüm | {n} albüm"
+        },
+        "title": "Sanatçı"
+      },
+      "ArtistDetail": {
+        "button": {
+          "filter": "Süzeği kaldır",
+          "more": "Daha çok yükle…"
+        },
+        "description": {
+          "library": "Bu sanatçı şu kütüphanelerde var:"
+        },
+        "header": {
+          "album": "Bu sanatçıdan albümler",
+          "library": "Kullanıcı kütüphaneleri",
+          "track": "Bu sanatçıdan yeni parçalar"
+        },
+        "link": {
+          "filter": "Süzeklerimi gözden geçir"
+        },
+        "message": {
+          "filter": "Şu anda bu sanatçıya ilişkin içeriği gizliyorsunuz."
+        }
+      },
+      "ArtistEdit": {
+        "header": {
+          "edit": "Bu sanatçıyı düzenle",
+          "suggest": "Bu sanatçı üzerine bir düzenleme öner"
+        },
+        "message": {
+          "remote": "Bu nesne öteki bir sunucuca yönetiliyor, düzenleyemezsiniz."
+        }
+      },
+      "Artists": {
+        "button": {
+          "search": "Ara",
+          "upload": "Müzik ekle"
+        },
+        "empty": {
+          "noResults": "Sorgunuzla eşleşen sonuç yok"
+        },
+        "label": {
+          "excludeCompilation": "Derleme Sanatçılarını Dışarıda Tut",
+          "search": "Sanatçı adı",
+          "tags": "Etiketler"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Artan",
+            "descending": "Azalan",
+            "label": "Sıralama yönü"
+          },
+          "label": "Sıralama"
+        },
+        "pagination": {
+          "results": "Sayfa başına sonuçlar"
+        },
+        "placeholder": {
+          "search": "Ara…"
+        },
+        "title": "Sanatçılar"
+      },
+      "EditCard": {
+        "button": {
+          "approve": "Onayla",
+          "delete": "Sil",
+          "reject": "Reddet"
+        },
+        "header": {
+          "modification": "Değişiklik {id}"
+        },
+        "link": {
+          "track": "Parça #{id} - {name}"
+        },
+        "modal": {
+          "content": {
+            "warning": "Bu öneri tümüyle silinecektir, bu eylem geri alınamaz."
+          }
+        },
+        "status": {
+          "applied": "Onaylı ve uygulamalı",
+          "approved": "Onaylı",
+          "pending": "Beklemede",
+          "rejected": "Reddedildi"
+        },
+        "table": {
+          "update": {
+            "header": {
+              "field": "Alan",
+              "newValue": "Yeni değer",
+              "oldValue": "Eski değer"
+            }
+          }
+        }
+      },
+      "EditForm": {
+        "button": {
+          "cancel": "İptal",
+          "clear": "Temizle",
+          "new": "Başka bir düzenleme gönder",
+          "reset": "İlk değere sıfırla",
+          "showAll": "Tüm düzenlemeleri göster",
+          "showUnreviewed": "Değerlendirilmemiş düzenlemelere sınırla",
+          "submit": "Düzenlemeyi gönder ve uygula",
+          "suggest": "Öneri gönder"
+        },
+        "empty": {
+          "suggestEdit": "Aşağıdaki formu kullanarak değişiklik önerin"
+        },
+        "header": {
+          "failure": "Düzenleme gönderilirken hata",
+          "recentEdits": "Son düzenlemeler",
+          "success": "Düzenlemeniz başarıyla gönderildi.",
+          "unreviewed": "Değerlendirilmemiş düzenlemelere sınırla"
+        },
+        "label": {
+          "summary": "Özet (isteğe bağlı)"
+        },
+        "message": {
+          "noPermission": "Bu nesneyi düzenlemeye izniniz yok, ancak değişiklikler önerebilirsiniz. Gönderilince öneriler onaylanmadan önce değerlendirilecektir."
+        },
+        "placeholder": {
+          "summary": "Değişikliklerinizi açıklayan kısa bir özet."
+        }
+      },
+      "FileUpload": {
+        "button": {
+          "cancel": "İptal",
+          "retry": "Başarısız yüklemeleri yeniden dene"
+        },
+        "empty": {
+          "noFiles": "0"
+        },
+        "label": {
+          "extensions": "Desteklenen uzantılar: {extensions}",
+          "remainingSpace": "Kalan depolama alanı",
+          "uploadWidget": "Yüklenecek dosyaları seçmek için tıklayın ya da dosyalar veya sıralaçlar sürükleyip bırakın"
+        },
+        "link": {
+          "picard": "Bu amaç için Picard kullanmanızı öneririz.",
+          "processing": "İşleniyor",
+          "uploading": "Yükleniyor"
+        },
+        "message": {
+          "listener": "Bu sayfa ayrılmak istediğinizi doğrulamanızı istiyor - girdiğiniz veri kaydedilmemiş olabilir.",
+          "local": {
+            "format": "Yüklediğiniz müzik dosyaları OGG, FLAC, MP3 ya da AIFF biçimindedir",
+            "message": "Kütüphanenize müzik yüklemek üzeresiniz. İlerlemeden önce emin olun ki:",
+            "tag": "Yüklediğiniz müzik dosyaları gereğince etiketlidir."
+          }
+        },
+        "table": {
+          "upload": {
+            "header": {
+              "actions": "Eylemler",
+              "filename": "Dosya adı",
+              "size": "Boyut",
+              "status": "Durum"
+            },
+            "progress": "%{percent}",
+            "status": {
+              "pending": "Beklemede",
+              "uploaded": "Yüklü",
+              "uploading": "Yüklenmekte…"
+            }
+          }
+        },
+        "tooltip": {
+          "denied": "Yükleme reddedildi, dosyanın çok büyük olmadığından ve kotanıza erişmediğinizden emin olun",
+          "extension": "Geçersiz dosya türü, bir ses dosyası yüklediğinizden emin olun. Desteklenen dosya uzantıları {extensions}",
+          "network": "Bu dosya yüklenirken bir ağ hatası gerçekleşti",
+          "retry": "Yeniden dene",
+          "size": "Bu dosya yüklenemiyor, çok büyük olmadığından emin olun",
+          "timeout": "Yükleme zaman aşımı, lütfen yeniden deneyin"
+        }
+      },
+      "Home": {
+        "header": {
+          "newChannels": "Yeni kanallar",
+          "playlists": "Oynatma listeleri",
+          "recentlyAdded": "Son eklenenler",
+          "recentlyFavorited": "Son favorilenenler",
+          "recentlyListened": "Son dinlenenler"
+        },
+        "title": "Kütüphane"
+      },
+      "ImportStatusModal": {
+        "button": {
+          "close": "Kapat"
+        },
+        "error": {
+          "importFailure": "Yükleme işlenmesi sırasında bir hata gerçekleşti. Aşağıda daha çok bilgi bulacaksınız.",
+          "unknownError": {
+            "label": "Bilinmeyen hata",
+            "message": "Bilinmeyen bir hata gerçekleşti"
+          }
+        },
+        "link": {
+          "documentation": "Bu hata için belgelememizi okuyun"
+        },
+        "message": {
+          "importDetail": "Yüklemeniz hâlâ beklemede ve yakında sunucuca işlenecektir.",
+          "importSuccess": "Yükleme sunucuca başarıyla işlendi."
+        },
+        "table": {
+          "error": {
+            "debug": "Hata ayıklama bilgisi",
+            "errorDetail": "Hata ayrıntısı",
+            "errorType": "Hata türü",
+            "help": "Yardım alma"
+          }
+        }
+      },
+      "Podcasts": {
+        "button": {
+          "cancel": "İptal",
+          "channel": "Kanal Oluştur",
+          "feed": "Akışa abone ol",
+          "search": "Ara",
+          "subscribe": "Abone ol"
+        },
+        "label": {
+          "tags": "Etiketler"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Artan",
+            "descending": "Azalan",
+            "label": "Sıralama yönü"
+          },
+          "label": "Sıralama"
+        },
+        "pagination": {
+          "results": "Sayfa başına sonuçlar"
+        },
+        "placeholder": {
+          "search": "Ara…"
         }
       },
       "radios": {
@@ -60,30 +1648,6 @@
             "matches": "{ n } tane parça filtrelendi | { n } tane parça filtrelendi"
           }
         }
-      }
-    },
-    "favorites": {
-      "List": {
-        "header": {
-          "favorites": "{ n } favori | { n } favoriler"
-        }
-      }
-    },
-    "channels": {
-      "UploadModal": {
-        "meta": {
-          "files": "{ n } dosya | { n } dosyalar"
-        }
-      },
-      "AlbumSelect": {
-        "meta": {
-          "tracks": "{ n } parça | { n } parça"
-        }
-      }
-    },
-    "AboutPod": {
-      "stat": {
-        "hoursOfMusic": "{ n } müzik saati | { n } müzik saatleri"
       }
     },
     "playlists": {
