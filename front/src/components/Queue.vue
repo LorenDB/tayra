@@ -354,7 +354,7 @@ if (!isWebGLSupported) {
               >
                 <div
                   class="buffer bar"
-                  :style="{ 'transform': `translateX(${bufferProgress - 100}%)` }"
+                  :style="{ 'transform': `translate3d(${bufferProgress - 100}%, 0, 0)` }"
                 />
                 <div class="position bar" />
               </div>

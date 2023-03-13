@@ -128,8 +128,10 @@ export const useTracks = createGlobalState(() => {
         soundCache.get(currentTrack.value.id)
       }
 
+      // Add track to the sound cache and remove from the promise cache
       soundCache.set(track.id, sound)
       soundPromises.delete(track.id)
+
       return sound
     }
 
