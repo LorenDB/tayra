@@ -39,7 +39,7 @@ RUN set -eux; \
   openssl-dev \
   postgresql-dev \
   zlib-dev \
-  py3-cryptography=38.0.3-r0 \
+  py3-cryptography=38.0.3-r1 \
   py3-lxml=4.9.2-r0 \
   py3-pillow=9.3.0-r0 \
   py3-psycopg2=2.9.5-r0 \
@@ -71,13 +71,13 @@ RUN set -eux; \
 ARG install_dev_deps=0
 RUN set -eux; \
   if [ "$install_dev_deps" = "1" ] ; then \
-    grep -Ev 'cryptography|lxml|pillow|psycopg2|watchfiles' /dev-requirements.txt \
-    | pip3 install -r /dev/stdin \
-    cryptography==38.0.3 \
-    lxml==4.9.2 \
-    pillow==9.3.0 \
-    psycopg2==2.9.5 \
-    watchfiles==0.18.1; \
+   grep -Ev 'cryptography|lxml|pillow|psycopg2|watchfiles' /dev-requirements.txt \
+   | pip3 install -r /dev/stdin \
+   cryptography==38.0.3 \
+   lxml==4.9.2 \
+   pillow==9.3.0 \
+   psycopg2==2.9.5 \
+   watchfiles==0.18.1; \
   fi
 
 FROM alpine:3.17 as image
@@ -97,7 +97,7 @@ RUN set -eux; \
   libpq \
   libxml2 \
   libxslt \
-  py3-cryptography=38.0.3-r0 \
+  py3-cryptography=38.0.3-r1 \
   py3-lxml=4.9.2-r0 \
   py3-pillow=9.3.0-r0 \
   py3-psycopg2=2.9.5-r0 \

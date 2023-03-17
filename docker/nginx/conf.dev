@@ -144,5 +144,10 @@ http {
         location /manifest.json {
             return 302 /api/v1/instance/spa-manifest.json;
         }
+
+        location /staticfiles/ {
+            alias /staticfiles/;
+        }
+
     }
 }
