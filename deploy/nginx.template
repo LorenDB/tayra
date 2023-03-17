@@ -120,8 +120,15 @@ server {
         proxy_pass   http://funkwhale-api;
     }
 
-    location /media/ {
-        alias ${MEDIA_ROOT}/;
+    # Allow direct access to only specific subdirectories in /media
+    location /media/__sized__/ {
+        alias ${MEDIA_ROOT}/__sized__/;
+        add_header Access-Control-Allow-Origin '*';
+    }
+
+    # Allow direct access to only specific subdirectories in /media
+    location /media/attachments/ {
+        alias ${MEDIA_ROOT}/attachments/;
         add_header Access-Control-Allow-Origin '*';
     }
 
