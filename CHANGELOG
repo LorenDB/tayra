@@ -10,6 +10,28 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 .. towncrier
 
+1.2.10 (2023-03-17)
+-------------------
+
+Upgrade instructions are available at
+https://docs.funkwhale.audio/admin/upgrading.html
+
+Bugfixes:
+
+- Fixes a security vulnerability that allows to download all media files without access control #2101
+
+Contributors to our Issues:
+
+- Georg Krause
+- JuniorJPDJ
+
+Special thanks to Conradowatz for reporting the vulnerability
+
+Committers:
+
+- JuniorJPDJ
+
+
 1.2.9 (2022-11-25)
 ------------------
 
