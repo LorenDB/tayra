@@ -3500,10 +3500,10 @@ follow-redirects@^1.15.0:
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.2.tgz#b460864144ba63f2681096f274c4e57026da2c13"
   integrity sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==
 
-fomantic-ui-css@2.9.1:
-  version "2.9.1"
-  resolved "https://registry.yarnpkg.com/fomantic-ui-css/-/fomantic-ui-css-2.9.1.tgz#b1d3d8a23f64c9ad2570b2d20e8a300e08696f7c"
-  integrity sha512-TltZaYeYwJ4qt3IT1f4bA3EV4KezptlbWNLKqrt5axkOT3l31pCeO6xOjKkQAZaHefrrLNbmJ6T+/qTwTbiIww==
+fomantic-ui-css@2.9.2:
+  version "2.9.2"
+  resolved "https://registry.yarnpkg.com/fomantic-ui-css/-/fomantic-ui-css-2.9.2.tgz#b445206bb0c1547ff05abbecc4725107749f7f54"
+  integrity sha512-D2KogymuA0t7z7zLoekSorgpOKil+q8y09sfYmWP1LcEA1WYRcMKdm5okjnxn4eopl8j45WBnWrkgtobNSbY2w==
   dependencies:
     jquery "^3.4.0"
 
