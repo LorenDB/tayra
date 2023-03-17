@@ -74,8 +74,12 @@ server {
         proxy_pass   http://funkwhale-api/.well-known/;
     }
 
-    location /media/ {
-        alias ${MEDIA_ROOT}/;
+    location /media/__sized__/ {
+        alias ${MEDIA_ROOT}/__sized__/;
+    }
+
+    location /media/attachments/ {
+        alias ${MEDIA_ROOT}/attachments/;
     }
 
     # this is an internal location that is used to serve

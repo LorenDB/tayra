@@ -108,8 +108,12 @@ http {
             proxy_pass   http://funkwhale-api/api/subsonic/rest/;
         }
 
-        location /media/ {
-            alias /protected/media/;
+        location /media/__sized__/ {
+            alias /protected/media/__sized__/;
+        }
+
+        location /media/attachments/ {
+            alias /protected/media/attachments/;
         }
 
         # this is an internal location that is used to serve
