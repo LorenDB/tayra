@@ -463,6 +463,12 @@
       align-items: center;
     }
 
+    .title.ellipsis {
+      @include media("<tablet") {
+          max-width: 35vw;
+      }
+    }
+
     // NOTE: Taken from semantic ui
     &.active {
       background: #E0E0E0;
