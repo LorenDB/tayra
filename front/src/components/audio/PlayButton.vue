@@ -105,15 +105,17 @@ const openMenu = () => {
   // little magic to ensure the menu is always visible in the viewport
   // By default, try to display it on the right if there is enough room
   const menu = dropdown.value.find('.menu')
-  const viewportOffset = menu.get(0)?.getBoundingClientRect() ?? { right: 0, left: 0 }
-  const viewportWidth = document.documentElement.clientWidth
-  const rightOverflow = viewportOffset.right - viewportWidth
-  const leftOverflow = -viewportOffset.left
+  if (!menu.classList.includes('visible')) {
+    const viewportOffset = menu.get(0)?.getBoundingClientRect() ?? { right: 0, left: 0 }
+    const viewportWidth = document.documentElement.clientWidth
+    const rightOverflow = viewportOffset.right - viewportWidth
+    const leftOverflow = -viewportOffset.left
 
-  if (rightOverflow > 0) {
-    menu.css({ cssText: `left: ${-rightOverflow - 5}px !important;` })
-  } else if (leftOverflow > 0) {
-    menu.css({ cssText: `right: -${leftOverflow + 5}px !important;` })
+    if (rightOverflow > 0) {
+      menu.css({ cssText: `left: ${-rightOverflow - 5}px !important;` })
+    } else if (leftOverflow > 0) {
+      menu.css({ cssText: `right: -${leftOverflow + 5}px !important;` })
+    }
   }
 }
 </script>
