@@ -17,6 +17,7 @@ myst-parser = "==0.18.1"
 
 django = "==3.2.18"
 django-environ = "==0.9.0"
+funkwhale-api = {path = "../api"}
 
 [tool.poetry.dev-dependencies]
 

@@ -112,7 +112,7 @@ review_docs:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes: [docs/**/*]
 
-  image: $CI_REGISTRY/funkwhale/ci/python:3.11
+  image: $CI_REGISTRY/funkwhale/ci/python-funkwhale-api:3.11
   variables:
     BUILD_PATH: "../docs-review"
   environment:
@@ -311,7 +311,7 @@ build_docs:
     - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
     - changes: [docs/**/*]
 
-  image: $CI_REGISTRY/funkwhale/ci/python:3.11
+  image: $CI_REGISTRY/funkwhale/ci/python-funkwhale-api:3.11
   variables:
     BUILD_PATH: "../public"
     GIT_STRATEGY: clone
