@@ -29,7 +29,7 @@ const submit = async () => {
   errors.value = []
 
   try {
-    const response = await axios.post('manage/users/invitations/', { code: code.value })
+    const response = await axios.post('manage/users/invitations/', { code: code.value || undefined })
     invitations.unshift(response.data)
     code.value = ''
   } catch (error) {
