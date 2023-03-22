@@ -1908,7 +1908,7 @@
           }
         },
         "subtitle": {
-          "with-uploader": "Hochgeladen von {0] auf {1}",
+          "with-uploader": "Hochgeladen von {0} auf {1}",
           "without-uploader": "Hochgeladen auf {0}"
         },
         "title": "Titel"
