@@ -112,8 +112,15 @@ http {
             proxy_pass   http://funkwhale-api;
         }
 
-        location /media/ {
-            alias /protected/media/;
+        # Allow direct access to only specific subdirectories in /media
+        location /media/__sized__/ {
+            alias /protected/media/__sized__/;
+            add_header Access-Control-Allow-Origin '*';
+        }
+
+        # Allow direct access to only specific subdirectories in /media
+        location /media/attachments/ {
+            alias /protected/media/attachments/;
             add_header Access-Control-Allow-Origin '*';
         }
 

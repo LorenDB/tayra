@@ -1,0 +1,124 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.10\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-24 18:14+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../administrator/manage-script/create-library.md:1
+msgid "Create a library"
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:3
+msgid "Use the `create_library` command to create new libraries for a given user."
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:9
+msgid "Parameter"
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:10
+msgid "Data type"
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:11
+msgid "Description"
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:13
+msgid "`username`*"
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:14
+#: ../../administrator/manage-script/create-library.md:18
+msgid "String"
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:15
+msgid "The user you want to create the library for."
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:17
+msgid "`--name`"
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:19
+msgid "The name of the library. Defaults to \"default\"."
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:21
+msgid "`--privacy-level`"
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:22
+msgid "Enum (String)"
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:23
+msgid "The [privacy level](../../user/libraries/create.md) of the library"
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:24
+msgid "`\"me\"` (default)"
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:25
+msgid "`\"instance\"`"
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:26
+msgid "`\"everyone\"`"
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:29
+msgid "Examples"
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:31
+msgid "Create a new library"
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:33
+msgid "Use the following command to create a new library with a custom name and privacy level."
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:0
+msgid "Debian"
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:0
+msgid "Docker"
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:57
+#: ../../administrator/manage-script/create-library.md:89
+#: ../../administrator/manage-script/create-library.md:121
+msgid "Returns"
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:63
+msgid "Create a new library with no name or privacy level"
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:65
+msgid "You can create a library using only a username. The script substitutes default values for the library name and privacy level."
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:95
+msgid "Library with the same name already exists"
+msgstr ""
+
+#: ../../administrator/manage-script/create-library.md:97
+msgid "If a library with the same name already exists for the given user, the script will **not** create a new library."
+msgstr ""

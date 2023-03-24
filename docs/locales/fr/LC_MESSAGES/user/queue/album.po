@@ -1,0 +1,96 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.11.0\n"
+
+#: ../../user_documentation/queue/add_album.md:1
+msgid "Add albums to your queue"
+msgstr ""
+
+#: ../../user_documentation/queue/add_album.md:3
+msgid ""
+"Add entire albums to your queue to start listening to them. Choose from "
+"the following **Play options**:"
+msgstr ""
+
+#: ../../user_documentation/queue/add_album.md:5
+msgid "**Play** – remove all content from the queue and play the selected album."
+msgstr ""
+
+#: ../../user_documentation/queue/add_album.md:6
+msgid "**Add to queue** – add the selected album to the end of the queue."
+msgstr ""
+
+#: ../../user_documentation/queue/add_album.md:7
+msgid "**Play next** – add the selected album to the next position in the queue."
+msgstr ""
+
+#: ../../user_documentation/queue/add_album.md:8
+msgid ""
+"**Play now** – play the selected album immediately but do not clear the "
+"queue."
+msgstr ""
+
+#: ../../user_documentation/queue/add_album.md:10
+msgid "You can add albums from the following places:"
+msgstr ""
+
+#: ../../user_documentation/queue/add_album.md:16
+msgid "From the album details page"
+msgstr ""
+
+#: ../../user_documentation/queue/add_album.md:18
+msgid "To add an album to the queue from the album details page:"
+msgstr ""
+
+#: ../../user_documentation/queue/add_album.md:20
+msgid "Go to the album's details page."
+msgstr ""
+
+#: ../../user_documentation/queue/add_album.md:21
+msgid ""
+"Select the orange play button ({fa}`play`) to **Play** the album. Select "
+"the dropdown icon ({fa}`caret-down`) to select a different **Play "
+"option**."
+msgstr ""
+
+#: ../../user_documentation/queue/add_album.md:23
+msgid "You're done! You've added the album to your queue."
+msgstr ""
+
+#: ../../user_documentation/queue/add_album.md:25
+msgid "From an album card"
+msgstr ""
+
+#: ../../user_documentation/queue/add_album.md:27
+msgid "To add an album from its album card:"
+msgstr ""
+
+#: ../../user_documentation/queue/add_album.md:29
+msgid "Find the album card in the interface."
+msgstr ""
+
+#: ../../user_documentation/queue/add_album.md:30
+msgid ""
+"Select the orange play button ({fa}`play`) to **Play** the album. Select "
+"the kebab menu ({fa}`ellipsis-v`) to select a different **Play option**."
+msgstr ""
+
+#: ../../user_documentation/queue/add_album.md:32
+msgid "That's it! You've added the album to your queue."
+msgstr ""
+

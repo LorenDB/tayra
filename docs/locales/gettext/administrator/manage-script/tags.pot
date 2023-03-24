@@ -1,0 +1,89 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.10\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-24 18:14+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../administrator/manage-script/tags.md:1
+msgid "Add artist and album tags from track metadata"
+msgstr ""
+
+#: ../../administrator/manage-script/tags.md:3
+msgid "Funkwhale extracts track tags from the file's metadata. Funkwhale applies these tags to the track's album and artist by running a check every few days. You can run the process at any time using the `funkwhale-manage` command line interface."
+msgstr ""
+
+#: ../../administrator/manage-script/tags.md:5
+msgid "The command performs the following actions:"
+msgstr ""
+
+#: ../../administrator/manage-script/tags.md:7
+msgid "Finds all local artists or albums with no tags."
+msgstr ""
+
+#: ../../administrator/manage-script/tags.md:8
+msgid "Gets all the tags associated with the album/artist's tracks."
+msgstr ""
+
+#: ../../administrator/manage-script/tags.md:9
+msgid "Applies the track's tags to the album/artist."
+msgstr ""
+
+#: ../../administrator/manage-script/tags.md:11
+msgid "Add tags to albums"
+msgstr ""
+
+#: ../../administrator/manage-script/tags.md:13
+msgid "To add tags to untagged albums:"
+msgstr ""
+
+#: ../../administrator/manage-script/tags.md:0
+msgid "Debian"
+msgstr ""
+
+#: ../../administrator/manage-script/tags.md:21
+#: ../../administrator/manage-script/tags.md:39
+#: ../../administrator/manage-script/tags.md:64
+#: ../../administrator/manage-script/tags.md:82
+msgid "SSH into your Funkwhale server."
+msgstr ""
+
+#: ../../administrator/manage-script/tags.md:22
+#: ../../administrator/manage-script/tags.md:40
+#: ../../administrator/manage-script/tags.md:65
+#: ../../administrator/manage-script/tags.md:83
+msgid "Navigate to the Funkwhale directory."
+msgstr ""
+
+#: ../../administrator/manage-script/tags.md:28
+#: ../../administrator/manage-script/tags.md:46
+msgid "Run the `funkwhale-manage` command line interface to generate tags for untagged albums."
+msgstr ""
+
+#: ../../administrator/manage-script/tags.md:0
+msgid "Docker"
+msgstr ""
+
+#: ../../administrator/manage-script/tags.md:54
+msgid "Add tags to artists"
+msgstr ""
+
+#: ../../administrator/manage-script/tags.md:56
+msgid "To add tags to untagged artists:"
+msgstr ""
+
+#: ../../administrator/manage-script/tags.md:71
+#: ../../administrator/manage-script/tags.md:89
+msgid "Run the `funkwhale-manage` command line interface to generate tags for untagged artists."
+msgstr ""

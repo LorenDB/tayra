@@ -1,0 +1,49 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.10\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-24 18:14+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../developer/contribute/copy.md:1
+msgid "Update UI copy"
+msgstr ""
+
+#: ../../developer/contribute/copy.md:4
+msgid "Funkwhale is localized into several languages using [Weblate](https://translate.funkwhale.audio). You must make sure that any frontend strings are properly marked for localization. We use the [vue-i18n package](https://kazupon.github.io/vue-i18n/) to handle translation of frontend files."
+msgstr ""
+
+#: ../../developer/contribute/copy.md:7
+msgid "All UI strings are stored in `front/locales/en.json` file. The file is structured to mimic the format of the repository. Each string should be labeled following the semantic naming for the item it applies to."
+msgstr ""
+
+#: ../../developer/contribute/copy.md:9
+msgid "UI strings can be added to both the `<script>` and `<template>` part of a Vue file using following syntax:"
+msgstr ""
+
+#: ../../developer/contribute/copy.md:0
+msgid "Locale file"
+msgstr ""
+
+#: ../../developer/contribute/copy.md:0
+msgid "Script"
+msgstr ""
+
+#: ../../developer/contribute/copy.md:0
+msgid "Template"
+msgstr ""
+
+#: ../../developer/contribute/copy.md:58
+msgid "Some strings change depending on whether they are plural or not. You can create plural strings using the [vue-i18n pluralization syntax](https://kazupon.github.io/vue-i18n/guide/pluralization.html)"
+msgstr ""

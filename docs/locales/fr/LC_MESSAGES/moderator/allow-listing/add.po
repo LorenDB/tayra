@@ -1,0 +1,147 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.11.0\n"
+
+#: ../../moderator_documentation/allow_listing/add_domain.md:1
+msgid "Add a domain to your allow-list"
+msgstr ""
+
+#: ../../moderator_documentation/allow_listing/add_domain.md:3
+msgid ""
+"If you have allow-listing enabled, you need to add a domain to your "
+"allow-list to interact with it. You can add new domains in two ways:"
+msgstr ""
+
+#: ../../moderator_documentation/allow_listing/add_domain.md
+msgid "Required permissions"
+msgstr ""
+
+#: ../../moderator_documentation/allow_listing/add_domain.md:13
+msgid ""
+"{guilabel}`Moderation` – provides access to the administration and "
+"moderation menus."
+msgstr ""
+
+#: ../../moderator_documentation/allow_listing/add_domain.md:16
+msgid "Add a new domain"
+msgstr ""
+
+#: ../../moderator_documentation/allow_listing/add_domain.md:18
+msgid "To add a domain that is not currently in your domains list:"
+msgstr ""
+
+#: ../../moderator_documentation/allow_listing/add_domain.md
+msgid "Desktop"
+msgstr ""
+
+#: ../../moderator_documentation/allow_listing/add_domain.md:26
+#: ../../moderator_documentation/allow_listing/add_domain.md:39
+#: ../../moderator_documentation/allow_listing/add_domain.md:61
+#: ../../moderator_documentation/allow_listing/add_domain.md:74
+msgid "Log in to your {term}`pod`."
+msgstr ""
+
+#: ../../moderator_documentation/allow_listing/add_domain.md:27
+#: ../../moderator_documentation/allow_listing/add_domain.md:62
+msgid ""
+"Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open "
+"the {guilabel}`Administration` menu."
+msgstr ""
+
+#: ../../moderator_documentation/allow_listing/add_domain.md:28
+#: ../../moderator_documentation/allow_listing/add_domain.md:41
+#: ../../moderator_documentation/allow_listing/add_domain.md:63
+#: ../../moderator_documentation/allow_listing/add_domain.md:76
+msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
+msgstr ""
+
+#: ../../moderator_documentation/allow_listing/add_domain.md:29
+#: ../../moderator_documentation/allow_listing/add_domain.md:42
+#: ../../moderator_documentation/allow_listing/add_domain.md:64
+#: ../../moderator_documentation/allow_listing/add_domain.md:77
+msgid ""
+"Select {guilabel}`Domains` at the top of the page. The "
+"{guilabel}`Domains` page opens. You can see a list of known domains on "
+"this page."
+msgstr ""
+
+#: ../../moderator_documentation/allow_listing/add_domain.md:30
+#: ../../moderator_documentation/allow_listing/add_domain.md:43
+msgid ""
+"Enter the URL of the Fediverse server you want to add in the "
+"{guilabel}`Add a domain` field."
+msgstr ""
+
+#: ../../moderator_documentation/allow_listing/add_domain.md:31
+#: ../../moderator_documentation/allow_listing/add_domain.md:44
+msgid ""
+"Check ({fa}`check-square`) the checkbox labeled {guilabel}`Add to allow-"
+"list`."
+msgstr ""
+
+#: ../../moderator_documentation/allow_listing/add_domain.md:32
+#: ../../moderator_documentation/allow_listing/add_domain.md:45
+msgid "Select {guilabel}`Add`."
+msgstr ""
+
+#: ../../moderator_documentation/allow_listing/add_domain.md
+msgid "Mobile"
+msgstr ""
+
+#: ../../moderator_documentation/allow_listing/add_domain.md:40
+#: ../../moderator_documentation/allow_listing/add_domain.md:75
+msgid ""
+"Select the wrench icon ({fa}`wrench`) at the top of the screen to open "
+"the {guilabel}`Administration` menu."
+msgstr ""
+
+#: ../../moderator_documentation/allow_listing/add_domain.md:49
+msgid "That's it! You've added the domain to your pod's allow-list."
+msgstr ""
+
+#: ../../moderator_documentation/allow_listing/add_domain.md:51
+msgid "Add a known domain"
+msgstr ""
+
+#: ../../moderator_documentation/allow_listing/add_domain.md:53
+msgid "To add a domain that is already in your pod's domain list:"
+msgstr ""
+
+#: ../../moderator_documentation/allow_listing/add_domain.md:65
+#: ../../moderator_documentation/allow_listing/add_domain.md:78
+msgid ""
+"Check ({fa}`check-square`) the checkbox next to the domain(s) you want to"
+" add to the allow-list."
+msgstr ""
+
+#: ../../moderator_documentation/allow_listing/add_domain.md:66
+#: ../../moderator_documentation/allow_listing/add_domain.md:79
+msgid "Select {guilabel}`Add to allow-list` in the {guilabel}`Actions` dropdown."
+msgstr ""
+
+#: ../../moderator_documentation/allow_listing/add_domain.md:67
+#: ../../moderator_documentation/allow_listing/add_domain.md:80
+msgid ""
+"Select {guilabel}`Go`. A green tick ({fa}`check`) appears next to the "
+"domain(s)"
+msgstr ""
+
+#: ../../moderator_documentation/allow_listing/add_domain.md:84
+msgid "You're done! You've added the domain to your pod's allow-list."
+msgstr ""
+

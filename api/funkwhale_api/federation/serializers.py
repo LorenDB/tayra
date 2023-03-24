@@ -247,6 +247,7 @@ class ActorSerializer(jsonld.JsonLdSerializer):
         truncate_length=common_models.CONTENT_TEXT_MAX_LENGTH,
         required=False,
         allow_null=True,
+        allow_blank=True,
     )
     followers = serializers.URLField(max_length=500, required=False)
     following = serializers.URLField(max_length=500, required=False, allow_null=True)

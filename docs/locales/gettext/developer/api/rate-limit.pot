@@ -1,0 +1,165 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.10\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-24 18:14+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../developer/api/rate-limit.md:1
+msgid "Rate limiting"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:3
+msgid "Funkwhale supports rate-limiting as of version 0.2.0. Pod admins can choose to rate limit specific endpoints to prevent abuse and improve the stability of the service. If the server drops a request due to rate-limiting, it returns a `429` status code."
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:5
+msgid "By default, rate limits follow these rules:"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:7
+msgid "Anonymous (unauthenticated) requests are subject to lower limits than authenticated requests"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:8
+msgid "`PUT`, `DELETE`, `PUT`, `POST`, and `PATCH` requests are subject to lower limits than `GET` requests"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:10
+msgid "You can return a full list of scope with their corresponding rate-limits by making a `GET` request to `/api/v1/rate-limit`."
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:12
+msgid "HTTP headers"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:14
+msgid "Each API call returns HTTP headers to pass the following information:"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:16
+msgid "What was the scope of the request"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:17
+msgid "What is the rate-limit associated with the request scope"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:18
+msgid "How many more requests in the scope can be made within the rate-limit timeframe"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:19
+msgid "How much time does the client need to wait to send another request"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:21
+msgid "Here is a full list of supported headers"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:27
+msgid "Header"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:28
+msgid "Example value"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:29
+msgid "Description"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:30
+msgid "`X-RateLimit-Limit`"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:31
+msgid "50"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:32
+msgid "The number of requests allowed within a given period"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:33
+msgid "`X-RateLimit-Duration`"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:34
+msgid "3600"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:35
+msgid "The time window, in seconds, during which the number of requests are measured"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:36
+msgid "`X-RateLimit-Scope`"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:37
+msgid "`login`"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:38
+msgid "The name of the scope computed for the request"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:39
+msgid "`X-RateLimit-Remaining`"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:40
+msgid "42"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:41
+msgid "How many requests can be sent with the same scope before the rate-limit applies"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:42
+msgid "`Retry-After`"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:43
+msgid "3543"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:44
+msgid "How many seconds the client must wait before it can retry. Only applies if `X-RateLimit-Remaining` is `0`"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:45
+msgid "`X-RateLimit-Reset`"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:46
+msgid "1568126089"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:47
+msgid "A timestamp indicating when the `X-RateLimit-Remaining` value will reset"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:48
+msgid "`X-RateLimit-ResetSeconds`"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:49
+msgid "3599"
+msgstr ""
+
+#: ../../developer/api/rate-limit.md:50
+msgid "The number of seconds until the `X-RateLimit-Remaining` value resets"
+msgstr ""

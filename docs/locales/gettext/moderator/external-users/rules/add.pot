@@ -1,0 +1,111 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.10\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-24 18:14+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../moderator/external-users/rules/add.md:1
+msgid "Add a moderation rule"
+msgstr ""
+
+#: ../../moderator/external-users/rules/add.md:4
+msgid "Purging a user's data removes all objects and caches associated to that user. This impacts users who have objects from these users in their libraries."
+msgstr ""
+
+#: ../../moderator/external-users/rules/add.md:7
+msgid "Add moderation rules to users to control how they can interact with your {term}`pod`. Moderation rules enable you to restrict content from a user showing on your pod."
+msgstr ""
+
+#: ../../moderator/external-users/rules/add.md:0
+msgid "Required permissions"
+msgstr ""
+
+#: ../../moderator/external-users/rules/add.md:13
+msgid "{guilabel}`Moderation` – provides access to the administration and moderation menus."
+msgstr ""
+
+#: ../../moderator/external-users/rules/add.md:16
+msgid "To add a moderation rule to a user:"
+msgstr ""
+
+#: ../../moderator/external-users/rules/add.md:0
+msgid "Desktop"
+msgstr ""
+
+#: ../../moderator/external-users/rules/add.md:24
+#: ../../moderator/external-users/rules/add.md:41
+msgid "Log in to your {term}`pod`."
+msgstr ""
+
+#: ../../moderator/external-users/rules/add.md:25
+msgid "Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu."
+msgstr ""
+
+#: ../../moderator/external-users/rules/add.md:26
+#: ../../moderator/external-users/rules/add.md:43
+msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
+msgstr ""
+
+#: ../../moderator/external-users/rules/add.md:27
+#: ../../moderator/external-users/rules/add.md:44
+msgid "Select {guilabel}`Accounts` at the top of the page. The {guilabel}`Accounts` page opens. You can see a list of known accounts on this page."
+msgstr ""
+
+#: ../../moderator/external-users/rules/add.md:28
+#: ../../moderator/external-users/rules/add.md:45
+msgid "Select the account you want to apply the rule to. The account's moderation page opens."
+msgstr ""
+
+#: ../../moderator/external-users/rules/add.md:29
+#: ../../moderator/external-users/rules/add.md:46
+msgid "Select {guilabel}`Add a moderation policy`. The moderation policy form appears."
+msgstr ""
+
+#: ../../moderator/external-users/rules/add.md:30
+#: ../../moderator/external-users/rules/add.md:47
+msgid "Enter the {guilabel}`Reason` you are applying the rule. Depending on your pod's configuration, users may be able to see this."
+msgstr ""
+
+#: ../../moderator/external-users/rules/add.md:31
+#: ../../moderator/external-users/rules/add.md:48
+msgid "Choose your moderation rule:"
+msgstr ""
+
+#: ../../moderator/external-users/rules/add.md:32
+#: ../../moderator/external-users/rules/add.md:49
+msgid "{guilabel}`Block everything` – purge all content from the user and block all content."
+msgstr ""
+
+#: ../../moderator/external-users/rules/add.md:33
+#: ../../moderator/external-users/rules/add.md:50
+msgid "{guilabel}`Reject media` – only reject media files such as audio files, avatars, and album art."
+msgstr ""
+
+#: ../../moderator/external-users/rules/add.md:34
+#: ../../moderator/external-users/rules/add.md:51
+msgid "Select {guilabel}`Create` to save your rule."
+msgstr ""
+
+#: ../../moderator/external-users/rules/add.md:0
+msgid "Mobile"
+msgstr ""
+
+#: ../../moderator/external-users/rules/add.md:42
+msgid "Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu."
+msgstr ""
+
+#: ../../moderator/external-users/rules/add.md:55
+msgid "That's all there is to it! You've applied your moderation rule. The rule takes effect as soon as you create it."
+msgstr ""

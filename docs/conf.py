@@ -99,7 +99,7 @@ release = version
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = "en"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -247,8 +247,8 @@ def setup(app):
     app.connect("build-finished", copy_legacy_redirects)
 
 
-smv_tag_whitelist = None
-smv_branch_whitelist = r"(stable|develop)$"
+smv_tag_whitelist = r"^$"
+smv_branch_whitelist = r"^(stable|develop)$"
 
 # Internationalization settings
 locale_dirs = ["locales/"]

@@ -1,0 +1,92 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.10\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-24 18:14+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../moderator/domains/rules/delete.md:1
+msgid "Delete a moderation rule"
+msgstr ""
+
+#: ../../moderator/domains/rules/delete.md:3
+msgid "If you no longer need a moderation rule, you can delete it completely. This allows the other server to interact with your pod normally."
+msgstr ""
+
+#: ../../moderator/domains/rules/delete.md:0
+msgid "Required permissions"
+msgstr ""
+
+#: ../../moderator/domains/rules/delete.md:9
+msgid "{guilabel}`Moderation` – provides access to the administration and moderation menus."
+msgstr ""
+
+#: ../../moderator/domains/rules/delete.md:12
+msgid "To delete an existing moderation rule:"
+msgstr ""
+
+#: ../../moderator/domains/rules/delete.md:0
+msgid "Desktop"
+msgstr ""
+
+#: ../../moderator/domains/rules/delete.md:20
+#: ../../moderator/domains/rules/delete.md:34
+msgid "Log in to your {term}`pod`."
+msgstr ""
+
+#: ../../moderator/domains/rules/delete.md:21
+msgid "Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu."
+msgstr ""
+
+#: ../../moderator/domains/rules/delete.md:22
+#: ../../moderator/domains/rules/delete.md:36
+msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
+msgstr ""
+
+#: ../../moderator/domains/rules/delete.md:23
+#: ../../moderator/domains/rules/delete.md:37
+msgid "Select {guilabel}`Domains` at the top of the page. The {guilabel}`Domains` page opens. You can see a list of known domains on this page."
+msgstr ""
+
+#: ../../moderator/domains/rules/delete.md:24
+#: ../../moderator/domains/rules/delete.md:38
+msgid "Select the domain with the moderation rule you want to edit. The domain's moderation page opens."
+msgstr ""
+
+#: ../../moderator/domains/rules/delete.md:25
+#: ../../moderator/domains/rules/delete.md:39
+msgid "Select {guilabel}`Edit` under the {guilabel}`This domain is subject to specific moderation rules` header. The moderation policy form opens."
+msgstr ""
+
+#: ../../moderator/domains/rules/delete.md:26
+#: ../../moderator/domains/rules/delete.md:40
+msgid "Select {guilabel}`Delete`. A {guilabel}`Delete this moderation rule?` warning appears."
+msgstr ""
+
+#: ../../moderator/domains/rules/delete.md:27
+#: ../../moderator/domains/rules/delete.md:41
+msgid "Select {guilabel}`Delete moderation rule`."
+msgstr ""
+
+#: ../../moderator/domains/rules/delete.md:0
+msgid "Mobile"
+msgstr ""
+
+#: ../../moderator/domains/rules/delete.md:35
+msgid "Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu."
+msgstr ""
+
+#: ../../moderator/domains/rules/delete.md:45
+msgid "That's it! You've deleted your moderation rule. Content from the domain will no longer get blocked."
+msgstr ""

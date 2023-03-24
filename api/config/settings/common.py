@@ -871,6 +871,7 @@ Example:
 
 - ``redis://127.0.0.1:6379/0``
 - ``redis+socket:///run/redis/redis.sock?virtual_host=0``
+
 """
 # END CELERY
 # Location of root django.contrib.admin URL, use {% url 'admin:index' %}

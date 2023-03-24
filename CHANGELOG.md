@@ -9,6 +9,14 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 <!-- towncrier -->
 
+## 1.3.0-rc4 (2023-03-24)
+
+Update since 1.3.0-rc2:
+
+- Resolved an issue where queue text with mouse over has dark text on dark background (#2058) (2058)
+- Improve signal handling for service and containers
+- Fixes an issue which made it possible to download all media files without access control (#2101)
+
 ## 1.3.0-rc3 (2023-01-23)
 
 Update since 1.3.0-rc2:
@@ -51,17 +59,20 @@ Update instructions:
   curl -L -o /srv/funkwhale/docker-compose.yml "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/${FUNKWHALE_VERSION}/deploy/docker-compose.yml"
   ```
 
-  ```{note}
-  If you need to customize your nginx template, e.g. to work around [problems with Docker's resolver](https://docs.funkwhale.audio/admin/external-storages.html#no-resolver-found), you can mount your
+  .. note::
+  If you need to customize your nginx template, e.g. to work around `problems with Docker's resolver <https://docs.funkwhale.audio/admin/external-storages.html#no-resolver-found>`\_, you can mount your
   custom nginx configuration into the container. Uncomment the commented volumes in the `nginx` section of your `docker-compose.yml`.
   Additionally you need to update the paths in `nginx/funkwhale.template`.
   Replace all occurrences of `/funkwhale` by `/usr/share/nginx/html`.
   This loads the templates from your `nginx` folder and overrides the template files in the Docker container.
-  ```
+
+  ````
 
   ```sh
   docker-compose up -d
-  ```
+  ````
+
+- The Docker instructions now use the updated Docker compose plugin. If you previously used the `docker-compose` standalone installation, do the following while upgrading:
 
 - The Docker instructions now use the updated Docker compose plugin. If you previously used the `docker-compose` standalone installation, do the following while upgrading:
 

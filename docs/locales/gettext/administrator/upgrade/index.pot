@@ -1,0 +1,53 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.10\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-24 18:14+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../administrator/upgrade/index.md:11
+msgid "Prepare for the upgrade"
+msgstr ""
+
+#: ../../administrator/upgrade/index.md:21
+msgid "Quick install script"
+msgstr ""
+
+#: ../../administrator/upgrade/index.md:21
+msgid "Docker"
+msgstr ""
+
+#: ../../administrator/upgrade/index.md:21
+msgid "Debian"
+msgstr ""
+
+#: ../../administrator/upgrade/index.md:21
+msgid "Choose your installation method"
+msgstr ""
+
+#: ../../administrator/upgrade/index.md:1
+msgid "Upgrade your Funkwhale instance"
+msgstr ""
+
+#: ../../administrator/upgrade/index.md:3
+msgid "We release new updates to Funkwhale to add new features and fix bugs. We recommend you install these updates to ensure you have the best experience."
+msgstr ""
+
+#: ../../administrator/upgrade/index.md:6
+msgid "We recommend you back up your database and media files before performing and update."
+msgstr ""
+
+#: ../../administrator/upgrade/index.md:9
+msgid "Be sure to check the changelog for any specific instructions relating to upgrades."
+msgstr ""

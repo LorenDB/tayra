@@ -18,6 +18,9 @@
         "publicContent": "浏览公开内容",
         "signup": "注册"
       },
+      "help": {
+        "closedRegistrations": "本实例已关闭注册。您可以使用以下链接在其他实例注册。"
+      },
       "link": {
         "findOtherPod": "查看其他实例",
         "learnMore": "查看更多"
@@ -144,7 +147,7 @@
       "message": {
         "pageNotFound": "抱歉，您访问的页面不存在："
       },
-      "title": "找不到页面"
+      "title": "未找到页面"
     },
     "Queue": {
       "button": {
@@ -159,6 +162,9 @@
       "label": {
         "addArtistContentFilter": "隐藏这个歌手的相关内容…",
         "duration": "时长",
+        "enterFullscreen": "进入全屏模式",
+        "exitFullscreen": "退出全屏模式",
+        "favorite": "收藏歌曲",
         "next": "下一首",
         "pause": "暂停",
         "play": "播放",

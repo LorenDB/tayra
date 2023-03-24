@@ -1,0 +1,57 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.10\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-24 18:14+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../administrator/index.md:1
+msgid "Get started"
+msgstr ""
+
+#: ../../administrator/index.md:3
+msgid "Follow the guides in this section to set up and administrate your pod."
+msgstr ""
+
+#: ../../administrator/index.md:9
+msgid "Install Funkwhale on your server"
+msgstr ""
+
+#: ../../administrator/index.md:11
+msgid "Funkwhale is self-hosted, meaning you run it on your own server. To set up your own Funkwhale pod, check out [our installation guides](installation/index.md). Choose the installation method that works for you!"
+msgstr ""
+
+#: ../../administrator/index.md:13
+msgid "Configure your Funkwhale pod"
+msgstr ""
+
+#: ../../administrator/index.md:15
+msgid "Once you've installed Funkwhale, you can use [the guides in this section](configuration/index.md) to configure it."
+msgstr ""
+
+#: ../../administrator/index.md:17
+msgid "Upgrade your Funkwhale pod"
+msgstr ""
+
+#: ../../administrator/index.md:19
+msgid "Funkwhale releases new updates regularly. To keep up-to-date with these changes, check out our [upgrade guides](upgrade/index.md). If you're moving from our deprecated mono-container Docker setup, check out our [migration guide](migration.md)."
+msgstr ""
+
+#: ../../administrator/index.md:21
+msgid "Manage your Funkwhale pod"
+msgstr ""
+
+#: ../../administrator/index.md:23
+msgid "Funkwhale provides tools for managing content and users on your Funkwhale pod. In addition to the [frontend moderation tools](../moderator/index.md), pod admins can use some extra tools for more powerful administration. Check out our [guide to the Django dashboard](django/index.md) and our [management script](manage-script/index.md) to get started."
+msgstr ""

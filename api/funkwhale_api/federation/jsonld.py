@@ -1,5 +1,6 @@
 import asyncio
 import functools
+import logging
 
 import aiohttp
 import pyld.documentloader.requests
@@ -9,6 +10,8 @@ from rest_framework import serializers
 from rest_framework.fields import empty
 
 from . import contexts
+
+logger = logging.getLogger(__name__)
 
 
 def cached_contexts(loader):
@@ -282,7 +285,8 @@ class JsonLdSerializer(serializers.Serializer):
             if dereferenced_ids:
                 try:
                     loop = asyncio.get_event_loop()
-                except RuntimeError:
+                except RuntimeError as exception:
+                    logger.debug(exception)
                     loop = asyncio.new_event_loop()
                 references = self.context.setdefault("references", {})
                 loop.run_until_complete(

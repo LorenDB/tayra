@@ -246,6 +246,7 @@
         "url": "Pod-Adresse"
       },
       "message": {
+        "currentConnection": "Du bist aktuell mit { 0 } verbunden. Wenn du fortfährst, wird die Verbindung unterbrochen und alle lokalen Daten werden gelöscht.",
         "newUrl": "Du verwendest jetzt den Funkwhale-Pod unter { url }"
       }
     },
@@ -299,6 +300,7 @@
         "language": "Sprache",
         "main": "Hauptmenü",
         "play": "Diesen Titel abspielen",
+        "reports": "Ausstehende Überprüfungen",
         "theme": "Theme"
       },
       "link": {
@@ -318,6 +320,7 @@
         "radios": "Radios",
         "search": "Suchen",
         "settings": "Einstellungen",
+        "switchInstance": "Ändere die Instanz",
         "users": "Nutzende"
       }
     },
@@ -513,7 +516,17 @@
           "unmute": "Stummschaltung aufheben"
         },
         "meta": {
-          "position": "{ index } von { length }"
+          "position": "{ index } von { length }",
+          "unknownAlbum": "Unbekanntes Album",
+          "unknownArtist": "Unbekannte*r Künstler*in"
+        }
+      },
+      "PlayerControls": {
+        "labels": {
+          "next": "Nächster Titel",
+          "pause": "Pause",
+          "play": "Abspielen",
+          "previous": "Vorheriger Titel"
         }
       },
       "Search": {
@@ -664,6 +677,7 @@
         },
         "header": {
           "appDetails": "Anwendungsdetails",
+          "appSecretWarning": "Stelle sicher, dass dieser Token sicher gespeichert ist.",
           "editApp": "Anwendung bearbeiten"
         },
         "help": {
@@ -676,6 +690,9 @@
         },
         "link": {
           "settings": "Zurück zu den Einstellungen"
+        },
+        "message": {
+          "appSecretWarning": "Du wirst es nie wieder angezeigt bekommen, nachdem du diese Ansicht verlassen hast."
         },
         "title": "Anwendung bearbeiten"
       },
@@ -695,6 +712,7 @@
           "redirectUri": "Umleitungs-URI",
           "scopes": {
             "description": "Beim Aktivieren der übergeordneten Bereiche \"Lesen\" oder \"Schreiben\" erhältst du Zugriff auf alle entsprechenden untergeordneten Bereiche.",
+            "label": "Bereiche",
             "read": {
               "description": "Lesezugriff auf Benutzerdaten",
               "label": "Lesen"
@@ -753,6 +771,9 @@
         "link": {
           "createAccount": "Konto erstellen",
           "resetPassword": "Kennwort zurücksetzen"
+        },
+        "message": {
+          "redirect": "Du wirst jetzt zu {domain} weitergeleitet, um dich zu authentifizieren"
         },
         "placeholder": {
           "username": "Benutzername oder E-Mail-Adresse eingeben"
@@ -925,6 +946,7 @@
         },
         "label": {
           "email": "E-Mail-Adresse",
+          "invitation": "Einladung",
           "password": "Kennwort",
           "username": "Benutzername"
         },
@@ -1247,6 +1269,11 @@
           "failure": "Fehler beim Aktualisieren der Beschreibung"
         }
       },
+      "UserLink": {
+        "link": {
+          "username": "{'@'}{username}"
+        }
+      },
       "UserMenu": {
         "label": {
           "language": "Sprache",
@@ -1283,6 +1310,7 @@
         "link": {
           "about": "Über",
           "chat": "Chat-Raum",
+          "docs": "Dokumentation",
           "forum": "Forum",
           "git": "Bugtracker",
           "login": "Anmelden",
@@ -1402,7 +1430,8 @@
         "meta": {
           "episodes": "{ n } Folge | { n } Folgen",
           "tracks": "{ n } Titel | { n } Titel"
-        }
+        },
+        "title": "Album"
       },
       "AlbumDetail": {
         "description": {
@@ -1651,6 +1680,9 @@
           "import": "Import-Ergebnisse:",
           "previousImport": "Ergebnisse des letzten Imports:"
         },
+        "empty": {
+          "noFiles": "0"
+        },
         "header": {
           "failure": "Fehler beim Starten des Imports",
           "local": "Musik aus deinem Computer importieren",
@@ -1668,6 +1700,7 @@
           "uploading": "Hochladen läuft"
         },
         "message": {
+          "listener": "Willst Du diese Seite wirklich verlassen? Eingegebene Daten werden gegebenenfalls nicht gespeichert.",
           "local": {
             "copyright": "Die lädst kein urheberrechtlich geschütztes Material in eine öffentliche Mediathek hoch. Wenn doch, missachtest du das Gesetz",
             "format": "Die Dateien, die du hochlädst, sind im OGG-, Flac-, MP3- oder AIFF-Format",
@@ -1683,6 +1716,7 @@
               "size": "Größe",
               "status": "Status"
             },
+            "progress": "{percent}%",
             "status": {
               "pending": "Ausstehend",
               "uploaded": "Hochgeladen",
@@ -1799,7 +1833,8 @@
       "Radios": {
         "button": {
           "add": "Ein Radio erstellen",
-          "create": "Dein eigenes Radio erstellen"
+          "create": "Dein eigenes Radio erstellen",
+          "search": "Suche"
         },
         "empty": {
           "noResults": "Keine Ergebnisse zu deiner Anfrage"
@@ -1872,6 +1907,10 @@
             "header": "Bette diesen Titel in deine Webseite ein"
           }
         },
+        "subtitle": {
+          "with-uploader": "Hochgeladen von {0} auf {1}",
+          "without-uploader": "Hochgeladen auf {0}"
+        },
         "title": "Titel"
       },
       "TrackDetail": {
@@ -1901,7 +1940,8 @@
           },
           "track": {
             "bitrate": {
-              "label": "Bitrate"
+              "label": "Bitrate",
+              "value": "{bitrate}/s"
             },
             "codec": "Codec",
             "downloads": "Downloads",
@@ -1963,6 +2003,7 @@
         "Filter": {
           "cancelButton": "Abbrechen",
           "excludeLabel": "Ausschließen",
+          "matchingTracks": "Kein Titel passt zu den Kriterien | {n} zu den Kriterien passender Titel | {n} zu den Kriterien passende Titel",
           "matchingTracksModalHeader": "Titel, die dem Filter entsprechen",
           "removeButton": "Entfernen"
         }
@@ -2096,6 +2137,7 @@
         },
         "EditsCardList": {
           "label": {
+            "search": "Suche",
             "status": "Status"
           },
           "option": {
@@ -2568,6 +2610,7 @@
               "internalNotes": "Interne Notizen",
               "pending": "Ausstehend",
               "refused": "Abgelehnt",
+              "resolutionDate": "Datum des Beschlusses",
               "status": "Status"
             }
           }
@@ -2629,12 +2672,16 @@
                 "creationDate": "Erstellungsdatum",
                 "expirationDate": "Ablaufdatum",
                 "owner": "Besitzer·in",
-                "status": "Status"
+                "status": "Status",
+                "user": "Benutzer*in"
               }
             }
           }
         },
         "UsersTable": {
+          "label": {
+            "search": "Suche"
+          },
           "notApplicable": "k. A.",
           "ordering": {
             "direction": {
@@ -2725,6 +2772,9 @@
           "message": "Verwende dieses Feld, um dem Moderationsteam zusätzlichen Kontext bereitzustellen.",
           "modal": "Mithilfe dieses Formulars kannst du einen Bericht an unser Moderationsteam senden."
         },
+        "error": {
+          "nodeinfoFetch": "Informationen über diese Instanz können nicht abgerufen werden: {error}"
+        },
         "header": {
           "disabled": "Anonyme Meldungen sind deaktiviert. Melde dich an, um eine Meldung einzureichen.",
           "modal": "Möchtest du dieses Objekt melden?",
@@ -2751,7 +2801,8 @@
         "message": {
           "libraryAcceptFollow": "Das Abonnieren der Mediathek \"{ library }\" wurde von { username } bestätigt",
           "libraryFollow": "{ username } hat deine Mediathek \"{ library }\" abonniert",
-          "libraryPendingFollow": "{ username } möchte deine Mediathek \"{ library }\" abonnieren"
+          "libraryPendingFollow": "{ username } möchte deine Mediathek \"{ library }\" abonnieren",
+          "libraryReject": "Du hast {username}s Anfrage, \"{library}\" zu folgen, abgelehnt"
         }
       }
     },
@@ -2830,7 +2881,8 @@
           "addToPlaylist": "Zur Wiedergabeliste hinzufügen",
           "available": "Verfügbare Wiedergabelisten",
           "manage": "Wiedergabelisten verwalten",
-          "noResults": "Keine Ergebnisse für diesen Filter"
+          "noResults": "Keine Ergebnisse für diesen Filter",
+          "track": "{title}, von {artist}"
         },
         "label": {
           "filter": "Filter"
@@ -2869,8 +2921,12 @@
     },
     "radios": {
       "Button": {
+        "startArtistsRadio": "Start Künstler*innen Radio",
         "startRadio": "Radio abspielen",
-        "stopRadio": "Radio ausschalten"
+        "startTagsRadio": "Starte Tag Radio",
+        "stopArtistsRadio": "Stoppe Künstler*innen Radio",
+        "stopRadio": "Radio ausschalten",
+        "stopTagsRadio": "Stoppe Tag Radio"
       },
       "Card": {
         "button": {

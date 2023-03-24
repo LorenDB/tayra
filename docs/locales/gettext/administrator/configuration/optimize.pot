@@ -1,0 +1,77 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.10\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-24 18:14+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../administrator/configuration/optimize.md:1
+msgid "Optimize memory usage"
+msgstr ""
+
+#: ../../administrator/configuration/optimize.md:3
+msgid "Funkwhale has a reasonable memory footprint. If you're running Funkwhale on a limited device, you can use these tweaks to reduce the footprint."
+msgstr ""
+
+#: ../../administrator/configuration/optimize.md:5
+msgid "Reduce workers concurrency"
+msgstr ""
+
+#: ../../administrator/configuration/optimize.md:7
+msgid "Funkwhale uses Celery to handle asynchronous tasks. By default, Celery spawns a worker per CPU core. This can lead to higher memory usage."
+msgstr ""
+
+#: ../../administrator/configuration/optimize.md:9
+msgid "You can set the number of workers using the `CELERYD_CONCURRENCY` variable in your `.env` file. For example, a value of `CELERYD_CONCURRENCY=1` spawns a single worker."
+msgstr ""
+
+#: ../../administrator/configuration/optimize.md:12
+msgid "Reducing the number of celery workers slows down the handling of asynchronous tasks. On larger instances, this can cause performance problems."
+msgstr ""
+
+#: ../../administrator/configuration/optimize.md:15
+msgid "Switch to solo pool execution"
+msgstr ""
+
+#: ../../administrator/configuration/optimize.md:17
+msgid "Celery uses a `prefork` pool by default. This enables the server to process many tasks at the same time. You can switch to a `solo` pool which handles tasks one at a time. This reduces memory overhead but removes the ability to process tasks concurrently."
+msgstr ""
+
+#: ../../administrator/configuration/optimize.md:0
+msgid "Debian"
+msgstr ""
+
+#: ../../administrator/configuration/optimize.md:25
+msgid "Open your `funkwhale-worker` unit file in an editor."
+msgstr ""
+
+#: ../../administrator/configuration/optimize.md:31
+msgid "Add the `--pool=solo` flag to the `ExecStart` line of your unit file."
+msgstr ""
+
+#: ../../administrator/configuration/optimize.md:42
+msgid "Restart the Celery service."
+msgstr ""
+
+#: ../../administrator/configuration/optimize.md:0
+msgid "Docker"
+msgstr ""
+
+#: ../../administrator/configuration/optimize.md:53
+msgid "Add the `--pool=solo` flag to the `celerybeat` command in `docker-compose.yml`."
+msgstr ""
+
+#: ../../administrator/configuration/optimize.md:61
+msgid "Restart Celery."
+msgstr ""

@@ -1,0 +1,489 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.10\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-24 18:14+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../user/info/cli.rst:2
+msgid "Funkwhale CLI"
+msgstr ""
+
+#: ../../user/info/cli.rst:4
+msgid "`Funkwhale CLI <https://dev.funkwhale.audio/funkwhale/cli/>`_ is a command-line interface you can install on your local computer to interact with any Funkwhale server via the REST API. It's especially useful if you need to do repetitive operations or write scripts that interact with Funkwhale servers."
+msgstr ""
+
+#: ../../user/info/cli.rst:8
+msgid "Here is a (non-exhaustive) list of operations you can perform via the CLI:"
+msgstr ""
+
+#: ../../user/info/cli.rst:10
+msgid "Manage libraries"
+msgstr ""
+
+#: ../../user/info/cli.rst:11
+msgid "Upload local files"
+msgstr ""
+
+#: ../../user/info/cli.rst:12
+msgid "Retrieve and search tracks, albums and artists"
+msgstr ""
+
+#: ../../user/info/cli.rst:13
+msgid "Download tracks"
+msgstr ""
+
+#: ../../user/info/cli.rst:14
+msgid "Manage playlists"
+msgstr ""
+
+#: ../../user/info/cli.rst:15
+msgid "Manage favorites"
+msgstr ""
+
+#: ../../user/info/cli.rst:17
+msgid "Table of Contents"
+msgstr ""
+
+#: ../../user/info/cli.rst:20
+msgid "Installation"
+msgstr ""
+
+#: ../../user/info/cli.rst:22
+msgid "We provide a prebuilt binary for Linux::"
+msgstr ""
+
+#: ../../user/info/cli.rst:27
+msgid "You can also install from source with::"
+msgstr ""
+
+#: ../../user/info/cli.rst:34
+msgid "Installing from source requires you have Python 3.6 or higher available."
+msgstr ""
+
+#: ../../user/info/cli.rst:36
+msgid "You can check the installation was successful by running ``funkwhale --help``. This should output the list of available commands and the CLI description."
+msgstr ""
+
+#: ../../user/info/cli.rst:40
+msgid "Basic usage"
+msgstr ""
+
+#: ../../user/info/cli.rst:42
+msgid "Here are a couple of commands you can try to get started:"
+msgstr ""
+
+#: ../../user/info/cli.rst:56
+msgid "Getting help"
+msgstr ""
+
+#: ../../user/info/cli.rst:58
+msgid "The most basic way to get help is to run ``funkwhale --help``. It will list available commands, namespaces and arguments that are common to all commands."
+msgstr ""
+
+#: ../../user/info/cli.rst:60
+msgid "You can also append the ``--help`` flag after any command to get more information about its arguments and options, like this: ``funkwhale albums ls --help``"
+msgstr ""
+
+#: ../../user/info/cli.rst:62
+msgid "The CLI offers nested commands. For instance, ``funkwhale albums`` isn't a valid command in itself, but a namespace for all albums-related commands."
+msgstr ""
+
+#: ../../user/info/cli.rst:64
+msgid "To get the help of a specific namespace and list all its available commands, simply run ``funkwhale <namespace> --help``."
+msgstr ""
+
+#: ../../user/info/cli.rst:67
+msgid "Authentication"
+msgstr ""
+
+#: ../../user/info/cli.rst:69
+msgid "The CLI uses Oauth tokens to interact with the API."
+msgstr ""
+
+#: ../../user/info/cli.rst:71
+msgid "To get started, you need to create an application for the CLI. To do this:"
+msgstr ""
+
+#: ../../user/info/cli.rst:73
+msgid "Log in to your Funkwhale pod."
+msgstr ""
+
+#: ../../user/info/cli.rst:74
+msgid "Select the cog icon (:fa:`cog`) or your avatar to expand the user menu."
+msgstr ""
+
+#: ../../user/info/cli.rst:75
+msgid "Select :guilabel:`Settings`."
+msgstr ""
+
+#: ../../user/info/cli.rst:76
+msgid "Scroll down to the :guilabel:`Your applications` section."
+msgstr ""
+
+#: ../../user/info/cli.rst:77
+msgid "Select :guilabel:`Register a new application` to create a new application."
+msgstr ""
+
+#: ../../user/info/cli.rst:78
+msgid "Give your application an appropriate name (e.g. \"Funkwhale CLI\")."
+msgstr ""
+
+#: ../../user/info/cli.rst:79
+msgid "Give your application the permissions you require."
+msgstr ""
+
+#: ../../user/info/cli.rst:80
+msgid "Select :guilabel:`Create application`. A screen appears showing :guilabel:`Application details`."
+msgstr ""
+
+#: ../../user/info/cli.rst:81
+msgid "Copy the app's :guilabel:`Access token`."
+msgstr ""
+
+#: ../../user/info/cli.rst:83
+msgid "Once you have your app's Access Token, you can either:"
+msgstr ""
+
+#: ../../user/info/cli.rst:85
+msgid "Run ``funkwhale login``. The CLI asks you for your token and stores it in your machine's keyring. The CLI uses this token to authenticate."
+msgstr ""
+
+#: ../../user/info/cli.rst:86
+msgid "Explicitly pass a token to the command via the ``-t`` flag or the ``FUNKWHALE_TOKEN`` environment variable"
+msgstr ""
+
+#: ../../user/info/cli.rst:88
+msgid "If you use ``funkwhale login``, you can delete the local token with ``funkwhale logout``."
+msgstr ""
+
+#: ../../user/info/cli.rst:90
+msgid "You can check that you are fully authenticated by running ``funkwhale users me``. It will display information relating to your user profile."
+msgstr ""
+
+#: ../../user/info/cli.rst:93
+msgid "Configuration"
+msgstr ""
+
+#: ../../user/info/cli.rst:95
+msgid "To work, the CLI needs to be pointed to a Funkwhale server. This can be done in various ways:"
+msgstr ""
+
+#: ../../user/info/cli.rst:97
+msgid "Via the ``-H https://funkwhale.domain`` flag when calling the CLI"
+msgstr ""
+
+#: ../../user/info/cli.rst:98
+msgid "Via the ``FUNKWHALE_SERVER_URL`` environment variable"
+msgstr ""
+
+#: ../../user/info/cli.rst:99
+msgid "Via an env file (see below)"
+msgstr ""
+
+#: ../../user/info/cli.rst:102
+msgid "Env file"
+msgstr ""
+
+#: ../../user/info/cli.rst:104
+msgid "The CLI will try to read configuration options from a ``.env`` file in the current directory. If this file is not present, it will read the configuration options from ``~/.config/funkwhale/env`` on Linux or ``~/Library/Application Support/funkwhale/env`` on macOS."
+msgstr ""
+
+#: ../../user/info/cli.rst:106
+msgid "You can also give it a path to another env file via the ``-e /path/to/.envfile`` flag or the ``ENV_FILE`` environment variable."
+msgstr ""
+
+#: ../../user/info/cli.rst:108
+msgid "An env file simply contains a list of variables, using the same syntax as environment variables (comments starting with # are allowed). Example::"
+msgstr ""
+
+#: ../../user/info/cli.rst:115
+msgid "List of configuration options"
+msgstr ""
+
+#: ../../user/info/cli.rst:118
+msgid "CLI Flag"
+msgstr ""
+
+#: ../../user/info/cli.rst:118
+msgid "Environment variable"
+msgstr ""
+
+#: ../../user/info/cli.rst:118
+msgid "Example value"
+msgstr ""
+
+#: ../../user/info/cli.rst:118
+msgid "Description"
+msgstr ""
+
+#: ../../user/info/cli.rst:120
+msgid "``-e``, ``--env-file``"
+msgstr ""
+
+#: ../../user/info/cli.rst:120
+msgid "``ENV_FILE``"
+msgstr ""
+
+#: ../../user/info/cli.rst:120
+msgid "``~/Music/.env``"
+msgstr ""
+
+#: ../../user/info/cli.rst:120
+msgid "Path to a local env file to use for configuration"
+msgstr ""
+
+#: ../../user/info/cli.rst:122
+msgid "``-H``, ``--url``"
+msgstr ""
+
+#: ../../user/info/cli.rst:122
+msgid "``FUNKWHALE_SERVER_URL``"
+msgstr ""
+
+#: ../../user/info/cli.rst:122
+msgid "``https://demo.funkwhale.audio``"
+msgstr ""
+
+#: ../../user/info/cli.rst:122
+msgid "The URL of the Funkwhale server the CLI should contact"
+msgstr ""
+
+#: ../../user/info/cli.rst:124
+msgid "``-t``, ``--token``"
+msgstr ""
+
+#: ../../user/info/cli.rst:124
+msgid "``FUNKWHALE_TOKEN``"
+msgstr ""
+
+#: ../../user/info/cli.rst:124
+msgid "``eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI``"
+msgstr ""
+
+#: ../../user/info/cli.rst:124
+msgid "A JWT token to use for authentication"
+msgstr ""
+
+#: ../../user/info/cli.rst:126
+msgid "``--no-login``"
+msgstr ""
+
+#: ../../user/info/cli.rst:126
+msgid "``FUNKWHALE_NO_LOGIN``"
+msgstr ""
+
+#: ../../user/info/cli.rst:126
+#: ../../user/info/cli.rst:131
+msgid "``true``"
+msgstr ""
+
+#: ../../user/info/cli.rst:126
+msgid "Completely disable authentication and keyring"
+msgstr ""
+
+#: ../../user/info/cli.rst:128
+msgid "``-v``, ``--verbosity``"
+msgstr ""
+
+#: ../../user/info/cli.rst:128
+msgid "One of ``CRITICAL``, ``ERROR``, ``WARNING``, ``INFO`` or ``DEBUG``"
+msgstr ""
+
+#: ../../user/info/cli.rst:128
+msgid "Control the verbosity (default is INFO)"
+msgstr ""
+
+#: ../../user/info/cli.rst:131
+msgid "``-q``, ``--quiet``"
+msgstr ""
+
+#: ../../user/info/cli.rst:131
+msgid "``FUNKWHALE_QUIET``"
+msgstr ""
+
+#: ../../user/info/cli.rst:131
+msgid "Completely disable logging"
+msgstr ""
+
+#: ../../user/info/cli.rst:135
+msgid "Read commands"
+msgstr ""
+
+#: ../../user/info/cli.rst:137
+msgid "All commands that list results - such as ``funkwhale albums ls`` or ``funkwhale tracks ls`` - share similar behaviors and sets of arguments."
+msgstr ""
+
+#: ../../user/info/cli.rst:140
+msgid "Filtering"
+msgstr ""
+
+#: ../../user/info/cli.rst:142
+msgid "Results can be filtered using the ``-f`` or ``--filter`` flag. Provided values are transmitted directly in the querystring when the requests to the API is made::"
+msgstr ""
+
+#: ../../user/info/cli.rst:147
+msgid "The flag can be provided multiple times, to add multiple filter conditions::"
+msgstr ""
+
+#: ../../user/info/cli.rst:154
+msgid "The list of supported fields for filtering depends on the resource being queried, and can be found in our `API documentation`_."
+msgstr ""
+
+#: ../../user/info/cli.rst:158
+msgid "Searching"
+msgstr ""
+
+#: ../../user/info/cli.rst:160
+msgid "Any text provided after the ``ls`` command will be considered a search query and transmitted to the API::"
+msgstr ""
+
+#: ../../user/info/cli.rst:167
+msgid "This is technically equivalent to filtering with a ``q`` parameter as described above::"
+msgstr ""
+
+#: ../../user/info/cli.rst:173
+msgid "Ordering"
+msgstr ""
+
+#: ../../user/info/cli.rst:175
+msgid "You can control the ordering of the results with the `-o` or ``--ordering`` flag::"
+msgstr ""
+
+#: ../../user/info/cli.rst:182
+msgid "Ordering in descending order is supported by prefixing the field name with ``-``, e.g: ``-o -creation_date``"
+msgstr ""
+
+#: ../../user/info/cli.rst:186
+msgid "The list of supported fields for ordering depends on the resource being queried, and can be found in our `API documentation`_."
+msgstr ""
+
+#: ../../user/info/cli.rst:190
+msgid "Pagination"
+msgstr ""
+
+#: ../../user/info/cli.rst:192
+msgid "You can retrieve a specific result page using the ``-p`` or ``--page`` flag::"
+msgstr ""
+
+#: ../../user/info/cli.rst:197
+msgid "You can also alter the size of the pages using the ``-s`` or ``--page-size`` flag::"
+msgstr ""
+
+#: ../../user/info/cli.rst:202
+msgid "Sometimes, you may want to retrieve multiple pages of results at once. This is supported using the ``-l`` or ``--limit`` flag::"
+msgstr ""
+
+#: ../../user/info/cli.rst:207
+msgid "You can, of course, combine these flags::"
+msgstr ""
+
+#: ../../user/info/cli.rst:213
+msgid "Output"
+msgstr ""
+
+#: ../../user/info/cli.rst:215
+msgid "While the default output displays a human-readable table, you can customize it."
+msgstr ""
+
+#: ../../user/info/cli.rst:217
+msgid "The ``--raw`` flag will simply output the raw JSON payload returned by the API server::"
+msgstr ""
+
+#: ../../user/info/cli.rst:221
+msgid "The ``-h`` or ``--no-headers`` flag simply removes the table column headers."
+msgstr ""
+
+#: ../../user/info/cli.rst:223
+msgid "The ``-t`` or ``--format`` flag alters the rendering of result, depending on the provided value::"
+msgstr ""
+
+#: ../../user/info/cli.rst:230
+msgid "Available formats are: ``fancy_grid``, ``github``, ``grid``, ``html``, ``jira``, ``latex``, ``latex_booktabs``, ``latex_raw``, ``mediawiki``, ``moinmoin``, ``orgtbl``, ``pipe``, ``plain``, ``presto``, ``psql``, ``rst``, ``simple``, ``textile``, ``tsv``, ``youtrack``"
+msgstr ""
+
+#: ../../user/info/cli.rst:232
+msgid "The ``-c`` or ``--column`` flag gives you control on the displayed columns::"
+msgstr ""
+
+#: ../../user/info/cli.rst:237
+msgid "For a given resource, the list of available columns can be found by running ``funkwhale <resource> ls --help``."
+msgstr ""
+
+#: ../../user/info/cli.rst:239
+msgid "The ``-i`` or ``--ids`` flag displays only the IDs of results, one per line::"
+msgstr ""
+
+#: ../../user/info/cli.rst:243
+msgid "This is especially useful in conjunction with other commands (like deletion commands) and piping. Note that this is also technically equivalent to applying the ``--no-headers``, ``--format plain`` and ``--column ID`` flags."
+msgstr ""
+
+#: ../../user/info/cli.rst:247
+msgid "Write commands"
+msgstr ""
+
+#: ../../user/info/cli.rst:250
+msgid "Deleting objects"
+msgstr ""
+
+#: ../../user/info/cli.rst:252
+msgid "Some resources support deletion, via commands such as ``funkwhale libraries rm`` or ``funkwhale playlists rm``, followed by one or more IDs::"
+msgstr ""
+
+#: ../../user/info/cli.rst:257
+msgid "By default, the ``rm`` command will ask for confirmation, but you can disable this behavior by providing the ``--no-input`` flag."
+msgstr ""
+
+#: ../../user/info/cli.rst:263
+msgid "Examples"
+msgstr ""
+
+#: ../../user/info/cli.rst:266
+msgid "Uploading local files"
+msgstr ""
+
+#: ../../user/info/cli.rst:268
+msgid "**Goal**: create a library and upload all MP3 files from ``~/Music`` to it"
+msgstr ""
+
+#: ../../user/info/cli.rst:270
+#: ../../user/info/cli.rst:282
+#: ../../user/info/cli.rst:298
+#: ../../user/info/cli.rst:315
+msgid "**Commands**::"
+msgstr ""
+
+#: ../../user/info/cli.rst:278
+msgid "Favorite an entire album"
+msgstr ""
+
+#: ../../user/info/cli.rst:280
+msgid "**Goal**: retrieve all the tracks from an album and add these to your favorites"
+msgstr ""
+
+#: ../../user/info/cli.rst:294
+msgid "Mirror an artist discography locally"
+msgstr ""
+
+#: ../../user/info/cli.rst:296
+msgid "**Goal**: Download the discography of an artist locally, in the ``~/Music`` directory, in an ``Artist/Album/Track`` folder hierarchy"
+msgstr ""
+
+#: ../../user/info/cli.rst:311
+msgid "Open a remote album in VLC"
+msgstr ""
+
+#: ../../user/info/cli.rst:313
+msgid "**Goal**: Variation of the previous example, but instead of downloading an artist discography, we listen to an album in VLC"
+msgstr ""

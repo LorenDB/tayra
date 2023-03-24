@@ -1,0 +1,73 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.10\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-24 18:14+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../user/channels/rss.md:1
+msgid "Subscribe to an RSS feed"
+msgstr ""
+
+#: ../../user/channels/rss.md:4
+msgid "Other users on your pod can't see podcasts you import using RSS. They need to subscribe to the feed themselves."
+msgstr ""
+
+#: ../../user/channels/rss.md:7
+msgid "You can use Funkwhale as a {term}`podcatcher` to listen to your favorite podcasts. Funkwhale can read {abbr}`RSS (Really Simple Syndication)` feeds to import podcasts. To add an RSS feed to Funkwhale:"
+msgstr ""
+
+#: ../../user/channels/rss.md:0
+msgid "Desktop"
+msgstr ""
+
+#: ../../user/channels/rss.md:15
+msgid "Select {guilabel}`Channels` in the sidebar. The {guilabel}`Channels` page opens."
+msgstr ""
+
+#: ../../user/channels/rss.md:16
+#: ../../user/channels/rss.md:28
+msgid "Select {guilabel}`+ Add new` at the top of the page. The {guilabel}`Subscriptions` screen appears."
+msgstr ""
+
+#: ../../user/channels/rss.md:17
+#: ../../user/channels/rss.md:29
+msgid "Select {guilabel}`RSS`."
+msgstr ""
+
+#: ../../user/channels/rss.md:18
+#: ../../user/channels/rss.md:30
+msgid "Enter the URL of the RSS feed in the {guilabel}`RSS feed location` input."
+msgstr ""
+
+#: ../../user/channels/rss.md:19
+#: ../../user/channels/rss.md:31
+msgid "Select {guilabel}`Subscribe`."
+msgstr ""
+
+#: ../../user/channels/rss.md:0
+msgid "Mobile"
+msgstr ""
+
+#: ../../user/channels/rss.md:26
+msgid "Select the hamburger menu ({fa}`bars`) to open the menu bar."
+msgstr ""
+
+#: ../../user/channels/rss.md:27
+msgid "Select {guilabel}`Channels`. The {guilabel}`Channels` page opens."
+msgstr ""
+
+#: ../../user/channels/rss.md:35
+msgid "That's it! Your favorite podcast is now available in the {guilabel}`Channels` page. Funkwhale updates the feed to make sure you always have the latest episodes."
+msgstr ""

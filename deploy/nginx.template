@@ -120,8 +120,15 @@ server {
         proxy_pass   http://funkwhale-api;
     }
 
-    location /media/ {
-        alias ${MEDIA_ROOT}/;
+    # Allow direct access to only specific subdirectories in /media
+    location /media/__sized__/ {
+        alias ${MEDIA_ROOT}/__sized__/;
+        add_header Access-Control-Allow-Origin '*';
+    }
+
+    # Allow direct access to only specific subdirectories in /media
+    location /media/attachments/ {
+        alias ${MEDIA_ROOT}/attachments/;
         add_header Access-Control-Allow-Origin '*';
     }
 
@@ -145,7 +152,7 @@ server {
         # has been checked on API side.
         # Set this to the same value as your MUSIC_DIRECTORY_PATH setting.
         internal;
-        alias   ${MUSIC_DIRECTORY_SERVE_PATH};
+        alias   ${MUSIC_DIRECTORY_SERVE_PATH}/;
         add_header Access-Control-Allow-Origin '*';
     }
 

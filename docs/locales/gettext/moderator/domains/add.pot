@@ -1,0 +1,82 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.10\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-24 18:14+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../moderator/domains/add.md:1
+msgid "Add a domain to your pod's domain list"
+msgstr ""
+
+#: ../../moderator/domains/add.md:3
+msgid "Funkwhale records the domains of other {term}`Fediverse` servers when users interact with them. Once a domain is in your domains list, you can [add moderation rules](rules/add.md) to it."
+msgstr ""
+
+#: ../../moderator/domains/add.md:0
+msgid "Required permissions"
+msgstr ""
+
+#: ../../moderator/domains/add.md:9
+msgid "{guilabel}`Moderation` – provides access to the administration and moderation menus."
+msgstr ""
+
+#: ../../moderator/domains/add.md:12
+msgid "You can also add domains to this list at any time to create rules before users interact with them. To do this:"
+msgstr ""
+
+#: ../../moderator/domains/add.md:0
+msgid "Desktop"
+msgstr ""
+
+#: ../../moderator/domains/add.md:20
+#: ../../moderator/domains/add.md:32
+msgid "Log in to your {term}`pod`."
+msgstr ""
+
+#: ../../moderator/domains/add.md:21
+msgid "Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu."
+msgstr ""
+
+#: ../../moderator/domains/add.md:22
+#: ../../moderator/domains/add.md:34
+msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
+msgstr ""
+
+#: ../../moderator/domains/add.md:23
+#: ../../moderator/domains/add.md:35
+msgid "Select {guilabel}`Domains` at the top of the page. The {guilabel}`Domains` page opens. You can see a list of known domains on this page."
+msgstr ""
+
+#: ../../moderator/domains/add.md:24
+#: ../../moderator/domains/add.md:36
+msgid "Enter the URL of the Fediverse server you want to add in the {guilabel}`Add a domain` field."
+msgstr ""
+
+#: ../../moderator/domains/add.md:25
+#: ../../moderator/domains/add.md:37
+msgid "Select {guilabel}`Add` to add the domain. The domain moderation page opens."
+msgstr ""
+
+#: ../../moderator/domains/add.md:0
+msgid "Mobile"
+msgstr ""
+
+#: ../../moderator/domains/add.md:33
+msgid "Select the wrench icon ({fa}`wrench`) at the top of the page to open the {guilabel}`Administration` menu."
+msgstr ""
+
+#: ../../moderator/domains/add.md:41
+msgid "That's it! The domain is now in your domains list. You can now add moderation rules to this domain."
+msgstr ""

@@ -1,0 +1,122 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.11.0\n"
+
+#: ../../user/plugins/scrobbler.md:1
+msgid "Scrobbler plugin"
+msgstr ""
+
+#: ../../user/plugins/scrobbler.md:4
+msgid ""
+"If you want to use [Last.fm](https://last.fm) to scrobble your listens, "
+"your pod admin needs to set up an API account. Contact your {term}`pod` "
+"admin if you have any questions."
+msgstr ""
+
+#: ../../user/plugins/scrobbler.md:7
+msgid ""
+"The **Scrobbler** plugin enables you to submit "
+"({term}`scrobble<Scrobbling>`) listens to a scrobbler service. Scrobbling"
+" listens helps you build up a profile of your music tastes. It also "
+"enables you to keep a record of your listens."
+msgstr ""
+
+#: ../../user/plugins/scrobbler.md:10
+msgid ""
+"Using ListenBrainz or Maloja? Check out the "
+"[ListenBrainz](listenbrainz.md) and [Maloja](maloja.md) plugins!"
+msgstr ""
+
+#: ../../user/plugins/scrobbler.md:13
+msgid ""
+"The **Scrobbler** plugin supports any scrobbling service that uses the "
+"Audioscrobbler protocol. To set up the **Scrobbler plugin**:"
+msgstr ""
+
+#: ../../user/plugins/scrobbler.md
+msgid "Desktop"
+msgstr ""
+
+#: ../../user/plugins/scrobbler.md:21 ../../user/plugins/scrobbler.md:38
+msgid "Log in to your account."
+msgstr ""
+
+#: ../../user/plugins/scrobbler.md:22
+msgid "Select the cog icon ({fa}`cog`) or your avatar to expand the user menu."
+msgstr ""
+
+#: ../../user/plugins/scrobbler.md:23 ../../user/plugins/scrobbler.md:40
+msgid "Select {guilabel}`Settings`."
+msgstr ""
+
+#: ../../user/plugins/scrobbler.md:24 ../../user/plugins/scrobbler.md:41
+msgid "Scroll down to the {guilabel}`Plugins` section."
+msgstr ""
+
+#: ../../user/plugins/scrobbler.md:25 ../../user/plugins/scrobbler.md:42
+msgid "Select {guilabel}`Manage plugins`."
+msgstr ""
+
+#: ../../user/plugins/scrobbler.md:26 ../../user/plugins/scrobbler.md:43
+msgid "Find the {guilabel}`Scrobbler` plugin."
+msgstr ""
+
+#: ../../user/plugins/scrobbler.md:27 ../../user/plugins/scrobbler.md:44
+msgid "Toggle the {guilabel}`Enabled` switch."
+msgstr ""
+
+#: ../../user/plugins/scrobbler.md:28 ../../user/plugins/scrobbler.md:45
+msgid ""
+"Enter the {guilabel}`URL of the scrobbler service`. If you leave this "
+"field blank, the plugin defaults to **Last.fm**."
+msgstr ""
+
+#: ../../user/plugins/scrobbler.md:29 ../../user/plugins/scrobbler.md:46
+msgid ""
+"Enter {guilabel}`Your scrobbler username`. You can set this up on your "
+"scrobbler service."
+msgstr ""
+
+#: ../../user/plugins/scrobbler.md:30 ../../user/plugins/scrobbler.md:47
+msgid ""
+"Enter {guilabel}`Your scrobbler password`. You can set this up on your "
+"scrobbler service."
+msgstr ""
+
+#: ../../user/plugins/scrobbler.md:31 ../../user/plugins/scrobbler.md:48
+msgid "Select {guilabel}`Save`."
+msgstr ""
+
+#: ../../user/plugins/scrobbler.md:39
+msgid ""
+"Select the cog icon ({fa}`cog`) or your avatar to open the "
+"{guilabel}`Options` menu."
+msgstr ""
+
+#: ../../user/plugins/scrobbler.md:52
+msgid ""
+"That's it! You've set up the **Scrobbler** plugin. When you listen to "
+"tracks, the plugin sends the information to your scrobbler service."
+msgstr ""
+
+#~ msgid ""
+#~ "Using ListenBrainz or Maloja? Check out"
+#~ " the [ListenBrainz](listenbrainz_plugin) and "
+#~ "[Maloja](maloja_plugin) plugins!"
+#~ msgstr ""
+

@@ -32,7 +32,12 @@ services:
     # of CPUs. You can adjust this, by explicitly setting the --concurrency
     # flag:
     #   celery -A funkwhale_api.taskapp worker -l INFO --concurrency=4
-    command: celery -A funkwhale_api.taskapp worker -l INFO --concurrency=${CELERYD_CONCURRENCY-0}
+    command:
+      - celery
+      - --app=funkwhale_api.taskapp
+      - worker
+      - --loglevel=INFO
+      - --concurrency=${CELERYD_CONCURRENCY-0}
     environment:
       - C_FORCE_ROOT=true
     volumes:
@@ -42,11 +47,15 @@ services:
   celerybeat:
     restart: unless-stopped
     image: funkwhale/api:${FUNKWHALE_VERSION:-latest}
+    command:
+      - celery
+      - --app=funkwhale_api.taskapp
+      - beat
+      - --loglevel=INFO
     depends_on:
       - postgres
       - redis
     env_file: .env
-    command: celery -A funkwhale_api.taskapp beat --pidfile= -l INFO
 
   api:
     restart: unless-stopped

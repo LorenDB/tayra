@@ -1458,7 +1458,7 @@
           "discogs": "Rechercher sur Discogs",
           "django": "Voir dans l'administration Django",
           "domain": "Voir sur { domaine }",
-          "moderation": "Ouvrir dans l'interface de modérations",
+          "moderation": "Ouvrir dans l'interface de modération",
           "musicbrainz": "Voir sur MusicBrainz"
         },
         "modal": {
@@ -1527,7 +1527,7 @@
           "discogs": "Rechercher sur Discogs",
           "django": "Voir dans l'administration Django",
           "domain": "Voir sur { domaine }",
-          "moderation": "Ouvrir dans l'interface de modérations",
+          "moderation": "Ouvrir dans l'interface de modération",
           "musicbrainz": "Voir sur MusicBrainz",
           "wikipedia": "Rechercher sur Wikipédia"
         },
@@ -1871,7 +1871,7 @@
         "link": {
           "albums": "Albums",
           "artists": "Artistes",
-          "moderation": "Ouvrir dans l'interface de modérations"
+          "moderation": "Ouvrir dans l'interface de modération"
         }
       },
       "TagSelector": {
@@ -1893,7 +1893,7 @@
           "discogs": "Rechercher sur Discogs",
           "django": "Voir dans l'administration Django",
           "domain": "Voir sur { domaine }",
-          "moderation": "Ouvrir dans l'interface de modérations",
+          "moderation": "Ouvrir dans l'interface de modération",
           "wikipedia": "Rechercher sur Wikipédia"
         },
         "modal": {
@@ -2543,7 +2543,7 @@
             "reportedObject": "Élément signalé"
           },
           "link": {
-            "moderation": "Ouvrir dans l'interface de modérations",
+            "moderation": "Ouvrir dans l'interface de modération",
             "publicPage": "Voir la page publique",
             "report": "Signaler { id }"
           },
@@ -4024,7 +4024,7 @@
         "link": {
           "activity": "Activité",
           "domainView": "Voir sur { domaine }",
-          "moderation": "Ouvrir dans l'interface de modérations",
+          "moderation": "Ouvrir dans l'interface de modération",
           "overview": "Aperçu"
         },
         "title": "Profil de { username }"
@@ -4085,7 +4085,7 @@
           "channelTracks": "Pistes",
           "domainView": "Voir sur { domaine }",
           "mirrored": "Redondé depuis { domain }",
-          "moderation": "Ouvrir dans l'interface de modérations"
+          "moderation": "Ouvrir dans l'interface de modération"
         },
         "meta": {
           "episodes": "{ n } épisode | { n } épisodes",
@@ -4505,7 +4505,7 @@
           "albums": "Albums",
           "artists": "Artistes",
           "domain": "Voir sur { domaine }",
-          "moderation": "Ouvrir dans l'interface de modérations",
+          "moderation": "Ouvrir dans l'interface de modération",
           "owner": "Appartient à { username }",
           "tracks": "Pistes"
         },
