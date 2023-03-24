@@ -10,6 +10,14 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 .. towncrier
 
+1.3.0-rc4 (2023-03-24)
+----------------------
+
+Update since 1.3.0-rc2:
+- Resolved an issue where queue text with mouse over has dark text on dark background (#2058) (2058)
+- Improve signal handling for service and containers
+- Fixes an issue which made it possible to download all media files without access control (#2101)
+
 1.3.0-rc3 (2023-01-23)
 ----------------------
 
