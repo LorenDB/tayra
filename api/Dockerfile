@@ -33,7 +33,7 @@ RUN set -eux; \
   openssl-dev \
   postgresql-dev \
   zlib-dev \
-  py3-cryptography=38.0.3-r0 \
+  py3-cryptography=38.0.3-r1 \
   py3-lxml=4.9.2-r0 \
   py3-pillow=9.3.0-r0 \
   py3-psycopg2=2.9.5-r0 \
@@ -92,7 +92,7 @@ RUN set -eux; \
   libpq \
   libxml2 \
   libxslt \
-  py3-cryptography=38.0.3-r0 \
+  py3-cryptography=38.0.3-r1 \
   py3-lxml=4.9.2-r0 \
   py3-pillow=9.3.0-r0 \
   py3-psycopg2=2.9.5-r0 \
