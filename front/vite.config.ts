@@ -6,7 +6,7 @@ import { resolve } from 'path'
 import { visualizer } from 'rollup-plugin-visualizer'
 
 import manifest from './pwa-manifest.json'
-import Vue from '@vitejs/plugin-vue'
+import Inspector from 'vite-plugin-vue-inspector'
 
 const port = +(process.env.VUE_PORT ?? 8080)
 
