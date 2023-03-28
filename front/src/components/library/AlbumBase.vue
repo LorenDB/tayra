@@ -257,10 +257,10 @@ const remove = async () => {
               </template>
               <template v-if="totalTracks > 0">
                 <span v-if="isSerie">
-                  {{ $t('components.library.AlbumBase.meta.episodes', {episode_count: totalTracks}) }}
+                  {{ $t('components.library.AlbumBase.meta.episodes', totalTracks) }}
                 </span>
                 <span v-else>
-                  {{ $t('components.library.AlbumBase.meta.tracks', {tracks_count: totalTracks}) }}
+                  {{ $t('components.library.AlbumBase.meta.tracks', totalTracks) }}
                 </span>
                 <span class="middle middledot symbol" />
               </template>
