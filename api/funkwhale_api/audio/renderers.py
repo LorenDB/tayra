@@ -26,7 +26,6 @@ class PodcastRSSRenderer(renderers.JSONRenderer):
 
 class PodcastRSSContentNegociation(negotiation.DefaultContentNegotiation):
     def select_renderer(self, request, renderers, format_suffix=None):
-
         return (PodcastRSSRenderer(), PodcastRSSRenderer.media_type)
 
 

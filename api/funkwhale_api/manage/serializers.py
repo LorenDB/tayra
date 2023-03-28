@@ -395,7 +395,6 @@ class ManageNestedTrackSerializer(serializers.ModelSerializer):
 
 
 class ManageNestedAlbumSerializer(ManageBaseAlbumSerializer):
-
     tracks_count = serializers.SerializerMethodField()
 
     class Meta:
@@ -662,7 +661,6 @@ class ManageUploadSerializer(serializers.ModelSerializer):
 
 
 class ManageTagSerializer(ManageBaseAlbumSerializer):
-
     tracks_count = serializers.SerializerMethodField()
     albums_count = serializers.SerializerMethodField()
     artists_count = serializers.SerializerMethodField()

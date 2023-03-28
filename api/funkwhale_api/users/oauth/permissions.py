@@ -47,7 +47,6 @@ METHOD_SCOPE_MAPPING = {
 
 class ScopePermission(permissions.BasePermission):
     def has_permission(self, request, view):
-
         if request.method.lower() in ["options", "head"]:
             return True
 
@@ -103,7 +102,6 @@ class ScopePermission(permissions.BasePermission):
             )
 
     def has_permission_token(self, token, required_scope):
-
         if token.is_expired():
             return False
 

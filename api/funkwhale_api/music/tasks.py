@@ -445,7 +445,6 @@ def get_best_candidate_or_create(model, query, defaults, sort_fields):
     """
     candidates = model.objects.filter(query)
     if candidates:
-
         return sort_candidates(candidates, sort_fields)[0], False
 
     return model.objects.create(**defaults), True

@@ -155,7 +155,7 @@ class ListenBrainzClient:
 
 def _get_payload_many(tracks):
     payload = []
-    for (listened_at, track) in tracks:
+    for listened_at, track in tracks:
         data = _get_payload(track, listened_at)
         payload.append(data)
     return payload

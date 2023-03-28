@@ -20,7 +20,6 @@ class RadioViewSet(
     mixins.DestroyModelMixin,
     viewsets.GenericViewSet,
 ):
-
     serializer_class = serializers.RadioSerializer
     permission_classes = [
         oauth_permissions.ScopePermission,
@@ -87,7 +86,6 @@ class RadioViewSet(
 class RadioSessionViewSet(
     mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
 ):
-
     serializer_class = serializers.RadioSessionSerializer
     queryset = models.RadioSession.objects.all()
     permission_classes = []

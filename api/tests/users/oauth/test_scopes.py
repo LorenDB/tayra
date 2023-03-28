@@ -187,5 +187,4 @@ from funkwhale_api.users.oauth import scopes
     ],
 )
 def test_get_scopes_from_user_permissions(user_perms, expected):
-
     assert scopes.get_from_permissions(**user_perms) == expected

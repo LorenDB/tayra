@@ -387,7 +387,6 @@ class SubsonicViewSet(viewsets.GenericViewSet):
         try:
             offset = int(data.get("offset", 0))
         except (TypeError, ValueError):
-
             offset = 0
 
         try:

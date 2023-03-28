@@ -136,7 +136,6 @@ def clean_flac_pictures(apic):
 def clean_ogg_pictures(metadata_block_picture):
     pictures = []
     for b64_data in [metadata_block_picture]:
-
         try:
             data = base64.b64decode(b64_data)
         except (TypeError, ValueError):

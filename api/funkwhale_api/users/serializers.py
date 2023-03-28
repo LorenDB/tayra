@@ -185,7 +185,6 @@ class UserWriteSerializer(serializers.ModelSerializer):
 
 
 class UserReadSerializer(serializers.ModelSerializer):
-
     permissions = serializers.SerializerMethodField()
     full_username = serializers.SerializerMethodField()
     avatar = common_serializers.AttachmentSerializer(source="get_avatar")

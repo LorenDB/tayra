@@ -419,7 +419,7 @@ def test_can_start_custom_multiple_radio_from_api(api_client, factories):
     tracks = factories["music.Track"].create_batch(5)
     url = reverse("api:v1:radios:sessions-list")
     map_filters_to_type = {"tags": "names", "artists": "ids", "playlists": "names"}
-    for (key, value) in map_filters_to_type.items():
+    for key, value in map_filters_to_type.items():
         attr = value[:-1]
         track_filter_key = [getattr(a.artist, attr) for a in tracks]
         config = {"filters": [{"type": key, value: track_filter_key}]}

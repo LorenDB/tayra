@@ -46,7 +46,6 @@ def create_local_accounts(factories, count, dependencies):
 
 def create_taggable_items(dependency):
     def inner(factories, count, dependencies):
-
         objs = []
         tagged_objects = dependencies.get(
             dependency, list(CONFIG_BY_ID[dependency]["model"].objects.all().only("pk"))
@@ -260,7 +259,6 @@ class Command(BaseCommand):
 
         self.stdout.write("")
         if options["dry_run"]:
-
             self.stdout.write(
                 "Run this command with --no-dry-run to commit the changes to the database"
             )

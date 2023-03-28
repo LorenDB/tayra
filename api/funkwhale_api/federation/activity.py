@@ -180,7 +180,6 @@ def receive(activity, on_behalf_of, inbox_actor=None):
 
     inbox_items = []
     for recipients, type in [(local_to_recipients, "to"), (local_cc_recipients, "cc")]:
-
         for r in recipients:
             inbox_items.append(models.InboxItem(actor_id=r, type=type, activity=copy))
 

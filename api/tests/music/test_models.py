@@ -156,7 +156,6 @@ def test_import_track_with_different_artist_than_release(factories, mocker):
     "extension,mimetype", [("ogg", "audio/ogg"), ("mp3", "audio/mpeg")]
 )
 def test_audio_track_mime_type(extension, mimetype, factories):
-
     name = ".".join(["test", extension])
     path = os.path.join(DATA_DIR, name)
     upload = factories["music.Upload"](audio_file__from_path=path, mimetype=None)
@@ -166,7 +165,6 @@ def test_audio_track_mime_type(extension, mimetype, factories):
 
 @pytest.mark.parametrize("name", ["test.ogg", "test.mp3"])
 def test_audio_track_checksum(name, factories):
-
     path = os.path.join(DATA_DIR, name)
     upload = factories["music.Upload"](audio_file__from_path=path, mimetype=None)
 

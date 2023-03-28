@@ -736,7 +736,6 @@ See :doc:`/administrator_documentation/configuration_docs/ldap` for more informa
 """
 
 if AUTH_LDAP_ENABLED:
-
     # Import the LDAP modules here.
     # This way, we don't need the dependency unless someone
     # actually enables the LDAP support

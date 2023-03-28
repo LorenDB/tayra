@@ -36,7 +36,6 @@ def check_allow_list(payload, **kwargs):
     }
 
     if relevant_domains - allowed_domains:
-
         raise mrf.Discard(
             "These domains are not allowed: {}".format(
                 ", ".join(relevant_domains - allowed_domains)

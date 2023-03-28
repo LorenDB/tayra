@@ -9,7 +9,6 @@ from . import serializers, utils
 
 
 class ActivityViewSet(viewsets.GenericViewSet):
-
     serializer_class = serializers.AutoSerializer
     permission_classes = [ConditionalAuthentication]
     queryset = TrackFavorite.objects.none()

@@ -4,7 +4,6 @@ from funkwhale_api.federation import routes, serializers
 
 
 def test_pleroma_actor_from_ap_with_tags(factories):
-
     payload = {
         "@context": [
             "https://www.w3.org/ns/activitystreams",
@@ -73,7 +72,6 @@ def test_pleroma_actor_from_ap_with_tags(factories):
 
 
 def test_pleroma_actor_from_ap(factories):
-
     payload = {
         "@context": [
             "https://www.w3.org/ns/activitystreams",

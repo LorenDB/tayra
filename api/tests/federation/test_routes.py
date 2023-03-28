@@ -401,7 +401,6 @@ def test_inbox_delete_library(factories):
 
 
 def test_inbox_delete_album(factories):
-
     album = factories["music.Album"](attributed=True)
     payload = {
         "type": "Delete",

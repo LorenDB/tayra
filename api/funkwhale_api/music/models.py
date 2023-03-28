@@ -437,7 +437,6 @@ class TrackQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
         )
 
     def annotate_playable_by_actor(self, actor):
-
         files = (
             Upload.objects.playable_by(actor)
             .filter(track=models.OuterRef("id"))
@@ -448,7 +447,6 @@ class TrackQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
         return self.annotate(is_playable_by_actor=subquery)
 
     def playable_by(self, actor, include=True):
-
         if settings.MUSIC_USE_DENORMALIZATION:
             if actor is not None:
                 query = models.Q(actor=None) | models.Q(actor=actor)

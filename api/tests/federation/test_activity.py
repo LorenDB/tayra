@@ -16,7 +16,6 @@ from funkwhale_api.federation import (
 def test_receive_validates_basic_attributes_and_stores_activity(
     mrf_inbox_registry, factories, now, mocker
 ):
-
     mocker.patch.object(
         activity.InboxRouter, "get_matching_handlers", return_value=True
     )
@@ -598,7 +597,6 @@ def test_prepare_deliveries_and_inbox_items_allow_list(factories, preferences):
 
 
 def test_prepare_deliveries_and_inbox_items_instances_with_followers(factories):
-
     domain1 = factories["federation.Domain"](with_service_actor=True)
     domain2 = factories["federation.Domain"](with_service_actor=True)
     library = factories["music.Library"](actor__local=True)

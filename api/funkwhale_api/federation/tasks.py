@@ -139,7 +139,6 @@ def dispatch_outbox(activity):
     "delivery",
 )
 def deliver_to_remote(delivery):
-
     if not preferences.get("federation__enabled"):
         # federation is disabled, we only deliver to local recipients
         return

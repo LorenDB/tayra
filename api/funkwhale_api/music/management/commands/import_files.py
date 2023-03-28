@@ -810,7 +810,6 @@ def check_updates(stdout, library, extensions, paths, batch_size):
         )
 
         for upload in rows:
-
             check_upload(stdout, upload)
             checked_paths.add(upload.source.replace("file://", "", 1))
 

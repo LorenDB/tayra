@@ -119,7 +119,6 @@ class MultipleQueryFilter(filters.TypedMultipleChoiceFilter):
 
 
 def filter_target(value):
-
     config = {
         "artist": ["artist", "target_id", int],
         "album": ["album", "target_id", int],
@@ -177,7 +176,6 @@ class ActorScopeFilter(filters.CharFilter):
         super().__init__(*args, **kwargs)
 
     def filter(self, queryset, value):
-
         if not value:
             return queryset
 
