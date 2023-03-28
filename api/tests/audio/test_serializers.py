@@ -1,9 +1,9 @@
 import datetime
+import sys
 import uuid
 
 import feedparser
 import pytest
-import pytz
 from django.templatetags.static import static
 from django.urls import reverse
 
@@ -13,6 +13,11 @@ from funkwhale_api.common import utils as common_utils
 from funkwhale_api.federation import actors
 from funkwhale_api.federation import serializers as federation_serializers
 from funkwhale_api.federation import utils as federation_utils
+
+if sys.version_info < (3, 9):
+    from backports.zoneinfo import ZoneInfo
+else:
+    from zoneinfo import ZoneInfo
 
 
 def test_channel_serializer_create(factories, mocker):
@@ -456,7 +461,7 @@ def test_rss_duration(seconds, expected):
     "dt, expected",
     [
         (
-            datetime.datetime(2020, 1, 30, 6, 0, 49, tzinfo=pytz.UTC),
+            datetime.datetime(2020, 1, 30, 6, 0, 49, tzinfo=ZoneInfo("UTC")),
             "Thu, 30 Jan 2020 06:00:49 +0000",
         ),
     ],
@@ -678,7 +683,7 @@ def test_rss_feed_item_serializer_create(factories):
     assert upload.track.position == 33
     assert upload.track.disc_number == 2
     assert upload.track.creation_date == datetime.datetime(2020, 3, 11, 16).replace(
-        tzinfo=pytz.utc
+        tzinfo=ZoneInfo("UTC")
     )
     assert upload.track.get_tags() == ["pop", "rock"]
     assert upload.track.attachment_cover.url == "https://image.url/"
@@ -748,7 +753,7 @@ def test_rss_feed_item_serializer_update(factories):
     assert upload.track.position == 33
     assert upload.track.disc_number == 2
     assert upload.track.creation_date == datetime.datetime(2020, 3, 11, 16).replace(
-        tzinfo=pytz.utc
+        tzinfo=ZoneInfo("UTC")
     )
     assert upload.track.get_tags() == ["pop", "rock"]
     assert upload.track.attachment_cover.url == "https://image.url/"

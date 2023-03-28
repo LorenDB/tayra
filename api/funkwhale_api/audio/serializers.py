@@ -1,10 +1,10 @@
 import datetime
 import logging
+import sys
 import time
 import uuid
 
 import feedparser
-import pytz
 import requests
 from django.conf import settings
 from django.db import transaction
@@ -32,6 +32,11 @@ from funkwhale_api.tags import serializers as tags_serializers
 from funkwhale_api.users import serializers as users_serializers
 
 from . import categories, models
+
+if sys.version_info < (3, 9):
+    from backports.zoneinfo import ZoneInfo
+else:
+    from zoneinfo import ZoneInfo
 
 logger = logging.getLogger(__name__)
 
@@ -769,7 +774,7 @@ class RssFeedItemSerializer(serializers.Serializer):
         if "published_parsed" in validated_data:
             track_defaults["creation_date"] = datetime.datetime.fromtimestamp(
                 time.mktime(validated_data["published_parsed"])
-            ).replace(tzinfo=pytz.utc)
+            ).replace(tzinfo=ZoneInfo("UTC"))
 
         upload_defaults = {
             "source": validated_data["links"]["audio"]["source"],

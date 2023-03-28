@@ -1,8 +1,8 @@
 import datetime
 import logging
+import sys
 
 import cryptography.exceptions
-import pytz
 import requests
 import requests_http_message_signatures
 from django import forms
@@ -10,6 +10,11 @@ from django.utils import timezone
 from django.utils.http import parse_http_date
 
 from . import exceptions, utils
+
+if sys.version_info < (3, 9):
+    from backports.zoneinfo import ZoneInfo
+else:
+    from zoneinfo import ZoneInfo
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +31,7 @@ def verify_date(raw_date):
     except ValueError as e:
         raise forms.ValidationError(str(e))
     dt = datetime.datetime.utcfromtimestamp(ts)
-    dt = dt.replace(tzinfo=pytz.utc)
+    dt = dt.replace(tzinfo=ZoneInfo("UTC"))
     delta = datetime.timedelta(seconds=DATE_HEADER_VALID_FOR)
     now = timezone.now()
     if dt < now - delta or dt > now + delta:
