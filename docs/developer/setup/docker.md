@@ -97,15 +97,7 @@ You need to create some local data to mimic a production environment.
 
 ## Manage services
 
-Once you have set up your containers, bring them up to start working on them.
-
-1. Compile the translations:
-
-   ```sh
-   sudo docker compose -f dev.yml run --rm front yarn run i18n-compile
-   ```
-
-2. Launch all services:
+Once you have set up your containers, launch all services to start working on them:
 
    ```sh
    sudo docker compose -f dev.yml up front api nginx celeryworker
