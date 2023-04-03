@@ -8,3 +8,4 @@ These installation methods are not provided by the Funkwhale project. If you hav
 - [Kubernetes helm chart](https://gitlab.com/ananace/charts/)
 - [HomelabOS](https://homelabos.com/docs/software/funkwhale/)
 - [Docker swarm](https://github.com/fedeb95/funkwhale-swarm)
+- [MASH-Playbook](https://github.com/mother-of-all-self-hosting/mash-playbook): The playbook let's you host FOSS services from Nextcloud to Funkwhale via ansible. To get started with funkwhale you should check [the documentation](https://github.com/mother-of-all-self-hosting/mash-playbook/blob/main/docs/services/funkwhale.md)
