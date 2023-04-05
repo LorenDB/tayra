@@ -50,7 +50,6 @@ extensions = [
     "sphinx.ext.autodoc",
     "myst_parser",
     "sphinx_design",
-    "sphinx_multiversion",
     "sphinxcontrib.mermaid",
 ]
 autodoc_mock_imports = [
@@ -246,9 +245,6 @@ def copy_legacy_redirects(app, docname):
 def setup(app):
     app.connect("build-finished", copy_legacy_redirects)
 
-
-smv_tag_whitelist = r"^$"
-smv_branch_whitelist = r"^(stable|develop)$"
 
 # Internationalization settings
 locale_dirs = ["locales/"]

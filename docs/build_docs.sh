@@ -15,11 +15,11 @@ for i in $(poetry run sphinx-intl stat); do
 done
 
 # Build sphinx
-poetry run sphinx-multiversion . "$BUILD_PATH"
+poetry run sphinx-build . "$BUILD_PATH"
 for path in locales/*; do
   lang="$(basename "$path")"
   if [[ "$lang" != "gettext" ]]; then
-    poetry run sphinx-multiversion -D language="$lang" . "$BUILD_PATH/$lang"
+    poetry run sphinx-build -D language="$lang" . "$BUILD_PATH/$lang"
   fi
 done
 
