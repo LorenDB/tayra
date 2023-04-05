@@ -51,7 +51,6 @@ extensions = [
     "sphinx.ext.autodoc",
     "myst_parser",
     "sphinx_design",
-    "sphinx_multiversion",
 ]
 autodoc_mock_imports = [
     "celery",
@@ -248,7 +247,3 @@ def copy_legacy_redirects(app, docname):
 
 def setup(app):
     app.connect("build-finished", copy_legacy_redirects)
-
-
-smv_tag_whitelist = None
-smv_branch_whitelist = r"(stable|develop)$"
