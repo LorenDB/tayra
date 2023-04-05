@@ -82,7 +82,7 @@ pyld = "==2.0.3"
 python-magic = "==0.4.27"
 requests = "==2.28.2"
 requests-http-message-signatures = "==0.3.1"
-sentry-sdk = "==1.12.1"
+sentry-sdk = "==1.19.1"
 watchdog = "==2.2.1"
 
 # Dependencies pinning
