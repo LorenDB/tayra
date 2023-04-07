@@ -99,9 +99,9 @@ You need to create some local data to mimic a production environment.
 
 Once you have set up your containers, launch all services to start working on them:
 
-   ```sh
-   sudo docker compose -f dev.yml up front api nginx celeryworker
-   ```
+```sh
+sudo docker compose -f dev.yml up front api nginx celeryworker
+```
 
 This gives you access to the following:
 
