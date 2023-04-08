@@ -14,6 +14,7 @@ APPS_DIR = ROOT_DIR.path("funkwhale_api")
 env = environ.Env()
 ENV = env
 LOGLEVEL = env("LOGLEVEL", default="info").upper()
+IS_DOCKER_SETUP = env.bool("IS_DOCKER_SETUP", False)
 
 
 if env("FUNKWHALE_SENTRY_DSN", default=None) is not None:
@@ -374,7 +375,7 @@ vars().update(EMAIL_CONFIG)
 # The `_database_url_docker` variable will only by used as default for DATABASE_URL
 # in the context of a docker deployment.
 _database_url_docker = None
-if env.bool("IS_DOCKER_SETUP", False) and env.str("DATABASE_URL", None) is None:
+if IS_DOCKER_SETUP and env.str("DATABASE_URL", None) is None:
     warnings.warn(
         DeprecationWarning(
             "the automatically generated 'DATABASE_URL' configuration in the docker "
