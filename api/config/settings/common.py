@@ -806,6 +806,9 @@ if AUTH_LDAP_ENABLED:
 AUTOSLUG_SLUGIFY_FUNCTION = "slugify.slugify"
 
 CACHE_DEFAULT = "redis://127.0.0.1:6379/0"
+if IS_DOCKER_SETUP:
+    CACHE_DEFAULT = "redis://redis:6379/0"
+
 CACHE_URL = env.cache_url("CACHE_URL", default=CACHE_DEFAULT)
 """
 The URL of your redis server. For example:
@@ -820,7 +823,8 @@ If you're using password auth (the extra slash is important)
 .. note::
 
     If you want to use Redis over unix sockets, you also need to update
-    :attr:`CELERY_BROKER_URL`
+    :attr:`CELERY_BROKER_URL`, because the scheme differ from the one used by
+    :attr:`CACHE_URL`.
 
 """
 CACHES = {
@@ -849,7 +853,7 @@ CACHEOPS_ENABLED = bool(CACHEOPS_DURATION)
 
 if CACHEOPS_ENABLED:
     INSTALLED_APPS += ("cacheops",)
-    CACHEOPS_REDIS = env("CACHE_URL", default=CACHE_DEFAULT)
+    CACHEOPS_REDIS = CACHE_URL
     CACHEOPS_PREFIX = lambda _: "cacheops"  # noqa
     CACHEOPS_DEFAULTS = {"timeout": CACHEOPS_DURATION}
     CACHEOPS = {
@@ -860,9 +864,7 @@ if CACHEOPS_ENABLED:
 
 # CELERY
 INSTALLED_APPS += ("funkwhale_api.taskapp.celery.CeleryConfig",)
-CELERY_BROKER_URL = env(
-    "CELERY_BROKER_URL", default=env("CACHE_URL", default=CACHE_DEFAULT)
-)
+CELERY_BROKER_URL = env.str("CELERY_BROKER_URL", default=CACHE_URL)
 """
 The celery task broker URL. Defaults to :attr:`CACHE_URL`.
 You don't need to tweak this unless you want
