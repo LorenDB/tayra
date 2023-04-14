@@ -55,7 +55,7 @@ python-ldap = "==3.4.3"
 
 # Channels
 channels = { extras = ["daphne"], version = "==4.0.0" }
-channels-redis = "==4.0.0"
+channels-redis = "==4.1.0"
 
 # Celery
 kombu = "==5.2.4"
