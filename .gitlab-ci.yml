@@ -64,11 +64,8 @@ workflow:
           $CI_COMMIT_BRANCH =~ /(stable|develop)/ ||
           $CI_COMMIT_TAG
         )
-    # Never run for branches that have an open merge request
-    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
-      when: never
     # Run for merge requests from any repo or branches
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_MERGE_REQUEST_ID
 
 stages:
   - review
