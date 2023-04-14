@@ -216,8 +216,12 @@ test_api:
     matrix:
       - PYTHON_VERSION: ["3.8", "3.9", "3.10", "3.11"]
   services:
-    - postgres:15-alpine
-    - redis:7-alpine
+    - name: postgres:15-alpine
+      command:
+        - --fsync=off
+        - --full_page_writes=off
+        - --synchronous_commit=off
+    - name: redis:7-alpine
   cache: *api_cache
   variables:
     DATABASE_URL: "postgresql://postgres@postgres/postgres"
