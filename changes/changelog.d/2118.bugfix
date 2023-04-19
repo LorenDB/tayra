@@ -1,0 +1,4 @@
+Prefer str over dict for the CACHE_URL api setting
+
+This fix the ability to reuse the CACHE_URL with other settings such as
+CELERY_BROKER_URL.

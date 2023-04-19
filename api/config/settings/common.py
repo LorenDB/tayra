@@ -737,7 +737,6 @@ See :doc:`/administrator_documentation/configuration_docs/ldap` for more informa
 """
 
 if AUTH_LDAP_ENABLED:
-
     # Import the LDAP modules here.
     # This way, we don't need the dependency unless someone
     # actually enables the LDAP support
@@ -809,7 +808,7 @@ CACHE_URL_DEFAULT = "redis://127.0.0.1:6379/0"
 if IS_DOCKER_SETUP:
     CACHE_URL_DEFAULT = "redis://redis:6379/0"
 
-CACHE_URL = env.cache_url("CACHE_URL", default=CACHE_URL_DEFAULT)
+CACHE_URL = env.str("CACHE_URL", default=CACHE_URL_DEFAULT)
 """
 The URL of your redis server. For example:
 
@@ -828,13 +827,20 @@ If you're using password auth (the extra slash is important)
 
 """
 CACHES = {
-    "default": CACHE_URL,
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": CACHE_URL,
+        "OPTIONS": {
+            "CLIENT_CLASS": "funkwhale_api.common.cache.RedisClient",
+            "IGNORE_EXCEPTIONS": True,  # mimics memcache behavior.
+            # http://niwinz.github.io/django-redis/latest/#_memcached_exceptions_behavior
+        },
+    },
     "local": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         "LOCATION": "local-cache",
     },
 }
-CACHES["default"]["BACKEND"] = "django_redis.cache.RedisCache"
 
 CHANNEL_LAYERS = {
     "default": {
@@ -843,11 +849,6 @@ CHANNEL_LAYERS = {
     }
 }
 
-CACHES["default"]["OPTIONS"] = {
-    "CLIENT_CLASS": "funkwhale_api.common.cache.RedisClient",
-    "IGNORE_EXCEPTIONS": True,  # mimics memcache behavior.
-    # http://niwinz.github.io/django-redis/latest/#_memcached_exceptions_behavior
-}
 CACHEOPS_DURATION = env("CACHEOPS_DURATION", default=0)
 CACHEOPS_ENABLED = bool(CACHEOPS_DURATION)
 
