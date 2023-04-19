@@ -805,11 +805,11 @@ if AUTH_LDAP_ENABLED:
 # SLUGLIFIER
 AUTOSLUG_SLUGIFY_FUNCTION = "slugify.slugify"
 
-CACHE_DEFAULT = "redis://127.0.0.1:6379/0"
+CACHE_URL_DEFAULT = "redis://127.0.0.1:6379/0"
 if IS_DOCKER_SETUP:
-    CACHE_DEFAULT = "redis://redis:6379/0"
+    CACHE_URL_DEFAULT = "redis://redis:6379/0"
 
-CACHE_URL = env.cache_url("CACHE_URL", default=CACHE_DEFAULT)
+CACHE_URL = env.cache_url("CACHE_URL", default=CACHE_URL_DEFAULT)
 """
 The URL of your redis server. For example:
 
