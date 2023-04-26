@@ -102,7 +102,8 @@ RUN set -eux; \
   py3-pillow=9.3.0-r0 \
   py3-psycopg2=2.9.5-r0 \
   py3-watchfiles=0.18.1-r0 \
-  python3
+  python3 \
+  tzdata
 
 COPY --from=builder /venv /venv
 ENV PATH="/venv/bin:$PATH"
