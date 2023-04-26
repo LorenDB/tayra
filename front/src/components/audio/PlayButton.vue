@@ -111,11 +111,11 @@ const openMenu = () => {
     const rightOverflow = viewportOffset.right - viewportWidth
     const leftOverflow = -viewportOffset.left
 
-    if (rightOverflow > 0) {
-      menu.css({ cssText: `left: ${-rightOverflow - 5}px !important;` })
-    } else if (leftOverflow > 0) {
-      menu.css({ cssText: `right: -${leftOverflow + 5}px !important;` })
-    }
+    menu.css({
+      cssText: rightOverflow > 0
+        ? `left: ${-rightOverflow - 5}px !important;`
+        : `right: ${-leftOverflow + 5}px !important;`
+    })
   }
 }
 </script>
