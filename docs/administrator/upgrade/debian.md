@@ -33,7 +33,6 @@ If you installed Funkwhale following the [Debian guide](../installation/debian.m
 2. Follow the [Download Funkwhale](../installation/debian.md#3-download-funkwhale) instructions in the installation guide.
 3. Follow the [Install the Funkwhale API](../installation/debian.md#4-install-the-funkwhale-api) instructions in the installation guide.
 
-
 ## Update your reverse proxy configuration
 
 To ensure your reverse proxy is up-to-date with changes, you should regenerate your Nginx configuration with each upgrade. To do this:
@@ -71,7 +70,6 @@ To ensure your reverse proxy is up-to-date with changes, you should regenerate y
    ```console
    # systemctl restart nginx
    ```
-
 
 ## Update your Funkwhale instance
 
