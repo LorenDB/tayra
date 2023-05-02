@@ -62,6 +62,21 @@ exit
 
 That’s it! You’ve updated your Funkwhale pod. You should now see the new version running in your web browser.
 
+## Update your reverse proxy configuration
+
+To ensure your reverse proxy is up-to-date with changes, you should regenerate your Nginx configuration with each upgrade. To do this:
+
+:::{include} /administrator/installation/docker.md
+:start-after: Nginx update instructions
+:end-before: Instructions end
+:::
+
+Once you've updated your configuration, restart Nginx.
+
+```console
+# systemctl restart nginx
+```
+
 ## Upgrade the postgres container
 
 Funkwhale depends on postgres for its database container. To upgrade postgres, you need to export your database and import it into the new container.

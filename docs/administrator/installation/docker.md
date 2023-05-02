@@ -167,50 +167,62 @@ That's it! Your Funkwhale pod is now up and running.
 
 ## 5. Set up your reverse proxy
 
-Funkwhale requires a reverse proxy to serve content to users. We recommend using [Nginx](https://nginx.com) to handle requests to your container. To do this:
+Funkwhale requires a reverse proxy to serve content to users. We recommend using [Nginx](https://nginx.com) to handle requests to your container. Follow this guide to install an Nginx configuration using details from your `.env` file.
 
-1. Install Nginx.
+:::{note} Before you begin
+Nginx isn't preinstalled on Debian. You can install it by running the following commands:
 
-   ```{code-block} sh
-   sudo apt-get update
-   sudo apt-get install nginx
+```console
+$ sudo apt update
+$ sudo apt install nginx
+```
+:::
+
+% Nginx update instructions
+
+1. Log in to a root shell to make changes to the config files
+
+   ```console
+   $ sudo su
    ```
 
-2. Download the Nginx templates from Funkwhale.
+2. Download the new Nginx templates from Funkwhale
 
-   ```{code-block} sh
-   sudo curl -L -o /etc/nginx/funkwhale_proxy.conf "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$FUNKWHALE_VERSION/deploy/funkwhale_proxy.conf"
-   sudo curl -L -o /etc/nginx/sites-available/funkwhale.template "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$FUNKWHALE_VERSION/deploy/docker.proxy.template"
+   ```console
+   # curl -L -o /etc/nginx/funkwhale_proxy.conf "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$FUNKWHALE_VERSION/deploy/funkwhale_proxy.conf"
+   # curl -L -o /etc/nginx/sites-available/funkwhale.template "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$FUNKWHALE_VERSION/deploy/docker.proxy.template"
    ```
 
-3. Create an Nginx template with details from your `.env` file.
+3. Update the Nginx configuration with details from your {file}`.env` file
 
-   ```{code-block} sh
-   # Log in to a root shell.
-
-   sudo su
-
-   # Create an Nginx configuration using the Funkwhale template with details from your `.env` file.
-
-   set -a && source /srv/funkwhale/.env && set +a
+   ```console
+   # set -a && source /srv/funkwhale/config/.env && set +a
    envsubst "`env | awk -F = '{printf \" $%s\", $$1}'`" \
       < /etc/nginx/sites-available/funkwhale.template \
       > /etc/nginx/sites-available/funkwhale.conf
-
-   # Enable the configuration so that Nginx serves it.
-
-   ln -s /etc/nginx/sites-available/funkwhale.conf /etc/nginx/sites-enabled/
-
-   # Exit the root shell.
-
-   exit
    ```
 
-That's it! You've created your Nginx file. Run the following command to check the `.env` details populated correctly.
+4. Check the configuration file to make sure the template values have been updated properly
 
-```{code-block} sh
-grep '${' /etc/nginx/sites-enabled/funkwhale.conf
-```
+   ```console
+   # grep '${' /etc/nginx/sites-available/funkwhale.conf
+   ```
+
+% Instructions end
+
+5. Create a symbolic link to the {file}`sites-enabled` directory to enable your configuration
+
+   ```console
+   # ln -s /etc/nginx/sites-available/funkwhale.conf /etc/nginx/sites-enabled/
+   ```
+
+6. Restart Nginx
+
+   ```console
+   # systemctl restart nginx
+   ```
+
+That's it! You've created your Nginx file.
 
 ### Override default Nginx templates
 
