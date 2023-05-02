@@ -176,6 +176,7 @@ Nginx isn't preinstalled on Debian. You can install it by running the following 
 $ sudo apt update
 $ sudo apt install nginx
 ```
+
 :::
 
 % Nginx update instructions

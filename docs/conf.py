@@ -257,4 +257,4 @@ gettext_compact = False
 
 # Don't copy prompts with copybutton
 
-copybutton_exclude = '.linenos, .gp'
+copybutton_exclude = ".linenos, .gp"
