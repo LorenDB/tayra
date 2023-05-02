@@ -364,10 +364,10 @@ $ sudo apt install nginx
    # ln -s /etc/nginx/sites-available/funkwhale.conf /etc/nginx/sites-enabled/
    ```
 
-6. Restart Nginx
+6. Reload Nginx
 
    ```console
-   # systemctl restart nginx
+   # systemctl reload nginx
    ```
 
 That's it! You've created your Nginx file.

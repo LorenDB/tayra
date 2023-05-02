@@ -71,10 +71,10 @@ To ensure your reverse proxy is up-to-date with changes, you should regenerate y
 :end-before: Instructions end
 :::
 
-Once you've updated your configuration, restart Nginx.
+Once you've updated your configuration, reload Nginx.
 
 ```console
-# systemctl restart nginx
+# systemctl reload nginx
 ```
 
 ## Upgrade the postgres container
