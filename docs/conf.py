@@ -52,6 +52,7 @@ extensions = [
     "sphinx_design",
     "sphinx_multiversion",
     "sphinxcontrib.mermaid",
+    "sphinx_copybutton",
 ]
 autodoc_mock_imports = [
     "celery",
@@ -253,3 +254,7 @@ smv_branch_whitelist = r"^(stable|develop)$"
 # Internationalization settings
 locale_dirs = ["locales/"]
 gettext_compact = False
+
+# Don't copy prompts with copybutton
+
+copybutton_exclude = '.linenos, .gp'
