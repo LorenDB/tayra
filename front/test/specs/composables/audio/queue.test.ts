@@ -1,7 +1,7 @@
 import { useQueue } from '~/composables/audio/queue'
 import type { Track } from '~/types'
 
-const { tracks, enqueue, dequeue, clear, reorder, currentIndex, shuffle } = useQueue()
+const { tracks, enqueue, dequeue, clear, reorder, currentIndex } = useQueue()
 
 describe('currentIndex', () => {
   beforeEach(async () => {
@@ -9,7 +9,7 @@ describe('currentIndex', () => {
     await enqueue(
       { id: 1, uploads: [] } as any as Track,
       { id: 2, uploads: [] } as any as Track,
-      { id: 3, uploads: [] } as any as Track,
+      { id: 3, uploads: [] } as any as Track
     )
   })
 
@@ -85,7 +85,7 @@ describe('Ordered queue', () => {
     await enqueue(
       { id: 1, uploads: [] } as any as Track,
       { id: 2, uploads: [] } as any as Track,
-      { id: 3, uploads: [] } as any as Track,
+      { id: 3, uploads: [] } as any as Track
     )
   })
 

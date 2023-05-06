@@ -136,7 +136,7 @@ export const useQueue = createGlobalState(() => {
   async function enqueueAt(index: number, ...newTracks: Track[]): Promise<void>
   // NOTE: Only last boolean of newTracks is considered as skipFetch
   async function enqueueAt(index: number, ...newTracks: (Track | boolean)[]): Promise<void>
-  async function enqueueAt(index: number, ...newTracks: (Track | boolean)[]): Promise<void> {
+  async function enqueueAt (index: number, ...newTracks: (Track | boolean)[]): Promise<void> {
     let skipFetch = false
     if (!isTrack(newTracks[newTracks.length - 1])) {
       skipFetch = newTracks.pop() as boolean
@@ -164,7 +164,7 @@ export const useQueue = createGlobalState(() => {
   async function enqueue(...newTracks: Track[]): Promise<void>
   // NOTE: Only last boolean of newTracks is considered as skipFetch
   async function enqueue(...newTracks: (Track | boolean)[]): Promise<void>
-  async function enqueue(...newTracks: (Track | boolean)[]): Promise<void> {
+  async function enqueue (...newTracks: (Track | boolean)[]): Promise<void> {
     return enqueueAt(tracks.value.length, ...newTracks)
   }
 
