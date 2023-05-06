@@ -1,9 +1,7 @@
 import { AudioContext } from 'standardized-audio-context-mock'
-import { vi, beforeAll } from 'vitest'
+import { vi } from 'vitest'
 
-beforeAll(() => {
-  vi.mock('standardized-audio-context', () => ({
-    AudioContext
-  }))
-})
+vi.mock('standardized-audio-context', () => ({
+  AudioContext
+}))
 
