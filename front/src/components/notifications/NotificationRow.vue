@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Notification, LibraryFollow } from '~/types'
 
-import { computed, ref, watchEffect } from 'vue'
+import { computed, ref, watchEffect, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 
@@ -30,7 +30,7 @@ const notificationData = computed(() => {
 
   if (activity.type === 'Follow') {
     if (activity.object && activity.object.type === 'music.Library') {
-      const detailUrl = { name: 'content.libraries.detail', params: { id: activity.object.uuid } }
+      const detailUrl = { name: 'library.detail.edit', params: { id: activity.object.uuid } }
 
       if (activity.related_object?.approved === null) {
         return {
@@ -76,7 +76,7 @@ const notificationData = computed(() => {
 })
 
 const read = ref(false)
-watchEffect(async () => {
+watch(read, async () => {
   await axios.patch(`federation/inbox/${item.value.id}/`, { is_read: read.value })
 
   item.value.is_read = read.value
@@ -92,11 +92,13 @@ const handleAction = (handler?: () => void) => {
 const approveLibraryFollow = async (follow: LibraryFollow) => {
   await axios.post(`federation/follows/library/${follow.uuid}/accept/`)
   follow.approved = true
+  item.value.is_read = true
 }
 
 const rejectLibraryFollow = async (follow: LibraryFollow) => {
   await axios.post(`federation/follows/library/${follow.uuid}/reject/`)
   follow.approved = false
+  item.value.is_read = true
 }
 </script>
 

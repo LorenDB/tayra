@@ -4,7 +4,7 @@ import type { Notification } from '~/types'
 import moment from 'moment'
 import axios from 'axios'
 
-import { ref, reactive, computed, watch, markRaw } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 
@@ -38,7 +38,7 @@ const fetchData = async () => {
   try {
     const response = await axios.get('federation/inbox/', { params: filters })
     notifications.count = response.data.count
-    notifications.results = response.data.results.map(markRaw)
+    notifications.results = response.data.results
   } catch (error) {
     useErrorHandler(error as Error)
   }
@@ -50,7 +50,7 @@ watch(filters, fetchData, { immediate: true })
 
 useWebSocketHandler('inbox.item_added', (event) => {
   notifications.count += 1
-  notifications.results.unshift(markRaw((event.item)))
+  notifications.results.unshift(event.item)
 })
 
 const instanceSupportMessageDelay = ref(60)
