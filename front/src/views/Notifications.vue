@@ -136,7 +136,7 @@ const markAllAsRead = async () => {
                       <option :value="90">
                         {{ $t('views.Notifications.option.delay.90') }}
                       </option>
-                      <option :value="null">
+                      <option :value="36500">
                         {{ $t('views.Notifications.option.delay.never') }}
                       </option>
                     </select>
@@ -200,7 +200,7 @@ const markAllAsRead = async () => {
                       <option :value="90">
                         {{ $t('views.Notifications.option.delay.90') }}
                       </option>
-                      <option :value="null">
+                      <option :value="36500">
                         {{ $t('views.Notifications.option.delay.never') }}
                       </option>
                     </select>
