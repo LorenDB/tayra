@@ -52,6 +52,10 @@ export default defineConfig(({ mode }) => ({
       src: './src',
       all: true,
       reporter: ['text', 'cobertura']
-    }
+    },
+    setupFiles: [
+      './test/setup/mock-audio-context.ts',
+      './test/setup/mock-vue-i18n.ts',
+    ]
   }
 }))
