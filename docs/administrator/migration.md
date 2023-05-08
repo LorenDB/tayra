@@ -112,20 +112,20 @@ Check the file and remove any duplicated settings after copying.
 
 1. Start up your new database container.
 
-   ```{code-block} sh
-   sudo docker compose up -d postgres
+   ```console
+   # docker compose up -d postgres
    ```
 
 2. Import your database dump into the new container.
 
-   ```{code-block} sh
-   cat db_dump.sql | sudo docker compose exec -T postgres psql -U postgres
+   ```console
+   # cat db_dump.sql | docker compose exec -T postgres psql -U postgres
    ```
 
 3. Run the database migrations.
 
-   ```{code-block} sh
-   sudo docker compose run --rm api funkwhale-manage migrate
+   ```console
+   # docker compose run --rm api funkwhale-manage migrate
    ```
 
 ## Start your Funkwhale instance

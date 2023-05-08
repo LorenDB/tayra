@@ -76,7 +76,7 @@ source_suffix = ".rst"
 root_doc = "index"
 
 # Enable colon fences
-myst_enable_extensions = ["colon_fence"]
+myst_enable_extensions = ["colon_fence", "attrs_block"]
 
 # Autogenerate anchors
 
