@@ -136,6 +136,7 @@ const markAllAsRead = async () => {
                       <option :value="90">
                         {{ $t('views.Notifications.option.delay.90') }}
                       </option>
+                      <!-- NOTE: Postpone notification 100 years, so that the user never sees it -->
                       <option :value="36500">
                         {{ $t('views.Notifications.option.delay.never') }}
                       </option>
@@ -200,6 +201,7 @@ const markAllAsRead = async () => {
                       <option :value="90">
                         {{ $t('views.Notifications.option.delay.90') }}
                       </option>
+                      <!-- NOTE: Postpone notification 100 years, so that the user never sees it -->
                       <option :value="36500">
                         {{ $t('views.Notifications.option.delay.never') }}
                       </option>
