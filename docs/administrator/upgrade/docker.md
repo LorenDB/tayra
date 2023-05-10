@@ -81,26 +81,18 @@ Once you've updated your configuration, reload Nginx.
 
 Funkwhale depends on Postgres for its database container. To upgrade Postgres, you need to export your database and import it into a new container to update the schema.
 
-The following update methods are supported:
-
-:::{contents}
-:local:
-:::
-
-### Standard upgrade
-
 To update your Postgres container, follow these steps:
 
-1. Create a backup of your Funkwhale database. We will import this into the new postgres container later.
-
-   ```console
-   # docker compose exec -i postgres pg_dump -U postgres postgres > db_dump.sql
-   ```
-
-2. Stop all Funkwhale services
+1. Stop all Funkwhale services
 
    ```console
    # docker compose down
+   ```
+
+2. Create a backup of your Funkwhale database. We will import this into the new postgres container later.
+
+   ```console
+   # docker compose exec -i postgres pg_dump -U postgres postgres > db_dump.sql
    ```
 
 3. Move the {file}`data/postgres` directory to another location to back it up
@@ -148,60 +140,8 @@ Once you've updated your Postgres containers, you need to migrate your database.
 :end-line: 129
 :::
 
-### Postgres upgrade container (AMD64 only)
-
-You can use the [`postgres-upgrade`](https://hub.docker.com/r/tianon/postgres-upgrade/) container to upgrade Postgres on **AMD64** Docker deployments. This container automates the process of upgrading between major versions of Postgres. Use these commands to upgrade your Postgres container:
-
-1. Export your current Postgres version number. You can find this in your `docker-compose.yml` file.
-
-   ```console
-   # export OLD_POSTGRES=13
-   ```
-
-2. Export the major version number you want to upgrade to.
-
-   ```console
-   # export NEW_POSTGRES=14
-   ```
-
-3. Stop the Postgres container. This means no data changes while you are upgrading.
-
-   ```console
-   # docker compose stop postgres
-   ```
-
-4. Run the migration using the `postgres-upgrade` container. This creates a new version of the database in the `/srv/funkwhale/data/postgres-new` directory.
-
-   ```console
-   # docker run --rm \
-   -v $(pwd)/data/postgres:/var/lib/postgresql/${OLD_POSTGRES}/data \
-   -v $(pwd)/data/postgres-new:/var/lib/postgresql/${NEW_POSTGRES}/data \
-   tianon/postgres-upgrade:${OLD_POSTGRES}-to-${NEW_POSTGRES}
-   ```
-
-5. Re-add the access control rules required by Funkwhale.
-
-   ```console
-   # echo "host all all all trust" | tee -a ./data/postgres-new/pg_hba.conf
-   ```
-
-6. Swap your old database out with your new database.
-
-   ```console
-   # mv ./data/postgres ./data/postgres-old
-   # mv ./data/postgres-new ./data/postgres
-   ```
-
-7. Pull the new Postgres version.
-
-   ```console
-   # docker compose pull
-   ```
-
-8. Restart your containers.
-
-   ```console
-   # docker compose up -d
-   ```
+:::{seealso}
+You can use the [`postgres-upgrade` container](https://hub.docker.com/r/tianon/postgres-upgrade/) to automate some of the upgrade procedure on **AMD64** Docker deployments.
+:::
 
 That's it! Your Funkwhale pod is now running the new version of Postgres. The old database is available in `/srv/funkwhale/data/postgres-old`. You can back this up and remove it from your server once you've confirmed everything is working.
