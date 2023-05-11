@@ -100,7 +100,8 @@ Update instructions:
   ```
 
   After this you can continue to use the **docker compose** syntax for all Docker management tasks.
-- Upgrade Postgres to version 15. [Make sure to migrate!](https://docs.funkwhale.audio/administrator_documentation/upgrade_docs/docker.html#upgrade-the-postgres-container)
+
+- Upgrade Postgres to version 15. [Make sure to migrate!](https://docs.funkwhale.audio/administrator/upgrade/docker.html#upgrade-the-postgres-container)
 - With this update Funkwhale starts using poetry to maintain its dependencies. We therefore recommend
   removing the old virtualenv by running `rm -rf /srv/funkwhale/virtualenv`.
 
@@ -723,9 +724,7 @@ nztvar
 Upgrade instructions are available at
 https://docs.funkwhale.audio/admin/upgrading.html
 
-Due to a bug in our CI Pipeline frontend artifacts are not available at
-https://dev.funkwhale.audio/funkwhale/funkwhale/builds/artifacts/1.2.0/download?job=build_front as they would usually.
-Please use this URL to get your frontend build: https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/81069/artifacts/download
+Due to a bug in our CI Pipeline, you need to download the frontend artifact here: https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/81069/artifacts/download
 
 If you are running the All-in-One-Container since a longer time, you probably need to manually migrate your database information. If that's the case, you will get a message like this:
 
