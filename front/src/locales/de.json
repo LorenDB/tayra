@@ -183,9 +183,11 @@
       },
       "message": {
         "automaticPlay": "Der nächste Titel wird automatisch in wenigen Sekunden wiedergegeben…",
-        "radio": "Neue Titel werden hier automatisch hinzugefügt."
+        "radio": "Neue Titel werden hier automatisch hinzugefügt.",
+        "webglUnsupported": "Leider unterstützt dein Browser kein WebGL2."
       },
       "meta": {
+        "end": "Ende",
         "queuePosition": "Titel { index } von { length }",
         "startTime": "00:00",
         "unknownAlbum": "Unbekanntes Album",
@@ -2922,9 +2924,11 @@
     "radios": {
       "Button": {
         "startArtistsRadio": "Start Künstler*innen Radio",
+        "startPlaylistsRadio": "Starte Wiedergabelistenradio",
         "startRadio": "Radio abspielen",
         "startTagsRadio": "Starte Tag Radio",
         "stopArtistsRadio": "Stoppe Künstler*innen Radio",
+        "stopPlaylistsRadio": "Stoppe Wiedergabelistenradio",
         "stopRadio": "Radio ausschalten",
         "stopTagsRadio": "Stoppe Tag Radio"
       },
@@ -3195,6 +3199,9 @@
           "label": "Sichtbarkeit"
         }
       }
+    },
+    "useErrorHandler": {
+      "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten."
     },
     "useThemeList": {
       "darkTheme": "Dunkel",

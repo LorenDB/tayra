@@ -92,7 +92,7 @@ const queue = computed<QueueTrack[]>(() => {
 })
 
 // Current Index
-export const currentIndex = useClamp(useStorage('queue:index', 0), 0, () => tracks.value.length - 1)
+export const currentIndex = useClamp(useStorage('queue:index', 0), 0, () => Math.max(0, tracks.value.length - 1))
 export const currentTrack = computed(() => queue.value[currentIndex.value])
 
 // Use Queue
@@ -133,10 +133,10 @@ export const useQueue = createGlobalState(() => {
   const isTrack = (track: Track | boolean): track is Track => typeof track !== 'boolean'
 
   // Adding tracks
-  async function enqueueAt (index: number, ...newTracks: Track[]): Promise<void>
+  async function enqueueAt(index: number, ...newTracks: Track[]): Promise<void>
   // NOTE: Only last boolean of newTracks is considered as skipFetch
-  async function enqueueAt (index: number, ...newTracks: (Track | boolean)[]) : Promise<void>
-  async function enqueueAt (index: number, ...newTracks: (Track | boolean)[]) : Promise<void> {
+  async function enqueueAt(index: number, ...newTracks: (Track | boolean)[]): Promise<void>
+  async function enqueueAt (index: number, ...newTracks: (Track | boolean)[]): Promise<void> {
     let skipFetch = false
     if (!isTrack(newTracks[newTracks.length - 1])) {
       skipFetch = newTracks.pop() as boolean
@@ -161,9 +161,9 @@ export const useQueue = createGlobalState(() => {
     }
   }
 
-  async function enqueue (...newTracks: Track[]): Promise<void>
+  async function enqueue(...newTracks: Track[]): Promise<void>
   // NOTE: Only last boolean of newTracks is considered as skipFetch
-  async function enqueue (...newTracks: (Track | boolean)[]): Promise<void>
+  async function enqueue(...newTracks: (Track | boolean)[]): Promise<void>
   async function enqueue (...newTracks: (Track | boolean)[]): Promise<void> {
     return enqueueAt(tracks.value.length, ...newTracks)
   }
@@ -257,6 +257,13 @@ export const useQueue = createGlobalState(() => {
     list.value.splice(to, 0, id)
 
     const current = currentIndex.value
+
+    // NOTE: We're batching the changes to avoid reactivity issues related to the currentIndex being clamped at list length
+    const listCopy = list.value.slice()
+    const [id] = listCopy.splice(from, 1)
+    listCopy.splice(to, 0, id)
+    list.value = listCopy
+
     if (current === from) {
       currentIndex.value = to
       return
@@ -327,6 +334,8 @@ export const useQueue = createGlobalState(() => {
     const lastTracks = [...tracks.value]
     tracks.value.length = 0
     await delMany(lastTracks)
+
+    currentIndex.value = 0
   }
 
   // Radio queue populating
@@ -365,7 +374,7 @@ export const useQueue = createGlobalState(() => {
           const radios = JSON.parse(oldRadios)
           store.commit('radios/current', radios.radios.current)
           store.commit('radios/running', radios.radios.running)
-        } catch (err) {}
+        } catch (err) { }
 
         currentIndex.value = index
         delete localStorage.queue
@@ -374,7 +383,7 @@ export const useQueue = createGlobalState(() => {
 
     if (localStorage.player) {
       try {
-        const { player: { looping: loopingMode, volume } } = JSON.parse(localStorage.player) as { player: { looping: LoopingMode, volume: number }}
+        const { player: { looping: loopingMode, volume } } = JSON.parse(localStorage.player) as { player: { looping: LoopingMode, volume: number } }
         looping.value = loopingMode ?? 0
         setGain(volume ?? 0.7)
         delete localStorage.player

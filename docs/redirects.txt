@@ -50,3 +50,5 @@ developers/plugins.html, ../developer/plugins/index.html
 developers/authentication.html, ../developer/api/authentication.html
 documentation/index.html, ../contributor/documentation.html
 translators.html, ../contributor/translation.html
+federation.html, ../developer/federation/index.html
+upgrading.html, ../administrator/upgrade/index.html

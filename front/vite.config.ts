@@ -7,6 +7,9 @@ import { visualizer } from 'rollup-plugin-visualizer'
 
 import manifest from './pwa-manifest.json'
 import Inspector from 'vite-plugin-vue-inspector'
+import { defineConfig } from 'vite'
+
+
 
 const port = +(process.env.VUE_PORT ?? 8080)
 
@@ -78,6 +81,10 @@ export default defineConfig(({ mode }) => ({
       src: './src',
       all: true,
       reporter: ['text', 'cobertura']
-    }
+    },
+    setupFiles: [
+      './test/setup/mock-audio-context.ts',
+      './test/setup/mock-vue-i18n.ts',
+    ]
   }
 }))

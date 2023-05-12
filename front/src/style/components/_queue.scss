@@ -291,6 +291,7 @@
       align-items: center;
       justify-content: center;
       text-align: center;
+      max-width: 100vw;
 
       .ui.header {
         width: 100%;
@@ -460,6 +461,12 @@
     > div {
       display: flex;
       align-items: center;
+    }
+
+    .title.ellipsis {
+      @include media("<tablet") {
+          max-width: 35vw;
+      }
     }
 
     // NOTE: Taken from semantic ui

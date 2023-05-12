@@ -35,6 +35,7 @@
         vertical-align: middle;
     }
     &.sidebar {
+        z-index: 10000 !important;
         overflow-y: visible !important;
         background: var(--sidebar-background);
         z-index: 1;

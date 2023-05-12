@@ -51,6 +51,7 @@ extensions = [
     "myst_parser",
     "sphinx_design",
     "sphinxcontrib.mermaid",
+    "sphinx_copybutton",
 ]
 autodoc_mock_imports = [
     "celery",
@@ -74,7 +75,7 @@ source_suffix = ".rst"
 root_doc = "index"
 
 # Enable colon fences
-myst_enable_extensions = ["colon_fence"]
+myst_enable_extensions = ["colon_fence", "attrs_block"]
 
 # Autogenerate anchors
 
@@ -249,3 +250,7 @@ def setup(app):
 # Internationalization settings
 locale_dirs = ["locales/"]
 gettext_compact = False
+
+# Don't copy prompts with copybutton
+
+copybutton_exclude = ".linenos, .gp"
