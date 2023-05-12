@@ -10,6 +10,23 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 .. towncrier
 
+1.3.0-rc6 (2023-05-12)
+----------------------
+
+Updates since 1.3.0-rc5
+
+- Add systemd update instructions to Debian upgrade instructions (#1966)
+- Fix broken links in CHANGELOG (#1976)
+- Add generic upgrade instructions to Docker postgres documentation (#2049)
+- Added Nginx regeneration instructions to Debian update guide (#2050)
+- Fixed mobile player element widths (#2054)
+- Allow summary field of actors to be blank. This leaves actors valid that have a blank (`""`) summary field and allows follows from those.
+- Fix front album tracks count translation
+- Prefer str over dict for the CACHE_URL api setting\
+  This fix the ability to reuse the CACHE_URL with other settings such as\
+  CELERY_BROKER_URL.\
+  Move api docker hardcoded env vars in the settings module\
+
 1.3.0-rc5 (2023-03-26)
 ----------------------
 
