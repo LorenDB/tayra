@@ -7,8 +7,6 @@ import { visualizer } from 'rollup-plugin-visualizer'
 
 import manifest from './pwa-manifest.json'
 import Inspector from 'vite-plugin-vue-inspector'
-import { defineConfig } from 'vite'
-
 
 
 const port = +(process.env.VUE_PORT ?? 8080)
