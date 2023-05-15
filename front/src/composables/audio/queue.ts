@@ -253,9 +253,6 @@ export const useQueue = createGlobalState(() => {
       ? shuffledIds
       : tracks
 
-    const [id] = list.value.splice(from, 1)
-    list.value.splice(to, 0, id)
-
     const current = currentIndex.value
 
     // NOTE: We're batching the changes to avoid reactivity issues related to the currentIndex being clamped at list length
