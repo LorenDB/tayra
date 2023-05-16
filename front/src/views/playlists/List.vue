@@ -130,7 +130,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
               <input
                 id="playlists-search"
                 v-model="query"
-                stype="text"
+                type="text"
                 name="search"
                 :placeholder="labels.searchPlaceholder"
               >
@@ -209,7 +209,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
         <button
           v-if="$store.state.auth.authenticated"
           class="ui success button labeled icon"
-          @click="$store.commit('playlists/chooseTrack', null)"
+          @click="$store.commit('playlists/showModal', true)"
         >
           <i class="list icon" />
           {{ $t('views.playlists.List.button.create') }}
