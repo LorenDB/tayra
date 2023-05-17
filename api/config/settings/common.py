@@ -1458,3 +1458,21 @@ instead of request header.
 
 HASHING_ALGORITHM = "sha256"
 HASHING_CHUNK_SIZE = 1024 * 100
+
+"""
+Typenses Settings
+"""
+TYPESENSE_API_KEY = env("TYPESENSE_API_KEY", default=None)
+""" Typesense API key. This need to be defined in the .env file for Typenses to be activated."""
+TYPESENSE_PORT = env("TYPESENSE_PORT", default="8108")
+"""Typesense listening port"""
+TYPESENSE_PROTOCOL = env("TYPESENSE_PROTOCOL", default="http")
+"""Typesense listening protocol"""
+TYPESENSE_HOST = env(
+    "TYPESENSE_HOST",
+    default="typesense" if IS_DOCKER_SETUP else "localhost",
+)
+"""
+Typesense hostname. Defaults to `localhost` on non-Docker deployments and to `typesense` on
+Docker deployments.
+"""

@@ -13,7 +13,7 @@ RUN set -eux; \
 
 COPY pyproject.toml poetry.lock /
 RUN set -eux; \
-  poetry export --without-hashes > requirements.txt; \
+  poetry export --without-hashes --extras typesense > requirements.txt; \
   poetry export --without-hashes --with dev > dev-requirements.txt;
 
 FROM alpine:3.17 as builder

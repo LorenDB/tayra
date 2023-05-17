@@ -175,6 +175,19 @@ services:
       - "./docs/swagger.yml:/usr/share/nginx/html/swagger.yml"
       - "./docs/api:/usr/share/nginx/html/api"
 
+  typesense:
+    env_file:
+      - .env.dev
+      - .env
+    image: typesense/typesense:0.24.0
+    networks:
+      - internal
+    volumes:
+      - ./typesense/data:/data
+    command: --data-dir /data --enable-cors
+    profiles:
+      - typesense
+
   # minio:
   #   image: minio/minio
   #   command: server /data

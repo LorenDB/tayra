@@ -3564,6 +3564,20 @@ dev = ["pep8 (>=1.6.2)", "pyenchant (>=1.6.6)", "pytest (>=2.6.4)", "pytest-cov 
 twisted = ["twisted (>=20.3.0)", "zope.interface (>=5.2.0)"]
 
 [[package]]
+name = "typesense"
+version = "0.15.1"
+description = "Python client for Typesense, an open source and typo tolerant search engine."
+category = "main"
+optional = true
+python-versions = ">=3"
+files = [
+    {file = "typesense-0.15.1-py2.py3-none-any.whl", hash = "sha256:4e87e66049e863187b5115d4743371edd5db75c80795f35a8ffe632bb407f075"},
+]
+
+[package.dependencies]
+requests = "*"
+
+[[package]]
 name = "typing-extensions"
 version = "4.5.0"
 description = "Backported and Experimental Type Hints for Python 3.7+"
@@ -4132,7 +4146,10 @@ docs = ["Sphinx", "repoze.sphinx.autointerface"]
 test = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 
+[extras]
+typesense = ["typesense"]
+
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "3725c7f5bebac81c9e7024b4d6c1918cd91fd600634c01b5bd5bc14aa52638ac"
+content-hash = "21ed086d4caa2b2a8679e8fdfc11b630f9494871aa4c48b66bae2f44cd946180"

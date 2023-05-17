@@ -92,3 +92,16 @@ services:
     ports:
       # override those variables in your .env file if needed
       - "${FUNKWHALE_API_IP}:${FUNKWHALE_API_PORT}:80"
+
+  typesense:
+    restart: unless-stopped
+    env_file:
+      - .env
+    image: typesense/typesense:0.24.0
+    networks:
+      - internal
+    volumes:
+      - ./typesense/data:/data
+    command: --data-dir /data --enable-cors
+    profiles:
+      - typesense
