@@ -1,12 +1,12 @@
+import { visualizer } from 'rollup-plugin-visualizer'
 import { defineConfig, type PluginOption } from 'vite'
-import Vue from '@vitejs/plugin-vue'
-import VueI18n from '@intlify/unplugin-vue-i18n/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import { resolve } from 'path'
-import { visualizer } from 'rollup-plugin-visualizer'
 
 import manifest from './pwa-manifest.json'
-import Inspector from 'vite-plugin-vue-inspector'
+
+import VueI18n from '@intlify/unplugin-vue-i18n/vite'
+import Vue from '@vitejs/plugin-vue'
 
 
 const port = +(process.env.VUE_PORT ?? 8080)
@@ -21,11 +21,6 @@ export default defineConfig(({ mode }) => ({
     // https://github.com/intlify/bundle-tools/tree/main/packages/vite-plugin-vue-i18n
     VueI18n({
       include: resolve(__dirname, './src/locales/**')
-    }),
-
-    // https://github.com/webfansplz/vite-plugin-vue-inspector
-    Inspector({
-      toggleComboKey: 'alt-shift-d'
     }),
 
     // https://github.com/btd/rollup-plugin-visualizer
