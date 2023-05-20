@@ -100,12 +100,6 @@ Follow this guide to migrate a mono-container installation to a multi-container 
    cat .env.bak >> .env
    ```
 
-6. Update the database URL in your new `.env` file.
-
-   ```{code-block} sh
-   echo "DATABASE_URL=postgresql://funkwhale@postgres:5432/funkwhale" >> .env
-   ```
-
 Check the file and remove any duplicated settings after copying.
 
 ## Migrate your database
