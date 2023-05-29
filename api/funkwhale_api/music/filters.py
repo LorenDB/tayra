@@ -104,7 +104,7 @@ class ArtistFilter(
         distinct=True,
         library_field="tracks__uploads__library",
     )
-    ordering = django_filters.OrderingFilter(
+    ordering = common_filters.CaseInsensitiveNameOrderingFilter(
         fields=(
             ("id", "id"),
             ("name", "name"),
