@@ -183,9 +183,11 @@
       },
       "message": {
         "automaticPlay": "La piste suivante va se jouer automatiquement dans quelques secondes…",
-        "radio": "Les nouvelles pistes seront ajoutées ici automatiquement."
+        "radio": "Les nouvelles pistes seront ajoutées ici automatiquement.",
+        "webglUnsupported": "Votre navigateur semble ne pas supporter WebGL2."
       },
       "meta": {
+        "end": "Fin",
         "queuePosition": "Piste { index } sur { length }",
         "startTime": "00:00",
         "unknownAlbum": "Album Inconnu",
@@ -1956,7 +1958,7 @@
           "suggest": "Nous ne pouvons pas charger cette piste"
         },
         "message": {
-          "remote": "Cet objet est géré par un autre serveur, vous ne pouvez pas le modifier."
+          "remote": " Cet objet est géré par un autre serveur, vous ne pouvez pas le modifier."
         }
       },
       "radios": {
