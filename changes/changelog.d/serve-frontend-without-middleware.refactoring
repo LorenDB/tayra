@@ -1,2 +1,0 @@
-Instead of requesting the right spa content from the API using a middleware we now serve the
-Frontend directly with nginx and only proxy-forward for API endpoints

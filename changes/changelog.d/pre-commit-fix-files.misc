@@ -1,8 +1,0 @@
-Format or fix files using pre-commit
-
-- Upgrade code to >=python3.7
-- Fix flake8 warnings
-- Fix spelling errors
-- Format files using black
-- Format files using isort
-- Format files using prettier

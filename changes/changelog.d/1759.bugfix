@@ -1,1 +1,0 @@
-Fix CSP issue caused by django-channels package (#1752)

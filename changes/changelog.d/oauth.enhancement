@@ -1,1 +1,0 @@
-OAuth Application client secrets are now hashed before storing them to the DB. Those are only displayed once from now on!

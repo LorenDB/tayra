@@ -1,1 +1,0 @@
-Skip refreshing local actors in celery federation.refresh_actor_data task - fixes disappearing avatars (!1873)

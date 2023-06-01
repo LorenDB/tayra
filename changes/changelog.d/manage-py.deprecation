@@ -1,1 +1,0 @@
-Deprecate the api manage.py script in favor of the funkwhale-manage entrypoint

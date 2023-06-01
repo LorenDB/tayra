@@ -1,1 +1,0 @@
-Exclude /api/v1/oauth/authorize from the specs since its not supported yet (#1899)

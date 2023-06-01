@@ -10,67 +10,8 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 .. towncrier
 
-1.3.0-rc6 (2023-05-12)
-----------------------
-
-Updates since 1.3.0-rc5
-
-- Add systemd update instructions to Debian upgrade instructions (#1966)
-- Fix broken links in CHANGELOG (#1976)
-- Add generic upgrade instructions to Docker postgres documentation (#2049)
-- Added Nginx regeneration instructions to Debian update guide (#2050)
-- Fixed mobile player element widths (#2054)
-- Allow summary field of actors to be blank. This leaves actors valid that have a blank (`""`) summary field and allows follows from those.
-- Fix front album tracks count translation
-- Prefer str over dict for the CACHE_URL api setting\
-  This fix the ability to reuse the CACHE_URL with other settings such as\
-  CELERY_BROKER_URL.\
-  Move api docker hardcoded env vars in the settings module\
-
-1.3.0-rc5 (2023-03-26)
-----------------------
-
-Updates since 1.3.0-rc4
-
-- Bump cryptography to 38.0.3-rc1 to match package provided by alpine
-- Fix numerous frontend performance and stability issues
-
-1.3.0-rc4 (2023-03-24)
-----------------------
-
-Update since 1.3.0-rc2:
-- Resolved an issue where queue text with mouse over has dark text on dark background (#2058) (2058)
-- Improve signal handling for service and containers
-- Fixes an issue which made it possible to download all media files without access control (#2101)
-
-1.3.0-rc3 (2023-01-23)
-----------------------
-
-Update since 1.3.0-rc2:
-
-- Fix pipeline execution for tags
-
-1.3.0-rc2 (2023-01-23)
-----------------------
-
-Update since 1.3.0-rc1:
-
-Enhancements:
-
-- Retry fetching new radio track 5 times if error occurred before resetting radio session (#2022)
-
-Bugfixes:
-
-- Docker setup: do not export the API port 5000 publicly
-- Fix artist name submission in Maloja plugin
-
-Deprecations:
-
-- That's the last minor version series that supports python3.7. Funkwhale 1.4 will remove support for it. #1693
-- Deprecate the api manage.py script in favor of the funkwhale-manage entrypoint
-
-1.3.0-rc1 (2023-01-20)
-----------------------
+1.3.0 (2023-06-01)
+------------------
 
 Upgrade instructions are available at
 https://docs.funkwhale.audio/admin/upgrading.html
@@ -90,35 +31,31 @@ Update instructions:
   ```
 
   .. note::
-    If you need to customize your nginx template, e.g. to work around `problems with
-    Docker's resolver <https://docs.funkwhale.audio/admin/external-storages.html#no-resolver-found>`_, you can mount your
-    custom nginx configuration into the container. Uncomment the commented volumes in the `nginx` section of your `docker-compose.yml`.
-    Additionally you need to update the paths in `nginx/funkwhale.template`.
-    Replace all occurrences of `/funkwhale` by `/usr/share/nginx/html`.
-    This loads the templates from your `nginx` folder and overrides the template files in the Docker container.
+     If you need to customize your nginx template, e.g. to work around `problems with
+     Docker's resolver <https://docs.funkwhale.audio/admin/external-storages.html#no-resolver-found>`_, you can mount your
+     custom nginx configuration into the container. Uncomment the commented volumes in the `nginx` section of your `docker-compose.yml`.
+  	 Additionally you need to update the paths in `nginx/funkwhale.template`.
+  	 Replace all occurrences of `/funkwhale` by `/usr/share/nginx/html`.
+     This loads the templates from your `nginx` folder and overrides the template files in the Docker container.
 
   ```
   docker-compose up -d
   ```
-
 - The Docker instructions now use the updated Docker compose plugin. If you previously used the ``docker-compose`` standalone installation, do the following while upgrading:
 
   1. Download the `Docker compose plugin <https://docs.docker.com/compose/install/linux/#install-using-the-repository>`_
   2. Stop your containers using the **docker-compose** syntax.
 
-  ```sh
-  sudo docker-compose down
-  ```
+  .. code-block:: sh
+     sudo docker-compose down
 
   3. Bring the containers back up using the **docker compose** syntax.
 
-  ```sh
-  sudo docker compose up -d
-  ```
+  .. code-block:: sh
+     sudo docker compose up -d
 
   After this you can continue to use the **docker compose** syntax for all Docker management tasks.
-
-- Upgrade Postgres to version 15. [Make sure to migrate!](https://docs.funkwhale.audio/administrator/upgrade/docker.html#upgrade-the-postgres-container)
+- Upgrade Postgres to version 15. [Make sure to migrate!](https://docs.funkwhale.audio/administrator_documentation/upgrade_docs/docker.html#upgrade-the-postgres-container)
 - With this update Funkwhale starts using poetry to maintain its dependencies. We therefore recommend
   removing the old virtualenv by running `rm -rf /srv/funkwhale/virtualenv`.
 
@@ -138,12 +75,15 @@ Enhancements:
 - Add coverage report for Frontend Tests
 - Add hint which serializer is used for OembedView (#1901)
 - Add music visualizer (#1135)
+- Add playable tracks to gitpod instance
 - Add playlists radio to search page (#1968)
 - Add proper serialization for TextPreviewView (#1903)
+- Add python debug and test support for gitpod
 - Add Serializer for SpaManifest endpoint
 - Add support for python 3.11
 - Added proper serializers for the rate-limit endpoint.
 - Added type hints to the API.
+- Adding support for play all radio in search result page (#1563)
 - All administrator documentation has been rewritten to improve clarity and update outdated information.
 - Allow arbitrary length names for artists, albums and tracks
 - Allow installing the funkwhale_api package
@@ -190,6 +130,7 @@ Enhancements:
 - Remove unnecessary or wrong `is` keyword usage from backend
 - Rename OpenAPI schema's operation ids for nicer API client method names.
 - Replace django-channels package with web socket implementation from @vueuse/core (#1715)
+- Retry fetching new radio track 5 times if error occurred before resetting radio session (#2022)
 - Rewrite embedded player to petite-vue
 - Split DATABASE_URL into multiple configuration variables
 - The ListenBrainz plugin submits the track duration
@@ -212,8 +153,12 @@ Bugfixes:
 
 - Allow enabling systemd funkwhale.target
 - Allow playback of media from external frontend (#1937).
+- Allow summary field of actors to be blank. This leaves actors valid that have a blank (`""`) summary field and allows follows from those.
+- Catch ValueError on radio end (#1596)
 - Channel overview was displaying foreign tracks (#1773) (1773)
+- Docker setup: do not export the API port 5000 publicly
 - Fix adding same track multiple times (#1933)
+- Fix artist name submission in Maloja plugin
 - Fix changing visualizer CORS error (#1934).
 - Fix content form autofocus despite `autofocus` prop being set to `false` (#1924)
 - Fix CSP header issues
@@ -225,10 +170,14 @@ Bugfixes:
 - Fix embedded player not working on social posts (1946)
 - Fix favorite button in queue
 - Fix fetching pages of albums in album detail view (#1927)
+- Fix front album tracks count translation
 - Fix global keyboard shortcuts firing when input is focused (#1876)
+- Fix lots of problems in debian installation guide
+- Fix media directory nginx routing error in front docker container introduced in !1897
 - Fix OAuth login (#1890)
 - Fix play button in albums with multi-page volumes (#1928)
 - Fix player closing when queue ends (#1931)
+- Fix postgres connection details in docker setup
 - Fix purging of dangling files #1929
 - Fix remote search (#1857)
 - Fix search by text in affected views (#1858)
@@ -238,30 +187,44 @@ Bugfixes:
 - Fix validity issues in openapi/swagger spec files (#1171)
 - Fixed an issue which caused links in Markdown forms to not render correctly. (#2023)
 - Fixed login redirect (1736)
+- Fixed mobile player element widths (#2054)
 - Fixed remote subscription form in Podcast and search views (#1708)
 - Fixed upload form VUE errors (#1738) (1738)
+- Fixes an issue which made it possible to download all media files without access control (#2101)
 - Fixes channel page (#1729) (1729)
 - Fixes development environment set-up with docker (1726)
 - Fixes embed player (#1783) (1783)
 - Fixes service worker (#1634)
 - Fixes track listenings not being sent when tab is not focused
 - Hide create custom radio to un-authenticated users (#1720)
+- Improve signal handling for service and containers
+- Move api docker hardcoded env vars in the settings module
+- Prefer str over dict for the CACHE_URL api setting
+
+  This fix the ability to reuse the CACHE_URL with other settings such as
+  CELERY_BROKER_URL.
 - Remove trailing slash from reverse proxy configuration
 - Remove unused Footer component (#1660)
 - Remove usage of deprecated Model and Serializer fields (#1663)
+- Resolved an issue where queue text with mouse over has dark text on dark background (#2058) (2058)
 - Skip refreshing local actors in celery federation.refresh_actor_data task - fixes disappearing avatars (!1873)
 
 
 Documentation:
 
 - Add ability to translate documentation into multiple languages
+- Add generic upgrade instructions to Docker postgres documentation (#2049)
 - Add restore instructions to backup docs (#1627).
+- Add systemd update instructions to Debian upgrade instructions (#1966)
+- Added Nginx regeneration instructions to Debian update guide (#2050)
 - Added virtualenv upgrade instructions for Debian (#1562).
 - Cleaned up documentation
 - Document the new login flow of the CLI-tool (#1800)
 - Documented LOGLEVEL command (#1541).
 - Documented the `NGINX_MAX_BODY_SIZE` .env variable (#1624).
+- Fix broken links in CHANGELOG (#1976)
 - Harden security for debian install docs
+- Remove unnecessary postgres variable in Docker migration guide (#2124).
 - Rewrote documentation contributor guide.
 - Rewrote the architecture file (#1908)
 - Rewrote the federation developer documentation (#1911)
@@ -276,7 +239,6 @@ Other:
 - Add a CI job to check if changelog snippet is available
 - Add CI broken links checker
 - Add pre-commit hooks
-
   - flake8
   - black
   - isort
@@ -306,10 +268,148 @@ Other:
 - Use vite for building the frontend, #1644
 
 
+Deprecation:
+
+- Deprecate the api manage.py script in favor of the funkwhale-manage entrypoint
+- That's the last minor version series that supports python3.7. Funkwhale 1.4 will remove support for
+  it. #1693
+- The automatically generated 'DATABASE_URL' configuration in the docker setup is deprecated, please
+  configure either the 'DATABASE_URL' environment variable or the 'DATABASE_HOST', 'DATABASE_USER' and
+  'DATABASE_PASSWORD' environment variables instead.
+
+
 Removal:
 
 - This release removes support for Python 3.6. Please make sure you update your python version before
   Updating Funkwhale!
+
+Committers:
+
+- Agate
+- Aina Hernàndez Campaña
+- AMoonRabbit
+- Anton
+- bruce diao
+- Bruno Talanski
+- ButterflyOfFire
+- Çağla Pickaxe
+- Ciarán Ainsworth
+- Dignified Silence
+- dignny
+- Éilias McTalún
+- EorlBruder
+- Fedi Funkers
+- Georg Krause
+- ghose
+- Henri Dickson
+- Jacek Pruciak
+- Jasper Bogers
+- Jhoan Sebastian Espinosa Borrero
+- jo
+- jooola
+- Julian Rademacher
+- JuniorJPDJ
+- Kasper Seweryn
+- Keunes
+- Kisel1337
+- Laurin W
+- Marcos Peña
+- Matyáš Caras
+- Michael Long
+- nztvar
+- oki
+- Petitminion
+- Philipp Wolfer
+- poeppe
+- Porrumentzio
+- ppom
+- Reinhard Prechtl
+- Sky
+- Sporiff
+- Stuart Begley-Miller
+- @ta
+- Thomas
+- Till Robin Zickel
+- tobifroe
+- wvffle
+
+Contributors to our Issues:
+
+- AMoonRabbit
+- Agate
+- Artem Anufrij
+- ChengChung
+- Ciarán Ainsworth
+- Creak
+- Eric Mesa
+- Georg Krause
+- Hans Bauer
+- HurricaneDancer
+- Jakob Schürz
+- Jucgshu
+- Julian-Samuel Gebühr
+- JuniorJPDJ
+- Kasper Seweryn
+- Keunes
+- Laser Lesbian
+- Laurin W
+- Marco
+- Marcos Peña
+- Martin Giger
+- Mathieu Jourdan
+- MattDHarding
+- Meliurwen
+- Micha Gläß-Stöcker
+- MichaelBechHansen
+- Nathan Mih
+- Nicolas Derive
+- Nolan Darilek
+- Philipp Wolfer
+- Porrumentzio
+- Rodion Borisov
+- Sam Birch
+- Sky Leite
+- TheSunCat
+- Thomas
+- Tobias Frölich
+- Tony Wasserka
+- Vincent Riquer
+- Virgile Robles
+- dddddd-mmmmmm
+- gerry_the_hat
+- getzze
+- heyarne
+- jake
+- jooola
+- jovuit
+- nouts
+- petitminion
+- ppom
+- pullopen
+- resister
+- silksow
+- troll
+
+Contributors to our Merge Requests:
+
+- AMoonRabbit
+- Ciarán Ainsworth
+- Georg Krause
+- JuniorJPDJ
+- Kasper Seweryn
+- Laurin W
+- Marcos Peña
+- Mathieu Jourdan
+- Nicolas Derive
+- Philipp Wolfer
+- Rodion Borisov
+- Thomas
+- Tobias Frölich
+- getzze
+- jooola
+- mqus
+- petitminion
+- poeppe
 
 
 1.2.9 (2022-11-25)
