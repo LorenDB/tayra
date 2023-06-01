@@ -1,3 +1,13 @@
+<script setup lang="ts">
+import type { FSLogs } from '~/types'
+
+interface Props {
+  data: FSLogs
+}
+
+defineProps<Props>()
+</script>
+
 <template>
   <div class="ui segment component-fs-logs">
     <div
@@ -5,23 +15,16 @@
       class="ui active dimmer"
     >
       <div class="ui text loader">
-        <translate translate-context="Content/Library/Paragraph">
-          Import hasn't started yet
-        </translate>
+        {{ $t('components.library.FsLogs.empty.notStarted') }}
       </div>
     </div>
-    <template
-      v-for="(row, idx) in data.logs"
-      v-else
-    >
-      <p :key="idx">
+    <template v-else>
+      <p
+        v-for="row in data.logs"
+        :key="row"
+      >
         {{ row }}
       </p>
     </template>
   </div>
 </template>
-<script>
-export default {
-  props: { data: { type: Object, required: true } }
-}
-</script>

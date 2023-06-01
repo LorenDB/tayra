@@ -1,7 +1,6 @@
 from funkwhale_api.common import admin
 
-from . import models
-from . import tasks
+from . import models, tasks
 
 
 def redeliver_deliveries(modeladmin, request, queryset):

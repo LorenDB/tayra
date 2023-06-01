@@ -1,10 +1,10 @@
 import json
+import logging
 import sys
 import uuid
-import logging
 
-from django.core.management.base import BaseCommand, CommandError
 from django.core import validators
+from django.core.management.base import BaseCommand, CommandError
 
 from funkwhale_api.common import session
 from funkwhale_api.federation import models
@@ -71,7 +71,7 @@ class Command(BaseCommand):
                 )
             )
             for name in registry.keys():
-                self.stdout.write("- {}".format(name))
+                self.stdout.write(f"- {name}")
             return
         raw_content = None
         content = None
@@ -82,7 +82,8 @@ class Command(BaseCommand):
             content = models.Activity.objects.get(uuid=input).payload
         elif is_url(input):
             response = session.get_session().get(
-                input, headers={"Accept": "application/activity+json"},
+                input,
+                headers={"Accept": "application/activity+json"},
             )
             response.raise_for_status()
             content = response.json()

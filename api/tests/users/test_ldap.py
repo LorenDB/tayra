@@ -1,5 +1,4 @@
 from django.contrib.auth import get_backends
-
 from django_auth_ldap import backend
 
 

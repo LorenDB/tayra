@@ -1,10 +1,154 @@
+<script setup lang="ts">
+import type { EditObject, EditObjectType } from '~/composables/moderation/useEditConfigs'
+import type { BackendError, License, ReviewState } from '~/types'
+
+import { computed, onMounted, reactive, ref, watchEffect } from 'vue'
+import { isEqual, clone } from 'lodash-es'
+import { useI18n } from 'vue-i18n'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+import $ from 'jquery'
+
+import AttachmentInput from '~/components/common/AttachmentInput.vue'
+import useEditConfigs from '~/composables/moderation/useEditConfigs'
+import TagsSelector from '~/components/library/TagsSelector.vue'
+import EditList from '~/components/library/EditList.vue'
+import EditCard from '~/components/library/EditCard.vue'
+
+interface Props {
+  objectType: EditObjectType
+  object: EditObject
+  licenses?: License[]
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  licenses: () => []
+})
+
+const { t } = useI18n()
+const configs = useEditConfigs()
+const store = useStore()
+
+const config = computed(() => configs[props.objectType])
+const currentState = computed(() => config.value.fields.reduce((state: ReviewState, field) => {
+  state[field.id] = { value: field.getValue(props.object) }
+  return state
+}, {}))
+
+const canEdit = computed(() => {
+  if (!store.state.auth.authenticated) return false
+
+  const isOwner = props.object.attributed_to
+    && store.state.auth.fullUsername === props.object.attributed_to.full_username
+
+  return isOwner || store.state.auth.availablePermissions.library
+})
+
+const labels = computed(() => ({
+  summaryPlaceholder: t('components.library.EditForm.placeholder.summary')
+}))
+
+const mutationsUrl = computed(() => props.objectType === 'track'
+  ? `tracks/${props.object.id}/mutations/`
+  : props.objectType === 'album'
+    ? `albums/${props.object.id}/mutations/`
+    : props.objectType === 'artist'
+      ? `artists/${props.object.id}/mutations/`
+      : ''
+)
+
+const mutationPayload = computed(() => {
+  const changedFields = config.value.fields.filter(f => {
+    return !isEqual(values[f.id], initialValues[f.id])
+  })
+
+  if (changedFields.length === 0) {
+    return {}
+  }
+
+  const data = {
+    type: 'update',
+    payload: {} as Record<string, unknown>,
+    summary: summary.value
+  }
+
+  for (const field of changedFields) {
+    data.payload[field.id] = values[field.id]
+  }
+
+  return data
+})
+
+const showPendingReview = ref(true)
+const editListFilters = computed(() => showPendingReview.value
+  ? { is_approved: 'null' }
+  : {}
+)
+
+const values = reactive({} as Record<string, any>)
+const initialValues = reactive({} as Record<string, any>)
+for (const { id, getValue } of config.value.fields) {
+  values[id] = clone(getValue(props.object))
+  initialValues[id] = clone(values[id])
+}
+
+const license = ref()
+watchEffect(() => {
+  if (values.license === null) {
+    $(license.value).dropdown('clear')
+    return
+  }
+
+  $(license.value).dropdown('set selected', values.license)
+})
+
+onMounted(() => {
+  $('.ui.dropdown').dropdown({ fullTextSearch: true })
+})
+
+const submittedMutation = ref()
+const summary = ref('')
+
+const errors = ref([] as string[])
+const isLoading = ref(false)
+const submit = async () => {
+  const url = mutationsUrl.value
+  if (!url) return
+
+  isLoading.value = true
+  errors.value = []
+
+  try {
+    const response = await axios.post(url, {
+      ...mutationPayload.value,
+      is_approved: canEdit.value
+        ? true
+        : undefined
+    })
+
+    submittedMutation.value = response.data
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const fieldValuesChanged = (fieldId: string) => {
+  return !isEqual(values[fieldId], initialValues[fieldId])
+}
+
+const resetField = (fieldId: string) => {
+  values[fieldId] = clone(initialValues[fieldId])
+}
+</script>
+
 <template>
   <div v-if="submittedMutation">
     <div class="ui positive message">
       <h4 class="header">
-        <translate translate-context="Content/Library/Paragraph">
-          Your edit was successfully submitted.
-        </translate>
+        {{ $t('components.library.EditForm.header.success') }}
       </h4>
     </div>
     <edit-card
@@ -15,9 +159,7 @@
       class="ui button"
       @click.prevent="submittedMutation = null"
     >
-      <translate translate-context="Content/Library/Button.Label">
-        Submit another edit
-      </translate>
+      {{ $t('components.library.EditForm.button.new') }}
     </button>
   </div>
   <div v-else>
@@ -27,39 +169,31 @@
       :obj="object"
       :current-state="currentState"
     >
-      <div slot="title">
+      <div>
         <template v-if="showPendingReview">
-          <translate translate-context="Content/Library/Paragraph">
-            Recent edits awaiting review
-          </translate>
+          {{ $t('components.library.EditForm.header.unreviewed') }}
           <button
             class="ui tiny basic right floated button"
             @click.prevent="showPendingReview = false"
           >
-            <translate translate-context="Content/Library/Button.Label">
-              Show all edits
-            </translate>
+            {{ $t('components.library.EditForm.button.showAll') }}
           </button>
         </template>
         <template v-else>
-          <translate translate-context="Content/Library/Paragraph">
-            Recent edits
-          </translate>
+          {{ $t('components.library.EditForm.header.recentEdits') }}
           <button
             class="ui tiny basic right floated button"
             @click.prevent="showPendingReview = true"
           >
-            <translate translate-context="Content/Library/Button.Label">
-              Restrict to unreviewed edits
-            </translate>
+            {{ $t('components.library.EditForm.button.showUnreviewed') }}
           </button>
         </template>
       </div>
-      <empty-state slot="empty-state">
-        <translate translate-context="Content/Library/Paragraph">
-          Suggest a change using the form below.
-        </translate>
-      </empty-state>
+      <template #empty-state>
+        <empty-state>
+          {{ $t('components.library.EditForm.empty.suggestEdit') }}
+        </empty-state>
+      </template>
     </edit-list>
     <form
       class="ui form"
@@ -72,9 +206,7 @@
         class="ui negative message"
       >
         <h4 class="header">
-          <translate translate-context="Content/Library/Error message.Title">
-            Error while submitting edit
-          </translate>
+          {{ $t('components.library.EditForm.header.failure') }}
         </h4>
         <ul class="list">
           <li
@@ -89,114 +221,105 @@
         v-if="!canEdit"
         class="ui message"
       >
-        <translate translate-context="Content/Library/Paragraph">
-          You don't have the permission to edit this object, but you can suggest changes. Once submitted, suggestions will be reviewed before approval.
-        </translate>
+        {{ $t('components.library.EditForm.message.noPermission') }}
       </div>
-      <div
-        v-for="fieldConfig in config.fields"
-        v-if="values"
-        :key="fieldConfig.id"
-        class="ui field"
-      >
-        <template v-if="fieldConfig.type === 'text'">
-          <label :for="fieldConfig.id">{{ fieldConfig.label }}</label>
-          <input
-            :id="fieldConfig.id"
-            v-model="values[fieldConfig.id]"
-            :type="fieldConfig.inputType || 'text'"
-            :required="fieldConfig.required"
-            :name="fieldConfig.id"
-          >
-        </template>
-        <template v-else-if="fieldConfig.type === 'license'">
-          <label :for="fieldConfig.id">{{ fieldConfig.label }}</label>
-
-          <select
-            :id="fieldConfig.id"
-            ref="license"
-            v-model="values[fieldConfig.id]"
-            :required="fieldConfig.required"
-            class="ui fluid search dropdown"
-          >
-            <option :value="null">
-              <translate translate-context="*/*/*">
-                N/A
-              </translate>
-            </option>
-            <option
-              v-for="license in licenses"
-              :key="license.code"
-              :value="license.code"
+      <template v-if="values">
+        <div
+          v-for="fieldConfig in config.fields"
+          :key="fieldConfig.id"
+          class="ui field"
+        >
+          <template v-if="fieldConfig.type === 'text'">
+            <label :for="fieldConfig.id">{{ fieldConfig.label }}</label>
+            <input
+              :id="fieldConfig.id"
+              v-model="values[fieldConfig.id]"
+              :type="fieldConfig.inputType || 'text'"
+              :required="fieldConfig.required"
+              :name="fieldConfig.id"
             >
-              {{ license.name }}
-            </option>
-          </select>
-          <button
-            class="ui tiny basic left floated button"
-            form="noop"
-            @click.prevent="values[fieldConfig.id] = null"
-          >
-            <i class="x icon" />
-            <translate translate-context="Content/Library/Button.Label">
-              Clear
-            </translate>
-          </button>
-        </template>
-        <template v-else-if="fieldConfig.type === 'content'">
-          <label :for="fieldConfig.id">{{ fieldConfig.label }}</label>
-          <content-form
-            v-model="values[fieldConfig.id].text"
-            :field-id="fieldConfig.id"
-            :rows="3"
-          />
-        </template>
-        <template v-else-if="fieldConfig.type === 'attachment'">
-          <attachment-input
-            :id="fieldConfig.id"
-            v-model="values[fieldConfig.id]"
-            :initial-value="initialValues[fieldConfig.id]"
-            :required="fieldConfig.required"
-            :name="fieldConfig.id"
-            @delete="values[fieldConfig.id] = initialValues[fieldConfig.id]"
-          >
-            <span slot="label">{{ fieldConfig.label }}</span>
-          </attachment-input>
-        </template>
-        <template v-else-if="fieldConfig.type === 'tags'">
-          <label :for="fieldConfig.id">{{ fieldConfig.label }}</label>
-          <tags-selector
-            :id="fieldConfig.id"
-            ref="tags"
-            v-model="values[fieldConfig.id]"
-            required="fieldConfig.required"
-          />
-          <button
-            class="ui tiny basic left floated button"
-            form="noop"
-            @click.prevent="values[fieldConfig.id] = []"
-          >
-            <i class="x icon" />
-            <translate translate-context="Content/Library/Button.Label">
-              Clear
-            </translate>
-          </button>
-        </template>
-        <div v-if="fieldValuesChanged(fieldConfig.id)">
-          <button
-            class="ui tiny basic right floated reset button"
-            form="noop"
-            @click.prevent="resetField(fieldConfig.id)"
-          >
-            <i class="undo icon" />
-            <translate translate-context="Content/Library/Button.Label">
-              Reset to initial value
-            </translate>
-          </button>
+          </template>
+          <template v-else-if="fieldConfig.type === 'license'">
+            <label :for="fieldConfig.id">{{ fieldConfig.label }}</label>
+
+            <select
+              :id="fieldConfig.id"
+              ref="license"
+              v-model="values[fieldConfig.id]"
+              :required="fieldConfig.required"
+              class="ui fluid search dropdown"
+            >
+              <option :value="null">
+                {{ $t('components.library.EditForm.notApplicable') }}
+              </option>
+              <option
+                v-for="{ code, name } in licenses"
+                :key="code"
+                :value="code"
+              >
+                {{ name }}
+              </option>
+            </select>
+            <button
+              class="ui tiny basic left floated button"
+              form="noop"
+              @click.prevent="values[fieldConfig.id] = null"
+            >
+              <i class="x icon" />
+              {{ $t('components.library.EditForm.button.clear') }}
+            </button>
+          </template>
+          <template v-else-if="fieldConfig.type === 'content'">
+            <label :for="fieldConfig.id">{{ fieldConfig.label }}</label>
+            <content-form
+              v-model="values[fieldConfig.id].text"
+              :field-id="fieldConfig.id"
+              :rows="3"
+            />
+          </template>
+          <template v-else-if="fieldConfig.type === 'attachment'">
+            <attachment-input
+              :id="fieldConfig.id"
+              v-model="values[fieldConfig.id]"
+              :initial-value="initialValues[fieldConfig.id]"
+              :required="fieldConfig.required"
+              :name="fieldConfig.id"
+              @delete="values[fieldConfig.id] = initialValues[fieldConfig.id]"
+            >
+              <span>{{ fieldConfig.label }}</span>
+            </attachment-input>
+          </template>
+          <template v-else-if="fieldConfig.type === 'tags'">
+            <label :for="fieldConfig.id">{{ fieldConfig.label }}</label>
+            <tags-selector
+              :id="fieldConfig.id"
+              ref="tags"
+              v-model="values[fieldConfig.id]"
+              required="fieldConfig.required"
+            />
+            <button
+              class="ui tiny basic left floated button"
+              form="noop"
+              @click.prevent="values[fieldConfig.id] = []"
+            >
+              <i class="x icon" />
+              {{ $t('components.library.EditForm.button.clear') }}
+            </button>
+          </template>
+          <div v-if="fieldValuesChanged(fieldConfig.id)">
+            <button
+              class="ui tiny basic right floated reset button"
+              form="noop"
+              @click.prevent="resetField(fieldConfig.id)"
+            >
+              <i class="undo icon" />
+              {{ $t('components.library.EditForm.button.reset') }}
+            </button>
+          </div>
         </div>
-      </div>
+      </template>
       <div class="field">
-        <label for="summary"><translate translate-context="*/*/*">Summary (optional)</translate></label>
+        <label for="summary">{{ $t('components.library.EditForm.label.summary') }}</label>
         <textarea
           id="change-summary"
           v-model="summary"
@@ -210,165 +333,20 @@
         class="ui left floated button"
         :to="{name: 'library.tracks.detail', params: {id: object.id }}"
       >
-        <translate translate-context="*/*/Button.Label/Verb">
-          Cancel
-        </translate>
+        {{ $t('components.library.EditForm.button.cancel') }}
       </router-link>
       <button
         :class="['ui', {'loading': isLoading}, 'right', 'floated', 'success', 'button']"
         type="submit"
         :disabled="isLoading || !mutationPayload"
       >
-        <translate
-          v-if="canEdit"
-          key="1"
-          translate-context="Content/Library/Button.Label/Verb"
-        >
-          Submit and apply edit
-        </translate>
-        <translate
-          v-else
-          key="2"
-          translate-context="Content/Library/Button.Label/Verb"
-        >
-          Submit suggestion
-        </translate>
+        <span v-if="canEdit">
+          {{ $t('components.library.EditForm.button.submit') }}
+        </span>
+        <span v-else>
+          {{ $t('components.library.EditForm.button.suggest') }}
+        </span>
       </button>
     </form>
   </div>
 </template>
-
-<script>
-import $ from 'jquery'
-import _ from '@/lodash'
-import axios from 'axios'
-import AttachmentInput from '@/components/common/AttachmentInput'
-import EditList from '@/components/library/EditList'
-import EditCard from '@/components/library/EditCard'
-import TagsSelector from '@/components/library/TagsSelector'
-import edits from '@/edits'
-
-export default {
-  components: {
-    EditList,
-    EditCard,
-    TagsSelector,
-    AttachmentInput
-  },
-  props: {
-    objectType: { type: String, required: true },
-    object: { type: Object, required: true },
-    licenses: { type: Array, required: true }
-  },
-  data () {
-    return {
-      isLoading: false,
-      errors: [],
-      values: {},
-      initialValues: {},
-      summary: '',
-      submittedMutation: null,
-      showPendingReview: true
-    }
-  },
-  computed: {
-    configs: edits.getConfigs,
-    config: edits.getConfig,
-    currentState: edits.getCurrentState,
-    canEdit: edits.getCanEdit,
-    labels () {
-      return {
-        summaryPlaceholder: this.$pgettext('*/*/Placeholder', 'A short summary describing your changes.')
-      }
-    },
-    mutationsUrl () {
-      if (this.objectType === 'track') {
-        return `tracks/${this.object.id}/mutations/`
-      }
-      if (this.objectType === 'album') {
-        return `albums/${this.object.id}/mutations/`
-      }
-      if (this.objectType === 'artist') {
-        return `artists/${this.object.id}/mutations/`
-      }
-      return null
-    },
-    mutationPayload () {
-      const self = this
-      const changedFields = this.config.fields.filter(f => {
-        return !_.isEqual(self.values[f.id], self.initialValues[f.id])
-      })
-      if (changedFields.length === 0) {
-        return null
-      }
-      const payload = {
-        type: 'update',
-        payload: {},
-        summary: this.summary
-      }
-      changedFields.forEach((f) => {
-        payload.payload[f.id] = self.values[f.id]
-      })
-      return payload
-    },
-    editListFilters () {
-      if (this.showPendingReview) {
-        return { is_approved: 'null' }
-      } else {
-        return {}
-      }
-    }
-  },
-  watch: {
-    'values.license' (newValue) {
-      if (newValue === null) {
-        $(this.$refs.license).dropdown('clear')
-      } else {
-        $(this.$refs.license).dropdown('set selected', newValue)
-      }
-    }
-  },
-  created () {
-    this.setValues()
-  },
-  mounted () {
-    $('.ui.dropdown').dropdown({ fullTextSearch: true })
-  },
-
-  methods: {
-    setValues () {
-      const self = this
-      this.config.fields.forEach(f => {
-        self.$set(self.values, f.id, _.clone(f.getValue(self.object)))
-        self.$set(self.initialValues, f.id, _.clone(self.values[f.id]))
-      })
-    },
-    submit () {
-      const self = this
-      self.isLoading = true
-      self.errors = []
-      const payload = _.clone(this.mutationPayload || {})
-      if (this.canEdit) {
-        payload.is_approved = true
-      }
-      return axios.post(this.mutationsUrl, payload).then(
-        response => {
-          self.isLoading = false
-          self.submittedMutation = response.data
-        },
-        error => {
-          self.errors = error.backendErrors
-          self.isLoading = false
-        }
-      )
-    },
-    fieldValuesChanged (fieldId) {
-      return !_.isEqual(this.values[fieldId], this.initialValues[fieldId])
-    },
-    resetField (fieldId) {
-      this.values[fieldId] = _.clone(this.initialValues[fieldId])
-    }
-  }
-
-}
-</script>

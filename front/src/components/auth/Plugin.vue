@@ -1,12 +1,66 @@
+<script setup lang="ts">
+import type { Library, Plugin, BackendError } from '~/types'
+
+import axios from 'axios'
+import { clone } from 'lodash-es'
+import useMarkdown, { useMarkdownRaw } from '~/composables/useMarkdown'
+import { ref } from 'vue'
+
+interface Props {
+  plugin: Plugin
+  libraries: Library[]
+}
+
+const props = defineProps<Props>()
+
+const description = useMarkdown(() => props.plugin.description ?? '')
+const enabled = ref(props.plugin.enabled)
+const values = clone(props.plugin.values ?? {})
+
+const errors = ref([] as string[])
+const isLoading = ref(false)
+const submit = async () => {
+  isLoading.value = true
+  errors.value = []
+
+  try {
+    await axios.post(`plugins/${props.plugin.name}/${enabled.value ? 'enable' : 'disable'}`)
+    await axios.post(`plugins/${props.plugin.name}`, values)
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const scan = async () => {
+  isLoading.value = true
+  errors.value = []
+
+  try {
+    await axios.post(`plugins/${props.plugin.name}/scan`, values)
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const submitAndScan = async () => {
+  await submit()
+  await scan()
+}
+</script>
+
 <template>
   <form
     :class="['ui segment form', {loading: isLoading}]"
     @submit.prevent="submit"
   >
     <h3>{{ plugin.label }}</h3>
-    <div
+    <sanitized-html
       v-if="plugin.description"
-      v-html="markdown.makeHtml(plugin.description)"
+      :html="description"
     />
     <template v-if="plugin.homepage">
       <div class="ui small hidden divider" />
@@ -15,7 +69,7 @@
         target="_blank"
       >
         <i class="external icon" />
-        <translate translate-context="Footer/*/List item.Link/Short, Noun">Documentation</translate>
+        {{ $t('components.auth.Plugin.link.documentation') }}
       </a>
     </template>
     <div class="ui clearing hidden divider" />
@@ -25,9 +79,7 @@
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/*/Error message.Title">
-          Error while saving plugin
-        </translate>
+        {{ $t('components.auth.Plugin.header.failure') }}
       </h4>
       <ul class="list">
         <li
@@ -45,7 +97,7 @@
           v-model="enabled"
           type="checkbox"
         >
-        <label :for="`${plugin.name}-enabled`"><translate translate-context="*/*/*">Enabled</translate></label>
+        <label :for="`${plugin.name}-enabled`">{{ $t('components.auth.Plugin.label.pluginEnabled') }}</label>
       </div>
     </div>
     <div class="ui clearing hidden divider" />
@@ -53,7 +105,7 @@
       v-if="plugin.source"
       class="field"
     >
-      <label for="plugin-library"><translate translate-context="*/*/*/Noun">Library</translate></label>
+      <label for="plugin-library">{{ $t('components.auth.Plugin.label.library') }}</label>
       <select
         id="plugin-library"
         v-model="values['library']"
@@ -67,150 +119,90 @@
         </option>
       </select>
       <div>
-        <translate translate-context="*/*/Paragraph/Noun">
-          Library where files should be imported.
-        </translate>
+        {{ $t('components.auth.Plugin.description.library') }}
       </div>
     </div>
-    <template
-      v-for="(field, key) in plugin.conf"
-      v-if="plugin.conf && plugin.conf.length > 0"
-    >
-      <div
-        v-if="field.type === 'text'"
-        :key="key"
-        class="field"
+    <template v-if="(plugin.conf?.length ?? 0) > 0">
+      <template
+        v-for="field in plugin.conf"
+        :key="field.name"
       >
-        <label :for="`plugin-${field.name}`">{{ field.label || field.name }}</label>
-        <input
-          :id="`plugin-${field.name}`"
-          v-model="values[field.name]"
-          type="text"
+        <div
+          v-if="field.type === 'text'"
+          class="field"
         >
+          <label :for="`plugin-${field.name}`">{{ field.label || field.name }}</label>
+          <input
+            :id="`plugin-${field.name}`"
+            v-model="values[field.name]"
+            type="text"
+          >
+          <sanitized-html
+            v-if="field.help"
+            :html="useMarkdownRaw(field.help)"
+          />
+        </div>
         <div
-          v-if="field.help"
-          v-html="markdown.makeHtml(field.help)"
-        />
-      </div>
-      <div
-        v-if="field.type === 'long_text'"
-        :key="key"
-        class="field"
-      >
-        <label :for="`plugin-${field.name}`">{{ field.label || field.name }}</label>
-        <textarea
-          :id="`plugin-${field.name}`"
-          v-model="values[field.name]"
-          type="text"
-          rows="5"
-        />
-        <div
-          v-if="field.help"
-          v-html="markdown.makeHtml(field.help)"
-        />
-      </div>
-      <div
-        v-if="field.type === 'url'"
-        :key="key"
-        class="field"
-      >
-        <label :for="`plugin-${field.name}`">{{ field.label || field.name }}</label>
-        <input
-          :id="`plugin-${field.name}`"
-          v-model="values[field.name]"
-          type="url"
+          v-if="field.type === 'long_text'"
+          class="field"
         >
+          <label :for="`plugin-${field.name}`">{{ field.label || field.name }}</label>
+          <textarea
+            :id="`plugin-${field.name}`"
+            v-model="values[field.name]"
+            type="text"
+            rows="5"
+          />
+          <sanitized-html
+            v-if="field.help"
+            :html="useMarkdownRaw(field.help)"
+          />
+        </div>
         <div
-          v-if="field.help"
-          v-html="markdown.makeHtml(field.help)"
-        />
-      </div>
-      <div
-        v-if="field.type === 'password'"
-        :key="key"
-        class="field"
-      >
-        <label :for="`plugin-${field.name}`">{{ field.label || field.name }}</label>
-        <input
-          :id="`plugin-${field.name}`"
-          v-model="values[field.name]"
-          type="password"
+          v-if="field.type === 'url'"
+          class="field"
         >
+          <label :for="`plugin-${field.name}`">{{ field.label || field.name }}</label>
+          <input
+            :id="`plugin-${field.name}`"
+            v-model="values[field.name]"
+            type="url"
+          >
+          <sanitized-html
+            v-if="field.help"
+            :html="useMarkdownRaw(field.help)"
+          />
+        </div>
         <div
-          v-if="field.help"
-          v-html="markdown.makeHtml(field.help)"
-        />
-      </div>
+          v-if="field.type === 'password'"
+          class="field"
+        >
+          <label :for="`plugin-${field.name}`">{{ field.label || field.name }}</label>
+          <input
+            :id="`plugin-${field.name}`"
+            v-model="values[field.name]"
+            type="password"
+          >
+          <sanitized-html
+            v-if="field.help"
+            :html="useMarkdownRaw(field.help)"
+          />
+        </div>
+      </template>
     </template>
     <button
       type="submit"
       :class="['ui', {'loading': isLoading}, 'right', 'floated', 'button']"
     >
-      <translate translate-context="Content/*/Button.Label/Verb">
-        Save
-      </translate>
+      {{ $t('components.auth.Plugin.button.save') }}
     </button>
     <button
       v-if="plugin.source"
-      type="scan"
       :class="['ui', {'loading': isLoading}, 'right', 'floated', 'button']"
       @click.prevent="submitAndScan"
     >
-      <translate translate-context="Content/*/Button.Label/Verb">
-        Scan
-      </translate>
+      {{ $t('components.auth.Plugin.button.scan') }}
     </button>
     <div class="ui clearing hidden divider" />
   </form>
 </template>
-
-<script>
-import axios from 'axios'
-import lodash from '@/lodash'
-import showdown from 'showdown'
-export default {
-  props: {
-    plugin: { type: Object, required: true },
-    libraries: { type: Array, required: true }
-  },
-  data () {
-    return {
-      markdown: new showdown.Converter(),
-      isLoading: false,
-      enabled: this.plugin.enabled,
-      values: lodash.clone(this.plugin.values || {}),
-      errors: []
-    }
-  },
-  methods: {
-    async submit () {
-      this.isLoading = true
-      this.errors = []
-      const url = `plugins/${this.plugin.name}`
-      const enableUrl = this.enabled ? `${url}/enable` : `${url}/disable`
-      await axios.post(enableUrl)
-      try {
-        await axios.post(url, this.values)
-      } catch (e) {
-        this.errors = e.backendErrors
-      }
-      this.isLoading = false
-    },
-    async scan () {
-      this.isLoading = true
-      this.errors = []
-      const url = `plugins/${this.plugin.name}/scan`
-      try {
-        await axios.post(url, this.values)
-      } catch (e) {
-        this.errors = e.backendErrors
-      }
-      this.isLoading = false
-    },
-    async submitAndScan () {
-      await this.submit()
-      await this.scan()
-    }
-  }
-}
-</script>

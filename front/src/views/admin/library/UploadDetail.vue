@@ -1,3 +1,66 @@
+<script setup lang="ts">
+import type { PrivacyLevel, ImportStatus } from '~/types'
+
+import { humanSize, truncate } from '~/utils/filters'
+import { useRouter } from 'vue-router'
+import { computed, ref } from 'vue'
+
+import time from '~/utils/time'
+import axios from 'axios'
+
+import ImportStatusModal from '~/components/library/ImportStatusModal.vue'
+
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useErrorHandler from '~/composables/useErrorHandler'
+
+interface Props {
+  id: number
+}
+
+const props = defineProps<Props>()
+
+const sharedLabels = useSharedLabels()
+const router = useRouter()
+
+const privacyLevels = computed(() => sharedLabels.fields.privacy_level.shortChoices[object.value.library.privacy_level as PrivacyLevel])
+const importStatus = computed(() => sharedLabels.fields.import_status.choices[object.value.import_status as ImportStatus].label)
+
+const isLoading = ref(false)
+const object = ref()
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(`manage/library/uploads/${props.id}/`)
+    object.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+fetchData()
+
+const remove = async () => {
+  isLoading.value = true
+
+  try {
+    await axios.delete(`manage/uploads/${props.id}/`)
+    router.push({ name: 'manage.library.uploads' })
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+const getQuery = (field: string, value: string) => `${field}:"${value}"`
+const displayName = (object: any) => object.filename ?? object.source ?? object.uuid
+
+const showUploadDetailModal = ref(false)
+</script>
+
 <template>
   <main>
     <div
@@ -8,8 +71,8 @@
     </div>
     <template v-if="object">
       <import-status-modal
+        v-model:show="showUploadDetailModal"
         :upload="object"
-        :show.sync="showUploadDetailModal"
       />
       <section
         v-title="displayName(object)"
@@ -21,12 +84,12 @@
               <h2 class="ui header">
                 <i class="circular inverted file icon" />
                 <div class="content">
-                  {{ displayName(object) | truncate(100) }}
+                  {{ truncate(displayName(object)) }}
                   <div class="sub header">
                     <template v-if="object.is_local">
                       <span class="ui tiny accent label">
                         <i class="home icon" />
-                        <translate translate-context="Content/Moderation/*/Short, Noun">Local</translate>
+                        {{ $t('views.admin.library.UploadDetail.header.local') }}
                       </span>
                       &nbsp;
                     </template>
@@ -43,7 +106,7 @@
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    <translate translate-context="Content/Moderation/Link/Verb">View in Django's admin</translate>&nbsp;
+                    {{ $t('views.admin.library.UploadDetail.link.django') }}
                   </a>
                   <button
                     v-dropdown
@@ -59,7 +122,7 @@
                         rel="noopener noreferrer"
                       >
                         <i class="wrench icon" />
-                        <translate translate-context="Content/Moderation/Link/Verb">View in Django's admin</translate>&nbsp;
+                        {{ $t('views.admin.library.UploadDetail.link.django') }}
                       </a>
                       <a
                         class="basic item"
@@ -68,7 +131,7 @@
                         rel="noopener noreferrer"
                       >
                         <i class="external icon" />
-                        <translate translate-context="Content/Moderation/Link/Verb">Open remote profile</translate>&nbsp;
+                        {{ $t('views.admin.library.UploadDetail.link.remoteProfile') }}
                       </a>
                     </div>
                   </button>
@@ -82,7 +145,7 @@
                     rel="noopener noreferrer"
                   >
                     <i class="download icon" />
-                    <translate translate-context="Content/Track/Link/Verb">Download</translate>
+                    {{ $t('views.admin.library.UploadDetail.button.download') }}
                   </a>
                 </div>
                 <div class="ui buttons">
@@ -90,26 +153,24 @@
                     :class="['ui', {loading: isLoading}, 'basic danger button']"
                     :action="remove"
                   >
-                    <translate translate-context="*/*/*/Verb">
-                      Delete
-                    </translate>
-                    <p slot="modal-header">
-                      <translate translate-context="Popup/Library/Title">
-                        Delete this upload?
-                      </translate>
-                    </p>
-                    <div slot="modal-content">
+                    {{ $t('views.admin.library.UploadDetail.button.delete') }}
+                    <template #modal-header>
                       <p>
-                        <translate translate-context="Content/Moderation/Paragraph">
-                          The upload will be removed. This action is irreversible.
-                        </translate>
+                        {{ $t('views.admin.library.UploadDetail.modal.delete.header') }}
                       </p>
-                    </div>
-                    <p slot="modal-confirm">
-                      <translate translate-context="*/*/*/Verb">
-                        Delete
-                      </translate>
-                    </p>
+                    </template>
+                    <template #modal-content>
+                      <div>
+                        <p>
+                          {{ $t('views.admin.library.UploadDetail.modal.delete.content.warning') }}
+                        </p>
+                      </div>
+                    </template>
+                    <template #modal-confirm>
+                      <p>
+                        {{ $t('views.admin.library.UploadDetail.button.delete') }}
+                      </p>
+                    </template>
                   </dangerous-button>
                 </div>
               </div>
@@ -124,18 +185,14 @@
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
-                    Upload data
-                  </translate>
+                  {{ $t('views.admin.library.UploadDetail.header.uploadData') }}
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      <translate translate-context="*/*/*/Noun">
-                        Name
-                      </translate>
+                      {{ $t('views.admin.library.UploadDetail.table.upload.name') }}
                     </td>
                     <td>
                       {{ displayName(object) }}
@@ -144,21 +201,17 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('privacy_level', object.library.privacy_level) }}">
-                        <translate translate-context="*/*/*">
-                          Visibility
-                        </translate>
+                        {{ $t('views.admin.library.UploadDetail.link.visibility') }}
                       </router-link>
                     </td>
                     <td>
-                      {{ sharedLabels.fields.privacy_level.shortChoices[object.library.privacy_level] }}
+                      {{ privacyLevels }}
                     </td>
                   </tr>
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.accounts.detail', params: {id: object.library.actor.full_username }}">
-                        <translate translate-context="*/*/*/Noun">
-                          Account
-                        </translate>
+                        {{ $t('views.admin.library.UploadDetail.link.account') }}
                       </router-link>
                     </td>
                     <td>
@@ -168,9 +221,7 @@
                   <tr v-if="!object.is_local">
                     <td>
                       <router-link :to="{name: 'manage.moderation.domains.detail', params: {id: object.domain }}">
-                        <translate translate-context="Content/Moderation/*/Noun">
-                          Domain
-                        </translate>
+                        {{ $t('views.admin.library.UploadDetail.link.domain') }}
                       </router-link>
                     </td>
                     <td>
@@ -180,17 +231,15 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('status', object.import_status) }}">
-                        <translate translate-context="Content/*/*/Noun">
-                          Import status
-                        </translate>
+                        {{ $t('views.admin.library.UploadDetail.link.importStatus') }}
                       </router-link>
                     </td>
                     <td>
-                      {{ sharedLabels.fields.import_status.choices[object.import_status].label }}
+                      {{ importStatus }}
                       <button
                         class="ui tiny basic icon button"
-                        :title="sharedLabels.fields.import_status.detailTitle"
-                        @click="detailedUpload = object; showUploadDetailModal = true"
+                        :title="sharedLabels.fields.import_status.label"
+                        @click="showUploadDetailModal = true"
                       >
                         <i class="question circle outline icon" />
                       </button>
@@ -199,9 +248,7 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.libraries.detail', params: {id: object.library.uuid }}">
-                        <translate translate-context="*/*/*/Noun">
-                          Library
-                        </translate>
+                        {{ $t('views.admin.library.UploadDetail.link.library') }}
                       </router-link>
                     </td>
                     <td>
@@ -217,18 +264,14 @@
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
-                    Activity
-                  </translate>&nbsp;
+                  {{ $t('views.admin.library.UploadDetail.header.activity') }}&nbsp;
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Short (Value is a date)">
-                        First seen
-                      </translate>
+                      {{ $t('views.admin.library.UploadDetail.table.activity.firstSeen') }}
                     </td>
                     <td>
                       <human-date :date="object.creation_date" />
@@ -236,21 +279,18 @@
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/*/*/Noun">
-                        Accessed date
-                      </translate>
+                      {{ $t('views.admin.library.UploadDetail.table.activity.accessedDate') }}
                     </td>
                     <td>
                       <human-date
                         v-if="object.accessed_date"
                         :date="object.accessed_date"
                       />
-                      <translate
+                      <span
                         v-else
-                        translate-context="*/*/*"
                       >
-                        N/A
-                      </translate>
+                        {{ $t('views.admin.library.UploadDetail.notApplicable') }}
+                      </span>
                     </td>
                   </tr>
                 </tbody>
@@ -262,9 +302,7 @@
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
-                    Audio content
-                  </translate>&nbsp;
+                  {{ $t('views.admin.library.UploadDetail.header.audioContent') }}&nbsp;
                 </div>
               </h3>
               <table class="ui very basic table">
@@ -272,9 +310,7 @@
                   <tr v-if="object.track">
                     <td>
                       <router-link :to="{name: 'manage.library.tracks.detail', params: {id: object.track.id }}">
-                        <translate translate-context="*/*/*/Noun">
-                          Track
-                        </translate>
+                        {{ $t('views.admin.library.UploadDetail.table.audioContent.track') }}
                       </router-link>
                     </td>
                     <td>
@@ -283,86 +319,72 @@
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Noun">
-                        Cached size
-                      </translate>
+                      {{ $t('views.admin.library.UploadDetail.table.audioContent.cachedSize') }}
                     </td>
                     <td>
                       <template v-if="object.audio_file">
-                        {{ object.size | humanSize }}
+                        {{ humanSize(object.size) }}
                       </template>
-                      <translate
+                      <span
                         v-else
-                        translate-context="*/*/*"
                       >
-                        N/A
-                      </translate>
+                        {{ $t('views.admin.library.UploadDetail.notApplicable') }}
+                      </span>
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/*/*/Noun">
-                        Size
-                      </translate>
+                      {{ $t('views.admin.library.UploadDetail.table.audioContent.size') }}
                     </td>
                     <td>
-                      {{ object.size | humanSize }}
+                      {{ humanSize(object.size) }}
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Track/*/Noun">
-                        Bitrate
-                      </translate>
+                      {{ $t('views.admin.library.UploadDetail.table.audioContent.bitrate.label') }}
                     </td>
                     <td>
                       <template v-if="object.bitrate">
-                        {{ object.bitrate | humanSize }}/s
+                        {{ $t('views.admin.library.UploadDetail.table.audioContent.bitrate.value', {bitrate: humanSize(object.bitrate)}) }}
                       </template>
-                      <translate
+                      <span
                         v-else
-                        translate-context="*/*/*"
                       >
-                        N/A
-                      </translate>
+                        {{ $t('views.admin.library.UploadDetail.notApplicable') }}
+                      </span>
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/*/*">
-                        Duration
-                      </translate>
+                      {{ $t('views.admin.library.UploadDetail.table.audioContent.duration') }}
                     </td>
                     <td>
                       <template v-if="object.duration">
-                        {{ object.duration | duration }}
+                        {{ time.parse(object.duration) }}
                       </template>
-                      <translate
+                      <span
                         v-else
-                        translate-context="*/*/*"
                       >
-                        N/A
-                      </translate>
+                        {{ $t('views.admin.library.UploadDetail.notApplicable') }}
+                      </span>
                     </td>
                   </tr>
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('type', object.mimetype) }}">
-                        <translate translate-context="Content/Track/Table.Label/Noun">
-                          Type
-                        </translate>
+                        {{ $t('views.admin.library.UploadDetail.link.type') }}
                       </router-link>
                     </td>
                     <td>
                       <template v-if="object.mimetype">
                         {{ object.mimetype }}
                       </template>
-                      <translate
+                      <span
                         v-else
-                        translate-context="*/*/*"
                       >
-                        N/A
-                      </translate>
+                        {{ $t('views.admin.library.UploadDetail.notApplicable') }}
+                      </span>
                     </td>
                   </tr>
                 </tbody>
@@ -374,71 +396,3 @@
     </template>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import TranslationsMixin from '@/components/mixins/Translations'
-import ImportStatusModal from '@/components/library/ImportStatusModal'
-import time from '@/utils/time'
-
-export default {
-  components: {
-    ImportStatusModal
-  },
-  mixins: [
-    TranslationsMixin
-  ],
-  props: { id: { type: Number, required: true } },
-  data () {
-    return {
-      time,
-      detailedUpload: {},
-      showUploadDetailModal: false,
-      isLoading: true,
-      object: null,
-      stats: null
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        statsWarning: this.$pgettext('Content/Moderation/Help text', 'Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object')
-      }
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      const self = this
-      this.isLoading = true
-      const url = `manage/library/uploads/${this.id}/`
-      axios.get(url).then(response => {
-        self.object = response.data
-        self.isLoading = false
-      })
-    },
-    remove () {
-      const self = this
-      this.isLoading = true
-      const url = `manage/library/uploads/${this.id}/`
-      axios.delete(url).then(response => {
-        self.$router.push({ name: 'manage.library.uploads' })
-      })
-    },
-    getQuery (field, value) {
-      return `${field}:"${value}"`
-    },
-    displayName (upload) {
-      if (upload.filename) {
-        return upload.filename
-      }
-      if (upload.source) {
-        return upload.source
-      }
-      return upload.uuid
-    }
-  }
-}
-</script>

@@ -1,3 +1,78 @@
+<script setup lang="ts">
+import { humanSize, truncate } from '~/utils/filters'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import { computed, ref } from 'vue'
+
+import axios from 'axios'
+
+import FetchButton from '~/components/federation/FetchButton.vue'
+import TagsList from '~/components/tags/List.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+
+interface Props {
+  id: number
+}
+
+const props = defineProps<Props>()
+
+const { t } = useI18n()
+const router = useRouter()
+
+const labels = computed(() => ({
+  statsWarning: t('views.admin.library.ArtistDetail.warning.stats')
+}))
+
+const isLoading = ref(false)
+const object = ref()
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(`manage/library/artists/${props.id}/`)
+    object.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+const isLoadingStats = ref(false)
+const stats = ref()
+const fetchStats = async () => {
+  isLoadingStats.value = true
+
+  try {
+    const response = await axios.get(`manage/library/artists/${props.id}/stats/`)
+    stats.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoadingStats.value = false
+}
+
+fetchStats()
+fetchData()
+
+const remove = async () => {
+  isLoading.value = true
+
+  try {
+    await axios.delete(`manage/library/artists/${props.id}/`)
+    router.push({ name: 'manage.library.artists' })
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+const getQuery = (field: string, value: string) => `${field}:"${value}"`
+</script>
+
 <template>
   <main>
     <div
@@ -26,12 +101,12 @@
                   src="../../../assets/audio/default-cover.png"
                 >
                 <div class="content">
-                  {{ object.name | truncate(100) }}
+                  {{ truncate(object.name) }}
                   <div class="sub header">
                     <template v-if="object.is_local">
                       <span class="ui tiny accent label">
                         <i class="home icon" />
-                        <translate translate-context="Content/Moderation/*/Short, Noun">Local</translate>
+                        {{ $t('views.admin.library.ArtistDetail.header.local') }}
                       </span>
                       &nbsp;
                     </template>
@@ -54,9 +129,7 @@
                     :to="{name: 'library.artists.detail', params: {id: object.id }}"
                   >
                     <i class="info icon" />
-                    <translate translate-context="Content/Moderation/Link/Verb">
-                      Open local profile
-                    </translate>&nbsp;
+                    {{ $t('views.admin.library.ArtistDetail.link.localProfile') }}
                   </router-link>
                   <button
                     v-dropdown
@@ -72,7 +145,7 @@
                         rel="noopener noreferrer"
                       >
                         <i class="wrench icon" />
-                        <translate translate-context="Content/Moderation/Link/Verb">View in Django's admin</translate>&nbsp;
+                        {{ $t('views.admin.library.ArtistDetail.link.django') }}
                       </a>
                       <a
                         v-if="object.mbid"
@@ -82,7 +155,7 @@
                         rel="noopener noreferrer"
                       >
                         <i class="external icon" />
-                        <translate translate-context="Content/Moderation/Link/Verb">Open on MusicBrainz</translate>&nbsp;
+                        {{ $t('views.admin.library.ArtistDetail.link.musicbrainz') }}
                       </a>
                       <fetch-button
                         v-if="!object.is_local"
@@ -91,9 +164,7 @@
                         @refresh="fetchData"
                       >
                         <i class="refresh icon" />&nbsp;
-                        <translate translate-context="Content/Moderation/Button/Verb">
-                          Refresh from remote server
-                        </translate>&nbsp;
+                        {{ $t('views.admin.library.ArtistDetail.button.remoteRefresh') }}
                       </fetch-button>
                       <a
                         class="basic item"
@@ -102,7 +173,7 @@
                         rel="noopener noreferrer"
                       >
                         <i class="external icon" />
-                        <translate translate-context="Content/Moderation/Link/Verb">Open remote profile</translate>&nbsp;
+                        {{ $t('views.admin.library.ArtistDetail.link.remoteProfile') }}
                       </a>
                     </div>
                   </button>
@@ -114,9 +185,7 @@
                     class="ui labeled icon button"
                   >
                     <i class="edit icon" />
-                    <translate translate-context="Content/*/Button.Label/Verb">
-                      Edit
-                    </translate>
+                    {{ $t('views.admin.library.ArtistDetail.button.edit') }}
                   </router-link>
                 </div>
                 <div class="ui buttons">
@@ -124,26 +193,24 @@
                     :class="['ui', {loading: isLoading}, 'basic danger button']"
                     :action="remove"
                   >
-                    <translate translate-context="*/*/*/Verb">
-                      Delete
-                    </translate>
-                    <p slot="modal-header">
-                      <translate translate-context="Popup/Library/Title">
-                        Delete this artist?
-                      </translate>
-                    </p>
-                    <div slot="modal-content">
+                    {{ $t('views.admin.library.ArtistDetail.button.delete') }}
+                    <template #modal-header>
                       <p>
-                        <translate translate-context="Content/Moderation/Paragraph">
-                          The artist will be removed, as well as associated uploads, tracks, albums, favorites and listening history. This action is irreversible.
-                        </translate>
+                        {{ $t('views.admin.library.ArtistDetail.modal.delete.header') }}
                       </p>
-                    </div>
-                    <p slot="modal-confirm">
-                      <translate translate-context="*/*/*/Verb">
-                        Delete
-                      </translate>
-                    </p>
+                    </template>
+                    <template #modal-content>
+                      <div>
+                        <p>
+                          {{ $t('views.admin.library.ArtistDetail.modal.delete.content.warning') }}
+                        </p>
+                      </div>
+                    </template>
+                    <template #modal-confirm>
+                      <p>
+                        {{ $t('views.admin.library.ArtistDetail.button.delete') }}
+                      </p>
+                    </template>
                   </dangerous-button>
                 </div>
               </div>
@@ -158,18 +225,14 @@
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
-                    Artist data
-                  </translate>
+                  {{ $t('views.admin.library.ArtistDetail.header.artistData') }}
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      <translate translate-context="*/*/*/Noun">
-                        Name
-                      </translate>
+                      {{ $t('views.admin.library.ArtistDetail.table.artist.name') }}
                     </td>
                     <td>
                       {{ object.name }}
@@ -178,9 +241,7 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.artists', query: {q: getQuery('category', object.content_category) }}">
-                        <translate translate-context="*/*/*">
-                          Category
-                        </translate>
+                        {{ $t('views.admin.library.ArtistDetail.link.category') }}
                       </router-link>
                     </td>
                     <td>
@@ -190,9 +251,7 @@
                   <tr v-if="!object.is_local">
                     <td>
                       <router-link :to="{name: 'manage.moderation.domains.detail', params: {id: object.domain }}">
-                        <translate translate-context="Content/Moderation/*/Noun">
-                          Domain
-                        </translate>
+                        {{ $t('views.admin.library.ArtistDetail.link.domain') }}
                       </router-link>
                     </td>
                     <td>
@@ -201,11 +260,12 @@
                   </tr>
                   <tr v-if="object.description">
                     <td>
-                      <translate translate-context="'*/*/*/Noun">
-                        Description
-                      </translate>
+                      {{ $t('views.admin.library.ArtistDetail.table.artist.description') }}
                     </td>
-                    <td v-html="object.description.html" />
+                    <sanitized-html
+                      tag="td"
+                      :html="object.description.html"
+                    />
                   </tr>
                 </tbody>
               </table>
@@ -216,9 +276,7 @@
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
-                    Activity
-                  </translate>&nbsp;
+                  {{ $t('views.admin.library.ArtistDetail.header.activity') }}&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -238,9 +296,7 @@
                 <tbody>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Short (Value is a date)">
-                        First seen
-                      </translate>
+                      {{ $t('views.admin.library.ArtistDetail.table.activity.firstSeen') }}
                     </td>
                     <td>
                       <human-date :date="object.creation_date" />
@@ -248,9 +304,7 @@
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="*/*/*/Noun">
-                        Listenings
-                      </translate>
+                      {{ $t('views.admin.library.ArtistDetail.table.activity.listenings') }}
                     </td>
                     <td>
                       {{ stats.listenings }}
@@ -258,9 +312,7 @@
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="*/*/*">
-                        Favorited tracks
-                      </translate>
+                      {{ $t('views.admin.library.ArtistDetail.table.activity.favorited') }}
                     </td>
                     <td>
                       {{ stats.track_favorites }}
@@ -268,9 +320,7 @@
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="*/*/*">
-                        Playlists
-                      </translate>
+                      {{ $t('views.admin.library.ArtistDetail.table.activity.playlists') }}
                     </td>
                     <td>
                       {{ stats.playlists }}
@@ -279,9 +329,7 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.reports.list', query: {q: getQuery('target', `artist:${object.id}`) }}">
-                        <translate translate-context="Content/Moderation/Table.Label/Noun">
-                          Linked reports
-                        </translate>
+                        {{ $t('views.admin.library.ArtistDetail.link.reports') }}
                       </router-link>
                     </td>
                     <td>
@@ -291,9 +339,7 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.edits', query: {q: getQuery('target', 'artist ' + object.id)}}">
-                        <translate translate-context="*/Admin/*/Noun">
-                          Edits
-                        </translate>
+                        {{ $t('views.admin.library.ArtistDetail.link.edits') }}
                       </router-link>
                     </td>
                     <td>
@@ -309,9 +355,7 @@
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
-                    Audio content
-                  </translate>&nbsp;
+                  {{ $t('views.admin.library.ArtistDetail.header.audioContent') }}&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -331,31 +375,25 @@
                 <tbody>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Noun">
-                        Cached size
-                      </translate>
+                      {{ $t('views.admin.library.ArtistDetail.table.audioContent.cachedSize') }}
                     </td>
                     <td>
-                      {{ stats.media_downloaded_size | humanSize }}
+                      {{ humanSize(stats.media_downloaded_size) }}
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label">
-                        Total size
-                      </translate>
+                      {{ $t('views.admin.library.ArtistDetail.table.audioContent.totalSize') }}
                     </td>
                     <td>
-                      {{ stats.media_total_size | humanSize }}
+                      {{ humanSize(stats.media_total_size) }}
                     </td>
                   </tr>
 
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.libraries', query: {q: getQuery('artist_id', object.id) }}">
-                        <translate translate-context="*/*/*/Noun">
-                          Libraries
-                        </translate>
+                        {{ $t('views.admin.library.ArtistDetail.link.libraries') }}
                       </router-link>
                     </td>
                     <td>
@@ -365,9 +403,7 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('artist_id', object.id) }}">
-                        <translate translate-context="*/*/*">
-                          Uploads
-                        </translate>
+                        {{ $t('views.admin.library.ArtistDetail.link.uploads') }}
                       </router-link>
                     </td>
                     <td>
@@ -377,9 +413,7 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.albums', query: {q: getQuery('artist_id', object.id) }}">
-                        <translate translate-context="*/*/*">
-                          Albums
-                        </translate>
+                        {{ $t('views.admin.library.ArtistDetail.link.albums') }}
                       </router-link>
                     </td>
                     <td>
@@ -389,9 +423,7 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.tracks', query: {q: getQuery('artist_id', object.id) }}">
-                        <translate translate-context="*/*/*">
-                          Tracks
-                        </translate>
+                        {{ $t('views.admin.library.ArtistDetail.link.tracks') }}
                       </router-link>
                     </td>
                     <td>
@@ -407,72 +439,3 @@
     </template>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-
-import TagsList from '@/components/tags/List'
-import FetchButton from '@/components/federation/FetchButton'
-
-export default {
-  components: {
-    FetchButton,
-    TagsList
-  },
-  props: { id: { type: Number, required: true } },
-  data () {
-    return {
-      isLoading: true,
-      isLoadingStats: false,
-      object: null,
-      stats: null
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        statsWarning: this.$pgettext('Content/Moderation/Help text', 'Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object')
-      }
-    }
-  },
-  created () {
-    this.fetchData()
-    this.fetchStats()
-  },
-  methods: {
-    fetchData () {
-      const self = this
-      this.isLoading = true
-      const url = `manage/library/artists/${this.id}/`
-      axios.get(url).then(response => {
-        if (response.data.channel) {
-          self.$router.push({ name: 'manage.channels.detail', params: { id: response.data.channel } })
-        } else {
-          self.object = response.data
-          self.isLoading = false
-        }
-      })
-    },
-    fetchStats () {
-      const self = this
-      this.isLoadingStats = true
-      const url = `manage/library/artists/${this.id}/stats/`
-      axios.get(url).then(response => {
-        self.stats = response.data
-        self.isLoadingStats = false
-      })
-    },
-    remove () {
-      const self = this
-      this.isLoading = true
-      const url = `manage/library/artists/${this.id}/`
-      axios.delete(url).then(response => {
-        self.$router.push({ name: 'manage.library.artists' })
-      })
-    },
-    getQuery (field, value) {
-      return `${field}:"${value}"`
-    }
-  }
-}
-</script>

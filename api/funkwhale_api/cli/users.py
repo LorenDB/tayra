@@ -1,17 +1,13 @@
 import click
-
 from django.db import transaction
 
 from funkwhale_api.federation import models as federation_models
-from funkwhale_api.users import models
-from funkwhale_api.users import serializers
-from funkwhale_api.users import tasks
+from funkwhale_api.users import models, serializers, tasks
 
-from . import base
-from . import utils
+from . import base, utils
 
 
-class FakeRequest(object):
+class FakeRequest:
     def __init__(self, session={}):
         self.session = session
 
@@ -48,7 +44,7 @@ def handler_create_user(
     for permission in permissions:
         if permission in models.PERMISSIONS:
             utils.logger.debug("Setting %s permission to True", permission)
-            setattr(user, "permission_{}".format(permission), True)
+            setattr(user, f"permission_{permission}", True)
         else:
             utils.logger.warn("Unknown permission %s", permission)
     utils.logger.debug("Creating actor…")
@@ -60,7 +56,7 @@ def handler_create_user(
 @transaction.atomic
 def handler_delete_user(usernames, soft=True):
     for username in usernames:
-        click.echo("Deleting {}…".format(username))
+        click.echo(f"Deleting {username}…")
         actor = None
         user = None
         try:
@@ -157,13 +153,16 @@ def users():
     type=click.INT,
 )
 @click.option(
-    "--superuser/--no-superuser", default=False,
+    "--superuser/--no-superuser",
+    default=False,
 )
 @click.option(
-    "--staff/--no-staff", default=False,
+    "--staff/--no-staff",
+    default=False,
 )
 @click.option(
-    "--permission", multiple=True,
+    "--permission",
+    multiple=True,
 )
 def create(username, password, email, superuser, staff, permission, upload_quota):
     """Create a new user"""
@@ -179,9 +178,9 @@ def create(username, password, email, superuser, staff, permission, upload_quota
         permissions=permission,
         upload_quota=upload_quota,
     )
-    click.echo("User {} created!".format(user.username))
+    click.echo(f"User {user.username} created!")
     if generated_password:
-        click.echo("  Generated password: {}".format(generated_password))
+        click.echo(f"  Generated password: {generated_password}")
 
 
 @base.delete_command(group=users, id_var="username")
@@ -210,7 +209,9 @@ def delete(username, hard):
 @click.option("--permission-settings/--no-permission-settings", default=None)
 @click.option("--password", default=None, envvar="FUNKWHALE_CLI_USER_UPDATE_PASSWORD")
 @click.option(
-    "-q", "--upload-quota", type=click.INT,
+    "-q",
+    "--upload-quota",
+    type=click.INT,
 )
 def update(username, **kwargs):
     """Update attributes for given users"""

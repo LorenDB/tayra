@@ -1,3 +1,107 @@
+<script setup lang="ts">
+import type { Track, Artist, Library } from '~/types'
+
+import { momentFormat } from '~/utils/filters'
+import { computed, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import { getDomain } from '~/utils'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
+import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
+import EmbedWizard from '~/components/audio/EmbedWizard.vue'
+import SemanticModal from '~/components/semantic/Modal.vue'
+import PlayButton from '~/components/audio/PlayButton.vue'
+
+import updateQueryString from '~/composables/updateQueryString'
+import useErrorHandler from '~/composables/useErrorHandler'
+import useReport from '~/composables/moderation/useReport'
+import useLogger from '~/composables/useLogger'
+
+interface Events {
+  (e: 'deleted'): void
+}
+
+interface Props {
+  id: number
+}
+
+const emit = defineEmits<Events>()
+const props = defineProps<Props>()
+
+const { report, getReportableObjects } = useReport()
+
+const track = ref<Track | null>(null)
+const artist = ref<Artist | null>(null)
+const showEmbedModal = ref(false)
+const libraries = ref([] as Library[])
+
+const logger = useLogger()
+const router = useRouter()
+const store = useStore()
+
+const domain = computed(() => getDomain(track.value?.fid ?? ''))
+const publicLibraries = computed(() => libraries.value?.filter(library => library.privacy_level === 'everyone') ?? [])
+const isEmbedable = computed(() => artist.value?.channel?.actor || publicLibraries.value.length)
+const upload = computed(() => track.value?.uploads?.[0] ?? null)
+const wikipediaUrl = computed(() => `https://en.wikipedia.org/w/index.php?search=${encodeURI(`${track.value?.title ?? ''} ${track.value?.artist?.name ?? ''}`)}`)
+const discogsUrl = computed(() => `https://discogs.com/search/?type=release&title=${encodeURI(track.value?.album?.title ?? '')}&artist=${encodeURI(track.value?.artist?.name ?? '')}&title=${encodeURI(track.value?.title ?? '')}`)
+const downloadUrl = computed(() => {
+  const url = store.getters['instance/absoluteUrl'](upload.value?.listen_url ?? '')
+  return store.state.auth.authenticated
+    ? updateQueryString(url, 'token', encodeURI(store.state.auth.scopedTokens.listen ?? ''))
+    : url
+})
+
+const attributedToUrl = computed(() => router.resolve({
+  name: 'profile.full.overview',
+  params: {
+    username: track.value?.attributed_to.preferred_username,
+    domain: track.value?.attributed_to.domain
+  }
+})?.href)
+
+const { t } = useI18n()
+const labels = computed(() => ({
+  title: t('components.library.TrackBase.title'),
+  download: t('components.library.TrackBase.button.download'),
+  more: t('components.library.TrackBase.button.more')
+}))
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  logger.debug(`Fetching track "${props.id}"`)
+  try {
+    const trackResponse = await axios.get(`tracks/${props.id}/`, { params: { refresh: 'true' } })
+    track.value = trackResponse.data
+    const artistResponse = await axios.get(`artists/${trackResponse.data.artist.id}/`)
+    artist.value = artistResponse.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+  isLoading.value = false
+}
+
+watch(() => props.id, fetchData, { immediate: true })
+
+const remove = async () => {
+  isLoading.value = true
+  try {
+    await axios.delete(`tracks/${track.value?.id}`)
+    emit('deleted')
+    router.push({ name: 'library.artists.detail', params: { id: artist.value?.id } })
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
   <main>
     <div
@@ -17,20 +121,44 @@
             <div class="eight wide left aligned column">
               <h1 class="ui header">
                 {{ track.title }}
-                <div
-                  class="sub header"
-                  v-html="subtitle"
-                />
               </h1>
+              <span class="ui header">
+                <i18n-t
+                  v-if="track.attributed_to"
+                  keypath="components.library.TrackBase.subtitle.with-uploader"
+                >
+                  <a
+                    class="internal"
+                    :href="attributedToUrl"
+                  >
+                    <span class="symbol at" />{{ track.attributed_to.full_username }}
+                  </a>
+                  <time
+                    :title="track.creation_date"
+                    :datetime="track.creation_date"
+                  >
+                    {{ momentFormat(new Date(track.creation_date), 'LL') }}
+                  </time>
+                </i18n-t>
+                <i18n-t
+                  v-else
+                  keypath="components.library.TrackBase.subtitle.without-uploader"
+                >
+                  <time
+                    :title="track.creation_date"
+                    :datetime="track.creation_date"
+                  >
+                    {{ momentFormat(new Date(track.creation_date), 'LL') }}
+                  </time>
+                </i18n-t>
+              </span>
             </div>
             <div class="eight wide right aligned column button-group">
               <play-button
                 class="vibrant"
                 :track="track"
               >
-                <translate translate-context="*/Queue/Button.Label/Short, Verb">
-                  Play
-                </translate>
+                {{ $t('components.library.TrackBase.button.play') }}
               </play-button>
               &nbsp;
               <track-favorite-icon
@@ -55,14 +183,12 @@
               >
                 <i class="download icon" />
               </a>
-              <modal
+              <semantic-modal
                 v-if="isEmbedable"
-                :show.sync="showEmbedModal"
+                v-model:show="showEmbedModal"
               >
                 <h4 class="header">
-                  <translate translate-context="Popup/Track/Title">
-                    Embed this track on your website
-                  </translate>
+                  {{ $t('components.library.TrackBase.modal.embed.header') }}
                 </h4>
                 <div class="scrolling content">
                   <div class="description">
@@ -74,12 +200,10 @@
                 </div>
                 <div class="actions">
                   <button class="ui basic deny button">
-                    <translate translate-context="*/*/Button.Label/Verb">
-                      Cancel
-                    </translate>
+                    {{ $t('components.library.TrackBase.button.cancel') }}
                   </button>
                 </div>
-              </modal>
+              </semantic-modal>
               <button
                 v-dropdown="{direction: 'downward'}"
                 class="ui floating dropdown circular icon basic button"
@@ -97,10 +221,7 @@
                     class="basic item"
                   >
                     <i class="external icon" />
-                    <translate
-                      :translate-params="{domain: domain}"
-                      translate-context="Content/*/Button.Label/Verb"
-                    >View on %{ domain }</translate>
+                    {{ $t('components.library.TrackBase.link.domain', {domain: domain}) }}
                   </a>
                   <div
                     v-if="isEmbedable"
@@ -109,9 +230,7 @@
                     @click="showEmbedModal = !showEmbedModal"
                   >
                     <i class="code icon" />
-                    <translate translate-context="Content/*/Button.Label/Verb">
-                      Embed
-                    </translate>
+                    {{ $t('components.library.TrackBase.button.embed') }}
                   </div>
                   <a
                     :href="wikipediaUrl"
@@ -120,7 +239,7 @@
                     class="basic item"
                   >
                     <i class="wikipedia w icon" />
-                    <translate translate-context="Content/*/Button.Label/Verb">Search on Wikipedia</translate>
+                    {{ $t('components.library.TrackBase.link.wikipedia') }}
                   </a>
                   <a
                     v-if="discogsUrl"
@@ -130,7 +249,7 @@
                     class="basic item"
                   >
                     <i class="external icon" />
-                    <translate translate-context="Content/*/Button.Label/Verb">Search on Discogs</translate>
+                    {{ $t('components.library.TrackBase.link.discogs') }}
                   </a>
                   <router-link
                     v-if="track.is_local"
@@ -138,9 +257,7 @@
                     class="basic item"
                   >
                     <i class="edit icon" />
-                    <translate translate-context="Content/*/Button.Label/Verb">
-                      Edit
-                    </translate>
+                    {{ $t('components.library.TrackBase.button.edit') }}
                   </router-link>
                   <dangerous-button
                     v-if="artist && $store.state.auth.authenticated && artist.channel && artist.attributed_to.full_username === $store.state.auth.fullUsername"
@@ -148,34 +265,32 @@
                     @confirm="remove()"
                   >
                     <i class="ui trash icon" />
-                    <translate translate-context="*/*/*/Verb">
-                      Delete…
-                    </translate>
-                    <p slot="modal-header">
-                      <translate translate-context="Popup/Channel/Title">
-                        Delete this track?
-                      </translate>
-                    </p>
-                    <div slot="modal-content">
+                    {{ $t('components.library.TrackBase.button.delete') }}
+                    <template #modal-header>
                       <p>
-                        <translate translate-context="Content/Moderation/Paragraph">
-                          The track will be deleted, as well as any related files and data. This action is irreversible.
-                        </translate>
+                        {{ $t('components.library.TrackBase.modal.delete.header') }}
                       </p>
-                    </div>
-                    <p slot="modal-confirm">
-                      <translate translate-context="*/*/*/Verb">
-                        Delete
-                      </translate>
-                    </p>
+                    </template>
+                    <template #modal-content>
+                      <div>
+                        <p>
+                          {{ $t('components.library.TrackBase.modal.delete.content.warning') }}
+                        </p>
+                      </div>
+                    </template>
+                    <template #modal-confirm>
+                      <p>
+                        {{ $t('components.library.TrackBase.button.delete') }}
+                      </p>
+                    </template>
                   </dangerous-button>
                   <div class="divider" />
                   <div
-                    v-for="obj in getReportableObjs({track})"
+                    v-for="obj in getReportableObjects({track})"
                     :key="obj.target.type + obj.target.id"
                     role="button"
                     class="basic item"
-                    @click.stop.prevent="$store.dispatch('moderation/report', obj.target)"
+                    @click.stop.prevent="report(obj)"
                   >
                     <i class="share icon" /> {{ obj.label }}
                   </div>
@@ -186,9 +301,7 @@
                     :to="{name: 'manage.library.tracks.detail', params: {id: track.id}}"
                   >
                     <i class="wrench icon" />
-                    <translate translate-context="Content/Moderation/Link">
-                      Open in moderation interface
-                    </translate>
+                    {{ $t('components.library.TrackBase.link.moderation') }}
                   </router-link>
                   <a
                     v-if="$store.state.auth.profile && $store.state.auth.profile.is_superuser"
@@ -198,7 +311,7 @@
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    <translate translate-context="Content/Moderation/Link/Verb">View in Django's admin</translate>&nbsp;
+                    {{ $t('components.library.TrackBase.link.django') }}
                   </a>
                 </div>
               </button>
@@ -217,200 +330,3 @@
     </template>
   </main>
 </template>
-
-<script>
-import time from '@/utils/time'
-import axios from 'axios'
-import url from '@/utils/url'
-import { getDomain } from '@/utils'
-import logger from '@/logging'
-import PlayButton from '@/components/audio/PlayButton'
-import TrackFavoriteIcon from '@/components/favorites/TrackFavoriteIcon'
-import TrackPlaylistIcon from '@/components/playlists/TrackPlaylistIcon'
-import Modal from '@/components/semantic/Modal'
-import EmbedWizard from '@/components/audio/EmbedWizard'
-import ReportMixin from '@/components/mixins/Report'
-import { momentFormat } from '@/filters'
-
-const FETCH_URL = 'tracks/'
-
-function escapeHtml (unsafe) {
-  return unsafe
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;')
-}
-
-export default {
-  components: {
-    PlayButton,
-    TrackPlaylistIcon,
-    TrackFavoriteIcon,
-    Modal,
-    EmbedWizard
-  },
-  mixins: [ReportMixin],
-  props: { id: { type: [String, Number], required: true } },
-  data () {
-    return {
-      time,
-      isLoading: true,
-      track: null,
-      artist: null,
-      showEmbedModal: false,
-      libraries: []
-    }
-  },
-  computed: {
-    domain () {
-      if (this.track) {
-        return getDomain(this.track.fid)
-      }
-      return null
-    },
-    publicLibraries () {
-      return this.libraries.filter(l => {
-        return l.privacy_level === 'everyone'
-      })
-    },
-    isEmbedable () {
-      const self = this
-      return (self.artist && self.artist.channel && self.artist.channel.actor) || this.publicLibraries.length > 0
-    },
-    upload () {
-      if (this.track.uploads) {
-        return this.track.uploads[0]
-      }
-      return null
-    },
-    labels () {
-      return {
-        title: this.$pgettext('*/*/*/Noun', 'Track'),
-        download: this.$pgettext('Content/Track/Link/Verb', 'Download'),
-        more: this.$pgettext('*/*/Button.Label/Noun', 'More…')
-      }
-    },
-    wikipediaUrl () {
-      return (
-        'https://en.wikipedia.org/w/index.php?search=' +
-        encodeURI(this.track.title + ' ' + this.track.artist.name)
-      )
-    },
-    discogsUrl () {
-      if (this.track.album) {
-        return (
-          'https://discogs.com/search/?type=release&title=' +
-    encodeURI(this.track.album.title) + '&artist=' +
-    encodeURI(this.track.artist.name) + '&track=' +
-    encodeURI(this.track.title)
-        )
-      }
-      return null
-    },
-    downloadUrl () {
-      let u = this.$store.getters['instance/absoluteUrl'](
-        this.upload.listen_url
-      )
-      if (this.$store.state.auth.authenticated) {
-        let param = 'jwt'
-        let value = this.$store.state.auth.token
-        if (this.$store.state.auth.scopedTokens && this.$store.state.auth.scopedTokens.listen) {
-          // used scoped tokens instead of JWT to reduce the attack surface if the token
-          // is leaked
-          param = 'token'
-          value = this.$store.state.auth.scopedTokens.listen
-        }
-        u = url.updateQueryString(
-          u,
-          param,
-          encodeURI(value)
-        )
-      }
-      return u
-    },
-    attributedToUrl () {
-      const route = this.$router.resolve({
-        name: 'profile.full.overview',
-        params: {
-          username: this.track.attributed_to.preferred_username,
-          domain: this.track.attributed_to.domain
-        }
-      })
-      return route.href
-    },
-    albumUrl () {
-      const route = this.$router.resolve({ name: 'library.albums.detail', params: { id: this.track.album.id } })
-      return route.href
-    },
-    artistUrl () {
-      const route = this.$router.resolve({ name: 'library.artists.detail', params: { id: this.track.artist.id } })
-      return route.href
-    },
-    headerStyle () {
-      if (!this.cover || !this.cover.urls.original) {
-        return ''
-      }
-      return (
-        'background-image: url(' +
-        this.$store.getters['instance/absoluteUrl'](this.cover.urls.original) +
-        ')'
-      )
-    },
-    subtitle () {
-      let msg
-      if (this.track.attributed_to) {
-        msg = this.$pgettext('Content/Track/Paragraph', 'Uploaded by <a class="internal" href="%{ uploaderUrl }">%{ uploader }</a> on <time title="%{ date }" datetime="%{ date }">%{ prettyDate }</time>')
-        return this.$gettextInterpolate(msg, {
-          uploaderUrl: this.attributedToUrl,
-          uploader: escapeHtml(`@${this.track.attributed_to.full_username}`),
-          date: escapeHtml(this.track.creation_date),
-          prettyDate: escapeHtml(momentFormat(this.track.creation_date, 'LL'))
-        })
-      } else {
-        msg = this.$pgettext('Content/Track/Paragraph', 'Uploaded on <time title="%{ date }" datetime="%{ date }">%{ prettyDate }</time>')
-        return this.$gettextInterpolate(msg, {
-          date: escapeHtml(this.track.creation_date),
-          prettyDate: escapeHtml(momentFormat(this.track.creation_date, 'LL'))
-        })
-      }
-    }
-  },
-  watch: {
-    id () {
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      const self = this
-      this.isLoading = true
-      const url = FETCH_URL + this.id + '/'
-      logger.default.debug('Fetching track "' + this.id + '"')
-      axios.get(url, { params: { refresh: 'true' } }).then(response => {
-        self.track = response.data
-        axios.get(`artists/${response.data.artist.id}/`).then(response => {
-          self.artist = response.data
-        })
-        self.isLoading = false
-      })
-    },
-    remove () {
-      const self = this
-      self.isLoading = true
-      axios.delete(`tracks/${this.track.id}`).then((response) => {
-        self.isLoading = false
-        self.$emit('deleted')
-        self.$router.push({ name: 'library.artists.detail', params: { id: this.artist.id } })
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    }
-  }
-}
-</script>

@@ -1,0 +1,4519 @@
+{
+  "App": {
+    "loading": "Laden…"
+  },
+  "components": {
+    "About": {
+      "description": {
+        "findApp": "Gebruik Funkwhale op andere apparaten met onze apps.",
+        "funkwhale": "Funkwhale is een gemeenschapsgedreven project dat je muziek en audio laat luisteren en delen binnen een gedecentraliseerd open netwerk.",
+        "publicContent": "Luister naar publiek toegankelijke albums en afspeellijsten op deze pod.",
+        "quota": "Gebruikers op deze pod krijgen ook { quota } aan gratis opslag om hun eigen content te uploaden!",
+        "signup": "Maak nu een account aan om je favorieten op te slaan, afspeellijsten te maken, nieuwe content te ontdekken en nog veel meer!"
+      },
+      "header": {
+        "aboutPod": "Over deze pod",
+        "findApp": "Zoek een app",
+        "funkwhale": "Een sociaal platform voor het genieten en delen van muziek",
+        "publicContent": "Publieke content doorbladeren",
+        "signup": "Aanmelden"
+      },
+      "help": {
+        "closedRegistrations": "Deze pod is niet open voor nieuwe gebruikers. Je kunt je registreren bij een andere pod via de onderstaande link."
+      },
+      "link": {
+        "findOtherPod": "Zoek een andere pod",
+        "learnMore": "Meer leren"
+      },
+      "message": {
+        "greeting": "Hallo {username}",
+        "loggedIn": "Je bent al ingelogd!"
+      },
+      "placeholder": {
+        "noDescription": "Geen beschrijving beschikbaar."
+      },
+      "stat": {
+        "activeUsers": "{ n } actieve gebruiker | { n } actieve gebruikers",
+        "hoursOfMusic": "uur muziek | uur muziek"
+      },
+      "title": "Over"
+    },
+    "AboutPod": {
+      "feature": {
+        "allowList": "Toelatingslijst",
+        "anonymousAccess": "Anonieme toegang",
+        "federation": "Federatie",
+        "quota": "Uploadquotum",
+        "registrations": "Registraties",
+        "status": {
+          "closed": "Gesloten",
+          "disabled": "Uitgeschakeld",
+          "enabled": "Ingeschakeld",
+          "open": "Open"
+        },
+        "version": "Funkwhale-versie"
+      },
+      "header": {
+        "about": "Over deze pod",
+        "contact": "Contact",
+        "features": "Kenmerken",
+        "rules": "Regels",
+        "statistics": "Statistieken",
+        "terms": "Voorwaarden en privacy beleid"
+      },
+      "link": {
+        "about": "Over deze pod",
+        "features": "Kenmerken",
+        "introduction": "Introductie",
+        "rules": "Regels",
+        "statistics": "Statistieken",
+        "terms": "Voorwaarden en privacy beleid"
+      },
+      "message": {
+        "contact": "Stuur ons een e-mail: {'{{'} contactEmail {'}}'}"
+      },
+      "notApplicable": "N.B.",
+      "placeholder": {
+        "noDescription": "Geen beschrijving beschikbaar.",
+        "noRules": "Geen regels beschikbaar.",
+        "noTerms": "Geen termen beschikbaar."
+      },
+      "stat": {
+        "activeUsers": "actieve gebruiker | actieve gebruikers",
+        "albumsCount": "album | albums",
+        "artistsCount": "artiest | artiesten",
+        "hoursOfMusic": "uur muziek | uur muziek",
+        "listeningsCount": "Luisterbeurt | Luisterbeurten",
+        "tracksCount": "nummer | nummers"
+      },
+      "title": "Over"
+    },
+    "Home": {
+      "description": {
+        "funkwhale": {
+          "paragraph1": "Deze pod draait Funkwhale, een gemeenschapgestuurd project dat je muziek en audio laat beluisteren en delen binnen een gedecentraliseerd open netwerk.",
+          "paragraph2": "Funkwhale is gratis en wordt ontwikkeld door een vriendelijke gemeenschap van vrijwilligers."
+        },
+        "quota": "Gebruikers van deze pod krijgen ook { quota } aan gratis opslag om hun eigen content te uploaden!",
+        "signup": "Maak nu een account aan om je favorieten op te slaan, afspeellijsten te maken, nieuwe content te ontdekken en nog veel meer!"
+      },
+      "header": {
+        "about": "Over deze Funkwhale-pod",
+        "aboutFunkwhale": "Over Funkwhale",
+        "contact": "Contact",
+        "links": "Handige links",
+        "login": "Inloggen",
+        "newAlbums": "Recent toegevoegde albums",
+        "newChannels": "Nieuwe kanalen",
+        "signup": "Aanmelden",
+        "statistics": "Statistieken",
+        "welcome": "Welkom bij { podName }!"
+      },
+      "link": {
+        "findOtherPod": "Zoek een andere pod",
+        "funkwhale": "Bezoek funkwhale.audio",
+        "learnMore": "Meer leren",
+        "mobileApps": {
+          "description": "Gebruik Funkwhale op andere apparaten met onze apps",
+          "label": "Mobiele apps"
+        },
+        "publicContent": {
+          "description": "Luister naar publiek toegankelijke albums en afspeellijsten op deze pod",
+          "label": "Publieke content doorbladeren"
+        },
+        "rules": "Regels op deze server",
+        "userGuides": {
+          "description": "Ontdek alles wat je moet weten over Funkwhale en zijn functies",
+          "label": "Handleidingen"
+        },
+        "viewMore": "Meer bekijken…"
+      },
+      "placeholder": {
+        "noDescription": "Geen beschrijving beschikbaar."
+      },
+      "stat": {
+        "activeUsers": "{ n } actieve gebruiker | { n } actieve gebruikers",
+        "hoursOfMusic": "{ n } uur muziek | { n } uren muziek"
+      },
+      "title": "Startpagina"
+    },
+    "PageNotFound": {
+      "header": {
+        "pageNotFound": "Pagina niet gevonden!"
+      },
+      "link": {
+        "home": "Terug naar hoofdpagina"
+      },
+      "message": {
+        "pageNotFound": "Sorry, de opgevraagde pagina bestaat niet:"
+      },
+      "title": "Pagina Niet Gevonden"
+    },
+    "Queue": {
+      "button": {
+        "clear": "Wissen",
+        "close": "Sluiten",
+        "stopRadio": "Radio stoppen"
+      },
+      "header": {
+        "failure": "Het nummer kan niet worden geladen",
+        "noSources": "Het nummer heeft geen beschikbare bronnen.",
+        "radio": "Er wordt een radiostation afgespeeld"
+      },
+      "label": {
+        "addArtistContentFilter": "Verberg content van deze artiest…",
+        "duration": "Duur",
+        "enterFullscreen": "Volledig scherm openen",
+        "exitFullscreen": "Volledig scherm sluiten",
+        "next": "Volgend nummer",
+        "pause": "Pauseer",
+        "play": "Afspelen",
+        "previous": "Vorig nummer",
+        "queue": "Wachtrij",
+        "remove": "Verwijderen",
+        "restart": "Nummer herstarten",
+        "selectTrack": "Kies nummer",
+        "showCoverArt": "Toon omslagafbeelding",
+        "showVisualizer": "Toon MoonDrop-visualisatie"
+      },
+      "message": {
+        "automaticPlay": "Het volgende nummer zal automatisch worden afgespeeld over een paar seconden…",
+        "radio": "Nieuwe nummers worden hier automatisch toegevoegd."
+      },
+      "meta": {
+        "queuePosition": "Nummer { index } van { length }"
+      },
+      "warning": {
+        "connectivity": "Je hebt wellicht een connectiviteitsprobleem."
+      }
+    },
+    "RemoteSearchForm": {
+      "button": {
+        "fediverse": "Fediverse",
+        "rss": "RSS",
+        "search": "Zoeken"
+      },
+      "description": {
+        "fediverse": "Gebruik dit formulier om je te abonneren op een kanaal dat elders op de Fediverse wordt beheerd.",
+        "rss": "Gebruik dit formulier om je te abonneren op een RSS feed vanaf z'n URL."
+      },
+      "error": {
+        "fetchFailed": "Dit object kan niet worden opgehaald"
+      },
+      "header": {
+        "fetchFailed": "Fout bij het ophalen van het object"
+      },
+      "label": {
+        "fediverse": {
+          "fieldLabel": "Fediverse object",
+          "title": "Abonneren op een podcast beheerd op de Fediverse"
+        },
+        "rss": {
+          "fieldLabel": "RSS feed locatie",
+          "fieldPlaceholder": "https://website.example.com/rss.xml",
+          "title": "Abonneren op een podcast RSS feed"
+        }
+      },
+      "warning": {
+        "unsupported": "Dit soort object wordt nog niet ondersteund"
+      }
+    },
+    "SetInstanceModal": {
+      "button": {
+        "cancel": "Annuleren",
+        "submit": "Indienen"
+      },
+      "header": {
+        "chooseInstance": "Kies je server",
+        "failure": "Het is niet mogelijk om verbinding te maken met de opgegeven URL",
+        "suggestions": "Aanbevelingen"
+      },
+      "help": {
+        "notFunkwhaleServer": "Het opgegeven adres is geen Funkwhale-server",
+        "selectPod": "Selecteer met welke Funkwhale-server je wil verbinden. Voer zelf de URL in, of kies een van de suggesties.",
+        "serverDown": "De server is mogelijk niet beschikbaar"
+      },
+      "label": {
+        "url": "Server-URL"
+      },
+      "message": {
+        "newUrl": "Je gebruikt nu de Funkwhale-server op { url }"
+      }
+    },
+    "ShortcutsModal": {
+      "button": {
+        "close": "Sluiten"
+      },
+      "header": {
+        "modal": "Sneltoetsen"
+      },
+      "shortcut": {
+        "audio": {
+          "clearQueue": "Wachtrij leegmaken",
+          "decreaseVolume": "Volume verlagen",
+          "expandQueue": "Wachtrij/afspeler vergroten",
+          "increaseVolume": "Volume verhogen",
+          "label": "Sneltoetsen audiospeler",
+          "playNext": "Speel volgende nummer",
+          "playPause": "Pauzeer/speel het huidige nummer",
+          "playPrevious": "Speel vorig nummer",
+          "seekBack30": "Terugspoelen met 30s",
+          "seekBack5": "Terugspoelen met 5s",
+          "seekForward30": "Vooruitspoelen met 30s",
+          "seekForward5": "Vooruitspoelen met 5s",
+          "shuffleQueue": "Wachtrij shuffelen",
+          "toggleFavorite": "Favoriet",
+          "toggleLoop": "Rij doorlopen",
+          "toggleMute": "Stil"
+        },
+        "general": {
+          "focus": "Focus zoekbalk",
+          "label": "Algemene sneltoetsen",
+          "show": "Toon beschikbare sneltoetsen",
+          "unfocus": "Deselecteer zoekbalk"
+        }
+      }
+    },
+    "Sidebar": {
+      "header": {
+        "administration": "Administratie",
+        "explore": "Verkennen",
+        "library": "Mijn bibliotheek",
+        "main": "Hoofdnavigatie",
+        "more": "Meer"
+      },
+      "label": {
+        "add": "Content toevoegen",
+        "administration": "Administratie",
+        "edits": "Openstaande bewerkingen",
+        "follows": "In behandeling zijnde volgverzoeken",
+        "language": "Taal",
+        "main": "Hoofdmenu",
+        "play": "Speel dit nummer",
+        "theme": "Thema"
+      },
+      "link": {
+        "about": "Over deze pod",
+        "albums": "Albums",
+        "artists": "Artiesten",
+        "browse": "Bladeren",
+        "channels": "Kanalen",
+        "createAccount": "Creëer een account",
+        "favorites": "Favorieten",
+        "home": "Startpagina",
+        "library": "Bibliotheek",
+        "login": "Inloggen",
+        "moderation": "Moderatie",
+        "playlists": "Afspeellijsten",
+        "podcasts": "Podcasts",
+        "radios": "Radio's",
+        "search": "Zoeken",
+        "settings": "Instellingen",
+        "users": "Gebruikers"
+      }
+    },
+    "admin": {
+      "SettingsGroup": {
+        "button": {
+          "save": "Opslaan"
+        },
+        "header": {
+          "error": "Fout tijdens opslaan van instellingen",
+          "image": "Huidige afbeelding"
+        },
+        "message": {
+          "success": "De instellingen zijn bijgewerkt."
+        }
+      },
+      "SignupFormBuilder": {
+        "button": {
+          "add": "Voeg een nieuw veld toe",
+          "edit": "Bewerk formulier",
+          "preview": "Previewformulier"
+        },
+        "help": {
+          "additionalFields": "Extra velden moeten weergegeven worden in het formulier. Wordt alleen getoond als handmatige aanmeldvalidatie is aangezet.",
+          "helpText": "Een optionele tekst om weer te geven bij het begin van het aanmeldformulier."
+        },
+        "label": {
+          "additionalField": "Extra veld",
+          "additionalFields": "Extra velden",
+          "delete": "Verwijderen",
+          "helpText": "Helptekst",
+          "moveDown": "Naar beneden",
+          "moveUp": "Naar boven"
+        },
+        "table": {
+          "additionalFields": {
+            "header": {
+              "actions": "Acties",
+              "label": "Veldlabel",
+              "required": "Vereist",
+              "type": "Veldtype"
+            },
+            "required": {
+              "false": "Nee",
+              "true": "Ja"
+            },
+            "type": {
+              "long": "Lange tekst",
+              "short": "Korte tekst"
+            }
+          }
+        }
+      }
+    },
+    "audio": {
+      "ChannelCard": {
+        "meta": {
+          "episodes": "{ n } aflevering | { n } afleveringen",
+          "tracks": "{ n } nummer | { n } nummers"
+        },
+        "title": "Bijgewerkt op { date }"
+      },
+      "ChannelEntries": {
+        "help": {
+          "subscribe": "Je moet je wellicht abonneren op dit kanaal om de inhoud ervan te zien."
+        }
+      },
+      "ChannelForm": {
+        "header": {
+          "error": "Fout tijdens opslaan van het kanaal"
+        },
+        "help": {
+          "discography": "Publiceer muziek die je maakt als een leuke discografie van albums en singles.",
+          "podcast": "Beheer je afleveringen en houd je gemeenschap op de hoogte.",
+          "podcastFields": "Gebruikt voor de itunes:email en itunes:name velden die vereist zijn door sommige platformen zoals Spotify en iTunes.",
+          "username": "Gebruikt in URLs en om dit kanaal te volgen op de Fediverse. Het kan later niet aangepast worden."
+        },
+        "label": {
+          "category": "Categorie",
+          "description": "Omschrijving",
+          "discography": "Artiestdiscografie",
+          "email": "Eigenaar e-mailadres",
+          "image": "Kanaalafbeelding",
+          "language": "Taal",
+          "name": "Naam",
+          "owner": "Eigenaarnaam",
+          "podcast": "Podcasts",
+          "subcategory": "Subcategorie",
+          "tags": "Tags",
+          "username": "Fediverse bijnaam"
+        },
+        "legend": {
+          "purpose": "Waar zal dit kanaal voor worden gebruikt?"
+        },
+        "loader": {
+          "loading": "Bezig met uploaden"
+        },
+        "placeholder": {
+          "name": "Geweldige kanaalnaam",
+          "username": "geweldigekanaalnaam"
+        }
+      },
+      "ChannelSerieCard": {
+        "meta": {
+          "episodes": "{ n } aflevering | { n } afleveringen"
+        }
+      },
+      "ChannelSeries": {
+        "button": {
+          "showMore": "Toon meer"
+        },
+        "help": {
+          "subscribe": "Je moet je wellicht abonneren op dit kanaal om de inhoud ervan te zien."
+        }
+      },
+      "ChannelsWidget": {
+        "button": {
+          "showMore": "Toon meer"
+        }
+      },
+      "EmbedWizard": {
+        "button": {
+          "copy": "Kopiëren"
+        },
+        "header": {
+          "preview": "Voorbeeld"
+        },
+        "help": {
+          "anonymous": "Neem alsjeblieft contact op met de beheerders om te vragen de relevante instellingen aan te passen.",
+          "embed": "Kopieer/plak deze HTML-code in je website",
+          "width": "Laat leeg voor een responsieve widget"
+        },
+        "label": {
+          "embed": "Embed-code",
+          "height": "Widget hoogte",
+          "width": "Widget breedte"
+        },
+        "message": {
+          "copy": "Tekst gekopieerd naar het klembord!"
+        },
+        "warning": {
+          "anonymous": "Delen werkt niet omdat anonieme gebruikers geen toegang hebben tot content op deze pod."
+        }
+      },
+      "LibraryFollowButton": {
+        "button": {
+          "cancel": "Trek volgverzoek in",
+          "follow": "Volgen",
+          "unfollow": "Ontvolgen"
+        }
+      },
+      "PlayButton": {
+        "button": {
+          "addToPlaylist": "Toevoegen aan afspeellijst…",
+          "addToQueue": "Aan huidige wachtrij toevoegen",
+          "discretePlay": "Afspelen",
+          "episodeDetails": "Afleveringdetails",
+          "hideArtist": "Content van deze artiest verbergen",
+          "playAlbum": "Album afspelen",
+          "playArtist": "Speel artiest af",
+          "playNext": "Hierna afspelen",
+          "playNow": "Nu afspelen",
+          "playPlaylist": "Afspeellijst afspelen",
+          "playTrack": "Nummer afspelen",
+          "playTracks": "Nummers afspelen",
+          "report": "Rapporteren…",
+          "startRadio": "Speel soortgelijke nummers",
+          "trackDetails": "Nummerdetails"
+        },
+        "title": {
+          "more": "Meer…",
+          "unavailable": "Dit nummer is niet beschikbaar in een bibliotheek waar je toegang tot hebt"
+        }
+      },
+      "Player": {
+        "header": {
+          "player": "Audiospeler en bediening"
+        },
+        "label": {
+          "addArtistContentFilter": "Verberg content van deze artiest…",
+          "audioPlayer": "Mediaspeler",
+          "clearQueue": "Wachtrij wissen",
+          "expandQueue": "Wachtrij uitklappen",
+          "loopingDisabled": "Herhalen uitgeschakeld. Klik om over te schakelen naar één nummer-herhaling.",
+          "loopingSingle": "Eén nummer wordt herhaald. Klik om over te schakelen naar wachtrijherhaling.",
+          "loopingWholeQueue": "Gehele wachtrij wordt herhaald. Klik om herhalen uit te schakelen.",
+          "mute": "Dempen",
+          "nextTrack": "Volgend nummer",
+          "pause": "Pauseer",
+          "play": "Afspelen",
+          "previousTrack": "Vorig nummer",
+          "shuffleQueue": "Shuffel je wachtrij",
+          "unmute": "Ontdempen"
+        },
+        "meta": {
+          "position": "{ index } van { length }"
+        }
+      },
+      "Search": {
+        "empty": {
+          "noAlbums": "Geen albums gevonden voor je zoekopdracht",
+          "noArtists": "Geen artiesten gevonden voor je zoekopdracht"
+        },
+        "header": {
+          "albums": "Albums",
+          "artists": "Artiesten",
+          "search": "Zoek naar wat muziek"
+        },
+        "placeholder": {
+          "search": "Artiest, album, nummer…"
+        }
+      },
+      "SearchBar": {
+        "empty": {
+          "noResults": "Sorry, er zijn geen resultaten voor deze zoekopdracht"
+        },
+        "header": {
+          "noResults": "Geen resultaten gevonden"
+        },
+        "label": {
+          "album": "Album",
+          "artist": "Artiest",
+          "category": {
+            "federation": "Federatie",
+            "podcasts": "Podcasts"
+          },
+          "search": "Zoeken naar content",
+          "tag": "Tag",
+          "track": "Nummer"
+        },
+        "link": {
+          "fediverse": "Zoeken op de fediverse",
+          "more": "Meer resultaten 🡒",
+          "rss": "Abonneren op podcast via RSS"
+        },
+        "placeholder": {
+          "search": "Zoek naar artiesten, albums, nummers…"
+        }
+      },
+      "VolumeControl": {
+        "button": {
+          "mute": "Dempen",
+          "unmute": "Ontdempen"
+        },
+        "label": {
+          "slider": "Pas volume aan"
+        }
+      },
+      "album": {
+        "Card": {
+          "meta": {
+            "tracks": "{ n } nummer | { n } nummers"
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": "Toon meer"
+          }
+        }
+      },
+      "artist": {
+        "Card": {
+          "meta": {
+            "episodes": "{ n } aflevering | { n } afleveringen",
+            "tracks": "{ n } nummer | { n } nummers"
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": "Toon meer"
+          }
+        }
+      },
+      "podcast": {
+        "MobileRow": {
+          "button": {
+            "actions": "Toon nummer acties"
+          }
+        },
+        "Modal": {
+          "button": {
+            "addToFavorites": "Toevoegen aan favorieten",
+            "addToPlaylist": "Toevoegen aan afspeellijst…",
+            "addToQueue": "Toevoegen aan wachtrij",
+            "albumDetails": "Album bekijken",
+            "artistDetails": "Artiest bekijken",
+            "channelDetails": "Kanaal bekijken",
+            "episodeDetails": "Afleveringdetails",
+            "playNext": "Hierna afspelen",
+            "playNow": "Nu afspelen",
+            "removeFromFavorites": "Verwijderen uit favorieten",
+            "seriesDetails": "Series bekijken",
+            "startRadio": "Radio afspelen",
+            "trackDetails": "Nummerdetails"
+          }
+        }
+      },
+      "track": {
+        "MobileRow": {
+          "button": {
+            "actions": "Toon nummer acties"
+          }
+        },
+        "Modal": {
+          "button": {
+            "addToFavorites": "Toevoegen aan favorieten",
+            "addToPlaylist": "Toevoegen aan afspeellijst…",
+            "addToQueue": "Toevoegen aan wachtrij",
+            "albumDetails": "Album bekijken",
+            "artistDetails": "Artiest bekijken",
+            "channelDetails": "Kanaal bekijken",
+            "episodeDetails": "Afleveringdetails",
+            "playNext": "Hierna afspelen",
+            "playNow": "Nu afspelen",
+            "removeFromFavorites": "Verwijderen uit favorieten",
+            "seriesDetails": "Series bekijken",
+            "startRadio": "Radio afspelen",
+            "trackDetails": "Nummerdetails"
+          }
+        },
+        "Table": {
+          "table": {
+            "header": {
+              "album": "Album",
+              "artist": "Artiest",
+              "title": "Titel"
+            }
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": "Toon meer"
+          },
+          "empty": {
+            "noResults": "Niets gevonden"
+          }
+        }
+      }
+    },
+    "auth": {
+      "ApplicationEdit": {
+        "button": {
+          "regenerateToken": "Genereer token opnieuw"
+        },
+        "header": {
+          "appDetails": "Applicatie-details",
+          "editApp": "Bewerk applicatie"
+        },
+        "help": {
+          "appDetails": "De applicatie-ID en sleutel zijn gevoelige gegevens en moet je als wachtwoord beschouwen. Deel ze niet met anderen."
+        },
+        "label": {
+          "accessToken": "Access token",
+          "appId": "Applicatie-ID",
+          "appSecret": "Applicatie-sleutel"
+        },
+        "link": {
+          "settings": "Terug naar instellingen"
+        },
+        "title": "Bewerk applicatie"
+      },
+      "ApplicationForm": {
+        "button": {
+          "create": "Maak applicatie aan",
+          "update": "Applicatie bijwerken"
+        },
+        "header": {
+          "failure": "We kunnen je wijzigingen niet opslaan"
+        },
+        "help": {
+          "redirectUri": "Gebruik \"urn:ietf:wg:oauth:2.0:oob\" als redirect URI als je applicatie niet geserveerd wordt op het web."
+        },
+        "label": {
+          "name": "Naam",
+          "redirectUri": "Redirect URI",
+          "scopes": {
+            "description": "Het aanvinken van de bovenliggende \"Lees\"- of \"Schrijf\"-scopes impliceert toegang tot alle corresponderende kindscopes.",
+            "read": {
+              "description": "Alleen-lezen toegang tot gebruikersgegevens",
+              "label": "Lezen"
+            },
+            "write": {
+              "description": "Alleen-schrijven toegang tot gebruikersgegevens",
+              "label": "Schrijven"
+            }
+          }
+        }
+      },
+      "ApplicationNew": {
+        "link": {
+          "settings": "Terug naar instellingen"
+        },
+        "title": "Maak een nieuwe applicatie aan"
+      },
+      "Authorize": {
+        "button": {
+          "authorize": "Autoriseer { app }"
+        },
+        "header": {
+          "access": "{ app } wil toegang tot je Funkwhale account",
+          "allScopes": "Volledige toegang",
+          "authorize": "Autoriseer third-party app",
+          "authorizeFailure": "Fout bij het autoriseren van applicatie",
+          "fetchFailure": "Fout bij ophalen van applicatiegegevens",
+          "readOnly": "Alleen-lezen",
+          "writeOnly": "Alleen-schrijven"
+        },
+        "help": {
+          "copyCode": "Je zult een code te zien krijgen om te kopiëren naar de applicatie.",
+          "pasteCode": "Kopieer en plak de volgende code in de applicatie:",
+          "redirect": "Je wordt doorgestuurd naar { 0 }"
+        },
+        "message": {
+          "unknownPermissions": "De applicatie verzoekt ook de volgende onbekende machtigingen:"
+        },
+        "title": "Sta deze applicatie toe"
+      },
+      "LoginForm": {
+        "button": {
+          "login": "Inloggen"
+        },
+        "header": {
+          "loginFailure": "Er is een fout opgetreden tijdens het inloggen"
+        },
+        "help": {
+          "approvalRequired": "Als je je recentelijk hebt aangemeld, moet je misschien even wachten voordat ons moderatieteam je account heeft bekeken. Of je moet je e-mailadres verifiëren.",
+          "invalidCredentials": "Controleer of de combinatie van gebruikersnaam en wachtwoord klopt en controleer of je je e-mailadres hebt geverifieerd."
+        },
+        "label": {
+          "password": "Wachtwoord",
+          "username": "Gebruikersnaam of e-mailadres"
+        },
+        "link": {
+          "createAccount": "Creëer een account",
+          "resetPassword": "Wachtwoord opnieuw instellen"
+        },
+        "placeholder": {
+          "username": "Voer je gebruikersnaam of e-mailadres in"
+        }
+      },
+      "Logout": {
+        "button": {
+          "logout": "Ja, ik wil uitloggen!"
+        },
+        "header": {
+          "confirm": "Weet je zeker dat je wilt uitloggen?",
+          "unauthenticated": "Je bent momenteel niet ingelogd"
+        },
+        "link": {
+          "login": "Inloggen!"
+        },
+        "message": {
+          "loggedIn": "Je bent ingelogd als { username }"
+        },
+        "title": "Uitloggen"
+      },
+      "Plugin": {
+        "button": {
+          "save": "Opslaan",
+          "scan": "Scan"
+        },
+        "description": {
+          "library": "Bibliotheek waar bestanden geïmporteerd zouden moeten worden."
+        },
+        "header": {
+          "failure": "Fout bij het opslaan van de plugin"
+        },
+        "label": {
+          "library": "Bibliotheek",
+          "pluginEnabled": "Ingeschakeld"
+        },
+        "link": {
+          "documentation": "Documentatie"
+        }
+      },
+      "Settings": {
+        "button": {
+          "delete": "Verwijderen",
+          "deleteAccount": "Verwijder mijn account…",
+          "deleteAccountConfirm": "Verwijder mijn account",
+          "disableSubsonic": "Toegang uitschakelen",
+          "edit": "Bewerken",
+          "password": "Wachtwoord wijzigen",
+          "refresh": "Verversen",
+          "remove": "Verwijderen",
+          "removeApp": "Verwijder applicatie",
+          "revoke": "Intrekken",
+          "revokeAccess": "Toestemming toegang intrekken",
+          "update": "Update",
+          "updateSettings": "Instellingen bijwerken"
+        },
+        "description": {
+          "authorizedApps": "Dit is de lijst van applicaties die toegang hebben tot je accountdata.",
+          "changeEmail": "Verander het e-mail adres dat aan je account gekoppeld is. We zullen een bevestiging sturen naar het nieuwe adres.",
+          "changePassword": {
+            "paragraph1": "Als je je wachtwoord wijzigt, dan wordt ook het wachtwoord voor de Subsonic-API gewijzigd als je deze had ingesteld.",
+            "paragraph2": "Je moet je wachtwoord bijwerken op je clients die ook dit wachtwoord gebruiken."
+          },
+          "contentFilters": "Inhoudsfilters helpen je inhoud te verbergen die je niet wilt tegenkomen.",
+          "deleteAccount": "Je kunt permanent en onomkeerbaar je account en alle bijbehorende gegevens verwijderd middels het formulier hieronder. Je zult om bevestiging worden gevraagd.",
+          "plugins": "Gebruik plugins om Funkwhale uit te breiden en extra eigenschappen te krijgen.",
+          "yourApps": "Dit is de lijst van applicaties die je geregistreerd hebt."
+        },
+        "header": {
+          "accountFailure": "We kunnen je account niet verwijderen",
+          "accountSettings": "Accountinstellingen",
+          "authorizedApps": "Geautoriseerde apps",
+          "avatar": "Avatar",
+          "avatarFailure": "Je avatar kan niet opgeslagen worden",
+          "changeEmail": "Wijzig mijn e-mailadres",
+          "changePassword": "Wijzig mijn wachtwoord",
+          "contentFilters": "Inhoudsfilters",
+          "deleteAccount": "Verwijder mijn account",
+          "emailFailure": "We kunnen je e-mailadres niet aanpassen",
+          "hiddenArtists": "Verborgen artiesten",
+          "noApps": "Je hebt geen applicatie verbonden met je account.",
+          "noPersonalApps": "Je hebt nog geen applicatie geregistreerd.",
+          "passwordFailure": "Je wachtwoord kan niet worden gewijzigd",
+          "plugins": "Plugins",
+          "settingsUpdated": "Instellingen bijgewerkt",
+          "updateFailure": "Je instellingen kunnen niet worden bijgewerkt",
+          "yourApps": "Je applicaties"
+        },
+        "help": {
+          "changePassword": "Controleer of je wachtwoord klopt",
+          "noApps": "Als je applicaties van derden toegang hebt gegeven tot je data, vind je ze hier in de lijst.",
+          "noPersonalApps": "Maak er één aan om Funkwhale te integreren met third-party applicaties."
+        },
+        "label": {
+          "avatar": "Avatar",
+          "currentPassword": "Huidige wachtwoord",
+          "newEmail": "Nieuw e-mailadres",
+          "newPassword": "Nieuw wachtwoord",
+          "password": "Wachtwoord"
+        },
+        "link": {
+          "managePlugins": "Plugins beheren",
+          "newApp": "Registreer een nieuwe applicatie"
+        },
+        "message": {
+          "confirmDelete": "Je verzoek tot verwijderen is ingediend. Je account en inhoud worden spoedig verwijderd",
+          "currentEmail": "Je huidige e-mailadres is { email }."
+        },
+        "modal": {
+          "changePassword": {
+            "content": {
+              "logout": "Je wordt uitgelogd uit deze sessie moet inloggen op de nieuwe",
+              "subsonic": "Je Subsonic-wachtwoord wordt vervangen door een nieuwe, waardoor je wordt uitgelogd op apparaten die het oude wachtwoord gebruiken",
+              "warning": "Het aanpassen van je wachtwoord heeft de volgende gevolgen:"
+            },
+            "header": "Wil je je wachtwoord wijzigen?"
+          },
+          "deleteAccount": {
+            "content": {
+              "warning": "Dit is onomkeerbaar en zal permanent al je data van onze servers verwijderen. Je zult onmiddellijk worden uitgelogd."
+            },
+            "header": "Wil je jouw account verwijderen?"
+          },
+          "deleteApp": {
+            "content": {
+              "warning": "Dit zal de applicatie en alle bijbehorende tokens verwijderen. Dit kan niet ongedaan worden gemaakt."
+            },
+            "header": "Applicatie \"{ application }\" verwijderen?"
+          },
+          "revokeApp": {
+            "content": {
+              "warning": "Dit zal de applicatie verhinderen om de dienst namens jou te benaderen."
+            },
+            "header": "Toegang voor de service \"{ application }\" intrekken?"
+          }
+        },
+        "table": {
+          "artists": {
+            "header": {
+              "creationDate": "Toegevoegd",
+              "name": "Naam"
+            }
+          },
+          "authorizedApps": {
+            "header": {
+              "application": "Applicatie",
+              "permissions": "Machtigingen"
+            }
+          },
+          "yourApps": {
+            "header": {
+              "application": "Applicatie",
+              "creationDate": "Toegevoegd",
+              "scopes": "Scopes"
+            }
+          }
+        },
+        "title": "Accountinstellingen",
+        "warning": {
+          "deleteAccount": "Je account zal binnen een paar minuten van onze servers verwijderd worden. We zullen ook andere servers informeren die wellicht een kopie van je gegevens hebben, zodat zij die ook kunnen verwijderen. Merk op dat deze servers offline kunnen zijn, of niet van zins zijn om aan het verzoek te voldoen."
+        }
+      },
+      "SignupForm": {
+        "button": {
+          "create": "Account creëren"
+        },
+        "header": {
+          "login": "Log in op je Funkwhale-account",
+          "signupFailure": "Je account kan niet aangemaakt worden."
+        },
+        "label": {
+          "email": "E-mailadres",
+          "password": "Wachtwoord",
+          "username": "Gebruikersnaam"
+        },
+        "message": {
+          "accountCreated": "Je account is succesvol aangemaakt. Verifieer je e-mailadres voordat je probeert in te loggen.",
+          "awaitingReview": "Je verzoek tot account aanmaken is succesvol verstuurd. Je zult via e-mail te horen krijgen wanneer ons moderatieteam je verzoek heeft bekeken.",
+          "registrationClosed": "Vrije registraties zijn niet mogelijk op deze server. Je zult een uitnodigingscode nodig hebben om te registreren.",
+          "requiresReview": "Registraties op deze pod zijn geopend, maar worden bekeken door beheerders voor goedkeuring."
+        },
+        "placeholder": {
+          "email": "Voer je e-mailadres in",
+          "invitation": "Voer je uitnodigingscode in (hoofdletterongevoelig)",
+          "username": "Voer je gebruikersnaam in"
+        }
+      },
+      "SubsonicTokenForm": {
+        "button": {
+          "confirmDisable": "Toegang uitschakelen",
+          "confirmNewPassword": "Wachtwoord aanvragen",
+          "disable": "Subsonic-toegang uitschakelen",
+          "newPassword": "Nieuw wachtwoord aanvragen"
+        },
+        "description": {
+          "subsonic": {
+            "paragraph1": "Funkwhale werkt met andere muziekspelers die de Subsonic-API ondersteunen.",
+            "paragraph2": "Je kunt ze gebruiken om ook offline te genieten van je afspeellijst en muziek, bijvoorbeeld op je smartphone of tablet.",
+            "paragraph3": "Om Funkwhale te benaderen via die apps is een apart wachtwoord nodig. Dit kan je hieronder instellen."
+          }
+        },
+        "header": {
+          "error": "Fout",
+          "subsonic": "Wachtwoord voor Subsonic-API"
+        },
+        "label": {
+          "subsonicField": "Je wachtwoord voor de Subsonic-API"
+        },
+        "link": {
+          "apps": "Ontdek hoe je Funkwhale met andere apps kunt gebruiken"
+        },
+        "message": {
+          "accessDisabled": "Toegang uitgeschakeld",
+          "passwordUpdated": "Wachtwoord bijgewerkt",
+          "unavailable": "De Subsonic-API is niet beschikbaar op deze server."
+        },
+        "modal": {
+          "disableSubsonic": {
+            "content": {
+              "warning": "De toegang tot de Subsonic-API vanaf dit account wordt uitgeschakeld."
+            },
+            "header": "Subsonic-API-toegang uitschakelen?"
+          },
+          "newPassword": {
+            "content": {
+              "warning": "Je wordt uitgelogd op elk apparaat met het huidige wachtwoord."
+            },
+            "header": "Nieuw Subsonic-API-wachtwoord aanvragen?"
+          }
+        }
+      }
+    },
+    "channels": {
+      "AlbumForm": {
+        "header": {
+          "error": "Fout bij aanmaken"
+        },
+        "label": {
+          "albumTitle": "Titel"
+        }
+      },
+      "AlbumModal": {
+        "button": {
+          "cancel": "Annuleren",
+          "create": "Aanmaken"
+        },
+        "header": {
+          "newAlbum": "Nieuw album",
+          "newSeries": "Nieuwe series"
+        }
+      },
+      "AlbumSelect": {
+        "label": {
+          "album": "Album",
+          "series": "Series"
+        },
+        "meta": {
+          "tracks": "{ n } nummer | { n } nummers"
+        },
+        "option": {
+          "none": "Geen"
+        }
+      },
+      "LicenseSelect": {
+        "label": {
+          "license": "Licentie"
+        },
+        "link": {
+          "license": "Over deze licentie"
+        },
+        "option": {
+          "none": "Geen"
+        }
+      },
+      "SubscribeButton": {
+        "help": {
+          "auth": "Je moet ingelogd zijn om je te kunnen abonneren op dit kanaal"
+        },
+        "title": {
+          "subscribe": "Abonneren",
+          "unsubscribe": "Ontvolgen"
+        }
+      },
+      "UploadForm": {
+        "button": {
+          "edit": "Bewerken",
+          "ignore": "Negeren",
+          "remove": "Verwijderen",
+          "resume": "Hervatten",
+          "retry": "Opnieuw proberen"
+        },
+        "description": {
+          "extensions": "Ondersteunde uitbreidingen: { extensions }"
+        },
+        "header": {
+          "error": "Fout bij het publiceren"
+        },
+        "help": {
+          "license": "Voeg een licentie toe aan je upload zodat je publiek weet wat is toegestaan."
+        },
+        "label": {
+          "channel": "Kanaal",
+          "openBrowser": "Bladeren…"
+        },
+        "message": {
+          "dragAndDrop": "Sleep je bestanden hiernaartoe of open je browser om ze te uploaden",
+          "pending": "Je hebt wat conceptuploads die in afwachting zijn van publicatie."
+        },
+        "status": {
+          "errored": "Mislukt",
+          "pending": "In behandeling",
+          "uploading": "Bezig met uploaden"
+        },
+        "warning": {
+          "quota": "Je hebt geen ruimte meer over om je bestanden te uploaden. Neem contact op met de moderatoren."
+        }
+      },
+      "UploadMetadataForm": {
+        "label": {
+          "description": "Omschrijving",
+          "image": "Afbeelding van nummer",
+          "position": "Positie",
+          "tags": "Tags",
+          "title": "Titel"
+        }
+      },
+      "UploadModal": {
+        "button": {
+          "cancel": "Annuleren",
+          "close": "Sluiten",
+          "finishLater": "Rond later af",
+          "next": "Volgende stap",
+          "previous": "Vorige stap",
+          "publish": "Publiceer",
+          "update": "Update"
+        },
+        "header": {
+          "processing": "Uploads aan het verwerken",
+          "publish": "Publiceer audio",
+          "uploadDetails": "Uploaddetails",
+          "uploadFiles": "Bestanden om te uploaden"
+        },
+        "meta": {
+          "files": "{ n } bestand | { n } bestanden",
+          "quota": "Resterende opslagruimte:"
+        }
+      }
+    },
+    "common": {
+      "ActionTable": {
+        "button": {
+          "allSelected": "Één element geselecteerd | Alle { n } elementen geselecteerd",
+          "go": "Ga",
+          "launch": "Opstarten",
+          "refresh": "Vernieuw inhoud tabel",
+          "select": "Selecteer",
+          "selectAll": "Selecteer alle voorwerpen",
+          "selectCurrentPage": "Alleen deze pagina kiezen",
+          "selectElement": "Selecteer { n } element | Selecteer alle { n } elementen",
+          "selected": "{ n } van { total } geselecteerd | { n } van { total } geselecteerd"
+        },
+        "header": {
+          "error": "Fout tijdens toepassen van actie"
+        },
+        "label": {
+          "actions": "Acties",
+          "performAction": "Voer acties uit"
+        },
+        "message": {
+          "needsRefresh": "Inhoud is geüpdatet. Klik vernieuwen om actuele inhoud te zien",
+          "success": "Actie { action } is begonnen voor { n } element | Actie { action } is begonnen voor { n } elementen"
+        },
+        "modal": {
+          "performAction": {
+            "content": {
+              "warning": "Dit kan gevolgen hebben voor veel elementen of onomkeerbare consequenties hebben. Controleer of je dit écht wilt doen."
+            },
+            "header": "Wil je { action } toepassen op { n } element? | Wil je { action } toepassen op { n } elementen?"
+          }
+        }
+      },
+      "AttachmentInput": {
+        "button": {
+          "remove": "Verwijderen"
+        },
+        "header": {
+          "failure": "Je attachment kan niet opgeslagen worden"
+        },
+        "help": {
+          "upload": "PNG or JPG. Dimensies zouden tussen 1400x1400px en 3000x3000px moeten liggen. Maximaal toegestane bestandsgrootte is 5MB."
+        },
+        "label": {
+          "upload": "Nieuwe afbeelding uploaden…"
+        },
+        "loader": {
+          "uploading": "Bezig met bestand uploaden…"
+        }
+      },
+      "CollapseLink": {
+        "button": {
+          "collapse": "Toeklappen",
+          "expand": "Uitklappen"
+        }
+      },
+      "ContentForm": {
+        "button": {
+          "preview": "Voorbeeld",
+          "write": "Schrijven"
+        },
+        "empty": {
+          "noContent": "Niets om te bekijken."
+        },
+        "help": {
+          "markdown": "Markdown syntax wordt ondersteund."
+        },
+        "placeholder": {
+          "input": "Schrijf hier een paar woorden…"
+        }
+      },
+      "CopyInput": {
+        "button": {
+          "copy": "Kopiëren"
+        },
+        "message": {
+          "success": "Tekst gekopieerd naar het klembord!"
+        }
+      },
+      "DangerousButton": {
+        "button": {
+          "cancel": "Annuleren",
+          "confirm": "Bevestigen"
+        },
+        "header": {
+          "confirm": "Wil je de actie bevestigen?"
+        }
+      },
+      "Duration": {
+        "meta": {
+          "hours": "{ hours } uur { minutes } min",
+          "minutes": "{ minutes } min"
+        }
+      },
+      "EmptyState": {
+        "button": {
+          "refresh": "Verversen"
+        },
+        "header": {
+          "noResults": "Geen resultaten gevonden."
+        }
+      },
+      "ExpandableDiv": {
+        "button": {
+          "less": "Toon minder",
+          "more": "Toon meer"
+        }
+      },
+      "InlineSearchBar": {
+        "button": {
+          "clear": "Wissen"
+        },
+        "label": {
+          "search": "Zoeken"
+        },
+        "placeholder": {
+          "search": "Zoeken…"
+        }
+      },
+      "LoginModal": {
+        "description": {
+          "noAccess": "Je hebt geen toegang!"
+        },
+        "header": {
+          "unauthenticated": "Ongeauthenticeerd"
+        },
+        "link": {
+          "login": "Inloggen",
+          "signup": "Aanmelden"
+        }
+      },
+      "RenderedDescription": {
+        "button": {
+          "cancel": "Annuleren",
+          "edit": "Bewerken",
+          "less": "Toon minder",
+          "more": "Toon meer",
+          "update": "Omschrijving bijwerken"
+        },
+        "empty": {
+          "noDescription": "Geen beschrijving beschikbaar"
+        },
+        "header": {
+          "failure": "Fout tijdens bijwerken van de beschrijving"
+        }
+      },
+      "UserMenu": {
+        "label": {
+          "language": "Taal",
+          "shortcuts": "Sneltoetsen",
+          "theme": "Thema"
+        },
+        "link": {
+          "about": "Over",
+          "chat": "Chatruimte",
+          "docs": "Documentatie",
+          "forum": "Forum",
+          "git": "Issuetracker",
+          "login": "Inloggen",
+          "logout": "Uitloggen",
+          "notifications": "Meldingen",
+          "profile": "Profiel",
+          "settings": "Instellingen",
+          "signup": "Aanmelden",
+          "support": "Help"
+        }
+      },
+      "UserModal": {
+        "button": {
+          "switchInstance": "Andere server gebruiken"
+        },
+        "header": {
+          "options": "Opties"
+        },
+        "label": {
+          "language": "Taal",
+          "shortcuts": "Sneltoetsen",
+          "theme": "Thema"
+        },
+        "link": {
+          "about": "Over",
+          "chat": "Chatruimte",
+          "forum": "Forum",
+          "git": "Issuetracker",
+          "login": "Inloggen",
+          "logout": "Uitloggen",
+          "notifications": "Meldingen",
+          "profile": "Profiel",
+          "settings": "Instellingen",
+          "signup": "Aanmelden",
+          "support": "Help"
+        }
+      }
+    },
+    "favorites": {
+      "List": {
+        "empty": {
+          "noFavorites": "Er zijn nog geen nummers aan je favorieten toegevoegd"
+        },
+        "header": {
+          "favorites": "{ n } favoriet | { n } favorieten"
+        },
+        "link": {
+          "library": "Verzameling doorbladeren"
+        },
+        "loader": {
+          "loading": "Je favorieten aan het laden…"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Oplopend",
+            "descending": "Aflopend",
+            "label": "Volgorde"
+          },
+          "label": "Volgorde"
+        },
+        "pagination": {
+          "results": "Aantal resultaten per pagina"
+        },
+        "title": "Je favorieten"
+      },
+      "TrackFavoriteIcon": {
+        "button": {
+          "add": "Toevoegen aan favorieten",
+          "remove": "Verwijderen uit favorieten"
+        },
+        "label": {
+          "inFavorites": "In je favorieten"
+        }
+      }
+    },
+    "federation": {
+      "FetchButton": {
+        "button": {
+          "close": "Sluiten",
+          "reload": "Sluiten en pagina vernieuwen"
+        },
+        "description": {
+          "failure": "Er is een fout opgetreden tijdens het vernieuwen van gegevens:",
+          "pending": "Het verversverzoek is niet op tijd verwerkt door onze server. Het zal later worden verwerkt.",
+          "skipped": "De externe server reageerde, maar de geretourneerde data wordt niet ondersteund door Funkwhale.",
+          "success": "Gegevens van externe server succesvol vernieuwd."
+        },
+        "header": {
+          "failure": "Fout bij vernieuwen",
+          "pending": "Vernieuwing in afwachting",
+          "refresh": "Object verversen van externe server…",
+          "saveFailure": "Fout tijdens opslaan van instellingen",
+          "skipped": "Vernieuwen overgeslagen",
+          "success": "Vernieuwen afgerond"
+        },
+        "loader": {
+          "awaitingResult": "Wacht op resultaat…",
+          "fetchRequest": "Fetch aan het aanvragen…"
+        },
+        "table": {
+          "error": {
+            "label": {
+              "detail": "Foutdetail",
+              "type": "Foutsoort"
+            },
+            "value": {
+              "connectionError": "Kan geen verbinding krijgen met de externe server",
+              "httpError": "Er is een HTTP-fout opgetreden bij het contacteren van de externe server",
+              "httpStatus": "De externe server reageerde met HTTP { status }",
+              "invalidAttributesError": "Gegevens verkregen van de externe server waren onvolledig of incorrect",
+              "invalidJsonError": "De externe server retourneerde ongeldigde JSON of JSON-LD data",
+              "timeoutError": "The externe server reageerde niet snel genoeg",
+              "unknownError": "Onbekende fout"
+            }
+          }
+        }
+      },
+      "LibraryWidget": {
+        "button": {
+          "showMore": "Toon meer"
+        },
+        "empty": {
+          "noMatch": "Geen overeenkomende bibliotheek."
+        }
+      }
+    },
+    "forms": {
+      "PasswordInput": {
+        "button": {
+          "copy": "Kopiëren"
+        },
+        "message": {
+          "copy": "Tekst gekopieerd naar het klembord!"
+        },
+        "title": "Wachtwoord tonen/verbergen"
+      }
+    },
+    "library": {
+      "AlbumBase": {
+        "link": {
+          "addDescription": "Voeg een omschrijving toe…"
+        },
+        "meta": {
+          "episodes": "{ n } aflevering | { n } afleveringen",
+          "tracks": "{ n } nummer | { n } nummers"
+        }
+      },
+      "AlbumDetail": {
+        "description": {
+          "libraries": "Dit album is beschikbaar in de volgende verzamelingen:"
+        },
+        "header": {
+          "episodes": "Afleveringen",
+          "libraries": "Gebruikersverzamelingen",
+          "tracks": "Nummers"
+        },
+        "meta": {
+          "volume": "Volume { number }"
+        }
+      },
+      "AlbumDropdown": {
+        "button": {
+          "cancel": "Annuleren",
+          "delete": "Verwijderen…",
+          "edit": "Bewerken",
+          "embed": "Embedden",
+          "more": "Meer…"
+        },
+        "link": {
+          "discogs": "Zoek bij Discogs",
+          "django": "Kijk in Django's admin",
+          "domain": "Op { domain } bekijken",
+          "moderation": "Open in moderatie-interface",
+          "musicbrainz": "Bekijken op MusicBrainz"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "Het album zal worden verwijderd, samen met alle bijbehorende bestanden en data. Dit kan niet ongedaan gemaakt worden."
+            },
+            "header": "Album verwijderen?"
+          },
+          "embed": {
+            "header": "Embed dit album op je website"
+          }
+        }
+      },
+      "AlbumEdit": {
+        "header": {
+          "edit": "Dit album bewerken",
+          "suggest": "Stel een wijziging voor op dit album"
+        },
+        "message": {
+          "remote": "Dit object wordt beheerd door een andere server. Je kunt het niet bewerken."
+        }
+      },
+      "Albums": {
+        "button": {
+          "search": "Zoeken"
+        },
+        "empty": {
+          "noResults": "Geen resultaten gevonden voor je zoekopdracht"
+        },
+        "header": {
+          "browse": "Albums doorbladeren"
+        },
+        "label": {
+          "search": "Zoeken",
+          "tags": "Tags"
+        },
+        "link": {
+          "addMusic": "Voeg muziek toe"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Oplopend",
+            "descending": "Aflopend",
+            "label": "Sorteervolgorde"
+          },
+          "label": "Volgorde"
+        },
+        "pagination": {
+          "results": "Aantal resultaten per pagina"
+        },
+        "placeholder": {
+          "search": "Voer albumtitel in…"
+        },
+        "title": "Albums"
+      },
+      "ArtistBase": {
+        "button": {
+          "cancel": "Annuleren",
+          "edit": "Bewerken",
+          "embed": "Embedden",
+          "more": "Meer…",
+          "play": "Alle albums afspelen"
+        },
+        "link": {
+          "discogs": "Zoek bij Discogs",
+          "django": "Kijk in Django's admin",
+          "domain": "Op { domain } bekijken",
+          "moderation": "Open in moderatie-interface",
+          "musicbrainz": "Bekijken op MusicBrainz",
+          "wikipedia": "Zoeken op Wikipedia"
+        },
+        "meta": {
+          "albums": "{ n } albums | { n } albums",
+          "tracks": "{ n } nummer in | { n } nummers in"
+        },
+        "modal": {
+          "embed": {
+            "header": "Embed deze artiest op je website"
+          }
+        },
+        "title": "Artiest"
+      },
+      "ArtistDetail": {
+        "button": {
+          "filter": "Filter verwijderen",
+          "more": "Laad meer…"
+        },
+        "description": {
+          "library": "Deze artiest komt voor in de volgende verzamelingen:"
+        },
+        "header": {
+          "album": "Albums van deze artiest",
+          "library": "Gebruikersverzamelingen",
+          "track": "Nieuwe nummers van deze artiest"
+        },
+        "link": {
+          "filter": "Mijn filters controleren"
+        },
+        "message": {
+          "filter": "Je verbergt momenteel content gerelateerd aan deze artiest."
+        }
+      },
+      "ArtistEdit": {
+        "header": {
+          "edit": "Bewerk deze artiest",
+          "suggest": "Stel een wijziging voor op deze artiest"
+        },
+        "message": {
+          "remote": "Dit object wordt beheerd door een andere server. Je kunt het niet bewerken."
+        }
+      },
+      "Artists": {
+        "button": {
+          "search": "Zoeken",
+          "upload": "Voeg muziek toe"
+        },
+        "empty": {
+          "noResults": "Geen resultaten gevonden voor je zoekopdracht"
+        },
+        "header": {
+          "browse": "Artiesten doorbladeren"
+        },
+        "label": {
+          "excludeCompilation": "Sluit compilatie artiesten uit",
+          "search": "Artiestnaam",
+          "tags": "Tags"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Oplopend",
+            "descending": "Aflopend",
+            "label": "Sorteervolgorde"
+          },
+          "label": "Volgorde"
+        },
+        "pagination": {
+          "results": "Aantal resultaten per pagina"
+        },
+        "placeholder": {
+          "search": "Zoeken…"
+        },
+        "title": "Artiesten"
+      },
+      "EditCard": {
+        "button": {
+          "approve": "Goedkeuren",
+          "delete": "Verwijderen",
+          "reject": "Afkeuren"
+        },
+        "header": {
+          "modification": "Modificatie { id }"
+        },
+        "link": {
+          "track": "Nummer #{ id } - { name }"
+        },
+        "modal": {
+          "content": {
+            "warning": "De suggestie zal worden verwijderd. Dit kan niet ongedaan gemaakt worden."
+          },
+          "delete": {
+            "header": "Deze suggestie verwijderen?"
+          }
+        },
+        "status": {
+          "applied": "Goedgekeurd en toegepast",
+          "approved": "Goedgekeurd",
+          "pending": "Wachtend op beoordeling",
+          "rejected": "Afgekeurd"
+        },
+        "table": {
+          "update": {
+            "header": {
+              "field": "Veld",
+              "newValue": "Nieuwe waarde",
+              "oldValue": "Oude waarde"
+            },
+            "notApplicable": "N.B."
+          }
+        }
+      },
+      "EditForm": {
+        "button": {
+          "cancel": "Annuleren",
+          "clear": "Wissen",
+          "new": "Nog een bewerking verzenden",
+          "reset": "Zet terug naar initiële waarde",
+          "showAll": "Toon alle wijzigingen",
+          "showUnreviewed": "Beperken tot niet-bekeken bewerkingen",
+          "submit": "Bewerking verzenden en toepassen",
+          "suggest": "Suggestie versturen"
+        },
+        "empty": {
+          "suggestEdit": "Stel een wijziging voor middels het formulier hieronder."
+        },
+        "header": {
+          "failure": "Fout bij indienen van bewerking",
+          "recentEdits": "Recente bewerkingen",
+          "success": "Je wijziging is succesvol opgestuurd.",
+          "unreviewed": "Recente bewerking wachtend op een beoordeling"
+        },
+        "label": {
+          "summary": "Samenvatting (optioneel)"
+        },
+        "message": {
+          "noPermission": "Je hebt geen toestemming om dit object te bewerken, maar je kunt wijzigingen voorstellen. Eenmaal ingediend zullen ze voor goedkeuring worden ingezien."
+        },
+        "notApplicable": "N.B.",
+        "placeholder": {
+          "summary": "Een korte samenvatting van je aanpassingen."
+        }
+      },
+      "FileUpload": {
+        "button": {
+          "cancel": "Annuleren",
+          "retry": "Gefaalde uploads opnieuw proberen"
+        },
+        "description": {
+          "import": "Resultaten van je import:",
+          "previousImport": "Resultaten van je vorige import:"
+        },
+        "header": {
+          "failure": "Fout bij het importeren",
+          "local": "Upload muziek van je local storage",
+          "server": "Importstatus",
+          "status": "Importstatus"
+        },
+        "label": {
+          "extensions": "Ondersteunde uitbreidingen: { extensions }",
+          "remainingSpace": "Resterende opslagruimte",
+          "uploadWidget": "Klik om bestanden te selecteren, of sleep bestanden of mappen hierheen"
+        },
+        "link": {
+          "picard": "We raden je aan om hiervoor Picard te gebruiken.",
+          "processing": "Aan het verwerken",
+          "uploading": "Bezig met uploaden"
+        },
+        "message": {
+          "local": {
+            "copyright": "Je uploadt geen content waarop copyright berust. Anders overtreed je misschien de wet",
+            "format": "De muziekbestanden die je uploadt, hebben het OGG, Flac, MP3 of AIFF formaat",
+            "message": "Je staat op het punt muziek te uploaden. Controleer voordat je doorgaat:",
+            "tag": "De muziekbestanden die je uploadt, hebben de juiste tags."
+          }
+        },
+        "table": {
+          "upload": {
+            "header": {
+              "actions": "Acties",
+              "filename": "Bestandsnaam",
+              "size": "Grootte",
+              "status": "Status"
+            },
+            "status": {
+              "pending": "In behandeling",
+              "uploaded": "Geüpload",
+              "uploading": "Bezig met uploaden…"
+            }
+          }
+        },
+        "tooltip": {
+          "denied": "Upload geweigerd. Zorg ervoor dat het bestand niet te groot is en dat je je quotum nog niet hebt bereikt",
+          "extension": "Ongeldig bestandstype, zorg ervoor dat u een audiobestand uploadt. Ondersteunde bestandsextensies zijn { extensions }",
+          "network": "Er is een netwerkfout opgetreden tijdens het uploaden van dit bestand",
+          "retry": "Opnieuw proberen",
+          "size": "Kan dit bestand niet uploaden; zorg ervoor dat het niet te groot is",
+          "timeout": "Upload verlopen; probeer het opnieuw"
+        }
+      },
+      "FsBrowser": {
+        "button": {
+          "import": "Importeer"
+        }
+      },
+      "FsLogs": {
+        "empty": {
+          "notStarted": "Import is nog niet gestart"
+        }
+      },
+      "Home": {
+        "header": {
+          "newChannels": "Nieuwe kanalen",
+          "playlists": "Afspeellijsten",
+          "recentlyAdded": "Recent toegevoegd",
+          "recentlyFavorited": "Recent toegevoegd aan favorieten",
+          "recentlyListened": "Recent beluisterd"
+        },
+        "title": "Bibliotheek"
+      },
+      "ImportStatusModal": {
+        "button": {
+          "close": "Sluiten"
+        },
+        "error": {
+          "importFailure": "Er is een fout opgetreden tijdens het verwerken van de upload. Meer informatie vind je hieronder.",
+          "invalidMetadata": {
+            "label": "Ongeldige metadata",
+            "message": "De metadata bij het bestand zijn ongeldig, of sommige verplichte velden ontbreken."
+          },
+          "unknownError": {
+            "label": "Onbekende fout",
+            "message": "Er is een onbekende fout opgetreden"
+          }
+        },
+        "header": {
+          "importDetail": "Details van de import"
+        },
+        "link": {
+          "documentation": "Lees onze documentatie voor deze fout",
+          "support": "Open een ondersteuningsdraad (voeg de foutopsporingsinformatie toe onderaan je bericht)"
+        },
+        "message": {
+          "importDetail": "Upload staat nog in de wacht en wordt spoedig verwerkt door de server.",
+          "importSuccess": "Geüpload nummer is verwerkt door de server."
+        },
+        "table": {
+          "error": {
+            "debug": "Foutgegevens",
+            "errorDetail": "Foutdetail",
+            "errorType": "Foutsoort",
+            "help": "Hulp en ondersteuning"
+          }
+        },
+        "warning": {
+          "importSkipped": "Upload was overgeslagen omdat een vergelijkbare upload al beschikbaar is in één van je verzamelingen."
+        }
+      },
+      "Podcasts": {
+        "button": {
+          "cancel": "Annuleren",
+          "channel": "Maak een nieuw kanaal",
+          "feed": "Abonneren op feed",
+          "search": "Zoeken",
+          "subscribe": "Abonneren"
+        },
+        "empty": {
+          "noResults": "Geen resultaten gevonden voor je zoekopdracht"
+        },
+        "header": {
+          "browse": "Podcasts doorbladeren"
+        },
+        "label": {
+          "search": "Podcasttitel",
+          "tags": "Tags"
+        },
+        "modal": {
+          "subscription": {
+            "header": "Abonnement"
+          }
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Oplopend",
+            "descending": "Aflopend",
+            "label": "Sorteervolgorde"
+          },
+          "label": "Volgorde"
+        },
+        "pagination": {
+          "results": "Aantal resultaten per pagina"
+        },
+        "placeholder": {
+          "search": "Zoeken…"
+        },
+        "title": "Podcasts"
+      },
+      "Radios": {
+        "button": {
+          "add": "Maak een radiostation",
+          "create": "Maak je eigen radiostation"
+        },
+        "empty": {
+          "noResults": "Geen resultaten gevonden voor je zoekopdracht"
+        },
+        "header": {
+          "browse": "Radio's doorbladeren",
+          "instance": "Radio's op deze server",
+          "user": "Gebruikersradio's"
+        },
+        "label": {
+          "search": "Zoeken"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Oplopend",
+            "descending": "Aflopend",
+            "label": "Volgorde"
+          },
+          "label": "Volgorde"
+        },
+        "pagination": {
+          "results": "Aantal resultaten per pagina"
+        },
+        "placeholder": {
+          "search": "Voer een radionaam in…"
+        },
+        "title": "Radio's"
+      },
+      "TagDetail": {
+        "header": {
+          "channels": "Kanalen",
+          "tracks": "Nummers"
+        },
+        "link": {
+          "albums": "Albums",
+          "artists": "Artiesten",
+          "moderation": "Open in moderatie-interface"
+        }
+      },
+      "TagSelector": {
+        "placeholder": {
+          "search": "Zoeken…"
+        }
+      },
+      "TrackBase": {
+        "button": {
+          "cancel": "Annuleren",
+          "delete": "Verwijderen…",
+          "download": "Downloaden",
+          "edit": "Bewerken",
+          "embed": "Embedden",
+          "more": "Meer…",
+          "play": "Afspelen"
+        },
+        "link": {
+          "discogs": "Zoek bij Discogs",
+          "django": "Kijk in Django's admin",
+          "domain": "Op { domain } bekijken",
+          "moderation": "Open in moderatie-interface",
+          "wikipedia": "Zoeken op Wikipedia"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "Het nummer zal worden verwijderd, samen met alle bijbehorende bestanden en data. Dit kan niet ongedaan gemaakt worden."
+            },
+            "header": "Dit nummer verwijderen?"
+          },
+          "embed": {
+            "header": "Embed dit nummer op je website"
+          }
+        },
+        "title": "Nummer"
+      },
+      "TrackDetail": {
+        "description": {
+          "library": "Dit nummer komt voor in de volgende verzamelingen:"
+        },
+        "header": {
+          "episode": "Afleveringdetails",
+          "library": "Gerelateerde bibliotheken",
+          "playlists": "Gerelateerde afspeellijsten",
+          "release": "Publicatiedetails",
+          "track": "Nummerdetails"
+        },
+        "link": {
+          "musicbrainz": "Bekijken op MusicBrainz"
+        },
+        "notApplicable": "N.B.",
+        "table": {
+          "release": {
+            "album": "Album",
+            "artist": "Artiest",
+            "copyright": "Copyright",
+            "license": "Licentie",
+            "series": "Serie",
+            "url": "URL",
+            "year": "Jaar"
+          },
+          "track": {
+            "bitrate": {
+              "label": "Bitrate"
+            },
+            "codec": "Codec",
+            "downloads": "Downloads",
+            "duration": "Duur",
+            "size": "Grootte"
+          }
+        }
+      },
+      "TrackEdit": {
+        "header": {
+          "edit": "Bewerk dit nummer",
+          "suggest": "Stel een wijziging voor op dit nummer"
+        },
+        "message": {
+          "remote": "Dit object wordt beheerd door een andere server. Je kunt het niet bewerken."
+        }
+      },
+      "radios": {
+        "Builder": {
+          "button": {
+            "filter": "Filter toevoegen",
+            "save": "Opslaan"
+          },
+          "description": {
+            "builder": "Met deze interface kun je je eigen radiostation opzetten. Dit station speelt nummers aan de hand van jouw wensen."
+          },
+          "header": {
+            "builder": "Bouwer",
+            "created": "Radio gecreëerd",
+            "matches": "{ n } nummer komt overeen met de gecombineerde filters | { n } nummers komen overeen met de gecombineerde filters",
+            "updated": "Radio bijgewerkt"
+          },
+          "label": {
+            "description": "Omschrijving",
+            "filter": "Voeg filters toe om je radio te personaliseren",
+            "name": "Radionaam",
+            "public": "Publiekelijk tonen"
+          },
+          "option": {
+            "filter": "Filter kiezen"
+          },
+          "placeholder": {
+            "description": "Mijn geweldige omschrijving",
+            "name": "Mijn geweldige radio"
+          },
+          "table": {
+            "filter": {
+              "header": {
+                "actions": "Acties",
+                "candidates": "Mogelijkheden",
+                "config": "Instellingen",
+                "exclude": "Uitsluiten",
+                "name": "Filternaam"
+              }
+            }
+          },
+          "title": "Radio opzetten"
+        },
+        "Filter": {
+          "cancelButton": "Annuleren",
+          "excludeLabel": "Uitsluiten",
+          "matchingTracksModalHeader": "Nummers volgens filter",
+          "removeButton": "Verwijderen"
+        }
+      }
+    },
+    "manage": {
+      "ChannelsTable": {
+        "label": {
+          "category": "Categorie",
+          "search": "Zoeken"
+        },
+        "link": {
+          "local": "Lokaal",
+          "moderation": "Open in moderatie-interface"
+        },
+        "option": {
+          "all": "Alles"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Oplopend",
+            "descending": "Aflopend",
+            "label": "Sorteervolgorde"
+          },
+          "label": "Volgorde"
+        },
+        "pagination": {
+          "results": "Resultaten - { start }-{ end } van de { total }"
+        },
+        "placeholder": {
+          "search": "Zoek op domein, naam, account…"
+        },
+        "table": {
+          "channel": {
+            "header": {
+              "account": "Account",
+              "albums": "Albums",
+              "creationDate": "Toegevoegd",
+              "domain": "Domein",
+              "name": "Naam",
+              "tracks": "Nummers"
+            }
+          }
+        }
+      },
+      "library": {
+        "AlbumsTable": {
+          "action": {
+            "delete": {
+              "label": "Verwijderen",
+              "warning": "De geselecteerde albums worden verwijderd, samen met bijbehorende nummers, uploads, favorieten en luisterhistorie. Dit kan niet ongedaan gemaakt worden."
+            }
+          },
+          "label": {
+            "search": "Zoeken"
+          },
+          "link": {
+            "local": "Lokaal",
+            "moderation": "Open in moderatie-interface"
+          },
+          "notApplicable": "N.B.",
+          "ordering": {
+            "direction": {
+              "ascending": "Oplopend",
+              "descending": "Aflopend",
+              "label": "Sorteervolgorde"
+            },
+            "label": "Volgorde"
+          },
+          "pagination": {
+            "results": "Resultaten - { start }-{ end } van de { total }"
+          },
+          "placeholder": {
+            "search": "Zoek op domein, titel, artiest, MusicBrainz ID…"
+          },
+          "table": {
+            "album": {
+              "header": {
+                "artist": "Artiest",
+                "creationDate": "Toegevoegd",
+                "domain": "Domein",
+                "name": "Titel",
+                "releaseDate": "Publicatiedatum",
+                "tracks": "Nummers"
+              }
+            }
+          }
+        },
+        "ArtistsTable": {
+          "action": {
+            "delete": {
+              "label": "Verwijderen",
+              "warning": "De geselecteerde artiest wordt verwijderd, samen met bijbehorende uploads, nummers, favorieten en luistergeschiedenis. Dit kan niet ongedaan gemaakt worden."
+            }
+          },
+          "label": {
+            "category": "Categorie",
+            "search": "Zoeken"
+          },
+          "link": {
+            "local": "Lokaal"
+          },
+          "option": {
+            "all": "Alles"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Oplopend",
+              "descending": "Aflopend",
+              "label": "Sorteervolgorde"
+            },
+            "label": "Volgorde"
+          },
+          "pagination": {
+            "results": "Resultaten - { start }-{ end } van de { total }"
+          },
+          "placeholder": {
+            "search": "Zoek op domein, naam, MusicBrainz ID…"
+          },
+          "table": {
+            "artist": {
+              "header": {
+                "albums": "Albums",
+                "creationDate": "Toegevoegd",
+                "domain": "Domein",
+                "name": "Naam",
+                "tracks": "Nummers"
+              }
+            }
+          }
+        },
+        "EditsCardList": {
+          "label": {
+            "status": "Status"
+          },
+          "option": {
+            "all": "Alles",
+            "approved": "Goedgekeurd",
+            "pending": "Wachtend op beoordeling",
+            "rejected": "Afgekeurd"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Oplopend",
+              "descending": "Aflopend",
+              "label": "Volgorde"
+            },
+            "label": "Volgorde"
+          },
+          "pagination": {
+            "results": "Resultaten - { start }-{ end } van de { total }"
+          },
+          "placeholder": {
+            "search": "Zoek op account, samenvatting, domein…"
+          }
+        },
+        "LibrariesTable": {
+          "action": {
+            "delete": {
+              "label": "Verwijderen",
+              "warning": "De geselecteerde bibliotheek zal worden verwijderd, samen met de bijbehorende uploads en volgers. Dit kan niet ongedaan gemaakt worden."
+            }
+          },
+          "label": {
+            "search": "Zoeken",
+            "visibility": "Zichtbaarheid"
+          },
+          "link": {
+            "local": "Lokaal"
+          },
+          "option": {
+            "all": "Alles"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Oplopend",
+              "descending": "Aflopend",
+              "label": "Sorteervolgorde"
+            },
+            "label": "Volgorde"
+          },
+          "pagination": {
+            "results": "Resultaten - { start }-{ end } van de { total }"
+          },
+          "placeholder": {
+            "search": "Zoek op domeinnaam, gebruikersnaam, beschrijving…"
+          },
+          "table": {
+            "library": {
+              "header": {
+                "account": "Account",
+                "creationDate": "Toegevoegd",
+                "domain": "Domein",
+                "followers": "Volgers",
+                "name": "Naam",
+                "uploads": "Uploads",
+                "visibility": "Zichtbaarheid"
+              }
+            }
+          }
+        },
+        "TagsTable": {
+          "action": {
+            "delete": {
+              "label": "Verwijderen",
+              "warning": "De geselecteerde tag zal worden verwijderd en worden losgekoppeld van enige bestaande content. Dit kan niet ongedaan gemaakt worden."
+            }
+          },
+          "label": {
+            "search": "Zoeken"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Oplopend",
+              "descending": "Aflopend",
+              "label": "Sorteervolgorde"
+            },
+            "label": "Volgorde"
+          },
+          "pagination": {
+            "results": "Resultaten - { start }-{ end } van de { total }"
+          },
+          "placeholder": {
+            "search": "Zoek op naam"
+          },
+          "table": {
+            "tag": {
+              "header": {
+                "albums": "Albums",
+                "artists": "Artiesten",
+                "creationDate": "Toegevoegd",
+                "name": "Naam",
+                "tracks": "Nummers"
+              }
+            }
+          }
+        },
+        "TracksTable": {
+          "action": {
+            "delete": {
+              "label": "Verwijderen",
+              "warning": "De geselecteerde nummers worden verwijderd, samen met bijbehorende uploads, favorieten en luistergeschiedenis. Dit kan niet ongedaan gemaakt worden."
+            }
+          },
+          "label": {
+            "search": "Zoeken"
+          },
+          "link": {
+            "local": "Lokaal"
+          },
+          "notApplicable": "N.B.",
+          "ordering": {
+            "direction": {
+              "ascending": "Oplopend",
+              "descending": "Aflopend",
+              "label": "Sorteervolgorde"
+            },
+            "label": "Volgorde"
+          },
+          "pagination": {
+            "results": "Resultaten - { start }-{ end } van de { total }"
+          },
+          "placeholder": {
+            "search": "Zoek op domein, titel, artiest, album, MusicBrainz ID…"
+          },
+          "table": {
+            "track": {
+              "header": {
+                "album": "Album",
+                "artist": "Artiest",
+                "creationDate": "Toegevoegd",
+                "domain": "Domein",
+                "license": "Licentie",
+                "title": "Titel"
+              }
+            }
+          }
+        },
+        "UploadsTable": {
+          "action": {
+            "delete": {
+              "label": "Verwijderen",
+              "warning": "De geselecteerde upload zal worden verwijderd. Dit kan niet ongedaan gemaakt worden."
+            }
+          },
+          "label": {
+            "search": "Zoeken",
+            "status": "Status",
+            "visibility": "Zichtbaarheid"
+          },
+          "link": {
+            "local": "Lokaal"
+          },
+          "notApplicable": "N.B.",
+          "option": {
+            "all": "Alles",
+            "failed": "Mislukt",
+            "finished": "Afgerond",
+            "pending": "In behandeling",
+            "skipped": "Overgeslagen"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Oplopend",
+              "descending": "Aflopend",
+              "label": "Sorteervolgorde"
+            },
+            "label": "Volgorde"
+          },
+          "pagination": {
+            "results": "Resultaten - { start }-{ end } van de { total }"
+          },
+          "placeholder": {
+            "search": "Zoek op domeinnaam, actor, naam, referentie, bron…"
+          },
+          "table": {
+            "upload": {
+              "header": {
+                "accessedDate": "Benaderd op",
+                "account": "Account",
+                "creationDate": "Toegevoegd",
+                "domain": "Domein",
+                "importStatus": "Importstatus",
+                "library": "Bibliotheek",
+                "name": "Naam",
+                "size": "Grootte",
+                "visibility": "Zichtbaarheid"
+              }
+            }
+          }
+        }
+      },
+      "moderation": {
+        "AccountsTable": {
+          "action": {
+            "purge": {
+              "label": "Leegmaken"
+            }
+          },
+          "label": {
+            "search": "Zoeken"
+          },
+          "link": {
+            "local": "Lokale account"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Oplopend",
+              "descending": "Aflopend",
+              "label": "Sorteervolgorde"
+            },
+            "label": "Volgorde"
+          },
+          "pagination": {
+            "results": "Resultaten - { start }-{ end } van de { total }"
+          },
+          "placeholder": {
+            "search": "Zoek op domein, gebruikersnaam, biografie…"
+          },
+          "table": {
+            "account": {
+              "header": {
+                "domain": "Domein",
+                "firstSeen": "Eerst gezien",
+                "lastSeen": "Laatst gezien",
+                "moderationRule": "Gemodereerd",
+                "name": "Naam",
+                "uploads": "Uploads"
+              },
+              "moderationRule": "Ja"
+            }
+          }
+        },
+        "DomainsTable": {
+          "action": {
+            "add": {
+              "label": "Toevoegen aan toelatingslijst"
+            },
+            "purge": {
+              "label": "Leegmaken"
+            },
+            "remove": {
+              "label": "Verwijder van toelatingslijst"
+            }
+          },
+          "empty": {
+            "noPods": "Geen andere pods gevonden"
+          },
+          "label": {
+            "inList": "Is aanwezig op toestemmingslijst",
+            "search": "Zoeken"
+          },
+          "link": {
+            "list": "Dit domein is aanwezig in je toestemmingslijst"
+          },
+          "option": {
+            "all": "Alles",
+            "no": "Nee",
+            "yes": "Ja"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Oplopend",
+              "descending": "Aflopend",
+              "label": "Sorteervolgorde"
+            },
+            "label": "Volgorde"
+          },
+          "pagination": {
+            "results": "Resultaten - { start }-{ end } van de { total }"
+          },
+          "placeholder": {
+            "search": "Zoek op naam…"
+          },
+          "table": {
+            "domain": {
+              "header": {
+                "firstSeen": "Eerst gezien",
+                "moderationRule": "Gemodereerd",
+                "name": "Naam",
+                "receivedMessages": "Ontvangen berichten",
+                "users": "Gebruikers"
+              },
+              "moderationRule": "Ja"
+            }
+          }
+        },
+        "InstancePolicyCard": {
+          "button": {
+            "edit": "Bewerken"
+          },
+          "header": {
+            "rule": "Regel"
+          },
+          "label": {
+            "blockAll": "Alles blokkeren",
+            "muteActivity": "Demp activiteit",
+            "muteNotifications": "Demp notificaties",
+            "reason": "Reden",
+            "rejectMedia": "Media afkeuren"
+          },
+          "status": {
+            "enabled": "Ingeschakeld",
+            "paused": "Gepauzeerd"
+          }
+        },
+        "InstancePolicyForm": {
+          "button": {
+            "cancel": "Annuleren",
+            "confirm": "Moderatie-regel verwijderen",
+            "create": "Aanmaken",
+            "delete": "Verwijderen",
+            "update": "Update"
+          },
+          "header": {
+            "addRule": "Nieuwe moderatieregel toevoegen",
+            "editRule": "Moderatie-regel aanpassen",
+            "failure": "Fout bij aanmaken van regel"
+          },
+          "label": {
+            "blockAll": "Alles blokkeren",
+            "customizeRule": "Of pas de regel aan",
+            "policyDisabled": "Uitgeschakeld",
+            "policyEnabled": "Ingeschakeld",
+            "policyReason": "Reden",
+            "rejectMedia": "Media afkeuren",
+            "silenceActivity": "Demp activiteit",
+            "silenceNotifications": "Demp notificaties"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "Dit kan niet ongedaan gemaakt worden."
+              },
+              "header": "Deze moderatie-regel verwijderen?"
+            }
+          },
+          "tooltip": {
+            "blockAll": "Alles van dit account of deze domeinnaam blokkeren. Dit voorkomt elke interactie en verwijdert alle gerelateerde gegevens (uploads, bibliotheken, gevolgde accounts, enz.)",
+            "isActive": "Gebruik deze instelling om tijdelijk het beleid in en uit te schakelen zonder het helemaal te verwijderen.",
+            "rejectMedia": "Geen mediabestanden (audio, albumhoes, profielfoto…) downloaden van dit account of domein. Hiermee wordt ook bestaande content verwijderd.",
+            "silenceActivity": "Verberg account- of domeininhoud, behalve voor volgers.",
+            "silenceNotifications": "Voorkom dat account of domein notificaties veroorzaakt, behalve van volgers.",
+            "summary": "Leg uit waarom je dit beleid toepast. Zo kun je later nog achterhalen waarom je actie hebt ondernomen op dit account of dit domein. Afhankelijk van de instellingen op je server, wordt dit ook aan gebruikers getoond zodat ze kunnen begrijpen welke regels er gelden."
+          }
+        },
+        "InstancePolicyModal": {
+          "button": {
+            "close": "Sluiten",
+            "show": "Moderatieregels…"
+          },
+          "modal": {
+            "manage": {
+              "content": {
+                "warning": "Deze entiteit is onderhevig aan specifieke moderatieregels"
+              },
+              "header": "Beheer moderatieregels voor { obj }"
+            }
+          }
+        },
+        "NoteForm": {
+          "button": {
+            "add": "Notitie toevoegen"
+          },
+          "header": {
+            "failure": "Fout bij indienen van notitie"
+          },
+          "placeholder": {
+            "summary": "Beschrijf welke acties zijn ondernomen, of eventuele andere gerelateerde updates …"
+          }
+        },
+        "NotesThread": {
+          "button": {
+            "delete": "Verwijderen"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "De notitie zal worden verwijderd. Dit kan niet ongedaan gemaakt worden."
+              },
+              "header": "Deze notitie verwijderen?"
+            }
+          }
+        },
+        "ReportCard": {
+          "button": {
+            "confirmDelete": "Verwijderen",
+            "delete": "Verwijder gemeld object",
+            "resolve": "Oplossen",
+            "unresolve": "Niet opgelost"
+          },
+          "header": {
+            "actions": "Acties",
+            "message": "Bericht",
+            "notes": "Interne notities",
+            "reportedObject": "Gemeldde object"
+          },
+          "link": {
+            "moderation": "Open in moderatie-interface",
+            "publicPage": "Publieke pagina bekijken",
+            "report": "Melding { id }"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "Dit zal het object verwijderen dat bij dit rapport hoort, en het rapport als opgelost markeren. Dit kan niet ongedaan gemaakt worden."
+              },
+              "header": "Gemeld object verwijderen?"
+            }
+          },
+          "notApplicable": "N.B.",
+          "table": {
+            "object": {
+              "account": "Account",
+              "domain": "Domein",
+              "local": "Lokaal",
+              "owner": "Eigenaar",
+              "type": "Type"
+            },
+            "report": {
+              "category": "Categorie",
+              "creationDate": "Toegevoegd",
+              "submittedBy": "Ingediend door"
+            },
+            "status": {
+              "assignedTo": "Toegewezen aan",
+              "internalNotes": "Interne notities",
+              "resolutionDate": "Datum opgelost",
+              "resolved": "Opgelost",
+              "status": "Status",
+              "unresolved": "Niet opgelost"
+            }
+          },
+          "warning": {
+            "objectDeleted": "Het object behorend bij dit verslag is verwijderd."
+          }
+        },
+        "UserRequestCard": {
+          "button": {
+            "approve": "Goedkeuren",
+            "reject": "Weigeren"
+          },
+          "header": {
+            "actions": "Acties",
+            "notes": "Interne notities",
+            "signup": "Bericht"
+          },
+          "link": {
+            "request": "Verzoek { id }"
+          },
+          "message": {
+            "signup": "Deze gebruiker wil zich aanmelden bij je pod."
+          },
+          "notApplicable": "N.B.",
+          "table": {
+            "request": {
+              "creationDate": "Toegevoegd",
+              "submittedBy": "Ingediend door"
+            },
+            "status": {
+              "approved": "Goedgekeurd",
+              "assignedTo": "Toegewezen aan",
+              "internalNotes": "Interne notities",
+              "pending": "In behandeling",
+              "refused": "Geweigerd",
+              "status": "Status"
+            }
+          }
+        }
+      },
+      "users": {
+        "InvitationForm": {
+          "button": {
+            "clear": "Wissen",
+            "new": "Nieuwe uitnodiging aanvragen"
+          },
+          "header": {
+            "failure": "Fout tijdens creëren van uitnodiging"
+          },
+          "label": {
+            "invite": "Uitnodigingscode"
+          },
+          "placeholder": {
+            "invitation": "Laat leeg om een willekeurig code te krijgen"
+          },
+          "table": {
+            "invitation": {
+              "header": {
+                "code": "Code",
+                "link": "Link om te delen"
+              }
+            }
+          }
+        },
+        "InvitationsTable": {
+          "action": {
+            "delete": "Verwijderen"
+          },
+          "label": {
+            "expired": "Vervallen",
+            "search": "Zoeken",
+            "status": "Status",
+            "unused": "Niet gebruikt",
+            "used": "Gebruikt"
+          },
+          "option": {
+            "all": "Alles",
+            "expired": "Vervallen/gebruikt",
+            "open": "Open"
+          },
+          "ordering": {
+            "label": "Volgorde"
+          },
+          "pagination": {
+            "results": "Eén resultaat wordt getoond | Resultaten { start } t/m { end } van { total }"
+          },
+          "placeholder": {
+            "search": "Zoek op gebruikersnaam, e-mailadres, code…"
+          },
+          "table": {
+            "invitation": {
+              "header": {
+                "code": "Code",
+                "creationDate": "Toegevoegd",
+                "expirationDate": "Vervaldatum",
+                "owner": "Eigenaar",
+                "status": "Status"
+              }
+            }
+          }
+        },
+        "UsersTable": {
+          "notApplicable": "N.B.",
+          "ordering": {
+            "direction": {
+              "ascending": "Oplopend",
+              "descending": "Aflopend",
+              "label": "Sorteervolgorde"
+            },
+            "label": "Volgorde"
+          },
+          "pagination": {
+            "results": "Eén resultaat wordt getoond | Resultaten { start } t/m { end } van { total }"
+          },
+          "permission": {
+            "library": "Bibliotheek",
+            "moderation": "Moderatie",
+            "settings": "Instellingen"
+          },
+          "placeholder": {
+            "search": "Zoek op gebruikersnaam, e-mailadres, naam…"
+          },
+          "table": {
+            "user": {
+              "accountStatus": {
+                "active": "Actief",
+                "inactive": "Inactief"
+              },
+              "header": {
+                "accountStatus": "Accountstatus",
+                "email": "E-mailadres",
+                "lastActivity": "Laatste activiteit",
+                "permissions": "Machtigingen",
+                "signup": "Registreren",
+                "status": "Status",
+                "username": "Gebruikersnaam"
+              },
+              "status": {
+                "admin": "Beheerder",
+                "regular": "Standaardgebruiker",
+                "staff": "Staflid"
+              }
+            }
+          }
+        }
+      }
+    },
+    "moderation": {
+      "FilterModal": {
+        "button": {
+          "cancel": "Annuleren",
+          "hide": "Inhoud verbergen"
+        },
+        "header": {
+          "failure": "Fout bij aanmaken van filter",
+          "modal": "Wil je content van de artiest \"{ name }\" verbergen?"
+        },
+        "help": {
+          "createFilter": "Je kunt je filters beheren en bijwerken vanuit je accountinstellingen wanneer je maar wilt."
+        },
+        "message": {
+          "success": "Inhoudsfilter succesvol toegevoegd"
+        },
+        "warning": {
+          "createFilter": {
+            "listIntro": "Je zult geen nummers, albums en gebruikersactiviteit gekoppeld aan deze artiest meer zien:",
+            "listItem1": "In favorieten en luistergeschiedenis van andere gebruikers",
+            "listItem2": "In de \"Recent toegevoegd\" widget",
+            "listItem3": "In artiesten- en albumlijsten",
+            "listItem4": "In radiosuggesties"
+          }
+        }
+      },
+      "ReportCategoryDropdown": {
+        "label": {
+          "category": "Categorie"
+        },
+        "option": {
+          "all": "Alles"
+        }
+      },
+      "ReportModal": {
+        "button": {
+          "cancel": "Annuleren",
+          "submit": "Rapport indienen"
+        },
+        "description": {
+          "email": "We zullen dit e-mailadres gebruiken als we contact met je moeten opnemen aangaande dit rapport.",
+          "forwardToDomain": "Stuur een geanonimiseerde kopie van je rapport door naar de server die dit element beheert.",
+          "message": "Gebruik dit veld om extra context te geven aan de moderator die dit rapport zal behandelen.",
+          "modal": "Gebruik dit formulier om een rapport in te dienen voor ons moderatieteam."
+        },
+        "header": {
+          "disabled": "Anonieme meldingen zijn uitgeschakeld, gelieve je aan te melden om een melding in te dienen.",
+          "modal": "Wil je dit object melden?",
+          "submissionFailure": "Fout bij indienen van melding"
+        },
+        "label": {
+          "email": "E-mailadres",
+          "forwardToDomain": "Stuur door naar { domain}",
+          "message": "Bericht"
+        },
+        "message": {
+          "submissionSuccess": "Melding succesvol ingediend, dankjewel"
+        }
+      }
+    },
+    "notifications": {
+      "NotificationRow": {
+        "button": {
+          "approve": "Goedkeuren",
+          "markRead": "Markeer als gelezen",
+          "markUnread": "Markeer als ongelezen",
+          "reject": "Afkeuren"
+        },
+        "message": {
+          "libraryAcceptFollow": "{ username } heeft je volgverzoek voor de verzameling \"{ library }\" geaccepteerd",
+          "libraryFollow": "{ username } volgt nu je verzameling \"{ library }\"",
+          "libraryPendingFollow": "{ username } wil je verzameling \"{ library }\" volgen"
+        }
+      }
+    },
+    "playlists": {
+      "Card": {
+        "meta": {
+          "tracks": "{ n } nummer | { n } nummers"
+        }
+      },
+      "Editor": {
+        "button": {
+          "addDuplicate": "Toch toevoegen",
+          "clear": "Afspeellijst wissen",
+          "copy": "Kopieer nummers van de huidige wachtrij naar deze afspeellijst",
+          "insertFromQueue": "Toevoegen vanuit wachtrij ({ count } nummer) | Toevoegen vanuit wachtrij ({ count } nummers)"
+        },
+        "error": {
+          "sync": "Er is een fout opgetreden tijdens het opslaan van je wijzigingen"
+        },
+        "header": {
+          "editor": "Afspeellijst wijzigen"
+        },
+        "help": {
+          "reorder": "Versleep de rijen om nummers op de afspeellijst te herordenen"
+        },
+        "loading": {
+          "sync": "Bezig met synchroniseren van wijzigingen naar server…"
+        },
+        "message": {
+          "sync": "Wijzigingen opgeslagen op server"
+        },
+        "modal": {
+          "clearPlaylist": {
+            "content": {
+              "warning": "Alle nummers worden verwijderd uit de afspeellijst; dit kan niet ongedaan worden gemaakt."
+            },
+            "header": "Weet je zeker dat je de afspeellijst \"{ playlist }\" wilt wissen?"
+          }
+        },
+        "warning": {
+          "duplicate": "Een aantal nummers in je wachtrij staat al in deze afspeellijst:"
+        }
+      },
+      "Form": {
+        "button": {
+          "create": "Afspeellijst creëren",
+          "update": "Afspeellijst bijwerken"
+        },
+        "header": {
+          "createFailure": "De afspeellijst kon niet worden gecreëerd",
+          "createPlaylist": "Creëer een nieuwe afspeellijst",
+          "createSuccess": "Afspeellijst gecreëerd",
+          "updateSuccess": "Afspeellijst gewijzigd"
+        },
+        "label": {
+          "name": "Afspeellijstnaam",
+          "visibility": "Zichtbaarheid van afspeellijst"
+        },
+        "placeholder": {
+          "name": "Mijn geweldige afspeellijst"
+        }
+      },
+      "PlaylistModal": {
+        "button": {
+          "addDuplicate": "Toch toevoegen",
+          "addToPlaylist": "Toevoegen aan deze afspeellijst",
+          "addTrack": "Nummer toevoegen",
+          "cancel": "Annuleren",
+          "edit": "Bewerken"
+        },
+        "empty": {
+          "noPlaylists": "Er zijn nog geen afspeellijsten gemaakt"
+        },
+        "header": {
+          "addFailure": "Het nummer kan niet aan een afspeellijst worden toegevoegd",
+          "addToPlaylist": "Toevoegen aan afspeellijst",
+          "available": "Beschikbare afspeellijsten",
+          "manage": "Afspeellijsten beheren",
+          "noResults": "Geen resultaten bij je filter"
+        },
+        "label": {
+          "filter": "Filter"
+        },
+        "placeholder": {
+          "filterPlaylist": "Voer een afspeellijstnaam in"
+        },
+        "table": {
+          "edit": {
+            "header": {
+              "edit": "Bewerken",
+              "lastModification": "Laatste wijziging",
+              "name": "Naam",
+              "tracks": "Nummers"
+            }
+          }
+        },
+        "warning": {
+          "duplicate": "{ 0 } staat al in { 1 }."
+        }
+      },
+      "TrackPlaylistIcon": {
+        "button": {
+          "add": "Toevoegen aan afspeellijst…"
+        }
+      },
+      "Widget": {
+        "button": {
+          "create": "Maak afspeellijst",
+          "more": "Toon meer"
+        },
+        "placeholder": {
+          "noPlaylists": "Er zijn nog geen afspeellijsten gemaakt"
+        }
+      }
+    },
+    "radios": {
+      "Button": {
+        "startRadio": "Radio afspelen",
+        "stopRadio": "Radio stoppen"
+      },
+      "Card": {
+        "button": {
+          "edit": "Bewerken"
+        }
+      }
+    },
+    "tags": {
+      "List": {
+        "button": {
+          "more": "Nog 1 tag tonen | Nog { count } tags tonen"
+        }
+      }
+    },
+    "vui": {
+      "Pagination": {
+        "label": "Paginatie",
+        "next": "Volgende pagina",
+        "previous": "Vorige pagina"
+      }
+    }
+  },
+  "composables": {
+    "audio": {
+      "usePlayOptions": {
+        "addToQueueMessage": "{ count } nummer toegevoegd aan je wachtrij | { count } nummers toegevoegd aan je wachtrij"
+      }
+    },
+    "locale": {
+      "useSharedLabels": {
+        "fields": {
+          "contentCategory": {
+            "choices": {
+              "music": "Muziek",
+              "other": "Overig",
+              "podcast": "Podcast"
+            },
+            "label": "Inhoudcategorie"
+          },
+          "importStatus": {
+            "choices": {
+              "draft": {
+                "help": "Dit nummer is geüpload, maar is nog niet ingepland om verwerkt te worden door de server",
+                "label": "Klad"
+              },
+              "errored": {
+                "help": "Dit nummer kon niet worden verwerkt. Controleer dat het goed getagd is",
+                "label": "Mislukt"
+              },
+              "finished": {
+                "help": "Geïmporteerd",
+                "label": "Afgerond"
+              },
+              "pending": {
+                "help": "Nummer is geüpload, maar is nog niet verwerkt door de server",
+                "label": "In behandeling"
+              },
+              "skipped": {
+                "help": "Nummer is al aanwezig in één van je bibliotheken",
+                "label": "Overgeslagen"
+              }
+            },
+            "label": "Klik voor meer informatie over het importeerproces van deze upload"
+          },
+          "privacyLevel": {
+            "choices": {
+              "instance": "Iedereen op deze server",
+              "private": "Niemand, behalve ik",
+              "public": "Iedereen, op alle servers"
+            },
+            "help": "Bepaal de zichtbaarheid van je activiteit",
+            "label": "Zichtbaarheid van activiteit",
+            "shortChoices": {
+              "instance": "Server",
+              "private": "Privé",
+              "public": "Iedereen"
+            }
+          },
+          "reportType": {
+            "choices": {
+              "illegalContent": "Illegale inhoud",
+              "invalidMetadata": "Ongeldige metadata",
+              "offensiveContent": "Aanstootgevende inhoud",
+              "other": "Overig",
+              "takedownRequest": "Verzoek tot uitschakelen"
+            },
+            "label": "Categorie"
+          },
+          "summary": {
+            "label": "Bio"
+          }
+        },
+        "filters": {
+          "accessedDate": "Benaderd op",
+          "albumTitle": "Albumnaam",
+          "artistName": "Artiestnaam",
+          "bitrate": "Bitrate",
+          "creationDate": "Toegevoegd",
+          "dateJoined": "Geregistreerd op",
+          "domain": "Domein",
+          "duration": "Duur",
+          "expirationDate": "Vervaldatum",
+          "firstSeen": "Eerst gezien-datum",
+          "followers": "Volgers",
+          "itemsCount": "Items",
+          "lastActivity": "Laatste activiteit",
+          "lastSeen": "Datum laatst gezien",
+          "modificationDate": "Bewerkt op",
+          "name": "Naam",
+          "receivedMessages": "Ontvangen berichten",
+          "releaseDate": "Publicatiedatum",
+          "size": "Grootte",
+          "trackTitle": "Naam van nummer",
+          "uploads": "Uploads",
+          "username": "Gebruikersnaam",
+          "users": "Gebruikers"
+        },
+        "scopes": {
+          "edits": {
+            "description": "Toegang tot bewerkingen",
+            "label": "Wijzigingen"
+          },
+          "favorites": {
+            "label": "Favorieten"
+          },
+          "filters": {
+            "description": "Toegang tot contentfilters",
+            "label": "Inhoudsfilters"
+          },
+          "follows": {
+            "description": "Toegang tot je volglijst",
+            "label": "Volgingen"
+          },
+          "libraries": {
+            "description": "Toegang tot audiobestanden, bibliotheken, artiesten, albums, en nummers",
+            "label": "Bibliotheek en uploads"
+          },
+          "listenings": {
+            "description": "Toegang tot je luistergeschiedenis",
+            "label": "Luisterbeurten"
+          },
+          "notifications": {
+            "description": "Toegang tot notificaties",
+            "label": "Meldingen"
+          },
+          "playlists": {
+            "description": "Toegang tot afspeellijsten",
+            "label": "Afspeellijsten"
+          },
+          "profile": {
+            "description": "Toegang tot je emailadres, gebruikersnaam en profiel",
+            "label": "Profiel"
+          },
+          "radios": {
+            "description": "Toegang tot radio's",
+            "label": "Radio's"
+          },
+          "reports": {
+            "description": "Toegang tot moderatierapporten",
+            "label": "Meldingen"
+          },
+          "security": {
+            "description": "Toegang tot beveiligingsinstellingen zoals wachtwoord en authorisaties",
+            "label": "Beveiliging"
+          }
+        }
+      }
+    },
+    "moderation": {
+      "useEditConfigs": {
+        "album": {
+          "releaseDate": "Publicatiedatum",
+          "title": "Titel"
+        },
+        "artist": {
+          "name": "Naam"
+        },
+        "cover": {
+          "label": "Kaft"
+        },
+        "description": {
+          "label": "Omschrijving"
+        },
+        "tags": {
+          "label": "Tags"
+        },
+        "track": {
+          "copyright": "Copyright",
+          "license": "Licentie",
+          "position": "Positie",
+          "title": "Titel"
+        }
+      },
+      "useReport": {
+        "account": {
+          "typeLabel": "Account"
+        },
+        "album": {
+          "label": "Dit album rapporteren…",
+          "typeLabel": "Album"
+        },
+        "artist": {
+          "label": "Deze artiest rapporteren…",
+          "typeLabel": "Artiest"
+        },
+        "channel": {
+          "label": "Dit kanaal rapporteren…",
+          "typeLabel": "Kanaal"
+        },
+        "library": {
+          "label": "Deze bibliotheek rapporteren…",
+          "typeLabel": "Bibliotheek"
+        },
+        "playlist": {
+          "label": "Deze afspeellijst rapporteren…",
+          "typeLabel": "Afspeellijst"
+        },
+        "track": {
+          "label": "Dit nummer rapporteren…",
+          "typeLabel": "Nummer"
+        }
+      },
+      "useReportConfigs": {
+        "account": {
+          "label": "Account",
+          "summary": "Bio"
+        },
+        "album": {
+          "label": "Album",
+          "releaseDate": "Publicatiedatum",
+          "title": "Titel"
+        },
+        "artist": {
+          "label": "Artiest"
+        },
+        "channel": {
+          "label": "Kanaal"
+        },
+        "creationDate": {
+          "label": "Toegevoegd"
+        },
+        "library": {
+          "description": "Omschrijving",
+          "label": "Bibliotheek"
+        },
+        "musicbrainzId": {
+          "label": "MusicBrainz ID"
+        },
+        "name": {
+          "label": "Naam"
+        },
+        "playlist": {
+          "label": "Afspeellijst"
+        },
+        "tags": {
+          "label": "Tags"
+        },
+        "track": {
+          "copyright": "Copyright",
+          "label": "Nummer",
+          "license": "Licentie",
+          "position": "Positie",
+          "title": "Titel"
+        },
+        "visibility": {
+          "label": "Zichtbaarheid"
+        }
+      }
+    },
+    "useThemeList": {
+      "darkTheme": "Donker",
+      "lightTheme": "Licht"
+    }
+  },
+  "init": {
+    "axios": {
+      "rateLimitDelay": "Je hebt te veel verzoeken ingediend en wordt tijdelijk tegengehouden. Probeer het nog eens over { delay }",
+      "rateLimitLater": "Je hebt te veel verzoeken ingediend en wordt tijdelijk tegengehouden. Probeer het later nog eens"
+    },
+    "serviceWorker": {
+      "actions": {
+        "later": "Later",
+        "update": "Update"
+      },
+      "newAppVersion": "Er is een nieuwe versie van de app beschikbaar."
+    }
+  },
+  "views": {
+    "Notifications": {
+      "button": {
+        "read": "Alles markeren als gelezen",
+        "submit": "Begrepen!"
+      },
+      "empty": {
+        "notifications": "Geen notificaties te tonen."
+      },
+      "header": {
+        "funkwhaleSupport": "Vind je Funkwhale leuk?",
+        "instanceSupport": "Steun deze Funkwhale pod",
+        "messages": "Je berichten",
+        "notifications": "Je meldingen"
+      },
+      "label": {
+        "reminder": "Herinner me over:",
+        "showRead": "Gelezen meldingen tonen"
+      },
+      "link": {
+        "donate": "Doneer",
+        "help": "Ontdek andere manieren om te helpen"
+      },
+      "loading": {
+        "notifications": "Notificaties aan het laden…"
+      },
+      "message": {
+        "funkwhaleSupport": "We merken dat je hier al een tijdje bent. Als je Funkwhale nuttig vindt, kunnen we je hulp gebruiken om het nog beter te maken!"
+      },
+      "option": {
+        "delay": {
+          "30": "30 dagen",
+          "60": "60 dagen",
+          "90": "90 dagen",
+          "never": "Nooit"
+        }
+      },
+      "title": "Meldingen"
+    },
+    "Search": {
+      "button": {
+        "submit": "Zoekopdracht versturen"
+      },
+      "header": {
+        "remote": "Zoek een extern object",
+        "rss": "Abonneren op een podcast RSS feed",
+        "search": "Zoeken"
+      },
+      "label": {
+        "albums": "Albums",
+        "artists": "Artiesten",
+        "playlists": "Afspeellijsten",
+        "podcasts": "Podcasts",
+        "radios": "Radio's",
+        "series": "Series",
+        "tags": "Tags",
+        "tracks": "Nummers"
+      }
+    },
+    "admin": {
+      "ChannelDetail": {
+        "button": {
+          "delete": "Verwijderen",
+          "openRemote": "Open extern profiel",
+          "refresh": "Vernieuwd door externe server"
+        },
+        "header": {
+          "activity": "Activiteit",
+          "audioContent": "Audio-inhoud",
+          "channelData": "Kanaalgegevens"
+        },
+        "label": {
+          "local": "Lokaal"
+        },
+        "link": {
+          "django": "Kijk in Django's admin",
+          "localProfile": "Open lokaal profiel"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "Het kanaal zal worden verwijderd, samen met alle bijbehorende uploads, nummers en albums. Dit kan niet ongedaan gemaakt worden."
+            },
+            "header": "Dit kanaal verwijderen?"
+          }
+        },
+        "table": {
+          "activity": {
+            "edits": "Wijzigingen",
+            "favorited": "Favoriete nummers",
+            "firstSeen": "Eerst gezien",
+            "linkedReports": "Gelinkte meldingen",
+            "listenings": "Luisterbeurten",
+            "playlists": "Afspeellijsten"
+          },
+          "audioContent": {
+            "albums": "Albums",
+            "cachedSize": "Gecachete grootte",
+            "totalSize": "Totale grootte",
+            "tracks": "Nummers",
+            "uploads": "Uploads"
+          },
+          "channelData": {
+            "account": "Account",
+            "category": "Categorie",
+            "description": "Omschrijving",
+            "domain": "Domein",
+            "name": "Naam",
+            "rss": "RSS Feed",
+            "url": "URL"
+          }
+        },
+        "warning": {
+          "stats": "Statistieken worden berekend op basis van de activiteit en media op je server, en vertegenwoordigen niet de activiteit voor dit object"
+        }
+      },
+      "CommonList": {
+        "title": {
+          "accounts": "Accounts",
+          "albums": "Albums",
+          "artists": "Artiesten",
+          "channels": "Kanalen",
+          "invitations": "Uitnodigingen",
+          "libraries": "Verzamelingen",
+          "tags": "Tags",
+          "tracks": "Nummers",
+          "uploads": "Uploads",
+          "users": "Gebruikers"
+        }
+      },
+      "Settings": {
+        "header": {
+          "channels": "Kanalen",
+          "federation": "Federatie",
+          "instanceInfo": "Serverinformatie",
+          "moderation": "Moderatie",
+          "music": "Muziek",
+          "playlists": "Afspeellijsten",
+          "sections": "Secties",
+          "security": "Beveiliging",
+          "settings": "Serverinstellingen",
+          "signups": "Aanmeldingen",
+          "stats": "Statistieken",
+          "subsonic": "Subsonic",
+          "ui": "Gebruikersinterface"
+        }
+      },
+      "library": {
+        "AlbumDetail": {
+          "button": {
+            "delete": "Verwijderen",
+            "edit": "Bewerken",
+            "remoteRefresh": "Vernieuwd door externe server"
+          },
+          "header": {
+            "activity": "Activiteit",
+            "albumData": "Albumgegevens",
+            "audioContent": "Audio-inhoud",
+            "local": "Lokaal"
+          },
+          "link": {
+            "artist": "Artiest",
+            "django": "Kijk in Django's admin",
+            "domain": "Domein",
+            "edits": "Wijzigingen",
+            "libraries": "Verzamelingen",
+            "localProfile": "Open lokaal profiel",
+            "musicbrainz": "Open op MusicBrainz",
+            "remoteProfile": "Open extern profiel",
+            "reports": "Gelinkte meldingen",
+            "tracks": "Nummers",
+            "uploads": "Uploads"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "Het album en de bijbehorende nummers, favorieten en luisterhistorie worden verwijderd. Dit kan niet ongedaan gemaakt worden."
+              },
+              "header": "Album verwijderen?"
+            }
+          },
+          "table": {
+            "activity": {
+              "favorited": "Favoriete nummers",
+              "firstSeen": "Eerst gezien",
+              "listenings": "Luisterbeurten",
+              "playlists": "Afspeellijsten"
+            },
+            "album": {
+              "description": "Omschrijving",
+              "title": "Titel"
+            },
+            "audioContent": {
+              "cachedSize": "Gecachete grootte",
+              "totalSize": "Totale grootte"
+            }
+          },
+          "warning": {
+            "stats": "Statistieken worden berekend op basis van de activiteit en media op je server, en vertegenwoordigen niet de activiteit voor dit object"
+          }
+        },
+        "ArtistDetail": {
+          "button": {
+            "delete": "Verwijderen",
+            "edit": "Bewerken",
+            "remoteRefresh": "Vernieuwd door externe server"
+          },
+          "header": {
+            "activity": "Activiteit",
+            "artistData": "Artiestgegevens",
+            "audioContent": "Audio-inhoud",
+            "local": "Lokaal"
+          },
+          "link": {
+            "albums": "Albums",
+            "category": "Categorie",
+            "django": "Kijk in Django's admin",
+            "domain": "Domein",
+            "edits": "Wijzigingen",
+            "libraries": "Verzamelingen",
+            "localProfile": "Open lokaal profiel",
+            "musicbrainz": "Open op MusicBrainz",
+            "remoteProfile": "Open extern profiel",
+            "reports": "Gelinkte meldingen",
+            "tracks": "Nummers",
+            "uploads": "Uploads"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "The artiest wordt verwijderd, samen met bijbehorende uploads, nummers, albums, favorieten en luisterhistorie. Dit kan niet ongedaan gemaakt worden."
+              },
+              "header": "Deze artiest verwijderen?"
+            }
+          },
+          "table": {
+            "activity": {
+              "favorited": "Favoriete nummers",
+              "firstSeen": "Eerst gezien",
+              "listenings": "Luisterbeurten",
+              "playlists": "Afspeellijsten"
+            },
+            "artist": {
+              "description": "Omschrijving",
+              "name": "Naam"
+            },
+            "audioContent": {
+              "cachedSize": "Gecachete grootte",
+              "totalSize": "Totale grootte"
+            }
+          },
+          "warning": {
+            "stats": "Statistieken worden berekend op basis van de activiteit en media op je server, en vertegenwoordigen niet de activiteit voor dit object"
+          }
+        },
+        "Base": {
+          "link": {
+            "albums": "Albums",
+            "artists": "Artiesten",
+            "channels": "Kanalen",
+            "edits": "Wijzigingen",
+            "libraries": "Verzamelingen",
+            "tags": "Tags",
+            "tracks": "Nummers",
+            "uploads": "Uploads"
+          },
+          "menu": {
+            "secondary": "Submenu"
+          },
+          "title": "Bibliotheek beheren"
+        },
+        "EditsList": {
+          "header": {
+            "edits": "Bibliotheekbewerkingen"
+          },
+          "title": "Wijzigingen"
+        },
+        "LibraryDetail": {
+          "button": {
+            "delete": "Verwijderen"
+          },
+          "header": {
+            "activity": "Activiteit",
+            "audioContent": "Audio-inhoud",
+            "libraryData": "Bibliotheekgegevens",
+            "local": "Lokaal"
+          },
+          "link": {
+            "account": "Account",
+            "albums": "Albums",
+            "artists": "Artiesten",
+            "django": "Kijk in Django's admin",
+            "domain": "Domein",
+            "remoteProfile": "Open extern profiel",
+            "reports": "Gelinkte meldingen",
+            "tracks": "Nummers",
+            "uploads": "Uploads",
+            "visibility": "Zichtbaarheid"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "De bibliotheek zal worden verwijderd, samen met alle bijbehorende nummers en volgers. Dit kan niet ongedaan gemaakt worden."
+              },
+              "header": "Deze bibliotheek verwijderen?"
+            }
+          },
+          "table": {
+            "activity": {
+              "firstSeen": "Eerst gezien",
+              "followers": "Volgers"
+            },
+            "audioContent": {
+              "cachedSize": "Gecachete grootte",
+              "totalSize": "Totale grootte"
+            },
+            "library": {
+              "description": "Omschrijving",
+              "name": "Naam"
+            }
+          },
+          "warning": {
+            "stats": "Statistieken worden berekend op basis van de activiteit en media op je server, en vertegenwoordigen niet de activiteit voor dit object"
+          }
+        },
+        "TagDetail": {
+          "button": {
+            "delete": "Verwijderen"
+          },
+          "header": {
+            "activity": "Activiteit",
+            "audioContent": "Audio-inhoud",
+            "tagData": "Tag data"
+          },
+          "link": {
+            "albums": "Albums",
+            "artists": "Artiesten",
+            "django": "Kijk in Django's admin",
+            "localProfile": "Open lokaal profiel",
+            "tracks": "Nummers"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "De content zal worden verwijderd en losgekoppeld van enig welke entiteit. Dit kan niet ongedaan gemaakt worden."
+              },
+              "header": "Deze tag verwijderen?"
+            }
+          },
+          "table": {
+            "activity": {
+              "firstSeen": "Eerst gezien"
+            },
+            "tag": {
+              "name": "Naam"
+            }
+          }
+        },
+        "TrackDetail": {
+          "button": {
+            "delete": "Verwijderen",
+            "edit": "Bewerken",
+            "remoteRefresh": "Vernieuwd door externe server"
+          },
+          "header": {
+            "activity": "Activiteit",
+            "local": "Lokaal",
+            "trackData": "Nummergegevens"
+          },
+          "link": {
+            "album": "Album",
+            "albumArtist": "Albumartiest",
+            "artist": "Artiest",
+            "django": "Kijk in Django's admin",
+            "domain": "Domein",
+            "edits": "Wijzigingen",
+            "libraries": "Verzamelingen",
+            "localProfile": "Open lokaal profiel",
+            "musicbrainz": "Open op MusicBrainz",
+            "remoteProfile": "Open extern profiel",
+            "reports": "Gelinkte meldingen",
+            "uploads": "Uploads"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "Het nummer zal worden verwijderd, samen met alle bijbehorende uploads, favorieten en luistergeschiedenis. Dit kan niet ongedaan gemaakt worden."
+              },
+              "header": "Dit nummer verwijderen?"
+            }
+          },
+          "table": {
+            "activity": {
+              "favorited": "Favoriete nummers",
+              "firstSeen": "Eerst gezien",
+              "listenings": "Luisterbeurten",
+              "playlists": "Afspeellijsten"
+            },
+            "track": {
+              "copyright": "Copyright",
+              "description": "Omschrijving",
+              "discNumber": "CD-nummer",
+              "license": "Licentie",
+              "position": "Positie",
+              "title": "Titel"
+            },
+            "trackData": {
+              "cachedSize": "Gecachete grootte",
+              "totalSize": "Totale grootte"
+            }
+          },
+          "warning": {
+            "stats": "Statistieken worden berekend op basis van de activiteit en media op je server, en vertegenwoordigen niet de activiteit voor dit object"
+          }
+        },
+        "UploadDetail": {
+          "button": {
+            "delete": "Verwijderen",
+            "download": "Downloaden"
+          },
+          "header": {
+            "activity": "Activiteit",
+            "audioContent": "Audio-inhoud",
+            "local": "Lokaal",
+            "uploadData": "Uploaddatum"
+          },
+          "link": {
+            "account": "Account",
+            "django": "Kijk in Django's admin",
+            "domain": "Domein",
+            "importStatus": "Importstatus",
+            "library": "Bibliotheek",
+            "remoteProfile": "Open extern profiel",
+            "type": "Type",
+            "visibility": "Zichtbaarheid"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "De content zal worden verwijderd. Dit kan niet ongedaan gemaakt worden."
+              },
+              "header": "Deze upload verwijderen?"
+            }
+          },
+          "notApplicable": "N.B.",
+          "table": {
+            "activity": {
+              "accessedDate": "Benaderd op",
+              "firstSeen": "Eerst gezien"
+            },
+            "audioContent": {
+              "bitrate": {
+                "label": "Bitrate"
+              },
+              "cachedSize": "Gecachete grootte",
+              "duration": "Duur",
+              "size": "Grootte",
+              "track": "Nummer"
+            },
+            "upload": {
+              "name": "Naam"
+            }
+          }
+        }
+      },
+      "moderation": {
+        "AccountsDetail": {
+          "button": {
+            "addPolicy": "Een moderatiebeleid toevoegen"
+          },
+          "description": {
+            "policy": "Met moderatieregels kun je bepalen of en hoe er interactie is tussen jouw server en een bepaald domein of account."
+          },
+          "header": {
+            "accountData": "Accountgegevens",
+            "activePolicy": "Dit domein is onderhevig aan moderatieregels",
+            "activity": "Activiteit",
+            "audioContent": "Audio-inhoud",
+            "localAccount": "Lokale account",
+            "noPolicy": "Je hebt geen regels ingesteld voor dit account."
+          },
+          "link": {
+            "albums": "Albums",
+            "artists": "Artiesten",
+            "channels": "Kanalen",
+            "django": "Kijk in Django's admin",
+            "domain": "Domein",
+            "libraries": "Verzamelingen",
+            "linkedReports": "Gelinkte meldingen",
+            "openProfile": "Open profiel",
+            "remoteProfile": "Open extern profiel",
+            "requests": "Verzoeken",
+            "tracks": "Nummers",
+            "uploads": "Uploads"
+          },
+          "notApplicable": "N.B.",
+          "option": {
+            "permission": {
+              "library": "Bibliotheek",
+              "moderation": "Moderatie",
+              "settings": "Instellingen"
+            }
+          },
+          "table": {
+            "accountData": {
+              "displayName": "Weergavenaam",
+              "email": "E-mailadres",
+              "lastActivity": "Laatste activiteit",
+              "lastChecked": "Laatst gecontroleerd",
+              "loginStatus": {
+                "disabled": "Uitgeschakeld",
+                "enabled": "Ingeschakeld",
+                "label": "Loginstatus"
+              },
+              "permissions": "Machtigingen",
+              "signupDate": "Geregistreerd op",
+              "userType": "Type",
+              "username": "Gebruikersnaam"
+            },
+            "activity": {
+              "emittedFollows": "Uitgezonden bibliotheekvolgingen",
+              "emittedMessages": "Uitgezonden berichten",
+              "firstSeen": "Eerst gezien",
+              "receivedFollows": "Bibliotheek-volgers"
+            },
+            "audioContent": {
+              "cachedSize": "Gecachete grootte",
+              "megabyte": "MB",
+              "totalSize": "Totale grootte",
+              "uploadQuota": "Uploadquotum"
+            }
+          },
+          "tooltip": {
+            "uploadQuota": "Bepaald hoeveel content de gebruiker kan uploaden. Laat leeg om de standaardwaarde van deze server te gebruiken."
+          },
+          "warning": {
+            "stats": "Statistieken worden berekend op basis van de activiteit en media op je server, en vertegenwoordigen niet de activiteit voor dit object"
+          }
+        },
+        "Base": {
+          "link": {
+            "accounts": "Accounts",
+            "domains": "Domeinen",
+            "reports": "Meldingen",
+            "userRequests": "Gebruikerverzoeken"
+          },
+          "menu": {
+            "secondary": "Submenu"
+          },
+          "title": "Moderatie"
+        },
+        "DomainsDetail": {
+          "button": {
+            "addPolicy": "Een moderatiebeleid toevoegen",
+            "addToAllowList": "Toevoegen aan toelatingslijst",
+            "refreshNodeInfo": "Vernieuw serverinformatie",
+            "removeFromAllowList": "Verwijder van toelatingslijst"
+          },
+          "description": {
+            "policy": "Met moderatieregels kun je bepalen of en hoe er interactie is tussen jouw server en een bepaald domein of account."
+          },
+          "header": {
+            "activePolicy": "Dit domein is onderhevig aan moderatieregels",
+            "activity": "Activiteit",
+            "audioContent": "Audio-inhoud",
+            "instanceData": "Servergegevens",
+            "noPolicy": "Je hebt geen regels ingesteld op dit domein."
+          },
+          "link": {
+            "albums": "Albums",
+            "artists": "Artiesten",
+            "channels": "Kanalen",
+            "django": "Kijk in Django's admin",
+            "knownAccounts": "Bekende accounts",
+            "libraries": "Verzamelingen",
+            "tracks": "Nummers",
+            "uploads": "Uploads",
+            "website": "Open website"
+          },
+          "notApplicable": "N.B.",
+          "table": {
+            "activity": {
+              "emittedFollows": "Uitgezonden bibliotheekvolgingen",
+              "emittedMessages": "Uitgezonden berichten",
+              "firstSeen": "Eerst gezien",
+              "receivedFollows": "Bibliotheek-volgers"
+            },
+            "audioContent": {
+              "cachedSize": "Gecachete grootte",
+              "totalSize": "Totale grootte"
+            },
+            "instanceData": {
+              "domainName": "Naam",
+              "inAllowList": {
+                "false": "Nee",
+                "label": "Is aanwezig op toestemmingslijst",
+                "true": "Ja"
+              },
+              "lastChecked": "Laatst gecontroleerd",
+              "nodeInfoStatus": {
+                "label": "Status",
+                "value": "Fout bij het ophalen van serverinformatie"
+              },
+              "software": {
+                "label": "Software"
+              },
+              "totalUsers": "Totaal aantal gebruikers"
+            }
+          },
+          "warning": {
+            "stats": "Statistieken worden berekend op basis van de activiteit en media op je server, en vertegenwoordigen niet de activiteit voor dit object"
+          }
+        },
+        "DomainsList": {
+          "button": {
+            "add": "Toevoegen"
+          },
+          "header": {
+            "domains": "Domeinen",
+            "failure": "Fout bij aanmaken van domein"
+          },
+          "label": {
+            "addDomain": "Domein toevoegen",
+            "addToAllowList": "Toevoegen aan toelatingslijst"
+          },
+          "title": "Domeinen"
+        },
+        "ReportsList": {
+          "header": {
+            "reports": "Meldingen"
+          },
+          "label": {
+            "search": "Zoeken",
+            "status": "Status"
+          },
+          "option": {
+            "status": {
+              "all": "Alles",
+              "resolved": "Opgelost",
+              "unresolved": "Niet opgelost"
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Oplopend",
+              "descending": "Aflopend",
+              "label": "Volgorde"
+            },
+            "label": "Volgorde"
+          },
+          "placeholder": {
+            "search": "Zoek op account, samenvatting, domein…"
+          },
+          "title": "Meldingen"
+        },
+        "RequestsList": {
+          "header": {
+            "userRequests": "Gebruikerverzoeken"
+          },
+          "label": {
+            "search": "Zoeken",
+            "status": "Status"
+          },
+          "option": {
+            "status": {
+              "all": "Alles",
+              "approved": "Goedgekeurd",
+              "pending": "In behandeling",
+              "refused": "Geweigerd"
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Oplopend",
+              "descending": "Aflopend",
+              "label": "Volgorde"
+            },
+            "label": "Volgorde"
+          },
+          "placeholder": {
+            "search": "Zoek op gebruikersnaam…"
+          },
+          "title": "Gebruikerverzoeken"
+        }
+      },
+      "users": {
+        "Base": {
+          "link": {
+            "invitations": "Uitnodigingen",
+            "users": "Gebruikers"
+          },
+          "menu": {
+            "secondary": "Submenu"
+          },
+          "title": "Gebruikers beheren"
+        }
+      }
+    },
+    "auth": {
+      "Callback": {
+        "header": {
+          "loggingIn": "Aan het inloggen…"
+        }
+      },
+      "EmailConfirm": {
+        "header": {
+          "failure": "We konden je e-mailadres niet bevestigen",
+          "success": "E-mailadres bevestigd"
+        },
+        "label": {
+          "confirmationCode": "Bevestigingscode"
+        },
+        "link": {
+          "back": "Terug naar inloggen",
+          "login": "Doorgaan met inloggen"
+        },
+        "message": {
+          "success": "Je kunt nu onbeperkt gebruikmaken van de dienst."
+        },
+        "title": "Bevestig je e-mailadres"
+      },
+      "Login": {
+        "header": {
+          "login": "Log in op je Funkwhale-account"
+        },
+        "title": "Inloggen"
+      },
+      "PasswordReset": {
+        "button": {
+          "requestReset": "Wachtwoordherstel aanvragen"
+        },
+        "header": {
+          "failure": "Fout tijdens aanvragen van wachtwoordherstel",
+          "reset": "Wachtwoord opnieuw instellen"
+        },
+        "help": {
+          "form": "Met dit formulier kun je je wachtwoord laten resetten. Je ontvangt van ons een e-mail op het door jou ingevoerde aangegeven adres met de instructies om je wachtwoord te herstellen."
+        },
+        "label": {
+          "email": "E-mailadres van account"
+        },
+        "link": {
+          "back": "Terug naar inlogpagina"
+        },
+        "placeholder": {
+          "email": "Voer het e-mailadres in dat is gekoppeld aan je account"
+        },
+        "title": "Wachtwoord opnieuw instellen"
+      },
+      "PasswordResetConfirm": {
+        "button": {
+          "update": "Wachtwoord bijwerken"
+        },
+        "header": {
+          "failure": "Fout tijdens wijzigen van wachtwoord",
+          "success": "Wachtwoord is gewijzigd"
+        },
+        "label": {
+          "newPassword": "Nieuw wachtwoord"
+        },
+        "link": {
+          "back": "Terug naar inlogpagina",
+          "login": "Doorgaan met inloggen"
+        },
+        "message": {
+          "requestSent": "Als het e-mailadres uit de vorige stap geldig is en verbonden aan een gebruikersaccount, dan zou je binnen een paar minuten een e-mail moeten ontvangen met resetinstructies.",
+          "success": "Je wachtwoord is bijgewerkt."
+        },
+        "title": "Wachtwoord wijzigen"
+      },
+      "Plugins": {
+        "title": "Plugins beheren"
+      },
+      "ProfileActivity": {
+        "header": {
+          "playlists": "Afspeellijsten",
+          "recentlyFavorited": "Recent toegevoegd aan favorieten",
+          "recentlyListened": "Recent beluisterd"
+        }
+      },
+      "ProfileBase": {
+        "label": {
+          "self": "Dit ben jij!"
+        },
+        "link": {
+          "activity": "Activiteit",
+          "domainView": "Op { domain } bekijken",
+          "moderation": "Open in moderatie-interface",
+          "overview": "Overzicht"
+        },
+        "title": "{ username }'s profiel"
+      },
+      "ProfileOverview": {
+        "button": {
+          "cancel": "Annuleren",
+          "createChannel": "Maak kanaal",
+          "next": "Volgende stap",
+          "previous": "Vorige stap"
+        },
+        "header": {
+          "channels": "Kanalen",
+          "libraries": "Gebruikersverzamelingen",
+          "sharedLibraries": "Deze gebruiker heeft de volgende verzamelingen gedeeld"
+        },
+        "link": {
+          "addNew": "Nieuwe toevoegen"
+        },
+        "modal": {
+          "createChannel": {
+            "artist": {
+              "header": "Artiestkanaal"
+            },
+            "header": "Maak kanaal",
+            "podcast": {
+              "header": "Podcastkanaal"
+            }
+          }
+        }
+      },
+      "Signup": {
+        "header": {
+          "createAccount": "Maak een Funkwhale-account"
+        },
+        "title": "Aanmelden"
+      }
+    },
+    "channels": {
+      "DetailBase": {
+        "button": {
+          "cancel": "Annuleren",
+          "confirm": "Verwijderen",
+          "delete": "Verwijderen…",
+          "edit": "Bewerken…",
+          "embed": "Embedden",
+          "play": "Afspelen",
+          "updateChannel": "Kanaal bijwerken",
+          "upload": "Uploaden"
+        },
+        "header": {
+          "artistChannel": "Artiestkanaal",
+          "podcastChannel": "Podcastkanaal"
+        },
+        "link": {
+          "channelEpisodes": "Alle Afleveringen",
+          "channelOverview": "Overzicht",
+          "channelTracks": "Nummers",
+          "domainView": "Op { domain } bekijken",
+          "mirrored": "Gemirrord van { domain }",
+          "moderation": "Open in moderatie-interface"
+        },
+        "meta": {
+          "episodes": "{ count } aflevering | { count } afleveringen",
+          "listenings": "{ count } luisteraar | { count } luisteraars",
+          "subscribers": "{ count } abonnee | { count } abonnees",
+          "tracks": "{ count } nummer | { count } nummers"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "Dit kanaal zal worden verwijderd, samen met alle bijbehorende bestanden en data. Dit kan niet ongedaan gemaakt worden."
+            },
+            "header": "Dit kanaal verwijderen?"
+          },
+          "embed": {
+            "header": "Embed deze artiest op je website"
+          },
+          "subscribe": {
+            "fediverse": {
+              "content": {
+                "help": "Als je Mastodon of andere fediverse applicaties gebruikt, kun je je abonneren op dit account:"
+              },
+              "header": "Abonneren op de Fediverse"
+            },
+            "funkwhale": {
+              "header": "Abonneren op Funkwhale"
+            },
+            "header": "Abonneren op dit kanaal",
+            "rss": {
+              "content": {
+                "help": "Kopieer en plak de volgende URL in je favoriete podcatcher:"
+              },
+              "header": "Abonneren via RSS"
+            }
+          }
+        },
+        "title": "Kanaal"
+      },
+      "DetailOverview": {
+        "header": {
+          "albums": "Albums",
+          "latestEpisodes": "Nieuwste afleveringen",
+          "latestTracks": "Nieuwste nummers",
+          "series": "Series",
+          "uploadsFailure": "Sommige uploads konden niet gepubliceerd worden",
+          "uploadsProcessing": "Uploads worden verwerkt",
+          "uploadsSuccess": "Uploads succesvol gepubliceerd"
+        },
+        "link": {
+          "addAlbum": "Nieuwe toevoegen",
+          "erroredUploads": "Uploads met fouten bekijken",
+          "skippedUploads": "Overgeslagen uploads bekijken"
+        },
+        "message": {
+          "processing": "Je uploads worden door Funkwhale verwerkt en zullen zeer spoedig live staan."
+        },
+        "meta": {
+          "progress": "Verwerkte uploads:"
+        }
+      },
+      "SubscriptionsList": {
+        "button": {
+          "cancel": "Annuleren",
+          "subscribe": "Abonneren"
+        },
+        "link": {
+          "addNew": "Nieuwe toevoegen"
+        },
+        "modal": {
+          "subscription": {
+            "header": "Abonnement"
+          }
+        },
+        "placeholder": {
+          "search": "Filter op naam…"
+        },
+        "title": "Geabonneerde Kanalen"
+      }
+    },
+    "content": {
+      "Base": {
+        "link": {
+          "libraries": "Verzamelingen",
+          "tracks": "Nummers"
+        },
+        "menu": {
+          "secondary": "Submenu"
+        },
+        "title": "Content toevoegen"
+      },
+      "Home": {
+        "button": {
+          "start": "Aan de slag"
+        },
+        "description": {
+          "channel": {
+            "1": "Als je een muzikant of podcaster bent, zijn kanalen voor jou ontworpen!",
+            "2": "Deel je werk publiekelijk en krijg abonnees op Funkwhale, de Fediverse of enig welke podcasting applicatie."
+          },
+          "follow": "Je kunt andere verzamelingen volgen voor toegang tot nieuwe muziek. Publiek toegankelijke verzamelingen kun je meteen volgen – voor privéverzamelingen heb je toestemming nodig van de beheerder.",
+          "upload": "Upload je persoonlijke muziekverzameling naar Funkwhale om ervan te genieten van waar dan ook, en om het te delen met vrienden en familie."
+        },
+        "header": {
+          "channel": "Publiceer je werk in een kanaal",
+          "follow": "Externe verzamelingen volgen",
+          "upload": "Upload third-party content in je verzameling"
+        },
+        "help": {
+          "uploadQuota": "Deze server biedt tot {quota} opslagruimte aan elke gebruiker."
+        },
+        "title": "Inhoud toevoegen en beheren"
+      },
+      "libraries": {
+        "Card": {
+          "button": {
+            "upload": "Uploaden"
+          },
+          "label": {
+            "size": "Totale grootte van de bestanden in deze verzameling"
+          },
+          "link": {
+            "details": "Bibliotheekdetails"
+          },
+          "meta": {
+            "tracks": "{ count } nummer | { count } nummers"
+          }
+        },
+        "FilesTable": {
+          "action": {
+            "delete": "Verwijderen",
+            "restartImport": "Importeren herstarten"
+          },
+          "button": {
+            "showStatus": "Toon informatie over de uploadstatus van dit nummer"
+          },
+          "empty": {
+            "noTracks": "Er zijn nog geen nummers aan deze bibliotheek toegevoegd"
+          },
+          "label": {
+            "importStatus": "Importstatus",
+            "search": "Zoeken"
+          },
+          "notApplicable": "N.B.",
+          "option": {
+            "status": {
+              "all": "Alles",
+              "draft": "Klad",
+              "failed": "Mislukt",
+              "finished": "Afgerond",
+              "pending": "In behandeling",
+              "skipped": "Overgeslagen"
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Oplopend",
+              "descending": "Aflopend",
+              "label": "Sorteervolgorde"
+            },
+            "label": "Volgorde"
+          },
+          "pagination": {
+            "results": "Resultaten - { start }-{ end } van de { total }"
+          },
+          "placeholder": {
+            "search": "Zoek op titel, artiest, album…"
+          },
+          "table": {
+            "file": {
+              "header": {
+                "album": "Album",
+                "artist": "Artiest",
+                "duration": "Duur",
+                "importStatus": "Importstatus",
+                "size": "Grootte",
+                "title": "Titel",
+                "uploadDate": "Uploaddatum"
+              }
+            }
+          }
+        },
+        "Form": {
+          "button": {
+            "confirm": "Bibliotheek verwijderen",
+            "create": "Bibliotheek maken",
+            "delete": "Verwijderen",
+            "update": "Verzameling bijwerken"
+          },
+          "description": {
+            "library": "Verzamelingen helpen je bij het organiseren en delen van je muziekverzamelingen. Je kunt je eigen muziek uploaden naar Funkwhale en delen met vrienden en familie.",
+            "visibility": "Je kunt je verzameling delen met anderen, ongeacht hoe je de zichtbaarheid hebt ingesteld."
+          },
+          "header": {
+            "failure": "Fout"
+          },
+          "label": {
+            "description": "Omschrijving",
+            "name": "Naam",
+            "visibility": "Zichtbaarheid"
+          },
+          "message": {
+            "libraryCreated": "Bibliotheek gecreëerd",
+            "libraryDeleted": "Bibliotheek verwijderd",
+            "libraryUpdated": "Bibliotheek bijgewerkt"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "De bibliotheek en al haar nummers worden verwijderd. Dit kan niet ongedaan gemaakt worden."
+              },
+              "header": "Deze bibliotheek verwijderen?"
+            }
+          },
+          "placeholder": {
+            "description": "Deze bibliotheek bevat mijn persoonlijke muziek. Ik hoop dat het je smaak is.",
+            "name": "Mijn geweldige bibliotheek"
+          }
+        },
+        "Home": {
+          "empty": {
+            "noLibrary": "Het lijkt erop dat je geen bibliotheek hebt; tijd om er één te creëren."
+          },
+          "header": {
+            "libraries": "Mijn verzamelingen"
+          },
+          "link": {
+            "createLibrary": "Maak een nieuwe bibliotheek"
+          },
+          "loading": {
+            "libraries": "Bibliotheken aan het laden…"
+          }
+        },
+        "Quota": {
+          "button": {
+            "purge": "Leegmaken"
+          },
+          "header": {
+            "currentUsage": "Huidig verbruik"
+          },
+          "label": {
+            "currentUsage": "{ current } in gebruik; maximaal { max } toegestaan",
+            "errored": "Mislukte bestanden",
+            "pending": "In behandeling zijnde bestanden",
+            "skipped": "Overgeslagen bestanden"
+          },
+          "link": {
+            "viewFiles": "Bestanden bekijken"
+          },
+          "loading": {
+            "currentUsage": "Gebruiksgegevens aan het laden…"
+          },
+          "modal": {
+            "purgeErrored": {
+              "content": {
+                "description": "Alle nummers die zijn geüpload maar niet volledig door de server verwerkt konden worden, worden verwijderd. De bestanden worden gewist en je krijgt de bijbehorende opslagruimte terug."
+              },
+              "header": "Foutieve bestanden verwijderen?"
+            },
+            "purgePending": {
+              "content": {
+                "description": "Alle nummers die geüpload maar nog niet verwerkt zijn, worden verwijderd. De bestanden worden gewist en je krijgt de bijbehorende opslagruimte terug."
+              },
+              "header": "In behandeling zijnde bestanden verwijderen?"
+            },
+            "purgeSkipped": {
+              "content": {
+                "description": "Alle nummers die bij het importeren zijn overgeslagen, worden verwijderd. De bestanden worden gewist en je krijgt de bijbehorende opslagruimte terug."
+              },
+              "header": "Overgeslagen bestanden verwijderen?"
+            }
+          }
+        }
+      },
+      "remote": {
+        "Card": {
+          "button": {
+            "cancel": "Trek volgverzoek in",
+            "follow": "Volgen",
+            "pending": "Openstaande volgverzoeken",
+            "unfollow": "Ontvolgen"
+          },
+          "label": {
+            "scanFailure": "Probleem tijdens scannen",
+            "scanPartialSuccess": "Afgerond, maar met foutmeldingen",
+            "scanPending": "Nog te scannen",
+            "scanProgress": "Aan het scannen… ({ progress }%)",
+            "scanSuccess": "Gescand",
+            "sharingLink": "Link om te delen"
+          },
+          "link": {
+            "scan": "Nu scannen",
+            "scanDetails": "Details"
+          },
+          "message": {
+            "scanLaunched": "Scan begonnen",
+            "scanSkipped": "Scan overgeslagen (vorige scan was zeer recent)"
+          },
+          "meta": {
+            "failedTracks": "Mislukte nummers:",
+            "lastUpdate": "Laatste update:",
+            "tracks": "{ count } nummer | { count } nummers"
+          },
+          "modal": {
+            "unfollow": {
+              "content": {
+                "warning": "Als je deze verzameling ontvolgt, verlies je toegang tot haar inhoud."
+              },
+              "header": "Wil je deze verzameling ontvolgen?"
+            }
+          },
+          "tooltip": {
+            "private": "Deze bibliotheek is privé en goedkeuring van de eigenaar is nodig om de inhoud te benaderen",
+            "public": "Deze bibliotheek is publiek toegankelijk en je kunt de inhoud vrij benaderen"
+          }
+        },
+        "Home": {
+          "button": {
+            "refresh": "Verversen"
+          },
+          "description": {
+            "remoteLibraries": "Externe bibliotheken worden beheerd door andere gebruikers op het netwerk. Je kunt ze gebruiken als ze publiek toegankelijk zijn of je toegang hebt gekregen."
+          },
+          "header": {
+            "knownLibraries": "Bekende verzamelingen",
+            "remoteLibraries": "Externe verzamelingen"
+          },
+          "loading": {
+            "remoteLibraries": "Externe bibliotheken aan het laden…"
+          }
+        },
+        "ScanForm": {
+          "button": {
+            "submit": "Zoekopdracht versturen"
+          },
+          "header": {
+            "failure": "Externe bibliotheek kon niet opgehaald worden"
+          },
+          "label": {
+            "search": "Zoek een externe bibliotheek"
+          },
+          "placeholder": {
+            "url": "Voer de URL van een bibliotheek in"
+          }
+        }
+      }
+    },
+    "library": {
+      "DetailAlbums": {
+        "empty": {
+          "follow": "Je moet wellicht deze verzameling volgen om de inhoud ervan te zien.",
+          "upload": "Deze bibliotheek is leeg. Je zou er iets naartoe moeten uploaden!"
+        }
+      },
+      "DetailOverview": {
+        "empty": {
+          "follow": "Je moet wellicht deze verzameling volgen om de inhoud ervan te zien.",
+          "upload": "Deze bibliotheek is leeg. Je zou er iets naartoe moeten uploaden!"
+        }
+      },
+      "DetailTracks": {
+        "empty": {
+          "follow": "Je moet wellicht deze verzameling volgen om de inhoud ervan te zien.",
+          "upload": "Deze bibliotheek is leeg. Je zou er iets naartoe moeten uploaden!"
+        }
+      },
+      "Edit": {
+        "button": {
+          "accept": "Accepteren",
+          "reject": "Afkeuren"
+        },
+        "empty": {
+          "noFollowers": "Niemand volgt deze bibliotheek"
+        },
+        "header": {
+          "followers": "Volgers",
+          "libraryContents": "Bibliotheekinhoud"
+        },
+        "loading": {
+          "followers": "Volgers aan het laden…"
+        },
+        "table": {
+          "action": {
+            "header": {
+              "action": "Actie",
+              "date": "Datum",
+              "status": "Status",
+              "user": "Gebruiker"
+            },
+            "status": {
+              "accepted": "Geaccepteerd",
+              "pending": "Wachtend op goedkeuring",
+              "rejected": "Afgekeurd"
+            }
+          }
+        }
+      },
+      "LibraryBase": {
+        "button": {
+          "edit": "Bewerken",
+          "upload": "Uploaden"
+        },
+        "description": {
+          "sharingLink": "Deel deze link met anderen zodat ze toegang tot je bibliotheek kunnen aanvragen, door de link te kopiëren naar hun zoekbalk."
+        },
+        "label": {
+          "instance": "Beperkt",
+          "private": "Privé",
+          "public": "Publiek",
+          "sharingLink": "Link om te delen"
+        },
+        "link": {
+          "albums": "Albums",
+          "artists": "Artiesten",
+          "domain": "Op { domain } bekijken",
+          "moderation": "Open in moderatie-interface",
+          "owner": "In het bezit van { username }",
+          "tracks": "Nummers"
+        },
+        "meta": {
+          "tracks": "{ count } nummer | { count } nummers"
+        },
+        "title": "Bibliotheek",
+        "tooltip": {
+          "instance": "Deze bibliotheek is beperkt tot gebruikers van deze pod",
+          "private": "Deze bibliotheek is privé en goedkeuring van de eigenaar is nodig om de inhoud te benaderen",
+          "public": "Deze bibliotheek is publiek toegankelijk en je kunt de inhoud vrij benaderen"
+        }
+      }
+    },
+    "playlists": {
+      "Detail": {
+        "button": {
+          "cancel": "Annuleren",
+          "confirm": "Afspeellijst verwijderen",
+          "delete": "Verwijderen",
+          "edit": "Bewerken",
+          "embed": "Embedden",
+          "playAll": "Alles afspelen",
+          "stopEdit": "Bewerken stoppen"
+        },
+        "empty": {
+          "noTracks": "Er zitten nog geen nummers in deze afspeellijst"
+        },
+        "header": {
+          "tracks": "Nummers"
+        },
+        "meta": {
+          "tracks": "Afspeellijst met { count } nummer, door { username } | Afspeellijst met { count } nummers, door { username }"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "De afspeellijst wordt volledig verwijderd; dit kan niet ongedaan worden gemaakt."
+            },
+            "header": "Weet je zeker dat je de afspeellijst \"{ playlist }\" wilt verwijderen?"
+          },
+          "embed": {
+            "header": "Embed deze afspeellijst op je website"
+          }
+        },
+        "title": "Afspeellijst"
+      },
+      "List": {
+        "button": {
+          "create": "Maak een afspeellijst",
+          "manage": "Beheer je afspeellijsten",
+          "search": "Zoeken"
+        },
+        "empty": {
+          "noResults": "Geen resultaten gevonden voor je zoekopdracht"
+        },
+        "header": {
+          "browse": "Afspeellijsten doorbladeren",
+          "playlists": "Afspeellijsten"
+        },
+        "label": {
+          "search": "Zoeken"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Oplopend",
+            "descending": "Aflopend",
+            "label": "Volgorde"
+          },
+          "label": "Volgorde"
+        },
+        "pagination": {
+          "results": "Aantal resultaten per pagina"
+        },
+        "placeholder": {
+          "search": "Voer een afspeellijsttitel in…"
+        }
+      }
+    },
+    "radios": {
+      "Detail": {
+        "button": {
+          "confirm": "Radiostation verwijderen",
+          "edit": "Bewerken…"
+        },
+        "empty": {
+          "noTracks": "Er zijn nog geen nummers aan deze radio toegevoegd"
+        },
+        "header": {
+          "tracks": "Nummers"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "De radio wordt volledig verwijderd; dit kan niet ongedaan worden gemaakt."
+            },
+            "header": "Weet je zeker dat je het radiostation \"{ radio }\" wilt verwijderen?"
+          }
+        },
+        "title": "Radio"
+      }
+    }
+  }
+}

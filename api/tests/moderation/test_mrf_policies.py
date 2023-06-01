@@ -1,7 +1,6 @@
 import pytest
 
-from funkwhale_api.moderation import mrf
-from funkwhale_api.moderation import mrf_policies
+from funkwhale_api.moderation import mrf, mrf_policies
 
 
 @pytest.mark.parametrize(

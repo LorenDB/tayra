@@ -1,17 +1,135 @@
+<script setup lang="ts">
+import type { BackendError } from '~/types'
+
+import axios from 'axios'
+import ReportCategoryDropdown from '~/components/moderation/ReportCategoryDropdown.vue'
+import SemanticModal from '~/components/semantic/Modal.vue'
+import { computed, ref, watchEffect } from 'vue'
+import { useStore } from '~/store'
+import { useI18n } from 'vue-i18n'
+
+interface ReportType {
+  anonymous: boolean
+  type: string
+}
+
+const store = useStore()
+const target = computed(() => store.state.moderation.reportModalTarget)
+
+const forward = ref(false)
+const summary = ref('')
+const category = ref('')
+const submitterEmail = ref('')
+
+const reportTypes = ref([] as ReportType[])
+const allowedCategories = computed(() => {
+  if (store.state.auth.authenticated) {
+    return []
+  }
+
+  return reportTypes.value
+    .filter((type) => type.anonymous === true)
+    .map((type) => type.type)
+})
+
+const canSubmit = computed(() => store.state.auth.authenticated || allowedCategories.value.length > 0)
+
+const targetDomain = computed(() => {
+  if (!target.value._obj) {
+    return
+  }
+
+  const fid = target.value.type === 'channel' && target.value._obj.actor
+    ? target.value._obj.actor.fid
+    : target.value._obj.fid
+
+  return !fid
+    ? store.getters['instance/domain']
+    : new URL(fid).hostname
+})
+
+const isLocal = computed(() => store.getters['instance/domain'] === targetDomain.value)
+
+const errors = ref([] as string[])
+
+const show = computed({
+  get: () => store.state.moderation.showReportModal,
+  set: (value: boolean) => {
+    store.commit('moderation/showReportModal', value)
+    errors.value = []
+  }
+})
+
+const isLoading = ref(false)
+
+// TODO (wvffle): MOVE ALL use*() METHODS SOMEWHERE TO THE TOP
+const { t } = useI18n()
+
+const submit = async () => {
+  isLoading.value = true
+
+  const payload = {
+    target: { ...target.value, _obj: undefined },
+    summary: summary.value,
+    type: category.value,
+    forward: forward.value,
+    submitter_email: !store.state.auth.authenticated
+      ? submitterEmail.value
+      : undefined
+  }
+
+  try {
+    const response = await axios.post('moderation/reports/', payload)
+    show.value = false
+
+    store.commit('moderation/contentFilter', response.data)
+    store.commit('ui/addMessage', {
+      content: t('components.moderation.ReportModal.message.submissionSuccess'),
+      date: new Date()
+    })
+
+    summary.value = ''
+    category.value = ''
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const isLoadingReportTypes = ref(false)
+watchEffect(async () => {
+  if (!store.state.moderation.showReportModal || store.state.auth.authenticated) {
+    return
+  }
+
+  isLoadingReportTypes.value = true
+
+  try {
+    const response = await axios.get('instance/nodeinfo/2.0/')
+    reportTypes.value = response.data.metadata.reportTypes ?? []
+  } catch (error) {
+    store.commit('ui/addMessage', {
+      content: t('components.moderation.ReportModal.error.nodeinfoFetch', { error: `${error}` }),
+      date: new Date()
+    })
+  }
+
+  isLoadingReportTypes.value = false
+})
+</script>
+
 <template>
-  <modal
-    :show="$store.state.moderation.showReportModal"
-    @update:show="update"
-  >
+  <semantic-modal v-model:show="show">
     <h2
       v-if="target"
       class="ui header"
     >
-      <translate translate-context="Popup/Moderation/Title/Verb">
-        Do you want to report this object?
-      </translate>
+      {{ $t('components.moderation.ReportModal.header.modal') }}
       <div class="ui sub header">
-        {{ target.typeLabel }} - {{ target.label }}
+        {{ target.typeLabel }}
+        <span class="middle hyphen symbol" />
+        {{ target.label }}
       </div>
     </h2>
     <div class="scrolling content">
@@ -22,9 +140,7 @@
           class="ui negative message"
         >
           <h4 class="header">
-            <translate translate-context="Popup/Moderation/Error message">
-              Error while submitting report
-            </translate>
+            {{ $t('components.moderation.ReportModal.header.submissionFailure') }}
           </h4>
           <ul class="list">
             <li
@@ -37,9 +153,7 @@
         </div>
       </div>
       <p>
-        <translate translate-context="*/Moderation/Popup,Paragraph">
-          Use this form to submit a report to our moderation team.
-        </translate>
+        {{ $t('components.moderation.ReportModal.description.modal') }}
       </p>
       <form
         v-if="canSubmit"
@@ -61,7 +175,7 @@
             class="ui eight wide required field"
           >
             <label for="report-submitter-email">
-              <translate translate-context="Content/*/*/Noun">Email</translate>
+              {{ $t('components.moderation.ReportModal.label.email') }}
             </label>
             <input
               id="report-submitter-email"
@@ -71,20 +185,16 @@
               required
             >
             <p>
-              <translate translate-context="*/*/Field,Help">
-                We'll use this e-mail address if we need to contact you regarding this report.
-              </translate>
+              {{ $t('components.moderation.ReportModal.description.email') }}
             </p>
           </div>
         </div>
         <div class="ui field">
           <label for="report-summary">
-            <translate translate-context="*/*/Field.Label/Noun">Message</translate>
+            {{ $t('components.moderation.ReportModal.label.message') }}
           </label>
           <p>
-            <translate translate-context="*/*/Field,Help">
-              Use this field to provide additional context to the moderator that will handle your report.
-            </translate>
+            {{ $t('components.moderation.ReportModal.description.message') }}
           </p>
           <content-form
             v-model="summary"
@@ -104,13 +214,10 @@
             >
             <label for="report-forward">
               <strong>
-                <translate
-                  :translate-params="{domain: targetDomain}"
-                  translate-context="*/*/Field.Label/Verb"
-                >Forward to %{ domain} </translate>
+                {{ $t('components.moderation.ReportModal.label.forwardToDomain', {domain: targetDomain}) }}
               </strong>
               <p>
-                <translate translate-context="*/*/Field,Help">Forward an anonymized copy of your report to the server hosting this element.</translate>
+                {{ $t('components.moderation.ReportModal.description.forwardToDomain') }}
               </p>
             </label>
           </div>
@@ -127,17 +234,13 @@
         class="ui warning message"
       >
         <h4 class="header">
-          <translate translate-context="Popup/Moderation/Error message">
-            Anonymous reports are disabled, please sign-in to submit a report.
-          </translate>
+          {{ $t('components.moderation.ReportModal.header.disabled') }}
         </h4>
       </div>
     </div>
     <div class="actions">
       <button class="ui basic cancel button">
-        <translate translate-context="*/*/Button.Label/Verb">
-          Cancel
-        </translate>
+        {{ $t('components.moderation.ReportModal.button.cancel') }}
       </button>
       <button
         v-if="canSubmit"
@@ -145,133 +248,8 @@
         type="submit"
         form="report-form"
       >
-        <translate translate-context="Popup/*/Button.Label">
-          Submit report
-        </translate>
+        {{ $t('components.moderation.ReportModal.button.submit') }}
       </button>
     </div>
-  </modal>
+  </semantic-modal>
 </template>
-
-<script>
-import axios from 'axios'
-import { mapState } from 'vuex'
-
-function urlDomain (data) {
-  const a = document.createElement('a')
-  a.href = data
-  return a.hostname
-}
-
-export default {
-  components: {
-    ReportCategoryDropdown: () => import(/* webpackChunkName: "reports" */ '@/components/moderation/ReportCategoryDropdown'),
-    Modal: () => import(/* webpackChunkName: "modal" */ '@/components/semantic/Modal')
-  },
-  data () {
-    return {
-      formKey: String(new Date()),
-      errors: [],
-      isLoading: false,
-      isLoadingReportTypes: false,
-      summary: '',
-      submitterEmail: '',
-      category: null,
-      reportTypes: [],
-      forward: false
-    }
-  },
-  computed: {
-    ...mapState({
-      target: state => state.moderation.reportModalTarget
-    }),
-    allowedCategories () {
-      if (this.$store.state.auth.authenticated) {
-        return []
-      }
-      return this.reportTypes.filter((t) => {
-        return t.anonymous === true
-      }).map((c) => {
-        return c.type
-      })
-    },
-    canSubmit () {
-      if (this.$store.state.auth.authenticated) {
-        return true
-      }
-
-      return this.allowedCategories.length > 0
-    },
-    targetDomain () {
-      if (!this.target._obj) {
-        return
-      }
-      let fid = this.target._obj.fid
-      if (this.target.type === 'channel' && this.target._obj.actor) {
-        fid = this.target._obj.actor.fid
-      }
-      if (!fid) {
-        return this.$store.getters['instance/domain']
-      }
-      return urlDomain(fid)
-    },
-    isLocal () {
-      return this.$store.getters['instance/domain'] === this.targetDomain
-    }
-  },
-  watch: {
-    '$store.state.moderation.showReportModal': function (v) {
-      if (!v || this.$store.state.auth.authenticated) {
-        return
-      }
-
-      const self = this
-      self.isLoadingReportTypes = true
-      axios.get('instance/nodeinfo/2.0/').then(response => {
-        self.isLoadingReportTypes = false
-        self.reportTypes = response.data.metadata.reportTypes || []
-      }, error => {
-        self.isLoadingReportTypes = false
-        self.$store.commit('ui/addMessage', {
-          content: 'Cannot fetch Node Info: ' + error,
-          date: new Date()
-        })
-      })
-    }
-  },
-  methods: {
-    update (v) {
-      this.$store.commit('moderation/showReportModal', v)
-      this.errors = []
-    },
-    submit () {
-      const self = this
-      self.isLoading = true
-      const payload = {
-        target: { ...this.target, _obj: null },
-        summary: this.summary,
-        type: this.category,
-        forward: this.forward
-      }
-      if (!this.$store.state.auth.authenticated) {
-        payload.submitter_email = this.submitterEmail
-      }
-      return axios.post('moderation/reports/', payload).then(response => {
-        self.update(false)
-        self.isLoading = false
-        const msg = this.$pgettext('*/Moderation/Message', 'Report successfully submitted, thank you')
-        self.$store.commit('moderation/contentFilter', response.data)
-        self.$store.commit('ui/addMessage', {
-          content: msg,
-          date: new Date()
-        })
-        self.summary = ''
-        self.category = ''
-      }, error => {
-        self.errors = error.backendErrors
-        self.isLoading = false
-      })
-    }
-  }
-}
-</script>

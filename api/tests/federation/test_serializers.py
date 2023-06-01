@@ -1,19 +1,21 @@
 import io
-import pytest
 import uuid
 
+import pytest
 from django.core.paginator import Paginator
 from django.urls import reverse
 from django.utils import timezone
 
 from funkwhale_api.common import utils as common_utils
-from funkwhale_api.federation import actors
-from funkwhale_api.federation import contexts
-from funkwhale_api.federation import keys
-from funkwhale_api.federation import jsonld
-from funkwhale_api.federation import models
-from funkwhale_api.federation import serializers
-from funkwhale_api.federation import utils
+from funkwhale_api.federation import (
+    actors,
+    contexts,
+    jsonld,
+    keys,
+    models,
+    serializers,
+    utils,
+)
 from funkwhale_api.moderation import serializers as moderation_serializers
 from funkwhale_api.music import licenses
 
@@ -805,7 +807,9 @@ def test_activity_pub_album_serializer_to_ap(factories):
 
 def test_activity_pub_album_serializer_to_ap_channel_artist(factories):
     channel = factories["audio.Channel"]()
-    album = factories["music.Album"](artist=channel.artist,)
+    album = factories["music.Album"](
+        artist=channel.artist,
+    )
 
     serializer = serializers.AlbumSerializer(album)
 
@@ -1936,7 +1940,7 @@ def test_report_serializer_to_ap(factories):
         "actor": actors.get_service_actor().fid,
         "content": report.summary,
         "object": [report.target.fid],
-        "tag": [{"type": "Hashtag", "name": "#{}".format(report.type)}],
+        "tag": [{"type": "Hashtag", "name": f"#{report.type}"}],
     }
     serializer = serializers.FlagSerializer(report)
     assert serializer.data == expected

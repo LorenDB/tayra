@@ -1,7 +1,6 @@
 import urllib.parse
 
-from funkwhale_api.common import preferences
-from funkwhale_api.common import utils
+from funkwhale_api.common import preferences, utils
 from funkwhale_api.federation import models as federation_models
 from funkwhale_api.moderation import mrf
 
@@ -30,13 +29,11 @@ def check_allow_list(payload, **kwargs):
         utils.recursive_getattr(payload, "object.id", permissive=True),
     ]
 
-    relevant_domains = set(
-        [
-            domain
-            for domain in [urllib.parse.urlparse(i).hostname for i in relevant_ids if i]
-            if domain
-        ]
-    )
+    relevant_domains = {
+        domain
+        for domain in [urllib.parse.urlparse(i).hostname for i in relevant_ids if i]
+        if domain
+    }
 
     if relevant_domains - allowed_domains:
 

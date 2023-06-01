@@ -1,7 +1,7 @@
 .ui.cards > .card,
 .ui.card {
   color: var(--card-text-color);
-  background: var(--card-background);  
+  background: var(--card-background);
   &:not(.flat) {
     box-shadow: var(--card-box-shadow);
   }

@@ -1,11 +1,10 @@
 import os
-import pytest
 import uuid
 
+import pytest
 from django import forms
 
-from funkwhale_api.music import importers
-from funkwhale_api.music import models
+from funkwhale_api.music import importers, models
 
 DATA_DIR = os.path.dirname(os.path.abspath(__file__))
 

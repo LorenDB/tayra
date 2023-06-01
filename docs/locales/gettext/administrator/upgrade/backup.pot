@@ -1,0 +1,90 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../administrator/upgrade/backup.md:1
+msgid "Back up your Funkwhale instance"
+msgstr ""
+
+#: ../../administrator/upgrade/backup.md:3
+msgid "Before performing big changes, we recommend you back up your database and media files. Follow the instructions in this guide to back up your instance."
+msgstr ""
+
+#: ../../administrator/upgrade/backup.md:5
+msgid "Back up your database."
+msgstr ""
+
+#: ../../administrator/upgrade/backup.md:0
+msgid "Debian"
+msgstr ""
+
+#: ../../administrator/upgrade/backup.md:0
+msgid "Docker"
+msgstr ""
+
+#: ../../administrator/upgrade/backup.md:28
+msgid "Back up your media files. In this example we use [rsync](https://rsync.samba.org) to back up the files."
+msgstr ""
+
+#: ../../administrator/upgrade/backup.md:54
+msgid "Back up your configuration files."
+msgstr ""
+
+#: ../../administrator/upgrade/backup.md:77
+msgid "If you are performing regular backups, you may need deduplication and compression to keep the size down. In this case, a tool like [`borg`](https://www.borgbackup.org/) is more appropriate."
+msgstr ""
+
+#: ../../administrator/upgrade/backup.md:79
+msgid "Restore a backup"
+msgstr ""
+
+#: ../../administrator/upgrade/backup.md:81
+msgid "Restore your files"
+msgstr ""
+
+#: ../../administrator/upgrade/backup.md:83
+msgid "To restart your files, do the following:"
+msgstr ""
+
+#: ../../administrator/upgrade/backup.md:85
+msgid "Rename your current file directories."
+msgstr ""
+
+#: ../../administrator/upgrade/backup.md:92
+msgid "Restore your backed-up files to the original directories."
+msgstr ""
+
+#: ../../administrator/upgrade/backup.md:99
+msgid "Restore the database"
+msgstr ""
+
+#: ../../administrator/upgrade/backup.md:101
+msgid "To restore your database, do the following:"
+msgstr ""
+
+#: ../../administrator/upgrade/backup.md:109
+msgid "Restore your database backup:"
+msgstr ""
+
+#: ../../administrator/upgrade/backup.md:115
+#: ../../administrator/upgrade/backup.md:133
+msgid "Run the `funkwhale-manage migrate` command to set up the database."
+msgstr ""
+
+#: ../../administrator/upgrade/backup.md:127
+msgid "Restore your database backup."
+msgstr ""

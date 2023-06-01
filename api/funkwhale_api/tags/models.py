@@ -4,12 +4,9 @@ from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.postgres.fields import CICharField
-from django.db import models
-from django.db import transaction
-
+from django.db import models, transaction
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-
 
 TAG_REGEX = re.compile(r"^((\w+)([\d_]*))$")
 
@@ -47,6 +44,9 @@ class TaggedItem(models.Model):
 
     class Meta:
         unique_together = ("tag", "content_type", "object_id")
+
+    def __str__(self):
+        return self.tag.name
 
 
 @transaction.atomic

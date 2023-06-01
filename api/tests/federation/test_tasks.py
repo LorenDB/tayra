@@ -1,15 +1,11 @@
 import datetime
 import os
 import pathlib
-import pytest
 
+import pytest
 from django.utils import timezone
 
-from funkwhale_api.federation import jsonld
-from funkwhale_api.federation import models
-from funkwhale_api.federation import serializers
-from funkwhale_api.federation import tasks
-from funkwhale_api.federation import utils
+from funkwhale_api.federation import jsonld, models, serializers, tasks, utils
 
 
 def test_clean_federation_music_cache_if_no_listen(preferences, factories):
@@ -218,7 +214,7 @@ def test_update_domain_nodeinfo(factories, mocker, now, service_actor):
 
 def test_update_domain_nodeinfo_error(factories, r_mock, now):
     domain = factories["federation.Domain"](nodeinfo_fetch_date=None)
-    wellknown_url = "https://{}/.well-known/nodeinfo".format(domain.name)
+    wellknown_url = f"https://{domain.name}/.well-known/nodeinfo"
 
     r_mock.get(wellknown_url, status_code=500)
 
@@ -229,7 +225,7 @@ def test_update_domain_nodeinfo_error(factories, r_mock, now):
     assert domain.nodeinfo_fetch_date == now
     assert domain.nodeinfo == {
         "status": "error",
-        "error": "500 Server Error: None for url: {}".format(wellknown_url),
+        "error": f"500 Server Error: None for url: {wellknown_url}",
     }
 
 
@@ -410,14 +406,12 @@ def test_fetch_success(factories, r_mock, mocker):
 
 def test_fetch_webfinger(factories, r_mock, mocker):
     actor = factories["federation.Actor"]()
-    fetch = factories["federation.Fetch"](
-        url="webfinger://{}".format(actor.full_username)
-    )
+    fetch = factories["federation.Fetch"](url=f"webfinger://{actor.full_username}")
     payload = serializers.ActorSerializer(actor).data
     init = mocker.spy(serializers.ActorSerializer, "__init__")
     save = mocker.spy(serializers.ActorSerializer, "save")
     webfinger_payload = {
-        "subject": "acct:{}".format(actor.full_username),
+        "subject": f"acct:{actor.full_username}",
         "aliases": ["https://test.webfinger"],
         "links": [
             {"rel": "self", "type": "application/activity+json", "href": actor.fid}
@@ -530,7 +524,9 @@ def test_fetch_channel_actor_returns_channel_and_fetch_outbox(
     assert fetch.status == "finished"
     assert fetch.object == obj
     fetch_collection.assert_called_once_with(
-        obj.actor.outbox_url, channel_id=obj.pk, max_pages=1,
+        obj.actor.outbox_url,
+        channel_id=obj.pk,
+        max_pages=1,
     )
     fetch_collection_delayed.assert_called_once_with(
         "http://outbox.url/page2",
@@ -544,7 +540,7 @@ def test_fetch_honor_instance_policy_domain(factories):
     domain = factories["moderation.InstancePolicy"](
         block_all=True, for_domain=True
     ).target_domain
-    fid = "https://{}/test".format(domain.name)
+    fid = f"https://{domain.name}/test"
 
     fetch = factories["federation.Fetch"](url=fid)
     tasks.fetch(fetch_id=fetch.pk)
@@ -590,7 +586,7 @@ def test_fetch_honor_instance_policy_different_url_and_id(r_mock, factories):
         block_all=True, for_domain=True
     ).target_domain
     fid = "https://ok/test"
-    r_mock.get(fid, json={"id": "http://{}/test".format(domain.name)})
+    r_mock.get(fid, json={"id": f"http://{domain.name}/test"})
     fetch = factories["federation.Fetch"](url=fid)
     tasks.fetch(fetch_id=fetch.pk)
     fetch.refresh_from_db()
@@ -655,7 +651,10 @@ def test_fetch_collection(mocker, r_mock):
     r_mock.get(payloads["outbox"]["id"], json=payloads["outbox"])
     r_mock.get(payloads["outbox"]["first"], json=payloads["page1"])
     r_mock.get(payloads["page1"]["next"], json=payloads["page2"])
-    result = tasks.fetch_collection(payloads["outbox"]["id"], max_pages=2,)
+    result = tasks.fetch_collection(
+        payloads["outbox"]["id"],
+        max_pages=2,
+    )
     assert result["items"] == [
         payloads["page1"]["orderedItems"][2],
         payloads["page2"]["orderedItems"][1],
@@ -665,3 +664,22 @@ def test_fetch_collection(mocker, r_mock):
     assert result["seen"] == 7
     assert result["total"] == 27094
     assert result["next_page"] == payloads["page2"]["next"]
+
+
+def test_check_all_remote_instance_reachable(factories, r_mock):
+    domain = factories["federation.Domain"]()
+    r_mock.get(
+        f"https://{domain.name}/api/v1/instance/nodeinfo/2.0/", json={"version": "2"}
+    )
+    tasks.check_all_remote_instance_availability()
+    domain = models.Domain.objects.get(name=domain.name)
+    assert domain.reachable is True
+
+
+def test_check_remote_instance_unreachable(factories, r_mock):
+    domain = factories["federation.Domain"]()
+
+    r_mock.get(f"https://{domain.name}/api/v1/instance/nodeinfo/2.0/", json={})
+    tasks.check_all_remote_instance_availability()
+    domain = models.Domain.objects.get(name=domain.name)
+    assert domain.reachable is False

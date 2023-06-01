@@ -1,13 +1,10 @@
+import django_filters.rest_framework
 from django.db.models import functions
 from rest_framework import viewsets
 
-import django_filters.rest_framework
-
 from funkwhale_api.users.oauth import permissions as oauth_permissions
 
-from . import filters
-from . import models
-from . import serializers
+from . import filters, models, serializers
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):

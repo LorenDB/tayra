@@ -1,10 +1,11 @@
-
 .center.aligned.menu {
   justify-content: center;
 }
+
 .text.center.aligned {
   text-align: center;
 }
+
 .ellipsis:not(.icon) {
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -24,9 +25,11 @@
 a {
   cursor: pointer;
 }
+
 .segment.hidden {
   display: none;
 }
+
 .hidden:not(.divider) {
   display: none !important;
 }
@@ -53,16 +56,25 @@ a {
     display: none !important;
   }
 }
+
+.desktop-and-below {
+  @include media(">=desktop") {
+    display: none !important;
+  }
+}
+
 .tablet-and-up {
   @include media("<tablet") {
     display: none !important;
   }
 }
+
 .tablet-and-below {
   @include media(">=tablet") {
     display: none !important;
   }
 }
+
 .mobile-only {
   @include media(">tablet") {
     display: none !important;
@@ -86,7 +98,7 @@ a {
 }
 
 span.diff.added {
-  background-color:rgba(0, 255, 0, 0.25);
+  background-color: rgba(0, 255, 0, 0.25);
 }
 
 
@@ -101,13 +113,77 @@ span.diff.removed {
 .discrete {
   color: var(--discrete-text-color);
 }
+
 .really.discrete {
   color: var(--really-discrete-text-color);
 }
 
 .ui.inverted.dimmer {
   background-color: var(--dimmer-background);
-  > .ui.dimmer {
+
+  >.ui.dimmer {
     color: var(--dimmer-color);
+  }
+}
+
+.symbol {
+  &.left::after {
+    padding-right: 0.25em;
+  }
+
+  &.right::after {
+    padding-left: 0.25em;
+  }
+
+  &.middle::after {
+    padding: 0 0.25em;
+  }
+
+  &.at::after {
+    content: "@";
+  }
+
+  &.slash::after {
+    content: "/";
+  }
+
+  &.pipe::after {
+    content: "|";
+  }
+
+  &.middledot::after {
+    content: "·";
+  }
+
+  &.infinity::after {
+    content: "∞";
+  }
+
+  &.single::after {
+    content: "1";
+  }
+
+  &.hashtag::after {
+    content: "#";
+  }
+
+  &.ellipses::after {
+    content: "…";
+  }
+
+  &.doubledot::after {
+    content: "..";
+  }
+
+  &.hyphen::after {
+    content: "-";
+  }
+
+  &.colon::after {
+    content: ":";
+  }
+
+  &.percent::after {
+    content: "%";
   }
 }

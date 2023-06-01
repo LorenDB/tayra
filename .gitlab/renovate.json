@@ -1,0 +1,75 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    ":dependencyDashboard",
+    ":maintainLockFilesWeekly",
+    ":enablePreCommit",
+    ":semanticCommits",
+    ":semanticCommitScopeDisabled",
+    "group:monorepos",
+    "group:recommended"
+  ],
+  "baseBranches": ["stable", "develop"],
+  "branchConcurrentLimit": 2,
+  "prConcurrentLimit": 1,
+  "rangeStrategy": "pin",
+  "ignoreDeps": ["$CI_REGISTRY/funkwhale/backend-test-docker"],
+  "packageRules": [
+    {
+      "matchPaths": ["api/*", "front/*", "docs/*"],
+      "additionalBranchPrefix": "{{parentDir}}-",
+      "semanticCommitScope": "{{parentDir}}"
+    },
+    {
+      "matchUpdateTypes": ["lockFileMaintenance"],
+      "branchConcurrentLimit": 0,
+      "prConcurrentLimit": 0
+    },
+    {
+      "matchUpdateTypes": ["major", "minor"],
+      "matchBaseBranches": ["stable"],
+      "enabled": false
+    },
+    {
+      "matchDepTypes": ["devDependencies"],
+      "matchBaseBranches": ["stable"],
+      "enabled": false
+    },
+    {
+      "matchUpdateTypes": ["patch", "pin", "digest"],
+      "matchBaseBranches": ["develop"],
+      "automerge": true,
+      "automergeType": "branch"
+    },
+    {
+      "matchManagers": ["npm"],
+      "addLabels": ["Area::Frontend"]
+    },
+    {
+      "matchManagers": ["poetry"],
+      "addLabels": ["Area::Backend"]
+    },
+    {
+      "matchPackagePatterns": ["^@vueuse/.*"],
+      "groupName": "vueuse"
+    },
+    {
+      "matchPackageNames": ["channels", "channels-redis", "daphne"],
+      "groupName": "channels"
+    },
+    {
+      "matchPackageNames": ["node"],
+      "allowedVersions": "/\\d+[02468]$/"
+    },
+    {
+      "matchFiles": ["deploy/docker-compose.yml"],
+      "matchPackageNames": ["postgres"],
+      "postUpgradeTasks": {
+        "commands": [
+          "echo 'Upgrade Postgres to version {{ newVersion }}. [Make sure to migrate!](https://docs.funkwhale.audio/administrator_documentation/upgrade_docs/docker.html#upgrade-the-postgres-container)' > changes/changelog.d/postgres.update"
+        ],
+        "fileFilters": ["changes/changelog.d/postgres.update"]
+      }
+    }
+  ]
+}

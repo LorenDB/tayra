@@ -1,0 +1,85 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.11.0\n"
+
+#: ../../user/radios/delete.md:1
+msgid "Delete a radio"
+msgstr ""
+
+#: ../../user/radios/delete.md:4
+msgid ""
+"Users who have access to your radio won't be able to access it when you "
+"delete it. This action is irreversible."
+msgstr ""
+
+#: ../../user/radios/delete.md:7
+msgid "If you no longer want a radio, you can delete it. To do this:"
+msgstr ""
+
+#: ../../user/radios/delete.md
+msgid "Desktop"
+msgstr ""
+
+#: ../../user/radios/delete.md:15
+msgid ""
+"Select {guilabel}`Radios` in the sidebar. The {guilabel}`Browsing radios`"
+" screen opens."
+msgstr ""
+
+#: ../../user/radios/delete.md:16 ../../user/radios/delete.md:27
+msgid ""
+"Select your radio under the {guilabel}`User radios` section. The radio "
+"details screen opens."
+msgstr ""
+
+#: ../../user/radios/delete.md:17 ../../user/radios/delete.md:28
+msgid ""
+"Select {guilabel}`Delete`. A {guilabel}`Do you want to delete the radio` "
+"warning appears."
+msgstr ""
+
+#: ../../user/radios/delete.md:18 ../../user/radios/delete.md:29
+msgid "Select {guilabel}`Delete radio`."
+msgstr ""
+
+#: ../../user/radios/delete.md
+msgid "Mobile"
+msgstr ""
+
+#: ../../user/radios/delete.md:25
+msgid "Select the hamburger menu ({fa}`bars`) to open the menu bar."
+msgstr ""
+
+#: ../../user/radios/delete.md:26
+msgid ""
+"Select {menuselection}`Explore --> Radios` or {menuselection}`My Library "
+"--> Radios`. The {guilabel}`Browsing radios` screen opens."
+msgstr ""
+
+#: ../../user/radios/delete.md:33
+msgid ""
+"That's it! You've deleted your radio. You can [create a new "
+"one](create.md) at any time."
+msgstr ""
+
+#~ msgid ""
+#~ "That's it! You've deleted your radio."
+#~ " You can [create a new "
+#~ "one](create_radio.md) at any time."
+#~ msgstr ""
+

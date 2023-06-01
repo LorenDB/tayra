@@ -1,19 +1,138 @@
+<script setup lang="ts">
+import type { OrderingProps } from '~/composables/navigation/useOrdering'
+import type { Artist, BackendResponse } from '~/types'
+import type { RouteRecordName } from 'vue-router'
+import type { OrderingField } from '~/store/ui'
+
+import { computed, ref, watch, onMounted } from 'vue'
+import { useRouteQuery } from '@vueuse/router'
+import { useI18n } from 'vue-i18n'
+import { syncRef } from '@vueuse/core'
+import { sortedUniq } from 'lodash-es'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+import $ from 'jquery'
+
+import TagsSelector from '~/components/library/TagsSelector.vue'
+import RemoteSearchForm from '~/components/RemoteSearchForm.vue'
+import SemanticModal from '~/components/semantic/Modal.vue'
+import ArtistCard from '~/components/audio/artist/Card.vue'
+import Pagination from '~/components/vui/Pagination.vue'
+
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useOrdering from '~/composables/navigation/useOrdering'
+import useErrorHandler from '~/composables/useErrorHandler'
+import usePage from '~/composables/navigation/usePage'
+import useLogger from '~/composables/useLogger'
+
+interface Props extends OrderingProps {
+  scope?: 'me' | 'all'
+
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  orderingConfigName?: RouteRecordName
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  scope: 'all',
+  orderingConfigName: undefined
+})
+
+const page = usePage()
+
+const tags = useRouteQuery<string[]>('tag', [])
+
+const q = useRouteQuery('query', '')
+const query = ref(q.value)
+syncRef(q, query, { direction: 'ltr' })
+
+const result = ref<BackendResponse<Artist>>()
+const showSubscribeModal = ref(false)
+
+const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
+  ['creation_date', 'creation_date'],
+  ['name', 'name']
+]
+
+const logger = useLogger()
+const sharedLabels = useSharedLabels()
+
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props)
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  const params = {
+    scope: props.scope,
+    page: page.value,
+    page_size: paginateBy.value,
+    q: query.value,
+    ordering: orderingString.value,
+    playable: 'true',
+    tag: tags.value,
+    include_channels: 'true',
+    content_category: 'podcast'
+  }
+
+  logger.time('Fetching podcasts')
+  try {
+    const response = await axios.get('artists/', {
+      params,
+      paramsSerializer: {
+        indexes: null
+      }
+    })
+
+    result.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+    result.value = undefined
+  } finally {
+    logger.timeEnd('Fetching podcasts')
+    isLoading.value = false
+  }
+}
+
+const store = useStore()
+watch(() => store.state.moderation.lastUpdate, fetchData)
+watch([page, tags, q], fetchData)
+fetchData()
+
+const search = () => {
+  page.value = 1
+  q.value = query.value
+}
+
+onOrderingUpdate(() => {
+  page.value = 1
+  fetchData()
+})
+
+onMounted(() => $('.ui.dropdown').dropdown())
+
+const { t } = useI18n()
+const labels = computed(() => ({
+  searchPlaceholder: t('components.library.Podcasts.placeholder.search'),
+  title: t('components.library.Podcasts.title')
+}))
+
+const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value].sort((a, b) => a - b)))
+</script>
+
 <template>
   <main v-title="labels.title">
     <section class="ui vertical stripe segment">
       <h2 class="ui header">
-        <translate translate-context="Content/Podcasts/Title">
-          Browsing podcasts
-        </translate>
+        {{ $t('components.library.Podcasts.header.browse') }}
       </h2>
       <form
         :class="['ui', {'loading': isLoading}, 'form']"
-        @submit.prevent="updatePage();updateQueryString();fetchData()"
+        @submit.prevent="search"
       >
         <div class="fields">
           <div class="field">
             <label for="artist-search">
-              <translate translate-context="Content/Search/Input.Label/Noun">Podcast title</translate>
+              {{ $t('components.library.Podcasts.label.search') }}
             </label>
             <div class="ui action input">
               <input
@@ -26,18 +145,18 @@
               <button
                 class="ui icon button"
                 type="submit"
-                :aria-label="$pgettext('Content/Search/Input.Label/Noun', 'Search')"
+                :aria-label="t('components.library.Podcasts.button.search')"
               >
                 <i class="search icon" />
               </button>
             </div>
           </div>
           <div class="field">
-            <label for="tags-search"><translate translate-context="*/*/*/Noun">Tags</translate></label>
+            <label for="tags-search">{{ $t('components.library.Podcasts.label.tags') }}</label>
             <tags-selector v-model="tags" />
           </div>
           <div class="field">
-            <label for="artist-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
+            <label for="artist-ordering">{{ $t('components.library.Podcasts.ordering.label') }}</label>
             <select
               id="artist-ordering"
               v-model="ordering"
@@ -53,39 +172,33 @@
             </select>
           </div>
           <div class="field">
-            <label for="artist-ordering-direction"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering direction</translate></label>
+            <label for="artist-ordering-direction">{{ $t('components.library.Podcasts.ordering.direction.label') }}</label>
             <select
               id="artist-ordering-direction"
               v-model="orderingDirection"
               class="ui dropdown"
             >
               <option value="+">
-                <translate translate-context="Content/Search/Dropdown">
-                  Ascending
-                </translate>
+                {{ $t('components.library.Podcasts.ordering.direction.ascending') }}
               </option>
               <option value="-">
-                <translate translate-context="Content/Search/Dropdown">
-                  Descending
-                </translate>
+                {{ $t('components.library.Podcasts.ordering.direction.descending') }}
               </option>
             </select>
           </div>
           <div class="field">
-            <label for="artist-results"><translate translate-context="Content/Search/Dropdown.Label/Noun">Results per page</translate></label>
+            <label for="artist-results">{{ $t('components.library.Podcasts.pagination.results') }}</label>
             <select
               id="artist-results"
               v-model="paginateBy"
               class="ui dropdown"
             >
-              <option :value="parseInt(12)">
-                12
-              </option>
-              <option :value="parseInt(30)">
-                30
-              </option>
-              <option :value="parseInt(50)">
-                50
+              <option
+                v-for="opt in paginateOptions"
+                :key="opt"
+                :value="opt"
+              >
+                {{ opt }}
               </option>
             </select>
           </div>
@@ -115,9 +228,7 @@
       >
         <div class="ui icon header">
           <i class="podcast icon" />
-          <translate translate-context="Content/Artists/Placeholder">
-            No results matching your query
-          </translate>
+          {{ $t('components.library.Podcasts.empty.noResults') }}
         </div>
         <router-link
           v-if="$store.state.auth.authenticated"
@@ -125,9 +236,7 @@
           class="ui success button labeled icon"
         >
           <i class="upload icon" />
-          <translate translate-context="Content/*/Verb">
-            Create a Channel
-          </translate>
+          {{ $t('components.library.Podcasts.button.channel') }}
         </router-link>
         <h1
           v-if="$store.state.auth.authenticated"
@@ -136,7 +245,7 @@
           <div class="actions">
             <a @click.stop.prevent="showSubscribeModal = true">
               <i class="plus icon" />
-              <translate translate-context="Content/Profile/Button">Subscribe to feed</translate>
+              {{ $t('components.library.Podcasts.button.feed') }}
             </a>
           </div>
         </h1>
@@ -144,29 +253,26 @@
       <div class="ui center aligned basic segment">
         <pagination
           v-if="result && result.count > paginateBy"
-          :current="page"
+          v-model:current="page"
           :paginate-by="paginateBy"
           :total="result.count"
-          @page-changed="selectPage"
         />
       </div>
     </section>
-    <modal
+    <semantic-modal
+      v-model:show="showSubscribeModal"
       class="tiny"
-      :show.sync="showSubscribeModal"
       :fullscreen="false"
     >
       <h2 class="header">
-        <translate translate-context="*/*/*/Noun">
-          Subscription
-        </translate>
+        {{ $t('components.library.Podcasts.modal.subscription.header') }}
       </h2>
       <div
         ref="modalContent"
         class="scrolling content"
       >
         <remote-search-form
-          type="both"
+          initial-type="both"
           :show-submit="false"
           :standalone="false"
           :redirect="true"
@@ -175,9 +281,7 @@
       </div>
       <div class="actions">
         <button class="ui basic deny button">
-          <translate translate-context="*/*/Button.Label/Verb">
-            Cancel
-          </translate>
+          {{ $t('components.library.Podcasts.button.cancel') }}
         </button>
         <button
           form="remote-search"
@@ -185,142 +289,9 @@
           class="ui primary button"
         >
           <i class="bookmark icon" />
-          <translate translate-context="*/*/*/Verb">
-            Subscribe
-          </translate>
+          {{ $t('components.library.Podcasts.button.subscribe') }}
         </button>
       </div>
-    </modal>
+    </semantic-modal>
   </main>
 </template>
-
-<script>
-import qs from 'qs'
-import axios from 'axios'
-import $ from 'jquery'
-
-import logger from '@/logging'
-
-import OrderingMixin from '@/components/mixins/Ordering'
-import PaginationMixin from '@/components/mixins/Pagination'
-import TranslationsMixin from '@/components/mixins/Translations'
-import ArtistCard from '@/components/audio/artist/Card'
-import Pagination from '@/components/Pagination'
-import TagsSelector from '@/components/library/TagsSelector'
-import Modal from '@/components/semantic/Modal'
-import RemoteSearchForm from '@/components/RemoteSearchForm'
-
-const FETCH_URL = 'artists/'
-
-export default {
-  components: {
-    ArtistCard,
-    Pagination,
-    TagsSelector,
-    RemoteSearchForm,
-    Modal
-  },
-  mixins: [OrderingMixin, PaginationMixin, TranslationsMixin],
-  props: {
-    defaultQuery: { type: String, required: false, default: '' },
-    defaultTags: { type: Array, required: false, default: () => { return [] } },
-    scope: { type: String, required: false, default: 'all' }
-  },
-  data () {
-    return {
-      isLoading: true,
-      result: null,
-      page: parseInt(this.defaultPage),
-      query: this.defaultQuery,
-      tags: (this.defaultTags || []).filter((t) => { return t.length > 0 }),
-      orderingOptions: [['creation_date', 'creation_date'], ['name', 'name']],
-      showSubscribeModal: false
-    }
-  },
-  computed: {
-    labels () {
-      const searchPlaceholder = this.$pgettext('Content/Search/Input.Placeholder', 'Search…')
-      const title = this.$pgettext('*/*/*/Noun', 'Podcasts')
-      return {
-        searchPlaceholder,
-        title
-      }
-    }
-  },
-  watch: {
-    page () {
-      this.updateQueryString()
-      this.fetchData()
-    },
-    '$store.state.moderation.lastUpdate': function () {
-      this.fetchData()
-    },
-    excludeCompilation () {
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  mounted () {
-    $('.ui.dropdown').dropdown()
-  },
-  methods: {
-    updateQueryString: function () {
-      history.pushState(
-        {},
-        null,
-        this.$route.path + '?' + new URLSearchParams(
-          {
-            query: this.query,
-            page: this.page,
-            tag: this.tags,
-            paginateBy: this.paginateBy,
-            ordering: this.getOrderingAsString(),
-            include_channels: true,
-            content_category: 'podcast'
-          }).toString()
-      )
-    },
-    fetchData: function () {
-      const self = this
-      this.isLoading = true
-      const url = FETCH_URL
-      const params = {
-        scope: this.scope,
-        page: this.page,
-        page_size: this.paginateBy,
-        has_albums: this.excludeCompilation,
-        q: this.query,
-        ordering: this.getOrderingAsString(),
-        playable: 'true',
-        tag: this.tags,
-        include_channels: 'true',
-        content_category: 'podcast'
-      }
-      logger.default.debug('Fetching artists')
-      axios.get(
-        url,
-        {
-          params: params,
-          paramsSerializer: function (params) {
-            return qs.stringify(params, { indices: false })
-          }
-        }
-      ).then(response => {
-        self.result = response.data
-        self.isLoading = false
-      }, () => {
-        self.result = null
-        self.isLoading = false
-      })
-    },
-    selectPage: function (page) {
-      this.page = page
-    },
-    updatePage () {
-      this.page = this.defaultPage
-    }
-  }
-}
-</script>

@@ -1,3 +1,17 @@
+<script setup lang="ts">
+interface Props {
+  primary?: string
+  secondary?: string
+  text?: string
+}
+
+withDefaults(defineProps<Props>(), {
+  primary: '#009fe3',
+  secondary: 'var(--text-color)',
+  text: 'var(--text-color)'
+})
+</script>
+
 <template>
   <svg
     viewBox="0 0 271.66678 53.49133"
@@ -36,13 +50,3 @@
     </g>
   </svg>
 </template>
-
-<script>
-export default {
-  props: {
-    primary: { type: String, default: '#009fe3' },
-    secondary: { type: String, default: 'var(--text-color)' },
-    text: { type: String, default: 'var(--text-color)' }
-  }
-}
-</script>

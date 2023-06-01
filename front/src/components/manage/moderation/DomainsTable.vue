@@ -1,12 +1,133 @@
+<script setup lang="ts">
+import type { OrderingProps } from '~/composables/navigation/useOrdering'
+import type { RouteRecordName } from 'vue-router'
+import type { OrderingField } from '~/store/ui'
+
+import { watchDebounced } from '@vueuse/core'
+import { computed, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+import axios from 'axios'
+
+import ActionTable from '~/components/common/ActionTable.vue'
+import Pagination from '~/components/vui/Pagination.vue'
+
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useOrdering from '~/composables/navigation/useOrdering'
+import useErrorHandler from '~/composables/useErrorHandler'
+import usePage from '~/composables/navigation/usePage'
+
+interface Props extends OrderingProps {
+  filters?: object
+  allowListEnabled?: boolean
+
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  orderingConfigName?: RouteRecordName
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  filters: () => ({}),
+  allowListEnabled: false,
+  orderingConfigName: undefined
+})
+
+const page = usePage()
+type ResponseType = { count: number, results: any[] }
+const result = ref<null | ResponseType>(null)
+
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props)
+
+const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
+  ['name', 'name'],
+  ['creation_date', 'first_seen'],
+  ['actors_count', 'users'],
+  ['outbox_activities_count', 'received_messages']
+]
+
+const { t } = useI18n()
+const query = ref('')
+const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
+const actions = computed(() => [
+  {
+    name: 'purge',
+    label: t('components.manage.moderation.DomainsTable.action.purge.label'),
+    isDangerous: true
+  },
+  {
+    name: 'allow_list_add',
+    label: t('components.manage.moderation.DomainsTable.action.add.label'),
+    filterCheckable: (obj: { allowed: boolean }) => {
+      return !obj.allowed
+    }
+  },
+  {
+    name: 'allow_list_remove',
+    label: t('components.manage.moderation.DomainsTable.action.remove.label'),
+    filterCheckable: (obj: { allowed: boolean }) => {
+      return obj.allowed
+    }
+  }
+])
+
+const allowed = ref(null)
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  const params = {
+    page: page.value,
+    page_size: paginateBy.value,
+    q: query.value,
+    ordering: orderingString.value,
+    allowed: allowed.value,
+    ...props.filters
+  } as Record<string, unknown>
+
+  if (params.allowed === null) {
+    delete params.allowed
+  }
+
+  try {
+    const response = await axios.get('/manage/federation/domains/', {
+      params
+    })
+
+    result.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+    result.value = null
+  } finally {
+    isLoading.value = false
+  }
+}
+
+const forceFetchFirstPage = async () => {
+  page.value = 1
+  return fetchData()
+}
+
+watchDebounced(query, forceFetchFirstPage, { debounce: 300 })
+onOrderingUpdate(forceFetchFirstPage)
+watch(allowed, forceFetchFirstPage)
+
+watch(page, fetchData)
+fetchData()
+
+const sharedLabels = useSharedLabels()
+const labels = computed(() => ({
+  searchPlaceholder: t('components.manage.moderation.DomainsTable.placeholder.search'),
+  allowListTitle: t('components.manage.moderation.DomainsTable.link.list')
+}))
+</script>
+
 <template>
   <div>
     <div class="ui inline form">
       <div class="fields">
         <div class="ui field">
-          <label for="domains-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
+          <label for="domains-search">{{ $t('components.manage.moderation.DomainsTable.label.search') }}</label>
           <input
             id="domains-search"
-            v-model="search"
+            v-model="query"
             name="search"
             type="text"
             :placeholder="labels.searchPlaceholder"
@@ -16,31 +137,25 @@
           v-if="allowListEnabled"
           class="field"
         >
-          <label for="domains-allow-list"><translate translate-context="Content/Moderation/*/Adjective">Is present on allow-list</translate></label>
+          <label for="domains-allow-list">{{ $t('components.manage.moderation.DomainsTable.label.inList') }}</label>
           <select
             id="domains-allow-list"
             v-model="allowed"
             class="ui dropdown"
           >
             <option :value="null">
-              <translate translate-context="Content/*/Dropdown">
-                All
-              </translate>
+              {{ $t('components.manage.moderation.DomainsTable.option.all') }}
             </option>
             <option :value="true">
-              <translate translate-context="*/*/*">
-                Yes
-              </translate>
+              {{ $t('components.manage.moderation.DomainsTable.option.yes') }}
             </option>
             <option :value="false">
-              <translate translate-context="*/*/*">
-                No
-              </translate>
+              {{ $t('components.manage.moderation.DomainsTable.option.no') }}
             </option>
           </select>
         </div>
         <div class="field">
-          <label for="domains-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
+          <label for="domains-ordering">{{ $t('components.manage.moderation.DomainsTable.ordering.label') }}</label>
           <select
             id="domains-ordering"
             v-model="ordering"
@@ -56,21 +171,17 @@
           </select>
         </div>
         <div class="field">
-          <label for="domains-ordering-direction"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering direction</translate></label>
+          <label for="domains-ordering-direction">{{ $t('components.manage.moderation.DomainsTable.ordering.direction.label') }}</label>
           <select
             id="domains-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              <translate translate-context="Content/Search/Dropdown">
-                Ascending
-              </translate>
+              {{ $t('components.manage.moderation.DomainsTable.ordering.direction.ascending') }}
             </option>
             <option value="-">
-              <translate translate-context="Content/Search/Dropdown">
-                Descending
-              </translate>
+              {{ $t('components.manage.moderation.DomainsTable.ordering.direction.descending') }}
             </option>
           </select>
         </div>
@@ -92,36 +203,25 @@
         :filters="actionFilters"
         @action-launched="fetchData"
       >
-        <template slot="header-cells">
+        <template #header-cells>
           <th>
-            <translate translate-context="*/*/*/Noun">
-              Name
-            </translate>
+            {{ $t('components.manage.moderation.DomainsTable.table.domain.header.name') }}
           </th>
           <th>
-            <translate translate-context="*/*/*/Noun">
-              Users
-            </translate>
+            {{ $t('components.manage.moderation.DomainsTable.table.domain.header.users') }}
           </th>
           <th>
-            <translate translate-context="Content/Moderation/*/Noun">
-              Received messages
-            </translate>
+            {{ $t('components.manage.moderation.DomainsTable.table.domain.header.receivedMessages') }}
           </th>
           <th>
-            <translate translate-context="Content/Moderation/Table.Label/Short (Value is a date)">
-              First seen
-            </translate>
+            {{ $t('components.manage.moderation.DomainsTable.table.domain.header.firstSeen') }}
           </th>
           <th>
-            <translate translate-context="Content/Moderation/Table.Label/Short">
-              Under moderation rule
-            </translate>
+            {{ $t('components.manage.moderation.DomainsTable.table.domain.header.moderationRule') }}
           </th>
         </template>
         <template
-          slot="row-cells"
-          slot-scope="scope"
+          #row-cells="scope"
         >
           <td>
             <router-link :to="{name: 'manage.moderation.domains.detail', params: {id: scope.obj.name }}">
@@ -143,7 +243,7 @@
             <human-date :date="scope.obj.creation_date" />
           </td>
           <td>
-            <span v-if="scope.obj.instance_policy"><i class="shield icon" /> <translate translate-context="*/*/*">Yes</translate></span>
+            <span v-if="scope.obj.instance_policy"><i class="shield icon" />{{ $t('components.manage.moderation.DomainsTable.table.domain.moderationRule') }}</span>
           </td>
         </template>
       </action-table>
@@ -153,158 +253,22 @@
       >
         <div class="ui icon header">
           <i class="server icon" />
-          <translate translate-context="Content/Home/Placeholder">
-            No other pods found
-          </translate>
+          {{ $t('components.manage.moderation.DomainsTable.empty.noPods') }}
         </div>
       </div>
     </div>
     <div>
       <pagination
         v-if="result && result.count > paginateBy"
+        v-model:current="page"
         :compact="true"
-        :current="page"
         :paginate-by="paginateBy"
         :total="result.count"
-        @page-changed="selectPage"
       />
 
       <span v-if="result && result.results.length > 0">
-        <translate
-          translate-context="Content/*/Paragraph"
-          :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
-        >
-          Showing results %{ start }-%{ end } on %{ total }
-        </translate>
+        {{ $t('components.manage.moderation.DomainsTable.pagination.results', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
       </span>
     </div>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import _ from '@/lodash'
-import time from '@/utils/time'
-import Pagination from '@/components/Pagination'
-import ActionTable from '@/components/common/ActionTable'
-import OrderingMixin from '@/components/mixins/Ordering'
-import TranslationsMixin from '@/components/mixins/Translations'
-
-export default {
-  components: {
-    Pagination,
-    ActionTable
-  },
-  mixins: [OrderingMixin, TranslationsMixin],
-  props: {
-    filters: { type: Object, required: false, default: function () { return {} } },
-    allowListEnabled: { type: Boolean, default: false }
-  },
-  data () {
-    return {
-      time,
-      isLoading: false,
-      result: null,
-      page: 1,
-      search: '',
-      allowed: null,
-      orderingOptions: [
-        ['name', 'name'],
-        ['creation_date', 'first_seen'],
-        ['actors_count', 'users'],
-        ['outbox_activities_count', 'received_messages']
-      ]
-
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        searchPlaceholder: this.$pgettext('Content/Search/Input.Placeholder', 'Search by name…'),
-        allowListTitle: this.$pgettext('Content/Moderation/Popup', 'This domain is present in your allow-list')
-      }
-    },
-    actionFilters () {
-      const currentFilters = {
-        q: this.search
-      }
-      if (this.filters) {
-        return _.merge(currentFilters, this.filters)
-      } else {
-        return currentFilters
-      }
-    },
-    actions () {
-      return [
-        {
-          name: 'purge',
-          label: this.$pgettext('*/*/*/Verb', 'Purge'),
-          isDangerous: true
-        },
-        {
-          name: 'allow_list_add',
-          label: this.$pgettext('Content/Moderation/Action/Verb', 'Add to allow-list'),
-          filterCheckable: (obj) => {
-            return !obj.allowed
-          }
-        },
-        {
-          name: 'allow_list_remove',
-          label: this.$pgettext('Content/Moderation/Action/Verb', 'Remove from allow-list'),
-          filterCheckable: (obj) => {
-            return obj.allowed
-          }
-        }
-      ]
-    }
-  },
-  watch: {
-    search (newValue) {
-      this.page = 1
-      this.fetchData()
-    },
-    page () {
-      this.fetchData()
-    },
-    allowed () {
-      this.fetchData()
-    },
-    ordering () {
-      this.fetchData()
-    },
-    orderingDirection () {
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      const baseFilters = {
-        page: this.page,
-        page_size: this.paginateBy,
-        q: this.search,
-        ordering: this.getOrderingAsString()
-      }
-      if (this.allowed !== null) {
-        baseFilters.allowed = this.allowed
-      }
-      const params = _.merge(baseFilters, this.filters)
-      const self = this
-      self.isLoading = true
-      self.checked = []
-      axios.get('/manage/federation/domains/', { params: params }).then((response) => {
-        self.result = response.data
-        self.isLoading = false
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    selectPage: function (page) {
-      this.page = page
-    }
-  }
-}
-</script>

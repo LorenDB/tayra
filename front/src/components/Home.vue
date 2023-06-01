@@ -1,3 +1,64 @@
+<script setup lang="ts">
+import { get } from 'lodash-es'
+import AlbumWidget from '~/components/audio/album/Widget.vue'
+import ChannelsWidget from '~/components/audio/ChannelsWidget.vue'
+import LoginForm from '~/components/auth/LoginForm.vue'
+import SignupForm from '~/components/auth/SignupForm.vue'
+import useMarkdown from '~/composables/useMarkdown'
+import { humanSize } from '~/utils/filters'
+import { useStore } from '~/store'
+import { computed } from 'vue'
+import { whenever } from '@vueuse/core'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+
+const { t } = useI18n()
+const labels = computed(() => ({
+  title: t('components.Home.title')
+}))
+
+const store = useStore()
+const nodeinfo = computed(() => store.state.instance.nodeinfo)
+
+const podName = computed(() => get(nodeinfo.value, 'metadata.nodeName') || 'Funkwhale')
+const banner = computed(() => get(nodeinfo.value, 'metadata.banner'))
+const shortDescription = computed(() => get(nodeinfo.value, 'metadata.shortDescription'))
+const longDescription = useMarkdown(() => get(nodeinfo.value, 'metadata.longDescription', ''))
+const rules = computed(() => get(nodeinfo.value, 'metadata.rules'))
+const contactEmail = computed(() => get(nodeinfo.value, 'metadata.contactEmail'))
+const anonymousCanListen = computed(() => get(nodeinfo.value, 'metadata.library.anonymousCanListen'))
+const openRegistrations = computed(() => get(nodeinfo.value, 'openRegistrations'))
+const defaultUploadQuota = computed(() => get(nodeinfo.value, 'metadata.defaultUploadQuota'))
+
+const stats = computed(() => {
+  const users = get(nodeinfo.value, 'usage.users.activeMonth', 0)
+  const hours = get(nodeinfo.value, 'metadata.library.music.hours', 0)
+
+  if (users === null) {
+    return null
+  }
+
+  return { users, hours }
+})
+
+const headerStyle = computed(() => {
+  if (!banner.value) {
+    return ''
+  }
+
+  return {
+    backgroundImage: `url(${store.getters['instance/absoluteUrl'](banner.value)})`
+  }
+})
+
+// TODO (wvffle): Check if needed
+const router = useRouter()
+whenever(() => store.state.auth.authenticated, () => {
+  console.log('Authenticated, redirecting to /library…')
+  router.push('/library')
+})
+</script>
+
 <template>
   <main
     v-title="labels.title"
@@ -9,12 +70,8 @@
     >
       <div class="segment-content">
         <h1 class="ui center aligned large header">
-          <span
-            v-translate="{podName: podName}"
-            translate-context="Content/Home/Header"
-            :translate-params="{podName: podName}"
-          >
-            Welcome to %{ podName }!
+          <span>
+            {{ $t('components.Home.header.welcome', {podName: podName}) }}
           </span>
           <div
             v-if="shortDescription"
@@ -29,9 +86,7 @@
       <div class="ui stackable grid">
         <div class="ten wide column">
           <h2 class="header">
-            <translate translate-context="Content/Home/Header">
-              About this Funkwhale pod
-            </translate>
+            {{ $t('components.Home.header.about') }}
           </h2>
           <div
             id="pod"
@@ -39,24 +94,22 @@
           >
             <div class="ui stackable grid">
               <div class="eight wide column">
-                <p v-if="!renderedDescription">
-                  <translate translate-context="Content/Home/Paragraph">
-                    No description available.
-                  </translate>
+                <p v-if="!longDescription">
+                  {{ $t('components.Home.placeholder.noDescription') }}
                 </p>
-                <template v-if="renderedDescription || rules">
-                  <div
-                    v-if="renderedDescription"
+                <template v-if="longDescription || rules">
+                  <sanitized-html
+                    v-if="longDescription"
                     id="renderedDescription"
-                    v-html="renderedDescription"
+                    :html="longDescription"
                   />
                   <div
-                    v-if="renderedDescription"
+                    v-if="longDescription"
                     class="ui hidden divider"
                   />
                   <div class="ui relaxed list">
                     <div
-                      v-if="renderedDescription"
+                      v-if="longDescription"
                       class="item"
                     >
                       <i class="arrow right icon" />
@@ -65,9 +118,7 @@
                           class="ui link"
                           :to="{name: 'about'}"
                         >
-                          <translate translate-context="Content/Home/Link">
-                            Learn more
-                          </translate>
+                          {{ $t('components.Home.link.learnMore') }}
                         </router-link>
                       </div>
                     </div>
@@ -82,9 +133,7 @@
                           class="ui link"
                           :to="{name: 'about', hash: '#rules'}"
                         >
-                          <translate translate-context="Content/Home/Link">
-                            Server rules
-                          </translate>
+                          {{ $t('components.Home.link.rules') }}
                         </router-link>
                       </div>
                     </div>
@@ -94,36 +143,20 @@
               <div class="eight wide column">
                 <template v-if="stats">
                   <h3 class="sub header">
-                    <translate translate-context="Content/Home/Header">
-                      Statistics
-                    </translate>
+                    {{ $t('components.Home.header.statistics') }}
                   </h3>
                   <p>
-                    <i class="user icon" /><translate
-                      translate-context="Content/Home/Stat"
-                      :translate-params="{count: stats.users.toLocaleString($store.state.ui.momentLocale) }"
-                      :translate-n="stats.users"
-                      translate-plural="%{ count } active users"
-                    >
-                      %{ count } active user
-                    </translate>
+                    <i class="user icon" />
+                    {{ $t('components.Home.stat.activeUsers', stats.users) }}
                   </p>
                   <p>
-                    <i class="music icon" /><translate
-                      translate-context="Content/Home/Stat"
-                      :translate-params="{count: parseInt(stats.hours).toLocaleString($store.state.ui.momentLocale)}"
-                      :translate-n="parseInt(stats.hours)"
-                      translate-plural="%{ count } hours of music"
-                    >
-                      %{ count } hour of music
-                    </translate>
+                    <i class="music icon" />
+                    {{ $t('components.Home.stat.hoursOfMusic', stats.hours) }}
                   </p>
                 </template>
                 <template v-if="contactEmail">
                   <h3 class="sub header">
-                    <translate translate-context="Content/Home/Header/Name">
-                      Contact
-                    </translate>
+                    {{ $t('components.Home.header.contact') }}
                   </h3>
                   <i class="at icon" />
                   <a :href="`mailto:${contactEmail}`">{{ contactEmail }}</a>
@@ -146,21 +179,13 @@
       <div class="ui stackable grid">
         <div class="four wide column">
           <h3 class="header">
-            <translate translate-context="Footer/*/Title/Short">
-              About Funkwhale
-            </translate>
+            {{ $t('components.Home.header.aboutFunkwhale') }}
           </h3>
-          <p
-            v-translate
-            translate-context="Content/Home/Paragraph"
-          >
-            This pod runs Funkwhale, a community-driven project that lets you listen and share music and audio within a decentralized, open network.
+          <p>
+            {{ $t('components.Home.description.funkwhale.paragraph1') }}
           </p>
-          <p
-            v-translate
-            translate-context="Content/Home/Paragraph"
-          >
-            Funkwhale is free and developed by a friendly community of volunteers.
+          <p>
+            {{ $t('components.Home.description.funkwhale.paragraph2') }}
           </p>
           <a
             target="_blank"
@@ -168,14 +193,12 @@
             href="https://funkwhale.audio"
           >
             <i class="external alternate icon" />
-            <translate translate-context="Content/Home/Link">Visit funkwhale.audio</translate>
+            {{ $t('components.Home.link.funkwhale') }}
           </a>
         </div>
         <div class="four wide column">
           <h3 class="header">
-            <translate translate-context="Head/Login/Title">
-              Log In
-            </translate>
+            {{ $t('components.Home.header.login') }}
           </h3>
           <login-form
             button-classes="success"
@@ -185,23 +208,14 @@
         </div>
         <div class="four wide column">
           <h3 class="header">
-            <translate translate-context="*/Signup/Title">
-              Sign up
-            </translate>
+            {{ $t('components.Home.header.signup') }}
           </h3>
           <template v-if="openRegistrations">
             <p>
-              <translate translate-context="Content/Home/Paragraph">
-                Sign up now to keep track of your favorites, create playlists, discover new content and much more!
-              </translate>
+              {{ $t('components.Home.description.signup') }}
             </p>
             <p v-if="defaultUploadQuota">
-              <translate
-                translate-context="Content/Home/Paragraph"
-                :translate-params="{quota: humanSize(defaultUploadQuota * 1000 * 1000)}"
-              >
-                Users on this pod also get %{ quota } of free storage to upload their own content!
-              </translate>
+              {{ $t('components.Home.description.quota', { quota: humanSize(defaultUploadQuota * 1000 * 1000) }) }}
             </p>
             <signup-form
               button-classes="success"
@@ -209,8 +223,8 @@
             />
           </template>
           <div v-else>
-            <p translate-context="Content/Home/Paragraph">
-              Registrations are closed on this pod. You can signup on another pod using the link below.
+            <p>
+              {{ $t('components.Home.help.registrationsClosed') }}
             </p>
             <a
               target="_blank"
@@ -218,16 +232,14 @@
               href="https://funkwhale.audio/#get-started"
             >
               <i class="external alternate icon" />
-              <translate translate-context="Content/Home/Link">Find another pod</translate>
+              {{ $t('components.Home.link.findOtherPod') }}
             </a>
           </div>
         </div>
 
         <div class="four wide column">
           <h3 class="header">
-            <translate translate-context="Content/Home/Header">
-              Useful links
-            </translate>
+            {{ $t('components.Home.header.links') }}
           </h3>
           <div class="ui relaxed list">
             <div class="item">
@@ -238,14 +250,10 @@
                   class="header"
                   to="/library"
                 >
-                  <translate translate-context="Content/Home/Link">
-                    Browse public content
-                  </translate>
+                  {{ $t('components.Home.link.publicContent.label') }}
                 </router-link>
                 <div class="description">
-                  <translate translate-context="Content/Home/Link">
-                    Listen to public albums and playlists shared on this pod
-                  </translate>
+                  {{ $t('components.Home.link.publicContent.description') }}
                 </div>
               </div>
             </div>
@@ -258,12 +266,10 @@
                   target="_blank"
                   rel="noopener"
                 >
-                  <translate translate-context="Content/Home/Link">Mobile apps</translate>
+                  {{ $t('components.Home.link.mobileApps.label') }}
                 </a>
                 <div class="description">
-                  <translate translate-context="Content/Home/Link">
-                    Use Funkwhale on other devices with our apps
-                  </translate>
+                  {{ $t('components.Home.link.mobileApps.description') }}
                 </div>
               </div>
             </div>
@@ -276,12 +282,10 @@
                   target="_blank"
                   rel="noopener"
                 >
-                  <translate translate-context="Content/Home/Link">User guides</translate>
+                  {{ $t('components.Home.link.userGuides.label') }}
                 </a>
                 <div class="description">
-                  <translate translate-context="Content/Home/Link">
-                    Discover everything you need to know about Funkwhale and its features
-                  </translate>
+                  {{ $t('components.Home.link.userGuides.description') }}
                 </div>
               </div>
             </div>
@@ -297,23 +301,17 @@
         :filters="{playable: true, ordering: '-creation_date'}"
         :limit="10"
       >
-        <template slot="title">
-          <translate translate-context="Content/Home/Title">
-            Recently added albums
-          </translate>
+        <template #title>
+          {{ $t('components.Home.header.newAlbums') }}
         </template>
         <router-link to="/library">
-          <translate translate-context="Content/Home/Link">
-            View more…
-          </translate>
+          {{ $t('components.Home.link.viewMore') }}
           <div class="ui hidden divider" />
         </router-link>
       </album-widget>
       <div class="ui hidden section divider" />
       <h3 class="ui header">
-        <translate translate-context="*/*/*">
-          New channels
-        </translate>
+        {{ $t('components.Home.header.newChannels') }}
       </h3>
       <channels-widget
         :show-modification-date="true"
@@ -323,106 +321,3 @@
     </section>
   </main>
 </template>
-
-<script>
-import _ from '@/lodash'
-import { mapState } from 'vuex'
-import showdown from 'showdown'
-import AlbumWidget from '@/components/audio/album/Widget'
-import ChannelsWidget from '@/components/audio/ChannelsWidget'
-import LoginForm from '@/components/auth/LoginForm'
-import SignupForm from '@/components/auth/SignupForm'
-import { humanSize } from '@/filters'
-
-export default {
-  components: {
-    AlbumWidget,
-    ChannelsWidget,
-    LoginForm,
-    SignupForm
-  },
-  data () {
-    return {
-      markdown: new showdown.Converter(),
-      excerptLength: 2, // html nodes,
-      humanSize
-    }
-  },
-  computed: {
-    ...mapState({
-      nodeinfo: state => state.instance.nodeinfo
-    }),
-    labels () {
-      return {
-        title: this.$pgettext('Head/Home/Title', 'Home')
-      }
-    },
-    podName () {
-      return _.get(this.nodeinfo, 'metadata.nodeName') || 'Funkwhale'
-    },
-    banner () {
-      return _.get(this.nodeinfo, 'metadata.banner')
-    },
-    shortDescription () {
-      return _.get(this.nodeinfo, 'metadata.shortDescription')
-    },
-    longDescription () {
-      return _.get(this.nodeinfo, 'metadata.longDescription')
-    },
-    rules () {
-      return _.get(this.nodeinfo, 'metadata.rules')
-    },
-    renderedDescription () {
-      if (!this.longDescription) {
-        return
-      }
-      const doc = this.markdown.makeHtml(this.longDescription)
-      return doc
-    },
-    stats () {
-      const data = {
-        users: _.get(this.nodeinfo, 'usage.users.activeMonth', null),
-        hours: _.get(this.nodeinfo, 'metadata.library.music.hours', null)
-      }
-      if (data.users === null || data.artists === null) {
-        return
-      }
-      return data
-    },
-    contactEmail () {
-      return _.get(this.nodeinfo, 'metadata.contactEmail')
-    },
-    defaultUploadQuota () {
-      return _.get(this.nodeinfo, 'metadata.defaultUploadQuota')
-    },
-    anonymousCanListen () {
-      return _.get(this.nodeinfo, 'metadata.library.anonymousCanListen')
-    },
-    openRegistrations () {
-      return _.get(this.nodeinfo, 'openRegistrations')
-    },
-    headerStyle () {
-      if (!this.banner) {
-        return ''
-      }
-      return (
-        'background-image: url(' +
-        this.$store.getters['instance/absoluteUrl'](this.banner) +
-        ')'
-      )
-    }
-  },
-  watch: {
-    '$store.state.auth.authenticated': {
-      handler (v) {
-        if (v) {
-          console.log('Authenticated, redirecting to /library…')
-          this.$router.push('/library')
-        }
-      },
-      immediate: true
-    }
-  }
-
-}
-</script>

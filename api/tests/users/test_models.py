@@ -1,10 +1,10 @@
 import datetime
-import pytest
 
+import pytest
 from django.urls import reverse
 
-from funkwhale_api.users import models
 from funkwhale_api.federation import utils as federation_utils
+from funkwhale_api.users import models
 
 
 def test__str__(factories):
@@ -186,8 +186,8 @@ def test_get_channels_groups(factories):
     user = factories["users.User"](permission_library=True)
 
     assert user.get_channels_groups() == [
-        "user.{}.imports".format(user.pk),
-        "user.{}.inbox".format(user.pk),
+        f"user.{user.pk}.imports",
+        f"user.{user.pk}.inbox",
         "admin.library",
     ]
 
@@ -251,7 +251,7 @@ def test_get_by_natural_key_annotates_primary_email_verified_no_email(factories)
     user = factories["users.User"]()
     user = models.User.objects.get_by_natural_key(user.username)
 
-    assert user.has_verified_primary_email is None
+    assert user.has_verified_primary_email is False
 
 
 def test_get_by_natural_key_annotates_primary_email_verified_true(factories):

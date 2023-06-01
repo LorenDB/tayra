@@ -1,3 +1,27 @@
+<script setup lang="ts">
+import type { Library, PrivacyLevel } from '~/types'
+
+import { humanSize } from '~/utils/filters'
+import { useI18n } from 'vue-i18n'
+import { computed } from 'vue'
+
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+
+interface Props {
+  library: Library
+}
+
+defineProps<Props>()
+
+const { t } = useI18n()
+
+const sharedLabels = useSharedLabels()
+
+const sizeLabel = computed(() => t('views.content.libraries.Card.label.size'))
+
+const privacyTooltips = (level: PrivacyLevel) => `Visibility: ${sharedLabels.fields.privacy_level.choices[level].toLowerCase()}`
+</script>
+
 <template>
   <div class="ui card">
     <div class="content">
@@ -6,21 +30,21 @@
         <span
           v-if="library.privacy_level === 'me'"
           class="right floated"
-          :data-tooltip="privacy_tooltips('me')"
+          :data-tooltip="privacyTooltips('me')"
         >
           <i class="small lock icon" />
         </span>
         <span
           v-else-if="library.privacy_level === 'instance'"
           class="right floated"
-          :data-tooltip="privacy_tooltips('instance')"
+          :data-tooltip="privacyTooltips('instance')"
         >
           <i class="small circle outline icon" />
         </span>
         <span
           v-else-if="library.privacy_level === 'everyone'"
           class="right floated"
-          :data-tooltip="privacy_tooltips('everyone')"
+          :data-tooltip="privacyTooltips('everyone')"
         >
           <i class="small globe icon" />
         </span>
@@ -39,20 +63,13 @@
         <span
           v-if="library.size"
           class="right floated"
-          :data-tooltip="size_label"
+          :data-tooltip="sizeLabel"
         >
           <i class="database icon" />
-          {{ library.size | humanSize }}
+          {{ humanSize(library.size) }}
         </span>
         <i class="music icon" />
-        <translate
-          translate-context="*/*/*"
-          :translate-params="{count: library.uploads_count}"
-          :translate-n="library.uploads_count"
-          translate-plural="%{ count } tracks"
-        >
-          %{ count } track
-        </translate>
+        {{ $t('views.content.libraries.Card.meta.tracks', library.uploads_count) }}
       </div>
     </div>
     <div class="ui bottom basic attached buttons">
@@ -60,38 +77,14 @@
         :to="{name: 'library.detail.upload', params: {id: library.uuid}}"
         class="ui button"
       >
-        <translate translate-context="Content/Library/Card.Button.Label/Verb">
-          Upload
-        </translate>
+        {{ $t('views.content.libraries.Card.button.upload') }}
       </router-link>
       <router-link
         :to="{name: 'library.detail', params: {id: library.uuid}}"
-        exact
         class="ui button"
       >
-        <translate translate-context="Content/Library/Card.Button.Label/Noun">
-          Library Details
-        </translate>
+        {{ $t('views.content.libraries.Card.link.details') }}
       </router-link>
     </div>
   </div>
 </template>
-
-<script>
-import TranslationsMixin from '@/components/mixins/Translations'
-
-export default {
-  mixins: [TranslationsMixin],
-  props: { library: { type: Object, required: true } },
-  computed: {
-    size_label () {
-      return this.$pgettext('Content/Library/Card.Help text', 'Total size of the files in this library')
-    }
-  },
-  methods: {
-    privacy_tooltips (level) {
-      return 'Visibility: ' + this.sharedLabels.fields.privacy_level.choices[level].toLowerCase()
-    }
-  }
-}
-</script>

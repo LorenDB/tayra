@@ -1,3 +1,23 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import { computed } from 'vue'
+
+import EditsCardList from '~/components/manage/library/EditsCardList.vue'
+
+interface Props {
+  defaultQuery?: string
+}
+
+withDefaults(defineProps<Props>(), {
+  defaultQuery: ''
+})
+
+const { t } = useI18n()
+const labels = computed(() => ({
+  title: t('views.admin.library.EditsList.title')
+}))
+</script>
+
 <template>
   <main v-title="labels.title">
     <section class="ui vertical stripe segment">
@@ -6,31 +26,9 @@
         :default-query="defaultQuery"
       >
         <h2 class="ui header">
-          <translate translate-context="Content/Admin/Title/Noun">
-            Library edits
-          </translate>
+          {{ $t('views.admin.library.EditsList.header.edits') }}
         </h2>
       </edits-card-list>
     </section>
   </main>
 </template>
-
-<script>
-import EditsCardList from '@/components/manage/library/EditsCardList'
-
-export default {
-  components: {
-    EditsCardList
-  },
-  props: {
-    defaultQuery: { type: String, required: false, default: '' }
-  },
-  computed: {
-    labels () {
-      return {
-        title: this.$pgettext('*/Admin/*/Noun', 'Edits')
-      }
-    }
-  }
-}
-</script>

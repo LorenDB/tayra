@@ -3,8 +3,7 @@ from django.conf import settings
 
 from config import plugins
 
-from . import mutations
-from . import utils
+from . import mutations, utils
 
 
 class CommonConfig(AppConfig):

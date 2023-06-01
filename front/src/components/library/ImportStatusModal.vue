@@ -1,9 +1,83 @@
+<script setup lang="ts">
+import type { Upload } from '~/types'
+
+import SemanticModal from '~/components/semantic/Modal.vue'
+import { useVModel } from '@vueuse/core'
+import { useI18n } from 'vue-i18n'
+
+interface ErrorEntry {
+  key: string
+  value: string
+}
+
+interface Events {
+  (e: 'update:show', value: boolean): void
+}
+
+interface Props {
+  upload: Upload
+  show: boolean
+}
+
+const emit = defineEmits<Events>()
+const props = defineProps<Props>()
+
+const show = useVModel(props, 'show', emit)
+
+const getErrors = (details: object): ErrorEntry[] => {
+  const errors = []
+
+  for (const [key, value] of Object.entries(details)) {
+    if (Array.isArray(value)) {
+      errors.push({ key, value: value.join(', ') })
+      continue
+    }
+
+    if (typeof value === 'object') {
+      errors.push(...getErrors(value).map(error => ({
+        ...error,
+        key: `${key} / ${error.key}`
+      })))
+    }
+  }
+
+  return errors
+}
+
+const { t } = useI18n()
+
+const getErrorData = (upload: Upload) => {
+  const payload = upload.import_details ?? { error_code: '', detail: {} }
+
+  const errorCode = payload.error_code
+    ? payload.error_code
+    : 'unknown_error'
+
+  return {
+    errorCode,
+    supportUrl: 'https://forum.funkwhale.audio/t/support',
+    documentationUrl: `https://docs.funkwhale.audio/users/upload.html#${errorCode}`,
+    label: errorCode === 'invalid_metadata'
+      ? t('components.library.ImportStatusModal.error.invalidMetadata.label')
+      : t('components.library.ImportStatusModal.error.unknownError.label'),
+    detail: errorCode === 'invalid_metadata'
+      ? t('components.library.ImportStatusModal.error.invalidMetadata.message')
+      : t('components.library.ImportStatusModal.error.unknownError.message'),
+    errorRows: errorCode === 'invalid_metadata'
+      ? getErrors(payload.detail ?? {})
+      : [],
+    debugInfo: {
+      source: upload.source,
+      ...payload
+    }
+  }
+}
+</script>
+
 <template>
-  <modal :show.sync="showModal">
+  <semantic-modal v-model:show="show">
     <h4 class="header">
-      <translate translate-context="Popup/Import/Title">
-        Import detail
-      </translate>
+      {{ $t('components.library.ImportStatusModal.header.importDetail') }}
     </h4>
     <div
       v-if="Object.keys(upload).length > 0"
@@ -14,43 +88,33 @@
           v-if="upload.import_status === 'pending'"
           class="ui message"
         >
-          <translate translate-context="Popup/Import/Message">
-            Upload is still pending and will soon be processed by the server.
-          </translate>
+          {{ $t('components.library.ImportStatusModal.message.importDetail') }}
         </div>
         <div
           v-if="upload.import_status === 'finished'"
           class="ui success message"
         >
-          <translate translate-context="Popup/Import/Message">
-            Upload was successfully processed by the server.
-          </translate>
+          {{ $t('components.library.ImportStatusModal.message.importSuccess') }}
         </div>
         <div
           v-if="upload.import_status === 'skipped'"
           role="alert"
           class="ui warning message"
         >
-          <translate translate-context="Popup/Import/Message">
-            Upload was skipped because a similar one is already available in one of your libraries.
-          </translate>
+          {{ $t('components.library.ImportStatusModal.warning.importSkipped') }}
         </div>
         <div
           v-if="upload.import_status === 'errored'"
           class="ui error message"
         >
-          <translate translate-context="Popup/Import/Message">
-            An error occurred during upload processing. You will find more information below.
-          </translate>
+          {{ $t('components.library.ImportStatusModal.error.importFailure') }}
         </div>
         <template v-if="upload.import_status === 'errored'">
           <table class="ui very basic collapsing celled table">
             <tbody>
               <tr>
                 <td>
-                  <translate translate-context="Popup/Import/Table.Label/Noun">
-                    Error type
-                  </translate>
+                  {{ $t('components.library.ImportStatusModal.table.error.errorType') }}
                 </td>
                 <td>
                   {{ getErrorData(upload).label }}
@@ -58,9 +122,7 @@
               </tr>
               <tr>
                 <td>
-                  <translate translate-context="Popup/Import/Table.Label/Noun">
-                    Error detail
-                  </translate>
+                  {{ $t('components.library.ImportStatusModal.table.error.errorDetail') }}
                 </td>
                 <td>
                   {{ getErrorData(upload).detail }}
@@ -69,16 +131,16 @@
                       v-for="row in getErrorData(upload).errorRows"
                       :key="row.key"
                     >
-                      {{ row.key }}: {{ row.value }}
+                      {{ row.key }}
+                      <span class="left colon symbol" />
+                      {{ row.value }}
                     </li>
                   </ul>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <translate translate-context="Footer/*/Link">
-                    Getting help
-                  </translate>
+                  {{ $t('components.library.ImportStatusModal.table.error.help') }}
                 </td>
                 <td>
                   <ul>
@@ -87,7 +149,7 @@
                         :href="getErrorData(upload).documentationUrl"
                         target="_blank"
                       >
-                        <translate translate-context="Popup/Import/Table.Label/Value">Read our documentation for this error</translate>
+                        {{ $t('components.library.ImportStatusModal.link.documentation') }}
                       </a>
                     </li>
                     <li>
@@ -95,7 +157,7 @@
                         :href="getErrorData(upload).supportUrl"
                         target="_blank"
                       >
-                        <translate translate-context="Popup/Import/Table.Label/Value">Open a support thread (include the debug information below in your message)</translate>
+                        {{ $t('components.library.ImportStatusModal.link.support') }}
                       </a>
                     </li>
                   </ul>
@@ -103,16 +165,14 @@
               </tr>
               <tr>
                 <td>
-                  <translate translate-context="Popup/Import/Table.Label/Noun">
-                    Debug information
-                  </translate>
+                  {{ $t('components.library.ImportStatusModal.table.error.debug') }}
                 </td>
                 <td>
                   <div class="ui form">
                     <textarea
                       class="ui textarea"
                       rows="10"
-                      :value="getErrorData(upload).debugInfo"
+                      :value="JSON.stringify(getErrorData(upload).debugInfo)"
                     />
                   </div>
                 </td>
@@ -124,92 +184,8 @@
     </div>
     <div class="actions">
       <button class="ui deny button">
-        <translate translate-context="*/*/Button.Label/Verb">
-          Close
-        </translate>
+        {{ $t('components.library.ImportStatusModal.button.close') }}
       </button>
     </div>
-  </modal>
+  </semantic-modal>
 </template>
-<script>
-import Modal from '@/components/semantic/Modal'
-
-function getErrors (payload) {
-  const errors = []
-  for (const k in payload) {
-    if (Object.prototype.hasOwnProperty.call(payload, k)) {
-      const value = payload[k]
-      if (Array.isArray(value)) {
-        errors.push({
-          key: k,
-          value: value.join(', ')
-        })
-      } else {
-        // possibly artists, so nested errors
-        if (typeof value === 'object') {
-          getErrors(value).forEach((e) => {
-            errors.push({
-              key: `${k} / ${e.key}`,
-              value: e.value
-            })
-          })
-        }
-      }
-    }
-  }
-  return errors
-}
-
-export default {
-  components: {
-    Modal
-  },
-  props: {
-    upload: { type: Object, required: true },
-    show: { type: Boolean }
-  },
-  data () {
-    return {
-      showModal: this.show
-    }
-  },
-  watch: {
-    showModal (v) {
-      this.$emit('update:show', v)
-    },
-    show (v) {
-      this.showModal = v
-    }
-  },
-  methods: {
-    getErrorData (upload) {
-      const payload = upload.import_details || {}
-      const d = {
-        supportUrl: 'https://forum.funkwhale.audio/t/support',
-        errorRows: []
-      }
-      if (!payload.error_code) {
-        d.errorCode = 'unknown_error'
-      } else {
-        d.errorCode = payload.error_code
-      }
-      d.documentationUrl = `https://docs.funkwhale.audio/users/upload.html#${d.errorCode}`
-      if (d.errorCode === 'invalid_metadata') {
-        d.label = this.$pgettext('Popup/Import/Error.Label', 'Invalid metadata')
-        d.detail = this.$pgettext('Popup/Import/Error.Label', 'The metadata included in the file is invalid or some mandatory fields are missing.')
-        const detail = payload.detail || {}
-        d.errorRows = getErrors(detail)
-      } else {
-        d.label = this.$pgettext('*/*/Error', 'Unknown error')
-        d.detail = this.$pgettext('Popup/Import/Error.Label', 'An unknown error occurred')
-      }
-      const debugInfo = {
-        source: upload.source,
-        ...payload
-      }
-      d.debugInfo = JSON.stringify(debugInfo, null, 4)
-      return d
-    }
-  }
-}
-</script>

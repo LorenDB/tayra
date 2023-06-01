@@ -1,27 +1,182 @@
+<script setup lang="ts">
+import type { Playlist, PlaylistTrack, BackendError, APIErrorResponse } from '~/types'
+
+import { useI18n } from 'vue-i18n'
+import { useVModels } from '@vueuse/core'
+import { computed, ref } from 'vue'
+
+import { useQueue } from '~/composables/audio/queue'
+import { useStore } from '~/store'
+
+import draggable from 'vuedraggable'
+import axios from 'axios'
+
+import PlaylistForm from '~/components/playlists/Form.vue'
+
+interface Events {
+  (e: 'update:playlistTracks', value: PlaylistTrack[]): void
+  (e: 'update:playlist', value: Playlist): void
+}
+
+interface Props {
+  playlist: Playlist | null
+  playlistTracks: PlaylistTrack[]
+}
+
+const emit = defineEmits<Events>()
+const props = defineProps<Props>()
+
+const { playlistTracks, playlist } = useVModels(props, emit)
+
+const errors = ref([] as string[])
+const duplicateTrackAddInfo = ref<{ tracks: string[] }>()
+const showDuplicateTrackAddConfirmation = ref(false)
+
+const { tracks: queueTracks } = useQueue()
+
+interface ModifiedPlaylistTrack extends PlaylistTrack {
+  _id?: string
+}
+
+const tracks = computed({
+  get: () => playlistTracks.value.map((playlistTrack, index) => ({ ...playlistTrack, _id: `${index}-${playlistTrack.track.id}` } as ModifiedPlaylistTrack)),
+  set: (playlist) => {
+    playlistTracks.value = playlist.map((modifiedPlaylistTrack, index) => {
+      const res = { ...modifiedPlaylistTrack, index } as ModifiedPlaylistTrack
+      delete res._id
+      return res as PlaylistTrack
+    })
+  }
+})
+
+const { t } = useI18n()
+const labels = computed(() => ({
+  copyTitle: t('components.playlists.Editor.button.copy')
+}))
+
+const isLoading = ref(false)
+const status = computed(() => isLoading.value
+  ? 'loading'
+  : showDuplicateTrackAddConfirmation.value
+    ? 'confirmDuplicateAdd'
+    : errors.value.length > 0
+      ? 'errored'
+      : 'saved'
+)
+
+const responseHandlers = {
+  success () {
+    errors.value = []
+    showDuplicateTrackAddConfirmation.value = false
+  },
+  errored (error: BackendError): void {
+    showDuplicateTrackAddConfirmation.value = false
+
+    const { backendErrors, rawPayload = {} } = error
+    if (backendErrors.length === 1 && backendErrors[0] === 'Tracks Already Exist In Playlist') {
+      duplicateTrackAddInfo.value = ((rawPayload.playlist as APIErrorResponse).non_field_errors as APIErrorResponse)[0] as { tracks: string[] }
+      showDuplicateTrackAddConfirmation.value = true
+      return
+    }
+
+    errors.value = backendErrors
+  }
+}
+
+const fetchTracks = async () => {
+  // NOTE: This is handled by other functions and never used directly
+  const response = await axios.get(`playlists/${playlist.value?.id}/tracks/`)
+  playlistTracks.value = response.data.results
+}
+
+const store = useStore()
+const reorder = async ({ oldIndex: from, newIndex: to }: { oldIndex: number, newIndex: number }) => {
+  isLoading.value = true
+
+  try {
+    await axios.post(`playlists/${playlist.value?.id}/move/`, { from, to })
+    await store.dispatch('playlists/fetchOwn')
+    responseHandlers.success()
+  } catch (error) {
+    responseHandlers.errored(error as BackendError)
+  }
+
+  isLoading.value = false
+}
+
+const removePlaylistTrack = async (index: number) => {
+  isLoading.value = true
+
+  try {
+    tracks.value.splice(index, 1)
+    await axios.post(`playlists/${playlist.value?.id}/remove/`, { index })
+    await Promise.all([
+      store.dispatch('playlists/fetchOwn'),
+      fetchTracks()
+    ])
+    responseHandlers.success()
+  } catch (error) {
+    responseHandlers.errored(error as BackendError)
+  }
+
+  isLoading.value = false
+}
+
+const clearPlaylist = async () => {
+  isLoading.value = true
+
+  try {
+    tracks.value = []
+    await axios.delete(`playlists/${playlist.value?.id}/clear/`)
+    await store.dispatch('playlists/fetchOwn')
+    responseHandlers.success()
+  } catch (error) {
+    responseHandlers.errored(error as BackendError)
+  }
+
+  isLoading.value = false
+}
+
+const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.post(`playlists/${playlist.value?.id}/add/`, {
+      allow_duplicates: allowDuplicates,
+      tracks: insertedTracks
+    })
+
+    tracks.value.push(...response.data.results)
+    await Promise.all([
+      store.dispatch('playlists/fetchOwn'),
+      fetchTracks()
+    ])
+    responseHandlers.success()
+  } catch (error) {
+    responseHandlers.errored(error as BackendError)
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
   <div class="ui text container component-playlist-editor">
     <playlist-form
-      :title="false"
-      :playlist="playlist"
-      @updated="$emit('playlist-updated', $event)"
+      v-model:playlist="playlist"
+      :title="undefined"
     />
     <h3 class="ui top attached header">
-      <translate translate-context="Content/Playlist/Title">
-        Playlist editor
-      </translate>
+      {{ $t('components.playlists.Editor.header.editor') }}
     </h3>
     <div class="ui attached segment">
       <template v-if="status === 'loading'">
         <div class="ui active tiny inline loader" />
-        <translate translate-context="Content/Playlist/Paragraph">
-          Syncing changes to server…
-        </translate>
+        {{ $t('components.playlists.Editor.loading.sync') }}
       </template>
       <template v-else-if="status === 'errored'">
         <i class="dangerclose icon" />
-        <translate translate-context="Content/Playlist/Error message.Title">
-          An error occurred while saving your changes
-        </translate>
+        {{ $t('components.playlists.Editor.error.sync') }}
         <div
           v-if="errors.length > 0"
           role="alert"
@@ -29,8 +184,8 @@
         >
           <ul class="list">
             <li
-              v-for="(error, key) in errors"
-              :key="key"
+              v-for="error in errors"
+              :key="error"
             >
               {{ error }}
             </li>
@@ -42,16 +197,13 @@
         role="alert"
         class="ui warning message"
       >
-        <p
-          v-translate="{playlist: playlist.name}"
-          translate-context="Content/Playlist/Paragraph"
-        >
-          Some tracks in your queue are already in this playlist:
+        <p>
+          {{ $t('components.playlists.Editor.warning.duplicate') }}
         </p>
         <ul class="ui relaxed divided list duplicate-tracks-list">
           <li
-            v-for="(track, key) in duplicateTrackAddInfo.tracks"
-            :key="key"
+            v-for="track in duplicateTrackAddInfo?.tracks ?? []"
+            :key="track"
             class="ui item"
           >
             {{ track }}
@@ -61,15 +213,12 @@
           class="ui small success button"
           @click="insertMany(queueTracks, true)"
         >
-          <translate translate-context="*/Playlist/Button.Label/Verb">
-            Add anyways
-          </translate>
+          {{ $t('components.playlists.Editor.button.addDuplicate') }}
         </button>
       </div>
       <template v-else-if="status === 'saved'">
-        <i class="success check icon" /> <translate translate-context="Content/Playlist/Paragraph">
-          Changes synced with server
-        </translate>
+        <i class="success check icon" />
+        {{ $t('components.playlists.Editor.message.sync') }}
       </template>
     </div>
     <div class="ui bottom attached segment">
@@ -80,93 +229,80 @@
         @click="insertMany(queueTracks, false)"
       >
         <i class="plus icon" />
-        <translate
-          translate-context="Content/Playlist/Button.Label/Verb"
-          translate-plural="Insert from queue (%{ count } tracks)"
-          :translate-n="queueTracks.length"
-          :translate-params="{count: queueTracks.length}"
-        >
-          Insert from queue (%{ count } track)
-        </translate>
+        {{ $t('components.playlists.Editor.button.insertFromQueue', queueTracks.length) }}
       </button>
 
       <dangerous-button
-        :disabled="plts.length === 0"
+        :disabled="tracks.length === 0"
         class="ui labeled right floated danger icon button"
         :action="clearPlaylist"
       >
-        <i class="eraser icon" /> <translate translate-context="*/Playlist/Button.Label/Verb">
-          Clear playlist
-        </translate>
-        <p
-          slot="modal-header"
-          v-translate="{playlist: playlist.name}"
-          translate-context="Popup/Playlist/Title"
-          :translate-params="{playlist: playlist.name}"
-        >
-          Do you want to clear the playlist "%{ playlist }"?
-        </p>
-        <p slot="modal-content">
-          <translate translate-context="Popup/Playlist/Paragraph">
-            This will remove all tracks from this playlist and cannot be undone.
-          </translate>
-        </p>
-        <div slot="modal-confirm">
-          <translate translate-context="*/Playlist/Button.Label/Verb">
-            Clear playlist
-          </translate>
-        </div>
+        <i class="eraser icon" />
+        {{ $t('components.playlists.Editor.button.clear') }}
+        <template #modal-header>
+          <p>
+            {{ $t('components.playlists.Editor.modal.clearPlaylist.header', {playlist: playlist?.name}) }}
+          </p>
+        </template>
+        <template #modal-content>
+          <p>
+            {{ $t('components.playlists.Editor.modal.clearPlaylist.content.warning') }}
+          </p>
+        </template>
+        <template #modal-confirm>
+          <div>
+            {{ $t('components.playlists.Editor.button.clear') }}
+          </div>
+        </template>
       </dangerous-button>
       <div class="ui hidden divider" />
-      <template v-if="plts.length > 0">
+      <template v-if="tracks.length > 0">
         <p>
-          <translate translate-context="Content/Playlist/Paragraph/Call to action">
-            Drag and drop rows to reorder tracks in the playlist
-          </translate>
+          {{ $t('components.playlists.Editor.help.reorder') }}
         </p>
         <div class="table-wrapper">
           <table class="ui compact very basic unstackable table">
             <draggable
-              v-model="plts"
+              v-model="tracks"
               tag="tbody"
+              item-key="_id"
               @update="reorder"
             >
-              <tr
-                v-for="(plt, index) in plts"
-                :key="`${index}-${plt.track.id}`"
-              >
-                <td class="left aligned">
-                  {{ plt.index + 1 }}
-                </td>
-                <td class="center aligned">
-                  <img
-                    v-if="plt.track.album && plt.track.album.cover && plt.track.album.cover.urls.original"
-                    v-lazy="$store.getters['instance/absoluteUrl'](plt.track.album.cover.urls.medium_square_crop)"
-                    alt=""
-                    class="ui mini image"
-                  >
-                  <img
-                    v-else
-                    alt=""
-                    class="ui mini image"
-                    src="../../assets/audio/default-cover.png"
-                  >
-                </td>
-                <td colspan="4">
-                  <strong>{{ plt.track.title }}</strong><br>
-                  {{ plt.track.artist.name }}
-                </td>
-                <td class="right aligned">
-                  <button
-                    class="ui circular danger basic icon button"
-                    @click.stop="removePlt(index)"
-                  >
-                    <i
-                      class="trash icon"
-                    />
-                  </button>
-                </td>
-              </tr>
+              <template #item="{ element: plt, index }">
+                <tr>
+                  <td class="left aligned">
+                    {{ plt.index + 1 }}
+                  </td>
+                  <td class="center aligned">
+                    <img
+                      v-if="plt.track.album && plt.track.album.cover && plt.track.album.cover.urls.original"
+                      v-lazy="$store.getters['instance/absoluteUrl'](plt.track.album.cover.urls.medium_square_crop)"
+                      alt=""
+                      class="ui mini image"
+                    >
+                    <img
+                      v-else
+                      alt=""
+                      class="ui mini image"
+                      src="../../assets/audio/default-cover.png"
+                    >
+                  </td>
+                  <td colspan="4">
+                    <strong>{{ plt.track.title }}</strong><br>
+                    {{ plt.track.artist.name }}
+                  </td>
+                  <td class="right aligned">
+                    <button
+                      class="ui circular danger basic icon button"
+                      @click.stop="removePlaylistTrack(index)"
+                    >
+                      <i
+                        class="trash icon"
+                      />
+                    </button>
+                  </td>
+                </tr>
+              </template>
             </draggable>
           </table>
         </div>
@@ -174,141 +310,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import { mapState } from 'vuex'
-import axios from 'axios'
-import PlaylistForm from '@/components/playlists/Form'
-
-import draggable from 'vuedraggable'
-
-export default {
-  components: {
-    draggable,
-    PlaylistForm
-  },
-  props: {
-    playlist: { type: Object, required: true },
-    playlistTracks: { type: Array, required: true }
-  },
-  data () {
-    return {
-      plts: this.playlistTracks,
-      isLoading: false,
-      errors: [],
-      duplicateTrackAddInfo: {},
-      showDuplicateTrackAddConfirmation: false
-    }
-  },
-  computed: {
-    ...mapState({
-      queueTracks: state => state.queue.tracks
-    }),
-    labels () {
-      return {
-        copyTitle: this.$pgettext('Content/Playlist/Button.Tooltip/Verb', 'Copy the current queue to this playlist')
-      }
-    },
-    status () {
-      if (this.isLoading) {
-        return 'loading'
-      }
-      if (this.errors.length > 0) {
-        return 'errored'
-      }
-      if (this.showDuplicateTrackAddConfirmation) {
-        return 'confirmDuplicateAdd'
-      }
-      return 'saved'
-    }
-  },
-  watch: {
-    plts: {
-      handler (newValue) {
-        newValue.forEach((e, i) => {
-          e.index = i
-        })
-        this.$emit('tracks-updated', newValue)
-      },
-      deep: true
-    }
-  },
-  methods: {
-    success () {
-      this.isLoading = false
-      this.errors = []
-      this.showDuplicateTrackAddConfirmation = false
-    },
-    errored (errors) {
-      this.isLoading = false
-      if (errors.length === 1 && errors[0].code === 'tracks_already_exist_in_playlist') {
-        this.duplicateTrackAddInfo = errors[0]
-        this.showDuplicateTrackAddConfirmation = true
-      } else {
-        this.errors = errors
-      }
-    },
-    reorder ({ oldIndex, newIndex }) {
-      const self = this
-      self.isLoading = true
-      const url = `playlists/${this.playlist.id}/move`
-      axios.post(url, { from: oldIndex, to: newIndex }).then((response) => {
-        self.success()
-      }, error => {
-        self.errored(error.backendErrors)
-      })
-    },
-    removePlt (index) {
-      this.plts.splice(index, 1)
-      const self = this
-      self.isLoading = true
-      const url = `playlists/${this.playlist.id}/remove`
-      axios.post(url, { index }).then((response) => {
-        self.success()
-        self.$store.dispatch('playlists/fetchOwn')
-      }, error => {
-        self.errored(error.backendErrors)
-      })
-    },
-    clearPlaylist () {
-      this.plts = []
-      const self = this
-      self.isLoading = true
-      const url = 'playlists/' + this.playlist.id + '/clear'
-      axios.delete(url).then((response) => {
-        self.success()
-        self.$store.dispatch('playlists/fetchOwn')
-      }, error => {
-        self.errored(error.backendErrors)
-      })
-    },
-    insertMany (tracks, allowDuplicates) {
-      const self = this
-      const ids = tracks.map(t => {
-        return t.id
-      })
-      const payload = {
-        tracks: ids,
-        allow_duplicates: allowDuplicates
-      }
-      self.isLoading = true
-      const url = 'playlists/' + this.playlist.id + '/add/'
-      axios.post(url, payload).then((response) => {
-        response.data.results.forEach(r => {
-          self.plts.push(r)
-        })
-        self.success()
-        self.$store.dispatch('playlists/fetchOwn')
-      }, error => {
-        // if backendErrors isn't populated (e.g. duplicate track exceptions raised by
-        // the playlist model), read directly from the response
-        if (error.rawPayload.playlist) {
-          self.errored(error.rawPayload.playlist)
-        } else {
-          self.errored(error.backendErrors)
-        }
-      })
-    }
-  }
-}
-</script>

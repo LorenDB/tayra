@@ -11,10 +11,7 @@ from django.utils import timezone
 from funkwhale_api.common import channels
 from funkwhale_api.taskapp import celery
 
-from . import models
-from . import serializers
-from . import session
-from . import signals
+from . import models, serializers, session, signals
 
 logger = logging.getLogger(__name__)
 

@@ -1,7 +1,8 @@
-from config import plugins
 import funkwhale_api
-from .funkwhale_startup import PLUGIN
+from config import plugins
+
 from .client import ListenBrainzClient, Track
+from .funkwhale_startup import PLUGIN
 
 
 @plugins.register_hook(plugins.LISTENING_CREATED, PLUGIN)
@@ -41,5 +42,9 @@ def get_track(track):
 
     if track.artist.mbid:
         additional_info["artist_mbids"] = [str(track.artist.mbid)]
+
+    upload = track.uploads.filter(duration__gte=0).first()
+    if upload:
+        additional_info["duration"] = upload.duration
 
     return Track(artist, title, album, additional_info)

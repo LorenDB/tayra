@@ -1,13 +1,17 @@
-import aiohttp
 import asyncio
 import functools
+import logging
 
+import aiohttp
+import pyld.documentloader.requests
 import pyld.jsonld
 from django.conf import settings
-import pyld.documentloader.requests
 from rest_framework import serializers
 from rest_framework.fields import empty
+
 from . import contexts
+
+logger = logging.getLogger(__name__)
 
 
 def cached_contexts(loader):
@@ -95,7 +99,7 @@ async def fetch_many(*ids, references=None):
     """
     Given a list of object ids, will fetch the remote
     representations for those objects, expand them
-    and return a dictionnary with id as the key and expanded document as the values
+    and return a dictionary with id as the key and expanded document as the values
     """
     ids = set(ids)
     results = references if references is not None else {}
@@ -121,7 +125,7 @@ DEFAULT_PREPARE_CONFIG = {
 
 def dereference(value, references):
     """
-    Given a payload and a dictonary containing ids and objects, will replace
+    Given a payload and a dictionary containing ids and objects, will replace
     all the matching objects in the payload by the one in the references dictionary.
     """
 
@@ -165,10 +169,10 @@ def get_value(value, keep=None, attr=None):
 def prepare_for_serializer(payload, config, fallbacks={}):
     """
     Json-ld payloads, as returned by expand are quite complex to handle, because
-    every attr is basically a list of dictionnaries. To make code simpler,
+    every attr is basically a list of dictionaries. To make code simpler,
     we use this function to clean the payload a little bit, base on the config object.
 
-    Config is a dictionnary, with keys being serializer field names, and values
+    Config is a dictionary, with keys being serializer field names, and values
     being dictionaries describing how to handle this field.
     """
     final_payload = {}
@@ -192,7 +196,9 @@ def prepare_for_serializer(payload, config, fallbacks={}):
             for a in aliases:
                 try:
                     value = get_value(
-                        payload[a["property"]], keep=a.get("keep"), attr=a.get("attr"),
+                        payload[a["property"]],
+                        keep=a.get("keep"),
+                        attr=a.get("attr"),
                     )
                 except (IndexError, KeyError):
                     continue
@@ -254,7 +260,7 @@ class JsonLdSerializer(serializers.Serializer):
                     data = expand(data)
                 except ValueError as e:
                     raise serializers.ValidationError(
-                        "{} is not a valid jsonld document: {}".format(data, e)
+                        f"{data} is not a valid jsonld document: {e}"
                     )
             try:
                 config = self.Meta.jsonld_mapping
@@ -279,7 +285,8 @@ class JsonLdSerializer(serializers.Serializer):
             if dereferenced_ids:
                 try:
                     loop = asyncio.get_event_loop()
-                except RuntimeError:
+                except RuntimeError as exception:
+                    logger.debug(exception)
                     loop = asyncio.new_event_loop()
                 references = self.context.setdefault("references", {})
                 loop.run_until_complete(

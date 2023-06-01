@@ -1,12 +1,100 @@
+<script setup lang="ts">
+import type { Library, BackendError, PrivacyLevel } from '~/types'
+
+import { useI18n } from 'vue-i18n'
+import { computed, ref } from 'vue'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+
+const PRIVACY_LEVELS = ['me', 'instance', 'everyone'] as PrivacyLevel[]
+
+interface Events {
+  (e: 'updated', data: Library): void
+  (e: 'created', data: Library): void
+  (e: 'deleted'): void
+}
+
+interface Props {
+  library?: Library
+}
+
+const emit = defineEmits<Events>()
+const props = defineProps<Props>()
+
+const { t } = useI18n()
+
+const sharedLabels = useSharedLabels()
+const store = useStore()
+
+const labels = computed(() => ({
+  descriptionPlaceholder: t('views.content.libraries.Form.placeholder.description'),
+  namePlaceholder: t('views.content.libraries.Form.placeholder.name')
+}))
+
+const currentVisibilityLevel = ref(props.library?.privacy_level ?? 'me')
+const currentDescription = ref(props.library?.description ?? '')
+const currentName = ref(props.library?.name ?? '')
+
+const errors = ref([] as string[])
+const isLoading = ref(false)
+const submit = async () => {
+  isLoading.value = true
+
+  try {
+    const payload = {
+      name: currentName.value,
+      description: currentDescription.value,
+      privacy_level: currentVisibilityLevel.value
+    }
+
+    const response = props.library
+      ? await axios.patch(`libraries/${props.library.uuid}/`, payload)
+      : await axios.post('libraries/', payload)
+
+    if (props.library) emit('updated', response.data)
+    else emit('created', response.data)
+
+    store.commit('ui/addMessage', {
+      content: props.library
+        ? t('views.content.libraries.Form.message.libraryUpdated')
+        : t('views.content.libraries.Form.message.libraryCreated'),
+      date: new Date()
+    })
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const remove = async () => {
+  isLoading.value = true
+
+  try {
+    await axios.delete(`libraries/${props.library?.uuid}/`)
+    emit('deleted')
+    store.commit('ui/addMessage', {
+      content: t('views.content.libraries.Form.message.libraryDeleted'),
+      date: new Date()
+    })
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
   <form
     class="ui form"
     @submit.prevent="submit"
   >
     <p v-if="!library">
-      <translate translate-context="Content/Library/Paragraph">
-        Libraries help you organize and share your music collections. You can upload your own music collection to Funkwhale and share it with your friends and family.
-      </translate>
+      {{ $t('views.content.libraries.Form.description.library') }}
     </p>
     <div
       v-if="errors.length > 0"
@@ -14,9 +102,7 @@
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/*/Error message.Title">
-          Error
-        </translate>
+        {{ $t('views.content.libraries.Form.header.failure') }}
       </h4>
       <ul class="list">
         <li
@@ -28,7 +114,7 @@
       </ul>
     </div>
     <div class="required field">
-      <label for="current-name"><translate translate-context="*/*/*/Noun">Name</translate></label>
+      <label for="current-name">{{ $t('views.content.libraries.Form.label.name') }}</label>
       <input
         id="current-name"
         v-model="currentName"
@@ -39,7 +125,7 @@
       >
     </div>
     <div class="field">
-      <label for="current-description"><translate translate-context="*/*/*/Noun">Description</translate></label>
+      <label for="current-description">{{ $t('views.content.libraries.Form.label.description') }}</label>
       <textarea
         id="current-description"
         v-model="currentDescription"
@@ -48,11 +134,9 @@
       />
     </div>
     <div class="field">
-      <label for="visibility-level"><translate translate-context="*/*/*">Visibility</translate></label>
+      <label for="visibility-level">{{ $t('views.content.libraries.Form.label.visibility') }}</label>
       <p>
-        <translate translate-context="Content/Library/Paragraph">
-          You are able to share your library with other people, regardless of its visibility.
-        </translate>
+        {{ $t('views.content.libraries.Form.description.visibility') }}
       </p>
       <select
         id="visibility-level"
@@ -60,8 +144,8 @@
         class="ui dropdown"
       >
         <option
-          v-for="(c, key) in ['me', 'instance', 'everyone']"
-          :key="key"
+          v-for="c in PRIVACY_LEVELS"
+          :key="c"
           :value="c"
         >
           {{ sharedLabels.fields.privacy_level.choices[c] }}
@@ -72,135 +156,39 @@
       class="ui submit button"
       type="submit"
     >
-      <translate
+      <span
         v-if="library"
-        translate-context="Content/Library/Button.Label/Verb"
       >
-        Update library
-      </translate>
-      <translate
+        {{ $t('views.content.libraries.Form.button.update') }}
+      </span>
+      <span
         v-else
-        translate-context="Content/Library/Button.Label/Verb"
       >
-        Create library
-      </translate>
+        {{ $t('views.content.libraries.Form.button.create') }}
+      </span>
     </button>
     <dangerous-button
       v-if="library"
       type="button"
       class="ui right floated basic danger button"
-      @confirm="remove()"
+      @confirm="remove"
     >
-      <translate translate-context="*/*/*/Verb">
-        Delete
-      </translate>
-      <p slot="modal-header">
-        <translate translate-context="Popup/Library/Title">
-          Delete this library?
-        </translate>
-      </p>
-      <p slot="modal-content">
-        <translate translate-context="Popup/Library/Paragraph">
-          The library and all its tracks will be deleted. This can not be undone.
-        </translate>
-      </p>
-      <div slot="modal-confirm">
-        <translate translate-context="Popup/Library/Button.Label/Verb">
-          Delete library
-        </translate>
-      </div>
+      {{ $t('views.content.libraries.Form.button.delete') }}
+      <template #modal-header>
+        <p>
+          {{ $t('views.content.libraries.Form.modal.delete.header') }}
+        </p>
+      </template>
+      <template #modal-content>
+        <p>
+          {{ $t('views.content.libraries.Form.modal.delete.content.warning') }}
+        </p>
+      </template>
+      <template #modal-confirm>
+        <div>
+          {{ $t('views.content.libraries.Form.button.confirm') }}
+        </div>
+      </template>
     </dangerous-button>
   </form>
 </template>
-
-<script>
-import axios from 'axios'
-import MixinsTranslation from '@/components/mixins/Translations.vue'
-
-export default {
-  mixins: [MixinsTranslation],
-  props: { library: { type: Object, default: null } },
-  data () {
-    const d = {
-      isLoading: false,
-      over: false,
-      errors: []
-    }
-    if (this.library) {
-      d.currentVisibilityLevel = this.library.privacy_level
-      d.currentName = this.library.name
-      d.currentDescription = this.library.description
-    } else {
-      d.currentVisibilityLevel = 'me'
-      d.currentName = ''
-      d.currentDescription = ''
-    }
-    return d
-  },
-  computed: {
-    labels () {
-      const namePlaceholder = this.$pgettext('Content/Library/Input.Placeholder', 'My awesome library')
-      const descriptionPlaceholder = this.$pgettext('Content/Library/Input.Placeholder', 'This library contains my personal music, I hope you like it.')
-      return {
-        namePlaceholder,
-        descriptionPlaceholder
-      }
-    }
-  },
-  methods: {
-    submit () {
-      const self = this
-      this.isLoading = true
-      const payload = {
-        name: this.currentName,
-        description: this.currentDescription,
-        privacy_level: this.currentVisibilityLevel
-      }
-      let promise
-      if (this.library) {
-        promise = axios.patch(`libraries/${this.library.uuid}/`, payload)
-      } else {
-        promise = axios.post('libraries/', payload)
-      }
-      promise.then((response) => {
-        self.isLoading = false
-        let msg
-        if (self.library) {
-          self.$emit('updated', response.data)
-          msg = this.$pgettext('Content/Library/Message', 'Library updated')
-        } else {
-          self.$emit('created', response.data)
-          msg = this.$pgettext('Content/Library/Message', 'Library created')
-        }
-        self.$store.commit('ui/addMessage', {
-          content: msg,
-          date: new Date()
-        })
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    reset () {
-      this.currentVisibilityLevel = 'me'
-      this.currentName = ''
-      this.currentDescription = ''
-    },
-    remove () {
-      const self = this
-      axios.delete(`libraries/${this.library.uuid}/`).then((response) => {
-        self.isLoading = false
-        const msg = this.$pgettext('Content/Library/Message', 'Library deleted')
-        self.$emit('deleted', {})
-        self.$store.commit('ui/addMessage', {
-          content: msg,
-          date: new Date()
-        })
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    }
-  }
-}
-</script>

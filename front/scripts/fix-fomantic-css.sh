@@ -1,10 +1,24 @@
-#!/usr/bin/env -S bash -eux
+#!/usr/bin/env bash
 
-cd "$(dirname $0)/.." # change into base directory
+set -eux
 
-find node_modules/fomantic-ui-css/components -name "*.min.css" -delete
-mkdir -p node_modules/fomantic-ui-css/tweaked
+cd "$(dirname "$0")/.." # change into base directory
+
+FOMANTIC_SRC_PATH="node_modules/fomantic-ui-css"
+
+find "$FOMANTIC_SRC_PATH/components" -name "*.min.css" -delete
+mkdir -p "$FOMANTIC_SRC_PATH/tweaked"
+
 echo 'Removing google font…'
-sed -i '/@import url(/d' node_modules/fomantic-ui-css/components/site.css
+sed -i '/@import url(/d' "$FOMANTIC_SRC_PATH/components/site.css"
+
 echo "Replacing hardcoded values by CSS vars…"
-scripts/fix-fomantic-css.py node_modules/fomantic-ui-css node_modules/fomantic-ui-css/tweaked
+scripts/fix-fomantic-css.py "$FOMANTIC_SRC_PATH" "$FOMANTIC_SRC_PATH/tweaked"
+
+echo 'Fixing jQuery import…'
+
+# shellcheck disable=SC2046
+sed -i '1s/^import jQuery from "jquery"//' $(find "$FOMANTIC_SRC_PATH" -name '*.js')
+
+# shellcheck disable=SC2046
+sed -i '1s/^/import jQuery from "jquery"\n/' $(find "$FOMANTIC_SRC_PATH" -name '*.js')

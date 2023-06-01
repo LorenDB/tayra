@@ -1,31 +1,29 @@
 import requests.exceptions
-
 from django.conf import settings
 from django.db import transaction
 from django.db.models import Count, Q
-
-from rest_framework import decorators
-from rest_framework import mixins
-from rest_framework import permissions
-from rest_framework import response
-from rest_framework import viewsets
+from drf_spectacular.utils import extend_schema, extend_schema_view
+from rest_framework import decorators, mixins, permissions, response, viewsets
 
 from funkwhale_api.common import preferences
 from funkwhale_api.common import utils as common_utils
 from funkwhale_api.common.permissions import ConditionalAuthentication
 from funkwhale_api.music import models as music_models
+from funkwhale_api.music import serializers as music_serializers
 from funkwhale_api.music import views as music_views
 from funkwhale_api.users.oauth import permissions as oauth_permissions
 
-from . import activity
-from . import api_serializers
-from . import exceptions
-from . import filters
-from . import models
-from . import routes
-from . import serializers
-from . import tasks
-from . import utils
+from . import (
+    activity,
+    api_serializers,
+    exceptions,
+    filters,
+    models,
+    routes,
+    serializers,
+    tasks,
+    utils,
+)
 
 
 @transaction.atomic
@@ -38,6 +36,10 @@ def update_follow(follow, approved):
         routes.outbox.dispatch({"type": "Reject"}, context={"follow": follow})
 
 
+@extend_schema_view(
+    list=extend_schema(operation_id="get_federation_library_follows"),
+    create=extend_schema(operation_id="create_federation_library_follow"),
+)
 class LibraryFollowViewSet(
     mixins.CreateModelMixin,
     mixins.ListModelMixin,
@@ -56,6 +58,14 @@ class LibraryFollowViewSet(
     required_scope = "follows"
     filterset_class = filters.LibraryFollowFilter
     ordering_fields = ("creation_date",)
+
+    @extend_schema(operation_id="get_federation_library_follow")
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+
+    @extend_schema(operation_id="delete_federation_library_follow")
+    def destroy(self, request, uuid=None):
+        return super().destroy(request, uuid)
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -77,6 +87,10 @@ class LibraryFollowViewSet(
         context["actor"] = self.request.user.actor
         return context
 
+    @extend_schema(
+        operation_id="accept_federation_library_follow",
+        responses={404: None, 204: None},
+    )
     @decorators.action(methods=["post"], detail=True)
     def accept(self, request, *args, **kwargs):
         try:
@@ -88,6 +102,7 @@ class LibraryFollowViewSet(
         update_follow(follow, approved=True)
         return response.Response(status=204)
 
+    @extend_schema(operation_id="reject_federation_library_follow")
     @decorators.action(methods=["post"], detail=True)
     def reject(self, request, *args, **kwargs):
         try:
@@ -100,6 +115,7 @@ class LibraryFollowViewSet(
         update_follow(follow, approved=False)
         return response.Response(status=204)
 
+    @extend_schema(operation_id="get_all_federation_library_follows")
     @decorators.action(methods=["get"], detail=False)
     def all(self, request, *args, **kwargs):
         """
@@ -174,12 +190,12 @@ class LibraryViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
             )
         except requests.exceptions.RequestException as e:
             return response.Response(
-                {"detail": "Error while fetching the library: {}".format(str(e))},
+                {"detail": f"Error while fetching the library: {str(e)}"},
                 status=400,
             )
         except serializers.serializers.ValidationError as e:
             return response.Response(
-                {"detail": "Invalid data in remote library: {}".format(str(e))},
+                {"detail": f"Invalid data in remote library: {str(e)}"},
                 status=400,
             )
         serializer = self.serializer_class(library)
@@ -288,7 +304,11 @@ class ActorViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
             qs = qs.filter(query)
         return qs
 
-    libraries = decorators.action(methods=["get"], detail=True)(
+    libraries = decorators.action(
+        methods=["get"],
+        detail=True,
+        serializer_class=music_serializers.LibraryForOwnerSerializer,
+    )(
         music_views.get_libraries(
             filter_uploads=lambda o, uploads: uploads.filter(library__actor=o)
         )

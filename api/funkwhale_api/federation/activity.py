@@ -1,10 +1,10 @@
-import uuid
 import logging
 import urllib.parse
+import uuid
 
-from django.core.cache import cache
 from django.conf import settings
-from django.db import transaction, IntegrityError
+from django.core.cache import cache
+from django.db import IntegrityError, transaction
 from django.db.models import Q
 
 from funkwhale_api.common import channels
@@ -119,11 +119,10 @@ def should_reject(fid, actor_id=None, payload={}):
 
 @transaction.atomic
 def receive(activity, on_behalf_of, inbox_actor=None):
-    from . import models
-    from . import serializers
-    from . import tasks
-    from .routes import inbox
     from funkwhale_api.moderation import mrf
+
+    from . import models, serializers, tasks
+    from .routes import inbox
 
     logger.debug(
         "[federation] Received activity from %s : %s", on_behalf_of.fid, activity
@@ -223,8 +222,7 @@ class InboxRouter(Router):
         call_handlers should be False when are delivering a local activity, because
         we want only want to bind activities to their recipients, not reapply the changes.
         """
-        from . import api_serializers
-        from . import models
+        from . import api_serializers, models
 
         handlers = self.get_matching_handlers(payload)
         for handler in handlers:
@@ -243,8 +241,8 @@ class InboxRouter(Router):
                 for k in r.keys():
                     if k in ["object", "target", "related_object"]:
                         update_fields += [
-                            "{}_id".format(k),
-                            "{}_content_type".format(k),
+                            f"{k}_id",
+                            f"{k}_content_type",
                         ]
                     else:
                         update_fields.append(k)
@@ -266,7 +264,7 @@ class InboxRouter(Router):
                 user = ii.actor.get_user()
                 if not user:
                     continue
-                group = "user.{}.inbox".format(user.pk)
+                group = f"user.{user.pk}.inbox"
                 channels.group_send(
                     group,
                     {
@@ -305,8 +303,8 @@ class OutboxRouter(Router):
         for further delivery.
         """
         from funkwhale_api.common import preferences
-        from . import models
-        from . import tasks
+
+        from . import models, tasks
 
         allow_list_enabled = preferences.get("moderation__allow_list_enabled")
         allowed_domains = None
@@ -426,7 +424,7 @@ def is_allowed_url(url, allowed_domains):
 def prepare_deliveries_and_inbox_items(recipient_list, type, allowed_domains=None):
     """
     Given a list of recipients (
-        either actor instances, public adresses, a dictionnary with a "type" and "target"
+        either actor instances, public addresses, a dictionary with a "type" and "target"
         keys for followers collections)
     returns a list of deliveries, alist of inbox_items and a list
     of urls to persist in the activity in place of the initial recipient list.

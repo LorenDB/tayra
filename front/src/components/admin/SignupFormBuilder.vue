@@ -1,3 +1,67 @@
+<script setup lang="ts">
+import type { Form } from '~/types'
+
+import SignupForm from '~/components/auth/SignupForm.vue'
+import { useVModel } from '@vueuse/core'
+import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { arrayMove } from '~/utils'
+
+interface Events {
+  (e: 'update:modelValue', value: Form): void
+}
+
+interface Props {
+  modelValue: Form
+  signupApprovalEnabled?: boolean
+}
+
+const emit = defineEmits<Events>()
+const props = withDefaults(defineProps<Props>(), {
+  signupApprovalEnabled: false
+})
+
+const value = useVModel(props, 'modelValue', emit, { deep: true })
+
+const maxFields = ref(10)
+const isPreviewing = ref(false)
+
+const { t } = useI18n()
+const labels = computed(() => ({
+  delete: t('components.admin.SignupFormBuilder.label.delete'),
+  up: t('components.admin.SignupFormBuilder.label.moveUp'),
+  down: t('components.admin.SignupFormBuilder.label.moveDown')
+}))
+
+if (!value.value?.fields) {
+  value.value = {
+    help_text: {
+      text: '',
+      content_type: 'text/markdown'
+    },
+    fields: []
+  }
+}
+
+const addField = () => {
+  value.value.fields.push({
+    label: t('components.admin.SignupFormBuilder.label.additionalField', { fieldNumber: value.value.fields.length + 1 }),
+    required: true,
+    input_type: 'short_text'
+  })
+}
+
+const remove = (idx: number) => {
+  value.value.fields.splice(idx, 1)
+}
+
+const move = (idx: number, increment: number) => {
+  if (idx + increment >= value.value.fields.length) return
+  if (idx === 0 && increment < 0) return
+  arrayMove(value.value.fields, idx, idx + increment)
+}
+</script>
+
 <template>
   <div>
     <div class="ui top attached tabular menu">
@@ -5,17 +69,13 @@
         :class="[{active: !isPreviewing}, 'item']"
         @click.stop.prevent="isPreviewing = false"
       >
-        <translate translate-context="Content/*/Button.Label/Verb">
-          Edit form
-        </translate>
+        {{ $t('components.admin.SignupFormBuilder.button.edit') }}
       </button>
       <button
         :class="[{active: isPreviewing}, 'item']"
         @click.stop.prevent="isPreviewing = true"
       >
-        <translate translate-context="*/Form/Menu.item">
-          Preview form
-        </translate>
+        {{ $t('components.admin.SignupFormBuilder.button.preview') }}
       </button>
     </div>
     <div
@@ -23,7 +83,7 @@
       class="ui bottom attached segment"
     >
       <signup-form
-        :customization="local"
+        :customization="value"
         :signup-approval-enabled="signupApprovalEnabled"
         :fetch-description-html="true"
       />
@@ -35,53 +95,43 @@
     >
       <div class="field">
         <label for="help-text">
-          <translate translate-context="*/*/Label">Help text</translate>
+          {{ $t('components.admin.SignupFormBuilder.label.helpText') }}
         </label>
         <p>
-          <translate translate-context="*/*/Help">
-            An optional text to be displayed at the start of the sign-up form.
-          </translate>
+          {{ $t('components.admin.SignupFormBuilder.help.helpText') }}
         </p>
         <content-form
+          v-if="value.help_text"
+          v-model="value.help_text.text"
           field-id="help-text"
           :permissive="true"
-          :value="(local.help_text || {}).text"
-          @input="update('help_text.text', $event)"
         />
       </div>
       <div class="field">
         <label>
-          <translate translate-context="*/*/Label">Additional fields</translate>
+          {{ $t('components.admin.SignupFormBuilder.label.additionalFields') }}
         </label>
         <p>
-          <translate translate-context="*/*/Help">
-            Additional form fields to be displayed in the form. Only shown if manual sign-up validation is enabled.
-          </translate>
+          {{ $t('components.admin.SignupFormBuilder.help.additionalFields') }}
         </p>
-        <table v-if="local.fields.length > 0">
+        <table v-if="value.fields?.length > 0">
           <thead>
             <tr>
               <th>
-                <translate translate-context="*/*/Form-builder,Help">
-                  Field label
-                </translate>
+                {{ $t('components.admin.SignupFormBuilder.table.additionalFields.header.label') }}
               </th>
               <th>
-                <translate translate-context="*/*/Form-builder,Help">
-                  Field type
-                </translate>
+                {{ $t('components.admin.SignupFormBuilder.table.additionalFields.header.type') }}
               </th>
               <th>
-                <translate translate-context="*/*/Form-builder,Help">
-                  Required
-                </translate>
+                {{ $t('components.admin.SignupFormBuilder.table.additionalFields.header.required') }}
               </th>
-              <th><span class="visually-hidden"><translate translate-context="*/*/Form-builder,Help">Actions</translate></span></th>
+              <th><span class="visually-hidden">{{ $t('components.admin.SignupFormBuilder.table.additionalFields.header.actions') }}</span></th>
             </tr>
           </thead>
           <tbody>
             <tr
-              v-for="(field, idx) in local.fields"
+              v-for="(field, idx) in value.fields"
               :key="idx"
             >
               <td>
@@ -94,44 +144,36 @@
               <td>
                 <select v-model="field.input_type">
                   <option value="short_text">
-                    <translate translate-context="*/*/Form-builder">
-                      Short text
-                    </translate>
+                    {{ $t('components.admin.SignupFormBuilder.table.additionalFields.type.short') }}
                   </option>
                   <option value="long_text">
-                    <translate translate-context="*/*/Form-builder">
-                      Long text
-                    </translate>
+                    {{ $t('components.admin.SignupFormBuilder.table.additionalFields.type.long') }}
                   </option>
                 </select>
               </td>
               <td>
                 <select v-model="field.required">
                   <option :value="true">
-                    <translate translate-context="*/*/*">
-                      Yes
-                    </translate>
+                    {{ $t('components.admin.SignupFormBuilder.table.additionalFields.required.true') }}
                   </option>
                   <option :value="false">
-                    <translate translate-context="*/*/*">
-                      No
-                    </translate>
+                    {{ $t('components.admin.SignupFormBuilder.table.additionalFields.required.false') }}
                   </option>
                 </select>
               </td>
               <td>
                 <i
-                  :disabled="idx === 0"
+                  :disabled="idx === 0 || null"
                   role="button"
                   :title="labels.up"
-                  :class="['up', 'arrow', {disabled: idx === 0}, 'icon']"
+                  :class="['up', 'arrow', { disabled: idx === 0 }, 'icon']"
                   @click="move(idx, -1)"
                 />
                 <i
-                  :disabled="idx >= local.fields.length - 1"
+                  :disabled="idx >= value.fields.length - 1 || null"
                   role="button"
                   :title="labels.down"
-                  :class="['down', 'arrow', {disabled: idx >= local.fields.length - 1}, 'icon']"
+                  :class="['down', 'arrow', { disabled: idx >= value.fields.length - 1 }, 'icon']"
                   @click="move(idx, 1)"
                 />
                 <i
@@ -146,103 +188,14 @@
         </table>
         <div class="ui hidden divider" />
         <button
-          v-if="local.fields.length < maxFields"
+          v-if="value.fields?.length < maxFields"
           class="ui basic button"
           @click.stop.prevent="addField"
         >
-          <translate translate-context="*/*/Form-builder">
-            Add a new field
-          </translate>
+          {{ $t('components.admin.SignupFormBuilder.button.add') }}
         </button>
       </div>
     </div>
     <div class="ui hidden divider" />
   </div>
 </template>
-
-<script>
-import lodash from '@/lodash'
-
-import SignupForm from '@/components/auth/SignupForm'
-
-function arrayMove (arr, oldIndex, newIndex) {
-  if (newIndex >= arr.length) {
-    let k = newIndex - arr.length + 1
-    while (k--) {
-      arr.push(undefined)
-    }
-  }
-  arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0])
-  return arr
-};
-
-// v-model with objects is complex, cf
-// https://simonkollross.de/posts/vuejs-using-v-model-with-objects-for-custom-components
-export default {
-  components: {
-    SignupForm
-  },
-  props: {
-    value: { type: Object, required: true },
-    signupApprovalEnabled: { type: Boolean }
-  },
-  data () {
-    return {
-      maxFields: 10,
-      isPreviewing: false
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        delete: this.$pgettext('*/*/*', 'Delete'),
-        up: this.$pgettext('*/*/*', 'Move up'),
-        down: this.$pgettext('*/*/*', 'Move down')
-      }
-    },
-    local () {
-      return (this.value && this.value.fields) ? this.value : { help_text: { text: null, content_type: 'text/markdown' }, fields: [] }
-    }
-  },
-  created () {
-    this.$emit('input', this.local)
-  },
-  methods: {
-    addField () {
-      const newValue = lodash.tap(lodash.cloneDeep(this.local), v => v.fields.push({
-        label: this.$pgettext('*/*/Form-builder', 'Additional field') + ' ' + (this.local.fields.length + 1),
-        required: true,
-        input_type: 'short_text'
-      }))
-      this.$emit('input', newValue)
-    },
-    remove (idx) {
-      this.$emit('input', lodash.tap(lodash.cloneDeep(this.local), v => v.fields.splice(idx, 1)))
-    },
-    move (idx, incr) {
-      if (idx === 0 && incr < 0) {
-        return
-      }
-      if (idx + incr >= this.local.fields.length) {
-        return
-      }
-      const newFields = arrayMove(lodash.cloneDeep(this.local).fields, idx, idx + incr)
-      this.update('fields', newFields)
-    },
-    update (key, value) {
-      if (key === 'help_text.text') {
-        key = 'help_text'
-        if (!value || value.length === 0) {
-          value = null
-        } else {
-          value = {
-            text: value,
-            content_type: 'text/markdown'
-          }
-        }
-      }
-      this.$emit('input', lodash.tap(lodash.cloneDeep(this.local), v => lodash.set(v, key, value)))
-    }
-  }
-}
-</script>

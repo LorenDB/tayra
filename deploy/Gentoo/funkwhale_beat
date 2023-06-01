@@ -1,27 +1,41 @@
 #!/sbin/openrc-run
-NAME=funkwhalebeat
-PIDFILE=/var/run/$NAME.pid
-USER=funkwhale
-WORKDIR=/srv/funkwhale/api 
-Celery=/srv/funkwhale/virtualenv/bin/celery 
-BEAT_ARGS="-A funkwhale_api.taskapp beat -l INFO"
+# shellcheck shell=bash
+
+NAME="funkwhalebeat"
+PIDFILE="/var/run/$NAME.pid"
+USER="funkwhale"
+WORKDIR="/srv/funkwhale/api"
+Celery="/srv/funkwhale/venv/bin/celery"
+BEAT_ARGS="--app funkwhale_api.taskapp beat --loglevel INFO"
+
 depend() {
-        need net 
+  need net
 }
 
 start() {
-	ebegin "Starting Funkwhale Beat"
-        cd /srv/funkwhale/api
-	set -a && source /srv/funkwhale/config/.env && set +a
-	echo ' start beat' 
-	start-stop-daemon --start --user $USER --make-pidfile --pidfile $PIDFILE  -d $WORKDIR  --exec $Celery -- $BEAT_ARGS >> /var/log/funk/worker.log 2>&1&
-        echo 'Started Beat'
-	echo
-	eend $?
+  ebegin "Starting Funkwhale Beat"
+  cd /srv/funkwhale/api || exit 1
+
+  # shellcheck disable=SC1091
+  set -a && source /srv/funkwhale/config/.env && set +a
+
+  echo "Starting Funkwhale Beat"
+  # shellcheck disable=SC2086
+  start-stop-daemon --start \
+    --user "$USER" \
+    --make-pidfile \
+    --pidfile "$PIDFILE" \
+    --chdir "$WORKDIR" \
+    --exec "$Celery" \
+    -- $BEAT_ARGS \
+    >> /var/log/funk/worker.log 2>&1 &
+  echo "Funkwhale Beat started"
+  echo
+  eend $?
 }
 
 stop() {
-	ebegin "Stopping Funkwhale Beat"
-	start-stop-daemon --stop --pidfile $PIDFILE
-	eend $?
+  ebegin "Stopping Funkwhale Beat"
+  start-stop-daemon --stop --pidfile "$PIDFILE"
+  eend $?
 }

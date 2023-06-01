@@ -6,13 +6,18 @@ authors = ["Funkwhale Collective <contact@funkwhale.audio>"]
 license = "AGPLv3"
 
 [tool.poetry.dependencies]
-python = "^3.10"
-Sphinx = "4.4.0"
-sphinx-rtd-theme = "1.0.0"
-django-environ = "0.8.1"
-Django = "==4.0.6"
-myst-parser = "==0.17.2"
-sphinx_design = "0.2.0"
+python = "^3.8"
+
+sphinx = "==5.3.0"
+sphinx_design = "==0.3.0"
+sphinx-intl = "2.0.1"
+sphinx-rtd-theme = "==1.1.1"
+sphinxcontrib-mermaid = "0.7.1"
+myst-parser = "==0.18.1"
+
+django = "==4.1.5"
+django-environ = "==0.9.0"
+sphinx-copybutton = "==0.5.2"
 
 [tool.poetry.dev-dependencies]
 

@@ -3,7 +3,6 @@ import hashlib
 
 from rest_framework import authentication, exceptions
 
-from funkwhale_api.common import authentication as common_authentication
 from funkwhale_api.users.models import User
 
 
@@ -27,7 +26,7 @@ def authenticate(username, password):
     except (User.DoesNotExist, binascii.Error):
         raise exceptions.AuthenticationFailed("Wrong username or password.")
 
-    if common_authentication.should_verify_email(user):
+    if user.should_verify_email():
         raise exceptions.AuthenticationFailed("You need to verify your e-mail address.")
 
     return (user, None)
@@ -46,7 +45,7 @@ def authenticate_salt(username, salt, token):
     if expected != token:
         raise exceptions.AuthenticationFailed("Wrong username or password.")
 
-    if common_authentication.should_verify_email(user):
+    if user.should_verify_email():
         raise exceptions.AuthenticationFailed("You need to verify your e-mail address.")
 
     return (user, None)

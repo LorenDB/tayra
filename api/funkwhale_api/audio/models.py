@@ -1,14 +1,13 @@
 import uuid
 
-
 from django.contrib.contenttypes.fields import GenericRelation
-from django.contrib.postgres.fields import JSONField
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
-from django.urls import reverse
-from django.utils import timezone
+from django.db.models import JSONField
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from django.urls import reverse
+from django.utils import timezone
 
 from funkwhale_api.federation import keys
 from funkwhale_api.federation import models as federation_models
@@ -81,7 +80,7 @@ class Channel(models.Model):
             return self.actor.fid
 
     @property
-    def is_local(self):
+    def is_local(self) -> bool:
         return self.actor.is_local
 
     @property
@@ -94,7 +93,7 @@ class Channel(models.Model):
             suffix = self.actor.preferred_username
         else:
             suffix = self.actor.full_username
-        return federation_utils.full_url("/channels/{}".format(suffix))
+        return federation_utils.full_url(f"/channels/{suffix}")
 
     def get_rss_url(self):
         if not self.artist.is_local or self.is_external_rss:

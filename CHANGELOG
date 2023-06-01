@@ -10,11 +10,409 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 .. towncrier
 
-1.2.10 (2023-03-17)
--------------------
+1.3.0 (2023-06-01)
+------------------
 
 Upgrade instructions are available at
 https://docs.funkwhale.audio/admin/upgrading.html
+
+Update instructions:
+
+- If you are running the docker deployment, make sure to update our compose file.
+  In this small example we show you how to save the old config and update it
+  correctly:
+
+  ```
+  export FUNKWHALE_VERSION="1.3.0"
+  cd /srv/funkwhale
+  docker-compose down
+  mv docker-compose.yml docker-compose.bak
+  curl -L -o /srv/funkwhale/docker-compose.yml "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/${FUNKWHALE_VERSION}/deploy/docker-compose.yml"
+  ```
+
+  .. note::
+     If you need to customize your nginx template, e.g. to work around `problems with
+     Docker's resolver <https://docs.funkwhale.audio/admin/external-storages.html#no-resolver-found>`_, you can mount your
+     custom nginx configuration into the container. Uncomment the commented volumes in the `nginx` section of your `docker-compose.yml`.
+  	 Additionally you need to update the paths in `nginx/funkwhale.template`.
+  	 Replace all occurrences of `/funkwhale` by `/usr/share/nginx/html`.
+     This loads the templates from your `nginx` folder and overrides the template files in the Docker container.
+
+  ```
+  docker-compose up -d
+  ```
+- The Docker instructions now use the updated Docker compose plugin. If you previously used the ``docker-compose`` standalone installation, do the following while upgrading:
+
+  1. Download the `Docker compose plugin <https://docs.docker.com/compose/install/linux/#install-using-the-repository>`_
+  2. Stop your containers using the **docker-compose** syntax.
+
+  .. code-block:: sh
+     sudo docker-compose down
+
+  3. Bring the containers back up using the **docker compose** syntax.
+
+  .. code-block:: sh
+     sudo docker compose up -d
+
+  After this you can continue to use the **docker compose** syntax for all Docker management tasks.
+- Upgrade Postgres to version 15. [Make sure to migrate!](https://docs.funkwhale.audio/administrator_documentation/upgrade_docs/docker.html#upgrade-the-postgres-container)
+- With this update Funkwhale starts using poetry to maintain its dependencies. We therefore recommend
+  removing the old virtualenv by running `rm -rf /srv/funkwhale/virtualenv`.
+
+
+Features:
+
+- Add a management command to create a new library for a user
+- Add Gitpod configuration and guide
+- Add Sentry SDK to collect #1479
+- Prepare API for the upcoming version 2
+- Rewrite player to be based on Web Audio API
+
+
+Enhancements:
+
+- Add a celery task to scan remote library (#1712)
+- Add coverage report for Frontend Tests
+- Add hint which serializer is used for OembedView (#1901)
+- Add music visualizer (#1135)
+- Add playable tracks to gitpod instance
+- Add playlists radio to search page (#1968)
+- Add proper serialization for TextPreviewView (#1903)
+- Add python debug and test support for gitpod
+- Add Serializer for SpaManifest endpoint
+- Add support for python 3.11
+- Added proper serializers for the rate-limit endpoint.
+- Added type hints to the API.
+- Adding support for play all radio in search result page (#1563)
+- All administrator documentation has been rewritten to improve clarity and update outdated information.
+- Allow arbitrary length names for artists, albums and tracks
+- Allow installing the funkwhale_api package
+- Allow using default browser dark mode and update UI dynamically on change
+- Apply migrations on API container start (!1879)
+- Automatically fetch next page of tracks (#1526)
+- Build frontend natively for cross-arch docker images
+- Change unmaintained PyMemoize library to django-cache-memoize
+  to enable Python 3.10 support
+- Cleaned up frontend docker container
+- Cleanup Gitlab CI and Dockerfiles (!1796)
+- Create the funkwhale-manage entrypoint in the api package
+- Created migration guide for the deprecated all-in-one docker container.
+- Don't buffer python stdout/err in docker
+- Don't compile python byte code in docker
+- Don't use poetry in production deployments
+- Drop direct dependency on pyopenssl (#1975)
+- Exclude /api/v1/oauth/authorize from the specs since its not supported yet (#1899)
+- Fix openapi specs for user endpoints (#1892, #1894)
+- Fix Serializer for inline channel artists (#1833)
+- Fix specs for ListenViewSet (#1898)
+- Handle PWA correctly and provide better cache strategy for album covers (#1721)
+- Improve docker caching
+- Improve specification of LibraryFollowViewSet (#1896)
+- Install API python package in docker image
+- Make CI always run all tests on protected branches.
+- Make mutations endpoint appear in openapi specs
+- Make Python 3.10 tests in CI mandatory
+- Make sure ChannelViewSet always has a serializer (#1895)
+- Migrate to new queue system from old localStorage keys
+- Migrate to Vue 3
+- Migrate to vue-i18n (#1831)
+  Fix locale changing (#1862)
+- Migrated to sphinx-design.
+- New task checking if remote instance is reachable to avoid playback latence (#1711)
+- OAuth Application client secrets are now hashed before storing them to the DB. Those are only displayed once from now on!
+- Parameterize the default S3 ACL when uploading objects. (#1319)
+- Pin Alpine package versions in API Dockerfile (fixes part of CI build issues).
+- Prefer using the funkwhale-manage entrypoint
+- Prevent running two pipelines for MRs
+- Random and less listened radio filter out un-owned content on library section (#2007)
+- Refactor node info endpoint to use proper serializers
+- Refactor SettingsView to use a proper serializer
+- Remove unnecessary or wrong `is` keyword usage from backend
+- Rename OpenAPI schema's operation ids for nicer API client method names.
+- Replace django-channels package with web socket implementation from @vueuse/core (#1715)
+- Retry fetching new radio track 5 times if error occurred before resetting radio session (#2022)
+- Rewrite embedded player to petite-vue
+- Split DATABASE_URL into multiple configuration variables
+- The ListenBrainz plugin submits the track duration
+- Update Django OAuth Toolkit to version 2, ref #1944
+- Update migration after django update (#1815)
+- Update upload status when import fails (#1999)
+- Updated the installation guides to make installation steps clearer.
+- Upgrade docker base image to alpine 3.17
+- Use proper serializer for Search endpoint (#1902)
+
+
+Refactoring:
+
+- Instead of requesting the right spa content from the API using a middleware we now serve the
+  Frontend directly with nginx and only proxy-forward for API endpoints
+- Replace django-rest-auth with dj-rest-auth (#1877)
+
+
+Bugfixes:
+
+- Allow enabling systemd funkwhale.target
+- Allow playback of media from external frontend (#1937).
+- Allow summary field of actors to be blank. This leaves actors valid that have a blank (`""`) summary field and allows follows from those.
+- Catch ValueError on radio end (#1596)
+- Channel overview was displaying foreign tracks (#1773) (1773)
+- Docker setup: do not export the API port 5000 publicly
+- Fix adding same track multiple times (#1933)
+- Fix artist name submission in Maloja plugin
+- Fix changing visualizer CORS error (#1934).
+- Fix content form autofocus despite `autofocus` prop being set to `false` (#1924)
+- Fix CSP header issues
+- Fix CSP issue caused by django-channels package (#1752)
+- Fix docker API image building with removing autobahn workaround version pin
+- Fix docker builds on armv7
+- Fix docker nginx entrypoint
+- Fix editing playlist tracks (#1362)
+- Fix embedded player not working on social posts (1946)
+- Fix favorite button in queue
+- Fix fetching pages of albums in album detail view (#1927)
+- Fix front album tracks count translation
+- Fix global keyboard shortcuts firing when input is focused (#1876)
+- Fix lots of problems in debian installation guide
+- Fix media directory nginx routing error in front docker container introduced in !1897
+- Fix OAuth login (#1890)
+- Fix play button in albums with multi-page volumes (#1928)
+- Fix player closing when queue ends (#1931)
+- Fix postgres connection details in docker setup
+- Fix purging of dangling files #1929
+- Fix remote search (#1857)
+- Fix search by text in affected views (#1858)
+- Fix timeout on spa manifest requests
+- Fix track table showing all tracks and double pagination in some cases (#1923)
+- Fix user requests and reports filtering (#1924)
+- Fix validity issues in openapi/swagger spec files (#1171)
+- Fixed an issue which caused links in Markdown forms to not render correctly. (#2023)
+- Fixed login redirect (1736)
+- Fixed mobile player element widths (#2054)
+- Fixed remote subscription form in Podcast and search views (#1708)
+- Fixed upload form VUE errors (#1738) (1738)
+- Fixes an issue which made it possible to download all media files without access control (#2101)
+- Fixes channel page (#1729) (1729)
+- Fixes development environment set-up with docker (1726)
+- Fixes embed player (#1783) (1783)
+- Fixes service worker (#1634)
+- Fixes track listenings not being sent when tab is not focused
+- Hide create custom radio to un-authenticated users (#1720)
+- Improve signal handling for service and containers
+- Move api docker hardcoded env vars in the settings module
+- Prefer str over dict for the CACHE_URL api setting
+
+  This fix the ability to reuse the CACHE_URL with other settings such as
+  CELERY_BROKER_URL.
+- Remove trailing slash from reverse proxy configuration
+- Remove unused Footer component (#1660)
+- Remove usage of deprecated Model and Serializer fields (#1663)
+- Resolved an issue where queue text with mouse over has dark text on dark background (#2058) (2058)
+- Skip refreshing local actors in celery federation.refresh_actor_data task - fixes disappearing avatars (!1873)
+
+
+Documentation:
+
+- Add ability to translate documentation into multiple languages
+- Add generic upgrade instructions to Docker postgres documentation (#2049)
+- Add restore instructions to backup docs (#1627).
+- Add systemd update instructions to Debian upgrade instructions (#1966)
+- Added Nginx regeneration instructions to Debian update guide (#2050)
+- Added virtualenv upgrade instructions for Debian (#1562).
+- Cleaned up documentation
+- Document the new login flow of the CLI-tool (#1800)
+- Documented LOGLEVEL command (#1541).
+- Documented the `NGINX_MAX_BODY_SIZE` .env variable (#1624).
+- Fix broken links in CHANGELOG (#1976)
+- Harden security for debian install docs
+- Remove unnecessary postgres variable in Docker migration guide (#2124).
+- Rewrote documentation contributor guide.
+- Rewrote the architecture file (#1908)
+- Rewrote the federation developer documentation (#1911)
+- Rewrote the plugins documentation (#1910)
+- Rewrote translators file
+- Updated API developer documentation (#1912, #1909)
+- Updated CONTRIBUTING guide with up-to-date documentation. Created layout in documentation hub.
+
+
+Other:
+
+- Add a CI job to check if changelog snippet is available
+- Add CI broken links checker
+- Add pre-commit hooks
+  - flake8
+  - black
+  - isort
+  - pyupgrade
+  - prettier
+  - codespell
+- Add pre-commit to development tools
+- Align the openapi spec to the actual API wherever possible
+- Cache lychee checked urls for 1 day in CI
+- Fix api tests warnings by renaming fixtures
+- Fix permissions for build artifacts
+- Fix shell scripts lint errors
+- Format api pyproject.toml
+- Format or fix files using pre-commit
+
+  - Upgrade code to >=python3.7
+  - Fix flake8 warnings
+  - Fix spelling errors
+  - Format files using black
+  - Format files using isort
+  - Format files using prettier
+- Move api tools config to pyproject.toml
+- Move database url composition from custom script to django settings
+- Remove docker_all_in_one_release ci job
+- Rename api composer/django/ dir to docker/
+- Unpin asgiref in API dependencies
+- Use vite for building the frontend, #1644
+
+
+Deprecation:
+
+- Deprecate the api manage.py script in favor of the funkwhale-manage entrypoint
+- That's the last minor version series that supports python3.7. Funkwhale 1.4 will remove support for
+  it. #1693
+- The automatically generated 'DATABASE_URL' configuration in the docker setup is deprecated, please
+  configure either the 'DATABASE_URL' environment variable or the 'DATABASE_HOST', 'DATABASE_USER' and
+  'DATABASE_PASSWORD' environment variables instead.
+
+
+Removal:
+
+- This release removes support for Python 3.6. Please make sure you update your python version before
+  Updating Funkwhale!
+
+Committers:
+
+- Agate
+- Aina Hernàndez Campaña
+- AMoonRabbit
+- Anton
+- bruce diao
+- Bruno Talanski
+- ButterflyOfFire
+- Çağla Pickaxe
+- Ciarán Ainsworth
+- Dignified Silence
+- dignny
+- Éilias McTalún
+- EorlBruder
+- Fedi Funkers
+- Georg Krause
+- ghose
+- Henri Dickson
+- Jacek Pruciak
+- Jasper Bogers
+- Jhoan Sebastian Espinosa Borrero
+- jo
+- jooola
+- Julian Rademacher
+- JuniorJPDJ
+- Kasper Seweryn
+- Keunes
+- Kisel1337
+- Laurin W
+- Marcos Peña
+- Matyáš Caras
+- Michael Long
+- nztvar
+- oki
+- Petitminion
+- Philipp Wolfer
+- poeppe
+- Porrumentzio
+- ppom
+- Reinhard Prechtl
+- Sky
+- Sporiff
+- Stuart Begley-Miller
+- @ta
+- Thomas
+- Till Robin Zickel
+- tobifroe
+- wvffle
+
+Contributors to our Issues:
+
+- AMoonRabbit
+- Agate
+- Artem Anufrij
+- ChengChung
+- Ciarán Ainsworth
+- Creak
+- Eric Mesa
+- Georg Krause
+- Hans Bauer
+- HurricaneDancer
+- Jakob Schürz
+- Jucgshu
+- Julian-Samuel Gebühr
+- JuniorJPDJ
+- Kasper Seweryn
+- Keunes
+- Laser Lesbian
+- Laurin W
+- Marco
+- Marcos Peña
+- Martin Giger
+- Mathieu Jourdan
+- MattDHarding
+- Meliurwen
+- Micha Gläß-Stöcker
+- MichaelBechHansen
+- Nathan Mih
+- Nicolas Derive
+- Nolan Darilek
+- Philipp Wolfer
+- Porrumentzio
+- Rodion Borisov
+- Sam Birch
+- Sky Leite
+- TheSunCat
+- Thomas
+- Tobias Frölich
+- Tony Wasserka
+- Vincent Riquer
+- Virgile Robles
+- dddddd-mmmmmm
+- gerry_the_hat
+- getzze
+- heyarne
+- jake
+- jooola
+- jovuit
+- nouts
+- petitminion
+- ppom
+- pullopen
+- resister
+- silksow
+- troll
+
+Contributors to our Merge Requests:
+
+- AMoonRabbit
+- Ciarán Ainsworth
+- Georg Krause
+- JuniorJPDJ
+- Kasper Seweryn
+- Laurin W
+- Marcos Peña
+- Mathieu Jourdan
+- Nicolas Derive
+- Philipp Wolfer
+- Rodion Borisov
+- Thomas
+- Tobias Frölich
+- getzze
+- jooola
+- mqus
+- petitminion
+- poeppe
+
+1.2.10 (2023-03-17)
+-------------------
 
 Bugfixes:
 
@@ -30,7 +428,6 @@ Special thanks to Conradowatz for reporting the vulnerability
 Committers:
 
 - JuniorJPDJ
-
 
 1.2.9 (2022-11-25)
 ------------------
@@ -461,11 +858,9 @@ nztvar
 Upgrade instructions are available at
 https://docs.funkwhale.audio/admin/upgrading.html
 
-Due to a bug in our CI Pipeline frontend artifacts are not available at
-https://dev.funkwhale.audio/funkwhale/funkwhale/builds/artifacts/1.2.0/download?job=build_front as they would usually.
-Please use this URL to get your frontend build: https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/81069/artifacts/download
+Due to a bug in our CI Pipeline, you need to download the frontend artifact here: https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/81069/artifacts/download
 
-If you are running the All-in-One-Container since a longer time, you probably need to manually migrate your database information. If thats the case, you will get a message like this:
+If you are running the All-in-One-Container since a longer time, you probably need to manually migrate your database information. If that's the case, you will get a message like this:
 
 `DETAIL:  The data directory was initialized by PostgreSQL version 11, which is not compatible with this version 13.5.`
 
@@ -473,7 +868,7 @@ Make sure the Funkwhale version is set to `1.1.4` in `docker-compose.yml`. Now y
 
 `docker-compose exec -T funkwhale pg_dump -c -U funkwhale > "db.dump"`
 
-Now you can update the Funkwhale version in `docker-compose.yml` to `1.2.0`. Additionally you should save your `data` directory, eg by running `mv data data.bak && mkdir data`. Stop Funkwhale and start it again with the new version, by using `docker-compose down && docker-compose up -d`. This will initialize a fresh DB and applies all migrations. Now you can restore your database with the following command: `cat db.dump | docker-compose exec -T funkwhale psql -U funkwhale`. Thats it, enjoy!
+Now you can update the Funkwhale version in `docker-compose.yml` to `1.2.0`. Additionally you should save your `data` directory, eg by running `mv data data.bak && mkdir data`. Stop Funkwhale and start it again with the new version, by using `docker-compose down && docker-compose up -d`. This will initialize a fresh DB and applies all migrations. Now you can restore your database with the following command: `cat db.dump | docker-compose exec -T funkwhale psql -U funkwhale`. That's it, enjoy!
 
 Features:
 
@@ -510,7 +905,7 @@ Bugfixes:
 - Fix showing too long radio descriptions (#1556)
 - Fix X-Frame-Options HTTP header for embed and force it to SAMEORIGIN value for other pages (fix #1022)
 - Fix before last track starts playing when last track removed (#1485)
-- Fix delete account button is not disalbed when missing password (#1591)
+- Fix delete account button is not disabled when missing password (#1591)
 - Fix omputed properties already defined in components data (#1649)
 - Fix the all in one docker image building process, related to #1503
 - Fix crash in album moderation interface when missing cover (#1474)
@@ -522,7 +917,7 @@ Bugfixes:
 - Sanitize remote tracks' saving locations with slashes on their names (#1435)
 - Show embed option for channel tracks (#1278)
 - Store volume in logarithmic scale and convert when setting it to audio (fixes #1543)
-- Use global Howler volume instead of setting it separatly for each track (fixes #1542)
+- Use global Howler volume instead of setting it separately for each track (fixes #1542)
 
 
 Documentation:
@@ -980,7 +1375,7 @@ Features:
 - Allow users to hide compilation artists on the artist search page (#1053)
 - Can now launch server import from the UI (#1105)
 - Dedicated, advanced search page (#370)
-- Persist theme and language settings accross sessions (#996)
+- Persist theme and language settings across sessions (#996)
 
 
 Enhancements:
@@ -1072,13 +1467,13 @@ Enhancements:
 
 Bugfixes:
 
-- Fix embedded player not working on channel serie/album (#1175)
+- Fix embedded player not working on channel series/album (#1175)
 - Fixed broken mimetype detection during import (#1165)
 - Fixed crash when loading recent albums via Subsonic (#1158)
 - Fixed crash with null help text in admin (#1161)
 - Fixed invalid metadata when importing multi-artists tracks/albums (#1104)
 - Fixed player crash when using Funkwhale as a PWA (#1157)
-- Fixed wrong covert art displaying in some situations (#1138)
+- Fixed wrong convert art displaying in some situations (#1138)
 - Make channel card updated times more humanly readable, add internationalization (#1089)
 
 Contributors to this release (development, documentation, reviews):
@@ -1105,7 +1500,7 @@ Enhancements:
 - Fix HTML <title> not including instance name in some situations (#1107)
 - Make URL-building logic more resilient against reverse proxy misconfiguration (#1085)
 - Removed unused masonry dependency (#1112)
-- Support for specifying itunes:email and itunes:name in channels for compatibiliy with third-party platforms (#1154)
+- Support for specifying itunes:email and itunes:name in channels for compatibility with third-party platforms (#1154)
 - Updated the /api/v1/libraries endpoint to support listing public libraries from other users/pods (#1151)
 
 
@@ -1298,7 +1693,7 @@ Upgrade from Postgres 10 to 11 [manual action required, docker all-in-one only]
 
 With our upgrade to Alpine 3.10, the ``funkwhale/all-in-one`` image now includes PostgreSQL 11.
 
-In order to update to Funkwhale 0.21, you will first need to uprade Funkwhale's PostgreSQL database, following the steps below::
+In order to update to Funkwhale 0.21, you will first need to upgrade Funkwhale's PostgreSQL database, following the steps below::
 
     # open a shell as the Funkwhale user
     sudo -u funkwhale -H bash
@@ -1521,7 +1916,7 @@ Contributors to this release (translation, development, documentation, reviews, 
 - Ciarán Ainsworth
 - Dag Stenstad
 - Daniele Lira Mereb
-- Eliot Berriot
+- Agate
 - Esteban
 - Johannes H.
 - knuxify
@@ -1675,7 +2070,7 @@ Then reload the configuration change with ``sudo systemctl daemon-reload`` and `
 Content-Security-Policy and additional security headers [manual action suggested]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To improve the security and reduce the attack surface in case of a successfull exploit, we suggest
+To improve the security and reduce the attack surface in case of a successful exploit, we suggest
 you add the following Content-Security-Policy to your nginx configuration.
 
 ..note::
@@ -1728,7 +2123,7 @@ Then reload nginx with ``systemctl reload nginx``.
         # Simply copy-paste the /front/ location, but replace the following lines:
         location /front/embed.html {
             add_header X-Frame-Options "ALLOW";
-            alias /frontent/embed.html;
+            alias /frontend/embed.html;
         }
     }
 
@@ -1740,7 +2135,7 @@ Rate limiting
 With this release, rate-limiting on the API is enabled by default, with high enough limits to ensure
 regular users of the app aren't affected. Requests beyond allowed limits are answered with a 429 HTTP error.
 
-For anonymous requests, the limit is applied to the IP adress of the client, and for authenticated requests, the limit
+For anonymous requests, the limit is applied to the IP address of the client, and for authenticated requests, the limit
 is applied to the corresponding user account. By default, anonymous requests get a lower limit than authenticated requests.
 
 You can disable the rate-limiting feature by adding `THROTTLING_ENABLED=false` to your ``.env`` file and restarting the
@@ -1829,7 +2224,7 @@ Contributors to this release (translation, development, documentation, reviews, 
 - Amaranthe
 - ButterflyOfFire
 - Ciarán Ainsworth
-- Eliot Berriot
+- Agate
 - Esteban
 - Francesc Galí
 - Freyja Wildes
@@ -1889,12 +2284,12 @@ Bugfixes:
 - Use ASCII filename before upload to S3 to avoid playback issues (#847)
 
 
-Contributors to this release (commiters and reviewers):
+Contributors to this release (committers and reviewers):
 
 - Ciarán Ainsworth
 - Creak
 - ealgase
-- Eliot Berriot
+- Agate
 - Esteban
 - Freyja Wildes
 - hellekin
@@ -2050,7 +2445,7 @@ Enhancements:
 - Expose an instance-level actor (service@domain) in nodeinfo endpoint (#689)
 - Improved readability of logo (#385)
 - Keep persistent connections to the database instead of recreating a new one for each request
-- Labels for privacy levels are now consistently grabbed from a common source instead of being hardcoded everytime they are needed.
+- Labels for privacy levels are now consistently grabbed from a common source instead of being hardcoded every time they are needed.
 - Merged artist/album buttons with title text on artist and album pages (#725)
 - Now honor maxBitrate parameter in Subsonic API (#802)
 - Preload next track in queue (#572)
@@ -2072,7 +2467,7 @@ Bugfixes:
 - Do not consider tracks as duplicates during import if they have different positions (#740)
 - Ensure all our ActivityPub fetches are authenticated (#758)
 - Ensure correct track duration and playable status when browsing radios (#812)
-- Fixed alignement/size issue with some buttons (#702)
+- Fixed alignment/size issue with some buttons (#702)
 - Fixed an encoding issue with instance name on about page (#828)
 - Fixed cover not showing in queue/player when playing tracks from "albums" tab (#795)
 - Fixed crashing upload processing on invalid date format (#718)
@@ -2092,7 +2487,7 @@ Documentation:
 
 - Document how to use Redis over unix sockets (#770)
 
-Contributors to this release (commiters and translators):
+Contributors to this release (committers and translators):
 
 - Ale London
 - Alexander
@@ -2101,7 +2496,7 @@ Contributors to this release (commiters and translators):
 - Ciarán Ainsworth
 - Damien Nicolas
 - Daniele Lira Mereb
-- Eliot Berriot
+- Agate
 - Elza Gelez
 - gerry_the_hat
 - gordon
@@ -2154,7 +2549,7 @@ Enhancements:
 Bugfixes:
 
 - Avoid mixed content when deploying mono-container behind HTTPS proxy (thetarkus/docker-funkwhale#19)
-- Display new notifications immediatly on notifications page (#729)
+- Display new notifications immediately on notifications page (#729)
 - Ensure cover art from uploaded files is picked up properly on existing albums (#757)
 - Fixed a crash when federating a track with unspecified position
 - Fixed broken Activity and Actor modules in django admin (#767)
@@ -2296,7 +2691,7 @@ Bugfixes:
 - Fix transcoding of in-place imported tracks (#688)
 - Fixed celery worker defaulting to development settings instead of production
 - Fixed crashing Django admin when loading track detail page (#666)
-- Fixed list icon alignement on landing page (#668)
+- Fixed list icon alignment on landing page (#668)
 - Fixed overescaping issue in notifications and album page (#676)
 - Fixed wrong number of affected elements in bulk action modal (#683)
 - Fixed wrong URL in documentation for funkwhale_proxy.conf file when deploying using Docker
@@ -2321,7 +2716,7 @@ Many thanks to the dozens of people that contributed to this release: translator
 bug hunters, admins and backers. You made it possible!
 
 Upgrade instructions are available at
-https://docs.funkwhale.audio/admin/upgrading.html, ensure you also execute the intructions
+https://docs.funkwhale.audio/admin/upgrading.html, ensure you also execute the instructions
 marked with ``[manual action required]`` and ``[manual action suggested]``.
 
 See ``Full changelog`` below for an exhaustive list of changes!
@@ -2541,7 +2936,7 @@ Enhancements:
 - Load env file in config/.env automatically to avoid sourcing it by hand (#626)
 - More resilient date parsing during audio import, will not crash anymore on
   invalid dates (#622)
-- Now start radios immediatly, skipping any existing tracks in queue (#585)
+- Now start radios immediately, skipping any existing tracks in queue (#585)
 - Officially support connecting to a password protected redis server, with
   the redis://:password@localhost:6379/0 scheme (#640)
 - Performance improvement when fetching favorites, down to a single, small http request
@@ -2569,11 +2964,11 @@ Bugfixes:
 - Allow opus file upload (#598)
 - Do not display "view on MusicBrainz" button if we miss the mbid (#422)
 - Do not try to create unaccent extension if it's already present (#663)
-- Ensure admin links in sidebar are displayed for users with relavant permissions, and only them (#597)
-- Fix broken websocket connexion under Chrome browser (#589)
+- Ensure admin links in sidebar are displayed for users with relevant permissions, and only them (#597)
+- Fix broken websocket connection under Chrome browser (#589)
 - Fix play button not starting playback with empty queue (#632)
 - Fixed a styling inconsistency on about page when instance description was missing (#659)
-- Fixed a UI discrepency in playlist tracks count (#647)
+- Fixed a UI discrepancy in playlist tracks count (#647)
 - Fixed greyed tracks in radio builder and detail page (#637)
 - Fixed inconsistencies in subsonic error responses (#616)
 - Fixed incorrect icon for "next track" in player control (#613)
@@ -2581,7 +2976,7 @@ Bugfixes:
 - Fixed missing track count on various library cards (#581)
 - Fixed skipped track when appending multiple tracks to the queue under certain conditions (#209)
 - Fixed wrong album/track count on artist page (#599)
-- Hide unplayable/emtpy playlists in "Browse playlist" pages (#424)
+- Hide unplayable/empty playlists in "Browse playlist" pages (#424)
 - Initial UI render using correct language from browser (#644)
 - Invalid URI for reverse proxy websocket with apache (#617)
 - Properly encode Wikipedia and lyrics search urls (#470)
@@ -2630,7 +3025,7 @@ Bugfixes:
   or adding tracks to queue (#464)
 - Fix broken icons in playlist editor (#515)
 - Fixed a few untranslated strings (#559)
-- Fixed splitted album when importing from federation (#346)
+- Fixed split album when importing from federation (#346)
 - Fixed toggle mute in volume bar does not restore previous volume level (#514)
 - Fixed wrong env file URL and display bugs in deployment documentation (#520)
 - Fixed wrong title in PlayButton (#435)
@@ -2905,7 +3300,7 @@ Features:
 
 - Complete redesign of the library home and playlist pages (#284)
 - Expose ActivityPub actors for users (#317)
-- Implemented a basic but functionnal Github-like search on federated tracks
+- Implemented a basic but functional Github-like search on federated tracks
   list (#344)
 - Internationalized interface as well as translations for Arabic, French,
   Esperanto, Italian, Occitan, Polish, Portuguese and Swedish (#161, #167)
@@ -3066,7 +3461,7 @@ This is the type of query you can run:
 - ``artist:"System of a Down" domain:instance.funkwhale`` search for results where artist name equals "System of a Down" and inside "instance.funkwhale" library
 
 
-Ensure MEDIA_ROOT, STATIC_ROOT and MUSIC_DIRECTORY_* are set explicitely [Manual action required]
+Ensure MEDIA_ROOT, STATIC_ROOT and MUSIC_DIRECTORY_* are set explicitly [Manual action required]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In our default .env file, MEDIA_ROOT and STATIC_ROOT were commented by default, causing
@@ -3186,10 +3581,10 @@ Invitations generation and management requires the "settings" permission.
 Removed front-end and back-end coupling
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Eventhough Funkwhale's front-end has always been a Single Page Application,
+Even though Funkwhale's front-end has always been a Single Page Application,
 talking to an API, it was only able to talk to an API on the same domain.
 
-There was no real technical justification behind this (only lazyness), and it was
+There was no real technical justification behind this (only laziness), and it was
 also blocking interesting use cases:
 
 - Use multiple customized versions of the front-end with the same instance
@@ -3232,7 +3627,7 @@ Bugfixes:
 - Ensure radios can only be edited and deleted by their owners (#311)
 - Fixed admin menu not showing after login (#245)
 - Fixed broken pagination in Subsonic API (#295)
-- Fixed duplicated websocket connexion on timeline (#287)
+- Fixed duplicated websocket connection on timeline (#287)
 
 
 Documentation:
@@ -3468,7 +3863,7 @@ Bugfixes:
   (#106)
 - Fixed a few broken translations strings (#227)
 - Fixed broken ordering in front-end lists (#179)
-- Fixed ignored page_size paremeter on artist and favorites list (#240)
+- Fixed ignored page_size parameter on artist and favorites list (#240)
 - Read ID3Tag Tracknumber from TRCK (#220)
 - We now fetch album covers regardless of the import methods (#231)
 
@@ -3490,7 +3885,7 @@ This is the first bit of an ongoing work that will span several releases, to
 bring more powerful library management features to Funkwhale. This iteration
 includes a basic file management interface where users with the "library"
 permission can list and search available files, order them using
-various criterias (size, bitrate, duration...) and delete them.
+various criteria (size, bitrate, duration...) and delete them.
 
 New "upload" permission
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -3598,10 +3993,10 @@ tend to be a lot bigger than other files, you may want to increase the
 ``client_max_body_size`` value in your Nginx configuration if you plan
 to upload flac files.
 
-Missing subsonic configuration bloc in vhost files
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Missing subsonic configuration block in vhost files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Because of a missing bloc in the sample Nginx and Apache configurations,
+Because of a missing block in the sample Nginx and Apache configurations,
 instances that were deployed after the 0.13 release are likely to be unable
 to answer to Subsonic clients (the missing bits were properly documented
 in the changelog).
@@ -3684,7 +4079,7 @@ additional information about audio files:
 - Duration
 
 This change is not retroactive, meaning already imported files will lack those
-informations. The interface and API should work as before in such case, however,
+information. The interface and API should work as before in such case, however,
 we offer a command to deal with legacy files and populate the missing values.
 
 On docker setups:
@@ -3787,8 +4182,8 @@ without developping our own alternative clients for each and every platform.
 Most advanced Subsonic clients support offline caching of music files,
 playlist management and search, which makes them well-suited for nomadic use.
 
-Please head over :doc:`users/apps` for more informations about supported clients
-and user instructions.
+Please see `our list of supported apps <https://funkwhale.audio/en_US/apps>`_
+for more information about supported clients and user instructions.
 
 At the instance-level, the Subsonic API is enabled by default, but require
 and additional endpoint to be added in you reverse-proxy configuration.
@@ -3971,7 +4366,7 @@ of emails:
 - Password reset emails, enabling user to reset their password without an admin's intervention
 
 Email sending is disabled by default, as it requires additional configuration.
-In this mode, emails are simply outputed on stdout.
+In this mode, emails are simply outputted on stdout.
 
 If you want to actually send those emails to your users, you should edit your
 .env file and tweak the ``EMAIL_CONFIG`` variable. See :data:`EMAIL_CONFIG <config.settings.common.EMAIL_CONFIG>`
@@ -4110,7 +4505,7 @@ This is for real this time, and includes:
 
 - Following other Funkwhale libraries
 - Importing tracks from remote libraries (tracks are hotlinked, and only cached for a short amount of time)
-- Searching accross federated catalogs
+- Searching across federated catalogs
 
 Note that by default, federation is opt-in, on a per-instance basis:
 instances will request access to your catalog, and you can accept or refuse
@@ -4260,7 +4655,7 @@ Bugfixes:
 - Fixed broken import request admin (#115)
 - Fixed forced redirection to login event with
   API_AUTHENTICATION_REQUIRED=False (#119)
-- Fixed position not being reseted properly when playing the same track
+- Fixed position not being reset properly when playing the same track
   multiple times in a row
 - Fixed synchronized start/stop radio buttons for all custom radios (#103)
 - Fixed typo and missing icon on homepage (#96)
@@ -4333,7 +4728,7 @@ To prepare for new realtime features and enable websocket support in Funkwhale,
 we are now using django-channels and daphne to serve HTTP and websocket traffic.
 
 This replaces gunicorn and the switch should be easy assuming you
-follow the upgrade process described bellow.
+follow the upgrade process described below.
 
 If you are using docker, please remove the command instruction inside the
 api service, as the up-to-date command is now included directly in the image
@@ -4464,7 +4859,7 @@ Basic transcoding is now available to/from the following formats : ogg and mp3.
 
 This relies internally on FFMPEG and can put some load on your server.
 It's definitely recommended you setup some caching for the transcoded files
-at your webserver level. Check the the exemple nginx file at deploy/nginx.conf
+at your webserver level. Check the the example nginx file at deploy/nginx.conf
 for an implementation.
 
 On the frontend, usage of transcoding should be transparent in the player.
@@ -4518,7 +4913,7 @@ an import is made.
 0.3.1
 ------------------
 
-- Revamped all import logic, everything is more tested and consistend
+- Revamped all import logic, everything is more tested and consistent
 - Can now use Acoustid in file imports to automatically grab metadata from musicbrainz
 - Brand new file import wizard
 
@@ -4577,7 +4972,7 @@ Tech:
 
 Features:
 
-- Models: now store relese group mbid on Album model (#7)
+- Models: now store release group mbid on Album model (#7)
 - Models: now bind import job to track files (#44)
 
 Bugfixes:

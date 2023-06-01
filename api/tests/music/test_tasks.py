@@ -1,14 +1,14 @@
 import datetime
 import os
-import pytest
 import uuid
 
+import pytest
 from django.core.paginator import Paginator
 from django.utils import timezone
 
 from funkwhale_api.common import utils as common_utils
-from funkwhale_api.federation import serializers as federation_serializers
 from funkwhale_api.federation import jsonld
+from funkwhale_api.federation import serializers as federation_serializers
 from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.music import licenses, metadata, models, signals, tasks
 
@@ -78,32 +78,6 @@ def test_can_create_track_from_file_metadata_attributed_to(factories, mocker):
     assert track.artist.name == metadata["artists"][0]["name"]
     assert track.artist.mbid is None
     assert track.artist.attributed_to == actor
-
-
-def test_can_create_track_from_file_metadata_truncates_too_long_values(
-    factories, mocker
-):
-    metadata = {
-        "title": "a" * 5000,
-        "artists": [{"name": "b" * 5000}],
-        "album": {"title": "c" * 5000, "release_date": datetime.date(2012, 8, 15)},
-        "position": 4,
-        "disc_number": 2,
-        "copyright": "d" * 5000,
-    }
-
-    track = tasks.get_track_from_import_metadata(metadata)
-
-    assert track.title == metadata["title"][: models.MAX_LENGTHS["TRACK_TITLE"]]
-    assert track.copyright == metadata["copyright"][: models.MAX_LENGTHS["COPYRIGHT"]]
-    assert (
-        track.album.title
-        == metadata["album"]["title"][: models.MAX_LENGTHS["ALBUM_TITLE"]]
-    )
-    assert (
-        track.artist.name
-        == metadata["artists"][0]["name"][: models.MAX_LENGTHS["ARTIST_NAME"]]
-    )
 
 
 def test_can_create_track_from_file_metadata_featuring(factories):
@@ -416,7 +390,7 @@ def test_upload_import_in_place(factories, mocker):
     upload = factories["music.Upload"](
         track=None,
         audio_file=None,
-        source="file://{}".format(path),
+        source=f"file://{path}",
         import_metadata={"funkwhale": {"track": {"uuid": track.uuid}}},
     )
 
@@ -590,7 +564,7 @@ def test_populate_album_cover_file_cover_separate_file(
     ext, mimetype, factories, mocker
 ):
     mocker.patch("funkwhale_api.music.tasks.IMAGE_TYPES", [(ext, mimetype)])
-    image_path = os.path.join(DATA_DIR, "cover.{}".format(ext))
+    image_path = os.path.join(DATA_DIR, f"cover.{ext}")
     with open(image_path, "rb") as f:
         image_content = f.read()
     album = factories["music.Album"](attachment_cover=None, mbid=None)
@@ -801,7 +775,7 @@ def test_scan_page_fetches_page_and_creates_tracks(now, mocker, factories, r_moc
     scan = factories["music.LibraryScan"](status="scanning", total_files=5)
     uploads = [
         factories["music.Upload"](
-            fid="https://track.test/{}".format(i),
+            fid=f"https://track.test/{i}",
             size=42,
             bitrate=66,
             duration=99,
@@ -973,7 +947,7 @@ def test_update_library_entity(factories, mocker):
     ],
 )
 def test_get_cover_from_fs(name, ext, mimetype, tmpdir):
-    cover_path = os.path.join(tmpdir, "{}.{}".format(name, ext))
+    cover_path = os.path.join(tmpdir, f"{name}.{ext}")
     content = "Hello"
     with open(cover_path, "w") as f:
         f.write(content)
@@ -1082,13 +1056,15 @@ def test_process_channel_upload_forces_artist_and_attributed_to(
     upload.refresh_from_db()
 
     expected_final_metadata = tasks.collections.ChainMap(
-        {"upload_source": None}, expected_forced_values, {"funkwhale": {}},
+        {"upload_source": None},
+        expected_forced_values,
+        {"funkwhale": {}},
     )
     assert upload.import_status == "finished"
     get_track_from_import_metadata.assert_called_once_with(
         expected_final_metadata,
         attributed_to=channel.attributed_to,
-        **expected_forced_values
+        **expected_forced_values,
     )
 
     assert upload.track.description.content_type == "text/markdown"
@@ -1175,7 +1151,8 @@ def test_tag_albums_from_tracks(queryset_equal_queries, factories, mocker):
     )
 
     add_tags_batch.assert_called_once_with(
-        get_tags_from_foreign_key.return_value, model=models.Album,
+        get_tags_from_foreign_key.return_value,
+        model=models.Album,
     )
 
 
@@ -1200,7 +1177,8 @@ def test_tag_artists_from_tracks(queryset_equal_queries, factories, mocker):
     )
 
     add_tags_batch.assert_called_once_with(
-        get_tags_from_foreign_key.return_value, model=models.Artist,
+        get_tags_from_foreign_key.return_value,
+        model=models.Artist,
     )
 
 

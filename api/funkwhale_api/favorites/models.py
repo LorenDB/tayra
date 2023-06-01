@@ -23,4 +23,4 @@ class TrackFavorite(models.Model):
         return favorite
 
     def get_activity_url(self):
-        return "{}/favorites/tracks/{}".format(self.user.get_activity_url(), self.pk)
+        return f"{self.user.get_activity_url()}/favorites/tracks/{self.pk}"

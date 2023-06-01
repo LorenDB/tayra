@@ -1,3 +1,46 @@
+<script setup lang="ts">
+import type { BackendError } from '~/types'
+
+import { computed, ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+import axios from 'axios'
+
+interface Props {
+  defaultKey: string
+}
+
+const props = defineProps<Props>()
+
+const { t } = useI18n()
+
+const labels = computed(() => ({
+  confirm: t('views.auth.EmailConfirm.title')
+}))
+
+const errors = ref([] as string[])
+const key = ref(props.defaultKey)
+const isLoading = ref(false)
+const success = ref(false)
+const submit = async () => {
+  isLoading.value = true
+  errors.value = []
+
+  try {
+    await axios.post('auth/registration/verify-email/', { key: key.value })
+    success.value = true
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+onMounted(() => {
+  if (key.value) submit()
+})
+</script>
+
 <template>
   <main
     v-title="labels.confirm"
@@ -17,9 +60,7 @@
             class="ui negative message"
           >
             <h4 class="header">
-              <translate translate-context="Content/Signup/Paragraph">
-                Could not confirm your e-mail address
-              </translate>
+              {{ $t('views.auth.EmailConfirm.header.failure') }}
             </h4>
             <ul class="list">
               <li
@@ -31,7 +72,7 @@
             </ul>
           </div>
           <div class="field">
-            <label for="confirmation-code"><translate translate-context="Content/Signup/Form.Label">Confirmation code</translate></label>
+            <label for="confirmation-code">{{ $t('views.auth.EmailConfirm.label.confirmationCode') }}</label>
             <input
               id="confirmation-code"
               v-model="key"
@@ -41,9 +82,7 @@
             >
           </div>
           <router-link :to="{path: '/login'}">
-            <translate translate-context="Content/Signup/Link/Verb">
-              Return to login
-            </translate>
+            {{ $t('views.auth.EmailConfirm.link.back') }}
           </router-link>
           <button
             :class="['ui', {'loading': isLoading}, 'right', 'floated', 'success', 'button']"
@@ -57,70 +96,16 @@
           class="ui positive message"
         >
           <h4 class="header">
-            <translate translate-context="Content/Signup/Message">
-              E-mail address confirmed
-            </translate>
+            {{ $t('views.auth.EmailConfirm.header.success') }}
           </h4>
           <p>
-            <translate translate-context="Content/Signup/Paragraph">
-              You can now use the service without limitations.
-            </translate>
+            {{ $t('views.auth.EmailConfirm.message.success') }}
           </p>
           <router-link :to="{name: 'login'}">
-            <translate translate-context="Content/Signup/Link/Verb">
-              Proceed to login
-            </translate>
+            {{ $t('views.auth.EmailConfirm.link.login') }}
           </router-link>
         </div>
       </div>
     </section>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-
-export default {
-  props: { defaultKey: { type: String, required: true } },
-  data () {
-    return {
-      isLoading: false,
-      errors: [],
-      key: this.defaultKey,
-      success: false
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        confirm: this.$pgettext('Head/Signup/Title', 'Confirm your e-mail address')
-      }
-    }
-  },
-  mounted () {
-    if (this.key) {
-      this.submit()
-    }
-  },
-  methods: {
-    submit () {
-      const self = this
-      self.isLoading = true
-      self.errors = []
-      const payload = {
-        key: this.key
-      }
-      return axios.post('auth/registration/verify-email/', payload).then(
-        response => {
-          self.isLoading = false
-          self.success = true
-        },
-        error => {
-          self.errors = error.backendErrors
-          self.isLoading = false
-        }
-      )
-    }
-  }
-}
-</script>

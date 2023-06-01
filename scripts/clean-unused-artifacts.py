@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import gitlab
 
 TOKEN = "CHANGEME"
@@ -26,5 +28,5 @@ for job in jobs:
         "name": job.attributes["name"],
         "created_at": job.attributes["created_at"],
     }
-    print("Deleting job {}!".format(job.id), relevant)
+    print(f"Deleting job {job.id}!", relevant)
     job.erase()

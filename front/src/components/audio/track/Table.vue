@@ -1,14 +1,149 @@
+<script setup lang="ts">
+import type { Track } from '~/types'
+
+import { useI18n } from 'vue-i18n'
+import { clone, uniqBy } from 'lodash-es'
+import { ref, computed } from 'vue'
+
+import axios from 'axios'
+
+import TrackMobileRow from '~/components/audio/track/MobileRow.vue'
+import Pagination from '~/components/vui/Pagination.vue'
+import TrackRow from '~/components/audio/track/Row.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+
+interface Events {
+  (e: 'fetched'): void
+  (e: 'page-changed', page: number): void
+}
+
+interface Props {
+  tracks?: undefined | Track[]
+
+  showAlbum?: boolean
+  showArtist?: boolean
+  showPosition?: boolean
+  showArt?: boolean
+  showDuration?: boolean
+  search?: boolean
+  displayActions?: boolean
+  isArtist?: boolean
+  isAlbum?: boolean
+  isPodcast?: boolean
+
+  filters?: object
+
+  nextUrl?: string | null
+
+  paginateResults?: boolean
+  total?: number
+  page?: number
+  paginateBy?: number,
+
+  unique?: boolean
+}
+
+const emit = defineEmits<Events>()
+const props = withDefaults(defineProps<Props>(), {
+  tracks: undefined,
+
+  showAlbum: true,
+  showArtist: true,
+  showPosition: false,
+  showArt: true,
+  showDuration: true,
+  search: false,
+  displayActions: true,
+  isArtist: false,
+  isAlbum: false,
+  isPodcast: false,
+
+  filters: () => ({}),
+  nextUrl: null,
+
+  paginateResults: true,
+  total: 0,
+  page: 1,
+  paginateBy: 25,
+
+  unique: true
+})
+
+const currentPage = ref(props.page)
+const totalTracks = ref(props.total)
+const fetchDataUrl = ref(props.nextUrl)
+const additionalTracks = ref([] as Track[])
+const query = ref('')
+
+const allTracks = computed(() => {
+  const tracks = [...(props.tracks ?? []), ...additionalTracks.value]
+  return props.unique
+    ? uniqBy(tracks, 'id')
+    : tracks
+})
+
+const { t } = useI18n()
+const labels = computed(() => ({
+  title: t('components.audio.track.Table.table.header.title'),
+  album: t('components.audio.track.Table.table.header.album'),
+  artist: t('components.audio.track.Table.table.header.artist')
+}))
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+
+  const params = {
+    ...clone(props.filters),
+    page_size: props.paginateBy,
+    page: currentPage.value,
+    include_channels: true,
+    q: query.value
+  }
+
+  try {
+    const response = await axios.get('tracks/', { params })
+
+    // TODO (wvffle): Fetch continuously?
+    fetchDataUrl.value = response.data.next
+    additionalTracks.value = response.data.results
+    totalTracks.value = response.data.count
+    emit('fetched')
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+const performSearch = () => {
+  currentPage.value = 1
+  additionalTracks.value = []
+  fetchData()
+}
+
+if (props.tracks === undefined) {
+  fetchData()
+}
+
+const updatePage = (page: number) => {
+  if (props.tracks === undefined) {
+    currentPage.value = page
+    fetchData()
+  } else {
+    emit('page-changed', page)
+  }
+}
+</script>
+
 <template>
   <div>
     <!-- Show the search bar if search is true -->
     <inline-search-bar
       v-if="search"
       v-model="query"
-      @search="
-        currentPage = 1;
-        additionalTracks = [];
-        fetchData('tracks/');
-      "
+      @search="performSearch"
     />
 
     <!-- Add a header if needed -->
@@ -23,7 +158,7 @@
     >
       <empty-state
         :refresh="true"
-        @refresh="fetchData('tracks/')"
+        @refresh="fetchData()"
       />
     </slot>
     <div v-else>
@@ -89,7 +224,7 @@
 
         <track-row
           v-for="(track, index) in allTracks"
-          :key="track.id"
+          :key="`${track.id} ${track.position}`"
           :track="track"
           :index="index"
           :tracks="allTracks"
@@ -103,14 +238,14 @@
         />
       </div>
       <div
-        v-if="paginateResults"
+        v-if="tracks && paginateResults"
         class="ui center aligned basic segment desktop-and-up"
       >
         <pagination
           :total="totalTracks"
-          :current=" tracks.length > 0 ? page : currentPage"
+          :current="tracks !== undefined ? page : currentPage"
           :paginate-by="paginateBy"
-          @page-changed="updatePage"
+          @update:current="updatePage"
         />
       </div>
     </div>
@@ -141,118 +276,18 @@
         :is-podcast="isPodcast"
       />
       <div
-        v-if="paginateResults && totalTracks > paginateBy"
+        v-if="tracks && paginateResults && totalTracks > paginateBy"
         class="ui center aligned basic segment tablet-and-below"
       >
         <pagination
           v-if="paginateResults && totalTracks > paginateBy"
           :paginate-by="paginateBy"
           :total="totalTracks"
-          :current="tracks.length > 0 ? page : {currentPage}"
+          :current="tracks !== undefined ? page : currentPage"
           :compact="true"
-          @page-changed="updatePage"
+          @update:current="updatePage"
         />
       </div>
     </div>
   </div>
 </template>
-
-<script>
-import _ from '@/lodash'
-import axios from 'axios'
-import TrackRow from '@/components/audio/track/Row.vue'
-import TrackMobileRow from '@/components/audio/track/MobileRow.vue'
-import Pagination from '@/components/Pagination.vue'
-import { unique } from '@/filters'
-
-export default {
-  components: {
-    TrackRow,
-    TrackMobileRow,
-    Pagination
-  },
-
-  props: {
-    tracks: { type: Array, default: () => { return [] } },
-    showAlbum: { type: Boolean, required: false, default: true },
-    showArtist: { type: Boolean, required: false, default: true },
-    showPosition: { type: Boolean, required: false, default: false },
-    showArt: { type: Boolean, required: false, default: true },
-    search: { type: Boolean, required: false, default: false },
-    filters: { type: Object, required: false, default: () => { return {} } },
-    nextUrl: { type: String, required: false, default: null },
-    displayActions: { type: Boolean, required: false, default: true },
-    showDuration: { type: Boolean, required: false, default: true },
-    isArtist: { type: Boolean, required: false, default: false },
-    isAlbum: { type: Boolean, required: false, default: false },
-    isPodcast: { type: Boolean, required: false, default: false },
-    paginateResults: { type: Boolean, required: false, default: true },
-    total: { type: Number, required: false, default: 0 },
-    page: { type: Number, required: false, default: 1 },
-    paginateBy: { type: Number, required: false, default: 25 }
-  },
-
-  data () {
-    return {
-      fetchDataUrl: this.nextUrl,
-      isLoading: false,
-      additionalTracks: [],
-      query: '',
-      totalTracks: this.total,
-      currentPage: this.page
-    }
-  },
-  computed: {
-    allTracks () {
-      const tracks = (this.tracks || []).concat(this.additionalTracks)
-      return unique(tracks, 'id')
-    },
-
-    labels () {
-      return {
-        title: this.$pgettext('*/*/*/Noun', 'Title'),
-        album: this.$pgettext('*/*/*/Noun', 'Album'),
-        artist: this.$pgettext('*/*/*/Noun', 'Artist')
-      }
-    }
-  },
-  created () {
-    if (this.tracks.length === 0) {
-      this.fetchData('tracks/')
-    }
-  },
-  methods: {
-    async fetchData (url) {
-      if (!url) {
-        return
-      }
-      this.isLoading = true
-      const self = this
-      const params = _.clone(this.filters)
-      params.page_size = this.paginateBy
-      params.page = this.currentPage
-      params.include_channels = true
-      params.q = this.query
-      const tracksPromise = await axios.get(url, { params: params })
-      try {
-        self.fetchDataUrl = tracksPromise.data.next
-        self.additionalTracks = tracksPromise.data.results
-        self.totalTracks = tracksPromise.data.count
-        self.$emit('fetched', tracksPromise.data)
-        self.isLoading = false
-      } catch (e) {
-        self.isLoading = false
-        self.errors = e.backendErrors
-      }
-    },
-    updatePage: function (page) {
-      if (this.tracks.length === 0) {
-        this.currentPage = page
-        this.fetchData('tracks/')
-      } else {
-        this.$emit('page-changed', page)
-      }
-    }
-  }
-}
-</script>

@@ -1,3 +1,148 @@
+<script setup lang="ts">
+import type { InstancePolicy } from '~/types'
+
+import { computed, ref, reactive, nextTick, watch } from 'vue'
+import { useCurrentElement } from '@vueuse/core'
+import { humanSize } from '~/utils/filters'
+import { useI18n } from 'vue-i18n'
+
+import axios from 'axios'
+import $ from 'jquery'
+
+import InstancePolicyForm from '~/components/manage/moderation/InstancePolicyForm.vue'
+import InstancePolicyCard from '~/components/manage/moderation/InstancePolicyCard.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+import useLogger from '~/composables/useLogger'
+
+interface Props {
+  id: number
+}
+
+const props = defineProps<Props>()
+
+const { t } = useI18n()
+
+const logger = useLogger()
+
+const labels = computed(() => ({
+  statsWarning: t('views.admin.moderation.AccountsDetail.warning.stats'),
+  uploadQuota: t('views.admin.moderation.AccountsDetail.tooltip.uploadQuota')
+}))
+
+const allPermissions = computed(() => [
+  { code: 'library', label: t('views.admin.moderation.AccountsDetail.option.permission.library') },
+  { code: 'moderation', label: t('views.admin.moderation.AccountsDetail.option.permission.moderation') },
+  { code: 'settings', label: t('views.admin.moderation.AccountsDetail.option.permission.settings') }
+])
+
+const isLoadingPolicy = ref(false)
+const policy = ref()
+const fetchPolicy = async (id: number) => {
+  isLoadingPolicy.value = true
+
+  try {
+    const response = await axios.get(`manage/moderation/instance-policies/${id}/`)
+    policy.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoadingPolicy.value = false
+}
+
+const permissions = ref([] as string[])
+const isLoading = ref(false)
+const object = ref()
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(`manage/accounts/${props.id}/`)
+    object.value = response.data
+
+    if (response.data.instance_policy) {
+      fetchPolicy(response.data.instance_policy)
+    }
+
+    if (response.data.user) {
+      for (const { code } of allPermissions.value) {
+        if (response.data.user.permissions[code]) {
+          permissions.value.push(code)
+        }
+      }
+    }
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+const isLoadingStats = ref(false)
+const stats = ref()
+const fetchStats = async () => {
+  isLoadingStats.value = true
+
+  try {
+    const response = await axios.get(`manage/accounts/${props.id}/stats/`)
+    stats.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoadingStats.value = false
+}
+
+fetchStats()
+fetchData()
+
+const el = useCurrentElement()
+watch(object, async () => {
+  await nextTick()
+  $(el.value).find('select.dropdown').dropdown()
+})
+
+const getQuery = (field: string, value: string) => `${field}:"${value}"`
+
+const updating = reactive(new Set<string>())
+const updateUser = async (attr: string, toNull = false) => {
+  let newValue = object.value.user[attr]
+  if (toNull && !newValue) {
+    newValue = null
+  }
+
+  updating.add(attr)
+
+  const params = {
+    [attr]: newValue
+  }
+
+  if (attr === 'permissions') {
+    params.permissions = allPermissions.value.reduce((acc, { code }) => {
+      acc[code] = permissions.value.includes(code)
+      return acc
+    }, {} as Record<string, boolean>)
+  }
+
+  try {
+    await axios.patch(`manage/users/users/${object.value.user.id}/`, params)
+    logger.info(`${attr} was updated successfully to ${newValue}`)
+  } catch (error) {
+    logger.error(`Error while setting ${attr} to ${newValue}`, error)
+    // TODO: Use error handler
+  }
+
+  updating.delete(attr)
+}
+
+const showPolicyForm = ref(false)
+const updatePolicy = (newPolicy: InstancePolicy) => {
+  policy.value = newPolicy
+  showPolicyForm.value = false
+}
+</script>
+
 <template>
   <main class="page-admin-account-detail">
     <div
@@ -22,7 +167,7 @@
                     <template v-if="object.user">
                       <span class="ui tiny accent label">
                         <i class="home icon" />
-                        <translate translate-context="Content/Moderation/*/Short, Noun">Local account</translate>
+                        {{ $t('views.admin.moderation.AccountsDetail.header.localAccount') }}
                       </span>
                       &nbsp;
                     </template>
@@ -31,7 +176,7 @@
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <translate translate-context="Content/Moderation/Link/Verb">Open profile</translate>&nbsp;
+                      {{ $t('views.admin.moderation.AccountsDetail.link.openProfile') }}&nbsp;
                       <i class="external icon" />
                     </a>
                   </div>
@@ -47,7 +192,7 @@
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    <translate translate-context="Content/Moderation/Link/Verb">View in Django's admin</translate>&nbsp;
+                    {{ $t('views.admin.moderation.AccountsDetail.link.django') }}&nbsp;
                   </a>
                   <a
                     v-else-if="$store.state.auth.profile && $store.state.auth.profile.is_superuser"
@@ -57,7 +202,7 @@
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    <translate translate-context="Content/Moderation/Link/Verb">View in Django's admin</translate>&nbsp;
+                    {{ $t('views.admin.moderation.AccountsDetail.link.django') }}&nbsp;
                   </a>
                   <button
                     v-dropdown
@@ -72,7 +217,7 @@
                         rel="noopener noreferrer"
                       >
                         <i class="external icon" />
-                        <translate translate-context="Content/Moderation/Link/Verb">Open remote profile</translate>&nbsp;
+                        {{ $t('views.admin.moderation.AccountsDetail.link.remoteProfile') }}&nbsp;
                       </a>
                     </div>
                   </button>
@@ -98,23 +243,17 @@
                 <header class="ui header">
                   <h3>
                     <i class="shield icon" />
-                    <translate translate-context="Content/Moderation/Card.Title">
-                      You don't have any rule in place for this account.
-                    </translate>
+                    {{ $t('views.admin.moderation.AccountsDetail.header.noPolicy') }}
                   </h3>
                 </header>
                 <p>
-                  <translate translate-context="Content/Moderation/Card.Paragraph">
-                    Moderation policies help you control how your instance interact with a given domain or account.
-                  </translate>
+                  {{ $t('views.admin.moderation.AccountsDetail.description.policy') }}
                 </p>
                 <button
                   class="ui primary button"
                   @click="showPolicyForm = true"
                 >
-                  <translate translate-context="Content/Moderation/Button/Verb">
-                    Add a moderation policy
-                  </translate>
+                  {{ $t('views.admin.moderation.AccountsDetail.button.addPolicy') }}
                 </button>
               </template>
               <instance-policy-card
@@ -124,9 +263,7 @@
               >
                 <header class="ui header">
                   <h3>
-                    <translate translate-context="Content/Moderation/Card.Title">
-                      This domain is subject to specific moderation rules
-                    </translate>
+                    {{ $t('views.admin.moderation.AccountsDetail.header.activePolicy') }}
                   </h3>
                 </header>
               </instance-policy-card>
@@ -150,18 +287,14 @@
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
-                    Account data
-                  </translate>
+                  {{ $t('views.admin.moderation.AccountsDetail.header.accountData') }}
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      <translate translate-context="Content/*/*">
-                        Username
-                      </translate>
+                      {{ $t('views.admin.moderation.AccountsDetail.table.accountData.username') }}
                     </td>
                     <td>
                       {{ object.preferred_username }}
@@ -170,9 +303,7 @@
                   <tr v-if="!object.user">
                     <td>
                       <router-link :to="{name: 'manage.moderation.domains.detail', params: {id: object.domain }}">
-                        <translate translate-context="Content/Moderation/*/Noun">
-                          Domain
-                        </translate>
+                        {{ $t('views.admin.moderation.AccountsDetail.link.domain') }}
                       </router-link>
                     </td>
                     <td>
@@ -181,9 +312,7 @@
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="'Content/*/*/Noun'">
-                        Display name
-                      </translate>
+                      {{ $t('views.admin.moderation.AccountsDetail.table.accountData.displayName') }}
                     </td>
                     <td>
                       {{ object.name }}
@@ -191,9 +320,7 @@
                   </tr>
                   <tr v-if="object.user">
                     <td>
-                      <translate translate-context="Content/*/*">
-                        Email address
-                      </translate>
+                      {{ $t('views.admin.moderation.AccountsDetail.table.accountData.email') }}
                     </td>
                     <td>
                       {{ object.user.email }}
@@ -201,13 +328,11 @@
                   </tr>
                   <tr v-if="object.user">
                     <td>
-                      <translate translate-context="Content/*/*/Noun">
-                        Login status
-                      </translate>
+                      {{ $t('views.admin.moderation.AccountsDetail.table.accountData.loginStatus.label') }}
                     </td>
                     <td>
                       <div
-                        v-if="object.user.username != $store.state.auth.profile.username"
+                        v-if="object.user.username != $store.state.auth.profile?.username"
                         class="ui toggle checkbox"
                       >
                         <input
@@ -217,39 +342,29 @@
                           @change="updateUser('is_active')"
                         >
                         <label for="is-active">
-                          <translate
+                          <span
                             v-if="object.user.is_active"
-                            key="1"
-                            translate-context="*/*/*/State of feature"
-                          >Enabled</translate>
-                          <translate
+                          >{{ $t('views.admin.moderation.AccountsDetail.table.accountData.loginStatus.enabled') }}</span>
+                          <span
                             v-else
-                            key="2"
-                            translate-context="*/*/*/State of feature"
-                          >Disabled</translate>
+                          >{{ $t('views.admin.moderation.AccountsDetail.table.accountData.loginStatus.disabled') }}</span>
                         </label>
                       </div>
-                      <translate
+                      <span
                         v-else-if="object.user.is_active"
-                        key="1"
-                        translate-context="*/*/*/State of feature"
                       >
-                        Enabled
-                      </translate>
-                      <translate
+                        {{ $t('views.admin.moderation.AccountsDetail.table.accountData.loginStatus.enabled') }}
+                      </span>
+                      <span
                         v-else
-                        key="2"
-                        translate-context="*/*/*/State of feature"
                       >
-                        Disabled
-                      </translate>
+                        {{ $t('views.admin.moderation.AccountsDetail.table.accountData.loginStatus.disabled') }}
+                      </span>
                     </td>
                   </tr>
                   <tr v-if="object.user">
                     <td>
-                      <translate translate-context="Content/*/*/Noun">
-                        Permissions
-                      </translate>
+                      {{ $t('views.admin.moderation.AccountsDetail.table.accountData.permissions') }}
                     </td>
                     <td>
                       <select
@@ -266,14 +381,12 @@
                           {{ p.label }}
                         </option>
                       </select>
-                      <action-feedback :is-loading="updating.permissions" />
+                      <action-feedback :is-loading="updating.has('permissions')" />
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Track/Table.Label/Noun">
-                        Type
-                      </translate>
+                      {{ $t('views.admin.moderation.AccountsDetail.table.accountData.userType') }}
                     </td>
                     <td>
                       {{ object.type }}
@@ -281,28 +394,23 @@
                   </tr>
                   <tr v-if="!object.user">
                     <td>
-                      <translate translate-context="Content/*/Table.Label">
-                        Last checked
-                      </translate>
+                      {{ $t('views.admin.moderation.AccountsDetail.table.accountData.lastChecked') }}
                     </td>
                     <td>
                       <human-date
                         v-if="object.last_fetch_date"
                         :date="object.last_fetch_date"
                       />
-                      <translate
+                      <span
                         v-else
-                        translate-context="*/*/*"
                       >
-                        N/A
-                      </translate>
+                        {{ $t('views.admin.moderation.AccountsDetail.notApplicable') }}
+                      </span>
                     </td>
                   </tr>
                   <tr v-if="object.user">
                     <td>
-                      <translate translate-context="Content/Admin/Table.Label/Noun">
-                        Sign-up date
-                      </translate>
+                      {{ $t('views.admin.moderation.AccountsDetail.table.accountData.signupDate') }}
                     </td>
                     <td>
                       <human-date :date="object.user.date_joined" />
@@ -310,9 +418,7 @@
                   </tr>
                   <tr v-if="object.user">
                     <td>
-                      <translate translate-context="Content/Profile/Table.Label/Short, Noun (Value is a date)">
-                        Last activity
-                      </translate>
+                      {{ $t('views.admin.moderation.AccountsDetail.table.accountData.lastActivity') }}
                     </td>
                     <td>
                       <human-date :date="object.user.last_activity" />
@@ -327,9 +433,7 @@
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
-                    Activity
-                  </translate>&nbsp;
+                  {{ $t('views.admin.moderation.AccountsDetail.header.activity') }}&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -349,9 +453,7 @@
                 <tbody>
                   <tr v-if="!object.user">
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Short (Value is a date)">
-                        First seen
-                      </translate>
+                      {{ $t('views.admin.moderation.AccountsDetail.table.activity.firstSeen') }}
                     </td>
                     <td>
                       <human-date :date="object.creation_date" />
@@ -359,9 +461,7 @@
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Noun">
-                        Emitted messages
-                      </translate>
+                      {{ $t('views.admin.moderation.AccountsDetail.table.activity.emittedMessages') }}
                     </td>
                     <td>
                       {{ stats.outbox_activities }}
@@ -369,9 +469,7 @@
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Noun">
-                        Received library follows
-                      </translate>
+                      {{ $t('views.admin.moderation.AccountsDetail.table.activity.receivedFollows') }}
                     </td>
                     <td>
                       {{ stats.received_library_follows }}
@@ -379,9 +477,7 @@
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Noun">
-                        Emitted library follows
-                      </translate>
+                      {{ $t('views.admin.moderation.AccountsDetail.table.activity.emittedFollows') }}
                     </td>
                     <td>
                       {{ stats.emitted_library_follows }}
@@ -390,9 +486,7 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.reports.list', query: {q: getQuery('target', `account:${object.full_username}`) }}">
-                        <translate translate-context="Content/Moderation/Table.Label/Noun">
-                          Linked reports
-                        </translate>
+                        {{ $t('views.admin.moderation.AccountsDetail.link.linkedReports') }}
                       </router-link>
                     </td>
                     <td>
@@ -402,9 +496,7 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.requests.list', query: {q: getQuery('submitter', `${object.full_username}`) }}">
-                        <translate translate-context="Content/Moderation/Table.Label/Noun">
-                          Requests
-                        </translate>
+                        {{ $t('views.admin.moderation.AccountsDetail.link.requests') }}
                       </router-link>
                     </td>
                     <td>
@@ -420,9 +512,7 @@
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
-                    Audio content
-                  </translate>&nbsp;
+                  {{ $t('views.admin.moderation.AccountsDetail.header.audioContent') }}&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -442,19 +532,15 @@
                 <tbody>
                   <tr v-if="!object.user">
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Noun">
-                        Cached size
-                      </translate>
+                      {{ $t('views.admin.moderation.AccountsDetail.table.audioContent.cachedSize') }}
                     </td>
                     <td>
-                      {{ stats.media_downloaded_size | humanSize }}
+                      {{ humanSize(stats.media_downloaded_size) }}
                     </td>
                   </tr>
                   <tr v-if="object.user">
                     <td>
-                      <translate translate-context="*/*/*">
-                        Upload quota
-                      </translate>
+                      {{ $t('views.admin.moderation.AccountsDetail.table.audioContent.uploadQuota') }}
                       <span :data-tooltip="labels.uploadQuota"><i class="question circle icon" /></span>
                     </td>
                     <td>
@@ -467,34 +553,28 @@
                           @change="updateUser('upload_quota', true)"
                         >
                         <div class="ui basic label">
-                          <translate translate-context="Content/*/*/Unit">
-                            MB
-                          </translate>&#32;
+                          {{ $t('views.admin.moderation.AccountsDetail.table.audioContent.megabyte') }}
                         </div>
                         <action-feedback
                           class="ui basic label"
                           size="tiny"
-                          :is-loading="updating.upload_quota"
+                          :is-loading="updating.has('upload_quota')"
                         />
                       </div>
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label">
-                        Total size
-                      </translate>
+                      {{ $t('views.admin.moderation.AccountsDetail.table.audioContent.totalSize') }}
                     </td>
                     <td>
-                      {{ stats.media_total_size | humanSize }}
+                      {{ humanSize(stats.media_total_size) }}
                     </td>
                   </tr>
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.channels', query: {q: getQuery('account', object.full_username) }}">
-                        <translate translate-context="*/*/*">
-                          Channels
-                        </translate>
+                        {{ $t('views.admin.moderation.AccountsDetail.link.channels') }}
                       </router-link>
                     </td>
                     <td>
@@ -504,9 +584,7 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.libraries', query: {q: getQuery('account', object.full_username) }}">
-                        <translate translate-context="*/*/*/Noun">
-                          Libraries
-                        </translate>
+                        {{ $t('views.admin.moderation.AccountsDetail.link.libraries') }}
                       </router-link>
                     </td>
                     <td>
@@ -516,9 +594,7 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('account', object.full_username) }}">
-                        <translate translate-context="*/*/*">
-                          Uploads
-                        </translate>
+                        {{ $t('views.admin.moderation.AccountsDetail.link.uploads') }}
                       </router-link>
                     </td>
                     <td>
@@ -527,9 +603,7 @@
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="*/*/*/Noun">
-                        Artists
-                      </translate>
+                      {{ $t('views.admin.moderation.AccountsDetail.link.artists') }}
                     </td>
                     <td>
                       {{ stats.artists }}
@@ -537,9 +611,7 @@
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="*/*/*">
-                        Albums
-                      </translate>
+                      {{ $t('views.admin.moderation.AccountsDetail.link.albums') }}
                     </td>
                     <td>
                       {{ stats.albums }}
@@ -547,9 +619,7 @@
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="*/*/*">
-                        Tracks
-                      </translate>
+                      {{ $t('views.admin.moderation.AccountsDetail.link.tracks') }}
                     </td>
                     <td>
                       {{ stats.tracks }}
@@ -564,151 +634,3 @@
     </template>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import logger from '@/logging'
-import lodash from '@/lodash'
-import $ from 'jquery'
-
-import InstancePolicyForm from '@/components/manage/moderation/InstancePolicyForm'
-import InstancePolicyCard from '@/components/manage/moderation/InstancePolicyCard'
-
-export default {
-  components: {
-    InstancePolicyForm,
-    InstancePolicyCard
-  },
-  props: { id: { type: Number, required: true } },
-  data () {
-    return {
-      lodash,
-      isLoading: true,
-      isLoadingStats: false,
-      isLoadingPolicy: false,
-      object: null,
-      stats: null,
-      showPolicyForm: false,
-      permissions: [],
-      updating: {
-        permissions: false,
-        upload_quota: false
-      }
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        statsWarning: this.$pgettext('Content/Moderation/Help text', 'Statistics are computed from known activity and content on your instance, and do not reflect general activity for this account'),
-        uploadQuota: this.$pgettext('Content/Moderation/Help text', 'Determine how much content the user can upload. Leave empty to use the default value of the instance.')
-      }
-    },
-    allPermissions () {
-      return [
-        {
-          code: 'library',
-          label: this.$pgettext('*/*/*/Noun', 'Library')
-        },
-        {
-          code: 'moderation',
-          label: this.$pgettext('*/Moderation/*', 'Moderation')
-        },
-        {
-          code: 'settings',
-          label: this.$pgettext('*/*/*/Noun', 'Settings')
-        }
-      ]
-    }
-  },
-  watch: {
-    object () {
-      this.$nextTick(() => {
-        $(this.$el).find('select.dropdown').dropdown()
-      })
-    }
-  },
-  created () {
-    this.fetchData()
-    this.fetchStats()
-  },
-  methods: {
-    fetchData () {
-      const self = this
-      this.isLoading = true
-      const url = 'manage/accounts/' + this.id + '/'
-      axios.get(url).then(response => {
-        self.object = response.data
-        self.isLoading = false
-        if (self.object.instance_policy) {
-          self.fetchPolicy(self.object.instance_policy)
-        }
-        if (response.data.user) {
-          self.allPermissions.forEach(p => {
-            if (self.object.user.permissions[p.code]) {
-              self.permissions.push(p.code)
-            }
-          })
-        }
-      })
-    },
-    fetchPolicy (id) {
-      const self = this
-      this.isLoadingPolicy = true
-      const url = `manage/moderation/instance-policies/${id}/`
-      axios.get(url).then(response => {
-        self.policy = response.data
-        self.isLoadingPolicy = false
-      })
-    },
-    fetchStats () {
-      const self = this
-      this.isLoadingStats = true
-      const url = 'manage/accounts/' + this.id + '/stats/'
-      axios.get(url).then(response => {
-        self.stats = response.data
-        self.isLoadingStats = false
-      })
-    },
-    refreshNodeInfo (data) {
-      this.object.nodeinfo = data
-      this.object.nodeinfo_fetch_date = new Date()
-    },
-
-    updateUser (attr, toNull) {
-      let newValue = this.object.user[attr]
-      if (toNull && !newValue) {
-        newValue = null
-      }
-      const self = this
-      this.updating[attr] = true
-      const params = {}
-      if (attr === 'permissions') {
-        params.permissions = {}
-        this.allPermissions.forEach(p => {
-          params.permissions[p.code] = this.permissions.indexOf(p.code) > -1
-        })
-      } else {
-        params[attr] = newValue
-      }
-      axios.patch(`manage/users/users/${this.object.user.id}/`, params).then(
-        response => {
-          logger.default.info(
-            `${attr} was updated succcessfully to ${newValue}`
-          )
-          self.updating[attr] = false
-        },
-        error => {
-          logger.default.error(
-            `Error while setting ${attr} to ${newValue}`,
-            error
-          )
-          self.updating[attr] = false
-        }
-      )
-    },
-    getQuery (field, value) {
-      return `${field}:"${value}"`
-    }
-  }
-}
-</script>

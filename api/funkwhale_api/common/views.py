@@ -3,28 +3,26 @@ import time
 
 from django.conf import settings
 from django.db import transaction
-
+from drf_spectacular.utils import extend_schema
+from rest_framework import (
+    exceptions,
+    generics,
+    mixins,
+    permissions,
+    response,
+    views,
+    viewsets,
+)
 from rest_framework.decorators import action
-from rest_framework import exceptions
-from rest_framework import mixins
-from rest_framework import permissions
-from rest_framework import response
-from rest_framework import views
-from rest_framework import viewsets
 
 from config import plugins
-
+from funkwhale_api.common.serializers import (
+    ErrorDetailSerializer,
+    TextPreviewSerializer,
+)
 from funkwhale_api.users.oauth import permissions as oauth_permissions
 
-from . import filters
-from . import models
-from . import mutations
-from . import serializers
-from . import signals
-from . import tasks
-from . import throttling
-from . import utils
-
+from . import filters, models, mutations, serializers, signals, tasks, throttling, utils
 
 logger = logging.getLogger(__name__)
 
@@ -78,6 +76,7 @@ class MutationViewSet(
 
         return super().perform_destroy(instance)
 
+    @extend_schema(operation_id="approve_mutation")
     @action(detail=True, methods=["post"])
     @transaction.atomic
     def approve(self, request, *args, **kwargs):
@@ -107,6 +106,7 @@ class MutationViewSet(
         )
         return response.Response({}, status=200)
 
+    @extend_schema(operation_id="reject_mutation")
     @action(detail=True, methods=["post"])
     @transaction.atomic
     def reject(self, request, *args, **kwargs):
@@ -139,6 +139,7 @@ class MutationViewSet(
 class RateLimitView(views.APIView):
     permission_classes = []
     throttle_classes = []
+    serializer_class = serializers.RateLimitSerializer
 
     def get(self, request, *args, **kwargs):
         ident = throttling.get_ident(getattr(request, "user", None), request)
@@ -147,7 +148,7 @@ class RateLimitView(views.APIView):
             "ident": ident,
             "scopes": throttling.get_status(ident, time.time()),
         }
-        return response.Response(data, status=200)
+        return response.Response(serializers.RateLimitSerializer(data).data, status=200)
 
 
 class AttachmentViewSet(
@@ -197,20 +198,25 @@ class AttachmentViewSet(
         instance.delete()
 
 
-class TextPreviewView(views.APIView):
+class TextPreviewView(generics.GenericAPIView):
     permission_classes = []
+    serializer_class = TextPreviewSerializer
 
+    @extend_schema(
+        operation_id="preview_text",
+        responses={200: TextPreviewSerializer, 400: ErrorDetailSerializer},
+    )
     def post(self, request, *args, **kwargs):
         payload = request.data
         if "text" not in payload:
-            return response.Response({"detail": "Invalid input"}, status=400)
+            return response.Response(
+                ErrorDetailSerializer("Invalid input").data, status=400
+            )
 
         permissive = payload.get("permissive", False)
-        data = {
-            "rendered": utils.render_html(
-                payload["text"], "text/markdown", permissive=permissive
-            )
-        }
+        data = TextPreviewSerializer(
+            utils.render_html(payload["text"], "text/markdown", permissive=permissive)
+        ).data
         return response.Response(data, status=200)
 
 
@@ -272,6 +278,7 @@ class PluginViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         user.plugins.filter(code=kwargs["pk"]).delete()
         return response.Response(status=204)
 
+    @extend_schema(operation_id="enable_plugin")
     @action(detail=True, methods=["post"])
     def enable(self, request, *args, **kwargs):
         user = request.user
@@ -280,6 +287,7 @@ class PluginViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         plugins.enable_conf(kwargs["pk"], True, user)
         return response.Response({}, status=200)
 
+    @extend_schema(operation_id="disable_plugin")
     @action(detail=True, methods=["post"])
     def disable(self, request, *args, **kwargs):
         user = request.user

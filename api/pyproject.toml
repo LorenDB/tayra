@@ -1,0 +1,183 @@
+[tool.poetry]
+name = "funkwhale-api"
+version = "1.2.9"
+description = "Funkwhale API"
+
+authors = ["Funkwhale Collective"]
+homepage = "https://funkwhale.audio"
+repository = "https://dev.funkwhale.audio/funkwhale/funkwhale"
+documentation = "https://docs.funkwhale.audio"
+license = "AGPL-3.0-only"
+
+packages = [
+  { include = "funkwhale_api" },
+  { include = "config" },
+]
+include = [
+  { path = "*.html" },
+  { path = "*.json" },
+  { path = "*.png" },
+  { path = "*.txt" },
+]
+exclude = ["tests"]
+
+[tool.poetry.scripts]
+funkwhale-manage = 'funkwhale_api.main:main'
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+# Django
+dj-rest-auth = { extras = ["with_social"], version = "2.2.7" }
+django = "==3.2.16"
+django-allauth = "==0.42.0"
+django-cache-memoize = "0.1.10"
+django-cacheops = "==6.1"
+django-cleanup = "==6.0.0"
+django-cors-headers = "==3.13.0"
+django-dynamic-preferences = "==1.14.0"
+django-environ = "==0.10.0"
+django-filter = "==22.1"
+django-oauth-toolkit = "2.2.0"
+django-redis = "==5.2.0"
+django-storages = "==1.13.2"
+django-versatileimagefield = "==2.2"
+djangorestframework = "==3.14.0"
+drf-spectacular = "==0.25.1"
+markdown = "==3.4.1"
+persisting-theory = "==1.0"
+psycopg2 = "==2.9.5"
+redis = "==4.5.4"
+
+# Django LDAP
+django-auth-ldap = "==4.1.0"
+python-ldap = "==3.4.3"
+
+# Channels
+channels = { extras = ["daphne"], version = "==4.0.0" }
+channels-redis = "==4.1.0"
+
+# Celery
+kombu = "==5.2.4"
+celery = "==5.2.7"
+
+# Deployment
+gunicorn = "==20.1.0"
+uvicorn = { version = "==0.20.0", extras = ["standard"] }
+
+# Libs
+aiohttp = "==3.8.3"
+arrow = "==1.2.3"
+bleach = "==5.0.1"
+boto3 = "==1.26.54"
+click = "==8.1.3"
+cryptography = "==38.0.4"
+feedparser = "==6.0.10"
+musicbrainzngs = "==0.7.1"
+mutagen = "==1.46.0"
+pillow = "==9.3.0"
+pydub = "==0.25.1"
+pyld = "==2.0.3"
+python-magic = "==0.4.27"
+pytz = "==2022.7.1"
+requests = "==2.28.2"
+requests-http-message-signatures = "==0.3.1"
+sentry-sdk = "==1.12.1"
+watchdog = "==2.2.1"
+
+# Dependencies pinning
+importlib-metadata = { version = "==4.13.0", python = "<=3.7" }
+ipython = "==7.34.0"
+pluralizer = "==1.2.0"
+service-identity = "==21.1.0"
+unicode-slugify = "==0.1.5"
+
+[tool.poetry.dev-dependencies]
+aioresponses = "==0.7.4"
+asynctest = "==0.13.0"
+black = "==22.12.0"
+coverage = { version = "==6.5.0", extras = ["toml"] }
+debugpy = "==1.6.5"
+django-coverage-plugin = "==3.0.0"
+django-debug-toolbar = "==3.8.1"
+factory-boy = "==3.2.1"
+faker = "==15.3.4"
+flake8 = "==3.9.2"
+ipdb = "==0.13.11"
+prompt-toolkit = "==3.0.36"
+pytest = "==7.2.1"
+pytest-asyncio = "==0.20.3"
+pytest-cov = "==4.0.0"
+pytest-django = "==4.5.2"
+pytest-env = "==0.8.1"
+pytest-mock = "==3.10.0"
+pytest-randomly = "==3.12.0"
+pytest-sugar = "==0.9.6"
+requests-mock = "==1.10.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pylint.master]
+load-plugins = [
+  "pylint_common",
+  "pylint_django",
+  "pylint_celery",
+]
+
+[tool.pylint.messages_control]
+disable = [
+  "invalid-name",
+  "missing-class-docstring",
+  "missing-function-docstring",
+  "missing-module-docstring",
+]
+
+[tool.pylint.design]
+max-parents = 13
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pytest.ini_options]
+python_files = [
+  "tests.py",
+  "test_*.py",
+  "*_tests.py",
+]
+testpaths = ["tests"]
+addopts = "-p no:warnings"
+env = [
+  "SECRET_KEY=test",
+  "EMAIL_CONFIG=consolemail://",
+  "CELERY_BROKER_URL=memory://",
+  "CELERY_TASK_ALWAYS_EAGER=True",
+  "FUNKWHALE_HOSTNAME_SUFFIX=",
+  "FUNKWHALE_HOSTNAME_PREFIX=",
+  "FUNKWHALE_HOSTNAME=test.federation",
+  "FEDERATION_HOSTNAME=test.federation",
+  "FUNKWHALE_URL=https://test.federation",
+  "DEBUG_TOOLBAR_ENABLED=False",
+  "DEBUG=False",
+  "WEAK_PASSWORDS=True",
+  "CREATE_IMAGE_THUMBNAILS=False",
+  "FORCE_HTTPS_URLS=False",
+  "FUNKWHALE_SPA_HTML_ROOT=http://noop/",
+  "PROXY_MEDIA=true",
+  "MUSIC_USE_DENORMALIZATION=true",
+  "EXTERNAL_MEDIA_PROXY_ENABLED=true",
+  "DISABLE_PASSWORD_VALIDATORS=false",
+  "DISABLE_PASSWORD_VALIDATORS=false",
+  "FUNKWHALE_PLUGINS=",
+  "MUSIC_DIRECTORY_PATH=/music",
+]
+
+[tool.coverage.run]
+plugins = ["django_coverage_plugin"]
+include = ["funkwhale_api/*"]
+omit = [
+  "*migrations*",
+  "*tests*",
+  "funkwhale_api/schema.py",
+]

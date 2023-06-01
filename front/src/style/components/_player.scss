@@ -3,15 +3,24 @@
   z-index: 999999;
   width: 100%;
   width: 100vw;
+
   .ui.top.attached.progress {
     top: 0;
+    height: 1rem;
+    z-index: 1;
+    padding-bottom: 0.8rem;
+    border-radius: 0;
+
+    .bar {
+      height: 0.2rem;
+    }
   }
+
 }
 .ui.bottom-player > .segment.fixed-controls {
   color: var(--player-color);
   background: var(--player-background);
   width: 100%;
-  width: 100vw;
   border-radius: 0;
   padding: 0em;
   position: fixed;
@@ -38,10 +47,24 @@
 
   .ui.progress .bar {
     transition: none;
-  }
-
-  .ui.progress .buffer.bar {
+    width: 100%;
+    transform-origin: top left;
+    will-change: transform;
     position: absolute;
+
+    &.seek {
+      background: var(--player-color);
+      opacity: 0;
+      transition: opacity .2s ease;
+      mix-blend-mode: overlay;
+    }
+
+    &.position {
+      transform: translate3d(calc(var(--fw-track-progress) - 100%), 0, 0);
+    }
+  }
+  .ui.progress:hover .bar.seek {
+    opacity: 0.4;
   }
 
   @keyframes MOVE-BG {
@@ -72,10 +95,9 @@
     animation-timing-function: linear;
     animation-iteration-count: infinite;
   }
-  .ui.progress:not([data-percent]):not(.indeterminate)
+  .ui.progress:not(.indeterminate)
     .bar.position:not(.buffer) {
     background: var(--vibrant-color);
-    min-width: 0;
   }
 
   .track-controls {
@@ -184,8 +206,8 @@
       }
     }
   }
-  .shuffling.loader.inline {
-    margin: 0;
+  .shuffling {
+    color: var(--vibrant-color);
   }
   .control.circular.button {
     padding: 0;
@@ -200,15 +222,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-width: 10em;
+    min-width: 8em;
+    z-index: 2;
     > .control.button {
       padding: 0.5em;
 
     }
     .position.control {
-      padding-right: 1em;
       flex-grow: 1;
-      padding-left: 0;
+
       i.stream.icon {
         position: relative;
         top: -2px;

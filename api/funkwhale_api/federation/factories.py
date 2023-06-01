@@ -7,7 +7,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.utils.http import http_date
 
-from funkwhale_api.factories import registry, NoUpdateOnCreate
+from funkwhale_api.factories import NoUpdateOnCreate, registry
 from funkwhale_api.users import factories as user_factories
 
 from . import keys, models
@@ -70,6 +70,8 @@ class DomainFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
     name = factory.Faker("domain_name")
     nodeinfo_fetch_date = factory.LazyFunction(lambda: timezone.now())
     allowed = None
+    reachable = True
+    last_successful_contact = None
 
     class Meta:
         model = "federation.Domain"
@@ -104,7 +106,7 @@ class ActorFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
     summary = factory.Faker("paragraph")
     domain = factory.SubFactory(DomainFactory)
     fid = factory.LazyAttribute(
-        lambda o: "https://{}/users/{}".format(o.domain.name, o.preferred_username)
+        lambda o: f"https://{o.domain.name}/users/{o.preferred_username}"
     )
     followers_url = factory.LazyAttribute(
         lambda o: "https://{}/users/{}followers".format(
@@ -127,7 +129,9 @@ class ActorFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
         model = models.Actor
 
     class Params:
-        with_real_keys = factory.Trait(keys=factory.LazyFunction(keys.get_key_pair),)
+        with_real_keys = factory.Trait(
+            keys=factory.LazyFunction(keys.get_key_pair),
+        )
 
     @factory.post_generation
     def local(self, create, extracted, **kwargs):
@@ -138,7 +142,7 @@ class ActorFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
         self.domain = models.Domain.objects.get_or_create(
             name=settings.FEDERATION_HOSTNAME
         )[0]
-        self.fid = "https://{}/actors/{}".format(self.domain, self.preferred_username)
+        self.fid = f"https://{self.domain}/actors/{self.preferred_username}"
         self.save(update_fields=["domain", "fid"])
         if not create:
             if extracted and hasattr(extracted, "pk"):
@@ -296,13 +300,13 @@ class NoteFactory(factory.Factory):
 @registry.register(name="federation.AudioMetadata")
 class AudioMetadataFactory(factory.Factory):
     recording = factory.LazyAttribute(
-        lambda o: "https://musicbrainz.org/recording/{}".format(uuid.uuid4())
+        lambda o: f"https://musicbrainz.org/recording/{uuid.uuid4()}"
     )
     artist = factory.LazyAttribute(
-        lambda o: "https://musicbrainz.org/artist/{}".format(uuid.uuid4())
+        lambda o: f"https://musicbrainz.org/artist/{uuid.uuid4()}"
     )
     release = factory.LazyAttribute(
-        lambda o: "https://musicbrainz.org/release/{}".format(uuid.uuid4())
+        lambda o: f"https://musicbrainz.org/release/{uuid.uuid4()}"
     )
     bitrate = 42
     length = 43

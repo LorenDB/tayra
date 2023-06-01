@@ -1,3 +1,15 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import { computed } from 'vue'
+
+const { t } = useI18n()
+
+const labels = computed(() => ({
+  secondaryMenu: t('views.content.Base.menu.secondary'),
+  title: t('views.content.Base.title')
+}))
+</script>
+
 <template>
   <main
     v-title="labels.title"
@@ -12,33 +24,15 @@
         class="ui item"
         :to="{name: 'content.libraries.index'}"
       >
-        <translate translate-context="*/*/*/Noun">
-          Libraries
-        </translate>
+        {{ $t('views.content.Base.link.libraries') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'content.libraries.files'}"
       >
-        <translate translate-context="*/*/*">
-          Tracks
-        </translate>
+        {{ $t('views.content.Base.link.tracks') }}
       </router-link>
     </nav>
     <router-view :key="$route.fullPath" />
   </main>
 </template>
-<script>
-export default {
-  computed: {
-    labels () {
-      const title = this.$pgettext('*/Library/*/Verb', 'Add content')
-      const secondaryMenu = this.$pgettext('Menu/*/Hidden text', 'Secondary menu')
-      return {
-        title,
-        secondaryMenu
-      }
-    }
-  }
-}
-</script>

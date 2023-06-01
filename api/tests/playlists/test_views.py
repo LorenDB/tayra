@@ -61,7 +61,8 @@ def test_playlist_inherits_user_privacy(logged_in_api_client):
 
 
 @pytest.mark.parametrize(
-    "name,method", [("api:v1:playlists-list", "post")],
+    "name,method",
+    [("api:v1:playlists-list", "post")],
 )
 def test_url_requires_login(name, method, factories, api_client):
     url = reverse(name)

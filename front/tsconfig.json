@@ -1,0 +1,28 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.web.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "sourceMap": true,
+    "noUnusedLocals": true,
+    "experimentalDecorators": true,
+    "typeRoots": ["node_modules/@types"],
+    "types": [
+      "vitest/globals",
+      "vite/client",
+      "vue/ref-macros",
+      "vite-plugin-pwa/client"
+    ],
+    "paths": {
+      "#/*": ["src/worker/*"],
+      "?/*": ["test/*"],
+      "~/*": ["src/*"]
+    }
+  },
+  "include": [
+    "src/**/*.d.ts",
+    "src/**/*.ts",
+    "src/**/*.vue",
+    "vite.config.ts",
+    "test/**/*.ts"
+  ]
+}

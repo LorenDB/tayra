@@ -1,17 +1,69 @@
+<script setup lang="ts">
+import type { BackendError } from '~/types'
+
+import axios from 'axios'
+
+import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useStore } from '~/store'
+
+import SemanticModal from '~/components/semantic/Modal.vue'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
+const { t } = useI18n()
+
+const store = useStore()
+const show = computed({
+  get: () => store.state.moderation.showFilterModal,
+  set: (value) => {
+    store.commit('moderation/showFilterModal', value)
+    errors.value = []
+  }
+})
+
+const type = computed(() => store.state.moderation.filterModalTarget.type)
+const target = computed(() => store.state.moderation.filterModalTarget.target)
+
+const errors = ref([] as string[])
+const isLoading = ref(false)
+
+const hide = async () => {
+  isLoading.value = true
+
+  const payload = {
+    target: {
+      type: type.value,
+      id: target.value?.id
+    }
+  }
+
+  try {
+    const response = await axios.post('moderation/content-filters/', payload)
+    logger.info(`Successfully hidden ${type.value} ${target.value?.id}`)
+    show.value = false
+    store.state.moderation.lastUpdate = new Date()
+    store.commit('moderation/contentFilter', response.data)
+    store.commit('ui/addMessage', {
+      content: t('components.moderation.FilterModal.message.success'),
+      date: new Date()
+    })
+  } catch (error) {
+    logger.error(`Error while hiding ${type.value} ${target.value?.id}`)
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
-  <modal
-    :show="$store.state.moderation.showFilterModal"
-    @update:show="update"
-  >
-    <h4 class="header">
-      <translate
-        v-if="type === 'artist'"
-        key="1"
-        translate-context="Popup/Moderation/Title/Verb"
-        :translate-params="{name: target.name}"
-      >
-        Do you want to hide content from artist "%{ name }"?
-      </translate>
+  <semantic-modal v-model:show="show">
+    <h4
+      v-if="type === 'artist'"
+      class="header"
+    >
+      {{ $t('components.moderation.FilterModal.header.modal', {name: target?.name}) }}
     </h4>
     <div class="scrolling content">
       <div class="description">
@@ -21,9 +73,7 @@
           class="ui negative message"
         >
           <h4 class="header">
-            <translate translate-context="Popup/Moderation/Error message">
-              Error while creating filter
-            </translate>
+            {{ $t('components.moderation.FilterModal.header.failure') }}
           </h4>
           <ul class="list">
             <li
@@ -36,113 +86,38 @@
         </div>
         <template v-if="type === 'artist'">
           <p>
-            <translate translate-context="Popup/Moderation/Paragraph">
-              You will not see tracks, albums and user activity linked to this artist any more:
-            </translate>
+            {{ $t('components.moderation.FilterModal.warning.createFilter.listIntro') }}
           </p>
           <ul>
             <li>
-              <translate translate-context="Popup/Moderation/List item">
-                In other users favorites and listening history
-              </translate>
+              {{ $t('components.moderation.FilterModal.warning.createFilter.listItem1') }}
             </li>
             <li>
-              <translate translate-context="Popup/Moderation/List item">
-                In "Recently added" widget
-              </translate>
+              {{ $t('components.moderation.FilterModal.warning.createFilter.listItem2') }}
             </li>
             <li>
-              <translate translate-context="Popup/Moderation/List item">
-                In artists and album listings
-              </translate>
+              {{ $t('components.moderation.FilterModal.warning.createFilter.listItem3') }}
             </li>
             <li>
-              <translate translate-context="Popup/Moderation/List item">
-                In radio suggestions
-              </translate>
+              {{ $t('components.moderation.FilterModal.warning.createFilter.listItem4') }}
             </li>
           </ul>
           <p>
-            <translate translate-context="Popup/Moderation/Paragraph">
-              You can manage and update your filters any time from your account settings.
-            </translate>
+            {{ $t('components.moderation.FilterModal.help.createFilter') }}
           </p>
         </template>
       </div>
     </div>
     <div class="actions">
       <button class="ui basic cancel button">
-        <translate translate-context="*/*/Button.Label/Verb">
-          Cancel
-        </translate>
+        {{ $t('components.moderation.FilterModal.button.cancel') }}
       </button>
       <button
         :class="['ui', 'success', {loading: isLoading}, 'button']"
         @click="hide"
       >
-        <translate translate-context="Popup/*/Button.Label">
-          Hide content
-        </translate>
+        {{ $t('components.moderation.FilterModal.button.hide') }}
       </button>
     </div>
-  </modal>
+  </semantic-modal>
 </template>
-
-<script>
-import axios from 'axios'
-import { mapState } from 'vuex'
-
-import logger from '@/logging'
-import Modal from '@/components/semantic/Modal'
-
-export default {
-  components: {
-    Modal
-  },
-  data () {
-    return {
-      formKey: String(new Date()),
-      errors: [],
-      isLoading: false
-    }
-  },
-  computed: {
-    ...mapState({
-      type: state => state.moderation.filterModalTarget.type,
-      target: state => state.moderation.filterModalTarget.target
-    })
-  },
-  methods: {
-    update (v) {
-      this.$store.commit('moderation/showFilterModal', v)
-      this.errors = []
-    },
-    hide () {
-      const self = this
-      self.isLoading = true
-      const payload = {
-        target: {
-          type: this.type,
-          id: this.target.id
-        }
-      }
-      return axios.post('moderation/content-filters/', payload).then(response => {
-        logger.default.info('Successfully added track to playlist')
-        self.update(false)
-        self.$store.commit('moderation/lastUpdate', new Date())
-        self.isLoading = false
-        const msg = this.$pgettext('*/Moderation/Message', 'Content filter successfully added')
-        self.$store.commit('moderation/contentFilter', response.data)
-        self.$store.commit('ui/addMessage', {
-          content: msg,
-          date: new Date()
-        })
-      }, error => {
-        logger.default.error(`Error while hiding ${self.type} ${self.target.id}`)
-        self.errors = error.backendErrors
-        self.isLoading = false
-      })
-    }
-  }
-}
-</script>

@@ -1,15 +1,10 @@
 from django.db import IntegrityError
-
-from rest_framework import mixins
-from rest_framework import response
-from rest_framework import status
-from rest_framework import viewsets
+from rest_framework import mixins, response, status, viewsets
 
 from funkwhale_api.federation import routes
 from funkwhale_api.federation import utils as federation_utils
 
-from . import models
-from . import serializers
+from . import models, serializers
 
 
 class UserFilterViewSet(

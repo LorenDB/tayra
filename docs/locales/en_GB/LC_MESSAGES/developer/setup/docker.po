@@ -1,0 +1,233 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.11.0\n"
+
+#: ../../developer_documentation/setup/docker.md:1
+msgid "Develop using Docker"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:3
+msgid ""
+"Funkwhale can be run in Docker containers for local development. You can "
+"work on any part of the Funkwhale codebase and run the container setup to"
+" test your changes. To work with Docker:"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:5
+msgid "[Install Docker](https://docs.docker.com/install)"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:6
+msgid "[Install docker compose](https://docs.docker.com/compose/install)"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:7
+msgid ""
+"Clone the Funkwhale repository to your system. The `develop` branch is "
+"checked out by default"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md
+msgid "SSH"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md
+msgid "HTTPS"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:31
+msgid "Set up your Docker environment"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:35
+msgid ""
+"Funkwhale provides a `dev.yml` file that contains the required docker "
+"compose setup. You need to pass the `-f dev.yml` flag you run docker "
+"compose commands to ensure it uses this file. If you don't want to add "
+"this each time, you can export it as a `COMPOSE_FILE` variable:"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:43
+msgid "To set up your Docker environment:"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:45
+msgid "Create a `.env` file to enable customization of your setup."
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:51
+msgid ""
+"Add the following variables to load images and enable access to Django "
+"admin pages:"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:58
+msgid "Create a network for federation support"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:64
+msgid ""
+"Once you've set everything up, you need to build the containers. Run this"
+" command any time there are upstream changes or dependency changes to "
+"ensure you're up-to-date."
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:70
+msgid "Set up the database"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:72
+msgid ""
+"Funkwhale relies on a postgresql database to store information. To set "
+"this up, you need to run the `funkwhale-manage migrate` command:"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:78
+msgid ""
+"This command creates all the required tables. You need to run this "
+"whenever there are changes to the API schema. You can run this at any "
+"time without causing issues."
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:80
+msgid "Set up local data"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:82
+msgid "You need to create some local data to mimic a production environment."
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:84
+msgid "Create a superuser so you can log in to your local app:"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:90
+msgid ""
+"Add some fake data to populate the database. The following command "
+"creates 25 artists with random albums, tracks, and metadata."
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:98
+msgid "Manage services"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:100
+msgid ""
+"Once you have set up your containers, bring them up to start working on "
+"them."
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:102
+msgid "Compile the translations:"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:108
+msgid "Launch all services:"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:114
+msgid "This gives you access to the following:"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:116
+msgid "The Funkwhale webapp on `http://localhost:8000`"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:117
+msgid "The Funkwhale API on `http://localhost:8000/api/v1`"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:118
+msgid "The Django admin interface on `http://localhost:8000/api/admin`"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:120
+msgid "Once you're done with the containers, you can stop them all:"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:126
+msgid "If you want to destroy your containers, run the following:"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:132
+msgid "Set up federation support"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:134
+msgid ""
+"Working on federation features requires some additional setup. You need "
+"to do the following:"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:136
+msgid "Update your DNS resolver to resolve all your .dev hostnames locally"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:137
+msgid ""
+"Set up a reverse proxy (such as traefik) to catch .dev requests with a "
+"TLS certificate"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:138
+msgid "Set up two or more local instances"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:140
+msgid "To resolve hostnames locally, run the following:"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md
+msgid "dnsmasq"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md
+msgid "NetworkManager"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:164
+msgid ""
+"To add a wildcard certificate, copy the test certificate from the "
+"`docker/ssl` folder. This certificate is a wildcard for "
+"`*.funkwhale.test`"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:171
+msgid "To run a reverse proxy for your app:"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:173
+msgid "Add the following configuration to your `.env` file:"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:186
+msgid "Launch traefik using the bundled configuration:"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:192
+msgid ""
+"Set up as many different projects as you need. Make sure the "
+"`COMPOSE_PROJECT_NAME` and `VUE_PORT` variables are unique per instance"
+msgstr ""
+
+#: ../../developer_documentation/setup/docker.md:202
+msgid ""
+"You can access your project at "
+"`https://{COMPOSE_PROJECT_NAME}.funkwhale.test`."
+msgstr ""
+

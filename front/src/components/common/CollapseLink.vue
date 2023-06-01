@@ -1,32 +1,31 @@
+<script setup lang="ts">
+import { useVModel } from '@vueuse/core'
+
+interface Events {
+  (e: 'update:modelValue', value: boolean): void
+}
+
+interface Props {
+  modelValue: boolean
+}
+
+const emit = defineEmits<Events>()
+const props = defineProps<Props>()
+const value = useVModel(props, 'modelValue', emit)
+</script>
+
 <template>
   <a
     role="button"
     class="collapse link"
-    @click.prevent="$emit('input', !value)"
+    @click.prevent="value = !value"
   >
-    <translate
-      v-if="isCollapsed"
-      key="1"
-      translate-context="*/*/Button,Label"
-    >Expand</translate>
-    <translate
-      v-else
-      key="2"
-      translate-context="*/*/Button,Label"
-    >Collapse</translate>
-    <i :class="[{down: !isCollapsed}, {right: isCollapsed}, 'angle', 'icon']" />
+    <span v-if="value">
+      {{ $t('components.common.CollapseLink.button.expand') }}
+    </span>
+    <span v-else>
+      {{ $t('components.common.CollapseLink.button.collapse') }}
+    </span>
+    <i :class="[{ down: !value, right: value }, 'angle', 'icon']" />
   </a>
 </template>
-<script>
-
-export default {
-  props: {
-    value: { type: Boolean, required: true }
-  },
-  computed: {
-    isCollapsed () {
-      return this.value
-    }
-  }
-}
-</script>

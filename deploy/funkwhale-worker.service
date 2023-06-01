@@ -9,8 +9,12 @@ User=funkwhale
 WorkingDirectory=/srv/funkwhale/api
 Environment="CELERYD_CONCURRENCY=0"
 EnvironmentFile=/srv/funkwhale/config/.env
-ExecStart=/srv/funkwhale/virtualenv/bin/celery -A funkwhale_api.taskapp worker -l INFO --concurrency=${CELERYD_CONCURRENCY}
 
+ExecStart=/srv/funkwhale/venv/bin/celery \
+    --app funkwhale_api.taskapp \
+    worker \
+    --loglevel INFO \
+    --concurrency=${CELERYD_CONCURRENCY}
 
 [Install]
 WantedBy=multi-user.target

@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from funkwhale_api.activity import serializers as activity_serializers
@@ -39,6 +40,7 @@ class ListeningSerializer(serializers.ModelSerializer):
 
         return super().create(validated_data)
 
+    @extend_schema_field(federation_serializers.APIActorSerializer)
     def get_actor(self, obj):
         actor = obj.user.actor
         if actor:

@@ -1,17 +1,10 @@
 from django.db import transaction
-
-from rest_framework import decorators
-from rest_framework import permissions
-from rest_framework import response
-from rest_framework import status
+from drf_spectacular.utils import OpenApiParameter, extend_schema
+from rest_framework import decorators, permissions, response, status
 
 from funkwhale_api.common import utils as common_utils
 
-from . import api_serializers
-from . import filters
-from . import models
-from . import tasks
-from . import utils
+from . import api_serializers, filters, models, tasks, utils
 
 
 def fetches_route():
@@ -42,8 +35,16 @@ def fetches_route():
             serializer = api_serializers.FetchSerializer(fetch)
             return response.Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    return decorators.action(
-        methods=["get", "post"],
-        detail=True,
-        permission_classes=[permissions.IsAuthenticated],
-    )(fetches)
+    return extend_schema(methods=["post"], responses=api_serializers.FetchSerializer())(
+        extend_schema(
+            methods=["get"],
+            responses=api_serializers.FetchSerializer(many=True),
+            parameters=[OpenApiParameter("id", location="query", exclude=True)],
+        )(
+            decorators.action(
+                methods=["get", "post"],
+                detail=True,
+                permission_classes=[permissions.IsAuthenticated],
+            )(fetches)
+        )
+    )

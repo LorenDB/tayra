@@ -9,25 +9,21 @@ from django.db import transaction
 from django.db.models import F, Q
 from django.dispatch import receiver
 from django.utils import timezone
-
 from musicbrainzngs import ResponseError
 from requests.exceptions import RequestException
 
 from funkwhale_api import musicbrainz
 from funkwhale_api.common import channels, preferences
 from funkwhale_api.common import utils as common_utils
-from funkwhale_api.federation import routes
 from funkwhale_api.federation import library as lb
+from funkwhale_api.federation import routes
 from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.music.management.commands import import_files
 from funkwhale_api.tags import models as tags_models
 from funkwhale_api.tags import tasks as tags_tasks
 from funkwhale_api.taskapp import celery
 
-from . import licenses
-from . import models
-from . import metadata
-from . import signals
+from . import licenses, metadata, models, signals
 
 logger = logging.getLogger(__name__)
 
@@ -70,13 +66,26 @@ def get_cover_from_fs(dir_path):
     if os.path.exists(dir_path):
         for name in FOLDER_IMAGE_NAMES:
             for e, m in IMAGE_TYPES:
-                cover_path = os.path.join(dir_path, "{}.{}".format(name, e))
+                cover_path = os.path.join(dir_path, f"{name}.{e}")
                 if not os.path.exists(cover_path):
                     logger.debug("Cover %s does not exists", cover_path)
                     continue
                 with open(cover_path, "rb") as c:
                     logger.info("Found cover at %s", cover_path)
                     return {"mimetype": m, "content": c.read()}
+
+
+@celery.app.task(name="music.library.schedule_remote_scan")
+def schedule_scan_for_all_remote_libraries():
+    from funkwhale_api.federation import actors
+
+    libraries = models.Library.objects.all().prefetch_related()
+    actor = actors.get_service_actor()
+
+    for library in libraries:
+        if library.actor.is_local:
+            continue
+        library.schedule_scan(actor)
 
 
 @celery.app.task(name="music.start_library_scan")
@@ -90,6 +99,10 @@ def start_library_scan(library_scan):
         library_scan.status = "errored"
         library_scan.save(update_fields=["status", "modification_date"])
         raise
+    if "errors" in data.keys():
+        library_scan.status = "errored"
+        library_scan.save(update_fields=["status", "modification_date"])
+        raise Exception("Error from remote server : " + str(data))
     library_scan.modification_date = timezone.now()
     library_scan.status = "scanning"
     library_scan.total_files = data["totalItems"]
@@ -173,7 +186,8 @@ def fail_import(upload, error_code, detail=None, **fields):
 @celery.app.task(name="music.process_upload")
 @celery.require_instance(
     models.Upload.objects.filter(import_status="pending").select_related(
-        "library__actor__user", "library__channel__artist",
+        "library__actor__user",
+        "library__channel__artist",
     ),
     "upload",
 )
@@ -239,7 +253,9 @@ def process_upload(upload, update_denormalization=True):
         )
     else:
         final_metadata = collections.ChainMap(
-            additional_data, forced_values, internal_config,
+            additional_data,
+            forced_values,
+            internal_config,
         )
     try:
         track = get_track_from_import_metadata(
@@ -312,7 +328,8 @@ def process_upload(upload, update_denormalization=True):
     # update album cover, if needed
     if track.album and not track.album.attachment_cover:
         populate_album_cover(
-            track.album, source=final_metadata.get("upload_source"),
+            track.album,
+            source=final_metadata.get("upload_source"),
         )
 
     if broadcast:
@@ -542,9 +559,7 @@ def _get_track(data, attributed_to=None, **forced_values):
         else:
             album_artists = getter(data, "album", "artists", default=artists) or artists
             album_artist_data = album_artists[0]
-            album_artist_name = truncate(
-                album_artist_data.get("name"), models.MAX_LENGTHS["ARTIST_NAME"]
-            )
+            album_artist_name = album_artist_data.get("name")
             if album_artist_name == artist_name:
                 album_artist = artist
             else:
@@ -588,9 +603,7 @@ def _get_track(data, attributed_to=None, **forced_values):
         # get / create album
         if "album" in data:
             album_data = data["album"]
-            album_title = truncate(
-                album_data["title"], models.MAX_LENGTHS["ALBUM_TITLE"]
-            )
+            album_title = album_data["title"]
             album_fid = album_data.get("fid", None)
 
             if album_mbid:
@@ -626,11 +639,7 @@ def _get_track(data, attributed_to=None, **forced_values):
         else:
             album = None
     # get / create track
-    track_title = (
-        forced_values["title"]
-        if "title" in forced_values
-        else truncate(data["title"], models.MAX_LENGTHS["TRACK_TITLE"])
-    )
+    track_title = forced_values["title"] if "title" in forced_values else data["title"]
     position = (
         forced_values["position"]
         if "position" in forced_values
@@ -649,7 +658,7 @@ def _get_track(data, attributed_to=None, **forced_values):
     copyright = (
         forced_values["copyright"]
         if "copyright" in forced_values
-        else truncate(data.get("copyright"), models.MAX_LENGTHS["COPYRIGHT"])
+        else data.get("copyright")
     )
     description = (
         {"text": forced_values["description"], "content_type": "text/markdown"}
@@ -715,7 +724,7 @@ def _get_track(data, attributed_to=None, **forced_values):
 def get_artist(artist_data, attributed_to, from_activity_id):
     artist_mbid = artist_data.get("mbid", None)
     artist_fid = artist_data.get("fid", None)
-    artist_name = truncate(artist_data["name"], models.MAX_LENGTHS["ARTIST_NAME"])
+    artist_name = artist_data["name"]
 
     if artist_mbid:
         query = Q(mbid=artist_mbid)
@@ -755,7 +764,7 @@ def broadcast_import_status_update_to_owner(old_status, new_status, upload, **kw
 
     from . import serializers
 
-    group = "user.{}.imports".format(user.pk)
+    group = f"user.{user.pk}.imports"
     channels.group_send(
         group,
         {
@@ -779,7 +788,7 @@ def clean_transcoding_cache():
     limit = timezone.now() - datetime.timedelta(minutes=delay)
     candidates = (
         models.UploadVersion.objects.filter(
-            (Q(accessed_date__lt=limit) | Q(accessed_date=None))
+            Q(accessed_date__lt=limit) | Q(accessed_date=None)
         )
         .only("audio_file", "id")
         .order_by("id")
@@ -796,15 +805,18 @@ def albums_set_tags_from_tracks(ids=None, dry_run=False):
     if ids is not None:
         qs = qs.filter(pk__in=ids)
     data = tags_tasks.get_tags_from_foreign_key(
-        ids=qs, foreign_key_model=models.Track, foreign_key_attr="album",
+        ids=qs,
+        foreign_key_model=models.Track,
+        foreign_key_attr="album",
     )
     logger.info("Found automatic tags for %s albums…", len(data))
     if dry_run:
-        logger.info("Running in dry-run mode, not commiting")
+        logger.info("Running in dry-run mode, not committing")
         return
 
     tags_tasks.add_tags_batch(
-        data, model=models.Album,
+        data,
+        model=models.Album,
     )
     return data
 
@@ -818,15 +830,18 @@ def artists_set_tags_from_tracks(ids=None, dry_run=False):
     if ids is not None:
         qs = qs.filter(pk__in=ids)
     data = tags_tasks.get_tags_from_foreign_key(
-        ids=qs, foreign_key_model=models.Track, foreign_key_attr="artist",
+        ids=qs,
+        foreign_key_model=models.Track,
+        foreign_key_attr="artist",
     )
     logger.info("Found automatic tags for %s artists…", len(data))
     if dry_run:
-        logger.info("Running in dry-run mode, not commiting")
+        logger.info("Running in dry-run mode, not committing")
         return
 
     tags_tasks.add_tags_batch(
-        data, model=models.Artist,
+        data,
+        model=models.Artist,
     )
     return data
 

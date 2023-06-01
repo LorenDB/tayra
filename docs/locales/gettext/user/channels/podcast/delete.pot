@@ -1,0 +1,141 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../user/channels/podcast/delete.md:1
+msgid "Delete content from a Podcast channel"
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:3
+msgid "You can delete content from your podcast channel. This means that your followers won't be able to listen to the deleted content any more."
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:9
+msgid "Delete an episode"
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:12
+msgid "Deleting an episode also deletes the file from the {term}`pod`. This action is irreversible."
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:15
+msgid "To delete a single episode from a channel:"
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:0
+msgid "Desktop"
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:23
+#: ../../user/channels/podcast/delete.md:38
+#: ../../user/channels/podcast/delete.md:66
+#: ../../user/channels/podcast/delete.md:80
+msgid "Log in to your pod."
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:24
+#: ../../user/channels/podcast/delete.md:67
+msgid "Select the upload icon ({fa}`upload`) in the top of the sidebar."
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:25
+#: ../../user/channels/podcast/delete.md:40
+#: ../../user/channels/podcast/delete.md:68
+#: ../../user/channels/podcast/delete.md:82
+msgid "Select {guilabel}`Get started` under {guilabel}`Publish your work in a channel`. Your user profile opens."
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:26
+#: ../../user/channels/podcast/delete.md:41
+#: ../../user/channels/podcast/delete.md:69
+#: ../../user/channels/podcast/delete.md:83
+msgid "Select the channel containing the content under the {guilabel}`Channels` header. The channel's page opens."
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:27
+#: ../../user/channels/podcast/delete.md:42
+msgid "Select the kebab menu ({fa}`ellipsis-v`) next to the episode in question. This opens the track options menu."
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:28
+#: ../../user/channels/podcast/delete.md:43
+msgid "Select {guilabel}`ℹ︎ Episode details`. The episode details page opens."
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:29
+#: ../../user/channels/podcast/delete.md:44
+msgid "Select the kebab menu ({fa}`ellipsis-v`) at the top of the page."
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:30
+#: ../../user/channels/podcast/delete.md:45
+msgid "Select {guilabel}`Delete…`. A {guilabel}`Delete this track?` warning appears."
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:31
+#: ../../user/channels/podcast/delete.md:46
+msgid "Select {guilabel}`Delete` to delete the episode."
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:0
+msgid "Mobile"
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:39
+#: ../../user/channels/podcast/delete.md:81
+msgid "Select the upload icon ({fa}`upload`) at the top of the screen."
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:50
+msgid "That's it! You've deleted your episode. You can add it again by [uploading it to your channel](upload.md)."
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:52
+msgid "Delete a series"
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:55
+msgid "Deleting a series also deletes all episodes in the series and deletes the files from the {term}`pod`. This action is irreversible."
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:58
+msgid "Delete a series to remove all episodes it contains. To do this:"
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:70
+#: ../../user/channels/podcast/delete.md:84
+msgid "Select your series in the {guilabel}`Series` section. The series detail page opens."
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:71
+#: ../../user/channels/podcast/delete.md:85
+msgid "Select the kebab menu ({fa}`ellipsis-v`) to open the options menu."
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:72
+#: ../../user/channels/podcast/delete.md:86
+msgid "Select {guilabel}`Delete…`. A {guilabel}`Delete this album?` warning appears."
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:73
+#: ../../user/channels/podcast/delete.md:87
+msgid "Select {guilabel}`Delete` to delete the series."
+msgstr ""
+
+#: ../../user/channels/podcast/delete.md:91
+msgid "You're done! You've deleted the series and all the episodes it contained. You can add them again by [uploading it to your channel](upload.md)."
+msgstr ""

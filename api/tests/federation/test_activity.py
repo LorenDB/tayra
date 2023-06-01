@@ -1,13 +1,13 @@
-import pytest
 import uuid
 
+import pytest
 from django.db.models import Q
 from django.urls import reverse
 
 from funkwhale_api.federation import (
     activity,
-    models,
     api_serializers,
+    models,
     serializers,
     tasks,
 )
@@ -352,7 +352,7 @@ def test_inbox_routing_send_to_channel(factories, mocker):
     ii.refresh_from_db()
 
     group_send.assert_called_once_with(
-        "user.{}.inbox".format(ii.actor.user.pk),
+        f"user.{ii.actor.user.pk}.inbox",
         {
             "type": "event.send",
             "text": "",
@@ -455,10 +455,10 @@ def test_outbox_router_dispatch_allow_list(mocker, factories, preferences, now):
     router.connect({"type": "Noop"}, handler)
     router.dispatch({"type": "Noop"}, {"summary": "hello"})
     prepare_deliveries_and_inbox_items.assert_any_call(
-        [r1], "to", allowed_domains=set([r1.domain_id])
+        [r1], "to", allowed_domains={r1.domain_id}
     )
     prepare_deliveries_and_inbox_items.assert_any_call(
-        [r2], "cc", allowed_domains=set([r1.domain_id])
+        [r2], "cc", allowed_domains={r1.domain_id}
     )
 
 
@@ -579,7 +579,7 @@ def test_prepare_deliveries_and_inbox_items_allow_list(factories, preferences):
     recipients = [remote_actor1, remote_actor2]
 
     inbox_items, deliveries, urls = activity.prepare_deliveries_and_inbox_items(
-        recipients, "to", allowed_domains=set([remote_actor1.domain_id])
+        recipients, "to", allowed_domains={remote_actor1.domain_id}
     )
     expected_inbox_items = []
 

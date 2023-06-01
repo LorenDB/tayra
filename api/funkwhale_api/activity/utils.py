@@ -17,7 +17,7 @@ def combined_recent(limit, **kwargs):
     _qs_list = list(querysets.values())
     union_qs = _qs_list[0].union(*_qs_list[1:])
     records = []
-    for row in union_qs.order_by("-{}".format(datetime_field))[:limit]:
+    for row in union_qs.order_by(f"-{datetime_field}")[:limit]:
         records.append(
             {"type": row["__type"], "when": row[datetime_field], "pk": row["pk"]}
         )

@@ -21,7 +21,7 @@ def test_can_pick_track_from_choices():
     previous_choices = [first_pick]
     for remaining_choice in choices:
         pick = radio.pick(choices=choices, previous_choices=previous_choices)
-        assert pick in set(choices).difference(previous_choices)
+        assert pick in set(choices).difference(set(previous_choices))
 
 
 def test_can_pick_by_weight():
@@ -140,7 +140,7 @@ def test_can_use_radio_session_to_filter_choices(factories):
     for i in range(10):
         radio.pick(filter_playable=False)
 
-    # ensure 10 differents tracks have been suggested
+    # ensure 10 different tracks have been suggested
     tracks_id = [
         session_track.track.pk for session_track in session.session_tracks.all()
     ]
@@ -413,3 +413,19 @@ def test_get_choices_for_custom_radio_exclude_tag(factories):
 
     expected = [u.track.pk for u in included_uploads]
     assert list(choices.values_list("id", flat=True)) == expected
+
+
+def test_can_start_custom_multiple_radio_from_api(api_client, factories):
+    tracks = factories["music.Track"].create_batch(5)
+    url = reverse("api:v1:radios:sessions-list")
+    map_filters_to_type = {"tags": "names", "artists": "ids", "playlists": "names"}
+    for (key, value) in map_filters_to_type.items():
+        attr = value[:-1]
+        track_filter_key = [getattr(a.artist, attr) for a in tracks]
+        config = {"filters": [{"type": key, value: track_filter_key}]}
+        response = api_client.post(
+            url,
+            {"radio_type": "custom_multiple", "config": config},
+            format="json",
+        )
+        assert response.status_code == 201

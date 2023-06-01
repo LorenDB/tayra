@@ -1,9 +1,9 @@
 import json
 import urllib.parse
 
+import persisting_theory
 from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
-import persisting_theory
 from rest_framework import serializers
 
 from funkwhale_api.audio import models as audio_models
@@ -14,8 +14,7 @@ from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.music import models as music_models
 from funkwhale_api.playlists import models as playlists_models
 
-from . import models
-from . import tasks
+from . import models, tasks
 
 
 class FilteredArtistSerializer(serializers.ModelSerializer):
@@ -24,7 +23,7 @@ class FilteredArtistSerializer(serializers.ModelSerializer):
         fields = ["id", "name"]
 
 
-class TargetSerializer(serializers.Serializer):
+class ModerationTargetSerializer(serializers.Serializer):
     type = serializers.ChoiceField(choices=["artist"])
     id = serializers.CharField()
 
@@ -44,7 +43,7 @@ class TargetSerializer(serializers.Serializer):
 
 
 class UserFilterSerializer(serializers.ModelSerializer):
-    target = TargetSerializer()
+    target = ModerationTargetSerializer()
 
     class Meta:
         model = models.UserFilter
@@ -62,7 +61,7 @@ class UserFilterSerializer(serializers.ModelSerializer):
 state_serializers = persisting_theory.Registry()
 
 
-class DescriptionStateMixin(object):
+class DescriptionStateMixin:
     def get_description(self, o):
         if o.description:
             return o.description.text

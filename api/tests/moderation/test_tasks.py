@@ -1,5 +1,4 @@
 from funkwhale_api.federation import utils as federation_utils
-
 from funkwhale_api.moderation import tasks
 
 
@@ -24,9 +23,7 @@ def test_report_created_signal_sends_email_to_mods(factories, mailoutbox, settin
 
     tasks.send_new_report_email_to_moderators(report_id=report.pk)
 
-    detail_url = federation_utils.full_url(
-        "/manage/moderation/reports/{}".format(report.uuid)
-    )
+    detail_url = federation_utils.full_url(f"/manage/moderation/reports/{report.uuid}")
     unresolved_reports_url = federation_utils.full_url(
         "/manage/moderation/reports?q=resolved:no"
     )
@@ -57,7 +54,7 @@ def test_signup_request_pending_sends_email_to_mods(factories, mailoutbox, setti
     tasks.user_request_handle(user_request_id=signup_request.pk, new_status="pending")
 
     detail_url = federation_utils.full_url(
-        "/manage/moderation/requests/{}".format(signup_request.uuid)
+        f"/manage/moderation/requests/{signup_request.uuid}"
     )
     unresolved_requests_url = federation_utils.full_url(
         "/manage/moderation/requests?q=status:pending"
@@ -66,7 +63,8 @@ def test_signup_request_pending_sends_email_to_mods(factories, mailoutbox, setti
     for i, mod in enumerate([mod1, mod2]):
         m = mailoutbox[i]
         assert m.subject == "[{} moderation] New sign-up request from {}".format(
-            settings.FUNKWHALE_HOSTNAME, signup_request.submitter.preferred_username,
+            settings.FUNKWHALE_HOSTNAME,
+            signup_request.submitter.preferred_username,
         )
         assert detail_url in m.body
         assert unresolved_requests_url in m.body
@@ -91,7 +89,8 @@ def test_approved_request_sends_email_to_submitter_and_set_active(
     m = mailoutbox[-1]
     login_url = federation_utils.full_url("/login")
     assert m.subject == "Welcome to {}, {}!".format(
-        settings.FUNKWHALE_HOSTNAME, signup_request.submitter.preferred_username,
+        settings.FUNKWHALE_HOSTNAME,
+        signup_request.submitter.preferred_username,
     )
     assert login_url in m.body
     assert list(m.to) == [user.email]

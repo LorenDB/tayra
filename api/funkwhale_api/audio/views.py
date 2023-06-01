@@ -1,18 +1,13 @@
-from rest_framework import decorators
-from rest_framework import exceptions
-from rest_framework import mixins
-from rest_framework import permissions as rest_permissions
-from rest_framework import response
-from rest_framework import viewsets
-
 from django import http
 from django.db import transaction
 from django.db.models import Count, Prefetch, Q, Sum
 from django.utils import timezone
+from drf_spectacular.utils import extend_schema, extend_schema_view
+from rest_framework import decorators, exceptions, mixins
+from rest_framework import permissions as rest_permissions
+from rest_framework import response, viewsets
 
-from funkwhale_api.common import locales
-from funkwhale_api.common import permissions
-from funkwhale_api.common import preferences
+from funkwhale_api.common import locales, permissions, preferences
 from funkwhale_api.common import utils as common_utils
 from funkwhale_api.common.mixins import MultipleLookupDetailMixin
 from funkwhale_api.federation import actors
@@ -27,19 +22,28 @@ from funkwhale_api.users.oauth import permissions as oauth_permissions
 from . import categories, filters, models, renderers, serializers
 
 ARTIST_PREFETCH_QS = (
-    music_models.Artist.objects.select_related("description", "attachment_cover",)
+    music_models.Artist.objects.select_related(
+        "description",
+        "attachment_cover",
+    )
     .prefetch_related(music_views.TAG_PREFETCH)
     .annotate(_tracks_count=Count("tracks"))
 )
 
 
-class ChannelsMixin(object):
+class ChannelsMixin:
     def dispatch(self, request, *args, **kwargs):
         if not preferences.get("audio__channels_enabled"):
             return http.HttpResponse(status=405)
         return super().dispatch(request, *args, **kwargs)
 
 
+@extend_schema_view(
+    metedata_choices=extend_schema(operation_id="get_channel_metadata_choices"),
+    subscribe=extend_schema(operation_id="subscribe_channel"),
+    unsubscribe=extend_schema(operation_id="unsubscribe_channel"),
+    rss_subscribe=extend_schema(operation_id="subscribe_channel_rss"),
+)
 class ChannelViewSet(
     ChannelsMixin,
     MultipleLookupDetailMixin,
@@ -91,7 +95,9 @@ class ChannelViewSet(
             return serializers.ChannelSerializer
         elif self.action in ["update", "partial_update"]:
             return serializers.ChannelUpdateSerializer
-        return serializers.ChannelCreateSerializer
+        elif self.action == "create":
+            return serializers.ChannelCreateSerializer
+        return serializers.ChannelSerializer
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -131,6 +137,7 @@ class ChannelViewSet(
         detail=True,
         methods=["post"],
         permission_classes=[rest_permissions.IsAuthenticated],
+        serializer_class=serializers.SubscriptionSerializer,
     )
     def subscribe(self, request, *args, **kwargs):
         object = self.get_object()
@@ -153,6 +160,7 @@ class ChannelViewSet(
         data = serializers.SubscriptionSerializer(subscription).data
         return response.Response(data, status=201)
 
+    @extend_schema(responses={204: None})
     @decorators.action(
         detail=True,
         methods=["post", "delete"],
@@ -192,7 +200,9 @@ class ChannelViewSet(
                     "track",
                     queryset=music_models.Track.objects.select_related(
                         "attachment_cover", "description"
-                    ).prefetch_related(music_views.TAG_PREFETCH,),
+                    ).prefetch_related(
+                        music_views.TAG_PREFETCH,
+                    ),
                 ),
             )
             .select_related("track__attachment_cover", "track__description")
@@ -232,7 +242,9 @@ class ChannelViewSet(
         if not serializer.is_valid():
             return response.Response(serializer.errors, status=400)
         channel = (
-            models.Channel.objects.filter(rss_url=serializer.validated_data["url"],)
+            models.Channel.objects.filter(
+                rss_url=serializer.validated_data["url"],
+            )
             .order_by("id")
             .first()
         )
@@ -243,7 +255,10 @@ class ChannelViewSet(
                     serializer.validated_data["url"]
                 )
             except serializers.FeedFetchException as e:
-                return response.Response({"detail": str(e)}, status=400,)
+                return response.Response(
+                    {"detail": str(e)},
+                    status=400,
+                )
 
         subscription = federation_models.Follow(actor=request.user.actor)
         subscription.fid = subscription.get_federation_id()
@@ -312,6 +327,10 @@ class SubscriptionsViewSet(
         qs = super().get_queryset()
         return qs.filter(actor=self.request.user.actor)
 
+    @extend_schema(
+        responses=serializers.AllSubscriptionsSerializer(),
+        operation_id="get_all_subscriptions",
+    )
     @decorators.action(methods=["get"], detail=False)
     def all(self, request, *args, **kwargs):
         """
@@ -319,12 +338,7 @@ class SubscriptionsViewSet(
         to have a performant endpoint and avoid lots of queries just to display
         subscription status in the UI
         """
-        subscriptions = list(
-            self.get_queryset().values_list("uuid", "target__channel__uuid")
-        )
+        subscriptions = self.get_queryset().values("uuid", "target__channel__uuid")
 
-        payload = {
-            "results": [{"uuid": str(u[0]), "channel": u[1]} for u in subscriptions],
-            "count": len(subscriptions),
-        }
+        payload = serializers.AllSubscriptionsSerializer(subscriptions).data
         return response.Response(payload, status=200)

@@ -1,58 +1,43 @@
+<script setup lang="ts">
+import { toRefs, useClipboard } from '@vueuse/core'
+
+interface Props {
+  value: string
+  buttonClasses?: string
+  id?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  buttonClasses: 'accent',
+  id: 'copy-input'
+})
+
+const { value } = toRefs(props)
+const { copy, isSupported: canCopy, copied } = useClipboard({ source: value, copiedDuring: 5000 })
+</script>
+
 <template>
   <div class="ui fluid action input component-copy-input">
     <p
       v-if="copied"
       class="message"
     >
-      <translate translate-context="Content/*/Paragraph">
-        Text copied to clipboard!
-      </translate>
+      {{ $t('components.common.CopyInput.message.success') }}
     </p>
     <input
       :id="id"
-      ref="input"
-      :name="id"
       :value="value"
+      :name="id"
       type="text"
       readonly
     >
     <button
       :class="['ui', buttonClasses, 'right', 'labeled', 'icon', 'button']"
-      @click="copy"
+      :disabled="!canCopy || undefined"
+      @click="copy()"
     >
       <i class="copy icon" />
-      <translate translate-context="*/*/Button.Label/Short, Verb">
-        Copy
-      </translate>
+      {{ $t('components.common.CopyInput.button.copy') }}
     </button>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    value: { type: String, required: true },
-    buttonClasses: { type: String, default: 'accent' },
-    id: { type: String, default: 'copy-input' }
-  },
-  data () {
-    return {
-      copied: false,
-      timeout: null
-    }
-  },
-  methods: {
-    copy () {
-      if (this.timeout) {
-        clearTimeout(this.timeout)
-      }
-      this.$refs.input.select()
-      document.execCommand('Copy')
-      const self = this
-      self.copied = true
-      this.timeout = setTimeout(() => {
-        self.copied = false
-      }, 5000)
-    }
-  }
-}
-</script>

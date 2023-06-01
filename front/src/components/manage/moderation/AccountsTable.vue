@@ -1,22 +1,121 @@
+<script setup lang="ts">
+import type { SmartSearchProps } from '~/composables/navigation/useSmartSearch'
+import type { OrderingProps } from '~/composables/navigation/useOrdering'
+import type { RouteRecordName } from 'vue-router'
+import type { OrderingField } from '~/store/ui'
+
+import { ref, computed, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+import axios from 'axios'
+
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import ActionTable from '~/components/common/ActionTable.vue'
+import Pagination from '~/components/vui/Pagination.vue'
+
+import useSmartSearch from '~/composables/navigation/useSmartSearch'
+import useOrdering from '~/composables/navigation/useOrdering'
+import useErrorHandler from '~/composables/useErrorHandler'
+import usePage from '~/composables/navigation/usePage'
+
+interface Props extends SmartSearchProps, OrderingProps {
+  filters?: object
+
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  orderingConfigName?: RouteRecordName
+  defaultQuery?: string
+  updateUrl?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  defaultQuery: '',
+  updateUrl: false,
+  filters: () => ({}),
+  orderingConfigName: undefined
+})
+
+const search = ref()
+
+const page = usePage()
+type ResponseType = { count: number, results: any[] }
+const result = ref<null | ResponseType>(null)
+
+const { onSearch, query, addSearchToken } = useSmartSearch(props)
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props)
+
+const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
+  ['creation_date', 'first_seen'],
+  ['last_fetch_date', 'last_seen'],
+  ['preferred_username', 'username'],
+  ['domain', 'domain'],
+  ['uploads_count', 'uploads']
+]
+
+const { t } = useI18n()
+const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
+const actions = computed(() => [
+  {
+    name: 'purge',
+    label: t('components.manage.moderation.AccountsTable.action.purge.label'),
+    isDangerous: true
+  }
+])
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  const params = {
+    page: page.value,
+    page_size: paginateBy.value,
+    q: query.value,
+    ordering: orderingString.value,
+    ...props.filters
+  }
+
+  try {
+    const response = await axios.get('/manage/accounts/', {
+      params
+    })
+
+    result.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+    result.value = null
+  } finally {
+    isLoading.value = false
+  }
+}
+
+onSearch(() => (page.value = 1))
+watch(page, fetchData)
+onOrderingUpdate(fetchData)
+fetchData()
+
+const sharedLabels = useSharedLabels()
+const labels = computed(() => ({
+  searchPlaceholder: t('components.manage.moderation.AccountsTable.placeholder.search')
+}))
+</script>
+
 <template>
   <div>
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="accounts-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
-          <form @submit.prevent="search.query = $refs.search.value">
+          <label for="accounts-search">{{ $t('components.manage.moderation.AccountsTable.label.search') }}</label>
+          <form @submit.prevent="query = search.value">
             <input
               id="accounts-search"
               ref="search"
               name="search"
               type="text"
-              :value="search.query"
+              :value="query"
               :placeholder="labels.searchPlaceholder"
             >
           </form>
         </div>
         <div class="field">
-          <label for="accounts-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
+          <label for="accounts-ordering">{{ $t('components.manage.moderation.AccountsTable.ordering.label') }}</label>
           <select
             id="accounts-ordering"
             v-model="ordering"
@@ -32,21 +131,17 @@
           </select>
         </div>
         <div class="field">
-          <label for="accounts-ordering-direction"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering direction</translate></label>
+          <label for="accounts-ordering-direction">{{ $t('components.manage.moderation.AccountsTable.ordering.direction.label') }}</label>
           <select
             id="accounts-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              <translate translate-context="Content/Search/Dropdown">
-                Ascending
-              </translate>
+              {{ $t('components.manage.moderation.AccountsTable.ordering.direction.ascending') }}
             </option>
             <option value="-">
-              <translate translate-context="Content/Search/Dropdown">
-                Descending
-              </translate>
+              {{ $t('components.manage.moderation.AccountsTable.ordering.direction.descending') }}
             </option>
           </select>
         </div>
@@ -67,41 +162,28 @@
         :filters="actionFilters"
         @action-launched="fetchData"
       >
-        <template slot="header-cells">
+        <template #header-cells>
           <th>
-            <translate translate-context="*/*/*/Noun">
-              Name
-            </translate>
+            {{ $t('components.manage.moderation.AccountsTable.table.account.header.name') }}
           </th>
           <th>
-            <translate translate-context="Content/Moderation/*/Noun">
-              Domain
-            </translate>
+            {{ $t('components.manage.moderation.AccountsTable.table.account.header.domain') }}
           </th>
           <th>
-            <translate translate-context="*/*/*">
-              Uploads
-            </translate>
+            {{ $t('components.manage.moderation.AccountsTable.table.account.header.uploads') }}
           </th>
           <th>
-            <translate translate-context="Content/Moderation/Table.Label/Short (Value is a date)">
-              First seen
-            </translate>
+            {{ $t('components.manage.moderation.AccountsTable.table.account.header.firstSeen') }}
           </th>
           <th>
-            <translate translate-context="Content/Moderation/Table.Label/Noun">
-              Last seen
-            </translate>
+            {{ $t('components.manage.moderation.AccountsTable.table.account.header.lastSeen') }}
           </th>
           <th>
-            <translate translate-context="Content/Moderation/Table.Label/Short">
-              Under moderation rule
-            </translate>
+            {{ $t('components.manage.moderation.AccountsTable.table.account.header.moderationRule') }}
           </th>
         </template>
         <template
-          slot="row-cells"
-          slot-scope="scope"
+          #row-cells="scope"
         >
           <td>
             <router-link :to="{name: 'manage.moderation.accounts.detail', params: {id: scope.obj.full_username }}">
@@ -127,7 +209,7 @@
               @click.prevent="addSearchToken('domain', scope.obj.domain)"
             >
               <i class="home icon" />
-              <translate translate-context="Content/Moderation/*/Short, Noun">Local account</translate>
+              {{ $t('components.manage.moderation.AccountsTable.link.local') }}
             </a>
           </td>
           <td>
@@ -143,7 +225,7 @@
             />
           </td>
           <td>
-            <span v-if="scope.obj.instance_policy"><i class="shield icon" /> <translate translate-context="*/*/*">Yes</translate></span>
+            <span v-if="scope.obj.instance_policy"><i class="shield icon" />{{ $t('components.manage.moderation.AccountsTable.table.account.moderationRule') }}</span>
           </td>
         </template>
       </action-table>
@@ -151,130 +233,15 @@
     <div>
       <pagination
         v-if="result && result.count > paginateBy"
+        v-model:current="page"
         :compact="true"
-        :current="page"
         :paginate-by="paginateBy"
         :total="result.count"
-        @page-changed="selectPage"
       />
 
       <span v-if="result && result.results.length > 0">
-        <translate
-          translate-context="Content/*/Paragraph"
-          :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
-        >
-          Showing results %{ start }-%{ end } on %{ total }
-        </translate>
+        {{ $t('components.manage.moderation.AccountsTable.pagination.results', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
       </span>
     </div>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import _ from '@/lodash'
-import time from '@/utils/time'
-import { normalizeQuery, parseTokens } from '@/search'
-import Pagination from '@/components/Pagination'
-import ActionTable from '@/components/common/ActionTable'
-import OrderingMixin from '@/components/mixins/Ordering'
-import TranslationsMixin from '@/components/mixins/Translations'
-import SmartSearchMixin from '@/components/mixins/SmartSearch'
-
-export default {
-  components: {
-    Pagination,
-    ActionTable
-  },
-  mixins: [OrderingMixin, TranslationsMixin, SmartSearchMixin],
-  props: {
-    filters: { type: Object, required: false, default: function () { return {} } }
-  },
-  data () {
-    return {
-      time,
-      isLoading: false,
-      result: null,
-      page: 1,
-      search: {
-        query: this.defaultQuery,
-        tokens: parseTokens(normalizeQuery(this.defaultQuery))
-      },
-      orderingOptions: [
-        ['creation_date', 'first_seen'],
-        ['last_fetch_date', 'last_seen'],
-        ['preferred_username', 'username'],
-        ['domain', 'domain'],
-        ['uploads_count', 'uploads']
-      ]
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        searchPlaceholder: this.$pgettext('Content/Search/Input.Placeholder', 'Search by domain, username, bio…')
-      }
-    },
-    actionFilters () {
-      const currentFilters = {
-        q: this.search.query
-      }
-      if (this.filters) {
-        return _.merge(currentFilters, this.filters)
-      } else {
-        return currentFilters
-      }
-    },
-    actions () {
-      return [
-        {
-          name: 'purge',
-          label: this.$pgettext('*/*/*/Verb', 'Purge'),
-          isDangerous: true
-        }
-      ]
-    }
-  },
-  watch: {
-    search (newValue) {
-      this.page = 1
-      this.fetchData()
-    },
-    page () {
-      this.fetchData()
-    },
-    ordering () {
-      this.fetchData()
-    },
-    orderingDirection () {
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      const params = _.merge({
-        page: this.page,
-        page_size: this.paginateBy,
-        q: this.search.query,
-        ordering: this.getOrderingAsString()
-      }, this.filters)
-      const self = this
-      self.isLoading = true
-      self.checked = []
-      axios.get('/manage/accounts/', { params: params }).then((response) => {
-        self.result = response.data
-        self.isLoading = false
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    selectPage: function (page) {
-      this.page = page
-    }
-  }
-}
-</script>

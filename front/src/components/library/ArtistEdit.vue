@@ -1,60 +1,45 @@
+<script setup lang="ts">
+import type { EditObjectType } from '~/composables/moderation/useEditConfigs'
+import type { Artist, Library } from '~/types'
+
+import { useStore } from '~/store'
+
+import EditForm from '~/components/library/EditForm.vue'
+
+interface Props {
+  objectType: EditObjectType
+  object: Artist
+  libraries: Library[]
+}
+
+defineProps<Props>()
+
+const store = useStore()
+const canEdit = store.state.auth.availablePermissions.library
+</script>
+
 <template>
   <section class="ui vertical stripe segment">
     <div class="ui text container">
       <h2>
-        <translate
-          v-if="canEdit"
-          key="1"
-          translate-context="Content/*/Title"
-        >
-          Edit this artist
-        </translate>
-        <translate
-          v-else
-          key="2"
-          translate-context="Content/*/Title"
-        >
-          Suggest an edit on this artist
-        </translate>
+        <span v-if="canEdit">
+          {{ $t('components.library.ArtistEdit.header.edit') }}
+        </span>
+        <span v-else>
+          {{ $t('components.library.ArtistEdit.header.suggest') }}
+        </span>
       </h2>
       <div
         v-if="!object.is_local"
         class="ui message"
       >
-        <translate translate-context="Content/*/Message">
-          This object is managed by another server, you cannot edit it.
-        </translate>
+        {{ $t('components.library.ArtistEdit.message.remote') }}
       </div>
       <edit-form
         v-else
         :object-type="objectType"
         :object="object"
-        :can-edit="canEdit"
       />
     </div>
   </section>
 </template>
-
-<script>
-import EditForm from '@/components/library/EditForm'
-export default {
-  components: {
-    EditForm
-  },
-  props: {
-    objectType: { type: String, required: true },
-    object: { type: Object, required: true },
-    libraries: { type: Array, required: true }
-  },
-  data () {
-    return {
-      id: this.object.id
-    }
-  },
-  computed: {
-    canEdit () {
-      return true
-    }
-  }
-}
-</script>

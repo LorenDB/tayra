@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from funkwhale_api.activity import serializers as activity_serializers
@@ -35,6 +36,7 @@ class UserTrackFavoriteSerializer(serializers.ModelSerializer):
         fields = ("id", "user", "track", "creation_date", "actor")
         actor = serializers.SerializerMethodField()
 
+    @extend_schema_field(federation_serializers.APIActorSerializer)
     def get_actor(self, obj):
         actor = obj.user.actor
         if actor:
@@ -45,3 +47,16 @@ class UserTrackFavoriteWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.TrackFavorite
         fields = ("id", "track", "creation_date")
+
+
+class SimpleFavoriteSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    track = serializers.IntegerField()
+
+
+class AllFavoriteSerializer(serializers.Serializer):
+    results = SimpleFavoriteSerializer(many=True, source="*")
+    count = serializers.SerializerMethodField()
+
+    def get_count(self, o) -> int:
+        return len(o)

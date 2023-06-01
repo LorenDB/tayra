@@ -1,3 +1,67 @@
+<script setup lang="ts">
+import type { Track, Radio } from '~/types'
+
+import { ref, computed, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+
+import axios from 'axios'
+
+import TrackTable from '~/components/audio/track/Table.vue'
+import RadioButton from '~/components/radios/Button.vue'
+import Pagination from '~/components/vui/Pagination.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+
+interface Props {
+  id: number
+}
+
+const props = defineProps<Props>()
+
+const radio = ref<Radio | null>(null)
+const tracks = ref([] as Track[])
+const totalTracks = ref(0)
+const page = ref(1)
+
+const { t } = useI18n()
+const labels = computed(() => ({
+  title: t('views.radios.Detail.title')
+}))
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+
+  const url = `radios/radios/${props.id}/`
+
+  try {
+    const radioResponse = await axios.get(url)
+    radio.value = radioResponse.data
+
+    const tracksResponse = await axios.get(url + 'tracks/', { params: { page: page.value } })
+    totalTracks.value = tracksResponse.data.count
+    tracks.value = tracksResponse.data.results
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+watch(page, fetchData, { immediate: true })
+
+const router = useRouter()
+const deleteRadio = async () => {
+  try {
+    await axios.delete(`radios/radios/${props.id}/`)
+    return router.push({ path: '/library' })
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+}
+</script>
+
 <template>
   <main>
     <div
@@ -18,8 +82,7 @@
           <div class="content">
             {{ radio.name }}
             <div class="sub header">
-              Radio containing {{ totalTracks }} tracks,
-              by <username :username="radio.user.username" />
+              {{ $t('views.radios.Detail.header.radio', {tracks: totalTracks}) }}<username :username="radio.user.username" />
             </div>
           </div>
         </h2>
@@ -32,34 +95,30 @@
           <router-link
             class="ui icon labeled button"
             :to="{name: 'library.radios.edit', params: {id: radio.id}}"
-            exact
           >
             <i class="pencil icon" />
-            Edit…
+            {{ $t('views.radios.Detail.button.edit') }}
           </router-link>
           <dangerous-button
             class="ui labeled danger icon button"
             :action="deleteRadio"
           >
-            <i class="trash icon" /> Delete
-            <p
-              slot="modal-header"
-              v-translate="{radio: radio.name}"
-              translate-context="Popup/Radio/Title"
-              :translate-params="{radio: radio.name}"
-            >
-              Do you want to delete the radio "%{ radio }"?
-            </p>
-            <p slot="modal-content">
-              <translate translate-context="Popup/Radio/Paragraph">
-                This will completely delete this radio and cannot be undone.
-              </translate>
-            </p>
-            <p slot="modal-confirm">
-              <translate translate-context="Popup/Radio/Button.Label/Verb">
-                Delete radio
-              </translate>
-            </p>
+            <i class="trash icon" /> {{ $t('views.radios.Detail.button.delete') }}
+            <template #modal-header>
+              <p>
+                {{ $t('views.radios.Detail.modal.delete.header', {radio: radio.name}) }}
+              </p>
+            </template>
+            <template #modal-content>
+              <p>
+                {{ $t('views.radios.Detail.modal.delete.content.warning') }}
+              </p>
+            </template>
+            <template #modal-confirm>
+              <p>
+                {{ $t('views.radios.Detail.button.confirm') }}
+              </p>
+            </template>
           </dangerous-button>
         </template>
       </div>
@@ -69,115 +128,34 @@
       class="ui vertical stripe segment"
     >
       <h2>
-        <translate translate-context="*/*/*">
-          Tracks
-        </translate>
+        {{ $t('views.radios.Detail.header.tracks') }}
       </h2>
       <track-table :tracks="tracks" />
       <div class="ui center aligned basic segment">
         <pagination
           v-if="totalTracks > 25"
-          :current="page"
+          v-model:current="page"
           :paginate-by="25"
           :total="totalTracks"
-          @page-changed="selectPage"
         />
       </div>
     </section>
     <div
-      v-else-if="!isLoading && !totalTracks > 0"
+      v-else-if="!isLoading && totalTracks === 0"
       class="ui placeholder segment"
     >
       <div class="ui icon header">
         <i class="rss icon" />
-        <translate
-          translate-context="Content/Radios/Placeholder"
-        >
-          No tracks have been added to this radio yet
-        </translate>
+        {{ $t('views.radios.Detail.empty.noTracks') }}
       </div>
       <router-link
-        v-if="$store.state.auth.username === radio.user.username"
+        v-if="$store.state.auth.username === radio?.user.username"
         class="ui success icon labeled button"
-        :to="{name: 'library.radios.edit', params: {id: radio.id}}"
-        exact
+        :to="{name: 'library.radios.edit', params: { id: radio?.id }}"
       >
         <i class="pencil icon" />
-        Edit…
+        {{ $t('views.radios.Detail.button.edit') }}
       </router-link>
     </div>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import TrackTable from '@/components/audio/track/Table'
-import RadioButton from '@/components/radios/Button'
-import Pagination from '@/components/Pagination'
-
-export default {
-  components: {
-    TrackTable,
-    RadioButton,
-    Pagination
-  },
-  props: {
-    id: { type: Number, required: true }
-  },
-  data: function () {
-    return {
-      isLoading: false,
-      radio: null,
-      tracks: [],
-      totalTracks: 0,
-      page: 1
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        title: this.$pgettext('Head/Radio/Title', 'Radio')
-      }
-    }
-  },
-  watch: {
-    page: function () {
-      this.fetch()
-    }
-  },
-  created: function () {
-    this.fetch()
-  },
-  methods: {
-    selectPage: function (page) {
-      this.page = page
-    },
-    fetch: function () {
-      const self = this
-      self.isLoading = true
-      const url = 'radios/radios/' + this.id + '/'
-      axios.get(url).then(response => {
-        self.radio = response.data
-        axios
-          .get(url + 'tracks/', { params: { page: this.page } })
-          .then(response => {
-            this.totalTracks = response.data.count
-            this.tracks = response.data.results
-          })
-          .then(() => {
-            self.isLoading = false
-          })
-      })
-    },
-    deleteRadio () {
-      const self = this
-      const url = 'radios/radios/' + this.id + '/'
-      axios.delete(url).then(response => {
-        self.$router.push({
-          path: '/library'
-        })
-      })
-    }
-  }
-}
-</script>

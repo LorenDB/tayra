@@ -1,22 +1,20 @@
+import django_filters
 from django import forms
 from django.db.models import Q
-
-import django_filters
 from django_filters import rest_framework as filters
 
+from funkwhale_api.audio import models as audio_models
 from funkwhale_api.common import fields
 from funkwhale_api.common import filters as common_filters
 from funkwhale_api.common import search
-
-from funkwhale_api.audio import models as audio_models
 from funkwhale_api.federation import models as federation_models
 from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.moderation import models as moderation_models
 from funkwhale_api.moderation import serializers as moderation_serializers
 from funkwhale_api.moderation import utils as moderation_utils
 from funkwhale_api.music import models as music_models
-from funkwhale_api.users import models as users_models
 from funkwhale_api.tags import models as tags_models
+from funkwhale_api.users import models as users_models
 
 
 class ActorField(forms.CharField):

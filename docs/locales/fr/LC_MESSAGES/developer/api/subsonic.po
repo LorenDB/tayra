@@ -1,0 +1,220 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.11.0\n"
+
+#: ../../developer_documentation/api/subsonic.md:1
+msgid "Subsonic API"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:3
+msgid ""
+"Funkwhale supports a subset of the [Subsonic "
+"API's](http://www.subsonic.org/pages/api.jsp) endpoints. This enables "
+"users to listen to music stored on their Funkwhale pod through a "
+"Subsonic-compatible app."
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:5
+msgid ""
+"We aim to support as many endpoints as we can to give Subsonic users the "
+"best possible experience. However, some endpoints require a folder-based "
+"endpoint. This doesn't match Funkwhale's internal structure, which means "
+"emulating them is difficult."
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:7
+msgid "Supported endpoints"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:10
+msgid ""
+"We aim to keep this list up-to-date. If you think something is missing, "
+"you can see all supported endpoints in the [API "
+"views](https://dev.funkwhale.audio/funkwhale/funkwhale/blob/develop/api/funkwhale_api/subsonic/views.py)."
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:13
+msgid ""
+"Funkwhale supports both XML and JSON formats for the following Subsonic "
+"endpoints:"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:15
+msgid "[`createPlaylist`](http://www.subsonic.org/pages/api.jsp#createPlaylist)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:16
+msgid "[`deletePlaylist`](http://www.subsonic.org/pages/api.jsp#deletePlaylist)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:17
+msgid "[`getAlbum`](http://www.subsonic.org/pages/api.jsp#getAlbum)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:18
+msgid "[`getAlbumList2`](http://www.subsonic.org/pages/api.jsp#getAlbumList2)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:19
+msgid "[`getArtist`](http://www.subsonic.org/pages/api.jsp#getArtist)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:20
+msgid "[`getArtistInfo2`](http://www.subsonic.org/pages/api.jsp#getArtistInfo2)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:21
+msgid "[`getArtists`](http://www.subsonic.org/pages/api.jsp#getArtists)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:22
+msgid "[`getAvatar`](http://www.subsonic.org/pages/api.jsp#getAvatar)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:23
+msgid "[`getCoverArt`](http://www.subsonic.org/pages/api.jsp#getCoverArt)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:24
+msgid "[`getIndexes`](http://www.subsonic.org/pages/api.jsp#getIndexes)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:25
+msgid "[`getLicense`](http://www.subsonic.org/pages/api.jsp#getLicense)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:26
+msgid "[`getMusicFolders`](http://www.subsonic.org/pages/api.jsp#getMusicFolders)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:27
+msgid "[`getPlaylist`](http://www.subsonic.org/pages/api.jsp#getPlaylist)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:28
+msgid "[`getPlaylists`](http://www.subsonic.org/pages/api.jsp#getPlaylists)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:29
+msgid "[`getRandomSongs`](http://www.subsonic.org/pages/api.jsp#getRandomSongs)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:30
+msgid "[`getSong`](http://www.subsonic.org/pages/api.jsp#getSong)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:31
+msgid "[`getStarred`](http://www.subsonic.org/pages/api.jsp#getStarred)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:32
+msgid "[`getStarred2`](http://www.subsonic.org/pages/api.jsp#getStarred2)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:33
+msgid "[`getUser`](http://www.subsonic.org/pages/api.jsp#getUser)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:34
+msgid "[`ping`](http://www.subsonic.org/pages/api.jsp#ping)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:35
+msgid "[`scrobble`](http://www.subsonic.org/pages/api.jsp#scrobble)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:36
+msgid "[`search3`](http://www.subsonic.org/pages/api.jsp#search3)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:37
+msgid "[`star`](http://www.subsonic.org/pages/api.jsp#star)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:38
+msgid "[`stream`](http://www.subsonic.org/pages/api.jsp#stream)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:39
+msgid "[`unstar`](http://www.subsonic.org/pages/api.jsp#unstar)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:40
+msgid "[`updatePlaylist`](http://www.subsonic.org/pages/api.jsp#updatePlaylist)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:42
+msgid "Additional properties"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:44
+msgid ""
+"Funkwhale returns some additional properties to Subsonic payloads. You "
+"can use these properties to adapt your client behavior if needed:"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:47
+msgid "Property"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:48
+msgid "Data type"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:49
+msgid "Description"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:50
+msgid "`type`"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:51
+#: ../../developer_documentation/api/subsonic.md:54
+msgid "String"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:52
+msgid "The name of the app (`funkwhale`)"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:53
+msgid "`funkwhaleVersion`"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:55
+msgid "The Funkwhale version the pod is running"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:67
+msgid "Test a Subsonic app"
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:69
+msgid ""
+"We host a demo server at <https://demo.funkwhale.audio> which you can use"
+" to test your Subsonic app."
+msgstr ""
+
+#: ../../developer_documentation/api/subsonic.md:71
+msgid ""
+"You can test the Subsonic API by logging in with a Subsonic client or by "
+"directly by calling an endpoint. For example, call this URL to test the "
+"`ping` endpoint: <https://demo.funkwhale.audio/rest/ping.view?f=json>"
+msgstr ""
+

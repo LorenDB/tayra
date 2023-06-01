@@ -1,0 +1,167 @@
+{
+  "components": {
+    "auth": {
+      "Authorize": {
+        "header": {
+          "access": "{ app } 需要訪問您的funkwhale賬戶"
+        }
+      },
+      "Logout": {
+        "header": {
+          "confirm": "您确定要登出吗？"
+        }
+      }
+    },
+    "About": {
+      "stat": {
+        "activeUsers": "{ count } 活躍用戶",
+        "hoursOfMusic": "{ count } 小時"
+      },
+      "header": {
+        "aboutPod": "關於此媒體庫"
+      },
+      "description": {
+        "funkwhale": "此 pod 运行 Funkwhale，这是一个社区驱动的项目，允许您在分散的开放式网络中收听和共享音乐和音频。",
+        "signup": "立即注册，以跟踪您的收藏夹，创建播放列表，发现新内容等等！"
+      }
+    },
+    "Home": {
+      "stat": {
+        "activeUsers": "{ count } 活躍用戶",
+        "hoursOfMusic": "{ count } 小時"
+      },
+      "header": {
+        "aboutFunkwhale": "關於 Funkwhale",
+        "about": "關於此Funkwhale媒體池"
+      },
+      "link": {
+        "userGuides": {
+          "description": "發現您需要了解的有關Funkwhale及其功能的所有信息"
+        }
+      },
+      "description": {
+        "signup": "立即注册，以跟踪您的收藏夹，创建播放列表，发现新内容等等！",
+        "funkwhale": {
+          "paragraph1": "此 pod 运行 Funkwhale，这是一个社区驱动的项目，允许您在分散的开放式网络中收听和共享音乐和音频。"
+        }
+      }
+    },
+    "audio": {
+      "artist": {
+        "Card": {
+          "meta": {
+            "episodes": "{ count } 正在聽"
+          }
+        }
+      },
+      "ChannelCard": {
+        "meta": {
+          "episodes": "{ count } 正在聽"
+        }
+      },
+      "ChannelSerieCard": {
+        "meta": {
+          "episodes": "{ count } 正在聽"
+        }
+      }
+    },
+    "library": {
+      "AlbumBase": {
+        "meta": {
+          "episodes": "{ count } 正在聽"
+        }
+      },
+      "FileUpload": {
+        "tooltip": {
+          "network": "上傳這個文件時發生了網絡錯誤"
+        }
+      }
+    },
+    "favorites": {
+      "List": {
+        "header": {
+          "favorites": "{ count } 喜愛"
+        }
+      }
+    },
+    "AboutPod": {
+      "stat": {
+        "hoursOfMusic": "{ count } 小時",
+        "activeUsers": "{ count } 活躍用戶",
+        "listeningsCount": "{ count } 正在聽"
+      },
+      "link": {
+        "about": "關於此媒體庫"
+      },
+      "header": {
+        "about": "關於此媒體庫"
+      }
+    },
+    "common": {
+      "ActionTable": {
+        "button": {
+          "selected": "{ count } 中 { total } 選中"
+        }
+      }
+    },
+    "channels": {
+      "LicenseSelect": {
+        "link": {
+          "license": "關於此許可"
+        }
+      }
+    },
+    "RemoteSearchForm": {
+      "label": {
+        "rss": {
+          "fieldPlaceholder": "{'@'}channel{'@'}pod.example 或 https://website.example/rss.xml"
+        }
+      }
+    }
+  },
+  "views": {
+    "channels": {
+      "DetailBase": {
+        "meta": {
+          "listenings": "{ count } 正在聽"
+        }
+      }
+    },
+    "library": {
+      "Edit": {
+        "button": {
+          "accept": "確認"
+        },
+        "table": {
+          "action": {
+            "status": {
+              "accepted": "已確認"
+            }
+          }
+        }
+      }
+    },
+    "auth": {
+      "PasswordReset": {
+        "link": {
+          "back": "返回登录"
+        }
+      },
+      "PasswordResetConfirm": {
+        "link": {
+          "back": "返回登录"
+        }
+      },
+      "Signup": {
+        "header": {
+          "createAccount": "{ app } 需要訪問您的funkwhale賬戶"
+        }
+      }
+    }
+  },
+  "init": {
+    "serviceWorker": {
+      "newAppVersion": "该应用程序有新版本可用。"
+    }
+  }
+}

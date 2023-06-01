@@ -1,3 +1,47 @@
+<script setup lang="ts">
+import type { Channel } from '~/types'
+
+import { useI18n } from 'vue-i18n'
+import { computed, ref } from 'vue'
+import { useStore } from '~/store'
+
+import LoginModal from '~/components/common/LoginModal.vue'
+
+interface Events {
+  (e: 'unsubscribed'): void
+  (e: 'subscribed'): void
+}
+
+interface Props {
+  channel: Channel
+}
+
+const emit = defineEmits<Events>()
+const props = defineProps<Props>()
+
+const { t } = useI18n()
+const store = useStore()
+
+const isSubscribed = computed(() => store.getters['channels/isSubscribed'](props.channel.uuid))
+const title = computed(() => isSubscribed.value
+  ? t('components.channels.SubscribeButton.title.unsubscribe')
+  : t('components.channels.SubscribeButton.title.subscribe')
+)
+
+const message = computed(() => ({
+  authMessage: t('components.channels.SubscribeButton.help.auth')
+}))
+
+const toggle = async () => {
+  await store.dispatch('channels/toggle', props.channel.uuid)
+
+  if (isSubscribed.value) emit('unsubscribed')
+  else emit('subscribed')
+}
+
+const loginModal = ref()
+</script>
+
 <template>
   <button
     v-if="$store.state.auth.authenticated"
@@ -5,76 +49,22 @@
     @click.stop="toggle"
   >
     <i class="heart icon" />
-    <translate
-      v-if="isSubscribed"
-      translate-context="Content/Track/Button.Message"
-    >
-      Unsubscribe
-    </translate>
-    <translate
-      v-else
-      translate-context="Content/Track/*/Verb"
-    >
-      Subscribe
-    </translate>
+    {{ title }}
   </button>
   <button
     v-else
     :class="['ui', 'pink', 'icon', 'labeled', 'button']"
-    @click="$refs.loginModal.show = true"
+    @click="loginModal.show = true"
   >
     <i class="heart icon" />
-    <translate translate-context="Content/Track/*/Verb">
-      Subscribe
-    </translate>
+    {{ title }}
     <login-modal
       ref="loginModal"
       class="small"
       :next-route="$route.fullPath"
       :message="message.authMessage"
-      :cover="channel.artist.cover"
-      @created="$refs.loginModal.show = false;"
+      :cover="channel.artist?.cover!"
+      @created="loginModal.show = false"
     />
   </button>
 </template>
-
-<script>
-import LoginModal from '@/components/common/LoginModal'
-
-export default {
-  components: {
-    LoginModal
-  },
-  props: {
-    channel: { type: Object, required: true }
-  },
-  computed: {
-    title () {
-      if (this.isSubscribed) {
-        return this.$pgettext('Content/Channel/Button/Verb', 'Subscribe')
-      } else {
-        return this.$pgettext('Content/Channel/Button/Verb', 'Unsubscribe')
-      }
-    },
-    isSubscribed () {
-      return this.$store.getters['channels/isSubscribed'](this.channel.uuid)
-    },
-    message () {
-      return {
-        authMessage: this.$pgettext('Popup/Message/Paragraph', 'You need to be logged in to subscribe to this channel')
-      }
-    }
-  },
-  methods: {
-    toggle () {
-      if (this.isSubscribed) {
-        this.$emit('unsubscribed')
-      } else {
-        this.$emit('subscribed')
-      }
-      this.$store.dispatch('channels/toggle', this.channel.uuid)
-    }
-  }
-
-}
-</script>

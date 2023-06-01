@@ -1,3 +1,219 @@
+<script setup lang="ts">
+import type { RadioConfig } from '~/store/radios'
+
+import { ref, reactive, computed, watch } from 'vue'
+import { useRouteQuery } from '@vueuse/router'
+import { useI18n } from 'vue-i18n'
+import { syncRef } from '@vueuse/core'
+
+import axios from 'axios'
+
+import PlaylistCardList from '~/components/playlists/CardList.vue'
+import RemoteSearchForm from '~/components/RemoteSearchForm.vue'
+import ArtistCard from '~/components/audio/artist/Card.vue'
+import TrackTable from '~/components/audio/track/Table.vue'
+import AlbumCard from '~/components/audio/album/Card.vue'
+import Pagination from '~/components/vui/Pagination.vue'
+import RadioButton from '~/components/radios/Button.vue'
+import RadioCard from '~/components/radios/Card.vue'
+import TagsList from '~/components/tags/List.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+
+type QueryType = 'artists' | 'albums' | 'tracks' | 'playlists' | 'tags' | 'radios' | 'podcasts' | 'series' | 'rss'
+
+const type = useRouteQuery<QueryType>('type', 'artists')
+const id = useRouteQuery<string>('id')
+
+const pageQuery = useRouteQuery<string>('page', '1')
+const page = ref(+pageQuery.value)
+syncRef(pageQuery, page, {
+  transform: {
+    ltr: (left) => +left,
+    rtl: (right) => right.toString()
+  }
+})
+
+const q = useRouteQuery('q', '')
+const query = ref(q.value)
+syncRef(q, query, { direction: 'ltr' })
+
+type ResponseType = { count: number, results: any[] }
+const results = reactive({
+  artists: null,
+  albums: null,
+  tracks: null,
+  playlists: null,
+  radios: null,
+  tags: null,
+  podcasts: null,
+  series: null
+} as Record<QueryType, null | ResponseType>)
+
+const paginateBy = ref(25)
+
+const { t } = useI18n()
+
+interface SearchType {
+  id: QueryType
+  label: string
+  includeChannels?: boolean
+  contentCategory?: string
+  endpoint?: string
+}
+
+const types = computed(() => [
+  {
+    id: 'artists',
+    label: t('views.Search.label.artists'),
+    includeChannels: true,
+    contentCategory: 'music'
+  },
+  {
+    id: 'albums',
+    label: t('views.Search.label.albums'),
+    includeChannels: true,
+    contentCategory: 'music'
+  },
+  {
+    id: 'tracks',
+    label: t('views.Search.label.tracks')
+  },
+  {
+    id: 'playlists',
+    label: t('views.Search.label.playlists')
+  },
+  {
+    id: 'radios',
+    label: t('views.Search.label.radios'),
+    endpoint: 'radios/radios'
+  },
+  {
+    id: 'tags',
+    label: t('views.Search.label.tags')
+  },
+  {
+    id: 'podcasts',
+    label: t('views.Search.label.podcasts'),
+    endpoint: '/artists',
+    contentCategory: 'podcast',
+    includeChannels: true
+  },
+  {
+    id: 'series',
+    label: t('views.Search.label.series'),
+    endpoint: '/albums',
+    includeChannels: true,
+    contentCategory: 'podcast'
+  }
+] as SearchType[])
+
+const currentType = computed(() => types.value.find(({ id }) => id === type.value))
+
+const axiosParams = computed(() => {
+  const params = new URLSearchParams({
+    q: query.value,
+    page: page.value as unknown as string,
+    page_size: paginateBy.value as unknown as string
+  })
+
+  if (currentType.value?.contentCategory) params.append('content_category', currentType.value.contentCategory)
+  if (currentType.value?.includeChannels) params.append('include_channels', currentType.value.includeChannels as unknown as string)
+
+  return params
+})
+
+const currentResults = computed(() => results[currentType.value?.id ?? 'artists'])
+
+const isLoading = ref(false)
+const search = async () => {
+  if (!currentType.value) return
+
+  q.value = query.value
+
+  if (!query.value) {
+    for (const type of types.value) {
+      results[type.id] = null
+    }
+
+    return
+  }
+
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(currentType.value.endpoint ?? currentType.value.id, {
+      params: axiosParams.value
+    })
+
+    results[currentType.value.id] = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+
+  // TODO (wvffle): Resolve race condition
+  for (const type of types.value) {
+    if (type.id !== currentType.value.id) {
+      axios.get(type.endpoint ?? type.id, {
+        params: {
+          q: query.value,
+          page_size: 1,
+          content_category: type.contentCategory,
+          include_channels: type.includeChannels
+        }
+      }).then(response => {
+        results[type.id] = response.data
+      }).catch(() => undefined)
+    }
+  }
+}
+
+watch(type, () => {
+  page.value = 1
+  search()
+})
+
+search()
+
+const labels = computed(() => ({
+  title: id.value
+    ? (
+        type.value === 'rss'
+          ? t('views.Search.header.rss')
+          : t('views.Search.header.remote')
+      )
+    : t('views.Search.header.search'),
+  submitSearch: t('views.Search.button.submit')
+}))
+
+const radioConfig = computed(() => {
+  const results = Object.values(currentResults.value?.results ?? {})
+  if (results.length) {
+    switch (currentType.value?.id) {
+      case 'tags':
+        return {
+          type: 'tag',
+          names: results.map(({ name }) => name)
+        } as RadioConfig
+
+      case 'playlists':
+      case 'artists':
+        return {
+          type: currentType.value.id.slice(0, -1),
+          ids: results.map(({ id }) => id)
+        } as RadioConfig
+    }
+
+    // TODO (wvffle): Use logger
+    console.info('This type is not yet supported for radio')
+  }
+
+  return null
+})
+</script>
+
 <template>
   <main
     v-title="labels.title"
@@ -5,13 +221,13 @@
   >
     <section class="ui vertical stripe segment">
       <div
-        v-if="initialId"
+        v-if="id"
         class="ui small text container"
       >
         <h2>{{ labels.title }}</h2>
         <remote-search-form
-          :initial-id="initialId"
-          :type="initialType"
+          :initial-id="id"
+          :initial-type="type === 'rss' ? 'rss' : 'artists'"
         />
       </div>
       <div
@@ -20,46 +236,59 @@
       >
         <h2>
           <label for="query">
-            <translate translate-context="Content/Search/Input.Label/Noun">Search</translate>
+            {{ $t('views.Search.header.search') }}
           </label>
         </h2>
-        <form
-          class="ui form"
-          @submit.prevent="page = 1; search()"
-        >
-          <div class="ui field">
-            <div class="ui action input">
-              <input
-                id="query"
-                v-model="query"
-                class="ui input"
-                name="query"
-                type="text"
-              >
-              <button
-                :aria-label="labels.submitSearch"
-                type="submit"
-                class="ui icon button"
-              >
-                <i class="search icon" />
-              </button>
-            </div>
+        <div class="ui two column doubling stackable grid container">
+          <div class="column">
+            <form
+              class="ui form"
+              @submit.prevent="page = 1; search()"
+            >
+              <div class="ui field">
+                <div class="ui action input">
+                  <input
+                    id="query"
+                    v-model="query"
+                    class="ui input"
+                    name="query"
+                    type="text"
+                  >
+                  <button
+                    :aria-label="labels.submitSearch"
+                    type="submit"
+                    class="ui icon button"
+                  >
+                    <i class="search icon" />
+                  </button>
+                </div>
+              </div>
+            </form>
           </div>
-        </form>
+          <div class="column">
+            <radio-button
+              v-if="radioConfig"
+              class="ui right floated medium button"
+              type="custom_multiple"
+              :radio-config="radioConfig"
+            />
+          </div>
+        </div>
         <div class="ui secondary pointing menu">
           <a
-            v-for="t in types"
-            :key="t.id"
-            :class="['item', {active: type === t.id}]"
+            v-for="th in types"
+            :key="th.id"
+            :class="['item', {active: type === th.id}]"
             href=""
-            @click.prevent="type = t.id"
+            @click.prevent="type = th.id"
           >
-            {{ t.label }}
+            {{ th.label }}
             <span
-              v-if="results[t.id]"
+              v-if="results[th.id]"
               class="ui circular mini right floated label"
             >
-              {{ results[t.id].count }}</span>
+              {{ results[th.id]?.count ?? 0 }}
+            </span>
           </a>
         </div>
         <div v-if="isLoading">
@@ -126,206 +355,11 @@
 
         <pagination
           v-if="currentResults && currentResults.count > paginateBy"
-          :current="page"
+          v-model:current="page"
           :paginate-by="paginateBy"
           :total="currentResults.count"
-          @page-changed="page = $event"
         />
       </div>
     </section>
   </main>
 </template>
-
-<script>
-import RemoteSearchForm from '@/components/RemoteSearchForm'
-import ArtistCard from '@/components/audio/artist/Card'
-import AlbumCard from '@/components/audio/album/Card'
-import TrackTable from '@/components/audio/track/Table'
-import Pagination from '@/components/Pagination'
-import PlaylistCardList from '@/components/playlists/CardList'
-import RadioCard from '@/components/radios/Card'
-import TagsList from '@/components/tags/List'
-
-import axios from 'axios'
-
-export default {
-  components: {
-    RemoteSearchForm,
-    ArtistCard,
-    AlbumCard,
-    TrackTable,
-    Pagination,
-    PlaylistCardList,
-    RadioCard,
-    TagsList
-  },
-  props: {
-    initialId: { type: String, required: false, default: '' },
-    initialType: { type: String, required: false, default: '' },
-    initialQuery: { type: String, required: false, default: '' },
-    initialPage: { type: Number, required: false, default: 0 }
-  },
-  data () {
-    return {
-      query: this.initialQuery,
-      type: this.initialType,
-      page: this.initialPage,
-      results: {
-        artists: null,
-        albums: null,
-        tracks: null,
-        playlists: null,
-        radios: null,
-        tags: null,
-        podcasts: null,
-        series: null
-      },
-      isLoading: false,
-      paginateBy: 25
-    }
-  },
-  computed: {
-    labels () {
-      const submitSearch = this.$pgettext('Content/Search/Button.Label/Verb', 'Submit Search Query')
-      let title = this.$pgettext('Content/Search/Input.Label/Noun', 'Search')
-      if (this.initialId) {
-        title = this.$pgettext('Head/Fetch/Title', 'Search a remote object')
-        if (this.type === 'rss') {
-          title = this.$pgettext('Head/Fetch/Title', 'Subscribe to a podcast RSS feed')
-        }
-      }
-      return {
-        title,
-        submitSearch
-      }
-    },
-    axiosParams () {
-      const params = new URLSearchParams()
-      params.append('q', this.query)
-      params.append('page', this.page)
-      params.append('page_size', this.paginateBy)
-      if (this.currentType.contentCategory !== undefined) { params.append('content_category', this.currentType.contentCategory) };
-      if (this.currentType.includeChannels !== undefined) { params.append('include_channels', this.currentType.includeChannels) };
-      return params
-    },
-    types () {
-      return [
-        {
-          id: 'artists',
-          label: this.$pgettext('*/*/*/Noun', 'Artists'),
-          includeChannels: true,
-          contentCategory: 'music'
-        },
-        {
-          id: 'albums',
-          label: this.$pgettext('*/*/*', 'Albums'),
-          includeChannels: true,
-          contentCategory: 'music'
-        },
-        {
-          id: 'tracks',
-          label: this.$pgettext('*/*/*', 'Tracks')
-        },
-        {
-          id: 'playlists',
-          label: this.$pgettext('*/*/*', 'Playlists')
-        },
-        {
-          id: 'radios',
-          label: this.$pgettext('*/*/*', 'Radios'),
-          endpoint: 'radios/radios'
-        },
-        {
-          id: 'tags',
-          label: this.$pgettext('*/*/*', 'Tags')
-        },
-        {
-          id: 'podcasts',
-          label: this.$pgettext('*/*/*', 'Podcasts'),
-          endpoint: '/artists',
-          contentCategory: 'podcast',
-          includeChannels: true
-        },
-        {
-          id: 'series',
-          label: this.$pgettext('*/*/*', 'Series'),
-          endpoint: '/albums',
-          includeChannels: true,
-          contentCategory: 'podcast'
-        }
-      ]
-    },
-    currentType () {
-      return this.types.filter(t => {
-        return t.id === this.type
-      })[0]
-    },
-    currentResults () {
-      return this.results[this.currentType.id]
-    }
-  },
-  watch: {
-    async type () {
-      this.page = 1
-      this.updateQueryString()
-      await this.search()
-    },
-    async page () {
-      this.updateQueryString()
-      await this.search()
-    },
-    '$route.query.q': async function (v) {
-      this.query = v
-      this.updateQueryString()
-      await this.search()
-    }
-  },
-  created () {
-    this.search()
-  },
-  methods: {
-    async search () {
-      this.updateQueryString()
-      if (!this.query) {
-        this.types.forEach(t => {
-          this.results[t.id] = null
-        })
-        return
-      }
-      this.isLoading = true
-      const response = await axios.get(
-        this.currentType.endpoint || this.currentType.id,
-        { params: this.axiosParams }
-      )
-      this.results[this.currentType.id] = response.data
-      this.isLoading = false
-      this.types.forEach(t => {
-        if (t.id !== this.currentType.id) {
-          axios.get(t.endpoint || t.id, {
-            params: {
-              q: this.query,
-              page_size: 1,
-              content_category: t.contentCategory,
-              include_channels: t.includeChannels
-            }
-          }).then(response => {
-            this.results[t.id] = response.data
-          })
-        }
-      })
-    },
-    updateQueryString: function () {
-      history.pushState(
-        {},
-        null,
-        this.$route.path + '?' + new URLSearchParams(
-          {
-            q: this.query,
-            page: this.page,
-            type: this.type
-          }).toString()
-      )
-    }
-  }
-}
-</script>

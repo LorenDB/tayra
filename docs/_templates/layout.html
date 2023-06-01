@@ -2,14 +2,28 @@
 
 {% block document %}
 
-  {% if current_version and current_version.name == "develop" %}
-    <div class="admonition warning">
-      <p class="admonition-title">Warning</p>
-      <p>This documentation only applies for the development version of
-      Funkwhale! <a href="{{ vpathto('stable') }}">Visit the docs for the latest
-      release.</a></p>
-    </div>
-  {% endif %}
+{% if language is not none %}
+<div class="translation-hint">
+  <i class="fa fa-times" id="translation-closer" aria-hidden="true"></i>
+  <h1>Something wrong with the translation?</h1>
+  <p>
+    Help us to improve it on our
+    <a
+      href="https://translate.funkwhale.audio/projects/documentation/{{ pagename | replace("/", "-") }}"
+      target="_blank">translation platform</a>
+  </p>
+</div>
+{% endif %}
+
+{% if current_version and current_version.name == "develop" %}
+<div class="admonition warning">
+  <p class="admonition-title">Warning</p>
+  <p>
+    This documentation only applies for the development version of Funkwhale!
+    <a href="{{ vpathto('stable') }}">Visit the docs for the latest release.</a>
+  </p>
+</div>
+{% endif %}
 
 {{ super() }}
 

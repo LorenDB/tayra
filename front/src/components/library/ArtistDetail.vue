@@ -1,3 +1,61 @@
+<script setup lang="ts">
+import type { Artist, Track, Album, Library } from '~/types'
+import type { ContentFilter } from '~/store/moderation'
+
+import { ref, computed, reactive } from 'vue'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+import LibraryWidget from '~/components/federation/LibraryWidget.vue'
+import TrackTable from '~/components/audio/track/Table.vue'
+import AlbumCard from '~/components/audio/album/Card.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+
+interface Events {
+  (e: 'libraries-loaded', libraries: Library[]): void
+}
+
+interface Props {
+  object: Artist
+  tracks: Track[]
+  albums: Album[]
+  isLoadingAlbums: boolean
+  nextTracksUrl?: string | null
+  nextAlbumsUrl?: string | null
+}
+
+const emit = defineEmits<Events>()
+const props = withDefaults(defineProps<Props>(), {
+  nextTracksUrl: null,
+  nextAlbumsUrl: null
+})
+
+const store = useStore()
+
+const additionalAlbums = reactive([] as Album[])
+const contentFilter = computed(() => store.getters['moderation/artistFilters']().find((filter: ContentFilter) => filter.target.id === props.object.id))
+const allAlbums = computed(() => [...props.albums, ...additionalAlbums])
+
+const isLoadingMoreAlbums = ref(false)
+const loadMoreAlbumsUrl = ref(props.nextAlbumsUrl)
+const loadMoreAlbums = async () => {
+  if (loadMoreAlbumsUrl.value === null) return
+  isLoadingMoreAlbums.value = true
+
+  try {
+    const response = await axios.get(loadMoreAlbumsUrl.value)
+    additionalAlbums.push(...additionalAlbums.concat(response.data.results))
+    loadMoreAlbumsUrl.value = response.data.next
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoadingMoreAlbums.value = false
+}
+</script>
+
 <template>
   <div v-if="object">
     <div
@@ -7,25 +65,19 @@
       <div class="ui hidden divider" />
       <div class="ui message">
         <p>
-          <translate translate-context="Content/Artist/Paragraph">
-            You are currently hiding content related to this artist.
-          </translate>
+          {{ $t('components.library.ArtistDetail.message.filter') }}
         </p>
         <router-link
           class="right floated"
           :to="{name: 'settings'}"
         >
-          <translate translate-context="Content/Moderation/Link">
-            Review my filters
-          </translate>
+          {{ $t('components.library.ArtistDetail.link.filter') }}
         </router-link>
         <button
           class="ui basic tiny button"
           @click="$store.dispatch('moderation/deleteContentFilter', contentFilter.uuid)"
         >
-          <translate translate-context="Content/Moderation/Button.Label">
-            Remove filter
-          </translate>
+          {{ $t('components.library.ArtistDetail.button.filter') }}
         </button>
       </div>
     </div>
@@ -40,9 +92,7 @@
       class="ui vertical stripe segment"
     >
       <h2>
-        <translate translate-context="Content/Artist/Title">
-          Albums by this artist
-        </translate>
+        {{ $t('components.library.ArtistDetail.header.album') }}
       </h2>
       <div class="ui cards app-cards">
         <album-card
@@ -53,13 +103,11 @@
       </div>
       <div class="ui hidden divider" />
       <button
-        v-if="nextAlbumsUrl && loadMoreAlbumsUrl"
+        v-if="loadMoreAlbumsUrl !== null"
         :class="['ui', {loading: isLoadingMoreAlbums}, 'button']"
-        @click="loadMoreAlbums(loadMoreAlbumsUrl)"
+        @click="loadMoreAlbums()"
       >
-        <translate translate-context="Content/*/Button.Label">
-          Load more…
-        </translate>
+        {{ $t('components.library.ArtistDetail.button.more') }}
       </button>
     </section>
     <section
@@ -72,11 +120,9 @@
         :track-only="true"
         :tracks="tracks.slice(0,5)"
       >
-        <template slot="header">
+        <template #header>
           <h2>
-            <translate translate-context="Content/Artist/Title">
-              New tracks by this artist
-            </translate>
+            {{ $t('components.library.ArtistDetail.header.track') }}
           </h2>
           <div class="ui hidden divider" />
         </template>
@@ -84,74 +130,14 @@
     </section>
     <section class="ui vertical stripe segment">
       <h2>
-        <translate translate-context="Content/*/Title/Noun">
-          User libraries
-        </translate>
+        {{ $t('components.library.ArtistDetail.header.library') }}
       </h2>
       <library-widget
         :url="'artists/' + object.id + '/libraries/'"
-        @loaded="$emit('libraries-loaded', $event)"
+        @loaded="emit('libraries-loaded', $event)"
       >
-        <translate
-          slot="subtitle"
-          translate-context="Content/Artist/Paragraph"
-        >
-          This artist is present in the following libraries:
-        </translate>
+        {{ $t('components.library.ArtistDetail.description.library') }}
       </library-widget>
     </section>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import AlbumCard from '@/components/audio/album/Card'
-import TrackTable from '@/components/audio/track/Table'
-import LibraryWidget from '@/components/federation/LibraryWidget'
-
-export default {
-  components: {
-    AlbumCard,
-    TrackTable,
-    LibraryWidget
-  },
-  props: {
-    object: { type: Object, required: true },
-    tracks: { type: Array, required: true },
-    albums: { type: Array, required: true },
-    isLoadingAlbums: { type: Boolean, required: true },
-    nextTracksUrl: { type: String, default: null },
-    nextAlbumsUrl: { type: String, default: null }
-  },
-  data () {
-    return {
-      loadMoreAlbumsUrl: this.nextAlbumsUrl,
-      additionalAlbums: [],
-      isLoadingMoreAlbums: false
-    }
-  },
-  computed: {
-    contentFilter () {
-      return this.$store.getters['moderation/artistFilters']().filter((e) => {
-        return e.target.id === this.object.id
-      })[0]
-    },
-    allAlbums () {
-      return this.albums.concat(this.additionalAlbums)
-    }
-  },
-  methods: {
-    loadMoreAlbums (url) {
-      const self = this
-      self.isLoadingMoreAlbums = true
-      axios.get(url).then((response) => {
-        self.additionalAlbums = self.additionalAlbums.concat(response.data.results)
-        self.loadMoreAlbumsUrl = response.data.next
-        self.isLoadingMoreAlbums = false
-      }, () => {
-        self.isLoadingMoreAlbums = false
-      })
-    }
-  }
-}
-</script>

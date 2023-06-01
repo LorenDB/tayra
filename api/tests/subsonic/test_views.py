@@ -18,7 +18,7 @@ def render_json(data):
 
 
 def test_render_content_json(db, api_client):
-    url = reverse("api:subsonic-ping")
+    url = reverse("api:subsonic:subsonic-ping")
     response = api_client.get(url, {"f": "json"})
 
     expected = {
@@ -33,7 +33,7 @@ def test_render_content_json(db, api_client):
 
 @pytest.mark.parametrize("f", ["xml", "json"])
 def test_exception_wrong_credentials(f, db, api_client):
-    url = reverse("api:subsonic-ping")
+    url = reverse("api:subsonic:subsonic-ping")
     response = api_client.get(url, {"f": f, "u": "yolo"})
 
     expected = {
@@ -46,7 +46,7 @@ def test_exception_wrong_credentials(f, db, api_client):
 
 @pytest.mark.parametrize("f", ["json"])
 def test_exception_missing_credentials(f, db, api_client):
-    url = reverse("api:subsonic-get_artists")
+    url = reverse("api:subsonic:subsonic-get_artists")
     response = api_client.get(url)
 
     expected = {
@@ -60,14 +60,14 @@ def test_exception_missing_credentials(f, db, api_client):
 
 def test_disabled_subsonic(preferences, api_client):
     preferences["subsonic__enabled"] = False
-    url = reverse("api:subsonic-ping")
+    url = reverse("api:subsonic:subsonic-ping")
     response = api_client.get(url)
     assert response.status_code == 405
 
 
 @pytest.mark.parametrize("f", ["xml", "json"])
 def test_get_license(f, db, logged_in_api_client, mocker):
-    url = reverse("api:subsonic-get_license")
+    url = reverse("api:subsonic:subsonic-get_license")
     assert url.endswith("getLicense") is True
     now = timezone.now()
     mocker.patch("django.utils.timezone.now", return_value=now)
@@ -89,7 +89,7 @@ def test_get_license(f, db, logged_in_api_client, mocker):
 
 @pytest.mark.parametrize("f", ["xml", "json"])
 def test_ping(f, db, api_client):
-    url = reverse("api:subsonic-ping")
+    url = reverse("api:subsonic:subsonic-ping")
     response = api_client.get(url, {"f": f})
 
     expected = {"status": "ok", "version": "1.16.0"}
@@ -105,7 +105,7 @@ def test_get_artists(
         user=logged_in_api_client.user,
         target_artist=factories["music.Artist"](playable=True),
     )
-    url = reverse("api:subsonic-get_artists")
+    url = reverse("api:subsonic:subsonic-get_artists")
     assert url.endswith("getArtists") is True
     factories["music.Artist"].create_batch(size=3, playable=True)
     playable_by = mocker.spy(music_models.ArtistQuerySet, "playable_by")
@@ -132,7 +132,7 @@ def test_get_artists(
 def test_get_artist(
     f, db, logged_in_api_client, factories, mocker, queryset_equal_queries
 ):
-    url = reverse("api:subsonic-get_artist")
+    url = reverse("api:subsonic:subsonic-get_artist")
     assert url.endswith("getArtist") is True
     artist = factories["music.Artist"](playable=True)
     factories["music.Album"].create_batch(size=3, artist=artist, playable=True)
@@ -148,7 +148,7 @@ def test_get_artist(
 
 @pytest.mark.parametrize("f", ["json"])
 def test_get_invalid_artist(f, db, logged_in_api_client, factories):
-    url = reverse("api:subsonic-get_artist")
+    url = reverse("api:subsonic:subsonic-get_artist")
     assert url.endswith("getArtist") is True
     expected = {"error": {"code": 0, "message": 'For input string "asdf"'}}
     response = logged_in_api_client.get(url, {"id": "asdf"})
@@ -161,7 +161,7 @@ def test_get_invalid_artist(f, db, logged_in_api_client, factories):
 def test_get_artist_info2(
     f, db, logged_in_api_client, factories, mocker, queryset_equal_queries
 ):
-    url = reverse("api:subsonic-get_artist_info2")
+    url = reverse("api:subsonic:subsonic-get_artist_info2")
     assert url.endswith("getArtistInfo2") is True
     artist = factories["music.Artist"](playable=True)
     playable_by = mocker.spy(music_models.ArtistQuerySet, "playable_by")
@@ -179,7 +179,7 @@ def test_get_artist_info2(
 def test_get_album(
     f, db, logged_in_api_client, factories, mocker, queryset_equal_queries
 ):
-    url = reverse("api:subsonic-get_album")
+    url = reverse("api:subsonic:subsonic-get_album")
     assert url.endswith("getAlbum") is True
     artist = factories["music.Artist"]()
     album = (
@@ -204,7 +204,7 @@ def test_get_album(
 def test_get_song(
     f, db, logged_in_api_client, factories, mocker, queryset_equal_queries
 ):
-    url = reverse("api:subsonic-get_song")
+    url = reverse("api:subsonic:subsonic-get_song")
     assert url.endswith("getSong") is True
     artist = factories["music.Artist"]()
     album = factories["music.Album"](artist=artist)
@@ -227,7 +227,7 @@ def test_stream(
     # Even with this settings set to false, we proxy media in the subsonic API
     # Because clients don't expect a 302 redirect
     settings.PROXY_MEDIA = False
-    url = reverse("api:subsonic-stream")
+    url = reverse("api:subsonic:subsonic-stream")
     mocked_serve = mocker.spy(music_views, "handle_serve")
     assert url.endswith("stream") is True
     upload = factories["music.Upload"](playable=True)
@@ -248,7 +248,7 @@ def test_stream(
 
 @pytest.mark.parametrize("format,expected", [("mp3", "mp3"), ("raw", None)])
 def test_stream_format(format, expected, logged_in_api_client, factories, mocker):
-    url = reverse("api:subsonic-stream")
+    url = reverse("api:subsonic:subsonic-stream")
     mocked_serve = mocker.patch.object(
         music_views, "handle_serve", return_value=Response()
     )
@@ -299,7 +299,7 @@ def test_stream_transcode(
     if format:
         params["format"] = format
     settings.SUBSONIC_DEFAULT_TRANSCODING_FORMAT = default_transcoding_format
-    url = reverse("api:subsonic-stream")
+    url = reverse("api:subsonic:subsonic-stream")
     mocked_serve = mocker.patch.object(
         music_views, "handle_serve", return_value=Response()
     )
@@ -318,7 +318,7 @@ def test_stream_transcode(
 
 @pytest.mark.parametrize("f", ["json"])
 def test_star(f, db, logged_in_api_client, factories):
-    url = reverse("api:subsonic-star")
+    url = reverse("api:subsonic:subsonic-star")
     assert url.endswith("star") is True
     track = factories["music.Track"]()
     response = logged_in_api_client.get(url, {"f": f, "id": track.pk})
@@ -332,7 +332,7 @@ def test_star(f, db, logged_in_api_client, factories):
 
 @pytest.mark.parametrize("f", ["json"])
 def test_unstar(f, db, logged_in_api_client, factories):
-    url = reverse("api:subsonic-unstar")
+    url = reverse("api:subsonic:subsonic-unstar")
     assert url.endswith("unstar") is True
     track = factories["music.Track"]()
     factories["favorites.TrackFavorite"](track=track, user=logged_in_api_client.user)
@@ -345,7 +345,7 @@ def test_unstar(f, db, logged_in_api_client, factories):
 
 @pytest.mark.parametrize("f", ["json"])
 def test_get_starred2(f, db, logged_in_api_client, factories):
-    url = reverse("api:subsonic-get_starred2")
+    url = reverse("api:subsonic:subsonic-get_starred2")
     assert url.endswith("getStarred2") is True
     track = factories["music.Track"]()
     favorite = factories["favorites.TrackFavorite"](
@@ -361,7 +361,7 @@ def test_get_starred2(f, db, logged_in_api_client, factories):
 
 @pytest.mark.parametrize("f", ["json"])
 def test_get_random_songs(f, db, logged_in_api_client, factories, mocker):
-    url = reverse("api:subsonic-get_random_songs")
+    url = reverse("api:subsonic:subsonic-get_random_songs")
     assert url.endswith("getRandomSongs") is True
     track1 = factories["music.Track"]()
     track2 = factories["music.Track"]()
@@ -384,7 +384,7 @@ def test_get_random_songs(f, db, logged_in_api_client, factories, mocker):
 
 @pytest.mark.parametrize("f", ["json"])
 def test_get_genres(f, db, logged_in_api_client, factories, mocker):
-    url = reverse("api:subsonic-get_genres")
+    url = reverse("api:subsonic:subsonic-get_genres")
     assert url.endswith("getGenres") is True
     tag1 = factories["tags.Tag"](name="Pop")
     tag2 = factories["tags.Tag"](name="Rock")
@@ -406,7 +406,7 @@ def test_get_genres(f, db, logged_in_api_client, factories, mocker):
 
 @pytest.mark.parametrize("f", ["json"])
 def test_get_starred(f, db, logged_in_api_client, factories):
-    url = reverse("api:subsonic-get_starred")
+    url = reverse("api:subsonic:subsonic-get_starred")
     assert url.endswith("getStarred") is True
     track = factories["music.Track"]()
     favorite = factories["favorites.TrackFavorite"](
@@ -424,7 +424,7 @@ def test_get_starred(f, db, logged_in_api_client, factories):
 def test_get_album_list2(
     f, db, logged_in_api_client, factories, mocker, queryset_equal_queries
 ):
-    url = reverse("api:subsonic-get_album_list2")
+    url = reverse("api:subsonic:subsonic-get_album_list2")
     assert url.endswith("getAlbumList2") is True
     album1 = factories["music.Album"](playable=True).__class__.objects.with_duration()[
         0
@@ -444,7 +444,7 @@ def test_get_album_list2(
 
 
 def test_get_album_list2_recent(db, logged_in_api_client, factories):
-    url = reverse("api:subsonic-get_album_list2")
+    url = reverse("api:subsonic:subsonic-get_album_list2")
     assert url.endswith("getAlbumList2") is True
     factories["music.Album"](playable=True, release_date=None)
     album2 = factories["music.Album"](playable=True).__class__.objects.with_duration()[
@@ -464,7 +464,7 @@ def test_get_album_list2_recent(db, logged_in_api_client, factories):
 
 @pytest.mark.parametrize("f", ["json"])
 def test_get_album_list2_pagination(f, db, logged_in_api_client, factories):
-    url = reverse("api:subsonic-get_album_list2")
+    url = reverse("api:subsonic:subsonic-get_album_list2")
     assert url.endswith("getAlbumList2") is True
     album1 = (
         factories["music.Album"](playable=True)
@@ -484,7 +484,7 @@ def test_get_album_list2_pagination(f, db, logged_in_api_client, factories):
 
 @pytest.mark.parametrize("f", ["json"])
 def test_get_album_list2_by_genre(f, db, logged_in_api_client, factories):
-    url = reverse("api:subsonic-get_album_list2")
+    url = reverse("api:subsonic:subsonic-get_album_list2")
     assert url.endswith("getAlbumList2") is True
     album1 = factories["music.Album"](
         artist__name="Artist1", playable=True, set_tags=["Rock"]
@@ -519,7 +519,7 @@ def test_get_album_list2_by_year(params, expected, db, logged_in_api_client, fac
         ).__class__.objects.with_duration()[i]
         for i in range(5)
     ]
-    url = reverse("api:subsonic-get_album_list2")
+    url = reverse("api:subsonic:subsonic-get_album_list2")
     base_params = {"f": "json"}
     base_params.update(params)
     response = logged_in_api_client.get(url, base_params)
@@ -538,7 +538,7 @@ def test_get_album_list2_by_year(params, expected, db, logged_in_api_client, fac
     ["set_tags", "artist__set_tags", "album__set_tags", "album__artist__set_tags"],
 )
 def test_get_songs_by_genre(f, tags_field, db, logged_in_api_client, factories):
-    url = reverse("api:subsonic-get_songs_by_genre")
+    url = reverse("api:subsonic:subsonic-get_songs_by_genre")
     assert url.endswith("getSongsByGenre") is True
     track1 = factories["music.Track"](playable=True, **{tags_field: ["Rock"]})
     track2 = factories["music.Track"](playable=True, **{tags_field: ["Rock"]})
@@ -555,7 +555,7 @@ def test_get_songs_by_genre(f, tags_field, db, logged_in_api_client, factories):
 
 
 def test_get_songs_by_genre_offset(logged_in_api_client, factories):
-    url = reverse("api:subsonic-get_songs_by_genre")
+    url = reverse("api:subsonic:subsonic-get_songs_by_genre")
     assert url.endswith("getSongsByGenre") is True
     track1 = factories["music.Track"](playable=True, set_tags=["Rock"])
     factories["music.Track"](playable=True, set_tags=["Rock"])
@@ -573,7 +573,7 @@ def test_get_songs_by_genre_offset(logged_in_api_client, factories):
 
 @pytest.mark.parametrize("f", ["json"])
 def test_search3(f, db, logged_in_api_client, factories):
-    url = reverse("api:subsonic-search3")
+    url = reverse("api:subsonic:subsonic-search3")
     assert url.endswith("search3") is True
     artist = factories["music.Artist"](name="testvalue", playable=True)
     factories["music.Artist"](name="nope")
@@ -606,7 +606,7 @@ def test_search3(f, db, logged_in_api_client, factories):
 
 @pytest.mark.parametrize("f", ["json"])
 def test_get_playlists(f, db, logged_in_api_client, factories):
-    url = reverse("api:subsonic-get_playlists")
+    url = reverse("api:subsonic:subsonic-get_playlists")
     assert url.endswith("getPlaylists") is True
     playlist1 = factories["playlists.PlaylistTrack"](
         playlist__user=logged_in_api_client.user
@@ -637,7 +637,7 @@ def test_get_playlists(f, db, logged_in_api_client, factories):
 
 @pytest.mark.parametrize("f", ["json"])
 def test_get_playlist(f, db, logged_in_api_client, factories):
-    url = reverse("api:subsonic-get_playlist")
+    url = reverse("api:subsonic:subsonic-get_playlist")
     assert url.endswith("getPlaylist") is True
     playlist = factories["playlists.PlaylistTrack"](
         playlist__user=logged_in_api_client.user
@@ -653,7 +653,7 @@ def test_get_playlist(f, db, logged_in_api_client, factories):
 
 @pytest.mark.parametrize("f", ["json"])
 def test_update_playlist(f, db, logged_in_api_client, factories):
-    url = reverse("api:subsonic-update_playlist")
+    url = reverse("api:subsonic:subsonic-update_playlist")
     assert url.endswith("updatePlaylist") is True
     playlist = factories["playlists.Playlist"](user=logged_in_api_client.user)
     factories["playlists.PlaylistTrack"](index=0, playlist=playlist)
@@ -677,7 +677,7 @@ def test_update_playlist(f, db, logged_in_api_client, factories):
 
 @pytest.mark.parametrize("f", ["json"])
 def test_delete_playlist(f, db, logged_in_api_client, factories):
-    url = reverse("api:subsonic-delete_playlist")
+    url = reverse("api:subsonic:subsonic-delete_playlist")
     assert url.endswith("deletePlaylist") is True
     playlist = factories["playlists.Playlist"](user=logged_in_api_client.user)
     response = logged_in_api_client.get(url, {"f": f, "id": playlist.pk})
@@ -688,7 +688,7 @@ def test_delete_playlist(f, db, logged_in_api_client, factories):
 
 @pytest.mark.parametrize("f", ["json"])
 def test_create_playlist(f, db, logged_in_api_client, factories):
-    url = reverse("api:subsonic-create_playlist")
+    url = reverse("api:subsonic:subsonic-create_playlist")
     assert url.endswith("createPlaylist") is True
     track1 = factories["music.Track"]()
     track2 = factories["music.Track"]()
@@ -710,7 +710,7 @@ def test_create_playlist(f, db, logged_in_api_client, factories):
 
 @pytest.mark.parametrize("f", ["json"])
 def test_create_playlist_with_update(f, db, logged_in_api_client, factories):
-    url = reverse("api:subsonic-create_playlist")
+    url = reverse("api:subsonic:subsonic-create_playlist")
     assert url.endswith("createPlaylist") is True
     playlist = factories["playlists.Playlist"](user=logged_in_api_client.user)
     factories["playlists.PlaylistTrack"](index=0, playlist=playlist)
@@ -730,7 +730,7 @@ def test_create_playlist_with_update(f, db, logged_in_api_client, factories):
 
 @pytest.mark.parametrize("f", ["json"])
 def test_get_music_folders(f, db, logged_in_api_client, factories):
-    url = reverse("api:subsonic-get_music_folders")
+    url = reverse("api:subsonic:subsonic-get_music_folders")
     assert url.endswith("getMusicFolders") is True
     response = logged_in_api_client.get(url, {"f": f})
     assert response.status_code == 200
@@ -751,7 +751,7 @@ def test_get_indexes(
         moderation_filters.USER_FILTER_CONFIG["ARTIST"], logged_in_api_client.user
     )
 
-    url = reverse("api:subsonic-get_indexes")
+    url = reverse("api:subsonic:subsonic-get_indexes")
     assert url.endswith("getIndexes") is True
     factories["music.Artist"].create_batch(size=3, playable=True)
     expected = {
@@ -772,10 +772,10 @@ def test_get_indexes(
 
 
 def test_get_cover_art_album(factories, logged_in_api_client):
-    url = reverse("api:subsonic-get_cover_art")
+    url = reverse("api:subsonic:subsonic-get_cover_art")
     assert url.endswith("getCoverArt") is True
     album = factories["music.Album"](with_cover=True)
-    response = logged_in_api_client.get(url, {"id": "al-{}".format(album.pk)})
+    response = logged_in_api_client.get(url, {"id": f"al-{album.pk}"})
 
     assert response.status_code == 200
     assert response["Content-Type"] == ""
@@ -786,9 +786,9 @@ def test_get_cover_art_album(factories, logged_in_api_client):
 
 def test_get_cover_art_attachment(factories, logged_in_api_client):
     attachment = factories["common.Attachment"]()
-    url = reverse("api:subsonic-get_cover_art")
+    url = reverse("api:subsonic:subsonic-get_cover_art")
     assert url.endswith("getCoverArt") is True
-    response = logged_in_api_client.get(url, {"id": "at-{}".format(attachment.uuid)})
+    response = logged_in_api_client.get(url, {"id": f"at-{attachment.uuid}"})
 
     assert response.status_code == 200
     assert response["Content-Type"] == ""
@@ -799,7 +799,7 @@ def test_get_cover_art_attachment(factories, logged_in_api_client):
 
 def test_get_avatar(factories, logged_in_api_client):
     user = factories["users.User"]()
-    url = reverse("api:subsonic-get_avatar")
+    url = reverse("api:subsonic:subsonic-get_avatar")
     assert url.endswith("getAvatar") is True
     response = logged_in_api_client.get(url, {"username": user.username})
 
@@ -813,7 +813,7 @@ def test_get_avatar(factories, logged_in_api_client):
 def test_scrobble(factories, logged_in_api_client):
     upload = factories["music.Upload"]()
     track = upload.track
-    url = reverse("api:subsonic-scrobble")
+    url = reverse("api:subsonic:subsonic-scrobble")
     assert url.endswith("scrobble") is True
     response = logged_in_api_client.get(url, {"id": track.pk, "submission": True})
 
@@ -825,7 +825,7 @@ def test_scrobble(factories, logged_in_api_client):
 
 @pytest.mark.parametrize("f", ["json"])
 def test_get_user(f, db, logged_in_api_client, factories):
-    url = reverse("api:subsonic-get_user")
+    url = reverse("api:subsonic:subsonic-get_user")
     assert url.endswith("getUser") is True
     response = logged_in_api_client.get(
         url, {"f": f, "username": logged_in_api_client.user.username}
@@ -862,7 +862,7 @@ def test_create_podcast_channel(logged_in_api_client, factories, mocker):
         return_value=(channel, []),
     )
     actor = logged_in_api_client.user.create_actor()
-    url = reverse("api:subsonic-create_podcast_channel")
+    url = reverse("api:subsonic:subsonic-create_podcast_channel")
     assert url.endswith("createPodcastChannel") is True
     response = logged_in_api_client.get(url, {"f": "json", "url": rss_url})
     assert response.status_code == 200
@@ -878,7 +878,7 @@ def test_delete_podcast_channel(logged_in_api_client, factories, mocker):
     channel = factories["audio.Channel"](external=True)
     subscription = factories["federation.Follow"](actor=actor, target=channel.actor)
     other_subscription = factories["federation.Follow"](target=channel.actor)
-    url = reverse("api:subsonic-delete_podcast_channel")
+    url = reverse("api:subsonic:subsonic-delete_podcast_channel")
     assert url.endswith("deletePodcastChannel") is True
     response = logged_in_api_client.get(url, {"f": "json", "id": channel.uuid})
     assert response.status_code == 200
@@ -911,7 +911,7 @@ def test_get_podcasts(logged_in_api_client, factories, mocker):
     factories["music.Upload"](import_status="pending", track__artist=channel.artist)
     factories["audio.Channel"](external=True)
     factories["federation.Follow"]()
-    url = reverse("api:subsonic-get_podcasts")
+    url = reverse("api:subsonic:subsonic-get_podcasts")
     assert url.endswith("getPodcasts") is True
     response = logged_in_api_client.get(url, {"f": "json"})
     assert response.status_code == 200
@@ -946,7 +946,7 @@ def test_get_podcasts_by_id(logged_in_api_client, factories, mocker):
     )
     factories["federation.Follow"](actor=actor, target=channel1.actor, approved=True)
     factories["federation.Follow"](actor=actor, target=channel2.actor, approved=True)
-    url = reverse("api:subsonic-get_podcasts")
+    url = reverse("api:subsonic:subsonic-get_podcasts")
     assert url.endswith("getPodcasts") is True
     response = logged_in_api_client.get(url, {"f": "json", "id": channel1.uuid})
     assert response.status_code == 200
@@ -975,7 +975,7 @@ def test_get_newest_podcasts(logged_in_api_client, factories, mocker):
         duration=43,
     )
     factories["federation.Follow"](actor=actor, target=channel.actor, approved=True)
-    url = reverse("api:subsonic-get_newest_podcasts")
+    url = reverse("api:subsonic:subsonic-get_newest_podcasts")
     assert url.endswith("getNewestPodcasts") is True
     response = logged_in_api_client.get(url, {"f": "json"})
     assert response.status_code == 200

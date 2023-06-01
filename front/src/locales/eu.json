@@ -1,0 +1,4502 @@
+{
+  "components": {
+    "auth": {
+      "Authorize": {
+        "header": {
+          "access": "{ app }-(e)k zure Funkwhale kontura sartu nahi du",
+          "authorize": "Baimendu hirugarrenen aplikazioa",
+          "authorizeFailure": "Errorea aplikazioa baimentzerakoan",
+          "fetchFailure": "Errorea aplikazioaren datuak eskuratzerakoan",
+          "allScopes": "Sarbide osoa",
+          "readOnly": "Irakurtzeko soilik",
+          "writeOnly": "Idazteko soilik"
+        },
+        "title": "Baimendu aplikazioa",
+        "button": {
+          "authorize": "Baimendu { app }"
+        },
+        "help": {
+          "pasteCode": "Kopiatu eta itsatsi honako kodea aplikazioan:",
+          "redirect": "{ 0 }(e)ra birbideratua izango zara",
+          "copyCode": "Aplikazioan kopiatu eta itsasteko kodea erakutsiko zaizu."
+        },
+        "message": {
+          "unknownPermissions": "Aplikazioak ondorengo baimen ezezagunak ere eskatzen ari da:"
+        }
+      },
+      "SubsonicTokenForm": {
+        "message": {
+          "accessDisabled": "Sarbidea desgaituta",
+          "passwordUpdated": "Pasahitza eguneratuta",
+          "unavailable": "Subsonic APIa ez dago erabilgarri Funkwhale instantzia honetan."
+        },
+        "button": {
+          "confirmDisable": "Sarbidea ezgaitu",
+          "disable": "Subsonic sarbidea ezgaitu",
+          "newPassword": "Eskatu pasahitz berria",
+          "confirmNewPassword": "Eskatu pasahitza"
+        },
+        "modal": {
+          "disableSubsonic": {
+            "header": "Subsonic API sarbidea ezgaitu?",
+            "content": {
+              "warning": "Honek guztiz desgaituko du Subsonic APIrako sarbidea kontu honetatik."
+            }
+          },
+          "newPassword": {
+            "header": "Eskatu Subsonic API pasahitz berria?",
+            "content": {
+              "warning": "Honek uneko pasahitza erabiltzen duten gailuetako zure saioak amaituko ditu."
+            }
+          }
+        },
+        "link": {
+          "apps": "Ezagutu nola erabili Funkwhale beste aplikazio batzuetatik"
+        },
+        "header": {
+          "error": "Errorea",
+          "subsonic": "Subsonic API pasahitza"
+        },
+        "description": {
+          "subsonic": {
+            "paragraph1": "Funkwhale Subsonic APIa darabilten beste musika erreproduzitzaileekin bateragarria da.",
+            "paragraph3": "Hala ere, bezero horietatik Funkwhalera sarbidea lortzeko behean ezar dezakezun aparteko pasahitz bat behar duzu.",
+            "paragraph2": "Zure zerrendak eta musika lineaz kanpo gozatzeko erabil ditzakezu, adibidez, zure mugikor edo tabletan."
+          }
+        },
+        "label": {
+          "subsonicField": "Zure Subsonic API pasahitza"
+        }
+      },
+      "ApplicationEdit": {
+        "label": {
+          "accessToken": "Sarbide tokena",
+          "appId": "Aplikazioaren IDa",
+          "appSecret": "Aplikazioaren sekretua"
+        },
+        "header": {
+          "appDetails": "Aplikazioaren xehetasunak",
+          "editApp": "Editatu aplikazioa"
+        },
+        "help": {
+          "appDetails": "Aplikazioaren IDa eta sekretua balio sentikorrak dira eta pasahitz gisa tratatu behar dira. Ez partekatu beste inorrekin."
+        },
+        "link": {
+          "settings": "Itzuli ezarpenetara"
+        },
+        "title": "Editatu aplikazioa",
+        "button": {
+          "regenerateToken": "Birsortu tokena"
+        }
+      },
+      "Settings": {
+        "title": "Kontuaren ezarpenak",
+        "header": {
+          "accountSettings": "Kontuaren ezarpenak",
+          "authorizedApps": "Baimendutako aplikazioak",
+          "avatar": "Irudia",
+          "changeEmail": "Aldatu nire eposta helbidea",
+          "changePassword": "Nire pasahitza aldatu",
+          "contentFilters": "Edukien iragazkiak",
+          "deleteAccount": "Ezabatu nire kontua",
+          "hiddenArtists": "Ezkutuko artistak",
+          "plugins": "Pluginak",
+          "settingsUpdated": "Ezarpenak eguneratuta",
+          "emailFailure": "Ezin dugu zure eposta helbidea aldatu",
+          "accountFailure": "Ezin dugu zure kontua ezabatu",
+          "noApps": "Ez daukazu kontuari konektatutako aplikaziorik.",
+          "noPersonalApps": "Ez daukazu aplikaziorik erregistratuta oraindik.",
+          "yourApps": "Zure aplikazioak",
+          "avatarFailure": "Zure avatarra ezin da gorde",
+          "passwordFailure": "Zure pasahitza ezin da aldatu",
+          "updateFailure": "Zure ezarpenak ezin dira eguneratu"
+        },
+        "table": {
+          "authorizedApps": {
+            "header": {
+              "application": "Aplikazioa",
+              "permissions": "Baimenak"
+            }
+          },
+          "yourApps": {
+            "header": {
+              "application": "Aplikazioa",
+              "creationDate": "Sortze data",
+              "scopes": "Esparruak"
+            }
+          },
+          "artists": {
+            "header": {
+              "creationDate": "Sortze data",
+              "name": "Izena"
+            }
+          }
+        },
+        "label": {
+          "avatar": "Irudia",
+          "currentPassword": "Uneko pasahitza",
+          "newEmail": "Eposta helbide berria",
+          "newPassword": "Pasahitz berria",
+          "password": "Pasahitza"
+        },
+        "button": {
+          "password": "Pasahitza aldatu",
+          "delete": "Ezabatu",
+          "deleteAccountConfirm": "Ezabatu nire kontua",
+          "deleteAccount": "Ezabatu nire kontua…",
+          "disableSubsonic": "Sarbidea ezgaitu",
+          "edit": "Editatu",
+          "refresh": "Freskatu",
+          "remove": "Kendu",
+          "removeApp": "Kendu aplikazioa",
+          "revoke": "Ezeztatu",
+          "revokeAccess": "Ezeztatu sarbidea",
+          "update": "Eguneratu",
+          "updateSettings": "Eguneratu ezarpenak"
+        },
+        "description": {
+          "changeEmail": "Aldatu zure kontuarekin lotutako eposta helbidea. Berrespena bidaliko dizugu helbide berrira.",
+          "changePassword": {
+            "paragraph1": "Zure pasahitza aldatzeak Subsonic APIko pasahitza ere aldatuko du, baten bat eskatuta baduzu.",
+            "paragraph2": "Pasahitz hau erabiltzen duten bezeroetan pasahitza eguneratu beharko duzu."
+          },
+          "contentFilters": "Edukiaren iragazkiek zerbitzuan ikusi nahi ez duzun edukia ezkutatzen lagunduko dizute.",
+          "authorizedApps": "Hau da zure kontuaren datuetara sarbidea duten aplikazioen zerrenda.",
+          "yourApps": "Hau da erregistratu dituzun aplikazioen zerrenda.",
+          "plugins": "Erabili pluginak Funkwhale hedatu eta ezaugarri gehigarriak lortzeko.",
+          "deleteAccount": "Beheko formularioa erabiliz zure kontua eta erlazionatutako datu guztiak ezabatu ditzakezu behin betiko eta atzera bueltarik gabe. Berresteko eskatuko zaizu."
+        },
+        "modal": {
+          "changePassword": {
+            "header": "Zure pasahitza aldatu?",
+            "content": {
+              "warning": "Pasahitza aldatzeak hurrengo ondorioak izango ditu:",
+              "logout": "Saio hau amaituko zaizu eta berriarekin hasi beharko duzu",
+              "subsonic": "Zure Subsonic pasahitza ausazko pasahitz batekin ordezkatuko da, Subsonic pasahitz zaharra erabiltzen duten gailuetan saioa amaituz"
+            }
+          },
+          "deleteAccount": {
+            "header": "Zure kontua ezabatu nahi duzu?",
+            "content": {
+              "warning": "Hau ezin da desegin eta datuak behin betiko ezabatuko ditu gure zerbitzarietatik. Berehala zure saioa amaitu da."
+            }
+          },
+          "deleteApp": {
+            "header": "\"{ application }\" aplikazioa kendu?",
+            "content": {
+              "warning": "Honek behin betiko ezabatuko ditu aplikazioa eta erlazionatutako token guztiak."
+            }
+          },
+          "revokeApp": {
+            "header": "\"{ application }\" aplikazioaren sarbidea ezeztatu?",
+            "content": {
+              "warning": "Honek eragotzi egingo dio aplikazio honi zerbitzura zure izenean sartzea."
+            }
+          }
+        },
+        "help": {
+          "noApps": "Hirugarrengoen aplikazioei zure datuetarako sarbidea baimentzen badiezu, aplikazio horiek hemen zerrendatuko dira.",
+          "changePassword": "Mesedez egiaztatu bi aldiz pasahitza zuzena dela",
+          "noPersonalApps": "Erregistratu bat Funkwhale hirugarrenen aplikazioekin integratzeko."
+        },
+        "link": {
+          "managePlugins": "Kudeatu pluginak",
+          "newApp": "Erregistratu aplikazio berri bat"
+        },
+        "warning": {
+          "deleteAccount": "Zure kontua gure zerbitzarietatik ezabatuko da minutu batzuk barru. Zure datuen kopia eduki dezaketen beste zerbitzariei ere ezabatzeko jakinaraziko diegu. Kontuan izan zerbitzari batzuk lineaz kanpo egon daitezkeela edo ez dutela eskaera osatu nahiko."
+        },
+        "message": {
+          "currentEmail": "Zure uneko eposta helbidea { email } da.",
+          "confirmDelete": "Zure ezabatze eskaera bidali da, zure kontua eta edukia laster ezabatuko dira"
+        }
+      },
+      "Logout": {
+        "header": {
+          "confirm": "Ziur al zaude saioa itxi nahi duzula?",
+          "unauthenticated": "Une honetan ez duzu saioa hasita"
+        },
+        "link": {
+          "login": "Hasi saioa!"
+        },
+        "title": "Amaitu saioa",
+        "button": {
+          "logout": "Bai, amaitu saioa!"
+        },
+        "message": {
+          "loggedIn": "{ username } moduan saioa hasita"
+        }
+      },
+      "ApplicationNew": {
+        "link": {
+          "settings": "Itzuli ezarpenetara"
+        },
+        "title": "Sortu aplikazio berri bat"
+      },
+      "ApplicationForm": {
+        "label": {
+          "scopes": {
+            "description": "Gurasoek \"Irakurri\" edo \"Idatzi\" esparruak egiaztatzeak dagozkien haurren esparru guztietarako sarbidea suposatzen du.",
+            "read": {
+              "label": "Irakurri",
+              "description": "Soilik irakurtzeko sarbidea erabiltzailearen datuetara"
+            },
+            "write": {
+              "label": "Idatzi",
+              "description": "Idazteko soilik sarbidea erabiltzaile datuetara"
+            }
+          },
+          "name": "Izena",
+          "redirectUri": "Birbideratu URIa"
+        },
+        "button": {
+          "create": "Sortu aplikazioa",
+          "update": "Eguneratu aplikazioa"
+        },
+        "help": {
+          "redirectUri": "Erabili \"urn:ietf:wg:oauth:2.0:oob\" birbideratzea URI bezala zure aplikazioa ez bada webean zerbitzatzen."
+        },
+        "header": {
+          "failure": "Ezin ditugu zure aldaketak gorde"
+        }
+      },
+      "LoginForm": {
+        "link": {
+          "createAccount": "Sortu kontua",
+          "resetPassword": "Berrezarri pasahitza"
+        },
+        "placeholder": {
+          "username": "Idatzi zure erabiltzaile-izena edo eposta helbidea"
+        },
+        "help": {
+          "approvalRequired": "Duela gutxi erregistratu bazara, baliteke moderazio taldeak zure kontua berrikusi edo zure eposta helbidea egiaztatu arte itxaron behar izatea.",
+          "invalidCredentials": "Egiaztatu erabiltzaile izena eta pasahitza zuzenak direla eta ziurtatu zure eposta helbidea egiaztatu duzula."
+        },
+        "button": {
+          "login": "Sartu"
+        },
+        "label": {
+          "password": "Pasahitza",
+          "username": "Erabiltzaile-izena edo eposta helbidea"
+        },
+        "header": {
+          "loginFailure": "Ezin dugu zure saioa hasi"
+        }
+      },
+      "SignupForm": {
+        "button": {
+          "create": "Sortu nire kontua"
+        },
+        "label": {
+          "email": "Eposta helbidea",
+          "password": "Pasahitza",
+          "username": "Erabiltzaile-izena"
+        },
+        "placeholder": {
+          "email": "Idatzi zure eposta helbidea",
+          "invitation": "Idatzi zure gonbidapen kodea (ez ditu maiuskulak eta minuskulak bereizten)",
+          "username": "Idatzi zure erabiltzaile-izena"
+        },
+        "header": {
+          "login": "Sartu zure Funkwhale kontura",
+          "signupFailure": "Ezin da zure kontua sortu."
+        },
+        "message": {
+          "registrationClosed": "Izena ematea itxita dago instantzia honetan. Gonbidapen kode bat beharko duzu izena emateko.",
+          "requiresReview": "Instantzia honetako izen emateak irekita daude, baina moderatzaileek berrikusi behar dituzte onartu aurretik.",
+          "awaitingReview": "Zure kontu-eskaera arrakastaz bidali da. Eposta mezu bat jasoko duzu gure moderazio taldeak zure eskaera berrikusi duenean.",
+          "accountCreated": "Zure kontua arrakastaz sortu da. Egiaztatu zure eposta saio hasten saiatu aurretik."
+        }
+      },
+      "Plugin": {
+        "link": {
+          "documentation": "Dokumentazioa"
+        },
+        "label": {
+          "pluginEnabled": "Gaituta",
+          "library": "Liburutegia"
+        },
+        "header": {
+          "failure": "Errorea plugina gordetzerakoan"
+        },
+        "description": {
+          "library": "Fitxategiak ze liburutegitara inportatu behar diren."
+        },
+        "button": {
+          "save": "Gorde",
+          "scan": "Eskaneatu"
+        }
+      }
+    },
+    "About": {
+      "stat": {
+        "activeUsers": "Erabiltzaile aktibo { n } | { n } erabiltzaile aktibo",
+        "hoursOfMusic": "ordu musika | ordu musika"
+      },
+      "header": {
+        "funkwhale": "Musikaz gozatzeko eta partekatzeko plataforma soziala",
+        "aboutPod": "Instantzia honi buruz",
+        "publicContent": "Arakatu eduki publikoa",
+        "findApp": "Bilatu aplikazio bat",
+        "signup": "Erregistratu"
+      },
+      "title": "Honi buruz",
+      "link": {
+        "findOtherPod": "Bilatu beste instantzia bat",
+        "learnMore": "Ikasi gehiago"
+      },
+      "description": {
+        "funkwhale": "Funkwhale komunitateak bultzatutako proiektua da, eta musika eta audioa sare deszentralizatu eta ireki batean entzuteko eta partekatzeko aukera ematen du.",
+        "publicContent": "Entzun pod honetan partekatutako album eta erreprodukzio-zerrenda publikoak.",
+        "signup": "Erregistratu orain zure gogokoenak jarraitzeko, erreprodukzio-zerrendak sortzeko, eduki berriak aurkitzeko eta askoz gehiago!",
+        "findApp": "Erabili Funkwhale beste gailuetan gure aplikazioekin.",
+        "quota": "Instantzia honetako erabiltzaileek { quota }eko doako ostatatzea dute beren eduki propioa igotzeko!"
+      },
+      "placeholder": {
+        "noDescription": "Ez dago deskribapenik eskuragarri."
+      },
+      "message": {
+        "loggedIn": "Saioa hasita zenuen!"
+      }
+    },
+    "Home": {
+      "stat": {
+        "activeUsers": "Erabiltzaile aktibo { n } | { n } erabiltzaile aktibo",
+        "hoursOfMusic": "Ordubete musika | { n } ordu musika"
+      },
+      "header": {
+        "aboutFunkwhale": "Funkwhale-ri buruz",
+        "about": "Funkwhale instantzia honi buruz",
+        "contact": "Kontaktua",
+        "login": "Hasi saioa",
+        "newChannels": "Kanal berriak",
+        "newAlbums": "Azken aldian gehitutako albumak",
+        "signup": "Erregistratu",
+        "statistics": "Estatistikak",
+        "links": "Esteka erabilgarriak",
+        "welcome": "Ongi etorri { podName }(e)ra!"
+      },
+      "link": {
+        "publicContent": {
+          "label": "Arakatu eduki publikoa",
+          "description": "Entzun instantzia honetan partekatutako album eta erreprodukzio-zerrenda publikoak"
+        },
+        "userGuides": {
+          "description": "Ezagutu Funkwhale eta bere ezaugarriei buruz jakin behar duzun guztia",
+          "label": "Erabiltzaile-gidak"
+        },
+        "findOtherPod": "Bilatu beste instantzia bat",
+        "learnMore": "Ikasi gehiago",
+        "mobileApps": {
+          "label": "Mugikorreko aplikazioak",
+          "description": "Erabili Funkwhale beste gailuetan gure aplikazioekin"
+        },
+        "rules": "Zerbitzariaren arauak",
+        "viewMore": "Ikusi gehiago…",
+        "funkwhale": "Bisitatu funkwhale.audio"
+      },
+      "description": {
+        "funkwhale": {
+          "paragraph2": "Funkwhale librea eta doakoa da eta boluntario komunitate jator batek garatzen du.",
+          "paragraph1": "Instantzia honek Funkwhale erabiltzen du, sare ireki eta deszentralizatu batean musika eta audioak entzun eta partekatzeko aukera ematen duen komunitateak gidatutako proiektu bat."
+        },
+        "signup": "Erregistratu orain zure gogokoen jarraipena egiteko, zerrendak sortzeko, eduki berria aurkitzeko eta asko gehiago!",
+        "quota": "Instantzia honetako erabiltzaileek { quota }eko doako ostatatzea dute beren eduki propioa igotzeko!"
+      },
+      "title": "Hasiera",
+      "placeholder": {
+        "noDescription": "Ez dago deskribapenik."
+      }
+    },
+    "audio": {
+      "artist": {
+        "Card": {
+          "meta": {
+            "episodes": "Saio { n } | { n } saio",
+            "tracks": "Pista { n } | { n } pista"
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": "Erakutsi gehiago"
+          }
+        }
+      },
+      "ChannelCard": {
+        "meta": {
+          "episodes": "Saio { n } | { n } saio",
+          "tracks": "Pista { n } | { n } pista"
+        },
+        "title": "{ date }-(e)an eguneratua"
+      },
+      "ChannelSerieCard": {
+        "meta": {
+          "episodes": "Saio { n } | { n } saio"
+        }
+      },
+      "album": {
+        "Card": {
+          "meta": {
+            "tracks": "Pista { n } | { n } pista"
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": "Erakutsi gehiago"
+          }
+        }
+      },
+      "Player": {
+        "meta": {
+          "position": "{ index } / { length }"
+        },
+        "header": {
+          "player": "Audio erreproduzigailua eta kontrolak"
+        },
+        "label": {
+          "clearQueue": "Garbitu zure ilara",
+          "expandQueue": "Zabaldu ilara",
+          "addArtistContentFilter": "Ezkutatu artista honen edukia…",
+          "loopingDisabled": "Begizta desgaituta. Egin klik pista bakarreko begiztara aldatzeko.",
+          "loopingSingle": "Pista bakarreko begiztan. Egin klik ilara osoko begiztara aldatzeko.",
+          "loopingWholeQueue": "Ilara osoko begiztan. Egin klik begizta desgaitzeko.",
+          "audioPlayer": "Multimedia-erreproduzigailua",
+          "mute": "Isilarazi",
+          "nextTrack": "Hurrengo pista",
+          "pause": "Pausatu",
+          "play": "Erreproduzitu",
+          "previousTrack": "Aurreko pista",
+          "shuffleQueue": "Nahasi zure ilara",
+          "unmute": "Aktibatu audioa"
+        }
+      },
+      "PlayButton": {
+        "button": {
+          "addToQueue": "Gehitu uneko ilaran",
+          "addToPlaylist": "Gehitu erreprodukzio-zerrendan…",
+          "episodeDetails": "Saioaren xehetasunak",
+          "hideArtist": "Ezkutatu artista honen edukia",
+          "discretePlay": "Erreproduzitu",
+          "playAlbum": "Erreproduzitu albuma",
+          "playArtist": "Erreproduzitu artista",
+          "playNext": "Erreproduzitu hurrengoa",
+          "playNow": "Erreproduzitu orain",
+          "playPlaylist": "Erreproduzitu zerrenda",
+          "startRadio": "Erreproduzitu antzeko kantak",
+          "playTrack": "Erreproduzitu pista",
+          "playTracks": "Erreproduzitu pistak",
+          "report": "Salatu…",
+          "trackDetails": "Pistaren xehetasunak"
+        },
+        "title": {
+          "more": "Gehiago…",
+          "unavailable": "Pista hau ez dago sarbidea duzun liburutegietan"
+        }
+      },
+      "podcast": {
+        "Modal": {
+          "button": {
+            "addToFavorites": "Gogokoetan sartu",
+            "addToPlaylist": "Gehitu erreprodukzio-zerrendan…",
+            "addToQueue": "Gehitu ilaran",
+            "episodeDetails": "Saioaren xehetasunak",
+            "playNext": "Erreproduzitu hurrengoa",
+            "playNow": "Erreproduzitu orain",
+            "startRadio": "Erreproduzitu irratia",
+            "removeFromFavorites": "Kendu gogokoetatik",
+            "trackDetails": "Pistaren xehetasunak",
+            "albumDetails": "Ikusi albuma",
+            "artistDetails": "Ikusi artista",
+            "channelDetails": "Ikusi kanala",
+            "seriesDetails": "Ikusi serieak"
+          }
+        },
+        "MobileRow": {
+          "button": {
+            "actions": "Erakutsi pistako ekintzak"
+          }
+        }
+      },
+      "track": {
+        "Modal": {
+          "button": {
+            "addToFavorites": "Gogokoetan sartu",
+            "addToPlaylist": "Gehitu erreprodukzio-zerrendan…",
+            "addToQueue": "Gehitu ilaran",
+            "episodeDetails": "Saioaren xehetasunak",
+            "playNext": "Erreproduzitu hurrengoa",
+            "playNow": "Erreproduzitu orain",
+            "startRadio": "Erreproduzitu irratia",
+            "removeFromFavorites": "Kendu gogokoetatik",
+            "trackDetails": "Pistaren xehetasunak",
+            "albumDetails": "Ikusi albuma",
+            "artistDetails": "Ikusi artista",
+            "channelDetails": "Ikusi kanala",
+            "seriesDetails": "Ikusi serieak"
+          }
+        },
+        "Table": {
+          "table": {
+            "header": {
+              "album": "Albuma",
+              "artist": "Artista",
+              "title": "Izenburua"
+            }
+          }
+        },
+        "Widget": {
+          "empty": {
+            "noResults": "Ez da ezer aurkitu"
+          },
+          "button": {
+            "more": "Erakutsi gehiago"
+          }
+        },
+        "MobileRow": {
+          "button": {
+            "actions": "Erakutsi pistako ekintzak"
+          }
+        }
+      },
+      "VolumeControl": {
+        "label": {
+          "slider": "Doitu bolumena"
+        },
+        "button": {
+          "mute": "Isilarazi",
+          "unmute": "Aktibatu audioa"
+        }
+      },
+      "SearchBar": {
+        "label": {
+          "album": "Albuma",
+          "artist": "Artista",
+          "category": {
+            "federation": "Federazioa",
+            "podcasts": "Podcastak"
+          },
+          "search": "Bilatu edukia",
+          "tag": "Etiketa",
+          "track": "Pista"
+        },
+        "link": {
+          "more": "Emaitza gehiago 🡒",
+          "fediverse": "Bilatu fedibertsoan",
+          "rss": "Harpidetu podcastera RSS bidez"
+        },
+        "header": {
+          "noResults": "Ez da bat datorren emaitzarik aurkitu"
+        },
+        "placeholder": {
+          "search": "Bilatu artistaren, albumaren, pisten… arabera"
+        },
+        "empty": {
+          "noResults": "Sentitzen dugu, ez dago emaitzarik bilaketa honentzat"
+        }
+      },
+      "Search": {
+        "header": {
+          "albums": "Albumak",
+          "artists": "Artistak",
+          "search": "Bilatu musika pixka bat"
+        },
+        "placeholder": {
+          "search": "Artista, albuma, pista …"
+        },
+        "empty": {
+          "noAlbums": "Ez dago zure bilaketarekin bat datorren albumik",
+          "noArtists": "Ez dago zure bilaketarekin bat datorren artistarik"
+        }
+      },
+      "ChannelForm": {
+        "label": {
+          "discography": "Artistaren diskografia",
+          "category": "Kategoria",
+          "image": "Kanalaren irudia",
+          "description": "Deskribapena",
+          "username": "Fedibertsoko izena",
+          "language": "Hizkuntza",
+          "name": "Izena",
+          "email": "Jabearen eposta helbidea",
+          "owner": "Jabearen izena",
+          "podcast": "Podcastak",
+          "subcategory": "Azpikategoria",
+          "tags": "Etiketak"
+        },
+        "placeholder": {
+          "name": "Kanalaren izen bikaina",
+          "username": "kanalarenizenbikaina"
+        },
+        "header": {
+          "error": "Errorea kanala gordetzerakoan"
+        },
+        "help": {
+          "podcast": "Ostatatu zure saioak eta mantendu zure komunitatea eguneratuta.",
+          "discography": "Argitaratu zuk egindako musika album eta singlez osatutako diskografia eder batean.",
+          "podcastFields": "Spotify edo iTunes bezalako plataforma batzuetako itunes:email eta itune:name eremuetan erabiltzen da.",
+          "username": "URLetan eta kanal hau Fedibertsoan jarraitzeko erabiltzen da. Ezin duzu aldatu aurrerago."
+        },
+        "loader": {
+          "loading": "Kargatzen"
+        },
+        "legend": {
+          "purpose": "Zertarako erabiliko da kanal hau?"
+        }
+      },
+      "LibraryFollowButton": {
+        "button": {
+          "cancel": "Utzi jarraitzeko eskaera",
+          "follow": "Jarraitu",
+          "unfollow": "Utzi jarraitzeari"
+        }
+      },
+      "EmbedWizard": {
+        "button": {
+          "copy": "Kopiatu"
+        },
+        "help": {
+          "embed": "Kopiatu eta itsatsi kode hau zure webguneko HTMLan",
+          "width": "Utzi hutsik widget moldagarrirako",
+          "anonymous": "Jarri zure administratzaileekin harremanetan eta eskatu dagokion ezarpena eguneratzeko."
+        },
+        "label": {
+          "embed": "Txertatu kodea",
+          "height": "Widgetaren altuera",
+          "width": "Widgetaren zabalera"
+        },
+        "header": {
+          "preview": "Aurrebista"
+        },
+        "warning": {
+          "anonymous": "Partekatzeak ez du funtzionatuko instantzia honek ez duelako onartzen erabiltzaile anonimoek edukira sarbidea izatea."
+        },
+        "message": {
+          "copy": "Testua arbelera kopiatu da!"
+        }
+      },
+      "ChannelSeries": {
+        "button": {
+          "showMore": "Erakutsi gehiago"
+        },
+        "help": {
+          "subscribe": "Bere edukia ikusteko kanal honetara harpidetu beharko duzu behar bada."
+        }
+      },
+      "ChannelsWidget": {
+        "button": {
+          "showMore": "Erakutsi gehiago"
+        }
+      },
+      "ChannelEntries": {
+        "help": {
+          "subscribe": "Bere edukia ikusteko kanal honetara harpidetu beharko duzu behar bada."
+        }
+      }
+    },
+    "library": {
+      "AlbumBase": {
+        "meta": {
+          "episodes": "Saio { n } | { n } saio",
+          "tracks": "Pista { n } | { n } pista"
+        },
+        "link": {
+          "addDescription": "Gehitu deskribapena…"
+        }
+      },
+      "ArtistBase": {
+        "title": "Artista",
+        "button": {
+          "cancel": "Ezeztatu",
+          "edit": "Editatu",
+          "embed": "Txertatu",
+          "more": "Gehiago…",
+          "play": "Erreproduzitu album denak"
+        },
+        "modal": {
+          "embed": {
+            "header": "Txertatu artista honen lana zure webgunean"
+          }
+        },
+        "link": {
+          "moderation": "Ireki moderazio interfazean",
+          "discogs": "Bilatu Discogs-en",
+          "wikipedia": "Bilatu Wikipedian",
+          "django": "Ikusi Django-ren administrazioan",
+          "domain": "Ikusi { domain }(e)n",
+          "musicbrainz": "Ikusi MusicBrainz-en"
+        }
+      },
+      "radios": {
+        "Builder": {
+          "header": {
+            "matches": "Pista { n } dator bat iragazki konbinatuekin | { n } pista datoz bat iragazki konbinatuekin",
+            "builder": "Eraikitzailea",
+            "created": "Irratia sortuta",
+            "updated": "Irratia eguneratuta"
+          },
+          "table": {
+            "filter": {
+              "header": {
+                "actions": "Akzioak",
+                "candidates": "Hautagaiak",
+                "config": "Konfigurazioa",
+                "exclude": "Baztertu",
+                "name": "Iragazkiaren izena"
+              }
+            }
+          },
+          "button": {
+            "filter": "Iragazkia sortu",
+            "save": "Gorde"
+          },
+          "label": {
+            "filter": "Iragazkiak sortu zure irratia pertsonalizatzeko",
+            "description": "Deskribapena",
+            "public": "Erakutsi publikoki",
+            "name": "Irratiaren izena"
+          },
+          "placeholder": {
+            "description": "Nire deskribapen txundigarria",
+            "name": "Nire irrati txundigarria"
+          },
+          "title": "Irrati eraikitzailea",
+          "option": {
+            "filter": "Aukeratu filtroa"
+          },
+          "description": {
+            "builder": "Zure irizpidearen araberako pistak erreproduzituko dituen irrati pertsonalizatua sortu dezakezu interfaze honekin."
+          }
+        },
+        "Filter": {
+          "cancelButton": "Ezeztatu",
+          "excludeLabel": "Baztertu",
+          "removeButton": "Kendu",
+          "matchingTracksModalHeader": "Iragazkiarekin bat datozen pistak"
+        }
+      },
+      "FileUpload": {
+        "tooltip": {
+          "network": "Sare-errorea eman da fitxategi hau igotzerakoan",
+          "size": "Ezin da fitxategi hau igo, ziurtatu ez dela handiegia",
+          "extension": "Fitxategi-mota baliogabea, ziurtatu igotzen ari zarena audio-fitxategi bat dela. Onartzen diren fitxategi-luzapenak: { extensions }",
+          "retry": "Saiatu berriro",
+          "denied": "Igoera ukatuta, ziurtatu fitxategia ez dela handiegia eta ez zarela zure mugara iritsi",
+          "timeout": "Igoeraren denbora-muga, mesedez saiatu berriro"
+        },
+        "table": {
+          "upload": {
+            "header": {
+              "actions": "Ekintzak",
+              "filename": "Fitxategi-izena",
+              "size": "Tamaina",
+              "status": "Egoera"
+            },
+            "status": {
+              "pending": "Zain",
+              "uploaded": "Igota",
+              "uploading": "Igotzen…"
+            }
+          }
+        },
+        "button": {
+          "cancel": "Ezeztatu",
+          "retry": "Saiatu berriro huts egindako igoerekin"
+        },
+        "label": {
+          "uploadWidget": "Klik egin igotzeko fitxategiak aukeratzeko edo arrastatu eta jaregin fitxategi edo karpetak",
+          "remainingSpace": "Gelditzen den biltegiratze-lekua",
+          "extensions": "Euskarria duten hedapenak: { extensions }"
+        },
+        "header": {
+          "failure": "Errorea inportazioa abiarazterakoan",
+          "server": "Inportazioaren egoera",
+          "status": "Inportatu egoera",
+          "local": "Igo musika zure gailutik"
+        },
+        "link": {
+          "processing": "Prozesatzen",
+          "uploading": "Igotzen",
+          "picard": "Helburu horretarako Picard erabiltzea gomendatzen dugu."
+        },
+        "description": {
+          "import": "Zure inportazioaren emaitzak:",
+          "previousImport": "Zure aurreko inportazioaren emaitzak:"
+        },
+        "message": {
+          "local": {
+            "format": "Igotzen ari zaren audio fitxategiak OGG, Flac, MP3 edo AIFF formatuan daude",
+            "tag": "Igotzen ari zaren musika fitxategiak behar bezala etiketatuta daude.",
+            "message": "Zure liburutegira musika igotzera zoaz. Jarraitu aurretik, ziurtatu:",
+            "copyright": "Ez zarela ari copyright duen edukia liburutegi publiko batera igotzen, bestela legea hausten ari zara"
+          }
+        }
+      },
+      "EditForm": {
+        "placeholder": {
+          "summary": "Zure aldaketak deskribatzen dituen laburpentxoa."
+        },
+        "button": {
+          "cancel": "Ezeztatu",
+          "clear": "Garbitu",
+          "reset": "Berrezarri hasierako baliora",
+          "showUnreviewed": "Mugatu berrikusi gabeko edizioetara",
+          "showAll": "Erakutsi edizio guztiak",
+          "submit": "Bilatu eta aplikatu edizioa",
+          "new": "Bidali beste edizio bat",
+          "suggest": "Bidali iradokizuna"
+        },
+        "header": {
+          "failure": "Errorea aldatutakoa bidaltzerakoan",
+          "recentEdits": "Azken aldiko edizioak",
+          "unreviewed": "Berrikuspenaren zain dauden azken aldiko edizioak",
+          "success": "Zure edizioa behar bezala bidalita."
+        },
+        "notApplicable": "Daturik gabe",
+        "empty": {
+          "suggestEdit": "Iradoki aldaketa bat beheko formularioa erabiliz."
+        },
+        "label": {
+          "summary": "Laburpena (hautazkoa)"
+        },
+        "message": {
+          "noPermission": "Ez daukazu objektu hau editatzeko baimenik, baina aldaketak iradoki ditzakezu. Bidalitakoan, iradokizunak onartu aurretik berrikusiko dira."
+        }
+      },
+      "Albums": {
+        "link": {
+          "addMusic": "Gehitu musikaren bat"
+        },
+        "title": "Albumak",
+        "ordering": {
+          "direction": {
+            "ascending": "Gorantza",
+            "descending": "Beheranzkoa",
+            "label": "Ordenazio norabidea"
+          },
+          "label": "Ordena"
+        },
+        "header": {
+          "browse": "Albumak arakatzen"
+        },
+        "placeholder": {
+          "search": "Idatzi albumaren izena…"
+        },
+        "empty": {
+          "noResults": "Ez dago zure bilaketarekin bat datorren emaitzarik"
+        },
+        "pagination": {
+          "results": "Emaitzak orrialdeko"
+        },
+        "label": {
+          "search": "Bilatu",
+          "tags": "Etiketak"
+        },
+        "button": {
+          "search": "Bilatu"
+        }
+      },
+      "Artists": {
+        "button": {
+          "upload": "Gehitu musikaren bat",
+          "search": "Bilatu"
+        },
+        "label": {
+          "search": "Artistaren izena",
+          "excludeCompilation": "Baztertu bilduma-artistak",
+          "tags": "Etiketak"
+        },
+        "title": "Artistak",
+        "ordering": {
+          "direction": {
+            "ascending": "Gorantza",
+            "descending": "Beheranzkoa",
+            "label": "Ordenazio norabidea"
+          },
+          "label": "Ordena"
+        },
+        "header": {
+          "browse": "Artistak arakatzen"
+        },
+        "empty": {
+          "noResults": "Ez dago zure bilaketarekin bat datorren emaitzarik"
+        },
+        "pagination": {
+          "results": "Emaitzak orrialdeko"
+        },
+        "placeholder": {
+          "search": "Bilatu…"
+        }
+      },
+      "TrackDetail": {
+        "table": {
+          "release": {
+            "album": "Albuma",
+            "artist": "Artista",
+            "copyright": "Copyright-a",
+            "license": "Lizentzia",
+            "series": "Seriea",
+            "url": "URL",
+            "year": "Urtea"
+          },
+          "track": {
+            "bitrate": {
+              "label": "Bitrate"
+            },
+            "codec": "Kodeka",
+            "downloads": "Deskargak",
+            "duration": "Iraupena",
+            "size": "Tamaina"
+          }
+        },
+        "header": {
+          "episode": "Saioaren xehetasunak",
+          "library": "Erlazionatutako liburutegiak",
+          "playlists": "Erlazionatutako zerrendak",
+          "release": "Argitalpenaren xehetasunak",
+          "track": "Pistaren xehetasunak"
+        },
+        "notApplicable": "Daturik gabe",
+        "description": {
+          "library": "Pista hau ondorengo liburutegietan dago:"
+        },
+        "link": {
+          "musicbrainz": "Ikusi MusicBrainz-en"
+        }
+      },
+      "TagDetail": {
+        "link": {
+          "albums": "Albumak",
+          "artists": "Artistak",
+          "moderation": "Ireki moderazio interfazean"
+        },
+        "header": {
+          "channels": "Kanalak",
+          "tracks": "Pistak"
+        }
+      },
+      "ArtistDetail": {
+        "header": {
+          "album": "Artista honen albumak",
+          "track": "Artista honen pista berriak",
+          "library": "Erabiltzaileen liburutegiak"
+        },
+        "button": {
+          "more": "Kargatu gehiago…",
+          "filter": "Kendu iragazkia"
+        },
+        "link": {
+          "filter": "Berrikusi nire iragazkiak"
+        },
+        "description": {
+          "library": "Artista hau ondorengo liburutegietan dago:"
+        },
+        "message": {
+          "filter": "Artista honekin erlazionatutako edukia ezkutatzen ari zara une honetan."
+        }
+      },
+      "ImportStatusModal": {
+        "error": {
+          "importFailure": "Errore bat gertatu da igoera prozesatzean. Azpian informazio gehiago aurkituko duzu.",
+          "unknownError": {
+            "message": "Errore ezezaguna gertatu da",
+            "label": "Errore ezezaguna"
+          },
+          "invalidMetadata": {
+            "label": "Metadatu baliogabeak",
+            "message": "Fitxategiaren metadatuak baliogabeak dira edo beharrezko eremuak falta dituzte."
+          }
+        },
+        "button": {
+          "close": "Itxi"
+        },
+        "table": {
+          "error": {
+            "debug": "Arazketa informazioa",
+            "errorDetail": "Errorearen xehetasuna",
+            "errorType": "Errore mota",
+            "help": "Lortu laguntza"
+          }
+        },
+        "header": {
+          "importDetail": "Inportazioaren xehetasunak"
+        },
+        "link": {
+          "support": "Ireki laguntza haria (sartu arazteko informazioa azpian, zure mezuan)",
+          "documentation": "Irakurri errori honi buruzko gure dokumentazioa"
+        },
+        "message": {
+          "importDetail": "Igoera zain dago oraindik eta laster prozesatuko du zerbitzariak.",
+          "importSuccess": "Igoera behar bezala prozesatu da zerbitzarian."
+        },
+        "warning": {
+          "importSkipped": "Igoera saltatu egin da zure liburutegietako batean antzeko bat badagoelako dagoeneko."
+        }
+      },
+      "EditCard": {
+        "button": {
+          "approve": "Onartu",
+          "delete": "Ezabatu",
+          "reject": "Baztertu"
+        },
+        "status": {
+          "approved": "Onartuta",
+          "applied": "Onartuta eta aplikatuta",
+          "pending": "Berrikuspenaren zain",
+          "rejected": "Baztertuta"
+        },
+        "modal": {
+          "delete": {
+            "header": "Iradokizun hau ezabatu nahi duzu?"
+          },
+          "content": {
+            "warning": "Iradokizuna guztiz ezabatuko da, ekintza hau ezin da desegin."
+          }
+        },
+        "table": {
+          "update": {
+            "header": {
+              "field": "Eremua",
+              "newValue": "Balio berria",
+              "oldValue": "Balio zaharra"
+            },
+            "notApplicable": "Daturik gabe"
+          }
+        },
+        "header": {
+          "modification": "Aldaketa { id }"
+        },
+        "link": {
+          "track": "Pista #{ id } - { name }"
+        }
+      },
+      "Podcasts": {
+        "ordering": {
+          "direction": {
+            "ascending": "Gorantza",
+            "descending": "Beheranzkoa",
+            "label": "Ordenazio norabidea"
+          },
+          "label": "Ordena"
+        },
+        "header": {
+          "browse": "Podcastak arakatzen"
+        },
+        "button": {
+          "cancel": "Ezeztatu",
+          "channel": "Sortu kanala",
+          "search": "Bilatu",
+          "subscribe": "Harpidetu",
+          "feed": "Harpidetu RSS jariora"
+        },
+        "empty": {
+          "noResults": "Ez dago zure bilaketarekin bat datorren emaitzarik"
+        },
+        "label": {
+          "search": "Podcastaren izenburua",
+          "tags": "Etiketak"
+        },
+        "title": "Podcastak",
+        "pagination": {
+          "results": "Emaitzak orrialdeko"
+        },
+        "placeholder": {
+          "search": "Bilatu…"
+        },
+        "modal": {
+          "subscription": {
+            "header": "Harpidetza"
+          }
+        }
+      },
+      "Radios": {
+        "ordering": {
+          "direction": {
+            "ascending": "Gorantza",
+            "descending": "Beheranzkoa",
+            "label": "Ordena"
+          },
+          "label": "Ordena"
+        },
+        "header": {
+          "browse": "Irratiak arakatzen",
+          "instance": "Instantziako irratiak",
+          "user": "Erabiltzaileen irratiak"
+        },
+        "button": {
+          "add": "Sortu irrati bat",
+          "create": "Sortu zure irrati propioa"
+        },
+        "placeholder": {
+          "search": "Idatzi irrati baten izena …"
+        },
+        "empty": {
+          "noResults": "Ez dago zure bilaketarekin bat datorren emaitzarik"
+        },
+        "title": "Irratiak",
+        "pagination": {
+          "results": "Emaitzak orrialdeko"
+        },
+        "label": {
+          "search": "Bilatu"
+        }
+      },
+      "AlbumDropdown": {
+        "button": {
+          "cancel": "Ezeztatu",
+          "delete": "Ezabatu…",
+          "edit": "Editatu",
+          "embed": "Txertatu",
+          "more": "Gehiago…"
+        },
+        "modal": {
+          "delete": {
+            "header": "Album hau ezabatu nahi duzu?",
+            "content": {
+              "warning": "Album hau eta erlazionatutako fitxategi eta datuak ezabatu egingo dira. Ekintza hau ezin da desegin."
+            }
+          },
+          "embed": {
+            "header": "Txertatu album hau zure webgunean"
+          }
+        },
+        "link": {
+          "moderation": "Ireki moderazio interfazean",
+          "discogs": "Bilatu Discogs-en",
+          "django": "Ikusi Django-ren administrazioan",
+          "domain": "Ikusi { domain }(e)n",
+          "musicbrainz": "Ikusi MusicBrainz-en"
+        }
+      },
+      "TrackBase": {
+        "button": {
+          "cancel": "Ezeztatu",
+          "delete": "Ezabatu…",
+          "download": "Deskargatu",
+          "edit": "Editatu",
+          "embed": "Txertatu",
+          "more": "Gehiago…",
+          "play": "Erreproduzitu"
+        },
+        "modal": {
+          "delete": {
+            "header": "Pista hau ezabatu nahi duzu?",
+            "content": {
+              "warning": "Pista eta erlazionatutako fitxategi eta datuak ezabatu egingo dira. Ekintza hau ezin da desegin."
+            }
+          },
+          "embed": {
+            "header": "Txertatu pista hau zure webgunean"
+          }
+        },
+        "link": {
+          "moderation": "Ireki moderazio interfazean",
+          "discogs": "Bilatu Discogs-en",
+          "wikipedia": "Bilatu Wikipedian",
+          "django": "Ikusi Django-ren administrazioan",
+          "domain": "Ikusi { domain }(e)n"
+        },
+        "title": "Pista"
+      },
+      "AlbumEdit": {
+        "header": {
+          "edit": "Editatu album hau",
+          "suggest": "Iradoki edizio bat album honetan"
+        },
+        "message": {
+          "remote": "Objektu hau beste zerbitzari batek kudeatzen du, ezin duzu editatu."
+        }
+      },
+      "ArtistEdit": {
+        "header": {
+          "edit": "Editatu artista hau",
+          "suggest": "Iradoki edizio bat artista honetan"
+        },
+        "message": {
+          "remote": "Objektu hau beste zerbitzari batek kudeatzen du, ezin duzu editatu."
+        }
+      },
+      "TrackEdit": {
+        "header": {
+          "edit": "Editatu pista hau",
+          "suggest": "Iradoki edizio bat pista honetan"
+        },
+        "message": {
+          "remote": "Objektu hau beste zerbitzari batek kudeatzen du, ezin duzu editatu."
+        }
+      },
+      "AlbumDetail": {
+        "header": {
+          "episodes": "Saioak",
+          "tracks": "Pistak",
+          "libraries": "Erabiltzaileen liburutegiak"
+        },
+        "description": {
+          "libraries": "Album hau ondorengo liburutegietan dago:"
+        },
+        "meta": {
+          "volume": "{ number } bolumena"
+        }
+      },
+      "FsBrowser": {
+        "button": {
+          "import": "Inportatu"
+        }
+      },
+      "FsLogs": {
+        "empty": {
+          "notStarted": "Inportazioa ez da hasi oraindik"
+        }
+      },
+      "Home": {
+        "title": "Liburutegia",
+        "header": {
+          "newChannels": "Kanal berriak",
+          "playlists": "Zerrendak",
+          "recentlyAdded": "Azken aldian gehituta",
+          "recentlyFavorited": "Azken aldian gogokoa",
+          "recentlyListened": "Azken aldian entzuna"
+        }
+      },
+      "TagSelector": {
+        "placeholder": {
+          "search": "Bilatu…"
+        }
+      }
+    },
+    "favorites": {
+      "List": {
+        "header": {
+          "favorites": "Gogoko { n } | { n } gogoko"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Gorantza",
+            "descending": "Beheranzkoa",
+            "label": "Ordena"
+          },
+          "label": "Ordena"
+        },
+        "link": {
+          "library": "Arakatu liburutegia"
+        },
+        "loader": {
+          "loading": "Zure gogokoak kargatzen…"
+        },
+        "empty": {
+          "noFavorites": "Ez da pistarik gehitu oraindik zure gogokoetara"
+        },
+        "pagination": {
+          "results": "Emaitzak orrialdeko"
+        },
+        "title": "Zure gogokoak"
+      },
+      "TrackFavoriteIcon": {
+        "button": {
+          "add": "Gogokoetan sartu",
+          "remove": "Kendu gogokoetatik"
+        },
+        "label": {
+          "inFavorites": "Gogokoetan"
+        }
+      }
+    },
+    "channels": {
+      "UploadModal": {
+        "meta": {
+          "files": "Fitxategi { n } | { n } fitxategi",
+          "quota": "Gelditzen den biltegiratze-lekua:"
+        },
+        "button": {
+          "cancel": "Ezeztatu",
+          "close": "Itxi",
+          "finishLater": "Amaitu beranduago",
+          "next": "Hurrengo pausoa",
+          "previous": "Aurreko pausoa",
+          "publish": "Argitaratu",
+          "update": "Eguneratu"
+        },
+        "header": {
+          "uploadFiles": "Fitxategiak kargatzeko",
+          "processing": "Igoerak prozesatzen",
+          "publish": "Argitaratu audioa",
+          "uploadDetails": "Igoeraren xehetasunak"
+        }
+      },
+      "AlbumSelect": {
+        "meta": {
+          "tracks": "Pista { n } | { n } pista"
+        },
+        "label": {
+          "album": "Albuma",
+          "series": "Serieak"
+        },
+        "option": {
+          "none": "Bat ere ez"
+        }
+      },
+      "LicenseSelect": {
+        "link": {
+          "license": "Lizentzia honi buruz"
+        },
+        "label": {
+          "license": "Lizentzia"
+        },
+        "option": {
+          "none": "Bat ere ez"
+        }
+      },
+      "UploadForm": {
+        "help": {
+          "license": "Gehitu lizentzia zure igoerari zure entzuleei askatasun batzuk emateko."
+        },
+        "label": {
+          "openBrowser": "Arakatu…",
+          "channel": "Kanala"
+        },
+        "message": {
+          "dragAndDrop": "Arrastatu eta askatu fitxategiak hemen edo ireki nabigatzailea fitxategiak igotzeko",
+          "pending": "Argitaratu gabeko igoera zirriborro batzuk dauzkazu."
+        },
+        "button": {
+          "edit": "Editatu",
+          "ignore": "Ez ikusi egin",
+          "remove": "Kendu",
+          "resume": "Berrekin",
+          "retry": "Saiatu berriro"
+        },
+        "header": {
+          "error": "Errorea argitaratzerakoan"
+        },
+        "status": {
+          "errored": "Erroreduna",
+          "pending": "Zain",
+          "uploading": "Igotzen"
+        },
+        "description": {
+          "extensions": "Euskarria duten hedapenak: { extensions }"
+        },
+        "warning": {
+          "quota": "Ez daukazu fitxategiak kargatzeko leku librerik. Jarri moderatzaileekin harremanetan."
+        }
+      },
+      "AlbumModal": {
+        "button": {
+          "cancel": "Ezeztatu",
+          "create": "Sortu"
+        },
+        "header": {
+          "newAlbum": "Album berria",
+          "newSeries": "Serie berria"
+        }
+      },
+      "UploadMetadataForm": {
+        "label": {
+          "description": "Deskribapena",
+          "position": "Kokapena",
+          "tags": "Etiketak",
+          "title": "Izenburua",
+          "image": "Pistaren irudia"
+        }
+      },
+      "AlbumForm": {
+        "header": {
+          "error": "Errorea sorketan"
+        },
+        "label": {
+          "albumTitle": "Izenburua"
+        }
+      },
+      "SubscribeButton": {
+        "title": {
+          "subscribe": "Harpidetu",
+          "unsubscribe": "Kendu harpidetza"
+        },
+        "help": {
+          "auth": "Saioa hasi behar duzu kanal honetara harpidetzeko"
+        }
+      }
+    },
+    "AboutPod": {
+      "stat": {
+        "hoursOfMusic": "ordu musika | ordu musika",
+        "activeUsers": "erabiltzaile aktibo | erabiltzaile aktibo",
+        "albumsCount": "album | album",
+        "artistsCount": "artista | artista",
+        "listeningsCount": "entzunaldi | entzunaldiak",
+        "tracksCount": "pista | pista"
+      },
+      "title": "Honi buruz",
+      "link": {
+        "about": "Instantzia honi buruz",
+        "features": "Ezaugarriak",
+        "introduction": "Sarrera",
+        "rules": "Arauak",
+        "statistics": "Estatistikak",
+        "terms": "Erabilera baldintzak eta pribatutasun politika"
+      },
+      "header": {
+        "about": "Instantzia honi buruz",
+        "contact": "Kontaktua",
+        "features": "Ezaugarriak",
+        "rules": "Arauak",
+        "statistics": "Estatistikak",
+        "terms": "Erabilera baldintzak eta pribatutasun politika"
+      },
+      "feature": {
+        "allowList": "Baimen-zerrenda",
+        "anonymousAccess": "Sarbide anonimoa",
+        "status": {
+          "closed": "Itxita",
+          "disabled": "Desgaituta",
+          "enabled": "Gaituta",
+          "open": "Irekita"
+        },
+        "federation": "Federazioa",
+        "version": "Funkwhale bertsioa",
+        "registrations": "Izen-emateak",
+        "quota": "Igoera muga"
+      },
+      "notApplicable": "Daturik gabe",
+      "placeholder": {
+        "noDescription": "Ez dago deskribapenik eskuragarri.",
+        "noRules": "Ez dago araurik erabilgarri.",
+        "noTerms": "Ez dago baldintzarik eskuragarri."
+      },
+      "message": {
+        "contact": "Bidal iezaguzu mezu elektroniko bat: {'{{'} contactEmail {'}}'}"
+      }
+    },
+    "common": {
+      "ActionTable": {
+        "button": {
+          "selected": "Aaukeratutako { n },{ total }(e)tik | { n } aukeratutako { total }(e)tik",
+          "allSelected": "Elementu bakarra hautatuta | { n } elementu hautatuta",
+          "go": "Joan",
+          "launch": "Abiarazi",
+          "refresh": "Freskatu taularen edukia",
+          "select": "Hautatu",
+          "selectAll": "Hautatu elementu guztiak",
+          "selectElement": "Hautatu elementu { n } | Hautatu { n } elementuak",
+          "selectCurrentPage": "Aukeratu orrialde hau bakarrik"
+        },
+        "message": {
+          "success": "{ action } ekintza arrakastaz gauzatu da elementu batean | { action } ekintza arrakastaz gauzatu da { n } elementutan",
+          "needsRefresh": "Edukia eguneratu da, sakatu Freskatu eduki eguneratua ikusteko"
+        },
+        "label": {
+          "actions": "Akzioak",
+          "performAction": "Burutu ekintzak"
+        },
+        "modal": {
+          "performAction": {
+            "header": "{ action } abiarazi nahi duzu elementu batean? | { action } abiarazi nahi duzu { n } elementutan?",
+            "content": {
+              "warning": "Honek elementu askori eragin diezaieke edo ondorio konponezinak eduki, egiaztatu hau den benetan nahi duzuna."
+            }
+          }
+        },
+        "header": {
+          "error": "Errorea akzioa aplikatzen zen bitartean"
+        }
+      },
+      "Duration": {
+        "meta": {
+          "hours": "{ hours } o { minutes } min",
+          "minutes": "{ minutes } minutu"
+        }
+      },
+      "UserMenu": {
+        "link": {
+          "about": "Honi buruz",
+          "chat": "Txat gela",
+          "docs": "Dokumentazioa",
+          "forum": "Foroa",
+          "support": "Laguntza",
+          "git": "Arazoen jarraipena",
+          "login": "Hasi saioa",
+          "logout": "Amaitu saioa",
+          "notifications": "Jakinarazpenak",
+          "profile": "Profila",
+          "settings": "Ezarpenak",
+          "signup": "Erregistratu"
+        },
+        "label": {
+          "shortcuts": "Laster-teklak",
+          "language": "Hizkuntza",
+          "theme": "Gaia"
+        }
+      },
+      "UserModal": {
+        "link": {
+          "about": "Honi buruz",
+          "chat": "Txat gela",
+          "forum": "Foroa",
+          "support": "Laguntza",
+          "git": "Arazoen jarraipena",
+          "login": "Hasi saioa",
+          "logout": "Amaitu saioa",
+          "notifications": "Jakinarazpenak",
+          "profile": "Profila",
+          "settings": "Ezarpenak",
+          "signup": "Erregistratu"
+        },
+        "label": {
+          "shortcuts": "Laster-teklak",
+          "language": "Hizkuntza",
+          "theme": "Gaia"
+        },
+        "header": {
+          "options": "Aukerak"
+        },
+        "button": {
+          "switchInstance": "Erabili beste instantzia bat"
+        }
+      },
+      "DangerousButton": {
+        "button": {
+          "cancel": "Ezeztatu",
+          "confirm": "Baieztatu"
+        },
+        "header": {
+          "confirm": "Nahi duzu akzio hau baieztatzea?"
+        }
+      },
+      "RenderedDescription": {
+        "button": {
+          "cancel": "Ezeztatu",
+          "edit": "Editatu",
+          "less": "Erakutsi gutxiago",
+          "more": "Erakutsi gehiago",
+          "update": "Eguneratu deskribapena"
+        },
+        "header": {
+          "failure": "Errorea deskribapena eguneratzerakoan"
+        },
+        "empty": {
+          "noDescription": "Ez dago deskribapenik"
+        }
+      },
+      "InlineSearchBar": {
+        "button": {
+          "clear": "Garbitu"
+        },
+        "label": {
+          "search": "Bilatu"
+        },
+        "placeholder": {
+          "search": "Bilatu…"
+        }
+      },
+      "CollapseLink": {
+        "button": {
+          "collapse": "Tolestu",
+          "expand": "Zabaldu"
+        }
+      },
+      "CopyInput": {
+        "button": {
+          "copy": "Kopiatu"
+        },
+        "message": {
+          "success": "Testua arbelera kopiatu da!"
+        }
+      },
+      "LoginModal": {
+        "link": {
+          "login": "Hasi saioa",
+          "signup": "Erregistratu"
+        },
+        "header": {
+          "unauthenticated": "Autentifikatu gabe"
+        },
+        "description": {
+          "noAccess": "Ez daukazu sarbiderik!"
+        }
+      },
+      "ContentForm": {
+        "help": {
+          "markdown": "Markdown sintaxia onartzen da."
+        },
+        "empty": {
+          "noContent": "Aurrebistarako ezer ez."
+        },
+        "button": {
+          "preview": "Aurrebista",
+          "write": "Idatzi"
+        },
+        "placeholder": {
+          "input": "Idatzi hitz batzuk hemen…"
+        }
+      },
+      "EmptyState": {
+        "header": {
+          "noResults": "Ez da emaitzarik aurkitu."
+        },
+        "button": {
+          "refresh": "Freskatu"
+        }
+      },
+      "AttachmentInput": {
+        "help": {
+          "upload": "PNG edo JPG. Neurriak 1400x1400px eta 3000x3000px artekoa izan behar du. Onartzen den gehienezko fitxategi-tamaina 5MB da."
+        },
+        "button": {
+          "remove": "Kendu"
+        },
+        "label": {
+          "upload": "Igo irudi berria…"
+        },
+        "loader": {
+          "uploading": "Fitxategia igotzen…"
+        },
+        "header": {
+          "failure": "Zure eranskina ezin da gorde"
+        }
+      },
+      "ExpandableDiv": {
+        "button": {
+          "less": "Erakutsi gutxiago",
+          "more": "Erakutsi gehiago"
+        }
+      }
+    },
+    "playlists": {
+      "Card": {
+        "meta": {
+          "tracks": "Pista { n } | { n } pista"
+        }
+      },
+      "PlaylistModal": {
+        "warning": {
+          "duplicate": "{ 0 } jada badago { 1 }(e)n."
+        },
+        "button": {
+          "addDuplicate": "Gehitu halere",
+          "addToPlaylist": "Gehitu erreprodukzio-zerrenda honetan",
+          "addTrack": "Abestia sartu",
+          "cancel": "Ezeztatu",
+          "edit": "Editatu"
+        },
+        "header": {
+          "addToPlaylist": "Gehitu erreprodukzio-zerrendan",
+          "available": "Zerrendak eskuragarri",
+          "manage": "Kudeatu zerrendak",
+          "noResults": "Ez dago zure iragazkiarekin bat datorren emaitzarik",
+          "addFailure": "Pista ezin da zerrenda batera gehitu"
+        },
+        "table": {
+          "edit": {
+            "header": {
+              "edit": "Editatu",
+              "lastModification": "Azken aldaketa",
+              "name": "Izena",
+              "tracks": "Pistak"
+            }
+          }
+        },
+        "placeholder": {
+          "filterPlaylist": "Idatzi erreprodukzio-zerrendaren izena"
+        },
+        "label": {
+          "filter": "Iragazkia"
+        },
+        "empty": {
+          "noPlaylists": "Ez da zerrendarik sortu oraindik"
+        }
+      },
+      "Editor": {
+        "button": {
+          "addDuplicate": "Gehitu halere",
+          "clear": "Garbitu zerrenda",
+          "copy": "Kopiatu uneko ilara erreprodukzio-zerrenda honetara",
+          "insertFromQueue": "Gehitu ilaratik (abesti { n }) | Gehitu ilaratik ({ n } abesti)"
+        },
+        "error": {
+          "sync": "Errorea gertatu da aldaketak gordetzerakoan"
+        },
+        "message": {
+          "sync": "Aldaketak zerbitzariarekin sinkronizatuta"
+        },
+        "modal": {
+          "clearPlaylist": {
+            "header": "Nahi duzu \"{ playlist }\" zerrenda garbitzea?",
+            "content": {
+              "warning": "Honek zerrenda honetako pista guztiak kenduko ditu eta ezin da desegin."
+            }
+          }
+        },
+        "help": {
+          "reorder": "Arrastatu eta jaregin lerroak abestiak zerrendan berrordenatzeko"
+        },
+        "header": {
+          "editor": "Zerrenda editorea"
+        },
+        "warning": {
+          "duplicate": "Zure ilarako pista batzuk zerrenda honetan daude dagoeneko:"
+        },
+        "loading": {
+          "sync": "Aldaketak zerbitzariarekin sinkronizatzen…"
+        }
+      },
+      "TrackPlaylistIcon": {
+        "button": {
+          "add": "Gehitu erreprodukzio-zerrendan…"
+        }
+      },
+      "Form": {
+        "header": {
+          "createPlaylist": "Zerrenda berria sortu",
+          "createSuccess": "Zerrenda sortuta",
+          "updateSuccess": "Zerrenda eguneratuta",
+          "createFailure": "Ezin izan da zerrenda sortu"
+        },
+        "button": {
+          "create": "Zerrenda sortu",
+          "update": "Eguneratu zerrenda"
+        },
+        "placeholder": {
+          "name": "Nire zerrenda txundigarria"
+        },
+        "label": {
+          "name": "Zerrenda izena",
+          "visibility": "Zerrendaren ikusgaitasuna"
+        }
+      },
+      "Widget": {
+        "button": {
+          "create": "Sortu erreprodukzio-zerrenda",
+          "more": "Erakutsi gehiago"
+        },
+        "placeholder": {
+          "noPlaylists": "Ez da zerrendarik sortu oraindik"
+        }
+      }
+    },
+    "notifications": {
+      "NotificationRow": {
+        "message": {
+          "libraryAcceptFollow": "{ username }-(e)k zure jarraipen-eskaera onartu du \"{ library }\" liburutegian",
+          "libraryFollow": "{ username } zure \"{ library }\" liburutegia jarraitzen hasi da",
+          "libraryPendingFollow": "{ username }-(e)k zure \"{ library }\" liburutegia jarraitu nahi du"
+        },
+        "button": {
+          "approve": "Onartu",
+          "markRead": "Markatu irakurrita",
+          "markUnread": "Markatu irakurri gabe",
+          "reject": "Baztertu"
+        }
+      }
+    },
+    "Sidebar": {
+      "link": {
+        "about": "Instantzia honi buruz",
+        "albums": "Albumak",
+        "artists": "Artistak",
+        "browse": "Arakatu",
+        "channels": "Kanalak",
+        "createAccount": "Sortu kontua",
+        "favorites": "Gogokoak",
+        "home": "Hasiera",
+        "library": "Liburutegia",
+        "login": "Sartu",
+        "moderation": "Moderazioa",
+        "playlists": "Zerrendak",
+        "podcasts": "Podcastak",
+        "radios": "Irratiak",
+        "search": "Bilatu",
+        "settings": "Ezarpenak",
+        "users": "Erabiltzaileak"
+      },
+      "label": {
+        "add": "Edukia sartu",
+        "administration": "Administrazioa",
+        "language": "Hizkuntza",
+        "main": "Menu nagusia",
+        "follows": "Zain dauden jarraitzeko eskaerak",
+        "edits": "Berrikuspen edizioak zain",
+        "play": "Erreproduzitu pista hau",
+        "theme": "Gaia"
+      },
+      "header": {
+        "administration": "Administrazioa",
+        "explore": "Arakatu",
+        "main": "Nabigazio nagusia",
+        "more": "Gehiago",
+        "library": "Nire liburutegia"
+      }
+    },
+    "manage": {
+      "library": {
+        "UploadsTable": {
+          "table": {
+            "upload": {
+              "header": {
+                "accessedDate": "Sarbide data",
+                "account": "Kontua",
+                "creationDate": "Sortze data",
+                "domain": "Domeinua",
+                "importStatus": "Inportazioaren egoera",
+                "library": "Liburutegia",
+                "name": "Izena",
+                "size": "Tamaina",
+                "visibility": "Ikusgaitasuna"
+              }
+            }
+          },
+          "option": {
+            "all": "Dena",
+            "failed": "Huts egin du",
+            "finished": "Amaituta",
+            "pending": "Zain",
+            "skipped": "Saltatuta"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Gorantza",
+              "descending": "Beheranzkoa",
+              "label": "Ordenazio norabidea"
+            },
+            "label": "Ordena"
+          },
+          "action": {
+            "delete": {
+              "label": "Ezabatu",
+              "warning": "Hautatutako igoerak ezabatu egingo dira. Ekintza hau ezin da desegin."
+            }
+          },
+          "link": {
+            "local": "Lokala"
+          },
+          "notApplicable": "Daturik gabe",
+          "label": {
+            "search": "Bilatu",
+            "status": "Egoera",
+            "visibility": "Ikusgaitasuna"
+          },
+          "placeholder": {
+            "search": "Bilatu domeinuaren, aktorearen, izenaren, erreferentziaren, iturburuaren... arabera"
+          },
+          "pagination": {
+            "results": "Emaitzak erakusten: { start }-{ end } guztizko { total }(e)tik"
+          }
+        },
+        "LibrariesTable": {
+          "table": {
+            "library": {
+              "header": {
+                "account": "Kontua",
+                "creationDate": "Sortze data",
+                "domain": "Domeinua",
+                "followers": "Jarraitzaileak",
+                "name": "Izena",
+                "uploads": "Igoerak",
+                "visibility": "Ikusgaitasuna"
+              }
+            }
+          },
+          "option": {
+            "all": "Dena"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Gorantza",
+              "descending": "Beheranzkoa",
+              "label": "Ordenazio norabidea"
+            },
+            "label": "Ordena"
+          },
+          "action": {
+            "delete": {
+              "label": "Ezabatu",
+              "warning": "Hautatutako liburutegia eta erlazionatutako igoerak eta jarraipenak ezabatu egingo dira. Ekintza hau ezin da desegin."
+            }
+          },
+          "link": {
+            "local": "Lokala"
+          },
+          "label": {
+            "search": "Bilatu",
+            "visibility": "Ikusgaitasuna"
+          },
+          "placeholder": {
+            "search": "Bilatu domeinuaren, aktorearen, izenaren, deskribapenaren… arabera"
+          },
+          "pagination": {
+            "results": "Emaitzak erakusten: { start }-{ end } guztizko { total }(e)tik"
+          }
+        },
+        "TracksTable": {
+          "table": {
+            "track": {
+              "header": {
+                "album": "Albuma",
+                "artist": "Artista",
+                "creationDate": "Sortze data",
+                "domain": "Domeinua",
+                "license": "Lizentzia",
+                "title": "Izenburua"
+              }
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Gorantza",
+              "descending": "Beheranzkoa",
+              "label": "Ordenazio norabidea"
+            },
+            "label": "Ordena"
+          },
+          "action": {
+            "delete": {
+              "label": "Ezabatu",
+              "warning": "Hautatutako pistak eta erlazionatutako igoerak, gogokoak eta entzunaldien historia ezabatu egingo dira. Ekintza hau ezin da desegin."
+            }
+          },
+          "link": {
+            "local": "Lokala"
+          },
+          "notApplicable": "Daturik gabe",
+          "label": {
+            "search": "Bilatu"
+          },
+          "placeholder": {
+            "search": "Bilatu domeinuaren, izenburuaren, artistaren, albumaren, MusicBrainz IDaren... arabera"
+          },
+          "pagination": {
+            "results": "Emaitzak erakusten: { start }-{ end } guztizko { total }(e)tik"
+          }
+        },
+        "ArtistsTable": {
+          "table": {
+            "artist": {
+              "header": {
+                "albums": "Albumak",
+                "creationDate": "Sortze data",
+                "domain": "Domeinua",
+                "name": "Izena",
+                "tracks": "Pistak"
+              }
+            }
+          },
+          "option": {
+            "all": "Dena"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Gorantza",
+              "descending": "Beheranzkoa",
+              "label": "Ordenazio norabidea"
+            },
+            "label": "Ordena"
+          },
+          "label": {
+            "category": "Kategoria",
+            "search": "Bilatu"
+          },
+          "action": {
+            "delete": {
+              "label": "Ezabatu",
+              "warning": "Hautatutako artista eta erlazionatutako igoerak, pistak, albumak, gogokoak eta entzunaldien historia ezabatu egingo dira. Ekintza hau ezin da desegin."
+            }
+          },
+          "link": {
+            "local": "Lokala"
+          },
+          "placeholder": {
+            "search": "Bilatu domeinuaren, izenaren MusicBrainz IDaren... arabera"
+          },
+          "pagination": {
+            "results": "Emaitzak erakusten: { start }-{ end } guztizko { total }(e)tik"
+          }
+        },
+        "TagsTable": {
+          "table": {
+            "tag": {
+              "header": {
+                "albums": "Albumak",
+                "artists": "Artistak",
+                "creationDate": "Sortze data",
+                "name": "Izena",
+                "tracks": "Pistak"
+              }
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Gorantza",
+              "descending": "Beheranzkoa",
+              "label": "Ordenazio norabidea"
+            },
+            "label": "Ordena"
+          },
+          "action": {
+            "delete": {
+              "label": "Ezabatu",
+              "warning": "Hautatutako etiketa ezabatu egingo da eta edukiarekiko esteka kenduko da, baldin balego. Ekintza hau ezin da desegin."
+            }
+          },
+          "label": {
+            "search": "Bilatu"
+          },
+          "placeholder": {
+            "search": "Bilatu izenaren arabera"
+          },
+          "pagination": {
+            "results": "Emaitzak erakusten: { start }-{ end } guztizko { total }(e)tik"
+          }
+        },
+        "EditsCardList": {
+          "option": {
+            "all": "Dena",
+            "approved": "Onartuta",
+            "pending": "Berrikuspenaren zain",
+            "rejected": "Baztertuta"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Gorantza",
+              "descending": "Beheranzkoa",
+              "label": "Ordena"
+            },
+            "label": "Ordena"
+          },
+          "placeholder": {
+            "search": "Bilatu kontuaren, laburpenaren, domeinuaren... arabera"
+          },
+          "pagination": {
+            "results": "Emaitzak erakusten: { start }-{ end } guztizko { total }(e)tik"
+          },
+          "label": {
+            "status": "Egoera"
+          }
+        },
+        "AlbumsTable": {
+          "table": {
+            "album": {
+              "header": {
+                "artist": "Artista",
+                "creationDate": "Sortze data",
+                "domain": "Domeinua",
+                "name": "Izenburua",
+                "releaseDate": "Argitalpen-data",
+                "tracks": "Pistak"
+              }
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Gorantza",
+              "descending": "Beheranzkoa",
+              "label": "Ordenazio norabidea"
+            },
+            "label": "Ordena"
+          },
+          "action": {
+            "delete": {
+              "label": "Ezabatu",
+              "warning": "Hautatutako albumak eta erlazionatutako pistak, igoerak, gogokoak eta entzunaldien historia ezabatu egingo dira. Ekintza hau ezin da desegin."
+            }
+          },
+          "link": {
+            "local": "Lokala",
+            "moderation": "Ireki moderazio interfazean"
+          },
+          "notApplicable": "Daturik gabe",
+          "label": {
+            "search": "Bilatu"
+          },
+          "placeholder": {
+            "search": "Bilatu domeinuaren, izenburuaren, artistaren, MusicBrainz IDaren... arabera"
+          },
+          "pagination": {
+            "results": "Emaitzak erakusten: { start }-{ end } guztizko { total }(e)tik"
+          }
+        }
+      },
+      "moderation": {
+        "ReportCard": {
+          "table": {
+            "object": {
+              "account": "Kontua",
+              "domain": "Domeinua",
+              "local": "Lokala",
+              "owner": "Jabea",
+              "type": "Mota"
+            },
+            "status": {
+              "assignedTo": "Honi esleituta",
+              "internalNotes": "Barne oharrak",
+              "resolutionDate": "Ebazpenaren data",
+              "resolved": "Ebatzita",
+              "status": "Egoera",
+              "unresolved": "Konpondu gabea"
+            },
+            "report": {
+              "category": "Kategoria",
+              "creationDate": "Sortze data",
+              "submittedBy": "Bidaltzailea"
+            }
+          },
+          "header": {
+            "actions": "Akzioak",
+            "notes": "Barne oharrak",
+            "message": "Mezua",
+            "reportedObject": "Salatutako objektua"
+          },
+          "button": {
+            "confirmDelete": "Ezabatu",
+            "delete": "Ezabatu salatutako objektua",
+            "resolve": "Ebatzi",
+            "unresolve": "Konpondu gabe"
+          },
+          "modal": {
+            "delete": {
+              "header": "Salatutako objektua ezabatu nahi duzu?",
+              "content": {
+                "warning": "Honek txostenarekin erlazionatutako objektua ezabatuko du. Ezabaketa ezin da desegin."
+              }
+            }
+          },
+          "notApplicable": "Daturik gabe",
+          "link": {
+            "moderation": "Ireki moderazio interfazean",
+            "report": "Salatu { id }",
+            "publicPage": "Ikusi orrialde publikoa"
+          },
+          "warning": {
+            "objectDeleted": "Txosten honekin lotutako objektua ezabatu da."
+          }
+        },
+        "UserRequestCard": {
+          "header": {
+            "actions": "Akzioak",
+            "notes": "Barne oharrak",
+            "signup": "Mezua"
+          },
+          "button": {
+            "approve": "Onartu",
+            "reject": "Ukatu"
+          },
+          "table": {
+            "status": {
+              "approved": "Onartuta",
+              "assignedTo": "Honi esleituta",
+              "internalNotes": "Barne oharrak",
+              "pending": "Zain",
+              "refused": "Ukatuta",
+              "status": "Egoera"
+            },
+            "request": {
+              "creationDate": "Sortze data",
+              "submittedBy": "Bidaltzailea"
+            }
+          },
+          "notApplicable": "Daturik gabe",
+          "link": {
+            "request": "Eskatu { id }"
+          },
+          "message": {
+            "signup": "Erabiltzaile honek zure instantzian erregistratu nahi du."
+          }
+        },
+        "InstancePolicyForm": {
+          "header": {
+            "addRule": "Gehitu moderazio-arau berri bat",
+            "editRule": "Editatu moderazio-arauak",
+            "failure": "Errorea araua sortzerakoan"
+          },
+          "label": {
+            "blockAll": "Blokeatu dena",
+            "policyDisabled": "Desgaituta",
+            "policyEnabled": "Gaituta",
+            "silenceActivity": "Isilarazi aktibitatea",
+            "silenceNotifications": "Isilarazi jakinarazpenak",
+            "customizeRule": "Edo pertsonalizatu zure araua",
+            "policyReason": "Arrazoia",
+            "rejectMedia": "Baztertu multimedia"
+          },
+          "tooltip": {
+            "blockAll": "Blokeatu kontu edo domeinu honetako guztia. Erakundearekin edozein harreman ekidingo du, eta lotutako edukiak ezabatu (igoerak, liburutegiak, jarraitzeak, etab.)",
+            "rejectMedia": "Ez deskargatu multimedia fitxategirik (audioa, albumaren azala, kontuaren avatarra...) kontu edo domeinu honetatik.",
+            "summary": "Azaldu zergatik aplikatzen duzun gidalerro hau: arau hau zergatik gehitu duzun gogoratzen lagunduko dizu. Zure instantziaren konfigurazioaren arabera publikoki erakutsi liteke erabiltzaileei zein moderazio-arau dauden ulertzen laguntzeko.",
+            "silenceActivity": "Ezkutatu kontua edo domeinuaren edukia, jarraitzaileentzat ezik.",
+            "silenceNotifications": "Eragotzi kontu edo domeinuak jakinarazpenak abiaraztea, jarraitzaileengandik izan ezik.",
+            "isActive": "Erabili ezarpen hau gidalerroa aldi baterako gaitu/desgaitzeko, guztiz kendu gabe."
+          },
+          "button": {
+            "cancel": "Ezeztatu",
+            "create": "Sortu",
+            "delete": "Ezabatu",
+            "confirm": "Ezabatu moderazio-araua",
+            "update": "Eguneratu"
+          },
+          "modal": {
+            "delete": {
+              "header": "Moderazio-arau hau ezabatu nahi duzu?",
+              "content": {
+                "warning": "Ekintza hau ezin da desegin."
+              }
+            }
+          }
+        },
+        "NoteForm": {
+          "button": {
+            "add": "Gehitu oharra"
+          },
+          "placeholder": {
+            "summary": "Deskribatu zer ekintza egin diren edo horiekin lotutako beste edozein eguneraketa…"
+          },
+          "header": {
+            "failure": "Errorea oharra bidaltzerakoan"
+          }
+        },
+        "DomainsTable": {
+          "action": {
+            "add": {
+              "label": "Gehitu baimen-zerrendan"
+            },
+            "purge": {
+              "label": "Kendu"
+            },
+            "remove": {
+              "label": "Kendu baimenendutakoen zerrendatik"
+            }
+          },
+          "option": {
+            "all": "Dena",
+            "no": "Ez",
+            "yes": "Bai"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Gorantza",
+              "descending": "Beheranzkoa",
+              "label": "Ordenazio norabidea"
+            },
+            "label": "Ordena"
+          },
+          "table": {
+            "domain": {
+              "header": {
+                "firstSeen": "Lehen aldiz ikusia",
+                "name": "Izena",
+                "receivedMessages": "Jasotako mezuak",
+                "moderationRule": "Moderazio arauaren pean",
+                "users": "Erabiltzaileak"
+              },
+              "moderationRule": "Bai"
+            }
+          },
+          "label": {
+            "inList": "Onartuen zerrendan dago",
+            "search": "Bilatu"
+          },
+          "empty": {
+            "noPods": "Ez da beste instantziarik aurkitu"
+          },
+          "placeholder": {
+            "search": "Bilatu izenaren arabera…"
+          },
+          "pagination": {
+            "results": "Emaitzak erakusten: { start }-{ end } guztizko { total }(e)tik"
+          },
+          "link": {
+            "list": "Domeinu hau zure onartuen zerrendan dago"
+          }
+        },
+        "AccountsTable": {
+          "ordering": {
+            "direction": {
+              "ascending": "Gorantza",
+              "descending": "Beheranzkoa",
+              "label": "Ordenazio norabidea"
+            },
+            "label": "Ordena"
+          },
+          "table": {
+            "account": {
+              "header": {
+                "domain": "Domeinua",
+                "firstSeen": "Lehen aldiz ikusia",
+                "lastSeen": "Ikusi zen azken aldia",
+                "name": "Izena",
+                "moderationRule": "Moderazio arauaren pean",
+                "uploads": "Igoerak"
+              },
+              "moderationRule": "Bai"
+            }
+          },
+          "link": {
+            "local": "Kontu lokala"
+          },
+          "action": {
+            "purge": {
+              "label": "Kendu"
+            }
+          },
+          "label": {
+            "search": "Bilatu"
+          },
+          "placeholder": {
+            "search": "Bilatu domeinuaren, erabiltzaile-izenaren, biografiaren... arabera"
+          },
+          "pagination": {
+            "results": "Emaitzak erakusten: { start }-{ end } guztizko { total }(e)tik"
+          }
+        },
+        "InstancePolicyCard": {
+          "label": {
+            "blockAll": "Blokeatu dena",
+            "muteActivity": "Isilarazi aktibitatea",
+            "muteNotifications": "Isilarazi jakinarazpenak",
+            "reason": "Arrazoia",
+            "rejectMedia": "Baztertu multimedia"
+          },
+          "button": {
+            "edit": "Editatu"
+          },
+          "status": {
+            "enabled": "Gaituta",
+            "paused": "Pausatuta"
+          },
+          "header": {
+            "rule": "Araua"
+          }
+        },
+        "InstancePolicyModal": {
+          "button": {
+            "close": "Itxi",
+            "show": "Moderazio arauak…"
+          },
+          "modal": {
+            "manage": {
+              "header": "Kudeatu { obj }(r)en moderazio arauak",
+              "content": {
+                "warning": "Entitate honek moderazio arau espezifikoak ditu"
+              }
+            }
+          }
+        },
+        "NotesThread": {
+          "button": {
+            "delete": "Ezabatu"
+          },
+          "modal": {
+            "delete": {
+              "header": "Ohar hau ezabatu nahi duzu?",
+              "content": {
+                "warning": "Oharra ezabatuko da. Ekintza hau ezin da desegin."
+              }
+            }
+          }
+        }
+      },
+      "ChannelsTable": {
+        "table": {
+          "channel": {
+            "header": {
+              "account": "Kontua",
+              "albums": "Albumak",
+              "creationDate": "Sortze data",
+              "domain": "Domeinua",
+              "name": "Izena",
+              "tracks": "Pistak"
+            }
+          }
+        },
+        "option": {
+          "all": "Dena"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Gorantza",
+            "descending": "Beheranzkoa",
+            "label": "Ordenazio norabidea"
+          },
+          "label": "Ordena"
+        },
+        "label": {
+          "category": "Kategoria",
+          "search": "Bilatu"
+        },
+        "link": {
+          "local": "Lokala",
+          "moderation": "Ireki moderazio interfazean"
+        },
+        "placeholder": {
+          "search": "Bilatu domeinuaren, izenaren, kontuaren... arabera"
+        },
+        "pagination": {
+          "results": "Emaitzak erakusten: { start }-{ end } guztizko { total }(e)tik"
+        }
+      },
+      "users": {
+        "UsersTable": {
+          "table": {
+            "user": {
+              "header": {
+                "accountStatus": "Kontuaren egoera",
+                "email": "Eposta",
+                "lastActivity": "Azken jarduera",
+                "permissions": "Baimenak",
+                "signup": "Erregistratu",
+                "status": "Egoera",
+                "username": "Erabiltzaile-izena"
+              },
+              "accountStatus": {
+                "active": "Aktibo",
+                "inactive": "Ez-aktiboa"
+              },
+              "status": {
+                "admin": "Admin",
+                "regular": "Erabiltzaile arrunta",
+                "staff": "Taldeko kidea"
+              }
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Gorantza",
+              "descending": "Beheranzkoa",
+              "label": "Ordenazio norabidea"
+            },
+            "label": "Ordena"
+          },
+          "permission": {
+            "library": "Liburutegia",
+            "moderation": "Moderazioa",
+            "settings": "Ezarpenak"
+          },
+          "notApplicable": "Daturik gabe",
+          "placeholder": {
+            "search": "Bilatu erabiltzaile-izenaren, helbide elektronikoaren, izenaren… arabera"
+          },
+          "pagination": {
+            "results": "Emaitza bat bistaratzen | { start } - { end } emaitzak bistaratzen, guztira { total }"
+          }
+        },
+        "InvitationsTable": {
+          "option": {
+            "all": "Dena",
+            "expired": "Iraungita/erabilita",
+            "open": "Ireki"
+          },
+          "table": {
+            "invitation": {
+              "header": {
+                "code": "Kodea",
+                "creationDate": "Sortze data",
+                "expirationDate": "Iraungitze data",
+                "owner": "Jabea",
+                "status": "Egoera"
+              }
+            }
+          },
+          "action": {
+            "delete": "Ezabatu"
+          },
+          "label": {
+            "expired": "Iraungita",
+            "unused": "Ez da erabiltzen",
+            "search": "Bilatu",
+            "status": "Egoera",
+            "used": "Erabilita"
+          },
+          "ordering": {
+            "label": "Ordena"
+          },
+          "placeholder": {
+            "search": "Bilatu erabiltzaile-izenaren, helbide elektronikoaren, kodearen… arabera"
+          },
+          "pagination": {
+            "results": "Emaitza bat bistaratzen | { start } - { end } emaitzak bistaratzen, guztira { total }"
+          }
+        },
+        "InvitationForm": {
+          "button": {
+            "clear": "Garbitu",
+            "new": "Lortu gonbidapen berria"
+          },
+          "table": {
+            "invitation": {
+              "header": {
+                "code": "Kodea",
+                "link": "Partekatu esteka"
+              }
+            }
+          },
+          "header": {
+            "failure": "Errorea gonbidapena sortzerakoan"
+          },
+          "label": {
+            "invite": "Gonbidapen kodea"
+          },
+          "placeholder": {
+            "invitation": "Utzi hutsik ausazko kode batentzat"
+          }
+        }
+      }
+    },
+    "admin": {
+      "SignupFormBuilder": {
+        "table": {
+          "additionalFields": {
+            "header": {
+              "actions": "Ekintzak",
+              "label": "Eremuaren etiketa",
+              "type": "Eremu mota",
+              "required": "Beharrezkoa"
+            },
+            "type": {
+              "long": "Testu luzea",
+              "short": "Testu laburra"
+            },
+            "required": {
+              "false": "Ez",
+              "true": "Bai"
+            }
+          }
+        },
+        "button": {
+          "add": "Gehitu eremu berri bat",
+          "edit": "Editatu formularioa",
+          "preview": "Formularioaren aurrebista"
+        },
+        "label": {
+          "additionalField": "Eremu gehigarria",
+          "additionalFields": "Eremu gehigarriak",
+          "delete": "Ezabatu",
+          "helpText": "Laguntza testua",
+          "moveDown": "Eraman behera",
+          "moveUp": "Eraman gora"
+        },
+        "help": {
+          "additionalFields": "Formularioan erakusteko eremu gehigarriak. Soili eskuzko izen-emate baliozkotzea gaituta badago erakutsiko da.",
+          "helpText": "Izena emateko formularioaren hasieran bistaratuko den aukerako testua."
+        }
+      },
+      "SettingsGroup": {
+        "header": {
+          "image": "Uneko irudia",
+          "error": "Errorea ezarpenak gordetzerakoan"
+        },
+        "button": {
+          "save": "Gorde"
+        },
+        "message": {
+          "success": "Ezarpenak arrakastaz eguneratuta."
+        }
+      }
+    },
+    "moderation": {
+      "ReportCategoryDropdown": {
+        "option": {
+          "all": "Dena"
+        },
+        "label": {
+          "category": "Kategoria"
+        }
+      },
+      "ReportModal": {
+        "header": {
+          "disabled": "Salaketa anonimoak desgaituta daude. Hasi saioa salaketa bidaltzeko.",
+          "modal": "Objektu hau salatu nahi al duzu?",
+          "submissionFailure": "Errorea salaketa bidaltzerakoan"
+        },
+        "button": {
+          "cancel": "Ezeztatu",
+          "submit": "Bidali txostena"
+        },
+        "label": {
+          "email": "Eposta",
+          "forwardToDomain": "Bidali { domain} domeinura",
+          "message": "Mezua"
+        },
+        "description": {
+          "forwardToDomain": "Bidali zure txostenaren kopia anonimatua elementu hau hartzen duen zerbitzarira.",
+          "message": "Erabili eremu hau moderatzaileari zure txostenari buruzko informazio gehigarria emateko.",
+          "modal": "Erabili formulario hau moderazio taldeari txosten bat bidaltzeko.",
+          "email": "Eposta helbide hau erabiliko dugu salaketa hau dela eta zurekin harremanetan jarri behar badugu."
+        },
+        "message": {
+          "submissionSuccess": "Salaketa arrakastaz bidali da, esker aunitz"
+        }
+      },
+      "FilterModal": {
+        "button": {
+          "cancel": "Ezeztatu",
+          "hide": "Ezkutatu edukia"
+        },
+        "message": {
+          "success": "Edukien iragazkia behar bezala gehitu da"
+        },
+        "header": {
+          "modal": "\"{ name }\" artistaren edukia ezkutatu nahi duzu?",
+          "failure": "Errorea iragazkia sortzerakoan"
+        },
+        "warning": {
+          "createFilter": {
+            "listItem2": "\"Azken aldian gehituta\" widget-ean",
+            "listItem3": "Artista eta albumen zerrendetan",
+            "listItem1": "Beste erabiltzaileen gogokoetan eta entzundakoen historian",
+            "listItem4": "Irratien iradokizunetan",
+            "listIntro": "Artista honen pista, album eta erabiltzaile aktibitatea ez dituzu ikusiko hemendik aurrera:"
+          }
+        },
+        "help": {
+          "createFilter": "Zure iragazkiak nahi duzunean kudeatu eta eguneratu ditzakezu kontuaren ezarpenetan."
+        }
+      }
+    },
+    "federation": {
+      "FetchButton": {
+        "description": {
+          "failure": "Errore bat gertatu da datuak freskatzen saiatzean:",
+          "success": "Datuak behar bezala freskatu dira urruneko zerbitzaritik.",
+          "pending": "Freskatze eskaera ez da garaiz prozesatu gure zerbitzarian. Beranduago prozesatuko da.",
+          "skipped": "Urruneko zerbitzariak erantzun du, baina Funkwhalek ez du itzulitako datuen euskarririk."
+        },
+        "table": {
+          "error": {
+            "value": {
+              "httpError": "HTTP errorea gertatu da urruneko zerbitzariarekin harremanetan jartzean",
+              "invalidAttributesError": "Urruneko zerbitzariak itzulitako datuek atributu baliogabeak edo faltan ditu",
+              "connectionError": "Ezin izan da urruneko zerbitzarira konektatu",
+              "httpStatus": "Urruneko zerbitzariak HTTP { status } egoerarekin erantzun du",
+              "timeoutError": "Urruneko zerbitzariak ez du behar bezain azkar erantzun",
+              "invalidJsonError": "Urruneko zerbitzariak baliogabeko JSON edo JSON-LD datuak itzuli ditu",
+              "unknownError": "Errore ezezaguna"
+            },
+            "label": {
+              "detail": "Errorearen xehetasuna",
+              "type": "Errore mota"
+            }
+          }
+        },
+        "button": {
+          "close": "Itxi",
+          "reload": "Itxi eta freskatu orria"
+        },
+        "header": {
+          "saveFailure": "Errorea ezarpenak gordetzerakoan",
+          "failure": "Freskatu errorea",
+          "pending": "Freskatu zain daudenak",
+          "success": "Arrakastaz freskatua",
+          "skipped": "Freskatzea saltatu da",
+          "refresh": "Objektua freskatzen urruneko zerbitzaritik…"
+        },
+        "loader": {
+          "fetchRequest": "Bilaketa eskatzen…",
+          "awaitingResult": "Erantzunen zain…"
+        }
+      },
+      "LibraryWidget": {
+        "empty": {
+          "noMatch": "Ez da bat datorren liburutegirik aurkitu."
+        },
+        "button": {
+          "showMore": "Erakutsi gehiago"
+        }
+      }
+    },
+    "ShortcutsModal": {
+      "shortcut": {
+        "audio": {
+          "label": "Audio erreproduzigailuaren laster-teklak",
+          "clearQueue": "Garbitu ilara",
+          "decreaseVolume": "Jaitsi bolumena",
+          "expandQueue": "Zabaldu ilara/erreproduzigailu ikuspegia",
+          "increaseVolume": "Igo bolumena",
+          "playPause": "Pausatu/erreproduzitu uneko pista",
+          "playNext": "Erreproduzitu hurrengo pista",
+          "playPrevious": "Erreproduzitu aurreko pista",
+          "seekBack30": "Bilatu atzeraka 30s",
+          "seekBack5": "Bilatu atzeraka 5s",
+          "seekForward30": "Bilatu aurreraka 30s",
+          "seekForward5": "Bilatu aurreraka 5s",
+          "shuffleQueue": "Nahasi ilara",
+          "toggleFavorite": "Txandakatu gogokoa",
+          "toggleMute": "Txandakatu mututzea",
+          "toggleLoop": "Txandakatu ilararen begizta"
+        },
+        "general": {
+          "focus": "Fokuratu bilaketa-barra",
+          "label": "Lasterbide orokorrak",
+          "show": "Erakutsi erabilgarri dauden laster-tekla guztiak",
+          "unfocus": "Kendu fokua bilaketa-barrari"
+        }
+      },
+      "button": {
+        "close": "Itxi"
+      },
+      "header": {
+        "modal": "Laster-teklak"
+      }
+    },
+    "SetInstanceModal": {
+      "button": {
+        "cancel": "Ezeztatu",
+        "submit": "Bidali"
+      },
+      "header": {
+        "chooseInstance": "Zure instantzia hautatu",
+        "failure": "Ezin da konektatu emandako URLarekin",
+        "suggestions": "Iradokitako aukerak"
+      },
+      "label": {
+        "url": "Instantziaren URLa"
+      },
+      "help": {
+        "notFunkwhaleServer": "Emandako helbidea ez da Funkwhale zerbitzari bat",
+        "serverDown": "Zerbitzaria erorita egon daiteke",
+        "selectPod": "Jarraitzeko, hautatu konektatu nahi duzun Funkwhale instantzia. Sartu helbidea zuzenean, edo hautatu iradokizunetako bat."
+      },
+      "message": {
+        "newUrl": "{ url } Funkwhale instantzia erabiltzen ari zara orain"
+      }
+    },
+    "Queue": {
+      "button": {
+        "clear": "Garbitu",
+        "close": "Itxi",
+        "stopRadio": "Gelditu irratia"
+      },
+      "label": {
+        "duration": "Iraupena",
+        "addArtistContentFilter": "Ezkutatu artista honen edukia…",
+        "next": "Hurrengo pista",
+        "pause": "Pausatu",
+        "play": "Erreproduzitu",
+        "previous": "Aurreko pista",
+        "queue": "Ilara",
+        "remove": "Kendu",
+        "restart": "Berrasi pista"
+      },
+      "message": {
+        "radio": "Abesti berriak hemen gehituko dira automatikoki.",
+        "automaticPlay": "Hurrengo pista automatikoki erreproduzituko da segundo batzuk barru…"
+      },
+      "header": {
+        "failure": "Pista ezin da kargatu",
+        "radio": "Irrati bat martxan duzu"
+      },
+      "meta": {
+        "queuePosition": "Pista { index } / { length }"
+      },
+      "warning": {
+        "connectivity": "Konexio arazo bat izan dezakezu."
+      }
+    },
+    "forms": {
+      "PasswordInput": {
+        "button": {
+          "copy": "Kopiatu"
+        },
+        "title": "Erakutsi/ezkutatu pasahitza",
+        "message": {
+          "copy": "Testua arbelera kopiatu da!"
+        }
+      }
+    },
+    "radios": {
+      "Card": {
+        "button": {
+          "edit": "Editatu"
+        }
+      },
+      "Button": {
+        "startRadio": "Erreproduzitu irratia",
+        "stopRadio": "Gelditu irratia"
+      }
+    },
+    "RemoteSearchForm": {
+      "header": {
+        "fetchFailed": "Errorea objektua eskuratzerakoan"
+      },
+      "button": {
+        "fediverse": "Fedibertsoa",
+        "rss": "RSS",
+        "search": "Bilatu"
+      },
+      "label": {
+        "fediverse": {
+          "fieldLabel": "Fedibertsoko objektua",
+          "title": "Harpidetu Fedibertsoan ostatatutako podcast batera"
+        },
+        "rss": {
+          "fieldPlaceholder": "https://adibidea.eus/rss.xml",
+          "fieldLabel": "RSS jarioaren kokapena",
+          "title": "Harpidetu podcast baten RSS jariora"
+        }
+      },
+      "warning": {
+        "unsupported": "Objektu mota hau ez da onartzen oraindik"
+      },
+      "error": {
+        "fetchFailed": "Objektu hau ezin da berreskuratu"
+      },
+      "description": {
+        "fediverse": "Erabili formulario hau fedibertsoan ostatatutako kanal batera harpidetzeko.",
+        "rss": "Erabili formulario hau RSS jario batera bere URLaren bidez harpidetzeko."
+      }
+    },
+    "PageNotFound": {
+      "link": {
+        "home": "Joan hasiera orrira"
+      },
+      "title": "Orrialdea ez da aurkitu",
+      "header": {
+        "pageNotFound": "Orrialdea ez da aurkitu!"
+      },
+      "message": {
+        "pageNotFound": "Sentitzen dugu, eskatu duzun orria ez da existitzen:"
+      }
+    },
+    "vui": {
+      "Pagination": {
+        "next": "Hurrengo orria",
+        "label": "Orrialdekatzea",
+        "previous": "Aurreko orria"
+      }
+    },
+    "tags": {
+      "List": {
+        "button": {
+          "more": "Erakutsi etiketa 1 gehiago | Erakutsi { n } etiketa gehiago"
+        }
+      }
+    }
+  },
+  "views": {
+    "channels": {
+      "DetailBase": {
+        "meta": {
+          "episodes": "Saio { n } | { n } saio",
+          "listenings": "Entzunaldi { n } | { n } entzunaldi",
+          "subscribers": "Harpidetu { n } | { n } harpidetu",
+          "tracks": "Pista { n } | { n } pista"
+        },
+        "link": {
+          "channelEpisodes": "Saio guztiak",
+          "mirrored": "{ domain } domeinutik ispilatua",
+          "moderation": "Ireki moderazio interfazean",
+          "channelOverview": "Informazio orokorra",
+          "channelTracks": "Pistak",
+          "domainView": "Ikusi { domain }(e)n"
+        },
+        "header": {
+          "artistChannel": "Artistaren kanala",
+          "podcastChannel": "Podcast kanala"
+        },
+        "button": {
+          "cancel": "Ezeztatu",
+          "confirm": "Ezabatu",
+          "delete": "Ezabatu…",
+          "edit": "Editatu…",
+          "embed": "Txertatu",
+          "play": "Erreproduzitu",
+          "updateChannel": "Eguneratu kanala",
+          "upload": "Igo"
+        },
+        "title": "Kanala",
+        "modal": {
+          "subscribe": {
+            "rss": {
+              "content": {
+                "help": "Kopiatu eta itsatsi URL hau zure podcast aplikazio gogokoenean:"
+              },
+              "header": "Harpidetu RSS bidez"
+            },
+            "fediverse": {
+              "content": {
+                "help": "Mastodon edo fedibertsoko beste aplikazioren bat erabiltzen ari bazara, kontu honetara harpidetu zaitezke:"
+              },
+              "header": "Harpidetu Fedibertsoan"
+            },
+            "funkwhale": {
+              "header": "Harpidetu Funkwhalen"
+            },
+            "header": "Harpidetu kanal honetara"
+          },
+          "delete": {
+            "header": "Kanal hau ezabatu nahi duzu?",
+            "content": {
+              "warning": "Kanal hau eta erlazionatutako fitxategi eta datuak ezabatu egingo dira. Ekintza hau ezin da desegin."
+            }
+          },
+          "embed": {
+            "header": "Txertatu artista honen lana zure webgunean"
+          }
+        }
+      },
+      "DetailOverview": {
+        "link": {
+          "addAlbum": "Gehitu berria",
+          "erroredUploads": "Ikusi huts egindako igoerak",
+          "skippedUploads": "Ikusi saltatutako igoerak"
+        },
+        "header": {
+          "albums": "Albumak",
+          "latestEpisodes": "Azken saioak",
+          "latestTracks": "Azken abestiak",
+          "series": "Serieak",
+          "uploadsFailure": "Igoera batzuk ezin izan dira argitaratu",
+          "uploadsProcessing": "Igoerak prozesatzen",
+          "uploadsSuccess": "Igoerak arrakastaz argitaratuta"
+        },
+        "meta": {
+          "progress": "Prozesatutako igoerak:"
+        },
+        "message": {
+          "processing": "Funkwhale zure igoerak prozesatzen ari da eta laster izango dira prest."
+        }
+      },
+      "SubscriptionsList": {
+        "link": {
+          "addNew": "Gehitu berria"
+        },
+        "button": {
+          "cancel": "Ezeztatu",
+          "subscribe": "Harpidetu"
+        },
+        "placeholder": {
+          "search": "Iragazi izenaren arabera…"
+        },
+        "title": "Harpidetutako kanalak",
+        "modal": {
+          "subscription": {
+            "header": "Harpidetza"
+          }
+        }
+      }
+    },
+    "content": {
+      "libraries": {
+        "Card": {
+          "meta": {
+            "tracks": "Pista { n } | { n } pista"
+          },
+          "link": {
+            "details": "Liburutegiaren xehetasunak"
+          },
+          "label": {
+            "size": "Liburutegi honetako fitxategien guztizko tamaina"
+          },
+          "button": {
+            "upload": "Igo"
+          }
+        },
+        "Quota": {
+          "label": {
+            "currentUsage": "{ current } erabilita baimendutako { max }e(ta)tik",
+            "errored": "Erroredun fitxategiak",
+            "pending": "Fitxategiak faltan",
+            "skipped": "Saltatutako fitxategiak"
+          },
+          "header": {
+            "currentUsage": "Oraingo erabilera"
+          },
+          "loading": {
+            "currentUsage": "Erabilpen datuak kargatzen…"
+          },
+          "button": {
+            "purge": "Kendu"
+          },
+          "modal": {
+            "purgeErrored": {
+              "header": "Erroreak emandako fitxategiak kendu?",
+              "content": {
+                "description": "Igotako baina oraindik zerbitzariak prozesatu ezin izan dituen pistak guztiz kentzen ditu, dagozkien datuak zure kuotara gehituz."
+              }
+            },
+            "purgePending": {
+              "header": "Zain dauden fitxategiak kendu?",
+              "content": {
+                "description": "Igotako baina oraindik prozesatu gabeko pistak guztiz kentzen ditu, dagozkien datuak zure kuotara gehituz."
+              }
+            },
+            "purgeSkipped": {
+              "header": "Saltatutako fitxategiak kendu?",
+              "content": {
+                "description": "Inportazio prozesuan igotako baina saltatutako pistak guztiz kentzen ditu, dagozkien datuak zure kuotara gehituz."
+              }
+            }
+          },
+          "link": {
+            "viewFiles": "Ikusi fitxategiak"
+          }
+        },
+        "FilesTable": {
+          "table": {
+            "file": {
+              "header": {
+                "album": "Albuma",
+                "artist": "Artista",
+                "duration": "Iraupena",
+                "importStatus": "Inportazioaren egoera",
+                "size": "Tamaina",
+                "title": "Izenburua",
+                "uploadDate": "Igoera data"
+              }
+            }
+          },
+          "option": {
+            "status": {
+              "all": "Dena",
+              "draft": "Zirriborroa",
+              "failed": "Huts egin du",
+              "finished": "Amaituta",
+              "pending": "Zain",
+              "skipped": "Saltatuta"
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Gorantza",
+              "descending": "Beheranzkoa",
+              "label": "Ordenazio norabidea"
+            },
+            "label": "Ordena"
+          },
+          "action": {
+            "delete": "Ezabatu",
+            "restartImport": "Hasi berriro inportazioa"
+          },
+          "label": {
+            "importStatus": "Inportazioaren egoera",
+            "search": "Bilatu"
+          },
+          "notApplicable": "Daturik gabe",
+          "empty": {
+            "noTracks": "Ez da pistarik gehitu oraindik liburutegi honetara"
+          },
+          "placeholder": {
+            "search": "Bilatu izenburuaren, artistaren, albumaren… arabera"
+          },
+          "button": {
+            "showStatus": "Erakutsi pista honen igoeraren egoerari buruzko informazioa"
+          },
+          "pagination": {
+            "results": "Emaitzak erakusten: { start }-{ end } guztizko { total }(e)tik"
+          }
+        },
+        "Home": {
+          "link": {
+            "createLibrary": "Liburutegi berria sortu"
+          },
+          "loading": {
+            "libraries": "Liburutegiak kargatzen…"
+          },
+          "empty": {
+            "noLibrary": "Badirudi ez duzula liburutegirik oraindik, bada bat sortzeko ordua."
+          },
+          "header": {
+            "libraries": "Nire liburutegiak"
+          }
+        },
+        "Form": {
+          "button": {
+            "create": "Liburutegia sortu",
+            "delete": "Ezabatu",
+            "confirm": "Liburutegia ezabatu",
+            "update": "Eguneratu liburutegia"
+          },
+          "modal": {
+            "delete": {
+              "header": "Liburutegi hau ezabatu?",
+              "content": {
+                "warning": "Liburutegia eta bere pista guztiak ezabatuko dira. Ekintza hau ezin da desegin."
+              }
+            }
+          },
+          "label": {
+            "description": "Deskribapena",
+            "name": "Izena",
+            "visibility": "Ikusgaitasuna"
+          },
+          "header": {
+            "failure": "Errorea"
+          },
+          "description": {
+            "library": "Liburutegiak zure musika bildumak antolatzen eta partekatzen laguntze dizute. Zure musika bilduma igo dezakezu Funkwhalera eta zure familia eta lagunekin partekatu.",
+            "visibility": "Zure liburutegia besteekin partekatu dezakezu, ikusgaitasuna edozein dela ere."
+          },
+          "message": {
+            "libraryCreated": "Liburutegia sortuta",
+            "libraryDeleted": "Liburutegia ezabatuta",
+            "libraryUpdated": "Liburutegia eguneratuta"
+          },
+          "placeholder": {
+            "name": "Nire liburutegi txundigarria",
+            "description": "Liburutegi honetan nire musika pertsonala dago, espero dut gustuko izango duzula."
+          }
+        }
+      },
+      "remote": {
+        "Card": {
+          "meta": {
+            "tracks": "Pista { n } | { n } pista",
+            "failedTracks": "Erroredun pistak:",
+            "lastUpdate": "Azken eguneraketa:"
+          },
+          "modal": {
+            "unfollow": {
+              "content": {
+                "warning": "Liburutegi hau jarraitzeari utzita, bere edukirako sarbidea galduko duzu."
+              },
+              "header": "Liburutegi hau jarraitzeari utzi?"
+            }
+          },
+          "button": {
+            "cancel": "Utzi jarraitzeko eskaera",
+            "follow": "Jarraitu",
+            "pending": "Jarraipen-eskaera onarpenaren zain",
+            "unfollow": "Utzi jarraitzeari"
+          },
+          "link": {
+            "scanDetails": "Xehetasunak",
+            "scan": "Eskaneatu orain"
+          },
+          "label": {
+            "scanFailure": "Arazoa eskaneatzean",
+            "scanPending": "Eskaneatzeko zain",
+            "scanSuccess": "Eskaneatzea amaituta",
+            "scanPartialSuccess": "Erroreak eskaneatzean",
+            "scanProgress": "Eskaneatzen… ({ progress }%)",
+            "sharingLink": "Esteka partekatzen"
+          },
+          "message": {
+            "scanLaunched": "Eskaneatzea abiarazita",
+            "scanSkipped": "Eskaneatzea saltatuta (aurreko eskaneatzea oso berria da)"
+          },
+          "tooltip": {
+            "private": "Liburutegi hau pribatua da eta jabearen onarpena beharrezkoa da edukira sarbidea izateko",
+            "public": "Liburutegi hau publikoa da eta edukira sarbide librea duzu"
+          }
+        },
+        "ScanForm": {
+          "header": {
+            "failure": "Ezin izan da eskuratu urruneko liburutegia"
+          },
+          "placeholder": {
+            "url": "Idatzi liburutegiaren URLa"
+          },
+          "label": {
+            "search": "Bilatu urruneko liburutegia"
+          },
+          "button": {
+            "submit": "Bidali bilaketa"
+          }
+        },
+        "Home": {
+          "header": {
+            "knownLibraries": "Liburutegi ezagunak",
+            "remoteLibraries": "Urruneko liburutegiak"
+          },
+          "loading": {
+            "remoteLibraries": "Urruneko liburutegiak kargatzen…"
+          },
+          "button": {
+            "refresh": "Freskatu"
+          },
+          "description": {
+            "remoteLibraries": "Urruneko liburutegiak interneteko beste erabiltzaile batzuenak dira. Hauetara sarbidea lor dezakezu hauetara baimena lortzen baduzu edo publikoak diren bitartean."
+          }
+        }
+      },
+      "Home": {
+        "title": "Gehitu eta kudeatu edukia",
+        "description": {
+          "follow": "Jarraitu beste erabiltzaile batzuen liburutegiak musika berria eskuratzeko. Liburutegi publikoak zuzenean jarraitu daitezke, baina liburutegi pribatu bat jarraitzeko bere sortzailearen onespena behar da.",
+          "channel": {
+            "1": "Musikaria edo podcast egilea bazara, kanalak zuretzat diseinatuta daude!",
+            "2": "Partekatu zure lana publikoki eta lortu harpidetzak Funkwhalen, fedibertsoan edo edozein podcast aplikaziotan."
+          },
+          "upload": "Igo zure musikaren liburutegi pertsonala Funkwhalera edozein lekutatik gozatu eta lagun eta familiarekin partekatzeko."
+        },
+        "header": {
+          "follow": "Jarraitu urruneko liburutegiak",
+          "channel": "Argitaratu zure lana kanal batean",
+          "upload": "Igo hirugarrengoen edukia liburutegi batera"
+        },
+        "button": {
+          "start": "Hasi erabiltzen"
+        },
+        "help": {
+          "uploadQuota": "Instantzia honek {quota}eko biltegiratzea eskaintzen dio erabiltzaile bakoitzari."
+        }
+      },
+      "Base": {
+        "title": "Edukia sartu",
+        "link": {
+          "libraries": "Liburutegiak",
+          "tracks": "Pistak"
+        },
+        "menu": {
+          "secondary": "Bigarren mailako menua"
+        }
+      }
+    },
+    "library": {
+      "LibraryBase": {
+        "meta": {
+          "tracks": "Pista { n } | { n } pista"
+        },
+        "link": {
+          "albums": "Albumak",
+          "artists": "Artistak",
+          "moderation": "Ireki moderazio interfazean",
+          "owner": "Jabea { username } da",
+          "tracks": "Pistak",
+          "domain": "Ikusi { domain }(e)n"
+        },
+        "button": {
+          "edit": "Editatu",
+          "upload": "Igo"
+        },
+        "title": "Liburutegia",
+        "label": {
+          "private": "Pribatua",
+          "public": "Publikoa",
+          "instance": "Mugatuta",
+          "sharingLink": "Esteka partekatzen"
+        },
+        "description": {
+          "sharingLink": "Partekatu esteka hau beste erabiltzaile batzuekin zure liburutegira sarbidea eska dezaten instantziaren bilaketa barran kopiatu eta itsatsiz."
+        },
+        "tooltip": {
+          "private": "Liburutegi hau pribatua da eta jabearen onarpena beharrezkoa da edukira sarbidea izateko",
+          "public": "Liburutegi hau publikoa da eta edukira sarbide librea duzu",
+          "instance": "Liburutegi hau instantzia honetako erabiltzaileetara mugatua dago"
+        }
+      },
+      "Edit": {
+        "button": {
+          "accept": "Onartu",
+          "reject": "Baztertu"
+        },
+        "table": {
+          "action": {
+            "status": {
+              "accepted": "Onartuta",
+              "pending": "Onarpenaren zain",
+              "rejected": "Baztertuta"
+            },
+            "header": {
+              "action": "Akzioa",
+              "date": "Data",
+              "status": "Egoera",
+              "user": "Erabiltzailea"
+            }
+          }
+        },
+        "header": {
+          "followers": "Jarraitzaileak",
+          "libraryContents": "Liburutegiaren edukiak"
+        },
+        "loading": {
+          "followers": "Jarraitzaileak kargatzen…"
+        },
+        "empty": {
+          "noFollowers": "Inor ez da liburutegi hau jarraitzen ari"
+        }
+      },
+      "DetailAlbums": {
+        "empty": {
+          "upload": "Liburutegi hau hutsik dago, zerbait igo beharko zenuke bertara!",
+          "follow": "Bere edukia ikusteko liburutegi hau jarraitu beharko duzu behar bada."
+        }
+      },
+      "DetailOverview": {
+        "empty": {
+          "upload": "Liburutegi hau hutsik dago, zerbait igo beharko zenuke bertara!",
+          "follow": "Bere edukia ikusteko liburutegi hau jarraitu beharko duzu behar bada."
+        }
+      },
+      "DetailTracks": {
+        "empty": {
+          "upload": "Liburutegi hau hutsik dago, zerbait igo beharko zenuke bertara!",
+          "follow": "Bere edukia ikusteko liburutegi hau jarraitu beharko duzu behar bada."
+        }
+      }
+    },
+    "auth": {
+      "ProfileBase": {
+        "title": "{ username }-(r)en profila",
+        "link": {
+          "activity": "Jarduera",
+          "moderation": "Ireki moderazio interfazean",
+          "overview": "Informazio orokorra",
+          "domainView": "Ikusi { domain }(e)n"
+        },
+        "label": {
+          "self": "Hau zu zara!"
+        }
+      },
+      "PasswordReset": {
+        "label": {
+          "email": "Kontuaren eposta"
+        },
+        "button": {
+          "requestReset": "Eskatu pasahitza berrezartzeko"
+        },
+        "link": {
+          "back": "Itzuli sarrerara"
+        },
+        "placeholder": {
+          "email": "Idatzi zure kontuarekin lotutako eposta helbidea"
+        },
+        "header": {
+          "failure": "Errorea pasahitza berrezartzerakoan",
+          "reset": "Berrezarri pasahitza"
+        },
+        "title": "Berrezarri pasahitza",
+        "help": {
+          "form": "Erabili formulario hau pasahitza berrezartzea eskatzeko. Emandako eposta helbidera mezu bat bidaliko dizugu, zure pasahitza berrezartzeko argibideekin."
+        }
+      },
+      "ProfileOverview": {
+        "link": {
+          "addNew": "Gehitu berria"
+        },
+        "modal": {
+          "createChannel": {
+            "artist": {
+              "header": "Artistaren kanala"
+            },
+            "header": "Sortu kanala",
+            "podcast": {
+              "header": "Podcast kanala"
+            }
+          }
+        },
+        "button": {
+          "cancel": "Ezeztatu",
+          "createChannel": "Sortu kanala",
+          "next": "Hurrengo pausoa",
+          "previous": "Aurreko pausoa"
+        },
+        "header": {
+          "channels": "Kanalak",
+          "sharedLibraries": "Erabiltzaile honek ondorengo liburutegiak partekatu ditu",
+          "libraries": "Erabiltzaileen liburutegiak"
+        }
+      },
+      "PasswordResetConfirm": {
+        "link": {
+          "back": "Itzuli sarrerara",
+          "login": "Jarraitu saio hasierara"
+        },
+        "title": "Zure pasahitza aldatu",
+        "header": {
+          "failure": "Errorea zure pasahitza aldatzerakoan",
+          "success": "Pasahitza arrakastaz eguneratu da"
+        },
+        "message": {
+          "requestSent": "Aurreko pausoan emandako eposta helbidea zuzena bada eta erabiltzaile kontu bati lotuta badago, datozen minututan eposta mezu bat jaso beharko zenuke pasahitza berrezartzeko argibideekin.",
+          "success": "Pasahitza arrakastaz eguneratu da."
+        },
+        "label": {
+          "newPassword": "Pasahitz berria"
+        },
+        "button": {
+          "update": "Eguneratu zure pasahitza"
+        }
+      },
+      "EmailConfirm": {
+        "title": "Egiaztatu zure e-posta helbidea",
+        "label": {
+          "confirmationCode": "Berrespen kodea"
+        },
+        "header": {
+          "failure": "Ezin izan da berretsi zure helbide elektronikoa",
+          "success": "E-posta helbidea egiaztatu da"
+        },
+        "link": {
+          "login": "Jarraitu saio hasierara",
+          "back": "Itzuli saio hasierara"
+        },
+        "message": {
+          "success": "Zerbitzua mugarik gabe erabil dezakezu orain."
+        }
+      },
+      "Signup": {
+        "header": {
+          "createAccount": "Sortu Funkwhale kontua"
+        },
+        "title": "Erregistratu"
+      },
+      "Login": {
+        "title": "Hasi saioa",
+        "header": {
+          "login": "Sartu zure Funkwhale kontura"
+        }
+      },
+      "Callback": {
+        "header": {
+          "loggingIn": "Saioa hasten…"
+        }
+      },
+      "Plugins": {
+        "title": "Kudeatu pluginak"
+      },
+      "ProfileActivity": {
+        "header": {
+          "playlists": "Zerrendak",
+          "recentlyFavorited": "Azken aldian gogokoa",
+          "recentlyListened": "Azken aldian entzuna"
+        }
+      }
+    },
+    "Notifications": {
+      "option": {
+        "delay": {
+          "30": "30 egun",
+          "60": "60 egun",
+          "90": "90 egun",
+          "never": "Inoiz ez"
+        }
+      },
+      "link": {
+        "help": "Ezagutu laguntzeko beste modu batzuk",
+        "donate": "Dohaintza egin"
+      },
+      "header": {
+        "funkwhaleSupport": "Gustuko al duzu Funkwhale?",
+        "instanceSupport": "Babestu Funkwhale instantzia hau",
+        "messages": "Zure mezuak",
+        "notifications": "Zure jakinarazpenak"
+      },
+      "button": {
+        "submit": "Ulertuta!",
+        "read": "Markatu dena irakurrita"
+      },
+      "loading": {
+        "notifications": "Jakinarazpenak kargatzen…"
+      },
+      "empty": {
+        "notifications": "Ez dago jakinarazpenik erakusteko."
+      },
+      "title": "Jakinarazpenak",
+      "label": {
+        "reminder": "Gogorarazi hau barru:",
+        "showRead": "Erakutsi irakurritako jakinarazpenak"
+      },
+      "message": {
+        "funkwhaleSupport": "Denbora pixkat daramazu hemen. Funkwhale erabilgarria iruditzen bazaizu, oraindik hobea egiten lagun gaitzakezu!"
+      }
+    },
+    "admin": {
+      "moderation": {
+        "AccountsDetail": {
+          "table": {
+            "accountData": {
+              "username": "Erabiltzaile-izena",
+              "loginStatus": {
+                "disabled": "Desgaituta",
+                "enabled": "Gaituta",
+                "label": "Saioaren egoera"
+              },
+              "displayName": "Bistaratzeko izena",
+              "email": "Eposta helbidea",
+              "lastActivity": "Azken jarduera",
+              "lastChecked": "Azken egiaztapena",
+              "permissions": "Baimenak",
+              "signupDate": "Erregistroaren data",
+              "userType": "Mota"
+            },
+            "audioContent": {
+              "cachedSize": "Cachearen tamaina",
+              "megabyte": "MB",
+              "totalSize": "Tamaina guztira",
+              "uploadQuota": "Igoera muga"
+            },
+            "activity": {
+              "emittedFollows": "Eskatutako liburutegi-jarraitzeak",
+              "emittedMessages": "Bidalitako mezuak",
+              "firstSeen": "Lehen aldiz ikusia",
+              "receivedFollows": "Jasotako liburutegiaren jarraipenak"
+            }
+          },
+          "header": {
+            "accountData": "Kontuaren datuak",
+            "activity": "Jarduera",
+            "audioContent": "Audio edukia",
+            "localAccount": "Kontu lokala",
+            "activePolicy": "Domeinu honek moderazio arau espezifikoak ditu",
+            "noPolicy": "Ez daukazu araurik kontu honetan oraindik."
+          },
+          "button": {
+            "addPolicy": "Gehitu moderazio-gidalerroa"
+          },
+          "link": {
+            "albums": "Albumak",
+            "artists": "Artistak",
+            "channels": "Kanalak",
+            "domain": "Domeinua",
+            "libraries": "Liburutegiak",
+            "linkedReports": "Estekatutako txostenak",
+            "openProfile": "Ireki profila",
+            "remoteProfile": "Ireki urruneko profila",
+            "requests": "Eskaerak",
+            "tracks": "Pistak",
+            "uploads": "Igoerak",
+            "django": "Ikusi Django-ren administrazioan"
+          },
+          "tooltip": {
+            "uploadQuota": "Zehaztu erabiltzaileak zenbat eduki igo dezakeen. Utzi hutsik instantziaren balio lehenetsia erabiltzeko."
+          },
+          "option": {
+            "permission": {
+              "library": "Liburutegia",
+              "moderation": "Moderazioa",
+              "settings": "Ezarpenak"
+            }
+          },
+          "description": {
+            "policy": "Moderazio politikek zure instantziak domeinu edo kontu batekin dituen elkarrekintzak kontrolatzen laguntzen dizute."
+          },
+          "notApplicable": "Daturik gabe",
+          "warning": {
+            "stats": "Estatistikak aktibitate ezagunetik eta zure instantziako edukitik kalkulatzen dira eta ez dute objektu honen aktibitate orokorra islatzen"
+          }
+        },
+        "Base": {
+          "link": {
+            "accounts": "Kontuak",
+            "domains": "Domeinuak",
+            "reports": "Salaketak",
+            "userRequests": "Erabiltzaileen eskaerak"
+          },
+          "title": "Moderazioa",
+          "menu": {
+            "secondary": "Bigarren mailako menua"
+          }
+        },
+        "DomainsDetail": {
+          "header": {
+            "activity": "Jarduera",
+            "audioContent": "Audio edukia",
+            "instanceData": "Instantziaren datuak",
+            "activePolicy": "Domeinu honek moderazio arau espezifikoak ditu",
+            "noPolicy": "Ez daukazu araurik domeinu honentzat."
+          },
+          "button": {
+            "addPolicy": "Gehitu moderazio-gidalerroa",
+            "addToAllowList": "Gehitu baimen-zerrendan",
+            "refreshNodeInfo": "Freskatu nodoaren informazioa",
+            "removeFromAllowList": "Kendu baimenendutakoen zerrendatik"
+          },
+          "link": {
+            "albums": "Albumak",
+            "artists": "Artistak",
+            "channels": "Kanalak",
+            "knownAccounts": "Kontu ezagunak",
+            "libraries": "Liburutegiak",
+            "website": "Ireki webgunea",
+            "tracks": "Pistak",
+            "uploads": "Igoerak",
+            "django": "Ikusi Django-ren administrazioan"
+          },
+          "table": {
+            "audioContent": {
+              "cachedSize": "Cachearen tamaina",
+              "totalSize": "Tamaina guztira"
+            },
+            "activity": {
+              "emittedFollows": "Eskatutako liburutegi-jarraitzeak",
+              "emittedMessages": "Bidalitako mezuak",
+              "firstSeen": "Lehen aldiz ikusia",
+              "receivedFollows": "Jasotako liburutegiaren jarraipenak"
+            },
+            "instanceData": {
+              "nodeInfoStatus": {
+                "value": "Errorea nodoaren informazioa eskuratzerakoan",
+                "label": "Egoera"
+              },
+              "inAllowList": {
+                "label": "Onartuen zerrendan dago",
+                "false": "Ez",
+                "true": "Bai"
+              },
+              "lastChecked": "Azken egiaztapena",
+              "domainName": "Izena",
+              "software": {
+                "label": "Softwarea"
+              },
+              "totalUsers": "Erabiltzaileak guztira"
+            }
+          },
+          "description": {
+            "policy": "Moderazio politikek zure instantziak domeinu edo kontu batekin dituen elkarrekintzak kontrolatzen laguntzen dizute."
+          },
+          "notApplicable": "Daturik gabe",
+          "warning": {
+            "stats": "Estatistikak aktibitate ezagunetik eta zure instantziako edukitik kalkulatzen dira eta ez dute objektu honen aktibitate orokorra islatzen"
+          }
+        },
+        "DomainsList": {
+          "button": {
+            "add": "Gehitu"
+          },
+          "label": {
+            "addDomain": "Gehitu domeinua",
+            "addToAllowList": "Gehitu baimen-zerrendan"
+          },
+          "title": "Domeinuak",
+          "header": {
+            "domains": "Domeinuak",
+            "failure": "Errorea domeinua sortzerakoan"
+          }
+        },
+        "ReportsList": {
+          "option": {
+            "status": {
+              "all": "Dena",
+              "resolved": "Ebatzita",
+              "unresolved": "Konpondu gabea"
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Gorantza",
+              "descending": "Beheranzkoa",
+              "label": "Ordena"
+            },
+            "label": "Ordena"
+          },
+          "title": "Salaketak",
+          "header": {
+            "reports": "Salaketak"
+          },
+          "label": {
+            "search": "Bilatu",
+            "status": "Egoera"
+          },
+          "placeholder": {
+            "search": "Bilatu kontuaren, laburpenaren, domeinuaren... arabera"
+          }
+        },
+        "RequestsList": {
+          "option": {
+            "status": {
+              "all": "Dena",
+              "approved": "Onartuta",
+              "pending": "Zain",
+              "refused": "Ukatuta"
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Gorantza",
+              "descending": "Beheranzkoa",
+              "label": "Ordena"
+            },
+            "label": "Ordena"
+          },
+          "label": {
+            "search": "Bilatu",
+            "status": "Egoera"
+          },
+          "placeholder": {
+            "search": "Bilatu erabiltzaile-izenaren arabera…"
+          },
+          "title": "Erabiltzaileen eskaerak",
+          "header": {
+            "userRequests": "Erabiltzaileen eskaerak"
+          }
+        }
+      },
+      "library": {
+        "UploadDetail": {
+          "table": {
+            "activity": {
+              "accessedDate": "Sarbide data",
+              "firstSeen": "Lehen aldiz ikusia"
+            },
+            "audioContent": {
+              "bitrate": {
+                "label": "Bitrate"
+              },
+              "cachedSize": "Cachearen tamaina",
+              "duration": "Iraupena",
+              "size": "Tamaina",
+              "track": "Pista"
+            },
+            "upload": {
+              "name": "Izena"
+            }
+          },
+          "link": {
+            "account": "Kontua",
+            "domain": "Domeinua",
+            "importStatus": "Inportazioaren egoera",
+            "library": "Liburutegia",
+            "remoteProfile": "Ireki urruneko profila",
+            "type": "Mota",
+            "django": "Ikusi Django-ren administrazioan",
+            "visibility": "Ikusgaitasuna"
+          },
+          "header": {
+            "activity": "Jarduera",
+            "audioContent": "Audio edukia",
+            "local": "Lokala",
+            "uploadData": "Igoera data"
+          },
+          "button": {
+            "delete": "Ezabatu",
+            "download": "Deskargatu"
+          },
+          "modal": {
+            "delete": {
+              "header": "Igoera hau ezabatu nahi duzu?",
+              "content": {
+                "warning": "Igoera ezabatu egingo da. Ekintza hau ezin da desegin."
+              }
+            }
+          },
+          "notApplicable": "Daturik gabe"
+        },
+        "LibraryDetail": {
+          "link": {
+            "account": "Kontua",
+            "albums": "Albumak",
+            "artists": "Artistak",
+            "domain": "Domeinua",
+            "reports": "Estekatutako txostenak",
+            "remoteProfile": "Ireki urruneko profila",
+            "tracks": "Pistak",
+            "uploads": "Igoerak",
+            "django": "Ikusi Django-ren administrazioan",
+            "visibility": "Ikusgaitasuna"
+          },
+          "header": {
+            "activity": "Jarduera",
+            "audioContent": "Audio edukia",
+            "libraryData": "Liburutegiaren datuak",
+            "local": "Lokala"
+          },
+          "table": {
+            "audioContent": {
+              "cachedSize": "Cachearen tamaina",
+              "totalSize": "Tamaina guztira"
+            },
+            "library": {
+              "description": "Deskribapena",
+              "name": "Izena"
+            },
+            "activity": {
+              "firstSeen": "Lehen aldiz ikusia",
+              "followers": "Jarraitzaileak"
+            }
+          },
+          "button": {
+            "delete": "Ezabatu"
+          },
+          "modal": {
+            "delete": {
+              "header": "Liburutegi hau ezabatu?",
+              "content": {
+                "warning": "Liburutegi hau eta erlazionatutako igoerak eta jarraipenak ezabatu egingo dira. Ekintza hau ezin da desegin."
+              }
+            }
+          },
+          "warning": {
+            "stats": "Estatistikak aktibitate ezagunetik eta zure instantziako edukitik kalkulatzen dira eta ez dute objektu honen aktibitate orokorra islatzen"
+          }
+        },
+        "AlbumDetail": {
+          "header": {
+            "activity": "Jarduera",
+            "albumData": "Albumaren datuak",
+            "audioContent": "Audio edukia",
+            "local": "Lokala"
+          },
+          "link": {
+            "artist": "Artista",
+            "domain": "Domeinua",
+            "edits": "Edizioak",
+            "libraries": "Liburutegiak",
+            "reports": "Estekatutako txostenak",
+            "localProfile": "Ireki profil lokala",
+            "musicbrainz": "Ireki MusicBrainz-en",
+            "remoteProfile": "Ireki urruneko profila",
+            "tracks": "Pistak",
+            "uploads": "Igoerak",
+            "django": "Ikusi Django-ren administrazioan"
+          },
+          "table": {
+            "audioContent": {
+              "cachedSize": "Cachearen tamaina",
+              "totalSize": "Tamaina guztira"
+            },
+            "album": {
+              "description": "Deskribapena",
+              "title": "Izenburua"
+            },
+            "activity": {
+              "favorited": "Gogoko pistak",
+              "firstSeen": "Lehen aldiz ikusia",
+              "listenings": "Entzunaldiak",
+              "playlists": "Zerrendak"
+            }
+          },
+          "button": {
+            "delete": "Ezabatu",
+            "edit": "Editatu",
+            "remoteRefresh": "Freskatu urruneko zerbitzaritik"
+          },
+          "modal": {
+            "delete": {
+              "header": "Album hau ezabatu nahi duzu?",
+              "content": {
+                "warning": "Album hau eta erlazionatutako igoerak, pistak, gogokoak eta entzunaldien historia ezabatu egingo dira. Ekintza hau ezin da desegin."
+              }
+            }
+          },
+          "warning": {
+            "stats": "Estatistikak aktibitate ezagunetik eta zure instantziako edukitik kalkulatzen dira eta ez dute objektu honen aktibitate orokorra islatzen"
+          }
+        },
+        "ArtistDetail": {
+          "header": {
+            "activity": "Jarduera",
+            "artistData": "Artistaren datuak",
+            "audioContent": "Audio edukia",
+            "local": "Lokala"
+          },
+          "link": {
+            "albums": "Albumak",
+            "category": "Kategoria",
+            "domain": "Domeinua",
+            "edits": "Edizioak",
+            "libraries": "Liburutegiak",
+            "reports": "Estekatutako txostenak",
+            "localProfile": "Ireki profil lokala",
+            "musicbrainz": "Ireki MusicBrainz-en",
+            "remoteProfile": "Ireki urruneko profila",
+            "tracks": "Pistak",
+            "uploads": "Igoerak",
+            "django": "Ikusi Django-ren administrazioan"
+          },
+          "table": {
+            "audioContent": {
+              "cachedSize": "Cachearen tamaina",
+              "totalSize": "Tamaina guztira"
+            },
+            "artist": {
+              "description": "Deskribapena",
+              "name": "Izena"
+            },
+            "activity": {
+              "favorited": "Gogoko pistak",
+              "firstSeen": "Lehen aldiz ikusia",
+              "listenings": "Entzunaldiak",
+              "playlists": "Zerrendak"
+            }
+          },
+          "button": {
+            "delete": "Ezabatu",
+            "edit": "Editatu",
+            "remoteRefresh": "Freskatu urruneko zerbitzaritik"
+          },
+          "modal": {
+            "delete": {
+              "header": "Artista hau ezabatu nahi duzu?",
+              "content": {
+                "warning": "Artista hau eta erlazionatutako igoerak, pistak, albumak, gogokoak eta entzunaldien historia ezabatu egingo dira. Ekintza hau ezin da desegin."
+              }
+            }
+          },
+          "warning": {
+            "stats": "Estatistikak aktibitate ezagunetik eta zure instantziako edukitik kalkulatzen dira eta ez dute objektu honen aktibitate orokorra islatzen"
+          }
+        },
+        "TagDetail": {
+          "header": {
+            "activity": "Jarduera",
+            "audioContent": "Audio edukia",
+            "tagData": "Etiketaren datuak"
+          },
+          "link": {
+            "albums": "Albumak",
+            "artists": "Artistak",
+            "localProfile": "Ireki profil lokala",
+            "tracks": "Pistak",
+            "django": "Ikusi Django-ren administrazioan"
+          },
+          "button": {
+            "delete": "Ezabatu"
+          },
+          "modal": {
+            "delete": {
+              "header": "Etiketa hau ezabatu nahi duzu?",
+              "content": {
+                "warning": "Etiketa ezabatu egingo da eta edukiarekiko esteka kenduko da, baldin balego. Ekintza hau ezin da desegin."
+              }
+            }
+          },
+          "table": {
+            "activity": {
+              "firstSeen": "Lehen aldiz ikusia"
+            },
+            "tag": {
+              "name": "Izena"
+            }
+          }
+        },
+        "TrackDetail": {
+          "header": {
+            "activity": "Jarduera",
+            "local": "Lokala",
+            "trackData": "Pistaren datuak"
+          },
+          "link": {
+            "album": "Albuma",
+            "albumArtist": "Artista honen albumak",
+            "artist": "Artista",
+            "domain": "Domeinua",
+            "edits": "Edizioak",
+            "libraries": "Liburutegiak",
+            "reports": "Estekatutako txostenak",
+            "localProfile": "Ireki profil lokala",
+            "musicbrainz": "Ireki MusicBrainz-en",
+            "remoteProfile": "Ireki urruneko profila",
+            "uploads": "Igoerak",
+            "django": "Ikusi Django-ren administrazioan"
+          },
+          "table": {
+            "trackData": {
+              "cachedSize": "Cachearen tamaina",
+              "totalSize": "Tamaina guztira"
+            },
+            "track": {
+              "copyright": "Copyright-a",
+              "description": "Deskribapena",
+              "discNumber": "Disko zenbakia",
+              "license": "Lizentzia",
+              "position": "Kokapena",
+              "title": "Izenburua"
+            },
+            "activity": {
+              "favorited": "Gogoko pistak",
+              "firstSeen": "Lehen aldiz ikusia",
+              "listenings": "Entzunaldiak",
+              "playlists": "Zerrendak"
+            }
+          },
+          "button": {
+            "delete": "Ezabatu",
+            "edit": "Editatu",
+            "remoteRefresh": "Freskatu urruneko zerbitzaritik"
+          },
+          "modal": {
+            "delete": {
+              "header": "Pista hau ezabatu nahi duzu?",
+              "content": {
+                "warning": "Pista eta erlazionatutako igoerak, gogokoak eta entzunaldien historia ezabatu egingo dira. Ekintza hau ezin da desegin."
+              }
+            }
+          },
+          "warning": {
+            "stats": "Estatistikak aktibitate ezagunetik eta zure instantziako edukitik kalkulatzen dira eta ez dute objektu honen aktibitate orokorra islatzen"
+          }
+        },
+        "Base": {
+          "link": {
+            "albums": "Albumak",
+            "artists": "Artistak",
+            "channels": "Kanalak",
+            "edits": "Edizioak",
+            "libraries": "Liburutegiak",
+            "tags": "Etiketak",
+            "tracks": "Pistak",
+            "uploads": "Igoerak"
+          },
+          "title": "Kudeatu liburutegia",
+          "menu": {
+            "secondary": "Bigarren mailako menua"
+          }
+        },
+        "EditsList": {
+          "title": "Edizioak",
+          "header": {
+            "edits": "Liburutegiaren edizioak"
+          }
+        }
+      },
+      "ChannelDetail": {
+        "table": {
+          "channelData": {
+            "account": "Kontua",
+            "category": "Kategoria",
+            "description": "Deskribapena",
+            "domain": "Domeinua",
+            "name": "Izena",
+            "rss": "RSS jarioa",
+            "url": "URL"
+          },
+          "audioContent": {
+            "albums": "Albumak",
+            "cachedSize": "Cachearen tamaina",
+            "totalSize": "Tamaina guztira",
+            "tracks": "Pistak",
+            "uploads": "Igoerak"
+          },
+          "activity": {
+            "edits": "Edizioak",
+            "favorited": "Gogoko pistak",
+            "firstSeen": "Lehen aldiz ikusia",
+            "linkedReports": "Estekatutako txostenak",
+            "listenings": "Entzunaldiak",
+            "playlists": "Zerrendak"
+          }
+        },
+        "header": {
+          "activity": "Jarduera",
+          "audioContent": "Audio edukia",
+          "channelData": "Kanalaren datuak"
+        },
+        "button": {
+          "delete": "Ezabatu",
+          "openRemote": "Ireki urruneko profila",
+          "refresh": "Freskatu urruneko zerbitzaritik"
+        },
+        "modal": {
+          "delete": {
+            "header": "Liburutegi hau ezabatu nahi duzu?",
+            "content": {
+              "warning": "Kanal hau eta erlazionatutako igoerak, pistak eta albumak ezabatu egingo dira. Ekintza hau ezin da desegin."
+            }
+          }
+        },
+        "label": {
+          "local": "Lokala"
+        },
+        "link": {
+          "localProfile": "Ireki profil lokala",
+          "django": "Ikusi Django-ren administrazioan"
+        },
+        "warning": {
+          "stats": "Estatistikak aktibitate ezagunetik eta zure instantziako edukitik kalkulatzen dira eta ez dute objektu honen aktibitate orokorra islatzen"
+        }
+      },
+      "CommonList": {
+        "title": {
+          "accounts": "Kontuak",
+          "albums": "Albumak",
+          "artists": "Artistak",
+          "channels": "Kanalak",
+          "invitations": "Gonbidapenak",
+          "libraries": "Liburutegiak",
+          "tags": "Etiketak",
+          "tracks": "Pistak",
+          "uploads": "Igoerak",
+          "users": "Erabiltzaileak"
+        }
+      },
+      "Settings": {
+        "header": {
+          "channels": "Kanalak",
+          "federation": "Federazioa",
+          "instanceInfo": "Instantziaren informazioa",
+          "settings": "Instantziaren ezarpenak",
+          "moderation": "Moderazioa",
+          "music": "Musika",
+          "playlists": "Zerrendak",
+          "sections": "Atalak",
+          "security": "Segurtasuna",
+          "signups": "Erregistroak",
+          "stats": "Estatistikak",
+          "subsonic": "Subsonic",
+          "ui": "Erabiltzaile interfazea"
+        }
+      },
+      "users": {
+        "Base": {
+          "link": {
+            "invitations": "Gonbidapenak",
+            "users": "Erabiltzaileak"
+          },
+          "title": "Kudeatu erabiltzaileak",
+          "menu": {
+            "secondary": "Bigarren mailako menua"
+          }
+        }
+      }
+    },
+    "Search": {
+      "label": {
+        "albums": "Albumak",
+        "artists": "Artistak",
+        "playlists": "Zerrendak",
+        "podcasts": "Podcastak",
+        "radios": "Irratiak",
+        "series": "Serieak",
+        "tags": "Etiketak",
+        "tracks": "Pistak"
+      },
+      "header": {
+        "search": "Bilatu",
+        "remote": "Bilatu urruneko objektu bat",
+        "rss": "Harpidetu podcast baten RSS jariora"
+      },
+      "button": {
+        "submit": "Bidali bilaketaren kontsulta"
+      }
+    },
+    "playlists": {
+      "List": {
+        "ordering": {
+          "direction": {
+            "ascending": "Gorantza",
+            "descending": "Beheranzkoa",
+            "label": "Ordena"
+          },
+          "label": "Ordena"
+        },
+        "header": {
+          "browse": "Zerrendak arakatzen",
+          "playlists": "Zerrendak"
+        },
+        "button": {
+          "create": "Sortu erreprodukzio-zerrenda",
+          "manage": "Kudeatu zure zerrendak",
+          "search": "Bilatu"
+        },
+        "placeholder": {
+          "search": "Idatzi erreprodukzio-zerrendaren izena…"
+        },
+        "empty": {
+          "noResults": "Ez dago zure bilaketarekin bat datorren emaitzarik"
+        },
+        "pagination": {
+          "results": "Emaitzak orrialdeko"
+        },
+        "label": {
+          "search": "Bilatu"
+        }
+      },
+      "Detail": {
+        "button": {
+          "cancel": "Ezeztatu",
+          "delete": "Ezabatu",
+          "confirm": "Zerrenda ezabatu",
+          "edit": "Editatu",
+          "embed": "Txertatu",
+          "playAll": "Erreproduzitu dena",
+          "stopEdit": "Utzi editatzeari"
+        },
+        "modal": {
+          "delete": {
+            "header": "Nahi duzu \"{ playlist }\" zerrenda ezabatzea?",
+            "content": {
+              "warning": "Honek guztiz ezabatuko du zerrenda hau eta ekintza ezin da desegin."
+            }
+          },
+          "embed": {
+            "header": "Txertatu erreprodukzio zerrenda hau zure webgunean"
+          }
+        },
+        "title": "Zerrenda",
+        "meta": {
+          "tracks": "Zerrendak { username }-(r)en pista { n } du | Zerrendak { username }-(r)en { n } pista ditu"
+        },
+        "empty": {
+          "noTracks": "Oraindik ez dago pistarik zerrenda honetan"
+        },
+        "header": {
+          "tracks": "Pistak"
+        }
+      }
+    },
+    "radios": {
+      "Detail": {
+        "button": {
+          "confirm": "Irratia ezabatu",
+          "edit": "Editatu…"
+        },
+        "modal": {
+          "delete": {
+            "header": "Nahi duzu \"{ radio }\" irratia ezabatzea?",
+            "content": {
+              "warning": "Honek guztiz ezabatuko du irrati hau eta ekintza ezin da desegin."
+            }
+          }
+        },
+        "empty": {
+          "noTracks": "Ez da pistarik gehitu oraindik irrati honetara"
+        },
+        "title": "Irratia",
+        "header": {
+          "tracks": "Pistak"
+        }
+      }
+    }
+  },
+  "composables": {
+    "audio": {
+      "usePlayOptions": {
+        "addToQueueMessage": "Pista { n } gehitu da zure ilaran | { n } pista gehitu dira zure ilaran"
+      }
+    },
+    "locale": {
+      "useSharedLabels": {
+        "scopes": {
+          "libraries": {
+            "description": "Sarbidea audio-fitxategi, liburutegi, artista, album eta pistetara",
+            "label": "Liburutegiak eta igoerak"
+          },
+          "filters": {
+            "description": "Eduki-iragazkietara sarbidea",
+            "label": "Edukien iragazkiak"
+          },
+          "profile": {
+            "description": "Sarbidea eposta, erabiltzaile-izen eta profil informaziora",
+            "label": "Profila"
+          },
+          "edits": {
+            "description": "Edizioetara sarbidea",
+            "label": "Edizioak"
+          },
+          "follows": {
+            "description": "Jarraitutakoetara sarbidea",
+            "label": "Jarraitutakoak"
+          },
+          "listenings": {
+            "description": "Entzunaldi-historiarako sarbidea",
+            "label": "Entzunaldiak"
+          },
+          "reports": {
+            "description": "Moderazio-salaketetarako sarbidea",
+            "label": "Salaketak"
+          },
+          "notifications": {
+            "description": "Jakinarazpenetarako sarbidea",
+            "label": "Jakinarazpenak"
+          },
+          "playlists": {
+            "description": "Erreprodukzio-zerrendetarako sarbidea",
+            "label": "Zerrendak"
+          },
+          "radios": {
+            "description": "Irratietarako sarbidea",
+            "label": "Irratiak"
+          },
+          "security": {
+            "description": "Pasahitza eta baimenak bezalako segurtasun ezarpenetarako sarbidea",
+            "label": "Segurtasuna"
+          },
+          "favorites": {
+            "label": "Gogokoak"
+          }
+        },
+        "filters": {
+          "accessedDate": "Sarbide data",
+          "albumTitle": "Albumaren izena",
+          "artistName": "Artistaren izena",
+          "bitrate": "Bitrate",
+          "creationDate": "Sortze data",
+          "domain": "Domeinua",
+          "duration": "Iraupena",
+          "expirationDate": "Iraungitze data",
+          "firstSeen": "Lehen aldiz ikusitako data",
+          "followers": "Jarraitzaileak",
+          "itemsCount": "Elementuak",
+          "lastActivity": "Azken jarduera",
+          "lastSeen": "Ikusi zen azken aldiaren data",
+          "modificationDate": "Aldatze data",
+          "name": "Izena",
+          "receivedMessages": "Jasotako mezuak",
+          "releaseDate": "Argitalpen-data",
+          "dateJoined": "Erregistroaren data",
+          "size": "Tamaina",
+          "trackTitle": "Pistaren izena",
+          "uploads": "Igoerak",
+          "username": "Erabiltzaile-izena",
+          "users": "Erabiltzaileak"
+        },
+        "fields": {
+          "privacyLevel": {
+            "label": "Jardueraren ikusgarritasuna",
+            "help": "Zehaztu zure jardueraren ikusgarritasun maila",
+            "shortChoices": {
+              "public": "Edonork",
+              "instance": "Instantzia",
+              "private": "Pribatua"
+            },
+            "choices": {
+              "instance": "Instantzia honetako edonork",
+              "public": "Edonork, instantzia guztietan zehar",
+              "private": "Soilik ni"
+            }
+          },
+          "summary": {
+            "label": "Bio"
+          },
+          "reportType": {
+            "label": "Kategoria",
+            "choices": {
+              "illegalContent": "Eduki ilegala",
+              "invalidMetadata": "Metadatu baliogabeak",
+              "offensiveContent": "Eduki mingarria",
+              "other": "Beste bat",
+              "takedownRequest": "Edukia kentzeko eskaera"
+            }
+          },
+          "importStatus": {
+            "label": "Egin klik igoera honen inportazio prozesuari buruzko informazio gehiago bistaratzeko",
+            "choices": {
+              "draft": {
+                "label": "Zirriborroa",
+                "help": "Pista hau igo da, baina ez da prozesatzeko programatu oraindik"
+              },
+              "errored": {
+                "label": "Erroreduna",
+                "help": "Ezin izan da pista hau prozesatu, mesedez ziurtatu behar bezala etiketatuta dagoela"
+              },
+              "finished": {
+                "label": "Amaituta",
+                "help": "Inportatuta"
+              },
+              "pending": {
+                "label": "Zain",
+                "help": "Pista igo da, baina zerbitzariak ez du prozesatu oraindik"
+              },
+              "skipped": {
+                "label": "Saltatuta",
+                "help": "Pista hau zure liburutegietako batean dago jadanik"
+              }
+            }
+          },
+          "contentCategory": {
+            "label": "Edukien kategoria",
+            "choices": {
+              "music": "Musika",
+              "other": "Beste bat",
+              "podcast": "Podcasta"
+            }
+          }
+        }
+      }
+    },
+    "moderation": {
+      "useReport": {
+        "account": {
+          "typeLabel": "Kontua"
+        },
+        "album": {
+          "typeLabel": "Albuma",
+          "label": "Salatu album hau…"
+        },
+        "artist": {
+          "typeLabel": "Artista",
+          "label": "Salatu artista hau…"
+        },
+        "channel": {
+          "typeLabel": "Kanala",
+          "label": "Salatu kanal hau…"
+        },
+        "library": {
+          "typeLabel": "Liburutegia",
+          "label": "Salatu liburutegi hau…"
+        },
+        "playlist": {
+          "typeLabel": "Zerrenda",
+          "label": "Salatu erreprodukzio-zerrenda hau…"
+        },
+        "track": {
+          "label": "Salatu pista hau…",
+          "typeLabel": "Pista"
+        }
+      },
+      "useReportConfigs": {
+        "account": {
+          "label": "Kontua",
+          "summary": "Bio"
+        },
+        "album": {
+          "label": "Albuma",
+          "releaseDate": "Argitalpen-data",
+          "title": "Izenburua"
+        },
+        "artist": {
+          "label": "Artista"
+        },
+        "channel": {
+          "label": "Kanala"
+        },
+        "track": {
+          "copyright": "Copyright-a",
+          "license": "Lizentzia",
+          "position": "Kokapena",
+          "title": "Izenburua",
+          "label": "Pista"
+        },
+        "creationDate": {
+          "label": "Sortze data"
+        },
+        "library": {
+          "description": "Deskribapena",
+          "label": "Liburutegia"
+        },
+        "musicbrainzId": {
+          "label": "MusicBrainz ID"
+        },
+        "name": {
+          "label": "Izena"
+        },
+        "playlist": {
+          "label": "Zerrenda"
+        },
+        "tags": {
+          "label": "Etiketak"
+        },
+        "visibility": {
+          "label": "Ikusgaitasuna"
+        }
+      },
+      "useEditConfigs": {
+        "track": {
+          "copyright": "Copyright-a",
+          "license": "Lizentzia",
+          "position": "Kokapena",
+          "title": "Izenburua"
+        },
+        "cover": {
+          "label": "Azala"
+        },
+        "description": {
+          "label": "Deskribapena"
+        },
+        "artist": {
+          "name": "Izena"
+        },
+        "album": {
+          "releaseDate": "Argitalpen-data",
+          "title": "Izenburua"
+        },
+        "tags": {
+          "label": "Etiketak"
+        }
+      }
+    },
+    "useThemeList": {
+      "darkTheme": "Iluna",
+      "lightTheme": "Argia"
+    }
+  },
+  "init": {
+    "serviceWorker": {
+      "newAppVersion": "Aplikazioaren bertsio berria eskuragarri dago.",
+      "actions": {
+        "later": "Geroago",
+        "update": "Eguneratu"
+      }
+    },
+    "axios": {
+      "rateLimitDelay": "Eskaera gehiegi bidali dituzu eta mugatua izan zara, saiatu { delay } igarotzean",
+      "rateLimitLater": "Eskaera gehiegi bidali dituzu eta mugatua izan zara, saiatu beranduago"
+    }
+  }
+}

@@ -1,8 +1,7 @@
 import pytest
+from rest_framework import serializers
 
 from funkwhale_api.common import mutations
-
-from rest_framework import serializers
 
 
 @pytest.fixture

@@ -2,7 +2,6 @@ import operator
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
-
 from rest_framework.permissions import BasePermission
 
 from funkwhale_api.common import preferences

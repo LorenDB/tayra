@@ -1,8 +1,6 @@
 import persisting_theory
-
-from rest_framework import serializers
-
 from django.db import models, transaction
+from rest_framework import serializers
 
 
 class ConfNotFound(KeyError):
@@ -45,7 +43,7 @@ class Registry(persisting_theory.Registry):
 
     def has_perm(self, perm, type, obj, actor):
         if perm not in ["approve", "suggest"]:
-            raise ValueError("Invalid permission {}".format(perm))
+            raise ValueError(f"Invalid permission {perm}")
         conf = self.get_conf(type, obj)
         checker = conf["perm_checkers"].get(perm)
         if not checker:
@@ -56,7 +54,7 @@ class Registry(persisting_theory.Registry):
         try:
             type_conf = self[type]
         except KeyError:
-            raise ConfNotFound("{} is not a registered mutation".format(type))
+            raise ConfNotFound(f"{type} is not a registered mutation")
 
         try:
             conf = type_conf[obj.__class__]
@@ -65,7 +63,7 @@ class Registry(persisting_theory.Registry):
                 conf = type_conf[None]
             except KeyError:
                 raise ConfNotFound(
-                    "No mutation configuration found for {}".format(obj.__class__)
+                    f"No mutation configuration found for {obj.__class__}"
                 )
         return conf
 

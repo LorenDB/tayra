@@ -1,0 +1,95 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../user/libraries/edit.md:1
+msgid "Edit a library"
+msgstr ""
+
+#: ../../user/libraries/edit.md:3
+msgid "You can update the details of your libraries at any time. To do this:"
+msgstr ""
+
+#: ../../user/libraries/edit.md:0
+msgid "Desktop"
+msgstr ""
+
+#: ../../user/libraries/edit.md:11
+#: ../../user/libraries/edit.md:28
+msgid "Log in to your {term}`pod`."
+msgstr ""
+
+#: ../../user/libraries/edit.md:12
+msgid "Select the upload icon ({fa}`upload`) in the top of the sidebar."
+msgstr ""
+
+#: ../../user/libraries/edit.md:13
+#: ../../user/libraries/edit.md:30
+msgid "Select {guilabel}`Get started` under {guilabel}`Upload third-party content in a library`."
+msgstr ""
+
+#: ../../user/libraries/edit.md:14
+#: ../../user/libraries/edit.md:31
+msgid "A screen appears showing your upload quota and your libraries."
+msgstr ""
+
+#: ../../user/libraries/edit.md:15
+#: ../../user/libraries/edit.md:32
+msgid "Select {guilabel}`Library Details` under the library you want to edit."
+msgstr ""
+
+#: ../../user/libraries/edit.md:16
+#: ../../user/libraries/edit.md:33
+msgid "Select the {guilabel}`✎ Edit` button at the top of the screen."
+msgstr ""
+
+#: ../../user/libraries/edit.md:17
+#: ../../user/libraries/edit.md:34
+msgid "Change any of the following:"
+msgstr ""
+
+#: ../../user/libraries/edit.md:18
+#: ../../user/libraries/edit.md:35
+msgid "{guilabel}`Name`."
+msgstr ""
+
+#: ../../user/libraries/edit.md:19
+#: ../../user/libraries/edit.md:36
+msgid "{guilabel}`Description`."
+msgstr ""
+
+#: ../../user/libraries/edit.md:20
+#: ../../user/libraries/edit.md:37
+msgid "{guilabel}`Visibility`."
+msgstr ""
+
+#: ../../user/libraries/edit.md:21
+#: ../../user/libraries/edit.md:38
+msgid "Select {guilabel}`Update Library` to save your changes. A toast notification appears at the bottom of the screen to confirm your changes."
+msgstr ""
+
+#: ../../user/libraries/edit.md:0
+msgid "Mobile"
+msgstr ""
+
+#: ../../user/libraries/edit.md:29
+msgid "Select the upload icon ({fa}`upload`) at the top of the screen."
+msgstr ""
+
+#: ../../user/libraries/edit.md:42
+msgid "That's it! You've updated your library's details."
+msgstr ""

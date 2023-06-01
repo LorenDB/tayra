@@ -1,6 +1,6 @@
+from dj_rest_auth import views as rest_auth_views
 from django.conf.urls import url
 from django.views.generic import TemplateView
-from rest_auth import views as rest_auth_views
 
 from . import views
 
@@ -46,7 +46,7 @@ urlpatterns = [
     # with proper key.
     # If you don't want to use API on that step, then just use ConfirmEmailView
     # view from:
-    # djang-allauth https://github.com/pennersr/django-allauth/blob/master/allauth/account/views.py#L190
+    # https://github.com/pennersr/django-allauth/blob/a62a370681/allauth/account/views.py#L291
     url(
         r"^registration/account-confirm-email/(?P<key>\w+)/?$",
         TemplateView.as_view(),

@@ -1,3 +1,54 @@
+<script setup lang="ts">
+import type { BackendError } from '~/types'
+
+import { useI18n } from 'vue-i18n'
+import { computed, ref } from 'vue'
+
+import axios from 'axios'
+
+import PasswordInput from '~/components/forms/PasswordInput.vue'
+
+interface Props {
+  defaultToken: string
+  defaultUid: string
+}
+
+const props = defineProps<Props>()
+
+const { t } = useI18n()
+
+const labels = computed(() => ({
+  changePassword: t('views.auth.PasswordResetConfirm.title')
+}))
+
+const newPassword = ref('')
+const token = ref(props.defaultToken)
+const uid = ref(props.defaultUid)
+
+const errors = ref([] as string[])
+const isLoading = ref(false)
+const success = ref(false)
+const submit = async () => {
+  isLoading.value = true
+  errors.value = []
+
+  try {
+    await axios.post('auth/password/reset/confirm/', {
+      uid: uid.value,
+      token: token.value,
+      new_password1: newPassword.value,
+      new_password2: newPassword.value
+    })
+
+    success.value = true
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
   <main
     v-title="labels.changePassword"
@@ -17,9 +68,7 @@
             class="ui negative message"
           >
             <h4 class="header">
-              <translate translate-context="Content/Signup/Card.Title">
-                Error while changing your password
-              </translate>
+              {{ $t('views.auth.PasswordResetConfirm.header.failure') }}
             </h4>
             <ul class="list">
               <li
@@ -32,31 +81,25 @@
           </div>
           <template v-if="token && uid">
             <div class="field">
-              <label for="password-field"><translate translate-context="Content/Settings/Input.Label">New password</translate></label>
+              <label for="password-field">{{ $t('views.auth.PasswordResetConfirm.label.newPassword') }}</label>
               <password-input
                 v-model="newPassword"
                 field-id="password-field"
               />
             </div>
             <router-link :to="{path: '/login'}">
-              <translate translate-context="Content/Signup/Link">
-                Back to login
-              </translate>
+              {{ $t('views.auth.PasswordResetConfirm.link.back') }}
             </router-link>
             <button
               :class="['ui', {'loading': isLoading}, 'right', 'floated', 'success', 'button']"
               type="submit"
             >
-              <translate translate-context="Content/Signup/Button.Label">
-                Update your password
-              </translate>
+              {{ $t('views.auth.PasswordResetConfirm.button.update') }}
             </button>
           </template>
           <template v-else>
             <p>
-              <translate translate-context="Content/Signup/Paragraph">
-                If the e-mail address provided in the previous step is valid and linked to a user account, you should receive an e-mail with reset instructions in the next couple of minutes.
-              </translate>
+              {{ $t('views.auth.PasswordResetConfirm.message.requestSent') }}
             </p>
           </template>
         </form>
@@ -65,77 +108,16 @@
           class="ui positive message"
         >
           <h4 class="header">
-            <translate translate-context="Content/Signup/Card.Title">
-              Password updated successfully
-            </translate>
+            {{ $t('views.auth.PasswordResetConfirm.header.success') }}
           </h4>
           <p>
-            <translate translate-context="Content/Signup/Card.Paragraph">
-              Your password has been updated successfully.
-            </translate>
+            {{ $t('views.auth.PasswordResetConfirm.message.success') }}
           </p>
           <router-link :to="{name: 'login'}">
-            <translate translate-context="Content/Signup/Link/Verb">
-              Proceed to login
-            </translate>
+            {{ $t('views.auth.PasswordResetConfirm.link.login') }}
           </router-link>
         </div>
       </div>
     </section>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import PasswordInput from '@/components/forms/PasswordInput'
-
-export default {
-  components: {
-    PasswordInput
-  },
-  props: {
-    defaultToken: { type: String, required: true },
-    defaultUid: { type: String, required: true }
-  },
-  data () {
-    return {
-      newPassword: '',
-      isLoading: false,
-      errors: [],
-      token: this.defaultToken,
-      uid: this.defaultUid,
-      success: false
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        changePassword: this.$pgettext('*/Signup/Title', 'Change your password')
-      }
-    }
-  },
-  methods: {
-    submit () {
-      const self = this
-      self.isLoading = true
-      self.errors = []
-      const payload = {
-        uid: this.uid,
-        token: this.token,
-        new_password1: this.newPassword,
-        new_password2: this.newPassword
-      }
-      return axios.post('auth/password/reset/confirm/', payload).then(
-        response => {
-          self.isLoading = false
-          self.success = true
-        },
-        error => {
-          self.errors = error.backendErrors
-          self.isLoading = false
-        }
-      )
-    }
-  }
-}
-</script>

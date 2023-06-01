@@ -1,11 +1,7 @@
 from rest_framework import viewsets
 
+from funkwhale_api.federation import api_serializers, decorators, models, tasks
 from funkwhale_api.music import models as music_models
-
-from funkwhale_api.federation import api_serializers
-from funkwhale_api.federation import decorators
-from funkwhale_api.federation import models
-from funkwhale_api.federation import tasks
 
 
 class V(viewsets.ModelViewSet):
@@ -43,9 +39,7 @@ def test_fetches_route_create(factories, api_request, mocker):
 def test_fetches_route_create_local(factories, api_request, mocker, settings):
     user = factories["users.User"]()
     user.create_actor()
-    track = factories["music.Track"](
-        fid="https://{}/test".format(settings.FEDERATION_HOSTNAME)
-    )
+    track = factories["music.Track"](fid=f"https://{settings.FEDERATION_HOSTNAME}/test")
     view = V.as_view({"post": "fetches"})
 
     request = api_request.post("/", format="json")

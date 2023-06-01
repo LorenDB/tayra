@@ -1,18 +1,73 @@
+<script setup lang="ts">
+import type { SupportedLanguages } from '~/locales'
+
+import SemanticModal from '~/components/semantic/Modal.vue'
+import useThemeList from '~/composables/useThemeList'
+import useTheme from '~/composables/useTheme'
+
+import { useVModel } from '@vueuse/core'
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+import { SUPPORTED_LOCALES } from '~/init/locale'
+
+interface Events {
+  (e: 'update:show', value: boolean): void
+  (e: 'showLanguageModalEvent'): void
+  (e: 'showThemeModalEvent'): void
+}
+
+interface Props {
+  show: boolean
+}
+
+const emit = defineEmits<Events>()
+const props = defineProps<Props>()
+
+const show = useVModel(props, 'show', emit)
+
+const { theme } = useTheme()
+const themes = useThemeList()
+
+const { t, locale: i18nLocale } = useI18n()
+const labels = computed(() => ({
+  header: t('components.common.UserModal.header.options'),
+  profile: t('components.common.UserModal.link.profile'),
+  settings: t('components.common.UserModal.link.settings'),
+  logout: t('components.common.UserModal.link.logout'),
+  about: t('components.common.UserModal.link.about'),
+  shortcuts: t('components.common.UserModal.label.shortcuts'),
+  support: t('components.common.UserModal.link.support'),
+  forum: t('components.common.UserModal.link.forum'),
+  docs: t('components.common.UserModal.link.docs'),
+  help: t('components.common.UserModal.link.support'),
+  language: t('components.common.UserModal.label.language'),
+  theme: t('components.common.UserModal.label.theme'),
+  chat: t('components.common.UserModal.link.chat'),
+  git: t('components.common.UserModal.link.git'),
+  login: t('components.common.UserModal.link.login'),
+  signup: t('components.common.UserModal.link.signup'),
+  notifications: t('components.common.UserModal.link.notifications'),
+  useOtherInstance: t('components.common.UserModal.button.switchInstance')
+}))
+
+const locale = computed(() => SUPPORTED_LOCALES[i18nLocale.value as SupportedLanguages])
+</script>
+
 <template>
   <!-- TODO make generic and move to semantic/modal? -->
-  <modal
-    :show="show"
+  <semantic-modal
+    v-model:show="show"
     :scrolling="true"
     :fullscreen="false"
-    @update:show="$emit('update:show', $event)"
   >
     <div
       v-if="$store.state.auth.authenticated"
       class="header"
     >
       <img
-        v-if="$store.state.auth.profile.avatar && $store.state.auth.profile.avatar.urls.medium_square_crop"
-        v-lazy="$store.getters['instance/absoluteUrl']($store.state.auth.profile.avatar.urls.medium_square_crop)"
+        v-if="$store.state.auth.profile?.avatar && $store.state.auth.profile?.avatar.urls.medium_square_crop"
+        v-lazy="$store.getters['instance/absoluteUrl']($store.state.auth.profile?.avatar.urls.medium_square_crop)"
         alt=""
         class="ui centered small circular image"
       >
@@ -38,12 +93,15 @@
           <div
             class="column"
             role="button"
-            @click="[$emit('update:show', false), $emit('showLanguageModalEvent')]"
+            @click="[$emit('update:show', false), emit('showLanguageModalEvent')]"
           >
             <i class="language icon user-modal list-icon" />
-            <span class="user-modal list-item">{{ labels.language }}:</span>
+            <span class="user-modal list-item">
+              {{ labels.language }}
+              <span class="left colon symbol" />
+            </span>
             <div class="right floated">
-              <span class="user-modal list-item">{{ $language.available[$language.current] }}</span>
+              <span class="user-modal list-item">{{ locale }}</span>
               <i class="action-hint chevron right icon" />
             </div>
           </div>
@@ -52,12 +110,15 @@
           <div
             class="column"
             role="button"
-            @click="[$emit('update:show', false), $emit('showThemeModalEvent')]"
+            @click="[$emit('update:show', false), emit('showThemeModalEvent')]"
           >
             <i class="palette icon user-modal list-icon" />
-            <span class="user-modal list-item">{{ labels.theme }}:</span>
+            <span class="user-modal list-item">
+              {{ labels.theme }}
+              <span class="left colon symbol" />
+            </span>
             <div class="right floated">
-              <span class="user-modal list-item"> {{ themes.find(x => x.key ===$store.state.ui.theme).name }}</span>
+              <span class="user-modal list-item"> {{ themes.find(x => x.key === theme)?.name }}</span>
               <i class="action-hint chevron right icon user-modal" />
             </div>
           </div>
@@ -77,24 +138,36 @@
           <div class="row">
             <router-link
               v-if="$store.state.auth.authenticated"
-              tag="div"
-              class="column"
-              :to="{name: 'notifications'}"
-              role="button"
+              v-slot="{ navigate }"
+              custom
+              :to="{ name: 'notifications' }"
             >
-              <i class="user-modal list-icon bell icon" />
-              <span class="user-modal list-item">{{ labels.notifications }}</span>
+              <div
+                class="column"
+                role="button"
+                @click="navigate"
+                @keypress.enter="navigate()"
+              >
+                <i class="user-modal list-icon bell icon" />
+                <span class="user-modal list-item">{{ labels.notifications }}</span>
+              </div>
             </router-link>
           </div>
           <div class="row">
             <router-link
-              tag="div"
-              class="column"
+              v-slot="{ navigate }"
+              custom
               :to="{ path: '/settings' }"
-              role="button"
             >
-              <i class="user-modal list-icon cog icon" />
-              <span class="user-modal list-item">{{ labels.settings }}</span>
+              <div
+                class="column"
+                role="button"
+                @click="navigate"
+                @keypress.enter="navigate()"
+              >
+                <i class="user-modal list-icon cog icon" />
+                <span class="user-modal list-item">{{ labels.settings }}</span>
+              </div>
             </router-link>
           </div>
           <div class="ui divider" />
@@ -121,127 +194,75 @@
         </div>
         <div class="row">
           <router-link
-            tag="div"
-            class="column"
+            v-slot="{ navigate }"
+            custom
             :to="{ name: 'about' }"
-            role="button"
           >
-            <i class="user-modal list-icon question circle outline icon" />
-            <span class="user-modal list-item">{{ labels.about }}</span>
+            <div
+              class="column"
+              role="button"
+              @click="navigate"
+              @keypress.enter="navigate()"
+            >
+              <i class="user-modal list-icon question circle outline icon" />
+              <span class="user-modal list-item">{{ labels.about }}</span>
+            </div>
           </router-link>
         </div>
         <div class="ui divider" />
-        <template v-if="$store.state.auth.authenticated">
-          <router-link
-            tag="div"
+
+        <router-link
+          v-if="$store.state.auth.authenticated"
+          v-slot="{ navigate }"
+          custom
+          :to="{ name: 'logout' }"
+        >
+          <div
             class="column"
-            :to="{ name: 'logout' }"
             role="button"
+            @click="navigate"
+            @keypress.enter="navigate()"
           >
             <i class="user-modal list-icon sign out alternate icon" />
             <span class="user-modal list-item">{{ labels.logout }}</span>
-          </router-link>
-        </template>
-        <template v-if="!$store.state.auth.authenticated">
-          <router-link
-            tag="div"
+          </div>
+        </router-link>
+        <router-link
+          v-else
+          v-slot="{ navigate }"
+          custom
+          :to="{ name: 'login' }"
+        >
+          <div
             class="column"
-            :to="{ name: 'login' }"
             role="button"
+            @click="navigate"
+            @keypress.enter="navigate()"
           >
             <i class="user-modal list-icon sign in alternate icon" />
             <span class="user-modal list-item">{{ labels.login }}</span>
-          </router-link>
-        </template>
-        <template
-          v-if="!$store.state.auth.authenticated"
-          &&
-          $store.state.instance.settings.users.registration_enabled.value
+          </div>
+        </router-link>
+        <router-link
+          v-if="!$store.state.auth.authenticated && $store.state.instance.settings.users.registration_enabled.value"
+          v-slot="{ navigate }"
+          custom
+          :to="{ name: 'signup' }"
         >
-          <router-link
-            tag="div"
+          <div
             class="column"
-            :to="{ name: 'signup' }"
             role="button"
+            @click="navigate"
+            @keypress.enter="navigate()"
           >
             <i class="user-modal list-item user icon" />
             <span class="user-modal list-item">{{ labels.signup }}</span>
-          </router-link>
-        </template>
+          </div>
+        </router-link>
       </div>
     </div>
-  </modal>
+  </semantic-modal>
 </template>
-
-<script>
-import Modal from '@/components/semantic/Modal'
-import { mapGetters } from 'vuex'
-
-export default {
-  components: {
-    Modal
-  },
-  props: {
-    show: { type: Boolean, required: true }
-  },
-  computed: {
-    labels () {
-      return {
-        header: this.$pgettext('Popup/Title/Noun', 'Options'),
-        profile: this.$pgettext('*/*/*/Noun', 'Profile'),
-        settings: this.$pgettext('*/*/*/Noun', 'Settings'),
-        logout: this.$pgettext('Sidebar/Login/List item.Link/Verb', 'Log out'),
-        about: this.$pgettext('Sidebar/About/List item.Link', 'About'),
-        shortcuts: this.$pgettext('*/*/*/Noun', 'Keyboard shortcuts'),
-        support: this.$pgettext('Sidebar/*/Listitem.Link', 'Help'),
-        forum: this.$pgettext('Sidebar/*/Listitem.Link', 'Forum'),
-        docs: this.$pgettext('Sidebar/*/Listitem.Link', 'Documentation'),
-        help: this.$pgettext('Sidebar/*/Listitem.Link', 'Help'),
-        language: this.$pgettext(
-          'Sidebar/Settings/Dropdown.Label/Short, Verb',
-          'Language'
-        ),
-        theme: this.$pgettext(
-          'Sidebar/Settings/Dropdown.Label/Short, Verb',
-          'Theme'
-        ),
-        chat: this.$pgettext('Sidebar/*/Listitem.Link', 'Chat room'),
-        git: this.$pgettext('Sidebar/*/List item.Link', 'Issue tracker'),
-        login: this.$pgettext('*/*/Button.Label/Verb', 'Log in'),
-        signup: this.$pgettext('*/*/Button.Label/Verb', 'Sign up'),
-        notifications: this.$pgettext('*/Notifications/*', 'Notifications'),
-        useOtherInstance: this.$pgettext(
-          'Sidebar/*/List item.Link',
-          'Use another instance'
-        )
-      }
-    },
-    themes () {
-      return [
-        {
-          icon: 'sun icon',
-          name: this.$pgettext(
-            'Footer/Settings/Dropdown.Label/Theme name',
-            'Light'
-          ),
-          key: 'light'
-        },
-        {
-          icon: 'moon icon',
-          name: this.$pgettext(
-            'Footer/Settings/Dropdown.Label/Theme name',
-            'Dark'
-          ),
-          key: 'dark'
-        }
-      ]
-    },
-    ...mapGetters({
-      additionalNotifications: 'ui/additionalNotifications'
-    })
-  }
-}
-</script>
 
 <style>
 .action-hint {

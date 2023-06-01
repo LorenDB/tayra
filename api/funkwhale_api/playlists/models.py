@@ -1,6 +1,6 @@
 from django.db import models, transaction
-from django.db.models.expressions import OuterRef, Subquery
 from django.db.models import Q
+from django.db.models.expressions import OuterRef, Subquery
 from django.utils import timezone
 from rest_framework import exceptions
 
@@ -82,7 +82,7 @@ class Playlist(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return "/library/playlists/{}".format(self.pk)
+        return f"/library/playlists/{self.pk}"
 
     @transaction.atomic
     def insert(self, plt, index=None, allow_duplicates=True):
@@ -151,7 +151,7 @@ class Playlist(models.Model):
         max_tracks = preferences.get("playlists__max_tracks")
         if existing.count() + len(tracks) > max_tracks:
             raise exceptions.ValidationError(
-                "Playlist would reach the maximum of {} tracks".format(max_tracks)
+                f"Playlist would reach the maximum of {max_tracks} tracks"
             )
 
         if not allow_duplicates:

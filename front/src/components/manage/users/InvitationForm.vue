@@ -1,3 +1,50 @@
+<script setup lang="ts">
+import type { BackendError } from '~/types'
+
+import { computed, ref, reactive } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+interface Invitation {
+  code: string
+}
+
+const { t } = useI18n()
+const router = useRouter()
+const store = useStore()
+
+const labels = computed(() => ({
+  placeholder: t('components.manage.users.InvitationForm.placeholder.invitation')
+}))
+
+const invitations = reactive([] as Invitation[])
+const code = ref('')
+const isLoading = ref(false)
+const errors = ref([] as string[])
+const submit = async () => {
+  isLoading.value = true
+  errors.value = []
+
+  try {
+    const response = await axios.post('manage/users/invitations/', { code: code.value || undefined })
+    invitations.unshift(response.data)
+    code.value = ''
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const getUrl = (code: string) => store.getters['instance/absoluteUrl'](router.resolve({
+  name: 'signup',
+  query: { invitation: code.toUpperCase() }
+}).href)
+</script>
+
 <template>
   <div>
     <form
@@ -10,9 +57,7 @@
         class="ui negative message"
       >
         <h4 class="header">
-          <translate translate-context="Content/Admin/Error message.Title">
-            Error while creating invitation
-          </translate>
+          {{ $t('components.manage.users.InvitationForm.header.failure') }}
         </h4>
         <ul class="list">
           <li
@@ -25,7 +70,7 @@
       </div>
       <div class="inline fields">
         <div class="ui field">
-          <label for="invitation-code"><translate translate-context="Content/*/Input.Label">Invitation code</translate></label>
+          <label for="invitation-code">{{ $t('components.manage.users.InvitationForm.label.invite') }}</label>
           <input
             v-model="code"
             for="invitation-code"
@@ -40,9 +85,7 @@
             :disabled="isLoading"
             type="submit"
           >
-            <translate translate-context="Content/Admin/Button.Label/Verb">
-              Get a new invitation
-            </translate>
+            {{ $t('components.manage.users.InvitationForm.button.new') }}
           </button>
         </div>
       </div>
@@ -53,14 +96,10 @@
         <thead>
           <tr>
             <th>
-              <translate translate-context="Content/Admin/Table.Label/Noun">
-                Code
-              </translate>
+              {{ $t('components.manage.users.InvitationForm.table.invitation.header.code') }}
             </th>
             <th>
-              <translate translate-context="Content/Admin/Table.Label/Noun">
-                Share link
-              </translate>
+              {{ $t('components.manage.users.InvitationForm.table.invitation.header.link') }}
             </th>
           </tr>
         </thead>
@@ -81,55 +120,10 @@
       </table>
       <button
         class="ui basic button"
-        @click="invitations = []"
+        @click="invitations.length = 0"
       >
-        <translate translate-context="Content/Library/Button.Label">
-          Clear
-        </translate>
+        {{ $t('components.manage.users.InvitationForm.button.clear') }}
       </button>
     </div>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-
-export default {
-  data () {
-    return {
-      isLoading: false,
-      code: null,
-      invitations: [],
-      errors: []
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        placeholder: this.$pgettext('Content/Admin/Input.Placeholder', 'Leave empty for a random code')
-      }
-    }
-  },
-  methods: {
-    submit () {
-      const self = this
-      this.isLoading = true
-      this.errors = []
-      const url = 'manage/users/invitations/'
-      const payload = {
-        code: this.code
-      }
-      axios.post(url, payload).then((response) => {
-        self.isLoading = false
-        self.invitations.unshift(response.data)
-      }, (error) => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    getUrl (code) {
-      return this.$store.getters['instance/absoluteUrl'](this.$router.resolve({ name: 'signup', query: { invitation: code.toUpperCase() } }).href)
-    }
-  }
-}
-</script>

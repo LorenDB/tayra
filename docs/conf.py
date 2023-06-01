@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # funkwhale documentation build configuration file, created by
 # sphinx-quickstart on Sun Jun 25 18:49:23 2017.
@@ -13,14 +12,14 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+import datetime
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
 import sys
-import datetime
-import subprocess
 
 sys.path.insert(0, os.path.abspath("../api"))
 sys.path.insert(0, os.path.abspath("../api/config"))
@@ -51,6 +50,8 @@ extensions = [
     "sphinx.ext.autodoc",
     "myst_parser",
     "sphinx_design",
+    "sphinxcontrib.mermaid",
+    "sphinx_copybutton",
 ]
 autodoc_mock_imports = [
     "celery",
@@ -74,12 +75,16 @@ source_suffix = ".rst"
 root_doc = "index"
 
 # Enable colon fences
-myst_enable_extensions = ["colon_fence"]
+myst_enable_extensions = ["colon_fence", "attrs_block"]
+
+# Autogenerate anchors
+
+myst_heading_anchors = 3
 
 # General information about the project.
 year = datetime.datetime.now().year
 project = "funkwhale"
-copyright = "{}, The Funkwhale Collective".format(year)
+copyright = f"{year}, The Funkwhale Collective"
 author = "The Funkwhale Collective"
 
 # The version info for the project you're documenting, acts as replacement for
@@ -94,7 +99,7 @@ release = version
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = "en"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -129,12 +134,18 @@ html_context = {
     "gitlab_url": "https://dev.funkwhale.audio/funkwhale/funkwhale",
 }
 html_logo = "logo.svg"
-html_favicon = "../front/public/favicon.png"
+html_favicon = "../front/public/favicon.ico"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-# html_static_path = ["_static"]
+html_static_path = ["_static"]
+html_css_files = [
+    "css/translation-hint.css",
+]
+html_js_files = [
+    "js/translation-hint.js",
+]
 
 # -- Options for HTMLHelp output ------------------------------------------
 
@@ -201,22 +212,9 @@ texinfo_documents = [
 
 # Define list of redirect files to be build in the Sphinx build process
 
-redirect_files = [
-    ("importing-music.html", "admin/importing-music.html"),
-    ("architecture.html", "developers/architecture.html"),
-    ("troubleshooting.html", "admin/troubleshooting.html"),
-    ("configuration.html", "admin/configuration.html"),
-    ("upgrading/index.html", "../admin/upgrading.html"),
-    ("upgrading/0.17.html", "../admin/0.17.html"),
-    ("users/django.html", "../admin/django.html"),
-    ("cli/index.html", "../users/cli.html"),
-    ("cli/examples.html", "../users/cli.html#examples"),
-    ("installation/ldap.html", "../admin/ldap.html"),
-    ("installation/optimization.html", "../admin/optimization.html"),
-    ("installation/external_dependencies.html", "debian.html"),
-    ("installation/systemd.html", "debian.html#systemd-unit-file"),
-    ("backup.html", "../admin/backup.html"),
-]
+redirect_list = []
+with open("redirects.txt") as fp:
+    data_list = [tuple(line.strip().split(",")) for line in fp]
 
 # Generate redirect template
 
@@ -236,7 +234,7 @@ redirect_template = """\
 
 def copy_legacy_redirects(app, docname):
     if app.builder.name == "html":
-        for html_src_path, new in redirect_files:
+        for html_src_path, new in data_list:
             page = redirect_template.format(new=new)
             target_path = app.outdir + "/" + html_src_path
             if not os.path.exists(os.path.dirname(target_path)):

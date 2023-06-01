@@ -1,6 +1,5 @@
-from django.db import models as dj_models
-
 import django_filters
+from django.db import models as dj_models
 from django_filters import rest_framework as filters
 
 from funkwhale_api.common import fields

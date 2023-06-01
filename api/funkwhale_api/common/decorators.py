@@ -1,17 +1,10 @@
 from django.db import transaction
+from drf_spectacular.utils import OpenApiParameter, extend_schema
+from rest_framework import decorators, exceptions, response, status
 
-from rest_framework import decorators
-from rest_framework import exceptions
-from rest_framework import response
-from rest_framework import status
-
-from . import filters
-from . import models
+from . import filters, models
 from . import mutations as common_mutations
-from . import serializers
-from . import signals
-from . import tasks
-from . import utils
+from . import serializers, signals, tasks, utils
 
 
 def action_route(serializer_class):
@@ -87,6 +80,16 @@ def mutations_route(types):
             )
             return response.Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    return decorators.action(
-        methods=["get", "post"], detail=True, required_scope="edits"
-    )(mutations)
+    return extend_schema(
+        methods=["post"], responses=serializers.APIMutationSerializer()
+    )(
+        extend_schema(
+            methods=["get"],
+            responses=serializers.APIMutationSerializer(many=True),
+            parameters=[OpenApiParameter("id", location="query", exclude=True)],
+        )(
+            decorators.action(
+                methods=["get", "post"], detail=True, required_scope="edits"
+            )(mutations)
+        )
+    )

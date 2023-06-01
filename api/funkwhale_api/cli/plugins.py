@@ -5,7 +5,6 @@ import sys
 import click
 from django.conf import settings
 
-
 from . import base
 
 

@@ -3,8 +3,8 @@ import uuid
 
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.postgres.fields import JSONField
 from django.db import models
+from django.db.models import JSONField
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.urls import reverse
@@ -205,7 +205,9 @@ class UserRequest(models.Model):
         max_length=40, choices=USER_REQUEST_STATUSES, default="pending"
     )
     submitter = models.ForeignKey(
-        "federation.Actor", related_name="requests", on_delete=models.CASCADE,
+        "federation.Actor",
+        related_name="requests",
+        on_delete=models.CASCADE,
     )
     assigned_to = models.ForeignKey(
         "federation.Actor",
@@ -224,7 +226,7 @@ class UserRequest(models.Model):
 
 @receiver(pre_save, sender=Report)
 def set_handled_date(sender, instance, **kwargs):
-    if instance.is_handled is True and not instance.handled_date:
+    if instance.is_handled and not instance.handled_date:
         instance.handled_date = timezone.now()
     elif not instance.is_handled:
         instance.handled_date = None

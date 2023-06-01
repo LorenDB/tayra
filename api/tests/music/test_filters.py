@@ -1,7 +1,6 @@
 import pytest
 
-from funkwhale_api.music import filters
-from funkwhale_api.music import models
+from funkwhale_api.music import filters, models
 
 
 def test_album_filter_hidden(factories, mocker, queryset_equal_list):

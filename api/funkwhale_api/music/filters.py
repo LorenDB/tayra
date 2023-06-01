@@ -1,6 +1,5 @@
-from django.db.models import Q
-
 import django_filters
+from django.db.models import Q
 from django_filters import rest_framework as filters
 
 from funkwhale_api.audio import filters as audio_filters
@@ -11,8 +10,7 @@ from funkwhale_api.common import search
 from funkwhale_api.moderation import filters as moderation_filters
 from funkwhale_api.tags import filters as tags_filters
 
-from . import models
-from . import utils
+from . import models, utils
 
 
 def filter_tags(queryset, name, value):
@@ -135,10 +133,7 @@ class ArtistFilter(
         return queryset.playable_by(actor, value).distinct()
 
     def filter_has_albums(self, queryset, name, value):
-        if value is True:
-            return queryset.filter(albums__isnull=False)
-        else:
-            return queryset.filter(albums__isnull=True)
+        return queryset.filter(albums__isnull=not value)
 
 
 class TrackFilter(
@@ -211,9 +206,11 @@ class UploadFilter(audio_filters.IncludeChannelsFilterSet):
     library = filters.UUIDFilter("library__uuid")
     playable = filters.BooleanFilter(field_name="_", method="filter_playable")
     scope = common_filters.ActorScopeFilter(
-        actor_field="library__actor", distinct=True, library_field="library",
+        actor_field="library__actor",
+        distinct=True,
+        library_field="library",
     )
-    import_status = common_filters.MultipleQueryFilter(coerce=str)
+    import_status = common_filters.MultipleQueryFilter(coerce=str, distinct=False)
     q = fields.SmartSearchFilter(
         config=search.SearchConfig(
             search_fields={
@@ -291,9 +288,13 @@ class AlbumFilter(
 
 
 class LibraryFilter(filters.FilterSet):
-    q = fields.SearchFilter(search_fields=["name"],)
+    q = fields.SearchFilter(
+        search_fields=["name"],
+    )
     scope = common_filters.ActorScopeFilter(
-        actor_field="actor", distinct=True, library_field="pk",
+        actor_field="actor",
+        distinct=True,
+        library_field="pk",
     )
 
     class Meta:

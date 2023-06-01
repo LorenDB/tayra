@@ -1,13 +1,13 @@
 import json
 
 from django import forms
-from django.contrib.postgres.forms import JSONField
 from django.conf import settings
+from django.contrib.postgres.forms import JSONField
 from dynamic_preferences import serializers, types
 from dynamic_preferences.registries import global_preferences_registry
 
 
-class DefaultFromSettingMixin(object):
+class DefaultFromSettingMixin:
     def get_default(self):
         return getattr(settings, self.setting)
 
@@ -38,7 +38,7 @@ class StringListSerializer(serializers.BaseSerializer):
 
         if type(value) not in [list, tuple]:
             raise cls.exception(
-                "Cannot serialize, value {} is not a list or a tuple".format(value)
+                f"Cannot serialize, value {value} is not a list or a tuple"
             )
 
         if cls.sort:
@@ -57,7 +57,7 @@ class StringListPreference(types.BasePreferenceType):
     field_class = forms.MultipleChoiceField
 
     def get_api_additional_data(self):
-        d = super(StringListPreference, self).get_api_additional_data()
+        d = super().get_api_additional_data()
         d["choices"] = self.get("choices")
         return d
 
@@ -72,14 +72,14 @@ class JSONSerializer(serializers.BaseSerializer):
         data_serializer = cls.data_serializer_class(data=value)
         if not data_serializer.is_valid():
             raise cls.exception(
-                "{} is not a valid value: {}".format(value, data_serializer.errors)
+                f"{value} is not a valid value: {data_serializer.errors}"
             )
         value = data_serializer.validated_data
         try:
             return json.dumps(value, sort_keys=True)
         except TypeError:
             raise cls.exception(
-                "Cannot serialize, value {} is not JSON serializable".format(value)
+                f"Cannot serialize, value {value} is not JSON serializable"
             )
 
     @classmethod

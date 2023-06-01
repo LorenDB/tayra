@@ -1,17 +1,17 @@
 import collections
 import io
-import PIL
 import os
 
-from rest_framework import serializers
-
+import PIL
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils.encoding import smart_text
 from django.utils.translation import ugettext_lazy as _
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
+from rest_framework import serializers
 
-from . import models
-from . import utils
+from . import models, utils
 
 
 class RelatedField(serializers.RelatedField):
@@ -82,14 +82,14 @@ class RelatedField(serializers.RelatedField):
         )
 
 
-class Action(object):
+class Action:
     def __init__(self, name, allow_all=False, qs_filter=None):
         self.name = name
         self.allow_all = allow_all
         self.qs_filter = qs_filter
 
     def __repr__(self):
-        return "<Action {}>".format(self.name)
+        return f"<Action {self.name}>"
 
 
 class ActionSerializer(serializers.Serializer):
@@ -113,7 +113,7 @@ class ActionSerializer(serializers.Serializer):
             )
 
         for action in self.actions_by_name.keys():
-            handler_name = "handle_{}".format(action)
+            handler_name = f"handle_{action}"
             assert hasattr(self, handler_name), "{} miss a {} method".format(
                 self.__class__.__name__, handler_name
             )
@@ -133,9 +133,9 @@ class ActionSerializer(serializers.Serializer):
         if value == "all":
             return self.queryset.all().order_by("id")
         if type(value) in [list, tuple]:
-            return self.queryset.filter(
-                **{"{}__in".format(self.pk_field): value}
-            ).order_by(self.pk_field)
+            return self.queryset.filter(**{f"{self.pk_field}__in": value}).order_by(
+                self.pk_field
+            )
 
         raise serializers.ValidationError(
             "{} is not a valid value for objects. You must provide either a "
@@ -270,6 +270,7 @@ class APIMutationSerializer(serializers.ModelSerializer):
             "previous_state",
         ]
 
+    @extend_schema_field(OpenApiTypes.OBJECT)
     def get_target(self, obj):
         target = obj.target
         if not target:
@@ -280,7 +281,7 @@ class APIMutationSerializer(serializers.ModelSerializer):
 
     def validate_type(self, value):
         if value not in self.context["registry"]:
-            raise serializers.ValidationError("Invalid mutation type {}".format(value))
+            raise serializers.ValidationError(f"Invalid mutation type {value}")
         return value
 
 
@@ -292,6 +293,7 @@ class AttachmentSerializer(serializers.Serializer):
     file = StripExifImageField(write_only=True)
     urls = serializers.SerializerMethodField()
 
+    @extend_schema_field(OpenApiTypes.OBJECT)
     def get_urls(self, o):
         urls = {}
         urls["source"] = o.url
@@ -310,14 +312,16 @@ class ContentSerializer(serializers.Serializer):
     text = serializers.CharField(
         max_length=models.CONTENT_TEXT_MAX_LENGTH, allow_null=True
     )
-    content_type = serializers.ChoiceField(choices=models.CONTENT_TEXT_SUPPORTED_TYPES,)
+    content_type = serializers.ChoiceField(
+        choices=models.CONTENT_TEXT_SUPPORTED_TYPES,
+    )
     html = serializers.SerializerMethodField()
 
-    def get_html(self, o):
+    def get_html(self, o) -> str:
         return utils.render_html(o.text, o.content_type)
 
 
-class NullToEmptDict(object):
+class NullToEmptDict:
     def get_attribute(self, o):
         attr = super().get_attribute(o)
         if attr is None:
@@ -328,3 +332,36 @@ class NullToEmptDict(object):
         if not v:
             return v
         return super().to_representation(v)
+
+
+class ScopesSerializer(serializers.Serializer):
+    id = serializers.CharField()
+    rate = serializers.CharField()
+    description = serializers.CharField()
+    limit = serializers.IntegerField()
+    duration = serializers.IntegerField()
+    remaining = serializers.IntegerField()
+    available = serializers.IntegerField()
+    available_seconds = serializers.IntegerField()
+    reset = serializers.IntegerField()
+    reset_seconds = serializers.IntegerField()
+
+
+class IdentSerializer(serializers.Serializer):
+    type = serializers.CharField()
+    id = serializers.IntegerField()
+
+
+class RateLimitSerializer(serializers.Serializer):
+    enabled = serializers.BooleanField()
+    ident = IdentSerializer()
+    scopes = serializers.ListField(child=ScopesSerializer())
+
+
+class ErrorDetailSerializer(serializers.Serializer):
+    detail = serializers.CharField(source="*")
+
+
+class TextPreviewSerializer(serializers.Serializer):
+    rendered = serializers.CharField(read_only=True, source="*")
+    text = serializers.CharField(write_only=True)

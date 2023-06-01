@@ -3,13 +3,9 @@ from django.core.paginator import Paginator
 from django.urls import reverse
 
 from funkwhale_api.common import utils
-
-from funkwhale_api.federation import (
-    actors,
-    serializers,
-    webfinger,
-    utils as federation_utils,
-)
+from funkwhale_api.federation import actors, serializers
+from funkwhale_api.federation import utils as federation_utils
+from funkwhale_api.federation import webfinger
 
 
 def test_authenticate_allows_anonymous_actor_fetch_when_allow_list_enabled(
@@ -31,7 +27,10 @@ def test_authenticate_skips_anonymous_fetch_when_allow_list_enabled(
 ):
     preferences["moderation__allow_list_enabled"] = True
     library = factories["music.Library"]()
-    url = reverse("federation:music:libraries-detail", kwargs={"uuid": library.uuid},)
+    url = reverse(
+        "federation:music:libraries-detail",
+        kwargs={"uuid": library.uuid},
+    )
     response = api_client.get(url)
 
     assert response.status_code == 403
@@ -165,7 +164,7 @@ def test_wellknown_webfinger_local(factories, api_client, settings, mocker):
     url = reverse("federation:well-known-webfinger")
     response = api_client.get(
         url,
-        data={"resource": "acct:{}".format(user.actor.webfinger_subject)},
+        data={"resource": f"acct:{user.actor.webfinger_subject}"},
         HTTP_ACCEPT="application/jrd+json",
     )
     serializer = serializers.ActorWebfingerSerializer(user.actor)
@@ -328,10 +327,8 @@ def test_music_library_retrieve_page_follow(
 def test_music_local_entity_detail(
     factories, api_client, factory, serializer_class, namespace, settings
 ):
-    obj = factories[factory](fid="http://{}/1".format(settings.FEDERATION_HOSTNAME))
-    url = reverse(
-        "federation:music:{}-detail".format(namespace), kwargs={"uuid": obj.uuid}
-    )
+    obj = factories[factory](fid=f"http://{settings.FEDERATION_HOSTNAME}/1")
+    url = reverse(f"federation:music:{namespace}-detail", kwargs={"uuid": obj.uuid})
     response = api_client.get(url)
 
     assert response.status_code == 200
@@ -346,9 +343,7 @@ def test_music_non_local_entity_detail(
     factories, api_client, factory, namespace, settings
 ):
     obj = factories[factory](fid="http://wrong-domain/1")
-    url = reverse(
-        "federation:music:{}-detail".format(namespace), kwargs={"uuid": obj.uuid}
-    )
+    url = reverse(f"federation:music:{namespace}-detail", kwargs={"uuid": obj.uuid})
     response = api_client.get(url)
 
     assert response.status_code == 404
@@ -470,7 +465,10 @@ def test_upload_retrieve_redirects_to_html_if_header_set(
 ):
     upload = factories["music.Upload"](library__local=True, playable=True)
 
-    url = reverse("federation:music:uploads-detail", kwargs={"uuid": upload.uuid},)
+    url = reverse(
+        "federation:music:uploads-detail",
+        kwargs={"uuid": upload.uuid},
+    )
     response = api_client.get(url, HTTP_ACCEPT="text/html")
     expected_url = utils.join_url(
         settings.FUNKWHALE_URL,
@@ -485,7 +483,10 @@ def test_track_retrieve_redirects_to_html_if_header_set(
 ):
     track = factories["music.Track"](local=True)
 
-    url = reverse("federation:music:tracks-detail", kwargs={"uuid": track.uuid},)
+    url = reverse(
+        "federation:music:tracks-detail",
+        kwargs={"uuid": track.uuid},
+    )
     response = api_client.get(url, HTTP_ACCEPT="text/html")
     expected_url = utils.join_url(
         settings.FUNKWHALE_URL,
@@ -500,7 +501,10 @@ def test_album_retrieve_redirects_to_html_if_header_set(
 ):
     album = factories["music.Album"](local=True)
 
-    url = reverse("federation:music:albums-detail", kwargs={"uuid": album.uuid},)
+    url = reverse(
+        "federation:music:albums-detail",
+        kwargs={"uuid": album.uuid},
+    )
     response = api_client.get(url, HTTP_ACCEPT="text/html")
     expected_url = utils.join_url(
         settings.FUNKWHALE_URL,
@@ -515,7 +519,10 @@ def test_artist_retrieve_redirects_to_html_if_header_set(
 ):
     artist = factories["music.Artist"](local=True)
 
-    url = reverse("federation:music:artists-detail", kwargs={"uuid": artist.uuid},)
+    url = reverse(
+        "federation:music:artists-detail",
+        kwargs={"uuid": artist.uuid},
+    )
     response = api_client.get(url, HTTP_ACCEPT="text/html")
     expected_url = utils.join_url(
         settings.FUNKWHALE_URL,
@@ -528,7 +535,7 @@ def test_artist_retrieve_redirects_to_html_if_header_set(
 @pytest.mark.parametrize("index", ["channels", "libraries"])
 def test_public_index_disabled(index, api_client, preferences):
     preferences["federation__public_index"] = False
-    url = reverse("federation:index:index-{}".format(index))
+    url = reverse(f"federation:index:index-{index}")
     response = api_client.get(url)
 
     assert response.status_code == 405
@@ -548,7 +555,9 @@ def test_index_channels_retrieve(factories, api_client):
         },
     ).data
 
-    url = reverse("federation:index:index-channels",)
+    url = reverse(
+        "federation:index:index-channels",
+    )
     response = api_client.get(url)
 
     assert response.status_code == 200

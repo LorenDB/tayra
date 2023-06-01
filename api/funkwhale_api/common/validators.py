@@ -72,7 +72,7 @@ class ImageDimensionsValidator:
 
 
 @deconstructible
-class FileValidator(object):
+class FileValidator:
     """
     Taken from https://gist.github.com/jrosebr1/2140738
     Validator for files, checking the size, extension and mimetype.
@@ -97,7 +97,7 @@ class FileValidator(object):
         "MIME type '%(mimetype)s' is not valid. Allowed types are: %(allowed_mimetypes)s."
     )
     min_size_message = _(
-        "The current file %(size)s, which is too small. The minumum file size is %(allowed_size)s."
+        "The current file %(size)s, which is too small. The minimum file size is %(allowed_size)s."
     )
     max_size_message = _(
         "The current file %(size)s, which is too large. The maximum file size is %(allowed_size)s."
@@ -163,5 +163,5 @@ class DomainValidator(validators.URLValidator):
 
         If it fails, we know the domain is not valid.
         """
-        super().__call__("http://{}".format(value))
+        super().__call__(f"http://{value}")
         return value

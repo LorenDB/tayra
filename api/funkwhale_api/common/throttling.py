@@ -1,9 +1,8 @@
 import collections
 
+from django.conf import settings
 from django.core.cache import cache
 from rest_framework import throttling as rest_throttling
-
-from django.conf import settings
 
 
 def get_ident(user, request):

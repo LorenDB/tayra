@@ -1,23 +1,47 @@
+<script setup lang="ts">
+import type { Channel } from '~/types'
+import SemanticModal from '~/components/semantic/Modal.vue'
+import ChannelAlbumForm from '~/components/channels/AlbumForm.vue'
+import { watch, ref } from 'vue'
+
+interface Events {
+  (e: 'created'): void
+}
+
+interface Props {
+  channel: Channel
+}
+
+const emit = defineEmits<Events>()
+defineProps<Props>()
+
+const isLoading = ref(false)
+const submittable = ref(false)
+const show = ref(false)
+
+watch(show, () => {
+  isLoading.value = false
+  submittable.value = false
+})
+
+const albumForm = ref()
+defineExpose({
+  show
+})
+</script>
+
 <template>
-  <modal
+  <semantic-modal
+    v-model:show="show"
     class="small"
-    :show.sync="show"
   >
     <h4 class="header">
-      <translate
-        v-if="channel.content_category === 'podcasts'"
-        key="1"
-        translate-context="Popup/Channels/Title/Verb"
-      >
-        New series
-      </translate>
-      <translate
-        v-else
-        key="2"
-        translate-context="Popup/Channels/Title"
-      >
-        New album
-      </translate>
+      <span v-if="channel.content_category === 'podcast'">
+        {{ $t('components.channels.AlbumModal.header.newSeries') }}
+      </span>
+      <span v-else>
+        {{ $t('components.channels.AlbumModal.header.newAlbum') }}
+      </span>
     </h4>
     <div class="scrolling content">
       <channel-album-form
@@ -25,50 +49,20 @@
         :channel="channel"
         @loading="isLoading = $event"
         @submittable="submittable = $event"
-        @created="$emit('created', $event)"
+        @created="emit('created')"
       />
     </div>
     <div class="actions">
       <button class="ui basic cancel button">
-        <translate translate-context="*/*/Button.Label/Verb">
-          Cancel
-        </translate>
+        {{ $t('components.channels.AlbumModal.button.cancel') }}
       </button>
       <button
         :class="['ui', 'primary', {loading: isLoading}, 'button']"
         :disabled="!submittable"
-        @click.stop.prevent="$refs.albumForm.submit()"
+        @click.stop.prevent="albumForm.submit()"
       >
-        <translate translate-context="*/*/Button.Label">
-          Create
-        </translate>
+        {{ $t('components.channels.AlbumModal.button.create') }}
       </button>
     </div>
-  </modal>
+  </semantic-modal>
 </template>
-
-<script>
-import Modal from '@/components/semantic/Modal'
-import ChannelAlbumForm from '@/components/channels/AlbumForm'
-
-export default {
-  components: {
-    Modal,
-    ChannelAlbumForm
-  },
-  props: { channel: { type: Object, required: true } },
-  data () {
-    return {
-      isLoading: false,
-      submittable: false,
-      show: false
-    }
-  },
-  watch: {
-    show () {
-      this.isLoading = false
-      this.submittable = false
-    }
-  }
-}
-</script>

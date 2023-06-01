@@ -1,3 +1,24 @@
+<script setup lang="ts">
+import { refAutoReset, toRefs } from '@vueuse/core'
+import { watch } from 'vue'
+
+interface Props {
+  isLoading: boolean
+  size?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  size: 'small'
+})
+
+const { isLoading, size } = toRefs(props)
+
+const isDone = refAutoReset(false, 2000)
+watch(isLoading, loading => {
+  isDone.value = !loading
+})
+</script>
+
 <template>
   <span
     v-if="isLoading || isDone"
@@ -13,40 +34,3 @@
     />
   </span>
 </template>
-
-<script>
-
-export default {
-  props: {
-    isLoading: { type: Boolean, required: true },
-    size: { type: String, default: 'small' }
-  },
-  data () {
-    return {
-      timer: null,
-      isDone: false
-    }
-  },
-  watch: {
-    isLoading (v) {
-      const self = this
-      if (v && this.timer) {
-        clearTimeout(this.timer)
-      }
-      if (v) {
-        this.isDone = false
-      } else {
-        this.isDone = true
-        this.timer = setTimeout(() => {
-          self.isDone = false
-        }, (2000))
-      }
-    }
-  },
-  destroyed () {
-    if (this.timer) {
-      clearTimeout(this.timer)
-    }
-  }
-}
-</script>

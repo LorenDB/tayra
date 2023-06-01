@@ -31,9 +31,7 @@ def test_mutation_filter_is_approved(value, expected, factories):
 
     qs = mutations[True].__class__.objects.all()
 
-    filterset = filters.MutationFilter(
-        {"q": "is_approved:{}".format(value)}, queryset=qs
-    )
+    filterset = filters.MutationFilter({"q": f"is_approved:{value}"}, queryset=qs)
 
     assert list(filterset.qs) == [mutations[expected]]
 

@@ -5,10 +5,7 @@ from django.db.models import Q
 
 from funkwhale_api.music import models as music_models
 
-from . import activity
-from . import actors
-from . import models
-from . import serializers
+from . import activity, actors, models, serializers
 
 logger = logging.getLogger(__name__)
 inbox = activity.InboxRouter()
@@ -196,7 +193,8 @@ def inbox_create_audio(payload, context):
     if is_channel:
         channel = context["actor"].get_channel()
         serializer = serializers.ChannelCreateUploadSerializer(
-            data=payload, context={"channel": channel},
+            data=payload,
+            context={"channel": channel},
         )
     else:
         serializer = serializers.UploadSerializer(

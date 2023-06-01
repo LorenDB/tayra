@@ -1,26 +1,25 @@
 import contextlib
 import io
 import os
-import PIL
 import random
 import shutil
 import tempfile
 import time
 
 import factory
+import PIL
 import pytest
-
-from django.core.management import call_command
+from aioresponses import aioresponses
 from django.contrib.auth.models import AnonymousUser
-from django.core.cache import cache as django_cache, caches
+from django.core.cache import cache as django_cache
+from django.core.cache import caches
 from django.core.files import uploadedfile
-from django.utils import timezone
-from django.test import client
+from django.core.management import call_command
 from django.db import connection
 from django.db.migrations.executor import MigrationExecutor
 from django.db.models import QuerySet
-
-from aioresponses import aioresponses
+from django.test import client
+from django.utils import timezone
 from dynamic_preferences.registries import global_preferences_registry
 from rest_framework.test import APIClient, APIRequestFactory
 
@@ -74,6 +73,7 @@ def queryset_equal_list():
 @pytest.fixture(scope="session", autouse=True)
 def factories_autodiscover():
     from django.apps import apps
+
     from funkwhale_api import factories
 
     app_names = [app.name for app in apps.app_configs.values()]
@@ -100,7 +100,7 @@ def local_cache():
 @pytest.fixture
 def factories(db):
     """
-    Returns a dictionnary containing all registered factories with keys such as
+    Returns a dictionary containing all registered factories with keys such as
     users.User or music.Track
     """
     from funkwhale_api import factories
@@ -117,7 +117,7 @@ def factories(db):
 @pytest.fixture
 def nodb_factories():
     """
-    Returns a dictionnary containing all registered factories with a build strategy
+    Returns a dictionary containing all registered factories with a build strategy
     that does not require access to the database
     """
     from funkwhale_api import factories

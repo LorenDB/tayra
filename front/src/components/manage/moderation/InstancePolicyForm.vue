@@ -1,23 +1,137 @@
+<script setup lang="ts">
+import type { BackendError, InstancePolicy } from '~/types'
+
+import { computed, ref, reactive } from 'vue'
+import { whenever } from '@vueuse/core'
+import { useI18n } from 'vue-i18n'
+
+import axios from 'axios'
+
+interface Events {
+  (e: 'save', data: InstancePolicy): void
+  (e: 'delete'): void
+  (e: 'cancel'): void
+}
+
+interface Props {
+  type: string
+  target: string
+  object?: InstancePolicy | null
+}
+
+const emit = defineEmits<Events>()
+const props = withDefaults(defineProps<Props>(), {
+  object: null
+})
+
+const { t } = useI18n()
+
+const labels = computed(() => ({
+  summaryHelp: t('components.manage.moderation.InstancePolicyForm.tooltip.summary'),
+  isActiveHelp: t('components.manage.moderation.InstancePolicyForm.tooltip.isActive'),
+  blockAllHelp: t('components.manage.moderation.InstancePolicyForm.tooltip.blockAll'),
+  silenceActivity: {
+    help: t('components.manage.moderation.InstancePolicyForm.tooltip.silenceActivity'),
+    label: t('components.manage.moderation.InstancePolicyForm.label.silenceActivity')
+  },
+  silenceNotifications: {
+    help: t('components.manage.moderation.InstancePolicyForm.tooltip.silenceNotifications'),
+    label: t('components.manage.moderation.InstancePolicyForm.label.silenceNotifications')
+  },
+  rejectMedia: {
+    help: t('components.manage.moderation.InstancePolicyForm.tooltip.rejectMedia'),
+    label: t('components.manage.moderation.InstancePolicyForm.label.rejectMedia')
+  }
+}))
+
+const current = reactive({
+  summary: props.object?.summary ?? '',
+  isActive: props.object?.is_active ?? true,
+  blockAll: props.object?.block_all ?? true,
+  silenceActivity: props.object?.silence_activity ?? false,
+  silenceNotifications: props.object?.silence_notifications ?? false,
+  rejectMedia: props.object?.reject_media ?? false
+})
+
+const fieldConfig = [
+  // TODO: We hide those until we actually have the related features implemented :)
+  // { id: 'silenceActivity', icon: 'feed' },
+  // { id: 'silenceNotifications', icon: 'bell' },
+  { id: 'rejectMedia', icon: 'file' }
+] as const
+
+whenever(() => current.silenceNotifications, () => (current.blockAll = false))
+whenever(() => current.silenceActivity, () => (current.blockAll = false))
+whenever(() => current.rejectMedia, () => (current.blockAll = false))
+whenever(() => current.blockAll, () => {
+  for (const config of fieldConfig) {
+    current[config.id] = false
+  }
+})
+
+const isLoading = ref(false)
+const errors = ref([] as string[])
+const createOrUpdate = async () => {
+  isLoading.value = true
+  errors.value = []
+
+  try {
+    const data = {
+      summary: current.summary,
+      is_active: current.isActive,
+      block_all: current.blockAll,
+      silence_activity: current.silenceActivity,
+      silence_notifications: current.silenceNotifications,
+      reject_media: current.rejectMedia,
+      target: {
+        type: props.type,
+        id: props.target
+      }
+    }
+
+    const response = props.object
+      ? await axios.patch(`manage/moderation/instance-policies/${props.object.id}/`, data)
+      : await axios.post('manage/moderation/instance-policies/', data)
+
+    emit('save', response.data)
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const remove = async () => {
+  isLoading.value = true
+  errors.value = []
+
+  try {
+    await axios.delete(`manage/moderation/instance-policies/${props.object?.id}/`)
+    emit('delete')
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
   <form
     class="ui form"
     @submit.prevent="createOrUpdate"
   >
     <h3 class="ui header">
-      <translate
+      <span
         v-if="object"
-        key="1"
-        translate-context="Content/Moderation/Card.Title/Verb"
       >
-        Edit moderation rule
-      </translate>
-      <translate
+        {{ $t('components.manage.moderation.InstancePolicyForm.header.editRule') }}
+      </span>
+      <span
         v-else
-        key="2"
-        translate-context="Content/Moderation/Card.Button.Label/Verb"
       >
-        Add a new moderation rule
-      </translate>
+        {{ $t('components.manage.moderation.InstancePolicyForm.header.addRule') }}
+      </span>
     </h3>
     <div
       v-if="errors && errors.length > 0"
@@ -25,9 +139,7 @@
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/Moderation/Error message.Title">
-          Error while creating rule
-        </translate>
+        {{ $t('components.manage.moderation.InstancePolicyForm.header.failure') }}
       </h4>
       <ul class="list">
         <li
@@ -50,23 +162,19 @@
           type="checkbox"
         >
         <label for="policy-is-active">
-          <translate
-            v-if="current.isActive"
-            key="1"
-            translate-context="*/*/*/State of feature"
-          >Enabled</translate>
-          <translate
-            v-else
-            key="2"
-            translate-context="*/*/*/State of feature"
-          >Disabled</translate>
+          <span v-if="current.isActive">
+            {{ $t('components.manage.moderation.InstancePolicyForm.label.policyEnabled') }}
+          </span>
+          <span v-else>
+            {{ $t('components.manage.moderation.InstancePolicyForm.label.policyDisabled') }}
+          </span>
           <tooltip :content="labels.isActiveHelp" />
         </label>
       </div>
     </div>
     <div class="field">
       <label for="policy-summary">
-        <translate translate-context="Content/Moderation/*/Noun">Reason</translate>
+        {{ $t('components.manage.moderation.InstancePolicyForm.label.policyReason') }}
         <tooltip :content="labels.summaryHelp" />
       </label>
       <textarea
@@ -84,15 +192,13 @@
           type="checkbox"
         >
         <label for="policy-is-active">
-          <translate translate-context="Content/Moderation/*/Verb">Block everything</translate>
+          {{ $t('components.manage.moderation.InstancePolicyForm.label.blockAll') }}
           <tooltip :content="labels.blockAllHelp" />
         </label>
       </div>
     </div>
     <div class="ui horizontal divider">
-      <translate translate-context="Content/Moderation/Card.Title">
-        Or customize your rule
-      </translate>
+      {{ $t('components.manage.moderation.InstancePolicyForm.label.customizeRule') }}
     </div>
     <div
       v-for="(config, key) in fieldConfig"
@@ -115,182 +221,42 @@
     <div class="ui hidden divider" />
     <button
       class="ui basic left floated button"
-      @click.prevent="$emit('cancel')"
+      @click.prevent="emit('cancel')"
     >
-      <translate translate-context="*/*/Button.Label/Verb">
-        Cancel
-      </translate>
+      {{ $t('components.manage.moderation.InstancePolicyForm.button.cancel') }}
     </button>
     <button
       :class="['ui', 'right', 'floated', 'success', {'disabled loading': isLoading}, 'button']"
       :disabled="isLoading"
     >
-      <translate
-        v-if="object"
-        key="1"
-        translate-context="Content/Moderation/Card.Button.Label/Verb"
-      >
-        Update
-      </translate>
-      <translate
-        v-else
-        key="2"
-        translate-context="Content/Moderation/Card.Button.Label/Verb"
-      >
-        Create
-      </translate>
+      <span v-if="object">
+        {{ $t('components.manage.moderation.InstancePolicyForm.button.update') }}
+      </span>
+      <span v-else>
+        {{ $t('components.manage.moderation.InstancePolicyForm.button.create') }}
+      </span>
     </button>
     <dangerous-button
       v-if="object"
       class="ui right floated basic danger button"
       @confirm="remove"
     >
-      <translate translate-context="*/*/*/Verb">
-        Delete
-      </translate>
-      <p slot="modal-header">
-        <translate translate-context="Popup/Moderation/Title">
-          Delete this moderation rule?
-        </translate>
-      </p>
-      <p slot="modal-content">
-        <translate translate-context="Popup/Moderation/Paragraph">
-          This action is irreversible.
-        </translate>
-      </p>
-      <div slot="modal-confirm">
-        <translate translate-context="Popup/Moderation/Button.Label/Verb">
-          Delete moderation rule
-        </translate>
-      </div>
+      {{ $t('components.manage.moderation.InstancePolicyForm.button.delete') }}
+      <template #modal-header>
+        <p>
+          {{ $t('components.manage.moderation.InstancePolicyForm.modal.delete.header') }}
+        </p>
+      </template>
+      <template #modal-content>
+        <p>
+          {{ $t('components.manage.moderation.InstancePolicyForm.modal.delete.content.warning') }}
+        </p>
+      </template>
+      <template #modal-confirm>
+        <div>
+          {{ $t('components.manage.moderation.InstancePolicyForm.button.confirm') }}
+        </div>
+      </template>
     </dangerous-button>
   </form>
 </template>
-
-<script>
-import axios from 'axios'
-import _ from '@/lodash'
-
-export default {
-  props: {
-    type: { type: String, required: true },
-    object: { type: Object, default: null },
-    target: { type: String, required: true }
-  },
-  data () {
-    const current = this.object || {}
-    return {
-      isLoading: false,
-      errors: [],
-      current: {
-        summary: _.get(current, 'summary', ''),
-        isActive: _.get(current, 'is_active', true),
-        blockAll: _.get(current, 'block_all', true),
-        silenceActivity: _.get(current, 'silence_activity', false),
-        silenceNotifications: _.get(current, 'silence_notifications', false),
-        rejectMedia: _.get(current, 'reject_media', false)
-      },
-      fieldConfig: [
-        // we hide those until we actually have the related features implemented :)
-        // {id: "silenceActivity", icon: "feed"},
-        // {id: "silenceNotifications", icon: "bell"},
-        { id: 'rejectMedia', icon: 'file' }
-      ]
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        summaryHelp: this.$pgettext('Content/Moderation/Help text', "Explain why you're applying this policy: this will help you remember why you added this rule. Depending on your pod configuration, this may be displayed publicly to help users understand the moderation rules in place."),
-        isActiveHelp: this.$pgettext('Content/Moderation/Help text', 'Use this setting to temporarily enable/disable the policy without completely removing it.'),
-        blockAllHelp: this.$pgettext('Content/Moderation/Help text', 'Block everything from this account or domain. This will prevent any interaction with the entity, and purge related content (uploads, libraries, follows, etc.)'),
-        silenceActivity: {
-          help: this.$pgettext('Content/Moderation/Help text', 'Hide account or domain content, except from followers.'),
-          label: this.$pgettext('Content/Moderation/*/Verb', 'Mute activity')
-        },
-        silenceNotifications: {
-          help: this.$pgettext('Content/Moderation/Help text', 'Prevent account or domain from triggering notifications, except from followers.'),
-          label: this.$pgettext('Content/Moderation/*/Verb', 'Mute notifications')
-        },
-        rejectMedia: {
-          help: this.$pgettext('Content/Moderation/Help text', 'Do not download any media file (audio, album cover, account avatar…) from this account or domain. This will purge existing content as well.'),
-          label: this.$pgettext('Content/Moderation/*/Verb', 'Reject media')
-        }
-      }
-    }
-  },
-  watch: {
-    'current.silenceActivity': function (v) {
-      if (v) {
-        this.current.blockAll = false
-      }
-    },
-    'current.silenceNotifications': function (v) {
-      if (v) {
-        this.current.blockAll = false
-      }
-    },
-    'current.rejectMedia': function (v) {
-      if (v) {
-        this.current.blockAll = false
-      }
-    },
-    'current.blockAll': function (v) {
-      if (v) {
-        const self = this
-        this.fieldConfig.forEach((f) => {
-          self.current[f.id] = false
-        })
-      }
-    }
-  },
-  methods: {
-    createOrUpdate () {
-      const self = this
-      this.isLoading = true
-      this.errors = []
-      let url, method
-      const data = {
-        summary: this.current.summary,
-        is_active: this.current.isActive,
-        block_all: this.current.blockAll,
-        silence_activity: this.current.silenceActivity,
-        silence_notifications: this.current.silenceNotifications,
-        reject_media: this.current.rejectMedia,
-        target: {
-          type: this.type,
-          id: this.target
-        }
-      }
-      if (this.object) {
-        url = `manage/moderation/instance-policies/${this.object.id}/`
-        method = 'patch'
-      } else {
-        url = 'manage/moderation/instance-policies/'
-        method = 'post'
-      }
-      axios[method](url, data).then((response) => {
-        this.isLoading = false
-        self.$emit('save', response.data)
-      }, (error) => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    remove () {
-      const self = this
-      this.isLoading = true
-      this.errors = []
-
-      const url = `manage/moderation/instance-policies/${this.object.id}/`
-      axios.delete(url).then((response) => {
-        this.isLoading = false
-        self.$emit('delete')
-      }, (error) => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    }
-  }
-}
-</script>

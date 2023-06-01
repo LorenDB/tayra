@@ -17,7 +17,7 @@ def test_can_create_artist_from_api(artists, mocker, db):
     assert artist.mbid, data["id"]
     assert artist.name, "Adhesive Wombat"
     assert artist.fid == federation_utils.full_url(
-        "/federation/music/artists/{}".format(artist.uuid)
+        f"/federation/music/artists/{artist.uuid}"
     )
 
 
@@ -42,7 +42,7 @@ def test_can_create_album_from_api(artists, albums, mocker, db):
     assert album.artist.name, "System of a Down"
     assert album.artist.mbid, data["artist-credit"][0]["artist"]["id"]
     assert album.fid == federation_utils.full_url(
-        "/federation/music/albums/{}".format(album.uuid)
+        f"/federation/music/albums/{album.uuid}"
     )
 
 
@@ -70,7 +70,7 @@ def test_can_create_track_from_api(artists, albums, tracks, mocker, db):
     assert str(track.album.mbid) == "a50d2a81-2a50-484d-9cb4-b9f6833f583e"
     assert track.album.title == "Marsupial Madness"
     assert track.fid == federation_utils.full_url(
-        "/federation/music/tracks/{}".format(track.uuid)
+        f"/federation/music/tracks/{track.uuid}"
     )
 
 

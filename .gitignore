@@ -86,7 +86,7 @@ front/tests/e2e/reports
 front/selenium-debug.log
 docs/_build
 
-data/
+/data/
 .env
 
 po/*.po

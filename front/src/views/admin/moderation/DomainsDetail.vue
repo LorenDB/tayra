@@ -1,3 +1,111 @@
+<script setup lang="ts">
+import type { InstancePolicy } from '~/types'
+
+import { humanSize } from '~/utils/filters'
+import { useI18n } from 'vue-i18n'
+import { computed, ref } from 'vue'
+import { get } from 'lodash-es'
+
+import axios from 'axios'
+
+import InstancePolicyForm from '~/components/manage/moderation/InstancePolicyForm.vue'
+import InstancePolicyCard from '~/components/manage/moderation/InstancePolicyCard.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+
+interface Props {
+  id: number
+  allowListEnabled: boolean
+}
+
+const props = defineProps<Props>()
+
+const { t } = useI18n()
+
+const labels = computed(() => ({
+  statsWarning: t('views.admin.moderation.DomainsDetail.warning.stats')
+}))
+
+const isLoadingPolicy = ref(false)
+const policy = ref()
+const fetchPolicy = async (id: number) => {
+  isLoadingPolicy.value = true
+
+  try {
+    const response = await axios.get(`manage/moderation/instance-policies/${id}/`)
+    policy.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoadingPolicy.value = false
+}
+
+const isLoading = ref(false)
+const object = ref()
+const externalUrl = computed(() => `https://${object.value?.name}`)
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(`manage/federation/domains/${props.id}/`)
+    object.value = response.data
+    if (response.data.instance_policy) {
+      fetchPolicy(response.data.instance_policy)
+    }
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+const isLoadingStats = ref(false)
+const stats = ref()
+const fetchStats = async () => {
+  isLoadingStats.value = true
+
+  try {
+    const response = await axios.get(`manage/federation/domains/${props.id}/stats/`)
+    stats.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoadingStats.value = false
+}
+
+fetchStats()
+fetchData()
+
+const refreshNodeInfo = (data: any) => {
+  object.value.nodeinfo = data
+  object.value.nodeinfo_fetch_date = new Date()
+}
+
+const getQuery = (field: string, value: string) => `${field}:"${value}"`
+
+const showPolicyForm = ref(false)
+const updatePolicy = (newPolicy: InstancePolicy) => {
+  policy.value = newPolicy
+  showPolicyForm.value = false
+}
+
+const isLoadingAllowList = ref(false)
+const setAllowList = async (value: boolean) => {
+  isLoadingAllowList.value = true
+
+  try {
+    const response = await axios.patch(`manage/federation/domains/${props.id}/`, { allowed: value })
+    object.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoadingAllowList.value = false
+}
+</script>
+
 <template>
   <main class="page-admin-domain-detail">
     <div
@@ -25,7 +133,7 @@
                       rel="noopener noreferrer"
                       class="logo-wrapper"
                     >
-                      <translate translate-context="Content/Moderation/Link/Verb">Open website</translate>&nbsp;
+                      {{ $t('views.admin.moderation.DomainsDetail.link.website') }}&nbsp;
                       <i class="external icon" />
                     </a>
                   </div>
@@ -34,14 +142,14 @@
               <div class="header-buttons">
                 <div class="ui icon buttons">
                   <a
-                    v-if="$store.state.auth.profile.is_superuser"
+                    v-if="$store.state.auth.profile?.is_superuser"
                     class="ui labeled icon button"
                     :href="$store.getters['instance/absoluteUrl'](`/api/admin/federation/domain/${object.name}`)"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    <translate translate-context="Content/Moderation/Link/Verb">View in Django's admin</translate>&nbsp;
+                    {{ $t('views.admin.moderation.DomainsDetail.link.django') }}&nbsp;
                   </a>
                 </div>
                 <div
@@ -54,9 +162,7 @@
                     @click.prevent="setAllowList(false)"
                   >
                     <i class="x icon" />
-                    <translate translate-context="Content/Moderation/Action/Verb">
-                      Remove from allow-list
-                    </translate>
+                    {{ $t('views.admin.moderation.DomainsDetail.button.removeFromAllowList') }}
                   </button>
                   <button
                     v-else
@@ -64,9 +170,7 @@
                     @click.prevent="setAllowList(true)"
                   >
                     <i class="check icon" />
-                    <translate translate-context="Content/Moderation/Action/Verb">
-                      Add to allow-list
-                    </translate>
+                    {{ $t('views.admin.moderation.DomainsDetail.button.addToAllowList') }}
                   </button>
                 </div>
               </div>
@@ -87,21 +191,17 @@
                 <header class="ui header">
                   <h3>
                     <i class="shield icon" />
-                    <translate translate-context="Content/Moderation/Card.Title">
-                      You don't have any rule in place for this domain.
-                    </translate>
+                    {{ $t('views.admin.moderation.DomainsDetail.header.noPolicy') }}
                   </h3>
                 </header>
                 <p>
-                  <translate translate-context="Content/Moderation/Card.Paragraph">
-                    Moderation policies help you control how your instance interact with a given domain or account.
-                  </translate>
+                  {{ $t('views.admin.moderation.DomainsDetail.description.policy') }}
                 </p>
                 <button
                   class="ui primary button"
                   @click="showPolicyForm = true"
                 >
-                  Add a moderation policy
+                  {{ $t('views.admin.moderation.DomainsDetail.button.addPolicy') }}
                 </button>
               </template>
               <instance-policy-card
@@ -111,9 +211,7 @@
               >
                 <header class="ui header">
                   <h3>
-                    <translate translate-context="Content/Moderation/Card.Title">
-                      This domain is subject to specific moderation rules
-                    </translate>
+                    {{ $t('views.admin.moderation.DomainsDetail.header.activePolicy') }}
                   </h3>
                 </header>
               </instance-policy-card>
@@ -137,97 +235,78 @@
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
-                    Instance data
-                  </translate>
+                  {{ $t('views.admin.moderation.DomainsDetail.header.instanceData') }}
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr v-if="allowListEnabled">
                     <td>
-                      <translate translate-context="Content/Moderation/*/Adjective">
-                        Is present on allow-list
-                      </translate>
+                      {{ $t('views.admin.moderation.DomainsDetail.table.instanceData.inAllowList.label') }}
                     </td>
                     <td>
-                      <translate
+                      <span
                         v-if="object.allowed"
-                        translate-context="*/*/*"
                       >
-                        Yes
-                      </translate>
-                      <translate
+                        {{ $t('views.admin.moderation.DomainsDetail.table.instanceData.inAllowList.true') }}
+                      </span>
+                      <span
                         v-else
-                        translate-context="*/*/*"
                       >
-                        No
-                      </translate>
+                        {{ $t('views.admin.moderation.DomainsDetail.table.instanceData.inAllowList.false') }}
+                      </span>
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/*/Table.Label">
-                        Last checked
-                      </translate>
+                      {{ $t('views.admin.moderation.DomainsDetail.table.instanceData.lastChecked') }}
                     </td>
                     <td>
                       <human-date
                         v-if="object.nodeinfo_fetch_date"
                         :date="object.nodeinfo_fetch_date"
                       />
-                      <translate
+                      <span
                         v-else
-                        translate-context="*/*/*"
                       >
-                        N/A
-                      </translate>
+                        {{ $t('views.admin.moderation.DomainsDetail.notApplicable') }}
+                      </span>
                     </td>
                   </tr>
 
                   <template v-if="object.nodeinfo && object.nodeinfo.status === 'ok'">
                     <tr>
                       <td>
-                        <translate translate-context="Content/Moderation/Table.Label">
-                          Software
-                        </translate>
+                        {{ $t('views.admin.moderation.DomainsDetail.table.instanceData.software.label') }}
                       </td>
                       <td>
-                        {{ lodash.get(object, 'nodeinfo.payload.software.name', $pgettext('*/*/*', 'N/A')) }} ({{ lodash.get(object, 'nodeinfo.payload.software.version', $pgettext('*/*/*', 'N/A')) }})
+                        {{ $t('views.admin.moderation.DomainsDetail.table.instanceData.software.value', {name: get(object, 'nodeinfo.payload.software.name', t('views.admin.moderation.DomainsDetail.notApplicable')), version: get(object, 'nodeinfo.payload.software.version', t('views.admin.moderation.DomainsDetail.notApplicable'))}) }}
                       </td>
                     </tr>
                     <tr>
                       <td>
-                        <translate translate-context="*/*/*/Noun">
-                          Name
-                        </translate>
+                        {{ $t('views.admin.moderation.DomainsDetail.table.instanceData.domainName') }}
                       </td>
                       <td>
-                        {{ lodash.get(object, 'nodeinfo.payload.metadata.nodeName', $pgettext('*/*/*', 'N/A')) }}
+                        {{ get(object, 'nodeinfo.payload.metadata.nodeName', t('views.admin.moderation.DomainsDetail.notApplicable')) }}
                       </td>
                     </tr>
                     <tr>
                       <td>
-                        <translate translate-context="Content/*/*">
-                          Total users
-                        </translate>
+                        {{ $t('views.admin.moderation.DomainsDetail.table.instanceData.totalUsers') }}
                       </td>
                       <td>
-                        {{ lodash.get(object, 'nodeinfo.payload.usage.users.total', $pgettext('*/*/*', 'N/A')) }}
+                        {{ get(object, 'nodeinfo.payload.usage.users.total', t('views.admin.moderation.DomainsDetail.notApplicable')) }}
                       </td>
                     </tr>
                   </template>
                   <template v-if="object.nodeinfo && object.nodeinfo.status === 'error'">
                     <tr>
                       <td>
-                        <translate translate-context="*/*/*">
-                          Status
-                        </translate>
+                        {{ $t('views.admin.moderation.DomainsDetail.table.instanceData.nodeInfoStatus.label') }}
                       </td>
                       <td>
-                        <translate translate-context="Content/Moderation/Table">
-                          Error while fetching node info
-                        </translate>&nbsp;
+                        {{ $t('views.admin.moderation.DomainsDetail.table.instanceData.nodeInfoStatus.value') }}&nbsp;
 
                         <span :data-tooltip="object.nodeinfo.error"><i class="question circle icon" /></span>
                       </td>
@@ -240,9 +319,7 @@
                 :url="'manage/federation/domains/' + object.name + '/nodeinfo/'"
                 @action-done="refreshNodeInfo"
               >
-                <translate translate-context="Content/Moderation/Button.Label/Verb">
-                  Refresh node info
-                </translate>
+                {{ $t('views.admin.moderation.DomainsDetail.button.refreshNodeInfo') }}
               </ajax-button>
             </section>
           </div>
@@ -251,9 +328,7 @@
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
-                    Activity
-                  </translate>&nbsp;
+                  {{ $t('views.admin.moderation.DomainsDetail.header.activity') }}&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -273,9 +348,7 @@
                 <tbody>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Short (Value is a date)">
-                        First seen
-                      </translate>
+                      {{ $t('views.admin.moderation.DomainsDetail.table.activity.firstSeen') }}
                     </td>
                     <td>
                       <human-date :date="object.creation_date" />
@@ -286,9 +359,7 @@
                       <router-link
                         :to="{name: 'manage.moderation.accounts.list', query: {q: 'domain:' + object.name }}"
                       >
-                        <translate translate-context="Content/Moderation/Table.Label.Link">
-                          Known accounts
-                        </translate>
+                        {{ $t('views.admin.moderation.DomainsDetail.link.knownAccounts') }}
                       </router-link>
                     </td>
                     <td>
@@ -297,9 +368,7 @@
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Noun">
-                        Emitted messages
-                      </translate>
+                      {{ $t('views.admin.moderation.DomainsDetail.table.activity.emittedMessages') }}
                     </td>
                     <td>
                       {{ stats.outbox_activities }}
@@ -307,9 +376,7 @@
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Noun">
-                        Received library follows
-                      </translate>
+                      {{ $t('views.admin.moderation.DomainsDetail.table.activity.receivedFollows') }}
                     </td>
                     <td>
                       {{ stats.received_library_follows }}
@@ -317,9 +384,7 @@
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Noun">
-                        Emitted library follows
-                      </translate>
+                      {{ $t('views.admin.moderation.DomainsDetail.table.activity.emittedFollows') }}
                     </td>
                     <td>
                       {{ stats.emitted_library_follows }}
@@ -334,9 +399,7 @@
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
-                    Audio content
-                  </translate>&nbsp;
+                  {{ $t('views.admin.moderation.DomainsDetail.header.audioContent') }}&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -356,30 +419,24 @@
                 <tbody>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Noun">
-                        Cached size
-                      </translate>
+                      {{ $t('views.admin.moderation.DomainsDetail.table.audioContent.cachedSize') }}
                     </td>
                     <td>
-                      {{ stats.media_downloaded_size | humanSize }}
+                      {{ humanSize(stats.media_downloaded_size) }}
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label">
-                        Total size
-                      </translate>
+                      {{ $t('views.admin.moderation.DomainsDetail.table.audioContent.totalSize') }}
                     </td>
                     <td>
-                      {{ stats.media_total_size | humanSize }}
+                      {{ humanSize(stats.media_total_size) }}
                     </td>
                   </tr>
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.channels', query: {q: getQuery('domain', object.name) }}">
-                        <translate translate-context="*/*/*">
-                          Channels
-                        </translate>
+                        {{ $t('views.admin.moderation.DomainsDetail.link.channels') }}
                       </router-link>
                     </td>
                     <td>
@@ -389,9 +446,7 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.libraries', query: {q: getQuery('domain', object.name) }}">
-                        <translate translate-context="*/*/*/Noun">
-                          Libraries
-                        </translate>
+                        {{ $t('views.admin.moderation.DomainsDetail.link.libraries') }}
                       </router-link>
                     </td>
                     <td>
@@ -401,9 +456,7 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('domain', object.name) }}">
-                        <translate translate-context="*/*/*">
-                          Uploads
-                        </translate>
+                        {{ $t('views.admin.moderation.DomainsDetail.link.uploads') }}
                       </router-link>
                     </td>
                     <td>
@@ -413,9 +466,7 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.artists', query: {q: getQuery('domain', object.name) }}">
-                        <translate translate-context="*/*/*/Noun">
-                          Artists
-                        </translate>
+                        {{ $t('views.admin.moderation.DomainsDetail.link.artists') }}
                       </router-link>
                     </td>
                     <td>
@@ -425,9 +476,7 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.albums', query: {q: getQuery('domain', object.name) }}">
-                        <translate translate-context="*/*/*">
-                          Albums
-                        </translate>
+                        {{ $t('views.admin.moderation.DomainsDetail.link.albums') }}
                       </router-link>
                     </td>
                     <td>
@@ -437,9 +486,7 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.tracks', query: {q: getQuery('domain', object.name) }}">
-                        <translate translate-context="*/*/*">
-                          Tracks
-                        </translate>
+                        {{ $t('views.admin.moderation.DomainsDetail.link.tracks') }}
                       </router-link>
                     </td>
                     <td>
@@ -455,99 +502,3 @@
     </template>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import lodash from '@/lodash'
-
-import InstancePolicyForm from '@/components/manage/moderation/InstancePolicyForm'
-import InstancePolicyCard from '@/components/manage/moderation/InstancePolicyCard'
-
-export default {
-  components: {
-    InstancePolicyForm,
-    InstancePolicyCard
-  },
-  props: { id: { type: Number, required: true }, allowListEnabled: { type: Boolean, required: true } },
-  data () {
-    return {
-      lodash,
-      isLoading: true,
-      isLoadingStats: false,
-      isLoadingPolicy: false,
-      isLoadingAllowList: false,
-      policy: null,
-      object: null,
-      stats: null,
-      showPolicyForm: false,
-      permissions: []
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        statsWarning: this.$pgettext('Content/Moderation/Help text', 'Statistics are computed from known activity and content on your instance, and do not reflect general activity for this domain')
-      }
-    },
-    externalUrl () {
-      return `https://${this.object.name}`
-    }
-  },
-  created () {
-    this.fetchData()
-    this.fetchStats()
-  },
-  methods: {
-    fetchData () {
-      const self = this
-      this.isLoading = true
-      const url = 'manage/federation/domains/' + this.id + '/'
-      axios.get(url).then(response => {
-        self.object = response.data
-        self.isLoading = false
-        if (self.object.instance_policy) {
-          self.fetchPolicy(self.object.instance_policy)
-        }
-      })
-    },
-    fetchStats () {
-      const self = this
-      this.isLoadingStats = true
-      const url = 'manage/federation/domains/' + this.id + '/stats/'
-      axios.get(url).then(response => {
-        self.stats = response.data
-        self.isLoadingStats = false
-      })
-    },
-    fetchPolicy (id) {
-      const self = this
-      this.isLoadingPolicy = true
-      const url = `manage/moderation/instance-policies/${id}/`
-      axios.get(url).then(response => {
-        self.policy = response.data
-        self.isLoadingPolicy = false
-      })
-    },
-    setAllowList (value) {
-      const self = this
-      this.isLoadingAllowList = true
-      const url = `manage/federation/domains/${this.id}/`
-      axios.patch(url, { allowed: value }).then(response => {
-        self.object = response.data
-        self.isLoadingAllowList = false
-      })
-    },
-    refreshNodeInfo (data) {
-      this.object.nodeinfo = data
-      this.object.nodeinfo_fetch_date = new Date()
-    },
-    updatePolicy (policy) {
-      this.policy = policy
-      this.showPolicyForm = false
-    },
-    getQuery (field, value) {
-      return `${field}:"${value}"`
-    }
-  }
-}
-</script>

@@ -1,0 +1,115 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../user/accounts/delete.md:1
+msgid "Delete your Funkwhale account"
+msgstr ""
+
+#: ../../user/accounts/delete.md:3
+msgid "If you have decided you no longer want your Funkwhale account, you can delete it. This action removes your profile and all your data from your {term}`pod`, including:"
+msgstr ""
+
+#: ../../user/accounts/delete.md:5
+msgid "Your user avatar."
+msgstr ""
+
+#: ../../user/accounts/delete.md:6
+msgid "Your email address."
+msgstr ""
+
+#: ../../user/accounts/delete.md:7
+msgid "The list of your followers."
+msgstr ""
+
+#: ../../user/accounts/delete.md:8
+msgid "Music files you have uploaded."
+msgstr ""
+
+#: ../../user/accounts/delete.md:9
+msgid "Radios you have created."
+msgstr ""
+
+#: ../../user/accounts/delete.md:10
+msgid "Playlists you have created."
+msgstr ""
+
+#: ../../user/accounts/delete.md:11
+msgid "Your favorites."
+msgstr ""
+
+#: ../../user/accounts/delete.md:13
+msgid "When you delete your account, your pod sends a message to other Funkwhale pods notifying them. If these pods hold any of your data, they should also delete it."
+msgstr ""
+
+#: ../../user/accounts/delete.md:16
+msgid "Other pods should delete local copies of your data in compliance with your request. There is no guarantee that they will do so, and some data may remain available. This can happen if a pod is offline or unavailable when your pod sends out the deletion message."
+msgstr ""
+
+#: ../../user/accounts/delete.md:19
+msgid "To delete your account:"
+msgstr ""
+
+#: ../../user/accounts/delete.md:0
+msgid "Desktop"
+msgstr ""
+
+#: ../../user/accounts/delete.md:27
+#: ../../user/accounts/delete.md:40
+msgid "Log in to your account."
+msgstr ""
+
+#: ../../user/accounts/delete.md:28
+msgid "Select the cog icon ({fa}`cog`) or your avatar to expand the user menu."
+msgstr ""
+
+#: ../../user/accounts/delete.md:29
+#: ../../user/accounts/delete.md:42
+msgid "Select {guilabel}`Settings`."
+msgstr ""
+
+#: ../../user/accounts/delete.md:30
+#: ../../user/accounts/delete.md:43
+msgid "Scroll to the {guilabel}`Delete my account` section."
+msgstr ""
+
+#: ../../user/accounts/delete.md:31
+#: ../../user/accounts/delete.md:44
+msgid "Enter your {guilabel}`Password`."
+msgstr ""
+
+#: ../../user/accounts/delete.md:32
+#: ../../user/accounts/delete.md:45
+msgid "Select {guilabel}`Delete my account…`."
+msgstr ""
+
+#: ../../user/accounts/delete.md:33
+#: ../../user/accounts/delete.md:46
+msgid "Select {guilabel}`Delete my account` on the warning notice that appears."
+msgstr ""
+
+#: ../../user/accounts/delete.md:0
+msgid "Mobile"
+msgstr ""
+
+#: ../../user/accounts/delete.md:41
+msgid "Select the cog icon ({fa}`cog`) or your avatar to open the {guilabel}`Options` menu."
+msgstr ""
+
+#: ../../user/accounts/delete.md:50
+msgid "That's it! You've deleted your account. You can [create another account](create.md) at any time."
+msgstr ""

@@ -1,3 +1,53 @@
+<script setup lang="ts">
+import { truncate } from '~/utils/filters'
+import { useRouter } from 'vue-router'
+import { ref } from 'vue'
+
+import axios from 'axios'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+
+interface Props {
+  id: number
+}
+
+const props = defineProps<Props>()
+
+const router = useRouter()
+
+const isLoading = ref(false)
+const object = ref()
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(`manage/tags/${props.id}/`)
+    object.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+fetchData()
+
+const remove = async () => {
+  isLoading.value = true
+
+  try {
+    await axios.delete(`manage/tags/${props.id}/`)
+    router.push({ name: 'manage.library.tags' })
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+const getQuery = (field: string, value: string) => `${field}:"${value}"`
+</script>
+
 <template>
   <main>
     <div
@@ -17,7 +67,7 @@
               <h2 class="ui header">
                 <i class="circular inverted hashtag icon" />
                 <div class="content">
-                  {{ object.name | truncate(100) }}
+                  {{ truncate(object.name) }}
                 </div>
               </h2>
               <div class="header-buttons">
@@ -27,9 +77,7 @@
                     :to="{name: 'library.tags.detail', params: {id: object.name }}"
                   >
                     <i class="info icon" />
-                    <translate translate-context="Content/Moderation/Link/Verb">
-                      Open local profile
-                    </translate>&nbsp;
+                    {{ $t('views.admin.library.TagDetail.link.localProfile') }}
                   </router-link>
                   <button
                     v-dropdown
@@ -45,7 +93,7 @@
                         rel="noopener noreferrer"
                       >
                         <i class="wrench icon" />
-                        <translate translate-context="Content/Moderation/Link/Verb">View in Django's admin</translate>&nbsp;
+                        {{ $t('views.admin.library.TagDetail.link.django') }}
                       </a>
                     </div>
                   </button>
@@ -55,26 +103,24 @@
                     :class="['ui', {loading: isLoading}, 'basic danger button']"
                     :action="remove"
                   >
-                    <translate translate-context="*/*/*/Verb">
-                      Delete
-                    </translate>
-                    <p slot="modal-header">
-                      <translate translate-context="Popup/Library/Title">
-                        Delete this tag?
-                      </translate>
-                    </p>
-                    <div slot="modal-content">
+                    {{ $t('views.admin.library.TagDetail.button.delete') }}
+                    <template #modal-header>
                       <p>
-                        <translate translate-context="Content/Moderation/Paragraph">
-                          The tag will be removed and unlinked from any existing entity. This action is irreversible.
-                        </translate>
+                        {{ $t('views.admin.library.TagDetail.modal.delete.header') }}
                       </p>
-                    </div>
-                    <p slot="modal-confirm">
-                      <translate translate-context="*/*/*/Verb">
-                        Delete
-                      </translate>
-                    </p>
+                    </template>
+                    <template #modal-content>
+                      <div>
+                        <p>
+                          {{ $t('views.admin.library.TagDetail.modal.delete.content.warning') }}
+                        </p>
+                      </div>
+                    </template>
+                    <template #modal-confirm>
+                      <p>
+                        {{ $t('views.admin.library.TagDetail.button.delete') }}
+                      </p>
+                    </template>
                   </dangerous-button>
                 </div>
               </div>
@@ -89,18 +135,14 @@
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
-                    Tag data
-                  </translate>
+                  {{ $t('views.admin.library.TagDetail.header.tagData') }}
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      <translate translate-context="*/*/*/Noun">
-                        Name
-                      </translate>
+                      {{ $t('views.admin.library.TagDetail.table.tag.name') }}
                     </td>
                     <td>
                       {{ object.name }}
@@ -115,31 +157,14 @@
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
-                    Activity
-                  </translate>&nbsp;
-                  <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
+                  {{ $t('views.admin.library.TagDetail.header.activity') }}&nbsp;
                 </div>
               </h3>
-              <div
-                v-if="isLoadingStats"
-                class="ui placeholder"
-              >
-                <div class="full line" />
-                <div class="short line" />
-                <div class="medium line" />
-                <div class="long line" />
-              </div>
-              <table
-                v-else
-                class="ui very basic table"
-              >
+              <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Short (Value is a date)">
-                        First seen
-                      </translate>
+                      {{ $t('views.admin.library.TagDetail.table.activity.firstSeen') }}
                     </td>
                     <td>
                       <human-date :date="object.creation_date" />
@@ -154,10 +179,7 @@
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
-                    Audio content
-                  </translate>&nbsp;
-                  <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
+                  {{ $t('views.admin.library.TagDetail.header.audioContent') }}&nbsp;
                 </div>
               </h3>
               <table class="ui very basic table">
@@ -165,9 +187,7 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.artists', query: {q: getQuery('tag', object.name) }}">
-                        <translate translate-context="*/*/*/Noun">
-                          Artists
-                        </translate>
+                        {{ $t('views.admin.library.TagDetail.link.artists') }}
                       </router-link>
                     </td>
                     <td>
@@ -177,9 +197,7 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.albums', query: {q: getQuery('tag', object.name) }}">
-                        <translate translate-context="*/*/*">
-                          Albums
-                        </translate>
+                        {{ $t('views.admin.library.TagDetail.link.albums') }}
                       </router-link>
                     </td>
                     <td>
@@ -189,9 +207,7 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.tracks', query: {q: getQuery('tag', object.name) }}">
-                        <translate translate-context="*/*/*">
-                          Tracks
-                        </translate>
+                        {{ $t('views.admin.library.TagDetail.link.tracks') }}
                       </router-link>
                     </td>
                     <td>
@@ -207,51 +223,3 @@
     </template>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-
-export default {
-  props: { id: { type: Number, required: true } },
-  data () {
-    return {
-      isLoading: true,
-      isLoadingStats: false,
-      object: null,
-      stats: null
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        statsWarning: this.$pgettext('Content/Moderation/Help text', 'Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object')
-      }
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      const self = this
-      this.isLoading = true
-      const url = `manage/tags/${this.id}/`
-      axios.get(url).then(response => {
-        self.object = response.data
-        self.isLoading = false
-      })
-    },
-    remove () {
-      const self = this
-      this.isLoading = true
-      const url = `manage/tags/${this.id}/`
-      axios.delete(url).then(response => {
-        self.$router.push({ name: 'manage.library.tags' })
-      })
-    },
-    getQuery (field, value) {
-      return `${field}:"${value}"`
-    }
-  }
-}
-</script>

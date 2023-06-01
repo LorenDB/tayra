@@ -1,5 +1,7 @@
 import datetime
+import logging
 import random
+from typing import List, Optional, Tuple
 
 from django.core.exceptions import ValidationError
 from django.db import connection
@@ -15,20 +17,30 @@ from funkwhale_api.tags.models import Tag
 from . import filters, models
 from .registries import registry
 
+logger = logging.getLogger(__name__)
 
-class SimpleRadio(object):
+
+class SimpleRadio:
     related_object_field = None
 
     def clean(self, instance):
         return
 
-    def pick(self, choices, previous_choices=[]):
-        return random.sample(set(choices).difference(previous_choices), 1)[0]
+    def pick(
+        self, choices: List[int], previous_choices: Optional[List[int]] = None
+    ) -> int:
+        if previous_choices:
+            choices = list(set(choices).difference(set(previous_choices)))
+        return random.sample(choices, 1)[0]
 
-    def pick_many(self, choices, quantity):
-        return random.sample(set(choices), quantity)
+    def pick_many(self, choices: List[int], quantity: int) -> int:
+        return random.sample(list(set(choices)), quantity)
 
-    def weighted_pick(self, choices, previous_choices=[]):
+    def weighted_pick(
+        self,
+        choices: List[Tuple[int, int]],
+        previous_choices: Optional[List[int]] = None,
+    ) -> int:
         total = sum(weight for c, weight in choices)
         r = random.uniform(0, total)
         upto = 0
@@ -107,6 +119,17 @@ class RandomRadio(SessionRadio):
         return qs.filter(artist__content_category="music").order_by("?")
 
 
+@registry.register(name="random_library")
+class RandomLibraryRadio(SessionRadio):
+    def get_queryset(self, **kwargs):
+        qs = super().get_queryset(**kwargs)
+        tracks_ids = self.session.user.actor.attributed_tracks.all().values_list(
+            "id", flat=True
+        )
+        query = Q(artist__content_category="music") & Q(pk__in=tracks_ids)
+        return qs.filter(query).order_by("?")
+
+
 @registry.register(name="favorites")
 class FavoritesRadio(SessionRadio):
     def get_queryset_kwargs(self):
@@ -146,6 +169,37 @@ class CustomRadio(SessionRadio):
         except AssertionError:
             raise serializers.ValidationError("You don't have access to this radio")
         return data
+
+
+@registry.register(name="custom_multiple")
+class CustomMultiple(SessionRadio):
+    """
+    Receive a vuejs generated config and use it to launch a radio session
+    """
+
+    config = serializers.JSONField(required=True)
+
+    def get_config(self, data):
+        return data["config"]
+
+    def get_queryset_kwargs(self):
+        kwargs = super().get_queryset_kwargs()
+        kwargs["config"] = self.session.config
+        return kwargs
+
+    def validate_session(self, data, **context):
+        data = super().validate_session(data, **context)
+        try:
+            data["config"] is not None
+        except KeyError:
+            raise serializers.ValidationError(
+                "You must provide a configuration for this radio"
+            )
+        return data
+
+    def get_queryset(self, **kwargs):
+        qs = super().get_queryset(**kwargs)
+        return filters.run([kwargs["config"]], candidates=qs)
 
 
 class RelatedObjectRadio(SessionRadio):
@@ -280,6 +334,22 @@ class LessListenedRadio(SessionRadio):
         )
 
 
+@registry.register(name="less-listened_library")
+class LessListenedLibraryRadio(SessionRadio):
+    def clean(self, instance):
+        instance.related_object = instance.user
+        super().clean(instance)
+
+    def get_queryset(self, **kwargs):
+        qs = super().get_queryset(**kwargs)
+        listened = self.session.user.listenings.all().values_list("track", flat=True)
+        tracks_ids = self.session.user.actor.attributed_tracks.all().values_list(
+            "id", flat=True
+        )
+        query = Q(artist__content_category="music") & Q(pk__in=tracks_ids)
+        return qs.filter(query).exclude(pk__in=listened).order_by("?")
+
+
 @registry.register(name="actor-content")
 class ActorContentRadio(RelatedObjectRadio):
     """
@@ -317,7 +387,9 @@ class LibraryRadio(RelatedObjectRadio):
 
     def get_queryset(self, **kwargs):
         qs = super().get_queryset(**kwargs)
-        actor_uploads = Upload.objects.filter(library=self.session.related_object,)
+        actor_uploads = Upload.objects.filter(
+            library=self.session.related_object,
+        )
         return qs.filter(pk__in=actor_uploads.values("track"))
 
     def get_related_object_id_repr(self, obj):
@@ -330,5 +402,6 @@ class RecentlyAdded(SessionRadio):
         date = datetime.date.today() - datetime.timedelta(days=30)
         qs = super().get_queryset(**kwargs)
         return qs.filter(
-            Q(artist__content_category="music"), Q(creation_date__gt=date),
+            Q(artist__content_category="music"),
+            Q(creation_date__gt=date),
         )

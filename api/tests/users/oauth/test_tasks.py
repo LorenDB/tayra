@@ -1,4 +1,5 @@
 from oauth2_provider import models
+
 from funkwhale_api.users.oauth import tasks
 
 

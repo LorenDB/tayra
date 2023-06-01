@@ -1,41 +1,58 @@
+---
+include:
+  - project: funkwhale/ci
+    file: /templates/pre-commit.yml
+  - project: funkwhale/ci
+    file: /templates/lychee.yml
+
 variables:
-  IMAGE_NAME: funkwhale/funkwhale
-  IMAGE: $IMAGE_NAME:$CI_COMMIT_REF_NAME
-  IMAGE_LATEST: $IMAGE_NAME:latest
-  ALL_IN_ONE_IMAGE_NAME: funkwhale/all-in-one
-  ALL_IN_ONE_IMAGE: $ALL_IN_ONE_IMAGE_NAME:$CI_COMMIT_REF_NAME
-  ALL_IN_ONE_IMAGE_LATEST: $ALL_IN_ONE_IMAGE_NAME:latest
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/pip-cache"
   PYTHONDONTWRITEBYTECODE: "true"
-  REVIEW_DOMAIN: preview.funkwhale.audio
-  REVIEW_INSTANCE_URL: https://funkwhale.juniorjpdj.pl
-  DOCKER_HOST: tcp://docker:2375/
-  DOCKER_DRIVER: overlay2
-  DOCKER_TLS_CERTDIR: ""
-  BUILD_PLATFORMS: linux/amd64,linux/arm64,linux/arm/v7
+
+  PIP_CACHE_DIR: $CI_PROJECT_DIR/.cache/pip
+
+.shared_variables:
+  # Keep the git files permissions during job setup
+  keep_git_files_permissions: &keep_git_files_permissions
+    GIT_STRATEGY: clone
+    GIT_DEPTH: "5"
+    FF_DISABLE_UMASK_FOR_DOCKER_EXECUTOR: "true"
+
+default:
+  tags:
+    - docker
+
+workflow:
+  rules:
+    # Run for any event on the default branches in the funkwhale namespace
+    - if: >
+        $CI_PROJECT_NAMESPACE == "funkwhale" &&
+        (
+          $CI_COMMIT_BRANCH =~ /(stable|develop)/ ||
+          $CI_COMMIT_TAG
+        )
+    # Run for merge requests from any repo or branches
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
 stages:
   - review
   - lint
-  - build
   - test
-  - deploy
-  - deps
+  - build
+  - publish
 
 review_front:
   interruptible: true
   stage: review
-  image: node:16-buster
+  image: node:18-alpine
   when: manual
   allow_failure: true
   variables:
     BASE_URL: /-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/front-review/
     VUE_APP_ROUTER_BASE_URL: /-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/front-review/
-    VUE_APP_INSTANCE_URL: $REVIEW_INSTANCE_URL
+    VUE_APP_INSTANCE_URL: https://demo.funkwhale.audio
     NODE_ENV: review
   before_script:
-    - curl -L -o /usr/local/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
-    - chmod +x /usr/local/bin/jq
+    - apk add --no-cache jq bash coreutils python3
     - rm -rf front-review
     - mkdir front-review
     - cd front
@@ -43,7 +60,7 @@ review_front:
     - yarn install
     # this is to ensure we don't have any errors in the output,
     # cf https://dev.funkwhale.audio/funkwhale/funkwhale/issues/169
-    - yarn run build | tee /dev/stderr | (! grep -i 'ERROR in')
+    - yarn run build --base ./ | tee /dev/stderr | (! grep -i 'ERROR in')
     - cp -r dist/* ../front-review
   artifacts:
     expire_in: 2 weeks
@@ -54,10 +71,6 @@ review_front:
     paths:
       - front/node_modules
       - front/yarn.lock
-  only:
-    - branches
-  tags:
-    - docker
   environment:
     name: review/front/$CI_COMMIT_REF_NAME
     url: http://$CI_PROJECT_NAMESPACE.pages.funkwhale.audio/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/front-review/index.html
@@ -65,9 +78,8 @@ review_front:
 review_docs:
   interruptible: true
   stage: review
-  when: manual
   allow_failure: true
-  image: python:3.10
+  image: python:3.11
   variables:
     BUILD_PATH: "../docs-review"
   before_script:
@@ -82,7 +94,7 @@ review_docs:
     - git switch stable && git pull
     - git switch $CI_COMMIT_BRANCH && git pull
   script:
-    - poetry run python -m sphinx . $BUILD_PATH
+    - poetry run python3 -m sphinx . $BUILD_PATH
   cache:
     key: "$CI_PROJECT_ID__sphinx"
     paths:
@@ -91,77 +103,79 @@ review_docs:
     expire_in: 2 weeks
     paths:
       - docs-review
-  only:
-    - branches
-  tags:
-    - docker
   environment:
     name: review/docs/$CI_COMMIT_REF_NAME
     url: http://$CI_PROJECT_NAMESPACE.pages.funkwhale.audio/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/docs-review/index.html
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - docs/**/*
+    - if: $CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+      when: manual
 
-black:
-  interruptible: true
-  image: python:3.6
-  stage: lint
-  variables:
-    GIT_STRATEGY: fetch
-  before_script:
-    - pip install black==19.10b0
-  script:
-    - black --check --diff api/
-  only:
-    refs:
-      - branches
-    changes:
-      - api/**/*
+find_broken_links:
+  allow_failure:
+    exit_codes: 2
 
-flake8:
-  interruptible: true
-  image: python:3.6
-  stage: lint
-  variables:
-    GIT_STRATEGY: fetch
-  before_script:
-    - pip install 'flake8<3.7'
+  extends: [.lychee]
   script:
-    - flake8 -v api
-  cache:
-    key: "$CI_PROJECT_ID__flake8_pip_cache"
-    paths:
-      - "$PIP_CACHE_DIR"
-  only:
-    refs:
-      - branches
-    changes:
-      - api/**/*
+    - >
+      lychee
+      --cache
+      --no-progress
+      --exclude-all-private
+      --exclude-mail
+      --exclude 'demo\.funkwhale\.audio'
+      --exclude 'nginx\.com'
+      --exclude-path 'docs/_templates/'
+      -- . || exit $?
+
+changelog_snippet:
+  interruptible: true
+  image: alpine:3.17
+  stage: lint
+  before_script:
+    - apk add git
+    - git fetch origin $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
+  script:
+    - git diff --name-only FETCH_HEAD | grep "changes/changelog.d/*"
+  rules:
+    - if: $CI_COMMIT_AUTHOR == 'Renovate Bot <bot@dev.funkwhale.audio>'
+      when: never
+    - if: $CI_MERGE_REQUEST_TITLE =~ /NOCHANGELOG/
+      when: never
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+
+pre-commit:
+  extends: [.pre-commit]
 
 eslint:
   interruptible: true
-  image: node:16-buster
+  image: node:18-alpine
   stage: lint
-  allow_failure: true
   before_script:
     - cd front
+    - apk add --no-cache jq bash coreutils python3
     - yarn install
   script:
     - yarn lint --max-warnings 0
+    - yarn lint:tsc
   cache:
     key: "$CI_PROJECT_ID__eslint_npm_cache"
     paths:
       - front/node_modules
-  only:
-    refs:
-      - branches
-    changes:
-      - front/**/*
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - front/**/*
 
 test_api:
   interruptible: true
   services:
-    - postgres:11
-    - redis:5
+    - postgres:15-alpine
+    - redis:7-alpine
   stage: test
-  image: $CI_REGISTRY/funkwhale/backend-test-docker:3.7
+  retry: 1
   cache:
     key: "$CI_PROJECT_ID__pip_cache"
     paths:
@@ -172,96 +186,109 @@ test_api:
     DJANGO_SETTINGS_MODULE: config.settings.local
     POSTGRES_HOST_AUTH_METHOD: trust
     CACHE_URL: "redis://redis:6379/0"
-  only:
-    refs:
-      - branches
-    changes:
-      - api/**/*
   before_script:
     - cd api
-    - pip3 install -r requirements/base.txt
-    - pip3 install -r requirements/local.txt
-    - pip3 install -r requirements/test.txt
+    - poetry install --no-root
   script:
-    - pytest --cov-report xml --cov-report term-missing:skip-covered --cov=funkwhale_api --junitxml=report.xml tests/
-  tags:
-    - docker
+    - poetry run pytest --cov-report xml --cov-report term-missing:skip-covered --cov=funkwhale_api --junitxml=report.xml tests/
   artifacts:
-    when: always
+    expire_in: 2 weeks
     reports:
       junit: api/report.xml
       coverage_report:
         coverage_format: cobertura
         path: api/coverage.xml
+  parallel:
+    matrix:
+      - PY_VER: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+  image: $CI_REGISTRY/funkwhale/backend-test-docker:$PY_VER
+  coverage: '/TOTAL\s*\d*\s*\d*\s*(\d*%)/'
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - api/**/*
+    - if: $CI_COMMIT_REF_PROTECTED == "true"
+      when: always
 
-test_front:
-  interruptible: true
-  stage: test
-  image: node:16-buster
-  before_script:
-    - cd front
-  only:
-    refs:
-      - branches
-    changes:
-      - front/**/*
-  script:
-    - yarn install --check-files
-    - yarn test:unit
-  cache:
-    key: "funkwhale__front_dependencies"
-    paths:
-      - front/node_modules
-      - front/yarn.lock
-  artifacts:
-    name: "front_${CI_COMMIT_REF_NAME}"
-    paths:
-      - front/dist/
-    reports:
-      junit: front/test-results.xml
-  tags:
-    - docker
+# Those tests are disabled for now since no vitest dom emulation is providing
+# AudioContext, which is required for our HTML audio player
+#test_front:
+#  interruptible: true
+#  stage: test
+#  image: node:18-alpine
+#  before_script:
+#    - cd front
+#    - apk add --no-cache jq bash coreutils python3
+#  script:
+#    - yarn install --check-files
+#    - yarn test:unit
+#  cache:
+#    key: "funkwhale__front_dependencies"
+#    paths:
+#      - front/node_modules
+#      - front/yarn.lock
+#  artifacts:
+#    name: "front_${CI_COMMIT_REF_NAME}"
+#    paths:
+#      - front/dist/
+#    reports:
+#      junit: front/coverage/cobertura-coverage.xml
+#  tags:
+#    - docker
+#  rules:
+#    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+#      changes:
+#        - front/**/*
+#    - if: $CI_COMMIT_REF_PROTECTED == "true"
+#      when: always
 
-build_front:
+build_openapi_schema:
   stage: build
-  image: node:16-buster
-  before_script:
-    - curl -L -o /usr/local/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
-    - chmod +x /usr/local/bin/jq
-    - cd front
-  script:
-    - yarn install
-    - yarn run i18n-compile
-    # this is to ensure we don't have any errors in the output,
-    # cf https://dev.funkwhale.audio/funkwhale/funkwhale/issues/169
-    - yarn build | tee /dev/stderr | (! grep -i 'ERROR in')
-    - chmod -R 755 dist
-  artifacts:
-    name: "front_${CI_COMMIT_REF_NAME}"
+  image: $CI_REGISTRY/funkwhale/backend-test-docker:3.11
+  services:
+    - postgres:15-alpine
+    - redis:7-alpine
+  cache:
+    key: "$CI_PROJECT_ID__pip_cache"
     paths:
-      - front/dist/
-  only:
-    - tags@funkwhale/funkwhale
-    - master@funkwhale/funkwhale
-    - stable@funkwhale/funkwhale
-    - develop@funkwhale/funkwhale
-  tags:
-    - docker
+      - "$PIP_CACHE_DIR"
+  variables:
+    DATABASE_URL: "postgresql://postgres@postgres/postgres"
+    FUNKWHALE_URL: "https://funkwhale.ci"
+    DJANGO_SETTINGS_MODULE: config.settings.local
+    POSTGRES_HOST_AUTH_METHOD: trust
+    CACHE_URL: "redis://redis:6379/0"
+    API_TYPE: "v1"
+  before_script:
+    - cd api
+    - pip3 install poetry
+    - poetry install
+    - poetry run funkwhale-manage migrate
+  script:
+    - poetry run funkwhale-manage spectacular --file ../docs/schema.yml
+  artifacts:
+    expire_in: 2 weeks
+    paths:
+      - docs/schema.yml
 
 build_documentation:
   stage: build
-  image: python:3.10
+  image: python:3.11
+  needs:
+    - job: build_openapi_schema
+      artifacts: true
   variables:
     BUILD_PATH: "../public"
+    GIT_STRATEGY: clone
+    GIT_DEPTH: 0
   before_script:
     - cd docs
     - apt-get update
-    - apt-get install -y graphviz git
+    - apt-get install -y graphviz
     - pip install poetry
     - poetry install
-    - git switch develop && git pull
-    - git switch stable && git pull
-    - git switch $CI_COMMIT_BRANCH && git pull
+    - git branch stable --track origin/stable || true
+    - git branch develop --track origin/develop || true
   script:
     - ./build_docs.sh
   cache:
@@ -269,18 +296,64 @@ build_documentation:
     paths:
       - "$PIP_CACHE_DIR"
   artifacts:
+    expire_in: 2 weeks
     paths:
       - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == "stable" || $CI_COMMIT_BRANCH == "develop"
+      when: always
+    - changes:
+        - docs/**/*
+      when: always
+
+build_front:
+  stage: build
+  image: node:18-alpine
+  variables:
+    <<: *keep_git_files_permissions
+  before_script:
+    - apk add --no-cache jq bash coreutils python3
+    - cd front
+  script:
+    - yarn install
+    # this is to ensure we don't have any errors in the output,
+    # cf https://dev.funkwhale.audio/funkwhale/funkwhale/issues/169
+    - yarn run build:deployment | tee /dev/stderr | (! grep -i 'ERROR in')
+  artifacts:
+    name: front_${CI_COMMIT_REF_NAME}
+    paths:
+      - front/dist/
   only:
+    - tags@funkwhale/funkwhale
     - stable@funkwhale/funkwhale
-  tags:
-    - docker
+    - develop@funkwhale/funkwhale
+
+build_api:
+  stage: build
+  image: bash
+  variables:
+    <<: *keep_git_files_permissions
+  script:
+    - rm -rf api/tests
+    - >
+      if [ "$CI_COMMIT_REF_NAME" == "develop" ] || [ "$CI_COMMIT_REF_NAME" == "stable" ]; then
+        ./scripts/set-api-build-metadata.sh $CI_COMMIT_SHORT_SHA;
+      fi
+  artifacts:
+    name: api_${CI_COMMIT_REF_NAME}
+    paths:
+      - api
+  only:
+    - tags@funkwhale/funkwhale
+    - stable@funkwhale/funkwhale
+    - develop@funkwhale/funkwhale
 
 deploy_documentation:
-  stage: deploy
+  stage: publish
   image: alpine
-  dependencies:
-    - build_documentation
+  needs:
+    - job: build_documentation
+      artifacts: true
   before_script:
     - apk add openssh-client rsync
     - mkdir -p ~/.ssh
@@ -293,19 +366,33 @@ deploy_documentation:
   rules:
     - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
 
-
 .docker_publish:
-  stage: deploy
+  stage: publish
   image: egon0/docker-with-buildx-and-git:bash
+  parallel:
+    matrix:
+      - COMPONENT: ["api", "front"]
+  variables:
+    <<: *keep_git_files_permissions
+
+    IMAGE_NAME: funkwhale/$COMPONENT
+    IMAGE: $IMAGE_NAME:$CI_COMMIT_REF_NAME
+    IMAGE_LATEST: $IMAGE_NAME:latest
+
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+    BUILD_PLATFORMS: linux/amd64,linux/arm64,linux/arm/v7
   tags:
     - multiarch
   services:
     - docker:20-dind
   before_script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
-    - cp -r front/dist api/frontend
-  script:
+  cache:
+    key: docker_public_${CI_COMMIT_REF_NAME}
+    paths:
+      - ~/.cargo
 
 docker_publish_stable_release:
   # Publish a docker image for releases
@@ -317,7 +404,7 @@ docker_publish_stable_release:
     - ./docs/get-releases-json.py | scripts/is-docker-latest.py $CI_COMMIT_TAG - && export DOCKER_LATEST_TAG="-t $IMAGE_LATEST" || export DOCKER_LATEST_TAG=;
     - export major="$(echo $CI_COMMIT_REF_NAME | cut -d '.' -f 1)"
     - export minor="$(echo $CI_COMMIT_REF_NAME | cut -d '.' -f 1,2)"
-    - cd api
+    - cd $COMPONENT
     - docker buildx create --use --name A$CI_COMMIT_SHORT_SHA
     - docker buildx build --platform $BUILD_PLATFORMS --push -t $IMAGE $DOCKER_LATEST_TAG -t $IMAGE_NAME:$major -t $IMAGE_NAME:$minor .
 
@@ -328,67 +415,17 @@ docker_publish_unstable_release:
     - if: $CI_COMMIT_TAG && $CI_COMMIT_REF_NAME !~ /^[0-9]+(.[0-9]+){1,2}$/
   script:
     # Check if this is the latest release
-    - cd api
+    - cd $COMPONENT
     - docker buildx create --use --name A$CI_COMMIT_SHORT_SHA
     - docker buildx build --platform $BUILD_PLATFORMS --push -t $IMAGE .
 
-docker_published_non-release:
+docker_publish_non-release:
   # Publish a docker image for each commit on develop
   extends: .docker_publish
   only:
     - develop@funkwhale/funkwhale
     - stable@funkwhale/funkwhale
   script:
-    - ./scripts/set-api-build-metadata.sh $CI_COMMIT_SHORT_SHA
-    - cd api
+    - cd $COMPONENT
     - docker buildx create --use --name A$CI_COMMIT_SHORT_SHA
     - docker buildx build --platform $BUILD_PLATFORMS --push -t $IMAGE .
-
-docker_all_in_one_release:
-  stage: deploy
-  image: egon0/docker-with-buildx-and-git:bash
-  services:
-    - docker:20-dind
-  variables:
-    ALL_IN_ONE_REF: main
-    ALL_IN_ONE_ARTIFACT_URL: https://dev.funkwhale.audio/funkwhale/funkwhale-docker-all-in-one/-/archive/$ALL_IN_ONE_REF/funkwhale-docker-all-in-one-$ALL_IN_ONE_REF.zip
-    BUILD_PATH: all_in_one
-  before_script:
-    - docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
-    - (if [ "$CI_COMMIT_REF_NAME" == "develop" ] || [ "$CI_COMMIT_REF_NAME" == "master" ] || [ "$CI_COMMIT_REF_NAME" == "stable" ]; then ./scripts/set-api-build-metadata.sh $(echo $CI_COMMIT_SHA | cut -c 1-8); fi);
-  script:
-    - if [[ ! -z "$CI_COMMIT_TAG" ]]; then (./docs/get-releases-json.py | scripts/is-docker-latest.py $CI_COMMIT_TAG -) && export DOCKER_LATEST_TAG="-t $ALL_IN_ONE_IMAGE_LATEST" || export DOCKER_LATEST_TAG=; fi
-    - wget $ALL_IN_ONE_ARTIFACT_URL -O all_in_one.zip
-    - unzip -o all_in_one.zip -d tmpdir
-    - mv tmpdir/funkwhale-docker-all-in-one-$ALL_IN_ONE_REF $BUILD_PATH && rmdir tmpdir
-    - cp -r api $BUILD_PATH/src/api
-    - cp -r front $BUILD_PATH/src/front
-    - cd $BUILD_PATH
-    - ./scripts/download-nginx-template.sh src/ $CI_COMMIT_REF_NAME
-    - docker build -t $ALL_IN_ONE_IMAGE $DOCKER_LATEST_TAG .
-    - docker push $ALL_IN_ONE_IMAGE
-    - if [[ ! -z "$DOCKER_LATEST_TAG" ]]; then docker push $ALL_IN_ONE_IMAGE_LATEST; fi
-  only:
-    - develop@funkwhale/funkwhale
-    - master@funkwhale/funkwhale
-    - stable@funkwhale/funkwhale
-    - tags@funkwhale/funkwhale
-
-build_api:
-  # Simply publish a zip containing api/ directory
-  stage: deploy
-  image: bash
-  artifacts:
-    name: "api_${CI_COMMIT_REF_NAME}"
-    paths:
-      - api
-  script:
-    - rm -rf api/tests
-    - (if [ "$CI_COMMIT_REF_NAME" == "develop" ] || [ "$CI_COMMIT_REF_NAME" == "stable" ] || [ "$CI_COMMIT_REF_NAME" == "master" ]; then ./scripts/set-api-build-metadata.sh $(echo $CI_COMMIT_SHA | cut -c 1-8); fi);
-    - chmod -R 750 api
-    - echo Done!
-  only:
-    - tags@funkwhale/funkwhale
-    - master@funkwhale/funkwhale
-    - stable@funkwhale/funkwhale
-    - develop@funkwhale/funkwhale

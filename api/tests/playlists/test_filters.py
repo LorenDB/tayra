@@ -1,5 +1,4 @@
-from funkwhale_api.playlists import filters
-from funkwhale_api.playlists import models
+from funkwhale_api.playlists import filters, models
 
 
 def test_playlist_filter_track(factories, queryset_equal_list):

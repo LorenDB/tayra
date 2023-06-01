@@ -1,14 +1,8 @@
-import uuid
 import pytest
-
 from django.urls import reverse
 
-from funkwhale_api.audio import categories
-from funkwhale_api.audio import renderers
-from funkwhale_api.audio import serializers
-from funkwhale_api.audio import views
-from funkwhale_api.common import locales
-from funkwhale_api.common import utils
+from funkwhale_api.audio import categories, renderers, serializers, views
+from funkwhale_api.common import locales, utils
 
 
 def test_channel_create(logged_in_api_client):
@@ -52,7 +46,8 @@ def test_channel_create(logged_in_api_client):
 
 
 @pytest.mark.parametrize(
-    "field", ["uuid", "actor.preferred_username", "actor.full_username"],
+    "field",
+    ["uuid", "actor.preferred_username", "actor.full_username"],
 )
 def test_channel_detail(field, factories, logged_in_api_client):
     channel = factories["audio.Channel"](
@@ -281,7 +276,7 @@ def test_subscriptions_all(factories, logged_in_api_client):
 
     assert response.status_code == 200
     assert response.data == {
-        "results": [{"uuid": subscription.uuid, "channel": uuid.UUID(channel.uuid)}],
+        "results": [{"uuid": subscription.uuid, "channel": channel.uuid}],
         "count": 1,
     }
 
@@ -423,7 +418,10 @@ def test_subscribe_to_rss_creates_channel(factories, logged_in_api_client, mocke
 
 
 def test_refresh_channel_when_param_is_true(
-    factories, mocker, logged_in_api_client, queryset_equal_queries,
+    factories,
+    mocker,
+    logged_in_api_client,
+    queryset_equal_queries,
 ):
     obj = factories["audio.Channel"]()
     refetch_obj = mocker.patch(
@@ -444,7 +442,7 @@ def test_can_filter_channels_through_api_scope(factories, logged_in_api_client):
     factories["audio.Channel"]()
     url = reverse("api:v1:channels-list")
     response = logged_in_api_client.get(
-        url, {"scope": "actor:{}".format(channel.attributed_to.full_username)}
+        url, {"scope": f"actor:{channel.attributed_to.full_username}"}
     )
 
     assert response.status_code == 200

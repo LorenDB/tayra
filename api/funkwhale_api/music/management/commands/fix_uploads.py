@@ -73,20 +73,18 @@ class Command(BaseCommand):
             Q(source__startswith="file://") | Q(source__startswith="upload://")
         ).exclude(mimetype__startswith="audio/")
         total = matching.count()
-        self.stdout.write(
-            "[mimetypes] {} entries found with bad or no mimetype".format(total)
-        )
+        self.stdout.write(f"[mimetypes] {total} entries found with bad or no mimetype")
         if not total:
             return
         for extension, mimetype in utils.EXTENSION_TO_MIMETYPE.items():
-            qs = matching.filter(source__endswith=".{}".format(extension))
+            qs = matching.filter(source__endswith=f".{extension}")
             self.stdout.write(
                 "[mimetypes] setting {} {} files to {}".format(
                     qs.count(), extension, mimetype
                 )
             )
             if not dry_run:
-                self.stdout.write("[mimetypes] commiting...")
+                self.stdout.write("[mimetypes] committing...")
                 qs.update(mimetype=mimetype)
 
     def fix_file_data(self, dry_run, **kwargs):
@@ -95,9 +93,7 @@ class Command(BaseCommand):
             Q(bitrate__isnull=True) | Q(duration__isnull=True)
         )
         total = matching.count()
-        self.stdout.write(
-            "[bitrate/length] {} entries found with missing values".format(total)
-        )
+        self.stdout.write(f"[bitrate/length] {total} entries found with missing values")
         if dry_run:
             return
 
@@ -135,7 +131,7 @@ class Command(BaseCommand):
         self.stdout.write("Fixing missing size...")
         matching = models.Upload.objects.filter(size__isnull=True)
         total = matching.count()
-        self.stdout.write("[size] {} entries found with missing values".format(total))
+        self.stdout.write(f"[size] {total} entries found with missing values")
         if dry_run:
             return
 
@@ -148,16 +144,12 @@ class Command(BaseCommand):
             for upload in chunk:
                 handled += 1
 
-                self.stdout.write(
-                    "[size] {}/{} fixing file #{}".format(handled, total, upload.pk)
-                )
+                self.stdout.write(f"[size] {handled}/{total} fixing file #{upload.pk}")
 
                 try:
                     upload.size = upload.get_file_size()
                 except Exception as e:
-                    self.stderr.write(
-                        "[size] error with file #{}: {}".format(upload.pk, str(e))
-                    )
+                    self.stderr.write(f"[size] error with file #{upload.pk}: {str(e)}")
                 else:
                     updated.append(upload)
 
@@ -170,9 +162,7 @@ class Command(BaseCommand):
             & (Q(audio_file__isnull=False) | Q(source__startswith="file://"))
         )
         total = matching.count()
-        self.stdout.write(
-            "[checksum] {} entries found with missing values".format(total)
-        )
+        self.stdout.write(f"[checksum] {total} entries found with missing values")
         if dry_run:
             return
         chunks = common_utils.chunk_queryset(
@@ -184,7 +174,7 @@ class Command(BaseCommand):
             for upload in chunk:
                 handled += 1
                 self.stdout.write(
-                    "[checksum] {}/{} fixing file #{}".format(handled, total, upload.pk)
+                    f"[checksum] {handled}/{total} fixing file #{upload.pk}"
                 )
 
                 try:
@@ -193,7 +183,7 @@ class Command(BaseCommand):
                     )
                 except Exception as e:
                     self.stderr.write(
-                        "[checksum] error with file #{}: {}".format(upload.pk, str(e))
+                        f"[checksum] error with file #{upload.pk}: {str(e)}"
                     )
                 else:
                     updated.append(upload)

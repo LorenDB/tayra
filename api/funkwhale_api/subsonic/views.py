@@ -14,22 +14,20 @@ from rest_framework import permissions as rest_permissions
 from rest_framework import renderers, response, viewsets
 from rest_framework.decorators import action
 from rest_framework.serializers import ValidationError
-from config import plugins
 
 import funkwhale_api
+from config import plugins
 from funkwhale_api.activity import record
 from funkwhale_api.audio import models as audio_models
 from funkwhale_api.audio import serializers as audio_serializers
 from funkwhale_api.audio import views as audio_views
-from funkwhale_api.common import (
-    fields,
-    preferences,
-    models as common_models,
-    utils as common_utils,
-    tasks as common_tasks,
-)
-from funkwhale_api.federation import models as federation_models
+from funkwhale_api.common import fields
+from funkwhale_api.common import models as common_models
+from funkwhale_api.common import preferences
+from funkwhale_api.common import tasks as common_tasks
+from funkwhale_api.common import utils as common_utils
 from funkwhale_api.favorites.models import TrackFavorite
+from funkwhale_api.federation import models as federation_models
 from funkwhale_api.moderation import filters as moderation_filters
 from funkwhale_api.music import models as music_models
 from funkwhale_api.music import serializers as music_serializers
@@ -69,7 +67,7 @@ def find_object(
                     {
                         "error": {
                             "code": 0,
-                            "message": 'For input string "{}"'.format(raw_value),
+                            "message": f'For input string "{raw_value}"',
                         }
                     }
                 )
@@ -88,7 +86,7 @@ def find_object(
                     {
                         "error": {
                             "code": 70,
-                            "message": "{} not found".format(qs.model.__name__),
+                            "message": f"{qs.model.__name__} not found",
                         }
                     }
                 )
@@ -906,7 +904,7 @@ class SubsonicViewSet(viewsets.GenericViewSet):
                     {
                         "error": {
                             "code": 0,
-                            "message": "Error while fetching url: {}".format(e),
+                            "message": f"Error while fetching url: {e}",
                         }
                     }
                 )

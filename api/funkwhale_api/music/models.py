@@ -5,25 +5,23 @@ import tempfile
 import urllib.parse
 import uuid
 
-from django.db.models.expressions import OuterRef, Subquery
-from django.db.models.query_utils import Q
-
 import arrow
 import pydub
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericRelation
-from django.contrib.postgres.fields import JSONField
-from django.contrib.postgres.search import SearchVectorField
 from django.contrib.postgres.indexes import GinIndex
+from django.contrib.postgres.search import SearchVectorField
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models, transaction
+from django.db.models import Count, JSONField, Prefetch
+from django.db.models.expressions import OuterRef, Subquery
+from django.db.models.query_utils import Q
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import timezone
-from django.db.models import Prefetch, Count
 
 from funkwhale_api import musicbrainz
 from funkwhale_api.common import fields
@@ -33,17 +31,10 @@ from funkwhale_api.common import utils as common_utils
 from funkwhale_api.federation import models as federation_models
 from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.tags import models as tags_models
+
 from . import importers, metadata, utils
 
 logger = logging.getLogger(__name__)
-
-MAX_LENGTHS = {
-    "ARTIST_NAME": 255,
-    "ALBUM_TITLE": 255,
-    "TRACK_TITLE": 255,
-    "COPYRIGHT": 500,
-}
-
 
 ARTIST_CONTENT_CATEGORY_CHOICES = [
     ("music", "music"),
@@ -94,9 +85,7 @@ class APIModelMixin(models.Model):
                 cls.musicbrainz_model
             ]
         else:
-            raw_data = cls.api.search(**kwargs)[
-                "{0}-list".format(cls.musicbrainz_model)
-            ][0]
+            raw_data = cls.api.search(**kwargs)[f"{cls.musicbrainz_model}-list"][0]
         cleaned_data = cls.clean_musicbrainz_data(raw_data)
         return importers.load(cls, cleaned_data, raw_data, cls.import_hooks)
 
@@ -125,7 +114,7 @@ class APIModelMixin(models.Model):
 
         return federation_utils.full_url(
             reverse(
-                "federation:music:{}-detail".format(self.federation_namespace),
+                f"federation:music:{self.federation_namespace}-detail",
                 kwargs={"uuid": self.uuid},
             )
         )
@@ -137,7 +126,7 @@ class APIModelMixin(models.Model):
         return super().save(**kwargs)
 
     @property
-    def is_local(self):
+    def is_local(self) -> bool:
         return federation_utils.is_local(self.fid)
 
     @property
@@ -213,7 +202,7 @@ class ArtistQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
 
 
 class Artist(APIModelMixin):
-    name = models.CharField(max_length=MAX_LENGTHS["ARTIST_NAME"])
+    name = models.TextField()
     federation_namespace = "artists"
     musicbrainz_model = "artist"
     musicbrainz_mapping = {
@@ -251,7 +240,7 @@ class Artist(APIModelMixin):
         db_index=True,
         default="music",
         choices=ARTIST_CONTENT_CATEGORY_CHOICES,
-        null=True,
+        null=False,
     )
     modification_date = models.DateTimeField(default=timezone.now, db_index=True)
     api = musicbrainz.api.artists
@@ -261,10 +250,10 @@ class Artist(APIModelMixin):
         return self.name
 
     def get_absolute_url(self):
-        return "/library/artists/{}".format(self.pk)
+        return f"/library/artists/{self.pk}"
 
     def get_moderation_url(self):
-        return "/manage/library/artists/{}".format(self.pk)
+        return f"/manage/library/artists/{self.pk}"
 
     @classmethod
     def get_or_create_from_name(cls, name, **kwargs):
@@ -331,13 +320,14 @@ class AlbumQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
         )
         return self.annotate(
             duration=models.Sum(
-                "tracks__uploads__duration", filter=Q(tracks__uploads=subquery),
+                "tracks__uploads__duration",
+                filter=Q(tracks__uploads=subquery),
             )
         )
 
 
 class Album(APIModelMixin):
-    title = models.CharField(max_length=MAX_LENGTHS["ALBUM_TITLE"])
+    title = models.TextField()
     artist = models.ForeignKey(Artist, related_name="albums", on_delete=models.CASCADE)
     release_date = models.DateField(null=True, blank=True, db_index=True)
     release_group_id = models.UUIDField(null=True, blank=True)
@@ -404,10 +394,10 @@ class Album(APIModelMixin):
         return self.title
 
     def get_absolute_url(self):
-        return "/library/albums/{}".format(self.pk)
+        return f"/library/albums/{self.pk}"
 
     def get_moderation_url(self):
-        return "/manage/library/albums/{}".format(self.pk)
+        return f"/manage/library/albums/{self.pk}"
 
     @classmethod
     def get_or_create_from_title(cls, title, **kwargs):
@@ -495,7 +485,7 @@ def get_artist(release_list):
 
 class Track(APIModelMixin):
     mbid = models.UUIDField(db_index=True, null=True, blank=True)
-    title = models.CharField(max_length=MAX_LENGTHS["TRACK_TITLE"])
+    title = models.TextField()
     artist = models.ForeignKey(Artist, related_name="tracks", on_delete=models.CASCADE)
     disc_number = models.PositiveIntegerField(null=True, blank=True)
     position = models.PositiveIntegerField(null=True, blank=True)
@@ -519,9 +509,7 @@ class Track(APIModelMixin):
         on_delete=models.SET_NULL,
         related_name="attributed_tracks",
     )
-    copyright = models.CharField(
-        max_length=MAX_LENGTHS["COPYRIGHT"], null=True, blank=True
-    )
+    copyright = models.TextField(null=True, blank=True)
     description = models.ForeignKey(
         "common.Content", null=True, blank=True, on_delete=models.SET_NULL
     )
@@ -567,10 +555,10 @@ class Track(APIModelMixin):
         return self.title
 
     def get_absolute_url(self):
-        return "/library/tracks/{}".format(self.pk)
+        return f"/library/tracks/{self.pk}"
 
     def get_moderation_url(self):
-        return "/manage/library/tracks/{}".format(self.pk)
+        return f"/manage/library/tracks/{self.pk}"
 
     def save(self, **kwargs):
         try:
@@ -582,9 +570,9 @@ class Track(APIModelMixin):
     @property
     def full_name(self):
         try:
-            return "{} - {} - {}".format(self.artist.name, self.album.title, self.title)
+            return f"{self.artist.name} - {self.album.title} - {self.title}"
         except AttributeError:
-            return "{} - {}".format(self.artist.name, self.title)
+            return f"{self.artist.name} - {self.title}"
 
     @property
     def cover(self):
@@ -592,8 +580,8 @@ class Track(APIModelMixin):
 
     def get_activity_url(self):
         if self.mbid:
-            return "https://musicbrainz.org/recording/{}".format(self.mbid)
-        return settings.FUNKWHALE_URL + "/tracks/{}".format(self.pk)
+            return f"https://musicbrainz.org/recording/{self.mbid}"
+        return settings.FUNKWHALE_URL + f"/tracks/{self.pk}"
 
     @classmethod
     def get_or_create_from_title(cls, title, **kwargs):
@@ -651,9 +639,9 @@ class Track(APIModelMixin):
         )
 
     @property
-    def listen_url(self):
+    def listen_url(self) -> str:
         # Not using reverse because this is slow
-        return "/api/v1/listen/{}/".format(self.uuid)
+        return f"/api/v1/listen/{self.uuid}/"
 
     @property
     def local_license(self):
@@ -758,7 +746,7 @@ class Upload(models.Model):
         default=empty_dict, max_length=50000, encoder=DjangoJSONEncoder, blank=True
     )
     import_date = models.DateTimeField(null=True, blank=True)
-    # optionnal metadata provided during import
+    # optional metadata provided during import
     import_metadata = JSONField(
         default=empty_dict, max_length=50000, encoder=DjangoJSONEncoder, blank=True
     )
@@ -770,7 +758,7 @@ class Upload(models.Model):
     # in the same import
     import_reference = models.CharField(max_length=50, default=get_import_reference)
 
-    # optionnal metadata about import results (error messages, etc.)
+    # optional metadata about import results (error messages, etc.)
     import_details = JSONField(
         default=empty_dict, max_length=50000, encoder=DjangoJSONEncoder, blank=True
     )
@@ -785,7 +773,7 @@ class Upload(models.Model):
     objects = UploadQuerySet.as_manager()
 
     @property
-    def is_local(self):
+    def is_local(self) -> bool:
         return federation_utils.is_local(self.fid)
 
     @property
@@ -821,7 +809,7 @@ class Upload(models.Model):
             title_parts.append(self.track.artist.name)
 
             title = " - ".join(title_parts)
-            filename = "{}.{}".format(title, extension)
+            filename = f"{title}.{extension}"
             tmp_file = tempfile.TemporaryFile()
             for chunk in r.iter_content(chunk_size=512):
                 tmp_file.write(chunk)
@@ -837,8 +825,8 @@ class Upload(models.Model):
         )
 
     @property
-    def filename(self):
-        return "{}.{}".format(self.track.full_name, self.extension)
+    def filename(self) -> str:
+        return f"{self.track.full_name}.{self.extension}"
 
     @property
     def extension(self):
@@ -913,13 +901,13 @@ class Upload(models.Model):
         return metadata.Metadata(audio_file)
 
     @property
-    def listen_url(self):
-        return self.track.listen_url + "?upload={}".format(self.uuid)
+    def listen_url(self) -> str:
+        return self.track.listen_url + f"?upload={self.uuid}"
 
-    def get_listen_url(self, to=None, download=True):
+    def get_listen_url(self, to=None, download=True) -> str:
         url = self.listen_url
         if to:
-            url += "&to={}".format(to)
+            url += f"&to={to}"
         if not download:
             url += "&download=false"
 
@@ -960,9 +948,9 @@ class Upload(models.Model):
         bitrate = min(bitrate or 320000, self.bitrate or 320000)
         version = self.versions.create(mimetype=mimetype, bitrate=bitrate, size=0)
         # we keep the same name, but we update the extension
-        new_name = os.path.splitext(os.path.basename(self.audio_file.name))[
-            0
-        ] + ".{}".format(format)
+        new_name = (
+            os.path.splitext(os.path.basename(self.audio_file.name))[0] + f".{format}"
+        )
         version.audio_file.save(new_name, f)
         utils.transcode_audio(
             audio=self.get_audio_segment(),
@@ -1022,7 +1010,7 @@ class UploadVersion(models.Model):
         unique_together = ("upload", "mimetype", "bitrate")
 
     @property
-    def filename(self):
+    def filename(self) -> str:
         try:
             return (
                 self.upload.track.full_name
@@ -1105,9 +1093,7 @@ class ImportBatch(models.Model):
             tasks.import_batch_notify_followers.delay(import_batch_id=self.pk)
 
     def get_federation_id(self):
-        return federation_utils.full_url(
-            "/federation/music/import/batch/{}".format(self.uuid)
-        )
+        return federation_utils.full_url(f"/federation/music/import/batch/{self.uuid}")
 
 
 class ImportJob(models.Model):
@@ -1169,7 +1155,7 @@ class LibraryQuerySet(models.QuerySet):
         )
 
     def viewable_by(self, actor):
-        from funkwhale_api.federation.models import LibraryFollow, Follow
+        from funkwhale_api.federation.models import Follow, LibraryFollow
 
         if actor is None:
             return self.filter(privacy_level="everyone")
@@ -1181,15 +1167,23 @@ class LibraryQuerySet(models.QuerySet):
         ).values_list("target", flat=True)
         followed_channels_libraries = (
             Follow.objects.exclude(target__channel=None)
-            .filter(actor=actor, approved=True,)
+            .filter(
+                actor=actor,
+                approved=True,
+            )
             .values_list("target__channel__library", flat=True)
         )
+        domains_reachable = federation_models.Domain.objects.filter(
+            reachable=True
+        ) | federation_models.Domain.objects.filter(name=settings.FUNKWHALE_HOSTNAME)
+
         return self.filter(
             me_query
             | instance_query
             | models.Q(privacy_level="everyone")
             | models.Q(pk__in=followed_libraries)
             | models.Q(pk__in=followed_channels_libraries)
+            & models.Q(actor__domain__in=domains_reachable)
         )
 
 
@@ -1211,16 +1205,16 @@ class Library(federation_models.FederationMixin):
     def __str__(self):
         return self.name
 
-    def get_moderation_url(self):
-        return "/manage/library/libraries/{}".format(self.uuid)
+    def get_moderation_url(self) -> str:
+        return f"/manage/library/libraries/{self.uuid}"
 
-    def get_federation_id(self):
+    def get_federation_id(self) -> str:
         return federation_utils.full_url(
             reverse("federation:music:libraries-detail", kwargs={"uuid": self.uuid})
         )
 
-    def get_absolute_url(self):
-        return "/library/{}".format(self.uuid)
+    def get_absolute_url(self) -> str:
+        return f"/library/{self.uuid}"
 
     def save(self, **kwargs):
         if not self.pk and not self.fid and self.actor.is_local:
@@ -1229,7 +1223,7 @@ class Library(federation_models.FederationMixin):
 
         return super().save(**kwargs)
 
-    def should_autoapprove_follow(self, actor):
+    def should_autoapprove_follow(self, actor) -> bool:
         if self.privacy_level == "everyone":
             return True
         if self.privacy_level == "instance" and actor.get_user():
@@ -1260,6 +1254,9 @@ class Library(federation_models.FederationMixin):
             return self.channel
         except ObjectDoesNotExist:
             return None
+
+    def latest_scan(self):
+        return self.scans.order_by("-creation_date").first()
 
 
 SCAN_STATUS = [

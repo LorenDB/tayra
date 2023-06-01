@@ -1,0 +1,117 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../user/libraries/create.md:1
+msgid "Create a library"
+msgstr ""
+
+#: ../../user/libraries/create.md:4
+msgid "Want to publish your own content on your {term}`pod`? Take a look at [channels](../channels/index)."
+msgstr ""
+
+#: ../../user/libraries/create.md:7
+msgid "To start uploading your collection to your pod, you need to create a library. You can create as many libraries as you need."
+msgstr ""
+
+#: ../../user/libraries/create.md:9
+msgid "To create a library:"
+msgstr ""
+
+#: ../../user/libraries/create.md:0
+msgid "Desktop"
+msgstr ""
+
+#: ../../user/libraries/create.md:17
+#: ../../user/libraries/create.md:36
+msgid "Log in to your pod."
+msgstr ""
+
+#: ../../user/libraries/create.md:18
+msgid "Select the upload icon ({fa}`upload`) in the top of the sidebar."
+msgstr ""
+
+#: ../../user/libraries/create.md:19
+#: ../../user/libraries/create.md:38
+msgid "Select {guilabel}`Get started` under {guilabel}`Upload third-party content in a library`."
+msgstr ""
+
+#: ../../user/libraries/create.md:20
+#: ../../user/libraries/create.md:39
+msgid "A screen appears showing your upload quota. If you have created any libraries, these are also shown."
+msgstr ""
+
+#: ../../user/libraries/create.md:21
+#: ../../user/libraries/create.md:40
+msgid "Select {guilabel}`Create a new library`."
+msgstr ""
+
+#: ../../user/libraries/create.md:22
+#: ../../user/libraries/create.md:41
+msgid "Enter a {guilabel}`Name` for your library (required)."
+msgstr ""
+
+#: ../../user/libraries/create.md:23
+#: ../../user/libraries/create.md:42
+msgid "Enter {guilabel}`Description` for your library."
+msgstr ""
+
+#: ../../user/libraries/create.md:24
+#: ../../user/libraries/create.md:43
+msgid "Set the {guilabel}`Visibility` of your library. This determines who can access the content."
+msgstr ""
+
+#: ../../user/libraries/create.md:25
+#: ../../user/libraries/create.md:44
+msgid "{guilabel}`Everyone, across all instances` – the library's content is available to everybody who interacts with your pod. This includes users of other pods."
+msgstr ""
+
+#: ../../user/libraries/create.md:26
+#: ../../user/libraries/create.md:45
+msgid "{guilabel}`Everyone on this instance` – the library's content is available to all users on your pod. This does not include users of other pods."
+msgstr ""
+
+#: ../../user/libraries/create.md:27
+#: ../../user/libraries/create.md:46
+msgid "{guilabel}`Nobody except me` – the library's content is only available to you and people you share the library with."
+msgstr ""
+
+#: ../../user/libraries/create.md:28
+#: ../../user/libraries/create.md:47
+msgid "Select {guilabel}`Create library`."
+msgstr ""
+
+#: ../../user/libraries/create.md:29
+#: ../../user/libraries/create.md:48
+msgid "A screen appears showing you a summary of your library."
+msgstr ""
+
+#: ../../user/libraries/create.md:0
+msgid "Mobile"
+msgstr ""
+
+#: ../../user/libraries/create.md:37
+msgid "Select the upload icon ({fa}`upload`) at the top of the screen."
+msgstr ""
+
+#: ../../user/libraries/create.md:53
+msgid "Select {guilabel}`Nobody except me` if you don't own the copyright for the content or it isn't freely licensed."
+msgstr ""
+
+#: ../../user/libraries/create.md:56
+msgid "Well done! You've created your library. Now you can add some content to it."
+msgstr ""

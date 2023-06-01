@@ -1,12 +1,59 @@
+<script setup lang="ts">
+import type { Album, Artist, Library } from '~/types'
+
+import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+import { getDomain } from '~/utils'
+
+import useReport from '~/composables/moderation/useReport'
+
+import EmbedWizard from '~/components/audio/EmbedWizard.vue'
+import SemanticModal from '~/components/semantic/Modal.vue'
+
+interface Events {
+  (e: 'remove'): void
+}
+
+interface Props {
+  isLoading: boolean
+  artist: Artist | null
+  object: Album
+  publicLibraries: Library[]
+  isAlbum: boolean
+  isChannel: boolean
+  isSerie: boolean
+}
+
+const emit = defineEmits<Events>()
+const props = defineProps<Props>()
+const { report, getReportableObjects } = useReport()
+
+const showEmbedModal = ref(false)
+
+const domain = computed(() => getDomain(props.object.fid))
+
+const { t } = useI18n()
+const labels = computed(() => ({
+  more: t('components.library.AlbumDropdown.button.more')
+}))
+
+const isEmbedable = computed(() => (props.isChannel && props.artist?.channel?.actor) || props.publicLibraries.length)
+const musicbrainzUrl = computed(() => props.object?.mbid ? `https://musicbrainz.org/release/${props.object.mbid}` : null)
+const discogsUrl = computed(() => `https://discogs.com/search/?type=release&title=${encodeURI(props.object?.title)}&artist=${encodeURI(props.object?.artist.name)}`)
+
+const remove = () => emit('remove')
+</script>
+
 <template>
   <span>
 
-    <modal
+    <semantic-modal
       v-if="isEmbedable"
-      :show.sync="showEmbedModal"
+      v-model:show="showEmbedModal"
     >
       <h4 class="header">
-        <translate translate-context="Popup/Album/Title/Verb">Embed this album on your website</translate>
+        {{ $t('components.library.AlbumDropdown.modal.embed.header') }}
       </h4>
       <div class="scrolling content">
         <div class="description">
@@ -19,10 +66,10 @@
       </div>
       <div class="actions">
         <button class="ui basic deny button">
-          <translate translate-context="*/*/Button.Label/Verb">Cancel</translate>
+          {{ $t('components.library.AlbumDropdown.button.cancel') }}
         </button>
       </div>
-    </modal>
+    </semantic-modal>
     <button
       v-dropdown="{direction: 'downward'}"
       class="ui floating dropdown circular icon basic button"
@@ -37,10 +84,7 @@
           class="basic item"
         >
           <i class="external icon" />
-          <translate
-            :translate-params="{domain: domain}"
-            translate-context="Content/*/Button.Label/Verb"
-          >View on %{ domain }</translate>
+          {{ $t('components.library.AlbumDropdown.link.domain') }}
         </a>
 
         <div
@@ -50,7 +94,7 @@
           @click="showEmbedModal = !showEmbedModal"
         >
           <i class="code icon" />
-          <translate translate-context="Content/*/Button.Label/Verb">Embed</translate>
+          {{ $t('components.library.AlbumDropdown.button.embed') }}
         </div>
         <a
           v-if="isAlbum && musicbrainzUrl"
@@ -60,7 +104,7 @@
           class="basic item"
         >
           <i class="external icon" />
-          <translate translate-context="Content/*/*/Clickable, Verb">View on MusicBrainz</translate>
+          {{ $t('components.library.AlbumDropdown.link.musicbrainz') }}
         </a>
         <a
           v-if="!isChannel && isAlbum"
@@ -70,7 +114,7 @@
           class="basic item"
         >
           <i class="external icon" />
-          <translate translate-context="Content/*/Button.Label/Verb">Search on Discogs</translate>
+          {{ $t('components.library.AlbumDropdown.link.discogs') }}
         </a>
         <router-link
           v-if="object.is_local"
@@ -78,7 +122,7 @@
           class="basic item"
         >
           <i class="edit icon" />
-          <translate translate-context="Content/*/Button.Label/Verb">Edit</translate>
+          {{ $t('components.library.AlbumDropdown.button.edit') }}
         </router-link>
         <dangerous-button
           v-if="artist && $store.state.auth.authenticated && artist.channel && artist.attributed_to.full_username === $store.state.auth.fullUsername"
@@ -86,20 +130,32 @@
           @confirm="remove()"
         >
           <i class="ui trash icon" />
-          <translate translate-context="*/*/*/Verb">Delete…</translate>
-          <p slot="modal-header"><translate translate-context="Popup/Channel/Title">Delete this album?</translate></p>
-          <div slot="modal-content">
-            <p><translate translate-context="Content/Moderation/Paragraph">The album will be deleted, as well as any related files and data. This action is irreversible.</translate></p>
-          </div>
-          <p slot="modal-confirm"><translate translate-context="*/*/*/Verb">Delete</translate></p>
+          {{ $t('components.library.AlbumDropdown.button.delete') }}
+          <template #modal-header>
+            <p>
+              {{ $t('components.library.AlbumDropdown.modal.delete.header') }}
+            </p>
+          </template>
+          <template #modal-content>
+            <div>
+              <p>
+                {{ $t('components.library.AlbumDropdown.modal.delete.content.warning') }}
+              </p>
+            </div>
+          </template>
+          <template #modal-confirm>
+            <p>
+              {{ $t('components.library.AlbumDropdown.button.delete') }}
+            </p>
+          </template>
         </dangerous-button>
         <div class="divider" />
         <div
-          v-for="obj in getReportableObjs({album: object, channel: artist.channel})"
+          v-for="obj in getReportableObjects({album: object, channel: artist?.channel})"
           :key="obj.target.type + obj.target.id"
           role="button"
           class="basic item"
-          @click.stop.prevent="$store.dispatch('moderation/report', obj.target)"
+          @click.stop.prevent="report(obj)"
         >
           <i class="share icon" /> {{ obj.label }}
         </div>
@@ -110,78 +166,19 @@
           :to="{name: 'manage.library.albums.detail', params: {id: object.id}}"
         >
           <i class="wrench icon" />
-          <translate translate-context="Content/Moderation/Link">Open in moderation interface</translate>
+          {{ $t('components.library.AlbumDropdown.link.moderation') }}
         </router-link>
         <a
-          v-if="$store.state.auth.profile && $store.state.auth.profile.is_superuser"
+          v-if="$store.state.auth.profile && $store.state.auth.profile?.is_superuser"
           class="basic item"
           :href="$store.getters['instance/absoluteUrl'](`/api/admin/music/album/${object.id}`)"
           target="_blank"
           rel="noopener noreferrer"
         >
           <i class="wrench icon" />
-          <translate translate-context="Content/Moderation/Link/Verb">View in Django's admin</translate>&nbsp;
+          {{ $t('components.library.AlbumDropdown.link.django') }}
         </a>
       </div>
     </button>
   </span>
 </template>
-<script>
-import EmbedWizard from '@/components/audio/EmbedWizard'
-import Modal from '@/components/semantic/Modal'
-import ReportMixin from '@/components/mixins/Report'
-
-import { getDomain } from '@/utils'
-
-export default {
-  components: {
-    EmbedWizard,
-    Modal
-  },
-  mixins: [ReportMixin],
-  props: {
-    isLoading: Boolean,
-    artist: { type: Object, required: true },
-    object: { type: Object, required: true },
-    publicLibraries: { type: Array, required: true },
-    isAlbum: Boolean,
-    isChannel: Boolean,
-    isSerie: Boolean
-  },
-  data () {
-    return {
-      showEmbedModal: false
-    }
-  },
-  computed: {
-    domain () {
-      if (this.object) {
-        return getDomain(this.object.fid)
-      }
-      return null
-    },
-    labels () {
-      return {
-        more: this.$pgettext('*/*/Button.Label/Noun', 'More…')
-      }
-    },
-    isEmbedable () {
-      return (this.isChannel && this.artist.channel.actor) || this.publicLibraries.length > 0
-    },
-
-    musicbrainzUrl () {
-      if (this.object.mbid) {
-        return 'https://musicbrainz.org/release/' + this.object.mbid
-      }
-      return null
-    },
-    discogsUrl () {
-      return (
-        'https://discogs.com/search/?type=release&title=' +
-        encodeURI(this.object.title) + '&artist=' +
-        encodeURI(this.object.artist.name)
-      )
-    }
-  }
-}
-</script>

@@ -1,11 +1,10 @@
 import re
 import urllib.parse
 
-from django.conf import settings
-
 from cryptography.hazmat.backends import default_backend as crypto_default_backend
 from cryptography.hazmat.primitives import serialization as crypto_serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
+from django.conf import settings
 
 KEY_ID_REGEX = re.compile(r"keyId=\"(?P<id>.*)\"")
 

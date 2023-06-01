@@ -3,8 +3,8 @@ import json
 import pytest
 from django.urls import reverse
 
-from funkwhale_api.favorites.models import TrackFavorite
 from funkwhale_api.favorites import serializers
+from funkwhale_api.favorites.models import TrackFavorite
 
 
 def test_user_can_add_favorite(factories):

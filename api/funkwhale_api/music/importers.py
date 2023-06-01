@@ -6,7 +6,7 @@ def load(model, *args, **kwargs):
 EXCLUDE_VALIDATION = {"Track": ["artist"]}
 
 
-class Importer(object):
+class Importer:
     def __init__(self, model):
         self.model = model
 
@@ -22,7 +22,7 @@ class Importer(object):
         return m
 
 
-class Mapping(object):
+class Mapping:
     """Cast musicbrainz data to funkwhale data and vice-versa"""
 
     def __init__(self, musicbrainz_mapping):

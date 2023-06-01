@@ -1,11 +1,10 @@
+import mimetypes
 import os
 import pathlib
-import mimetypes
 
 import magic
 import mutagen
 import pydub
-
 from django.conf import settings
 from django.core.cache import cache
 from django.db.models import F
@@ -68,9 +67,7 @@ AUDIO_EXTENSIONS_AND_MIMETYPE = [
 EXTENSION_TO_MIMETYPE = {ext: mt for ext, mt in AUDIO_EXTENSIONS_AND_MIMETYPE}
 MIMETYPE_TO_EXTENSION = {mt: ext for ext, mt in AUDIO_EXTENSIONS_AND_MIMETYPE}
 
-SUPPORTED_EXTENSIONS = list(
-    sorted(set([ext for ext, _ in AUDIO_EXTENSIONS_AND_MIMETYPE]))
-)
+SUPPORTED_EXTENSIONS = list(sorted({ext for ext, _ in AUDIO_EXTENSIONS_AND_MIMETYPE}))
 
 
 def get_ext_from_type(mimetype):

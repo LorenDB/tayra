@@ -1,3 +1,43 @@
+<script setup lang="ts">
+import type { BackendError } from '~/types'
+
+import { useI18n } from 'vue-i18n'
+import { computed, ref } from 'vue'
+
+import axios from 'axios'
+
+interface Events {
+  (e: 'scanned', data: object): void
+}
+
+const emit = defineEmits<Events>()
+
+const { t } = useI18n()
+
+const labels = computed(() => ({
+  placeholder: t('views.content.remote.ScanForm.placeholder.url'),
+  submitLibrarySearch: t('views.content.remote.ScanForm.button.submit')
+}))
+
+const errors = ref([] as string[])
+const isLoading = ref(false)
+const query = ref('')
+const scan = async () => {
+  if (!query.value) return
+  isLoading.value = true
+  errors.value = []
+
+  try {
+    const response = await axios.post('federation/libraries/fetch/', { fid: query.value })
+    emit('scanned', response.data)
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
   <form
     class="ui form"
@@ -9,9 +49,7 @@
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/Library/Error message.Title">
-          Could not fetch remote library
-        </translate>
+        {{ $t('views.content.remote.ScanForm.header.failure') }}
       </h4>
       <ul class="list">
         <li
@@ -23,7 +61,7 @@
       </ul>
     </div>
     <div class="ui field">
-      <label for="library-search"><translate translate-context="Content/Library/Input.Label/Verb">Search a remote library</translate></label>
+      <label for="library-search">{{ $t('views.content.remote.ScanForm.label.search') }}</label>
       <div :class="['ui', 'action', {loading: isLoading}, 'input']">
         <input
           id="library-search"
@@ -43,41 +81,3 @@
     </div>
   </form>
 </template>
-<script>
-import axios from 'axios'
-
-export default {
-  data () {
-    return {
-      query: '',
-      isLoading: false,
-      errors: []
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        placeholder: this.$pgettext('Content/Library/Input.Placeholder', 'Enter a library URL'),
-        submitLibrarySearch: this.$pgettext('Content/Library/Input.Label', 'Submit search')
-      }
-    }
-  },
-  methods: {
-    scan () {
-      if (!this.query) {
-        return
-      }
-      const self = this
-      self.errors = []
-      self.isLoading = true
-      axios.post('federation/libraries/fetch/', { fid: this.query }).then((response) => {
-        self.$emit('scanned', response.data)
-        self.isLoading = false
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    }
-  }
-}
-</script>

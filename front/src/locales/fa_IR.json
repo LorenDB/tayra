@@ -1,0 +1,359 @@
+{
+  "components": {
+    "auth": {
+      "Settings": {
+        "label": {
+          "currentPassword": "تغییر پسورد"
+        },
+        "header": {
+          "passwordFailure": "پسورد شما قابل تغییر نیست"
+        }
+      },
+      "SignupForm": {
+        "label": {
+          "username": "نام کاربری"
+        }
+      },
+      "LoginForm": {
+        "label": {
+          "username": "نام کاربری یا ایمیل"
+        }
+      },
+      "ApplicationForm": {
+        "label": {
+          "scopes": {
+            "write": {
+              "label": "نوشتن"
+            }
+          }
+        }
+      },
+      "Logout": {
+        "button": {
+          "logout": "آره،می رم بیرون"
+        }
+      }
+    },
+    "audio": {
+      "ChannelForm": {
+        "label": {
+          "email": "نام کاربری یا ایمیل",
+          "owner": "نام کاربری"
+        }
+      },
+      "track": {
+        "Table": {
+          "table": {
+            "header": {
+              "title": "عنوان"
+            }
+          }
+        }
+      },
+      "ChannelCard": {
+        "title": "به روز شده در { date }"
+      }
+    },
+    "channels": {
+      "AlbumForm": {
+        "label": {
+          "albumTitle": "عنوان"
+        }
+      },
+      "UploadMetadataForm": {
+        "label": {
+          "title": "عنوان"
+        }
+      }
+    },
+    "manage": {
+      "library": {
+        "AlbumsTable": {
+          "table": {
+            "album": {
+              "header": {
+                "name": "عنوان"
+              }
+            }
+          }
+        },
+        "TracksTable": {
+          "table": {
+            "track": {
+              "header": {
+                "title": "عنوان"
+              }
+            }
+          }
+        }
+      },
+      "users": {
+        "UsersTable": {
+          "table": {
+            "user": {
+              "header": {
+                "username": "نام کاربری"
+              }
+            }
+          }
+        }
+      },
+      "moderation": {
+        "DomainsTable": {
+          "table": {
+            "domain": {
+              "header": {
+                "users": "کاربرها"
+              },
+              "moderationRule": "بله"
+            }
+          },
+          "option": {
+            "yes": "بله"
+          }
+        },
+        "AccountsTable": {
+          "table": {
+            "account": {
+              "moderationRule": "بله"
+            }
+          }
+        }
+      }
+    },
+    "federation": {
+      "FetchButton": {
+        "table": {
+          "error": {
+            "value": {
+              "unknownError": "خطای ناشناخته"
+            }
+          }
+        }
+      }
+    },
+    "library": {
+      "ImportStatusModal": {
+        "error": {
+          "unknownError": {
+            "label": "خطای ناشناخته"
+          }
+        }
+      },
+      "AlbumDropdown": {
+        "link": {
+          "domain": "به روز شده در { date }"
+        }
+      },
+      "ArtistBase": {
+        "link": {
+          "domain": "به روز شده در { date }"
+        }
+      },
+      "TrackBase": {
+        "link": {
+          "domain": "به روز شده در { date }"
+        }
+      },
+      "TrackDetail": {
+        "table": {
+          "release": {
+            "year": "سال"
+          }
+        }
+      },
+      "EditForm": {
+        "header": {
+          "success": "تغییرات شما با موفقیت اعمال گردید"
+        }
+      }
+    },
+    "common": {
+      "AttachmentInput": {
+        "label": {
+          "upload": "أپلود عکس جدید"
+        }
+      },
+      "ContentForm": {
+        "button": {
+          "write": "نوشتن"
+        },
+        "placeholder": {
+          "input": "یه چند کلمه ای اینجا بنویس ..."
+        }
+      }
+    },
+    "Home": {
+      "header": {
+        "links": "لینک های مفید"
+      }
+    },
+    "Sidebar": {
+      "link": {
+        "users": "کاربرها"
+      }
+    },
+    "admin": {
+      "SignupFormBuilder": {
+        "table": {
+          "additionalFields": {
+            "required": {
+              "true": "بله"
+            }
+          }
+        }
+      }
+    },
+    "favorites": {
+      "List": {
+        "title": "علاقه مندی های شما"
+      }
+    }
+  },
+  "composables": {
+    "moderation": {
+      "useEditConfigs": {
+        "album": {
+          "title": "عنوان"
+        },
+        "track": {
+          "title": "عنوان"
+        }
+      },
+      "useReportConfigs": {
+        "album": {
+          "title": "عنوان"
+        },
+        "track": {
+          "title": "عنوان"
+        }
+      }
+    },
+    "locale": {
+      "useSharedLabels": {
+        "filters": {
+          "username": "نام کاربری",
+          "users": "کاربرها"
+        }
+      }
+    }
+  },
+  "views": {
+    "admin": {
+      "library": {
+        "AlbumDetail": {
+          "table": {
+            "album": {
+              "title": "عنوان"
+            }
+          }
+        },
+        "TrackDetail": {
+          "table": {
+            "track": {
+              "title": "عنوان"
+            }
+          }
+        }
+      },
+      "moderation": {
+        "AccountsDetail": {
+          "table": {
+            "accountData": {
+              "username": "نام کاربری"
+            }
+          }
+        },
+        "DomainsDetail": {
+          "table": {
+            "instanceData": {
+              "inAllowList": {
+                "true": "بله"
+              }
+            }
+          }
+        }
+      },
+      "users": {
+        "Base": {
+          "link": {
+            "users": "کاربرها"
+          }
+        }
+      },
+      "CommonList": {
+        "title": {
+          "users": "کاربرها"
+        }
+      }
+    },
+    "content": {
+      "libraries": {
+        "FilesTable": {
+          "table": {
+            "file": {
+              "header": {
+                "title": "عنوان"
+              }
+            }
+          }
+        },
+        "Card": {
+          "button": {
+            "upload": "آپلود"
+          }
+        }
+      }
+    },
+    "auth": {
+      "PasswordResetConfirm": {
+        "button": {
+          "update": "تغییر پسورد"
+        },
+        "message": {
+          "success": "پسورد شما با موفقیت به روز گردید"
+        }
+      },
+      "ProfileBase": {
+        "link": {
+          "domainView": "به روز شده در { date }"
+        }
+      }
+    },
+    "library": {
+      "LibraryBase": {
+        "button": {
+          "upload": "آپلود"
+        },
+        "link": {
+          "domain": "به روز شده در { date }"
+        }
+      },
+      "Edit": {
+        "table": {
+          "action": {
+            "header": {
+              "user": "کاربر"
+            }
+          }
+        }
+      }
+    },
+    "channels": {
+      "DetailBase": {
+        "button": {
+          "upload": "آپلود"
+        },
+        "link": {
+          "domainView": "به روز شده در { date }"
+        }
+      }
+    },
+    "Notifications": {
+      "header": {
+        "messages": "پیام های شما",
+        "notifications": "اعلان های شما"
+      }
+    }
+  }
+}

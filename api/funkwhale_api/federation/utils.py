@@ -1,7 +1,7 @@
 import html.parser
+import re
 import unicodedata
 import urllib.parse
-import re
 
 from django.apps import apps
 from django.conf import settings
@@ -11,8 +11,7 @@ from django.db.models import CharField, Q, Value
 from funkwhale_api.common import session
 from funkwhale_api.moderation import mrf
 
-from . import exceptions
-from . import signing
+from . import exceptions, signing
 
 
 def full_url(path):
@@ -67,7 +66,11 @@ def slugify_username(username):
 
 
 def retrieve_ap_object(
-    fid, actor, serializer_class=None, queryset=None, apply_instance_policies=True,
+    fid,
+    actor,
+    serializer_class=None,
+    queryset=None,
+    apply_instance_policies=True,
 ):
     # we have a duplicate check here because it's less expensive to do those checks
     # twice than to trigger a HTTP request
@@ -119,10 +122,8 @@ def get_domain_query_from_url(domain, url_field="fid"):
     to match objects that have this domain in the given field.
     """
 
-    query = Q(**{"{}__startswith".format(url_field): "http://{}/".format(domain)})
-    query = query | Q(
-        **{"{}__startswith".format(url_field): "https://{}/".format(domain)}
-    )
+    query = Q(**{f"{url_field}__startswith": f"http://{domain}/"})
+    query = query | Q(**{f"{url_field}__startswith": f"https://{domain}/"})
     return query
 
 
@@ -135,14 +136,12 @@ def local_qs(queryset, url_field="fid", include=True):
     return queryset.filter(query)
 
 
-def is_local(url):
+def is_local(url) -> bool:
     if not url:
         return True
 
     d = settings.FEDERATION_HOSTNAME
-    return url.startswith("http://{}/".format(d)) or url.startswith(
-        "https://{}/".format(d)
-    )
+    return url.startswith(f"http://{d}/") or url.startswith(f"https://{d}/")
 
 
 def get_actor_data_from_username(username):
@@ -161,8 +160,8 @@ def get_actor_from_username_data_query(field, data):
     if field:
         return Q(
             **{
-                "{}__preferred_username__iexact".format(field): data["username"],
-                "{}__domain__name__iexact".format(field): data["domain"],
+                f"{field}__preferred_username__iexact": data["username"],
+                f"{field}__domain__name__iexact": data["domain"],
             }
         )
     else:
@@ -245,7 +244,7 @@ FID_MODEL_LABELS = [
 
 def get_object_by_fid(fid, local=None):
 
-    if local is True:
+    if local:
         parsed = urllib.parse.urlparse(fid)
         if parsed.netloc != settings.FEDERATION_HOSTNAME:
             raise ObjectDoesNotExist()

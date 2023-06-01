@@ -6,16 +6,497 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <meta name="generator" content="Funkwhale">
-  <link rel="icon" href="<%= BASE_URL %>favicon.png">
+
+  <link rel="icon" href="favicon.ico">
+
   <title>Funkwhale Widget</title>
+
+  <link rel="stylesheet" href="embed.css">
+
+  <script type="module">
+    import { createApp, reactive, nextTick } from 'https://unpkg.com/petite-vue@0.4.1?module'
+
+    const SUPPORTED_TYPES = ['track', 'album', 'artist', 'playlist', 'channel']
+
+    // Params
+    const params = new URL(location.href).searchParams
+    const baseUrl = params.get('instance') ?? params.get('b') ?? ''
+    const type = params.get('type')
+    const id = params.get('id')
+
+    // Error
+    let error = reactive({ value: false })
+    if (!SUPPORTED_TYPES.includes(type)) {
+      error.value = `The embed widget doesn't support this media type: ${type}.`
+    }
+
+    if (id === null || isNaN(+id)) {
+      error.value = `The embed widget couldn't read the provided media ID: ${id}.`
+    }
+
+    // Cover
+    const DEFAULT_COVER = 'embed-default-cover.jpeg'
+    const cover = reactive({ value: DEFAULT_COVER })
+
+    const fetchArtistCover = async (id) => {
+      const response = await fetch(`${baseUrl}/api/v1/artists/${id}/`)
+      const data = await response.json()
+      cover.value = data.cover?.urls.medium_square_crop ?? DEFAULT_COVER
+    }
+
+    if (type === 'artist') {
+      fetchArtistCover(id).catch(() => undefined)
+    }
+
+    // Tracks
+    const tracks = reactive([])
+
+    const getTracksUrl = () => type === 'track'
+      ? `${baseUrl}/api/v1/tracks/${id}`
+      :  type === 'playlist'
+        ? `${baseUrl}/api/v1/playlists/${id}/tracks/`
+        : `${baseUrl}/api/v1/tracks/`
+
+    const getAudioSources = (uploads) => {
+      const sources = uploads
+        // NOTE: Filter out repeating and unplayable media types
+        .filter(({ mimetype }, index, array) => array.findIndex((upload) => upload.mimetype === mimetype) === index)
+        .filter(({ mimetype }) => ['probably', 'maybe'].includes(audio.element?.canPlayType(mimetype)))
+        // NOTE: For backwards compatibility, prepend the baseUrl if listen_url starts with a slash
+        .map(source => ({
+          ...source,
+          listen_url: source.listen_url[0] === '/'
+            ? `${baseUrl}${source.listen_url}`
+            : source.listen_url
+        }))
+
+      // NOTE: Add a transcoded MP3 src at the end for browsers
+      //       that do not support other codecs to be able to play it :)
+      if (sources.length > 0 && !sources.some(({ mimetype }) => mimetype === 'audio/mpeg')) {
+        const url = new URL(sources[0].listen_url)
+        url.searchParams.set('to', 'mp3')
+        sources.push({ mimetype: 'audio/mpeg', listen_url: url.toString() })
+      }
+
+      return sources
+    }
+
+    const fetchTracks = async (url = getTracksUrl()) => {
+      const filters = new URLSearchParams({
+        include_channels: true,
+        playable: true,
+        [type]: id
+      })
+
+      switch (type) {
+        case 'album':
+          filters.set('ordering', 'disc_number,position')
+          break
+
+        case 'artist':
+          filters.set('ordering', '-album__release_date,disc_number,position')
+          break
+
+        case 'channel':
+          filters.set('ordering', '-creation_date')
+          break
+
+        case 'playlist': break
+        case 'track': break
+
+        // NOTE: The type is undefined, let's return before we make any request
+        default: return
+      }
+
+      const response = await fetch(`${url}?${filters}`)
+      const data = await response.json()
+
+      if (response.status > 299) {
+        switch (response.status) {
+          case 400:
+          case 404:
+            error.value = `This ${type} wasn't found on the server.`
+            break
+
+          case 403:
+            error.value = `You need to log in to access this ${type}.`
+            break
+
+          case 500:
+            error.value = `An unknown error occurred while loading this ${type} from the server.`
+            break
+
+          default:
+            error.value = `An unknown error occurred while loading this ${type}.`
+        }
+
+        // NOTE: If we already have some tracks, let's fail silently
+        if (tracks.length > 0) {
+          console.error(error.value)
+          error.value = false
+        }
+
+        return
+      }
+
+      if (type === 'track') {
+        data.results = [data]
+      }
+
+      if (type === 'playlist') {
+        data.results = data.results.map(({ track }) => track)
+      }
+
+      tracks.push(
+        ...data.results.map((track) => ({
+          id: track.id,
+          title: track.title,
+          artist: track.artist,
+          album: track.album,
+          cover: (track.cover ?? track.album.cover)?.urls.medium_square_crop,
+          sources: getAudioSources(track.uploads)
+        })).filter(({ sources }) => sources.length > 0)
+      )
+
+      if (data.next) {
+        return fetchTracks(data.next)
+      }
+    }
+
+    // NOTE: Fetch tracks only if there is no error
+    if (error.value === false) {
+      fetchTracks().catch(err => {
+        console.error(err)
+        error.value = `An unknown error occurred while loading this ${type}.`
+      })
+    }
+
+    // Duration
+    const ZERO_DATE = +new Date('2022-01-01T00:00:00.000')
+    const intl = new Intl.DateTimeFormat('en', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hourCycle: 'h23'
+    })
+
+    const formatDuration = (duration) => {
+      if (duration === 0) return
+
+      const time = intl.format(new Date(ZERO_DATE + duration * 1e3))
+      return time.replace(/^00:/, '')
+    }
+
+    // Logo component
+    const Logo = () => ({ $template: '#logo-template' })
+
+    // Icon component
+    const Icon = ({ icon }) => ({ $template: '#icon-template', icon })
+
+    // Media Session
+    const initializeMediaSession = () => {
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.setActionHandler('play', () => {
+          player.playing = true
+          audio.element.play()
+        })
+
+        navigator.mediaSession.setActionHandler('pause', () => {
+          player.playing = false
+          audio.element.pause()
+        })
+
+        navigator.mediaSession.setActionHandler('seekbackward', () => player.seekTime({
+          target: { value: (audio.element.currentTime - 5) / audio.element.duration * 100 }
+        }))
+
+        navigator.mediaSession.setActionHandler('seekforward', () => player.seekTime({
+          target: { value: (audio.element.currentTime + 5) / audio.element.duration * 100 }
+        }))
+
+        navigator.mediaSession.setActionHandler('previoustrack', () => player.prev())
+        navigator.mediaSession.setActionHandler('nexttrack', () => player.next())
+      }
+    }
+
+    const updateMediaSessionMetadata = () => {
+      const { current } = player
+
+      if (tracks[current] && 'mediaSession' in navigator) {
+        const metadata = new MediaMetadata({
+          title: tracks[current].title,
+          album: tracks[current]?.album.title ?? '',
+          artist: tracks[current]?.artist.name ?? '',
+          artwork: [
+            { src: tracks[current]?.cover ?? cover.value, sizes: '96x96', type: 'image/png' },
+            { src: tracks[current]?.cover ?? cover.value, sizes: '128x128', type: 'image/png' },
+            { src: tracks[current]?.cover ?? cover.value, sizes: '192x192', type: 'image/png' },
+            { src: tracks[current]?.cover ?? cover.value, sizes: '256x256', type: 'image/png' },
+            { src: tracks[current]?.cover ?? cover.value, sizes: '384x384', type: 'image/png' },
+            { src: tracks[current]?.cover ?? cover.value, sizes: '512x512', type: 'image/png' }
+          ]
+        })
+
+        requestAnimationFrame(() => {
+          navigator.mediaSession.metadata = metadata
+        })
+      }
+    }
+
+    // Player
+    const player = reactive({
+      playing: false,
+      current: 0,
+      seek: 0,
+      play (unsafeIndex) {
+        const index = Math.min(tracks.length - 1, Math.max(unsafeIndex, 0))
+        if (this.current === index) return
+
+        const wasPlaying = this.playing
+        if (wasPlaying) audio.element.pause()
+
+        this.current = index
+        audio.element.currentTime = 0
+        audio.element.load()
+
+        if (wasPlaying) audio.element.play()
+
+        updateMediaSessionMetadata()
+      },
+
+      next () {
+        this.play(this.current + 1)
+      },
+
+      prev () {
+        this.play(this.current - 1)
+      },
+
+      seekTime (event) {
+        if (!audio.element) return
+
+        const seek = audio.element.duration * event.target.value / 100
+        audio.element.currentTime = isNaN(seek) ? 0 : Math.min(seek, audio.element.duration - 1)
+      },
+
+      togglePlay () {
+        this.playing = !this.playing
+
+        if (this.playing) audio.element.play()
+        else audio.element.pause()
+
+        updateMediaSessionMetadata()
+      }
+    })
+
+    // Volume
+    const DEFAULT_VOLUME = 75
+    const volume = reactive({
+      level: DEFAULT_VOLUME,
+      lastLevel: DEFAULT_VOLUME,
+
+      mute () {
+        if (this.lastLevel === 0) {
+          this.lastLevel = DEFAULT_VOLUME
+        }
+
+        const lastLevel = this.level
+        this.level = lastLevel === 0
+          ? this.lastLevel
+          : 0
+
+        this.lastLevel = lastLevel
+      }
+    })
+
+    // Audio
+    const audio = reactive({
+      element: undefined,
+      current: -1,
+      volume: -1
+    })
+
+    const watchAudio = (element, volume) => {
+      if (audio.element !== element) {
+        audio.element = element
+
+        element.addEventListener('timeupdate', (event) => {
+          const seek = element.currentTime / element.duration * 100
+          player.seek = isNaN(seek) ? 0 : seek
+        })
+
+        element.addEventListener('ended', () => {
+          // NOTE: Pause playback if it's a last track
+          if (player.current === tracks.length - 1) {
+            player.playing = false
+          }
+
+          player.next()
+        })
+      }
+
+      if (audio.volume !== volume) {
+        audio.element.volume = volume / 100
+        audio.volume = volume
+      }
+    }
+
+    // Application
+    const app = createApp({
+      // Components
+      Logo,
+      Icon,
+
+      // Errors
+      error,
+
+      // Playback
+      initializeMediaSession,
+      watchAudio,
+      player,
+      volume,
+
+      // Track info
+      formatDuration,
+      tracks,
+      cover
+    })
+
+    app.directive('range', (ctx) => {
+      ctx.effect(() => {
+        ctx.el.style.setProperty('--value', ctx.get())
+      })
+    })
+
+    app.mount()
+  </script>
 </head>
+
+<template id="logo-template">
+  <a
+    title="Funkwhale"
+    href="https://funkwhale.audio"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="logo-link"
+    tabindex="-1"
+  >
+    <img src="logo-white.svg" />
+  </a>
+</template>
+
+<template id="icon-template">
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="icon" fill="currentColor" viewBox="0 0 16 16">
+    <path v-if="icon === 'pause'" d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z" />
+    <path v-else-if="icon === 'play'" d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z" />
+    <path v-else-if="icon === 'prev'" d="M4 4a.5.5 0 0 1 1 0v3.248l6.267-3.636c.54-.313 1.232.066 1.232.696v7.384c0 .63-.692 1.01-1.232.697L5 8.753V12a.5.5 0 0 1-1 0V4z" />
+    <path v-else-if="icon === 'next'" d="M12.5 4a.5.5 0 0 0-1 0v3.248L5.233 3.612C4.693 3.3 4 3.678 4 4.308v7.384c0 .63.692 1.01 1.233.697L11.5 8.753V12a.5.5 0 0 0 1 0V4z" />
+    <path v-else-if="icon === 'mute'" d="M6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06zm7.137 2.096a.5.5 0 0 1 0 .708L12.207 8l1.647 1.646a.5.5 0 0 1-.708.708L11.5 8.707l-1.646 1.647a.5.5 0 0 1-.708-.708L10.793 8 9.146 6.354a.5.5 0 1 1 .708-.708L11.5 7.293l1.646-1.647a.5.5 0 0 1 .708 0z" />
+    <g v-else-if="icon === 'volume'">
+      <path d="M11.536 14.01A8.473 8.473 0 0 0 14.026 8a8.473 8.473 0 0 0-2.49-6.01l-.708.707A7.476 7.476 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303l.708.707z" />
+      <path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.483 5.483 0 0 1 11.025 8a5.483 5.483 0 0 1-1.61 3.89l.706.706z" />
+      <path d="M8.707 11.182A4.486 4.486 0 0 0 10.025 8a4.486 4.486 0 0 0-1.318-3.182L8 5.525A3.489 3.489 0 0 1 9.025 8 3.49 3.49 0 0 1 8 10.475l.707.707zM6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06z" />
+    </g>
+  </svg>
+</template>
 
 <body>
   <noscript>
-    <strong>We're sorry but this widget doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    <strong>You need to enable Javascript to use the embed widget.</strong>
   </noscript>
-  <div id="app"></div>
-  <!-- built files will be auto injected -->
+
+  <main v-scope v-cloak>
+    <div v-if="error.value !== false" class="error">
+      {{ error.value }}
+      <div v-scope="Logo()"></div>
+    </div>
+
+    <template v-else>
+      <div class="player">
+        <img :src="tracks[player.current]?.cover ?? cover.value" class="cover-image" />
+
+        <div class="player-content">
+          <h1>{{ tracks[player.current]?.title }}</h1>
+          <h2>{{ tracks[player.current]?.artist.name }}</h2>
+        </div>
+
+        <div class="player-controls">
+          <button @click="player.prev">
+            <span v-scope="Icon({ icon: 'prev' })"></span>
+          </button>
+          <button @click="player.togglePlay" class="play">
+            <span v-if="!player.playing" v-scope="Icon({ icon: 'play' })"></span>
+            <span v-else v-scope="Icon({ icon: 'pause' })"></span>
+          </button>
+          <button @click="player.next">
+            <span v-scope="Icon({ icon: 'next' })"></span>
+          </button>
+
+          <input
+            v-model.number="player.seek"
+            v-range="player.seek"
+            @input="player.seekTime"
+            type="range"
+            step="0.1"
+          />
+
+          <button @click="volume.mute">
+            <span v-if="volume.level === 0" v-scope="Icon({ icon: 'mute' })"></span>
+            <span v-else v-scope="Icon({ icon: 'volume' })"></span>
+          </button>
+
+          <input
+            v-model.number="volume.level"
+            v-range="volume.level"
+            type="range"
+            step="0.1"
+          />
+        </div>
+
+        <span v-scope="Logo()" class="logo-wrapper"></span>
+      </div>
+
+      <div class="track-list">
+        <table>
+          <tr
+            v-for="(track, index) in tracks"
+            :id="'queue-item-' + index"
+            :key="track.id"
+            role="button"
+            :class="{ 'current': player.current === index }"
+            @click="player.play(index)"
+            @keyup.enter="player.play(index)"
+            tabindex="0"
+          >
+            <td>
+              {{ index + 1 }}
+            </td>
+            <td :title="track.title">
+              {{ track.title }}
+            </td>
+            <td :title="track.artist.name">
+              {{ track.artist.name }}
+            </td>
+            <td :title="track.album?.title">
+              {{ track.album?.title }}
+            </td>
+            <td>
+              {{ formatDuration(track.sources?.[0].duration ?? 0) }}
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <audio v-effect="watchAudio($el, volume.level)" @vue:mounted="initializeMediaSession">
+        <source
+          v-for="source in tracks[player.current]?.sources ?? []"
+          :key="source.mimetype + source.listen_url"
+          :type="source.mimetype"
+          :src="source.listen_url"
+        >
+      </audio>
+    </template>
+  </main>
 </body>
 
 </html>

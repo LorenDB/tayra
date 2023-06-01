@@ -21,16 +21,8 @@ http {
     access_log  /var/log/nginx/access.log  main;
 
     sendfile        on;
-    #tcp_nopush     on;
 
     keepalive_timeout  65;
-
-    #gzip  on;
-
-    map $http_upgrade $connection_upgrade {
-        default upgrade;
-        ''      close;
-    }
 
     upstream funkwhale-api {
         server ${FUNKWHALE_API_IP}:${FUNKWHALE_API_PORT};
@@ -38,11 +30,25 @@ http {
     upstream funkwhale-front {
         server ${FUNKWHALE_FRONT_IP}:${FUNKWHALE_FRONT_PORT};
     }
+
+    # Required for websocket support.
+    map $http_upgrade $connection_upgrade {
+        default upgrade;
+        ''      close;
+    }
+
     server {
-        listen 80;
+        listen      80;
+        listen [::]:80;
         charset     utf-8;
-        client_max_body_size 100M;
+        client_max_body_size ${NGINX_MAX_BODY_SIZE};
         include /etc/nginx/funkwhale_proxy.conf;
+
+        add_header Content-Security-Policy "default-src 'self'; connect-src https: wss: http: ws: 'self' 'unsafe-eval'; script-src 'self' 'wasm-unsafe-eval'; style-src https: http: 'self' 'unsafe-inline'; img-src https: http: 'self' data:; font-src https: http: 'self' data:; media-src https: http: 'self' data:; object-src 'none'";
+        add_header Referrer-Policy "strict-origin-when-cross-origin";
+        add_header X-Frame-Options "SAMEORIGIN" always;
+        add_header Service-Worker-Allowed "/";
+
         # compression settings
         gzip on;
         gzip_comp_level    5;
@@ -68,41 +74,34 @@ http {
             text/vtt
             text/x-component
             text/x-cross-domain-policy;
+        # end of compression settings
 
-        add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; media-src 'self' data:";
-        add_header Referrer-Policy "strict-origin-when-cross-origin";
-        add_header X-Frame-Options "SAMEORIGIN" always;
-
-        location /front/ {
-            add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; media-src 'self' data:";
-            add_header Referrer-Policy "strict-origin-when-cross-origin";
-            add_header Service-Worker-Allowed "/";
-            # uncomment the following line and comment the proxy-pass one
-            # to use the frontend build with "yarn build"
-            #alias /frontend/dist/;
-            proxy_pass   http://funkwhale-front/front/;
-        }
-        location /front/embed.html {
-            add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; media-src 'self' data:";
-            add_header Referrer-Policy "strict-origin-when-cross-origin";
-            add_header X-Frame-Options "" always;
-            proxy_pass   http://funkwhale-front/front/embed.html;
-        }
-        location /front-server/ {
-            proxy_pass   http://funkwhale-front/;
-        }
-        location /sockjs-node/ {
-            proxy_pass   http://funkwhale-front/sockjs-node/;
+        location /api/ {
+            include /etc/nginx/funkwhale_proxy.conf;
+            # This is needed if you have file import via upload enabled.
+            client_max_body_size ${NGINX_MAX_BODY_SIZE};
+            proxy_pass   http://funkwhale-api;
         }
 
         location / {
-            include /etc/nginx/funkwhale_proxy.conf;
-            # this is needed if you have file import via upload enabled
-            client_max_body_size ${NGINX_MAX_BODY_SIZE};
-            proxy_pass   http://funkwhale-api/;
+            proxy_pass   http://funkwhale-front;
+            expires 1d;
         }
 
-        # You can comment this if you do not plan to use the Subsonic API
+        location = /embed.html {
+            add_header Content-Security-Policy "connect-src https: http: 'self'; default-src 'self'; script-src 'self' unpkg.com 'unsafe-inline' 'unsafe-eval'; style-src https: http: 'self' 'unsafe-inline'; img-src https: http: 'self' data:; font-src https: http: 'self' data:; object-src 'none'; media-src https: http: 'self' data:";
+            add_header Referrer-Policy "strict-origin-when-cross-origin";
+
+            proxy_pass   http://funkwhale-front;
+            expires 1d;
+        }
+
+        location /federation/ {
+            include /etc/nginx/funkwhale_proxy.conf;
+            proxy_pass   http://funkwhale-api;
+        }
+
+        # You can comment this if you do not plan to use the Subsonic API.
         location /rest/ {
             include /etc/nginx/funkwhale_proxy.conf;
             proxy_pass   http://funkwhale-api/api/subsonic/rest/;
@@ -116,35 +115,49 @@ http {
             alias /protected/media/attachments/;
         }
 
-        # this is an internal location that is used to serve
-        # audio files once correct permission / authentication
-        # has been checked on API side
-        location /_protected/media {
-            internal;
-            alias   /protected/media;
-
+        location /.well-known/ {
+            include /etc/nginx/funkwhale_proxy.conf;
+            proxy_pass   http://funkwhale-api;
         }
-        # Comment the previous location and uncomment this one if you're storing
-        # media files in a S3 bucket
-        # location ~ /_protected/media/(.+) {
-        #     internal;
-        #     resolver 127.0.0.11;
-        #     # Needed to ensure DSub auth isn't forwarded to S3/Minio, see #932
-        #     proxy_set_header Authorization "";
-        #     proxy_set_header X-Remote-URL "$1";
-        #     proxy_pass $1;
-        # }
 
-        location /_protected/music {
-            # this is an internal location that is used to serve
-            # audio files once correct permission / authentication
-            # has been checked on API side
-            # Set this to the same value as your MUSIC_DIRECTORY_PATH setting
-            internal;
-            alias   /music;
+        # Allow direct access to only specific subdirectories in /media
+        location /media/__sized__/ {
+            alias /protected/media/__sized__/;
+            add_header Access-Control-Allow-Origin '*';
         }
-        location /staticfiles/ {
-            alias /staticfiles/;
+
+        # Allow direct access to only specific subdirectories in /media
+        location /media/attachments/ {
+            alias /protected/media/attachments/;
+            add_header Access-Control-Allow-Origin '*';
+        }
+
+        # This is an internal location that is used to serve
+        # media (uploaded) files once correct permission / authentication
+        # has been checked on API side.
+        # Comment the "NON-S3" commented lines and uncomment "S3" commented lines
+        # if you're storing media files in a S3 bucket.
+        location ~ /_protected/media/(.+) {
+            internal;
+            alias   /protected/media/$1;                                        # NON-S3
+            # Needed to ensure DSub auth isn't forwarded to S3/Minio, see #932.
+#           proxy_set_header Authorization "";                                  # S3
+#           proxy_pass $1;                                                      # S3
+            add_header Access-Control-Allow-Origin '*';
+        }
+
+        location /_protected/music/ {
+            # This is an internal location that is used to serve
+            # local music files once correct permission / authentication
+            # has been checked on API side.
+            # Set this to the same value as your MUSIC_DIRECTORY_PATH setting.
+            internal;
+            alias   /music/;
+            add_header Access-Control-Allow-Origin '*';
+        }
+
+        location /manifest.json {
+            return 302 /api/v1/instance/spa-manifest.json;
         }
     }
 }

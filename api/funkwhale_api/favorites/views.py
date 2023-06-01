@@ -1,13 +1,13 @@
+from django.db.models import Prefetch
+from drf_spectacular.utils import extend_schema
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from django.db.models import Prefetch
-
 from funkwhale_api.activity import record
 from funkwhale_api.common import fields, permissions
-from funkwhale_api.music.models import Track
 from funkwhale_api.music import utils as music_utils
+from funkwhale_api.music.models import Track
 from funkwhale_api.users.oauth import permissions as oauth_permissions
 
 from . import filters, models, serializers
@@ -38,6 +38,7 @@ class TrackFavoriteViewSet(
             return serializers.UserTrackFavoriteSerializer
         return serializers.UserTrackFavoriteWriteSerializer
 
+    @extend_schema(operation_id="favorite_track")
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -67,6 +68,7 @@ class TrackFavoriteViewSet(
         favorite = models.TrackFavorite.add(track=track, user=self.request.user)
         return favorite
 
+    @extend_schema(operation_id="unfavorite_track")
     @action(methods=["delete", "post"], detail=False)
     def remove(self, request, *args, **kwargs):
         try:
@@ -77,6 +79,10 @@ class TrackFavoriteViewSet(
         favorite.delete()
         return Response([], status=status.HTTP_204_NO_CONTENT)
 
+    @extend_schema(
+        responses=serializers.AllFavoriteSerializer(),
+        operation_id="get_all_favorite_tracks",
+    )
     @action(methods=["get"], detail=False)
     def all(self, request, *args, **kwargs):
         """
@@ -85,10 +91,9 @@ class TrackFavoriteViewSet(
         favorites status in the UI
         """
         if not request.user.is_authenticated:
-            return Response({"results": [], "count": 0}, status=200)
+            return Response({"results": [], "count": 0}, status=401)
 
-        favorites = list(
-            request.user.track_favorites.values("id", "track").order_by("id")
-        )
-        payload = {"results": favorites, "count": len(favorites)}
+        favorites = request.user.track_favorites.values("id", "track").order_by("id")
+        payload = serializers.AllFavoriteSerializer(favorites).data
+
         return Response(payload, status=200)

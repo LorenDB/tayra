@@ -1,5 +1,4 @@
-from funkwhale_api.tags import filters
-from funkwhale_api.tags import models
+from funkwhale_api.tags import filters, models
 
 
 def test_filter_search_tag(factories, queryset_equal_list):

@@ -1,10 +1,9 @@
 import datetime
+
 import pytest
 
 from funkwhale_api.common import serializers as common_serializers
-from funkwhale_api.music import licenses
-from funkwhale_api.music import mutations
-
+from funkwhale_api.music import licenses, mutations
 from funkwhale_api.tags import models as tags_models
 
 
@@ -213,7 +212,8 @@ def test_mutation_set_attachment_cover(factory_name, factories, now, mocker):
 
 
 @pytest.mark.parametrize(
-    "factory_name", ["music.Track", "music.Album", "music.Artist"],
+    "factory_name",
+    ["music.Track", "music.Album", "music.Artist"],
 )
 def test_album_mutation_description(factory_name, factories, mocker):
     mocker.patch("funkwhale_api.federation.routes.outbox.dispatch")
@@ -236,7 +236,8 @@ def test_album_mutation_description(factory_name, factories, mocker):
 
 
 @pytest.mark.parametrize(
-    "factory_name", ["music.Track", "music.Album", "music.Artist"],
+    "factory_name",
+    ["music.Track", "music.Album", "music.Artist"],
 )
 def test_mutation_description_keep_tags(factory_name, factories, mocker):
     mocker.patch("funkwhale_api.federation.routes.outbox.dispatch")
@@ -256,14 +257,17 @@ def test_mutation_description_keep_tags(factory_name, factories, mocker):
 
 
 @pytest.mark.parametrize(
-    "factory_name", ["music.Track", "music.Album", "music.Artist"],
+    "factory_name",
+    ["music.Track", "music.Album", "music.Artist"],
 )
 def test_mutation_tags_keep_descriptions(factory_name, factories, mocker):
     mocker.patch("funkwhale_api.federation.routes.outbox.dispatch")
     content = factories["common.Content"]()
     obj = factories[factory_name](description=content)
     mutation = factories["common.Mutation"](
-        type="update", target=obj, payload={"tags": ["punk", "rock"]},
+        type="update",
+        target=obj,
+        payload={"tags": ["punk", "rock"]},
     )
     mutation.apply()
     obj.refresh_from_db()

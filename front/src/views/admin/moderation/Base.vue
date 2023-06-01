@@ -1,3 +1,26 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import { computed, ref } from 'vue'
+import { get } from 'lodash-es'
+
+import axios from 'axios'
+
+const { t } = useI18n()
+
+const allowListEnabled = ref(false)
+const labels = computed(() => ({
+  moderation: t('views.admin.moderation.Base.title'),
+  secondaryMenu: t('views.admin.moderation.Base.menu.secondary')
+}))
+
+const fetchNodeInfo = async () => {
+  const response = await axios.get('instance/nodeinfo/2.0/')
+  allowListEnabled.value = get(response.data, 'metadata.allowList.enabled', false)
+}
+
+fetchNodeInfo()
+</script>
+
 <template>
   <div
     v-title="labels.moderation"
@@ -12,9 +35,7 @@
         class="ui item"
         :to="{name: 'manage.moderation.reports.list', query: {q: 'resolved:no'}}"
       >
-        <translate translate-context="*/Moderation/*/Noun">
-          Reports
-        </translate>
+        {{ $t('views.admin.moderation.Base.link.reports') }}
         <div
           v-if="$store.state.ui.notifications.pendingReviewReports > 0"
           :class="['ui', 'circular', 'mini', 'right floated', 'accent', 'label']"
@@ -26,9 +47,7 @@
         class="ui item"
         :to="{name: 'manage.moderation.requests.list', query: {q: 'status:pending'}}"
       >
-        <translate translate-context="*/Moderation/*/Noun">
-          User Requests
-        </translate>
+        {{ $t('views.admin.moderation.Base.link.userRequests') }}
         <div
           v-if="$store.state.ui.notifications.pendingReviewRequests > 0"
           :class="['ui', 'circular', 'mini', 'right floated', 'accent', 'label']"
@@ -40,17 +59,13 @@
         class="ui item"
         :to="{name: 'manage.moderation.domains.list'}"
       >
-        <translate translate-context="*/Moderation/*/Noun">
-          Domains
-        </translate>
+        {{ $t('views.admin.moderation.Base.link.domains') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.moderation.accounts.list'}"
       >
-        <translate translate-context="*/Moderation/Title">
-          Accounts
-        </translate>
+        {{ $t('views.admin.moderation.Base.link.accounts') }}
       </router-link>
     </nav>
     <router-view
@@ -59,35 +74,3 @@
     />
   </div>
 </template>
-
-<script>
-import _ from '@/lodash'
-import axios from 'axios'
-
-export default {
-  data () {
-    return {
-      allowListEnabled: false
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        moderation: this.$pgettext('*/Moderation/*', 'Moderation'),
-        secondaryMenu: this.$pgettext('Menu/*/Hidden text', 'Secondary menu')
-      }
-    }
-  },
-  created () {
-    this.fetchNodeInfo()
-  },
-  methods: {
-    fetchNodeInfo () {
-      const self = this
-      axios.get('instance/nodeinfo/2.0/').then(response => {
-        self.allowListEnabled = _.get(response.data, 'metadata.allowList.enabled', false)
-      })
-    }
-  }
-}
-</script>

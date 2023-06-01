@@ -1,3 +1,98 @@
+<script setup lang="ts">
+import type { PrivacyLevel } from '~/types'
+
+import { humanSize, truncate } from '~/utils/filters'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import { computed, ref } from 'vue'
+
+import axios from 'axios'
+
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useErrorHandler from '~/composables/useErrorHandler'
+import useLogger from '~/composables/useLogger'
+
+const PRIVACY_LEVELS = ['me', 'instance', 'everyone'] as PrivacyLevel[]
+
+interface Props {
+  id: number
+}
+
+const props = defineProps<Props>()
+
+const { t } = useI18n()
+
+const sharedLabels = useSharedLabels()
+const router = useRouter()
+const logger = useLogger()
+
+const labels = computed(() => ({
+  statsWarning: t('views.admin.library.LibraryDetail.warning.stats')
+}))
+
+const isLoading = ref(false)
+const object = ref()
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(`manage/library/libraries/${props.id}/`)
+    object.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+const isLoadingStats = ref(false)
+const stats = ref()
+const fetchStats = async () => {
+  isLoadingStats.value = true
+
+  try {
+    const response = await axios.get(`manage/library/libraries/${props.id}/stats/`)
+    stats.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoadingStats.value = false
+}
+
+fetchStats()
+fetchData()
+
+const remove = async () => {
+  isLoading.value = true
+
+  try {
+    await axios.delete(`manage/library/libraries/${props.id}/`)
+    router.push({ name: 'manage.library.libraries' })
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+const getQuery = (field: string, value: string) => `${field}:"${value}"`
+
+const updateObj = async (attr: string) => {
+  const params = {
+    [attr]: object.value[attr]
+  }
+
+  try {
+    await axios.patch(`manage/library/libraries/${props.id}/`, params)
+    logger.info(`${attr} was updated successfully to ${params[attr]}`)
+  } catch (error) {
+    logger.error(`Error while setting ${attr} to ${params[attr]}`, error)
+    // TODO (wvffle): Use error handler with custom msg
+  }
+}
+</script>
+
 <template>
   <main>
     <div
@@ -17,12 +112,12 @@
               <h2 class="ui header">
                 <i class="circular inverted book icon" />
                 <div class="content">
-                  {{ object.name | truncate(100) }}
+                  {{ truncate(object.name) }}
                   <div class="sub header">
                     <template v-if="object.is_local">
                       <span class="ui tiny accent label">
                         <i class="home icon" />
-                        <translate translate-context="Content/Moderation/*/Short, Noun">Local</translate>
+                        {{ $t('views.admin.library.LibraryDetail.header.local') }}
                       </span>
                       &nbsp;
                     </template>
@@ -39,7 +134,7 @@
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    <translate translate-context="Content/Moderation/Link/Verb">View in Django's admin</translate>&nbsp;
+                    {{ $t('views.admin.library.LibraryDetail.link.django') }}
                   </a>
                   <button
                     v-dropdown
@@ -55,7 +150,7 @@
                         rel="noopener noreferrer"
                       >
                         <i class="wrench icon" />
-                        <translate translate-context="Content/Moderation/Link/Verb">View in Django's admin</translate>&nbsp;
+                        {{ $t('views.admin.library.LibraryDetail.link.django') }}
                       </a>
                       <a
                         class="basic item"
@@ -64,7 +159,7 @@
                         rel="noopener noreferrer"
                       >
                         <i class="external icon" />
-                        <translate translate-context="Content/Moderation/Link/Verb">Open remote profile</translate>&nbsp;
+                        {{ $t('views.admin.library.LibraryDetail.link.remoteProfile') }}
                       </a>
                     </div>
                   </button>
@@ -74,26 +169,24 @@
                     :class="['ui', {loading: isLoading}, 'basic danger button']"
                     :action="remove"
                   >
-                    <translate translate-context="*/*/*/Verb">
-                      Delete
-                    </translate>
-                    <p slot="modal-header">
-                      <translate translate-context="Popup/Library/Title">
-                        Delete this library?
-                      </translate>
-                    </p>
-                    <div slot="modal-content">
+                    {{ $t('views.admin.library.LibraryDetail.button.delete') }}
+                    <template #modal-header>
                       <p>
-                        <translate translate-context="Content/Moderation/Paragraph">
-                          The library will be removed, as well as associated uploads, and follows. This action is irreversible.
-                        </translate>
+                        {{ $t('views.admin.library.LibraryDetail.modal.delete.header') }}
                       </p>
-                    </div>
-                    <p slot="modal-confirm">
-                      <translate translate-context="*/*/*/Verb">
-                        Delete
-                      </translate>
-                    </p>
+                    </template>
+                    <template #modal-content>
+                      <div>
+                        <p>
+                          {{ $t('views.admin.library.LibraryDetail.modal.delete.content.warning') }}
+                        </p>
+                      </div>
+                    </template>
+                    <template #modal-confirm>
+                      <p>
+                        {{ $t('views.admin.library.LibraryDetail.button.delete') }}
+                      </p>
+                    </template>
                   </dangerous-button>
                 </div>
               </div>
@@ -108,18 +201,14 @@
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
-                    Library data
-                  </translate>
+                  {{ $t('views.admin.library.LibraryDetail.header.libraryData') }}
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      <translate translate-context="*/*/*/Noun">
-                        Name
-                      </translate>
+                      {{ $t('views.admin.library.LibraryDetail.table.library.name') }}
                     </td>
                     <td>
                       {{ object.name }}
@@ -128,9 +217,7 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.libraries', query: {q: getQuery('privacy_level', object.privacy_level) }}">
-                        <translate translate-context="*/*/*">
-                          Visibility
-                        </translate>
+                        {{ $t('views.admin.library.LibraryDetail.link.visibility') }}
                       </router-link>
                     </td>
                     <td>
@@ -142,24 +229,22 @@
                         @change="updateObj('privacy_level')"
                       >
                         <option
-                          v-for="(p, key) in ['me', 'instance', 'everyone']"
-                          :key="key"
+                          v-for="p in PRIVACY_LEVELS"
+                          :key="p"
                           :value="p"
                         >
                           {{ sharedLabels.fields.privacy_level.shortChoices[p] }}
                         </option>
                       </select>
                       <template v-else>
-                        {{ sharedLabels.fields.privacy_level.shortChoices[object.privacy_level] }}
+                        {{ sharedLabels.fields.privacy_level.shortChoices[object.privacy_level as PrivacyLevel] }}
                       </template>
                     </td>
                   </tr>
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.accounts.detail', params: {id: object.actor.full_username }}">
-                        <translate translate-context="*/*/*/Noun">
-                          Account
-                        </translate>
+                        {{ $t('views.admin.library.LibraryDetail.link.account') }}
                       </router-link>
                     </td>
                     <td>
@@ -169,9 +254,7 @@
                   <tr v-if="!object.is_local">
                     <td>
                       <router-link :to="{name: 'manage.moderation.domains.detail', params: {id: object.domain }}">
-                        <translate translate-context="Content/Moderation/*/Noun">
-                          Domain
-                        </translate>
+                        {{ $t('views.admin.library.LibraryDetail.link.domain') }}
                       </router-link>
                     </td>
                     <td>
@@ -180,9 +263,7 @@
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="*/*/*/Noun">
-                        Description
-                      </translate>
+                      {{ $t('views.admin.library.LibraryDetail.table.library.description') }}
                     </td>
                     <td>
                       {{ object.description }}
@@ -197,9 +278,7 @@
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
-                    Activity
-                  </translate>&nbsp;
+                  {{ $t('views.admin.library.LibraryDetail.header.activity') }}&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -219,9 +298,7 @@
                 <tbody>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Short (Value is a date)">
-                        First seen
-                      </translate>
+                      {{ $t('views.admin.library.LibraryDetail.table.activity.firstSeen') }}
                     </td>
                     <td>
                       <human-date :date="object.creation_date" />
@@ -229,9 +306,7 @@
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Federation/*/Noun">
-                        Followers
-                      </translate>
+                      {{ $t('views.admin.library.LibraryDetail.table.activity.followers') }}
                     </td>
                     <td>
                       {{ stats.followers }}
@@ -240,9 +315,7 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.reports.list', query: {q: getQuery('target', `library:${object.uuid}`) }}">
-                        <translate translate-context="Content/Moderation/Table.Label/Noun">
-                          Linked reports
-                        </translate>
+                        {{ $t('views.admin.library.LibraryDetail.link.reports') }}
                       </router-link>
                     </td>
                     <td>
@@ -258,9 +331,7 @@
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
-                    Audio content
-                  </translate>&nbsp;
+                  {{ $t('views.admin.library.LibraryDetail.header.audioContent') }}&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -280,30 +351,24 @@
                 <tbody>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Noun">
-                        Cached size
-                      </translate>
+                      {{ $t('views.admin.library.LibraryDetail.table.audioContent.cachedSize') }}
                     </td>
                     <td>
-                      {{ stats.media_downloaded_size | humanSize }}
+                      {{ humanSize(stats.media_downloaded_size) }}
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label">
-                        Total size
-                      </translate>
+                      {{ $t('views.admin.library.LibraryDetail.table.audioContent.totalSize') }}
                     </td>
                     <td>
-                      {{ stats.media_total_size | humanSize }}
+                      {{ humanSize(stats.media_total_size) }}
                     </td>
                   </tr>
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.artists', query: {q: getQuery('library_id', object.id) }}">
-                        <translate translate-context="*/*/*/Noun">
-                          Artists
-                        </translate>
+                        {{ $t('views.admin.library.LibraryDetail.link.artists') }}
                       </router-link>
                     </td>
                     <td>
@@ -313,9 +378,7 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.albums', query: {q: getQuery('library_id', object.id) }}">
-                        <translate translate-context="*/*/*">
-                          Albums
-                        </translate>
+                        {{ $t('views.admin.library.LibraryDetail.link.albums') }}
                       </router-link>
                     </td>
                     <td>
@@ -325,9 +388,7 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.tracks', query: {q: getQuery('library_id', object.id) }}">
-                        <translate translate-context="*/*/*">
-                          Tracks
-                        </translate>
+                        {{ $t('views.admin.library.LibraryDetail.link.tracks') }}
                       </router-link>
                     </td>
                     <td>
@@ -337,9 +398,7 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('library_id', object.id) }}">
-                        <translate translate-context="*/*/*">
-                          Uploads
-                        </translate>
+                        {{ $t('views.admin.library.LibraryDetail.link.uploads') }}
                       </router-link>
                     </td>
                     <td>
@@ -355,87 +414,3 @@
     </template>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import logger from '@/logging'
-import TranslationsMixin from '@/components/mixins/Translations'
-
-export default {
-  mixins: [
-    TranslationsMixin
-  ],
-  props: { id: { type: Number, required: true } },
-  data () {
-    return {
-      isLoading: true,
-      isLoadingStats: false,
-      object: null,
-      stats: null
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        statsWarning: this.$pgettext('Content/Moderation/Help text', 'Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object')
-      }
-    }
-  },
-  created () {
-    this.fetchData()
-    this.fetchStats()
-  },
-  methods: {
-    fetchData () {
-      const self = this
-      this.isLoading = true
-      const url = `manage/library/libraries/${this.id}/`
-      axios.get(url).then(response => {
-        self.object = response.data
-        self.isLoading = false
-      })
-    },
-    fetchStats () {
-      const self = this
-      this.isLoadingStats = true
-      const url = `manage/library/libraries/${this.id}/stats/`
-      axios.get(url).then(response => {
-        self.stats = response.data
-        self.isLoadingStats = false
-      })
-    },
-    remove () {
-      const self = this
-      this.isLoading = true
-      const url = `manage/library/libraries/${this.id}/`
-      axios.delete(url).then(response => {
-        self.$router.push({ name: 'manage.library.libraries' })
-      })
-    },
-    getQuery (field, value) {
-      return `${field}:"${value}"`
-    },
-    updateObj (attr, toNull) {
-      let newValue = this.object[attr]
-      if (toNull && !newValue) {
-        newValue = null
-      }
-      const params = {}
-      params[attr] = newValue
-      axios.patch(`manage/library/libraries/${this.id}/`, params).then(
-        response => {
-          logger.default.info(
-            `${attr} was updated succcessfully to ${newValue}`
-          )
-        },
-        error => {
-          logger.default.error(
-            `Error while setting ${attr} to ${newValue}`,
-            error
-          )
-        }
-      )
-    }
-  }
-}
-</script>

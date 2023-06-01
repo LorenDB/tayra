@@ -1,7 +1,6 @@
-from rest_framework import serializers
 import pytest
-
 from django.core.exceptions import ObjectDoesNotExist
+from rest_framework import serializers
 
 from funkwhale_api.federation import exceptions, utils
 
@@ -68,7 +67,7 @@ def test_retrieve_ap_object_honor_instance_policy_domain(factories):
     domain = factories["moderation.InstancePolicy"](
         block_all=True, for_domain=True
     ).target_domain
-    fid = "https://{}/test".format(domain.name)
+    fid = f"https://{domain.name}/test"
 
     with pytest.raises(exceptions.BlockedActorOrDomain):
         utils.retrieve_ap_object(fid, actor=None)
@@ -107,7 +106,7 @@ def test_retrieve_ap_object_honor_instance_policy_different_url_and_id(
         block_all=True, for_domain=True
     ).target_domain
     fid = "https://ok/test"
-    r_mock.get(fid, json={"id": "http://{}/test".format(domain.name)})
+    r_mock.get(fid, json={"id": f"http://{domain.name}/test"})
 
     with pytest.raises(exceptions.BlockedActorOrDomain):
         utils.retrieve_ap_object(fid, actor=None)

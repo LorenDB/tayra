@@ -1,6 +1,9 @@
+#!/usr/bin/env python3
+
 import argparse
-import requests
 import os
+
+import requests
 
 GITLAB_URL = "https://dev.funkwhale.audio"
 GITLAB_PROJECT_ID = 17
@@ -67,11 +70,11 @@ def clear_list(inList):
     outList = list(dict.fromkeys(inList))
     try:
         outList.remove("funkwhale-bot")
-    except:
+    except (IndexError, ValueError):
         pass
     try:
         outList.remove("weblate (bot)")
-    except:
+    except (IndexError, ValueError):
         pass
     outList.sort()
     return outList

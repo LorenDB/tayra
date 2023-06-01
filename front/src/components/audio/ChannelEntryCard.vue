@@ -1,3 +1,28 @@
+<script setup lang="ts">
+import type { Cover, Track } from '~/types'
+
+import { computed } from 'vue'
+
+import { usePlayer } from '~/composables/audio/player'
+import { useQueue } from '~/composables/audio/queue'
+
+import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
+import PlayButton from '~/components/audio/PlayButton.vue'
+
+interface Props {
+  entry: Track
+  defaultCover: Cover
+}
+
+const props = defineProps<Props>()
+
+const { currentTrack } = useQueue()
+const { isPlaying } = usePlayer()
+
+const cover = computed(() => props.entry.cover ?? null)
+const duration = computed(() => props.entry.uploads.find(upload => upload.duration)?.duration ?? null)
+</script>
+
 <template>
   <div :class="[{active: currentTrack && isPlaying && entry.id === currentTrack.id}, 'channel-entry-card']">
     <div class="controls">
@@ -18,7 +43,7 @@
       @click="$router.push({name: 'library.tracks.detail', params: {id: entry.id}})"
     >
     <img
-      v-else-if="entry.artist.content_category === 'podcast' && defaultCover != undefined"
+      v-else-if="entry.artist?.content_category === 'podcast' && defaultCover != undefined"
       v-lazy="$store.getters['instance/absoluteUrl'](defaultCover.urls.medium_square_crop)"
       class="channel-image image"
       @click="$router.push({name: 'library.tracks.detail', params: {id: entry.id}})"
@@ -75,45 +100,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import PlayButton from '@/components/audio/PlayButton'
-import TrackFavoriteIcon from '@/components/favorites/TrackFavoriteIcon'
-import { mapGetters } from 'vuex'
-
-export default {
-  components: {
-    PlayButton,
-    TrackFavoriteIcon
-  },
-  props: {
-    entry: { type: Object, required: true },
-    defaultCover: { type: Object, required: true }
-  },
-  computed: {
-
-    ...mapGetters({
-      currentTrack: 'queue/currentTrack'
-    }),
-
-    isPlaying () {
-      return this.$store.state.player.playing
-    },
-    cover () {
-      if (this.entry.cover) {
-        return this.entry.cover
-      }
-      return null
-    },
-    duration () {
-      const uploads = this.entry.uploads.filter((e) => {
-        return e.duration
-      })
-      if (uploads.length > 0) {
-        return uploads[0].duration
-      }
-      return null
-    }
-  }
-}
-</script>

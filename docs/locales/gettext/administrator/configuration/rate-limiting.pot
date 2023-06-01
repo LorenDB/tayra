@@ -1,0 +1,337 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../administrator/configuration/rate-limiting.md:1
+msgid "Rate limit API endpoints"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:3
+msgid "This article contains a summary of the endpoints you can control using rate-limiting. You can change the rate limits for these endpoints using the [`THROTTLING_RATES`](env-file.md#api-configuration) environment variable."
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:5
+msgid "Standard endpoints"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:11
+#: ../../administrator/configuration/rate-limiting.md:61
+#: ../../administrator/configuration/rate-limiting.md:93
+msgid "Endpoint name"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:12
+#: ../../administrator/configuration/rate-limiting.md:62
+#: ../../administrator/configuration/rate-limiting.md:94
+msgid "Description"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:13
+#: ../../administrator/configuration/rate-limiting.md:63
+#: ../../administrator/configuration/rate-limiting.md:95
+msgid "Default rate (per user)"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:14
+msgid "`anonymous-wildcard`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:15
+msgid "Anonymous requests not covered by other limits"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:16
+#: ../../administrator/configuration/rate-limiting.md:22
+#: ../../administrator/configuration/rate-limiting.md:46
+msgid "1000 per hour"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:17
+msgid "`authenticated-wildcard`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:18
+msgid "Authenticated requests not covered by other limits"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:19
+#: ../../administrator/configuration/rate-limiting.md:52
+msgid "2000 per hour"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:20
+msgid "`authenticated-create`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:21
+msgid "Authenticated POST requests"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:23
+msgid "`anonymous-create`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:24
+msgid "Anonymous POST requests"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:25
+#: ../../administrator/configuration/rate-limiting.md:43
+#: ../../administrator/configuration/rate-limiting.md:49
+msgid "1000 per day"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:26
+msgid "`authenticated-list`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:27
+msgid "Authenticated GET requests"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:28
+#: ../../administrator/configuration/rate-limiting.md:34
+msgid "10000 per hour"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:29
+msgid "`anonymous-list`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:30
+msgid "Anonymous GET requests"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:31
+#: ../../administrator/configuration/rate-limiting.md:37
+msgid "10000 per day"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:32
+msgid "`authenticated-retrieve`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:33
+msgid "Authenticated GET requests on resource details"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:35
+msgid "`anonymous-retrieve`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:36
+msgid "Anonymous GET requests on resource details"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:38
+msgid "`authenticated-destroy`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:39
+msgid "Authenticated DELETE requests on resource details"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:40
+msgid "500 per hour"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:41
+msgid "`anonymous-destroy`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:42
+msgid "Anonymous DELETE requests on resource details"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:44
+msgid "`authenticated-update`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:45
+msgid "Authenticated PATCH and PUT requests on resource details"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:47
+msgid "`anonymous-update`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:48
+msgid "Anonymous PATCH and PUT requests on resource details"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:50
+msgid "`subsonic`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:51
+msgid "All Subsonic API requests"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:55
+msgid "User action endpoints"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:64
+msgid "`login`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:65
+msgid "User login"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:66
+msgid "30 per hour"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:67
+msgid "`signup`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:68
+msgid "User signup"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:69
+#: ../../administrator/configuration/rate-limiting.md:101
+#: ../../administrator/configuration/rate-limiting.md:107
+msgid "10 per day"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:70
+msgid "`verify-email`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:71
+msgid "Email address confirmation"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:72
+#: ../../administrator/configuration/rate-limiting.md:75
+#: ../../administrator/configuration/rate-limiting.md:78
+#: ../../administrator/configuration/rate-limiting.md:81
+msgid "20 per hour"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:73
+msgid "`password-change`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:74
+msgid "Password change (when authenticated)"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:76
+msgid "`password-reset`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:77
+msgid "Password reset request"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:79
+msgid "`password-reset-confirm`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:80
+msgid "Password reset confirmation"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:82
+msgid "`fetch`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:83
+msgid "Fetch remote objects"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:84
+msgid "200 per day"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:87
+msgid "Dangerous endpoints"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:96
+msgid "`authenticated-reports`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:97
+msgid "Authenticated report submissions"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:98
+msgid "100 per day"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:99
+msgid "`anonymous-reports`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:100
+msgid "Anonymous report submissions"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:102
+msgid "`authenticated-oauth-app`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:103
+msgid "Authenticated OAuth app creation"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:104
+msgid "10 per hour"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:105
+msgid "`anonymous-oauth-app`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:106
+msgid "Anonymous OAuth app creation"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:108
+msgid "`oauth-authorize`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:109
+msgid "OAuth app authorization"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:110
+#: ../../administrator/configuration/rate-limiting.md:113
+#: ../../administrator/configuration/rate-limiting.md:116
+msgid "100 per hour"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:111
+msgid "`oauth-token`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:112
+msgid "OAuth token creation"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:114
+msgid "`oauth-revoke-token`"
+msgstr ""
+
+#: ../../administrator/configuration/rate-limiting.md:115
+msgid "OAuth token deletion"
+msgstr ""

@@ -1,0 +1,233 @@
+:root {
+  --fw-darker: #1b1c1d;
+  --fw-dark: #2f3030;
+  --fw-light: #666666;
+  --fw-primary: #f2711c;
+  --fw-text: #fff;
+}
+
+audio,
+[v-cloak] {
+  display: none;
+}
+
+body {
+  margin: 0;
+
+  font-family: sans-serif;
+
+  background-color: var(--fw-darker);
+  color: var(--fw-text);
+}
+
+main {
+  display: grid;
+  grid-template-rows: 166px 1fr;
+  height: 100vh;
+}
+
+/*
+  Error
+*/
+
+.error {
+  padding-left: 8px;
+  line-height: 50px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.error:first-letter {
+  text-transform: uppercase;
+}
+
+.error .logo-link {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+/*
+  Player
+*/
+
+.player {
+  display: grid;
+  grid-template-areas: 'cover content content' 'cover controls logo';
+  grid-template-columns: 166px 1fr 50px;
+  align-items: flex-end;
+  padding: 8px;
+}
+
+img {
+  display: block;
+  object-fit: contain;
+  object-position: center;
+  aspect-ratio: 1;
+}
+
+h1, h2 {
+  margin: 0;
+}
+
+.cover-image {
+  grid-area: cover;
+  background-color: var(--fw-dark);
+  width: 150px;
+}
+
+.player-content {
+  grid-area: content;
+}
+
+.player-controls {
+  grid-area: controls;
+  height: 36px;
+
+  display: grid;
+  grid-template-columns: auto auto auto 1fr auto 100px;
+  gap: 8px;
+}
+
+button {
+  color: inherit;
+  background-color: transparent;
+  border: none;
+  font-size: 2em;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+button:hover {
+  color: var(--fw-primary);
+}
+
+button.play {
+  font-size: 2.5em;
+}
+
+button > span {
+  display: inline-flex;
+}
+
+button svg.icon {
+  height: 1em;
+  width: 1em;
+}
+
+.logo-link {
+  display: block;
+  width: 42px;
+  height: 42px;
+  background-color: var(--fw-primary);
+  padding: 4px;
+}
+
+.player .logo-wrapper {
+  margin: 8px -8px -8px 8px;
+}
+
+/*
+  Track list
+*/
+
+.track-list {
+  background-color: var(--fw-dark);
+  overflow-y: scroll;
+  padding: 16px 8px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+tr {
+  font-weight: bold;
+  cursor: pointer;
+  background: var(--entry-bg, transparent);
+}
+
+tr.current {
+  --entry-bg: var(--fw-darker);
+}
+
+tr:hover {
+  --entry-bg: var(--fw-light);
+}
+
+td {
+  padding: 8px;
+  min-width: 40px;
+}
+
+td:first-child {
+  padding-left: 16px;
+  width: 0;
+}
+
+td:last-child {
+  text-align: right;
+  width: 0;
+}
+
+/*
+  Sliders
+*/
+
+input[type=range] {
+  background: transparent;
+  appearance: none;
+  height: 100%;
+  margin: 0;
+
+  --range-color: var(--fw-light);
+  --range-size: 0.6em;
+
+  --min: 0;
+  --max: 100;
+  --value: 50;
+  --range: calc(var(--max) - var(--min));
+  --ratio: calc((var(--value) - var(--min)) / var(--range));
+  --sx: calc(0.5 * var(--range-size) + var(--ratio) * (100% - var(--range-size)));
+}
+
+input[type=range]::-webkit-slider-thumb {
+  appearance: none;
+  width: var(--range-size);
+  height: var(--range-size);
+  border-radius: calc(var(--range-size) / 2);
+  background: var(--range-color);
+  border: none;
+  box-shadow: none;
+}
+
+input[type=range]::-moz-range-thumb {
+  appearance: none;
+  width: var(--range-size);
+  height: var(--range-size);
+  border-radius: calc(var(--range-size) / 2);
+  background: var(--range-color);
+  border: none;
+  box-shadow: none;
+}
+
+input[type=range]::-moz-range-track {
+  appearance: none;
+  height: var(--range-size);
+  border: none;
+  border-radius: calc(var(--range-size) / 2);
+  box-shadow: none;
+  background: linear-gradient(var(--range-color),var(--range-color)) 0/var(--sx) 100% no-repeat, var(--fw-dark);
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  appearance: none;
+  height: var(--range-size);
+  border: none;
+  border-radius: calc(var(--range-size) / 2);
+  box-shadow: none;
+  background: linear-gradient(var(--range-color),var(--range-color)) 0/var(--sx) 100% no-repeat, var(--fw-dark);
+}

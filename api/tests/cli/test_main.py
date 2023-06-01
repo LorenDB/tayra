@@ -1,10 +1,7 @@
 import pytest
-
 from click.testing import CliRunner
 
-from funkwhale_api.cli import main
-from funkwhale_api.cli import library
-from funkwhale_api.cli import users
+from funkwhale_api.cli import library, main, users
 
 
 @pytest.mark.parametrize(
@@ -57,7 +54,12 @@ from funkwhale_api.cli import users
         ),
         (
             ("users", "rm"),
-            ("testuser1", "testuser2", "--no-input", "--hard",),
+            (
+                "testuser1",
+                "testuser2",
+                "--no-input",
+                "--hard",
+            ),
             [
                 (
                     users,

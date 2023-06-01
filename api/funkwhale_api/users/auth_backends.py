@@ -1,5 +1,5 @@
-from django.contrib.auth import backends, get_user_model
 from allauth.account import auth_backends
+from django.contrib.auth import backends, get_user_model
 
 from funkwhale_api.common import authentication
 
@@ -44,7 +44,7 @@ class ModelBackend(backends.ModelBackend):
 
     def user_can_authenticate(self, user):
         can_authenticate = super().user_can_authenticate(user)
-        if authentication.should_verify_email(user):
+        if user.should_verify_email():
             raise authentication.UnverifiedEmail(user)
 
         return can_authenticate

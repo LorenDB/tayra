@@ -1,0 +1,127 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../moderator/content/edits.md:1
+msgid "Handle edits"
+msgstr ""
+
+#: ../../moderator/content/edits.md:4
+msgid "Users can edit content in their own libraries. Moderators don't need to approve these edits. The edits appear in the __Edits__ queue to give admins and moderators a full timeline of changes."
+msgstr ""
+
+#: ../../moderator/content/edits.md:7
+msgid "Users can suggest metadata edits on objects they can access. When a user suggests an edit, it's sent to the **Edits** queue for review. Moderators and pod admins can accept or reject these edits."
+msgstr ""
+
+#: ../../moderator/content/edits.md:0
+msgid "Required permissions"
+msgstr ""
+
+#: ../../moderator/content/edits.md:13
+msgid "{guilabel}`Moderation` – provides access to the administration menu."
+msgstr ""
+
+#: ../../moderator/content/edits.md:14
+msgid "{guilabel}`Library` – provides access to the library menu."
+msgstr ""
+
+#: ../../moderator/content/edits.md:17
+msgid "Each edit object contains the following information:"
+msgstr ""
+
+#: ../../moderator/content/edits.md:19
+msgid "A {guilabel}`Modification` ID – the unique ID of the modification. Select this to show the modification in context with the edited object."
+msgstr ""
+
+#: ../../moderator/content/edits.md:20
+msgid "A timestamp of when the user suggested the edit."
+msgstr ""
+
+#: ../../moderator/content/edits.md:21
+msgid "The status of the edit."
+msgstr ""
+
+#: ../../moderator/content/edits.md:22
+msgid "The {guilabel}`Field` that the user edited."
+msgstr ""
+
+#: ../../moderator/content/edits.md:23
+msgid "The {guilabel}`Old value` that the user edited."
+msgstr ""
+
+#: ../../moderator/content/edits.md:24
+msgid "The {guilabel}`New value` that the user entered."
+msgstr ""
+
+#: ../../moderator/content/edits.md:25
+msgid "The user who suggested the edit."
+msgstr ""
+
+#: ../../moderator/content/edits.md:27
+msgid "To review suggested edits:"
+msgstr ""
+
+#: ../../moderator/content/edits.md:0
+msgid "Desktop"
+msgstr ""
+
+#: ../../moderator/content/edits.md:35
+#: ../../moderator/content/edits.md:48
+msgid "Log in to your {term}`pod`."
+msgstr ""
+
+#: ../../moderator/content/edits.md:36
+msgid "Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu."
+msgstr ""
+
+#: ../../moderator/content/edits.md:37
+#: ../../moderator/content/edits.md:50
+msgid "Select {guilabel}`Library`. The {guilabel}`Edits` page opens. The {guilabel}`Library edits` section displays a list of unresolved edits."
+msgstr ""
+
+#: ../../moderator/content/edits.md:38
+#: ../../moderator/content/edits.md:51
+msgid "Review the edit and select on of the following options:"
+msgstr ""
+
+#: ../../moderator/content/edits.md:39
+#: ../../moderator/content/edits.md:52
+msgid "{guilabel}`Approve` – approve the edit and apply it to the object."
+msgstr ""
+
+#: ../../moderator/content/edits.md:40
+#: ../../moderator/content/edits.md:53
+msgid "{guilabel}`Reject` – reject the edit and leave the object in its current state."
+msgstr ""
+
+#: ../../moderator/content/edits.md:41
+#: ../../moderator/content/edits.md:54
+msgid "{guilabel}`Delete` – delete the edit suggestion without taking further action. The object remains in its current state."
+msgstr ""
+
+#: ../../moderator/content/edits.md:0
+msgid "Mobile"
+msgstr ""
+
+#: ../../moderator/content/edits.md:49
+msgid "Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu."
+msgstr ""
+
+#: ../../moderator/content/edits.md:58
+msgid "That's it! You've handled the edit request. You can use the filters on this page to search for historical requests."
+msgstr ""

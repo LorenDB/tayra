@@ -1,19 +1,122 @@
+<script setup lang="ts">
+import type { OrderingProps } from '~/composables/navigation/useOrdering'
+import type { RouteRecordName } from 'vue-router'
+import type { OrderingField } from '~/store/ui'
+
+import { watchDebounced } from '@vueuse/core'
+import { computed, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+import axios from 'axios'
+
+import ActionTable from '~/components/common/ActionTable.vue'
+import Pagination from '~/components/vui/Pagination.vue'
+
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useErrorHandler from '~/composables/useErrorHandler'
+import useOrdering from '~/composables/navigation/useOrdering'
+
+interface Props extends OrderingProps {
+  filters?: object
+
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  orderingConfigName?: RouteRecordName
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  filters: () => ({}),
+  orderingConfigName: undefined
+})
+
+const page = ref(1)
+const query = ref('')
+type ResponseType = { count: number, results: any[] }
+const result = ref<null | ResponseType>(null)
+
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props)
+
+const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
+  ['date_joined', 'date_joined'],
+  ['last_activity', 'last_activity'],
+  ['username', 'username']
+]
+
+const permissions = computed(() => [
+  {
+    code: 'library',
+    label: t('components.manage.users.UsersTable.permission.library')
+  },
+  {
+    code: 'moderation',
+    label: t('components.manage.users.UsersTable.permission.moderation')
+  },
+  {
+    code: 'settings',
+    label: t('components.manage.users.UsersTable.permission.settings')
+  }
+])
+
+const { t } = useI18n()
+const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  const params = {
+    page: page.value,
+    page_size: paginateBy.value,
+    q: query.value,
+    ordering: orderingString.value,
+    ...props.filters
+  }
+
+  try {
+    const response = await axios.get('/manage/users/users/', {
+      params
+    })
+
+    result.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+    result.value = null
+  } finally {
+    isLoading.value = false
+  }
+}
+
+const forceFetchFirstPage = async () => {
+  page.value = 1
+  return fetchData()
+}
+
+watchDebounced(query, forceFetchFirstPage, { debounce: 300 })
+onOrderingUpdate(forceFetchFirstPage)
+
+watch(page, fetchData)
+fetchData()
+
+const sharedLabels = useSharedLabels()
+const labels = computed(() => ({
+  searchPlaceholder: t('components.manage.users.UsersTable.placeholder.search')
+}))
+</script>
+
 <template>
   <div>
     <div class="ui inline form">
       <div class="fields">
         <div class="ui field">
-          <label for="users-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
+          <label for="users-search">{{ $t('components.manage.users.UsersTable.label.search') }}</label>
           <input
             id="users-search"
-            v-model="search"
+            v-model="query"
             name="search"
             type="text"
             :placeholder="labels.searchPlaceholder"
           >
         </div>
         <div class="field">
-          <label for="users-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
+          <label for="users-ordering">{{ $t('components.manage.users.UsersTable.ordering.label') }}</label>
           <select
             id="users-ordering"
             v-model="ordering"
@@ -29,21 +132,17 @@
           </select>
         </div>
         <div class="field">
-          <label for="users-ordering-direction"><translate translate-context="Content/Search/Dropdown.Label/Noun">Order</translate></label>
+          <label for="users-ordering-direction">{{ $t('components.manage.users.UsersTable.ordering.direction.label') }}</label>
           <select
             id="users-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              <translate translate-context="Content/Search/Dropdown">
-                Ascending
-              </translate>
+              {{ $t('components.manage.users.UsersTable.ordering.direction.ascending') }}
             </option>
             <option value="-">
-              <translate translate-context="Content/Search/Dropdown">
-                Descending
-              </translate>
+              {{ $t('components.manage.users.UsersTable.ordering.direction.descending') }}
             </option>
           </select>
         </div>
@@ -59,51 +158,36 @@
       <action-table
         v-if="result"
         :objects-data="result"
-        :actions="actions"
+        :actions="[]"
         :action-url="'manage/library/uploads/action/'"
         :filters="actionFilters"
         @action-launched="fetchData"
       >
-        <template slot="header-cells">
+        <template #header-cells>
           <th>
-            <translate translate-context="Content/*/*">
-              Username
-            </translate>
+            {{ $t('components.manage.users.UsersTable.table.user.header.username') }}
           </th>
           <th>
-            <translate translate-context="Content/*/*/Noun">
-              Email
-            </translate>
+            {{ $t('components.manage.users.UsersTable.table.user.header.email') }}
           </th>
           <th>
-            <translate translate-context="Content/Admin/Table.Label/Short, Noun">
-              Account status
-            </translate>
+            {{ $t('components.manage.users.UsersTable.table.user.header.accountStatus') }}
           </th>
           <th>
-            <translate translate-context="Content/Admin/Table.Label/Short, Noun (Value is a date)">
-              Sign-up
-            </translate>
+            {{ $t('components.manage.users.UsersTable.table.user.header.signup') }}
           </th>
           <th>
-            <translate translate-context="Content/Profile/Table.Label/Short, Noun (Value is a date)">
-              Last activity
-            </translate>
+            {{ $t('components.manage.users.UsersTable.table.user.header.lastActivity') }}
           </th>
           <th>
-            <translate translate-context="Content/*/*/Noun">
-              Permissions
-            </translate>
+            {{ $t('components.manage.users.UsersTable.table.user.header.permissions') }}
           </th>
           <th>
-            <translate translate-context="*/*/*">
-              Status
-            </translate>
+            {{ $t('components.manage.users.UsersTable.table.user.header.status') }}
           </th>
         </template>
         <template
-          slot="row-cells"
-          slot-scope="scope"
+          #row-cells="scope"
         >
           <td>
             <router-link
@@ -126,11 +210,11 @@
             <span
               v-if="scope.obj.is_active"
               class="ui basic success label"
-            ><translate translate-context="Content/Admin/Table">Active</translate></span>
+            >{{ $t('components.manage.users.UsersTable.table.user.accountStatus.active') }}</span>
             <span
               v-else
               class="ui basic label"
-            ><translate translate-context="Content/Admin/Table">Inactive</translate></span>
+            >{{ $t('components.manage.users.UsersTable.table.user.accountStatus.inactive') }}</span>
           </td>
           <td>
             <human-date :date="scope.obj.date_joined" />
@@ -141,18 +225,16 @@
               :date="scope.obj.last_activity"
             />
             <template v-else>
-              <translate translate-context="*/*/*">
-                N/A
-              </translate>
+              {{ $t('components.manage.users.UsersTable.notApplicable') }}
             </template>
           </td>
           <td>
             <template
-              v-for="(p, key) in permissions"
+              v-for="p in permissions"
+              :key="p.code"
             >
               <span
                 v-if="scope.obj.permissions[p.code]"
-                :key="key"
                 class="ui basic tiny label"
               >{{ p.label }}</span>
             </template>
@@ -161,15 +243,15 @@
             <span
               v-if="scope.obj.is_superuser"
               class="ui pink label"
-            ><translate translate-context="Content/Admin/Table.User role">Admin</translate></span>
+            >{{ $t('components.manage.users.UsersTable.table.user.status.admin') }}</span>
             <span
               v-else-if="scope.obj.is_staff"
               class="ui purple label"
-            ><translate translate-context="Content/Profile/User role">Staff member</translate></span>
+            >{{ $t('components.manage.users.UsersTable.table.user.status.staff') }}</span>
             <span
               v-else
               class="ui basic label"
-            ><translate translate-context="Content/Admin/Table, User role">Regular user</translate></span>
+            >{{ $t('components.manage.users.UsersTable.table.user.status.regular') }}</span>
           </td>
         </template>
       </action-table>
@@ -177,145 +259,15 @@
     <div>
       <pagination
         v-if="result && result.count > paginateBy"
+        v-model:current="page"
         :compact="true"
-        :current="page"
         :paginate-by="paginateBy"
         :total="result.count"
-        @page-changed="selectPage"
       />
 
       <span v-if="result && result.results.length > 0">
-        <translate
-          translate-context="Content/*/Paragraph"
-          translate-plural="Showing results %{ start } to %{ end } from %{ total }"
-          :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
-          :translate-n="result.count"
-        >
-          Showing one result
-        </translate>
+        {{ $t('components.manage.users.UsersTable.pagination.results', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}, result.results.length) }}
       </span>
     </div>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import _ from '@/lodash'
-import time from '@/utils/time'
-import Pagination from '@/components/Pagination'
-import ActionTable from '@/components/common/ActionTable'
-import OrderingMixin from '@/components/mixins/Ordering'
-import TranslationsMixin from '@/components/mixins/Translations'
-
-export default {
-  components: {
-    Pagination,
-    ActionTable
-  },
-  mixins: [OrderingMixin, TranslationsMixin],
-  props: {
-    filters: { type: Object, required: false, default: function () { return {} } }
-  },
-  data () {
-    return {
-      time,
-      isLoading: false,
-      result: null,
-      page: 1,
-      search: '',
-      orderingOptions: [
-        ['date_joined', 'date_joined'],
-        ['last_activity', 'last_activity'],
-        ['username', 'username']
-      ]
-
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        searchPlaceholder: this.$pgettext('Content/Search/Input.Placeholder', 'Search by username, e-mail address, name…')
-      }
-    },
-    privacyLevels () {
-      return {}
-    },
-    permissions () {
-      return [
-        {
-          code: 'library',
-          label: this.$pgettext('*/*/*/Noun', 'Library')
-        },
-        {
-          code: 'moderation',
-          label: this.$pgettext('*/Moderation/*', 'Moderation')
-        },
-        {
-          code: 'settings',
-          label: this.$pgettext('*/*/*/Noun', 'Settings')
-        }
-      ]
-    },
-    actionFilters () {
-      const currentFilters = {
-        q: this.search
-      }
-      if (this.filters) {
-        return _.merge(currentFilters, this.filters)
-      } else {
-        return currentFilters
-      }
-    },
-    actions () {
-      return [
-        // {
-        //   name: 'delete',
-        //   label: this.$pgettext('Content/Admin/Button.Label/Verb', 'Delete'),
-        //   isDangerous: true
-        // }
-      ]
-    }
-  },
-  watch: {
-    search (newValue) {
-      this.page = 1
-      this.fetchData()
-    },
-    page () {
-      this.fetchData()
-    },
-    ordering () {
-      this.fetchData()
-    },
-    orderingDirection () {
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      const params = _.merge({
-        page: this.page,
-        page_size: this.paginateBy,
-        q: this.search,
-        ordering: this.getOrderingAsString()
-      }, this.filters)
-      const self = this
-      self.isLoading = true
-      self.checked = []
-      axios.get('/manage/users/users/', { params: params }).then((response) => {
-        self.result = response.data
-        self.isLoading = false
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    selectPage: function (page) {
-      this.page = page
-    }
-  }
-}
-</script>

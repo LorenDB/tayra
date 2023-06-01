@@ -1,3 +1,159 @@
+<script setup lang="ts">
+import type { ContentCategory, Channel, BackendError } from '~/types'
+
+import { slugify } from 'transliteration'
+import { reactive, computed, ref, watchEffect, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+import axios from 'axios'
+import AttachmentInput from '~/components/common/AttachmentInput.vue'
+import TagsSelector from '~/components/library/TagsSelector.vue'
+
+interface Events {
+  (e: 'category', contentCategory: ContentCategory): void
+  (e: 'submittable', value: boolean): void
+  (e: 'loading', value: boolean): void
+  (e: 'errored', errors: string[]): void
+  (e: 'created', channel: Channel): void
+  (e: 'updated', channel: Channel): void
+}
+
+interface Props {
+  object?: Channel | null
+  step: number
+}
+
+const emit = defineEmits<Events>()
+const props = withDefaults(defineProps<Props>(), {
+  object: null,
+  step: 1
+})
+
+const { t } = useI18n()
+
+const newValues = reactive({
+  name: props.object?.artist?.name ?? '',
+  username: props.object?.actor.preferred_username ?? '',
+  tags: props.object?.artist?.tags ?? [] as string[],
+  description: props.object?.artist?.description?.text ?? '',
+  cover: props.object?.artist?.cover?.uuid ?? null,
+  content_category: props.object?.artist?.content_category ?? 'podcast',
+  metadata: { ...(props.object?.metadata ?? {}) }
+})
+
+const creating = computed(() => props.object === null)
+const categoryChoices = computed(() => [
+  {
+    value: 'podcast',
+    label: t('components.audio.ChannelForm.label.podcast'),
+    helpText: t('components.audio.ChannelForm.help.podcast')
+  },
+  {
+    value: 'music',
+    label: t('components.audio.ChannelForm.label.discography'),
+    helpText: t('components.audio.ChannelForm.help.discography')
+  }
+])
+
+interface ITunesCategory {
+  value: string
+  label: string
+  children: []
+}
+
+interface MetadataChoices {
+  itunes_category?: ITunesCategory[] | null
+  language: {
+    value: string
+    label: string
+  }[]
+}
+
+const metadataChoices = ref({ itunes_category: null } as MetadataChoices)
+const itunesSubcategories = computed(() => {
+  for (const element of metadataChoices.value.itunes_category ?? []) {
+    if (element.value === newValues.metadata.itunes_category) {
+      return element.children ?? []
+    }
+  }
+
+  return []
+})
+
+const labels = computed(() => ({
+  namePlaceholder: t('components.audio.ChannelForm.placeholder.name'),
+  usernamePlaceholder: t('components.audio.ChannelForm.placeholder.username')
+}))
+
+const submittable = computed(() => !!(
+  newValues.content_category === 'podcast'
+    ? newValues.name && newValues.username && newValues.metadata.itunes_category && newValues.metadata.language
+    : newValues.name && newValues.username
+))
+
+watch(() => newValues.name, (name) => {
+  if (creating.value) {
+    newValues.username = slugify(name)
+  }
+})
+
+watch(() => newValues.metadata.itunes_category, () => {
+  newValues.metadata.itunes_subcategory = null
+})
+
+const isLoading = ref(false)
+const errors = ref([] as string[])
+
+watchEffect(() => emit('category', newValues.content_category))
+watchEffect(() => emit('loading', isLoading.value))
+watchEffect(() => emit('submittable', submittable.value))
+
+// TODO (wvffle): Add loader / Use Suspense
+const fetchMetadataChoices = async () => {
+  try {
+    const response = await axios.get('channels/metadata-choices')
+    metadataChoices.value = response.data
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+}
+
+fetchMetadataChoices()
+
+const submit = async () => {
+  isLoading.value = true
+
+  const payload = {
+    ...newValues,
+    description: newValues.description
+      ? {
+          content_type: 'text/markdown',
+          text: newValues.description
+        }
+      : null
+  }
+
+  try {
+    const request = () => creating.value
+      ? axios.post('channels/', payload)
+      : axios.patch(`channels/${props.object?.uuid}`, payload)
+
+    const response = await request()
+    if (creating.value) emit('created', response.data)
+    else emit('updated', response.data)
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+    emit('errored', errors.value)
+  }
+
+  isLoading.value = false
+}
+
+defineExpose({
+  submit
+})
+</script>
+
 <template>
   <form
     class="ui form"
@@ -9,9 +165,7 @@
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/*/Error message.Title">
-          Error while saving channel
-        </translate>
+        {{ $t('components.audio.ChannelForm.header.error') }}
       </h4>
       <ul class="list">
         <li
@@ -28,9 +182,7 @@
         class="ui grouped channel-type required field"
       >
         <legend>
-          <translate translate-context="Content/Channel/Paragraph">
-            What will this channel be used for?
-          </translate>
+          {{ $t('components.audio.ChannelForm.legend.purpose') }}
         </legend>
         <div class="ui hidden divider" />
         <div class="field">
@@ -58,7 +210,7 @@
       <template v-if="!creating || step === 2">
         <div class="ui required field">
           <label for="channel-name">
-            <translate translate-context="Content/Channel/*">Name</translate>
+            {{ $t('components.audio.ChannelForm.label.name') }}
           </label>
           <input
             v-model="newValues.name"
@@ -69,11 +221,11 @@
         </div>
         <div class="ui required field">
           <label for="channel-username">
-            <translate translate-context="Content/Channel/*">Fediverse handle</translate>
+            {{ $t('components.audio.ChannelForm.label.username') }}
           </label>
           <div class="ui left labeled input">
             <div class="ui basic label">
-              @
+              <span class="at symbol" />
             </div>
             <input
               v-model="newValues.username"
@@ -86,25 +238,17 @@
           <template v-if="creating">
             <div class="ui small hidden divider" />
             <p>
-              <translate translate-context="Content/Channels/Paragraph">
-                Used in URLs and to follow this channel in the Fediverse. It cannot be changed later.
-              </translate>
+              {{ $t('components.audio.ChannelForm.help.username') }}
             </p>
           </template>
         </div>
         <div class="six wide column">
           <attachment-input
             v-model="newValues.cover"
-            :required="false"
             :image-class="newValues.content_category === 'podcast' ? '' : 'circular'"
             @delete="newValues.cover = null"
           >
-            <translate
-              slot="label"
-              translate-context="Content/Channel/*"
-            >
-              Channel Picture
-            </translate>
+            {{ $t('components.audio.ChannelForm.label.image') }}
           </attachment-input>
         </div>
         <div class="ui small hidden divider" />
@@ -112,7 +256,7 @@
           <div class="ten wide column">
             <div class="ui field">
               <label for="channel-tags">
-                <translate translate-context="*/*/*">Tags</translate>
+                {{ $t('components.audio.ChannelForm.label.tags') }}
               </label>
               <tags-selector
                 id="channel-tags"
@@ -127,7 +271,7 @@
           >
             <div class="ui required field">
               <label for="channel-language">
-                <translate translate-context="*/*/*">Language</translate>
+                {{ $t('components.audio.ChannelForm.label.language') }}
               </label>
               <select
                 id="channel-language"
@@ -150,7 +294,7 @@
         <div class="ui small hidden divider" />
         <div class="ui field">
           <label for="channel-name">
-            <translate translate-context="*/*/*">Description</translate>
+            {{ $t('components.audio.ChannelForm.label.description') }}
           </label>
           <content-form v-model="newValues.description" />
         </div>
@@ -160,7 +304,7 @@
         >
           <div class="ui required field">
             <label for="channel-itunes-category">
-              <translate translate-context="*/*/*">Category</translate>
+              {{ $t('components.audio.ChannelForm.label.category') }}
             </label>
             <select
               id="itunes-category"
@@ -180,7 +324,7 @@
           </div>
           <div class="ui field">
             <label for="channel-itunes-category">
-              <translate translate-context="*/*/*">Subcategory</translate>
+              {{ $t('components.audio.ChannelForm.label.subcategory') }}
             </label>
             <select
               id="itunes-category"
@@ -205,7 +349,7 @@
         >
           <div class="ui field">
             <label for="channel-itunes-email">
-              <translate translate-context="*/*/*">Owner e-mail address</translate>
+              {{ $t('components.audio.ChannelForm.label.email') }}
             </label>
             <input
               id="channel-itunes-email"
@@ -216,7 +360,7 @@
           </div>
           <div class="ui field">
             <label for="channel-itunes-name">
-              <translate translate-context="*/*/*">Owner name</translate>
+              {{ $t('components.audio.ChannelForm.label.owner') }}
             </label>
             <input
               id="channel-itunes-name"
@@ -227,9 +371,7 @@
           </div>
         </div>
         <p>
-          <translate translate-context="*/*/*">
-            Used for the itunes:email and itunes:name field required by certain platforms such as Spotify or iTunes.
-          </translate>
+          {{ $t('components.audio.ChannelForm.help.podcastFields') }}
         </p>
       </template>
     </template>
@@ -238,178 +380,8 @@
       class="ui active inverted dimmer"
     >
       <div class="ui text loader">
-        <translate translate-context="*/*/*">
-          Loading
-        </translate>
+        {{ $t('components.audio.ChannelForm.loader.loading') }}
       </div>
     </div>
   </form>
 </template>
-
-<script>
-import axios from 'axios'
-
-import AttachmentInput from '@/components/common/AttachmentInput'
-import TagsSelector from '@/components/library/TagsSelector'
-
-function slugify (text) {
-  return text.toString().toLowerCase()
-    .replace(/\s+/g, '') // Remove spaces
-    .replace(/[^\w]+/g, '') // Remove all non-word chars
-}
-
-export default {
-  components: {
-    AttachmentInput,
-    TagsSelector
-  },
-  props: {
-    object: { type: Object, required: false, default: null },
-    step: { type: Number, required: false, default: 1 }
-  },
-  data () {
-    const oldValues = {}
-    if (this.object) {
-      oldValues.metadata = { ...(this.object.metadata || {}) }
-      oldValues.name = this.object.artist.name
-      oldValues.description = this.object.artist.description
-      oldValues.cover = this.object.artist.cover
-      oldValues.tags = this.object.artist.tags
-      oldValues.content_category = this.object.artist.content_category
-      oldValues.username = this.object.actor.preferred_username
-    }
-    return {
-      isLoading: false,
-      errors: [],
-      metadataChoices: null,
-      newValues: {
-        name: oldValues.name || '',
-        username: oldValues.username || '',
-        tags: oldValues.tags || [],
-        description: (oldValues.description || {}).text || '',
-        cover: (oldValues.cover || {}).uuid || null,
-        content_category: oldValues.content_category || 'podcast',
-        metadata: oldValues.metadata || {}
-      }
-    }
-  },
-  computed: {
-    creating () {
-      return this.object === null
-    },
-    categoryChoices () {
-      return [
-        {
-          value: 'podcast',
-          label: this.$pgettext('*/*/*', 'Podcasts'),
-          helpText: this.$pgettext('Content/Channels/Help', 'Host your episodes and keep your community updated.')
-        },
-        {
-          value: 'music',
-          label: this.$pgettext('*/*/*', 'Artist discography'),
-          helpText: this.$pgettext('Content/Channels/Help', 'Publish music you make as a nice discography of albums and singles.')
-        }
-      ]
-    },
-    itunesSubcategories () {
-      for (let index = 0; index < this.metadataChoices.itunes_category.length; index++) {
-        const element = this.metadataChoices.itunes_category[index]
-        if (element.value === this.newValues.metadata.itunes_category) {
-          return element.children || []
-        }
-      }
-      return []
-    },
-    labels () {
-      return {
-        namePlaceholder: this.$pgettext('Content/Channel/Form.Field.Placeholder', 'Awesome channel name'),
-        usernamePlaceholder: this.$pgettext('Content/Channel/Form.Field.Placeholder', 'awesomechannelname')
-      }
-    },
-    submittable () {
-      let v = this.newValues.name && this.newValues.username
-      if (this.newValues.content_category === 'podcast') {
-        v = v && this.newValues.metadata.itunes_category && this.newValues.metadata.language
-      }
-      return !!v
-    }
-  },
-  watch: {
-    'newValues.name' (v) {
-      if (this.creating) {
-        this.newValues.username = slugify(v)
-      }
-    },
-    'newValues.metadata.itunes_category' (v) {
-      this.newValues.metadata.itunes_subcategory = null
-    },
-    'newValues.content_category': {
-      handler (v) {
-        this.$emit('category', v)
-      },
-      immediate: true
-    },
-    isLoading: {
-      handler (v) {
-        this.$emit('loading', v)
-      },
-      immediate: true
-    },
-    submittable: {
-      handler (v) {
-        this.$emit('submittable', v)
-      },
-      immediate: true
-    }
-  },
-
-  created () {
-    this.fetchMetadataChoices()
-  },
-  methods: {
-    fetchMetadataChoices () {
-      const self = this
-      axios.get('channels/metadata-choices').then((response) => {
-        self.metadataChoices = response.data
-      }, error => {
-        self.errors = error.backendErrors
-      })
-    },
-    submit () {
-      this.isLoading = true
-      const self = this
-      const handler = this.creating ? axios.post : axios.patch
-      const url = this.creating ? 'channels/' : `channels/${this.object.uuid}`
-      const payload = {
-        name: this.newValues.name,
-        username: this.newValues.username,
-        tags: this.newValues.tags,
-        content_category: this.newValues.content_category,
-        cover: this.newValues.cover,
-        metadata: this.newValues.metadata
-      }
-      if (this.newValues.description) {
-        payload.description = {
-          content_type: 'text/markdown',
-          text: this.newValues.description
-        }
-      } else {
-        payload.description = null
-      }
-
-      handler(url, payload).then((response) => {
-        self.isLoading = false
-        if (self.creating) {
-          self.$emit('created', response.data)
-        } else {
-          self.$emit('updated', response.data)
-        }
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-        self.$emit('errored', self.errors)
-      })
-    }
-  }
-}
-</script>

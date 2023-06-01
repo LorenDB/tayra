@@ -7,7 +7,6 @@ import sys
 import persisting_theory
 from django.core.cache import cache
 from django.db.models import Q
-
 from rest_framework import serializers
 
 logger = logging.getLogger("plugins")
@@ -29,7 +28,7 @@ _filters = {}
 _hooks = {}
 
 
-class PluginCache(object):
+class PluginCache:
     def __init__(self, prefix):
         self.prefix = prefix
 
@@ -82,7 +81,7 @@ def load_settings(name, settings):
         "text": django_settings.ENV,
     }
     values = {}
-    prefix = "FUNKWHALE_PLUGIN_{}".format(name.upper())
+    prefix = f"FUNKWHALE_PLUGIN_{name.upper()}"
     for s in settings:
         key = "_".join([prefix, s["name"].upper()])
         value = mapping[s["type"]](key, default=s.get("default", None))
@@ -180,7 +179,9 @@ def set_conf(name, conf, user=None, registry=_plugins):
     if not registry[name]["conf"] and not registry[name]["source"]:
         return
     conf_serializer = get_serializer_from_conf_template(
-        registry[name]["conf"], user=user, source=registry[name]["source"],
+        registry[name]["conf"],
+        user=user,
+        source=registry[name]["source"],
     )(data=conf)
     conf_serializer.is_valid(raise_exception=True)
     if "library" in conf_serializer.validated_data:
@@ -261,7 +262,7 @@ def get_serializer_from_conf_template(conf, source=False, user=None):
                 self.fields["library"] = LibraryField(actor=user.actor)
 
     for vname, v in validators.items():
-        setattr(Serializer, "validate_{}".format(vname), v)
+        setattr(Serializer, f"validate_{vname}", v)
     return Serializer
 
 

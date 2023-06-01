@@ -1,3 +1,16 @@
+<script setup lang="ts">
+import type { Library } from '~/types'
+
+import TrackTable from '~/components/audio/track/Table.vue'
+
+interface Props {
+  object: Library
+  isOwner: boolean
+}
+
+defineProps<Props>()
+</script>
+
 <template>
   <section>
     <track-table
@@ -6,38 +19,22 @@
       :search="true"
       :filters="{playable: true, library: object.uuid, ordering: '-creation_date'}"
     >
-      <empty-state slot="empty-state">
-        <p>
-          <translate
-            v-if="isOwner"
-            key="1"
-            translate-context="*/*/*"
-          >
-            This library is empty, you should upload something in it!
-          </translate>
-          <translate
-            v-else
-            key="2"
-            translate-context="*/*/*"
-          >
-            You may need to follow this library to see its content.
-          </translate>
-        </p>
-      </empty-state>
+      <template #empty-state>
+        <empty-state>
+          <p>
+            <span
+              v-if="isOwner"
+            >
+              {{ $t('views.library.DetailTracks.empty.upload') }}
+            </span>
+            <span
+              v-else
+            >
+              {{ $t('views.library.DetailTracks.empty.follow') }}
+            </span>
+          </p>
+        </empty-state>
+      </template>
     </track-table>
   </section>
 </template>
-
-<script>
-import TrackTable from '@/components/audio/track/Table'
-
-export default {
-  components: {
-    TrackTable
-  },
-  props: {
-    object: { type: [Object, String], required: true },
-    isOwner: { type: Boolean, required: true }
-  }
-}
-</script>

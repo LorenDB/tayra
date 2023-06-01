@@ -1,15 +1,85 @@
+<script setup lang="ts">
+import type { Artist, Album } from '~/types'
+
+import { useI18n } from 'vue-i18n'
+import { ref, computed, reactive, watch, onMounted } from 'vue'
+import { refDebounced } from '@vueuse/core'
+
+import axios from 'axios'
+import AlbumCard from '~/components/audio/album/Card.vue'
+import ArtistCard from '~/components/audio/artist/Card.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+import useLogger from '~/composables/useLogger'
+
+interface Props {
+  autofocus?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  autofocus: false
+})
+
+const logger = useLogger()
+const { t } = useI18n()
+
+const query = ref('')
+const queryDebounced = refDebounced(query, 500)
+
+const results = reactive({
+  artists: [] as Artist[],
+  albums: [] as Album[]
+})
+
+const isLoading = ref(false)
+const search = async () => {
+  if (queryDebounced.value.length < 1) {
+    return
+  }
+
+  isLoading.value = true
+  logger.debug(`Searching track matching "${queryDebounced.value}"`)
+
+  const params = {
+    query: queryDebounced.value
+  }
+
+  try {
+    const response = await axios.get('search/', { params })
+    results.artists = response.data.artists
+    results.albums = response.data.albums
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+watch(queryDebounced, search, { immediate: true })
+
+const searchInput = ref()
+onMounted(() => {
+  if (props.autofocus) {
+    searchInput.value.focus()
+  }
+})
+
+const labels = computed(() => ({
+  searchPlaceholder: t('components.audio.Search.placeholder.search')
+}))
+
+</script>
+
 <template>
   <div>
     <h2>
-      <translate translate-context="Content/Search/Title">
-        Search for some music
-      </translate>
+      {{ $t('components.audio.Search.header.search') }}
     </h2>
     <div :class="['ui', {'loading': isLoading }, 'search']">
       <div class="ui icon big input">
         <i class="search icon" />
         <input
-          ref="search"
+          ref="searchInput"
           v-model.trim="query"
           class="prompt"
           :placeholder="labels.searchPlaceholder"
@@ -19,9 +89,7 @@
     </div>
     <template v-if="query.length > 0">
       <h3 class="ui title">
-        <translate translate-context="*/*/*/Noun">
-          Artists
-        </translate>
+        {{ $t('components.audio.Search.header.artists') }}
       </h3>
       <div v-if="results.artists.length > 0">
         <div class="ui cards">
@@ -33,16 +101,12 @@
         </div>
       </div>
       <p v-else>
-        <translate translate-context="Content/Search/Paragraph">
-          No artist matched your query
-        </translate>
+        {{ $t('components.audio.Search.empty.noArtists') }}
       </p>
     </template>
     <template v-if="query.length > 0">
       <h3 class="ui title">
-        <translate translate-context="*/*/*">
-          Albums
-        </translate>
+        {{ $t('components.audio.Search.header.albums') }}
       </h3>
       <div
         v-if="results.albums.length > 0"
@@ -60,81 +124,8 @@
         </div>
       </div>
       <p v-else>
-        <translate translate-context="Content/Search/Paragraph">
-          No album matched your query
-        </translate>
+        {{ $t('components.audio.Search.empty.noAlbums') }}
       </p>
     </template>
   </div>
 </template>
-
-<script>
-import _ from '@/lodash'
-import axios from 'axios'
-import logger from '@/logging'
-import AlbumCard from '@/components/audio/album/Card'
-import ArtistCard from '@/components/audio/artist/Card'
-
-export default {
-  components: {
-    AlbumCard,
-    ArtistCard
-  },
-  props: {
-    autofocus: { type: Boolean, default: false }
-  },
-  data () {
-    return {
-      query: '',
-      results: {
-        albums: [],
-        artists: []
-      },
-      isLoading: false
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        searchPlaceholder: this.$pgettext('*/Search/Input.Placeholder', 'Artist, album, track…')
-      }
-    }
-  },
-  watch: {
-    query () {
-      this.search()
-    }
-  },
-  mounted () {
-    if (this.autofocus) {
-      this.$refs.search.focus()
-    }
-    this.search()
-  },
-  methods: {
-    search: _.debounce(function () {
-      if (this.query.length < 1) {
-        return
-      }
-      const self = this
-      self.isLoading = true
-      logger.default.debug('Searching track matching "' + this.query + '"')
-      const params = {
-        query: this.query
-      }
-      axios.get('search', {
-        params: params
-      }).then((response) => {
-        self.results = self.castResults(response.data)
-        self.isLoading = false
-      })
-    }, 500),
-    castResults (results) {
-      return {
-        albums: results.albums,
-        artists: results.artists
-      }
-    }
-  }
-}
-</script>

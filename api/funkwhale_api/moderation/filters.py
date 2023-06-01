@@ -1,7 +1,5 @@
 from django.db.models import Q
-
 from django_filters import rest_framework as filters
-
 
 USER_FILTER_CONFIG = {
     "ARTIST": {"target_artist": ["pk"]},
@@ -21,7 +19,7 @@ def get_filtered_content_query(config, user):
         query = None
         ids = user.content_filters.values_list(filter_field, flat=True)
         for model_field in model_fields:
-            q = Q(**{"{}__in".format(model_field): ids})
+            q = Q(**{f"{model_field}__in": ids})
             if query:
                 query |= q
             else:
@@ -64,7 +62,7 @@ class HiddenContentFilterSet(filters.FilterSet):
         config = self.__class__.Meta.hidden_content_fields_mapping
         final_query = get_filtered_content_query(config, user)
 
-        if value is True:
+        if value:
             return queryset.filter(final_query)
         else:
             return queryset.exclude(final_query)

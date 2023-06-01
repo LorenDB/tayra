@@ -1,9 +1,7 @@
 import django_filters
-
 from rest_framework import serializers
 
-from . import models
-from . import utils
+from . import models, utils
 
 
 class ActorRelatedField(serializers.EmailField):

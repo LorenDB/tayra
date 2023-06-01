@@ -1,9 +1,9 @@
 import hashlib
 
 from config import plugins
-from .funkwhale_startup import PLUGIN
 
 from . import scrobbler
+from .funkwhale_startup import PLUGIN
 
 # https://listenbrainz.org/lastfm-proxy
 DEFAULT_SCROBBLER_URL = "http://post.audioscrobbler.com"

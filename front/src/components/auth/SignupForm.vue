@@ -1,21 +1,101 @@
+<script setup lang="ts">
+import type { RouteLocationRaw } from 'vue-router'
+import type { BackendError, Form } from '~/types'
+
+import { computed, reactive, ref, watchEffect } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+import LoginForm from '~/components/auth/LoginForm.vue'
+import PasswordInput from '~/components/forms/PasswordInput.vue'
+import useLogger from '~/composables/useLogger'
+
+interface Props {
+  defaultInvitation?: string | null
+  next?: RouteLocationRaw
+  buttonClasses?: string
+  customization?: Form | null
+  fetchDescriptionHtml?: boolean
+  signupApprovalEnabled?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  defaultInvitation: null,
+  next: '/',
+  buttonClasses: 'success',
+  customization: null,
+  fetchDescriptionHtml: false,
+  signupApprovalEnabled: undefined
+})
+
+const { t } = useI18n()
+const logger = useLogger()
+const store = useStore()
+
+const labels = computed(() => ({
+  placeholder: t('components.auth.SignupForm.placeholder.invitation'),
+  usernamePlaceholder: t('components.auth.SignupForm.placeholder.username'),
+  emailPlaceholder: t('components.auth.SignupForm.placeholder.email')
+}))
+
+const signupRequiresApproval = computed(() => props.signupApprovalEnabled ?? store.state.instance.settings.moderation.signup_approval_enabled.value)
+const formCustomization = computed(() => props.customization ?? store.state.instance.settings.moderation.signup_form_customization.value)
+watchEffect(() => console.log(store.state.instance.settings.moderation.signup_approval_enabled.value))
+
+const payload = reactive({
+  username: '',
+  password1: '',
+  email: '',
+  invitation: props.defaultInvitation,
+  request_fields: {} as Record<string, string | number | string[]>
+})
+
+const submitted = ref(false)
+const isLoading = ref(false)
+const errors = ref([] as string[])
+const submit = async () => {
+  isLoading.value = true
+  errors.value = []
+
+  try {
+    await axios.post('auth/registration/', {
+      ...payload,
+      password2: payload.password1
+    })
+
+    logger.info('Successfully created account')
+    submitted.value = true
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const isLoadingInstanceSetting = ref(false)
+const fetchInstanceSettings = async () => {
+  isLoadingInstanceSetting.value = true
+  await store.dispatch('instance/fetchSettings')
+  isLoadingInstanceSetting.value = false
+}
+
+fetchInstanceSettings()
+</script>
+
 <template>
   <div v-if="submitted">
     <div class="ui success message">
       <p v-if="signupRequiresApproval">
-        <translate translate-context="Content/Signup/Form/Paragraph">
-          Your account request was successfully submitted. You will be notified by e-mail when our moderation team has reviewed your request.
-        </translate>
+        {{ $t('components.auth.SignupForm.message.awaitingReview') }}
       </p>
       <p v-else>
-        <translate translate-context="Content/Signup/Form/Paragraph">
-          Your account was successfully created. Please verify your e-mail address before trying to login.
-        </translate>
+        {{ $t('components.auth.SignupForm.message.accountCreated') }}
       </p>
     </div>
     <h2>
-      <translate translate-context="Content/Login/Title/Verb">
-        Log in to your Funkwhale account
-      </translate>
+      {{ $t('components.auth.SignupForm.header.login') }}
     </h2>
     <login-form
       button-classes="basic success"
@@ -31,19 +111,15 @@
       v-if="!$store.state.instance.settings.users.registration_enabled.value"
       class="ui message"
     >
-      <translate translate-context="Content/Signup/Form/Paragraph">
-        Public registrations are not possible on this instance. You will need an invitation code to sign up.
-      </translate>
+      {{ $t('components.auth.SignupForm.message.registrationClosed') }}
     </p>
     <p
       v-else-if="signupRequiresApproval"
       class="ui message"
     >
-      <translate translate-context="Content/Signup/Form/Paragraph">
-        Registrations on this pod are open, but reviewed by moderators before approval.
-      </translate>
+      {{ $t('components.auth.SignupForm.message.requiresReview') }}
     </p>
-    <template v-if="formCustomization && formCustomization.help_text">
+    <template v-if="formCustomization?.help_text">
       <rendered-description
         :content="formCustomization.help_text"
         :fetch-html="fetchDescriptionHtml"
@@ -57,9 +133,7 @@
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/Signup/Form/Paragraph">
-          Your account cannot be created.
-        </translate>
+        {{ $t('components.auth.SignupForm.header.signupFailure') }}
       </h4>
       <ul class="list">
         <li
@@ -71,11 +145,11 @@
       </ul>
     </div>
     <div class="required field">
-      <label for="username-field"><translate translate-context="Content/*/*">Username</translate></label>
+      <label for="username-field">{{ $t('components.auth.SignupForm.label.username') }}</label>
       <input
         id="username-field"
         ref="username"
-        v-model="username"
+        v-model="payload.username"
         name="username"
         required
         type="text"
@@ -84,11 +158,11 @@
       >
     </div>
     <div class="required field">
-      <label for="email-field"><translate translate-context="Content/*/*/Noun">E-mail address</translate></label>
+      <label for="email-field">{{ $t('components.auth.SignupForm.label.email') }}</label>
       <input
         id="email-field"
         ref="email"
-        v-model="email"
+        v-model="payload.email"
         name="email"
         required
         type="email"
@@ -96,9 +170,9 @@
       >
     </div>
     <div class="required field">
-      <label for="password-field"><translate translate-context="*/*/*">Password</translate></label>
+      <label for="password-field">{{ $t('components.auth.SignupForm.label.password') }}</label>
       <password-input
-        v-model="password"
+        v-model="payload.password1"
         field-id="password-field"
       />
     </div>
@@ -106,19 +180,19 @@
       v-if="!$store.state.instance.settings.users.registration_enabled.value"
       class="required field"
     >
-      <label for="invitation-code"><translate translate-context="Content/*/Input.Label">Invitation code</translate></label>
+      <label for="invitation-code">{{ $t('components.auth.SignupForm.label.invitation') }}</label>
       <input
         id="invitation-code"
-        v-model="invitation"
+        v-model="payload.invitation"
         required
         type="text"
         name="invitation"
         :placeholder="labels.placeholder"
       >
     </div>
-    <template v-if="signupRequiresApproval && formCustomization && formCustomization.fields && formCustomization.fields.length > 0">
+    <template v-if="signupRequiresApproval && (formCustomization?.fields.length ?? 0) > 0">
       <div
-        v-for="(field, idx) in formCustomization.fields"
+        v-for="(field, idx) in formCustomization?.fields"
         :key="idx"
         :class="[{required: field.required}, 'field']"
       >
@@ -126,18 +200,16 @@
         <textarea
           v-if="field.input_type === 'long_text'"
           :id="`custom-field-${idx}`"
-          :value="customFields[field.label]"
+          v-model="payload.request_fields[field.label]"
           :required="field.required"
           rows="5"
-          @input="$set(customFields, field.label, $event.target.value)"
         />
         <input
           v-else
           :id="`custom-field-${idx}`"
+          v-model="payload.request_fields[field.label]"
           type="text"
-          :value="customFields[field.label]"
           :required="field.required"
-          @input="$set(customFields, field.label, $event.target.value)"
         >
       </div>
     </template>
@@ -145,103 +217,7 @@
       :class="['ui', buttonClasses, {'loading': isLoading}, ' right floated button']"
       type="submit"
     >
-      <translate translate-context="Content/Signup/Button.Label">
-        Create my account
-      </translate>
+      {{ $t('components.auth.SignupForm.button.create') }}
     </button>
   </form>
 </template>
-
-<script>
-import axios from 'axios'
-import logger from '@/logging'
-
-import LoginForm from '@/components/auth/LoginForm'
-import PasswordInput from '@/components/forms/PasswordInput'
-
-export default {
-  components: {
-    LoginForm,
-    PasswordInput
-  },
-  props: {
-    defaultInvitation: { type: String, required: false, default: null },
-    next: { type: String, default: '/' },
-    buttonClasses: { type: String, default: 'success' },
-    customization: { type: Object, default: null },
-    fetchDescriptionHtml: { type: Boolean, default: false },
-    signupApprovalEnabled: { type: Boolean, default: null, required: false }
-  },
-  data () {
-    return {
-      username: '',
-      email: '',
-      password: '',
-      isLoadingInstanceSetting: true,
-      errors: [],
-      isLoading: false,
-      invitation: this.defaultInvitation,
-      customFields: {},
-      submitted: false
-    }
-  },
-  computed: {
-    labels () {
-      const placeholder = this.$pgettext(
-        'Content/Signup/Form/Placeholder',
-        'Enter your invitation code (case insensitive)'
-      )
-      const usernamePlaceholder = this.$pgettext('Content/Signup/Form/Placeholder', 'Enter your username')
-      const emailPlaceholder = this.$pgettext('Content/Signup/Form/Placeholder', 'Enter your e-mail address')
-      return {
-        usernamePlaceholder,
-        emailPlaceholder,
-        placeholder
-      }
-    },
-    formCustomization () {
-      return this.customization || this.$store.state.instance.settings.moderation.signup_form_customization.value
-    },
-    signupRequiresApproval () {
-      if (this.signupApprovalEnabled === null) {
-        return this.$store.state.instance.settings.moderation.signup_approval_enabled.value
-      }
-      return this.signupApprovalEnabled
-    }
-  },
-  created () {
-    const self = this
-    this.$store.dispatch('instance/fetchSettings', {
-      callback: function () {
-        self.isLoadingInstanceSetting = false
-      }
-    })
-  },
-  methods: {
-    submit () {
-      const self = this
-      self.isLoading = true
-      this.errors = []
-      const payload = {
-        username: this.username,
-        password1: this.password,
-        password2: this.password,
-        email: this.email,
-        invitation: this.invitation,
-        request_fields: this.customFields
-      }
-      return axios.post('auth/registration/', payload).then(
-        response => {
-          logger.default.info('Successfully created account')
-          self.submitted = true
-          self.isLoading = false
-        },
-        error => {
-          self.errors = error.backendErrors
-          self.isLoading = false
-        }
-      )
-    }
-  }
-}
-</script>

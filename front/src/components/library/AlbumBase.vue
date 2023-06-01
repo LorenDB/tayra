@@ -1,3 +1,121 @@
+<script setup lang="ts">
+import type { Track, Album, Artist, Library } from '~/types'
+
+import { momentFormat } from '~/utils/filters'
+import { computed, reactive, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import { sum } from 'lodash-es'
+
+import axios from 'axios'
+
+import ArtistLabel from '~/components/audio/ArtistLabel.vue'
+import PlayButton from '~/components/audio/PlayButton.vue'
+import TagsList from '~/components/tags/List.vue'
+import AlbumDropdown from './AlbumDropdown.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+
+interface Events {
+  (e: 'deleted'): void
+}
+
+interface Props {
+  id: number
+}
+
+const emit = defineEmits<Events>()
+const props = defineProps<Props>()
+
+const object = ref<Album | null>(null)
+const artist = ref<Artist | null>(null)
+const libraries = ref([] as Library[])
+const paginateBy = ref(50)
+
+const totalTracks = computed(() => object.value?.tracks_count ?? 0)
+const isChannel = computed(() => !!object.value?.artist.channel)
+const isAlbum = computed(() => object.value?.artist.content_category === 'music')
+const isSerie = computed(() => object.value?.artist.content_category === 'podcast')
+const totalDuration = computed(() => sum((object.value?.tracks ?? []).map(track => track.uploads[0]?.duration ?? 0)))
+const publicLibraries = computed(() => libraries.value?.filter(library => library.privacy_level === 'everyone') ?? [])
+
+const { t } = useI18n()
+const labels = computed(() => ({
+  title: t('components.library.AlbumBase.title')
+}))
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+
+  const albumResponse = await axios.get(`albums/${props.id}/`, { params: { refresh: 'true' } })
+  const artistResponse = await axios.get(`artists/${albumResponse.data.artist.id}/`)
+
+  artist.value = artistResponse.data
+  if (artist.value?.channel) {
+    artist.value.channel.artist = artist.value
+  }
+
+  object.value = albumResponse.data
+  if (object.value) {
+    object.value.tracks = []
+  }
+
+  fetchTracks()
+  isLoading.value = false
+}
+
+const tracks = reactive([] as Track[])
+watch(tracks, (tracks) => {
+  if (object.value) {
+    object.value.tracks = tracks
+  }
+})
+
+const isLoadingTracks = ref(false)
+const fetchTracks = async () => {
+  if (isLoadingTracks.value) return
+  isLoadingTracks.value = true
+  tracks.length = 0
+  let url = 'tracks/'
+  try {
+    while (url) {
+      const response = await axios.get(url, {
+        params: {
+          ordering: 'disc_number,position',
+          album: props.id,
+          page_size: paginateBy.value,
+          include_channels: true
+        }
+      })
+
+      url = response.data.next
+      tracks.push(...response.data.results)
+    }
+  } catch (error) {
+    console.error(error)
+  } finally {
+    isLoadingTracks.value = false
+  }
+}
+
+watch(() => props.id, fetchData, { immediate: true })
+
+const router = useRouter()
+const remove = async () => {
+  isLoading.value = true
+  try {
+    await axios.delete(`albums/${object.value?.id}`)
+    emit('deleted')
+    router.push({ name: 'library.artists.detail', params: { id: artist.value?.id } })
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
   <main>
     <div
@@ -59,25 +177,12 @@
                   />
                   <template v-if="totalTracks > 0">
                     <div class="ui hidden very small divider" />
-                    <translate
-                      v-if="isSerie"
-                      key="1"
-                      translate-context="Content/Channel/Paragraph"
-                      translate-plural="%{ count } episodes"
-                      :translate-n="totalTracks"
-                      :translate-params="{count: totalTracks}"
-                    >
-                      %{ count } episode
-                    </translate>
-                    <translate
-                      v-else
-                      translate-context="*/*/*"
-                      :translate-params="{count: totalTracks}"
-                      :translate-n="totalTracks"
-                      translate-plural="%{ count } tracks"
-                    >
-                      %{ count } track
-                    </translate>
+                    <span v-if="isSerie">
+                      {{ $t('components.library.AlbumBase.meta.episodes', totalTracks) }}
+                    </span>
+                    <span v-else>
+                      {{ $t('components.library.AlbumBase.meta.tracks', totalTracks) }}
+                    </span>
                   </template>
                   <div class="ui small hidden divider" />
                   <play-button
@@ -94,6 +199,7 @@
                     :is-serie="isSerie"
                     :is-channel="isChannel"
                     :artist="artist"
+                    @remove="remove"
                   />
                 </div>
               </div>
@@ -105,7 +211,10 @@
                 >
                   {{ object.title }}
                 </h2>
-                <artist-label :artist="artist" />
+                <artist-label
+                  v-if="artist"
+                  :artist="artist"
+                />
               </header>
             </div>
             <div
@@ -133,35 +242,27 @@
                   {{ object.title }}
                 </h2>
                 <artist-label
-                  class="rounded"
+                  v-if="artist"
                   :artist="artist"
+                  class="rounded"
                 />
               </header>
               <div
                 v-if="object.release_date || (totalTracks > 0)"
                 class="ui small hidden divider"
               />
-              <span v-if="object.release_date">{{ object.release_date | moment('Y') }} · </span>
+              <template v-if="object.release_date">
+                {{ momentFormat(new Date(object.release_date ?? '1970-01-01'), 'Y') }}
+                <span class="middle middledot symbol" />
+              </template>
               <template v-if="totalTracks > 0">
-                <translate
-                  v-if="isSerie"
-                  key="1"
-                  translate-context="Content/Channel/Paragraph"
-                  translate-plural="%{ count } episodes"
-                  :translate-n="totalTracks"
-                  :translate-params="{count: totalTracks}"
-                >
-                  %{ count } episode
-                </translate>
-                <translate
-                  v-else
-                  translate-context="*/*/*"
-                  :translate-params="{count: totalTracks}"
-                  :translate-n="totalTracks"
-                  translate-plural="%{ count } tracks"
-                >
-                  %{ count } track
-                </translate> ·
+                <span v-if="isSerie">
+                  {{ $t('components.library.AlbumBase.meta.episodes', totalTracks) }}
+                </span>
+                <span v-else>
+                  {{ $t('components.library.AlbumBase.meta.tracks', totalTracks) }}
+                </span>
+                <span class="middle middledot symbol" />
               </template>
               <human-duration
                 v-if="totalDuration > 0"
@@ -182,6 +283,7 @@
                 :is-serie="isSerie"
                 :is-channel="isChannel"
                 :artist="artist"
+                @remove="remove"
               />
               <div v-if="(object.tags && object.tags.length > 0) || object.description || $store.state.auth.authenticated && object.is_local">
                 <div class="ui small hidden divider" />
@@ -201,9 +303,7 @@
                   :to="{name: 'library.albums.edit', params: {id: object.id }}"
                 >
                   <i class="pencil icon" />
-                  <translate translate-context="Content/*/Button.Label/Verb">
-                    Add a description…
-                  </translate>
+                  {{ $t('components.library.AlbumBase.link.addDescription') }}
                 </router-link>
               </div>
             </div>
@@ -219,9 +319,7 @@
                 :to="{name: 'library.albums.edit', params: {id: object.id }}"
               >
                 <i class="pencil icon" />
-                <translate translate-context="Content/*/Button.Label/Verb">
-                  Add a description…
-                </translate>
+                {{ $t('components.library.AlbumBase.link.addDescription') }}
               </router-link>
             </template>
           </div>
@@ -230,15 +328,13 @@
               v-if="object"
               :key="$route.fullPath"
               :paginate-by="paginateBy"
-              :page="page"
               :total-tracks="totalTracks"
               :is-serie="isSerie"
               :artist="artist"
-              :discs="discs"
               :object="object"
+              :is-loading-tracks="isLoadingTracks"
               object-type="album"
               @libraries-loaded="libraries = $event"
-              @page-changed="page = $event"
             />
           </div>
         </div>
@@ -246,119 +342,3 @@
     </template>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import lodash from '@/lodash'
-import PlayButton from '@/components/audio/PlayButton'
-import TagsList from '@/components/tags/List'
-import ArtistLabel from '@/components/audio/ArtistLabel'
-import AlbumDropdown from './AlbumDropdown'
-
-function groupByDisc (initial) {
-  function inner (acc, track) {
-    const dn = track.disc_number - initial
-    if (acc[dn] === undefined) {
-      acc.push([track])
-    } else {
-      acc[dn].push(track)
-    }
-    return acc
-  }
-  return inner
-}
-
-export default {
-  components: {
-    PlayButton,
-    TagsList,
-    ArtistLabel,
-    AlbumDropdown
-  },
-  props: { id: { type: [String, Number], required: true } },
-  data () {
-    return {
-      isLoading: true,
-      object: null,
-      artist: null,
-      discs: [],
-      libraries: [],
-      page: 1,
-      paginateBy: 50
-    }
-  },
-  computed: {
-    totalTracks () {
-      return this.object.tracks_count
-    },
-    isChannel () {
-      return !!this.object.artist.channel
-    },
-    isSerie () {
-      return this.object.artist.content_category === 'podcast'
-    },
-    isAlbum () {
-      return this.object.artist.content_category === 'music'
-    },
-    totalDuration () {
-      const durations = [0]
-      this.object.tracks.forEach((t) => {
-        if (t.uploads[0] && t.uploads[0].duration) {
-          durations.push(t.uploads[0].duration)
-        }
-      })
-      return lodash.sum(durations)
-    },
-    labels () {
-      return {
-        title: this.$pgettext('*/*/*', 'Album')
-      }
-    },
-    publicLibraries () {
-      return this.libraries.filter(l => {
-        return l.privacy_level === 'everyone'
-      })
-    }
-  },
-  watch: {
-    id () {
-      this.fetchData()
-    },
-    page () {
-      this.fetchData()
-    }
-  },
-  async created () {
-    await this.fetchData()
-  },
-  methods: {
-    async fetchData () {
-      this.isLoading = true
-      let tracksResponse = axios.get('tracks/', { params: { ordering: 'disc_number,position', album: this.id, page_size: this.paginateBy, page: this.page, include_channels: 'true' } })
-      const albumResponse = await axios.get(`albums/${this.id}/`, { params: { refresh: 'true' } })
-      const artistResponse = await axios.get(`artists/${albumResponse.data.artist.id}/`)
-      this.artist = artistResponse.data
-      if (this.artist.channel) {
-        this.artist.channel.artist = this.artist
-      }
-      tracksResponse = await tracksResponse
-      this.object = albumResponse.data
-      this.object.tracks = tracksResponse.data.results
-      this.discs = this.object.tracks.reduce(groupByDisc(this.object.tracks[0].disc_number), [])
-      this.isLoading = false
-    },
-    remove () {
-      const self = this
-      self.isLoading = true
-      axios.delete(`albums/${this.object.id}`).then((response) => {
-        self.isLoading = false
-        self.$emit('deleted')
-        self.$router.push({ name: 'library.artists.detail', params: { id: this.artist.id } })
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    }
-  }
-}
-</script>

@@ -1,6 +1,66 @@
-<!-- eslint-disable vue/no-v-html
-We render some markdown to html here, the content is set by the admin so we should be save
--->
+<script setup lang="ts">
+import { humanSize } from '~/utils/filters'
+import { useStore } from '~/store'
+import { get } from 'lodash-es'
+import { computed } from 'vue'
+
+import useMarkdown from '~/composables/useMarkdown'
+import type { NodeInfo } from '~/store/instance'
+import { useI18n } from 'vue-i18n'
+
+const store = useStore()
+const nodeinfo = computed(() => store.state.instance.nodeinfo)
+
+const { t } = useI18n()
+const labels = computed(() => ({
+  title: t('components.AboutPod.title')
+}))
+
+const podName = computed(() => get(nodeinfo.value, 'metadata.nodeName') || 'Funkwhale')
+const banner = computed(() => get(nodeinfo.value, 'metadata.banner'))
+const longDescription = useMarkdown(() => get(nodeinfo.value, 'metadata.longDescription', ''))
+const rules = useMarkdown(() => get(nodeinfo.value, 'metadata.rules', ''))
+const terms = useMarkdown(() => get(nodeinfo.value, 'metadata.terms', ''))
+const contactEmail = computed(() => get(nodeinfo.value, 'metadata.contactEmail'))
+const anonymousCanListen = computed(() => get(nodeinfo.value, 'metadata.library.anonymousCanListen'))
+const allowListEnabled = computed(() => get(nodeinfo.value, 'metadata.allowList.enabled'))
+const version = computed(() => get(nodeinfo.value, 'software.version'))
+const openRegistrations = computed(() => get(nodeinfo.value, 'openRegistrations'))
+const defaultUploadQuota = computed(() => get(nodeinfo.value, 'metadata.defaultUploadQuota'))
+const federationEnabled = computed(() => get(nodeinfo.value, 'metadata.library.federationEnabled'))
+
+const onDesktop = computed(() => window.innerWidth > 800)
+
+const stats = computed(() => {
+  const info = nodeinfo.value ?? {} as NodeInfo
+
+  const data = {
+    users: get(info, 'usage.users.activeMonth', null),
+    hours: get(info, 'metadata.library.music.hours', null),
+    artists: get(info, 'metadata.library.artists.total', null),
+    albums: get(info, 'metadata.library.albums.total', null),
+    tracks: get(info, 'metadata.library.tracks.total', null),
+    listenings: get(info, 'metadata.usage.listenings.total', null)
+  }
+
+  if (data.users === null || data.artists === null) {
+    return data
+  }
+
+  return data
+})
+
+const headerStyle = computed(() => {
+  if (!banner.value) {
+    return ''
+  }
+
+  return {
+    backgroundImage: `url(${store.getters['instance/absoluteUrl'](banner.value)})`
+  }
+})
+</script>
+
 <template>
   <main
     v-title="labels.title"
@@ -31,42 +91,32 @@ We render some markdown to html here, the content is set by the admin so we shou
                   to="/about/pod"
                   class="item"
                 >
-                  <translate translate-context="Content/About/Header">
-                    About this pod
-                  </translate>
+                  {{ $t('components.AboutPod.link.about') }}
                 </router-link>
                 <router-link
                   to="/about/pod#rules"
                   class="item"
                 >
-                  <translate translate-context="Content/About/Header">
-                    Rules
-                  </translate>
+                  {{ $t('components.AboutPod.link.rules') }}
                 </router-link>
                 <router-link
                   to="/about/pod#terms"
                   class="item"
                 >
-                  <translate translate-context="Content/About/Header">
-                    Terms and privacy policy
-                  </translate>
+                  {{ $t('components.AboutPod.link.terms') }}
                 </router-link>
                 <router-link
                   to="/about/pod#features"
                   class="item"
                 >
-                  <translate translate-context="Content/About/Header">
-                    Features
-                  </translate>
+                  {{ $t('components.AboutPod.link.features') }}
                 </router-link>
                 <router-link
                   v-if="stats"
                   to="/about/pod#statistics"
                   class="item"
                 >
-                  <translate translate-context="Content/About/Header">
-                    Statistics
-                  </translate>
+                  {{ $t('components.AboutPod.link.statistics') }}
                 </router-link>
               </div>
             </div>
@@ -76,63 +126,49 @@ We render some markdown to html here, the content is set by the admin so we shou
                 id="description about-this-pod"
                 class="ui header"
               >
-                <translate translate-context="Content/About/Header">
-                  About this pod
-                </translate>
+                {{ $t('components.AboutPod.header.about') }}
               </h2>
-              <div
+              <sanitized-html
                 v-if="longDescription"
-                v-html="markdown.makeHtml(longDescription)"
+                :html="longDescription"
               />
               <p v-else>
-                <translate translate-context="Content/About/Paragraph">
-                  No description available.
-                </translate>
+                {{ $t('components.AboutPod.placeholder.noDescription') }}
               </p>
 
               <h3
                 id="rules"
                 class="ui header"
               >
-                <translate translate-context="Content/About/Header">
-                  Rules
-                </translate>
+                {{ $t('components.AboutPod.header.rules') }}
               </h3>
-              <div
+              <sanitized-html
                 v-if="rules"
-                v-html="markdown.makeHtml(rules)"
+                :html="rules"
               />
               <p v-else>
-                <translate translate-context="Content/About/Paragraph">
-                  No rules available.
-                </translate>
+                {{ $t('components.AboutPod.placeholder.noRules') }}
               </p>
 
               <h3
                 id="terms"
                 class="ui header"
               >
-                <translate translate-context="Content/About/Header">
-                  Terms and privacy policy
-                </translate>
+                {{ $t('components.AboutPod.header.terms') }}
               </h3>
-              <div
+              <sanitized-html
                 v-if="terms"
-                v-html="markdown.makeHtml(terms)"
+                :html="terms"
               />
               <p v-else>
-                <translate translate-context="Content/About/Paragraph">
-                  No terms available.
-                </translate>
+                {{ $t('components.AboutPod.placeholder.noTerms') }}
               </p>
 
               <h3
                 id="features"
                 class="header"
               >
-                <translate translate-context="Content/About/Header/Name">
-                  Features
-                </translate>
+                {{ $t('components.AboutPod.header.features') }}
               </h3>
               <div class="features-container ui two column stackable grid">
                 <div class="column">
@@ -140,9 +176,7 @@ We render some markdown to html here, the content is set by the admin so we shou
                     <tbody>
                       <tr>
                         <td>
-                          <translate translate-context="*/*/*">
-                            Funkwhale version
-                          </translate>
+                          {{ $t('components.AboutPod.feature.version') }}
                         </td>
                         <td
                           v-if="version"
@@ -157,15 +191,13 @@ We render some markdown to html here, the content is set by the admin so we shou
                           class="right aligned"
                         >
                           <span class="features-status ui text">
-                            <translate translate-context="*/*/*">N/A</translate>
+                            {{ $t('components.AboutPod.notApplicable') }}
                           </span>
                         </td>
                       </tr>
                       <tr>
                         <td>
-                          <translate translate-context="*/*/*">
-                            Federation
-                          </translate>
+                          {{ $t('components.AboutPod.feature.federation') }}
                         </td>
                         <td
                           v-if="federationEnabled"
@@ -173,7 +205,7 @@ We render some markdown to html here, the content is set by the admin so we shou
                         >
                           <span class="features-status ui text">
                             <i class="check icon" />
-                            <translate translate-context="*/*/*/State of feature">Enabled</translate>
+                            {{ $t('components.AboutPod.feature.status.enabled') }}
                           </span>
                         </td>
                         <td
@@ -182,15 +214,13 @@ We render some markdown to html here, the content is set by the admin so we shou
                         >
                           <span class="features-status ui text">
                             <i class="x icon" />
-                            <translate translate-context="*/*/*/State of feature">Disabled</translate>
+                            {{ $t('components.AboutPod.feature.status.disabled') }}
                           </span>
                         </td>
                       </tr>
                       <tr>
                         <td>
-                          <translate translate-context="*/*/*">
-                            Allow-list
-                          </translate>
+                          {{ $t('components.AboutPod.feature.allowList') }}
                         </td>
                         <td
                           v-if="allowListEnabled"
@@ -198,7 +228,7 @@ We render some markdown to html here, the content is set by the admin so we shou
                         >
                           <span class="features-status ui text">
                             <i class="check icon" />
-                            <translate translate-context="*/*/*/State of feature">Enabled</translate>
+                            {{ $t('components.AboutPod.feature.status.enabled') }}
                           </span>
                         </td>
                         <td
@@ -207,7 +237,7 @@ We render some markdown to html here, the content is set by the admin so we shou
                         >
                           <span class="features-status ui text">
                             <i class="x icon" />
-                            <translate translate-context="*/*/*/State of feature">Disabled</translate>
+                            {{ $t('components.AboutPod.feature.status.disabled') }}
                           </span>
                         </td>
                       </tr>
@@ -219,9 +249,7 @@ We render some markdown to html here, the content is set by the admin so we shou
                     <tbody>
                       <tr>
                         <td>
-                          <translate translate-context="*/*/*">
-                            Anonymous access
-                          </translate>
+                          {{ $t('components.AboutPod.feature.anonymousAccess') }}
                         </td>
                         <td
                           v-if="anonymousCanListen"
@@ -229,7 +257,7 @@ We render some markdown to html here, the content is set by the admin so we shou
                         >
                           <span class="features-status ui text">
                             <i class="check icon" />
-                            <translate translate-context="*/*/*/State of feature">Enabled</translate>
+                            {{ $t('components.AboutPod.feature.status.enabled') }}
                           </span>
                         </td>
                         <td
@@ -238,15 +266,13 @@ We render some markdown to html here, the content is set by the admin so we shou
                         >
                           <span class="features-status ui text">
                             <i class="x icon" />
-                            <translate translate-context="*/*/*/State of feature">Disabled</translate>
+                            {{ $t('components.AboutPod.feature.status.disabled') }}
                           </span>
                         </td>
                       </tr>
                       <tr>
                         <td>
-                          <translate translate-context="*/*/*">
-                            Registrations
-                          </translate>
+                          {{ $t('components.AboutPod.feature.registrations') }}
                         </td>
                         <td
                           v-if="openRegistrations"
@@ -254,7 +280,7 @@ We render some markdown to html here, the content is set by the admin so we shou
                         >
                           <span class="features-status ui text">
                             <i class="check icon" />
-                            <translate translate-context="*/*/*/State of registrations">Open</translate>
+                            {{ $t('components.AboutPod.feature.status.open') }}
                           </span>
                         </td>
                         <td
@@ -263,22 +289,20 @@ We render some markdown to html here, the content is set by the admin so we shou
                         >
                           <span class="features-status ui text">
                             <i class="x icon" />
-                            <translate translate-context="*/*/*/State of registrations">Closed</translate>
+                            {{ $t('components.AboutPod.feature.status.closed') }}
                           </span>
                         </td>
                       </tr>
                       <tr>
                         <td>
-                          <translate translate-context="*/*/*">
-                            Upload quota
-                          </translate>
+                          {{ $t('components.AboutPod.feature.quota') }}
                         </td>
                         <td
                           v-if="defaultUploadQuota"
                           class="right aligned"
                         >
                           <span class="features-status ui text">
-                            {{ defaultUploadQuota * 1000 * 1000 | humanSize }}
+                            {{ humanSize(defaultUploadQuota * 1000 * 1000) }}
                           </span>
                         </td>
                         <td
@@ -286,7 +310,7 @@ We render some markdown to html here, the content is set by the admin so we shou
                           class="right aligned"
                         >
                           <span class="features-status ui text">
-                            <translate translate-context="*/*/*">N/A</translate>
+                            {{ $t('components.AboutPod.notApplicable') }}
                           </span>
                         </td>
                       </tr>
@@ -300,9 +324,7 @@ We render some markdown to html here, the content is set by the admin so we shou
                   id="statistics"
                   class="header"
                 >
-                  <translate translate-context="Content/About/Header">
-                    Statistics
-                  </translate>
+                  {{ $t('components.AboutPod.header.statistics') }}
                 </h3>
                 <div class="statistics-container">
                   <div
@@ -310,13 +332,9 @@ We render some markdown to html here, the content is set by the admin so we shou
                     class="statistics-statistic"
                   >
                     <span class="statistics-figure ui text">
-                      <span class="ui big text"><strong>{{ parseInt(stats.hours).toLocaleString($store.state.ui.momentLocale) }}</strong></span>
+                      <span class="ui big text"><strong>{{ stats.hours.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                       <br>
-                      <translate
-                        translate-context="Content/About/*"
-                        :translate-n="parseInt(stats.hours)"
-                        translate-plural="hours of music"
-                      >hour of music</translate>
+                      {{ $t('components.AboutPod.stat.hoursOfMusic', stats.hours) }}
                     </span>
                   </div>
                   <div
@@ -326,11 +344,7 @@ We render some markdown to html here, the content is set by the admin so we shou
                     <span class="statistics-figure ui text">
                       <span class="ui big text"><strong>{{ stats.artists.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                       <br>
-                      <translate
-                        translate-context="Content/About/*"
-                        :translate-n="stats.artists"
-                        translate-plural="artists"
-                      >artist</translate>
+                      {{ $t('components.AboutPod.stat.artistsCount', stats.artists) }}
                     </span>
                   </div>
                   <div
@@ -340,11 +354,7 @@ We render some markdown to html here, the content is set by the admin so we shou
                     <span class="statistics-figure ui text">
                       <span class="ui big text"><strong>{{ stats.albums.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                       <br>
-                      <translate
-                        translate-context="Content/About/*"
-                        :translate-n="stats.albums"
-                        translate-plural="albums"
-                      >album</translate>
+                      {{ $t('components.AboutPod.stat.albumsCount', stats.albums) }}
                     </span>
                   </div>
                   <div
@@ -354,11 +364,7 @@ We render some markdown to html here, the content is set by the admin so we shou
                     <span class="statistics-figure ui text">
                       <span class="ui big text"><strong>{{ stats.tracks.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                       <br>
-                      <translate
-                        translate-context="Content/About/*"
-                        :translate-n="stats.tracks"
-                        translate-plural="tracks"
-                      >track</translate>
+                      {{ $t('components.AboutPod.stat.tracksCount', stats.tracks) }}
                     </span>
                   </div>
                   <div
@@ -368,11 +374,7 @@ We render some markdown to html here, the content is set by the admin so we shou
                     <span class="statistics-figure ui text">
                       <span class="ui big text"><strong>{{ stats.users.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                       <br>
-                      <translate
-                        translate-context="Content/About/*"
-                        :translate-n="stats.users"
-                        translate-plural="active users"
-                      >active user</translate>
+                      {{ $t('components.AboutPod.stat.activeUsers', stats.users) }}
                     </span>
                   </div>
                   <div
@@ -382,11 +384,7 @@ We render some markdown to html here, the content is set by the admin so we shou
                     <span class="statistics-figure ui text">
                       <span class="ui big text"><strong>{{ stats.listenings.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                       <br>
-                      <translate
-                        translate-context="Content/About/*"
-                        :translate-n="stats.listenings"
-                        translate-plural="listenings"
-                      >listening</translate>
+                      {{ $t('components.AboutPod.stat.listeningsCount', stats.listenings) }}
                     </span>
                   </div>
                 </div>
@@ -397,18 +395,13 @@ We render some markdown to html here, the content is set by the admin so we shou
                   id="contact"
                   class="ui header"
                 >
-                  <translate translate-context="Content/About/Header">
-                    Contact
-                  </translate>
+                  {{ $t('components.AboutPod.header.contact') }}
                 </h3>
                 <a
                   v-if="contactEmail"
                   :href="`mailto:${contactEmail}`"
                 >
-                  <translate
-                    translate-context="Content/About/Email"
-                    :translate-params="{ email: contactEmail }"
-                  >Send us an email: {{ contactEmail }}</translate>
+                  {{ $t('components.AboutPod.message.contact', { contactEmail }) }}
                 </a>
               </template>
 
@@ -419,9 +412,7 @@ We render some markdown to html here, the content is set by the admin so we shou
                   class="ui left floated basic secondary button"
                 >
                   <i class="icon arrow left" />
-                  <translate translate-context="Content/About/Paragraph">
-                    Introduction
-                  </translate>
+                  {{ $t('components.AboutPod.link.introduction') }}
                 </router-link>
               </div>
             </div>
@@ -431,99 +422,3 @@ We render some markdown to html here, the content is set by the admin so we shou
     </div>
   </main>
 </template>
-
-<script>
-import { mapState } from 'vuex'
-import _ from '@/lodash'
-import showdown from 'showdown'
-
-export default {
-  data () {
-    return {
-      markdown: new showdown.Converter(),
-      showAllowedDomains: false
-    }
-  },
-  computed: {
-
-    ...mapState({
-      nodeinfo: state => state.instance.nodeinfo
-    }),
-    labels () {
-      return {
-        title: this.$pgettext('Head/About/Title', 'About')
-      }
-    },
-    podName () {
-      return _.get(this.nodeinfo, 'metadata.nodeName') || 'Funkwhale'
-    },
-    banner () {
-      return _.get(this.nodeinfo, 'metadata.banner')
-    },
-    shortDescription () {
-      return _.get(this.nodeinfo, 'metadata.shortDescription')
-    },
-    longDescription () {
-      return _.get(this.nodeinfo, 'metadata.longDescription')
-    },
-    rules () {
-      return _.get(this.nodeinfo, 'metadata.rules')
-    },
-    terms () {
-      return _.get(this.nodeinfo, 'metadata.terms')
-    },
-    stats () {
-      const data = {
-        users: _.get(this.nodeinfo, 'usage.users.activeMonth', null),
-        hours: _.get(this.nodeinfo, 'metadata.library.music.hours', null),
-        artists: _.get(this.nodeinfo, 'metadata.library.artists.total', null),
-        albums: _.get(this.nodeinfo, 'metadata.library.albums.total', null),
-        tracks: _.get(this.nodeinfo, 'metadata.library.tracks.total', null),
-        listenings: _.get(this.nodeinfo, 'metadata.usage.listenings.total', null)
-      }
-      if (data.users === null || data.artists === null) {
-        return
-      }
-      return data
-    },
-    contactEmail () {
-      return _.get(this.nodeinfo, 'metadata.contactEmail')
-    },
-    anonymousCanListen () {
-      return _.get(this.nodeinfo, 'metadata.library.anonymousCanListen')
-    },
-    allowListEnabled () {
-      return _.get(this.nodeinfo, 'metadata.allowList.enabled')
-    },
-    allowListDomains () {
-      return _.get(this.nodeinfo, 'metadata.allowList.domains')
-    },
-    version () {
-      return _.get(this.nodeinfo, 'software.version')
-    },
-    openRegistrations () {
-      return _.get(this.nodeinfo, 'openRegistrations')
-    },
-    defaultUploadQuota () {
-      return _.get(this.nodeinfo, 'metadata.defaultUploadQuota')
-    },
-    federationEnabled () {
-      return _.get(this.nodeinfo, 'metadata.library.federationEnabled')
-    },
-    headerStyle () {
-      if (!this.banner) {
-        return ''
-      }
-      return (
-        'background-image: url(' +
-        this.$store.getters['instance/absoluteUrl'](this.banner) +
-        ')'
-      )
-    },
-    onDesktop () {
-      if (window.innerWidth > 800) return true
-      return false
-    }
-  }
-}
-</script>

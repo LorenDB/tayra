@@ -1,49 +1,138 @@
+<script setup lang="ts">
+import type { SmartSearchProps } from '~/composables/navigation/useSmartSearch'
+import type { OrderingProps } from '~/composables/navigation/useOrdering'
+import type { Report, BackendResponse } from '~/types'
+import type { RouteRecordName } from 'vue-router'
+import type { OrderingField } from '~/store/ui'
+
+import { computed, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+import ReportCategoryDropdown from '~/components/moderation/ReportCategoryDropdown.vue'
+import ReportCard from '~/components/manage/moderation/ReportCard.vue'
+import Pagination from '~/components/vui/Pagination.vue'
+
+import useSmartSearch from '~/composables/navigation/useSmartSearch'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useOrdering from '~/composables/navigation/useOrdering'
+import useErrorHandler from '~/composables/useErrorHandler'
+import usePage from '~/composables/navigation/usePage'
+
+interface Props extends SmartSearchProps, OrderingProps {
+  mode?: 'card'
+
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  defaultQuery?: string
+  orderingConfigName?: RouteRecordName
+  updateUrl?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  defaultQuery: '',
+  updateUrl: false,
+  mode: 'card',
+  orderingConfigName: undefined
+})
+
+const search = ref()
+
+const page = usePage()
+const result = ref<BackendResponse<Report>>()
+
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props)
+const { onSearch, query, addSearchToken, getTokenValue } = useSmartSearch(props)
+
+const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
+  ['creation_date', 'creation_date'],
+  ['applied_date', 'applied_date']
+]
+
+const store = useStore()
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  const params = {
+    page: page.value,
+    page_size: paginateBy.value,
+    q: query.value,
+    ordering: orderingString.value
+  }
+
+  try {
+    const response = await axios.get('manage/moderation/reports/', {
+      params
+    })
+
+    result.value = response.data
+    if (query.value === 'resolved:no') {
+      console.log('Refreshing sidebar notifications')
+      store.commit('ui/incrementNotifications', {
+        type: 'pendingReviewReports',
+        value: response.data.count
+      })
+    }
+  } catch (error) {
+    useErrorHandler(error as Error)
+    result.value = undefined
+  } finally {
+    isLoading.value = false
+  }
+}
+
+onSearch(() => (page.value = 1))
+watch([page, query], fetchData)
+onOrderingUpdate(fetchData)
+fetchData()
+
+const { t } = useI18n()
+const sharedLabels = useSharedLabels()
+const labels = computed(() => ({
+  searchPlaceholder: t('views.admin.moderation.ReportsList.placeholder.search'),
+  reports: t('views.admin.moderation.ReportsList.title')
+}))
+</script>
+
 <template>
   <main v-title="labels.reports">
     <section class="ui vertical stripe segment">
       <h2 class="ui header">
-        <translate translate-context="*/Moderation/*/Noun">
-          Reports
-        </translate>
+        {{ $t('views.admin.moderation.ReportsList.header.reports') }}
       </h2>
       <div class="ui hidden divider" />
       <div class="ui inline form">
         <div class="fields">
           <div class="ui field">
-            <label for="reports-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
-            <form @submit.prevent="search.query = $refs.search.value">
+            <label for="reports-search">{{ $t('views.admin.moderation.ReportsList.label.search') }}</label>
+            <form @submit.prevent="query = search.value">
               <input
                 id="reports-search"
                 ref="search"
                 name="search"
                 type="text"
-                :value="search.query"
+                :value="query"
                 :placeholder="labels.searchPlaceholder"
               >
             </form>
           </div>
           <div class="field">
-            <label for="reports-status"><translate translate-context="*/*/*">Status</translate></label>
+            <label for="reports-status">{{ $t('views.admin.moderation.ReportsList.label.status') }}</label>
             <select
               id="reports-status"
               class="ui dropdown"
               :value="getTokenValue('resolved', '')"
-              @change="addSearchToken('resolved', $event.target.value)"
+              @change="addSearchToken('resolved', ($event.target as HTMLSelectElement).value)"
             >
               <option value="">
-                <translate translate-context="Content/*/Dropdown">
-                  All
-                </translate>
+                {{ $t('views.admin.moderation.ReportsList.option.status.all') }}
               </option>
               <option value="yes">
-                <translate translate-context="Content/*/*/Short">
-                  Resolved
-                </translate>
+                {{ $t('views.admin.moderation.ReportsList.option.status.resolved') }}
               </option>
               <option value="no">
-                <translate translate-context="Content/*/*/Short">
-                  Unresolved
-                </translate>
+                {{ $t('views.admin.moderation.ReportsList.option.status.unresolved') }}
               </option>
             </select>
           </div>
@@ -51,11 +140,11 @@
             class="field"
             :all="true"
             :label="true"
-            :value="getTokenValue('category', '')"
-            @input="addSearchToken('category', $event)"
+            :model-value="getTokenValue('category', '')"
+            @update:model-value="addSearchToken('category', $event)"
           />
           <div class="field">
-            <label for="reports-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
+            <label for="reports-ordering">{{ $t('views.admin.moderation.ReportsList.ordering.label') }}</label>
             <select
               id="reports-ordering"
               v-model="ordering"
@@ -71,21 +160,17 @@
             </select>
           </div>
           <div class="field">
-            <label for="reports-ordering-direction"><translate translate-context="Content/Search/Dropdown.Label/Noun">Order</translate></label>
+            <label for="reports-ordering-direction">{{ $t('views.admin.moderation.ReportsList.ordering.direction.label') }}</label>
             <select
               id="reports-ordering-direction"
               v-model="orderingDirection"
               class="ui dropdown"
             >
               <option value="+">
-                <translate translate-context="Content/Search/Dropdown">
-                  Ascending
-                </translate>
+                {{ $t('views.admin.moderation.ReportsList.ordering.direction.ascending') }}
               </option>
               <option value="-">
-                <translate translate-context="Content/Search/Dropdown">
-                  Descending
-                </translate>
+                {{ $t('views.admin.moderation.ReportsList.ordering.direction.descending') }}
               </option>
             </select>
           </div>
@@ -114,131 +199,11 @@
       <div class="ui center aligned basic segment">
         <pagination
           v-if="result && result.count > paginateBy"
-          :current="page"
+          v-model:current="page"
           :paginate-by="paginateBy"
           :total="result.count"
-          @page-changed="selectPage"
         />
       </div>
     </section>
   </main>
 </template>
-
-<script>
-
-import axios from 'axios'
-import _ from '@/lodash'
-import time from '@/utils/time'
-import Pagination from '@/components/Pagination'
-import OrderingMixin from '@/components/mixins/Ordering'
-import TranslationsMixin from '@/components/mixins/Translations'
-import ReportCard from '@/components/manage/moderation/ReportCard'
-import ReportCategoryDropdown from '@/components/moderation/ReportCategoryDropdown'
-import { normalizeQuery, parseTokens } from '@/search'
-import SmartSearchMixin from '@/components/mixins/SmartSearch'
-
-export default {
-  components: {
-    Pagination,
-    ReportCard,
-    ReportCategoryDropdown
-  },
-  mixins: [OrderingMixin, TranslationsMixin, SmartSearchMixin],
-  props: {
-    mode: { type: String, default: 'card' }
-  },
-  data () {
-    return {
-      time,
-      isLoading: false,
-      result: null,
-      page: 1,
-      search: {
-        query: this.defaultQuery,
-        tokens: parseTokens(normalizeQuery(this.defaultQuery))
-      },
-      orderingOptions: [
-        ['creation_date', 'creation_date'],
-        ['applied_date', 'applied_date']
-      ],
-      targets: {
-        track: {}
-      }
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        searchPlaceholder: this.$pgettext('Content/Search/Input.Placeholder', 'Search by account, summary, domain…'),
-        reports: this.$pgettext('*/Moderation/*/Noun', 'Reports')
-      }
-    }
-  },
-  watch: {
-    search (newValue) {
-      this.page = 1
-      this.fetchData()
-    },
-    page () {
-      this.fetchData()
-    },
-    ordering () {
-      this.fetchData()
-    },
-    orderingDirection () {
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      const params = _.merge({
-        page: this.page,
-        page_size: this.paginateBy,
-        q: this.search.query,
-        ordering: this.getOrderingAsString()
-      }, this.filters)
-      const self = this
-      self.isLoading = true
-      this.result = null
-      axios.get('manage/moderation/reports/', { params: params }).then((response) => {
-        self.result = response.data
-        self.isLoading = false
-        if (self.search.query === 'resolved:no') {
-          console.log('Refreshing sidebar notifications')
-          self.$store.commit('ui/incrementNotifications', { type: 'pendingReviewReports', value: response.data.count })
-        }
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    selectPage: function (page) {
-      this.page = page
-    },
-    handle (type, id, value) {
-      if (type === 'delete') {
-        this.exclude.push(id)
-      }
-
-      this.result.results.forEach((e) => {
-        if (e.uuid === id) {
-          e.is_approved = value
-        }
-      })
-    },
-    getCurrentState (target) {
-      if (!target) {
-        return {}
-      }
-      if (this.targets[target.type] && this.targets[target.type][String(target.id)]) {
-        return this.targets[target.type][String(target.id)].currentState
-      }
-      return {}
-    }
-  }
-}
-
-</script>

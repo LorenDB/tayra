@@ -1,6 +1,6 @@
 import json
-import pytest
 
+import pytest
 from django.urls import reverse
 
 from funkwhale_api.users import models
@@ -19,6 +19,7 @@ def test_apps_post(api_client, db):
     assert response.status_code == 201
 
     app = models.Application.objects.get(name=data["name"])
+    setattr(app, "client_secret", response.data["client_secret"])
 
     assert app.client_type == models.Application.CLIENT_CONFIDENTIAL
     assert app.authorization_grant_type == models.Application.GRANT_AUTHORIZATION_CODE
@@ -40,6 +41,7 @@ def test_apps_post_logged_in_user(logged_in_api_client, db):
     assert response.status_code == 201
 
     app = models.Application.objects.get(name=data["name"])
+    setattr(app, "client_secret", response.data["client_secret"])
 
     assert app.client_type == models.Application.CLIENT_CONFIDENTIAL
     assert app.authorization_grant_type == models.Application.GRANT_AUTHORIZATION_CODE
@@ -294,12 +296,17 @@ def test_token_view_post(api_client, factories):
     app = grant.application
     url = reverse("api:v1:oauth:token")
 
+    # The Client Secret is hashed on save, so we need to set it manually to something
+    _client_secret = "random_langer_code_bla_bla"
+    app.client_secret = _client_secret
+    app.save()
+
     response = api_client.post(
         url,
         {
             "redirect_uri": app.redirect_uris,
             "client_id": app.client_id,
-            "client_secret": app.client_secret,
+            "client_secret": _client_secret,
             "grant_type": "authorization_code",
             "code": grant.code,
         },
@@ -320,7 +327,7 @@ def test_token_view_post(api_client, factories):
 
     # Now check we can use the token for auth
     response = api_client.get(
-        reverse("api:v1:users:users-me"), HTTP_AUTHORIZATION="Bearer {}".format(token)
+        reverse("api:v1:users:users-me"), HTTP_AUTHORIZATION=f"Bearer {token}"
     )
     assert response.status_code == 200
 
@@ -329,12 +336,17 @@ def test_revoke_view_post(logged_in_client, factories):
     token = factories["users.AccessToken"]()
     url = reverse("api:v1:oauth:revoke")
 
+    # The Client Secret is hashed on save, so we need to set it manually to something
+    _client_secret = "random_langer_code_bla_bla"
+    token.application.client_secret = _client_secret
+    token.application.save()
+
     response = logged_in_client.post(
         url,
         {
             "token": token.token,
             "client_id": token.application.client_id,
-            "client_secret": token.application.client_secret,
+            "client_secret": _client_secret,
         },
     )
     assert response.status_code == 200
@@ -422,7 +434,7 @@ def test_token_auth(
     settings.ACCOUNT_EMAIL_VERIFICATION = setting_value
     response = api_client.get(
         reverse("api:v1:users:users-me"),
-        HTTP_AUTHORIZATION="Bearer {}".format(token.token),
+        HTTP_AUTHORIZATION=f"Bearer {token.token}",
     )
     assert response.status_code == expected_status_code
 

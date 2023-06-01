@@ -30,7 +30,7 @@ def clean_acct(acct_string, ensure_local=True):
         raise forms.ValidationError("Invalid format")
 
     if ensure_local and hostname.lower() != settings.FEDERATION_HOSTNAME:
-        raise forms.ValidationError("Invalid hostname {}".format(hostname))
+        raise forms.ValidationError(f"Invalid hostname {hostname}")
 
     return username, hostname
 

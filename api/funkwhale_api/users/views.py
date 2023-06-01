@@ -1,24 +1,22 @@
 import json
 
+from allauth.account.adapter import get_adapter
+from dj_rest_auth import views as rest_auth_views
+from dj_rest_auth.registration import views as registration_views
 from django import http
 from django.contrib import auth
 from django.middleware import csrf
-
-from allauth.account.adapter import get_adapter
-from rest_auth import views as rest_auth_views
-from rest_auth.registration import views as registration_views
-from rest_framework import mixins
-from rest_framework import viewsets
+from drf_spectacular.utils import extend_schema, extend_schema_view
+from rest_framework import mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from funkwhale_api.common import authentication
-from funkwhale_api.common import preferences
-from funkwhale_api.common import throttling
+from funkwhale_api.common import authentication, preferences, throttling
 
 from . import models, serializers, tasks
 
 
+@extend_schema_view(post=extend_schema(operation_id="register", methods=["post"]))
 class RegisterView(registration_views.RegisterView):
     serializer_class = serializers.RegisterSerializer
     permission_classes = []
@@ -46,18 +44,22 @@ class RegisterView(registration_views.RegisterView):
         return user
 
 
+@extend_schema_view(post=extend_schema(operation_id="verify_email"))
 class VerifyEmailView(registration_views.VerifyEmailView):
     action = "verify-email"
 
 
+@extend_schema_view(post=extend_schema(operation_id="change_password"))
 class PasswordChangeView(rest_auth_views.PasswordChangeView):
     action = "password-change"
 
 
+@extend_schema_view(post=extend_schema(operation_id="reset_password"))
 class PasswordResetView(rest_auth_views.PasswordResetView):
     action = "password-reset"
 
 
+@extend_schema_view(post=extend_schema(operation_id="confirm_password_reset"))
 class PasswordResetConfirmView(rest_auth_views.PasswordResetConfirmView):
     action = "password-reset-confirm"
 
@@ -69,6 +71,8 @@ class UserViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     lookup_value_regex = r"[a-zA-Z0-9-_.]+"
     required_scope = "profile"
 
+    @extend_schema(operation_id="get_authenticated_user", methods=["get"])
+    @extend_schema(operation_id="delete_authenticated_user", methods=["delete"])
     @action(methods=["get", "delete"], detail=False)
     def me(self, request, *args, **kwargs):
         """Return information about the current user or delete it"""
@@ -83,6 +87,7 @@ class UserViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
         serializer = serializers.MeSerializer(request.user)
         return Response(serializer.data)
 
+    @extend_schema(operation_id="update_settings")
     @action(methods=["post"], detail=False, url_name="settings", url_path="settings")
     def set_settings(self, request, *args, **kwargs):
         """Return information about the current user or delete it"""
@@ -114,6 +119,7 @@ class UserViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
         data = {"subsonic_api_token": self.request.user.subsonic_api_token}
         return Response(data)
 
+    @extend_schema(operation_id="change_email", responses={200: None, 403: None})
     @action(
         methods=["post"],
         required_scope="security",
@@ -141,6 +147,8 @@ class UserViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
         return super().partial_update(request, *args, **kwargs)
 
 
+@extend_schema(operation_id="login")
+@action(methods=["post"], detail=False)
 def login(request):
     throttling.check_request(request, "login")
     if request.method != "POST":
@@ -160,6 +168,8 @@ def login(request):
     return response
 
 
+@extend_schema(operation_id="logout")
+@action(methods=["post"], detail=False)
 def logout(request):
     if request.method != "POST":
         return http.HttpResponse(status=405)

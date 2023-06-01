@@ -6,6 +6,7 @@ from django.db.models import Q, functions
 from django.urls import reverse_lazy
 
 from funkwhale_api.music import models
+from funkwhale_api.playlists import models as plt_models
 
 
 class RadioFilterRegistry(persisting_theory.Registry):
@@ -65,7 +66,7 @@ def clean_config(filter_config):
     return f.clean_config(filter_config)
 
 
-class RadioFilter(object):
+class RadioFilter:
     help_text = None
     label = None
     fields = []
@@ -113,7 +114,7 @@ class GroupFilter(RadioFilter):
                 elif operator == "or":
                     final_query |= query
                 else:
-                    raise ValueError('Invalid query operator "{}"'.format(operator))
+                    raise ValueError(f'Invalid query operator "{operator}"')
         return final_query
 
     def validate(self, config):
@@ -170,7 +171,7 @@ class ArtistFilter(RadioFilter):
         except KeyError:
             raise ValidationError("You must provide an id")
         except AssertionError:
-            raise ValidationError('No artist matching ids "{}"'.format(diff))
+            raise ValidationError(f'No artist matching ids "{diff}"')
 
 
 @registry.register
@@ -225,4 +226,21 @@ class TagFilter(RadioFilter):
         except KeyError:
             raise ValidationError("You must provide a name")
         except AssertionError:
-            raise ValidationError('No tag matching names "{}"'.format(diff))
+            raise ValidationError(f'No tag matching names "{diff}"')
+
+
+@registry.register
+class PlaylistFilter(RadioFilter):
+    code = "playlist"
+    label = "Playlist"
+
+    def get_query(self, candidates, ids, **kwargs):
+        playlists = plt_models.Playlist.objects.filter(id__in=ids)
+        ids_plts = []
+        for playlist in playlists:
+            ids = playlist.playlist_tracks.select_related("track").values_list(
+                "track_id", flat=True
+            )
+            for id in ids:
+                ids_plts.append(id)
+        return Q(id__in=ids_plts)

@@ -1,28 +1,24 @@
-import uuid
-import magic
 import mimetypes
+import uuid
 
-from django.contrib.postgres.fields import JSONField
+import magic
+from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import connections, models, transaction
-from django.db.models import Lookup
+from django.db.models import JSONField, Lookup
 from django.db.models.fields import Field
 from django.db.models.sql.compiler import SQLCompiler
 from django.dispatch import receiver
-from django.utils import timezone
 from django.urls import reverse
-
+from django.utils import timezone
 from versatileimagefield.fields import VersatileImageField
 from versatileimagefield.image_warmer import VersatileImageFieldWarmer
 
 from funkwhale_api.federation import utils as federation_utils
 
-from . import utils
-from . import validators
-
+from . import utils, validators
 
 CONTENT_TEXT_MAX_LENGTH = 5000
 CONTENT_TEXT_SUPPORTED_TYPES = [
@@ -40,7 +36,7 @@ class NotEqual(Lookup):
         lhs, lhs_params = self.process_lhs(compiler, connection)
         rhs, rhs_params = self.process_rhs(compiler, connection)
         params = lhs_params + rhs_params
-        return "%s <> %s" % (lhs, rhs), params
+        return f"{lhs} <> {rhs}", params
 
 
 class NullsLastSQLCompiler(SQLCompiler):
@@ -81,8 +77,8 @@ class NullsLastQuerySet(models.QuerySet):
 class LocalFromFidQuerySet:
     def local(self, include=True):
         host = settings.FEDERATION_HOSTNAME
-        query = models.Q(fid__startswith="http://{}/".format(host)) | models.Q(
-            fid__startswith="https://{}/".format(host)
+        query = models.Q(fid__startswith=f"http://{host}/") | models.Q(
+            fid__startswith=f"https://{host}/"
         )
         if include:
             return self.filter(query)
@@ -116,10 +112,10 @@ class Mutation(models.Model):
 
     type = models.CharField(max_length=100, db_index=True)
     # None = no choice, True = approved, False = refused
-    is_approved = models.NullBooleanField(default=None)
+    is_approved = models.BooleanField(default=None, null=True)
 
     # None = not applied, True = applied, False = failed
-    is_applied = models.NullBooleanField(default=None)
+    is_applied = models.BooleanField(default=None, null=True)
     creation_date = models.DateTimeField(default=timezone.now, db_index=True)
     applied_date = models.DateTimeField(null=True, blank=True, db_index=True)
     summary = models.TextField(max_length=2000, null=True, blank=True)
@@ -187,7 +183,7 @@ class AttachmentQuerySet(models.QuerySet):
             field_query = ~models.Q(**{field: None})
             query = query | field_query if query else field_query
 
-        if include is False:
+        if not include:
             query = ~query
 
         return self.filter(query)
@@ -222,7 +218,8 @@ class Attachment(models.Model):
         validators=[
             validators.ImageDimensionsValidator(min_width=50, min_height=50),
             validators.FileValidator(
-                allowed_extensions=["png", "jpg", "jpeg"], max_size=1024 * 1024 * 5,
+                allowed_extensions=["png", "jpg", "jpeg"],
+                max_size=1024 * 1024 * 5,
             ),
         ],
     )
@@ -365,7 +362,7 @@ CONTENT_FKS = {
 def remove_attached_content(sender, instance, **kwargs):
     fk_fields = CONTENT_FKS.get(instance._meta.label, [])
     for field in fk_fields:
-        if getattr(instance, "{}_id".format(field)):
+        if getattr(instance, f"{field}_id"):
             try:
                 getattr(instance, field).delete()
             except Content.DoesNotExist:

@@ -1,3 +1,56 @@
+<script setup lang="ts">
+import type { Track, Library } from '~/types'
+
+import { humanSize, momentFormat, truncate } from '~/utils/filters'
+import { computed, ref, watchEffect } from 'vue'
+
+import time from '~/utils/time'
+import axios from 'axios'
+
+import LibraryWidget from '~/components/federation/LibraryWidget.vue'
+import PlaylistWidget from '~/components/playlists/Widget.vue'
+import TagsList from '~/components/tags/List.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+
+interface Events {
+  (e: 'libraries-loaded', libraries: Library[]): void
+}
+
+interface Props {
+  track: Track
+}
+
+const emit = defineEmits<Events>()
+const props = defineProps<Props>()
+
+const musicbrainzUrl = computed(() => props.track.mbid
+  ? `https://musicbrainz.org/recording/${props.track.mbid}`
+  : null
+)
+
+const upload = computed(() => props.track.uploads?.[0] ?? null)
+
+const license = ref()
+const fetchLicense = async (licenseId: string) => {
+  license.value = undefined
+
+  try {
+    const response = await axios.get(`licenses/${licenseId}`)
+    license.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+}
+
+watchEffect(() => {
+  if (props.track.license) {
+    // @ts-expect-error For some reason, track.license is id instead of License here
+    fetchLicense(props.track.license)
+  }
+})
+</script>
+
 <template>
   <div v-if="track">
     <section class="ui vertical stripe segment">
@@ -23,100 +76,70 @@
               class="ui fluid image track-cover-image"
             >
             <h3 class="ui header">
-              <translate
-                v-if="track.artist.content_category === 'music'"
-                key="1"
-                translate-context="Content/*/*"
-              >
-                Track Details
-              </translate>
-              <translate
-                v-else
-                key="2"
-                translate-context="Content/*/*"
-              >
-                Episode Details
-              </translate>
+              <span v-if="track.artist?.content_category === 'music'">
+                {{ $t('components.library.TrackDetail.header.track') }}
+              </span>
+              <span v-else>
+                {{ $t('components.library.TrackDetail.header.episode') }}
+              </span>
             </h3>
             <table class="ui basic table">
               <tbody>
                 <tr>
                   <td>
-                    <translate translate-context="Content/*/*">
-                      Duration
-                    </translate>
+                    {{ $t('components.library.TrackDetail.table.track.duration') }}
                   </td>
                   <td class="right aligned">
                     <template v-if="upload.duration">
-                      {{ upload.duration | duration }}
+                      {{ time.parse(upload.duration) }}
                     </template>
-                    <translate
-                      v-else
-                      translate-context="*/*/*"
-                    >
-                      N/A
-                    </translate>
+                    <span v-else>
+                      {{ $t('components.library.TrackDetail.notApplicable') }}
+                    </span>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <translate translate-context="Content/*/*/Noun">
-                      Size
-                    </translate>
+                    {{ $t('components.library.TrackDetail.table.track.size') }}
                   </td>
                   <td class="right aligned">
                     <template v-if="upload.size">
-                      {{ upload.size | humanSize }}
+                      {{ humanSize(upload.size) }}
                     </template>
-                    <translate
-                      v-else
-                      translate-context="*/*/*"
-                    >
-                      N/A
-                    </translate>
+                    <span v-else>
+                      {{ $t('components.library.TrackDetail.notApplicable') }}
+                    </span>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <translate translate-context="Content/*/*/Noun">
-                      Codec
-                    </translate>
+                    {{ $t('components.library.TrackDetail.table.track.codec') }}
                   </td>
                   <td class="right aligned">
                     <template v-if="upload.extension">
                       {{ upload.extension }}
                     </template>
-                    <translate
-                      v-else
-                      translate-context="*/*/*"
-                    >
-                      N/A
-                    </translate>
+                    <span v-else>
+                      {{ $t('components.library.TrackDetail.notApplicable') }}
+                    </span>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <translate translate-context="Content/Track/*/Noun">
-                      Bitrate
-                    </translate>
+                    {{ $t('components.library.TrackDetail.table.track.bitrate.label') }}
                   </td>
                   <td class="right aligned">
                     <template v-if="upload.bitrate">
-                      {{ upload.bitrate | humanSize }}/s
+                      {{ $t('components.library.TrackDetail.table.track.bitrate.value', {bitrate: humanSize(upload.bitrate)}) }}
                     </template>
-                    <translate
-                      v-else
-                      translate-context="*/*/*"
-                    >
-                      N/A
-                    </translate>
+                    <span v-else>
+                      {{ $t('components.library.TrackDetail.notApplicable') }}
+                    </span>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <translate translate-context="Content/*/*">
-                      Downloads
-                    </translate>
+                    {{ $t('components.library.TrackDetail.table.track.downloads') }}
                   </td>
                   <td class="right aligned">
                     {{ track.downloads_count }}
@@ -137,40 +160,28 @@
             :can-update="false"
           />
           <h2 class="ui header">
-            <translate translate-context="Content/*/*">
-              Release Details
-            </translate>
+            {{ $t('components.library.TrackDetail.header.release') }}
           </h2>
           <table class="ui basic table ellipsis-rows">
             <tbody>
               <tr>
                 <td>
-                  <translate translate-context="*/*/*/Noun">
-                    Artist
-                  </translate>
+                  {{ $t('components.library.TrackDetail.table.release.artist') }}
                 </td>
                 <td class="right aligned">
-                  <router-link :to="{name: 'library.artists.detail', params: {id: track.artist.id}}">
-                    {{ track.artist.name }}
+                  <router-link :to="{name: 'library.artists.detail', params: {id: track.artist?.id}}">
+                    {{ track.artist?.name }}
                   </router-link>
                 </td>
               </tr>
               <tr v-if="track.album">
                 <td>
-                  <translate
-                    v-if="track.album.artist.content_category === 'music'"
-                    key="1"
-                    translate-context="*/*/*/Noun"
-                  >
-                    Album
-                  </translate>
-                  <translate
-                    v-else
-                    key="2"
-                    translate-context="*/*/*"
-                  >
-                    Serie
-                  </translate>
+                  <span v-if="track.album.artist.content_category === 'music'">
+                    {{ $t('components.library.TrackDetail.table.release.album') }}
+                  </span>
+                  <span v-else>
+                    {{ $t('components.library.TrackDetail.table.release.series') }}
+                  </span>
                 </td>
                 <td class="right aligned">
                   <router-link :to="{name: 'library.albums.detail', params: {id: track.album.id}}">
@@ -180,44 +191,34 @@
               </tr>
               <tr>
                 <td>
-                  <translate translate-context="*/*/*">
-                    Year
-                  </translate>
+                  {{ $t('components.library.TrackDetail.table.release.year') }}
                 </td>
                 <td class="right aligned">
                   <template v-if="track.album && track.album.release_date">
-                    {{ track.album.release_date | moment('Y') }}
+                    {{ momentFormat(new Date(track.album.release_date), 'Y') }}
                   </template>
                   <template v-else>
-                    <translate translate-context="*/*/*">
-                      N/A
-                    </translate>
+                    {{ $t('components.library.TrackDetail.notApplicable') }}
                   </template>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <translate translate-context="Content/Track/*/Noun">
-                    Copyright
-                  </translate>
+                  {{ $t('components.library.TrackDetail.table.release.copyright') }}
                 </td>
                 <td class="right aligned">
                   <span
                     v-if="track.copyright"
                     :title="track.copyright"
-                  >{{ track.copyright|truncate(50) }}</span>
+                  >{{ truncate(track.copyright, 50) }}</span>
                   <template v-else>
-                    <translate translate-context="*/*/*">
-                      N/A
-                    </translate>
+                    {{ $t('components.library.TrackDetail.notApplicable') }}
                   </template>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <translate translate-context="Content/*/*/Noun">
-                    License
-                  </translate>
+                  {{ $t('components.library.TrackDetail.table.release.license') }}
                 </td>
                 <td class="right aligned">
                   <a
@@ -226,19 +227,14 @@
                     target="_blank"
                     rel="noopener noreferrer"
                   >{{ license.name }}</a>
-                  <translate
-                    v-else
-                    translate-context="*/*/*"
-                  >
-                    N/A
-                  </translate>
+                  <span v-else>
+                    {{ $t('components.library.TrackDetail.notApplicable') }}
+                  </span>
                 </td>
               </tr>
               <tr v-if="!track.is_local">
                 <td>
-                  <translate translate-context="Content/*/*/Noun">
-                    URL
-                  </translate>
+                  {{ $t('components.library.TrackDetail.table.release.url') }}
                 </td>
                 <td :title="track.fid">
                   <a
@@ -246,7 +242,7 @@
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    {{ track.fid|truncate(65) }}
+                    {{ truncate(track.fid, 65) }}
                   </a>
                 </td>
               </tr>
@@ -259,12 +255,10 @@
             rel="noreferrer noopener"
           >
             <i class="external icon" />
-            <translate translate-context="Content/*/*/Clickable, Verb">View on MusicBrainz</translate>
+            {{ $t('components.library.TrackDetail.link.musicbrainz') }}
           </a>
           <h2 class="ui header">
-            <translate translate-context="Content/*/Title/Noun">
-              Related Playlists
-            </translate>
+            {{ $t('components.library.TrackDetail.header.playlists') }}
           </h2>
           <playlist-widget
             :url="'playlists/'"
@@ -272,103 +266,16 @@
           />
 
           <h2 class="ui header">
-            <translate translate-context="Content/*/Title/Noun">
-              Related Libraries
-            </translate>
+            {{ $t('components.library.TrackDetail.header.library') }}
           </h2>
           <library-widget
-            :url="'tracks/' + id + '/libraries/'"
-            @loaded="$emit('libraries-loaded', $event)"
+            :url="`tracks/${track.id}/libraries/`"
+            @loaded="emit('libraries-loaded', $event)"
           >
-            <translate
-              slot="subtitle"
-              translate-context="Content/Track/Paragraph"
-            >
-              This track is present in the following libraries:
-            </translate>
+            {{ $t('components.library.TrackDetail.description.library') }}
           </library-widget>
         </div>
       </div>
     </section>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import LibraryWidget from '@/components/federation/LibraryWidget'
-import TagsList from '@/components/tags/List'
-import PlaylistWidget from '@/components/playlists/Widget'
-
-export default {
-  components: {
-    LibraryWidget,
-    TagsList,
-    PlaylistWidget
-  },
-  props: {
-    track: { type: Object, required: true },
-    libraries: { type: Array, default: null }
-  },
-  data () {
-    return {
-      id: this.track.id,
-      licenseData: null
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        title: this.$pgettext('*/*/*/Noun', 'Track')
-      }
-    },
-    musicbrainzUrl () {
-      if (this.track.mbid) {
-        return 'https://musicbrainz.org/recording/' + this.track.mbid
-      }
-      return null
-    },
-    upload () {
-      if (this.track.uploads) {
-        return this.track.uploads[0]
-      }
-      return null
-    },
-    license () {
-      if (!this.track || !this.track.license) {
-        return null
-      }
-      return this.licenseData
-    },
-    cover () {
-      if (this.track.cover && this.track.cover.urls.original) {
-        return this.track.cover
-      }
-      if (this.track.album && this.track.album.cover) {
-        return this.track.album.cover
-      }
-      return null
-    }
-  },
-  watch: {
-    track (v) {
-      if (v && v.license) {
-        this.fetchLicenseData(v.license)
-      }
-    }
-  },
-  created () {
-    if (this.track && this.track.license) {
-      this.fetchLicenseData(this.track.license)
-    }
-  },
-  methods: {
-    fetchLicenseData (licenseId) {
-      const self = this
-      const url = `licenses/${licenseId}`
-      axios.get(url).then(response => {
-        self.licenseData = response.data
-      })
-    }
-  }
-}
-</script>

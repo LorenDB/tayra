@@ -1,4 +1,4 @@
-# This file was generated from funkwhale.template
+# This file was generated from Funkwhale's nginx.template
 
 upstream funkwhale-api {
     # depending on your setup, you may want to update this
@@ -10,12 +10,18 @@ server {
     listen [::]:80;
     # update this to match your instance name
     server_name ${FUNKWHALE_HOSTNAME};
+
     # useful for Let's Encrypt
-    location /.well-known/acme-challenge/ { allow all; }
-    location / { return 301 https://$host$request_uri; }
+    location /.well-known/acme-challenge/ {
+        allow all;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
 }
 
-# required for websocket support
+# Required for websocket support.
 map $http_upgrade $connection_upgrade {
     default upgrade;
     ''      close;
@@ -24,6 +30,7 @@ map $http_upgrade $connection_upgrade {
 server {
     listen      443 ssl http2;
     listen [::]:443 ssl http2;
+    charset     utf-8;
     server_name ${FUNKWHALE_HOSTNAME};
 
     # TLS
@@ -38,15 +45,14 @@ server {
     ssl_session_cache shared:SSL:10m;
     ssl_certificate     /etc/letsencrypt/live/${FUNKWHALE_HOSTNAME}/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/${FUNKWHALE_HOSTNAME}/privkey.pem;
+
     # HSTS
     add_header Strict-Transport-Security "max-age=31536000";
 
-    # If you are using S3 to host your files, remember to add your S3 URL to the
-    # media-src and img-src headers (e.g. img-src 'self' https://<your-S3-URL> data:)
-
-    add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; media-src 'self' data:; worker-src 'self'";
+    add_header Content-Security-Policy "default-src 'self'; connect-src https: wss: http: ws: 'self' 'unsafe-eval'; script-src 'self' 'wasm-unsafe-eval'; style-src https: http: 'self' 'unsafe-inline'; img-src https: http: 'self' data:; font-src https: http: 'self' data:; media-src https: http: 'self' data:; object-src 'none'";
     add_header Referrer-Policy "strict-origin-when-cross-origin";
     add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header Service-Worker-Allowed "/";
 
     root ${FUNKWHALE_FRONTEND_PATH};
 
@@ -77,39 +83,33 @@ server {
         text/x-cross-domain-policy;
     # end of compression settings
 
-    location / {
+    location /api/ {
         include /etc/nginx/funkwhale_proxy.conf;
-        # this is needed if you have file import via upload enabled
+        # This is needed if you have file import via upload enabled.
         client_max_body_size ${NGINX_MAX_BODY_SIZE};
-        proxy_pass   http://funkwhale-api/;
+        proxy_pass   http://funkwhale-api;
     }
 
-    location /front/ {
-        add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; media-src 'self' data:; worker-src 'self'";
-        add_header Referrer-Policy "strict-origin-when-cross-origin";
-        add_header Service-Worker-Allowed "/";
+    location / {
         alias ${FUNKWHALE_FRONTEND_PATH}/;
-        expires 30d;
-        add_header Pragma public;
-        add_header Cache-Control "public, must-revalidate, proxy-revalidate";
+        expires 1d;
+        try_files $uri $uri/ /index.html;
     }
-    location /front/embed.html {
-        add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; media-src 'self' data:; worker-src 'self'";
+
+    location = /embed.html {
+        add_header Content-Security-Policy "connect-src https: http: 'self'; default-src 'self'; script-src 'self' unpkg.com 'unsafe-inline' 'unsafe-eval'; style-src https: http: 'self' 'unsafe-inline'; img-src https: http: 'self' data:; font-src https: http: 'self' data:; object-src 'none'; media-src https: http: 'self' data:";
         add_header Referrer-Policy "strict-origin-when-cross-origin";
 
-        add_header X-Frame-Options "" always;
         alias ${FUNKWHALE_FRONTEND_PATH}/embed.html;
-        expires 30d;
-        add_header Pragma public;
-        add_header Cache-Control "public, must-revalidate, proxy-revalidate";
+        expires 1d;
     }
 
     location /federation/ {
         include /etc/nginx/funkwhale_proxy.conf;
-        proxy_pass   http://funkwhale-api/federation/;
+        proxy_pass   http://funkwhale-api;
     }
 
-    # You can comment this if you do not plan to use the Subsonic API
+    # You can comment this if you do not plan to use the Subsonic API.
     location /rest/ {
         include /etc/nginx/funkwhale_proxy.conf;
         proxy_pass   http://funkwhale-api/api/subsonic/rest/;
@@ -117,45 +117,46 @@ server {
 
     location /.well-known/ {
         include /etc/nginx/funkwhale_proxy.conf;
-        proxy_pass   http://funkwhale-api/.well-known/;
+        proxy_pass   http://funkwhale-api;
     }
 
+    # Allow direct access to only specific subdirectories in /media
     location /media/__sized__/ {
         alias ${MEDIA_ROOT}/__sized__/;
+        add_header Access-Control-Allow-Origin '*';
     }
 
+    # Allow direct access to only specific subdirectories in /media
     location /media/attachments/ {
         alias ${MEDIA_ROOT}/attachments/;
+        add_header Access-Control-Allow-Origin '*';
     }
 
-    location /_protected/media {
-        # this is an internal location that is used to serve
-        # audio files once correct permission / authentication
-        # has been checked on API side
+    # This is an internal location that is used to serve
+    # media (uploaded) files once correct permission / authentication
+    # has been checked on API side.
+    # Comment the "NON-S3" commented lines and uncomment "S3" commented lines
+    # if you're storing media files in a S3 bucket.
+    location ~ /_protected/media/(.+) {
         internal;
-        alias   ${MEDIA_ROOT};
+        alias   ${MEDIA_ROOT}/$1;                                           # NON-S3
+        # Needed to ensure DSub auth isn't forwarded to S3/Minio, see #932.
+#       proxy_set_header Authorization "";                                  # S3
+#       proxy_pass $1;                                                      # S3
+        add_header Access-Control-Allow-Origin '*';
     }
 
-    # Comment the previous location and uncomment this one if you're storing
-    # media files in a S3 bucket
-    # location ~ /_protected/media/(.+) {
-    #     internal;
-    #     # Needed to ensure DSub auth isn't forwarded to S3/Minio, see #932
-    #     proxy_set_header Authorization "";
-    #     proxy_pass $1;
-    # }
-
-    location /_protected/music {
-        # this is an internal location that is used to serve
-        # audio files once correct permission / authentication
-        # has been checked on API side
-        # Set this to the same value as your MUSIC_DIRECTORY_PATH setting
+    location /_protected/music/ {
+        # This is an internal location that is used to serve
+        # local music files once correct permission / authentication
+        # has been checked on API side.
+        # Set this to the same value as your MUSIC_DIRECTORY_PATH setting.
         internal;
-        alias   ${MUSIC_DIRECTORY_SERVE_PATH};
+        alias   ${MUSIC_DIRECTORY_SERVE_PATH}/;
+        add_header Access-Control-Allow-Origin '*';
     }
 
-    location /staticfiles/ {
-        # django static files
-        alias ${STATIC_ROOT}/;
+    location /manifest.json {
+        return 302 /api/v1/instance/spa-manifest.json;
     }
 }

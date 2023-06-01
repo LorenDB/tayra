@@ -12,12 +12,12 @@ This command will also generate federation ids for existing resources.
 """
 
 from django.conf import settings
-from django.db.models import functions, CharField, F, Value
+from django.db.models import CharField, F, Value, functions
 
+from funkwhale_api.common import preferences
+from funkwhale_api.federation import models as federation_models
 from funkwhale_api.music import models
 from funkwhale_api.users.models import User
-from funkwhale_api.federation import models as federation_models
-from funkwhale_api.common import preferences
 
 
 def create_libraries(open_api, stdout):
@@ -36,9 +36,7 @@ def create_libraries(open_api, stdout):
         )
         libraries_by_user[library.actor.user.pk] = library.pk
         if created:
-            stdout.write(
-                "  * Created library {} for user {}".format(library.pk, a.user.pk)
-            )
+            stdout.write(f"  * Created library {library.pk} for user {a.user.pk}")
         else:
             stdout.write(
                 "  * Found existing library {} for user {}".format(
@@ -60,13 +58,9 @@ def update_uploads(libraries_by_user, stdout):
         )
         total = candidates.update(library=library_id, import_status="finished")
         if total:
-            stdout.write(
-                "  * Assigned {} uploads to user {}'s library".format(total, user_id)
-            )
+            stdout.write(f"  * Assigned {total} uploads to user {user_id}'s library")
         else:
-            stdout.write(
-                "  * No uploads to assign to user {}'s library".format(user_id)
-            )
+            stdout.write(f"  * No uploads to assign to user {user_id}'s library")
 
 
 def update_orphan_uploads(open_api, stdout):
@@ -105,14 +99,12 @@ def update_orphan_uploads(open_api, stdout):
 def set_fid(queryset, path, stdout):
     model = queryset.model._meta.label
     qs = queryset.filter(fid=None)
-    base_url = "{}{}".format(settings.FUNKWHALE_URL, path)
-    stdout.write(
-        "* Assigning federation ids to {} entries (path: {})".format(model, base_url)
-    )
+    base_url = f"{settings.FUNKWHALE_URL}{path}"
+    stdout.write(f"* Assigning federation ids to {model} entries (path: {base_url})")
     new_fid = functions.Concat(Value(base_url), F("uuid"), output_field=CharField())
     total = qs.update(fid=new_fid)
 
-    stdout.write("  * {} entries updated".format(total))
+    stdout.write(f"  * {total} entries updated")
 
 
 def update_shared_inbox_url(stdout):
@@ -123,16 +115,16 @@ def update_shared_inbox_url(stdout):
 
 
 def generate_actor_urls(part, stdout):
-    field = "{}_url".format(part)
-    stdout.write("* Update {} for local actors...".format(field))
+    field = f"{part}_url"
+    stdout.write(f"* Update {field} for local actors...")
 
     queryset = federation_models.Actor.objects.local().filter(**{field: None})
-    base_url = "{}/federation/actors/".format(settings.FUNKWHALE_URL)
+    base_url = f"{settings.FUNKWHALE_URL}/federation/actors/"
 
     new_field = functions.Concat(
         Value(base_url),
         F("preferred_username"),
-        Value("/{}".format(part)),
+        Value(f"/{part}"),
         output_field=CharField(),
     )
 

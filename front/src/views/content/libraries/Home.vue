@@ -1,3 +1,44 @@
+<script setup lang="ts">
+import type { Library } from '~/types'
+import { useRouter } from 'vue-router'
+import { ref } from 'vue'
+
+import axios from 'axios'
+
+import LibraryForm from './Form.vue'
+import LibraryCard from './Card.vue'
+import Quota from './Quota.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+
+const router = useRouter()
+
+const libraries = ref([] as Library[])
+const isLoading = ref(false)
+const hiddenForm = ref(true)
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get('libraries/', { params: { scope: 'me' } })
+    libraries.value = response.data.results
+    if (libraries.value.length === 0) {
+      hiddenForm.value = false
+    }
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+fetchData()
+
+const libraryCreated = (library: Library) => {
+  router.push({ name: 'library.detail', params: { id: library.uuid } })
+}
+</script>
+
 <template>
   <section class="ui vertical aligned stripe segment">
     <div
@@ -5,9 +46,7 @@
       :class="['ui', {'active': isLoading}, 'inverted', 'dimmer']"
     >
       <div class="ui text loader">
-        <translate translate-context="Content/Library/Paragraph">
-          Loading Libraries…
-        </translate>
+        {{ $t('views.content.libraries.Home.loading.libraries') }}
       </div>
     </div>
     <div
@@ -15,15 +54,11 @@
       class="ui text container"
     >
       <h1 class="ui header">
-        <translate translate-context="Content/Library/Title">
-          My libraries
-        </translate>
+        {{ $t('views.content.libraries.Home.header.libraries') }}
       </h1>
 
       <p v-if="libraries.length == 0">
-        <translate translate-context="Content/Library/Paragraph">
-          Looks like you don't have a library, it's time to create one.
-        </translate>
+        {{ $t('views.content.libraries.Home.empty.noLibrary') }}
       </p>
       <a
         :aria-expanded="!hiddenForm"
@@ -38,11 +73,10 @@
           v-else
           class="minus icon"
         />
-        <translate translate-context="Content/Library/Link/Verb">Create a new library</translate>
+        {{ $t('views.content.libraries.Home.link.createLibrary') }}
       </a>
       <library-form
         v-if="!hiddenForm"
-        :library="null"
         @created="libraryCreated"
       />
       <div class="ui hidden divider" />
@@ -63,44 +97,3 @@
     </div>
   </section>
 </template>
-
-<script>
-import axios from 'axios'
-import LibraryForm from './Form'
-import LibraryCard from './Card'
-import Quota from './Quota'
-
-export default {
-  components: {
-    LibraryForm,
-    LibraryCard,
-    Quota
-  },
-  data () {
-    return {
-      isLoading: false,
-      hiddenForm: true,
-      libraries: []
-    }
-  },
-  created () {
-    this.fetch()
-  },
-  methods: {
-    fetch () {
-      this.isLoading = true
-      const self = this
-      axios.get('libraries/', { params: { scope: 'me' } }).then(response => {
-        self.isLoading = false
-        self.libraries = response.data.results
-        if (self.libraries.length === 0) {
-          self.hiddenForm = false
-        }
-      })
-    },
-    libraryCreated (library) {
-      this.$router.push({ name: 'library.detail', params: { id: library.uuid } })
-    }
-  }
-}
-</script>

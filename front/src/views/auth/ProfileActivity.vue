@@ -1,3 +1,21 @@
+<script setup lang="ts">
+import type { Actor } from '~/types'
+
+import { ref } from 'vue'
+
+import PlaylistWidget from '~/components/playlists/Widget.vue'
+import TrackWidget from '~/components/audio/track/Widget.vue'
+import RadioButton from '~/components/radios/Button.vue'
+
+interface Props {
+  object: Actor
+}
+
+defineProps<Props>()
+
+const recentActivity = ref(0)
+</script>
+
 <template>
   <section>
     <div>
@@ -9,9 +27,7 @@
         :client-only="true"
       />
       <h2 class="ui header">
-        <translate translate-context="Content/Home/Title">
-          Recently listened
-        </translate>
+        {{ $t('views.auth.ProfileActivity.header.recentlyListened') }}
       </h2>
       <div class="ui divider" />
       <track-widget
@@ -23,9 +39,7 @@
     <div class="ui hidden divider" />
     <div>
       <h2 class="ui header">
-        <translate translate-context="Content/Home/Title">
-          Recently favorited
-        </translate>
+        {{ $t('views.auth.ProfileActivity.header.recentlyFavorited') }}
       </h2>
       <div class="ui divider" />
       <track-widget
@@ -36,9 +50,7 @@
     <div class="ui hidden divider" />
     <div>
       <h2 class="ui header">
-        <translate translate-context="*/*/*">
-          Playlists
-        </translate>
+        {{ $t('views.auth.ProfileActivity.header.playlists') }}
       </h2>
       <div class="ui divider" />
       <playlist-widget
@@ -48,19 +60,3 @@
     </div>
   </section>
 </template>
-
-<script>
-import TrackWidget from '@/components/audio/track/Widget'
-import PlaylistWidget from '@/components/playlists/Widget'
-import RadioButton from '@/components/radios/Button'
-
-export default {
-  components: { TrackWidget, PlaylistWidget, RadioButton },
-  props: { object: { type: Object, required: true } },
-  data () {
-    return {
-      recentActivity: 0
-    }
-  }
-}
-</script>

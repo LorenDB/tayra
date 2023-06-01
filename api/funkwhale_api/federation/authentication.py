@@ -1,15 +1,17 @@
-import cryptography
-import logging
 import datetime
+import logging
 import urllib.parse
+
+import cryptography
 from django.contrib.auth.models import AnonymousUser
 from django.utils import timezone
+from rest_framework import authentication
+from rest_framework import exceptions as rest_exceptions
 
-from rest_framework import authentication, exceptions as rest_exceptions
 from funkwhale_api.common import preferences
 from funkwhale_api.moderation import models as moderation_models
-from . import actors, exceptions, keys, models, signing, tasks, utils
 
+from . import actors, exceptions, keys, models, signing, tasks, utils
 
 logger = logging.getLogger(__name__)
 
@@ -53,7 +55,9 @@ class SignatureAuthentication(authentication.BaseAuthentication):
             actor = actors.get_actor(actor_url)
         except Exception as e:
             logger.info(
-                "Discarding HTTP request from actor/domain %s, %s", actor_url, str(e),
+                "Discarding HTTP request from actor/domain %s, %s",
+                actor_url,
+                str(e),
             )
             raise rest_exceptions.AuthenticationFailed(
                 "Cannot fetch remote actor to authenticate signature"

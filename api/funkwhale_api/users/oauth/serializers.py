@@ -32,7 +32,7 @@ class CreateApplicationSerializer(serializers.ModelSerializer):
             "updated",
             "redirect_uris",
         ]
-        read_only_fields = ["client_id", "client_secret", "created", "updated"]
+        read_only_fields = ["client_id", "created", "updated"]
 
     def to_representation(self, obj):
         repr = super().to_representation(obj)

@@ -42,7 +42,7 @@ def test_inbox_routes(route, handler):
     matching = [
         handler for r, handler in routes.inbox.routes if activity.match_route(r, route)
     ]
-    assert len(matching) == 1, "Inbox route {} not found".format(route)
+    assert len(matching) == 1, f"Inbox route {route} not found"
     assert matching[0] == handler
 
 
@@ -88,7 +88,7 @@ def test_outbox_routes(route, handler):
     matching = [
         handler for r, handler in routes.outbox.routes if activity.match_route(r, route)
     ]
-    assert len(matching) == 1, "Outbox route {} not found".format(route)
+    assert len(matching) == 1, f"Outbox route {route} not found"
     assert matching[0] == handler
 
 
@@ -354,7 +354,10 @@ def test_inbox_create_audio_channel(factories, mocker):
     activity = factories["federation.Activity"]()
     channel = factories["audio.Channel"]()
     album = factories["music.Album"](artist=channel.artist)
-    upload = factories["music.Upload"](track__album=album, library=channel.library,)
+    upload = factories["music.Upload"](
+        track__album=album,
+        library=channel.library,
+    )
     payload = {
         "@context": jsonld.get_default_context(),
         "type": "Create",

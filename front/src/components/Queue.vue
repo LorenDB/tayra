@@ -1,518 +1,471 @@
+<script setup lang="ts">
+import type { QueueItemSource } from '~/types'
+
+import { whenever, watchDebounced, useCurrentElement, useScrollLock, useFullscreen, useIdle, refAutoReset, useStorage } from '@vueuse/core'
+import { nextTick, ref, computed, watchEffect, defineAsyncComponent } from 'vue'
+import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
+import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import { useStore } from '~/store'
+
+import { usePlayer } from '~/composables/audio/player'
+import { useTracks } from '~/composables/audio/tracks'
+import { useQueue } from '~/composables/audio/queue'
+
+import time from '~/utils/time'
+
+import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
+import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
+import PlayerControls from '~/components/audio/PlayerControls.vue'
+
+import VirtualList from '~/components/vui/list/VirtualList.vue'
+import QueueItem from '~/components/QueueItem.vue'
+
+const MilkDrop = defineAsyncComponent(() => import('~/components/audio/visualizer/MilkDrop.vue'))
+
+const {
+  isPlaying,
+  currentTime,
+  duration,
+  bufferProgress,
+  seekTo,
+  loading: isLoadingAudio,
+  errored
+} = usePlayer()
+
+const {
+  hasNext,
+  currentTrack,
+  currentIndex,
+  queue,
+  dequeue,
+  playTrack,
+  reorder,
+  endsIn,
+  clear
+} = useQueue()
+
+const { currentSound } = useTracks()
+
+const queueModal = ref()
+const { activate, deactivate } = useFocusTrap(queueModal, { allowOutsideClick: true, preventScroll: true })
+
+const { t } = useI18n()
+const scrollLock = useScrollLock(document.body)
+const store = useStore()
+
+const labels = computed(() => ({
+  queue: t('components.Queue.label.queue'),
+  populating: t('components.Queue.label.populatingRadio'),
+  duration: t('components.Queue.label.duration'),
+  addArtistContentFilter: t('components.Queue.label.addArtistContentFilter'),
+  restart: t('components.Queue.label.restart'),
+  previous: t('components.Queue.label.previous'),
+  next: t('components.Queue.label.next'),
+  pause: t('components.Queue.label.pause'),
+  play: t('components.Queue.label.play'),
+  fullscreen: t('components.Queue.label.enterFullscreen'),
+  exitFullscreen: t('components.Queue.label.exitFullscreen'),
+  showCoverArt: t('components.Queue.label.showCoverArt'),
+  showVisualizer: t('components.Queue.label.showVisualizer')
+}))
+
+watchEffect(async () => {
+  scrollLock.value = !!store.state.ui.queueFocused
+  if (store.state.ui.queueFocused) {
+    await nextTick()
+    activate()
+  } else {
+    deactivate()
+  }
+})
+
+const list = ref()
+const el = useCurrentElement()
+const scrollToCurrent = (behavior: ScrollBehavior = 'smooth') => {
+  const item = el.value?.querySelector('.queue-item.active')
+  item?.scrollIntoView({
+    behavior,
+    block: 'center'
+  })
+}
+
+watchDebounced(currentTrack, () => scrollToCurrent(), { debounce: 100 })
+
+whenever(
+  () => queue.value.length === 0,
+  () => store.commit('ui/queueFocused', null),
+  { immediate: true }
+)
+
+const router = useRouter()
+router.beforeEach(() => store.commit('ui/queueFocused', null))
+
+const progressBar = ref()
+const touchProgress = (event: MouseEvent) => {
+  const time = ((event.clientX - ((event.target as Element).closest('.progress')?.getBoundingClientRect().left ?? 0)) / progressBar.value.offsetWidth) * duration.value
+  seekTo(time)
+}
+
+const play = async (index: number) => {
+  isPlaying.value = true
+  return playTrack(index)
+}
+
+const queueItems = computed(() => queue.value.map((track, index) => ({
+  ...track,
+  key: `${index}-${track.id}`,
+  labels: {
+    remove: t('components.Queue.label.remove'),
+    selectTrack: t('components.Queue.label.selectTrack'),
+    favorite: t('components.Queue.label.favorite')
+  }
+}) as QueueItemSource))
+
+const reorderTracks = async (from: number, to: number) => {
+  reorder(from, to)
+
+  await nextTick()
+  if (to === currentIndex.value) {
+    scrollToCurrent()
+  }
+}
+
+const hideArtist = () => {
+  if (currentTrack.value.artistId !== -1) {
+    return store.dispatch('moderation/hide', {
+      type: 'artist',
+      target: {
+        id: currentTrack.value.artistId,
+        name: currentTrack.value.artistName
+      }
+    })
+  }
+}
+
+const cover = ref()
+const { isFullscreen: fullscreen, enter, exit } = useFullscreen(cover)
+const { idle } = useIdle(2000)
+
+const showTrackInfo = refAutoReset(false, 5000)
+whenever(currentTrack, () => (showTrackInfo.value = true))
+
+const milkdrop = ref()
+const loadRandomPreset = () => {
+  milkdrop.value?.loadRandomPreset()
+}
+
+enum CoverType {
+  COVER_ART,
+  MILK_DROP
+}
+
+let isWebGLSupported = false
+try {
+  const canvas = document.createElement('canvas')
+  isWebGLSupported = !!canvas.getContext('webgl2')
+} catch (error) {}
+
+const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
+if (!isWebGLSupported) {
+  coverType.value = CoverType.COVER_ART
+}
+</script>
+
 <template>
   <section
     class="main with-background component-queue"
     :aria-label="labels.queue"
   >
-    <div :class="['ui vertical stripe queue segment', playerFocused ? 'player-focused' : '']">
-      <div class="ui fluid container">
-        <div
-          id="queue-grid"
-          class="ui stackable grid"
-        >
-          <div class="ui six wide column current-track">
-            <div
-              id="player"
-              class="ui basic segment"
-            >
-              <template v-if="currentTrack">
+    <div
+      id="queue-grid"
+      :class="store.state.ui.queueFocused && `show-${store.state.ui.queueFocused}`"
+    >
+      <div
+        id="player"
+        class="ui basic segment"
+      >
+        <template v-if="currentTrack">
+          <div
+            ref="cover"
+            :class="['cover-container', { idle, fullscreen }]"
+          >
+            <div class="cover">
+              <template v-if="coverType === CoverType.COVER_ART">
                 <img
-                  v-if="currentTrack.cover && currentTrack.cover.urls.large_square_crop"
+                  v-if="fullscreen"
+                  class="cover-shadow"
+                  :src="$store.getters['instance/absoluteUrl'](currentTrack.coverUrl)"
+                >
+                <img
                   ref="cover"
                   alt=""
-                  :src="$store.getters['instance/absoluteUrl'](currentTrack.cover.urls.large_square_crop)"
+                  :src="$store.getters['instance/absoluteUrl'](currentTrack.coverUrl)"
                 >
-                <img
-                  v-else-if="currentTrack.album && currentTrack.album.cover && currentTrack.album.cover.urls.large_square_crop"
-                  ref="cover"
-                  alt=""
-                  :src="$store.getters['instance/absoluteUrl'](currentTrack.album.cover.urls.large_square_crop)"
-                >
-                <img
-                  v-else
-                  class="ui image"
-                  alt=""
-                  src="../assets/audio/default-cover.png"
-                >
-                <h1 class="ui header">
-                  <div class="content ellipsis">
-                    <router-link
-                      class="small header discrete link track"
-                      :to="{name: 'library.tracks.detail', params: {id: currentTrack.id }}"
-                    >
-                      {{ currentTrack.title }}
-                    </router-link>
-                    <div class="sub header ellipsis">
-                      <router-link
-                        class="discrete link artist"
-                        :to="{name: 'library.artists.detail', params: {id: currentTrack.artist.id }}"
-                      >
-                        {{ currentTrack.artist.name }}
-                      </router-link>
-                      <template v-if="currentTrack.album">
-                        /
-                        <router-link
-                          class="discrete link album"
-                          :to="{name: 'library.albums.detail', params: {id: currentTrack.album.id }}"
-                        >
-                          {{ currentTrack.album.title }}
-                        </router-link>
-                      </template>
-                    </div>
-                  </div>
-                </h1>
+              </template>
+              <milk-drop
+                v-else-if="coverType === CoverType.MILK_DROP"
+                ref="milkdrop"
+              />
+
+              <Transition name="queue">
                 <div
-                  v-if="currentTrack && errored"
-                  class="ui small warning message"
+                  v-if="!fullscreen || !idle"
+                  class="cover-buttons"
                 >
-                  <h3 class="header">
-                    <translate translate-context="Sidebar/Player/Error message.Title">
-                      The track cannot be loaded
-                    </translate>
-                  </h3>
-                  <p v-if="hasNext && playing && $store.state.player.errorCount < $store.state.player.maxConsecutiveErrors">
-                    <translate translate-context="Sidebar/Player/Error message.Paragraph">
-                      The next track will play automatically in a few seconds…
-                    </translate>
-                    <i class="loading spinner icon" />
-                  </p>
-                  <p>
-                    <translate translate-context="Sidebar/Player/Error message.Paragraph">
-                      You may have a connectivity issue.
-                    </translate>
-                  </p>
-                </div>
-                <div class="additional-controls tablet-and-below">
-                  <track-favorite-icon
-                    v-if="$store.state.auth.authenticated"
-                    :track="currentTrack"
-                  />
-                  <track-playlist-icon
-                    v-if="$store.state.auth.authenticated"
-                    :track="currentTrack"
-                  />
+                  <tooltip :content="!isWebGLSupported && $t('components.Queue.message.webglUnsupported')">
+                    <button
+                      v-if="coverType === CoverType.COVER_ART"
+                      class="ui secondary button"
+                      :aria-label="labels.showVisualizer"
+                      :title="labels.showVisualizer"
+                      :disabled="!isWebGLSupported"
+                      @click="coverType = CoverType.MILK_DROP"
+                    >
+                      <i class="icon signal" />
+                    </button>
+                    <button
+                      v-else-if="coverType === CoverType.MILK_DROP"
+                      class="ui secondary button"
+                      :aria-label="labels.showCoverArt"
+                      :title="labels.showCoverArt"
+                      :disabled="!isWebGLSupported"
+                      @click="coverType = CoverType.COVER_ART"
+                    >
+                      <i class="icon image outline" />
+                    </button>
+                  </tooltip>
+
                   <button
-                    v-if="$store.state.auth.authenticated"
-                    :class="['ui', 'really', 'basic', 'circular', 'icon', 'button']"
-                    :aria-label="labels.addArtistContentFilter"
-                    :title="labels.addArtistContentFilter"
-                    @click="$store.dispatch('moderation/hide', {type: 'artist', target: currentTrack.artist})"
+                    v-if="!fullscreen"
+                    class="ui secondary button"
+                    :aria-label="labels.fullscreen"
+                    :title="labels.fullscreen"
+                    @click="enter"
                   >
-                    <i :class="['eye slash outline', 'basic', 'icon']" />
+                    <i class="icon expand" />
+                  </button>
+                  <button
+                    v-else
+                    class="ui secondary button"
+                    :aria-label="labels.exitFullscreen"
+                    :title="labels.exitFullscreen"
+                    @click="exit"
+                  >
+                    <i class="icon compress" />
                   </button>
                 </div>
-                <div class="progress-wrapper">
-                  <div
-                    v-if="currentTrack && !errored"
-                    class="progress-area"
-                  >
-                    <div
-                      ref="progress"
-                      :class="['ui', 'small', 'vibrant', {'indicating': isLoadingAudio}, 'progress']"
-                      @click="touchProgress"
-                    >
-                      <div
-                        class="buffer bar"
-                        :data-percent="bufferProgress"
-                        :style="{ 'width': bufferProgress + '%' }"
-                      />
-                      <div
-                        class="position bar"
-                        :data-percent="progress"
-                        :style="{ 'width': progress + '%' }"
-                      />
-                    </div>
-                  </div>
-                  <div
-                    v-else
-                    class="progress-area"
-                  >
-                    <div
-                      ref="progress"
-                      :class="['ui', 'small', 'vibrant', 'progress']"
-                    >
-                      <div class="buffer bar" />
-                      <div class="position bar" />
-                    </div>
-                  </div>
-                  <div class="progress">
-                    <template v-if="!isLoadingAudio">
-                      <a
-                        href=""
-                        :aria-label="labels.restart"
-                        class="left floated timer discrete start"
-                        @click.prevent="setCurrentTime(0)"
-                      >{{ currentTimeFormatted }}</a>
-                      <span class="right floated timer total">{{ durationFormatted }}</span>
-                    </template>
-                    <template v-else>
-                      <span class="left floated timer">00:00</span>
-                      <span class="right floated timer">00:00</span>
-                    </template>
-                  </div>
+              </Transition>
+              <Transition name="queue">
+                <div
+                  v-if="fullscreen && (!idle || showTrackInfo)"
+                  class="track-info"
+                  @click="loadRandomPreset()"
+                >
+                  <h1>{{ currentTrack.title }}</h1>
+                  <h2>
+                    {{ currentTrack.artistName ?? $t('components.Queue.meta.unknownArtist') }}
+                    <span class="symbol hyphen middle" />
+                    {{ currentTrack.albumTitle ?? $t('components.Queue.meta.unknownAlbum') }}
+                  </h2>
                 </div>
-                <div class="player-controls tablet-and-below">
-                  <span
-                    role="button"
-                    :title="labels.previousTrack"
-                    :aria-label="labels.previousTrack"
-                    class="control"
-                    :disabled="emptyQueue"
-                    @click.prevent.stop="$store.dispatch('queue/previous')"
+              </Transition>
+            </div>
+          </div>
+          <h1 class="ui header">
+            <div class="content ellipsis">
+              <router-link
+                class="small header discrete link track"
+                :to="{name: 'library.tracks.detail', params: {id: currentTrack.id }}"
+              >
+                {{ currentTrack.title }}
+              </router-link>
+              <div class="sub header ellipsis">
+                <router-link
+                  class="discrete link artist"
+                  :to="{name: 'library.artists.detail', params: {id: currentTrack.artistId }}"
+                >
+                  {{ currentTrack.artistName ?? $t('components.Queue.meta.unknownArtist') }}
+                </router-link>
+                <template v-if="currentTrack.albumId !== -1">
+                  <span class="middle slash symbol" />
+                  <router-link
+                    class="discrete link album"
+                    :to="{name: 'library.albums.detail', params: {id: currentTrack.albumId }}"
                   >
-                    <i :class="['ui', 'backward step', {'disabled': emptyQueue}, 'icon']" />
-                  </span>
-
-                  <span
-                    v-if="!playing"
-                    role="button"
-                    :title="labels.play"
-                    :aria-label="labels.play"
-                    class="control"
-                    @click.prevent.stop="resumePlayback"
-                  >
-                    <i :class="['ui', 'play', {'disabled': !currentTrack}, 'icon']" />
-                  </span>
-                  <span
-                    v-else
-                    role="button"
-                    :title="labels.pause"
-                    :aria-label="labels.pause"
-                    class="control"
-                    @click.prevent.stop="pausePlayback"
-                  >
-                    <i :class="['ui', 'pause', {'disabled': !currentTrack}, 'icon']" />
-                  </span>
-                  <span
-                    role="button"
-                    :title="labels.next"
-                    :aria-label="labels.next"
-                    class="control"
-                    :disabled="!hasNext"
-                    @click.prevent.stop="$store.dispatch('queue/next')"
-                  >
-                    <i :class="['ui', {'disabled': !hasNext}, 'forward step', 'icon']" />
-                  </span>
-                </div>
+                    {{ currentTrack.albumTitle ?? $t('components.Queue.meta.unknownAlbum') }}
+                  </router-link>
+                </template>
+              </div>
+            </div>
+          </h1>
+          <div
+            v-if="currentTrack && errored"
+            class="ui small warning message"
+          >
+            <h3 class="header">
+              {{ $t('components.Queue.header.failure') }}
+            </h3>
+            <p v-if="hasNext && isPlaying">
+              {{ $t('components.Queue.message.automaticPlay') }}
+              <i class="loading spinner icon" />
+            </p>
+            <p>
+              {{ $t('components.Queue.warning.connectivity') }}
+            </p>
+          </div>
+          <div
+            v-else-if="currentSound && !currentSound.playable"
+            class="ui small warning message"
+          >
+            <h3 class="header">
+              {{ $t('components.Queue.header.noSources') }}
+            </h3>
+            <p v-if="hasNext && isPlaying">
+              {{ $t('components.Queue.message.automaticPlay') }}
+              <i class="loading spinner icon" />
+            </p>
+          </div>
+          <div class="additional-controls desktop-and-below">
+            <track-favorite-icon
+              v-if="$store.state.auth.authenticated"
+              :track="currentTrack"
+            />
+            <track-playlist-icon
+              v-if="$store.state.auth.authenticated"
+              :track="currentTrack"
+            />
+            <button
+              v-if="$store.state.auth.authenticated"
+              :class="['ui', 'really', 'basic', 'circular', 'icon', 'button']"
+              :aria-label="labels.addArtistContentFilter"
+              :title="labels.addArtistContentFilter"
+              @click="hideArtist"
+            >
+              <i :class="['eye slash outline', 'basic', 'icon']" />
+            </button>
+          </div>
+          <div class="progress-wrapper">
+            <div class="progress-area">
+              <div
+                ref="progressBar"
+                :class="['ui', 'small', 'vibrant', {'indicating': isLoadingAudio && !errored}, 'progress']"
+                @click="touchProgress"
+              >
+                <div
+                  class="buffer bar"
+                  :style="{ 'transform': `translate3d(${bufferProgress - 100}%, 0, 0)` }"
+                />
+                <div class="position bar" />
+              </div>
+            </div>
+            <div class="progress">
+              <template v-if="!isLoadingAudio">
+                <a
+                  href=""
+                  :aria-label="labels.restart"
+                  class="left floated timer discrete start"
+                  @click.prevent="currentTime = 0"
+                >
+                  {{ time.parse(Math.round(currentTime)) }}
+                </a>
+                <span class="right floated timer total">{{ time.parse(Math.round(duration)) }}</span>
+              </template>
+              <template v-else>
+                <span class="left floated timer">{{ $t('components.Queue.meta.startTime') }}</span>
+                <span class="right floated timer">{{ $t('components.Queue.meta.startTime') }}</span>
               </template>
             </div>
           </div>
-          <div class="ui ten wide column queue-column">
-            <div class="ui basic clearing fixed-header segment">
-              <h2 class="ui header">
-                <div class="content">
-                  <button
-                    class="ui right floated basic button"
-                    @click="$store.commit('ui/queueFocused', null)"
-                  >
-                    <translate translate-context="*/Queue/*/Verb">
-                      Close
-                    </translate>
-                  </button>
-                  <button
-                    class="ui right floated basic button danger"
-                    @click="$store.dispatch('queue/clean')"
-                  >
-                    <translate translate-context="*/Queue/*/Verb">
-                      Clear
-                    </translate>
-                  </button>
-                  {{ labels.queue }}
-                  <div class="sub header">
-                    <div>
-                      <translate
-                        translate-context="Sidebar/Queue/Text"
-                        :translate-params="{index: queue.currentIndex + 1, length: queue.tracks.length}"
-                      >
-                        Track %{ index } of %{ length }
-                      </translate><template v-if="!$store.state.radios.running">
-                        -
-                        <span :title="labels.duration">
-                          {{ timeLeft }}
-                        </span>
-                      </template>
-                    </div>
-                  </div>
+          <player-controls class="desktop-and-below" />
+        </template>
+      </div>
+      <div id="queue">
+        <div class="ui basic clearing segment">
+          <h2 class="ui header">
+            <div class="content">
+              <button
+                v-t="'components.Queue.button.close'"
+                class="ui right floated basic button"
+                @click="$store.commit('ui/queueFocused', null)"
+              />
+              <button
+                v-t="'components.Queue.button.clear'"
+                class="ui right floated basic button danger"
+                @click="clear"
+              />
+              {{ labels.queue }}
+              <div class="sub header">
+                <div>
+                  <i18n-t keypath="components.Queue.meta.queuePosition">
+                    <template #index>
+                      {{ currentIndex + 1 }}
+                    </template>
+                    <template #length>
+                      {{ queue.length }}
+                    </template>
+                  </i18n-t>
+                  <span class="middle pipe symbol" />
+                  <span v-t="'components.Queue.meta.end'" />
+                  <span :title="labels.duration">
+                    {{ endsIn }}
+                  </span>
                 </div>
-              </h2>
+              </div>
             </div>
-            <table class="ui compact very basic fixed single line selectable unstackable table">
-              <draggable
-                v-model="tracks"
-                tag="tbody"
-                handle=".handle"
-                @update="reorder"
-              >
-                <tr
-                  v-for="(track, index) in tracks"
-                  :key="index"
-                  :class="['queue-item', {'active': index === queue.currentIndex}]"
-                >
-                  <td class="handle">
-                    <i class="grip lines icon" />
-                  </td>
-                  <td
-                    class="image-cell"
-                    @click="$store.dispatch('queue/currentIndex', index)"
-                  >
-                    <img
-                      v-if="track.cover && track.cover.urls.original"
-                      class="ui mini image"
-                      alt=""
-                      :src="$store.getters['instance/absoluteUrl'](track.cover.urls.medium_square_crop)"
-                    >
-                    <img
-                      v-else-if="track.album && track.album.cover && track.album.cover.urls.original"
-                      class="ui mini image"
-                      alt=""
-                      :src="$store.getters['instance/absoluteUrl'](track.album.cover.urls.medium_square_crop)"
-                    >
-                    <img
-                      v-else
-                      class="ui mini image"
-                      alt=""
-                      src="../assets/audio/default-cover.png"
-                    >
-                  </td>
-                  <td
-                    colspan="3"
-                    @click="$store.dispatch('queue/currentIndex', index)"
-                  >
-                    <button
-                      class="title reset ellipsis"
-                      :title="track.title"
-                      :aria-label="labels.selectTrack"
-                    >
-                      <strong>{{ track.title }}</strong><br>
-                      <span>
-                        {{ track.artist.name }}
-                      </span>
-                    </button>
-                  </td>
-                  <td class="duration-cell">
-                    <template v-if="track.uploads.length > 0">
-                      {{ time.durationFormatted(track.uploads[0].duration) }}
-                    </template>
-                  </td>
-                  <td class="controls">
-                    <template v-if="$store.getters['favorites/isFavorite'](track.id)">
-                      <i class="pink heart icon" />
-                    </template>
-                    <button
-                      :aria-label="labels.removeFromQueue"
-                      :title="labels.removeFromQueue"
-                      :class="['ui', 'really', 'tiny', 'basic', 'circular', 'icon', 'button']"
-                      @click.stop="cleanTrack(index)"
-                    >
-                      <i class="x icon" />
-                    </button>
-                  </td>
-                </tr>
-              </draggable>
-            </table>
-
+          </h2>
+        </div>
+        <virtual-list
+          v-if="queueItems.length !== 0"
+          ref="list"
+          :list="queueItems"
+          :component="QueueItem"
+          :size="50"
+          @reorder="reorderTracks"
+          @visible="list.scrollToIndex(currentIndex, 'center')"
+        >
+          <template #default="{ index, item, classlist }">
+            <queue-item
+              v-if="index !== undefined"
+              :data-index="index"
+              :index="index"
+              :source="item"
+              :class="[...classlist, currentIndex === index && 'active']"
+              @play="play"
+              @remove="dequeue"
+            />
+          </template>
+          <template #footer>
+            <div
+              v-if="$store.state.radios.populating"
+              class="radio-populating"
+            >
+              <i class="loading spinner icon" />
+              {{ labels.populating }}
+            </div>
             <div
               v-if="$store.state.radios.running"
-              class="ui info message"
+              class="ui info message radio-message"
             >
               <div class="content">
                 <h3 class="header">
-                  <i class="feed icon" /> <translate translate-context="Sidebar/Player/Title">
-                    You have a radio playing
-                  </translate>
+                  <i class="feed icon" />
+                  {{ $t('components.Queue.header.radio') }}
                 </h3>
                 <p>
-                  <translate translate-context="Sidebar/Player/Paragraph">
-                    New tracks will be appended here automatically.
-                  </translate>
+                  {{ $t('components.Queue.message.radio') }}
                 </p>
                 <button
                   class="ui basic primary button"
                   @click="$store.dispatch('radios/stop')"
                 >
-                  <translate translate-context="*/Player/Button.Label/Short, Verb">
-                    Stop radio
-                  </translate>
+                  {{ $t('components.Queue.button.stopRadio') }}
                 </button>
               </div>
             </div>
-          </div>
-        </div>
+          </template>
+        </virtual-list>
       </div>
     </div>
   </section>
 </template>
-<script>
-import { mapState, mapGetters, mapActions } from 'vuex'
-import $ from 'jquery'
-import moment from 'moment'
-import lodash from '@/lodash'
-import time from '@/utils/time'
-import createFocusTrap from 'focus-trap'
-
-export default {
-  components: {
-    TrackFavoriteIcon: () => import(/* webpackChunkName: "auth-audio" */ '@/components/favorites/TrackFavoriteIcon'),
-    TrackPlaylistIcon: () => import(/* webpackChunkName: "auth-audio" */ '@/components/playlists/TrackPlaylistIcon'),
-    draggable: () => import(/* webpackChunkName: "draggable" */ 'vuedraggable')
-  },
-  data () {
-    return {
-      showVolume: false,
-      isShuffling: false,
-      tracksChangeBuffer: null,
-      focusTrap: null,
-      time
-    }
-  },
-  computed: {
-    ...mapState({
-      currentIndex: state => state.queue.currentIndex,
-      playing: state => state.player.playing,
-      isLoadingAudio: state => state.player.isLoadingAudio,
-      volume: state => state.player.volume,
-      looping: state => state.player.looping,
-      duration: state => state.player.duration,
-      bufferProgress: state => state.player.bufferProgress,
-      errored: state => state.player.errored,
-      currentTime: state => state.player.currentTime,
-      queue: state => state.queue
-    }),
-    ...mapGetters({
-      currentTrack: 'queue/currentTrack',
-      hasNext: 'queue/hasNext',
-      emptyQueue: 'queue/isEmpty',
-      durationFormatted: 'player/durationFormatted',
-      currentTimeFormatted: 'player/currentTimeFormatted',
-      progress: 'player/progress'
-    }),
-    tracks: {
-      get () {
-        return this.$store.state.queue.tracks
-      },
-      set (value) {
-        this.tracksChangeBuffer = value
-      }
-    },
-    labels () {
-      return {
-        queue: this.$pgettext('*/*/*', 'Queue'),
-        duration: this.$pgettext('*/*/*', 'Duration'),
-        addArtistContentFilter: this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Hide content from this artist…'),
-        restart: this.$pgettext('*/*/*', 'Restart track')
-      }
-    },
-    timeLeft () {
-      const seconds = lodash.sum(
-        this.queue.tracks.slice(this.queue.currentIndex).map((t) => {
-          return (t.uploads || []).map((u) => {
-            return u.duration || 0
-          })[0] || 0
-        })
-      )
-      return moment(this.$store.state.ui.lastDate).add(seconds, 'seconds').fromNow(true)
-    },
-    sliderVolume: {
-      get () {
-        return this.volume
-      },
-      set (v) {
-        this.$store.commit('player/volume', v)
-      }
-    },
-    playerFocused () {
-      return this.$store.state.ui.queueFocused === 'player'
-    }
-  },
-  watch: {
-    '$store.state.ui.queueFocused': {
-      handler (v) {
-        if (v === 'queue') {
-          this.$nextTick(() => {
-            this.scrollToCurrent()
-          })
-        }
-      },
-      immediate: true
-    },
-    '$store.state.queue.currentIndex': {
-      handler () {
-        this.$nextTick(() => {
-          this.scrollToCurrent()
-        })
-      }
-    },
-    '$store.state.queue.tracks': {
-      handler (v) {
-        if (!v || v.length === 0) {
-          this.$store.commit('ui/queueFocused', null)
-        }
-      },
-      immediate: true
-    },
-    '$route.fullPath' () {
-      this.$store.commit('ui/queueFocused', null)
-    }
-  },
-  mounted () {
-    this.focusTrap = createFocusTrap(this.$el, { allowOutsideClick: () => { return true } })
-    this.focusTrap.activate()
-    this.$nextTick(() => {
-      setTimeout(() => {
-        this.scrollToCurrent()
-        // delay is to let transition work
-      }, 400)
-    })
-  },
-  methods: {
-    ...mapActions({
-      cleanTrack: 'queue/cleanTrack',
-      mute: 'player/mute',
-      unmute: 'player/unmute',
-      clean: 'queue/clean',
-      toggleMute: 'player/toggleMute',
-      resumePlayback: 'player/resumePlayback',
-      pausePlayback: 'player/pausePlayback'
-    }),
-    reorder: function (event) {
-      this.$store.commit('queue/reorder', {
-        tracks: this.tracksChangeBuffer,
-        oldIndex: event.oldIndex,
-        newIndex: event.newIndex
-      })
-    },
-    scrollToCurrent () {
-      const current = $(this.$el).find('.queue-item.active')[0]
-      if (!current) {
-        return
-      }
-      const elementRect = current.getBoundingClientRect()
-      const absoluteElementTop = elementRect.top + window.pageYOffset
-      const middle = absoluteElementTop - (window.innerHeight / 2)
-      window.scrollTo({ top: middle, behaviour: 'smooth' })
-    },
-    touchProgress (e) {
-      const target = this.$refs.progress
-      const time = (e.layerX / target.offsetWidth) * this.duration
-      this.$emit('touch-progress', time)
-    },
-    shuffle () {
-      const disabled = this.queue.tracks.length === 0
-      if (this.isShuffling || disabled) {
-        return
-      }
-      const self = this
-      const msg = this.$pgettext('Content/Queue/Message', 'Queue shuffled!')
-      this.isShuffling = true
-      setTimeout(() => {
-        self.$store.dispatch('queue/shuffle', () => {
-          self.isShuffling = false
-          self.$store.commit('ui/addMessage', {
-            content: msg,
-            date: new Date()
-          })
-        })
-      }, 100)
-    }
-  }
-}
-</script>

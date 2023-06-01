@@ -1,3 +1,114 @@
+<script setup lang="ts">
+import type { BackendError, Application } from '~/types'
+
+import axios from 'axios'
+import { ref, reactive, computed } from 'vue'
+import { computedEager } from '@vueuse/core'
+import { useI18n } from 'vue-i18n'
+import { uniq } from 'lodash-es'
+
+import useScopes from '~/composables/auth/useScopes'
+
+interface Events {
+  (e: 'updated', application: Application): void
+  (e: 'created', application: Application): void
+}
+
+interface Props {
+  app?: Application | null
+  defaults?: Partial<Application>
+}
+
+const emit = defineEmits<Events>()
+const props = withDefaults(defineProps<Props>(), {
+  app: null,
+  defaults: () => ({})
+})
+
+const { t } = useI18n()
+const scopes = useScopes()
+  .filter(scope => !['reports', 'security'].includes(scope.id))
+
+const fields = reactive({
+  name: props.app?.name ?? props.defaults.name ?? '',
+  redirect_uris: props.app?.redirect_uris ?? props.defaults.redirect_uris ?? 'urn:ietf:wg:oauth:2.0:oob',
+  scopes: props.app?.scopes ?? props.defaults.scopes ?? 'read'
+})
+
+const errors = ref([] as string[])
+const isLoading = ref(false)
+const submit = async () => {
+  errors.value = []
+  isLoading.value = true
+
+  try {
+    const isUpdating = props.app !== null
+    const request = isUpdating
+      ? () => axios.patch(`oauth/apps/${props.app?.client_id}/`, fields)
+      : () => axios.post('oauth/apps/', fields)
+
+    const response = await request()
+
+    if (isUpdating) emit('updated', response.data as Application)
+    else emit('created', response.data as Application)
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const scopeArray = computed({
+  get: () => fields.scopes.trim().split(' '),
+  set: (scopes: string[]) => (fields.scopes = uniq(scopes).join(' '))
+})
+
+const allScopesSelected = (parent: typeof allScopes['value'][number]) => {
+  const scopes = new Set(scopeArray.value)
+  return parent.children.every(child => scopes.has(child.id))
+}
+
+const toggleAllScopes = (parent: typeof allScopes['value'][number]) => {
+  const scopes = new Set(scopeArray.value)
+
+  const allScopesSelected = parent.children.every(child => scopes.has(child.id))
+  for (const child of parent.children) {
+    const action = allScopesSelected
+      ? 'delete'
+      : 'add'
+
+    scopes[action](child.id)
+  }
+
+  scopeArray.value = [...scopes]
+}
+
+const scopeParents = computedEager(() => [
+  {
+    id: 'read',
+    label: t('components.auth.ApplicationForm.label.scopes.read.label'),
+    description: t('components.auth.ApplicationForm.label.scopes.read.description'),
+    value: scopeArray.value.includes('read')
+  },
+  {
+    id: 'write',
+    label: t('components.auth.ApplicationForm.label.scopes.write.label'),
+    description: t('components.auth.ApplicationForm.label.scopes.write.description'),
+    value: scopeArray.value.includes('write')
+  }
+])
+
+const allScopes = computed(() => {
+  return scopeParents.value.map(parent => ({
+    ...parent,
+    children: scopes.map(scope => {
+      const id = `${parent.id}:${scope.id}`
+      return { id, value: scopeArray.value.includes(id) }
+    })
+  }))
+})
+</script>
+
 <template>
   <form
     class="ui form component-form"
@@ -9,9 +120,7 @@
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/*/Error message.Title">
-          We cannot save your changes
-        </translate>
+        {{ $t('components.auth.ApplicationForm.header.failure') }}
       </h4>
       <ul class="list">
         <li
@@ -23,7 +132,7 @@
       </ul>
     </div>
     <div class="ui field">
-      <label for="application-name"><translate translate-context="*/*/*/Noun">Name</translate></label>
+      <label for="application-name">{{ $t('components.auth.ApplicationForm.label.name') }}</label>
       <input
         id="application-name"
         v-model="fields.name"
@@ -33,7 +142,7 @@
       >
     </div>
     <div class="ui field">
-      <label for="redirect-uris"><translate translate-context="Content/Applications/Input.Label/Noun">Redirect URI</translate></label>
+      <label for="redirect-uris">{{ $t('components.auth.ApplicationForm.label.redirectUri') }}</label>
       <input
         id="redirect-uris"
         v-model="fields.redirect_uris"
@@ -41,17 +150,13 @@
         type="text"
       >
       <p class="help">
-        <translate translate-context="Content/Applications/Help Text">
-          Use "urn:ietf:wg:oauth:2.0:oob" as a redirect URI if your application is not served on the web.
-        </translate>
+        {{ $t('components.auth.ApplicationForm.help.redirectUri') }}
       </p>
     </div>
     <div class="ui field">
-      <label><translate translate-context="Content/*/*/Noun">Scopes</translate></label>
+      <label>{{ $t('components.auth.ApplicationForm.label.scopes.label') }}</label>
       <p>
-        <translate translate-context="Content/Applications/Paragraph/">
-          Checking the parent "Read" or "Write" scopes implies access to all the corresponding children scopes.
-        </translate>
+        {{ $t('components.auth.ApplicationForm.label.scopes.description') }}
       </p>
       <div class="ui stackable two column grid">
         <div
@@ -62,9 +167,9 @@
           <div class="ui parent checkbox">
             <input
               :id="parent.id"
-              v-model="scopeArray"
-              :value="parent.id"
+              :checked="allScopesSelected(parent)"
               type="checkbox"
+              @input="toggleAllScopes(parent)"
             >
             <label :for="parent.id">
               {{ parent.label }}
@@ -75,8 +180,8 @@
           </div>
 
           <div
-            v-for="(child, index) in parent.children"
-            :key="index"
+            v-for="child in parent.children"
+            :key="child.id"
           >
             <div class="ui child checkbox">
               <input
@@ -87,9 +192,6 @@
               >
               <label :for="child.id">
                 {{ child.id }}
-                <p class="help">
-                  {{ child.description }}
-                </p>
               </label>
             </div>
           </div>
@@ -100,125 +202,12 @@
       :class="['ui', {'loading': isLoading}, 'success', 'button']"
       type="submit"
     >
-      <translate
-        v-if="updating"
-        key="2"
-        translate-context="Content/Applications/Button.Label/Verb"
-      >
-        Update application
-      </translate>
-      <translate
-        v-else
-        key="3"
-        translate-context="Content/Applications/Button.Label/Verb"
-      >
-        Create application
-      </translate>
+      <span v-if="app !== null">
+        {{ $t('components.auth.ApplicationForm.button.update') }}
+      </span>
+      <span v-else>
+        {{ $t('components.auth.ApplicationForm.button.create') }}
+      </span>
     </button>
   </form>
 </template>
-
-<script>
-import _ from '@/lodash'
-import axios from 'axios'
-import TranslationsMixin from '@/components/mixins/Translations'
-
-export default {
-  mixins: [TranslationsMixin],
-  props: {
-    app: { type: Object, required: false, default: () => { return null } },
-    defaults: { type: Object, required: false, default: () => { return {} } }
-  },
-  data () {
-    const defaults = this.defaults || {}
-    const app = this.app || {}
-    return {
-      isLoading: false,
-      errors: [],
-      fields: {
-        name: app.name || defaults.name || '',
-        redirect_uris: app.redirect_uris || defaults.redirect_uris || 'urn:ietf:wg:oauth:2.0:oob',
-        scopes: app.scopes || defaults.scopes || 'read'
-      },
-      scopes: [
-        { id: 'profile', icon: 'user' },
-        { id: 'libraries', icon: 'book' },
-        { id: 'favorites', icon: 'heart' },
-        { id: 'listenings', icon: 'music' },
-        { id: 'follows', icon: 'users' },
-        { id: 'playlists', icon: 'list' },
-        { id: 'radios', icon: 'rss' },
-        { id: 'filters', icon: 'eye slash' },
-        { id: 'notifications', icon: 'bell' },
-        { id: 'edits', icon: 'pencil alternate' }
-      ]
-    }
-  },
-  computed: {
-    updating () {
-      return this.app
-    },
-    scopeArray: {
-      get () {
-        return this.fields.scopes.split(' ')
-      },
-      set (v) {
-        this.fields.scopes = _.uniq(v).join(' ')
-      }
-    },
-    allScopes () {
-      const self = this
-      const parents = [
-        {
-          id: 'read',
-          label: this.$pgettext('Content/OAuth Scopes/Label/Verb', 'Read'),
-          description: this.$pgettext('Content/OAuth Scopes/Help Text', 'Read-only access to user data'),
-          value: this.scopeArray.indexOf('read') > -1
-        },
-        {
-          id: 'write',
-          label: this.$pgettext('Content/OAuth Scopes/Label/Verb', 'Write'),
-          description: this.$pgettext('Content/OAuth Scopes/Help Text', 'Write-only access to user data'),
-          value: this.scopeArray.indexOf('write') > -1
-        }
-      ]
-      parents.forEach((p) => {
-        p.children = self.scopes.map(s => {
-          const id = `${p.id}:${s.id}`
-          return {
-            id,
-            value: this.scopeArray.indexOf(id) > -1
-          }
-        })
-      })
-      return parents
-    }
-  },
-  methods: {
-    submit () {
-      this.errors = []
-      const self = this
-      self.isLoading = true
-      const payload = this.fields
-      let event, promise
-      if (this.updating) {
-        event = 'updated'
-        promise = axios.patch(`oauth/apps/${this.app.client_id}/`, payload)
-      } else {
-        event = 'created'
-        promise = axios.post('oauth/apps/', payload)
-      }
-      return promise.then(
-        response => {
-          self.isLoading = false
-          self.$emit(event, response.data)
-        },
-        error => {
-          self.isLoading = false
-          self.errors = error.backendErrors
-        }
-      )
-    }
-  }
-}
-</script>

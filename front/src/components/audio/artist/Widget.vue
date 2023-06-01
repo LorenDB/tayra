@@ -1,3 +1,69 @@
+<script setup lang="ts">
+import type { Artist } from '~/types'
+
+import { reactive, ref, watch } from 'vue'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+import ArtistCard from '~/components/audio/artist/Card.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+
+interface Props {
+  filters: Record<string, string | boolean>
+  search?: boolean
+  header?: boolean
+  limit?: number
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  search: false,
+  header: true,
+  limit: 12
+})
+
+const store = useStore()
+
+const query = ref('')
+const artists = reactive([] as Artist[])
+const count = ref(0)
+const nextPage = ref()
+
+const isLoading = ref(false)
+const fetchData = async (url = 'artists/') => {
+  isLoading.value = true
+
+  try {
+    const params = {
+      q: query.value,
+      ...props.filters,
+      page_size: props.limit
+    }
+
+    const response = await axios.get(url, { params })
+    nextPage.value = response.data.next
+    count.value = response.data.count
+    artists.push(...response.data.results)
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+const performSearch = () => {
+  artists.length = 0
+  fetchData()
+}
+
+watch(
+  () => store.state.moderation.lastUpdate,
+  () => fetchData(),
+  { immediate: true }
+)
+</script>
+
 <template>
   <div class="wrapper">
     <h3
@@ -10,7 +76,7 @@
     <inline-search-bar
       v-if="search"
       v-model="query"
-      @search="objects = []; fetchData()"
+      @search="performSearch"
     />
     <div class="ui hidden divider" />
     <div class="ui five app-cards cards">
@@ -21,13 +87,13 @@
         <div class="ui loader" />
       </div>
       <artist-card
-        v-for="artist in objects"
+        v-for="artist in artists"
         :key="artist.id"
         :artist="artist"
       />
     </div>
     <slot
-      v-if="!isLoading && objects.length === 0"
+      v-if="!isLoading && artists.length === 0"
       name="empty-state"
     >
       <empty-state
@@ -42,77 +108,8 @@
         :class="['ui', 'basic', 'button']"
         @click="fetchData(nextPage)"
       >
-        <translate translate-context="*/*/Button,Label">
-          Show more
-        </translate>
+        {{ $t('components.audio.artist.Widget.button.more') }}
       </button>
     </template>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import ArtistCard from '@/components/audio/artist/Card'
-
-export default {
-  components: {
-    ArtistCard
-  },
-  props: {
-    filters: { type: Object, required: true },
-    controls: { type: Boolean, default: true },
-    header: { type: Boolean, default: true },
-    search: { type: Boolean, default: false }
-  },
-  data () {
-    return {
-      objects: [],
-      limit: 12,
-      count: 0,
-      isLoading: false,
-      errors: null,
-      previousPage: null,
-      nextPage: null,
-      query: ''
-    }
-  },
-  watch: {
-    offset () {
-      this.fetchData()
-    },
-    '$store.state.moderation.lastUpdate': function () {
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData (url) {
-      url = url || 'artists/'
-      this.isLoading = true
-      const self = this
-      const params = { q: this.query, ...this.filters }
-      params.page_size = this.limit
-      params.offset = this.offset
-      axios.get(url, { params: params }).then((response) => {
-        self.previousPage = response.data.previous
-        self.nextPage = response.data.next
-        self.isLoading = false
-        self.objects = [...self.objects, ...response.data.results]
-        self.count = response.data.count
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    updateOffset (increment) {
-      if (increment) {
-        this.offset += this.limit
-      } else {
-        this.offset = Math.max(this.offset - this.limit, 0)
-      }
-    }
-  }
-}
-</script>

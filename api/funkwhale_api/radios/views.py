@@ -1,11 +1,12 @@
 from django.db.models import Q
+from drf_spectacular.utils import extend_schema
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from funkwhale_api.common import permissions as common_permissions
-from funkwhale_api.music.serializers import TrackSerializer
 from funkwhale_api.music import utils as music_utils
+from funkwhale_api.music.serializers import TrackSerializer
 from funkwhale_api.users.oauth import permissions as oauth_permissions
 
 from . import filters, filtersets, models, serializers
@@ -44,7 +45,7 @@ class RadioViewSet(
     def perform_update(self, serializer):
         return serializer.save(user=self.request.user)
 
-    @action(methods=["get"], detail=True)
+    @action(methods=["get"], detail=True, serializer_class=TrackSerializer)
     def tracks(self, request, *args, **kwargs):
         radio = self.get_object()
         tracks = radio.get_candidates().for_nested_serialization()
@@ -56,13 +57,16 @@ class RadioViewSet(
             serializer = TrackSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
-    @action(methods=["get"], detail=False)
+    @action(
+        methods=["get"], detail=False, serializer_class=serializers.FilterSerializer
+    )
     def filters(self, request, *args, **kwargs):
         serializer = serializers.FilterSerializer(
             filters.registry.exposed_filters, many=True
         )
         return Response(serializer.data)
 
+    @extend_schema(operation_id="validate_radio")
     @action(methods=["post"], detail=False)
     def validate(self, request, *args, **kwargs):
         try:
@@ -124,6 +128,7 @@ class RadioSessionTrackViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet)
     queryset = models.RadioSessionTrack.objects.all()
     permission_classes = []
 
+    @extend_schema(operation_id="get_next_radio_track")
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)

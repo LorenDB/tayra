@@ -1,3 +1,13 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+const labels = computed(() => ({
+  title: t('components.auth.Logout.title')
+}))
+</script>
+
 <template>
   <main
     v-title="labels.title"
@@ -9,23 +19,16 @@
         class="ui small text container"
       >
         <h2>
-          <translate translate-context="Content/Login/Title">
-            Are you sure you want to log out?
-          </translate>
+          {{ $t('components.auth.Logout.header.confirm') }}
         </h2>
-        <p
-          v-translate="{username: $store.state.auth.username}"
-          translate-context="Content/Login/Paragraph"
-        >
-          You are currently logged in as %{ username }
+        <p>
+          {{ $t('components.auth.Logout.message.loggedIn', { username: $store.state.auth.username }) }}
         </p>
         <button
           class="ui button"
           @click="$store.dispatch('auth/logout')"
         >
-          <translate translate-context="Content/Login/Button.Label">
-            Yes, log me out!
-          </translate>
+          {{ $t('components.auth.Logout.button.logout') }}
         </button>
       </div>
       <div
@@ -33,31 +36,15 @@
         class="ui small text container"
       >
         <h2>
-          <translate translate-context="Content/Login/Title">
-            You aren't currently logged in
-          </translate>
+          {{ $t('components.auth.Logout.header.unauthenticated') }}
         </h2>
         <router-link
           to="/login"
           class="ui button"
         >
-          <translate translate-context="Content/Login/Button.Label">
-            Log in!
-          </translate>
+          {{ $t('components.auth.Logout.link.login') }}
         </router-link>
       </div>
     </section>
   </main>
 </template>
-
-<script>
-export default {
-  computed: {
-    labels () {
-      return {
-        title: this.$pgettext('Head/Login/Title', 'Log Out')
-      }
-    }
-  }
-}
-</script>

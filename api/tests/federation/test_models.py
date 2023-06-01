@@ -23,7 +23,7 @@ def test_cannot_duplicate_follow(factories):
 
 def test_follow_federation_url(factories):
     follow = factories["federation.Follow"](local=True)
-    expected = "{}#follows/{}".format(follow.actor.fid, follow.uuid)
+    expected = f"{follow.actor.fid}#follows/{follow.uuid}"
 
     assert follow.get_federation_id() == expected
 
@@ -179,7 +179,7 @@ def test_actor_can_manage_attributed_to(mocker, factories):
 
 def test_actor_can_manage_domain_not_service_actor(mocker, factories):
     actor = factories["federation.Actor"]()
-    obj = mocker.Mock(fid="https://{}/hello".format(actor.domain_id))
+    obj = mocker.Mock(fid=f"https://{actor.domain_id}/hello")
 
     assert actor.can_manage(obj) is False
 
@@ -188,7 +188,7 @@ def test_actor_can_manage_domain_service_actor(mocker, factories):
     actor = factories["federation.Actor"]()
     actor.domain.service_actor = actor
     actor.domain.save()
-    obj = mocker.Mock(fid="https://{}/hello".format(actor.domain_id))
+    obj = mocker.Mock(fid=f"https://{actor.domain_id}/hello")
 
     assert actor.can_manage(obj) is True
 
@@ -257,7 +257,9 @@ def test_update_library_follow_approved_create_entries(
         assert list(music_models.Track.objects.playable_by(actor)) == expected_tracks
 
 
-def test_update_library_follow_delete_delete_denormalization_entries(factories,):
+def test_update_library_follow_delete_delete_denormalization_entries(
+    factories,
+):
     updated_playable_tracks = {"owner": [0], "follower": []}
     actors = {
         "owner": factories["federation.Actor"](local=True),

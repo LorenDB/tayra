@@ -1,18 +1,48 @@
+<script setup lang="ts">
+import type { FileSystem, FSEntry } from '~/types'
+
+import { useVModel } from '@vueuse/core'
+
+interface Events {
+  (e: 'update:modelValue', value: string[]): void
+  (e: 'import'): void
+}
+
+interface Props {
+  data: FileSystem
+  loading: boolean
+  modelValue: string[]
+}
+
+const emit = defineEmits<Events>()
+const props = defineProps<Props>()
+
+const value = useVModel(props, 'modelValue', emit)
+const handleClick = (entry: FSEntry) => {
+  if (!entry.dir) return
+
+  if (entry.name === '..') {
+    value.value.pop()
+    return
+  }
+
+  value.value.push(entry.name)
+}
+</script>
+
 <template>
-  <div :class="['ui', {loading}, 'segment']">
+  <div :class="['ui', { loading }, 'segment']">
     <div class="ui fluid action input">
       <input
         class="ui disabled"
         disabled
-        :value="data.root + '/' + value.join('/')"
+        :value="props.data.root + '/' + value.join('/')"
       >
       <button
         class="ui button"
-        @click.prevent="$emit('import')"
+        @click.prevent="emit('import')"
       >
-        <translate translate-context="Content/Library/Button/Verb">
-          Import
-        </translate>
+        {{ $t('components.library.FsBrowser.button.import') }}
       </button>
     </div>
     <div class="ui list component-fs-browser">
@@ -20,11 +50,11 @@
         v-if="value.length > 0"
         class="item"
         href=""
-        @click.prevent="handleClick({name: '..', dir: true})"
+        @click.prevent="handleClick({ name: '..', dir: true })"
       >
         <i class="folder icon" />
         <div class="content">
-          <div class="header">..</div>
+          <div class="header doubledot symbol" />
         </div>
       </a>
       <a
@@ -49,26 +79,3 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    data: { type: Object, required: true },
-    loading: { type: Boolean, required: true },
-    value: { type: String, required: true }
-  },
-  methods: {
-    handleClick (element) {
-      if (!element.dir) {
-        return
-      }
-      if (element.name === '..') {
-        const newValue = [...this.value]
-        newValue.pop()
-        this.$emit('input', newValue)
-      } else {
-        this.$emit('input', [...this.value, element.name])
-      }
-    }
-  }
-}
-</script>

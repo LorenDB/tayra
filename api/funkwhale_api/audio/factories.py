@@ -2,7 +2,7 @@ import uuid
 
 import factory
 
-from funkwhale_api.factories import registry, NoUpdateOnCreate
+from funkwhale_api.factories import NoUpdateOnCreate, registry
 from funkwhale_api.federation import actors
 from funkwhale_api.federation import factories as federation_factories
 from funkwhale_api.music import factories as music_factories
@@ -15,7 +15,7 @@ def set_actor(o):
 
 
 def get_rss_channel_name():
-    return "rssfeed-{}".format(uuid.uuid4())
+    return f"rssfeed-{uuid.uuid4()}"
 
 
 @registry.register

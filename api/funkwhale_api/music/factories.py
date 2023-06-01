@@ -2,9 +2,8 @@ import os
 
 import factory
 
-from funkwhale_api.factories import registry, NoUpdateOnCreate
-
 from funkwhale_api.common import factories as common_factories
+from funkwhale_api.factories import NoUpdateOnCreate, registry
 from funkwhale_api.federation import factories as federation_factories
 from funkwhale_api.music import licenses
 from funkwhale_api.tags import factories as tags_factories

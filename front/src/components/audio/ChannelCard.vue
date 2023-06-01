@@ -1,8 +1,50 @@
+<script setup lang="ts">
+import type { Channel } from '~/types'
+
+import { momentFormat } from '~/utils/filters'
+import { useI18n } from 'vue-i18n'
+import { useStore } from '~/store'
+import { computed } from 'vue'
+
+import moment from 'moment'
+
+import PlayButton from '~/components/audio/PlayButton.vue'
+import TagsList from '~/components/tags/List.vue'
+
+interface Props {
+  object: Channel
+}
+
+const props = defineProps<Props>()
+const store = useStore()
+
+const imageUrl = computed(() => props.object.artist?.cover
+  ? store.getters['instance/absoluteUrl'](props.object.artist.cover.urls.medium_square_crop)
+  : null
+)
+
+const urlId = computed(() => props.object.actor?.is_local
+  ? props.object.actor.preferred_username
+  : props.object.actor
+    ? props.object.actor.full_username
+    : props.object.uuid
+)
+
+const { t } = useI18n()
+const updatedTitle = computed(() => {
+  const date = momentFormat(new Date(props.object.artist?.modification_date ?? '1970-01-01'))
+  return t('components.audio.ChannelCard.title', { date })
+})
+
+// TODO (wvffle): Use time ago
+const updatedAgo = computed(() => moment(props.object.artist?.modification_date).fromNow())
+</script>
+
 <template>
   <div class="card app-card">
     <div
       v-lazy:background-image="imageUrl"
-      :class="['ui', 'head-image', {'circular': object.artist.content_category != 'podcast'}, {'padded': object.artist.content_category === 'podcast'}, 'image', {'default-cover': !object.artist.cover}]"
+      :class="['ui', 'head-image', {'circular': object.artist?.content_category != 'podcast'}, {'padded': object.artist?.content_category === 'podcast'}, 'image', {'default-cover': !object.artist?.cover}]"
       @click="$router.push({name: 'channels.detail', params: {id: urlId}})"
     >
       <play-button
@@ -18,48 +60,35 @@
           class="discrete link"
           :to="{name: 'channels.detail', params: {id: urlId}}"
         >
-          {{ object.artist.name }}
+          {{ object.artist?.name }}
         </router-link>
       </strong>
       <div class="description">
-        <translate
-          v-if="object.artist.content_category === 'podcast'"
-          key="1"
+        <span
+          v-if="object.artist?.content_category === 'podcast'"
           class="meta ellipsis"
-          translate-context="Content/Channel/Paragraph"
-          translate-plural="%{ count } episodes"
-          :translate-n="object.artist.tracks_count"
-          :translate-params="{count: object.artist.tracks_count}"
         >
-          %{ count } episode
-        </translate>
-        <translate
-          v-else
-          key="2"
-          translate-context="*/*/*"
-          :translate-params="{count: object.artist.tracks_count}"
-          :translate-n="object.artist.tracks_count"
-          translate-plural="%{ count } tracks"
-        >
-          %{ count } track
-        </translate>
+          {{ $t('components.audio.ChannelCard.meta.episodes', object.artist.tracks_count) }}
+        </span>
+        <span v-else>
+          {{ $t('components.audio.ChannelCard.meta.tracks', object.artist?.tracks_count ?? 0) }}
+        </span>
         <tags-list
           label-classes="tiny"
           :truncate-size="20"
           :limit="2"
           :show-more="false"
-          :tags="object.artist.tags"
+          :tags="object.artist?.tags ?? []"
         />
       </div>
     </div>
     <div class="extra content">
       <time
-        v-translate
         class="meta ellipsis"
-        :datetime="object.artist.modification_date"
+        :datetime="object.artist?.modification_date"
         :title="updatedTitle"
       >
-        %{ updatedAgo }
+        {{ updatedAgo }}
       </time>
       <play-button
         class="right floated basic icon"
@@ -73,46 +102,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import PlayButton from '@/components/audio/PlayButton'
-import TagsList from '@/components/tags/List'
-
-import { momentFormat } from '@/filters'
-import moment from 'moment'
-
-export default {
-  components: {
-    PlayButton,
-    TagsList
-  },
-  props: {
-    object: { type: Object, required: true }
-  },
-  computed: {
-    imageUrl () {
-      if (this.object.artist.cover) {
-        return this.$store.getters['instance/absoluteUrl'](this.object.artist.cover.urls.medium_square_crop)
-      }
-      return null
-    },
-    urlId () {
-      if (this.object.actor && this.object.actor.is_local) {
-        return this.object.actor.preferred_username
-      } else if (this.object.actor) {
-        return this.object.actor.full_username
-      } else {
-        return this.object.uuid
-      }
-    },
-    updatedTitle () {
-      const d = momentFormat(this.object.artist.modification_date)
-      const message = this.$pgettext('*/*/*', 'Updated on %{ date }')
-      return this.$gettextInterpolate(message, { date: d })
-    },
-    updatedAgo () {
-      return moment(this.object.artist.modification_date).fromNow()
-    }
-  }
-}
-</script>

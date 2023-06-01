@@ -1,3 +1,18 @@
+<script setup lang="ts">
+import type { Album } from '~/types'
+
+import PlayButton from '~/components/audio/PlayButton.vue'
+import { computed } from 'vue'
+
+interface Props {
+  serie: Album
+}
+
+const props = defineProps<Props>()
+
+const cover = computed(() => props.serie?.cover ?? null)
+</script>
+
 <template>
   <div class="channel-serie-card">
     <div class="two-images">
@@ -40,14 +55,9 @@
         </router-link>
       </strong>
       <div class="description">
-        <translate
-          translate-context="Content/Channel/Paragraph"
-          translate-plural="%{ count } episodes"
-          :translate-n="serie.tracks_count"
-          :translate-params="{count: serie.tracks_count}"
-        >
-          %{ count } episode
-        </translate>
+        <span>
+          {{ $t('components.audio.ChannelSerieCard.meta.episodes', serie.tracks_count) }}
+        </span>
       </div>
     </div>
     <div class="controls">
@@ -60,28 +70,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import PlayButton from '@/components/audio/PlayButton'
-
-export default {
-  components: {
-    PlayButton
-  },
-  props: { serie: { type: Object, required: true } },
-  computed: {
-    cover () {
-      if (this.serie.cover) {
-        return this.serie.cover
-      }
-      return null
-    },
-    duration () {
-      const uploads = this.serie.uploads.filter((e) => {
-        return e.duration
-      })
-      return uploads[0].duration
-    }
-  }
-}
-</script>

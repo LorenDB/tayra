@@ -1,0 +1,4515 @@
+{
+  "App": {
+    "loading": "加载中..."
+  },
+  "components": {
+    "About": {
+      "description": {
+        "findApp": "使用我们的 App 在其他设备上访问 Funkwhale。",
+        "funkwhale": "Funkwhale 是一个由社区支持的项目，允许您在去中心化、公开的网络中收听、分享音乐及各种音频。",
+        "publicContent": "收听本站分享的公开专辑和歌单。",
+        "quota": "本站上的用户还可以获得 { quota } 的免费存储空间来上传自己的内容！",
+        "signup": "立刻注册，来收藏您最喜欢的音乐、创建歌单、发现新的内容吧！"
+      },
+      "header": {
+        "aboutPod": "关于此实例",
+        "findApp": "适用的 App",
+        "funkwhale": "一个享受、分享音乐的社交平台",
+        "publicContent": "浏览公开内容",
+        "signup": "注册"
+      },
+      "help": {
+        "closedRegistrations": "本实例已关闭注册。您可以使用以下链接在其他实例注册。"
+      },
+      "link": {
+        "findOtherPod": "查看其他实例",
+        "learnMore": "查看更多"
+      },
+      "message": {
+        "greeting": "你好, {username}",
+        "loggedIn": "您已经登录！"
+      },
+      "placeholder": {
+        "noDescription": "无可用描述。"
+      },
+      "stat": {
+        "activeUsers": "{ count } 位活跃用户",
+        "hoursOfMusic": "小时音乐"
+      },
+      "title": "关于"
+    },
+    "AboutPod": {
+      "feature": {
+        "allowList": "允许列表",
+        "anonymousAccess": "匿名访问",
+        "federation": "联邦机制",
+        "quota": "上传文件存储配额",
+        "registrations": "用户注册",
+        "status": {
+          "closed": "关闭",
+          "disabled": "已禁用",
+          "enabled": "启用",
+          "open": "开放"
+        },
+        "version": "Funkwhale 版本"
+      },
+      "header": {
+        "about": "关于此实例",
+        "contact": "联系方式",
+        "features": "特性",
+        "rules": "规则",
+        "statistics": "统计",
+        "terms": "条款及隐私政策"
+      },
+      "link": {
+        "about": "关于此实例",
+        "features": "特性",
+        "introduction": "网站信息",
+        "rules": "规则",
+        "statistics": "统计",
+        "terms": "条款及隐私政策"
+      },
+      "message": {
+        "contact": "给我们发邮件：{'{{'} contactEmail {'}}'}"
+      },
+      "notApplicable": "N/A",
+      "placeholder": {
+        "noDescription": "无可用描述。",
+        "noRules": "无审核规则。",
+        "noTerms": "无适用条款。"
+      },
+      "stat": {
+        "activeUsers": "活跃用户",
+        "albumsCount": "专辑",
+        "artistsCount": "歌手",
+        "hoursOfMusic": "小时音乐",
+        "listeningsCount": "收听",
+        "tracksCount": "歌曲"
+      },
+      "title": "关于"
+    },
+    "Home": {
+      "description": {
+        "funkwhale": {
+          "paragraph1": "本站正在运行 Funkwhale，是一个由社区支持的项目，允许您在去中心化、公开的网络中收听、分享音乐及各种音频。",
+          "paragraph2": "Funkwhale 完全免费，由有爱的社区成员开发而成。"
+        },
+        "quota": "本站上的用户还可以获得 { quota } 的免费存储空间来上传自己的内容！",
+        "signup": "立刻注册，来收藏您最喜欢的音乐、创建歌单、发现新的内容吧！"
+      },
+      "header": {
+        "about": "关于此 Funkwhale 实例",
+        "aboutFunkwhale": "关于 Funkwhale",
+        "contact": "联系方式",
+        "links": "相关链接",
+        "login": "登录",
+        "newAlbums": "最近添加的专辑",
+        "newChannels": "新增频道",
+        "signup": "注册",
+        "statistics": "统计",
+        "welcome": "欢迎来到 { podName }！"
+      },
+      "link": {
+        "findOtherPod": "查看其他实例",
+        "funkwhale": "访问 funkwhale.audio",
+        "learnMore": "查看更多",
+        "mobileApps": {
+          "description": "使用我们的 App 在其他设备上访问 Funkwhale",
+          "label": "移动应用程序"
+        },
+        "publicContent": {
+          "description": "收听本站分享的公开专辑和歌单",
+          "label": "浏览公开内容"
+        },
+        "rules": "服务器规则",
+        "userGuides": {
+          "description": "查阅您想知道的任何有关 Funkwhale 及其功能的指南",
+          "label": "用户手册"
+        },
+        "viewMore": "查看更多…"
+      },
+      "placeholder": {
+        "noDescription": "无可用描述。"
+      },
+      "stat": {
+        "activeUsers": "{ count } 位活跃用户",
+        "hoursOfMusic": "{ count } 小时音乐"
+      },
+      "title": "主页"
+    },
+    "PageNotFound": {
+      "header": {
+        "pageNotFound": "找不到页面！"
+      },
+      "link": {
+        "home": "访问主页"
+      },
+      "message": {
+        "pageNotFound": "抱歉，您访问的页面不存在："
+      },
+      "title": "未找到页面"
+    },
+    "Queue": {
+      "button": {
+        "clear": "清除",
+        "close": "关闭",
+        "stopRadio": "停止播放电台"
+      },
+      "header": {
+        "failure": "此歌曲无法加载",
+        "radio": "您有一个电台正在播放"
+      },
+      "label": {
+        "addArtistContentFilter": "隐藏这个歌手的相关内容…",
+        "duration": "时长",
+        "enterFullscreen": "进入全屏模式",
+        "exitFullscreen": "退出全屏模式",
+        "favorite": "收藏歌曲",
+        "next": "下一首",
+        "pause": "暂停",
+        "play": "播放",
+        "previous": "上一首",
+        "queue": "播放队列",
+        "remove": "删除",
+        "restart": "从头开始"
+      },
+      "message": {
+        "automaticPlay": "下一首歌曲将在几秒钟后自动播放…",
+        "radio": "刚添加的歌曲会在这后面追加进来。"
+      },
+      "meta": {
+        "queuePosition": "第 { index } 首歌曲，共 { length } 首"
+      },
+      "warning": {
+        "connectivity": "您可能遇到了连接性问题。"
+      }
+    },
+    "RemoteSearchForm": {
+      "button": {
+        "fediverse": "联邦宇宙",
+        "rss": "RSS",
+        "search": "搜索"
+      },
+      "description": {
+        "fediverse": "使用此表单以订阅在联邦宇宙里某个服务器上托管的频道。",
+        "rss": "使用此表单以订阅一个 RSS 地址。"
+      },
+      "error": {
+        "fetchFailed": "无法检索此对象"
+      },
+      "header": {
+        "fetchFailed": "获取对象时出错"
+      },
+      "label": {
+        "fediverse": {
+          "fieldLabel": "联邦宇宙对象",
+          "title": "在联邦宇宙中订阅一个播客"
+        },
+        "rss": {
+          "fieldLabel": "RSS 订阅地址",
+          "fieldPlaceholder": "https://website.example.com/rss.xml",
+          "title": "通过 RSS 订阅一个播客"
+        }
+      },
+      "warning": {
+        "unsupported": "这种类型的对象还不受支持"
+      }
+    },
+    "SetInstanceModal": {
+      "button": {
+        "cancel": "取消",
+        "submit": "提交"
+      },
+      "header": {
+        "chooseInstance": "选择实例",
+        "failure": "无法连接至指定 URL",
+        "suggestions": "建议的选择"
+      },
+      "help": {
+        "notFunkwhaleServer": "输入的地址不是 Funkwhale 服务器",
+        "selectPod": "若要继续，请指定您要连接的 Funkwhale 实例。您可以直接输入地址，或从建议的选项中选择一个。",
+        "serverDown": "服务器可能开小差了"
+      },
+      "label": {
+        "url": "实例 URL"
+      },
+      "message": {
+        "newUrl": "您当前正在使用地址为 { url } 的 Funkwhale 实例"
+      }
+    },
+    "ShortcutsModal": {
+      "button": {
+        "close": "关闭"
+      },
+      "header": {
+        "modal": "键盘快捷键"
+      },
+      "shortcut": {
+        "audio": {
+          "clearQueue": "清除播放队列",
+          "decreaseVolume": "降低音量",
+          "expandQueue": "展开队列/播放器视图",
+          "increaseVolume": "增大音量",
+          "label": "音频播放器快捷键",
+          "playNext": "播放下一首歌曲",
+          "playPause": "暂停/播放当前歌曲",
+          "playPrevious": "播放上一首歌曲",
+          "seekBack30": "向后快进 30 秒",
+          "seekBack5": "向后快进 5 秒",
+          "seekForward30": "向前快退 30 秒",
+          "seekForward5": "向前快退 5 秒",
+          "shuffleQueue": "随机打乱播放队列",
+          "toggleFavorite": "收藏/取消收藏",
+          "toggleLoop": "切换循环播放模式",
+          "toggleMute": "静音/取消静音"
+        },
+        "general": {
+          "focus": "跳到搜索栏",
+          "label": "通用快捷键",
+          "show": "显示可用的键盘快捷键",
+          "unfocus": "跳出搜索栏"
+        }
+      }
+    },
+    "Sidebar": {
+      "header": {
+        "administration": "管理",
+        "explore": "探索",
+        "library": "我的曲库",
+        "main": "主导航栏",
+        "more": "更多"
+      },
+      "label": {
+        "add": "添加内容",
+        "administration": "管理",
+        "edits": "待审查的编辑记录",
+        "follows": "待处理的关注请求",
+        "language": "语言",
+        "main": "主菜单",
+        "play": "播放这首歌曲",
+        "theme": "主题"
+      },
+      "link": {
+        "about": "关于此实例",
+        "albums": "专辑",
+        "artists": "歌手",
+        "browse": "浏览",
+        "channels": "频道",
+        "createAccount": "创建一个账户",
+        "favorites": "收藏",
+        "home": "主页",
+        "library": "曲库",
+        "login": "登录",
+        "moderation": "审核",
+        "playlists": "歌单",
+        "podcasts": "播客",
+        "radios": "电台",
+        "search": "搜索",
+        "settings": "设置",
+        "users": "用户"
+      }
+    },
+    "admin": {
+      "SettingsGroup": {
+        "button": {
+          "save": "保存"
+        },
+        "header": {
+          "error": "保存设置时出错",
+          "image": "当前图片"
+        },
+        "message": {
+          "success": "设置更新成功。"
+        }
+      },
+      "SignupFormBuilder": {
+        "button": {
+          "add": "添加一个新字段",
+          "edit": "编辑表单",
+          "preview": "预览表单"
+        },
+        "help": {
+          "additionalFields": "要在表单中显示的其他字段。仅在启用人工注册验证时显示。",
+          "helpText": "可选的、在注册页面开头显示的一段文字。"
+        },
+        "label": {
+          "additionalField": "附加字段",
+          "additionalFields": "附加字段",
+          "delete": "删除",
+          "helpText": "帮助文本",
+          "moveDown": "向下移动",
+          "moveUp": "向上移动"
+        },
+        "table": {
+          "additionalFields": {
+            "header": {
+              "actions": "操作",
+              "label": "字段标签",
+              "required": "必需",
+              "type": "字段类型"
+            },
+            "required": {
+              "false": "否",
+              "true": "是"
+            },
+            "type": {
+              "long": "长文本",
+              "short": "短文本"
+            }
+          }
+        }
+      }
+    },
+    "audio": {
+      "ChannelCard": {
+        "meta": {
+          "episodes": "{ count } 个节目",
+          "tracks": "{ count } 首歌曲"
+        },
+        "title": "已于 ％{ date } 更新"
+      },
+      "ChannelEntries": {
+        "help": {
+          "subscribe": "您可能需要订阅这个频道以查看其内容。"
+        }
+      },
+      "ChannelForm": {
+        "header": {
+          "error": "保存频道时出错"
+        },
+        "help": {
+          "discography": "发布您制作的音乐，作为一个包含专辑和单曲的唱片集。",
+          "podcast": "主持您的节目，让您的社区保持活跃。",
+          "podcastFields": "将作为 itunes:email 和 itunes:name 被某些平台使用，例如 Spotify 和 iTunes。",
+          "username": "将在 URL 中，以及通过联邦宇宙订阅时使用。确定后将无法更改。"
+        },
+        "label": {
+          "category": "类别",
+          "description": "描述",
+          "discography": "歌手唱片",
+          "email": "所有人邮箱",
+          "image": "频道图片",
+          "language": "语言",
+          "name": "名称",
+          "owner": "所有人姓名",
+          "podcast": "播客",
+          "subcategory": "子类别",
+          "tags": "标签",
+          "username": "联邦宇宙地址"
+        },
+        "legend": {
+          "purpose": "这个频道的用途是？"
+        },
+        "loader": {
+          "loading": "加载中"
+        },
+        "placeholder": {
+          "name": "我的频道名称",
+          "username": "用户名"
+        }
+      },
+      "ChannelSerieCard": {
+        "meta": {
+          "episodes": "{ count } 个节目"
+        }
+      },
+      "ChannelSeries": {
+        "button": {
+          "showMore": "展开"
+        },
+        "help": {
+          "subscribe": "您可能需要订阅这个频道以查看其内容。"
+        }
+      },
+      "ChannelsWidget": {
+        "button": {
+          "showMore": "展开"
+        }
+      },
+      "EmbedWizard": {
+        "button": {
+          "copy": "复制"
+        },
+        "header": {
+          "preview": "预览"
+        },
+        "help": {
+          "anonymous": "请与管理员联系并要求他们更新相关设置。",
+          "embed": "复制粘贴以下 HTML 代码到您的网站源代码中",
+          "width": "留空以生成响应式小部件"
+        },
+        "label": {
+          "embed": "嵌入代码",
+          "height": "小部件高度",
+          "width": "小部件宽度"
+        },
+        "message": {
+          "copy": "文本已复制到剪贴板！"
+        },
+        "warning": {
+          "anonymous": "分享将会无效，因为本站不允许匿名用户访问任何内容。"
+        }
+      },
+      "LibraryFollowButton": {
+        "button": {
+          "cancel": "取消后续请求",
+          "follow": "关注",
+          "unfollow": "取消关注"
+        }
+      },
+      "PlayButton": {
+        "button": {
+          "addToPlaylist": "添加到歌单…",
+          "addToQueue": "添加到当前队列",
+          "discretePlay": "播放",
+          "episodeDetails": "节目详情",
+          "hideArtist": "隐藏这个歌手的相关内容",
+          "playAlbum": "播放这个专辑",
+          "playArtist": "播放这个歌手的歌曲",
+          "playNext": "下一首播放",
+          "playNow": "现在播放",
+          "playPlaylist": "播放这个歌单",
+          "playTrack": "播放这首歌曲",
+          "playTracks": "播放这些歌曲",
+          "report": "报告…",
+          "startRadio": "播放类似的歌曲",
+          "trackDetails": "歌曲详情"
+        },
+        "title": {
+          "more": "更多…",
+          "unavailable": "这首歌曲不存在于任何您可访问的曲库中"
+        }
+      },
+      "Player": {
+        "header": {
+          "player": "音频播放器和控件"
+        },
+        "label": {
+          "addArtistContentFilter": "隐藏这个歌手的相关内容…",
+          "audioPlayer": "媒体播放器",
+          "clearQueue": "清除您的播放队列",
+          "expandQueue": "展开队列",
+          "loopingDisabled": "循环播放已禁用。单击此处可切换到单曲循环。",
+          "loopingSingle": "单曲循环播放中。单击此处可切换到循环播放队列。",
+          "loopingWholeQueue": "循环播放队列中。单击此处可禁用循环播放。",
+          "mute": "静音",
+          "nextTrack": "下一首",
+          "pause": "暂停",
+          "play": "播放",
+          "previousTrack": "上一首",
+          "shuffleQueue": "随机打乱您现有的播放队列",
+          "unmute": "取消静音"
+        },
+        "meta": {
+          "position": "{ length } 中的第 { index } 首"
+        }
+      },
+      "Search": {
+        "empty": {
+          "noAlbums": "无匹配条件的专辑",
+          "noArtists": "无匹配条件的歌手"
+        },
+        "header": {
+          "albums": "专辑",
+          "artists": "歌手",
+          "search": "搜索音乐"
+        },
+        "placeholder": {
+          "search": "歌手，专辑，歌曲…"
+        }
+      },
+      "SearchBar": {
+        "empty": {
+          "noResults": "抱歉，此搜索没有匹配的结果"
+        },
+        "header": {
+          "noResults": "无匹配结果"
+        },
+        "label": {
+          "album": "专辑",
+          "artist": "歌手",
+          "category": {
+            "federation": "联邦机制",
+            "podcasts": "播客"
+          },
+          "search": "搜索音乐等内容",
+          "tag": "标签",
+          "track": "歌曲"
+        },
+        "link": {
+          "fediverse": "在联邦宇宙中搜索",
+          "more": "更多结果 🡒",
+          "rss": "通过 RSS 订阅播客"
+        },
+        "placeholder": {
+          "search": "搜索歌手，专辑，歌曲…"
+        }
+      },
+      "VolumeControl": {
+        "button": {
+          "mute": "静音",
+          "unmute": "取消静音"
+        },
+        "label": {
+          "slider": "调整音量"
+        }
+      },
+      "album": {
+        "Card": {
+          "meta": {
+            "tracks": "{ count } 首歌曲"
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": "展开"
+          }
+        }
+      },
+      "artist": {
+        "Card": {
+          "meta": {
+            "episodes": "{ count } 个节目",
+            "tracks": "{ count } 首歌曲"
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": "展开"
+          }
+        }
+      },
+      "podcast": {
+        "MobileRow": {
+          "button": {
+            "actions": "显示歌曲操作"
+          }
+        },
+        "Modal": {
+          "button": {
+            "addToFavorites": "添加到收藏",
+            "addToPlaylist": "添加到歌单…",
+            "addToQueue": "添加到播放队列",
+            "albumDetails": "查看专辑",
+            "artistDetails": "查看歌手",
+            "channelDetails": "查看频道",
+            "episodeDetails": "节目详情",
+            "playNext": "下一首播放",
+            "playNow": "现在播放",
+            "removeFromFavorites": "从收藏中删除",
+            "seriesDetails": "查看序列",
+            "startRadio": "播放这个电台",
+            "trackDetails": "歌曲详情"
+          }
+        }
+      },
+      "track": {
+        "MobileRow": {
+          "button": {
+            "actions": "显示歌曲操作"
+          }
+        },
+        "Modal": {
+          "button": {
+            "addToFavorites": "添加到收藏",
+            "addToPlaylist": "添加到歌单…",
+            "addToQueue": "添加到播放队列",
+            "albumDetails": "查看专辑",
+            "artistDetails": "查看歌手",
+            "channelDetails": "查看频道",
+            "episodeDetails": "节目详情",
+            "playNext": "下一首播放",
+            "playNow": "现在播放",
+            "removeFromFavorites": "从收藏中删除",
+            "seriesDetails": "查看序列",
+            "startRadio": "播放这个电台",
+            "trackDetails": "歌曲详情"
+          }
+        },
+        "Table": {
+          "table": {
+            "header": {
+              "album": "专辑",
+              "artist": "歌手",
+              "title": "标题"
+            }
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": "展开"
+          },
+          "empty": {
+            "noResults": "什么也没找到"
+          }
+        }
+      }
+    },
+    "auth": {
+      "ApplicationEdit": {
+        "button": {
+          "regenerateToken": "重新生成密钥"
+        },
+        "header": {
+          "appDetails": "应用详情",
+          "editApp": "编辑应用程序"
+        },
+        "help": {
+          "appDetails": "应用程序 ID 和密钥非常敏感，必须像对待密码一样对待它们。不要和任何人分享这些。"
+        },
+        "label": {
+          "accessToken": "访问令牌",
+          "appId": "应用 ID",
+          "appSecret": "应用密钥"
+        },
+        "link": {
+          "settings": "返回设置"
+        },
+        "title": "编辑应用程序"
+      },
+      "ApplicationForm": {
+        "button": {
+          "create": "创建应用程序",
+          "update": "更新应用"
+        },
+        "header": {
+          "failure": "我们无法保存您的修改"
+        },
+        "help": {
+          "redirectUri": "如果您的应用没有托管在网络上，请用 \"urn:ietf:wg:oauth:2.0:oob\" 作为重定向 URI。"
+        },
+        "label": {
+          "name": "名称",
+          "redirectUri": "重定向 URI",
+          "scopes": {
+            "description": "勾选父“读”或“写”作用域后，其所有子作用域也将被授予相应的权限。",
+            "read": {
+              "description": "允许读取用户数据",
+              "label": "可读"
+            },
+            "write": {
+              "description": "允许修改用户数据",
+              "label": "修改"
+            }
+          }
+        }
+      },
+      "ApplicationNew": {
+        "link": {
+          "settings": "返回设置"
+        },
+        "title": "创建一个新应用程序"
+      },
+      "Authorize": {
+        "button": {
+          "authorize": "授权 { app }"
+        },
+        "header": {
+          "access": "{ app } 想要访问您的 Funkwhale 帐户",
+          "allScopes": "完全访问",
+          "authorize": "授权第三方应用程序",
+          "authorizeFailure": "授权应用程序时出错",
+          "fetchFailure": "获取应用程序数据时出错",
+          "readOnly": "只读",
+          "writeOnly": "只写"
+        },
+        "help": {
+          "copyCode": "您将会看到一串需要粘贴到应用程序的字符。",
+          "pasteCode": "在应用程序中复制粘贴以下代码：",
+          "redirect": "您将会被跳转到 { 0 }"
+        },
+        "message": {
+          "unknownPermissions": "此应用程序还请求获取以下未知权限："
+        },
+        "title": "授权申请"
+      },
+      "LoginForm": {
+        "button": {
+          "login": "登录"
+        },
+        "header": {
+          "loginFailure": "我们无法为您登录"
+        },
+        "help": {
+          "approvalRequired": "如果您刚刚完成注册，您可能需要等待我们的审核团队审核您的帐户，或验证您的邮箱。",
+          "invalidCredentials": "请仔细检查您的用户名和密码是正确的，并确保您验证了您的邮箱地址。"
+        },
+        "label": {
+          "password": "密码",
+          "username": "用户名或邮箱地址"
+        },
+        "link": {
+          "createAccount": "创建一个账户",
+          "resetPassword": "重置您的密码"
+        },
+        "placeholder": {
+          "username": "输入您的用户名或邮箱"
+        }
+      },
+      "Logout": {
+        "button": {
+          "logout": "是，我要登出！"
+        },
+        "header": {
+          "confirm": "是否确实要登出？",
+          "unauthenticated": "您还没有登录"
+        },
+        "link": {
+          "login": "登录！"
+        },
+        "message": {
+          "loggedIn": "您已登录为 { username }"
+        },
+        "title": "登出"
+      },
+      "Plugin": {
+        "button": {
+          "save": "保存",
+          "scan": "扫描"
+        },
+        "description": {
+          "library": "文件将被导入到的曲库。"
+        },
+        "header": {
+          "failure": "保存插件设置时出错"
+        },
+        "label": {
+          "library": "曲库",
+          "pluginEnabled": "启用"
+        },
+        "link": {
+          "documentation": "文档"
+        }
+      },
+      "Settings": {
+        "button": {
+          "delete": "删除",
+          "deleteAccount": "删除我的账户…",
+          "deleteAccountConfirm": "删除我的账户",
+          "disableSubsonic": "禁用",
+          "edit": "编辑",
+          "password": "更改密码",
+          "refresh": "刷新",
+          "remove": "删除",
+          "removeApp": "删除应用程序",
+          "revoke": "撤销",
+          "revokeAccess": "撤销访问权限",
+          "update": "更新",
+          "updateSettings": "更新设置"
+        },
+        "description": {
+          "authorizedApps": "列表中的应用程序有权访问您的账户数据。",
+          "changeEmail": "更改与您账户绑定的邮箱。我们将向新的邮箱发送确认函。",
+          "changePassword": {
+            "paragraph1": "如果您之前获取过 Subsonic API 密码，更改密码将同时更换新的 Subsonic API 密码。",
+            "paragraph2": "您将需要更新使用 Subsonic API 的客户端上的密码。"
+          },
+          "contentFilters": "内容过滤器可以隐藏您不希望在实例上看到的内容。",
+          "deleteAccount": "使用下面的表单，您可以永久地、不可逆转地删除您的帐户和所有相关的数据。您需要确认此操作。",
+          "plugins": "使用插件扩展 Funkwhale 并获得额外的功能。",
+          "yourApps": "这是由您注册的应用程序列表。"
+        },
+        "header": {
+          "accountFailure": "我们无法删除您的账户",
+          "accountSettings": "帐户设置",
+          "authorizedApps": "已授权的应用程序",
+          "avatar": "头像",
+          "avatarFailure": "无法保存您的头像",
+          "changeEmail": "更改我的邮箱",
+          "changePassword": "更改我的密码",
+          "contentFilters": "内容过滤器",
+          "deleteAccount": "删除我的账户",
+          "emailFailure": "我们无法修改您的邮箱地址",
+          "hiddenArtists": "已隐藏的歌手",
+          "noApps": "您没有任何与账户链接的应用。",
+          "noPersonalApps": "您还未注册任何应用。",
+          "passwordFailure": "无法更改您的密码",
+          "plugins": "插件",
+          "settingsUpdated": "设置已更新",
+          "updateFailure": "无法更新您的设置",
+          "yourApps": "您的应用程序"
+        },
+        "help": {
+          "changePassword": "请仔细检查您的密码是否正确",
+          "noApps": "如果您授权第三方应用程序访问您的数据，这些应用程序将在此列出。",
+          "noPersonalApps": "注册一个应用程序，以整合 Funkwhale 与第三方应用程序。"
+        },
+        "label": {
+          "avatar": "头像",
+          "currentPassword": "旧密码",
+          "newEmail": "新的邮箱",
+          "newPassword": "新密码",
+          "password": "密码"
+        },
+        "link": {
+          "managePlugins": "管理插件",
+          "newApp": "注册一个新的应用程序"
+        },
+        "message": {
+          "confirmDelete": "您的删除请求已提交，您的账户和相关内容将很快被删除",
+          "currentEmail": "您当前的邮箱地址是 { email }。"
+        },
+        "modal": {
+          "changePassword": {
+            "content": {
+              "logout": "您将立刻被登出，需要重新登录",
+              "subsonic": "您的 Subsonic API 密码将被更改为一个随机的新密码，使用旧密码的设备将被登出",
+              "warning": "更改密码会导致以下后果："
+            },
+            "header": "确认更改您的密码？"
+          },
+          "deleteAccount": {
+            "content": {
+              "warning": "您的账户数据将被我们的服务器永久删除，此操作无法逆转。您将被我们立即登出。"
+            },
+            "header": "您确认要删除您的帐户吗？"
+          },
+          "deleteApp": {
+            "content": {
+              "warning": "这将永久删除应用程序以及所有关联密钥。"
+            },
+            "header": "确认删除应用程序 \"{ application }\"？"
+          },
+          "revokeApp": {
+            "content": {
+              "warning": "这将撤销您对此应用程序的授权。"
+            },
+            "header": "撤销应用程序 \"{ application }\" 的访问权限？"
+          }
+        },
+        "table": {
+          "artists": {
+            "header": {
+              "creationDate": "创建日期",
+              "name": "名称"
+            }
+          },
+          "authorizedApps": {
+            "header": {
+              "application": "应用",
+              "permissions": "权限"
+            }
+          },
+          "yourApps": {
+            "header": {
+              "application": "应用",
+              "creationDate": "创建日期",
+              "scopes": "权限范围"
+            }
+          }
+        },
+        "title": "帐户设置",
+        "warning": {
+          "deleteAccount": "您的账户将在几分钟内从我们的服务器上删除。我们也会通知那些拥有您部分个人数据的服务器，以便他们删除。请注意，其中一些服务器可能已经下线，或者不愿意遵守这些规定。"
+        }
+      },
+      "SignupForm": {
+        "button": {
+          "create": "创建我的账户"
+        },
+        "header": {
+          "login": "登录您的 Funkwhale 帐户",
+          "signupFailure": "无法创建您的账户。"
+        },
+        "label": {
+          "email": "邮箱",
+          "password": "密码",
+          "username": "用户名"
+        },
+        "message": {
+          "accountCreated": "您的账户已成功创建。请在尝试登录前验证您的邮箱地址。",
+          "awaitingReview": "您的注册请求已成功提交。当我们的管理员审核完您的请求后，您将收到邮件通知。",
+          "registrationClosed": "此实例不允许公开注册。您需要一个邀请码才能注册。",
+          "requiresReview": "本站上的注册是开放的，但需经管理员审批后方可登录。"
+        },
+        "placeholder": {
+          "email": "输入您的邮箱",
+          "invitation": "输入您的邀请码（不区分大小写）",
+          "username": "输入您的用户名"
+        }
+      },
+      "SubsonicTokenForm": {
+        "button": {
+          "confirmDisable": "禁用",
+          "confirmNewPassword": "生成密码",
+          "disable": "禁用 Subsonic",
+          "newPassword": "生成一个新的密码"
+        },
+        "description": {
+          "subsonic": {
+            "paragraph1": "Funkwhale 兼容所有支持 Subsonic API 的音乐播放器。",
+            "paragraph2": "您可以使用它们在离线模式下享受您的歌单和音乐，比如在您的智能手机或平板电脑上。",
+            "paragraph3": "然而，从这些客户端访问 Funkwhale 需要一个独立的密码，您可以在下方设置。"
+          }
+        },
+        "header": {
+          "error": "错误",
+          "subsonic": "Subsonic API 密码"
+        },
+        "label": {
+          "subsonicField": "您的 Subsonic API 密码"
+        },
+        "link": {
+          "apps": "了解其他可以访问 Funkwhale 的应用程序"
+        },
+        "message": {
+          "accessDisabled": "权限已禁用",
+          "passwordUpdated": "密码已更新",
+          "unavailable": "本 Funkwhale 实例不允许启用 Subsonic API。"
+        },
+        "modal": {
+          "disableSubsonic": {
+            "content": {
+              "warning": "账户将被禁止调用 Subsonic API。"
+            },
+            "header": "确认禁用 Subsonic API？"
+          },
+          "newPassword": {
+            "content": {
+              "warning": "这将使您的账户在使用当前密码的设备上被登出。"
+            },
+            "header": "确认生成一个新的 Subsonic API 密码？"
+          }
+        }
+      }
+    },
+    "channels": {
+      "AlbumForm": {
+        "header": {
+          "error": "创建时出错"
+        },
+        "label": {
+          "albumTitle": "标题"
+        }
+      },
+      "AlbumModal": {
+        "button": {
+          "cancel": "取消",
+          "create": "创建"
+        },
+        "header": {
+          "newAlbum": "添加专辑",
+          "newSeries": "添加序列"
+        }
+      },
+      "AlbumSelect": {
+        "label": {
+          "album": "专辑",
+          "series": "序列"
+        },
+        "meta": {
+          "tracks": "{ count } 首歌曲"
+        },
+        "option": {
+          "none": "没有"
+        }
+      },
+      "LicenseSelect": {
+        "label": {
+          "license": "许可证"
+        },
+        "link": {
+          "license": "关于此许可证"
+        },
+        "option": {
+          "none": "没有"
+        }
+      },
+      "SubscribeButton": {
+        "help": {
+          "auth": "您需要登录以订阅这个频道"
+        },
+        "title": {
+          "subscribe": "订阅",
+          "unsubscribe": "取消订阅"
+        }
+      },
+      "UploadForm": {
+        "button": {
+          "edit": "编辑",
+          "ignore": "忽略",
+          "remove": "移除",
+          "resume": "恢复",
+          "retry": "重试"
+        },
+        "description": {
+          "extensions": "支持的扩展：{ extensions }"
+        },
+        "header": {
+          "error": "发布时出错"
+        },
+        "help": {
+          "license": "为您的上传添加一个许可证，以确保您的受众有部分自由。"
+        },
+        "label": {
+          "channel": "频道",
+          "openBrowser": "浏览…"
+        },
+        "message": {
+          "dragAndDrop": "拖放文件到这里，或者点击以选择文件",
+          "pending": "您有一些暂存的内容未完成发布。"
+        },
+        "status": {
+          "errored": "出错",
+          "pending": "待定",
+          "uploading": "上传中"
+        },
+        "warning": {
+          "quota": "您已没有足够的空间上传您的文件。请联系管理员。"
+        }
+      },
+      "UploadMetadataForm": {
+        "label": {
+          "description": "描述",
+          "image": "歌曲附图",
+          "position": "音轨号",
+          "tags": "标签",
+          "title": "标题"
+        }
+      },
+      "UploadModal": {
+        "button": {
+          "cancel": "取消",
+          "close": "关闭",
+          "finishLater": "以后再完成",
+          "next": "下一步",
+          "previous": "上一步",
+          "publish": "发布",
+          "update": "更新"
+        },
+        "header": {
+          "processing": "处理上传记录",
+          "publish": "发布音频",
+          "uploadDetails": "上传详细信息",
+          "uploadFiles": "要上传的文件"
+        },
+        "meta": {
+          "files": "{ count } 个文件",
+          "quota": "剩余存储空间："
+        }
+      }
+    },
+    "common": {
+      "ActionTable": {
+        "button": {
+          "allSelected": "已选择所有 { count } 项",
+          "go": "执行",
+          "launch": "执行",
+          "refresh": "刷新表格内容",
+          "select": "选择",
+          "selectAll": "选择所有项目",
+          "selectCurrentPage": "只选择当前页面",
+          "selectElement": "全选所有 { total } 项",
+          "selected": "在 { total } 中已选定 { count } 个"
+        },
+        "header": {
+          "error": "执行操作时出错"
+        },
+        "label": {
+          "actions": "操作",
+          "performAction": "执行操作"
+        },
+        "message": {
+          "needsRefresh": "内容已更新，请单击“刷新”查看最新内容",
+          "success": "操作 ％{action} 已对 ％{count} 个项目成功执行"
+        },
+        "modal": {
+          "performAction": {
+            "content": {
+              "warning": "这个操作可能会产生大范围的影响或不可逆转的后果，请再三检查并确认您的操作。"
+            },
+            "header": "确认对这 { count } 项执行 { action } 操作吗？"
+          }
+        }
+      },
+      "AttachmentInput": {
+        "button": {
+          "remove": "移除"
+        },
+        "header": {
+          "failure": "无法保存您的附件"
+        },
+        "help": {
+          "upload": "PNG 或 JPG。尺寸应该在 1400x1400px 和 3000x3000px 之间。允许的最大文件大小为 5MB。"
+        },
+        "label": {
+          "upload": "上传新的附图…"
+        },
+        "loader": {
+          "uploading": "文件上传中…"
+        }
+      },
+      "CollapseLink": {
+        "button": {
+          "collapse": "折叠",
+          "expand": "展开"
+        }
+      },
+      "ContentForm": {
+        "button": {
+          "preview": "预览",
+          "write": "编辑"
+        },
+        "empty": {
+          "noContent": "无可预览内容。"
+        },
+        "help": {
+          "markdown": "支持 Markdown 语法。"
+        },
+        "placeholder": {
+          "input": "随便写点什么吧…"
+        }
+      },
+      "CopyInput": {
+        "button": {
+          "copy": "复制"
+        },
+        "message": {
+          "success": "文本已复制到剪贴板！"
+        }
+      },
+      "DangerousButton": {
+        "button": {
+          "cancel": "取消",
+          "confirm": "确认"
+        },
+        "header": {
+          "confirm": "您确认进行此操作吗？"
+        }
+      },
+      "Duration": {
+        "meta": {
+          "hours": "{ hours } 小时 { minutes } 分钟",
+          "minutes": "{ minutes } 分钟"
+        }
+      },
+      "EmptyState": {
+        "button": {
+          "refresh": "刷新"
+        },
+        "header": {
+          "noResults": "空空如也。"
+        }
+      },
+      "ExpandableDiv": {
+        "button": {
+          "less": "收起",
+          "more": "展开"
+        }
+      },
+      "InlineSearchBar": {
+        "button": {
+          "clear": "清除"
+        },
+        "label": {
+          "search": "搜索"
+        },
+        "placeholder": {
+          "search": "搜索…"
+        }
+      },
+      "LoginModal": {
+        "description": {
+          "noAccess": "您无权访问！"
+        },
+        "header": {
+          "unauthenticated": "未登录"
+        },
+        "link": {
+          "login": "登录",
+          "signup": "注册"
+        }
+      },
+      "RenderedDescription": {
+        "button": {
+          "cancel": "取消",
+          "edit": "编辑",
+          "less": "收起",
+          "more": "展开",
+          "update": "更新描述"
+        },
+        "empty": {
+          "noDescription": "无可用描述"
+        },
+        "header": {
+          "failure": "更新描述时出错"
+        }
+      },
+      "UserMenu": {
+        "label": {
+          "language": "语言",
+          "shortcuts": "键盘快捷键",
+          "theme": "主题"
+        },
+        "link": {
+          "about": "关于",
+          "chat": "聊天室",
+          "docs": "文档",
+          "forum": "论坛",
+          "git": "问题跟踪器",
+          "login": "登录",
+          "logout": "登出",
+          "notifications": "通知",
+          "profile": "个人档案",
+          "settings": "设置",
+          "signup": "注册",
+          "support": "帮助"
+        }
+      },
+      "UserModal": {
+        "button": {
+          "switchInstance": "连接到其他实例"
+        },
+        "header": {
+          "options": "选项"
+        },
+        "label": {
+          "language": "语言",
+          "shortcuts": "键盘快捷键",
+          "theme": "主题"
+        },
+        "link": {
+          "about": "关于",
+          "chat": "聊天室",
+          "forum": "论坛",
+          "git": "问题跟踪器",
+          "login": "登录",
+          "logout": "登出",
+          "notifications": "通知",
+          "profile": "个人档案",
+          "settings": "设置",
+          "signup": "注册",
+          "support": "帮助"
+        }
+      }
+    },
+    "favorites": {
+      "List": {
+        "empty": {
+          "noFavorites": "您的收藏内还没有任何歌曲"
+        },
+        "header": {
+          "favorites": "{ count } 个收藏"
+        },
+        "link": {
+          "library": "浏览曲库"
+        },
+        "loader": {
+          "loading": "正在加载收藏…"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "升序",
+            "descending": "降序",
+            "label": "顺序"
+          },
+          "label": "排序参考"
+        },
+        "pagination": {
+          "results": "每页结果数"
+        },
+        "title": "您的收藏"
+      },
+      "TrackFavoriteIcon": {
+        "button": {
+          "add": "添加到收藏",
+          "remove": "从收藏中删除"
+        },
+        "label": {
+          "inFavorites": "在收藏中"
+        }
+      }
+    },
+    "federation": {
+      "FetchButton": {
+        "button": {
+          "close": "关闭",
+          "reload": "关闭并重新加载页面"
+        },
+        "description": {
+          "failure": "尝试刷新数据时出错：",
+          "pending": "我们的服务器暂时未能处理刷新请求，稍后将会处理。",
+          "skipped": "远程服务器已回应，但返回的数据不受 Funkwhale 的支持。",
+          "success": "成功更新来自远程服务器的数据。"
+        },
+        "header": {
+          "failure": "刷新错误",
+          "pending": "刷新待定项",
+          "refresh": "从远程服务器更新…",
+          "saveFailure": "保存设置时出错",
+          "skipped": "刷新被跳过",
+          "success": "刷新成功"
+        },
+        "loader": {
+          "awaitingResult": "等待结果…",
+          "fetchRequest": "请求取回…"
+        },
+        "table": {
+          "error": {
+            "label": {
+              "detail": "错误详情",
+              "type": "错误类型"
+            },
+            "value": {
+              "connectionError": "无法连接到远程服务器",
+              "httpError": "连接远程服务器时发生 HTTP 错误",
+              "httpStatus": "远程服务器响应状态：HTTP { status }",
+              "invalidAttributesError": "远程服务器返回的数据含有无效或缺失的属性",
+              "invalidJsonError": "远程服务器返回了无效的 JSON 或 JSON-LD 数据",
+              "timeoutError": "远程服务器响应超时",
+              "unknownError": "未知错误"
+            }
+          }
+        }
+      },
+      "LibraryWidget": {
+        "button": {
+          "showMore": "展开"
+        },
+        "empty": {
+          "noMatch": "无匹配的曲库。"
+        }
+      }
+    },
+    "forms": {
+      "PasswordInput": {
+        "button": {
+          "copy": "复制"
+        },
+        "message": {
+          "copy": "文本已复制到剪贴板！"
+        },
+        "title": "显示/隐藏密码"
+      }
+    },
+    "library": {
+      "AlbumBase": {
+        "link": {
+          "addDescription": "添加描述…"
+        },
+        "meta": {
+          "episodes": "{ count } 个节目",
+          "tracks": "{ count } 首歌曲"
+        }
+      },
+      "AlbumDetail": {
+        "description": {
+          "libraries": "这个专辑存在于下列曲库中："
+        },
+        "header": {
+          "episodes": "节目",
+          "libraries": "用户曲库",
+          "tracks": "歌曲"
+        },
+        "meta": {
+          "volume": "第 { number } 张 CD"
+        }
+      },
+      "AlbumDropdown": {
+        "button": {
+          "cancel": "取消",
+          "delete": "删除…",
+          "edit": "编辑",
+          "embed": "嵌入",
+          "more": "更多…"
+        },
+        "link": {
+          "discogs": "在 Discogs 上搜索",
+          "django": "在 Django 管理面板中查看",
+          "domain": "在 { domain } 上查看",
+          "moderation": "打开审核界面",
+          "musicbrainz": "在 MusicBrainz 上查看"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "此专辑以及所有相关文件和数据都将被删除。此操作无法逆转。"
+            },
+            "header": "确认删除这个专辑？"
+          },
+          "embed": {
+            "header": "在您的网站上嵌入这个专辑"
+          }
+        }
+      },
+      "AlbumEdit": {
+        "header": {
+          "edit": "编辑这张专辑",
+          "suggest": "对这张专辑提出编辑建议"
+        },
+        "message": {
+          "remote": "此对象由另一台服务器管理，您无法编辑它。"
+        }
+      },
+      "Albums": {
+        "button": {
+          "search": "搜索"
+        },
+        "empty": {
+          "noResults": "无匹配条件的结果"
+        },
+        "header": {
+          "browse": "浏览专辑"
+        },
+        "label": {
+          "search": "搜索",
+          "tags": "标签"
+        },
+        "link": {
+          "addMusic": "添加音乐"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "升序",
+            "descending": "降序",
+            "label": "顺序"
+          },
+          "label": "排序参考"
+        },
+        "pagination": {
+          "results": "每页结果数"
+        },
+        "placeholder": {
+          "search": "输入专辑名称…"
+        },
+        "title": "专辑"
+      },
+      "ArtistBase": {
+        "button": {
+          "cancel": "取消",
+          "edit": "编辑",
+          "embed": "嵌入",
+          "more": "更多…",
+          "play": "播放所有专辑"
+        },
+        "link": {
+          "discogs": "在 Discogs 上搜索",
+          "django": "在 Django 管理面板中查看",
+          "domain": "在 { domain } 上查看",
+          "moderation": "打开审核界面",
+          "musicbrainz": "在 MusicBrainz 上查看",
+          "wikipedia": "在维基百科上搜索"
+        },
+        "meta": {
+          "tracks": "共有 { albumsCount } 张专辑中的 { count } 首歌曲"
+        },
+        "modal": {
+          "embed": {
+            "header": "在您的网站上嵌入这个歌手的歌曲"
+          }
+        },
+        "title": "歌手"
+      },
+      "ArtistDetail": {
+        "button": {
+          "filter": "移除过滤器",
+          "more": "加载更多…"
+        },
+        "description": {
+          "library": "以下曲库包含了 Ta 的歌曲："
+        },
+        "header": {
+          "album": "Ta 的专辑",
+          "library": "用户曲库",
+          "track": "新添加的 Ta 的歌曲"
+        },
+        "link": {
+          "filter": "查看我的过滤器"
+        },
+        "message": {
+          "filter": "您已经隐藏了这位歌手的部分内容。"
+        }
+      },
+      "ArtistEdit": {
+        "header": {
+          "edit": "编辑这个歌手",
+          "suggest": "对这位歌手提出编辑建议"
+        },
+        "message": {
+          "remote": "此对象由另一台服务器管理，您无法编辑它。"
+        }
+      },
+      "Artists": {
+        "button": {
+          "search": "搜索",
+          "upload": "添加音乐"
+        },
+        "empty": {
+          "noResults": "无匹配条件的结果"
+        },
+        "header": {
+          "browse": "浏览歌手"
+        },
+        "label": {
+          "excludeCompilation": "排除合辑歌手",
+          "search": "歌手姓名",
+          "tags": "标签"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "升序",
+            "descending": "降序",
+            "label": "顺序"
+          },
+          "label": "排序参考"
+        },
+        "pagination": {
+          "results": "每页结果数"
+        },
+        "placeholder": {
+          "search": "搜索…"
+        },
+        "title": "歌手"
+      },
+      "EditCard": {
+        "button": {
+          "approve": "批准",
+          "delete": "删除",
+          "reject": "拒绝"
+        },
+        "header": {
+          "modification": "修改记录 { id }"
+        },
+        "link": {
+          "track": "歌曲 #{ id } - { name }"
+        },
+        "modal": {
+          "content": {
+            "warning": "这条建议将被删除，此操作无法逆转。"
+          },
+          "delete": {
+            "header": "确认删除这条建议？"
+          }
+        },
+        "status": {
+          "applied": "已批准并应用",
+          "approved": "已批准",
+          "pending": "待审查",
+          "rejected": "已拒绝"
+        },
+        "table": {
+          "update": {
+            "header": {
+              "field": "字段",
+              "newValue": "新值",
+              "oldValue": "旧值"
+            },
+            "notApplicable": "N/A"
+          }
+        }
+      },
+      "EditForm": {
+        "button": {
+          "cancel": "取消",
+          "clear": "清除",
+          "new": "提交另一个编辑",
+          "reset": "重置为初始值",
+          "showAll": "显示所有编辑记录",
+          "showUnreviewed": "仅显示未审核的编辑记录",
+          "submit": "提交和应用编辑",
+          "suggest": "提交建议"
+        },
+        "empty": {
+          "suggestEdit": "使用下面的表格提出变动建议。"
+        },
+        "header": {
+          "failure": "提交编辑时出错",
+          "recentEdits": "最近编辑记录",
+          "success": "您的编辑已成功提交。",
+          "unreviewed": "最近待审查的编辑记录"
+        },
+        "label": {
+          "summary": "摘要（可选）"
+        },
+        "message": {
+          "noPermission": "您没有直接编辑此对象的权限，但可以提出建议进行更改。提交后，您的建议将会在管理员审核后应用。"
+        },
+        "notApplicable": "N/A",
+        "placeholder": {
+          "summary": "简要概括您做出的变化。"
+        }
+      },
+      "FileUpload": {
+        "button": {
+          "cancel": "取消",
+          "retry": "重试失败的上传"
+        },
+        "description": {
+          "import": "导入结果:",
+          "previousImport": "上一次导入的结果:"
+        },
+        "header": {
+          "failure": "执行导入时出错",
+          "local": "从本地上传音乐",
+          "server": "导入状态",
+          "status": "导入状态"
+        },
+        "label": {
+          "extensions": "支持的扩展：{ extensions }",
+          "remainingSpace": "剩余存储空间",
+          "uploadWidget": "单击以选择要上传的文件，或拖放文件、目录到这里"
+        },
+        "link": {
+          "picard": "我们建议使用 Picard 来完成标记。",
+          "processing": "处理中",
+          "uploading": "上传中"
+        },
+        "message": {
+          "local": {
+            "copyright": "请不要上传受版权保护的内容到公开的曲库中，否则您可能会触犯法律",
+            "format": "要上传的音乐文件必须是 OGG, Flac, MP3 或 AIFF 格式",
+            "message": "您正准备将音乐上传到您的曲库中。在继续之前，请确保：",
+            "tag": "上传的音乐文件已被正确标记。"
+          }
+        },
+        "table": {
+          "upload": {
+            "header": {
+              "actions": "操作",
+              "filename": "文件名",
+              "size": "文件大小",
+              "status": "状态"
+            },
+            "status": {
+              "pending": "待定",
+              "uploaded": "已上传",
+              "uploading": "上传中…"
+            }
+          }
+        },
+        "tooltip": {
+          "denied": "上传被拒绝，请确保文件不会太大且未超出您的配额",
+          "extension": "文件类型无效，请确保您上传的是音频文件。支持的文件扩展名为 { extensions }",
+          "network": "上传此文件时发生网络错误",
+          "retry": "重试",
+          "size": "无法上传此文件，请确保文件不会太大",
+          "timeout": "上传超时，请重试"
+        }
+      },
+      "FsBrowser": {
+        "button": {
+          "import": "导入"
+        }
+      },
+      "FsLogs": {
+        "empty": {
+          "notStarted": "导入还没有开始"
+        }
+      },
+      "Home": {
+        "header": {
+          "newChannels": "新增频道",
+          "playlists": "歌单",
+          "recentlyAdded": "最近添加",
+          "recentlyFavorited": "最近收藏",
+          "recentlyListened": "最近收听"
+        },
+        "title": "曲库"
+      },
+      "ImportStatusModal": {
+        "button": {
+          "close": "关闭"
+        },
+        "error": {
+          "importFailure": "上传处理过程中出错。您可在下方找到更多信息。",
+          "invalidMetadata": {
+            "label": "元数据错误",
+            "message": "文件中包含的元数据无效或缺少某些必填字段。"
+          },
+          "unknownError": {
+            "label": "未知错误",
+            "message": "发生了一个未知的错误"
+          }
+        },
+        "header": {
+          "importDetail": "导入详情"
+        },
+        "link": {
+          "documentation": "查阅有关此错误的文档",
+          "support": "去论坛新建一个请求支持帖（并自动引用下方显示的调试信息）"
+        },
+        "message": {
+          "importDetail": "上传仍在等待中，很快将由服务器处理。",
+          "importSuccess": "服务器已成功处理上传。"
+        },
+        "table": {
+          "error": {
+            "debug": "调试信息",
+            "errorDetail": "错误详情",
+            "errorType": "错误类型",
+            "help": "获取帮助"
+          }
+        },
+        "warning": {
+          "importSkipped": "已跳过上传，因为您的某个曲库中已有类似的上传记录。"
+        }
+      },
+      "Podcasts": {
+        "button": {
+          "cancel": "取消",
+          "channel": "创建频道",
+          "feed": "订阅",
+          "search": "搜索",
+          "subscribe": "订阅"
+        },
+        "empty": {
+          "noResults": "无匹配条件的结果"
+        },
+        "header": {
+          "browse": "浏览播客"
+        },
+        "label": {
+          "search": "播客标题",
+          "tags": "标签"
+        },
+        "modal": {
+          "subscription": {
+            "header": "订阅"
+          }
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "升序",
+            "descending": "降序",
+            "label": "顺序"
+          },
+          "label": "排序参考"
+        },
+        "pagination": {
+          "results": "每页结果数"
+        },
+        "placeholder": {
+          "search": "搜索…"
+        },
+        "title": "播客"
+      },
+      "Radios": {
+        "button": {
+          "add": "创建一个电台",
+          "create": "创建您自己的电台"
+        },
+        "empty": {
+          "noResults": "无匹配条件的结果"
+        },
+        "header": {
+          "browse": "浏览电台",
+          "instance": "实例电台",
+          "user": "用户电台"
+        },
+        "label": {
+          "search": "搜索"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "升序",
+            "descending": "降序",
+            "label": "顺序"
+          },
+          "label": "排序参考"
+        },
+        "pagination": {
+          "results": "每页结果数"
+        },
+        "placeholder": {
+          "search": "输入一个电台名称…"
+        },
+        "title": "电台"
+      },
+      "TagDetail": {
+        "header": {
+          "channels": "频道",
+          "tracks": "歌曲"
+        },
+        "link": {
+          "albums": "专辑",
+          "artists": "歌手",
+          "moderation": "打开审核界面"
+        }
+      },
+      "TagSelector": {
+        "placeholder": {
+          "search": "搜索…"
+        }
+      },
+      "TrackBase": {
+        "button": {
+          "cancel": "取消",
+          "delete": "删除…",
+          "download": "下载",
+          "edit": "编辑",
+          "embed": "嵌入",
+          "more": "更多…",
+          "play": "播放"
+        },
+        "link": {
+          "discogs": "在 Discogs 上搜索",
+          "django": "在 Django 管理面板中查看",
+          "domain": "在 { domain } 上查看",
+          "moderation": "打开审核界面",
+          "wikipedia": "在维基百科上搜索"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "这首歌曲，以及所有相关文件和数据，将被删除。此操作无法逆转。"
+            },
+            "header": "确认删除这首歌曲？"
+          },
+          "embed": {
+            "header": "在您的网站上嵌入这首歌曲"
+          }
+        },
+        "title": "歌曲"
+      },
+      "TrackDetail": {
+        "description": {
+          "library": "这首歌曲存在于下列曲库中："
+        },
+        "header": {
+          "episode": "节目详情",
+          "library": "相关曲库",
+          "playlists": "相关歌单",
+          "release": "发行详情",
+          "track": "歌曲详情"
+        },
+        "link": {
+          "musicbrainz": "在 MusicBrainz 上查看"
+        },
+        "notApplicable": "N/A",
+        "table": {
+          "release": {
+            "album": "专辑",
+            "artist": "歌手",
+            "copyright": "版权所有",
+            "license": "许可证",
+            "series": "序列",
+            "url": "链接",
+            "year": "年份"
+          },
+          "track": {
+            "bitrate": {
+              "label": "比特率"
+            },
+            "codec": "编码格式",
+            "downloads": "下载数",
+            "duration": "时长",
+            "size": "文件大小"
+          }
+        }
+      },
+      "TrackEdit": {
+        "header": {
+          "edit": "编辑这首歌曲",
+          "suggest": "对这首歌曲提出编辑建议"
+        },
+        "message": {
+          "remote": "此对象由另一台服务器管理，您无法编辑它。"
+        }
+      },
+      "radios": {
+        "Builder": {
+          "button": {
+            "filter": "添加过滤规则",
+            "save": "保存"
+          },
+          "description": {
+            "builder": "您可以使用这个界面来构建自己的定制电台，它将根据您的要求播放歌曲。"
+          },
+          "header": {
+            "builder": "构建器",
+            "created": "电台已创建",
+            "matches": "{ count } 首歌曲符合搜索条件",
+            "updated": "电台已更新"
+          },
+          "label": {
+            "description": "描述",
+            "filter": "添加过滤规则来定制您的电台",
+            "name": "电台名称",
+            "public": "公开显示"
+          },
+          "option": {
+            "filter": "选择一个过滤器"
+          },
+          "placeholder": {
+            "description": "我的描述",
+            "name": "我的电台"
+          },
+          "table": {
+            "filter": {
+              "header": {
+                "actions": "操作",
+                "candidates": "过滤结果",
+                "config": "配置值",
+                "exclude": "排除",
+                "name": "过滤器名称"
+              }
+            }
+          },
+          "title": "电台构建器"
+        },
+        "Filter": {
+          "cancelButton": "取消",
+          "excludeLabel": "排除",
+          "matchingTracksModalHeader": "符合过滤器的歌曲",
+          "removeButton": "移除"
+        }
+      }
+    },
+    "manage": {
+      "ChannelsTable": {
+        "label": {
+          "category": "类别",
+          "search": "搜索"
+        },
+        "link": {
+          "local": "本地",
+          "moderation": "打开审核界面"
+        },
+        "option": {
+          "all": "所有"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "升序",
+            "descending": "降序",
+            "label": "顺序"
+          },
+          "label": "排序参考"
+        },
+        "pagination": {
+          "results": "正在显示第 { start } ~ { end } 条结果，共 { total } 条结果"
+        },
+        "placeholder": {
+          "search": "搜索域名，名称，帐户…"
+        },
+        "table": {
+          "channel": {
+            "header": {
+              "account": "帐户",
+              "albums": "专辑",
+              "creationDate": "创建日期",
+              "domain": "域名",
+              "name": "名称",
+              "tracks": "歌曲"
+            }
+          }
+        }
+      },
+      "library": {
+        "AlbumsTable": {
+          "action": {
+            "delete": {
+              "label": "删除",
+              "warning": "选定的专辑，以及相关的歌曲、上传记录、收藏和收听历史，将被删除。此操作无法逆转。"
+            }
+          },
+          "label": {
+            "search": "搜索"
+          },
+          "link": {
+            "local": "本地",
+            "moderation": "打开审核界面"
+          },
+          "notApplicable": "N/A",
+          "ordering": {
+            "direction": {
+              "ascending": "升序",
+              "descending": "降序",
+              "label": "顺序"
+            },
+            "label": "排序参考"
+          },
+          "pagination": {
+            "results": "正在显示第 { start } ~ { end } 条结果，共 { total } 条结果"
+          },
+          "placeholder": {
+            "search": "搜索域名、标题、歌手、MusicBrainz ID…"
+          },
+          "table": {
+            "album": {
+              "header": {
+                "artist": "歌手",
+                "creationDate": "创建日期",
+                "domain": "域名",
+                "name": "标题",
+                "releaseDate": "发行日期",
+                "tracks": "歌曲"
+              }
+            }
+          }
+        },
+        "ArtistsTable": {
+          "action": {
+            "delete": {
+              "label": "删除",
+              "warning": "选定的歌手，以及相关的上传记录、歌曲、专辑、收藏和收听历史，将被删除。此操作无法逆转。"
+            }
+          },
+          "label": {
+            "category": "类别",
+            "search": "搜索"
+          },
+          "link": {
+            "local": "本地"
+          },
+          "option": {
+            "all": "所有"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "升序",
+              "descending": "降序",
+              "label": "顺序"
+            },
+            "label": "排序参考"
+          },
+          "pagination": {
+            "results": "正在显示第 { start } ~ { end } 条结果，共 { total } 条结果"
+          },
+          "placeholder": {
+            "search": "搜索域名、名称、MusicBrainz ID…"
+          },
+          "table": {
+            "artist": {
+              "header": {
+                "albums": "专辑",
+                "creationDate": "创建日期",
+                "domain": "域名",
+                "name": "名称",
+                "tracks": "歌曲"
+              }
+            }
+          }
+        },
+        "EditsCardList": {
+          "label": {
+            "status": "状态"
+          },
+          "option": {
+            "all": "所有",
+            "approved": "已批准",
+            "pending": "待审查",
+            "rejected": "已拒绝"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "升序",
+              "descending": "降序",
+              "label": "顺序"
+            },
+            "label": "排序参考"
+          },
+          "pagination": {
+            "results": "正在显示第 { start } ~ { end } 条结果，共 { total } 条结果"
+          },
+          "placeholder": {
+            "search": "搜索帐户，摘要，域名…"
+          }
+        },
+        "LibrariesTable": {
+          "action": {
+            "delete": {
+              "label": "删除",
+              "warning": "选定的曲库，以及相关的上传记录和关注，将被删除。此操作无法逆转。"
+            }
+          },
+          "label": {
+            "search": "搜索",
+            "visibility": "可见性"
+          },
+          "link": {
+            "local": "本地"
+          },
+          "option": {
+            "all": "所有"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "升序",
+              "descending": "降序",
+              "label": "顺序"
+            },
+            "label": "排序参考"
+          },
+          "pagination": {
+            "results": "正在显示第 { start } ~ { end } 条结果，共 { total } 条结果"
+          },
+          "placeholder": {
+            "search": "搜索域名、用户、名称、描述…"
+          },
+          "table": {
+            "library": {
+              "header": {
+                "account": "帐户",
+                "creationDate": "创建日期",
+                "domain": "域名",
+                "followers": "关注者",
+                "name": "名称",
+                "uploads": "上传记录",
+                "visibility": "可见性"
+              }
+            }
+          }
+        },
+        "TagsTable": {
+          "action": {
+            "delete": {
+              "label": "删除",
+              "warning": "选定的标签将被删除，并与现有内容解除链接（如果有）。此操作无法逆转。"
+            }
+          },
+          "label": {
+            "search": "搜索"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "升序",
+              "descending": "降序",
+              "label": "顺序"
+            },
+            "label": "排序参考"
+          },
+          "pagination": {
+            "results": "正在显示第 { start } ~ { end } 条结果，共 { total } 条结果"
+          },
+          "placeholder": {
+            "search": "搜索名称"
+          },
+          "table": {
+            "tag": {
+              "header": {
+                "albums": "专辑",
+                "artists": "歌手",
+                "creationDate": "创建日期",
+                "name": "名称",
+                "tracks": "歌曲"
+              }
+            }
+          }
+        },
+        "TracksTable": {
+          "action": {
+            "delete": {
+              "label": "删除",
+              "warning": "选定的歌曲，以及相关的上传记录、收藏和收听历史，将被删除。此操作无法逆转。"
+            }
+          },
+          "label": {
+            "search": "搜索"
+          },
+          "link": {
+            "local": "本地"
+          },
+          "notApplicable": "N/A",
+          "ordering": {
+            "direction": {
+              "ascending": "升序",
+              "descending": "降序",
+              "label": "顺序"
+            },
+            "label": "排序参考"
+          },
+          "pagination": {
+            "results": "正在显示第 { start } ~ { end } 条结果，共 { total } 条结果"
+          },
+          "placeholder": {
+            "search": "搜索域名、标题、歌手、专辑、MusicBrainz ID…"
+          },
+          "table": {
+            "track": {
+              "header": {
+                "album": "专辑",
+                "artist": "歌手",
+                "creationDate": "创建日期",
+                "domain": "域名",
+                "license": "许可证",
+                "title": "标题"
+              }
+            }
+          }
+        },
+        "UploadsTable": {
+          "action": {
+            "delete": {
+              "label": "删除",
+              "warning": "选定的上传记录将被删除。此操作无法逆转。"
+            }
+          },
+          "label": {
+            "search": "搜索",
+            "status": "状态",
+            "visibility": "可见性"
+          },
+          "link": {
+            "local": "本地"
+          },
+          "notApplicable": "N/A",
+          "option": {
+            "all": "所有",
+            "failed": "失败",
+            "finished": "已完成",
+            "pending": "待定",
+            "skipped": "已跳过"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "升序",
+              "descending": "降序",
+              "label": "顺序"
+            },
+            "label": "排序参考"
+          },
+          "pagination": {
+            "results": "正在显示第 { start } ~ { end } 条结果，共 { total } 条结果"
+          },
+          "placeholder": {
+            "search": "搜索域名、用户、名称、引用、引用源…"
+          },
+          "table": {
+            "upload": {
+              "header": {
+                "accessedDate": "访问日期",
+                "account": "帐户",
+                "creationDate": "创建日期",
+                "domain": "域名",
+                "importStatus": "导入状态",
+                "library": "曲库",
+                "name": "名称",
+                "size": "文件大小",
+                "visibility": "可见性"
+              }
+            }
+          }
+        }
+      },
+      "moderation": {
+        "AccountsTable": {
+          "action": {
+            "purge": {
+              "label": "清除"
+            }
+          },
+          "label": {
+            "search": "搜索"
+          },
+          "link": {
+            "local": "本地帐户"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "升序",
+              "descending": "降序",
+              "label": "顺序"
+            },
+            "label": "排序参考"
+          },
+          "pagination": {
+            "results": "正在显示第 { start } ~ { end } 条结果，共 { total } 条结果"
+          },
+          "placeholder": {
+            "search": "搜索域名，用户名，简介…"
+          },
+          "table": {
+            "account": {
+              "header": {
+                "domain": "域名",
+                "firstSeen": "首次发现",
+                "lastSeen": "最后上线",
+                "moderationRule": "受审核规则约束",
+                "name": "名称",
+                "uploads": "上传记录"
+              },
+              "moderationRule": "是"
+            }
+          }
+        },
+        "DomainsTable": {
+          "action": {
+            "add": {
+              "label": "添加到允许列表"
+            },
+            "purge": {
+              "label": "清除"
+            },
+            "remove": {
+              "label": "从允许列表中删除"
+            }
+          },
+          "empty": {
+            "noPods": "无其他站点"
+          },
+          "label": {
+            "inList": "已在允许列表中",
+            "search": "搜索"
+          },
+          "link": {
+            "list": "此域名在允许列表中"
+          },
+          "option": {
+            "all": "所有",
+            "no": "否",
+            "yes": "是"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "升序",
+              "descending": "降序",
+              "label": "顺序"
+            },
+            "label": "排序参考"
+          },
+          "pagination": {
+            "results": "正在显示第 { start } ~ { end } 条结果，共 { total } 条结果"
+          },
+          "placeholder": {
+            "search": "搜索名称…"
+          },
+          "table": {
+            "domain": {
+              "header": {
+                "firstSeen": "首次发现",
+                "moderationRule": "受审核规则约束",
+                "name": "名称",
+                "receivedMessages": "收到的信息",
+                "users": "用户"
+              },
+              "moderationRule": "是"
+            }
+          }
+        },
+        "InstancePolicyCard": {
+          "button": {
+            "edit": "编辑"
+          },
+          "header": {
+            "rule": "规则"
+          },
+          "label": {
+            "blockAll": "屏蔽所有内容",
+            "muteActivity": "隐藏活动记录",
+            "muteNotifications": "隐藏通知",
+            "reason": "原因",
+            "rejectMedia": "拒绝媒体"
+          },
+          "status": {
+            "enabled": "启用",
+            "paused": "已暂停"
+          }
+        },
+        "InstancePolicyForm": {
+          "button": {
+            "cancel": "取消",
+            "confirm": "删除审核规则",
+            "create": "创建",
+            "delete": "删除",
+            "update": "更新"
+          },
+          "header": {
+            "addRule": "添加一条新的审核规则",
+            "editRule": "编辑审核规则",
+            "failure": "创建规则时出错"
+          },
+          "label": {
+            "blockAll": "屏蔽所有内容",
+            "customizeRule": "或者自定义您的规则",
+            "policyDisabled": "已禁用",
+            "policyEnabled": "启用",
+            "policyReason": "原因",
+            "rejectMedia": "拒绝媒体",
+            "silenceActivity": "隐藏活动记录",
+            "silenceNotifications": "隐藏通知"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "此操作无法逆转。"
+              },
+              "header": "确认删除这条审核规则？"
+            }
+          },
+          "tooltip": {
+            "blockAll": "阻止此帐户或域的所有内容。这将阻止与实体的任何交互，并清除相关内容（上传记录、曲库、关注等等）",
+            "isActive": "使用此设置临时启用/禁用策略，无须完全删除策略。",
+            "rejectMedia": "不要从此帐户或域下载任何媒体文件（音频，专辑封面，帐户头像…）。这也将删除现存的相关内容。",
+            "silenceActivity": "隐藏帐户或域名内容，但对关注者除外。",
+            "silenceNotifications": "防止帐户或域名触发通知，但关注者触发除外。",
+            "summary": "解释您为什么要实行这个规则，这将帮助您记住为什么对此帐户或域名进行限制。根据您的实例配置，这条解释可能会被公开显示，以帮助用户准确地理解审核规则。"
+          }
+        },
+        "InstancePolicyModal": {
+          "button": {
+            "close": "关闭",
+            "show": "审核规则…"
+          },
+          "modal": {
+            "manage": {
+              "content": {
+                "warning": "此实体已受审核规则约束"
+              },
+              "header": "管理{ obj }的审核规则"
+            }
+          }
+        },
+        "NoteForm": {
+          "button": {
+            "add": "添加注释"
+          },
+          "header": {
+            "failure": "提交注释时出错"
+          },
+          "placeholder": {
+            "summary": "描述已采取的行动，或任何其他相关的更新…"
+          }
+        },
+        "NotesThread": {
+          "button": {
+            "delete": "删除"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "此注释将被删除。此操作不可逆转。"
+              },
+              "header": "确认删除这条注释？"
+            }
+          }
+        },
+        "ReportCard": {
+          "button": {
+            "confirmDelete": "删除",
+            "delete": "删除报告所指对象",
+            "resolve": "解决",
+            "unresolve": "未解决"
+          },
+          "header": {
+            "actions": "操作",
+            "message": "信息",
+            "notes": "内部注释",
+            "reportedObject": "被报告对象"
+          },
+          "link": {
+            "moderation": "打开审核界面",
+            "publicPage": "查看对外公开的页面",
+            "report": "报告 { id }"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "这将删除此报告所指的对象，并将报告标记为已解决。删除操作无法逆转。"
+              },
+              "header": "确认删除报告所指对象？"
+            }
+          },
+          "notApplicable": "N/A",
+          "table": {
+            "object": {
+              "account": "帐户",
+              "domain": "域名",
+              "local": "本地",
+              "owner": "所有人",
+              "type": "类型"
+            },
+            "report": {
+              "category": "类别",
+              "creationDate": "创建日期",
+              "submittedBy": "提出者"
+            },
+            "status": {
+              "assignedTo": "已分配给",
+              "internalNotes": "内部注释",
+              "resolutionDate": "解决日期",
+              "resolved": "已解决",
+              "status": "状态",
+              "unresolved": "未解决"
+            }
+          },
+          "warning": {
+            "objectDeleted": "报告所指对象已被删除。"
+          }
+        },
+        "UserRequestCard": {
+          "button": {
+            "approve": "批准",
+            "reject": "拒绝"
+          },
+          "header": {
+            "actions": "操作",
+            "notes": "内部注释",
+            "signup": "信息"
+          },
+          "link": {
+            "request": "请求 { id }"
+          },
+          "message": {
+            "signup": "此用户希望在您的站点上注册。"
+          },
+          "notApplicable": "N/A",
+          "table": {
+            "request": {
+              "creationDate": "创建日期",
+              "submittedBy": "提出者"
+            },
+            "status": {
+              "approved": "已批准",
+              "assignedTo": "已分配给",
+              "internalNotes": "内部注释",
+              "pending": "待定",
+              "refused": "已拒绝",
+              "status": "状态"
+            }
+          }
+        }
+      },
+      "users": {
+        "InvitationForm": {
+          "button": {
+            "clear": "清除",
+            "new": "生成一个新的邀请"
+          },
+          "header": {
+            "failure": "创建邀请时出错"
+          },
+          "label": {
+            "invite": "邀请码"
+          },
+          "placeholder": {
+            "invitation": "留空以随机生成邀请码"
+          },
+          "table": {
+            "invitation": {
+              "header": {
+                "code": "邀请码",
+                "link": "分享链接"
+              }
+            }
+          }
+        },
+        "InvitationsTable": {
+          "action": {
+            "delete": "删除"
+          },
+          "label": {
+            "expired": "已过期",
+            "search": "搜索",
+            "status": "状态",
+            "unused": "未使用",
+            "used": "已使用"
+          },
+          "option": {
+            "all": "所有",
+            "expired": "已过期/已使用",
+            "open": "可用"
+          },
+          "ordering": {
+            "label": "排序参考"
+          },
+          "pagination": {
+            "results": "正在显示第 { start } ~ { end } 条结果，共 { total } 条结果"
+          },
+          "placeholder": {
+            "search": "搜索用户名，邮箱，邀请码…"
+          },
+          "table": {
+            "invitation": {
+              "header": {
+                "code": "邀请码",
+                "creationDate": "创建日期",
+                "expirationDate": "过期日",
+                "owner": "所有人",
+                "status": "状态"
+              }
+            }
+          }
+        },
+        "UsersTable": {
+          "notApplicable": "N/A",
+          "ordering": {
+            "direction": {
+              "ascending": "升序",
+              "descending": "降序",
+              "label": "顺序"
+            },
+            "label": "排序参考"
+          },
+          "pagination": {
+            "results": "正在显示第 { start } ~ { end } 条结果，共 { total } 条结果"
+          },
+          "permission": {
+            "library": "曲库",
+            "moderation": "审核",
+            "settings": "设置"
+          },
+          "placeholder": {
+            "search": "搜索用户名，邮箱，姓名…"
+          },
+          "table": {
+            "user": {
+              "accountStatus": {
+                "active": "活跃",
+                "inactive": "不活跃"
+              },
+              "header": {
+                "accountStatus": "帐户状态",
+                "email": "邮箱",
+                "lastActivity": "最后活动",
+                "permissions": "权限",
+                "signup": "注册日期",
+                "status": "状态",
+                "username": "用户名"
+              },
+              "status": {
+                "admin": "管理员",
+                "regular": "普通用户",
+                "staff": "工作人员"
+              }
+            }
+          }
+        }
+      }
+    },
+    "moderation": {
+      "FilterModal": {
+        "button": {
+          "cancel": "取消",
+          "hide": "隐藏内容"
+        },
+        "header": {
+          "failure": "创建过滤器时出错",
+          "modal": "是否隐藏歌手“{name}”的相关内容？"
+        },
+        "help": {
+          "createFilter": "您随时可以在账户设置中管理和更新这些过滤器。"
+        },
+        "message": {
+          "success": "内容过滤器已成功添加"
+        },
+        "warning": {
+          "createFilter": {
+            "listIntro": "您将不会再看到此歌手的相关歌曲、专辑和用户活动：",
+            "listItem1": "在其他用户的收藏和收听历史中",
+            "listItem2": "在“最近添加”小部件中",
+            "listItem3": "在歌手和专辑列表中",
+            "listItem4": "在电台建议中"
+          }
+        }
+      },
+      "ReportCategoryDropdown": {
+        "label": {
+          "category": "类别"
+        },
+        "option": {
+          "all": "所有"
+        }
+      },
+      "ReportModal": {
+        "button": {
+          "cancel": "取消",
+          "submit": "提交报告"
+        },
+        "description": {
+          "email": "我们将会使用这个邮箱地址与您确认此报告的相关细节。",
+          "forwardToDomain": "将报告的一份匿名副本转发给托管此对象的服务器。",
+          "message": "在这里补充更多信息，帮助我们的管理员判断并处理您的报告。",
+          "modal": "使用此表单以向我们的管理员团队报告问题。"
+        },
+        "header": {
+          "disabled": "已禁止匿名报告，请登录后提交报告。",
+          "modal": "要报告此对象吗？",
+          "submissionFailure": "提交报告时出错"
+        },
+        "label": {
+          "email": "邮箱",
+          "forwardToDomain": "转发到 { domain }",
+          "message": "信息"
+        },
+        "message": {
+          "submissionSuccess": "报告已成功提交，谢谢"
+        }
+      }
+    },
+    "notifications": {
+      "NotificationRow": {
+        "button": {
+          "approve": "批准",
+          "markRead": "标记为已读",
+          "markUnread": "标记为未读",
+          "reject": "拒绝"
+        },
+        "message": {
+          "libraryAcceptFollow": "{ username } 已接受您关注了曲库“{ library }”",
+          "libraryFollow": "{ username } 关注了您的曲库“{ library }”",
+          "libraryPendingFollow": "{ username } 想关注您的曲库“{ library }”"
+        }
+      }
+    },
+    "playlists": {
+      "Card": {
+        "meta": {
+          "tracks": "{ count } 首歌曲"
+        }
+      },
+      "Editor": {
+        "button": {
+          "addDuplicate": "继续添加",
+          "clear": "清除歌单",
+          "copy": "将播放队列中的歌曲复制到歌单",
+          "insertFromQueue": "从播放队列插入（{ count } 首歌曲）"
+        },
+        "error": {
+          "sync": "保存更改时出错"
+        },
+        "header": {
+          "editor": "歌单编辑器"
+        },
+        "help": {
+          "reorder": "拖放行以重新排列歌单中的歌曲"
+        },
+        "loading": {
+          "sync": "正在与服务器同步修改…"
+        },
+        "message": {
+          "sync": "改动已与服务器同步"
+        },
+        "modal": {
+          "clearPlaylist": {
+            "content": {
+              "warning": "这将移除这个歌单中的所有歌曲，且无法撤销。"
+            },
+            "header": "要清空播放列表“{ playlist }”吗？"
+          }
+        },
+        "warning": {
+          "duplicate": "队列中的某些歌曲已在这个歌单中："
+        }
+      },
+      "Form": {
+        "button": {
+          "create": "创建歌单",
+          "update": "更新歌单"
+        },
+        "header": {
+          "createFailure": "无法创建歌单",
+          "createPlaylist": "创建一个新歌单",
+          "createSuccess": "歌单已创建",
+          "updateSuccess": "歌单已更新"
+        },
+        "label": {
+          "name": "歌单名称",
+          "visibility": "歌单可见性"
+        },
+        "placeholder": {
+          "name": "我的歌单"
+        }
+      },
+      "PlaylistModal": {
+        "button": {
+          "addDuplicate": "继续添加",
+          "addToPlaylist": "添加到这个歌单",
+          "addTrack": "添加歌曲",
+          "cancel": "取消",
+          "edit": "编辑"
+        },
+        "empty": {
+          "noPlaylists": "目前还没有创建过歌单"
+        },
+        "header": {
+          "addFailure": "这首歌曲无法添加到歌单中",
+          "addToPlaylist": "添加到歌单",
+          "available": "可用歌单",
+          "manage": "管理歌单",
+          "noResults": "无符合过滤器的结果"
+        },
+        "label": {
+          "filter": "过滤器"
+        },
+        "placeholder": {
+          "filterPlaylist": "输入歌单名称"
+        },
+        "table": {
+          "edit": {
+            "header": {
+              "edit": "编辑",
+              "lastModification": "最后修改",
+              "name": "名称",
+              "tracks": "歌曲"
+            }
+          }
+        },
+        "warning": {
+          "duplicate": "歌曲 { 0 } 已经在歌单 { 1 } 中。"
+        }
+      },
+      "TrackPlaylistIcon": {
+        "button": {
+          "add": "添加到歌单…"
+        }
+      },
+      "Widget": {
+        "button": {
+          "create": "创建歌单",
+          "more": "展开"
+        },
+        "placeholder": {
+          "noPlaylists": "目前还没有创建过歌单"
+        }
+      }
+    },
+    "radios": {
+      "Button": {
+        "startRadio": "播放这个电台",
+        "stopRadio": "停止播放电台"
+      },
+      "Card": {
+        "button": {
+          "edit": "编辑"
+        }
+      }
+    },
+    "tags": {
+      "List": {
+        "button": {
+          "more": "显示接下来的 { count } 个标签"
+        }
+      }
+    },
+    "vui": {
+      "Pagination": {
+        "label": "分页",
+        "next": "下一页",
+        "previous": "上一页"
+      }
+    }
+  },
+  "composables": {
+    "audio": {
+      "usePlayOptions": {
+        "addToQueueMessage": "{ count } 首歌曲已添加到您的播放队列中"
+      }
+    },
+    "locale": {
+      "useSharedLabels": {
+        "fields": {
+          "contentCategory": {
+            "choices": {
+              "music": "音乐",
+              "other": "其他",
+              "podcast": "播客"
+            },
+            "label": "内容类别"
+          },
+          "importStatus": {
+            "choices": {
+              "draft": {
+                "help": "这首歌曲已经上传，但还没有被服务器安排处理",
+                "label": "暂存"
+              },
+              "errored": {
+                "help": "无法处理这首歌曲，请确保它被正确地标记",
+                "label": "出错"
+              },
+              "finished": {
+                "help": "已导入",
+                "label": "已完成"
+              },
+              "pending": {
+                "help": "这首歌曲已经上传，但是还没有被服务器处理",
+                "label": "待定"
+              },
+              "skipped": {
+                "help": "这首歌曲已经存在于您的某个曲库中",
+                "label": "已跳过"
+              }
+            },
+            "label": "单击以显示有关此上传记录的导入过程的详细信息"
+          },
+          "privacyLevel": {
+            "choices": {
+              "instance": "此实例上的任何用户",
+              "private": "仅我自己",
+              "public": "所有实例上的任何人"
+            },
+            "help": "决定谁可以查看您的活动",
+            "label": "活动可见性",
+            "shortChoices": {
+              "instance": "实例",
+              "private": "私人",
+              "public": "任何人"
+            }
+          },
+          "reportType": {
+            "choices": {
+              "illegalContent": "非法内容",
+              "invalidMetadata": "元数据错误",
+              "offensiveContent": "攻击性内容",
+              "other": "其他",
+              "takedownRequest": "下线请求"
+            },
+            "label": "类别"
+          },
+          "summary": {
+            "label": "个人简介"
+          }
+        },
+        "filters": {
+          "accessedDate": "访问日期",
+          "albumTitle": "专辑名称",
+          "artistName": "歌手姓名",
+          "bitrate": "比特率",
+          "creationDate": "创建日期",
+          "dateJoined": "注册日期",
+          "domain": "域名",
+          "duration": "时长",
+          "expirationDate": "过期日",
+          "firstSeen": "首次发现日期",
+          "followers": "关注者",
+          "itemsCount": "项目",
+          "lastActivity": "最后活动",
+          "lastSeen": "最后可见日期",
+          "modificationDate": "修改日期",
+          "name": "名称",
+          "receivedMessages": "收到的信息",
+          "releaseDate": "发行日期",
+          "size": "文件大小",
+          "trackTitle": "歌名",
+          "uploads": "上传记录",
+          "username": "用户名",
+          "users": "用户"
+        },
+        "scopes": {
+          "edits": {
+            "description": "访问编辑",
+            "label": "编辑记录"
+          },
+          "favorites": {
+            "label": "收藏"
+          },
+          "filters": {
+            "description": "访问内容过滤器",
+            "label": "内容过滤器"
+          },
+          "follows": {
+            "description": "访问关注列表",
+            "label": "关注"
+          },
+          "libraries": {
+            "description": "访问音频文件，曲库，音乐人，专辑和歌曲",
+            "label": "曲库和上传"
+          },
+          "listenings": {
+            "description": "访问收听历史",
+            "label": "收听次数"
+          },
+          "notifications": {
+            "description": "访问通知",
+            "label": "通知"
+          },
+          "playlists": {
+            "description": "访问歌单",
+            "label": "歌单"
+          },
+          "profile": {
+            "description": "查看电子邮件、用户名和个人资料信息",
+            "label": "个人档案"
+          },
+          "radios": {
+            "description": "访问电台",
+            "label": "电台"
+          },
+          "reports": {
+            "description": "访问审核报告",
+            "label": "报告"
+          },
+          "security": {
+            "description": "访问安全设置，如密码和第三方应用授权",
+            "label": "安全"
+          }
+        }
+      }
+    },
+    "moderation": {
+      "useEditConfigs": {
+        "album": {
+          "releaseDate": "发行日期",
+          "title": "标题"
+        },
+        "artist": {
+          "name": "名称"
+        },
+        "cover": {
+          "label": "封面"
+        },
+        "description": {
+          "label": "描述"
+        },
+        "tags": {
+          "label": "标签"
+        },
+        "track": {
+          "copyright": "版权所有",
+          "license": "许可证",
+          "position": "音轨号",
+          "title": "标题"
+        }
+      },
+      "useReport": {
+        "account": {
+          "typeLabel": "帐户"
+        },
+        "album": {
+          "label": "报告这张专辑…",
+          "typeLabel": "专辑"
+        },
+        "artist": {
+          "label": "报告这个歌手…",
+          "typeLabel": "歌手"
+        },
+        "channel": {
+          "label": "报告这个频道…",
+          "typeLabel": "频道"
+        },
+        "library": {
+          "label": "报告这个曲库…",
+          "typeLabel": "曲库"
+        },
+        "playlist": {
+          "label": "报告这个歌单…",
+          "typeLabel": "歌单"
+        },
+        "track": {
+          "label": "报告这首歌曲…",
+          "typeLabel": "歌曲"
+        }
+      },
+      "useReportConfigs": {
+        "account": {
+          "label": "帐户",
+          "summary": "个人简介"
+        },
+        "album": {
+          "label": "专辑",
+          "releaseDate": "发行日期",
+          "title": "标题"
+        },
+        "artist": {
+          "label": "歌手"
+        },
+        "channel": {
+          "label": "频道"
+        },
+        "creationDate": {
+          "label": "创建日期"
+        },
+        "library": {
+          "description": "描述",
+          "label": "曲库"
+        },
+        "musicbrainzId": {
+          "label": "MusicBrainz ID"
+        },
+        "name": {
+          "label": "名称"
+        },
+        "playlist": {
+          "label": "歌单"
+        },
+        "tags": {
+          "label": "标签"
+        },
+        "track": {
+          "copyright": "版权所有",
+          "label": "歌曲",
+          "license": "许可证",
+          "position": "音轨号",
+          "title": "标题"
+        },
+        "visibility": {
+          "label": "可见性"
+        }
+      }
+    },
+    "useThemeList": {
+      "darkTheme": "深色",
+      "lightTheme": "浅色"
+    }
+  },
+  "init": {
+    "axios": {
+      "rateLimitDelay": "您发送的请求太多，已受到速率限制，请在 { delay } 后重试",
+      "rateLimitLater": "您发送的请求太多，已受到速率限制，请稍后重试"
+    },
+    "serviceWorker": {
+      "actions": {
+        "later": "稍后",
+        "update": "更新"
+      },
+      "newAppVersion": "此应用程序的新版本已经发布。"
+    }
+  },
+  "views": {
+    "Notifications": {
+      "button": {
+        "read": "全部标记为已读",
+        "submit": "知道了！"
+      },
+      "empty": {
+        "notifications": "没有可显示的通知。"
+      },
+      "header": {
+        "funkwhaleSupport": "您喜欢 Funkwhale 吗？",
+        "instanceSupport": "支持这个 Funkwhale 站点",
+        "messages": "您的信息",
+        "notifications": "您的通知"
+      },
+      "label": {
+        "reminder": "在以下时间后提醒我：",
+        "showRead": "显示已读通知"
+      },
+      "link": {
+        "donate": "捐赠",
+        "help": "了解其他为 Funkwhale 做出贡献的方式"
+      },
+      "loading": {
+        "notifications": "正在加载通知…"
+      },
+      "message": {
+        "funkwhaleSupport": "我们注意到您来这里有一段时间了。如果对您来说 Funkwhale 有用，我们希望您的举手之劳能让项目变得更好！"
+      },
+      "option": {
+        "delay": {
+          "30": "30 天",
+          "60": "60 天",
+          "90": "90 天",
+          "never": "从不"
+        }
+      },
+      "title": "通知"
+    },
+    "Search": {
+      "button": {
+        "submit": "提交搜索请求"
+      },
+      "header": {
+        "remote": "搜索远程对象",
+        "rss": "通过 RSS 订阅一个播客",
+        "search": "搜索"
+      },
+      "label": {
+        "albums": "专辑",
+        "artists": "歌手",
+        "playlists": "歌单",
+        "podcasts": "播客",
+        "radios": "电台",
+        "series": "序列",
+        "tags": "标签",
+        "tracks": "歌曲"
+      }
+    },
+    "admin": {
+      "ChannelDetail": {
+        "button": {
+          "delete": "删除",
+          "openRemote": "查看远程档案",
+          "refresh": "从远程服务器刷新"
+        },
+        "header": {
+          "activity": "活动",
+          "audioContent": "音频内容",
+          "channelData": "频道数据"
+        },
+        "label": {
+          "local": "本地"
+        },
+        "link": {
+          "django": "在 Django 管理面板中查看",
+          "localProfile": "查看本地档案"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "此频道，以及相关的上传记录、歌曲和专辑，将被删除。此操作无法逆转。"
+            },
+            "header": "确认删除这个频道？"
+          }
+        },
+        "table": {
+          "activity": {
+            "edits": "编辑记录",
+            "favorited": "被收藏的歌曲",
+            "firstSeen": "首次发现",
+            "linkedReports": "关联报告",
+            "listenings": "收听次数",
+            "playlists": "歌单"
+          },
+          "audioContent": {
+            "albums": "专辑",
+            "cachedSize": "已缓存大小",
+            "totalSize": "总文件大小",
+            "tracks": "歌曲",
+            "uploads": "上传记录"
+          },
+          "channelData": {
+            "account": "帐户",
+            "category": "类别",
+            "description": "描述",
+            "domain": "域名",
+            "name": "名称",
+            "rss": "RSS 订阅",
+            "url": "链接"
+          }
+        },
+        "warning": {
+          "stats": "统计数据根据实例上的已知活动和内容进行计算，并不反映此对象的一般活动"
+        }
+      },
+      "CommonList": {
+        "title": {
+          "accounts": "帐户",
+          "albums": "专辑",
+          "artists": "歌手",
+          "channels": "频道",
+          "invitations": "邀请",
+          "libraries": "曲库",
+          "tags": "标签",
+          "tracks": "歌曲",
+          "uploads": "上传记录",
+          "users": "用户"
+        }
+      },
+      "Settings": {
+        "header": {
+          "channels": "频道",
+          "federation": "联邦机制",
+          "instanceInfo": "实例信息",
+          "moderation": "审核",
+          "music": "音乐",
+          "playlists": "歌单",
+          "sections": "设置分项",
+          "security": "安全",
+          "settings": "实例设置",
+          "signups": "账户注册",
+          "stats": "统计",
+          "subsonic": "Subsonic",
+          "ui": "用户界面"
+        }
+      },
+      "library": {
+        "AlbumDetail": {
+          "button": {
+            "delete": "删除",
+            "edit": "编辑",
+            "remoteRefresh": "从远程服务器刷新"
+          },
+          "header": {
+            "activity": "活动",
+            "albumData": "专辑数据",
+            "audioContent": "音频内容",
+            "local": "本地"
+          },
+          "link": {
+            "artist": "歌手",
+            "django": "在 Django 管理面板中查看",
+            "domain": "域名",
+            "edits": "编辑记录",
+            "libraries": "曲库",
+            "localProfile": "查看本地档案",
+            "musicbrainz": "在 MusicBrainz 上打开",
+            "remoteProfile": "查看远程档案",
+            "reports": "关联报告",
+            "tracks": "歌曲",
+            "uploads": "上传记录"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "此专辑，以及相关的上传记录，歌曲，收藏和收听历史，将被删除。此操作无法逆转。"
+              },
+              "header": "确认删除这个专辑？"
+            }
+          },
+          "table": {
+            "activity": {
+              "favorited": "被收藏的歌曲",
+              "firstSeen": "首次发现",
+              "listenings": "收听次数",
+              "playlists": "歌单"
+            },
+            "album": {
+              "description": "描述",
+              "title": "标题"
+            },
+            "audioContent": {
+              "cachedSize": "已缓存大小",
+              "totalSize": "总文件大小"
+            }
+          },
+          "warning": {
+            "stats": "统计数据根据实例上的已知活动和内容进行计算，并不反映此对象的一般活动"
+          }
+        },
+        "ArtistDetail": {
+          "button": {
+            "delete": "删除",
+            "edit": "编辑",
+            "remoteRefresh": "从远程服务器刷新"
+          },
+          "header": {
+            "activity": "活动",
+            "artistData": "歌手数据",
+            "audioContent": "音频内容",
+            "local": "本地"
+          },
+          "link": {
+            "albums": "专辑",
+            "category": "类别",
+            "django": "在 Django 管理面板中查看",
+            "domain": "域名",
+            "edits": "编辑记录",
+            "libraries": "曲库",
+            "localProfile": "查看本地档案",
+            "musicbrainz": "在 MusicBrainz 上打开",
+            "remoteProfile": "查看远程档案",
+            "reports": "关联报告",
+            "tracks": "歌曲",
+            "uploads": "上传记录"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "此歌手，以及相关的上传记录、歌曲、专辑、收藏和收听历史，将被删除。此操作无法逆转。"
+              },
+              "header": "确认删除这个歌手？"
+            }
+          },
+          "table": {
+            "activity": {
+              "favorited": "被收藏的歌曲",
+              "firstSeen": "首次发现",
+              "listenings": "收听次数",
+              "playlists": "歌单"
+            },
+            "artist": {
+              "description": "描述",
+              "name": "名称"
+            },
+            "audioContent": {
+              "cachedSize": "已缓存大小",
+              "totalSize": "总文件大小"
+            }
+          },
+          "warning": {
+            "stats": "统计数据根据实例上的已知活动和内容进行计算，并不反映此对象的一般活动"
+          }
+        },
+        "Base": {
+          "link": {
+            "albums": "专辑",
+            "artists": "歌手",
+            "channels": "频道",
+            "edits": "编辑记录",
+            "libraries": "曲库",
+            "tags": "标签",
+            "tracks": "歌曲",
+            "uploads": "上传记录"
+          },
+          "menu": {
+            "secondary": "二级菜单"
+          },
+          "title": "管理曲库"
+        },
+        "EditsList": {
+          "header": {
+            "edits": "曲库编辑记录"
+          },
+          "title": "编辑记录"
+        },
+        "LibraryDetail": {
+          "button": {
+            "delete": "删除"
+          },
+          "header": {
+            "activity": "活动",
+            "audioContent": "音频内容",
+            "libraryData": "曲库数据",
+            "local": "本地"
+          },
+          "link": {
+            "account": "帐户",
+            "albums": "专辑",
+            "artists": "歌手",
+            "django": "在 Django 管理面板中查看",
+            "domain": "域名",
+            "remoteProfile": "查看远程档案",
+            "reports": "关联报告",
+            "tracks": "歌曲",
+            "uploads": "上传记录",
+            "visibility": "可见性"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "此曲库，以及相关的上传记录和关注，将被删除。此操作无法逆转。"
+              },
+              "header": "确认删除这个曲库？"
+            }
+          },
+          "table": {
+            "activity": {
+              "firstSeen": "首次发现",
+              "followers": "关注者"
+            },
+            "audioContent": {
+              "cachedSize": "已缓存大小",
+              "totalSize": "总文件大小"
+            },
+            "library": {
+              "description": "描述",
+              "name": "名称"
+            }
+          },
+          "warning": {
+            "stats": "统计数据根据实例上的已知活动和内容进行计算，并不反映此对象的一般活动"
+          }
+        },
+        "TagDetail": {
+          "button": {
+            "delete": "删除"
+          },
+          "header": {
+            "activity": "活动",
+            "audioContent": "音频内容",
+            "tagData": "标签数据"
+          },
+          "link": {
+            "albums": "专辑",
+            "artists": "歌手",
+            "django": "在 Django 管理面板中查看",
+            "localProfile": "查看本地档案",
+            "tracks": "歌曲"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "此标签将被删除，并与其他内容解除链接。此操作无法逆转。"
+              },
+              "header": "确认删除这个标签？"
+            }
+          },
+          "table": {
+            "activity": {
+              "firstSeen": "首次发现"
+            },
+            "tag": {
+              "name": "名称"
+            }
+          }
+        },
+        "TrackDetail": {
+          "button": {
+            "delete": "删除",
+            "edit": "编辑",
+            "remoteRefresh": "从远程服务器刷新"
+          },
+          "header": {
+            "activity": "活动",
+            "local": "本地",
+            "trackData": "歌曲数据"
+          },
+          "link": {
+            "album": "专辑",
+            "albumArtist": "专辑歌手",
+            "artist": "歌手",
+            "django": "在 Django 管理面板中查看",
+            "domain": "域名",
+            "edits": "编辑记录",
+            "libraries": "曲库",
+            "localProfile": "查看本地档案",
+            "musicbrainz": "在 MusicBrainz 上打开",
+            "remoteProfile": "查看远程档案",
+            "reports": "关联报告",
+            "uploads": "上传记录"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "这首歌曲，以及相关的上传记录、收藏和收听历史，将被删除。此操作无法逆转。"
+              },
+              "header": "确认删除这首歌曲？"
+            }
+          },
+          "table": {
+            "activity": {
+              "favorited": "被收藏的歌曲",
+              "firstSeen": "首次发现",
+              "listenings": "收听次数",
+              "playlists": "歌单"
+            },
+            "track": {
+              "copyright": "版权所有",
+              "description": "描述",
+              "discNumber": "CD 号",
+              "license": "许可证",
+              "position": "音轨号",
+              "title": "标题"
+            },
+            "trackData": {
+              "cachedSize": "已缓存大小",
+              "totalSize": "总文件大小"
+            }
+          },
+          "warning": {
+            "stats": "统计数据根据实例上的已知活动和内容进行计算，并不反映此对象的一般活动"
+          }
+        },
+        "UploadDetail": {
+          "button": {
+            "delete": "删除",
+            "download": "下载"
+          },
+          "header": {
+            "activity": "活动",
+            "audioContent": "音频内容",
+            "local": "本地",
+            "uploadData": "上传日期"
+          },
+          "link": {
+            "account": "帐户",
+            "django": "在 Django 管理面板中查看",
+            "domain": "域名",
+            "importStatus": "导入状态",
+            "library": "曲库",
+            "remoteProfile": "查看远程档案",
+            "type": "类型",
+            "visibility": "可见性"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "这条上传记录将被删除。此操作无法逆转。"
+              },
+              "header": "确认删除这条上传记录？"
+            }
+          },
+          "notApplicable": "N/A",
+          "table": {
+            "activity": {
+              "accessedDate": "访问日期",
+              "firstSeen": "首次发现"
+            },
+            "audioContent": {
+              "bitrate": {
+                "label": "比特率"
+              },
+              "cachedSize": "已缓存大小",
+              "duration": "时长",
+              "size": "文件大小",
+              "track": "歌曲"
+            },
+            "upload": {
+              "name": "名称"
+            }
+          }
+        }
+      },
+      "moderation": {
+        "AccountsDetail": {
+          "button": {
+            "addPolicy": "添加一个审核策略"
+          },
+          "description": {
+            "policy": "审核策略可以帮助您控制实例如何与指定的域名或帐户交互。"
+          },
+          "header": {
+            "accountData": "帐户资料",
+            "activePolicy": "此域名已受审核规则约束",
+            "activity": "活动",
+            "audioContent": "音频内容",
+            "localAccount": "本地帐户",
+            "noPolicy": "您对这个账户没有实行任何规则。"
+          },
+          "link": {
+            "albums": "专辑",
+            "artists": "歌手",
+            "channels": "频道",
+            "django": "在 Django 管理面板中查看",
+            "domain": "域名",
+            "libraries": "曲库",
+            "linkedReports": "关联报告",
+            "openProfile": "查看档案",
+            "remoteProfile": "查看远程档案",
+            "requests": "请求",
+            "tracks": "歌曲",
+            "uploads": "上传记录"
+          },
+          "notApplicable": "N/A",
+          "option": {
+            "permission": {
+              "library": "曲库",
+              "moderation": "审核",
+              "settings": "设置"
+            }
+          },
+          "table": {
+            "accountData": {
+              "displayName": "显示名称",
+              "email": "邮箱",
+              "lastActivity": "最后活动",
+              "lastChecked": "最后检查",
+              "loginStatus": {
+                "disabled": "已禁用",
+                "enabled": "启用",
+                "label": "登录状态"
+              },
+              "permissions": "权限",
+              "signupDate": "注册日期",
+              "userType": "类型",
+              "username": "用户名"
+            },
+            "activity": {
+              "emittedFollows": "已发出的关注曲库申请",
+              "emittedMessages": "已发出的消息",
+              "firstSeen": "首次发现",
+              "receivedFollows": "收到的曲库关注数"
+            },
+            "audioContent": {
+              "cachedSize": "已缓存大小",
+              "megabyte": "MB",
+              "totalSize": "总文件大小",
+              "uploadQuota": "上传文件存储配额"
+            }
+          },
+          "tooltip": {
+            "uploadQuota": "决定用户可以上传多少内容。留空以使用此实例的默认值。"
+          },
+          "warning": {
+            "stats": "统计数据根据实例上的已知活动和内容进行计算，并不反映此对象的一般活动"
+          }
+        },
+        "Base": {
+          "link": {
+            "accounts": "帐户",
+            "domains": "域名",
+            "reports": "报告",
+            "userRequests": "用户请求"
+          },
+          "menu": {
+            "secondary": "二级菜单"
+          },
+          "title": "审核"
+        },
+        "DomainsDetail": {
+          "button": {
+            "addPolicy": "添加一个审核策略",
+            "addToAllowList": "添加到允许列表",
+            "refreshNodeInfo": "刷新节点信息",
+            "removeFromAllowList": "从允许列表中删除"
+          },
+          "description": {
+            "policy": "审核策略可以帮助您控制实例如何与指定的域名或帐户交互。"
+          },
+          "header": {
+            "activePolicy": "此域名已受审核规则约束",
+            "activity": "活动",
+            "audioContent": "音频内容",
+            "instanceData": "实例数据",
+            "noPolicy": "您对这个域名没有实行任何规则。"
+          },
+          "link": {
+            "albums": "专辑",
+            "artists": "歌手",
+            "channels": "频道",
+            "django": "在 Django 管理面板中查看",
+            "knownAccounts": "已知账户",
+            "libraries": "曲库",
+            "tracks": "歌曲",
+            "uploads": "上传记录",
+            "website": "打开网站"
+          },
+          "notApplicable": "N/A",
+          "table": {
+            "activity": {
+              "emittedFollows": "已发出的关注曲库申请",
+              "emittedMessages": "已发出的消息",
+              "firstSeen": "首次发现",
+              "receivedFollows": "收到的曲库关注数"
+            },
+            "audioContent": {
+              "cachedSize": "已缓存大小",
+              "totalSize": "总文件大小"
+            },
+            "instanceData": {
+              "domainName": "名称",
+              "inAllowList": {
+                "false": "否",
+                "label": "已在允许列表中",
+                "true": "是"
+              },
+              "lastChecked": "最后检查",
+              "nodeInfoStatus": {
+                "label": "状态",
+                "value": "获取节点信息时出错"
+              },
+              "software": {
+                "label": "软件"
+              },
+              "totalUsers": "用户总数"
+            }
+          },
+          "warning": {
+            "stats": "统计数据根据实例上的已知活动和内容进行计算，并不反映此对象的一般活动"
+          }
+        },
+        "DomainsList": {
+          "button": {
+            "add": "添加"
+          },
+          "header": {
+            "domains": "域名",
+            "failure": "创建域名时出错"
+          },
+          "label": {
+            "addDomain": "添加域名",
+            "addToAllowList": "添加到允许列表"
+          },
+          "title": "域名"
+        },
+        "ReportsList": {
+          "header": {
+            "reports": "报告"
+          },
+          "label": {
+            "search": "搜索",
+            "status": "状态"
+          },
+          "option": {
+            "status": {
+              "all": "所有",
+              "resolved": "已解决",
+              "unresolved": "未解决"
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "升序",
+              "descending": "降序",
+              "label": "顺序"
+            },
+            "label": "排序参考"
+          },
+          "placeholder": {
+            "search": "搜索帐户，摘要，域名…"
+          },
+          "title": "报告"
+        },
+        "RequestsList": {
+          "header": {
+            "userRequests": "用户请求"
+          },
+          "label": {
+            "search": "搜索",
+            "status": "状态"
+          },
+          "option": {
+            "status": {
+              "all": "所有",
+              "approved": "已批准",
+              "pending": "待定",
+              "refused": "已拒绝"
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "升序",
+              "descending": "降序",
+              "label": "顺序"
+            },
+            "label": "排序参考"
+          },
+          "placeholder": {
+            "search": "搜索用户名…"
+          },
+          "title": "用户请求"
+        }
+      },
+      "users": {
+        "Base": {
+          "link": {
+            "invitations": "邀请",
+            "users": "用户"
+          },
+          "menu": {
+            "secondary": "二级菜单"
+          },
+          "title": "管理用户"
+        }
+      }
+    },
+    "auth": {
+      "Callback": {
+        "header": {
+          "loggingIn": "登录中…"
+        }
+      },
+      "EmailConfirm": {
+        "header": {
+          "failure": "无法确认您的邮箱",
+          "success": "邮箱已确认"
+        },
+        "label": {
+          "confirmationCode": "确认码"
+        },
+        "link": {
+          "back": "回到登录页面",
+          "login": "继续登录"
+        },
+        "message": {
+          "success": "您现在可以自由地使用本站的服务。"
+        },
+        "title": "确认您的邮箱"
+      },
+      "Login": {
+        "header": {
+          "login": "登录您的 Funkwhale 帐户"
+        },
+        "title": "登录"
+      },
+      "PasswordReset": {
+        "button": {
+          "requestReset": "请求重置密码"
+        },
+        "header": {
+          "failure": "请求重置密码时出错",
+          "reset": "重置您的密码"
+        },
+        "help": {
+          "form": "使用此表单以重置密码。我们会发送邮件到指定的邮箱，并说明如何重置您的密码。"
+        },
+        "label": {
+          "email": "账户邮箱"
+        },
+        "link": {
+          "back": "返回登录"
+        },
+        "placeholder": {
+          "email": "输入与您的帐户绑定的邮箱"
+        },
+        "title": "重置您的密码"
+      },
+      "PasswordResetConfirm": {
+        "button": {
+          "update": "更新您的密码"
+        },
+        "header": {
+          "failure": "更改密码时出错",
+          "success": "密码更新成功"
+        },
+        "label": {
+          "newPassword": "新密码"
+        },
+        "link": {
+          "back": "返回登录",
+          "login": "继续登录"
+        },
+        "message": {
+          "requestSent": "如果前面提供的邮箱是有效的、并且已经绑定到某个帐户，您应该会在接下来的几分钟内收到一封电子邮件，其中包括重置密码的步骤说明。",
+          "success": "成功更新您的密码。"
+        },
+        "title": "更改您的密码"
+      },
+      "Plugins": {
+        "title": "管理插件"
+      },
+      "ProfileActivity": {
+        "header": {
+          "playlists": "歌单",
+          "recentlyFavorited": "最近收藏",
+          "recentlyListened": "最近收听"
+        }
+      },
+      "ProfileBase": {
+        "label": {
+          "self": "这就是你！"
+        },
+        "link": {
+          "activity": "活动",
+          "domainView": "在 { domain } 上查看",
+          "moderation": "打开审核界面",
+          "overview": "概览"
+        },
+        "title": "{ username } 的个人资料"
+      },
+      "ProfileOverview": {
+        "button": {
+          "cancel": "取消",
+          "createChannel": "创建频道",
+          "next": "下一步",
+          "previous": "上一步"
+        },
+        "header": {
+          "channels": "频道",
+          "libraries": "用户曲库",
+          "sharedLibraries": "这个用户共享了下列曲库"
+        },
+        "link": {
+          "addNew": "添加新的"
+        },
+        "modal": {
+          "createChannel": {
+            "artist": {
+              "header": "歌手频道"
+            },
+            "header": "创建频道",
+            "podcast": {
+              "header": "播客频道"
+            }
+          }
+        }
+      },
+      "Signup": {
+        "header": {
+          "createAccount": "创建一个 Funkwhale 帐户"
+        },
+        "title": "注册新账户"
+      }
+    },
+    "channels": {
+      "DetailBase": {
+        "button": {
+          "cancel": "取消",
+          "confirm": "删除",
+          "delete": "删除…",
+          "edit": "编辑…",
+          "embed": "嵌入",
+          "play": "播放",
+          "updateChannel": "更新频道",
+          "upload": "上传"
+        },
+        "header": {
+          "artistChannel": "歌手频道",
+          "podcastChannel": "播客频道"
+        },
+        "link": {
+          "channelEpisodes": "所有节目",
+          "channelOverview": "概览",
+          "channelTracks": "歌曲",
+          "domainView": "在 { domain } 上查看",
+          "mirrored": "镜像来自 { domain }",
+          "moderation": "打开审核界面"
+        },
+        "meta": {
+          "episodes": "{ count } 个节目",
+          "listenings": "{ count } 次收听",
+          "subscribers": "{ count } 个订阅者",
+          "tracks": "{ count } 首歌曲"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "此频道以及相关的文件和数据将被删除。此操作无法逆转。"
+            },
+            "header": "确认删除这个频道？"
+          },
+          "embed": {
+            "header": "在您的网站上嵌入这个歌手的歌曲"
+          },
+          "subscribe": {
+            "fediverse": {
+              "content": {
+                "help": "如果您正在使用 Mastodon 或其他联邦宇宙内的应用程序，您可以订阅这个账户："
+              },
+              "header": "在联邦宇宙中订阅"
+            },
+            "funkwhale": {
+              "header": "在 Funkwhale 上订阅"
+            },
+            "header": "订阅这个频道",
+            "rss": {
+              "content": {
+                "help": "在您最喜欢的播客应用中粘贴下面的 URL："
+              },
+              "header": "通过 RSS 订阅"
+            }
+          }
+        },
+        "title": "频道"
+      },
+      "DetailOverview": {
+        "header": {
+          "albums": "专辑",
+          "latestEpisodes": "最新节目",
+          "latestTracks": "最新歌曲",
+          "series": "序列",
+          "uploadsFailure": "一些上传的歌曲无法发布",
+          "uploadsProcessing": "正在处理上传",
+          "uploadsSuccess": "上传已成功发布"
+        },
+        "link": {
+          "addAlbum": "添加新的",
+          "erroredUploads": "查看出错的上传记录",
+          "skippedUploads": "查看跳过的上传"
+        },
+        "message": {
+          "processing": "您的上传正在由 Funkwhale 处理，很快就会上线。"
+        },
+        "meta": {
+          "progress": "已处理的上传记录："
+        }
+      },
+      "SubscriptionsList": {
+        "button": {
+          "cancel": "取消",
+          "subscribe": "订阅"
+        },
+        "link": {
+          "addNew": "添加新的"
+        },
+        "modal": {
+          "subscription": {
+            "header": "订阅"
+          }
+        },
+        "placeholder": {
+          "search": "按名称过滤…"
+        },
+        "title": "已订阅的频道"
+      }
+    },
+    "content": {
+      "Base": {
+        "link": {
+          "libraries": "曲库",
+          "tracks": "歌曲"
+        },
+        "menu": {
+          "secondary": "二级菜单"
+        },
+        "title": "添加内容"
+      },
+      "Home": {
+        "button": {
+          "start": "开始"
+        },
+        "description": {
+          "channel": {
+            "1": "如果您是一个音乐家或播客，频道就是为您设计的！",
+            "2": "公开分享您的作品，并在 Funkwhale、联邦宇宙、或任何播客应用程序上获得订阅者。"
+          },
+          "follow": "关注其他用户的曲库以访问新音乐。公共库可以立即关注，而私人库则需要获得所有者的批准。",
+          "upload": "将您的个人曲库上传到 Funkwhale，以随时随地享受，并与朋友和家人分享。"
+        },
+        "header": {
+          "channel": "在频道中发布您的作品",
+          "follow": "关注远程曲库",
+          "upload": "在曲库中上传第三方内容"
+        },
+        "help": {
+          "uploadQuota": "本站为每个用户提供多达 ％{ quota } 的存储空间。"
+        },
+        "title": "添加和管理内容"
+      },
+      "libraries": {
+        "Card": {
+          "button": {
+            "upload": "上传"
+          },
+          "label": {
+            "size": "曲库中文件总大小"
+          },
+          "link": {
+            "details": "曲库详情"
+          },
+          "meta": {
+            "tracks": "{ count } 首歌曲"
+          }
+        },
+        "FilesTable": {
+          "action": {
+            "delete": "删除",
+            "restartImport": "重新启动导入"
+          },
+          "button": {
+            "showStatus": "点击以显示这首歌曲的当前上传状态"
+          },
+          "empty": {
+            "noTracks": "这个曲库还没有添加任何歌曲"
+          },
+          "label": {
+            "importStatus": "导入状态",
+            "search": "搜索"
+          },
+          "notApplicable": "N/A",
+          "option": {
+            "status": {
+              "all": "所有",
+              "draft": "暂存",
+              "failed": "失败",
+              "finished": "已完成",
+              "pending": "待定",
+              "skipped": "已跳过"
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "升序",
+              "descending": "降序",
+              "label": "顺序"
+            },
+            "label": "排序参考"
+          },
+          "pagination": {
+            "results": "正在显示第 { start } ~ { end } 条结果，共 { total } 条结果"
+          },
+          "placeholder": {
+            "search": "搜索标题，歌手，专辑…"
+          },
+          "table": {
+            "file": {
+              "header": {
+                "album": "专辑",
+                "artist": "歌手",
+                "duration": "时长",
+                "importStatus": "导入状态",
+                "size": "文件大小",
+                "title": "标题",
+                "uploadDate": "上传日期"
+              }
+            }
+          }
+        },
+        "Form": {
+          "button": {
+            "confirm": "删除曲库",
+            "create": "创建曲库",
+            "delete": "删除",
+            "update": "更新曲库"
+          },
+          "description": {
+            "library": "曲库帮助您整理和分享您的音乐。您可以上传自己的音乐到 Funkwhale，并与您的朋友和家人分享。",
+            "visibility": "您可以与其他人共享您的曲库，即使它对其他人不可见。"
+          },
+          "header": {
+            "failure": "错误"
+          },
+          "label": {
+            "description": "描述",
+            "name": "名称",
+            "visibility": "可见性"
+          },
+          "message": {
+            "libraryCreated": "曲库已创建",
+            "libraryDeleted": "曲库已删除",
+            "libraryUpdated": "曲库已更新"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "此曲库及其所有歌曲将被删除。此操作无法逆转。"
+              },
+              "header": "确认删除这个曲库？"
+            }
+          },
+          "placeholder": {
+            "description": "这个曲库收录了我的个人音乐，希望你喜欢。",
+            "name": "我的曲库"
+          }
+        },
+        "Home": {
+          "empty": {
+            "noLibrary": "好像您还没有自己的曲库，是时候创建一个了。"
+          },
+          "header": {
+            "libraries": "我的曲库"
+          },
+          "link": {
+            "createLibrary": "创建一个新曲库"
+          },
+          "loading": {
+            "libraries": "正在加载曲库…"
+          }
+        },
+        "Quota": {
+          "button": {
+            "purge": "清除"
+          },
+          "header": {
+            "currentUsage": "当前使用情况"
+          },
+          "label": {
+            "currentUsage": "共 { max }，已使用 { current }",
+            "errored": "出错的文件",
+            "pending": "待处理文件",
+            "skipped": "已跳过的文件"
+          },
+          "link": {
+            "viewFiles": "查看文件"
+          },
+          "loading": {
+            "currentUsage": "正在加载使用情况数据…"
+          },
+          "modal": {
+            "purgeErrored": {
+              "content": {
+                "description": "删除上传完成后服务器无法处理的歌曲，并将相应的空间增加到配额中。"
+              },
+              "header": "确认清除错误文件？"
+            },
+            "purgePending": {
+              "content": {
+                "description": "删除已上传但仍未处理的歌曲，并将相应的空间增加到配额中。"
+              },
+              "header": "确认清除待处理的文件？"
+            },
+            "purgeSkipped": {
+              "content": {
+                "description": "删除上传完成后、导入过程中被跳过的歌曲，并将相应的空间增加到配额中。"
+              },
+              "header": "确认清除被跳过的文件？"
+            }
+          }
+        }
+      },
+      "remote": {
+        "Card": {
+          "button": {
+            "cancel": "取消后续请求",
+            "follow": "关注",
+            "pending": "关注请求正在等待批准",
+            "unfollow": "取消关注"
+          },
+          "label": {
+            "scanFailure": "扫描过程中出错",
+            "scanPartialSuccess": "扫描完毕，但过程中出错",
+            "scanPending": "等待扫描",
+            "scanProgress": "扫描进行中… ({ progress }%)",
+            "scanSuccess": "扫描完毕",
+            "sharingLink": "分享链接"
+          },
+          "link": {
+            "scan": "立刻扫描",
+            "scanDetails": "详情"
+          },
+          "message": {
+            "scanLaunched": "扫描已启动",
+            "scanSkipped": "扫描被跳过（最近已经扫描过）"
+          },
+          "meta": {
+            "failedTracks": "失败的歌曲：",
+            "lastUpdate": "最后更新：",
+            "tracks": "{ count } 首歌曲"
+          },
+          "modal": {
+            "unfollow": {
+              "content": {
+                "warning": "取消关注该曲库后，您将失去对其内容的访问权限。"
+              },
+              "header": "确认取消关注这个曲库？"
+            }
+          },
+          "tooltip": {
+            "private": "这个曲库是私有的，访问它的内容需要得到它所有者的批准",
+            "public": "这个曲库是公开的，您可以自由访问它的内容"
+          }
+        },
+        "Home": {
+          "button": {
+            "refresh": "刷新"
+          },
+          "description": {
+            "remoteLibraries": "远程曲库归网络上的其他用户所有。只要它们是公共的或您被授予访问权限，您就可以访问它们。"
+          },
+          "header": {
+            "knownLibraries": "已知曲库",
+            "remoteLibraries": "远程曲库"
+          },
+          "loading": {
+            "remoteLibraries": "正在加载远程曲库…"
+          }
+        },
+        "ScanForm": {
+          "button": {
+            "submit": "搜索"
+          },
+          "header": {
+            "failure": "无法获取远程曲库"
+          },
+          "label": {
+            "search": "搜索远程曲库"
+          },
+          "placeholder": {
+            "url": "输入一个曲库 URL"
+          }
+        }
+      }
+    },
+    "library": {
+      "DetailAlbums": {
+        "empty": {
+          "follow": "您可能需要关注这个曲库以查看其内容。",
+          "upload": "这个曲库是空的，您应该上传点音乐上来！"
+        }
+      },
+      "DetailOverview": {
+        "empty": {
+          "follow": "您可能需要关注这个曲库以查看其内容。",
+          "upload": "这个曲库是空的，您应该上传点音乐上来！"
+        }
+      },
+      "DetailTracks": {
+        "empty": {
+          "follow": "您可能需要关注这个曲库以查看其内容。",
+          "upload": "这个曲库是空的，您应该上传点音乐上来！"
+        }
+      },
+      "Edit": {
+        "button": {
+          "accept": "接受",
+          "reject": "拒绝"
+        },
+        "empty": {
+          "noFollowers": "没有人关注这个曲库"
+        },
+        "header": {
+          "followers": "关注者",
+          "libraryContents": "曲库内容"
+        },
+        "loading": {
+          "followers": "正在加载关注者…"
+        },
+        "table": {
+          "action": {
+            "header": {
+              "action": "操作",
+              "date": "日期",
+              "status": "状态",
+              "user": "用户"
+            },
+            "status": {
+              "accepted": "接受",
+              "pending": "正在等待批准",
+              "rejected": "已拒绝"
+            }
+          }
+        }
+      },
+      "LibraryBase": {
+        "button": {
+          "edit": "编辑",
+          "upload": "上传"
+        },
+        "description": {
+          "sharingLink": "与其他用户分享这个链接，这样他们就可以将链接粘贴到他们的站点搜索栏，来请求访问这个曲库。"
+        },
+        "label": {
+          "instance": "站内公开",
+          "private": "私人",
+          "public": "公开",
+          "sharingLink": "分享链接"
+        },
+        "link": {
+          "albums": "专辑",
+          "artists": "歌手",
+          "domain": "在 { domain } 上查看",
+          "moderation": "打开审核界面",
+          "owner": "由 { username } 拥有",
+          "tracks": "歌曲"
+        },
+        "meta": {
+          "tracks": "{ count } 首歌曲"
+        },
+        "title": "曲库",
+        "tooltip": {
+          "instance": "这个曲库仅限于本站用户访问",
+          "private": "这个曲库是私有的，访问它的内容需要得到它所有者的批准",
+          "public": "这个曲库是公开的，您可以自由访问它的内容"
+        }
+      }
+    },
+    "playlists": {
+      "Detail": {
+        "button": {
+          "cancel": "取消",
+          "confirm": "删除歌单",
+          "delete": "删除",
+          "edit": "编辑",
+          "embed": "嵌入",
+          "playAll": "播放所有",
+          "stopEdit": "停止编辑"
+        },
+        "empty": {
+          "noTracks": "这个歌单中还没有任何歌曲"
+        },
+        "header": {
+          "tracks": "歌曲"
+        },
+        "meta": {
+          "tracks": "歌单包含来自用户 { username } 的 { count } 首歌曲"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "此歌单将被删除，且操作无法逆转。"
+            },
+            "header": "要清空歌单“{ playlist }”吗？"
+          },
+          "embed": {
+            "header": "在您的网站上嵌入这个歌单"
+          }
+        },
+        "title": "歌单"
+      },
+      "List": {
+        "button": {
+          "create": "创建一个歌单",
+          "manage": "管理您的歌单",
+          "search": "搜索"
+        },
+        "empty": {
+          "noResults": "无匹配条件的结果"
+        },
+        "header": {
+          "browse": "浏览歌单",
+          "playlists": "歌单"
+        },
+        "label": {
+          "search": "搜索"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "升序",
+            "descending": "降序",
+            "label": "顺序"
+          },
+          "label": "排序参考"
+        },
+        "pagination": {
+          "results": "每页结果数"
+        },
+        "placeholder": {
+          "search": "输入歌单名称…"
+        }
+      }
+    },
+    "radios": {
+      "Detail": {
+        "button": {
+          "confirm": "删除电台",
+          "edit": "编辑…"
+        },
+        "empty": {
+          "noTracks": "这个电台还没有添加任何歌曲"
+        },
+        "header": {
+          "tracks": "歌曲"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "此电台将被删除，且操作无法逆转。"
+            },
+            "header": "确认删除电台“{ radio }”吗？"
+          }
+        },
+        "title": "电台"
+      }
+    }
+  }
+}

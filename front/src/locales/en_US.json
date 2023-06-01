@@ -1,0 +1,4618 @@
+{
+  "App": {
+    "loading": "Loading..."
+  },
+  "components": {
+    "About": {
+      "title": "About",
+      "header": {
+        "funkwhale": "A social platform to enjoy and share music",
+        "signup": "Sign up",
+        "publicContent": "Browse public content",
+        "findApp": "Find an app",
+        "aboutPod": "About this pod"
+      },
+      "description": {
+        "funkwhale": "Funkwhale is a community-driven project that lets you listen and share music and audio within a decentralized, open network.",
+        "signup": "Sign up now to keep a track of your favorites, create playlists, discover new content and much more!",
+        "quota": "Users on this pod also get {quota} of free storage to upload their own content!",
+        "publicContent": "Listen to public albums and playlists shared on this pod.",
+        "findApp": "Use Funkwhale on other devices with our apps."
+      },
+      "placeholder": {
+        "noDescription": "No description available"
+      },
+      "message": {
+        "greeting": "Hello {username}",
+        "loggedIn": "You're already signed in!"
+      },
+      "link": {
+        "learnMore": "Learn more",
+        "findOtherPod": "Find another pod"
+      },
+      "stat": {
+        "activeUsers": "No active users | {n} active user | {n} active users",
+        "hoursOfMusic": "0 hours of music | {n} hour of music | {n} hours of music"
+      },
+      "help": {
+        "closedRegistrations": "Registrations are closed on this pod. You can signup on another pod using the link below."
+      }
+    },
+    "AboutPod": {
+      "title": "About",
+      "notApplicable": "N/A",
+      "header": {
+        "about": "About this pod",
+        "rules": "Rules",
+        "terms": "Terms and privacy policy",
+        "features": "Features",
+        "contact": "Contact",
+        "statistics": "Statistics"
+      },
+      "placeholder": {
+        "noDescription": "No description available",
+        "noRules": "No rules available",
+        "noTerms": "No terms available"
+      },
+      "message": {
+        "contact": "Send us an email: { contactEmail }"
+      },
+      "link": {
+        "about": "About this pod",
+        "rules": "Rules",
+        "terms": "Terms and privacy policy",
+        "features": "Features",
+        "statistics": "Statistics",
+        "introduction": "Introduction"
+      },
+      "feature": {
+        "version": "Funkwhale version",
+        "federation": "Federation",
+        "allowList": "Allow-list",
+        "anonymousAccess": "Anonymous access",
+        "registrations": "Registrations",
+        "quota": "Upload quota",
+        "status": {
+          "enabled": "Enabled",
+          "disabled": "Disabled",
+          "open": "Open",
+          "closed": "Closed"
+        }
+      },
+      "stat": {
+        "activeUsers": "No active users | {n} active user | {n} active users",
+        "hoursOfMusic": "0 hours of music | {n} hour of music | {n} hours of music",
+        "artistsCount": "0 artists | {n} artist | {n} artists",
+        "albumsCount": "0 albums | {n} album | {n} albums",
+        "tracksCount": "0 tracks | {n} track | {n} tracks",
+        "listeningsCount": "0 listenings | {n} listening | {n} listenings"
+      }
+    },
+    "Home": {
+      "title": "Home",
+      "header": {
+        "welcome": "Welcome to {podName}!",
+        "about": "About this Funkwhale pod",
+        "statistics": "Statistics",
+        "contact": "Contact",
+        "aboutFunkwhale": "About Funkwhale",
+        "login": "Log in",
+        "signup": "Sign up",
+        "links": "Useful links",
+        "newAlbums": "Recently added albums",
+        "newChannels": "New channels"
+      },
+      "description": {
+        "signup": "Sign up now to keep a track of your favorites, create playlists, discover new content and much more!",
+        "quota": "Users on this pod also get {quota} of free storage to upload their own content!",
+        "funkwhale": {
+          "paragraph1": "This pod runs Funkwhale, a community-driven project that lets you listen and share music and audio within a decentralized, open network.",
+          "paragraph2": "Funkwhale is free and developed by a friendly community of volunteers."
+        }
+      },
+      "placeholder": {
+        "noDescription": "No description available"
+      },
+      "link": {
+        "learnMore": "Learn more",
+        "rules": "Server rules",
+        "funkwhale": "Visit funkwhale.audio",
+        "findOtherPod": "Find another pod",
+        "viewMore": "View more…",
+        "publicContent": {
+          "label": "Browse public content",
+          "description": "Listen to public albums and playlists shared on this pod."
+        },
+        "mobileApps": {
+          "label": "Mobile apps",
+          "description": "Use Funkwhale on other devices with our apps"
+        },
+        "userGuides": {
+          "label": "User guides",
+          "description": "Discover everything you need to know about Funkwhale and its features"
+        }
+      },
+      "stat": {
+        "activeUsers": "No active users | {n} active user | {n} active users",
+        "hoursOfMusic": "0 hours of music | {n} hour of music | {n} hours of music"
+      },
+      "help": {
+        "registrationsClosed": "Registrations are closed on this pod. You can signup on another pod using the link below."
+      }
+    },
+    "PageNotFound": {
+      "title": "Page not found",
+      "header": {
+        "pageNotFound": "Page not found!"
+      },
+      "message": {
+        "pageNotFound": "Sorry, the page you asked for does not exist:"
+      },
+      "link": {
+        "home": "Go to home page"
+      }
+    },
+    "Queue": {
+      "label": {
+        "queue": "Queue",
+        "populatingRadio": "Fetching radio track...",
+        "duration": "Duration",
+        "addArtistContentFilter": "Hide content from this artist…",
+        "restart": "Restart track",
+        "previous": "Previous track",
+        "next": "Next track",
+        "pause": "Pause",
+        "play": "Play",
+        "remove": "Remove",
+        "selectTrack": "Select track",
+        "favorite": "Favorite track",
+        "enterFullscreen": "Enter fullscreen mode",
+        "exitFullscreen": "Exit fullscreen mode",
+        "showCoverArt": "Show Cover Art",
+        "showVisualizer": "Show MoonDrop visualizer"
+      },
+      "header": {
+        "failure": "The track cannot be loaded",
+        "radio": "You have a radio playing",
+        "noSources": "The track has no available sources."
+      },
+      "message": {
+        "automaticPlay": "The next track will play automatically in a few seconds…",
+        "radio": "New tracks will be appended here automatically.",
+        "webglUnsupported": "Your browser doesn't appear to support WebGL2."
+      },
+      "warning": {
+        "connectivity": "You may have a connectivity issue."
+      },
+      "button": {
+        "close": "Close",
+        "clear": "Clear",
+        "stopRadio": "Stop radio"
+      },
+      "meta": {
+        "queuePosition": "Track {index} of {length}",
+        "startTime": "00:00",
+        "unknownArtist": "Unknown Artist",
+        "unknownAlbum": "Unknown Album",
+        "end": "End"
+      }
+    },
+    "RemoteSearchForm": {
+      "label": {
+        "rss": {
+          "title": "Subscribe to a podcast RSS feed",
+          "fieldLabel": "RSS feed location",
+          "fieldPlaceholder": "https://website.example.com/rss.xml"
+        },
+        "fediverse": {
+          "title": "Fediverse object",
+          "fieldLabel": "Fediverse object",
+          "fieldPlaceholder": "{'@'}username{'@'}example.com"
+        }
+      },
+      "header": {
+        "fetchFailed": "Error while fetching object"
+      },
+      "description": {
+        "rss": "Use this form to subscribe to an RSS feed from its URL.",
+        "fediverse": "Use this form to subscribe to a channel hosted somewhere else on the Fediverse."
+      },
+      "button": {
+        "search": "Search",
+        "rss": "RSS",
+        "fediverse": "Fediverse"
+      },
+      "error": {
+        "fetchFailed": "This object cannot be retrieved"
+      },
+      "warning": {
+        "unsupported": "This kind of object isn't supported yet"
+      }
+    },
+    "SetInstanceModal": {
+      "header": {
+        "chooseInstance": "Choose your instance",
+        "failure": "It is not possible to connect to the given URL",
+        "suggestions": "Suggested choices"
+      },
+      "message": {
+        "newUrl": "You are now using the Funkwhale instance at {url}",
+        "currentConnection": "You are currently connected to { 0 }. If you continue, you will be disconnected from your current instance and all your local data will be deleted."
+      },
+      "help": {
+        "serverDown": "The server might be down",
+        "notFunkwhaleServer": "The given address is not a Funkwhale server",
+        "selectPod": "To continue, please select the Funkwhale instance you want to connect to. Enter the address directly, or select one of the suggested choices."
+      },
+      "button": {
+        "submit": "Submit",
+        "cancel": "Cancel"
+      },
+      "label": {
+        "url": "Instance URL"
+      }
+    },
+    "ShortcutsModal": {
+      "header": {
+        "modal": "Keyboard shortcuts"
+      },
+      "button": {
+        "close": "Close"
+      },
+      "shortcut": {
+        "general": {
+          "label": "General shortcuts",
+          "show": "Show available keyboard shortcuts",
+          "focus": "Focus searchbar",
+          "unfocus": "Unfocus searchbar"
+        },
+        "audio": {
+          "label": "Audio player shortcuts",
+          "playPause": "Pause/play the current track",
+          "seekBack5": "Seek backwards 5s",
+          "seekForward5": "Seek forwards 5s",
+          "seekBack30": "Seek backwards 30s",
+          "seekForward30": "Seek forwards 30s",
+          "playPrevious": "Play previous track",
+          "playNext": "Play next track",
+          "increaseVolume": "Increase volume",
+          "decreaseVolume": "Decrease volume",
+          "toggleMute": "Toggle mute",
+          "expandQueue": "Expand queue/player view",
+          "toggleLoop": "Toggle queue looping",
+          "shuffleQueue": "Shuffle queue",
+          "clearQueue": "Clear queue",
+          "toggleFavorite": "Toggle favorite"
+        }
+      }
+    },
+    "Sidebar": {
+      "label": {
+        "main": "Main menu",
+        "play": "Play this track",
+        "follows": "Pending follow requests",
+        "edits": "Pending review edits",
+        "reports": "Pending review reports",
+        "language": "Language",
+        "theme": "Theme",
+        "add": "Add content",
+        "administration": "Administration"
+      },
+      "header": {
+        "main": "Main navigation",
+        "explore": "Explore",
+        "more": "More",
+        "library": "My library",
+        "administration": "Administration"
+      },
+      "link": {
+        "home": "Home",
+        "search": "Search",
+        "browse": "Browse",
+        "podcasts": "Podcasts",
+        "albums": "Albums",
+        "artists": "Artists",
+        "playlists": "Playlists",
+        "radios": "Radios",
+        "favorites": "Favorites",
+        "channels": "Channels",
+        "about": "About this pod",
+        "switchInstance": "Switch instance",
+        "moderation": "Moderation",
+        "users": "Users",
+        "library": "Library",
+        "settings": "Settings",
+        "login": "Login",
+        "createAccount": "Create account"
+      }
+    },
+    "admin": {
+      "SettingsGroup": {
+        "header": {
+          "error": "Error while saving settings.",
+          "image": "Current image"
+        },
+        "message": {
+          "success": "Settings updated successfully."
+        },
+        "button": {
+          "save": "Save"
+        }
+      },
+      "SignupFormBuilder": {
+        "label": {
+          "delete": "Delete",
+          "moveUp": "Move up",
+          "moveDown": "Move down",
+          "additionalField": "Additional field",
+          "helpText": "Help text",
+          "additionalFields": "Additional fields"
+        },
+        "button": {
+          "edit": "Edit form",
+          "preview": "Preview Form",
+          "add": "Add a new field"
+        },
+        "help": {
+          "helpText": "An optional text to be displayed at the start of the sign-up form.",
+          "additionalFields": "Additional form fields to be displayed in the form. Only shown if manual sign-up validation is enabled."
+        },
+        "table": {
+          "additionalFields": {
+            "header": {
+              "label": "Field label",
+              "type": "Field type",
+              "required": "Required",
+              "actions": "Actions"
+            },
+            "type": {
+              "short": "Short text",
+              "long": "Long text"
+            },
+            "required": {
+              "true": "True",
+              "false": "False"
+            }
+          }
+        }
+      }
+    },
+    "audio": {
+      "ChannelCard": {
+        "title": "Updated on {date}",
+        "meta": {
+          "episodes": "No episodes | {n} episode | {n} episodes",
+          "tracks": "No tracks | {n} track | {n} tracks"
+        }
+      },
+      "ChannelEntries": {
+        "help": {
+          "subscribe": "You may need to subscribe to this channel to see its content."
+        }
+      },
+      "ChannelForm": {
+        "label": {
+          "podcast": "Podcasts",
+          "discography": "Artist Discography",
+          "name": "Name",
+          "username": "Fediverse handle",
+          "image": "Channel Picture",
+          "tags": "Tags",
+          "language": "Language",
+          "description": "Description",
+          "category": "Category",
+          "subcategory": "Subcategory",
+          "email": "Owner e-mail address",
+          "owner": "Owner name"
+        },
+        "help": {
+          "podcast": "Host your episodes and keep your community updated.",
+          "discography": "Publish music you make as a nice discography of albums and singles.",
+          "username": "Used in URLs and to follow this channel in the Fediverse. It cannot be changed later.",
+          "podcastFields": "Used for the itunes:email and itunes:name field required by certain platforms such as Spotify or iTunes."
+        },
+        "placeholder": {
+          "name": "Awesome channel name",
+          "username": "awesomechannelname"
+        },
+        "header": {
+          "error": "Error while saving channel."
+        },
+        "legend": {
+          "purpose": "What will this channel be used for?"
+        },
+        "loader": {
+          "loading": "Loading"
+        }
+      },
+      "ChannelSerieCard": {
+        "meta": {
+          "episodes": "No episodes | {n} episode | {n} episodes"
+        }
+      },
+      "ChannelSeries": {
+        "button": {
+          "showMore": "Show more"
+        },
+        "help": {
+          "subscribe": "You may need to subscribe to this channel to see its contents."
+        }
+      },
+      "ChannelsWidget": {
+        "button": {
+          "showMore": "Show more"
+        }
+      },
+      "EmbedWizard": {
+        "warning": {
+          "anonymous": "Sharing will not work because this pod doesn't allow anonymous users to access content."
+        },
+        "help": {
+          "anonymous": "Please contact your admins and ask them to update the corresponding setting.",
+          "embed": "Copy/paste this code in your website HTML",
+          "width": "Leave empty for a responsive widget"
+        },
+        "label": {
+          "width": "Widget width",
+          "height": "Widget height",
+          "embed": "Embed code"
+        },
+        "button": {
+          "copy": "Copy"
+        },
+        "header": {
+          "preview": "Preview"
+        },
+        "message": {
+          "copy": "Text copied to clipboard!"
+        }
+      },
+      "LibraryFollowButton": {
+        "button": {
+          "unfollow": "Unfollow",
+          "cancel": "Cancel follow request",
+          "follow": "Follow"
+        }
+      },
+      "PlayButton": {
+        "button": {
+          "playNow": "Play now",
+          "addToQueue": "Add to current queue",
+          "playNext": "Play next",
+          "startRadio": "Play similar songs",
+          "report": "Report…",
+          "addToPlaylist": "Add to playlist",
+          "hideArtist": "Hide content from this artist",
+          "playTrack": "Play track",
+          "playAlbum": "Play album",
+          "playArtist": "Play artist",
+          "playPlaylist": "Play playlist",
+          "playTracks": "Play tracks",
+          "episodeDetails": "Episode details",
+          "trackDetails": "Track details",
+          "discretePlay": "Play"
+        },
+        "title": {
+          "more": "More…",
+          "unavailable": "This track is not available in any library you have access to"
+        }
+      },
+      "Player": {
+        "label": {
+          "audioPlayer": "Media player",
+          "previousTrack": "Previous track",
+          "play": "Play",
+          "pause": "Pause",
+          "nextTrack": "Next track",
+          "unmute": "Unmute",
+          "mute": "Mute",
+          "expandQueue": "Expand queue",
+          "loopingDisabled": "Looping disabled. Click to switch to single-track looping.",
+          "loopingSingle": "Looping on a single track. Click to switch to whole queue looping.",
+          "loopingWholeQueue": "Looping on whole queue. Click to disable looping.",
+          "shuffleQueue": "Shuffle your queue",
+          "clearQueue": "Clear your queue",
+          "addArtistContentFilter": "Hide content from this artist…"
+        },
+        "header": {
+          "player": "Audio player and controls"
+        },
+        "meta": {
+          "position": "{index} of {length}",
+          "unknownArtist": "Unknown Artist",
+          "unknownAlbum": "Unknown Album"
+        }
+      },
+      "Search": {
+        "header": {
+          "search": "Search for some music",
+          "artists": "Artists",
+          "albums": "Albums"
+        },
+        "empty": {
+          "noArtists": "No artist matched your query",
+          "noAlbums": "No album matched your query"
+        },
+        "placeholder": {
+          "search": "Artist, album, track…"
+        }
+      },
+      "SearchBar": {
+        "placeholder": {
+          "search": "Search for artists, albums, tracks…"
+        },
+        "label": {
+          "search": "Search for content",
+          "artist": "Artist",
+          "album": "Album",
+          "track": "Track",
+          "tag": "Tag",
+          "category": {
+            "federation": "Federation",
+            "podcasts": "Podcasts"
+          }
+        },
+        "link": {
+          "rss": "Subscribe to podcast via RSS",
+          "fediverse": "Search on the fediverse",
+          "more": "More results 🡒"
+        },
+        "header": {
+          "noResults": "No matches found"
+        },
+        "empty": {
+          "noResults": "Sorry, there are no results for this search"
+        }
+      },
+      "VolumeControl": {
+        "button": {
+          "mute": "Mute",
+          "unmute": "Unmute"
+        },
+        "label": {
+          "slider": "Adjust volume"
+        }
+      },
+      "album": {
+        "Card": {
+          "meta": {
+            "tracks": "No tracks | {n} track | {n} tracks"
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": "Show more"
+          }
+        }
+      },
+      "artist": {
+        "Card": {
+          "meta": {
+            "tracks": "No tracks | {n} track | {n} tracks",
+            "episodes": "No episodes | {n} episode | {n} episodes"
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": "Show more"
+          }
+        }
+      },
+      "podcast": {
+        "MobileRow": {
+          "button": {
+            "actions": "Show track actions"
+          }
+        },
+        "Modal": {
+          "button": {
+            "addToFavorites": "Add to favorites",
+            "removeFromFavorites": "Remove from favorites",
+            "episodeDetails": "Episode details",
+            "trackDetails": "Track details",
+            "seriesDetails": "View series",
+            "albumDetails": "View album",
+            "channelDetails": "View channel",
+            "artistDetails": "View artist",
+            "startRadio": "Play radio",
+            "playNow": "Play now",
+            "addToQueue": "Add to queue",
+            "playNext": "Play next",
+            "addToPlaylist": "Add to playlist"
+          }
+        }
+      },
+      "track": {
+        "MobileRow": {
+          "button": {
+            "actions": "Show track actions"
+          }
+        },
+        "Modal": {
+          "button": {
+            "addToFavorites": "Add to favorites",
+            "removeFromFavorites": "Remove from favorites",
+            "episodeDetails": "Episode details",
+            "trackDetails": "Track details",
+            "seriesDetails": "View series",
+            "albumDetails": "View album",
+            "channelDetails": "View channel",
+            "artistDetails": "View artist",
+            "startRadio": "Play radio",
+            "playNow": "Play now",
+            "addToQueue": "Add to queue",
+            "playNext": "Play next",
+            "addToPlaylist": "Add to playlist"
+          }
+        },
+        "Table": {
+          "table": {
+            "header": {
+              "title": "Title",
+              "album": "Album",
+              "artist": "Artist"
+            }
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": "Show more"
+          },
+          "empty": {
+            "noResults": "Nothing found"
+          }
+        }
+      },
+      "PlayerControls": {
+        "labels": {
+          "previous": "Previous track",
+          "next": "Next track",
+          "pause": "Pause",
+          "play": "Play"
+        }
+      }
+    },
+    "auth": {
+      "ApplicationEdit": {
+        "title": "Edit application",
+        "link": {
+          "settings": "Back to settings"
+        },
+        "header": {
+          "appDetails": "Application Details",
+          "editApp": "Edit application",
+          "appSecretWarning": "Keep a copy of this token in a safe place."
+        },
+        "message": {
+          "appSecretWarning": "You won't be able to see it again once you leave this screen."
+        },
+        "help": {
+          "appDetails": "Application ID and secret are really sensitive values and must be treated like passwords. Do not share those with anyone else."
+        },
+        "label": {
+          "appId": "Application ID",
+          "appSecret": "Application secret",
+          "accessToken": "Access token"
+        },
+        "button": {
+          "regenerateToken": "Regenerate token"
+        }
+      },
+      "ApplicationForm": {
+        "header": {
+          "failure": "We cannot save your changes"
+        },
+        "label": {
+          "name": "Name",
+          "redirectUri": "Redirect URI",
+          "scopes": {
+            "label": "Scopes",
+            "description": "Checking the parent \"Read\" or \"Write\" scopes implies access to all the corresponding children scopes.",
+            "read": {
+              "label": "Read",
+              "description": "Read-only access to user data"
+            },
+            "write": {
+              "label": "Write",
+              "description": "Write-only access to user data"
+            }
+          }
+        },
+        "button": {
+          "update": "Update application",
+          "create": "Create application"
+        },
+        "help": {
+          "redirectUri": "Use \"urn:ietf:wg:oauth:2.0:oob\" as a redirect URI if your application is not served on the web."
+        }
+      },
+      "ApplicationNew": {
+        "title": "Create a new application",
+        "link": {
+          "settings": "Back to settings"
+        }
+      },
+      "Authorize": {
+        "title": "Allow application",
+        "header": {
+          "authorize": "Authorize third-party app",
+          "authorizeFailure": "Error while fetching application data",
+          "fetchFailure": "Error while fetching application data",
+          "access": "{app_name} wants to access your Funkwhale account",
+          "writeOnly": "Write-only",
+          "readOnly": "Read-only",
+          "allScopes": "Full access"
+        },
+        "message": {
+          "unknownPermissions": "The application is also requesting the following unknown permissions:"
+        },
+        "button": {
+          "authorize": "Authorize {app}"
+        },
+        "help": {
+          "copyCode": "You will be shown a code to copy-past in the application",
+          "redirect": "You will be redirected to { 0 }",
+          "pasteCode": "Copy-paste the following code in the application:"
+        }
+      },
+      "LoginForm": {
+        "placeholder": {
+          "username": "Enter your username or e-mail address"
+        },
+        "header": {
+          "loginFailure": "We cannot log you in"
+        },
+        "help": {
+          "approvalRequired": "If you signed-up recently, you may need to wait before our moderation team review your account, or verify your e-mail address.",
+          "invalidCredentials": "Please double-check that your username and password combination is correct and make sure you verified your e-mail address."
+        },
+        "label": {
+          "username": "Username or e-mail address",
+          "password": "Password"
+        },
+        "button": {
+          "login": "Login"
+        },
+        "link": {
+          "resetPassword": "Reset your password",
+          "createAccount": "Create an account"
+        },
+        "message": {
+          "redirect": "You will be redirected to {domain} to authenticate"
+        }
+      },
+      "Logout": {
+        "title": "Log out",
+        "header": {
+          "confirm": "Are you sure you want to log out?",
+          "unauthenticated": "You aren't currently logged in"
+        },
+        "button": {
+          "logout": "Yes, log me out!"
+        },
+        "link": {
+          "login": "Log in!"
+        },
+        "message": {
+          "loggedIn": "You are currently logged in as {username}"
+        }
+      },
+      "Plugin": {
+        "header": {
+          "failure": "Error while saving plugin"
+        },
+        "link": {
+          "documentation": "Documentation"
+        },
+        "button": {
+          "save": "Save",
+          "scan": "Scan"
+        },
+        "label": {
+          "library": "Library",
+          "pluginEnabled": "Enabled"
+        },
+        "description": {
+          "library": "Library where files should be imported."
+        }
+      },
+      "Settings": {
+        "title": "Account Settings",
+        "message": {
+          "confirmDelete": "Your deletion request was submitted, your account and content will be deleted shortly",
+          "currentEmail": "Your current e-mail address is {email}"
+        },
+        "header": {
+          "accountSettings": "Account settings",
+          "settingsUpdated": "Settings updated",
+          "updateFailure": "Your settings can't be updated",
+          "avatar": "Avatar",
+          "avatarFailure": "Your avatar cannot be saved",
+          "changePassword": "Change my password",
+          "passwordFailure": "Your password cannot be changed",
+          "contentFilters": "Content filters",
+          "hiddenArtists": "Hidden artists",
+          "authorizedApps": "Authorized apps",
+          "noApps": "You don't have any application connected with your account.",
+          "yourApps": "Your applications",
+          "noPersonalApps": "You don't have registered any application yet.",
+          "plugins": "Plugins",
+          "changeEmail": "Change my e-mail address",
+          "emailFailure": "We cannot change your e-mail address",
+          "deleteAccount": "Delete my account",
+          "accountFailure": "We cannot delete your account"
+        },
+        "description": {
+          "changePassword": {
+            "paragraph1": "Changing your password will also change your Subsonic API password if you have requested one.",
+            "paragraph2": "You will have to update your password on your clients that use this password."
+          },
+          "contentFilters": "Content filters help you hide content you don't want to see on the service.",
+          "authorizedApps": "This is the list of applications that have access to your account data.",
+          "yourApps": "This is the list of applications that you have registered.",
+          "plugins": "Use plugins to extend Funkwhale and get additional features.",
+          "changeEmail": "Change the e-mail address associated with your account. We will send a confirmation to the new address.",
+          "deleteAccount": "You can permanently and irreversibly delete your account and all the associated data using the form below. You will be asked for confirmation."
+        },
+        "button": {
+          "update": "Update",
+          "updateSettings": "Update settings",
+          "password": "Change password",
+          "disableSubsonic": "Disable access",
+          "refresh": "Refresh",
+          "delete": "Delete",
+          "revoke": "Revoke",
+          "revokeAccess": "Revoke access",
+          "edit": "Edit",
+          "remove": "Remove",
+          "removeApp": "Remove application",
+          "deleteAccount": "Delete my account…",
+          "deleteAccountConfirm": "Delete my account"
+        },
+        "help": {
+          "changePassword": "Please double-check your password is correct",
+          "noApps": "If you authorize third-party applications to access your data, those applications will be listed here.",
+          "noPersonalApps": "Register one to integrate Funkwhale with third-party applications."
+        },
+        "warning": {
+          "deleteAccount": "Your account will be deleted from our servers within a few minutes. We will also notify other servers who may have a copy of some of your data so they can proceed to deletion. Please note that some of these servers may be offline or unwilling to comply though."
+        },
+        "link": {
+          "newApp": "Register a new application",
+          "managePlugins": "Manage plugins"
+        },
+        "label": {
+          "avatar": "Avatar",
+          "password": "Password",
+          "currentPassword": "Current password",
+          "newPassword": "New password",
+          "newEmail": "New e-mail address"
+        },
+        "modal": {
+          "changePassword": {
+            "header": "Change your password?",
+            "content": {
+              "warning": "Changing your password will have the following consequences",
+              "logout": "You will be logged out from this session and have to log in with the new one",
+              "subsonic": "Your Subsonic password will be changed to a new, random one, logging you out from devices that used the old Subsonic password"
+            }
+          },
+          "revokeApp": {
+            "header": "Revoke access for application {app}?",
+            "content": {
+              "warning": "This will prevent this application from accessing the service on your behalf."
+            }
+          },
+          "deleteApp": {
+            "header": "Remove application {app}?",
+            "content": {
+              "warning": "This will permanently remove the application and all the associated tokens."
+            }
+          },
+          "deleteAccount": {
+            "header": "Do you want to delete your account?",
+            "content": {
+              "warning": "This is irreversible and will permanently remove your data from our servers. You will we immediatly logged out."
+            }
+          }
+        },
+        "table": {
+          "artists": {
+            "header": {
+              "name": "Name",
+              "creationDate": "Creation date"
+            }
+          },
+          "authorizedApps": {
+            "header": {
+              "application": "Application",
+              "permissions": "Permissions"
+            }
+          },
+          "yourApps": {
+            "header": {
+              "application": "Application",
+              "scopes": "Scopes",
+              "creationDate": "Creation date"
+            }
+          }
+        }
+      },
+      "SignupForm": {
+        "placeholder": {
+          "invitation": "Enter your invitation code (case insensitive)",
+          "username": "Enter your username",
+          "email": "Enter your e-mail address"
+        },
+        "message": {
+          "awaitingReview": "Your account request was successfully submitted. You will be notified by e-mail when our moderation team has reviewed your request.",
+          "accountCreated": "Your account was successfully created. Please verify your e-mail address before trying to login.",
+          "registrationClosed": "Public registrations are not possible on this instance. You will need an invitation code to sign up.",
+          "requiresReview": "Registrations on this pod are open, but reviewed by moderators before approval."
+        },
+        "header": {
+          "login": "Log in to your Funkwhale account",
+          "signupFailure": "Your account cannot be created."
+        },
+        "label": {
+          "username": "Username",
+          "email": "E-mail address",
+          "password": "Password",
+          "invitation": "Invitation code"
+        },
+        "button": {
+          "create": "Create my account"
+        }
+      },
+      "SubsonicTokenForm": {
+        "label": {
+          "subsonicField": "Your subsonic API password"
+        },
+        "message": {
+          "passwordUpdated": "Password updated",
+          "accessDisabled": "Access disabled",
+          "unavailable": "The Subsonic API is not available on this Funkwhale instance."
+        },
+        "header": {
+          "subsonic": "Subsonic API password",
+          "error": "Error"
+        },
+        "description": {
+          "subsonic": {
+            "paragraph1": "Funkwhale is compatible with other music players that support the Subsonic API.",
+            "paragraph2": "You can use those to enjoy your playlist and music in offline mode, on your smartphone or tablet, for instance.",
+            "paragraph3": "However, accessing Funkwhale from those clients requires a separate password you can set below."
+          }
+        },
+        "link": {
+          "apps": "Discover how to use Funkwhale from other apps"
+        },
+        "button": {
+          "newPassword": "Request a new password",
+          "confirmNewPassword": "Request a password",
+          "disable": "Disable Subsonic access",
+          "confirmDisable": "Disable access"
+        },
+        "modal": {
+          "newPassword": {
+            "header": "Request a new Subsonic API password?",
+            "content": {
+              "warning": "This will log you out from existing devices that use the current password."
+            }
+          },
+          "disableSubsonic": {
+            "header": "Disable Subsonic API access?",
+            "content": {
+              "warning": "This will completely disable access to the Subsonic API using from account."
+            }
+          }
+        }
+      }
+    },
+    "channels": {
+      "AlbumForm": {
+        "header": {
+          "error": "Error while creating"
+        },
+        "label": {
+          "albumTitle": "Title"
+        }
+      },
+      "AlbumModal": {
+        "header": {
+          "newSeries": "New series",
+          "newAlbum": "New album"
+        },
+        "button": {
+          "cancel": "Cancel",
+          "create": "Create"
+        }
+      },
+      "AlbumSelect": {
+        "label": {
+          "series": "Series",
+          "album": "Album"
+        },
+        "option": {
+          "none": "None"
+        },
+        "meta": {
+          "tracks": "No tracks | {n} track | {n} tracks"
+        }
+      },
+      "LicenseSelect": {
+        "label": {
+          "license": "Licence"
+        },
+        "option": {
+          "none": "None"
+        },
+        "link": {
+          "license": "About this license"
+        }
+      },
+      "SubscribeButton": {
+        "title": {
+          "unsubscribe": "Unsubscribe",
+          "subscribe": "Subscribe"
+        },
+        "help": {
+          "auth": "You need to be logged in to subscribe to this channel"
+        }
+      },
+      "UploadForm": {
+        "header": {
+          "error": "Error while publishing"
+        },
+        "label": {
+          "channel": "Channel",
+          "openBrowser": "Browse…"
+        },
+        "message": {
+          "pending": "You have some draft uploads pending publication.",
+          "dragAndDrop": "Drag and drop your files here or open the browser to upload your files"
+        },
+        "button": {
+          "edit": "Edit",
+          "ignore": "Ignore",
+          "resume": "Resume",
+          "remove": "Remove",
+          "retry": "Retry"
+        },
+        "help": {
+          "license": "Add a license to your upload to ensure some freedoms to your public."
+        },
+        "warning": {
+          "quota": "You don't have any space left to upload your files. Please contact the moderators."
+        },
+        "status": {
+          "uploading": "Uploading",
+          "errored": "Errored",
+          "pending": "Pending"
+        },
+        "description": {
+          "extensions": "Supported extensions {extensions}"
+        }
+      },
+      "UploadMetadataForm": {
+        "label": {
+          "title": "Title",
+          "tags": "Tags",
+          "image": "Track Picture",
+          "description": "Description",
+          "position": "Position"
+        }
+      },
+      "UploadModal": {
+        "meta": {
+          "files": "no files | {n} file | {n} files",
+          "quota": "Remaining storage space: {space}"
+        },
+        "header": {
+          "publish": "Publish audio",
+          "uploadFiles": "Files to upload",
+          "uploadDetails": "Upload details",
+          "processing": "Processing uploads"
+        },
+        "button": {
+          "cancel": "Cancel",
+          "previous": "Previous step",
+          "update": "Update",
+          "next": "Next",
+          "publish": "Publish",
+          "finishLater": "Finish later",
+          "close": "Close"
+        }
+      }
+    },
+    "common": {
+      "ActionTable": {
+        "header": {
+          "error": "Error while applying action"
+        },
+        "message": {
+          "needsRefresh": "Content has been updated, click refresh to see up-to-date content",
+          "success": "Action {action} was launched successfully on {n} element | Action {action} was launched successfully on {n} elements"
+        },
+        "button": {
+          "refresh": "Refresh table content",
+          "go": "Go",
+          "launch": "Launch",
+          "select": "Select",
+          "selected": "{ n } on {total} selected",
+          "selectAll": "Select all items",
+          "allSelected": "No elements selected | {n} element selected | All {n} elements selected",
+          "selectElement": "Select one element | Select all {n} elements",
+          "selectCurrentPage": "Select only current page"
+        },
+        "label": {
+          "actions": "Actions",
+          "performAction": "Perform actions"
+        },
+        "modal": {
+          "performAction": {
+            "header": "Do you want to launch {action} on {n} element? | Do you want to launch {action} on {n} elements?",
+            "content": {
+              "warning": "This may affect a lot of elements or have irreversible consequences, please double check this is really what you want."
+            }
+          }
+        }
+      },
+      "AttachmentInput": {
+        "header": {
+          "failure": "Your attachment cannot be saved"
+        },
+        "label": {
+          "upload": "Upload New Picture…"
+        },
+        "help": {
+          "upload": "PNG or JPG. Dimensions should be between 1400x1400px and 3000x3000px. Maximum file size allowed is 5MB."
+        },
+        "button": {
+          "remove": "Remove"
+        },
+        "loader": {
+          "uploading": "Uploading file…"
+        }
+      },
+      "CollapseLink": {
+        "button": {
+          "expand": "Expand",
+          "collapse": "Collapse"
+        }
+      },
+      "ContentForm": {
+        "placeholder": {
+          "input": "Write a few words here…"
+        },
+        "button": {
+          "write": "Write",
+          "preview": "Preview"
+        },
+        "empty": {
+          "noContent": "Nothing to preview"
+        },
+        "help": {
+          "markdown": "Markdown syntax is supported"
+        }
+      },
+      "CopyInput": {
+        "button": {
+          "copy": "Copy"
+        },
+        "message": {
+          "success": "Text copied to clipboard!"
+        }
+      },
+      "DangerousButton": {
+        "header": {
+          "confirm": "Do you want to confirm this action?"
+        },
+        "button": {
+          "cancel": "Cancel",
+          "confirm": "Confirm"
+        }
+      },
+      "Duration": {
+        "meta": {
+          "hours": "{hours} h {minutes} min",
+          "minutes": "{minutes} min"
+        }
+      },
+      "EmptyState": {
+        "button": {
+          "refresh": "Refresh"
+        },
+        "header": {
+          "noResults": "No results were found."
+        }
+      },
+      "ExpandableDiv": {
+        "button": {
+          "less": "Show less",
+          "more": "Show more"
+        }
+      },
+      "InlineSearchBar": {
+        "placeholder": {
+          "search": "Search…"
+        },
+        "label": {
+          "search": "Search"
+        },
+        "button": {
+          "clear": "Clear"
+        }
+      },
+      "LoginModal": {
+        "header": {
+          "unauthenticated": "Unauthenticated"
+        },
+        "link": {
+          "login": "Log in",
+          "signup": "Sign up"
+        },
+        "description": {
+          "noAccess": "You don't have access"
+        }
+      },
+      "RenderedDescription": {
+        "button": {
+          "more": "Show more",
+          "less": "Show less",
+          "edit": "Edit",
+          "cancel": "Cancel",
+          "update": "Update description"
+        },
+        "header": {
+          "failure": "Error while updating description"
+        },
+        "empty": {
+          "noDescription": "No description available"
+        }
+      },
+      "UserLink": {
+        "link": {
+          "username": "{'@'}{username}"
+        }
+      },
+      "UserMenu": {
+        "label": {
+          "language": "Change language",
+          "theme": "Change theme",
+          "shortcuts": "Keyboard shortcuts"
+        },
+        "link": {
+          "profile": "Profile",
+          "settings": "Settings",
+          "logout": "Log out",
+          "about": "About",
+          "support": "Help",
+          "forum": "Forum",
+          "docs": "Documentation",
+          "chat": "Chat room",
+          "git": "Issue tracker",
+          "login": "Log in",
+          "signup": "Sign up",
+          "notifications": "Notifications"
+        }
+      },
+      "UserModal": {
+        "header": {
+          "options": "Options"
+        },
+        "button": {
+          "switchInstance": "Use another instance"
+        },
+        "label": {
+          "language": "Change language",
+          "theme": "Change theme",
+          "shortcuts": "Keyboard shortcuts"
+        },
+        "link": {
+          "profile": "Profile",
+          "settings": "Settings",
+          "logout": "Log out",
+          "about": "About",
+          "support": "Help",
+          "forum": "Forum",
+          "docs": "Documentation",
+          "chat": "Chat room",
+          "git": "Issue tracker",
+          "login": "Log in",
+          "signup": "Sign up",
+          "notifications": "Notifications"
+        }
+      }
+    },
+    "favorites": {
+      "List": {
+        "title": "Your favorites",
+        "header": {
+          "favorites": "No favorites | {n} favorite | {n} favorites"
+        },
+        "empty": {
+          "noFavorites": "No tracks have been added to your favorites yet"
+        },
+        "ordering": {
+          "label": "Ordering",
+          "direction": {
+            "label": "Order",
+            "ascending": "Ascending",
+            "descending": "Descending"
+          }
+        },
+        "pagination": {
+          "results": "Results per page"
+        },
+        "link": {
+          "library": "Browse the library"
+        },
+        "loader": {
+          "loading": "Loading your favorites…"
+        }
+      },
+      "TrackFavoriteIcon": {
+        "button": {
+          "remove": "Remove from favorites",
+          "add": "Add to favorites"
+        },
+        "label": {
+          "inFavorites": "In favorites"
+        }
+      }
+    },
+    "federation": {
+      "FetchButton": {
+        "header": {
+          "refresh": "Refreshing object from remote server…",
+          "skipped": "Refresh was skipped",
+          "success": "Refresh successful",
+          "failure": "Refresh error",
+          "pending": "Refresh pending",
+          "saveFailure": "Error while saving settings"
+        },
+        "description": {
+          "skipped": "The remote server answered, but returned data was unsupported by Funkwhale.",
+          "success": "Data was refreshed successfully from remote server.",
+          "failure": "An error occurred while trying to refresh data:",
+          "pending": "The refresh request hasn't been processed in time by our server. It will be processed later."
+        },
+        "button": {
+          "close": "Close",
+          "reload": "Close and reload page"
+        },
+        "loader": {
+          "fetchRequest": "Requesting a fetch…",
+          "awaitingResult": "Waiting for result…"
+        },
+        "table": {
+          "error": {
+            "label": {
+              "type": "Error type",
+              "detail": "Error detail"
+            },
+            "value": {
+              "httpStatus": "The remote server answered with HTTP {status}",
+              "httpError": "An HTTP error occurred while contacting the remote server",
+              "timeoutError": "The remote server didn't respond quickly enough",
+              "connectionError": "Impossible to connect to the remote server",
+              "invalidJsonError": "The remote server returned invalid JSON or JSON-LD data",
+              "invalidAttributesError": "Data returned by the remote server had invalid or missing attributes",
+              "unknownError": "Unknown error"
+            }
+          }
+        }
+      },
+      "LibraryWidget": {
+        "button": {
+          "showMore": "Show more"
+        },
+        "empty": {
+          "noMatch": "No matching library."
+        }
+      }
+    },
+    "forms": {
+      "PasswordInput": {
+        "title": "Show/hide password",
+        "button": {
+          "copy": "Copy"
+        },
+        "message": {
+          "copy": "Text copied to clipboard!"
+        }
+      }
+    },
+    "library": {
+      "AlbumBase": {
+        "title": "Album",
+        "meta": {
+          "tracks": "No tracks | {n} track | {n} tracks",
+          "episodes": "No episodes | {n} episode | {n} episodes"
+        },
+        "link": {
+          "addDescription": "Add a description…"
+        }
+      },
+      "AlbumDetail": {
+        "header": {
+          "episodes": "Episodes",
+          "tracks": "Tracks",
+          "libraries": "User libraries"
+        },
+        "description": {
+          "libraries": "This album is present in the following libraries:"
+        },
+        "meta": {
+          "volume": "Volume {number}"
+        }
+      },
+      "AlbumDropdown": {
+        "button": {
+          "more": "More…",
+          "cancel": "Cancel",
+          "embed": "Embed",
+          "edit": "Edit",
+          "delete": "Delete"
+        },
+        "modal": {
+          "embed": {
+            "header": "Embed this album on your website"
+          },
+          "delete": {
+            "header": "Delete this album?",
+            "content": {
+              "warning": "The album will be deleted, as well as any related files and data. This action is irreversible."
+            }
+          }
+        },
+        "link": {
+          "domain": "View on {domain}",
+          "musicbrainz": "View on MusicBrainz",
+          "discogs": "Search on Discogs",
+          "moderation": "Open in moderation interface",
+          "django": "View in Django's admin"
+        }
+      },
+      "AlbumEdit": {
+        "header": {
+          "edit": "Edit this album",
+          "suggest": "Suggest an edit on this album"
+        },
+        "message": {
+          "remote": "This object is managed by another server, you cannot edit it."
+        }
+      },
+      "Albums": {
+        "title": "Albums",
+        "placeholder": {
+          "search": "Enter album title…"
+        },
+        "header": {
+          "browse": "Browsing albums"
+        },
+        "button": {
+          "search": "Search"
+        },
+        "label": {
+          "search": "Search",
+          "tags": "Tags"
+        },
+        "ordering": {
+          "label": "Ordering",
+          "direction": {
+            "label": "Ordering direction",
+            "ascending": "Ascending",
+            "descending": "Descending"
+          }
+        },
+        "pagination": {
+          "results": "Results per page"
+        },
+        "empty": {
+          "noResults": "No results matching your query"
+        },
+        "link": {
+          "addMusic": "Add some music"
+        }
+      },
+      "ArtistBase": {
+        "title": "Artist",
+        "meta": {
+          "tracks": "0 tracks in | {count} track in | {count} tracks in",
+          "albums": "0 albums | {n} album | {n} albums"
+        },
+        "button": {
+          "play": "Play all albums",
+          "edit": "Edit",
+          "cancel": "Cancel",
+          "embed": "Embed",
+          "more": "More…"
+        },
+        "link": {
+          "django": "View in Django's admin",
+          "musicbrainz": "View on MusicBrainz",
+          "wikipedia": "Search on Wikipedia",
+          "domain": "View on {domain}",
+          "discogs": "Search on Discogs",
+          "moderation": "Open in moderation interface"
+        },
+        "modal": {
+          "embed": {
+            "header": "Embed this artist work on your website"
+          }
+        }
+      },
+      "ArtistDetail": {
+        "header": {
+          "album": "Albums by this artist",
+          "track": "New tracks by this artist",
+          "library": "User libraries"
+        },
+        "description": {
+          "library": "This artist is present in the following libraries:"
+        },
+        "button": {
+          "more": "Load more…",
+          "filter": "Remove filter"
+        },
+        "message": {
+          "filter": "You are currently hiding content related to this artist."
+        },
+        "link": {
+          "filter": "Review my filters"
+        }
+      },
+      "ArtistEdit": {
+        "header": {
+          "edit": "Edit this artist",
+          "suggest": "Suggest an edit on this artist"
+        },
+        "message": {
+          "remote": "This object is managed by another server, you cannot edit it."
+        }
+      },
+      "Artists": {
+        "title": "Artists",
+        "placeholder": {
+          "search": "Search…"
+        },
+        "header": {
+          "browse": "Browsing artists"
+        },
+        "label": {
+          "search": "Artist name",
+          "tags": "Tags",
+          "excludeCompilation": "Exclude Compilation Artists"
+        },
+        "button": {
+          "search": "Search",
+          "upload": "Add some music"
+        },
+        "ordering": {
+          "label": "Ordering",
+          "direction": {
+            "label": "Ordering direction",
+            "ascending": "Ascending",
+            "descending": "Descending"
+          }
+        },
+        "pagination": {
+          "results": "Results per page"
+        },
+        "empty": {
+          "noResults": "No results matching your query"
+        }
+      },
+      "EditCard": {
+        "header": {
+          "modification": "Modification {id}"
+        },
+        "link": {
+          "track": "Track #{id} - {name}"
+        },
+        "status": {
+          "applied": "Approved and applied",
+          "approved": "Approved",
+          "pending": "Pending",
+          "rejected": "Rejected"
+        },
+        "table": {
+          "update": {
+            "header": {
+              "field": "Field",
+              "oldValue": "Old value",
+              "newValue": "New value"
+            },
+            "notApplicable": "N/A"
+          }
+        },
+        "button": {
+          "approve": "Approve",
+          "reject": "Reject",
+          "delete": "Delete"
+        },
+        "modal": {
+          "delete": {
+            "header": "Delete this suggestion?"
+          },
+          "content": {
+            "warning": "The suggestion will be completely removed, this action is irreversible."
+          }
+        }
+      },
+      "EditForm": {
+        "notApplicable": "N/A",
+        "placeholder": {
+          "summary": "A short summary describing your changes."
+        },
+        "header": {
+          "success": "Your edit was successfully submitted.",
+          "failure": "Error while submitting edit",
+          "recentEdits": "Recent edits",
+          "unreviewed": "Restrict to unreviewed edits"
+        },
+        "button": {
+          "showAll": "Show all edits",
+          "showUnreviewed": "Restrict to unreviewed edits",
+          "new": "Submit another edit",
+          "clear": "Clear",
+          "reset": "Reset to initial value",
+          "submit": "Submit and apply edit",
+          "cancel": "Cancel",
+          "suggest": "Submit suggestion"
+        },
+        "empty": {
+          "suggestEdit": "Suggest a change using the form below"
+        },
+        "label": {
+          "summary": "Summary (optional)"
+        },
+        "message": {
+          "noPermission": "You don't have the permission to edit this object, but you can suggest changes. Once submitted, suggestions will be reviewed before approval."
+        }
+      },
+      "FileUpload": {
+        "tooltip": {
+          "denied": "Upload denied, ensure the file is not too big and that you have not reached your quota",
+          "size": "Cannot upload this file, ensure it is not too big",
+          "network": "A network error occurred while uploading this file",
+          "timeout": "Upload timeout, please try again",
+          "retry": "Retry",
+          "extension": "Invalid file type, ensure you are uploading an audio file. Supported file extensions are {extensions}"
+        },
+        "message": {
+          "listener": "This page is asking you to confirm that you want to leave - data you have entered may not be saved.",
+          "local": {
+            "message": "You are about to upload music to your library. Before proceeding, please ensure that:",
+            "copyright": "You are not uploading copyrighted content in a public library, otherwise you may be infringing the law",
+            "tag": "The music files you are uploading are tagged properly.",
+            "format": "The music files you are uploading are in OGG, Flac, MP3 or AIFF format"
+          }
+        },
+        "link": {
+          "uploading": "Uploading",
+          "processing": "Processing",
+          "picard": "We recommend using Picard for that purpose."
+        },
+        "empty": {
+          "noFiles": "0"
+        },
+        "label": {
+          "remainingSpace": "Remaining storage space",
+          "uploadWidget": "Click to select files to upload or drag and drop files or directories",
+          "extensions": "Supported extensions: {extensions}"
+        },
+        "header": {
+          "local": "Upload music from '~/your local storage",
+          "server": "Import music from your server",
+          "failure": "Error while launching import",
+          "status": "Import status"
+        },
+        "table": {
+          "upload": {
+            "header": {
+              "filename": "Filename",
+              "size": "Size",
+              "status": "Status",
+              "actions": "Actions"
+            },
+            "status": {
+              "uploaded": "Uploaded",
+              "uploading": "Uploading…",
+              "pending": "Pending"
+            },
+            "progress": "{percent}%"
+          }
+        },
+        "button": {
+          "retry": "Retry failed uploads",
+          "cancel": "Cancel"
+        },
+        "description": {
+          "import": "Import status",
+          "previousImport": "Results of your previous import:"
+        }
+      },
+      "FsBrowser": {
+        "button": {
+          "import": "Import"
+        }
+      },
+      "FsLogs": {
+        "empty": {
+          "notStarted": "Import hasn't started yet"
+        }
+      },
+      "Home": {
+        "title": "Library",
+        "header": {
+          "recentlyListened": "Recently listened",
+          "recentlyFavorited": "Recently favorited",
+          "playlists": "Playlists",
+          "recentlyAdded": "Recently added",
+          "newChannels": "New channels"
+        }
+      },
+      "ImportStatusModal": {
+        "error": {
+          "invalidMetadata": {
+            "label": "Invalid metadata",
+            "message": "The metadata included in the file is invalid or some mandatory fields are missing."
+          },
+          "unknownError": {
+            "label": "Unknown error",
+            "message": "An unknown error occurred"
+          },
+          "importFailure": "An error occurred during upload processing. You will find more information below."
+        },
+        "header": {
+          "importDetail": "Import detail"
+        },
+        "message": {
+          "importDetail": "Upload is still pending and will soon be processed by the server.",
+          "importSuccess": "Upload was successfully processed by the server."
+        },
+        "warning": {
+          "importSkipped": "Upload was skipped because a similar one is already available in one of your libraries."
+        },
+        "table": {
+          "error": {
+            "errorType": "Error type",
+            "errorDetail": "Error detail",
+            "help": "Getting help",
+            "debug": "Debug information"
+          }
+        },
+        "link": {
+          "documentation": "Read our documentation for this error",
+          "support": "Open a support thread (include the debug information below in your message)"
+        },
+        "button": {
+          "close": "Close"
+        }
+      },
+      "Podcasts": {
+        "title": "Podcasts",
+        "placeholder": {
+          "search": "Search…"
+        },
+        "header": {
+          "browse": "Browsing podcasts"
+        },
+        "label": {
+          "search": "Podcast title",
+          "tags": "Tags"
+        },
+        "button": {
+          "search": "Search",
+          "cancel": "Cancel",
+          "subscribe": "Subscribe",
+          "channel": "Create a Channel",
+          "feed": "Subscribe to feed"
+        },
+        "ordering": {
+          "label": "Ordering",
+          "direction": {
+            "label": "Ordering direction",
+            "ascending": "Ascending",
+            "descending": "Descending"
+          }
+        },
+        "pagination": {
+          "results": "Results per page"
+        },
+        "empty": {
+          "noResults": "No results matching your query"
+        },
+        "modal": {
+          "subscription": {
+            "header": "Subscription"
+          }
+        }
+      },
+      "Radios": {
+        "title": "Radios",
+        "placeholder": {
+          "search": "Enter a radio name…"
+        },
+        "header": {
+          "browse": "Browsing radios",
+          "instance": "Instance radios",
+          "user": "User radios"
+        },
+        "link": {},
+        "label": {
+          "search": "Search"
+        },
+        "button": {
+          "search": "Search",
+          "create": "Create your own radio",
+          "add": "Create a radio"
+        },
+        "ordering": {
+          "label": "Ordering",
+          "direction": {
+            "label": "Order",
+            "ascending": "Ascending",
+            "descending": "Descending"
+          }
+        },
+        "pagination": {
+          "results": "Results per page"
+        },
+        "empty": {
+          "noResults": "No results matching your query"
+        }
+      },
+      "TagDetail": {
+        "link": {
+          "moderation": "Open in moderation interface",
+          "artists": "Artists",
+          "albums": "Albums"
+        },
+        "header": {
+          "channels": "Channels",
+          "tracks": "Tracks"
+        }
+      },
+      "TagSelector": {
+        "placeholder": {
+          "search": "Search…"
+        }
+      },
+      "TrackBase": {
+        "title": "Track",
+        "subtitle": {
+          "with-uploader": "Uploaded by {0} on {1}",
+          "without-uploader": "Uploaded on {0}"
+        },
+        "button": {
+          "download": "Download",
+          "more": "More…",
+          "play": "Play",
+          "cancel": "Cancel",
+          "embed": "Embed",
+          "edit": "Edit",
+          "delete": "Delete"
+        },
+        "link": {
+          "domain": "View on {domain}",
+          "wikipedia": "Search on Wikipedia",
+          "discogs": "Search on Discogs",
+          "moderation": "Open in moderation interface",
+          "django": "View in Django's admin"
+        },
+        "modal": {
+          "embed": {
+            "header": "Embed this track on your website"
+          },
+          "delete": {
+            "header": "Delete this track?",
+            "content": {
+              "warning": "The track will be deleted, as well as any related files and data. This action is irreversible."
+            }
+          }
+        }
+      },
+      "TrackDetail": {
+        "notApplicable": "N/A",
+        "header": {
+          "track": "Track details",
+          "episode": "Episode details",
+          "release": "Release Details",
+          "playlists": "Related Playlists",
+          "library": "Related libraries"
+        },
+        "description": {
+          "library": "This track is present in the following libraries:"
+        },
+        "link": {
+          "musicbrainz": "View on MusicBrainz"
+        },
+        "table": {
+          "track": {
+            "duration": "Duration",
+            "size": "Size",
+            "codec": "Codec",
+            "bitrate": {
+              "label": "Bitrate",
+              "value": "{bitrate}/s"
+            },
+            "downloads": "Downloads"
+          },
+          "release": {
+            "copyright": "Copyright",
+            "year": "Year",
+            "license": "License",
+            "url": "URL",
+            "artist": "Artist",
+            "album": "Album",
+            "series": "Serie"
+          }
+        }
+      },
+      "TrackEdit": {
+        "header": {
+          "edit": "Edit this track",
+          "suggest": "Suggest an edit on this track"
+        },
+        "message": {
+          "remote": " This object is managed by another server, you cannot edit it."
+        }
+      },
+      "radios": {
+        "Builder": {
+          "title": "Radio Builder",
+          "placeholder": {
+            "name": "My awesome radio",
+            "description": "My awesome description"
+          },
+          "header": {
+            "builder": "Builder",
+            "updated": "Radio updated",
+            "created": "Radio created",
+            "matches": "0 tracks matching combined filters | {n} track matching combined filters | {n} tracks matching combined filters"
+          },
+          "description": {
+            "builder": "You can use this interface to build your own custom radio, which will play tracks according to your criteria."
+          },
+          "label": {
+            "name": "Radio name",
+            "description": "Description",
+            "public": "Display publicly",
+            "filter": "Add filters to customize your radio"
+          },
+          "button": {
+            "save": "Save",
+            "filter": "Add filter"
+          },
+          "option": {
+            "filter": "Select a filter"
+          },
+          "table": {
+            "filter": {
+              "header": {
+                "name": "Filter name",
+                "exclude": "Exclude",
+                "config": "Config",
+                "candidates": "Candidates",
+                "actions": "Actions"
+              }
+            }
+          }
+        },
+        "Filter": {
+          "excludeLabel": "Exclude",
+          "matchingTracks": "0 tracks matching filter | {n} track matching filter | {n} tracks matching filter",
+          "matchingTracksModalHeader": "Tracks matching filter",
+          "cancelButton": "Cancel",
+          "removeButton": "Remove"
+        }
+      }
+    },
+    "manage": {
+      "ChannelsTable": {
+        "placeholder": {
+          "search": "Search by domain, name, account…"
+        },
+        "link": {
+          "moderation": "Open in moderation interface",
+          "local": "Local"
+        },
+        "label": {
+          "search": "Search",
+          "category": "Category"
+        },
+        "option": {
+          "all": "All"
+        },
+        "ordering": {
+          "label": "Ordering",
+          "direction": {
+            "label": "Ordering direction",
+            "ascending": "Ascending",
+            "descending": "Descending"
+          }
+        },
+        "table": {
+          "channel": {
+            "header": {
+              "name": "Name",
+              "account": "Account",
+              "domain": "Domain",
+              "albums": "Albums",
+              "tracks": "Tracks",
+              "creationDate": "Creation date"
+            }
+          }
+        },
+        "pagination": {
+          "results": "Showing results {start}-{end} on {total}"
+        }
+      },
+      "library": {
+        "AlbumsTable": {
+          "notApplicable": "N/A",
+          "placeholder": {
+            "search": "Search by domain, title, artist, MusicBrainz ID…"
+          },
+          "link": {
+            "moderation": "Open in moderation interface",
+            "local": "Local"
+          },
+          "label": {
+            "search": "Search"
+          },
+          "action": {
+            "delete": {
+              "label": "Delete",
+              "warning": "The selected albums will be removed, as well as associated tracks, uploads, favorites and listening history. This action is irreversible."
+            }
+          },
+          "ordering": {
+            "label": "Ordering",
+            "direction": {
+              "label": "Ordering direction",
+              "ascending": "Ascending",
+              "descending": "Descending"
+            }
+          },
+          "table": {
+            "album": {
+              "header": {
+                "name": "Name",
+                "artist": "Artist",
+                "domain": "Domain",
+                "tracks": "Tracks",
+                "releaseDate": "Release date",
+                "creationDate": "Creation date"
+              }
+            }
+          },
+          "pagination": {
+            "results": "Showing results {start}-{end} on {total}"
+          }
+        },
+        "ArtistsTable": {
+          "placeholder": {
+            "search": "Search by domain, name, MusicBrainz ID…"
+          },
+          "action": {
+            "delete": {
+              "label": "Delete",
+              "warning": "The selected artist will be removed, as well as associated tracks, uploads, favorites and listening history. This action is irreversible."
+            }
+          },
+          "label": {
+            "search": "Search",
+            "category": "Category"
+          },
+          "option": {
+            "all": "All"
+          },
+          "ordering": {
+            "label": "Ordering",
+            "direction": {
+              "label": "Ordering direction",
+              "ascending": "Ascending",
+              "descending": "Descending"
+            }
+          },
+          "table": {
+            "artist": {
+              "header": {
+                "name": "Name",
+                "domain": "Domain",
+                "albums": "Albums",
+                "tracks": "Tracks",
+                "creationDate": "Creation date"
+              }
+            }
+          },
+          "link": {
+            "local": "Local"
+          },
+          "pagination": {
+            "results": "Showing results {start}-{end} on {total}"
+          }
+        },
+        "EditsCardList": {
+          "placeholder": {
+            "search": "Search by account, summary, domain…"
+          },
+          "label": {
+            "search": "Search",
+            "status": "Status"
+          },
+          "option": {
+            "all": "All",
+            "pending": "Pending review",
+            "approved": "Approved",
+            "rejected": "Rejected"
+          },
+          "ordering": {
+            "label": "Ordering",
+            "direction": {
+              "label": "Order",
+              "ascending": "Ascending",
+              "descending": "Descending"
+            }
+          },
+          "pagination": {
+            "results": "Showing results {start}-{end} on {total}"
+          }
+        },
+        "LibrariesTable": {
+          "placeholder": {
+            "search": "Search by domain, actor, name, description…"
+          },
+          "action": {
+            "delete": {
+              "label": "Delete",
+              "warning": "The selected library will be removed, as well as associated uploads and follows. This action is irreversible."
+            }
+          },
+          "label": {
+            "search": "Search",
+            "visibility": "Visibility"
+          },
+          "option": {
+            "all": "All"
+          },
+          "ordering": {
+            "label": "Ordering",
+            "direction": {
+              "label": "Ordering direction",
+              "ascending": "Ascending",
+              "descending": "Descending"
+            }
+          },
+          "link": {
+            "local": "Local"
+          },
+          "table": {
+            "library": {
+              "header": {
+                "name": "Name",
+                "account": "Account",
+                "domain": "Domain",
+                "visibility": "Visibility",
+                "uploads": "Uploads",
+                "followers": "Followers",
+                "creationDate": "Creation date"
+              }
+            }
+          },
+          "pagination": {
+            "results": "Showing results {start}-{end} on {total}"
+          }
+        },
+        "TagsTable": {
+          "placeholder": {
+            "search": "Search by name"
+          },
+          "action": {
+            "delete": {
+              "label": "Delete",
+              "warning": "The selected tag will be removed and unlinked with existing content, if any. This action is irreversible."
+            }
+          },
+          "label": {
+            "search": "Search"
+          },
+          "ordering": {
+            "label": "Ordering",
+            "direction": {
+              "label": "Ordering direction",
+              "ascending": "Ascending",
+              "descending": "Descending"
+            }
+          },
+          "link": {},
+          "table": {
+            "tag": {
+              "header": {
+                "name": "Name",
+                "artists": "Artists",
+                "albums": "Albums",
+                "tracks": "Tracks",
+                "creationDate": "Creation date"
+              }
+            }
+          },
+          "pagination": {
+            "results": "Showing results {start}-{end} on {total}"
+          }
+        },
+        "TracksTable": {
+          "placeholder": {
+            "search": "Search by domain, title, artist, album, MusicBrainz ID…"
+          },
+          "action": {
+            "delete": {
+              "label": "Delete",
+              "warning": "The selected tracks will be removed, as well as associated uploads, favorites and listening history. This action is irreversible."
+            }
+          },
+          "label": {
+            "search": "Search"
+          },
+          "ordering": {
+            "label": "Ordering",
+            "direction": {
+              "label": "Ordering direction",
+              "ascending": "Ascending",
+              "descending": "Descending"
+            }
+          },
+          "link": {
+            "local": "Local"
+          },
+          "table": {
+            "track": {
+              "header": {
+                "title": "Title",
+                "album": "Album",
+                "artist": "Artist",
+                "domain": "Domain",
+                "license": "License",
+                "creationDate": "Creation date"
+              }
+            }
+          },
+          "pagination": {
+            "results": "Showing results {start}-{end} on {total}"
+          },
+          "notApplicable": "N/A"
+        },
+        "UploadsTable": {
+          "placeholder": {
+            "search": "Search by domain, actor, name, reference, source…"
+          },
+          "action": {
+            "delete": {
+              "label": "Delete",
+              "warning": "The selected upload will be removed. This action is irreversible."
+            }
+          },
+          "label": {
+            "search": "Search",
+            "visibility": "Visibility",
+            "status": "Import status"
+          },
+          "option": {
+            "all": "All",
+            "pending": "Pending",
+            "skipped": "Skipped",
+            "failed": "Failed",
+            "finished": "Finished"
+          },
+          "ordering": {
+            "label": "Ordering",
+            "direction": {
+              "label": "Ordering direction",
+              "ascending": "Ascending",
+              "descending": "Descending"
+            }
+          },
+          "link": {
+            "local": "Local"
+          },
+          "table": {
+            "upload": {
+              "header": {
+                "name": "Name",
+                "library": "Library",
+                "account": "Account",
+                "domain": "Domain",
+                "visibility": "Visibility",
+                "importStatus": "Import status",
+                "size": "Size",
+                "creationDate": "Creation date",
+                "accessedDate": "Accessed date"
+              }
+            }
+          },
+          "pagination": {
+            "results": "Showing results {start}-{end} on {total}"
+          },
+          "notApplicable": "N/A"
+        }
+      },
+      "moderation": {
+        "AccountsTable": {
+          "action": {
+            "purge": {
+              "label": "Purge"
+            }
+          },
+          "placeholder": {
+            "search": "Search by domain, username, bio…"
+          },
+          "label": {
+            "search": "Search"
+          },
+          "ordering": {
+            "label": "Ordering",
+            "direction": {
+              "label": "Ordering direction",
+              "ascending": "Ascending",
+              "descending": "Descending"
+            }
+          },
+          "link": {
+            "local": "Local account"
+          },
+          "table": {
+            "account": {
+              "header": {
+                "name": "Name",
+                "domain": "Domain",
+                "uploads": "Uploads",
+                "firstSeen": "First seen",
+                "lastSeen": "Last seen",
+                "moderationRule": "Under moderation rule"
+              },
+              "moderationRule": "Yes"
+            }
+          },
+          "pagination": {
+            "results": "Showing results {start}-{end} on {total}"
+          }
+        },
+        "DomainsTable": {
+          "action": {
+            "purge": {
+              "label": "Purge"
+            },
+            "add": {
+              "label": "Add to allow-list"
+            },
+            "remove": {
+              "label": "Remove from allow-list"
+            }
+          },
+          "placeholder": {
+            "search": "Search by name…"
+          },
+          "link": {
+            "list": "This domain is present in your allow-list"
+          },
+          "label": {
+            "search": "Search",
+            "inList": "Is present on allow-list"
+          },
+          "option": {
+            "all": "All",
+            "yes": "Yes",
+            "no": "No"
+          },
+          "ordering": {
+            "label": "Ordering",
+            "direction": {
+              "label": "Ordering direction",
+              "ascending": "Ascending",
+              "descending": "Descending"
+            }
+          },
+          "table": {
+            "domain": {
+              "header": {
+                "name": "Name",
+                "users": "Users",
+                "receivedMessages": "Received messages",
+                "firstSeen": "First seen",
+                "moderationRule": "Under moderation rule"
+              },
+              "moderationRule": "Yes"
+            }
+          },
+          "empty": {
+            "noPods": "No other pods found"
+          },
+          "pagination": {
+            "results": "Showing results {start}-{end} on {total}"
+          }
+        },
+        "InstancePolicyCard": {
+          "status": {
+            "enabled": "Enabled",
+            "paused": "Paused"
+          },
+          "button": {
+            "edit": "Edit"
+          },
+          "header": {
+            "rule": "Rule"
+          },
+          "label": {
+            "blockAll": "Block everything",
+            "muteActivity": "Mute activity",
+            "muteNotifications": "Mute notifications",
+            "rejectMedia": "Reject media",
+            "reason": "Reason"
+          }
+        },
+        "InstancePolicyForm": {
+          "tooltip": {
+            "summary": "Explain why you're applying this policy: this will help you remember why you added this rule. Depending on your pod configuration, this may be displayed publicly to help users understand the moderation rules in place.",
+            "isActive": "Use this setting to temporarily enable/disable the policy without completely removing it.",
+            "blockAll": "Block everything from this account or domain. This will prevent any interaction with the entity, and purge related content (uploads, libraries, follows, etc.",
+            "silenceActivity": "Hide account or domain content, except from followers.",
+            "silenceNotifications": "Prevent account or domain from triggering notifications, except from followers.",
+            "rejectMedia": "Hide account or domain content, except from followers."
+          },
+          "label": {
+            "silenceActivity": "Mute activity",
+            "silenceNotifications": "Mute notifications",
+            "rejectMedia": "Reject media",
+            "policyEnabled": "Enabled",
+            "policyDisabled": "Disabled",
+            "policyReason": "Reason",
+            "blockAll": "Block everything",
+            "customizeRule": "Or customize your rule"
+          },
+          "header": {
+            "editRule": "Edit moderation rule",
+            "addRule": "Add a new moderation rule",
+            "failure": "Error while creating rule"
+          },
+          "button": {
+            "cancel": "Cancel",
+            "update": "Update",
+            "create": "Create",
+            "delete": "Delete",
+            "confirm": "Delete moderation rule"
+          },
+          "modal": {
+            "delete": {
+              "header": "Delete this moderation rule?",
+              "content": {
+                "warning": "This action is irreversible"
+              }
+            }
+          }
+        },
+        "InstancePolicyModal": {
+          "button": {
+            "show": "Moderation rules…",
+            "close": "Close"
+          },
+          "modal": {
+            "manage": {
+              "header": "Manage moderation rules for {obj}",
+              "content": {
+                "warning": "This entity is subject to specific moderation rules"
+              }
+            }
+          }
+        },
+        "NoteForm": {
+          "placeholder": {
+            "summary": "Describe what actions have been taken, or any other related updates…"
+          },
+          "header": {
+            "failure": "Error while submitting note"
+          },
+          "button": {
+            "add": "Add note"
+          }
+        },
+        "NotesThread": {
+          "button": {
+            "delete": "Delete"
+          },
+          "modal": {
+            "delete": {
+              "header": "Delete this note?",
+              "content": {
+                "warning": "The note will be deleted. This action is irreversible."
+              }
+            }
+          }
+        },
+        "ReportCard": {
+          "modal": {
+            "delete": {
+              "header": "Delete reported object?",
+              "content": {
+                "warning": "This will delete the object associated with this report and mark the report as resolved. The deletion is irreversible."
+              }
+            }
+          },
+          "button": {
+            "delete": "Delete reported object",
+            "resolve": "Resolve",
+            "unresolve": "Unresolve",
+            "confirmDelete": "Delete"
+          },
+          "link": {
+            "report": "Report {id}",
+            "publicPage": "View public page",
+            "moderation": "Open in moderation interface"
+          },
+          "table": {
+            "report": {
+              "submittedBy": "Submitted by",
+              "category": "Category",
+              "creationDate": "Creation date"
+            },
+            "status": {
+              "status": "Status",
+              "resolved": "Resolved",
+              "unresolved": "Unresolved",
+              "assignedTo": "Assigned to",
+              "resolutionDate": "Resolution date",
+              "internalNotes": "Internal notes"
+            },
+            "object": {
+              "type": "Type",
+              "owner": "Owner",
+              "account": "Account",
+              "domain": "Domain",
+              "local": "Local"
+            }
+          },
+          "header": {
+            "message": "Message",
+            "reportedObject": "Reported object",
+            "notes": "Internal notes",
+            "actions": "Actions"
+          },
+          "warning": {
+            "objectDeleted": "The object associated with this report was deleted."
+          },
+          "notApplicable": "N/A"
+        },
+        "UserRequestCard": {
+          "link": {
+            "request": "Request {id}"
+          },
+          "table": {
+            "request": {
+              "submittedBy": "Submitted by",
+              "creationDate": "Creation date"
+            },
+            "status": {
+              "status": "Status",
+              "pending": "Pending",
+              "refused": "Refused",
+              "approved": "Approved",
+              "assignedTo": "Assigned to",
+              "resolutionDate": "Resolution date",
+              "internalNotes": "Internal notes"
+            }
+          },
+          "notApplicable": "N/A",
+          "header": {
+            "signup": "Message",
+            "actions": "Actions",
+            "notes": "Internal notes"
+          },
+          "message": {
+            "signup": "This user wants to sign-up on your pod."
+          },
+          "button": {
+            "approve": "Approve",
+            "reject": "Refuse"
+          }
+        }
+      },
+      "users": {
+        "InvitationForm": {
+          "placeholder": {
+            "invitation": "Leave empty for a random code"
+          },
+          "header": {
+            "failure": "Error while creating invitation"
+          },
+          "button": {
+            "clear": "Clear",
+            "new": "Get a new invitation"
+          },
+          "label": {
+            "invite": "Invitation code"
+          },
+          "table": {
+            "invitation": {
+              "header": {
+                "code": "Code",
+                "link": "Share link"
+              }
+            }
+          }
+        },
+        "InvitationsTable": {
+          "action": {
+            "delete": "Delete"
+          },
+          "placeholder": {
+            "search": "Search by username, e-mail address, code…"
+          },
+          "label": {
+            "search": "Search",
+            "status": "Status",
+            "used": "Used",
+            "expired": "Expired",
+            "unused": "Not used"
+          },
+          "ordering": {
+            "label": "Ordering"
+          },
+          "option": {
+            "all": "All",
+            "open": "Open",
+            "expired": "Expired/used"
+          },
+          "table": {
+            "invitation": {
+              "header": {
+                "owner": "Owner",
+                "status": "Status",
+                "creationDate": "Creation date",
+                "expirationDate": "Expiration date",
+                "user": "User",
+                "code": "Code"
+              }
+            }
+          },
+          "pagination": {
+            "results": "Showing zero results | Showing one result | Showing results {start} to {end} from {total}"
+          }
+        },
+        "UsersTable": {
+          "permission": {
+            "library": "Library",
+            "moderation": "Moderation",
+            "settings": "Settings"
+          },
+          "placeholder": {
+            "search": "Search by username, e-mail address, name…"
+          },
+          "label": {
+            "search": "Search"
+          },
+          "ordering": {
+            "label": "Ordering",
+            "direction": {
+              "label": "Ordering direction",
+              "ascending": "Ascending",
+              "descending": "Descending"
+            }
+          },
+          "table": {
+            "user": {
+              "header": {
+                "username": "Username",
+                "email": "Email",
+                "accountStatus": "Account status",
+                "signup": "Sign-up",
+                "lastActivity": "Last activity",
+                "permissions": "Permissions",
+                "status": "Status"
+              },
+              "accountStatus": {
+                "active": "Active",
+                "inactive": "Inactive"
+              },
+              "status": {
+                "admin": "Admin",
+                "staff": "Staff member",
+                "regular": "Regular user"
+              }
+            }
+          },
+          "notApplicable": "N/A",
+          "pagination": {
+            "results": "Showing zero results | Showing one result | Showing results {start} to {end} from {total}"
+          }
+        }
+      }
+    },
+    "moderation": {
+      "FilterModal": {
+        "message": {
+          "success": "Content filter successfully added"
+        },
+        "header": {
+          "modal": "Do you want to hide content from artist \"{name}\"?",
+          "failure": "Error while creating filter"
+        },
+        "warning": {
+          "createFilter": {
+            "listIntro": "You will not see tracks, albums and user activity linked to this artist any more:",
+            "listItem1": "In other users favorites and listening history",
+            "listItem2": "In \"Recently added\" widget",
+            "listItem3": "In artists and album listings",
+            "listItem4": "In radio suggestions"
+          }
+        },
+        "help": {
+          "createFilter": "You can manage your filters any time from your account settings."
+        },
+        "button": {
+          "cancel": "Cancel",
+          "hide": "Hide content"
+        }
+      },
+      "ReportCategoryDropdown": {
+        "label": {
+          "category": "Category"
+        },
+        "option": {
+          "all": "All"
+        }
+      },
+      "ReportModal": {
+        "message": {
+          "submissionSuccess": "Report successfully submitted, thank you"
+        },
+        "error": {
+          "nodeinfoFetch": "Cannot fetch Node Info: {error}"
+        },
+        "header": {
+          "modal": "Do you want to report this object?",
+          "submissionFailure": "Error while submitting report",
+          "disabled": "Anonymous reports are disabled, please sign-in to submit a report."
+        },
+        "description": {
+          "modal": "Use this form to submit a report to our moderation team",
+          "email": "We'll use this e-mail address if we need to contact you regarding this report.",
+          "message": "Use this field to provide additional context to the moderator that will handle your report.",
+          "forwardToDomain": "Forward an anonymized copy of your report to the server hosting this element."
+        },
+        "label": {
+          "email": "Email",
+          "message": "Message",
+          "forwardToDomain": "Forward to {domain}"
+        },
+        "button": {
+          "cancel": "Cancel",
+          "submit": "Submit report"
+        }
+      }
+    },
+    "notifications": {
+      "NotificationRow": {
+        "button": {
+          "markRead": "Mark as read",
+          "markUnread": "Mark as unread",
+          "reject": "Reject",
+          "approve": "Approve"
+        },
+        "message": {
+          "libraryFollow": "{username} followed your library \"{library}\"",
+          "libraryAcceptFollow": "{username} accepted your follow on library \"{library}\"",
+          "libraryReject": "You rejected {username}'s request to follow \"{library}\"",
+          "libraryPendingFollow": "{username} wants to follow your library \"{library}\""
+        }
+      }
+    },
+    "playlists": {
+      "Card": {
+        "meta": {
+          "tracks": "No tracks | {n} track | {n} tracks"
+        }
+      },
+      "Editor": {
+        "button": {
+          "copy": "Copy the current queue to this playlist",
+          "addDuplicate": "Add anyways",
+          "clear": "Clear playlist",
+          "insertFromQueue": "Insert from queue ({n} track) | Insert from queue ({n} tracks"
+        },
+        "header": {
+          "editor": "Playlist editor"
+        },
+        "loading": {
+          "sync": "Syncing changes to server…"
+        },
+        "error": {
+          "sync": "An error occurred while saving your changes"
+        },
+        "warning": {
+          "duplicate": "Some tracks in your queue are already in this playlist:"
+        },
+        "message": {
+          "sync": "Changes synced with server"
+        },
+        "help": {
+          "reorder": "Drag and drop rows to reorder tracks in the playlist"
+        },
+        "modal": {
+          "clearPlaylist": {
+            "header": "Do you want to clear the playlist \"{playlist}\"?",
+            "content": {
+              "warning": "This will remove all tracks from this playlist and cannot be undone."
+            }
+          }
+        }
+      },
+      "Form": {
+        "placeholder": {
+          "name": "My awesome playlist"
+        },
+        "header": {
+          "createPlaylist": "Create a new playlist",
+          "updateSuccess": "Playlist updated",
+          "createSuccess": "Playlist created",
+          "createFailure": "The playlist could not be created"
+        },
+        "label": {
+          "name": "Playlist name",
+          "visibility": "Playlist visiblity"
+        },
+        "button": {
+          "update": "Update playlist",
+          "create": "Create playlist"
+        }
+      },
+      "PlaylistModal": {
+        "placeholder": {
+          "filterPlaylist": "Enter playlist name"
+        },
+        "button": {
+          "addToPlaylist": "Add to this playlist",
+          "addTrack": "Add track",
+          "cancel": "Cancel",
+          "addDuplicate": "Add anyways",
+          "edit": "Edit"
+        },
+        "header": {
+          "addToPlaylist": "Add to playlist",
+          "track": "{title}, by {artist}",
+          "manage": "Manage playlists",
+          "addFailure": "The track can't be added to a playlist",
+          "available": "Available playlists",
+          "noResults": "No results matching your filter"
+        },
+        "warning": {
+          "duplicate": "{ 0 } is already in { 1 }."
+        },
+        "table": {
+          "edit": {
+            "header": {
+              "edit": "Edit",
+              "name": "Name",
+              "lastModification": "Last modification",
+              "tracks": "Tracks"
+            }
+          }
+        },
+        "label": {
+          "filter": "Filter"
+        },
+        "empty": {
+          "noPlaylists": "No playlists have been created yet"
+        }
+      },
+      "TrackPlaylistIcon": {
+        "button": {
+          "add": "Add to playlist…"
+        }
+      },
+      "Widget": {
+        "placeholder": {
+          "noPlaylists": "No playlists have been created yet"
+        },
+        "button": {
+          "create": "Create playlist",
+          "more": "Show more"
+        }
+      }
+    },
+    "radios": {
+      "Button": {
+        "stopTagsRadio": "Stop tags radio",
+        "startTagsRadio": "Start tags radio",
+        "stopArtistsRadio": "Stop artists radio",
+        "startArtistsRadio": "Start artists radio",
+        "stopPlaylistsRadio": "Stop playlists radio",
+        "startPlaylistsRadio": "Start playlists radio",
+        "stopRadio": "Stop radio",
+        "startRadio": "Play radio"
+      },
+      "Card": {
+        "button": {
+          "edit": "Edit"
+        }
+      }
+    },
+    "tags": {
+      "List": {
+        "button": {
+          "more": "Show 1 more tag | Show {n} more tags"
+        }
+      }
+    },
+    "vui": {
+      "Pagination": {
+        "label": "Pagination",
+        "previous": "Previous Page",
+        "next": "Next Page"
+      }
+    }
+  },
+  "composables": {
+    "useErrorHandler": {
+      "unexpectedError": "An unexpected error occurred.",
+      "errorReportTitle": "An unexpected error occured.",
+      "errorReportMessage": "To help us understand why it happened, please attach a detailed description of what you did that has triggered the error.",
+      "leaveFeedback": "Leave feedback"
+    },
+    "useThemeList": {
+      "browserDefault": "Browser default",
+      "lightTheme": "Light",
+      "darkTheme": "Dark"
+    },
+    "audio": {
+      "usePlayOptions": {
+        "addToQueueMessage": "{n} tracks were added to your queue | {n} track was added to your queue | {n} tracks were added to your queue"
+      }
+    },
+    "locale": {
+      "useSharedLabels": {
+        "fields": {
+          "privacyLevel": {
+            "label": "Activity visibility",
+            "help": "Determine the visiblity level of your activity",
+            "choices": {
+              "private": "Nobody except me",
+              "instance": "Everyone on this instance",
+              "public": "Everyone, across all instances"
+            },
+            "shortChoices": {
+              "private": "Private",
+              "instance": "Instance",
+              "public": "Everyone"
+            }
+          },
+          "importStatus": {
+            "label": "Click to display more information about the import process for this upload",
+            "choices": {
+              "skipped": {
+                "label": "Skipped",
+                "help": "This track is already present in one of your libraries"
+              },
+              "draft": {
+                "label": "Draft",
+                "help": "This track has been uploaded, but hasn't been scheduled for processing yet"
+              },
+              "pending": {
+                "label": "Pending",
+                "help": "This track has been uploaded, but hasn't been processed by the server yet"
+              },
+              "errored": {
+                "label": "Errored",
+                "help": "This track could not be processed, please make sure it is tagged correctly"
+              },
+              "finished": {
+                "label": "Finished",
+                "help": "Imported"
+              }
+            }
+          },
+          "reportType": {
+            "label": "Category",
+            "choices": {
+              "takedownRequest": "Takedown request",
+              "invalidMetadata": "Invalid metadata",
+              "illegalContent": "Illegal content",
+              "offensiveContent": "Offensive content",
+              "other": "Other"
+            }
+          },
+          "summary": {
+            "label": "Bio"
+          },
+          "contentCategory": {
+            "label": "Content category",
+            "choices": {
+              "podcast": "Podcast",
+              "music": "Music",
+              "other": "Other"
+            }
+          }
+        },
+        "filters": {
+          "creationDate": "Creation date",
+          "releaseDate": "Release date",
+          "accessedDate": "Accessed date",
+          "appliedDate": "Applied date",
+          "handledDate": "Handled date",
+          "firstSeen": "First seen date",
+          "lastSeen": "Last seen date",
+          "modificationDate": "Modification date",
+          "expirationDate": "Expiration date",
+          "trackTitle": "Track name",
+          "albumTitle": "Album name",
+          "artistName": "Artist name",
+          "name": "Name",
+          "itemsCount": "Items",
+          "size": "Size",
+          "bitrate": "Bitrate",
+          "duration": "Duration",
+          "dateJoined": "Sign-up date",
+          "lastActivity": "Last activity",
+          "username": "Username",
+          "domain": "Domaimn",
+          "users": "Users",
+          "receivedMessages": "Received messages",
+          "uploads": "Uploads",
+          "followers": "Followers"
+        },
+        "scopes": {
+          "profile": {
+            "label": "Profile",
+            "description": "Access to e-mail, username, and profile information"
+          },
+          "libraries": {
+            "label": "Libraries and uploads",
+            "description": "Access to audio files, libraries, artists, albums and tracks"
+          },
+          "favorites": {
+            "label": "Favorites",
+            "description": "Access to favorites"
+          },
+          "listenings": {
+            "label": "Listenings",
+            "description": "Access to listening history"
+          },
+          "follows": {
+            "label": "Follows",
+            "description": "Access to follows"
+          },
+          "playlists": {
+            "label": "Playlists",
+            "description": "Access to playlists"
+          },
+          "radios": {
+            "label": "Radios",
+            "description": "Access to radios"
+          },
+          "filters": {
+            "label": "Content filters",
+            "description": "Access to content filters"
+          },
+          "notifications": {
+            "label": "Notifications",
+            "description": "Access to notifications"
+          },
+          "edits": {
+            "label": "Edits",
+            "description": "Access to edits"
+          },
+          "security": {
+            "label": "Security",
+            "description": "Access to security settings such as password and authorization"
+          },
+          "reports": {
+            "label": "Reports",
+            "description": "Access to moderation reports"
+          }
+        }
+      }
+    },
+    "moderation": {
+      "useEditConfigs": {
+        "description": {
+          "label": "Description"
+        },
+        "cover": {
+          "label": "Cover"
+        },
+        "tags": {
+          "label": "Tags"
+        },
+        "artist": {
+          "name": "Name"
+        },
+        "album": {
+          "title": "Title",
+          "releaseDate": "Release date"
+        },
+        "track": {
+          "title": "Title",
+          "position": "Position",
+          "copyright": "Copyright",
+          "license": "Licence"
+        }
+      },
+      "useReport": {
+        "account": {
+          "label": "Report {'@'}{username}",
+          "typeLabel": "Account"
+        },
+        "track": {
+          "label": "Report this track…",
+          "typeLabel": "Track"
+        },
+        "album": {
+          "label": "Report this album…",
+          "typeLabel": "Album"
+        },
+        "channel": {
+          "label": "Report this channel…",
+          "typeLabel": "Channel"
+        },
+        "artist": {
+          "label": "Report this artist…",
+          "typeLabel": "Artist",
+          "unknownLabel": "Unknown artist"
+        },
+        "playlist": {
+          "label": "Report this playlist…",
+          "typeLabel": "Playlist"
+        },
+        "library": {
+          "label": "Report this library…",
+          "typeLabel": "Library"
+        }
+      },
+      "useReportConfigs": {
+        "tags": {
+          "label": "Tags"
+        },
+        "name": {
+          "label": "Name"
+        },
+        "creationDate": {
+          "label": "Creation date"
+        },
+        "musicbrainzId": {
+          "label": "MusicBrainz ID"
+        },
+        "visibility": {
+          "label": "Visibility"
+        },
+        "artist": {
+          "label": "Artist"
+        },
+        "album": {
+          "label": "Album",
+          "title": "Title",
+          "releaseDate": "Release date"
+        },
+        "track": {
+          "label": "Track",
+          "title": "Title",
+          "position": "Position",
+          "copyright": "Copyright",
+          "license": "Licence"
+        },
+        "library": {
+          "label": "Library",
+          "description": "Description"
+        },
+        "playlist": {
+          "label": "Playlist"
+        },
+        "account": {
+          "label": "Account",
+          "summary": "Bio"
+        },
+        "channel": {
+          "label": "Channel"
+        }
+      }
+    }
+  },
+  "init": {
+    "axios": {
+      "rateLimitDelay": "You sent too many requests and have been rate limited, please try again in {delay}",
+      "rateLimitLater": "You sent too many requests and have been rate limited, please try again later"
+    },
+    "sentry": {
+      "title": "To enhance the quality of our services, we would like to collect information about crashes during your session.",
+      "message": "The stack traces will be shared to { 0 } in order to help us understand how and when the errors occur.",
+      "funkwhaleInstance": "Funkwhale's official Glitchtip instance",
+      "allow": "Allow",
+      "deny": "Deny"
+    },
+    "serviceWorker": {
+      "newAppVersion": "A new version of the app is available.",
+      "actions": {
+        "update": "Update",
+        "later": "Later"
+      }
+    }
+  },
+  "views": {
+    "Notifications": {
+      "title": "Notifications",
+      "header": {
+        "messages": "Your messages",
+        "instanceSupport": "Support this Funkwhale pod",
+        "funkwhaleSupport": "Do you like Funkwhale?",
+        "notifications": "Your notifications"
+      },
+      "label": {
+        "reminder": "Remind me in:",
+        "showRead": "Show read notifications"
+      },
+      "message": {
+        "funkwhaleSupport": "We noticed you've been here for a while. If Funkwhale is useful to you, we could use your help to make it even better!"
+      },
+      "option": {
+        "delay": {
+          "30": "30 days",
+          "60": "60 days",
+          "90": "90 days",
+          "never": "Never"
+        }
+      },
+      "button": {
+        "submit": "Got it!",
+        "read": "Mark all as read"
+      },
+      "link": {
+        "donate": "Donate",
+        "help": "Discover other ways to help"
+      },
+      "loading": {
+        "notifications": "Loading notifications…"
+      },
+      "empty": {
+        "notifications": "No notification to show"
+      }
+    },
+    "Search": {
+      "header": {
+        "search": "Search",
+        "rss": "Subscribe to a podcast RSS feed",
+        "remote": "Search a remote object"
+      },
+      "label": {
+        "artists": "Artists",
+        "albums": "Albums",
+        "tracks": "Tracks",
+        "playlists": "Playlists",
+        "radios": "Radios",
+        "tags": "Tags",
+        "podcasts": "Podcasts",
+        "series": "Series"
+      },
+      "button": {
+        "submit": "Submit Search Query"
+      }
+    },
+    "admin": {
+      "ChannelDetail": {
+        "warning": {
+          "stats": "Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object"
+        },
+        "label": {
+          "local": "Local"
+        },
+        "link": {
+          "localProfile": "Open local profile",
+          "django": "View in Django's admin"
+        },
+        "button": {
+          "refresh": "Refresh from remote server",
+          "openRemote": "Open remote profile",
+          "delete": "Delete"
+        },
+        "modal": {
+          "delete": {
+            "header": "Delete this channel?",
+            "content": {
+              "warning": "The channel will be removed, as well as associated uploads, tracks, and albums. This action is irreversible."
+            }
+          }
+        },
+        "header": {
+          "channelData": "Channel data",
+          "activity": "Activity",
+          "audioContent": "Audio content"
+        },
+        "table": {
+          "channelData": {
+            "name": "Name",
+            "category": "Category",
+            "account": "Account",
+            "domain": "Domain",
+            "description": "Description",
+            "url": "URL",
+            "rss": "RSS feed"
+          },
+          "activity": {
+            "firstSeen": "First seen",
+            "listenings": "Listenings",
+            "favorited": "Favorited tracks",
+            "playlists": "Playlists",
+            "linkedReports": "Linked reports",
+            "edits": "Edits"
+          },
+          "audioContent": {
+            "cachedSize": "Cached size",
+            "totalSize": "Total size",
+            "uploads": "Uploads",
+            "albums": "Albums",
+            "tracks": "Tracks"
+          }
+        }
+      },
+      "CommonList": {
+        "title": {
+          "accounts": "Accounts",
+          "albums": "Albums",
+          "artists": "Artists",
+          "channels": "Channels",
+          "invitations": "Invitations",
+          "libraries": "Libraries",
+          "tags": "Tags",
+          "tracks": "Tracks",
+          "uploads": "Uploads",
+          "users": "Users"
+        }
+      },
+      "Settings": {
+        "header": {
+          "settings": "Instance Settings",
+          "instanceInfo": "Instance Information",
+          "signups": "Sign-ups",
+          "security": "Security",
+          "music": "Music",
+          "channels": "Channels",
+          "playlists": "Playlists",
+          "moderation": "Moderation",
+          "federation": "Federation",
+          "subsonic": "Subsonic",
+          "stats": "Statistics",
+          "ui": "User Interface",
+          "sections": "Sections"
+        }
+      },
+      "library": {
+        "AlbumDetail": {
+          "warning": {
+            "stats": "Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object"
+          },
+          "header": {
+            "local": "Local",
+            "albumData": "Album data",
+            "activity": "Activity",
+            "audioContent": "Audio content"
+          },
+          "link": {
+            "localProfile": "Open local profile",
+            "django": "View in Django's admin",
+            "musicbrainz": "Open on MusicBrainz",
+            "remoteProfile": "Open remote profile",
+            "artist": "Artist",
+            "domain": "Domain",
+            "reports": "Linked reports",
+            "edits": "Edits",
+            "libraries": "Libraries",
+            "uploads": "Uploads",
+            "tracks": "Tracks"
+          },
+          "button": {
+            "remoteRefresh": "Refresh from remote server",
+            "edit": "Edit",
+            "delete": "Delete"
+          },
+          "modal": {
+            "delete": {
+              "header": "Delete this album?",
+              "content": {
+                "warning": "The album will be deleted, as well as associated uploads, tracks, favorites and listening history. This action is irreversible."
+              }
+            }
+          },
+          "table": {
+            "album": {
+              "title": "Title",
+              "description": "Description"
+            },
+            "activity": {
+              "firstSeen": "First seen",
+              "listenings": "Listenings",
+              "favorited": "Favorited tracks",
+              "playlists": "Playlists"
+            },
+            "audioContent": {
+              "cachedSize": "Cached size",
+              "totalSize": "Total size"
+            }
+          }
+        },
+        "ArtistDetail": {
+          "warning": {
+            "stats": "Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object"
+          },
+          "header": {
+            "local": "Local",
+            "artistData": "Artist data",
+            "activity": "Activity",
+            "audioContent": "Audio content"
+          },
+          "link": {
+            "localProfile": "Open local profile",
+            "django": "View in Django's admin",
+            "musicbrainz": "Open on MusicBrainz",
+            "remoteProfile": "Open remote profile",
+            "category": "Category",
+            "domain": "Domain",
+            "reports": "Linked reports",
+            "edits": "Edits",
+            "libraries": "Libraries",
+            "uploads": "Uploads",
+            "albums": "Albums",
+            "tracks": "Tracks"
+          },
+          "button": {
+            "remoteRefresh": "Refresh from remote server",
+            "edit": "Edit",
+            "delete": "Delete"
+          },
+          "modal": {
+            "delete": {
+              "header": "Delete this artist?",
+              "content": {
+                "warning": "The artist will be deleted, as well as associated uploads, tracks, favorites and listening history. This action is irreversible."
+              }
+            }
+          },
+          "table": {
+            "artist": {
+              "name": "Name",
+              "description": "Description"
+            },
+            "activity": {
+              "firstSeen": "First seen",
+              "listenings": "Listenings",
+              "favorited": "Favorited tracks",
+              "playlists": "Playlists"
+            },
+            "audioContent": {
+              "cachedSize": "Cached size",
+              "totalSize": "Total size"
+            }
+          }
+        },
+        "Base": {
+          "title": "Manage Library",
+          "menu": {
+            "secondary": "Secondary menu"
+          },
+          "link": {
+            "edits": "Edits",
+            "channels": "Channels",
+            "artists": "Artists",
+            "albums": "Albums",
+            "tracks": "Tracks",
+            "libraries": "Libraries",
+            "uploads": "Uploads",
+            "tags": "Tags"
+          }
+        },
+        "EditsList": {
+          "title": "Edits",
+          "header": {
+            "edits": "Library edits"
+          }
+        },
+        "LibraryDetail": {
+          "warning": {
+            "stats": "Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object"
+          },
+          "header": {
+            "local": "Local",
+            "libraryData": "Library data",
+            "activity": "Activity",
+            "audioContent": "Audio content"
+          },
+          "link": {
+            "django": "View in Django's admin",
+            "remoteProfile": "Open remote profile",
+            "visibility": "Visibility",
+            "account": "Account",
+            "reports": "Linked reports",
+            "domain": "Domain",
+            "artists": "Artists",
+            "albums": "Albums",
+            "tracks": "Tracks",
+            "uploads": "Uploads"
+          },
+          "button": {
+            "delete": "Delete"
+          },
+          "modal": {
+            "delete": {
+              "header": "Delete this library?",
+              "content": {
+                "warning": "The library will be deleted, as well as associated uploads, tracks, favorites and listening history. This action is irreversible."
+              }
+            }
+          },
+          "table": {
+            "library": {
+              "name": "Name",
+              "description": "Description"
+            },
+            "activity": {
+              "firstSeen": "First seen",
+              "followers": "Followers"
+            },
+            "audioContent": {
+              "cachedSize": "Cached size",
+              "totalSize": "Total size"
+            }
+          }
+        },
+        "TagDetail": {
+          "header": {
+            "tagData": "Tag data",
+            "activity": "Activity",
+            "audioContent": "Audio content"
+          },
+          "link": {
+            "localProfile": "Open local profile",
+            "django": "View in Django's admin",
+            "artists": "Artists",
+            "albums": "Albums",
+            "tracks": "Tracks"
+          },
+          "button": {
+            "delete": "Delete"
+          },
+          "modal": {
+            "delete": {
+              "header": "Delete this tag?",
+              "content": {
+                "warning": "The tag will be removed and unlinked from any existing entity. This action is irreversible."
+              }
+            }
+          },
+          "table": {
+            "tag": {
+              "name": "Name"
+            },
+            "activity": {
+              "firstSeen": "First seen"
+            }
+          }
+        },
+        "TrackDetail": {
+          "warning": {
+            "stats": "Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object"
+          },
+          "header": {
+            "local": "Local",
+            "trackData": "Track data",
+            "activity": "Activity"
+          },
+          "link": {
+            "localProfile": "Open local profile",
+            "django": "View in Django's admin",
+            "musicbrainz": "Open on MusicBrainz",
+            "remoteProfile": "Open remote profile",
+            "album": "Album",
+            "artist": "Artist",
+            "domain": "Domain",
+            "reports": "Linked reports",
+            "edits": "Edits",
+            "libraries": "Libraries",
+            "uploads": "Uploads",
+            "albumArtist": "Album artist"
+          },
+          "button": {
+            "remoteRefresh": "Refresh from remote server",
+            "edit": "Edit",
+            "delete": "Delete"
+          },
+          "modal": {
+            "delete": {
+              "header": "Delete this track?",
+              "content": {
+                "warning": "The track will be deleted, as well as associated uploads, favorites and listening history. This action is irreversible."
+              }
+            }
+          },
+          "table": {
+            "track": {
+              "title": "Title",
+              "position": "Position",
+              "discNumber": "Disc number",
+              "copyright": "Copyright",
+              "license": "License",
+              "description": "Description"
+            },
+            "activity": {
+              "firstSeen": "First seen",
+              "listenings": "Listenings",
+              "favorited": "Favorited tracks",
+              "playlists": "Playlists"
+            },
+            "trackData": {
+              "cachedSize": "Cached size",
+              "totalSize": "Total size"
+            }
+          }
+        },
+        "UploadDetail": {
+          "header": {
+            "local": "Local",
+            "uploadData": "Upload data",
+            "activity": "Activity",
+            "audioContent": "Audio content"
+          },
+          "button": {
+            "download": "Download",
+            "delete": "Delete"
+          },
+          "link": {
+            "django": "View in Django's admin",
+            "remoteProfile": "Open remote profile",
+            "visibility": "Visibility",
+            "account": "Account",
+            "domain": "Domain",
+            "importStatus": "Import status",
+            "library": "Library",
+            "type": "Type"
+          },
+          "modal": {
+            "delete": {
+              "header": "Delete this upload?",
+              "content": {
+                "warning": "The upload will be removed. This action is irreversible."
+              }
+            }
+          },
+          "table": {
+            "upload": {
+              "name": "Name"
+            },
+            "activity": {
+              "firstSeen": "First seen",
+              "accessedDate": "Accessed date"
+            },
+            "audioContent": {
+              "track": "Track",
+              "cachedSize": "Cached size",
+              "size": "Size",
+              "bitrate": {
+                "label": "Bitrate",
+                "value": "{bitrate}/s"
+              },
+              "duration": "Duration"
+            }
+          },
+          "notApplicable": "N/A"
+        }
+      },
+      "moderation": {
+        "AccountsDetail": {
+          "warning": {
+            "stats": "Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object"
+          },
+          "tooltip": {
+            "uploadQuota": "Determine how much content the user can upload. Leave empty to use the default value of the instance."
+          },
+          "option": {
+            "permission": {
+              "library": "Library",
+              "moderation": "Moderation",
+              "settings": "Settings"
+            }
+          },
+          "header": {
+            "localAccount": "Local account",
+            "noPolicy": "You don't have any rule in place for this account.",
+            "activePolicy": "This domain is subject to specific moderation rules",
+            "accountData": "Account data",
+            "activity": "Activty",
+            "audioContent": "Audio content"
+          },
+          "link": {
+            "openProfile": "Open profile",
+            "django": "View in Django's admin",
+            "remoteProfile": "Open remote profile",
+            "domain": "Domain",
+            "linkedReports": "Linked reports",
+            "requests": "Requests",
+            "channels": "Channels",
+            "libraries": "Libraries",
+            "uploads": "Uploads",
+            "artists": "Artists",
+            "albums": "Albums",
+            "tracks": "Tracks"
+          },
+          "description": {
+            "policy": "Moderation policies help you control how your instance interact with a given domain or account"
+          },
+          "button": {
+            "addPolicy": "Add a moderation policy"
+          },
+          "table": {
+            "accountData": {
+              "username": "Username",
+              "displayName": "Display name",
+              "email": "Email address",
+              "loginStatus": {
+                "label": "Login status",
+                "enabled": "Enabled",
+                "disabled": "Disabled"
+              },
+              "permissions": "Permissions",
+              "userType": "Type",
+              "lastChecked": "Last checked",
+              "signupDate": "Sign-up date",
+              "lastActivity": "Last activity"
+            },
+            "activity": {
+              "firstSeen": "First seen",
+              "emittedMessages": "Emitted messages",
+              "receivedFollows": "Received library follows",
+              "emittedFollows": "Emitted library follows"
+            },
+            "audioContent": {
+              "cachedSize": "Cached size",
+              "uploadQuota": "Upload quota",
+              "megabyte": "MB",
+              "totalSize": "Total size"
+            }
+          },
+          "notApplicable": "N/A"
+        },
+        "Base": {
+          "title": "Moderation",
+          "menu": {
+            "secondary": "Secondary menu"
+          },
+          "link": {
+            "reports": "Reports",
+            "userRequests": "User Requests",
+            "domains": "Domains",
+            "accounts": "Accounts"
+          }
+        },
+        "DomainsDetail": {
+          "warning": {
+            "stats": "Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object"
+          },
+          "link": {
+            "website": "Open website",
+            "django": "View in Django's admin",
+            "knownAccounts": "Known accounts",
+            "channels": "Channels",
+            "libraries": "Libraries",
+            "uploads": "Uploads",
+            "artists": "Artists",
+            "albums": "Albums",
+            "tracks": "Tracks"
+          },
+          "button": {
+            "removeFromAllowList": "Remove from allow-list",
+            "addToAllowList": "Add to allow-list",
+            "addPolicy": "Add a moderation policy",
+            "refreshNodeInfo": "Refresh node info"
+          },
+          "header": {
+            "noPolicy": "You don't have any rule in place for this domain.",
+            "activePolicy": "This domain is subject to specific moderation rules",
+            "instanceData": "Instance data",
+            "activity": "Activty",
+            "audioContent": "Audio content"
+          },
+          "description": {
+            "policy": "Moderation policies help you control how your instance interact with a given domain or account"
+          },
+          "table": {
+            "instanceData": {
+              "inAllowList": {
+                "label": "Is present on allow-list",
+                "true": "Yes",
+                "false": "No"
+              },
+              "lastChecked": "Last checked",
+              "software": {
+                "label": "Software",
+                "value": "{name} ({version})"
+              },
+              "domainName": "Name",
+              "totalUsers": "Total users",
+              "nodeInfoStatus": {
+                "label": "Status",
+                "value": "Error while fetching node info"
+              }
+            },
+            "activity": {
+              "firstSeen": "First seen",
+              "emittedMessages": "Emitted messages",
+              "receivedFollows": "Received library follows",
+              "emittedFollows": "Emitted library follows"
+            },
+            "audioContent": {
+              "cachedSize": "Cached size",
+              "totalSize": "Total size"
+            }
+          },
+          "notApplicable": "N/A"
+        },
+        "DomainsList": {
+          "title": "Domains",
+          "header": {
+            "domains": "Domains",
+            "failure": "Error while creating domain"
+          },
+          "label": {
+            "addDomain": "Add a domain",
+            "addToAllowList": "Add to allow-list"
+          },
+          "button": {
+            "add": "Add"
+          }
+        },
+        "ReportsList": {
+          "title": "Reports",
+          "header": {
+            "reports": "Reports"
+          },
+          "placeholder": {
+            "search": "Search by account, summary, domain…"
+          },
+          "label": {
+            "search": "Search",
+            "status": "Status"
+          },
+          "option": {
+            "status": {
+              "all": "All",
+              "resolved": "Resolved",
+              "unresolved": "Unresolved"
+            }
+          },
+          "ordering": {
+            "label": "Ordering",
+            "direction": {
+              "label": "Order",
+              "ascending": "Ascending",
+              "descending": "Descending"
+            }
+          }
+        },
+        "RequestsList": {
+          "title": "User Requests",
+          "placeholder": {
+            "search": "Search by username"
+          },
+          "header": {
+            "userRequests": "User Requests"
+          },
+          "label": {
+            "search": "Search",
+            "status": "Status"
+          },
+          "option": {
+            "status": {
+              "all": "All",
+              "pending": "Pending",
+              "approved": "Approved",
+              "refused": "Refused"
+            }
+          },
+          "ordering": {
+            "label": "Ordering",
+            "direction": {
+              "label": "Order",
+              "ascending": "Ascending",
+              "descending": "Descending"
+            }
+          }
+        }
+      },
+      "users": {
+        "Base": {
+          "title": "Manage users",
+          "menu": {
+            "secondary": "Secondary menu"
+          },
+          "link": {
+            "users": "Users",
+            "invitations": "Invitations"
+          }
+        }
+      }
+    },
+    "auth": {
+      "Callback": {
+        "header": {
+          "loggingIn": "Logging in…"
+        }
+      },
+      "EmailConfirm": {
+        "title": "Confirm your e-mail address",
+        "header": {
+          "failure": "Could not confirm your e-mail address",
+          "success": "E-mail address confirmed"
+        },
+        "label": {
+          "confirmationCode": "Confirmation code"
+        },
+        "link": {
+          "back": "Return to login",
+          "login": "Proceed to login"
+        },
+        "message": {
+          "success": "You can now use the service without limitations"
+        }
+      },
+      "Login": {
+        "title": "Log in",
+        "header": {
+          "login": "Log in to your Funkwhale account"
+        }
+      },
+      "PasswordReset": {
+        "title": "Reset your password",
+        "placeholder": {
+          "email": "Enter the e-mail address linked to your account"
+        },
+        "header": {
+          "reset": "Reset your password",
+          "failure": "Error while asking for a password reset"
+        },
+        "help": {
+          "form": "Use this form to request a password reset. We will send an e-mail to the given address with instructions to reset your password."
+        },
+        "label": {
+          "email": "Account's e-mail address"
+        },
+        "link": {
+          "back": "Back to login"
+        },
+        "button": {
+          "requestReset": "Ask for a password reset"
+        }
+      },
+      "PasswordResetConfirm": {
+        "title": "Change your password",
+        "header": {
+          "failure": "Error while changing your password",
+          "success": "Password updated successfully"
+        },
+        "message": {
+          "success": "Your password has been updated successfully.",
+          "requestSent": "If the e-mail address provided in the previous step is valid and linked to a user account, you should receive an e-mail with reset instructions in the next couple of minutes."
+        },
+        "link": {
+          "back": "Back to login",
+          "login": "Proceed to login"
+        },
+        "label": {
+          "newPassword": "New password"
+        },
+        "button": {
+          "update": "Update your password"
+        }
+      },
+      "Plugins": {
+        "title": "Manage plugins"
+      },
+      "ProfileActivity": {
+        "header": {
+          "recentlyListened": "Recently listened",
+          "recentlyFavorited": "Recently favorited",
+          "playlists": "Playlists"
+        }
+      },
+      "ProfileBase": {
+        "title": "{username}'s profile",
+        "link": {
+          "domainView": "View on {domain}",
+          "moderation": "Open in moderation interface",
+          "overview": "Overview",
+          "activity": "Activity"
+        },
+        "label": {
+          "self": "This is you!"
+        }
+      },
+      "ProfileOverview": {
+        "header": {
+          "libraries": "User Libraries",
+          "channels": "Channels",
+          "sharedLibraries": "This user shared the following libraries"
+        },
+        "modal": {
+          "createChannel": {
+            "header": "Create channel",
+            "podcast": {
+              "header": "Podcast channel"
+            },
+            "artist": {
+              "header": "Artist channel"
+            }
+          }
+        },
+        "link": {
+          "addNew": "Add New"
+        },
+        "button": {
+          "cancel": "Cancel",
+          "previous": "Previous step",
+          "next": "Next step",
+          "createChannel": "Create channel"
+        }
+      },
+      "Signup": {
+        "title": "Sign up",
+        "header": {
+          "createAccount": "Create a Funkwhale account"
+        }
+      }
+    },
+    "channels": {
+      "DetailBase": {
+        "title": "Channel",
+        "meta": {
+          "episodes": "No episodes | {n} episode | {n} episodes",
+          "tracks": "No tracks | {n} track | {n} tracks",
+          "subscribers": "No subscribers | {n} subscriber | {n} subscribers",
+          "listenings": "No listenings | {n} listening | {n} listenings"
+        },
+        "header": {
+          "podcastChannel": "Podcast channel",
+          "artistChannel": "Artist channel"
+        },
+        "modal": {
+          "subscribe": {
+            "header": "Subscribe to this channel",
+            "funkwhale": {
+              "header": "Subscribe on Funkwhale"
+            },
+            "rss": {
+              "header": "Subscribe via RSS",
+              "content": {
+                "help": "Copy paste the following URL in your favorite podcatcher:"
+              }
+            },
+            "fediverse": {
+              "header": "Subscribe on the Fediverse",
+              "content": {
+                "help": "If you're using Mastodon or other fediverse applications, you can subscribe to this account:"
+              }
+            }
+          },
+          "delete": {
+            "header": "Delete this Channel?",
+            "content": {
+              "warning": "The channel will be deleted, as well as any related files and data. This action is irreversible."
+            }
+          },
+          "embed": {
+            "header": "Embed this artist work on your website"
+          }
+        },
+        "button": {
+          "cancel": "Cancel",
+          "embed": "Embed",
+          "edit": "Edit…",
+          "delete": "Delete…",
+          "upload": "Upload",
+          "play": "Play",
+          "updateChannel": "Update channel",
+          "confirm": "Delete"
+        },
+        "link": {
+          "domainView": "View on {domain}",
+          "moderation": "Open in moderation interface",
+          "mirrored": "Mirrored from {domain}",
+          "channelOverview": "Overview",
+          "channelEpisodes": "All episodes",
+          "channelTracks": "Tracks"
+        }
+      },
+      "DetailOverview": {
+        "header": {
+          "uploadsSuccess": "Uploads published successfully",
+          "uploadsFailure": "Some uploads couldn't be published",
+          "uploadsProcessing": "Uploads are being processed",
+          "latestEpisodes": "Latest episodes",
+          "latestTracks": "Latest tracks",
+          "series": "Series",
+          "albums": "Albums"
+        },
+        "meta": {
+          "progress": "Processed uploads: {finished}/{total}"
+        },
+        "link": {
+          "skippedUploads": "View skipped uploads",
+          "erroredUploads": "View errored uploads",
+          "addAlbum": "Add new"
+        },
+        "message": {
+          "processing": "Your uploads are being processed by Funkwhale and will be live very soon."
+        }
+      },
+      "SubscriptionsList": {
+        "title": "Subscribed Channels",
+        "placeholder": {
+          "search": "Filter by name…"
+        },
+        "link": {
+          "addNew": "Add new"
+        },
+        "modal": {
+          "subscription": {
+            "header": "Subscription"
+          }
+        },
+        "button": {
+          "cancel": "Cancel",
+          "subscribe": "Subscribe"
+        }
+      }
+    },
+    "content": {
+      "Base": {
+        "title": "Add content",
+        "menu": {
+          "secondary": "Secondary menu"
+        },
+        "link": {
+          "libraries": "Libraries",
+          "tracks": "Tracks"
+        }
+      },
+      "Home": {
+        "title": "Add and manage content",
+        "help": {
+          "uploadQuota": "This instance offers up to {quota} of storage space for every user."
+        },
+        "header": {
+          "channel": "Publish your work in a channel",
+          "upload": "Upload third-party content in a library",
+          "follow": "Follow remote libraries"
+        },
+        "description": {
+          "channel": {
+            "1": "If you are a musician or a podcaster, channels are designed for you!",
+            "2": "Share your work publicly and get subscribers on Funkwhale, the Fediverse or any podcasting application."
+          },
+          "upload": "Upload your personal music library to Funkwhale to enjoy it from anywhere and share it with friends and family.",
+          "follow": "Follow libraries from other users to get access to new music. Public libraries can be followed immediately, while following a private library requires approval from its owner."
+        },
+        "button": {
+          "start": "Get started"
+        }
+      },
+      "libraries": {
+        "Card": {
+          "label": {
+            "size": "Total size of the files in this library"
+          },
+          "meta": {
+            "tracks": "No tracks | {n} track | {n} tracks"
+          },
+          "button": {
+            "upload": "Upload"
+          },
+          "link": {
+            "details": "Library Details"
+          }
+        },
+        "FilesTable": {
+          "action": {
+            "delete": "Delete",
+            "restartImport": "Restart import"
+          },
+          "placeholder": {
+            "search": "Search by domain, title, artist, album…"
+          },
+          "button": {
+            "showStatus": "Show information about the upload status for this track"
+          },
+          "label": {
+            "search": "Search",
+            "importStatus": "Import status"
+          },
+          "option": {
+            "status": {
+              "all": "All",
+              "draft": "Draft",
+              "pending": "Pending",
+              "skipped": "Skipped",
+              "failed": "Failed",
+              "finished": "Finished"
+            }
+          },
+          "ordering": {
+            "label": "Ordering",
+            "direction": {
+              "label": "Ordering direction",
+              "ascending": "Ascending",
+              "descending": "Descending"
+            }
+          },
+          "empty": {
+            "noTracks": "No tracks have been added to this libray yet"
+          },
+          "table": {
+            "file": {
+              "header": {
+                "title": "Title",
+                "artist": "Artist",
+                "album": "Album",
+                "uploadDate": "Upload date",
+                "importStatus": "Import status",
+                "duration": "Duration",
+                "size": "Size"
+              }
+            }
+          },
+          "pagination": {
+            "results": "Showing results {start}-{end} on {total}"
+          },
+          "notApplicable": "N/A"
+        },
+        "Form": {
+          "placeholder": {
+            "description": "This library contains my personal music, I hope you like it.",
+            "name": "My awesome library"
+          },
+          "message": {
+            "libraryUpdated": "Library updated",
+            "libraryCreated": "Library created",
+            "libraryDeleted": "LIbrary deleted"
+          },
+          "description": {
+            "library": "Libraries help you organize and share your music collections. You can upload your own music collection to Funkwhale and share it with your friends and family.",
+            "visibility": "You are able to share your library with other people, regardless of its visibilty."
+          },
+          "header": {
+            "failure": "Error"
+          },
+          "label": {
+            "name": "Name",
+            "description": "Description",
+            "visibility": "Visibility"
+          },
+          "button": {
+            "update": "Update library",
+            "create": "Create library",
+            "delete": "Delete",
+            "confirm": "Delete library"
+          },
+          "modal": {
+            "delete": {
+              "header": "Delete this library?",
+              "content": {
+                "warning": "The library and all its tracks will be deleted. This can not be undone."
+              }
+            }
+          }
+        },
+        "Home": {
+          "loading": {
+            "libraries": "Loading libraries…"
+          },
+          "header": {
+            "libraries": "My libraries"
+          },
+          "empty": {
+            "noLibrary": "Looks like you don't have a library, it's time to create one."
+          },
+          "link": {
+            "createLibrary": "Create a new library"
+          }
+        },
+        "Quota": {
+          "header": {
+            "currentUsage": "Current usage"
+          },
+          "loading": {
+            "currentUsage": "Loading usage data…"
+          },
+          "label": {
+            "percentUsed": "{progress}%",
+            "currentUsage": "{amount} used on {max} allowed",
+            "skipped": "Skipped files",
+            "errored": "Errored files",
+            "pending": "Pending files"
+          },
+          "link": {
+            "viewFiles": "View files"
+          },
+          "button": {
+            "purge": "Purge"
+          },
+          "modal": {
+            "purgePending": {
+              "header": "Purge pending files?",
+              "content": {
+                "description": "Removes uploaded but yet to be processed tracks completely, adding the corresponding data to your quota."
+              }
+            },
+            "purgeSkipped": {
+              "header": "Purge skipped files?",
+              "content": {
+                "description": "Removes uploaded tracks skipped during the import processes completely, adding the corresponding data to your quota."
+              }
+            },
+            "purgeErrored": {
+              "header": "Purge errored files?",
+              "content": {
+                "description": "Removes uploaded tracks that could not be processed by the server completely, adding the corresponding data to your quota."
+              }
+            }
+          }
+        }
+      },
+      "remote": {
+        "Card": {
+          "tooltip": {
+            "private": "This library is private and your approval from its owner is needed to access its content",
+            "public": "This library is public and you can access its content freely"
+          },
+          "message": {
+            "scanSkipped": "Scan skipped (previous scan is too recent)",
+            "scanLaunched": "Scan launched"
+          },
+          "error": {
+            "follow": "Cannot follow remote library: {error}",
+            "unfollow": "Cannot unfollow remote library: {error}"
+          },
+          "meta": {
+            "tracks": "No tracks | {n} track | {n} tracks",
+            "lastUpdate": "Last update: ",
+            "failedTracks": "Failed tracks: {tracks}"
+          },
+          "button": {
+            "follow": "Follow",
+            "pending": "Follow request pending approval",
+            "cancel": "Cancel follow request",
+            "unfollow": "Unfollow"
+          },
+          "link": {
+            "scanDetails": "Details",
+            "scan": "Scan now "
+          },
+          "label": {
+            "sharingLink": "Sharing link",
+            "scanPending": "Scan pending",
+            "scanProgress": "Scanning ({progress})",
+            "scanFailure": "Problem during scanning",
+            "scanSuccess": "Scanned",
+            "scanPartialSuccess": "Scanned with errors"
+          },
+          "modal": {
+            "unfollow": {
+              "header": "Unfollow this libary?",
+              "content": {
+                "warning": "By unfollowing this library, you loose access to its content."
+              }
+            }
+          }
+        },
+        "Home": {
+          "loading": {
+            "remoteLibraries": "Loading remote libraries…"
+          },
+          "header": {
+            "remoteLibraries": "Remote libraries",
+            "knownLibraries": "Known libraries"
+          },
+          "description": {
+            "remoteLibraries": "Remote libraries are owned by other users on the network. You can access them as long as they are public or you are granted access."
+          },
+          "button": {
+            "refresh": "Refresh"
+          }
+        },
+        "ScanForm": {
+          "placeholder": {
+            "url": "Enter a library URL"
+          },
+          "button": {
+            "submit": "Submit search"
+          },
+          "label": {
+            "search": "Search a remote library"
+          },
+          "header": {
+            "failure": "Could not fetch remote library"
+          }
+        }
+      }
+    },
+    "library": {
+      "DetailAlbums": {
+        "empty": {
+          "upload": "This library is empty, you should upload something in it!",
+          "follow": "You may need to follow this library to see its content."
+        }
+      },
+      "DetailOverview": {
+        "empty": {
+          "upload": "This library is empty, you should upload something in it!",
+          "follow": "You may need to follow this library to see its content."
+        }
+      },
+      "DetailTracks": {
+        "empty": {
+          "upload": "This library is empty, you should upload something in it!",
+          "follow": "You may need to follow this library to see its content."
+        }
+      },
+      "Edit": {
+        "header": {
+          "libraryContents": "Library contents",
+          "followers": "Followers"
+        },
+        "button": {
+          "accept": "Accept",
+          "reject": "Reject"
+        },
+        "loading": {
+          "followers": "Loading followers…"
+        },
+        "table": {
+          "action": {
+            "header": {
+              "user": "User",
+              "date": "Date",
+              "status": "Status",
+              "action": "Action"
+            },
+            "status": {
+              "pending": "Pending approval",
+              "accepted": "Accepted",
+              "rejected": "Rejected"
+            }
+          }
+        },
+        "empty": {
+          "noFollowers": "Nobody is following this library"
+        }
+      },
+      "LibraryBase": {
+        "title": "Library",
+        "label": {
+          "private": "Private",
+          "instance": "Restricted",
+          "public": "Public",
+          "sharingLink": "Sharing link"
+        },
+        "tooltip": {
+          "private": "This library is private and your approval from its owner is needed to access its content",
+          "instance": "This library is restricted to users on this pod only",
+          "public": "This library is public and you can access its content freely"
+        },
+        "description": {
+          "sharingLink": "Share this link with other users so they can request access to this library by copy-pasting it in their pod search bar."
+        },
+        "link": {
+          "domain": "View on {domain}",
+          "moderation": "Open in moderation interface",
+          "owner": "Owned by {username}",
+          "artists": "Artists",
+          "albums": "Albums",
+          "tracks": "Tracks"
+        },
+        "meta": {
+          "tracks": "No tracks | {n} track | {n} tracks"
+        },
+        "button": {
+          "upload": "Upload",
+          "edit": "Edit"
+        }
+      }
+    },
+    "playlists": {
+      "Detail": {
+        "title": "Playlist",
+        "meta": {
+          "tracks": "Playlist containing {n} track, by {username} | Playlist containing {n} tracks, by {username}"
+        },
+        "header": {
+          "tracks": "Tracks"
+        },
+        "button": {
+          "playAll": "Play all",
+          "stopEdit": "Stop Editing",
+          "edit": "Edit",
+          "embed": "Embed",
+          "delete": "Delete",
+          "cancel": "Cancel",
+          "confirm": "Delete playlist"
+        },
+        "modal": {
+          "delete": {
+            "header": "Do you want to delete the playlist {playlist}?",
+            "content": {
+              "warning": "This will completely delete this playlist and cannot be undone."
+            }
+          },
+          "embed": {
+            "header": "Embed this playlist on your website"
+          }
+        },
+        "empty": {
+          "noTracks": "There are no tracks in this playlist yet"
+        }
+      },
+      "List": {
+        "header": {
+          "playlists": "Playlists",
+          "browse": "Browsing playlists"
+        },
+        "placeholder": {
+          "search": "Enter playlist name…"
+        },
+        "button": {
+          "manage": "Manage your playlists",
+          "create": "Create a playlist",
+          "search": "Search"
+        },
+        "label": {
+          "search": "Search"
+        },
+        "ordering": {
+          "label": "Ordering",
+          "direction": {
+            "label": "Order",
+            "ascending": "Ascending",
+            "descending": "Descending"
+          }
+        },
+        "pagination": {
+          "results": "Results per page"
+        },
+        "empty": {
+          "noResults": "No results matching your query"
+        }
+      }
+    },
+    "radios": {
+      "Detail": {
+        "title": "Radio",
+        "header": {
+          "radio": "Radio containing {tracks} tracks, by ",
+          "tracks": "Tracks"
+        },
+        "button": {
+          "edit": "Edit…",
+          "delete": "Delete",
+          "confirm": "Delete radio"
+        },
+        "modal": {
+          "delete": {
+            "header": "Do you want to delete the radio {radio}?",
+            "content": {
+              "warning": "This will completely delete this radio and cannot be undone."
+            }
+          }
+        },
+        "empty": {
+          "noTracks": "No tracks have been hadded to this radio yet"
+        }
+      }
+    }
+  }
+}

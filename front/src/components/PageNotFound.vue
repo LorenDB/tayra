@@ -1,3 +1,15 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const path = window.location.href
+
+const { t } = useI18n()
+const labels = computed(() => ({
+  title: t('components.PageNotFound.title')
+}))
+</script>
+
 <template>
   <main
     class="main pusher"
@@ -8,15 +20,11 @@
         <h1 class="ui huge header">
           <i class="warning icon" />
           <div class="content">
-            <translate translate-context="Content/*/Title">
-              Page not found!
-            </translate>
+            {{ $t('components.PageNotFound.header.pageNotFound') }}
           </div>
         </h1>
         <p>
-          <translate translate-context="Content/*/Paragraph">
-            Sorry, the page you asked for does not exist:
-          </translate>
+          {{ $t('components.PageNotFound.message.pageNotFound') }}
         </p>
         <a :href="path">{{ path }}</a>
         <div class="ui hidden divider" />
@@ -24,29 +32,10 @@
           class="ui icon labeled right button"
           to="/"
         >
-          <translate translate-context="Content/*/Button.Label/Verb">
-            Go to home page
-          </translate>
+          {{ $t('components.PageNotFound.link.home') }}
           <i class="right arrow icon" />
         </router-link>
       </div>
     </section>
   </main>
 </template>
-
-<script>
-export default {
-  data: function () {
-    return {
-      path: window.location.href
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        title: this.$pgettext('Head/*/Title', 'Page Not Found')
-      }
-    }
-  }
-}
-</script>

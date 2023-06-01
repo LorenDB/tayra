@@ -5,14 +5,13 @@ from django.db.models import Q
 
 from . import utils
 
-
 QUERY_REGEX = re.compile(r'(((?P<key>\w+):)?(?P<value>"[^"]+"|[\S]+))')
 
 
 def parse_query(query):
     """
     Given a search query such as "hello is:issue status:opened",
-    returns a list of dictionnaries discribing each query token
+    returns a list of dictionaries describing each query token
     """
     matches = [m.groupdict() for m in QUERY_REGEX.finditer(query.lower())]
     for m in matches:
@@ -26,20 +25,20 @@ def normalize_query(
     findterms=re.compile(r'"([^"]+)"|(\S+)').findall,
     normspace=re.compile(r"\s{2,}").sub,
 ):
-    """ Splits the query string in invidual keywords, getting rid of unecessary spaces
-        and grouping quoted words together.
-        Example:
+    """Splits the query string in individual keywords, getting rid of unnecessary spaces
+    and grouping quoted words together.
+    Example:
 
-        >>> normalize_query('  some random  words "with   quotes  " and   spaces')
-        ['some', 'random', 'words', 'with quotes', 'and', 'spaces']
+    >>> normalize_query('  some random  words "with   quotes  " and   spaces')
+    ['some', 'random', 'words', 'with quotes', 'and', 'spaces']
 
     """
     return [normspace(" ", (t[0] or t[1]).strip()) for t in findterms(query_string)]
 
 
 def get_query(query_string, search_fields):
-    """ Returns a query, that is a combination of Q objects. That combination
-        aims to search keywords within a model by testing the given search fields.
+    """Returns a query, that is a combination of Q objects. That combination
+    aims to search keywords within a model by testing the given search fields.
 
     """
     query = None  # Query to search for every search term
@@ -73,7 +72,7 @@ def get_fts_query(query_string, fts_fields=["body_text"], model=None):
     else:
         query_string = remove_chars(query_string, ['"', "&", "(", ")", "!", "'"])
         parts = query_string.replace(":", "").split(" ")
-        parts = ["{}:*".format(p) for p in parts if p]
+        parts = [f"{p}:*" for p in parts if p]
         if not parts:
             return Q(pk=None)
 
@@ -98,7 +97,7 @@ def get_fts_query(query_string, fts_fields=["body_text"], model=None):
                     )
                 }
             ).values_list("pk", flat=True)
-            new_query = Q(**{"{}__in".format(fk_field_name): list(subquery)})
+            new_query = Q(**{f"{fk_field_name}__in": list(subquery)})
         else:
             new_query = Q(
                 **{
@@ -181,7 +180,7 @@ class SearchConfig:
             except KeyError:
                 # no cleaning to apply
                 value = token["value"]
-            q = Q(**{"{}__icontains".format(to): value})
+            q = Q(**{f"{to}__icontains": value})
             if not specific_field_query:
                 specific_field_query = q
             else:

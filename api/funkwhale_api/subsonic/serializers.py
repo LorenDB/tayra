@@ -39,7 +39,7 @@ def get_track_path(track, suffix):
         parts.append(get_valid_filepart(track.album.title))
     track_part = get_valid_filepart(track.title) + "." + suffix
     if track.position:
-        track_part = "{} - {}".format(track.position, track_part)
+        track_part = f"{track.position} - {track_part}"
     parts.append(track_part)
     return "/".join(parts)
 
@@ -84,7 +84,7 @@ class GetArtistSerializer(serializers.Serializer):
             "album": [],
         }
         if artist.attachment_cover_id:
-            payload["coverArt"] = "ar-{}".format(artist.id)
+            payload["coverArt"] = f"ar-{artist.id}"
         for album in albums:
             album_data = {
                 "id": album.id,
@@ -95,7 +95,7 @@ class GetArtistSerializer(serializers.Serializer):
                 "songCount": len(album.tracks.all()),
             }
             if album.attachment_cover_id:
-                album_data["coverArt"] = "al-{}".format(album.id)
+                album_data["coverArt"] = f"al-{album.id}"
             if album.release_date:
                 album_data["year"] = album.release_date.year
             payload["album"].append(album_data)
@@ -128,7 +128,7 @@ def get_track_data(album, track, upload):
         "type": "music",
     }
     if album and album.attachment_cover_id:
-        data["coverArt"] = "al-{}".format(album.id)
+        data["coverArt"] = f"al-{album.id}"
     if upload.bitrate:
         data["bitrate"] = int(upload.bitrate / 1000)
     if upload.size:
@@ -151,7 +151,7 @@ def get_album2_data(album):
         "playCount": album.tracks.aggregate(l=Count("listenings"))["l"] or 0,
     }
     if album.attachment_cover_id:
-        payload["coverArt"] = "al-{}".format(album.id)
+        payload["coverArt"] = f"al-{album.id}"
     if album.tagged_items:
         # exposes only first genre since the specification uses singular noun
         first_genre = album.tagged_items.first()
@@ -308,7 +308,7 @@ def get_channel_data(channel, uploads):
         "description": channel.artist.description.as_plain_text
         if channel.artist.description
         else "",
-        "coverArt": "at-{}".format(channel.artist.attachment_cover.uuid)
+        "coverArt": f"at-{channel.artist.attachment_cover.uuid}"
         if channel.artist.attachment_cover
         else "",
         "originalImageUrl": channel.artist.attachment_cover.url
@@ -333,7 +333,7 @@ def get_channel_episode_data(upload, channel_id):
         "description": upload.track.description.as_plain_text
         if upload.track.description
         else "",
-        "coverArt": "at-{}".format(upload.track.attachment_cover.uuid)
+        "coverArt": f"at-{upload.track.attachment_cover.uuid}"
         if upload.track.attachment_cover
         else "",
         "isDir": "false",

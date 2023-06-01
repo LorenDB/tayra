@@ -1,3 +1,33 @@
+<script setup lang="ts">
+import SemanticModal from '~/components/semantic/Modal.vue'
+import { ref } from 'vue'
+
+interface Events {
+  (e: 'confirm'): void
+}
+
+interface Props {
+  action?: () => void
+  disabled?: boolean
+  confirmColor?: 'danger' | 'success'
+}
+
+const emit = defineEmits<Events>()
+const props = withDefaults(defineProps<Props>(), {
+  action: () => undefined,
+  disabled: false,
+  confirmColor: 'danger'
+})
+
+const showModal = ref(false)
+
+const confirm = () => {
+  showModal.value = false
+  emit('confirm')
+  props.action?.()
+}
+</script>
+
 <template>
   <button
     :class="[{disabled: disabled}]"
@@ -6,15 +36,13 @@
   >
     <slot />
 
-    <modal
+    <semantic-modal
+      v-model:show="showModal"
       class="small"
-      :show.sync="showModal"
     >
       <h4 class="header">
         <slot name="modal-header">
-          <translate translate-context="Modal/*/Title">
-            Do you want to confirm this action?
-          </translate>
+          {{ $t('components.common.DangerousButton.header.confirm') }}
         </slot>
       </h4>
       <div class="scrolling content">
@@ -24,57 +52,17 @@
       </div>
       <div class="actions">
         <button class="ui basic cancel button">
-          <translate translate-context="*/*/Button.Label/Verb">
-            Cancel
-          </translate>
+          {{ $t('components.common.DangerousButton.button.cancel') }}
         </button>
         <button
-          :class="['ui', 'confirm', confirmButtonColor, 'button']"
+          :class="['ui', 'confirm', confirmColor, 'button']"
           @click="confirm"
         >
           <slot name="modal-confirm">
-            <translate translate-context="Modal/*/Button.Label/Short, Verb">
-              Confirm
-            </translate>
+            {{ $t('components.common.DangerousButton.button.confirm') }}
           </slot>
         </button>
       </div>
-    </modal>
+    </semantic-modal>
   </button>
 </template>
-<script>
-import Modal from '@/components/semantic/Modal'
-
-export default {
-  components: {
-    Modal
-  },
-  props: {
-    action: { type: Function, required: false, default: () => {} },
-    disabled: { type: Boolean, default: false },
-    confirmColor: { type: String, default: 'danger', required: false }
-  },
-  data () {
-    return {
-      showModal: false
-    }
-  },
-  computed: {
-    confirmButtonColor () {
-      if (this.confirmColor) {
-        return this.confirmColor
-      }
-      return this.color
-    }
-  },
-  methods: {
-    confirm () {
-      this.showModal = false
-      this.$emit('confirm')
-      if (this.action) {
-        this.action()
-      }
-    }
-  }
-}
-</script>

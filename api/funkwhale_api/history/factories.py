@@ -1,6 +1,6 @@
 import factory
 
-from funkwhale_api.factories import registry, NoUpdateOnCreate
+from funkwhale_api.factories import NoUpdateOnCreate, registry
 from funkwhale_api.music import factories
 from funkwhale_api.users.factories import UserFactory
 

@@ -1,39 +1,107 @@
+<script setup lang="ts">
+import type { BackendError } from '~/types'
+
+import { useI18n } from 'vue-i18n'
+import { computed, ref } from 'vue'
+import { useStore } from '~/store'
+import axios from 'axios'
+
+import PasswordInput from '~/components/forms/PasswordInput.vue'
+
+const { t } = useI18n()
+const store = useStore()
+
+const subsonicEnabled = computed(() => store.state.instance.settings.subsonic.enabled.value)
+const labels = computed(() => ({
+  subsonicField: t('components.auth.SubsonicTokenForm.label.subsonicField')
+}))
+
+const errors = ref([] as string[])
+const success = ref(false)
+const isLoading = ref(false)
+const token = ref()
+const fetchToken = async () => {
+  success.value = false
+  errors.value = []
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(`users/${store.state.auth.username}/subsonic-token/`)
+    token.value = response.data.subsonic_api_token
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const showToken = ref(false)
+const successMessage = ref('')
+const requestNewToken = async () => {
+  successMessage.value = t('components.auth.SubsonicTokenForm.message.passwordUpdated')
+  success.value = false
+  errors.value = []
+  isLoading.value = true
+
+  try {
+    const response = await axios.post(`users/${store.state.auth.username}/subsonic-token/`)
+    showToken.value = true
+    token.value = response.data.subsonic_api_token
+    success.value = true
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const disable = async () => {
+  successMessage.value = t('components.auth.SubsonicTokenForm.message.accessDisabled')
+  success.value = false
+  errors.value = []
+  isLoading.value = true
+
+  try {
+    await axios.delete(`users/${store.state.auth.username}/subsonic-token/`)
+    token.value = null
+    success.value = true
+    showToken.value = false
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+fetchToken()
+</script>
+
 <template>
   <form
     class="ui form"
     @submit.prevent="requestNewToken()"
   >
     <h2>
-      <translate translate-context="Content/Settings/Title">
-        Subsonic API password
-      </translate>
+      {{ $t('components.auth.SubsonicTokenForm.header.subsonic') }}
     </h2>
     <p
       v-if="!subsonicEnabled"
       class="ui message"
     >
-      <translate translate-context="Content/Settings/Paragraph">
-        The Subsonic API is not available on this Funkwhale instance.
-      </translate>
+      {{ $t('components.auth.SubsonicTokenForm.message.unavailable') }}
     </p>
     <p>
-      <translate translate-context="Content/Settings/Paragraph'">
-        Funkwhale is compatible with other music players that support the Subsonic API.
-      </translate>&nbsp;<translate translate-context="Content/Settings/Paragraph">
-        You can use those to enjoy your playlist and music in offline mode, on your smartphone or tablet, for instance.
-      </translate>
+      {{ $t('components.auth.SubsonicTokenForm.description.subsonic.paragraph1') }}&nbsp;{{ $t('components.auth.SubsonicTokenForm.description.subsonic.paragraph2') }}
     </p>
     <p>
-      <translate translate-context="Content/Settings/Paragraph">
-        However, accessing Funkwhale from those clients requires a separate password you can set below.
-      </translate>
+      {{ $t('components.auth.SubsonicTokenForm.description.subsonic.paragraph3') }}
     </p>
     <p>
       <a
         href="https://docs.funkwhale.audio/users/apps.html#subsonic-compatible-clients"
         target="_blank"
       >
-        <translate translate-context="Content/Settings/Link">Discover how to use Funkwhale from other apps</translate>
+        {{ $t('components.auth.SubsonicTokenForm.link.apps') }}
       </a>
     </p>
     <div
@@ -50,9 +118,7 @@
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/*/Error message.Title">
-          Error
-        </translate>
+        {{ $t('components.auth.SubsonicTokenForm.header.error') }}
       </h4>
       <ul class="list">
         <li
@@ -86,24 +152,22 @@
         :class="['ui', {'loading': isLoading}, 'button']"
         :action="requestNewToken"
       >
-        <translate translate-context="*/Settings/Button.Label/Verb">
-          Request a new password
-        </translate>
-        <p slot="modal-header">
-          <translate translate-context="Popup/Settings/Title">
-            Request a new Subsonic API password?
-          </translate>
-        </p>
-        <p slot="modal-content">
-          <translate translate-context="Popup/Settings/Paragraph">
-            This will log you out from existing devices that use the current password.
-          </translate>
-        </p>
-        <div slot="modal-confirm">
-          <translate translate-context="*/Settings/Button.Label/Verb">
-            Request a new password
-          </translate>
-        </div>
+        {{ $t('components.auth.SubsonicTokenForm.button.newPassword') }}
+        <template #modal-header>
+          <p>
+            {{ $t('components.auth.SubsonicTokenForm.modal.newPassword.header') }}
+          </p>
+        </template>
+        <template #modal-content>
+          <p>
+            {{ $t('components.auth.SubsonicTokenForm.modal.newPassword.content.warning') }}
+          </p>
+        </template>
+        <template #modal-confirm>
+          <div>
+            {{ $t('components.auth.SubsonicTokenForm.button.confirmNewPassword') }}
+          </div>
+        </template>
       </dangerous-button>
       <button
         v-else
@@ -111,117 +175,30 @@
         :class="['ui', {'loading': isLoading}, 'button']"
         @click="requestNewToken"
       >
-        <translate translate-context="Content/Settings/Button.Label/Verb">
-          Request a password
-        </translate>
+        {{ $t('components.auth.SubsonicTokenForm.button.confirmNewPassword') }}
       </button>
       <dangerous-button
         v-if="token"
         :class="['ui', {'loading': isLoading}, 'warning', 'button']"
         :action="disable"
       >
-        <translate translate-context="Content/Settings/Button.Label/Verb">
-          Disable Subsonic access
-        </translate>
-        <p slot="modal-header">
-          <translate translate-context="Popup/Settings/Title">
-            Disable Subsonic API access?
-          </translate>
-        </p>
-        <p slot="modal-content">
-          <translate translate-context="Popup/Settings/Paragraph">
-            This will completely disable access to the Subsonic API using from account.
-          </translate>
-        </p>
-        <div slot="modal-confirm">
-          <translate translate-context="Popup/Settings/Button.Label">
-            Disable access
-          </translate>
-        </div>
+        {{ $t('components.auth.SubsonicTokenForm.button.disable') }}
+        <template #modal-header>
+          <p>
+            {{ $t('components.auth.SubsonicTokenForm.modal.disableSubsonic.header') }}
+          </p>
+        </template>
+        <template #modal-content>
+          <p>
+            {{ $t('components.auth.SubsonicTokenForm.modal.disableSubsonic.content.warning') }}
+          </p>
+        </template>
+        <template #modal-confirm>
+          <div>
+            {{ $t('components.auth.SubsonicTokenForm.button.confirmDisable') }}
+          </div>
+        </template>
       </dangerous-button>
     </template>
   </form>
 </template>
-
-<script>
-import axios from 'axios'
-import PasswordInput from '@/components/forms/PasswordInput'
-
-export default {
-  components: {
-    PasswordInput
-  },
-  data () {
-    return {
-      token: null,
-      errors: [],
-      success: false,
-      isLoading: false,
-      successMessage: '',
-      showToken: false
-    }
-  },
-  computed: {
-    subsonicEnabled () {
-      return this.$store.state.instance.settings.subsonic.enabled.value
-    },
-    labels () {
-      return {
-        subsonicField: this.$pgettext('Content/Password/Input.label', 'Your subsonic API password')
-      }
-    }
-  },
-  created () {
-    this.fetchToken()
-  },
-  methods: {
-    fetchToken () {
-      this.success = false
-      this.errors = []
-      this.isLoading = true
-      const self = this
-      const url = `users/${this.$store.state.auth.username}/subsonic-token/`
-      return axios.get(url).then(response => {
-        self.token = response.data.subsonic_api_token
-        self.isLoading = false
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    requestNewToken () {
-      this.successMessage = this.$pgettext('Content/Settings/Message', 'Password updated')
-      this.success = false
-      this.errors = []
-      this.isLoading = true
-      const self = this
-      const url = `users/${this.$store.state.auth.username}/subsonic-token/`
-      return axios.post(url, {}).then(response => {
-        self.showToken = true
-        self.token = response.data.subsonic_api_token
-        self.isLoading = false
-        self.success = true
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    disable () {
-      this.successMessage = this.$pgettext('Content/Settings/Message', 'Access disabled')
-      this.success = false
-      this.errors = []
-      this.isLoading = true
-      const self = this
-      const url = `users/${this.$store.state.auth.username}/subsonic-token/`
-      return axios.delete(url).then(response => {
-        self.isLoading = false
-        self.token = null
-        self.success = true
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    }
-  }
-}
-</script>

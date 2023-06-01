@@ -150,7 +150,7 @@
 
 .track-row,
 .track-table {
-  padding: 0.5em;
+  padding: 0.5em !important; /* Overwrite fomantic ui padding rules */
   > div:not(.mobile) {
     padding: 0.25em;
     margin-right: 0.25em;
@@ -235,7 +235,7 @@
     margin-left: 26px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;  
+    -webkit-box-orient: vertical;
     overflow: hidden;
 
     .podcast-episode-title {

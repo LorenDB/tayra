@@ -1,0 +1,2316 @@
+{
+  "components": {
+    "auth": {
+      "Authorize": {
+        "header": {
+          "access": "Το { app } ζητάει πρόσβαση στον Funkwhale λογαριασμό σας",
+          "authorize": "Εξουσιοδότηση εφαρμογής τρίτου",
+          "allScopes": "Πλήρης πρόσβαση"
+        },
+        "title": "επιτρέψτε την εφαρμογή",
+        "button": {
+          "authorize": "Εξουσιοδότηση { app }"
+        },
+        "help": {
+          "pasteCode": "Αντιγράψτε και επικολλήστε τον ακόλουθο κώδικα στην εφαρμογή:"
+        }
+      },
+      "SubsonicTokenForm": {
+        "message": {
+          "accessDisabled": "Απενεργοποιημένη πρόσβαση"
+        },
+        "button": {
+          "confirmDisable": "Απενεργοποίηση πρόσβασης",
+          "disable": "Απενεργοποίηση πρόσβασης στο Subsonic"
+        },
+        "modal": {
+          "disableSubsonic": {
+            "header": "Απενεργοποίηση πρόσβασης στο Subsonic API;"
+          }
+        },
+        "link": {
+          "apps": "Ανακαλύψτε πως μπορείτε να χρησιμοποιήσετε το Funkwhale από άλλες εφαρμογές"
+        },
+        "header": {
+          "error": "Σφάλμα"
+        },
+        "description": {
+          "subsonic": {
+            "paragraph1": "Το Funkwhale είναι συμβατό με άλλα προγράμματα αναπαραγωγής μουσικής που υποστηρίζουν το Subsonic API.",
+            "paragraph3": "Ωστόσο, η πρόσβαση στο Funkwhale από αυτούς τους clients απαιτεί έναν ξεχωριστό κωδικό τον οποίο μπορείτε να ορίσετε παρακάτω."
+          }
+        }
+      },
+      "ApplicationEdit": {
+        "label": {
+          "accessToken": "Access token",
+          "appId": "Αναγνωριστικό Εφαρμογής",
+          "appSecret": "Μυστικό εφαρμογής"
+        },
+        "header": {
+          "appDetails": "Λεπτομέρειες εφαρμογής",
+          "editApp": "Επεξεργασία εφαρμογής"
+        },
+        "help": {
+          "appDetails": "Το αναγνωριστικό εφαρμογής και το μυστικό είναι ευαίσθητες πληροφορίες και πρέπει να τα αντιμετωπίζεται σαν κωδικούς. Μην τα μοιραστείτε με κανέναν."
+        },
+        "link": {
+          "settings": "Πίσω στις ρυθμίσεις"
+        },
+        "title": "Επεξεργασία εφαρμογής"
+      },
+      "Settings": {
+        "title": "Ρυθμίσεις Λογαριασμού",
+        "header": {
+          "accountSettings": "Ρυθμίσεις λογαριασμού",
+          "authorizedApps": "Εξουσιοδοτημένες εφαρμογές",
+          "avatar": "Avatar",
+          "changeEmail": "Αλλαγή της διεύθυνσης e-mail μου",
+          "changePassword": "Αλλαγή του κωδικού μου",
+          "contentFilters": "Φίλτρα περιεχομένου",
+          "deleteAccount": "Διαγραφή του λογαριασμού μου",
+          "avatarFailure": "Το avatar σας δε μπορεί να αποθηκευτεί"
+        },
+        "table": {
+          "authorizedApps": {
+            "header": {
+              "application": "Εφαρμογή"
+            }
+          },
+          "yourApps": {
+            "header": {
+              "application": "Εφαρμογή",
+              "creationDate": "Ημερομηνία δημιουργίας"
+            }
+          },
+          "artists": {
+            "header": {
+              "creationDate": "Ημερομηνία δημιουργίας"
+            }
+          }
+        },
+        "label": {
+          "avatar": "Avatar",
+          "currentPassword": "Τρέχων κωδικός"
+        },
+        "button": {
+          "password": "Αλλαγή κωδικού",
+          "delete": "Διαγραφή",
+          "deleteAccountConfirm": "Διαγραφή του λογαριασμού μου",
+          "deleteAccount": "Διαγραφή του λογαριασμού μου…",
+          "disableSubsonic": "Απενεργοποίηση πρόσβασης",
+          "edit": "Επεξεργασία"
+        },
+        "description": {
+          "changeEmail": "Αλλαγή της διεύθυνσης e-mail του λογαριασμού σας. Θα σας σταλθεί e-mail επιβεβαίωσης στην καινούρια διεύθυνση.",
+          "changePassword": {
+            "paragraph1": "Εάν αλλάξετε τον κωδικό σας θα αλλάξει και ο κωδικός του Subsonic API αν έχετε έναν."
+          },
+          "contentFilters": "Τα φίλτρα περιεχομένου βοηθάνε στο να κρύβουν το περιεχόμενο το οποίο δεν θέλετε να βλέπετε στην υπηρεσία."
+        },
+        "modal": {
+          "changePassword": {
+            "header": "Αλλαγή κωδικού;",
+            "content": {
+              "warning": "Η αλλαγή του κωδικού σας θα έχει τις εξής συνέπειες:"
+            }
+          },
+          "deleteAccount": {
+            "header": "Θέλετε να διαγράψετε τον λογαριασμό σας;"
+          }
+        },
+        "help": {
+          "noApps": "Εάν εξουσιοδοτήσετε τρίτες εφαρμογές να έχουν πρόσβαση στα δεδομένα σας, αυτές οι εφαρμογές θα είναι καταγεγραμμένες εδώ."
+        },
+        "message": {
+          "currentEmail": "Η τρέχουσα διεύθυνση e-mail σας είναι { email }.",
+          "confirmDelete": "Το αίτημα διαγραφής σας υποβλήθηκε, ο λογαριαμός σας και το περιεχόμενό του θα διαγραφούν σύντομα."
+        }
+      },
+      "Logout": {
+        "header": {
+          "confirm": "Είστε σίγουρος πως θέλετε να αποσυνδεθείτε;"
+        }
+      },
+      "ApplicationNew": {
+        "link": {
+          "settings": "Πίσω στις ρυθμίσεις"
+        },
+        "title": "Δημιουργία νέας εφαρμογής"
+      },
+      "LoginForm": {
+        "link": {
+          "createAccount": "Δημιουργία λογαριασμού"
+        },
+        "placeholder": {
+          "username": "Εισάγετε το όνομα χρήστη ή τη διεύθυνση e-mail σας"
+        },
+        "help": {
+          "approvalRequired": "Εάν γραφτήκατε πρόσφατα, μπορεί να χρειαστεί να περιμένετε μέχρι οι διαχειριστές να ελέγξουν το λογαριασμό σας, ή να επαληθεύσουν τη διεύθυνση e-mail σας."
+        }
+      },
+      "ApplicationForm": {
+        "button": {
+          "create": "Δημιουργία εφαρμογής"
+        }
+      },
+      "SignupForm": {
+        "button": {
+          "create": "Δημιουργία του λογαριασμού σας"
+        },
+        "label": {
+          "email": "Διεύθυνση e-mail"
+        },
+        "placeholder": {
+          "username": "Εισάγετε το όνομα χρήστη σας"
+        }
+      },
+      "Plugin": {
+        "link": {
+          "documentation": "Τεχνικά Έγγραφα"
+        },
+        "label": {
+          "pluginEnabled": "Ενεργό"
+        },
+        "header": {
+          "failure": "Σφάλμα κατά την αποθήκευση πρόσθετου"
+        }
+      }
+    },
+    "About": {
+      "stat": {
+        "activeUsers": "{ n } ενεργός χρήστης | { n } ενεργοί χρήστες",
+        "hoursOfMusic": "{ n } ώρα μουσικής | { n } ώρες μουσικής"
+      },
+      "title": "Σχετικά με",
+      "header": {
+        "aboutPod": "Σχετικά με αυτό το pod",
+        "publicContent": "Περιήγηση δημόσιων δεδομένων",
+        "findApp": "Βρείτε άλλο pod"
+      },
+      "link": {
+        "findOtherPod": "Βρείτε άλλο pod"
+      }
+    },
+    "Home": {
+      "stat": {
+        "activeUsers": "{ n } ενεργός χρήστης | { n } ενεργοί χρήστες",
+        "hoursOfMusic": "{ n } ώρα μουσικής | { n } ώρες μουσικής"
+      },
+      "header": {
+        "aboutFunkwhale": "Σχετικά με το Funkwhale",
+        "about": "Σχετικά με αυτό το Funkwhale pod",
+        "contact": "Επικοινωνία"
+      },
+      "link": {
+        "publicContent": {
+          "label": "Περιήγηση δημόσιων δεδομένων"
+        },
+        "userGuides": {
+          "description": "Ανακαλύψτε ότι χρειάζεται να γνωρίζετε για το Funkwhale και τις δυνατότητες του"
+        },
+        "findOtherPod": "Βρείτε άλλο pod"
+      },
+      "description": {
+        "funkwhale": {
+          "paragraph2": "Το Funkwhale είναι δωρεάν και αναπτύσσεται από μια φιλική κοινότητα από εθελοντές."
+        }
+      },
+      "title": "Αρχική"
+    },
+    "audio": {
+      "artist": {
+        "Card": {
+          "meta": {
+            "episodes": "{ n } επεισόδιο | { n } επεισόδια",
+            "tracks": "{ n } κομμάτι | { n } κομμάτια"
+          }
+        }
+      },
+      "ChannelCard": {
+        "meta": {
+          "episodes": "{ n } επεισόδιο | { n } επεισόδια",
+          "tracks": "{ n } κομμάτι | { n } κομμάτια"
+        }
+      },
+      "ChannelSerieCard": {
+        "meta": {
+          "episodes": "{ n } επεισόδιο | { n } επεισόδια"
+        }
+      },
+      "album": {
+        "Card": {
+          "meta": {
+            "tracks": "{ n } κομμάτι | { n } κομμάτια"
+          }
+        }
+      },
+      "Player": {
+        "meta": {
+          "position": "{ index } απο { length }"
+        },
+        "header": {
+          "player": "Αναπαραγωγή ήχου και χειρισμός"
+        },
+        "label": {
+          "clearQueue": "Καθάρισμα της ουράς σας",
+          "addArtistContentFilter": "Απόκρυψη περιεχομένου από αυτόν τον καλλιτέχνη…"
+        }
+      },
+      "PlayButton": {
+        "button": {
+          "addToQueue": "Προσθήκη στην τρέχουσα ουρά",
+          "addToPlaylist": "Προσθήκη στην λίστα αναπαραγωγής…",
+          "episodeDetails": "Επεισόδια",
+          "hideArtist": "Απόκρυψη περιεχομένου από αυτόν τον καλλιτέχνη"
+        }
+      },
+      "podcast": {
+        "Modal": {
+          "button": {
+            "addToFavorites": "Προσθήκη στα αγαπημένα",
+            "addToPlaylist": "Προσθήκη στην λίστα αναπαραγωγής…",
+            "addToQueue": "Προσθήκη στην ουρά",
+            "episodeDetails": "Επεισόδια",
+            "startRadio": "Διαγραφή ράδιο",
+            "artistDetails": "Καλλιτέχνης Άλμπουμ",
+            "channelDetails": "Κανάλι καλλιτέχνη"
+          }
+        }
+      },
+      "track": {
+        "Modal": {
+          "button": {
+            "addToFavorites": "Προσθήκη στα αγαπημένα",
+            "addToPlaylist": "Προσθήκη στην λίστα αναπαραγωγής…",
+            "addToQueue": "Προσθήκη στην ουρά",
+            "episodeDetails": "Επεισόδια",
+            "startRadio": "Διαγραφή ράδιο",
+            "artistDetails": "Καλλιτέχνης Άλμπουμ",
+            "channelDetails": "Κανάλι καλλιτέχνη"
+          }
+        },
+        "Table": {
+          "table": {
+            "header": {
+              "album": "Άλμπουμ",
+              "artist": "Καλλιτέχνης"
+            }
+          }
+        }
+      },
+      "VolumeControl": {
+        "label": {
+          "slider": "Ρύθμιση έντασης"
+        }
+      },
+      "SearchBar": {
+        "label": {
+          "album": "Άλμπουμ",
+          "artist": "Καλλιτέχνης"
+        }
+      },
+      "Search": {
+        "header": {
+          "albums": "Άλμπουμ",
+          "artists": "Καλλιτέχνες"
+        },
+        "placeholder": {
+          "search": "Καλλιτέχνης, άλμπουμ, κομμάτι…"
+        }
+      },
+      "ChannelForm": {
+        "label": {
+          "discography": "Δισκογραφία καλλιτέχνη",
+          "category": "Κατηγορία",
+          "image": "Φωτογραφία Καναλιού",
+          "description": "Περιγραφή"
+        },
+        "placeholder": {
+          "name": "φοβερό όνομα καναλιού",
+          "username": "φοβεροονομακαναλιου"
+        },
+        "header": {
+          "error": "Σφάλμα κατά την αποθήκευση του καναλιού"
+        }
+      },
+      "LibraryFollowButton": {
+        "button": {
+          "cancel": "Ακύρωση αιτήματος ακόλουθου",
+          "follow": "Ακολούθησε"
+        }
+      },
+      "EmbedWizard": {
+        "button": {
+          "copy": "Αντιγραφή"
+        },
+        "help": {
+          "embed": "Αντιγράψτε και επικολλήστε τον ακόλουθο κώδικα στην HTML της ιστοσελίδας σας"
+        },
+        "label": {
+          "embed": "Ενσωμάτωση κώδικα"
+        }
+      }
+    },
+    "library": {
+      "AlbumBase": {
+        "meta": {
+          "episodes": "{ n } επεισόδιο | { n } επεισόδια",
+          "tracks": "{ n } κομμάτι | { n } κομμάτια"
+        },
+        "link": {
+          "addDescription": "Προσθήκη περιγραφής…"
+        }
+      },
+      "ArtistBase": {
+        "meta": {
+          "tracks": "{ n } κομμάτι σε | { n } κομμάτια σε",
+          "albums": "{ n } άλμπουμ | { n } άλμπουμ"
+        },
+        "title": "Καλλιτέχνης",
+        "button": {
+          "cancel": "Ακύρωση",
+          "edit": "Επεξεργασία",
+          "embed": "Ενσωμάτωση"
+        },
+        "modal": {
+          "embed": {
+            "header": "Ενσωμάτωση του καλλιτέχνη στην ιστοσελίδα σας"
+          }
+        }
+      },
+      "radios": {
+        "Builder": {
+          "header": {
+            "matches": "{ n } κομμάτι που ταιριάζει στα συνδυασμένα φίλτρα | { n } κομμάτια που ταιριάζουν στα συνδυασμένα φίλτρα",
+            "builder": "Κατασκευαστής"
+          },
+          "table": {
+            "filter": {
+              "header": {
+                "actions": "Ενέργειες",
+                "candidates": "Υποψήφιοι",
+                "config": "Ρυθμίσεις",
+                "name": "Όνομα φίλτρου"
+              }
+            }
+          },
+          "button": {
+            "filter": "Προσθήκη φίλτρου"
+          },
+          "label": {
+            "filter": "Προσθέστε φίλτρα για να προσαρμόσετε το ράδιο σας",
+            "description": "Περιγραφή",
+            "public": "Εμφάνιση δημοσίως"
+          }
+        },
+        "Filter": {
+          "cancelButton": "Ακύρωση"
+        }
+      },
+      "FileUpload": {
+        "tooltip": {
+          "network": "Σφάλμα δικτύου κατά το ανέβασμα του αρχείου",
+          "size": "Δεν είναι δυνατή η μεταφόρτωση του αρχείου, σιγουρευτείτε ότι δεν είναι πολύ μεγάλο"
+        },
+        "table": {
+          "upload": {
+            "header": {
+              "actions": "Ενέργειες",
+              "filename": "Όνομα αρχείου"
+            }
+          }
+        },
+        "button": {
+          "cancel": "Ακύρωση"
+        },
+        "label": {
+          "uploadWidget": "Κάντε κλικ για να επιλέξετε αρχεία για μεταφόρτωση ή κάντε drag and drop αρχεία ή φακέλους"
+        }
+      },
+      "EditForm": {
+        "placeholder": {
+          "summary": "Μια περίληψη των αλλαγών σας."
+        },
+        "button": {
+          "cancel": "Ακύρωση",
+          "clear": "Καθάρισμα"
+        },
+        "header": {
+          "failure": "Σφάλμα κατά την υποβολή αλλαγών"
+        }
+      },
+      "Albums": {
+        "link": {
+          "addMusic": "Προσθέστε μουσική"
+        },
+        "title": "Άλμπουμ",
+        "ordering": {
+          "direction": {
+            "ascending": "Αύξουσα",
+            "descending": "Φθίνουσα"
+          }
+        },
+        "header": {
+          "browse": "Περιήγηση Άλμπουμ"
+        },
+        "placeholder": {
+          "search": "Εισάγετε τίτλο άλμπουμ…"
+        }
+      },
+      "Artists": {
+        "button": {
+          "upload": "Προσθέστε μουσική"
+        },
+        "label": {
+          "search": "Όνομα καλλιτέχνη"
+        },
+        "title": "Καλλιτέχνες",
+        "ordering": {
+          "direction": {
+            "ascending": "Αύξουσα",
+            "descending": "Φθίνουσα"
+          }
+        },
+        "header": {
+          "browse": "Περιήγηση στους καλλιτέχνες"
+        }
+      },
+      "TrackDetail": {
+        "table": {
+          "release": {
+            "album": "Άλμπουμ",
+            "artist": "Καλλιτέχνης",
+            "copyright": "Πνευματικά Δικαιώματα"
+          },
+          "track": {
+            "bitrate": {
+              "label": "Bitrate"
+            },
+            "codec": "Codec",
+            "downloads": "Λήψεις",
+            "duration": "Διάρκεια"
+          }
+        }
+      },
+      "TagDetail": {
+        "link": {
+          "albums": "Άλμπουμ",
+          "artists": "Καλλιτέχνες"
+        },
+        "header": {
+          "channels": "Κανάλια"
+        }
+      },
+      "ArtistDetail": {
+        "header": {
+          "album": "Άλμπουμ από τον καλλιτέχνη",
+          "track": "Άλμπουμ από τον καλλιτέχνη"
+        }
+      },
+      "ImportStatusModal": {
+        "error": {
+          "importFailure": "Σφάλμα κατά την επεξεργασία της μεταφόρτωσης. Θα βρείτε επιπλέον πληροφορίες παρακάτω.",
+          "unknownError": {
+            "message": "Συνέβη κάποιο άγνωστο σφάλμα"
+          }
+        },
+        "button": {
+          "close": "Κλείσιμο"
+        },
+        "table": {
+          "error": {
+            "debug": "Πληροφορίες εντοπισμού σφαλμάτων",
+            "errorType": "Τύπος σφάλματος"
+          }
+        }
+      },
+      "EditCard": {
+        "button": {
+          "approve": "Αποδοχή",
+          "delete": "Διαγραφή"
+        },
+        "status": {
+          "approved": "Eγκρίθηκε",
+          "applied": "Εγκρίθηκε και εφαρμόστηκε"
+        },
+        "modal": {
+          "delete": {
+            "header": "Διαγραφή της υπόδειξης;"
+          }
+        },
+        "table": {
+          "update": {
+            "header": {
+              "field": "Πεδίο"
+            }
+          }
+        }
+      },
+      "Podcasts": {
+        "ordering": {
+          "direction": {
+            "ascending": "Αύξουσα",
+            "descending": "Φθίνουσα"
+          }
+        },
+        "header": {
+          "browse": "Περιήγηση στα podcast"
+        },
+        "button": {
+          "cancel": "Ακύρωση",
+          "channel": "Δημιουργία Καναλιού"
+        }
+      },
+      "Radios": {
+        "ordering": {
+          "direction": {
+            "ascending": "Αύξουσα",
+            "descending": "Φθίνουσα"
+          }
+        },
+        "header": {
+          "browse": "Περιήγηση στα ράδιο"
+        },
+        "button": {
+          "add": "Δημιουργία ράδιο",
+          "create": "Δημιουργία δικού σας ράδιο"
+        },
+        "placeholder": {
+          "search": "Εισάγετε όνομα ράδιο…"
+        }
+      },
+      "AlbumDropdown": {
+        "button": {
+          "cancel": "Ακύρωση",
+          "delete": "Διαγραφή…",
+          "edit": "Επεξεργασία",
+          "embed": "Ενσωμάτωση"
+        },
+        "modal": {
+          "delete": {
+            "header": "Διαγραφή του άλμπουμ;"
+          },
+          "embed": {
+            "header": "Ενσωμάτωση του άλμπουμ στην ιστοσελίδα σας"
+          }
+        }
+      },
+      "TrackBase": {
+        "button": {
+          "cancel": "Ακύρωση",
+          "delete": "Διαγραφή…",
+          "download": "Λήψη",
+          "edit": "Επεξεργασία",
+          "embed": "Ενσωμάτωση"
+        },
+        "modal": {
+          "delete": {
+            "header": "Διαγραφή του κομματιού;"
+          },
+          "embed": {
+            "header": "Ενσωμάτωση του κομματιού στην ιστοσελίδα σας"
+          }
+        }
+      },
+      "AlbumEdit": {
+        "header": {
+          "edit": "Επεξεργασία άλμπουμ"
+        }
+      },
+      "ArtistEdit": {
+        "header": {
+          "edit": "Επεξεργασία καλλιτέχνη"
+        }
+      },
+      "TrackEdit": {
+        "header": {
+          "edit": "Επεξεργασία κομματιού"
+        }
+      },
+      "AlbumDetail": {
+        "header": {
+          "episodes": "Επεισόδια"
+        }
+      }
+    },
+    "favorites": {
+      "List": {
+        "header": {
+          "favorites": "{ n } αγαπημένο | { n } αγαπημένα"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Αύξουσα",
+            "descending": "Φθίνουσα"
+          }
+        },
+        "link": {
+          "library": "Περιήγηση στην βιβλιοθήκη"
+        }
+      },
+      "TrackFavoriteIcon": {
+        "button": {
+          "add": "Προσθήκη στα αγαπημένα"
+        }
+      }
+    },
+    "channels": {
+      "UploadModal": {
+        "meta": {
+          "files": "{ n } αρχείο | { n } αρχεία"
+        },
+        "button": {
+          "cancel": "Ακύρωση",
+          "close": "Κλείσιμο"
+        },
+        "header": {
+          "uploadFiles": "Αρχεία προς ανέβασμα"
+        }
+      },
+      "AlbumSelect": {
+        "meta": {
+          "tracks": "{ n } κομμάτι | { n } κομμάτια"
+        },
+        "label": {
+          "album": "Άλμπουμ"
+        }
+      },
+      "LicenseSelect": {
+        "link": {
+          "license": "Σχετικά με αυτήν την άδεια"
+        }
+      },
+      "UploadForm": {
+        "help": {
+          "license": "Προσθέστε μια άδεια σε αυτό που ανεβάσατε για να εξασφαλίσετε μερικές ελευθερίες στο κοινό σας."
+        },
+        "label": {
+          "openBrowser": "Περιήγηση…",
+          "channel": "Κανάλι"
+        },
+        "message": {
+          "dragAndDrop": "Κάντε drag and drop τα αρχεία σας εδώ ή ανοίχτε τον περιηγητή για να ανεβάσετε τα αρχεία σας"
+        },
+        "button": {
+          "edit": "Επεξεργασία"
+        },
+        "header": {
+          "error": "Σφάλμα κατά τη δημοσίευση"
+        }
+      },
+      "AlbumModal": {
+        "button": {
+          "cancel": "Ακύρωση",
+          "create": "Δημιουργία"
+        }
+      },
+      "UploadMetadataForm": {
+        "label": {
+          "description": "Περιγραφή"
+        }
+      },
+      "AlbumForm": {
+        "header": {
+          "error": "Σφάλμα κατά τη δημιουργία"
+        }
+      }
+    },
+    "AboutPod": {
+      "stat": {
+        "hoursOfMusic": "{ n } ώρα μουσικής | { n } ώρες μουσικής",
+        "activeUsers": "{ n } ενεργός χρήστης | { n } ενεργοί χρήστες",
+        "albumsCount": "Άλμπουμ | Άλμπουμ",
+        "artistsCount": "Καλλιτέχνης | Καλλιτέχνης",
+        "listeningsCount": "{ n } ακρόαση | { n } ακροάσεις",
+        "tracksCount": "Προσθήκη κομματιού | Προσθήκη κομματιού"
+      },
+      "title": "Σχετικά με",
+      "link": {
+        "about": "Σχετικά με αυτό το pod"
+      },
+      "header": {
+        "about": "Σχετικά με αυτό το pod",
+        "contact": "Επικοινωνία"
+      },
+      "feature": {
+        "allowList": "Λίστα Επιτρεπομένων",
+        "anonymousAccess": "Ανώνυμη πρόσβαση",
+        "status": {
+          "closed": "Κλειστό",
+          "disabled": "Απενεργοποιημένο",
+          "enabled": "Ενεργό"
+        },
+        "version": "Έκδοση Funkwhale"
+      }
+    },
+    "common": {
+      "ActionTable": {
+        "button": {
+          "selected": "{ n } απο τα { total } επιλεγμένο | { n } απο τα { total } επιλεγμένα",
+          "allSelected": "{ n } στοιχείο επιλεγμένο | { n } στοιχεία επιλεγμένα",
+          "go": "Ξεκινήστε"
+        },
+        "message": {
+          "success": "Η ενέργεια { action } πραγματοποιήθηκε επιτυχώς σε { n } στοιχείο | Η ενέργεια { action } πραγματοποιήθηκε επιτυχώς σε { n } στοιχεία",
+          "needsRefresh": "Το περιεχόμενο έχει ανανεωθεί, κάντε ανανέωση για να δείτε το ενημερωμένο περιεχόμενο"
+        },
+        "label": {
+          "actions": "Ενέργειες"
+        },
+        "modal": {
+          "performAction": {
+            "header": "Θέλετε να εκκινήσετε την δράση { action } σε { n } στοιχεία; | Θέλετε να εκκινήσετε την δράση { action } σε { n } στοιχείο;"
+          }
+        }
+      },
+      "Duration": {
+        "meta": {
+          "hours": "{ hours } ώρες { minutes } λεπτά",
+          "minutes": "{ minutes } λεπτά"
+        }
+      },
+      "UserMenu": {
+        "link": {
+          "about": "Σχετικά με",
+          "chat": "Δωμάτιο συνομιλιών",
+          "docs": "Τεχνικά Έγγραφα"
+        },
+        "label": {
+          "language": "Αλλαγή γλώσσας"
+        }
+      },
+      "UserModal": {
+        "link": {
+          "about": "Σχετικά με",
+          "chat": "Δωμάτιο συνομιλιών"
+        },
+        "label": {
+          "language": "Αλλαγή γλώσσας"
+        },
+        "header": {
+          "options": "Ενέργειες"
+        },
+        "button": {
+          "switchInstance": "Επιλέξτε το instance σας"
+        }
+      },
+      "DangerousButton": {
+        "button": {
+          "cancel": "Ακύρωση",
+          "confirm": "Επιβεβαίωση"
+        },
+        "header": {
+          "confirm": "Επιβεβαίωση δράσης;"
+        }
+      },
+      "RenderedDescription": {
+        "button": {
+          "cancel": "Ακύρωση",
+          "edit": "Επεξεργασία"
+        },
+        "header": {
+          "failure": "Σφάλμα κατά την ενημέρωση της περιγραφής"
+        }
+      },
+      "InlineSearchBar": {
+        "button": {
+          "clear": "Καθάρισμα"
+        }
+      },
+      "CopyInput": {
+        "button": {
+          "copy": "Αντιγραφή"
+        }
+      }
+    },
+    "playlists": {
+      "Card": {
+        "meta": {
+          "tracks": "{ n } κομμάτι | { n } κομμάτια"
+        }
+      },
+      "PlaylistModal": {
+        "warning": {
+          "duplicate": "Το { 0 } είναι ήδη στην λίστα { 1 }."
+        },
+        "button": {
+          "addDuplicate": "Προσθήκη ούτως ή άλλως",
+          "addToPlaylist": "Προσθήκη σε αυτήν την λίστα αναπαραγωγής",
+          "addTrack": "Προσθήκη κομματιού",
+          "cancel": "Ακύρωση",
+          "edit": "Επεξεργασία"
+        },
+        "header": {
+          "addToPlaylist": "Προσθήκη στην λίστα αναπαραγωγής",
+          "available": "Διαθέσιμες λίστες αναπαραγωγής"
+        },
+        "table": {
+          "edit": {
+            "header": {
+              "edit": "Επεξεργασία"
+            }
+          }
+        },
+        "placeholder": {
+          "filterPlaylist": "Εισάγετε όνομα λίστας αναπαραγωγής"
+        },
+        "label": {
+          "filter": "Φίλτρο"
+        }
+      },
+      "Editor": {
+        "button": {
+          "addDuplicate": "Προσθήκη ούτως ή άλλως",
+          "clear": "Καθάρισμα λίστας αναπαραγωγής",
+          "copy": "Αντιγραφή της τρέχουσας ουράς σε αυτήν την λίστα αναπαραγωγής"
+        },
+        "error": {
+          "sync": "Σφάλμα κατά την αποθήκευση των αλλαγών σας"
+        },
+        "message": {
+          "sync": "Οι αλλαγές συγχρονίστηκαν με τον διακομιστή"
+        },
+        "modal": {
+          "clearPlaylist": {
+            "header": "Θέλετε να εκκαθαρίσετε την λίστα αναπαραγωγής \"{ playlist }\";"
+          }
+        },
+        "help": {
+          "reorder": "Κάντε drag and drop σειρές για να αναδιάταξη των κομματιών στην λίστα αναπαραγωγής"
+        }
+      },
+      "TrackPlaylistIcon": {
+        "button": {
+          "add": "Προσθήκη στην λίστα αναπαραγωγής…"
+        }
+      },
+      "Form": {
+        "header": {
+          "createPlaylist": "Δημιουργία νέας λίστας αναπαραγωγής"
+        },
+        "button": {
+          "create": "Δημιουργία λίστας αναπαραγωγής"
+        }
+      },
+      "Widget": {
+        "button": {
+          "create": "Δημιουργία Λίστας Αναπαραγωγής"
+        }
+      }
+    },
+    "notifications": {
+      "NotificationRow": {
+        "message": {
+          "libraryAcceptFollow": "{ username } αποδέχθηκε την ακολούθηση της βιβλιοθήκης \"{ library }\"",
+          "libraryFollow": "{ username } ακολούθησε την βιβλιοθήκη σας \"{ library }\"",
+          "libraryPendingFollow": "{ username } θέλει να ακολουθήσει την βιβλιοθήκη σας \"{ library }\""
+        },
+        "button": {
+          "approve": "Αποδοχή"
+        }
+      }
+    },
+    "Sidebar": {
+      "link": {
+        "about": "Σχετικά με αυτό το pod",
+        "albums": "Άλμπουμ",
+        "artists": "Καλλιτέχνες",
+        "browse": "Περιήγηση",
+        "channels": "Κανάλια",
+        "createAccount": "Δημιουργία λογαριασμού",
+        "favorites": "Αγαπημένα",
+        "home": "Αρχική"
+      },
+      "label": {
+        "add": "Προσθήκη περιεχομένου",
+        "administration": "Διαχείριση",
+        "language": "Αλλαγή γλώσσας"
+      },
+      "header": {
+        "administration": "Διαχείριση",
+        "explore": "Ανακάλυψε"
+      }
+    },
+    "manage": {
+      "library": {
+        "UploadsTable": {
+          "table": {
+            "upload": {
+              "header": {
+                "accessedDate": "Ημερομηνία πρόσβασης",
+                "account": "Λογαριασμός",
+                "creationDate": "Ημερομηνία δημιουργίας",
+                "domain": "Διεύθυνση"
+              }
+            }
+          },
+          "option": {
+            "all": "Όλα"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Αύξουσα",
+              "descending": "Φθίνουσα"
+            }
+          },
+          "action": {
+            "delete": {
+              "label": "Διαγραφή"
+            }
+          }
+        },
+        "LibrariesTable": {
+          "table": {
+            "library": {
+              "header": {
+                "account": "Λογαριασμός",
+                "creationDate": "Ημερομηνία δημιουργίας",
+                "domain": "Διεύθυνση",
+                "followers": "Ακόλουθοι"
+              }
+            }
+          },
+          "option": {
+            "all": "Όλα"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Αύξουσα",
+              "descending": "Φθίνουσα"
+            }
+          },
+          "action": {
+            "delete": {
+              "label": "Διαγραφή"
+            }
+          }
+        },
+        "TracksTable": {
+          "table": {
+            "track": {
+              "header": {
+                "album": "Άλμπουμ",
+                "artist": "Καλλιτέχνης",
+                "creationDate": "Ημερομηνία δημιουργίας",
+                "domain": "Διεύθυνση"
+              }
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Αύξουσα",
+              "descending": "Φθίνουσα"
+            }
+          },
+          "action": {
+            "delete": {
+              "label": "Διαγραφή"
+            }
+          }
+        },
+        "ArtistsTable": {
+          "table": {
+            "artist": {
+              "header": {
+                "albums": "Άλμπουμ",
+                "creationDate": "Ημερομηνία δημιουργίας",
+                "domain": "Διεύθυνση"
+              }
+            }
+          },
+          "option": {
+            "all": "Όλα"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Αύξουσα",
+              "descending": "Φθίνουσα"
+            }
+          },
+          "label": {
+            "category": "Κατηγορία"
+          },
+          "action": {
+            "delete": {
+              "label": "Διαγραφή"
+            }
+          }
+        },
+        "TagsTable": {
+          "table": {
+            "tag": {
+              "header": {
+                "albums": "Άλμπουμ",
+                "artists": "Καλλιτέχνες",
+                "creationDate": "Ημερομηνία δημιουργίας"
+              }
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Αύξουσα",
+              "descending": "Φθίνουσα"
+            }
+          },
+          "action": {
+            "delete": {
+              "label": "Διαγραφή"
+            }
+          }
+        },
+        "EditsCardList": {
+          "option": {
+            "all": "Όλα",
+            "approved": "Eγκρίθηκε"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Αύξουσα",
+              "descending": "Φθίνουσα"
+            }
+          }
+        },
+        "AlbumsTable": {
+          "table": {
+            "album": {
+              "header": {
+                "artist": "Καλλιτέχνης",
+                "creationDate": "Ημερομηνία δημιουργίας",
+                "domain": "Διεύθυνση"
+              }
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Αύξουσα",
+              "descending": "Φθίνουσα"
+            }
+          },
+          "action": {
+            "delete": {
+              "label": "Διαγραφή"
+            }
+          }
+        }
+      },
+      "moderation": {
+        "ReportCard": {
+          "table": {
+            "object": {
+              "account": "Λογαριασμός",
+              "domain": "Διεύθυνση"
+            },
+            "status": {
+              "assignedTo": "Ανατεθεί σε"
+            },
+            "report": {
+              "category": "Κατηγορία",
+              "creationDate": "Ημερομηνία δημιουργίας"
+            }
+          },
+          "header": {
+            "actions": "Ενέργειες"
+          },
+          "button": {
+            "confirmDelete": "Διαγραφή",
+            "delete": "Διαγραφή στοιχείου αναφοράς"
+          },
+          "modal": {
+            "delete": {
+              "header": "Διαγραφή στοιχείου αναφοράς;"
+            }
+          }
+        },
+        "UserRequestCard": {
+          "header": {
+            "actions": "Ενέργειες"
+          },
+          "button": {
+            "approve": "Αποδοχή"
+          },
+          "table": {
+            "status": {
+              "approved": "Eγκρίθηκε",
+              "assignedTo": "Ανατεθεί σε"
+            },
+            "request": {
+              "creationDate": "Ημερομηνία δημιουργίας"
+            }
+          }
+        },
+        "InstancePolicyForm": {
+          "header": {
+            "addRule": "Προσθήκη κανόνα συντονισμού",
+            "editRule": "Επεξεργασία κανόνα συντονισμού",
+            "failure": "Σφάλμα κατά τη δημιουργία κανόνα"
+          },
+          "label": {
+            "blockAll": "Μπλοκάρισμα όλων",
+            "policyDisabled": "Απενεργοποιημένο",
+            "policyEnabled": "Ενεργό"
+          },
+          "tooltip": {
+            "blockAll": "Μπλοκάρισμα όλων απ' τον συγκεκριμένο λογαριασμό ή διεύθυνση. Αυτό θα αποτρέψει οποιαδήποτε αλληλεπίδραση με την οντότητα, και θα καθαρίσει όλα τα σχετικό περιεχόμενο (Μεταφορτώσεις, βιβλιοθήκες, ακολούθους, κτλ.)",
+            "rejectMedia": "Αποτροπή κατεβάσματος αρχείων πολυμέσων (αρχεία ήχου, εξώφυλλο άλμπουμ, avatar λογαριασμού...) από αυτόν τον λογαριασμό ή διεύθυνση. Θα διαγραφεί και το ήδη υπάρχον περιεχόμενο."
+          },
+          "button": {
+            "cancel": "Ακύρωση",
+            "create": "Δημιουργία",
+            "delete": "Διαγραφή",
+            "confirm": "Διαγραφή κανόνα συντονισμού"
+          },
+          "modal": {
+            "delete": {
+              "header": "Διαγραφή του κανόνα συντονισμού;"
+            }
+          }
+        },
+        "NoteForm": {
+          "button": {
+            "add": "Προσθήκη σημείωσης"
+          },
+          "placeholder": {
+            "summary": "Περιγράψτε τις ενέργειες σας, ή άλλες σχετικές ενημερώσεις…"
+          },
+          "header": {
+            "failure": "Σφάλμα κατά την υποβολή σημείωσης"
+          }
+        },
+        "DomainsTable": {
+          "action": {
+            "add": {
+              "label": "Προσθήκη στην λίστα επιτρεπομένων"
+            }
+          },
+          "option": {
+            "all": "Όλα"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Αύξουσα",
+              "descending": "Φθίνουσα"
+            }
+          }
+        },
+        "AccountsTable": {
+          "ordering": {
+            "direction": {
+              "ascending": "Αύξουσα",
+              "descending": "Φθίνουσα"
+            }
+          },
+          "table": {
+            "account": {
+              "header": {
+                "domain": "Διεύθυνση"
+              }
+            }
+          }
+        },
+        "InstancePolicyCard": {
+          "label": {
+            "blockAll": "Μπλοκάρισμα όλων"
+          },
+          "button": {
+            "edit": "Επεξεργασία"
+          },
+          "status": {
+            "enabled": "Ενεργό"
+          }
+        },
+        "InstancePolicyModal": {
+          "button": {
+            "close": "Κλείσιμο"
+          }
+        },
+        "NotesThread": {
+          "button": {
+            "delete": "Διαγραφή"
+          },
+          "modal": {
+            "delete": {
+              "header": "Διαγραφή της σημείωσης;"
+            }
+          }
+        }
+      },
+      "ChannelsTable": {
+        "table": {
+          "channel": {
+            "header": {
+              "account": "Λογαριασμός",
+              "albums": "Άλμπουμ",
+              "creationDate": "Ημερομηνία δημιουργίας",
+              "domain": "Διεύθυνση"
+            }
+          }
+        },
+        "option": {
+          "all": "Όλα"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Αύξουσα",
+            "descending": "Φθίνουσα"
+          }
+        },
+        "label": {
+          "category": "Κατηγορία"
+        }
+      },
+      "users": {
+        "UsersTable": {
+          "table": {
+            "user": {
+              "header": {
+                "accountStatus": "Κατάσταση λογαριασμού",
+                "email": "Email"
+              },
+              "accountStatus": {
+                "active": "Ενεργός"
+              },
+              "status": {
+                "admin": "Διαχειριστής"
+              }
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Αύξουσα",
+              "descending": "Φθίνουσα"
+            }
+          }
+        },
+        "InvitationsTable": {
+          "option": {
+            "all": "Όλα",
+            "expired": "Ληγμένο/χρησιμοποιημένο"
+          },
+          "table": {
+            "invitation": {
+              "header": {
+                "code": "Κώδικας",
+                "creationDate": "Ημερομηνία δημιουργίας",
+                "expirationDate": "Ημερομηνία λήξης"
+              }
+            }
+          },
+          "action": {
+            "delete": "Διαγραφή"
+          }
+        },
+        "InvitationForm": {
+          "button": {
+            "clear": "Καθάρισμα",
+            "new": "Αποκτήστε μια νέα πρόσκληση"
+          },
+          "table": {
+            "invitation": {
+              "header": {
+                "code": "Κώδικας"
+              }
+            }
+          },
+          "header": {
+            "failure": "Σφάλμα κατά τη δημιουργία πρόσκλησης"
+          }
+        }
+      }
+    },
+    "admin": {
+      "SignupFormBuilder": {
+        "table": {
+          "additionalFields": {
+            "header": {
+              "actions": "Ενέργειες",
+              "type": "Τύπος πεδίου"
+            }
+          }
+        },
+        "button": {
+          "add": "Προσθήκη πεδίου",
+          "edit": "Επεξεργασία φόρμας"
+        },
+        "label": {
+          "additionalField": "Επιπλέον πεδίο",
+          "additionalFields": "Επιπλέον πεδία",
+          "delete": "Διαγραφή"
+        },
+        "help": {
+          "additionalFields": "Επιπλέον πεδία που θα εμφανιστούν στην φόρμα. Εμφανίζονται μόνο αν είναι ενεργοποιημένη η χειροκίνητη αποδοχή εγγραφών.",
+          "helpText": "Προαιρετικό κείμενο που θα εμφανίζεται στην αρχή της φόρμας εγγραφής."
+        }
+      },
+      "SettingsGroup": {
+        "header": {
+          "image": "Τρέχων εικόνα",
+          "error": "Σφάλμα κατά την αποθήκευση ρυθμίσεων"
+        }
+      }
+    },
+    "moderation": {
+      "ReportCategoryDropdown": {
+        "option": {
+          "all": "Όλα"
+        },
+        "label": {
+          "category": "Κατηγορία"
+        }
+      },
+      "ReportModal": {
+        "header": {
+          "disabled": "Οι ανώνυμες αναφορές είναι απενεργοποιημένες, παρακαλώ συνδεθείτε για να υποβάλλεται αναφορά.",
+          "modal": "Θέλετε να αναφέρεται αυτό το στοιχείο;",
+          "submissionFailure": "Σφάλμα κατά την υποβολή αναφοράς"
+        },
+        "button": {
+          "cancel": "Ακύρωση"
+        },
+        "label": {
+          "email": "Email",
+          "forwardToDomain": "Προώθηση στο { domain}"
+        },
+        "description": {
+          "forwardToDomain": "Προωθήστε ένα ανωνυμοποιημένο αντίγραφο της αναφοράς σας στον διακομιστή που φιλοξενεί αυτό το στοιχείο."
+        }
+      },
+      "FilterModal": {
+        "button": {
+          "cancel": "Ακύρωση",
+          "hide": "Απόκρυψη περιεχομένου"
+        },
+        "message": {
+          "success": "Προστέθηκε επιτυχώς το φίλτρο περιεχομένου"
+        },
+        "header": {
+          "modal": "Θέλετε να κρύψετε περιεχόμενο απ' τον καλλιτέχνη \"{ name }\";",
+          "failure": "Σφάλμα κατά τη δημιουργία φίλτρου"
+        }
+      }
+    },
+    "federation": {
+      "FetchButton": {
+        "description": {
+          "failure": "Σφάλμα κατά την ανανέωση των στοιχείων:",
+          "success": "Τα δεδομένα από τον απομακρυσμένο server ανανεώθηκαν επιτυχώς."
+        },
+        "table": {
+          "error": {
+            "value": {
+              "httpError": "Ένα σφάλμα HTTP συνέβη κατά την επικοινωνία με τον απομακρυσμένο εξυπηρετητή",
+              "invalidAttributesError": "Τα δεδομένα που πάρθηκαν από τον απομακρυσμένο server είχαν μη έγκυρα ή ελλιπής χαρακτηριστικά"
+            },
+            "label": {
+              "type": "Τύπος σφάλματος"
+            }
+          }
+        },
+        "button": {
+          "close": "Κλείσιμο",
+          "reload": "Κλείσιμο και ανανέωση σελίδας"
+        },
+        "header": {
+          "saveFailure": "Σφάλμα κατά την αποθήκευση ρυθμίσεων"
+        }
+      }
+    },
+    "ShortcutsModal": {
+      "shortcut": {
+        "audio": {
+          "label": "Συντομεύσεις αναπαραγωγής",
+          "clearQueue": "Καθάρισμα ουράς",
+          "decreaseVolume": "Μείωση έντασης"
+        },
+        "general": {
+          "label": "Γενικές συντομεύσεις"
+        }
+      },
+      "button": {
+        "close": "Κλείσιμο"
+      }
+    },
+    "SetInstanceModal": {
+      "button": {
+        "cancel": "Ακύρωση"
+      },
+      "header": {
+        "chooseInstance": "Επιλέξτε το instance σας"
+      }
+    },
+    "Queue": {
+      "button": {
+        "clear": "Καθάρισμα",
+        "close": "Κλείσιμο"
+      },
+      "label": {
+        "duration": "Διάρκεια",
+        "addArtistContentFilter": "Απόκρυψη περιεχομένου από αυτόν τον καλλιτέχνη…"
+      }
+    },
+    "forms": {
+      "PasswordInput": {
+        "button": {
+          "copy": "Αντιγραφή"
+        }
+      }
+    },
+    "radios": {
+      "Card": {
+        "button": {
+          "edit": "Επεξεργασία"
+        }
+      }
+    },
+    "RemoteSearchForm": {
+      "button": {
+        "fediverse": "Fediverse"
+      },
+      "label": {
+        "rss": {
+          "fieldPlaceholder": "https://website.example.com/rss.xml"
+        }
+      }
+    },
+    "PageNotFound": {
+      "link": {
+        "home": "Πηγαίνετε στην αρχική σελίδα"
+      }
+    }
+  },
+  "views": {
+    "channels": {
+      "DetailBase": {
+        "meta": {
+          "episodes": "{ n } επεισόδιο | { n } επεισόδια",
+          "listenings": "{ n } ακρόαση | { n } ακροάσεις",
+          "subscribers": "{ n } εγγεγραμμένος | { n } εγγεγραμμένοι",
+          "tracks": "{ n } κομμάτι | { n } κομμάτια"
+        },
+        "link": {
+          "channelEpisodes": "Όλα τα Επεισόδια"
+        },
+        "header": {
+          "artistChannel": "Κανάλι καλλιτέχνη"
+        },
+        "button": {
+          "cancel": "Ακύρωση",
+          "confirm": "Διαγραφή",
+          "delete": "Διαγραφή…",
+          "edit": "Επεξεργασία…",
+          "embed": "Ενσωμάτωση"
+        },
+        "title": "Κανάλι",
+        "modal": {
+          "subscribe": {
+            "rss": {
+              "content": {
+                "help": "Αντιγράψτε και επικολλήστε τον ακόλουθο σύνδεσμο στο αγαπημένο σας podcatcher:"
+              }
+            },
+            "fediverse": {
+              "content": {
+                "help": "Εάν χρησιμοποιείτε το Mastodon ή άλλες εφαρμογές του fediverse, μπορείτε να γίνετε συνδρομητές σε αυτόν το λογαριασμό:"
+              }
+            }
+          },
+          "delete": {
+            "header": "Διαγραφη του καναλιού;"
+          },
+          "embed": {
+            "header": "Ενσωμάτωση του καλλιτέχνη στην ιστοσελίδα σας"
+          }
+        }
+      },
+      "DetailOverview": {
+        "link": {
+          "addAlbum": "Προσθήκη νέου"
+        },
+        "header": {
+          "albums": "Άλμπουμ"
+        }
+      },
+      "SubscriptionsList": {
+        "link": {
+          "addNew": "Προσθήκη νέου"
+        },
+        "button": {
+          "cancel": "Ακύρωση"
+        }
+      }
+    },
+    "content": {
+      "libraries": {
+        "Card": {
+          "meta": {
+            "tracks": "{ n } κομμάτι | { n } κομμάτια"
+          }
+        },
+        "Quota": {
+          "label": {
+            "currentUsage": "{ current } σε χρήση απο τα { max } διαθέσιμα"
+          },
+          "header": {
+            "currentUsage": "Τρέχουσα χρήση"
+          }
+        },
+        "FilesTable": {
+          "table": {
+            "file": {
+              "header": {
+                "album": "Άλμπουμ",
+                "artist": "Καλλιτέχνης",
+                "duration": "Διάρκεια"
+              }
+            }
+          },
+          "option": {
+            "status": {
+              "all": "Όλα",
+              "draft": "Προσχέδιο"
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Αύξουσα",
+              "descending": "Φθίνουσα"
+            }
+          },
+          "action": {
+            "delete": "Διαγραφή"
+          }
+        },
+        "Home": {
+          "link": {
+            "createLibrary": "Δημιουργία νέας βιβλιοθήκης"
+          }
+        },
+        "Form": {
+          "button": {
+            "create": "Δημιουργία βιβλιοθήκης",
+            "delete": "Διαγραφή",
+            "confirm": "Διαγραφή βιβλιοθήκης"
+          },
+          "modal": {
+            "delete": {
+              "header": "Διαγραφή της βιβλιοθήκης;"
+            }
+          },
+          "label": {
+            "description": "Περιγραφή"
+          },
+          "header": {
+            "failure": "Σφάλμα"
+          }
+        }
+      },
+      "remote": {
+        "Card": {
+          "meta": {
+            "tracks": "{ n } κομμάτι | { n } κομμάτια",
+            "failedTracks": "Αποτυχημένα κομμάτια:"
+          },
+          "modal": {
+            "unfollow": {
+              "content": {
+                "warning": "Αν σταματήσετε να ακολουθείτε την βιβλιοθήκη, θα σταματήσετε να έχετε πρόσβαση στο περιεχόμενο της."
+              }
+            }
+          },
+          "button": {
+            "cancel": "Ακύρωση αιτήματος ακόλουθου",
+            "follow": "Ακολούθησε"
+          },
+          "link": {
+            "scanDetails": "Λεπτομέρειες"
+          }
+        },
+        "ScanForm": {
+          "header": {
+            "failure": "Αποτυχία λήψης της απομακρυσμένης βιβλιοθήκης"
+          },
+          "placeholder": {
+            "url": "Εισάγετε σύνδεσμο βιβλιοθήκης"
+          }
+        }
+      },
+      "Home": {
+        "title": "Προσθήκη και διαχείριση περιεχομένου",
+        "description": {
+          "follow": "Ακολούθησε βιβλιοθήκες από άλλους χρήστες για να αποκτήσεις πρόσβαση σε νέα μουσική. Οι δημόσιες βιβλιοθήκες μπορούν να ακολουθηθούν άμεσα, ενώ σε ιδιωτικές βιβλιοθήκες απαιτείται έγκριση από τον ιδιοκτήτη της.",
+          "channel": {
+            "1": "Εάν είσαι μουσικός ή podcaster, τα κανάλια σχεδιάστηκαν για 'σένα!"
+          }
+        },
+        "header": {
+          "follow": "Ακολούθησε απομακρυσμένες βιβλιοθήκες"
+        },
+        "button": {
+          "start": "Ξεκινήστε"
+        }
+      },
+      "Base": {
+        "title": "Προσθήκη περιεχομένου"
+      }
+    },
+    "library": {
+      "LibraryBase": {
+        "meta": {
+          "tracks": "{ n } κομμάτι | { n } κομμάτια"
+        },
+        "link": {
+          "albums": "Άλμπουμ",
+          "artists": "Καλλιτέχνες"
+        },
+        "button": {
+          "edit": "Επεξεργασία"
+        }
+      },
+      "Edit": {
+        "button": {
+          "accept": "Αποδοχή"
+        },
+        "table": {
+          "action": {
+            "status": {
+              "accepted": "Αποδεκτό"
+            },
+            "header": {
+              "action": "ενέργεια",
+              "date": "Ημερομηνία"
+            }
+          }
+        },
+        "header": {
+          "followers": "Ακόλουθοι"
+        }
+      }
+    },
+    "auth": {
+      "ProfileBase": {
+        "title": "προφίλ του { username }",
+        "link": {
+          "activity": "Δραστηριότητα"
+        }
+      },
+      "PasswordReset": {
+        "label": {
+          "email": "Διεύθυνση e-mail λογαριασμού"
+        },
+        "button": {
+          "requestReset": "Επαναφορά κωδικού"
+        },
+        "link": {
+          "back": "Πίσω στην σύνδεση"
+        }
+      },
+      "ProfileOverview": {
+        "link": {
+          "addNew": "Προσθήκη νέου"
+        },
+        "modal": {
+          "createChannel": {
+            "artist": {
+              "header": "Κανάλι καλλιτέχνη"
+            },
+            "header": "Δημιουργία καναλιού"
+          }
+        },
+        "button": {
+          "cancel": "Ακύρωση",
+          "createChannel": "Δημιουργία καναλιού"
+        },
+        "header": {
+          "channels": "Κανάλια"
+        }
+      },
+      "PasswordResetConfirm": {
+        "link": {
+          "back": "Πίσω στην σύνδεση"
+        },
+        "title": "Αλλαγή κωδικού",
+        "message": {
+          "requestSent": "Εάν η διεύθυνση e-mail που δόθηκε στο προηγούμενο βήμα είναι έγκυρη και συνδεδεμένη με ένα λογαριασμό χρήστη, θα πρέπει να παραλάβετε ένα e-mail με οδηγίες επαναφοράς στα επόμενα λεπτά."
+        }
+      },
+      "EmailConfirm": {
+        "title": "Επιβεβαίωση της διεύθυνσης e-mail σας",
+        "label": {
+          "confirmationCode": "Κωδικός επιβεβαίωσης"
+        },
+        "header": {
+          "failure": "Δεν μπορέσαμε να επιβεβαιώσουμε την διεύθυνση e-mail σας",
+          "success": "Η διεύθυνση e-mail επιβεβαιώθηκε"
+        }
+      },
+      "Signup": {
+        "header": {
+          "createAccount": "Δημιουργία Funkwhale λογαριασμού"
+        }
+      }
+    },
+    "Notifications": {
+      "option": {
+        "delay": {
+          "30": "30 ημέρες",
+          "60": "60 ημέρες",
+          "90": "90 ημέρες"
+        }
+      },
+      "link": {
+        "help": "Ανακαλύψτε άλλους τρόπους να βοηθήσετε",
+        "donate": "Δωρεά"
+      },
+      "header": {
+        "funkwhaleSupport": "Σας αρέσει το Funkwhale;"
+      }
+    },
+    "admin": {
+      "moderation": {
+        "AccountsDetail": {
+          "table": {
+            "accountData": {
+              "username": "Πρόσβαση σε αγαπημένα",
+              "loginStatus": {
+                "disabled": "Απενεργοποιημένο",
+                "enabled": "Ενεργό"
+              },
+              "displayName": "Εμφανιζόμενο όνομα",
+              "email": "Διεύθυνση Email"
+            },
+            "audioContent": {
+              "cachedSize": "Μέγεθος στην προσωρινή μνήμη"
+            }
+          },
+          "header": {
+            "accountData": "Στοιχεία λογαριασμού",
+            "activity": "Δραστηριότητα",
+            "audioContent": "Περιεχόμενο ήχου"
+          },
+          "button": {
+            "addPolicy": "Προσθήκη πολιτικής συντονισμού"
+          },
+          "link": {
+            "albums": "Άλμπουμ",
+            "artists": "Καλλιτέχνες",
+            "channels": "Κανάλια",
+            "domain": "Διεύθυνση"
+          },
+          "tooltip": {
+            "uploadQuota": "Καθορίστε πόσο περιεχόμενο μπορεί να ανεβάσει ο χρήστης. Αφήστε το κενό για να χρησιμοποιηθεί η προκαθορισμένη τιμή."
+          }
+        },
+        "Base": {
+          "link": {
+            "accounts": "Λογαριασμοί",
+            "domains": "Διευθύνσεις"
+          }
+        },
+        "DomainsDetail": {
+          "header": {
+            "activity": "Δραστηριότητα",
+            "audioContent": "Περιεχόμενο ήχου"
+          },
+          "button": {
+            "addPolicy": "Προσθήκη πολιτικής συντονισμού",
+            "addToAllowList": "Προσθήκη στην λίστα επιτρεπομένων"
+          },
+          "link": {
+            "albums": "Άλμπουμ",
+            "artists": "Καλλιτέχνες",
+            "channels": "Κανάλια"
+          },
+          "table": {
+            "audioContent": {
+              "cachedSize": "Μέγεθος στην προσωρινή μνήμη"
+            }
+          }
+        },
+        "DomainsList": {
+          "button": {
+            "add": "Προσθήκη"
+          },
+          "label": {
+            "addDomain": "Προσθήκη διεύθυνσης",
+            "addToAllowList": "Προσθήκη στην λίστα επιτρεπομένων"
+          },
+          "title": "Διευθύνσεις",
+          "header": {
+            "domains": "Διευθύνσεις",
+            "failure": "Σφάλμα κατά τη δημιουργία διεύθυνσης"
+          }
+        },
+        "ReportsList": {
+          "option": {
+            "status": {
+              "all": "Όλα"
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Αύξουσα",
+              "descending": "Φθίνουσα"
+            }
+          }
+        },
+        "RequestsList": {
+          "option": {
+            "status": {
+              "all": "Όλα",
+              "approved": "Eγκρίθηκε"
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Αύξουσα",
+              "descending": "Φθίνουσα"
+            }
+          }
+        }
+      },
+      "library": {
+        "UploadDetail": {
+          "table": {
+            "activity": {
+              "accessedDate": "Ημερομηνία πρόσβασης"
+            },
+            "audioContent": {
+              "bitrate": {
+                "label": "Bitrate"
+              },
+              "cachedSize": "Μέγεθος στην προσωρινή μνήμη",
+              "duration": "Διάρκεια"
+            }
+          },
+          "link": {
+            "account": "Λογαριασμός",
+            "domain": "Διεύθυνση"
+          },
+          "header": {
+            "activity": "Δραστηριότητα",
+            "audioContent": "Περιεχόμενο ήχου"
+          },
+          "button": {
+            "delete": "Διαγραφή",
+            "download": "Λήψη"
+          },
+          "modal": {
+            "delete": {
+              "header": "Διαγραφή της μεταφόρτωσης;"
+            }
+          }
+        },
+        "LibraryDetail": {
+          "link": {
+            "account": "Λογαριασμός",
+            "albums": "Άλμπουμ",
+            "artists": "Καλλιτέχνες",
+            "domain": "Διεύθυνση"
+          },
+          "header": {
+            "activity": "Δραστηριότητα",
+            "audioContent": "Περιεχόμενο ήχου"
+          },
+          "table": {
+            "audioContent": {
+              "cachedSize": "Μέγεθος στην προσωρινή μνήμη"
+            },
+            "library": {
+              "description": "Περιγραφή"
+            },
+            "activity": {
+              "followers": "Ακόλουθοι"
+            }
+          },
+          "button": {
+            "delete": "Διαγραφή"
+          },
+          "modal": {
+            "delete": {
+              "header": "Διαγραφή της βιβλιοθήκης;"
+            }
+          }
+        },
+        "AlbumDetail": {
+          "header": {
+            "activity": "Δραστηριότητα",
+            "albumData": "Στοιχεία άλμπουμ",
+            "audioContent": "Περιεχόμενο ήχου"
+          },
+          "link": {
+            "artist": "Καλλιτέχνης",
+            "domain": "Διεύθυνση",
+            "edits": "Επεξεργασίες"
+          },
+          "table": {
+            "audioContent": {
+              "cachedSize": "Μέγεθος στην προσωρινή μνήμη"
+            },
+            "album": {
+              "description": "Περιγραφή"
+            },
+            "activity": {
+              "favorited": "Αγαπημένα κομμάτια"
+            }
+          },
+          "button": {
+            "delete": "Διαγραφή",
+            "edit": "Επεξεργασία"
+          },
+          "modal": {
+            "delete": {
+              "header": "Διαγραφή του άλμπουμ;"
+            }
+          }
+        },
+        "ArtistDetail": {
+          "header": {
+            "activity": "Δραστηριότητα",
+            "artistData": "Δεδομένα καλλιτέχνη",
+            "audioContent": "Περιεχόμενο ήχου"
+          },
+          "link": {
+            "albums": "Άλμπουμ",
+            "category": "Κατηγορία",
+            "domain": "Διεύθυνση",
+            "edits": "Επεξεργασίες"
+          },
+          "table": {
+            "audioContent": {
+              "cachedSize": "Μέγεθος στην προσωρινή μνήμη"
+            },
+            "artist": {
+              "description": "Περιγραφή"
+            },
+            "activity": {
+              "favorited": "Αγαπημένα κομμάτια"
+            }
+          },
+          "button": {
+            "delete": "Διαγραφή",
+            "edit": "Επεξεργασία"
+          },
+          "modal": {
+            "delete": {
+              "header": "Διαγραφή του καλλιτέχνη;"
+            }
+          }
+        },
+        "TagDetail": {
+          "header": {
+            "activity": "Δραστηριότητα",
+            "audioContent": "Περιεχόμενο ήχου"
+          },
+          "link": {
+            "albums": "Άλμπουμ",
+            "artists": "Καλλιτέχνες"
+          },
+          "button": {
+            "delete": "Διαγραφή"
+          },
+          "modal": {
+            "delete": {
+              "header": "Διαγραφή της ετικέτας;"
+            }
+          }
+        },
+        "TrackDetail": {
+          "header": {
+            "activity": "Δραστηριότητα"
+          },
+          "link": {
+            "album": "Άλμπουμ",
+            "albumArtist": "Καλλιτέχνης Άλμπουμ",
+            "artist": "Καλλιτέχνης",
+            "domain": "Διεύθυνση",
+            "edits": "Επεξεργασίες"
+          },
+          "table": {
+            "trackData": {
+              "cachedSize": "Μέγεθος στην προσωρινή μνήμη"
+            },
+            "track": {
+              "copyright": "Πνευματικά Δικαιώματα",
+              "description": "Περιγραφή",
+              "discNumber": "Αριθμός δίσκου"
+            },
+            "activity": {
+              "favorited": "Αγαπημένα κομμάτια"
+            }
+          },
+          "button": {
+            "delete": "Διαγραφή",
+            "edit": "Επεξεργασία"
+          },
+          "modal": {
+            "delete": {
+              "header": "Διαγραφή του κομματιού;"
+            }
+          }
+        },
+        "Base": {
+          "link": {
+            "albums": "Άλμπουμ",
+            "artists": "Καλλιτέχνες",
+            "channels": "Κανάλια",
+            "edits": "Επεξεργασίες"
+          }
+        },
+        "EditsList": {
+          "title": "Επεξεργασίες"
+        }
+      },
+      "ChannelDetail": {
+        "table": {
+          "channelData": {
+            "account": "Λογαριασμός",
+            "category": "Κατηγορία",
+            "description": "Περιγραφή",
+            "domain": "Διεύθυνση"
+          },
+          "audioContent": {
+            "albums": "Άλμπουμ",
+            "cachedSize": "Μέγεθος στην προσωρινή μνήμη"
+          },
+          "activity": {
+            "edits": "Επεξεργασίες",
+            "favorited": "Αγαπημένα κομμάτια"
+          }
+        },
+        "header": {
+          "activity": "Δραστηριότητα",
+          "audioContent": "Περιεχόμενο ήχου",
+          "channelData": "Στοιχεία καναλιού"
+        },
+        "button": {
+          "delete": "Διαγραφή"
+        },
+        "modal": {
+          "delete": {
+            "header": "Διαγραφή του καναλιού;"
+          }
+        }
+      },
+      "CommonList": {
+        "title": {
+          "accounts": "Λογαριασμοί",
+          "albums": "Άλμπουμ",
+          "artists": "Καλλιτέχνες",
+          "channels": "Κανάλια"
+        }
+      },
+      "Settings": {
+        "header": {
+          "channels": "Κανάλια"
+        }
+      }
+    },
+    "Search": {
+      "label": {
+        "albums": "Άλμπουμ",
+        "artists": "Καλλιτέχνες"
+      }
+    },
+    "playlists": {
+      "List": {
+        "ordering": {
+          "direction": {
+            "ascending": "Αύξουσα",
+            "descending": "Φθίνουσα"
+          }
+        },
+        "header": {
+          "browse": "Περιήγηση στις λίστες αναπαραγωγής"
+        },
+        "button": {
+          "create": "Δημιουργία λίστας αναπαραγωγής"
+        },
+        "placeholder": {
+          "search": "Εισάγετε όνομα λίστας αναπαραγωγής…"
+        }
+      },
+      "Detail": {
+        "button": {
+          "cancel": "Ακύρωση",
+          "delete": "Διαγραφή",
+          "confirm": "Διαγραφή λίστας αναπαραγωγής",
+          "edit": "Επεξεργασία",
+          "embed": "Ενσωμάτωση"
+        },
+        "modal": {
+          "delete": {
+            "header": "Θέλετε να διαγράψετε την λίστα αναπαραγωγής \"{ playlist }\";"
+          },
+          "embed": {
+            "header": "Ενσωμάτωση της λίστας αναπαραγωγής στην ιστοσελίδα σας"
+          }
+        }
+      }
+    },
+    "radios": {
+      "Detail": {
+        "button": {
+          "confirm": "Διαγραφή ράδιο",
+          "edit": "Επεξεργασία…"
+        },
+        "modal": {
+          "delete": {
+            "header": "Θέλετε να διαγράψετε το ράδιο \"{ radio }\";"
+          }
+        }
+      }
+    }
+  },
+  "composables": {
+    "audio": {
+      "usePlayOptions": {
+        "addToQueueMessage": "{ n } κομμάτι προστέθηκε στην ουρά σας | { n } κομμάτια προστέθηκαν στην ουρά σας"
+      }
+    },
+    "locale": {
+      "useSharedLabels": {
+        "scopes": {
+          "libraries": {
+            "description": "Πρόσβαση σε αρχεία ήχου, βιβλιοθήκες, καλλιτέχνες, άλμπουμ και κομμάτια"
+          },
+          "filters": {
+            "description": "Πρόσβαση σε φίλτρα περιεχομένου",
+            "label": "Φίλτρα περιεχομένου"
+          },
+          "profile": {
+            "description": "Πρόσβαση σε e-mail, όνομα χρήστη και πληροφορίες προφίλ"
+          },
+          "edits": {
+            "description": "Πρόσβαση σε επεξεργασίες",
+            "label": "Επεξεργασίες"
+          },
+          "follows": {
+            "description": "Πρόσβαση σε ακολούθους",
+            "label": "Ακολουθούν"
+          },
+          "listenings": {
+            "description": "Πρόσβαση στο ιστορικό ακρόασης"
+          },
+          "reports": {
+            "description": "Πρόβαση στις αναφορές"
+          },
+          "notifications": {
+            "description": "Πρόσβαση στις ειδοποιήσεις"
+          },
+          "playlists": {
+            "description": "Πρόσβαση στις λίστες αναπαραγωγής"
+          },
+          "radios": {
+            "description": "Πρόσβαση στα ράδιο"
+          },
+          "security": {
+            "description": "Πρόσβαση σε ρυθμίσεις ασφαλείας όπως κωδικός και εξουσιοδότηση"
+          },
+          "favorites": {
+            "label": "Αγαπημένα"
+          }
+        },
+        "filters": {
+          "accessedDate": "Ημερομηνία πρόσβασης",
+          "albumTitle": "Όνομα άλμπουμ",
+          "artistName": "Όνομα καλλιτέχνη",
+          "bitrate": "Bitrate",
+          "creationDate": "Ημερομηνία δημιουργίας",
+          "domain": "Διεύθυνση",
+          "duration": "Διάρκεια",
+          "expirationDate": "Ημερομηνία λήξης",
+          "followers": "Ακόλουθοι"
+        },
+        "fields": {
+          "privacyLevel": {
+            "label": "Ορατότητα δραστηριότητας",
+            "help": "Καθορίστε το επίπεδο ορατότητας της δραστηριότητας σας",
+            "shortChoices": {
+              "public": "Όλοι"
+            },
+            "choices": {
+              "instance": "Όλοι σε αυτό το instance",
+              "public": "Όλοι, μεταξύ όλων των instances"
+            }
+          },
+          "summary": {
+            "label": "Βιογραφία"
+          },
+          "reportType": {
+            "label": "Κατηγορία",
+            "choices": {
+              "illegalContent": "Παράνομο περιεχόμενο"
+            }
+          },
+          "importStatus": {
+            "label": "Κάντε κλικ για εμφανιστούν περισσότερες πληροφορίες σχετικά με την διαδικασία εισαγωγής για αυτήν την μεταφόρτωση",
+            "choices": {
+              "draft": {
+                "label": "Προσχέδιο"
+              }
+            }
+          },
+          "contentCategory": {
+            "label": "Κατηγορία περιεχομένου"
+          }
+        }
+      }
+    },
+    "moderation": {
+      "useReport": {
+        "account": {
+          "typeLabel": "Λογαριασμός"
+        },
+        "album": {
+          "typeLabel": "Άλμπουμ"
+        },
+        "artist": {
+          "typeLabel": "Καλλιτέχνης"
+        },
+        "channel": {
+          "typeLabel": "Κανάλι"
+        }
+      },
+      "useReportConfigs": {
+        "account": {
+          "label": "Λογαριασμός",
+          "summary": "Βιογραφία"
+        },
+        "album": {
+          "label": "Άλμπουμ"
+        },
+        "artist": {
+          "label": "Καλλιτέχνης"
+        },
+        "channel": {
+          "label": "Κανάλι"
+        },
+        "track": {
+          "copyright": "Πνευματικά Δικαιώματα"
+        },
+        "creationDate": {
+          "label": "Ημερομηνία δημιουργίας"
+        },
+        "library": {
+          "description": "Περιγραφή"
+        }
+      },
+      "useEditConfigs": {
+        "track": {
+          "copyright": "Πνευματικά Δικαιώματα"
+        },
+        "description": {
+          "label": "Περιγραφή"
+        }
+      }
+    },
+    "useThemeList": {
+      "darkTheme": "Σκούρο"
+    }
+  },
+  "init": {
+    "serviceWorker": {
+      "newAppVersion": "Μια νέα έκδοση της εφαρμογής είναι διαθέσιμη."
+    }
+  }
+}

@@ -10,7 +10,6 @@ import urllib.parse
 
 import watchdog.events
 import watchdog.observers
-
 from django.conf import settings
 from django.core.cache import cache
 from django.core.files import File
@@ -19,7 +18,6 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db.models import Q
 from django.db.utils import IntegrityError
 from django.utils import timezone
-
 from rest_framework import serializers
 
 from funkwhale_api.common import utils as common_utils
@@ -33,7 +31,7 @@ def crawl_dir(dir, extensions, recursive=True, ignored=[]):
     try:
         scanner = os.scandir(dir)
     except Exception as e:
-        m = "Error while reading {}: {} {}\n".format(dir, e.__class__.__name__, e)
+        m = f"Error while reading {dir}: {e.__class__.__name__} {e}\n"
         sys.stderr.write(m)
         return
     try:
@@ -41,7 +39,7 @@ def crawl_dir(dir, extensions, recursive=True, ignored=[]):
             try:
                 if entry.is_file():
                     for e in extensions:
-                        if entry.name.lower().endswith(".{}".format(e.lower())):
+                        if entry.name.lower().endswith(f".{e.lower()}"):
                             if entry.path not in ignored:
                                 yield entry.path
                 elif recursive and entry.is_dir():
@@ -262,7 +260,7 @@ class Command(BaseCommand):
             raise CommandError("Invalid library id")
 
         if not library.actor.get_user():
-            raise CommandError("Library {} is not a local library".format(library.uuid))
+            raise CommandError(f"Library {library.uuid} is not a local library")
 
         if options["in_place"]:
             self.stdout.write(
@@ -279,12 +277,12 @@ class Command(BaseCommand):
                 if p and not import_path.startswith(p):
                     raise CommandError(
                         "Importing in-place only works if importing "
-                        "from {} (MUSIC_DIRECTORY_PATH), as this directory"
+                        "from {} (MUSIC_DIRECTORY_PATH), as this directory "
                         "needs to be accessible by the webserver."
                         "Culprit: {}".format(p, import_path)
                     )
 
-        reference = options["reference"] or "cli-{}".format(timezone.now().isoformat())
+        reference = options["reference"] or f"cli-{timezone.now().isoformat()}"
 
         import_url = "{}://{}/library/{}/upload?{}"
         import_url = import_url.format(
@@ -355,7 +353,7 @@ class Command(BaseCommand):
         batch_duration = None
         self.stdout.write("Starting import of new files…")
         for i, entries in enumerate(batch(crawler, options["batch_size"])):
-            if options.get("update_cache", False) is True:
+            if options.get("update_cache", False):
                 # check to see if the scan was cancelled
                 if cache.get("fs-import:status") == "canceled":
                     raise CommandError("Import cancelled")
@@ -364,12 +362,15 @@ class Command(BaseCommand):
             time_stats = ""
             if i > 0:
                 time_stats = " - running for {}s, previous batch took {}s".format(
-                    int(time.time() - start_time), int(batch_duration),
+                    int(time.time() - start_time),
+                    int(batch_duration),
                 )
             if entries:
                 self.stdout.write(
                     "Handling batch {} ({} items){}".format(
-                        i + 1, len(entries), time_stats,
+                        i + 1,
+                        len(entries),
+                        time_stats,
                     )
                 )
                 batch_errors = self.handle_batch(
@@ -392,10 +393,10 @@ class Command(BaseCommand):
             message.format(total - len(errors), int(time.time() - start_time))
         )
         if len(errors) > 0:
-            self.stderr.write("{} tracks could not be imported:".format(len(errors)))
+            self.stderr.write(f"{len(errors)} tracks could not be imported:")
 
             for path, error in errors:
-                self.stderr.write("- {}: {}".format(path, error))
+                self.stderr.write(f"- {path}: {error}")
 
         self.stdout.write(
             "For details, please refer to import reference '{}' or URL {}".format(
@@ -484,12 +485,12 @@ class Command(BaseCommand):
         return errors
 
     def filter_matching(self, matching, library):
-        sources = ["file://{}".format(p) for p in matching]
+        sources = [f"file://{p}" for p in matching]
         # we skip reimport for path that are already found
         # as a Upload.source
         existing = library.uploads.filter(source__in=sources, import_status="finished")
         existing = existing.values_list("source", flat=True)
-        existing = set([p.replace("file://", "", 1) for p in existing])
+        existing = {p.replace("file://", "", 1) for p in existing}
         skipped = set(matching) & existing
         result = {
             "initial": matching,
@@ -529,22 +530,25 @@ class Command(BaseCommand):
                     path, e.__class__.__name__, e
                 )
                 self.stderr.write(m)
-                errors.append((path, "{} {}".format(e.__class__.__name__, e)))
+                errors.append((path, f"{e.__class__.__name__} {e}"))
         return errors
 
     def setup_watcher(self, path, extensions, recursive, **kwargs):
         watchdog_queue = queue.Queue()
         # Set up a worker thread to process database load
         worker = threading.Thread(
-            target=process_load_queue(self.stdout, **kwargs), args=(watchdog_queue,),
+            target=process_load_queue(self.stdout, **kwargs),
+            args=(watchdog_queue,),
         )
         worker.setDaemon(True)
         worker.start()
 
         # setup watchdog to monitor directory for trigger files
-        patterns = ["*.{}".format(e) for e in extensions]
+        patterns = [f"*.{e}" for e in extensions]
         event_handler = Watcher(
-            stdout=self.stdout, queue=watchdog_queue, patterns=patterns,
+            stdout=self.stdout,
+            queue=watchdog_queue,
+            patterns=patterns,
         )
         observer = watchdog.observers.Observer()
         observer.schedule(event_handler, path, recursive=recursive)
@@ -552,9 +556,7 @@ class Command(BaseCommand):
 
         try:
             while True:
-                self.stdout.write(
-                    "Watching for changes at {}…".format(path), ending="\r"
-                )
+                self.stdout.write(f"Watching for changes at {path}…", ending="\r")
                 time.sleep(10)
                 if kwargs["prune"] and GLOBAL["need_pruning"]:
                     self.stdout.write("Some files were deleted, pruning library…")
@@ -581,7 +583,14 @@ def prune():
 
 
 def create_upload(
-    path, reference, library, async_, replace, in_place, dispatch_outbox, broadcast,
+    path,
+    reference,
+    library,
+    async_,
+    replace,
+    in_place,
+    dispatch_outbox,
+    broadcast,
 ):
     import_handler = tasks.process_upload.delay if async_ else tasks.process_upload
     upload = models.Upload(library=library, import_reference=reference)
@@ -692,7 +701,9 @@ def handle_modified(event, stdout, library, in_place, **kwargs):
             existing_candidates.in_place()
             .filter(source=source)
             .select_related(
-                "track__attributed_to", "track__artist", "track__album__artist",
+                "track__attributed_to",
+                "track__artist",
+                "track__album__artist",
             )
             .first()
         )
@@ -715,7 +726,7 @@ def handle_modified(event, stdout, library, in_place, **kwargs):
                 try:
                     tasks.update_track_metadata(audio_metadata, to_update.track)
                 except serializers.ValidationError as e:
-                    stdout.write("  Invalid metadata: {}".format(e))
+                    stdout.write(f"  Invalid metadata: {e}")
                 else:
                     to_update.checksum = checksum
                     to_update.save(update_fields=["checksum"])
@@ -752,7 +763,7 @@ def handle_moved(event, stdout, library, in_place, **kwargs):
     existing_candidates = existing_candidates.in_place().filter(source=old_source)
     existing = existing_candidates.first()
     if existing:
-        stdout.write("  Updating path of existing file #{}".format(existing.pk))
+        stdout.write(f"  Updating path of existing file #{existing.pk}")
         existing.source = new_source
         existing.save(update_fields=["source"])
 
@@ -781,18 +792,22 @@ def check_updates(stdout, library, extensions, paths, batch_size):
     for path in paths:
         for ext in extensions:
             queries.append(
-                Q(source__startswith="file://{}".format(path))
-                & Q(source__endswith=".{}".format(ext))
+                Q(source__startswith=f"file://{path}") & Q(source__endswith=f".{ext}")
             )
     query, remainder = queries[0], queries[1:]
     for q in remainder:
         query = q | query
     existing = existing.filter(query)
     total = existing.count()
-    stdout.write("Found {} files to check in database!".format(total))
+    stdout.write(f"Found {total} files to check in database!")
     uploads = existing.order_by("source")
     for i, rows in enumerate(batch(uploads.iterator(), batch_size)):
-        stdout.write("Handling batch {} ({} items)".format(i + 1, len(rows),))
+        stdout.write(
+            "Handling batch {} ({} items)".format(
+                i + 1,
+                len(rows),
+            )
+        )
 
         for upload in rows:
 
@@ -831,7 +846,7 @@ def check_upload(stdout, upload):
             try:
                 tasks.update_track_metadata(upload.get_metadata(), track)
             except serializers.ValidationError as e:
-                stdout.write("  Invalid metadata: {}".format(e))
+                stdout.write(f"  Invalid metadata: {e}")
                 return
             except IntegrityError:
                 stdout.write(

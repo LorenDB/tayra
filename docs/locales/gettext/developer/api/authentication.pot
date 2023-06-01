@@ -1,0 +1,287 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../developer/api/authentication.md:1
+msgid "API authentication"
+msgstr ""
+
+#: ../../developer/api/authentication.md:3
+msgid "Funkwhale uses the OAuth [authorization grant flow](https://tools.ietf.org/html/rfc6749#section-4.1) for external apps. This flow is a secure way to authenticate apps that requires a user's explicit consent to perform actions."
+msgstr ""
+
+#: ../../developer/api/authentication.md:27
+msgid "Steps"
+msgstr ""
+
+#: ../../developer/api/authentication.md:32
+msgid "1. Create an application"
+msgstr ""
+
+#: ../../developer/api/authentication.md:34
+msgid "To connect to the Funkwhale API using OAuth, you need to create an **application**. This represents the entity credentials are related to."
+msgstr ""
+
+#: ../../developer/api/authentication.md:36
+msgid "When creating an application you need to define the [**scopes**](https://www.rfc-editor.org/rfc/rfc6749#section-3.3) the application has access to. Scopes define what information your application can access. Each scope can be granted with the following rights:"
+msgstr ""
+
+#: ../../developer/api/authentication.md:38
+msgid "`read:<scope>`: grants read-only access to the resource"
+msgstr ""
+
+#: ../../developer/api/authentication.md:39
+msgid "`write:<scope>`: grants write-only access to the resource"
+msgstr ""
+
+#: ../../developer/api/authentication.md:41
+msgid "`read` rights are required to fetch information using a `GET` request. All other actions (`POST`, `PATCH`, `PUT`, and `DELETE`) require `write` privileges. You may give an application **both** `read` and `write` access to any scope."
+msgstr ""
+
+#: ../../developer/api/authentication.md:47
+msgid "Scope"
+msgstr ""
+
+#: ../../developer/api/authentication.md:48
+msgid "Description"
+msgstr ""
+
+#: ../../developer/api/authentication.md:49
+msgid "`read`"
+msgstr ""
+
+#: ../../developer/api/authentication.md:50
+#: ../../developer/api/authentication.md:52
+msgid "Read-only access to all data"
+msgstr ""
+
+#: ../../developer/api/authentication.md:51
+msgid "`write`"
+msgstr ""
+
+#: ../../developer/api/authentication.md:53
+msgid "`<read/write>:profile`"
+msgstr ""
+
+#: ../../developer/api/authentication.md:54
+msgid "Access to profile data (email address, username, etc.)"
+msgstr ""
+
+#: ../../developer/api/authentication.md:55
+msgid "`<read/write>:libraries`"
+msgstr ""
+
+#: ../../developer/api/authentication.md:56
+msgid "Access to library data (uploads, libraries, tracks, albums, artists, etc.)"
+msgstr ""
+
+#: ../../developer/api/authentication.md:57
+msgid "`<read/write>:favorites`"
+msgstr ""
+
+#: ../../developer/api/authentication.md:58
+msgid "Access to favorites"
+msgstr ""
+
+#: ../../developer/api/authentication.md:59
+msgid "`<read/write>:listenings`"
+msgstr ""
+
+#: ../../developer/api/authentication.md:60
+msgid "Access to history"
+msgstr ""
+
+#: ../../developer/api/authentication.md:61
+msgid "`<read/write>:follows`"
+msgstr ""
+
+#: ../../developer/api/authentication.md:62
+msgid "Access to followers"
+msgstr ""
+
+#: ../../developer/api/authentication.md:63
+msgid "`<read/write>:playlists`"
+msgstr ""
+
+#: ../../developer/api/authentication.md:64
+msgid "Access to playlists"
+msgstr ""
+
+#: ../../developer/api/authentication.md:65
+msgid "`<read/write>:radios`"
+msgstr ""
+
+#: ../../developer/api/authentication.md:66
+msgid "Access to radios"
+msgstr ""
+
+#: ../../developer/api/authentication.md:67
+msgid "`<read/write>:filters`"
+msgstr ""
+
+#: ../../developer/api/authentication.md:68
+msgid "Access to content filters"
+msgstr ""
+
+#: ../../developer/api/authentication.md:69
+msgid "`<read/write>:notifications`"
+msgstr ""
+
+#: ../../developer/api/authentication.md:70
+msgid "Access to notifications"
+msgstr ""
+
+#: ../../developer/api/authentication.md:71
+msgid "`<read/write>:edits`"
+msgstr ""
+
+#: ../../developer/api/authentication.md:72
+msgid "Access to metadata edits"
+msgstr ""
+
+#: ../../developer/api/authentication.md:75
+msgid "Next, you need to define a [**Redirect URI**](https://www.rfc-editor.org/rfc/rfc6749#section-3.1.2). This is the location the user is redirected to once they authenticate your app. This can be any URI you want."
+msgstr ""
+
+#: ../../developer/api/authentication.md:78
+msgid "Funkwhale supports the `urn:ietf:wg:oauth:2.0:oob` redirect URI for non-web applications. If you use this URI, the user is shown a token to copy and paste."
+msgstr ""
+
+#: ../../developer/api/authentication.md:81
+msgid "Once you've decided on your scopes and your redirect URI, you can create your app using one of the following methods:"
+msgstr ""
+
+#: ../../developer/api/authentication.md:83
+msgid "Visit `/settings/applications/new` on your Funkwhale pod while logged in"
+msgstr ""
+
+#: ../../developer/api/authentication.md:84
+msgid "Send a `POST` request to `/api/v1/oauth/apps`. See our [API documentation](https://docs.funkwhale.audio/swagger/) for more information"
+msgstr ""
+
+#: ../../developer/api/authentication.md:86
+msgid "Both methods return a [**client ID**](https://www.rfc-editor.org/rfc/rfc6749#section-2.2) and a [**secret**](https://www.rfc-editor.org/rfc/rfc6749#section-2.3.1)."
+msgstr ""
+
+#: ../../developer/api/authentication.md:88
+msgid "2. Get an authorization code"
+msgstr ""
+
+#: ../../developer/api/authentication.md:91
+msgid "Authorization codes are only valid for 5 minutes after the user approves the request."
+msgstr ""
+
+#: ../../developer/api/authentication.md:94
+msgid "You need an [**authorization code**](https://www.rfc-editor.org/rfc/rfc6749#section-1.3.1) to request an access token for your user. This code confirms to the server that a user has authorized access to their account."
+msgstr ""
+
+#: ../../developer/api/authentication.md:96
+msgid "To fetch an authorization code, you need to send the user to their Funkwhale pod to authenticate. This sends an [authorization request](https://www.rfc-editor.org/rfc/rfc6749#section-4.1.2) to the server."
+msgstr ""
+
+#: ../../developer/api/authentication.md:98
+msgid "To do this, call the `/authorize` endpoint with the following URL encoded query parameters:"
+msgstr ""
+
+#: ../../developer/api/authentication.md:100
+msgid "`client_id`\\* - Your application's client ID"
+msgstr ""
+
+#: ../../developer/api/authentication.md:101
+msgid "`response_type`\\* - Must be set to `code`."
+msgstr ""
+
+#: ../../developer/api/authentication.md:102
+msgid "`redirect_uri` - Your redirect URI"
+msgstr ""
+
+#: ../../developer/api/authentication.md:103
+#: ../../developer/api/authentication.md:135
+msgid "`scope` - A list of scopes"
+msgstr ""
+
+#: ../../developer/api/authentication.md:104
+msgid "`state` - Used to maintain state between the request and the callback to prevent cross-site request forgery. Typically corresponds with a location in the app (e.g. `/library`)"
+msgstr ""
+
+#: ../../developer/api/authentication.md:106
+msgid "Here is an example URL: `https://demo.funkwhale.audio/authorize?response_type=code&scope=read%20write&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fauth%2Fcallback&state=/library&client_id=jDOUfhqLlrbuOkToDCanZmBKEiyorMb9ZUgD2tFQ`."
+msgstr ""
+
+#: ../../developer/api/authentication.md:108
+msgid "When the user authorizes your app, the server responds with an authorization code. See [the OAuth spec](https://www.rfc-editor.org/rfc/rfc6749#section-4.1.2) for more information about this response."
+msgstr ""
+
+#: ../../developer/api/authentication.md:110
+msgid "3. Get an access token"
+msgstr ""
+
+#: ../../developer/api/authentication.md:112
+msgid "Once you receive your authorization code, you need to [request an access token](https://www.rfc-editor.org/rfc/rfc6749#section-4.1.3). To request an access token, call the `/api/v1/oauth/token` endpoint with the following information:"
+msgstr ""
+
+#: ../../developer/api/authentication.md:114
+msgid "`grant_type`\\* - Must be set to `authorization_code`"
+msgstr ""
+
+#: ../../developer/api/authentication.md:115
+msgid "`code`\\* - Your application's authorization code"
+msgstr ""
+
+#: ../../developer/api/authentication.md:116
+msgid "`redirect_uri`\\* - Your redirect URI"
+msgstr ""
+
+#: ../../developer/api/authentication.md:117
+msgid "`client_id`\\* Your application's client ID"
+msgstr ""
+
+#: ../../developer/api/authentication.md:119
+msgid "The server responds with an [`access_token`](https://www.rfc-editor.org/rfc/rfc6749#section-1.4) and a [`refresh_token`](https://www.rfc-editor.org/rfc/rfc6749#section-1.5). See [the OAuth spec](https://www.rfc-editor.org/rfc/rfc6749#section-4.1.4) for more information about this response."
+msgstr ""
+
+#: ../../developer/api/authentication.md:121
+msgid "You can use this token to authenticate calls from your application to the Funkwhale API by passing it as a request header with the following format: `Authorization: Bearer <token>`."
+msgstr ""
+
+#: ../../developer/api/authentication.md:123
+msgid "4. Refresh your access token"
+msgstr ""
+
+#: ../../developer/api/authentication.md:126
+msgid "When you refresh your token the endpoint returns a new `refresh_token`. You must update your refresh token each time you request a new access token."
+msgstr ""
+
+#: ../../developer/api/authentication.md:129
+msgid "By default, Funkwhale access tokens are valid for **10 hours**. Pod admins can configure this by setting the `ACCESS_TOKEN_EXPIRE_SECONDS` variable in their `.env` file."
+msgstr ""
+
+#: ../../developer/api/authentication.md:131
+msgid "After the access token expires, you must request a new access token by calling the `/api/v1/oauth/token` endpoint with the following information:"
+msgstr ""
+
+#: ../../developer/api/authentication.md:133
+msgid "`grant_type`\\* - Must be set to `refresh_token`"
+msgstr ""
+
+#: ../../developer/api/authentication.md:134
+msgid "`refresh_token`\\* - Your current refresh token"
+msgstr ""
+
+#: ../../developer/api/authentication.md:137
+msgid "See [the OAuth spec](https://www.rfc-editor.org/rfc/rfc6749#section-6) for more information about this response."
+msgstr ""

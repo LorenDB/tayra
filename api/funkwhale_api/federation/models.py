@@ -3,16 +3,16 @@ import urllib.parse
 import uuid
 
 from django.conf import settings
-from django.contrib.postgres.fields import JSONField
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
-from django.db.models.signals import post_save, pre_save, post_delete
+from django.db.models import JSONField
+from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
-from django.utils import timezone
 from django.urls import reverse
+from django.utils import timezone
 
 from funkwhale_api.common import session
 from funkwhale_api.common import utils as common_utils
@@ -29,6 +29,10 @@ TYPE_CHOICES = [
     ("Organization", "Organization"),
     ("Service", "Service"),
 ]
+
+MAX_LENGTHS = {
+    "ACTOR_NAME": 200,
+}
 
 
 def empty_dict():
@@ -48,7 +52,7 @@ class FederationMixin(models.Model):
         abstract = True
 
     @property
-    def is_local(self):
+    def is_local(self) -> bool:
         return federation_utils.is_local(self.fid)
 
     @property
@@ -76,7 +80,7 @@ class ActorQuerySet(models.QuerySet):
             )
             qs = qs.annotate(
                 **{
-                    "_usage_{}".format(s): models.Sum(
+                    f"_usage_{s}": models.Sum(
                         "libraries__uploads__size", filter=uploads_query
                     )
                 }
@@ -123,7 +127,8 @@ class Domain(models.Model):
     )
     # are interactions with this domain allowed (only applies when allow-listing is on)
     allowed = models.BooleanField(default=None, null=True)
-
+    reachable = models.BooleanField(default=True)
+    last_successful_contact = models.DateTimeField(default=None, null=True)
     objects = DomainQuerySet.as_manager()
 
     def __str__(self):
@@ -172,7 +177,7 @@ class Domain(models.Model):
         return data
 
     @property
-    def is_local(self):
+    def is_local(self) -> bool:
         return self.name == settings.FEDERATION_HOSTNAME
 
 
@@ -187,7 +192,7 @@ class Actor(models.Model):
     followers_url = models.URLField(max_length=500, null=True, blank=True)
     shared_inbox_url = models.URLField(max_length=500, null=True, blank=True)
     type = models.CharField(choices=TYPE_CHOICES, default="Person", max_length=25)
-    name = models.CharField(max_length=200, null=True, blank=True)
+    name = models.CharField(max_length=MAX_LENGTHS["ACTOR_NAME"], null=True, blank=True)
     domain = models.ForeignKey(Domain, on_delete=models.CASCADE, related_name="actors")
     summary = models.CharField(max_length=500, null=True, blank=True)
     summary_obj = models.ForeignKey(
@@ -198,7 +203,7 @@ class Actor(models.Model):
     private_key = models.TextField(max_length=5000, null=True, blank=True)
     creation_date = models.DateTimeField(default=timezone.now)
     last_fetch_date = models.DateTimeField(default=timezone.now)
-    manually_approves_followers = models.NullBooleanField(default=None)
+    manually_approves_followers = models.BooleanField(default=None, null=True)
     followers = models.ManyToManyField(
         to="self",
         symmetrical=False,
@@ -221,25 +226,25 @@ class Actor(models.Model):
         verbose_name = "Account"
 
     def get_moderation_url(self):
-        return "/manage/moderation/accounts/{}".format(self.full_username)
+        return f"/manage/moderation/accounts/{self.full_username}"
 
     @property
     def webfinger_subject(self):
-        return "{}@{}".format(self.preferred_username, settings.FEDERATION_HOSTNAME)
+        return f"{self.preferred_username}@{settings.FEDERATION_HOSTNAME}"
 
     @property
     def private_key_id(self):
-        return "{}#main-key".format(self.fid)
+        return f"{self.fid}#main-key"
 
     @property
-    def full_username(self):
-        return "{}@{}".format(self.preferred_username, self.domain_id)
+    def full_username(self) -> str:
+        return f"{self.preferred_username}@{self.domain_id}"
 
     def __str__(self):
-        return "{}@{}".format(self.preferred_username, self.domain_id)
+        return f"{self.preferred_username}@{self.domain_id}"
 
     @property
-    def is_local(self):
+    def is_local(self) -> bool:
         return self.domain_id == settings.FEDERATION_HOSTNAME
 
     def get_approved_followers(self):
@@ -265,21 +270,21 @@ class Actor(models.Model):
 
     def get_absolute_url(self):
         if self.is_local:
-            return federation_utils.full_url("/@{}".format(self.preferred_username))
+            return federation_utils.full_url(f"/@{self.preferred_username}")
         return self.url or self.fid
 
     def get_current_usage(self):
         actor = self.__class__.objects.filter(pk=self.pk).with_current_usage().get()
         data = {}
         for s in ["draft", "pending", "skipped", "errored", "finished"]:
-            data[s] = getattr(actor, "_usage_{}".format(s)) or 0
+            data[s] = getattr(actor, f"_usage_{s}") or 0
 
         data["total"] = sum(data.values())
         return data
 
     def get_stats(self):
-        from funkwhale_api.music import models as music_models
         from funkwhale_api.moderation import models as moderation_models
+        from funkwhale_api.music import models as music_models
 
         data = Actor.objects.filter(pk=self.pk).aggregate(
             outbox_activities=models.Count("outbox_activities", distinct=True),
@@ -336,8 +341,8 @@ class Actor(models.Model):
         # matches, we consider the actor has the permission to manage
         # the object
         domain = self.domain_id
-        return obj.fid.startswith("http://{}/".format(domain)) or obj.fid.startswith(
-            "https://{}/".format(domain)
+        return obj.fid.startswith(f"http://{domain}/") or obj.fid.startswith(
+            f"https://{domain}/"
         )
 
     @property
@@ -384,8 +389,7 @@ class Fetch(models.Model):
 
     @property
     def serializers(self):
-        from . import contexts
-        from . import serializers
+        from . import contexts, serializers
 
         return {
             contexts.FW.Artist: [serializers.ArtistSerializer],
@@ -488,15 +492,13 @@ class AbstractFollow(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, unique=True)
     creation_date = models.DateTimeField(default=timezone.now)
     modification_date = models.DateTimeField(auto_now=True)
-    approved = models.NullBooleanField(default=None)
+    approved = models.BooleanField(default=None, null=True)
 
     class Meta:
         abstract = True
 
     def get_federation_id(self):
-        return federation_utils.full_url(
-            "{}#follows/{}".format(self.actor.fid, self.uuid)
-        )
+        return federation_utils.full_url(f"{self.actor.fid}#follows/{self.uuid}")
 
 
 class Follow(AbstractFollow):
@@ -590,7 +592,7 @@ class LibraryTrack(models.Model):
             remote_response.raise_for_status()
             extension = music_utils.get_ext_from_type(self.audio_mimetype)
             title = " - ".join([self.title, self.album_title, self.artist_name])
-            filename = "{}.{}".format(title, extension)
+            filename = f"{title}.{extension}"
             tmp_file = tempfile.TemporaryFile()
             for chunk in r.iter_content(chunk_size=512):
                 tmp_file.write(chunk)

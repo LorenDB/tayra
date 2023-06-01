@@ -1,18 +1,66 @@
+<script setup lang="ts">
+import type { ImportStatus } from '~/types'
+
+import { compileTokens } from '~/utils/search'
+import { humanSize } from '~/utils/filters'
+import { computed, ref } from 'vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+
+import axios from 'axios'
+
+const quotaStatus = ref()
+const progress = computed(() => !quotaStatus.value
+  ? 0
+  : Math.min(quotaStatus.value.current * 100 / quotaStatus.value.max, 100)
+)
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get('users/me/')
+    quotaStatus.value = response.data.quota_status
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+fetchData()
+
+const purge = async (status: ImportStatus) => {
+  try {
+    await axios.post('uploads/action/', {
+      action: 'delete',
+      objects: 'all',
+      filters: { import_status: status }
+    })
+
+    fetchData()
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+}
+
+const purgeSkippedFiles = () => purge('skipped')
+const purgePendingFiles = () => purge('pending')
+const purgeErroredFiles = () => purge('errored')
+</script>
+
 <template>
   <div class="ui segment">
     <h3 class="ui header">
-      <translate translate-context="Content/Library/Title">
-        Current usage
-      </translate>
+      {{ $t('views.content.libraries.Quota.header.currentUsage') }}
     </h3>
     <div
       v-if="isLoading"
       :class="['ui', {'active': isLoading}, 'inverted', 'dimmer']"
     >
       <div class="ui text loader">
-        <translate translate-context="Content/Library/Paragraph">
-          Loading usage data…
-        </translate>
+        {{ $t('views.content.libraries.Quota.loading.currentUsage') }}
       </div>
     </div>
     <div
@@ -24,19 +72,14 @@
         :style="{width: `${progress}%`}"
       >
         <div class="progress">
-          {{ progress }}%
+          {{ $t('views.content.libraries.Quota.label.percentUsed', {progress: progress}) }}
         </div>
       </div>
       <div
         v-if="quotaStatus"
         class="label"
       >
-        <translate
-          translate-context="Content/Library/Paragraph"
-          :translate-params="{max: humanSize(quotaStatus.max * 1000 * 1000), current: humanSize(quotaStatus.current * 1000 * 1000)}"
-        >
-          %{ current } used on %{ max } allowed
-        </translate>
+        {{ $t('views.content.libraries.Quota.label.currentUsage', {max: humanSize(quotaStatus.max * 1000 * 1000), current: humanSize(quotaStatus.current * 1000 * 1000)}) }}
       </div>
     </div>
     <div class="ui hidden divider" />
@@ -53,9 +96,7 @@
             {{ humanSize(quotaStatus.pending * 1000 * 1000) }}
           </div>
           <div class="label">
-            <translate translate-context="Content/Library/Label">
-              Pending files
-            </translate>
+            {{ $t('views.content.libraries.Quota.label.pending') }}
           </div>
         </div>
         <div>
@@ -63,33 +104,29 @@
             class="ui basic primary tiny button"
             :to="{name: 'content.libraries.files', query: {q: compileTokens([{field: 'status', value: 'pending'}])}}"
           >
-            <translate translate-context="Content/Library/Link/Verb">
-              View files
-            </translate>
+            {{ $t('views.content.libraries.Quota.link.viewFiles') }}
           </router-link>
 
           <dangerous-button
             class="ui basic tiny button"
             :action="purgePendingFiles"
           >
-            <translate translate-context="*/*/*/Verb">
-              Purge
-            </translate>
-            <p slot="modal-header">
-              <translate translate-context="Popup/Library/Title">
-                Purge pending files?
-              </translate>
-            </p>
-            <p slot="modal-content">
-              <translate translate-context="Popup/Library/Paragraph">
-                Removes uploaded but yet to be processed tracks completely, adding the corresponding data to your quota.
-              </translate>
-            </p>
-            <div slot="modal-confirm">
-              <translate translate-context="*/*/*/Verb">
-                Purge
-              </translate>
-            </div>
+            {{ $t('views.content.libraries.Quota.button.purge') }}
+            <template #modal-header>
+              <p>
+                {{ $t('views.content.libraries.Quota.modal.purgePending.header') }}
+              </p>
+            </template>
+            <template #modal-content>
+              <p>
+                {{ $t('views.content.libraries.Quota.modal.purgePending.content.description') }}
+              </p>
+            </template>
+            <template #modal-confirm>
+              <div>
+                {{ $t('views.content.libraries.Quota.button.purge') }}
+              </div>
+            </template>
           </dangerous-button>
         </div>
       </div>
@@ -102,9 +139,7 @@
             {{ humanSize(quotaStatus.skipped * 1000 * 1000) }}
           </div>
           <div class="label">
-            <translate translate-context="Content/Library/Label">
-              Skipped files
-            </translate>
+            {{ $t('views.content.libraries.Quota.label.skipped') }}
           </div>
         </div>
         <div>
@@ -112,32 +147,28 @@
             class="ui basic primary tiny button"
             :to="{name: 'content.libraries.files', query: {q: compileTokens([{field: 'status', value: 'skipped'}])}}"
           >
-            <translate translate-context="Content/Library/Link/Verb">
-              View files
-            </translate>
+            {{ $t('views.content.libraries.Quota.link.viewFiles') }}
           </router-link>
           <dangerous-button
             class="ui basic tiny button"
             :action="purgeSkippedFiles"
           >
-            <translate translate-context="*/*/*/Verb">
-              Purge
-            </translate>
-            <p slot="modal-header">
-              <translate translate-context="Popup/Library/Title">
-                Purge skipped files?
-              </translate>
-            </p>
-            <p slot="modal-content">
-              <translate translate-context="Popup/Library/Paragraph">
-                Removes uploaded tracks skipped during the import processes completely, adding the corresponding data to your quota.
-              </translate>
-            </p>
-            <div slot="modal-confirm">
-              <translate translate-context="*/*/*/Verb">
-                Purge
-              </translate>
-            </div>
+            {{ $t('views.content.libraries.Quota.button.purge') }}
+            <template #modal-header>
+              <p>
+                {{ $t('views.content.libraries.Quota.modal.purgeSkipped.header') }}
+              </p>
+            </template>
+            <template #modal-content>
+              <p>
+                {{ $t('views.content.libraries.Quota.modal.purgeSkipped.content.description') }}
+              </p>
+            </template>
+            <template #modal-confirm>
+              <div>
+                {{ $t('views.content.libraries.Quota.button.purge') }}
+              </div>
+            </template>
           </dangerous-button>
         </div>
       </div>
@@ -150,9 +181,7 @@
             {{ humanSize(quotaStatus.errored * 1000 * 1000) }}
           </div>
           <div class="label">
-            <translate translate-context="Content/Library/Label">
-              Errored files
-            </translate>
+            {{ $t('views.content.libraries.Quota.label.errored') }}
           </div>
         </div>
         <div>
@@ -160,94 +189,31 @@
             class="ui basic primary tiny button"
             :to="{name: 'content.libraries.files', query: {q: compileTokens([{field: 'status', value: 'errored'}])}}"
           >
-            <translate translate-context="Content/Library/Link/Verb">
-              View files
-            </translate>
+            {{ $t('views.content.libraries.Quota.link.viewFiles') }}
           </router-link>
           <dangerous-button
             class="ui basic tiny button"
             :action="purgeErroredFiles"
           >
-            <translate translate-context="*/*/*/Verb">
-              Purge
-            </translate>
-            <p slot="modal-header">
-              <translate translate-context="Popup/Library/Title">
-                Purge errored files?
-              </translate>
-            </p>
-            <p slot="modal-content">
-              <translate translate-context="Popup/Library/Paragraph">
-                Removes uploaded tracks that could not be processed by the server completely, adding the corresponding data to your quota.
-              </translate>
-            </p>
-            <div slot="modal-confirm">
-              <translate translate-context="*/*/*/Verb">
-                Purge
-              </translate>
-            </div>
+            {{ $t('views.content.libraries.Quota.button.purge') }}
+            <template #modal-header>
+              <p>
+                {{ $t('views.content.libraries.Quota.modal.purgeErrored.header') }}
+              </p>
+            </template>
+            <template #modal-content>
+              <p>
+                {{ $t('views.content.libraries.Quota.modal.purgeErrored.content.description') }}
+              </p>
+            </template>
+            <template #modal-confirm>
+              <div>
+                {{ $t('views.content.libraries.Quota.button.purge') }}
+              </div>
+            </template>
           </dangerous-button>
         </div>
       </div>
     </div>
   </div>
 </template>
-<script>
-import axios from 'axios'
-import { humanSize } from '@/filters'
-import { compileTokens } from '@/search'
-
-export default {
-  data () {
-    return {
-      quotaStatus: null,
-      isLoading: false,
-      humanSize,
-      compileTokens
-    }
-  },
-  computed: {
-    progress () {
-      if (!this.quotaStatus) {
-        return 0
-      }
-      return Math.min(parseInt(this.quotaStatus.current * 100 / this.quotaStatus.max), 100)
-    }
-  },
-  created () {
-    this.fetch()
-  },
-  methods: {
-    fetch () {
-      const self = this
-      self.isLoading = true
-      axios.get('users/me/').then((response) => {
-        self.quotaStatus = response.data.quota_status
-        self.isLoading = false
-      })
-    },
-    purge (status) {
-      const self = this
-      const payload = {
-        action: 'delete',
-        objects: 'all',
-        filters: {
-          import_status: status
-        }
-      }
-      axios.post('uploads/action/', payload).then((response) => {
-        self.fetch()
-      })
-    },
-    purgeSkippedFiles () {
-      this.purge('skipped')
-    },
-    purgePendingFiles () {
-      this.purge('pending')
-    },
-    purgeErroredFiles () {
-      this.purge('errored')
-    }
-  }
-}
-</script>

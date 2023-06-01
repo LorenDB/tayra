@@ -5,13 +5,11 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-
 from funkwhale_api.federation import keys
 from funkwhale_api.federation import models as federation_models
 from funkwhale_api.music import models as music_models
 from funkwhale_api.tags import models as tags_models
 from funkwhale_api.users import models as users_models
-
 
 BATCH_SIZE = 500
 
@@ -238,6 +236,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         from django.apps import apps
+
         from funkwhale_api import factories
 
         app_names = [app.name for app in apps.app_configs.values()]

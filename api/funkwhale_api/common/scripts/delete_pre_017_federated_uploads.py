@@ -10,5 +10,5 @@ def main(command, **kwargs):
         source__startswith="http", source__contains="/federation/music/file/"
     ).exclude(source__contains="youtube")
     total = queryset.count()
-    command.stdout.write("{} uploads found".format(total))
+    command.stdout.write(f"{total} uploads found")
     queryset.delete()

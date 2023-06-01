@@ -1,7 +1,7 @@
 import datetime
 
-from django.db.models.aggregates import Count
 import pytest
+from django.db.models.aggregates import Count
 
 from funkwhale_api.music import models as music_models
 from funkwhale_api.subsonic import serializers
@@ -89,13 +89,13 @@ def test_get_artists_serializer(factories):
                         "id": artist1.pk,
                         "name": artist1.name,
                         "albumCount": 3,
-                        "coverArt": "ar-{}".format(artist1.id),
+                        "coverArt": f"ar-{artist1.id}",
                     },
                     {
                         "id": artist2.pk,
                         "name": artist2.name,
                         "albumCount": 2,
-                        "coverArt": "ar-{}".format(artist2.id),
+                        "coverArt": f"ar-{artist2.id}",
                     },
                 ],
             },
@@ -106,7 +106,7 @@ def test_get_artists_serializer(factories):
                         "id": artist3.pk,
                         "name": artist3.name,
                         "albumCount": 0,
-                        "coverArt": "ar-{}".format(artist3.id),
+                        "coverArt": f"ar-{artist3.id}",
                     }
                 ],
             },
@@ -129,11 +129,11 @@ def test_get_artist_serializer(factories):
         "id": artist.pk,
         "name": artist.name,
         "albumCount": 1,
-        "coverArt": "ar-{}".format(artist.id),
+        "coverArt": f"ar-{artist.id}",
         "album": [
             {
                 "id": album.pk,
-                "coverArt": "al-{}".format(album.id),
+                "coverArt": f"al-{album.id}",
                 "artistId": artist.pk,
                 "name": album.title,
                 "artist": artist.name,
@@ -159,7 +159,7 @@ def test_get_artist_serializer(factories):
 def test_get_track_data_content_type(mimetype, extension, expected, factories):
     upload = factories["music.Upload"]()
     upload.mimetype = mimetype
-    upload.audio_file = "test.{}".format(extension)
+    upload.audio_file = f"test.{extension}"
 
     data = serializers.get_track_data(
         album=upload.track.album, track=upload.track, upload=upload
@@ -182,7 +182,7 @@ def test_get_album_serializer(factories):
         "songCount": 1,
         "created": serializers.to_subsonic_date(album.creation_date),
         "year": album.release_date.year,
-        "coverArt": "al-{}".format(album.id),
+        "coverArt": f"al-{album.id}",
         "genre": tagged_item.tag.name,
         "duration": 43,
         "playCount": album.tracks.aggregate(l=Count("listenings"))["l"] or 0,
@@ -191,7 +191,7 @@ def test_get_album_serializer(factories):
                 "id": track.pk,
                 "isDir": "false",
                 "title": track.title,
-                "coverArt": "al-{}".format(album.id),
+                "coverArt": f"al-{album.id}",
                 "album": album.title,
                 "artist": artist.name,
                 "track": track.position,
@@ -308,7 +308,7 @@ def test_channel_serializer(factories):
         "url": channel.rss_url,
         "title": channel.artist.name,
         "description": description.as_plain_text,
-        "coverArt": "at-{}".format(channel.artist.attachment_cover.uuid),
+        "coverArt": f"at-{channel.artist.attachment_cover.uuid}",
         "originalImageUrl": channel.artist.attachment_cover.url,
         "status": "completed",
         "episode": [serializers.get_channel_episode_data(upload, channel.uuid)],
@@ -333,7 +333,7 @@ def test_channel_episode_serializer(factories):
         "streamId": upload.track.id,
         "title": track.title,
         "description": description.as_plain_text,
-        "coverArt": "at-{}".format(track.attachment_cover.uuid),
+        "coverArt": f"at-{track.attachment_cover.uuid}",
         "isDir": "false",
         "year": track.creation_date.year,
         "created": track.creation_date.isoformat(),

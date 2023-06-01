@@ -75,7 +75,7 @@ class Migration(migrations.Migration):
                     "last_fetch_date",
                     models.DateTimeField(default=django.utils.timezone.now),
                 ),
-                ("manually_approves_followers", models.NullBooleanField(default=None)),
+                ("manually_approves_followers", models.BooleanField(default=None, null=True)),
             ],
         )
     ]

@@ -1,8 +1,11 @@
-#!/bin/bash -eux
+#!/bin/sh
 
+set -eux
 
-envsubst "`env | awk -F = '{printf \" $$%s\", $$1}'`" \
-  < /etc/nginx/nginx.conf.template \
-  > /etc/nginx/nginx.conf \
-  && cat /etc/nginx/nginx.conf \
-  && nginx-debug -g 'daemon off;'
+TEMPLATE_PATH="/etc/nginx/nginx.conf.template"
+CONFIG_PATH="/etc/nginx/nginx.conf"
+
+ALLOWED_VARS="$(env | cut -d '=' -f 1 | xargs printf "\${%s} ")"
+envsubst "$ALLOWED_VARS" < "$TEMPLATE_PATH" | tee "$CONFIG_PATH"
+
+nginx-debug -g 'daemon off;'

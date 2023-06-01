@@ -1,3 +1,78 @@
+<script setup lang="ts">
+import type { PlaylistTrack, Playlist } from '~/types'
+
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import { ref, computed } from 'vue'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+import PlaylistEditor from '~/components/playlists/Editor.vue'
+import EmbedWizard from '~/components/audio/EmbedWizard.vue'
+import SemanticModal from '~/components/semantic/Modal.vue'
+import TrackTable from '~/components/audio/track/Table.vue'
+import PlayButton from '~/components/audio/PlayButton.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+
+interface Props {
+  id: number
+  defaultEdit?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  defaultEdit: false
+})
+
+const store = useStore()
+const router = useRouter()
+
+const edit = ref(props.defaultEdit)
+const playlist = ref<Playlist | null>(null)
+const playlistTracks = ref<PlaylistTrack[]>([])
+
+const showEmbedModal = ref(false)
+
+const tracks = computed(() => playlistTracks.value.map(({ track }, index) => ({ ...track, position: index + 1 })))
+
+const { t } = useI18n()
+const labels = computed(() => ({
+  playlist: t('views.playlists.Detail.title')
+}))
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const [playlistResponse, tracksResponse] = await Promise.all([
+      axios.get(`playlists/${props.id}/`),
+      axios.get(`playlists/${props.id}/tracks/`)
+    ])
+
+    playlist.value = playlistResponse.data
+    playlistTracks.value = tracksResponse.data.results
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+fetchData()
+
+const deletePlaylist = async () => {
+  try {
+    await axios.delete(`playlists/${props.id}/`)
+    store.dispatch('playlists/fetchOwn')
+    return router.push({ path: '/library' })
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+}
+</script>
+
 <template>
   <main>
     <div
@@ -18,14 +93,8 @@
           <div class="content">
             {{ playlist.name }}
             <div class="sub header">
-              <translate
-                translate-plural="Playlist containing %{ count } tracks, by %{ username }"
-                :translate-n="playlist.tracks_count"
-                :translate-params="{count: playlist.tracks_count, username: playlist.user.username}"
-                translate-context="Content/Playlist/Header.Subtitle"
-              >
-                Playlist containing %{ count } track, by %{ username }
-              </translate><br>
+              {{ $t('views.playlists.Detail.meta.tracks', { username: playlist.user.username }, playlist.tracks_count) }}
+              <br>
               <duration :seconds="playlist.duration" />
             </div>
           </div>
@@ -38,27 +107,21 @@
               :is-playable="playlist.is_playable"
               :tracks="tracks"
             >
-              <translate translate-context="Content/Queue/Button.Label/Short, Verb">
-                Play all
-              </translate>
+              {{ $t('views.playlists.Detail.button.playAll') }}
             </play-button>
           </div>
           <div class="ui buttons">
             <button
-              v-if="$store.state.auth.profile && playlist.user.id === $store.state.auth.profile.id"
+              v-if="$store.state.auth.profile && playlist.user.id === $store.state.auth.profile?.id"
               class="ui icon labeled button"
               @click="edit = !edit"
             >
               <i class="pencil icon" />
               <template v-if="edit">
-                <translate translate-context="Content/Playlist/Button.Label/Verb">
-                  Stop Editing
-                </translate>
+                {{ $t('views.playlists.Detail.button.stopEdit') }}
               </template>
               <template v-else>
-                <translate translate-context="Content/*/Button.Label/Verb">
-                  Edit
-                </translate>
+                {{ $t('views.playlists.Detail.button.edit') }}
               </template>
             </button>
           </div>
@@ -69,47 +132,39 @@
               @click="showEmbedModal = !showEmbedModal"
             >
               <i class="code icon" />
-              <translate translate-context="Content/*/Button.Label/Verb">
-                Embed
-              </translate>
+              {{ $t('views.playlists.Detail.button.embed') }}
             </button>
             <dangerous-button
               v-if="$store.state.auth.profile && playlist.user.id === $store.state.auth.profile.id"
               class="ui labeled danger icon button"
               :action="deletePlaylist"
             >
-              <i class="trash icon" /> <translate translate-context="*/*/*/Verb">
-                Delete
-              </translate>
-              <p
-                slot="modal-header"
-                v-translate="{playlist: playlist.name}"
-                translate-context="Popup/Playlist/Title/Call to action"
-                :translate-params="{playlist: playlist.name}"
-              >
-                Do you want to delete the playlist "%{ playlist }"?
-              </p>
-              <p slot="modal-content">
-                <translate translate-context="Popup/Playlist/Paragraph">
-                  This will completely delete this playlist and cannot be undone.
-                </translate>
-              </p>
-              <div slot="modal-confirm">
-                <translate translate-context="Popup/Playlist/Button.Label/Verb">
-                  Delete playlist
-                </translate>
-              </div>
+              <i class="trash icon" />
+              {{ $t('views.playlists.Detail.button.delete') }}
+              <template #modal-header>
+                <p>
+                  {{ $t('views.playlists.Detail.modal.delete.header', {playlist: playlist.name}) }}
+                </p>
+              </template>
+              <template #modal-content>
+                <p>
+                  {{ $t('views.playlists.Detail.modal.delete.content.warning') }}
+                </p>
+              </template>
+              <template #modal-confirm>
+                <div>
+                  {{ $t('views.playlists.Detail.button.confirm') }}
+                </div>
+              </template>
             </dangerous-button>
           </div>
         </div>
-        <modal
+        <semantic-modal
           v-if="playlist.privacy_level === 'everyone' && playlist.is_playable"
-          :show.sync="showEmbedModal"
+          v-model:show="showEmbedModal"
         >
           <h4 class="header">
-            <translate translate-context="Popup/Album/Title/Verb">
-              Embed this playlist on your website
-            </translate>
+            {{ $t('views.playlists.Detail.modal.embed.header') }}
           </h4>
           <div class="scrolling content">
             <div class="description">
@@ -121,32 +176,27 @@
           </div>
           <div class="actions">
             <button class="ui basic deny button">
-              <translate translate-context="*/*/Button.Label/Verb">
-                Cancel
-              </translate>
+              {{ $t('views.playlists.Detail.button.cancel') }}
             </button>
           </div>
-        </modal>
+        </semantic-modal>
       </div>
     </section>
     <section class="ui vertical stripe segment">
       <template v-if="edit">
         <playlist-editor
-          :playlist="playlist"
-          :playlist-tracks="playlistTracks"
-          @playlist-updated="playlist = $event"
-          @tracks-updated="updatePlts"
+          v-model:playlist="playlist"
+          v-model:playlist-tracks="playlistTracks"
         />
       </template>
       <template v-else-if="tracks.length > 0">
         <h2>
-          <translate translate-context="*/*/*">
-            Tracks
-          </translate>
+          {{ $t('views.playlists.Detail.header.tracks') }}
         </h2>
         <track-table
           :display-position="true"
           :tracks="tracks"
+          :unique="false"
         />
       </template>
       <div
@@ -155,98 +205,16 @@
       >
         <div class="ui icon header">
           <i class="list icon" />
-          <translate translate-context="Content/Home/Placeholder">
-            There are no tracks in this playlist yet
-          </translate>
+          {{ $t('views.playlists.Detail.empty.noTracks') }}
         </div>
         <button
           class="ui success icon labeled button"
           @click="edit = !edit"
         >
           <i class="pencil icon" />
-          <translate translate-context="Content/Home/CreatePlaylist">
-            Edit
-          </translate>
+          {{ $t('views.playlists.Detail.button.edit') }}
         </button>
       </div>
     </section>
   </main>
 </template>
-<script>
-import axios from 'axios'
-import TrackTable from '@/components/audio/track/Table'
-import PlayButton from '@/components/audio/PlayButton'
-import PlaylistEditor from '@/components/playlists/Editor'
-import EmbedWizard from '@/components/audio/EmbedWizard'
-import Modal from '@/components/semantic/Modal'
-
-export default {
-  components: {
-    PlaylistEditor,
-    TrackTable,
-    PlayButton,
-    Modal,
-    EmbedWizard
-  },
-  props: {
-    id: { type: [Number, String], required: true },
-    defaultEdit: { type: Boolean, default: false }
-  },
-  data: function () {
-    return {
-      edit: this.defaultEdit,
-      isLoading: false,
-      playlist: null,
-      tracks: [],
-      playlistTracks: [],
-      showEmbedModal: false
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        playlist: this.$pgettext('*/*/*', 'Playlist')
-      }
-    }
-  },
-  created: function () {
-    this.fetch()
-  },
-  methods: {
-    updatePlts (v) {
-      this.playlistTracks = v
-      this.tracks = v.map((e, i) => {
-        const track = e.track
-        track.position = i + 1
-        return track
-      })
-    },
-    fetch: function () {
-      const self = this
-      self.isLoading = true
-      const url = 'playlists/' + this.id + '/'
-      axios.get(url).then(response => {
-        self.playlist = response.data
-        axios
-          .get(url + 'tracks/')
-          .then(response => {
-            self.updatePlts(response.data.results)
-          })
-          .then(() => {
-            self.isLoading = false
-          })
-      })
-    },
-    deletePlaylist () {
-      const self = this
-      const url = 'playlists/' + this.id + '/'
-      axios.delete(url).then(response => {
-        self.$store.dispatch('playlists/fetchOwn')
-        self.$router.push({
-          path: '/library'
-        })
-      })
-    }
-  }
-}
-</script>

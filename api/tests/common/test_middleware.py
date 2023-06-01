@@ -1,14 +1,12 @@
 import html
 import time
+
 import pytest
 from django.http import HttpResponse
 from django.urls import reverse
 
+from funkwhale_api.common import middleware, throttling, utils
 from funkwhale_api.federation import utils as federation_utils
-
-from funkwhale_api.common import middleware
-from funkwhale_api.common import throttling
-from funkwhale_api.common import utils
 
 
 def test_spa_fallback_middleware_no_404(mocker):
@@ -131,7 +129,7 @@ def test_get_spa_html_from_http(local_cache, r_mock, mocker, settings):
 
     assert middleware.get_spa_html("http://test") == "hello world"
     cache_set.assert_called_once_with(
-        "spa-file:{}:index.html".format(url),
+        f"spa-file:{url}:index.html",
         "hello world",
         settings.FUNKWHALE_SPA_HTML_CACHE_DURATION,
     )
@@ -301,13 +299,17 @@ def test_rewrite_manifest_json_url(link, new_url, expected, mocker, settings):
     request = mocker.Mock(path="/", META={})
     mocker.patch.object(middleware, "get_spa_html", return_value=spa_html)
     mocker.patch.object(
-        middleware, "get_default_head_tags", return_value=[],
+        middleware,
+        "get_default_head_tags",
+        return_value=[],
     )
     response = middleware.serve_spa(request)
 
     assert response.status_code == 200
-    expected_html = "<html><head><link rel=before>{}<link rel=after>\n\n</head></html>".format(
-        expected
+    expected_html = (
+        "<html><head><link rel=before>{}<link rel=after>\n\n</head></html>".format(
+            expected
+        )
     )
     assert response.content == expected_html.encode()
 
@@ -319,7 +321,9 @@ def test_rewrite_manifest_json_url_rewrite_disabled(mocker, settings):
     request = mocker.Mock(path="/", META={})
     mocker.patch.object(middleware, "get_spa_html", return_value=spa_html)
     mocker.patch.object(
-        middleware, "get_default_head_tags", return_value=[],
+        middleware,
+        "get_default_head_tags",
+        return_value=[],
     )
     response = middleware.serve_spa(request)
 
@@ -338,13 +342,17 @@ def test_rewrite_manifest_json_url_rewrite_default_url(mocker, settings):
     request = mocker.Mock(path="/", META={})
     mocker.patch.object(middleware, "get_spa_html", return_value=spa_html)
     mocker.patch.object(
-        middleware, "get_default_head_tags", return_value=[],
+        middleware,
+        "get_default_head_tags",
+        return_value=[],
     )
     response = middleware.serve_spa(request)
 
     assert response.status_code == 200
-    expected_html = '<html><head><link rel=manifest href="{}">\n\n</head></html>'.format(
-        expected_url
+    expected_html = (
+        '<html><head><link rel=manifest href="{}">\n\n</head></html>'.format(
+            expected_url
+        )
     )
     assert response.content == expected_html.encode()
 
@@ -410,10 +418,34 @@ def test_get_request_head_tags_calls_view_with_proper_arg_when_accept_header_set
             "username",
             "actor.preferred_username",
         ),
-        ("music.Artist", {}, "library_artist", "pk", "pk",),
-        ("music.Album", {}, "library_album", "pk", "pk",),
-        ("music.Track", {}, "library_track", "pk", "pk",),
-        ("music.Library", {}, "library_library", "uuid", "uuid",),
+        (
+            "music.Artist",
+            {},
+            "library_artist",
+            "pk",
+            "pk",
+        ),
+        (
+            "music.Album",
+            {},
+            "library_album",
+            "pk",
+            "pk",
+        ),
+        (
+            "music.Track",
+            {},
+            "library_track",
+            "pk",
+            "pk",
+        ),
+        (
+            "music.Library",
+            {},
+            "library_library",
+            "uuid",
+            "uuid",
+        ),
         # when a track as a public upload, we should redirect to the upload instead
         ("music.Upload", {"playable": True}, "library_track", "pk", "track.pk"),
     ],

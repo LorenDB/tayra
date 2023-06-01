@@ -1,5 +1,5 @@
-from funkwhale_api.federation import serializers as federation_serializers
 from funkwhale_api.favorites import serializers
+from funkwhale_api.federation import serializers as federation_serializers
 from funkwhale_api.music import serializers as music_serializers
 from funkwhale_api.users import serializers as users_serializers
 

@@ -1,3 +1,50 @@
+<script setup lang="ts">
+import type { Note, BackendError } from '~/types'
+
+import axios from 'axios'
+import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+interface Events {
+  (e: 'created', note: Note): void
+}
+
+interface Props {
+  target: Note
+}
+
+const emit = defineEmits<Events>()
+const props = defineProps<Props>()
+
+const { t } = useI18n()
+const labels = computed(() => ({
+  summaryPlaceholder: t('components.manage.moderation.NoteForm.placeholder.summary')
+}))
+
+const summary = ref('')
+
+const isLoading = ref(false)
+const errors = ref([] as string[])
+const submit = async () => {
+  isLoading.value = true
+  errors.value = []
+
+  try {
+    const response = await axios.post('manage/moderation/notes/', {
+      target: props.target,
+      summary: summary.value
+    })
+
+    emit('created', response.data)
+    summary.value = ''
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
   <form
     class="ui form"
@@ -9,9 +56,7 @@
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/Moderation/Error message.Title">
-          Error while submitting note
-        </translate>
+        {{ $t('components.manage.moderation.NoteForm.header.failure') }}
       </h4>
       <ul class="list">
         <li
@@ -36,54 +81,7 @@
       type="submit"
       :disabled="isLoading"
     >
-      <translate translate-context="Content/Moderation/Button.Label/Verb">
-        Add note
-      </translate>
+      {{ $t('components.manage.moderation.NoteForm.button.add') }}
     </button>
   </form>
 </template>
-
-<script>
-import axios from 'axios'
-import showdown from 'showdown'
-
-export default {
-  props: {
-    target: { type: Object, required: true }
-  },
-  data () {
-    return {
-      markdown: new showdown.Converter(),
-      isLoading: false,
-      summary: '',
-      errors: []
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        summaryPlaceholder: this.$pgettext('Content/Moderation/Placeholder', 'Describe what actions have been taken, or any other related updates…')
-      }
-    }
-  },
-  methods: {
-    submit () {
-      const self = this
-      this.isLoading = true
-      const payload = {
-        target: this.target,
-        summary: this.summary
-      }
-      this.errors = []
-      axios.post('manage/moderation/notes/', payload).then((response) => {
-        self.$emit('created', response.data)
-        self.summary = ''
-        self.isLoading = false
-      }, error => {
-        self.errors = error.backendErrors
-        self.isLoading = false
-      })
-    }
-  }
-}
-</script>

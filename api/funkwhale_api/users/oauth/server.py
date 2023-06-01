@@ -1,4 +1,5 @@
 import urllib.parse
+
 import oauthlib.oauth2
 
 from funkwhale_api.common import authentication
@@ -7,7 +8,7 @@ from funkwhale_api.common import authentication
 def check(request):
     user = request.user
     request.user = user.__class__.objects.all().for_auth().get(pk=user.pk)
-    if authentication.should_verify_email(request.user):
+    if request.user.should_verify_email():
         raise authentication.UnverifiedEmail(user)
     return True
 

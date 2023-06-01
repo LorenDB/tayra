@@ -59,10 +59,7 @@ def test_get(mocker):
         "music_duration",
         "downloads",
     ]
-    [
-        mocker.patch.object(stats, "get_{}".format(k), return_value=i)
-        for i, k in enumerate(keys)
-    ]
+    [mocker.patch.object(stats, f"get_{k}", return_value=i) for i, k in enumerate(keys)]
 
     expected = {k: i for i, k in enumerate(keys)}
 

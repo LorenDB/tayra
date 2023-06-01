@@ -1,18 +1,15 @@
 from django.conf import settings
 from django.core import signing
-
-from rest_framework import authentication
-from rest_framework import exceptions
 from django.core.exceptions import ValidationError
-
-from .oauth import scopes as available_scopes
+from rest_framework import authentication, exceptions
 
 from . import models
+from .oauth import scopes as available_scopes
 
 
 def generate_scoped_token(user_id, user_secret, scopes):
     if set(scopes) & set(available_scopes.SCOPES_BY_ID) != set(scopes):
-        raise ValueError("{} contains invalid scopes".format(scopes))
+        raise ValueError(f"{scopes} contains invalid scopes")
 
     return signing.dumps(
         {
@@ -27,7 +24,9 @@ def generate_scoped_token(user_id, user_secret, scopes):
 def authenticate_scoped_token(token):
     try:
         payload = signing.loads(
-            token, salt="scoped_tokens", max_age=settings.SCOPED_TOKENS_MAX_AGE,
+            token,
+            salt="scoped_tokens",
+            max_age=settings.SCOPED_TOKENS_MAX_AGE,
         )
     except signing.BadSignature:
         raise exceptions.AuthenticationFailed("Invalid token signature")

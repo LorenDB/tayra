@@ -1,7 +1,6 @@
-import pytest
-
 import urllib.parse
 
+import pytest
 from django.urls import reverse
 
 from funkwhale_api.common import utils
@@ -15,8 +14,8 @@ def test_channel_detail(attribute, spa_html, no_api_auth, client, factories, set
         library__privacy_level="everyone", artist__with_cover=True
     )
     factories["music.Upload"](playable=True, library=channel.library)
-    url = "/channels/{}".format(utils.recursive_getattr(channel, attribute))
-    detail_url = "/channels/{}".format(channel.actor.full_username)
+    url = f"/channels/{utils.recursive_getattr(channel, attribute)}"
+    detail_url = f"/channels/{channel.actor.full_username}"
 
     response = client.get(url)
 
@@ -45,7 +44,7 @@ def test_channel_detail(attribute, spa_html, no_api_auth, client, factories, set
             "rel": "alternate",
             "type": "application/rss+xml",
             "href": channel.get_rss_url(),
-            "title": "{} - RSS Podcast Feed".format(channel.artist.name),
+            "title": f"{channel.artist.name} - RSS Podcast Feed",
         },
         {
             "tag": "link",
@@ -82,8 +81,8 @@ def test_oembed_channel(factories, no_api_auth, api_client, settings):
     channel = factories["audio.Channel"](artist__with_cover=True)
     artist = channel.artist
     url = reverse("api:v1:oembed")
-    obj_url = "https://test.com/channels/{}".format(channel.uuid)
-    iframe_src = "http://embed?type=channel&id={}".format(channel.uuid)
+    obj_url = f"https://test.com/channels/{channel.uuid}"
+    iframe_src = f"http://embed?type=channel&id={channel.uuid}"
     expected = {
         "version": "1.0",
         "type": "rich",

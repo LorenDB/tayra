@@ -1,0 +1,4614 @@
+{
+  "App": {
+    "loading": "Chargement…"
+  },
+  "components": {
+    "About": {
+      "description": {
+        "findApp": "Utiliser Funkwhale sur d'autres terminaux avec nos applications.",
+        "funkwhale": "Funkwhale est un projet communautaire qui vous permet d'écouter et de partager de la musique et des fichiers audio au sein d'un réseau ouvert et décentralisé.",
+        "publicContent": "Écouter les albums publics et les listes de lecture partagés sur ce pod.",
+        "quota": "Les utilisateur·ices de ce pod bénéficient également de { quota } d'espace de stockage pour mettre en ligne leurs propres contenus !",
+        "signup": "Inscrivez-vous maintenant pour conserver une trace de vos favoris, créer vos listes de lectures, découvrir de nouveaux contenus et bien plus encore !"
+      },
+      "header": {
+        "aboutPod": "À propos de ce pod",
+        "findApp": "Trouver une application",
+        "funkwhale": "Une plateforme sociale pour apprécier et partager la musique",
+        "publicContent": "Parcourir le contenu public",
+        "signup": "Inscription"
+      },
+      "help": {
+        "closedRegistrations": "Les inscriptions sont closes sur ce pod. Vous pouvez vous inscrire sur un autre pod en utilisant le lien ci-dessous."
+      },
+      "link": {
+        "findOtherPod": "Trouver un autre pod",
+        "learnMore": "En savoir plus"
+      },
+      "message": {
+        "greeting": "Bonjour {username}",
+        "loggedIn": "Vous êtes déjà connecté !"
+      },
+      "placeholder": {
+        "noDescription": "Pas de description disponible"
+      },
+      "stat": {
+        "activeUsers": "{ n } compte actif | { n } comptes actifs",
+        "hoursOfMusic": "heure de musique | heures de musique"
+      },
+      "title": "À propos"
+    },
+    "AboutPod": {
+      "feature": {
+        "allowList": "Liste d'autorisation",
+        "anonymousAccess": "Accès anonyme",
+        "federation": "Fédération",
+        "quota": "Quota d’envoi",
+        "registrations": "Inscriptions",
+        "status": {
+          "closed": "Fermées",
+          "disabled": "Désactivé",
+          "enabled": "Activé",
+          "open": "Ouvertes"
+        },
+        "version": "Version de Funkwhale"
+      },
+      "header": {
+        "about": "À propos de ce pod",
+        "contact": "Contact",
+        "features": "Fonctionnalités",
+        "rules": "Règles",
+        "statistics": "Statistiques",
+        "terms": "Condititions d'utilisation et politique de respect de la vie privée"
+      },
+      "link": {
+        "about": "À propos de ce pod",
+        "features": "Fonctionnalités",
+        "introduction": "Introduction",
+        "rules": "Règles",
+        "statistics": "Statistiques",
+        "terms": "Condititions d'utilisation et politique de respect de la vie privée"
+      },
+      "message": {
+        "contact": "Envoyez-nous un courriel : {'{{'} contactEmail {'}}'}"
+      },
+      "notApplicable": "ND",
+      "placeholder": {
+        "noDescription": "Pas de description disponible",
+        "noRules": "Aucune règle disponible",
+        "noTerms": "Aucune condition disponible"
+      },
+      "stat": {
+        "activeUsers": "utilisateur actif | utilisateurs actifs",
+        "albumsCount": "Album | Albums",
+        "artistsCount": "Artiste | Artistes",
+        "hoursOfMusic": "heure de musique | heures de musique",
+        "listeningsCount": "Écoute | Écoutes",
+        "tracksCount": "Piste | Pistes"
+      },
+      "title": "À propos"
+    },
+    "Home": {
+      "description": {
+        "funkwhale": {
+          "paragraph1": "Ce pod fonctionne grâce au logiciel Funkwhale, un projet communautaire qui vous permet d'écouter et de partager de la musique et des contenus audio au sein d'un réseau décentralisé et ouvert.",
+          "paragraph2": "Funkwhale est gratuit développé par une communauté accueillante de bénévoles."
+        },
+        "quota": "Les utilisateur·ices de ce pod bénéficient également de { quota } d'espace de stockage pour mettre en ligne leurs propres contenus !",
+        "signup": "Inscrivez-vous maintenant pour conserver une trace de vos favoris, créer vos listes de lectures, découvrir de nouveaux contenus et bien plus encore !"
+      },
+      "header": {
+        "about": "À propos de ce pod Funkwhale",
+        "aboutFunkwhale": "À propos de Funkwhale",
+        "contact": "Contact",
+        "links": "Liens utiles",
+        "login": "Connexion",
+        "newAlbums": "Albums ajoutés récemment",
+        "newChannels": "Nouvelles chaînes",
+        "signup": "Inscription",
+        "statistics": "Statistiques",
+        "welcome": "Bienvenue sur { podName } !"
+      },
+      "help": {
+        "registrationsClosed": "Les inscriptions sont closes sur ce pod. Vous pouvez vous inscrire sur un autre pod en utilisant le lien ci-dessous."
+      },
+      "link": {
+        "findOtherPod": "Trouver un autre pod",
+        "funkwhale": "Visiter funkwhale.audio",
+        "learnMore": "En savoir plus",
+        "mobileApps": {
+          "description": "Utiliser Funkwhale sur d'autres terminaux avec nos applications",
+          "label": "Applications mobiles"
+        },
+        "publicContent": {
+          "description": "Écouter les albums publics et les playlists disponibles sur ce pod.",
+          "label": "Parcourir le contenu public"
+        },
+        "rules": "Règles du serveur",
+        "userGuides": {
+          "description": "Découvrez tout ce que vous devez savoir à propos de Funkwhale et de ses fonctionnalités",
+          "label": "Guides d'utilisation"
+        },
+        "viewMore": "Voir plus…"
+      },
+      "placeholder": {
+        "noDescription": "Pas de description disponible"
+      },
+      "stat": {
+        "activeUsers": "{ n } compte actif | { n } comptes actifs",
+        "hoursOfMusic": "{ n } heure de musique | { n } heures de musique"
+      },
+      "title": "Accueil"
+    },
+    "PageNotFound": {
+      "header": {
+        "pageNotFound": "Page introuvable !"
+      },
+      "link": {
+        "home": "Retourner à la page d'accueil"
+      },
+      "message": {
+        "pageNotFound": "Désolé, la page demandée n’existe pas :"
+      },
+      "title": "Page non trouvée"
+    },
+    "Queue": {
+      "button": {
+        "clear": "Effacer",
+        "close": "Fermer",
+        "stopRadio": "Arrêter la radio"
+      },
+      "header": {
+        "failure": "Échec du chargement de la piste",
+        "noSources": "La piste n’a pas de sources disponibles.",
+        "radio": "Vous écoutez une radio"
+      },
+      "label": {
+        "addArtistContentFilter": "Cacher le contenu de cet artiste…",
+        "duration": "Durée",
+        "enterFullscreen": "Entrer en mode plein écran",
+        "exitFullscreen": "Sortir du mode plein écran",
+        "favorite": "Piste préférée",
+        "next": "Piste suivante",
+        "pause": "Pause",
+        "play": "Jouer",
+        "populatingRadio": "Recherche de piste radio…",
+        "previous": "Piste précédente",
+        "queue": "File d’attente",
+        "remove": "Retirer",
+        "restart": "Rejouer la piste",
+        "selectTrack": "Sélectionner la piste",
+        "showCoverArt": "Afficher la pochette",
+        "showVisualizer": "Montrer le visualiseur MoonDrop"
+      },
+      "message": {
+        "automaticPlay": "La piste suivante va se jouer automatiquement dans quelques secondes…",
+        "radio": "Les nouvelles pistes seront ajoutées ici automatiquement."
+      },
+      "meta": {
+        "queuePosition": "Piste { index } sur { length }",
+        "startTime": "00:00",
+        "unknownAlbum": "Album Inconnu",
+        "unknownArtist": "Artiste Inconnu"
+      },
+      "warning": {
+        "connectivity": "Il se peut que vous ayez des problèmes de connexion."
+      }
+    },
+    "RemoteSearchForm": {
+      "button": {
+        "fediverse": "Fédivers",
+        "rss": "RSS",
+        "search": "Rechercher"
+      },
+      "description": {
+        "fediverse": "Utilisez ce formulaire pour vous abonner à une chaîne hébergée ailleurs dans le Fédiverse.",
+        "rss": "Utilisez ce formulaire pour vous abonner à un flux RSS via une adresse URL."
+      },
+      "error": {
+        "fetchFailed": "Cet objet n'a pu être récupéré"
+      },
+      "header": {
+        "fetchFailed": "Erreur lors de la récupération de l'objet"
+      },
+      "label": {
+        "fediverse": {
+          "fieldLabel": "Objet du Fédiverse",
+          "fieldPlaceholder": "{'@'}username{'@'}exemple.com",
+          "title": "S'abonner à un podcast hébergé dans le Fédiverse"
+        },
+        "rss": {
+          "fieldLabel": "Emplacement du flux RSS",
+          "fieldPlaceholder": "https://siteweb.exemple.com/rss.xml",
+          "title": "S'abonner au fil RSS d'un podcast"
+        }
+      },
+      "warning": {
+        "unsupported": "Ce type d'objet n'est pas encore pris en charge"
+      }
+    },
+    "SetInstanceModal": {
+      "button": {
+        "cancel": "Annuler",
+        "submit": "Valider"
+      },
+      "header": {
+        "chooseInstance": "Choisissez votre instance",
+        "failure": "Impossible de se connecter à l'URL renseignée",
+        "suggestions": "Suggestions"
+      },
+      "help": {
+        "notFunkwhaleServer": "L'adresse fournie n'est pas un serveur Funkwhale",
+        "selectPod": "Pour continuer, sélectionnez le pod Funkwhale auquel vous souhaitez vous connecter. Entrez l'adresse directement, ou sélectionnez l'un des choix suggérés.",
+        "serverDown": "Le serveur est peut-être hors-service"
+      },
+      "label": {
+        "url": "Adresse de l'instance"
+      },
+      "message": {
+        "currentConnection": "Vous êtes actuellement connecté à { 0 }. Si vous continuez, vous serez déconnecté de l’instance actuelle et toutes vos données locales seront supprimées.",
+        "newUrl": "Vous utilisez maintenant l’instance Funkwhale sur { url }"
+      }
+    },
+    "ShortcutsModal": {
+      "button": {
+        "close": "Fermer"
+      },
+      "header": {
+        "modal": "Raccourcis clavier"
+      },
+      "shortcut": {
+        "audio": {
+          "clearQueue": "Vider la file d'attente",
+          "decreaseVolume": "Diminuer le volume",
+          "expandQueue": "Développer la file d'attente / Montrer le lecteur",
+          "increaseVolume": "Augmenter le volume",
+          "label": "Raccourcis du lecteur audio",
+          "playNext": "Jouer la piste suivante",
+          "playPause": "Mettre en pause/relancer la lecture",
+          "playPrevious": "Jouer la piste précédente",
+          "seekBack30": "Reculer de 30s",
+          "seekBack5": "Reculer de 5s",
+          "seekForward30": "Avancer de 30s",
+          "seekForward5": "Avancer de 5s",
+          "shuffleQueue": "Mélanger la file d'attente",
+          "toggleFavorite": "Ajouter/Retirer des favoris",
+          "toggleLoop": "Changer le mode de répétition",
+          "toggleMute": "Rendre muet/réactiver le son"
+        },
+        "general": {
+          "focus": "Mettre le focus dans la barre de recherche",
+          "label": "Raccourcis généraux",
+          "show": "Montrer les raccourcis clavier disponibles",
+          "unfocus": "Retirer le focus de la barre de recherche"
+        }
+      }
+    },
+    "Sidebar": {
+      "header": {
+        "administration": "Administration",
+        "explore": "Explorer",
+        "library": "Mon audiothèque",
+        "main": "Navigation",
+        "more": "Plus"
+      },
+      "label": {
+        "add": "Ajouter du contenu",
+        "administration": "Administration",
+        "edits": "Vérification des modifications en attente",
+        "follows": "Demandes d'abonnement en attente",
+        "language": "Langue",
+        "main": "Menu principal",
+        "play": "Jouer cette piste",
+        "reports": "Rapport de révision en cours",
+        "theme": "Thème"
+      },
+      "link": {
+        "about": "À propos de ce pod",
+        "albums": "Albums",
+        "artists": "Artistes",
+        "browse": "Parcourir",
+        "channels": "Chaînes",
+        "createAccount": "Créer un compte",
+        "favorites": "Favoris",
+        "home": "Accueil",
+        "library": "Audiothèque",
+        "login": "Se connecter",
+        "moderation": "Modération",
+        "playlists": "Listes de lecture",
+        "podcasts": "Podcasts",
+        "radios": "Radios",
+        "search": "Rechercher",
+        "settings": "Paramètres",
+        "switchInstance": "Changer d’instance",
+        "users": "Utilisateur·ice·s"
+      }
+    },
+    "admin": {
+      "SettingsGroup": {
+        "button": {
+          "save": "Enregistrer"
+        },
+        "header": {
+          "error": "Erreur lors de l'enregistrement des paramètres.",
+          "image": "Image actuelle"
+        },
+        "message": {
+          "success": "Paramètres modifiés avec succès."
+        }
+      },
+      "SignupFormBuilder": {
+        "button": {
+          "add": "Ajouter un champ",
+          "edit": "Éditer le formulaire",
+          "preview": "Aperçu du formulaire"
+        },
+        "help": {
+          "additionalFields": "Champs supplémentaires à afficher dans le formulaire. Visible uniquement si la validation manuelle des nouveaux comptes est active.",
+          "helpText": "Un texte facultatif à afficher au début du formulaire de création de compte."
+        },
+        "label": {
+          "additionalField": "Champ supplémentaire",
+          "additionalFields": "Champs supplémentaires",
+          "delete": "Supprimer",
+          "helpText": "Texte d'aide",
+          "moveDown": "Descendre",
+          "moveUp": "Monter"
+        },
+        "table": {
+          "additionalFields": {
+            "header": {
+              "actions": "Actions",
+              "label": "Libellé du champ",
+              "required": "Requis",
+              "type": "Type du champ"
+            },
+            "required": {
+              "false": "Non",
+              "true": "Oui"
+            },
+            "type": {
+              "long": "Texte long",
+              "short": "Texte court"
+            }
+          }
+        }
+      }
+    },
+    "audio": {
+      "ChannelCard": {
+        "meta": {
+          "episodes": "{ n } épisode | { n } épisodes",
+          "tracks": "{ n } piste | { n } pistes"
+        },
+        "title": "Mise à jour le { date }"
+      },
+      "ChannelEntries": {
+        "help": {
+          "subscribe": "Vous devez vous abonner à cette chaîne pour voir son contenu."
+        }
+      },
+      "ChannelForm": {
+        "header": {
+          "error": "Erreur lors de l'enregistrement de la chaîne."
+        },
+        "help": {
+          "discography": "Publier la musique que vous créez comme une discographie d'albums et de singles.",
+          "podcast": "Hébergez vos épisodes et gardez le contact avec votre communauté.",
+          "podcastFields": "Utilisé pour les champs itunes:email et itunes:name, requis par certaines plateformes comme Spotify ou iTunes.",
+          "username": "Utilisé dans les adresses URL et pour s'abonner à cette chaîne depuis le Fédiverse. Vous ne pourrez plus le modifier ensuite."
+        },
+        "label": {
+          "category": "Catégorie",
+          "description": "Description",
+          "discography": "Discographie de l'artiste",
+          "email": "Adresse courriel du propriétaire",
+          "image": "Image de la chaîne",
+          "language": "Langue",
+          "name": "Nom",
+          "owner": "Nom du propriétaire",
+          "podcast": "Podcasts",
+          "subcategory": "Sous-catégorie",
+          "tags": "Étiquettes",
+          "username": "Identifiant du Fédiverse"
+        },
+        "legend": {
+          "purpose": "À quoi servira cette chaîne ?"
+        },
+        "loader": {
+          "loading": "Chargement"
+        },
+        "placeholder": {
+          "name": "Un nom de chaîne génial",
+          "username": "nomdechainegenial"
+        }
+      },
+      "ChannelSerieCard": {
+        "meta": {
+          "episodes": "{ n } épisode | { n } épisodes"
+        }
+      },
+      "ChannelSeries": {
+        "button": {
+          "showMore": "Montrer plus"
+        },
+        "help": {
+          "subscribe": "Vous devez vous abonner à cette chaîne pour voir son contenu."
+        }
+      },
+      "ChannelsWidget": {
+        "button": {
+          "showMore": "Montrer plus"
+        }
+      },
+      "EmbedWizard": {
+        "button": {
+          "copy": "Copier"
+        },
+        "header": {
+          "preview": "Aperçu"
+        },
+        "help": {
+          "anonymous": "Merci de contacter vos administrateur·ices et de leur demander de mettre à jour le réglage correspondant.",
+          "embed": "Copiez-collez ce code dans le HTML de votre site web",
+          "width": "Laisser vide pour un widget adaptatif"
+        },
+        "label": {
+          "embed": "Code inséré",
+          "height": "Hauteur du widget",
+          "width": "Largeur du widget"
+        },
+        "message": {
+          "copy": "La texte a été copié dans le presse-papier !"
+        },
+        "warning": {
+          "anonymous": "Le partage ne fonctionnera car ce pod n'autorise pas les utilisateur·ices anonymes à accéder aux contenus."
+        }
+      },
+      "LibraryFollowButton": {
+        "button": {
+          "cancel": "Annuler la demande d'abonnement",
+          "follow": "Suivre",
+          "unfollow": "Se désabonner"
+        }
+      },
+      "PlayButton": {
+        "button": {
+          "addToPlaylist": "Ajouter à la liste de lecture",
+          "addToQueue": "Ajouter à la file d'attente actuelle",
+          "discretePlay": "Jouer",
+          "episodeDetails": "Détails de l'épisode",
+          "hideArtist": "Cacher le contenu de cet artiste",
+          "playAlbum": "Lire l'album",
+          "playArtist": "Lire tout l'artiste",
+          "playNext": "Lire ensuite",
+          "playNow": "Lire maintenant",
+          "playPlaylist": "Lire la liste de lecture",
+          "playTrack": "Jouer la piste",
+          "playTracks": "Jouer les pistes",
+          "report": "Signaler…",
+          "startRadio": "Jouer des chansons similaires",
+          "trackDetails": "Détails de la piste"
+        },
+        "title": {
+          "more": "Plus…",
+          "unavailable": "Cette piste n'est pas accessible dans les audiothèques auxquelles vous avez accès"
+        }
+      },
+      "Player": {
+        "header": {
+          "player": "Fonctions et raccourcis du lecteur audio"
+        },
+        "label": {
+          "addArtistContentFilter": "Cacher le contenu de cet artiste…",
+          "audioPlayer": "Lecteur média",
+          "clearQueue": "Vider la liste d'attente",
+          "expandQueue": "Développer la file d'attente",
+          "loopingDisabled": "Répétition désactivée. Cliquez ici pour activer la répétition sur la piste actuelle.",
+          "loopingSingle": "Répétition sur la piste en cours. Cliquez pour répéter l'intégralité de la liste d'attente.",
+          "loopingWholeQueue": "Répétition de l'intégralité de la liste d'attente, cliquez pour désactiver la répétition.",
+          "mute": "Couper le son",
+          "nextTrack": "Piste suivante",
+          "pause": "Pause",
+          "play": "Jouer",
+          "previousTrack": "Piste précédente",
+          "shuffleQueue": "Mélanger votre file d’attente",
+          "unmute": "Réactiver le son"
+        },
+        "meta": {
+          "position": "{ index } sur { length }",
+          "unknownAlbum": "Album Inconnu",
+          "unknownArtist": "Artiste Inconnu"
+        }
+      },
+      "PlayerControls": {
+        "labels": {
+          "next": "Piste suivante",
+          "pause": "Pause",
+          "play": "Lire",
+          "previous": "Piste précédente"
+        }
+      },
+      "Search": {
+        "empty": {
+          "noAlbums": "Aucun album ne correspond à votre recherche",
+          "noArtists": "Aucun artiste ne correspond à votre recherche"
+        },
+        "header": {
+          "albums": "Albums",
+          "artists": "Artistes",
+          "search": "Rechercher de la musique"
+        },
+        "placeholder": {
+          "search": "Artiste, album, piste…"
+        }
+      },
+      "SearchBar": {
+        "empty": {
+          "noResults": "Il n'y a malheureusement aucun résultat correspondant à cette recherche"
+        },
+        "header": {
+          "noResults": "Aucun résultat"
+        },
+        "label": {
+          "album": "Album",
+          "artist": "Artiste",
+          "category": {
+            "federation": "Fédération",
+            "podcasts": "Podcasts"
+          },
+          "search": "Rechercher du contenu audio",
+          "tag": "Étiquette",
+          "track": "Piste"
+        },
+        "link": {
+          "fediverse": "Rechercher sur le Fédivers",
+          "more": "Plus de résultats 🡒",
+          "rss": "S'abonner au podcast depuis le fil RSS"
+        },
+        "placeholder": {
+          "search": "Rechercher des artistes, albums, pistes…"
+        }
+      },
+      "VolumeControl": {
+        "button": {
+          "mute": "Couper le son",
+          "unmute": "Réactiver le son"
+        },
+        "label": {
+          "slider": "Ajuster le volume"
+        }
+      },
+      "album": {
+        "Card": {
+          "meta": {
+            "tracks": "{ n } piste | { n } pistes"
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": "Montrer plus"
+          }
+        }
+      },
+      "artist": {
+        "Card": {
+          "meta": {
+            "episodes": "{ n } épisode | { n } épisodes",
+            "tracks": "{ n } piste | { n } pistes"
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": "Montrer plus"
+          }
+        }
+      },
+      "podcast": {
+        "MobileRow": {
+          "button": {
+            "actions": "Afficher les actions de piste"
+          }
+        },
+        "Modal": {
+          "button": {
+            "addToFavorites": "Ajouter aux favoris",
+            "addToPlaylist": "Ajouter à la liste de lecture",
+            "addToQueue": "Ajouter à la file d'attente",
+            "albumDetails": "Voir l'album",
+            "artistDetails": "Voir l'artiste",
+            "channelDetails": "Voir la chaîne",
+            "episodeDetails": "Détails de l'épisode",
+            "playNext": "Lire ensuite",
+            "playNow": "Lire maintenant",
+            "removeFromFavorites": "Retirer des favoris",
+            "seriesDetails": "Voir les séries",
+            "startRadio": "Lancer la radio",
+            "trackDetails": "Détails de la piste"
+          }
+        }
+      },
+      "track": {
+        "MobileRow": {
+          "button": {
+            "actions": "Afficher les actions de piste"
+          }
+        },
+        "Modal": {
+          "button": {
+            "addToFavorites": "Ajouter aux favoris",
+            "addToPlaylist": "Ajouter à la liste de lecture",
+            "addToQueue": "Ajouter à la file d'attente",
+            "albumDetails": "Voir l'album",
+            "artistDetails": "Voir l'artiste",
+            "channelDetails": "Voir la chaîne",
+            "episodeDetails": "Détails de l'épisode",
+            "playNext": "Lire ensuite",
+            "playNow": "Lire maintenant",
+            "removeFromFavorites": "Retirer des favoris",
+            "seriesDetails": "Voir les séries",
+            "startRadio": "Lancer la radio",
+            "trackDetails": "Détails de la piste"
+          }
+        },
+        "Table": {
+          "table": {
+            "header": {
+              "album": "Album",
+              "artist": "Artiste",
+              "title": "Titre"
+            }
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": "Montrer plus"
+          },
+          "empty": {
+            "noResults": "Rien n'a été trouvé"
+          }
+        }
+      }
+    },
+    "auth": {
+      "ApplicationEdit": {
+        "button": {
+          "regenerateToken": "Régénérer le jeton"
+        },
+        "header": {
+          "appDetails": "Détails de l'application",
+          "appSecretWarning": "Gardez une copie de ce jeton dans un endroit sûr.",
+          "editApp": "Éditer l'application"
+        },
+        "help": {
+          "appDetails": "L'ID et le \"secret\" de l'application sont des données sensibles et doivent être traitées comme des mots de passe. Ne les partagez avec personne."
+        },
+        "label": {
+          "accessToken": "Jeton d'accès",
+          "appId": "ID de l'application",
+          "appSecret": "Secret de l'application"
+        },
+        "link": {
+          "settings": "Retour aux paramètres"
+        },
+        "message": {
+          "appSecretWarning": "Vous ne serez pas en mesure de le revoir une fois que vous aurez quitté cet écran."
+        },
+        "title": "Éditer l'application"
+      },
+      "ApplicationForm": {
+        "button": {
+          "create": "Créer une application",
+          "update": "Mettre à jour la playlist"
+        },
+        "header": {
+          "failure": "Impossible de sauvegarder vos modifications"
+        },
+        "help": {
+          "redirectUri": "Utiliser \"urn:ietf:wg:oauth:2.0:oob\" comme URI de redirection si votre application n'est pas disponible sur le web."
+        },
+        "label": {
+          "name": "Nom",
+          "redirectUri": "URI de redirection",
+          "scopes": {
+            "description": "Cocher le périmètre \"Lecture\" ou \"Écriture\" sur le parent implique l'accès à tous les périmètres enfants correspondants.",
+            "label": "Espaces",
+            "read": {
+              "description": "Accès en lecture seule aux données utilisateur",
+              "label": "Lire"
+            },
+            "write": {
+              "description": "Accès aux données utilisateur en écriture seule",
+              "label": "Écriture"
+            }
+          }
+        }
+      },
+      "ApplicationNew": {
+        "link": {
+          "settings": "Retour aux paramètres"
+        },
+        "title": "Créer une nouvelle application"
+      },
+      "Authorize": {
+        "button": {
+          "authorize": "Autoriser { app }"
+        },
+        "header": {
+          "access": "{ app } veut accéder à votre compte Funkwhale",
+          "allScopes": "Accès total",
+          "authorize": "Autoriser une application tierce",
+          "authorizeFailure": "Erreur lors de l'autorisation de l'application",
+          "fetchFailure": "Erreur lors de la récupération des données de l'application",
+          "readOnly": "Lecture seule",
+          "writeOnly": "Écriture seule"
+        },
+        "help": {
+          "copyCode": "Un code à copier-coller dans l'application vous sera présenté",
+          "pasteCode": "Copiez-coller le code suivant dans votre application :",
+          "redirect": "Vous allez être redirigé·e vers { 0 }"
+        },
+        "message": {
+          "unknownPermissions": "L'application demande également les permissions inconnues suivantes :"
+        },
+        "title": "Autoriser l'application"
+      },
+      "LoginForm": {
+        "button": {
+          "login": "Se connecter"
+        },
+        "header": {
+          "loginFailure": "Erreur lors de la connexion"
+        },
+        "help": {
+          "approvalRequired": "Si vous venez de vous inscrire, vous devrez peut-être attendre que notre équipe de modération examine votre compte ou vérifie votre adresse courriel.",
+          "invalidCredentials": "Veuillez vérifier que votre combinaison de nom d'utilisateur et de mot de passe est correcte et assurez-vous d'avoir vérifié votre adresse courriel."
+        },
+        "label": {
+          "password": "Mot de passe",
+          "username": "Nom d'utilisateur ou courriel"
+        },
+        "link": {
+          "createAccount": "Créer un compte",
+          "resetPassword": "Réinitialiser votre mot de passe"
+        },
+        "message": {
+          "redirect": "Vous serez rédirigé vers {domain} pour vous authentifier"
+        },
+        "placeholder": {
+          "username": "Saisissez votre nom d'utilisateur·rice ou courriel"
+        }
+      },
+      "Logout": {
+        "button": {
+          "logout": "Oui, déconnectez-moi !"
+        },
+        "header": {
+          "confirm": "Êtes-vous sûr·e de vouloir vous déconnecter ?",
+          "unauthenticated": "Vous n'êtes pas actuellement connecté·e"
+        },
+        "link": {
+          "login": "Connexion !"
+        },
+        "message": {
+          "loggedIn": "Vous êtes actuellement connecté·e en tant que { username }"
+        },
+        "title": "Déconnexion"
+      },
+      "Plugin": {
+        "button": {
+          "save": "Enregistrer",
+          "scan": "Analyse"
+        },
+        "description": {
+          "library": "L'audiothèque vers laquelle importer les fichiers."
+        },
+        "header": {
+          "failure": "Erreur lors de l'enregistrement des paramètres du greffon"
+        },
+        "label": {
+          "library": "Audiothèque",
+          "pluginEnabled": "Activé"
+        },
+        "link": {
+          "documentation": "Documentation"
+        }
+      },
+      "Settings": {
+        "button": {
+          "delete": "Supprimer",
+          "deleteAccount": "Supprimer mon compte…",
+          "deleteAccountConfirm": "Supprimer mon compte",
+          "disableSubsonic": "Désactiver l'accès",
+          "edit": "Éditer",
+          "password": "Changer le mot de passe",
+          "refresh": "Rafraîchir",
+          "remove": "Retirer",
+          "removeApp": "Supprimer l'application",
+          "revoke": "Révoquer",
+          "revokeAccess": "Révoquer l'accès",
+          "update": "Mettre à jour",
+          "updateSettings": "Mettre à jour les paramètres"
+        },
+        "description": {
+          "authorizedApps": "Voici la liste des applications qui ont accès aux donnnées de votre compte.",
+          "changeEmail": "Modifier l'adresse courriel associée à votre compte. Nous enverrons une confirmation à la nouvelle adresse.",
+          "changePassword": {
+            "paragraph1": "La mise à jour de votre mot de passe changera également le mot de passe de l'API Subsonic si vous en avez demandé un.",
+            "paragraph2": "Vous devrez mettre à jour votre mot de passe sur l'ensemble des clients utilisant ce mot de passe."
+          },
+          "contentFilters": "Les filtres de contenu vous aident à cacher les contenus que vous ne voulez pas voir sur ce service.",
+          "deleteAccount": "Vous pouvez de façon permanente et irrémédiable votre compte et toutes les données liées en utilisant le formulaire ci-dessous. Une confirmation vous sera demandée.",
+          "plugins": "Utilisez des greffons pour étendre Funkwhale et y ajouter des fonctionnalités.",
+          "yourApps": "Voici la liste des applications que vous avez créées."
+        },
+        "header": {
+          "accountFailure": "Nous ne pouvons pas supprimer votre compte",
+          "accountSettings": "Paramètres du compte",
+          "authorizedApps": "Applications autorisées",
+          "avatar": "Avatar",
+          "avatarFailure": "Impossible de sauvegarder votre avatar",
+          "changeEmail": "Modifier mon courriel",
+          "changePassword": "Changer mon mot de passe",
+          "contentFilters": "Filtres de contenu",
+          "deleteAccount": "Supprimer mon compte",
+          "emailFailure": "Nous ne pouvons pas modifier votre adresse de courriel",
+          "hiddenArtists": "Artistes cachés",
+          "noApps": "Vous n'avez aucune règle en place pour ce compte.",
+          "noPersonalApps": "Vous n'avez pas encore créé d'application.",
+          "passwordFailure": "Impossible de changer votre mot de passe",
+          "plugins": "Greffons",
+          "settingsUpdated": "Paramètres mis à jour",
+          "updateFailure": "Vos paramètres ne peuvent être mis à jour",
+          "yourApps": "Vos applications"
+        },
+        "help": {
+          "changePassword": "Merci de vérifier que votre mot de passe est correct",
+          "noApps": "Si vous autorisez des applications tierces à accéder à vos données, ces applications seront listées ici.",
+          "noPersonalApps": "Créez-en une pour intégrer Funkwhale avec des applications tierces."
+        },
+        "label": {
+          "avatar": "Avatar",
+          "currentPassword": "Mot de passe actuel",
+          "newEmail": "Nouvelle adresse courriel",
+          "newPassword": "Nouveau mot de passe",
+          "password": "Mot de passe"
+        },
+        "link": {
+          "managePlugins": "Gérer les greffons",
+          "newApp": "Créer une nouvelle application"
+        },
+        "message": {
+          "confirmDelete": "Votre demande de suppression a été envoyée, votre compte et le contenu associé sera supprimé sous peu",
+          "currentEmail": "Votre adresse courriel actuelle est {email}"
+        },
+        "modal": {
+          "changePassword": {
+            "content": {
+              "logout": "Vous allez être déconnecté⋅e de cette session et vous devrez vous connecter avec votre nouveau mot de passe",
+              "subsonic": "Votre mot de passe Subsonic sera remplacé par un nouveau mot de passe aléatoire, ce qui vous déconnectera de tous les appareils utilisant l'ancien mot de passe",
+              "warning": "Modifier votre mot de passe aura les conséquences suivantes"
+            },
+            "header": "Changer le mot de passe ?"
+          },
+          "deleteAccount": {
+            "content": {
+              "warning": "Ceci est irréversible et supprimera de façon permanente vos données de nos serveurs. Vous serez immédiatement déconnecté·e."
+            },
+            "header": "Souhaitez-vous supprimer votre compte ?"
+          },
+          "deleteApp": {
+            "content": {
+              "warning": "Cela supprimera définitivement l'application et tous les jetons associés."
+            },
+            "header": "Supprimer l'application « { application } » ?"
+          },
+          "revokeApp": {
+            "content": {
+              "warning": "Cela empêchera cette application d'accéder au service en votre nom."
+            },
+            "header": "Révoquer l'accès pour l'application « { application } » ?"
+          }
+        },
+        "table": {
+          "artists": {
+            "header": {
+              "creationDate": "Date de création",
+              "name": "Nom"
+            }
+          },
+          "authorizedApps": {
+            "header": {
+              "application": "Application",
+              "permissions": "Permissions"
+            }
+          },
+          "yourApps": {
+            "header": {
+              "application": "Application",
+              "creationDate": "Date de création",
+              "scopes": "Périmètres"
+            }
+          }
+        },
+        "title": "Paramètres du compte",
+        "warning": {
+          "deleteAccount": "Votre compte sera supprimé de nos serveurs en quelques minutes. Nous informerons également les autres pods qui peuvent détenir une copie partielle de vos données pour qu'ils puissent procéder à la suppression. Cependant, merci de noter que certains de ces pods peuvent être hors lignes où ne pas tenir compte de la demande de suppression."
+        }
+      },
+      "SignupForm": {
+        "button": {
+          "create": "Créer mon compte"
+        },
+        "header": {
+          "login": "Connectez-vous à votre compte Funkwhale",
+          "signupFailure": "Impossible de créer votre compte."
+        },
+        "label": {
+          "email": "Adresse courriel",
+          "invitation": "Code d’invitation",
+          "password": "Mot de passe",
+          "username": "Nom d'utilisateur"
+        },
+        "message": {
+          "accountCreated": "Votre compte a été créé avec succès. Veuillez vérifier votre adresse courriel avant d'essayer de vous connecter.",
+          "awaitingReview": "Votre demande de compte a été soumise avec succès. Vous serez informé par courriel lorsque notre équipe de modération aura examiné votre demande.",
+          "registrationClosed": "Les inscriptions sont désactivées sur cette instance. vous aurez besoin d'un code d'invitation pour vous inscrire.",
+          "requiresReview": "Les créations de comptes sont ouvertes sur ce pod mais sont soumises à l'approbation de l'équipe de modération."
+        },
+        "placeholder": {
+          "email": "Saisissez votre adresse courriel",
+          "invitation": "Saisissez votre code d'invitation (insensible à la casse)",
+          "username": "Saisissez votre nom d'utilisateur·rice"
+        }
+      },
+      "SubsonicTokenForm": {
+        "button": {
+          "confirmDisable": "Désactiver l'accès",
+          "confirmNewPassword": "Demander un mot de passe",
+          "disable": "Désactiver l'accès via Subsonic",
+          "newPassword": "Demander un nouveau mot de passe"
+        },
+        "description": {
+          "subsonic": {
+            "paragraph1": "Funkwhale est compatible avec d'autres lecteurs de musique qui supportent l'API Subsonic.",
+            "paragraph2": "Vous pouvez les utiliser pour profiter de vos playlists et de votre musique en mode hors-ligne sur votre smatphone ou tablette, par exemple.",
+            "paragraph3": "Cependant, accéder à Funkwhale depuis ces clients requiert un mot de passe distinct que vous pouvez configurer ci-dessous."
+          }
+        },
+        "header": {
+          "error": "Erreur",
+          "subsonic": "Mot de passe de l'API Subsonic"
+        },
+        "label": {
+          "subsonicField": "Mot de passe de l'API Subsonic"
+        },
+        "link": {
+          "apps": "Découvrez comment utiliser Funkwhale depuis d'autres applications"
+        },
+        "message": {
+          "accessDisabled": "Accès désactivé",
+          "passwordUpdated": "Mot de passe mis à jour",
+          "unavailable": "L'API Subsonic n'est pas disponible sur cette instance Funkwhale."
+        },
+        "modal": {
+          "disableSubsonic": {
+            "content": {
+              "warning": "Cela désactivera complétement l'accès à l'API Subsonic depuis votre compte."
+            },
+            "header": "Désactiver l'accès à l'API Subsonic ?"
+          },
+          "newPassword": {
+            "content": {
+              "warning": "Cela vous déconnectera sur l'ensemble de vos appareils utilisant ce mot de passe."
+            },
+            "header": "Demander un nouveau mot de passe pour l'API Subsonic ?"
+          }
+        }
+      }
+    },
+    "channels": {
+      "AlbumForm": {
+        "header": {
+          "error": "Erreur lors de la création"
+        },
+        "label": {
+          "albumTitle": "Titre"
+        }
+      },
+      "AlbumModal": {
+        "button": {
+          "cancel": "Annuler",
+          "create": "Créer"
+        },
+        "header": {
+          "newAlbum": "Nouvel album",
+          "newSeries": "Nouvelles séries"
+        }
+      },
+      "AlbumSelect": {
+        "label": {
+          "album": "Album",
+          "series": "Séries"
+        },
+        "meta": {
+          "tracks": "{ n } piste | { n } pistes"
+        },
+        "option": {
+          "none": "Néant"
+        }
+      },
+      "LicenseSelect": {
+        "label": {
+          "license": "Licence"
+        },
+        "link": {
+          "license": "À propos de cette licence d'utilisation"
+        },
+        "option": {
+          "none": "Néant"
+        }
+      },
+      "SubscribeButton": {
+        "help": {
+          "auth": "Vous devez être connecté pour vous abonner à cette chaîne"
+        },
+        "title": {
+          "subscribe": "S'abonner",
+          "unsubscribe": "Se désabonner"
+        }
+      },
+      "UploadForm": {
+        "button": {
+          "edit": "Éditer",
+          "ignore": "Ignorer",
+          "remove": "Retirer",
+          "resume": "Reprendre",
+          "retry": "Réessayer"
+        },
+        "description": {
+          "extensions": "Extensions prises en charge : { extensions }"
+        },
+        "header": {
+          "error": "Erreur lors de la publication"
+        },
+        "help": {
+          "license": "Ajouter une licence à cet envoi pour assurer des libertés d'utilisation à votre public."
+        },
+        "label": {
+          "channel": "Chaîne",
+          "openBrowser": "Parcourir…"
+        },
+        "message": {
+          "dragAndDrop": "Glissez-déposez ici vos fichiers ou bien ouvrez le navigateur pour les envoyer",
+          "pending": "Vous avez des brouillons en attente de publication."
+        },
+        "status": {
+          "errored": "En erreur",
+          "pending": "En attente",
+          "uploading": "Envoi en cours"
+        },
+        "warning": {
+          "quota": "Vous ne disposez plus de suffisamment d'espace de stockage pour envoyer de nouveaux fichiers. Merci de contacter l'équipe de modération."
+        }
+      },
+      "UploadMetadataForm": {
+        "label": {
+          "description": "Description",
+          "image": "Image de la piste",
+          "position": "Pagination",
+          "tags": "Étiquettes",
+          "title": "Titre"
+        }
+      },
+      "UploadModal": {
+        "button": {
+          "cancel": "Annuler",
+          "close": "Fermer",
+          "finishLater": "Terminer plus tard",
+          "next": "Étape suivante",
+          "previous": "Étape précédente",
+          "publish": "Publier",
+          "update": "Mettre à jour"
+        },
+        "header": {
+          "processing": "Envois en cours de traitement",
+          "publish": "Publier l'audio",
+          "uploadDetails": "Détails de l'envoi",
+          "uploadFiles": "Fichiers à envoyer"
+        },
+        "meta": {
+          "files": "{ n } fichier | { n } fichiers",
+          "quota": "Espace de stockage restant : {space}"
+        }
+      }
+    },
+    "common": {
+      "ActionTable": {
+        "button": {
+          "allSelected": "Unique élément sélectionné | Tous les { n } éléments sélectionnés",
+          "go": "Aller",
+          "launch": "Démarrer",
+          "refresh": "Rafraîchir le contenu de la table",
+          "select": "Sélectionner",
+          "selectAll": "Tout sélectionner",
+          "selectCurrentPage": "Sélectionner seulement la page actuelle",
+          "selectElement": "Sélectionner un élément | Sélectionner l'ensemble des { n } éléments",
+          "selected": "{ n } sur { total } élément sélectionné | { n } sur { total } éléments sélectionnés"
+        },
+        "header": {
+          "error": "Erreur lors du traitement de l'action"
+        },
+        "label": {
+          "actions": "Actions",
+          "performAction": "Appliquer les modifications en attente"
+        },
+        "message": {
+          "needsRefresh": "Le contenu a été modifié, cliquez sur rafraîchir pour voir le contenu à jour",
+          "success": "L'action {action} a été lancée avec succès sur {n} élément | L'action {action} a été lancée avec succès sur {n} éléments"
+        },
+        "modal": {
+          "performAction": {
+            "content": {
+              "warning": "Cela peut affecter de nombreux éléments ou avoir des conséquences irréversibles, merci de vérifier que c'est bien ce que vous souhaitez."
+            },
+            "header": "Voulez-vous effectuer l'action « { action } » sur { n } élément ? | Voulez-vous effectuer l'action « \"{ action } » sur { n } éléments ?"
+          }
+        }
+      },
+      "AttachmentInput": {
+        "button": {
+          "remove": "Retirer"
+        },
+        "header": {
+          "failure": "Impossible de sauvegarder votre pièce jointe"
+        },
+        "help": {
+          "upload": "PNG ou JPG. Les dimensions doivent se situer entre 1400x1400 pixels et 3000x3000 pixels. La taille maximale de fichier autorisée est de 5 Mo."
+        },
+        "label": {
+          "upload": "Envoyer une nouvelle image…"
+        },
+        "loader": {
+          "uploading": "Envoi du fichier en cours…"
+        }
+      },
+      "CollapseLink": {
+        "button": {
+          "collapse": "Réduire",
+          "expand": "Développer"
+        }
+      },
+      "ContentForm": {
+        "button": {
+          "preview": "Aperçu",
+          "write": "Écrire"
+        },
+        "empty": {
+          "noContent": "Rien à prévisualiser"
+        },
+        "help": {
+          "markdown": "La syntaxe Markdown est prise en charge"
+        },
+        "placeholder": {
+          "input": "Écrire quelques mots ici…"
+        }
+      },
+      "CopyInput": {
+        "button": {
+          "copy": "Copier"
+        },
+        "message": {
+          "success": "La texte a été copié dans le presse-papier !"
+        }
+      },
+      "DangerousButton": {
+        "button": {
+          "cancel": "Annuler",
+          "confirm": "Confirmer"
+        },
+        "header": {
+          "confirm": "Souhaitez-vous confirmer cette action ?"
+        }
+      },
+      "Duration": {
+        "meta": {
+          "hours": "{ hours} h { minutes } min",
+          "minutes": "{ minutes } min"
+        }
+      },
+      "EmptyState": {
+        "button": {
+          "refresh": "Rafraîchir"
+        },
+        "header": {
+          "noResults": "Aucun résultat n'a été trouvé."
+        }
+      },
+      "ExpandableDiv": {
+        "button": {
+          "less": "Montrer moins",
+          "more": "Montrer plus"
+        }
+      },
+      "InlineSearchBar": {
+        "button": {
+          "clear": "Effacer"
+        },
+        "label": {
+          "search": "Rechercher"
+        },
+        "placeholder": {
+          "search": "Rechercher…"
+        }
+      },
+      "LoginModal": {
+        "description": {
+          "noAccess": "Vous n'avez pas accès à ceci"
+        },
+        "header": {
+          "unauthenticated": "Déconnecté⋅e"
+        },
+        "link": {
+          "login": "Connexion",
+          "signup": "Inscription"
+        }
+      },
+      "RenderedDescription": {
+        "button": {
+          "cancel": "Annuler",
+          "edit": "Éditer",
+          "less": "Montrer moins",
+          "more": "Montrer plus",
+          "update": "Mettre à jour la description"
+        },
+        "empty": {
+          "noDescription": "Aucune description disponible"
+        },
+        "header": {
+          "failure": "Erreur lors de la mise à jour de la description"
+        }
+      },
+      "UserLink": {
+        "link": {
+          "username": "{'@'}{username}"
+        }
+      },
+      "UserMenu": {
+        "label": {
+          "language": "Langue",
+          "shortcuts": "Raccourcis clavier",
+          "theme": "Thème"
+        },
+        "link": {
+          "about": "À propos",
+          "chat": "Salle de discussion",
+          "docs": "Documentation",
+          "forum": "Forum",
+          "git": "Suivi des problèmes",
+          "login": "Connexion",
+          "logout": "Déconnexion",
+          "notifications": "Notifications",
+          "profile": "Profil",
+          "settings": "Paramètres",
+          "signup": "Inscription",
+          "support": "Aide"
+        }
+      },
+      "UserModal": {
+        "button": {
+          "switchInstance": "Utiliser une autre instance"
+        },
+        "header": {
+          "options": "Options"
+        },
+        "label": {
+          "language": "Langue",
+          "shortcuts": "Raccourcis clavier",
+          "theme": "Thème"
+        },
+        "link": {
+          "about": "À propos",
+          "chat": "Salle de discussion",
+          "docs": "Documentation",
+          "forum": "Forum",
+          "git": "Suivi des problèmes",
+          "login": "Connexion",
+          "logout": "Déconnexion",
+          "notifications": "Notifications",
+          "profile": "Profil",
+          "settings": "Paramètres",
+          "signup": "Inscription",
+          "support": "Aide"
+        }
+      }
+    },
+    "favorites": {
+      "List": {
+        "empty": {
+          "noFavorites": "Aucune piste n'a été ajoutée à vos favoris pour le moment"
+        },
+        "header": {
+          "favorites": "{ n } favori | { n } favoris"
+        },
+        "link": {
+          "library": "Parcourir l'audiothèque"
+        },
+        "loader": {
+          "loading": "Chargement de vos favoris…"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Croissant",
+            "descending": "Décroissant",
+            "label": "Ordre"
+          },
+          "label": "Trier par"
+        },
+        "pagination": {
+          "results": "Résultats par page"
+        },
+        "title": "Vos favoris"
+      },
+      "TrackFavoriteIcon": {
+        "button": {
+          "add": "Ajouter aux favoris",
+          "remove": "Retirer des favoris"
+        },
+        "label": {
+          "inFavorites": "Dans les favoris"
+        }
+      }
+    },
+    "federation": {
+      "FetchButton": {
+        "button": {
+          "close": "Fermer",
+          "reload": "Fermer et recharger la page"
+        },
+        "description": {
+          "failure": "Une erreur s'est produite pendant la mise à jour des données :",
+          "pending": "La requête de rafraîchissement n'a pas été effectuée à temps par notre serveur. Elle sera exécutée plus tard.",
+          "skipped": "Le serveur distant a répondu, mais les données envoyées ne sont pas prises en charge par Funkwhale.",
+          "success": "Les données ont été rafraîchies avec succès depuis le serveur distant."
+        },
+        "header": {
+          "failure": "Erreur de rafraîchissement",
+          "pending": "Rafraîchissement en attente",
+          "refresh": "Rafraîchissement de l'objet depuis le serveur distant…",
+          "saveFailure": "Erreur lors de l'enregistrement des paramètres",
+          "skipped": "Rafraîchissement non effectué",
+          "success": "Rafraîchissement accompli"
+        },
+        "loader": {
+          "awaitingResult": "Chargement de vos favoris…",
+          "fetchRequest": "Demande de récupération en cours…"
+        },
+        "table": {
+          "error": {
+            "label": {
+              "detail": "Détail de l'erreur",
+              "type": "Type d'erreur"
+            },
+            "value": {
+              "connectionError": "Impossible de se connecter au serveur distant",
+              "httpError": "Une erreur HTTP s'est produite en contactant le serveur distant",
+              "httpStatus": "Le serveur distant a répondu avec HTTP { status }",
+              "invalidAttributesError": "Les données renvoyées par le serveur distant ont des attributs manquants ou invalides",
+              "invalidJsonError": "Le serveur distant a envoyé des données JSON ou JSON-LD invalides",
+              "timeoutError": "Le serveur distant n’a pas répondu assez vite",
+              "unknownError": "Erreur inconnue"
+            }
+          }
+        }
+      },
+      "LibraryWidget": {
+        "button": {
+          "showMore": "Montrer plus"
+        },
+        "empty": {
+          "noMatch": "Aucune audiothèque correspondante."
+        }
+      }
+    },
+    "forms": {
+      "PasswordInput": {
+        "button": {
+          "copy": "Copier"
+        },
+        "message": {
+          "copy": "La texte a été copié dans le presse-papier !"
+        },
+        "title": "Afficher/masquer le mot de passe"
+      }
+    },
+    "library": {
+      "AlbumBase": {
+        "link": {
+          "addDescription": "Ajouter une description…"
+        },
+        "meta": {
+          "episodes": "{ n } épisode | { n } épisodes",
+          "tracks": "{ n } piste | { n } pistes"
+        },
+        "title": "Album"
+      },
+      "AlbumDetail": {
+        "description": {
+          "libraries": "Cet album est présent dans les audiothèques suivantes :"
+        },
+        "header": {
+          "episodes": "Épisodes",
+          "libraries": "Audiothèques de l’utilisateur",
+          "tracks": "Pistes"
+        },
+        "meta": {
+          "volume": "Volume { number }"
+        }
+      },
+      "AlbumDropdown": {
+        "button": {
+          "cancel": "Annuler",
+          "delete": "Supprimer",
+          "edit": "Éditer",
+          "embed": "Insérer",
+          "more": "Plus…"
+        },
+        "link": {
+          "discogs": "Rechercher sur Discogs",
+          "django": "Voir dans l'administration Django",
+          "domain": "Voir sur { domaine }",
+          "moderation": "Ouvrir dans l'interface de modération",
+          "musicbrainz": "Voir sur MusicBrainz"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "L'album sera supprimé, ainsi que tous les fichiers et données associés. Cette action est irréversible."
+            },
+            "header": "Supprimer cet album ?"
+          },
+          "embed": {
+            "header": "Insérez cet album dans votre site web"
+          }
+        }
+      },
+      "AlbumEdit": {
+        "header": {
+          "edit": "Modifier cet album",
+          "suggest": "Nous ne pouvons pas charger cette piste"
+        },
+        "message": {
+          "remote": "Cet objet est géré par un autre serveur, vous ne pouvez pas le modifier."
+        }
+      },
+      "Albums": {
+        "button": {
+          "search": "Rechercher"
+        },
+        "empty": {
+          "noResults": "Aucun résultat ne correspond à votre requête"
+        },
+        "header": {
+          "browse": "Parcourir les albums"
+        },
+        "label": {
+          "search": "Rechercher",
+          "tags": "Étiquettes"
+        },
+        "link": {
+          "addMusic": "Ajouter de la musique"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Croissant",
+            "descending": "Décroissant",
+            "label": "Sens"
+          },
+          "label": "Trier par"
+        },
+        "pagination": {
+          "results": "Résultats par page"
+        },
+        "placeholder": {
+          "search": "Entrer le titre de l’album…"
+        },
+        "title": "Albums"
+      },
+      "ArtistBase": {
+        "button": {
+          "cancel": "Annuler",
+          "edit": "Éditer",
+          "embed": "Insérer",
+          "more": "Plus…",
+          "play": "Lire tous les albums"
+        },
+        "link": {
+          "discogs": "Rechercher sur Discogs",
+          "django": "Voir dans l'administration Django",
+          "domain": "Voir sur { domaine }",
+          "moderation": "Ouvrir dans l'interface de modération",
+          "musicbrainz": "Voir sur MusicBrainz",
+          "wikipedia": "Rechercher sur Wikipédia"
+        },
+        "meta": {
+          "albums": "{ n } album | { n } albums",
+          "tracks": "{ n } piste dans | { n } pistes dans"
+        },
+        "modal": {
+          "embed": {
+            "header": "Insérez cet artiste dans votre site web"
+          }
+        },
+        "title": "Artiste"
+      },
+      "ArtistDetail": {
+        "button": {
+          "filter": "Supprimer le filtre",
+          "more": "Charger plus…"
+        },
+        "description": {
+          "library": "Cet artiste est présent dans les audiothèques suivantes :"
+        },
+        "header": {
+          "album": "Albums de cet artiste",
+          "library": "Audiothèques de l’utilisateur",
+          "track": "Nouvelles pistes de cet artiste"
+        },
+        "link": {
+          "filter": "Afficher les fichiers"
+        },
+        "message": {
+          "filter": "Vous masquez actuellement le contenu associé à cet artiste."
+        }
+      },
+      "ArtistEdit": {
+        "header": {
+          "edit": "Modifier cet artiste",
+          "suggest": "Nous ne pouvons pas charger cette piste"
+        },
+        "message": {
+          "remote": "Cet objet est géré par un autre serveur, vous ne pouvez pas le modifier."
+        }
+      },
+      "Artists": {
+        "button": {
+          "search": "Rechercher",
+          "upload": "Ajouter de la musique"
+        },
+        "empty": {
+          "noResults": "Aucun résultat ne correspond à votre requête"
+        },
+        "header": {
+          "browse": "Parcourir les artistes"
+        },
+        "label": {
+          "excludeCompilation": "Exclure les compilations d'artistes",
+          "search": "Nom de l'artiste",
+          "tags": "Étiquettes"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Croissant",
+            "descending": "Décroissant",
+            "label": "Sens"
+          },
+          "label": "Trier par"
+        },
+        "pagination": {
+          "results": "Résultats par page"
+        },
+        "placeholder": {
+          "search": "Rechercher…"
+        },
+        "title": "Artistes"
+      },
+      "EditCard": {
+        "button": {
+          "approve": "Approuver",
+          "delete": "Supprimer",
+          "reject": "Rejeter"
+        },
+        "header": {
+          "modification": "Modification { id }"
+        },
+        "link": {
+          "track": "Piste #{ id } - { name }"
+        },
+        "modal": {
+          "content": {
+            "warning": "La suggestion sera entièrement supprimée, cette action est irréversible."
+          },
+          "delete": {
+            "header": "Supprimer cette suggestion ?"
+          }
+        },
+        "status": {
+          "applied": "Approuvée et appliquée",
+          "approved": "Approuvée",
+          "pending": "Vérification en attente",
+          "rejected": "Rejeté"
+        },
+        "table": {
+          "update": {
+            "header": {
+              "field": "Champ",
+              "newValue": "Nouvelle valeur",
+              "oldValue": "Ancienne valeur"
+            },
+            "notApplicable": "ND"
+          }
+        }
+      },
+      "EditForm": {
+        "button": {
+          "cancel": "Annuler",
+          "clear": "Effacer",
+          "new": "Soumettre une nouvelle modification",
+          "reset": "Réinitialiser à la valeur d’origine",
+          "showAll": "Afficher toutes les modifications",
+          "showUnreviewed": "Limiter aux modifications en attente de validation",
+          "submit": "Soumettre et appliquer la modification",
+          "suggest": "Soumettre la suggestion"
+        },
+        "empty": {
+          "suggestEdit": "Suggérer un changement avec le formulaire ci-dessous"
+        },
+        "header": {
+          "failure": "Erreur durant l'envoi des modifications",
+          "recentEdits": "Modifications récentes",
+          "success": "Votre modification a été envoyée avec succès.",
+          "unreviewed": "Modifications récentes attendant une vérification"
+        },
+        "label": {
+          "summary": "Résumé (optionel)"
+        },
+        "message": {
+          "noPermission": "Vous n'avez pas la permission d'éditer cet élément, mais vous pouvez suggérer des modifications. Une fois envoyées, les suggestions sont examinées avant d'être approuvées."
+        },
+        "notApplicable": "ND",
+        "placeholder": {
+          "summary": "Une courte description décrivant vos changements."
+        }
+      },
+      "FileUpload": {
+        "button": {
+          "cancel": "Annuler",
+          "retry": "Retenter les envois échoués"
+        },
+        "description": {
+          "import": "Résultats de votre importation",
+          "previousImport": "Résultats de votre dernière importation :"
+        },
+        "empty": {
+          "noFiles": "0"
+        },
+        "header": {
+          "failure": "Erreur pendant le démarrage de l'importation",
+          "local": "Importer de la musique depuis votre stockage local",
+          "server": "Statut de l'import",
+          "status": "État de l'import"
+        },
+        "label": {
+          "extensions": "Extensions prises en charge : { extensions }",
+          "remainingSpace": "Espace de stockage restant",
+          "uploadWidget": "Cliquez pour sélectionner les fichiers a téléverser ou glisser-déposer les fichiers ou répertoires"
+        },
+        "link": {
+          "picard": "nous vous recommandons d'utiliser le logiciel Picard pour cela.",
+          "processing": "En cours de traitement",
+          "uploading": "Envoi en cours"
+        },
+        "message": {
+          "listener": "Cette page vous demande de confirmer que vous voulez quitter - les données que vous avez entrées peuvent ne pas être sauvées.",
+          "local": {
+            "copyright": "Vous n'envoyez pas de contenu sous copyright dans une audiothèque publique car, dans le cas contraire, vous être probablement en infraction",
+            "format": "Les fichiers musicaux que vous téléversez sont en format OGG, Flac, MP3 ou AIFF",
+            "message": "Vous êtes sur le point de transférer de la musique dans votre audiothèque. Avant de procéder, veuillez vous assurer que :",
+            "tag": "Les fichiers musicaux que vous téléversez sont correctement tagués."
+          }
+        },
+        "table": {
+          "upload": {
+            "header": {
+              "actions": "Actions",
+              "filename": "Nom du fichier",
+              "size": "Taille",
+              "status": "Statut"
+            },
+            "progress": "{percent} %",
+            "status": {
+              "pending": "En attente",
+              "uploaded": "Téléversé",
+              "uploading": "Envoi en cours…"
+            }
+          }
+        },
+        "tooltip": {
+          "denied": "Import refusée, assurez-vous que le fichier n'est pas trop gros et que vous n'avez pas atteint votre quota",
+          "extension": "Mauvais type de fichier, assurez-vous de charger un fichier audio. Les formats de fichiers supportés sont { extensions }",
+          "network": "Une erreur réseau s'est produite lors de l'envoi de ce fichier",
+          "retry": "Réessayer",
+          "size": "Impossible de transférer ce fichier, assurez-vous qu'il n'est pas trop gros",
+          "timeout": "Dépassement du délai d'envoi, veuillez réessayer"
+        }
+      },
+      "FsBrowser": {
+        "button": {
+          "import": "Importer"
+        }
+      },
+      "FsLogs": {
+        "empty": {
+          "notStarted": "L'importation n'a pas encore commencé"
+        }
+      },
+      "Home": {
+        "header": {
+          "newChannels": "Nouvelles chaînes",
+          "playlists": "Listes de lecture",
+          "recentlyAdded": "Ajoutés récemment",
+          "recentlyFavorited": "Récemment ajouté aux favoris",
+          "recentlyListened": "Écouté récemment"
+        },
+        "title": "Audiothèque"
+      },
+      "ImportStatusModal": {
+        "button": {
+          "close": "Fermer"
+        },
+        "error": {
+          "importFailure": "Une erreur a eu lieu durant le processus de téléversement. Vous trouverez plus d'information ci-dessous.",
+          "invalidMetadata": {
+            "label": "Métadonnées invalides",
+            "message": "Les métadonnées inclues dans le fichier sont invalides, ou certains champs obligatoires sont manquants."
+          },
+          "unknownError": {
+            "label": "Erreur inconnue",
+            "message": "Une erreur inconnue s'est produite"
+          }
+        },
+        "header": {
+          "importDetail": "Détails de l'import"
+        },
+        "link": {
+          "documentation": "Lire notre documentation pour cette erreur",
+          "support": "Ouvrir un fil de discussion de support (incluez les informations de débogage dans votre message)"
+        },
+        "message": {
+          "importDetail": "Le fichier est en encore attente et sera prochainement traité par le serveur.",
+          "importSuccess": "L'envoi a été correctement traité par le serveur."
+        },
+        "table": {
+          "error": {
+            "debug": "Informations de débogage",
+            "errorDetail": "Détail de l'erreur",
+            "errorType": "Type d'erreur",
+            "help": "Obtenir de l'aide"
+          }
+        },
+        "warning": {
+          "importSkipped": "L’import a été ignoré car un fichier similaire est déjà disponible dans une de vos audiothèques."
+        }
+      },
+      "Podcasts": {
+        "button": {
+          "cancel": "Annuler",
+          "channel": "Créer une nouvelle chaîne",
+          "feed": "S'abonner au fil RSS",
+          "search": "Rechercher",
+          "subscribe": "S'abonner"
+        },
+        "empty": {
+          "noResults": "Aucun résultat ne correspond à votre requête"
+        },
+        "header": {
+          "browse": "Parcourir les podcasts"
+        },
+        "label": {
+          "search": "Titre du podcast",
+          "tags": "Étiquettes"
+        },
+        "modal": {
+          "subscription": {
+            "header": "Abonnement"
+          }
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Croissant",
+            "descending": "Décroissant",
+            "label": "Sens"
+          },
+          "label": "Trier par"
+        },
+        "pagination": {
+          "results": "Résultats par page"
+        },
+        "placeholder": {
+          "search": "Rechercher…"
+        },
+        "title": "Podcasts"
+      },
+      "Radios": {
+        "button": {
+          "add": "Créer une radio",
+          "create": "Créer votre propre radio",
+          "search": "Rechercher"
+        },
+        "empty": {
+          "noResults": "Aucun résultat ne correspond à votre requête"
+        },
+        "header": {
+          "browse": "Parcourir les radios",
+          "instance": "Radios de l'instance",
+          "user": "Radios des utilisateur·ice·s"
+        },
+        "label": {
+          "search": "Rechercher"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Croissant",
+            "descending": "Décroissant",
+            "label": "Ordre"
+          },
+          "label": "Trier par"
+        },
+        "pagination": {
+          "results": "Résultats par page"
+        },
+        "placeholder": {
+          "search": "Saisissez un nom de radio…"
+        },
+        "title": "Radios"
+      },
+      "TagDetail": {
+        "header": {
+          "channels": "Chaînes",
+          "tracks": "Pistes"
+        },
+        "link": {
+          "albums": "Albums",
+          "artists": "Artistes",
+          "moderation": "Ouvrir dans l'interface de modération"
+        }
+      },
+      "TagSelector": {
+        "placeholder": {
+          "search": "Rechercher…"
+        }
+      },
+      "TrackBase": {
+        "button": {
+          "cancel": "Annuler",
+          "delete": "Supprimer",
+          "download": "Télécharger",
+          "edit": "Éditer",
+          "embed": "Insérer",
+          "more": "Plus…",
+          "play": "Jouer"
+        },
+        "link": {
+          "discogs": "Rechercher sur Discogs",
+          "django": "Voir dans l'administration Django",
+          "domain": "Voir sur { domaine }",
+          "moderation": "Ouvrir dans l'interface de modération",
+          "wikipedia": "Rechercher sur Wikipédia"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "La piste sera supprimée, ainsi que tous les fichiers et données associés. Cette action est irréversible."
+            },
+            "header": "Supprimer cette piste ?"
+          },
+          "embed": {
+            "header": "Insérez cette piste dans votre site web"
+          }
+        },
+        "subtitle": {
+          "with-uploader": "Téléversé par {0} sur {1}",
+          "without-uploader": "Téléversé sur {0}"
+        },
+        "title": "Piste"
+      },
+      "TrackDetail": {
+        "description": {
+          "library": "Cette piste est présente dans les audiothèques suivantes :"
+        },
+        "header": {
+          "episode": "Détails de l'épisode",
+          "library": "Audiothèques en rapport",
+          "playlists": "Listes de lecture en rapport",
+          "release": "Détails de sortie",
+          "track": "Détails de la piste"
+        },
+        "link": {
+          "musicbrainz": "Voir sur MusicBrainz"
+        },
+        "notApplicable": "ND",
+        "table": {
+          "release": {
+            "album": "Album",
+            "artist": "Artiste",
+            "copyright": "Copyright",
+            "license": "Licence",
+            "series": "Série",
+            "url": "Adresse URL",
+            "year": "Année"
+          },
+          "track": {
+            "bitrate": {
+              "label": "Bitrate",
+              "value": "{bitrate}/s"
+            },
+            "codec": "Codec",
+            "downloads": "Téléchargements",
+            "duration": "Durée",
+            "size": "Taille"
+          }
+        }
+      },
+      "TrackEdit": {
+        "header": {
+          "edit": "Modifier cette piste",
+          "suggest": "Nous ne pouvons pas charger cette piste"
+        },
+        "message": {
+          "remote": "Cet objet est géré par un autre serveur, vous ne pouvez pas le modifier."
+        }
+      },
+      "radios": {
+        "Builder": {
+          "button": {
+            "filter": "Ajouter le filtre",
+            "save": "Enregistrer"
+          },
+          "description": {
+            "builder": "Vous pouvez utiliser cette interface pour réaliser votre propre radio personnalisée, qui jouera les pistes correspondant aux critères indiqués."
+          },
+          "header": {
+            "builder": "Éditeur",
+            "created": "Radio créée",
+            "matches": "{ n } piste correspondante aux filtres sélectionnés | { n } pistes correspondantes aux filtres sélectionnés",
+            "updated": "Radio mise à jour"
+          },
+          "label": {
+            "description": "Description",
+            "filter": "Ajouter des filtres pour personnaliser votre radio",
+            "name": "Nom de la radio",
+            "public": "Afficher publiquement"
+          },
+          "option": {
+            "filter": "Sélectionner un filtre"
+          },
+          "placeholder": {
+            "description": "Ma description géniale",
+            "name": "Ma super radio"
+          },
+          "table": {
+            "filter": {
+              "header": {
+                "actions": "Actions",
+                "candidates": "Pistes candidates",
+                "config": "Configuration",
+                "exclude": "Exclure",
+                "name": "Nom du filtre"
+              }
+            }
+          },
+          "title": "Éditeur de radio"
+        },
+        "Filter": {
+          "cancelButton": "Annuler",
+          "excludeLabel": "Exclure",
+          "matchingTracks": "0 piste correspondant au filtre | {n} piste correspondant au filtre | {n} pistes correspondant au filtre",
+          "matchingTracksModalHeader": "Piste correspondant au filtre",
+          "removeButton": "Retirer"
+        }
+      }
+    },
+    "manage": {
+      "ChannelsTable": {
+        "label": {
+          "category": "Catégorie",
+          "search": "Rechercher"
+        },
+        "link": {
+          "local": "Local",
+          "moderation": "Ouvrir dans l'interface de modération"
+        },
+        "option": {
+          "all": "Tout"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Croissant",
+            "descending": "Décroissant",
+            "label": "Sens"
+          },
+          "label": "Trier par"
+        },
+        "pagination": {
+          "results": "Affichage des résultats { start }-{ end } sur { total }"
+        },
+        "placeholder": {
+          "search": "Rechercher par domaine, nom d'utilisateur·rice, compte…"
+        },
+        "table": {
+          "channel": {
+            "header": {
+              "account": "Compte",
+              "albums": "Albums",
+              "creationDate": "Date de création",
+              "domain": "Domaine",
+              "name": "Nom",
+              "tracks": "Pistes"
+            }
+          }
+        }
+      },
+      "library": {
+        "AlbumsTable": {
+          "action": {
+            "delete": {
+              "label": "Supprimer",
+              "warning": "Les albums sélectionnés seront supprimés, ainsi que les pistes, téléversements, favoris, et historique d'écoute associés. Cette action est irréversible."
+            }
+          },
+          "label": {
+            "search": "Rechercher"
+          },
+          "link": {
+            "local": "Local",
+            "moderation": "Ouvrir dans l'interface de modération"
+          },
+          "notApplicable": "ND",
+          "ordering": {
+            "direction": {
+              "ascending": "Croissant",
+              "descending": "Décroissant",
+              "label": "Sens"
+            },
+            "label": "Trier par"
+          },
+          "pagination": {
+            "results": "Affichage des résultats { start }-{ end } sur { total }"
+          },
+          "placeholder": {
+            "search": "Rechercher par titre, artiste, album…"
+          },
+          "table": {
+            "album": {
+              "header": {
+                "artist": "Artiste",
+                "creationDate": "Date de création",
+                "domain": "Domaine",
+                "name": "Titre",
+                "releaseDate": "Date de sortie",
+                "tracks": "Pistes"
+              }
+            }
+          }
+        },
+        "ArtistsTable": {
+          "action": {
+            "delete": {
+              "label": "Supprimer",
+              "warning": "L’artiste sélectionné sera supprimé, ainsi que les téléversements, pistes, albums, favoris et historique d’écoute associés. Cette action est irréversible."
+            }
+          },
+          "label": {
+            "category": "Catégorie",
+            "search": "Rechercher"
+          },
+          "link": {
+            "local": "Local"
+          },
+          "option": {
+            "all": "Tout"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Croissant",
+              "descending": "Décroissant",
+              "label": "Sens"
+            },
+            "label": "Trier par"
+          },
+          "pagination": {
+            "results": "Affichage des résultats { start }-{ end } sur { total }"
+          },
+          "placeholder": {
+            "search": "Rechercher par domaine, nom d'utilisateur·rice, bio…"
+          },
+          "table": {
+            "artist": {
+              "header": {
+                "albums": "Albums",
+                "creationDate": "Date de création",
+                "domain": "Domaine",
+                "name": "Nom",
+                "tracks": "Pistes"
+              }
+            }
+          }
+        },
+        "EditsCardList": {
+          "label": {
+            "search": "Rechercher",
+            "status": "Statut"
+          },
+          "option": {
+            "all": "Tout",
+            "approved": "Approuvée",
+            "pending": "Vérification en attente",
+            "rejected": "Rejeté"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Croissant",
+              "descending": "Décroissant",
+              "label": "Ordre"
+            },
+            "label": "Trier par"
+          },
+          "pagination": {
+            "results": "Affichage des résultats { start }-{ end } sur { total }"
+          },
+          "placeholder": {
+            "search": "Rechercher par titre, artiste, domaine…"
+          }
+        },
+        "LibrariesTable": {
+          "action": {
+            "delete": {
+              "label": "Supprimer",
+              "warning": "L’audiothèque sélectionnée sera supprimée, ainsi que les téléversements et abonnements associés. Cette action est irréversible."
+            }
+          },
+          "label": {
+            "search": "Rechercher",
+            "visibility": "Visibilité"
+          },
+          "link": {
+            "local": "Local"
+          },
+          "option": {
+            "all": "Tout"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Croissant",
+              "descending": "Décroissant",
+              "label": "Sens"
+            },
+            "label": "Trier par"
+          },
+          "pagination": {
+            "results": "Affichage des résultats { start }-{ end } sur { total }"
+          },
+          "placeholder": {
+            "search": "Rechercher par domaine, nom d'utilisateur·rice, bio…"
+          },
+          "table": {
+            "library": {
+              "header": {
+                "account": "Compte",
+                "creationDate": "Date de création",
+                "domain": "Domaine",
+                "followers": "Abonnés",
+                "name": "Nom",
+                "uploads": "Téléversements",
+                "visibility": "Visibilité"
+              }
+            }
+          }
+        },
+        "TagsTable": {
+          "action": {
+            "delete": {
+              "label": "Supprimer",
+              "warning": "Le tag selectionné sera supprimé ainsi que son lien avec des contenus existants, s'il y en a. Cette action est irréversible."
+            }
+          },
+          "label": {
+            "search": "Rechercher"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Croissant",
+              "descending": "Décroissant",
+              "label": "Sens"
+            },
+            "label": "Trier par"
+          },
+          "pagination": {
+            "results": "Affichage des résultats { start }-{ end } sur { total }"
+          },
+          "placeholder": {
+            "search": "Rechercher par nom"
+          },
+          "table": {
+            "tag": {
+              "header": {
+                "albums": "Albums",
+                "artists": "Artistes",
+                "creationDate": "Date de création",
+                "name": "Nom",
+                "tracks": "Pistes"
+              }
+            }
+          }
+        },
+        "TracksTable": {
+          "action": {
+            "delete": {
+              "label": "Supprimer",
+              "warning": "Les pistes sélectionnées seront supprimées, ainsi que les téléversements, favoris et historique d’écoute associés. Cette action est irréversible."
+            }
+          },
+          "label": {
+            "search": "Rechercher"
+          },
+          "link": {
+            "local": "Local"
+          },
+          "notApplicable": "ND",
+          "ordering": {
+            "direction": {
+              "ascending": "Croissant",
+              "descending": "Décroissant",
+              "label": "Sens"
+            },
+            "label": "Trier par"
+          },
+          "pagination": {
+            "results": "Affichage des résultats { start }-{ end } sur { total }"
+          },
+          "placeholder": {
+            "search": "Rechercher par titre, artiste, album…"
+          },
+          "table": {
+            "track": {
+              "header": {
+                "album": "Album",
+                "artist": "Artiste",
+                "creationDate": "Date de création",
+                "domain": "Domaine",
+                "license": "Licence",
+                "title": "Titre"
+              }
+            }
+          }
+        },
+        "UploadsTable": {
+          "action": {
+            "delete": {
+              "label": "Supprimer",
+              "warning": "Cette action est irréversible."
+            }
+          },
+          "label": {
+            "search": "Rechercher",
+            "status": "Statut",
+            "visibility": "Visibilité"
+          },
+          "link": {
+            "local": "Local"
+          },
+          "notApplicable": "ND",
+          "option": {
+            "all": "Tout",
+            "failed": "Échoué",
+            "finished": "Terminé",
+            "pending": "En attente",
+            "skipped": "Ignoré"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Croissant",
+              "descending": "Décroissant",
+              "label": "Sens"
+            },
+            "label": "Trier par"
+          },
+          "pagination": {
+            "results": "Affichage des résultats { start }-{ end } sur { total }"
+          },
+          "placeholder": {
+            "search": "Rechercher par domaine, nom d'utilisateur·rice, bio…"
+          },
+          "table": {
+            "upload": {
+              "header": {
+                "accessedDate": "Date d'accès",
+                "account": "Compte",
+                "creationDate": "Date de création",
+                "domain": "Domaine",
+                "importStatus": "Statut de l'import",
+                "library": "Audiothèque",
+                "name": "Nom",
+                "size": "Taille",
+                "visibility": "Visibilité"
+              }
+            }
+          }
+        }
+      },
+      "moderation": {
+        "AccountsTable": {
+          "action": {
+            "purge": {
+              "label": "Nettoyer"
+            }
+          },
+          "label": {
+            "search": "Rechercher"
+          },
+          "link": {
+            "local": "Compte local"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Croissant",
+              "descending": "Décroissant",
+              "label": "Sens"
+            },
+            "label": "Trier par"
+          },
+          "pagination": {
+            "results": "Affichage des résultats { start }-{ end } sur { total }"
+          },
+          "placeholder": {
+            "search": "Rechercher par domaine, nom d'utilisateur·rice, bio…"
+          },
+          "table": {
+            "account": {
+              "header": {
+                "domain": "Domaine",
+                "firstSeen": "Vu pour la première fois",
+                "lastSeen": "Vu pour la dernière fois",
+                "moderationRule": "Sous règle de modération",
+                "name": "Nom",
+                "uploads": "Téléversements"
+              },
+              "moderationRule": "Oui"
+            }
+          }
+        },
+        "DomainsTable": {
+          "action": {
+            "add": {
+              "label": "Ajouter à la liste d'autorisations"
+            },
+            "purge": {
+              "label": "Nettoyer"
+            },
+            "remove": {
+              "label": "Retirer de la liste d'autorisations"
+            }
+          },
+          "empty": {
+            "noPods": "Pas d’autres pods trouvés"
+          },
+          "label": {
+            "inList": "Présent sur la liste d'autorisations",
+            "search": "Rechercher"
+          },
+          "link": {
+            "list": "Ce domaine est présent sur votre liste d'autorisations"
+          },
+          "option": {
+            "all": "Tout",
+            "no": "Non",
+            "yes": "Oui"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Croissant",
+              "descending": "Décroissant",
+              "label": "Sens"
+            },
+            "label": "Trier par"
+          },
+          "pagination": {
+            "results": "Affichage des résultats { start }-{ end } sur { total }"
+          },
+          "placeholder": {
+            "search": "Rechercher par nom…"
+          },
+          "table": {
+            "domain": {
+              "header": {
+                "firstSeen": "Vu pour la première fois",
+                "moderationRule": "Sous règle de modération",
+                "name": "Nom",
+                "receivedMessages": "Messages reçus",
+                "users": "Utilisateur·ice·s"
+              },
+              "moderationRule": "Oui"
+            }
+          }
+        },
+        "InstancePolicyCard": {
+          "button": {
+            "edit": "Éditer"
+          },
+          "header": {
+            "rule": "Règle"
+          },
+          "label": {
+            "blockAll": "Bloquer tout",
+            "muteActivity": "Masquer l’activité",
+            "muteNotifications": "Masquer les notifications",
+            "reason": "Raison",
+            "rejectMedia": "Rejeter le média"
+          },
+          "status": {
+            "enabled": "Activé",
+            "paused": "En pause"
+          }
+        },
+        "InstancePolicyForm": {
+          "button": {
+            "cancel": "Annuler",
+            "confirm": "Supprimer la règle de modération",
+            "create": "Créer",
+            "delete": "Supprimer",
+            "update": "Mettre à jour"
+          },
+          "header": {
+            "addRule": "Ajouter une nouvelle règle de modération",
+            "editRule": "Mettre à jour les règles de modération",
+            "failure": "Erreur lors de la création de la règle"
+          },
+          "label": {
+            "blockAll": "Bloquer tout",
+            "customizeRule": "Ou personnalisez votre règle",
+            "policyDisabled": "Désactivé",
+            "policyEnabled": "Activé",
+            "policyReason": "Raison",
+            "rejectMedia": "Rejeter le média",
+            "silenceActivity": "Masquer l’activité",
+            "silenceNotifications": "Masquer les notifications"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "Cette action est irréversible"
+              },
+              "header": "Supprimer cette règle de modération ?"
+            }
+          },
+          "tooltip": {
+            "blockAll": "Tout bloquer de ce compte ou domaine. Cela empêche toute interaction avec l'entité, et purge le contenu lié (pistes, librairies, suivis, etc.)",
+            "isActive": "Utilisez ce paramètre pour activer/désactiver temporairement la règle sans la supprimer complètement.",
+            "rejectMedia": "Ne jamais télécharger de médias (audio, album, couverture, avatar de compte…) de ce compte ou domaine. Cela purgera aussi le contenu existant.",
+            "silenceActivity": "Cacher le contenu du compte ou du domaine, sauf aux abonnés.",
+            "silenceNotifications": "Empêche le compte ou domaine de déclencher des notifications, sauf pour les abonné·e·s.",
+            "summary": "Expliquez pourquoi vous appliquez cette politique : cela vous aidera à vous rappeler pourquoi vous avez ajouté cette règle. En fonction de la configuration de votre pod, cette explication peut être affichée publiquement pour aider les utilisateurs à comprendre les règles de modération en place."
+          }
+        },
+        "InstancePolicyModal": {
+          "button": {
+            "close": "Fermer",
+            "show": "Règles de modération…"
+          },
+          "modal": {
+            "manage": {
+              "content": {
+                "warning": "Cet élément est sujet à des règles de modération spécifiques"
+              },
+              "header": "Gérer les règles de modération pour { obj }"
+            }
+          }
+        },
+        "NoteForm": {
+          "button": {
+            "add": "Ajouter une note"
+          },
+          "header": {
+            "failure": "Erreur pendant la création de la note"
+          },
+          "placeholder": {
+            "summary": "Décrivez quelles actions ont été prises, ou toute autre mise à jour liée…"
+          }
+        },
+        "NotesThread": {
+          "button": {
+            "delete": "Supprimer"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "La note sera supprimée. Cette action est irréversible."
+              },
+              "header": "Supprimer cette note ?"
+            }
+          }
+        },
+        "ReportCard": {
+          "button": {
+            "confirmDelete": "Supprimer",
+            "delete": "Supprimer l’objet signalé",
+            "resolve": "Résoudre",
+            "unresolve": "Rouvrir"
+          },
+          "header": {
+            "actions": "Actions",
+            "message": "Message",
+            "notes": "Notes internes",
+            "reportedObject": "Élément signalé"
+          },
+          "link": {
+            "moderation": "Ouvrir dans l'interface de modération",
+            "publicPage": "Voir la page publique",
+            "report": "Signaler { id }"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "Cela supprimera l'élément associé avec ce signalement et marquera le rapport comme résolu. La suppression est irreversible."
+              },
+              "header": "Supprimer l’objet signalé ?"
+            }
+          },
+          "notApplicable": "ND",
+          "table": {
+            "object": {
+              "account": "Compte",
+              "domain": "Domaine",
+              "local": "Local",
+              "owner": "Propriétaire",
+              "type": "Type"
+            },
+            "report": {
+              "category": "Catégorie",
+              "creationDate": "Date de création",
+              "submittedBy": "Envoyé par"
+            },
+            "status": {
+              "assignedTo": "Assigné à",
+              "internalNotes": "Notes internes",
+              "resolutionDate": "Date de résolution",
+              "resolved": "Résolu",
+              "status": "Statut",
+              "unresolved": "Non-résolu"
+            }
+          },
+          "warning": {
+            "objectDeleted": "L’objet associé à ce signalement a été supprimé."
+          }
+        },
+        "UserRequestCard": {
+          "button": {
+            "approve": "Approuver",
+            "reject": "Refuser"
+          },
+          "header": {
+            "actions": "Actions",
+            "notes": "Notes internes",
+            "signup": "Message"
+          },
+          "link": {
+            "request": "Signalement { id }"
+          },
+          "message": {
+            "signup": "Cet utilisateur.trice voudrait créer un compte sur votre pod."
+          },
+          "notApplicable": "ND",
+          "table": {
+            "request": {
+              "creationDate": "Date de création",
+              "submittedBy": "Envoyé par"
+            },
+            "status": {
+              "approved": "Approuvée",
+              "assignedTo": "Assigné à",
+              "internalNotes": "Notes internes",
+              "pending": "En attente",
+              "refused": "Refusé",
+              "resolutionDate": "Date de résolution",
+              "status": "Statut"
+            }
+          }
+        }
+      },
+      "users": {
+        "InvitationForm": {
+          "button": {
+            "clear": "Effacer",
+            "new": "Obtenir une nouvelle invitation"
+          },
+          "header": {
+            "failure": "Erreur lors de la création de l'invitation"
+          },
+          "label": {
+            "invite": "Code d'invitation"
+          },
+          "placeholder": {
+            "invitation": "Laisser vide pour obtenir un code aléatoire"
+          },
+          "table": {
+            "invitation": {
+              "header": {
+                "code": "Code",
+                "link": "Lien de partage"
+              }
+            }
+          }
+        },
+        "InvitationsTable": {
+          "action": {
+            "delete": "Supprimer"
+          },
+          "label": {
+            "expired": "Expirée",
+            "search": "Rechercher",
+            "status": "Statut",
+            "unused": "Non utilisé",
+            "used": "Utilisé"
+          },
+          "option": {
+            "all": "Tout",
+            "expired": "Expirée/utilisée",
+            "open": "Accès libre"
+          },
+          "ordering": {
+            "label": "Trier par"
+          },
+          "pagination": {
+            "results": "Affichage d'un résultat | Affichage des résultats { start } à { end } de { total }"
+          },
+          "placeholder": {
+            "search": "Rechercher par nom d'utilisateur·rice, courriel, code…"
+          },
+          "table": {
+            "invitation": {
+              "header": {
+                "code": "Code",
+                "creationDate": "Date de création",
+                "expirationDate": "Date d'expiration",
+                "owner": "Propriétaire",
+                "status": "Statut",
+                "user": "Utilisateur"
+              }
+            }
+          }
+        },
+        "UsersTable": {
+          "label": {
+            "search": "Rechercher"
+          },
+          "notApplicable": "ND",
+          "ordering": {
+            "direction": {
+              "ascending": "Croissant",
+              "descending": "Décroissant",
+              "label": "Sens"
+            },
+            "label": "Trier par"
+          },
+          "pagination": {
+            "results": "Affichage d'un résultat | Affichage des résultats { start } à { end } de { total }"
+          },
+          "permission": {
+            "library": "Audiothèque",
+            "moderation": "Modération",
+            "settings": "Paramètres"
+          },
+          "placeholder": {
+            "search": "Rechercher par nom d'utilisateur·rice, courriel, nom…"
+          },
+          "table": {
+            "user": {
+              "accountStatus": {
+                "active": "Actif",
+                "inactive": "Inactif"
+              },
+              "header": {
+                "accountStatus": "Statut du compte",
+                "email": "Courriel",
+                "lastActivity": "Dernière activité",
+                "permissions": "Permissions",
+                "signup": "Inscription",
+                "status": "Statut",
+                "username": "Nom d'utilisateur"
+              },
+              "status": {
+                "admin": "Admin",
+                "regular": "Utilisateur·rice standard·e",
+                "staff": "Membre de l'équipe"
+              }
+            }
+          }
+        }
+      }
+    },
+    "moderation": {
+      "FilterModal": {
+        "button": {
+          "cancel": "Annuler",
+          "hide": "Cacher le contenu"
+        },
+        "header": {
+          "failure": "Erreur lors de la création de la règle",
+          "modal": "Voulez-vous cacher le contenu de l’artiste « { name } » ?"
+        },
+        "help": {
+          "createFilter": "Vous pouvez gérer et mettre à jour vos filtres à tout moment depuis les paramètres de votre compte."
+        },
+        "message": {
+          "success": "Filtre de contenu ajouté avec succès"
+        },
+        "warning": {
+          "createFilter": {
+            "listIntro": "Vous ne verrez plus les pistes, albums et activité utilisateur liées à cet artiste :",
+            "listItem1": "Dans les favoris des autres utilisateurs et dans l'historique d'écoute",
+            "listItem2": "Dans le widget \"Ajoutés récemment\"",
+            "listItem3": "Dans les listes d'artistes et d'albums",
+            "listItem4": "Dans les suggestions radio"
+          }
+        }
+      },
+      "ReportCategoryDropdown": {
+        "label": {
+          "category": "Catégorie"
+        },
+        "option": {
+          "all": "Tout"
+        }
+      },
+      "ReportModal": {
+        "button": {
+          "cancel": "Annuler",
+          "submit": "Envoyer le signalement"
+        },
+        "description": {
+          "email": "Nous utiliserons cette adresse courriel si nous devons vous contacter au sujet de ce rapport.",
+          "forwardToDomain": "Faire suivre une copie anonymisée du signalement au serveur hébergeant cet élément.",
+          "message": "Utilisez ce champ pour fournir du contexte supplémentaire aux modérateur·ices qui traiteront votre signalement.",
+          "modal": "Utilisez ce formulaire pour envoyer un signalement à notre équipe de modération"
+        },
+        "error": {
+          "nodeinfoFetch": "Impossible de récupérer les informations sur le nœud : {error}"
+        },
+        "header": {
+          "disabled": "Les signalements anonymes sont désactivés, inscrivez-vous pour faire un signalement.",
+          "modal": "Souhaitez-vous signaler cet élément ?",
+          "submissionFailure": "Erreur pendant l'envoi du signalement"
+        },
+        "label": {
+          "email": "Courriel",
+          "forwardToDomain": "Transférer vers { domain}",
+          "message": "Message"
+        },
+        "message": {
+          "submissionSuccess": "Signalement effectué avec succès, merci"
+        }
+      }
+    },
+    "notifications": {
+      "NotificationRow": {
+        "button": {
+          "approve": "Approuver",
+          "markRead": "Marquer comme lu",
+          "markUnread": "Marquer comme non lu",
+          "reject": "Rejeter"
+        },
+        "message": {
+          "libraryAcceptFollow": "{ username } a accepté votre suivi de l’audiothèque « { library } »",
+          "libraryFollow": "{ username } suit votre audiothèque « { library } »",
+          "libraryPendingFollow": "{ username } veut suivre votre audiothèque « { library } »",
+          "libraryReject": "Vous avez rejeté la demande de {username} de suivre \"{library}\""
+        }
+      }
+    },
+    "playlists": {
+      "Card": {
+        "meta": {
+          "tracks": "{ n } piste | { n } pistes"
+        }
+      },
+      "Editor": {
+        "button": {
+          "addDuplicate": "Ajouter quand même",
+          "clear": "Vider la liste de lecture",
+          "copy": "Copier les pistes de la file d’attente dans la liste de lecture",
+          "insertFromQueue": "Insérer depuis la file d'attente ({ n } piste) | Insérer depuis la file d'attente ({ n } pistes)"
+        },
+        "error": {
+          "sync": "Une erreur s'est produite pendant l'enregistrement de vos modifications"
+        },
+        "header": {
+          "editor": "Éditeur de playlist"
+        },
+        "help": {
+          "reorder": "Glissez et déposer les lignes pour réordonner les pistes dans la liste de lecture"
+        },
+        "loading": {
+          "sync": "Synchronisation des changements avec le serveur…"
+        },
+        "message": {
+          "sync": "Changements synchronisés avec le serveur"
+        },
+        "modal": {
+          "clearPlaylist": {
+            "content": {
+              "warning": "Cela supprimera toutes les pistes de la playlist et ne pourra pas être annulé."
+            },
+            "header": "Voulez-vous vider la liste de lecture « { playlist } » ?"
+          }
+        },
+        "warning": {
+          "duplicate": "Certaines pistes de votre file d'attente sont déjà dans cette liste de lecture :"
+        }
+      },
+      "Form": {
+        "button": {
+          "create": "Créer la liste de lecture",
+          "update": "Mettre à jour la playlist"
+        },
+        "header": {
+          "createFailure": "Playlist créée",
+          "createPlaylist": "Créer une nouvelle liste de lecture",
+          "createSuccess": "Liste de lecture créée",
+          "updateSuccess": "Liste de lecture mise à jour"
+        },
+        "label": {
+          "name": "Nom de la liste de lecture",
+          "visibility": "Visibilité de la playlist"
+        },
+        "placeholder": {
+          "name": "Ma liste de lecture géniale"
+        }
+      },
+      "PlaylistModal": {
+        "button": {
+          "addDuplicate": "Ajouter quand même",
+          "addToPlaylist": "Ajouter à cette liste de lecture",
+          "addTrack": "Ajouter la piste",
+          "cancel": "Annuler",
+          "edit": "Éditer"
+        },
+        "empty": {
+          "noPlaylists": "Aucune liste de lecture n'a été créée pour le moment"
+        },
+        "header": {
+          "addFailure": "Nous ne pouvons pas ajouter cette piste à une playlist",
+          "addToPlaylist": "Ajouter à la liste de lecture",
+          "available": "Listes de lecture disponibles",
+          "manage": "Gérer les listes de lecture",
+          "noResults": "Aucun résultat ne correspond à vos filtres",
+          "track": "{title}, par {artist}"
+        },
+        "label": {
+          "filter": "Filtrer"
+        },
+        "placeholder": {
+          "filterPlaylist": "Saisissez un nom de liste de lecture"
+        },
+        "table": {
+          "edit": {
+            "header": {
+              "edit": "Éditer",
+              "lastModification": "Dernière modification",
+              "name": "Nom",
+              "tracks": "Pistes"
+            }
+          }
+        },
+        "warning": {
+          "duplicate": "{ 0 } est déjà dans { 1 }."
+        }
+      },
+      "TrackPlaylistIcon": {
+        "button": {
+          "add": "Ajouter à la liste de lecture…"
+        }
+      },
+      "Widget": {
+        "button": {
+          "create": "Créer la liste de lecture",
+          "more": "Montrer plus"
+        },
+        "placeholder": {
+          "noPlaylists": "Aucune liste de lecture n'a été créée pour le moment"
+        }
+      }
+    },
+    "radios": {
+      "Button": {
+        "startArtistsRadio": "Commencer la radio d’artistes",
+        "startPlaylistsRadio": "Commencer la radio de listes de lectures",
+        "startRadio": "Lancer la radio",
+        "startTagsRadio": "Commencer la radio de tags",
+        "stopArtistsRadio": "Arrêter la radio d’artistes",
+        "stopPlaylistsRadio": "Arrêter la radio de listes de lectures",
+        "stopRadio": "Arrêter la radio",
+        "stopTagsRadio": "Arrêter la radio de tags"
+      },
+      "Card": {
+        "button": {
+          "edit": "Éditer"
+        }
+      }
+    },
+    "tags": {
+      "List": {
+        "button": {
+          "more": "Montrer 1 tag supplémentaire | Montrer { n } tags supplémentaires"
+        }
+      }
+    },
+    "vui": {
+      "Pagination": {
+        "label": "Pagination",
+        "next": "Étape suivante",
+        "previous": "Étape précédente"
+      }
+    }
+  },
+  "composables": {
+    "audio": {
+      "usePlayOptions": {
+        "addToQueueMessage": "{ n } piste a été ajoutée à votre liste d'attente | { n } pistes ont été ajoutées à votre liste d'attente"
+      }
+    },
+    "locale": {
+      "useSharedLabels": {
+        "fields": {
+          "contentCategory": {
+            "choices": {
+              "music": "Musique",
+              "other": "Autre",
+              "podcast": "Podcast"
+            },
+            "label": "Catégorie du contenu"
+          },
+          "importStatus": {
+            "choices": {
+              "draft": {
+                "help": "La piste est importée mais n'a pas encore été traitée par le serveur",
+                "label": "Brouillon"
+              },
+              "errored": {
+                "help": "Cette piste n'a pu être traitée, merci de vous assurer qu'elle est taggée correctement",
+                "label": "En erreur"
+              },
+              "finished": {
+                "help": "Importé",
+                "label": "Terminé"
+              },
+              "pending": {
+                "help": "La piste est importée mais n'a pas encore été traitée par le serveur",
+                "label": "En attente"
+              },
+              "skipped": {
+                "help": "La piste est déjà présente dans l'une de vos audiothèques",
+                "label": "Ignoré"
+              }
+            },
+            "label": "Cliquer pour afficher plus d'information à propos du processus d'import pour cet envoi"
+          },
+          "privacyLevel": {
+            "choices": {
+              "instance": "Tout le monde sur cette instance",
+              "private": "Personne à part moi",
+              "public": "Tout le monde, sur toutes les instances"
+            },
+            "help": "Détermine le niveau de visibilité de votre activité",
+            "label": "Visibilité de l'activité",
+            "shortChoices": {
+              "instance": "Instance",
+              "private": "Privé",
+              "public": "Tout le monde"
+            }
+          },
+          "reportType": {
+            "choices": {
+              "illegalContent": "Contenu illégal",
+              "invalidMetadata": "Métadonnées invalides",
+              "offensiveContent": "Contenu haineux",
+              "other": "Autre",
+              "takedownRequest": "Demande de retrait"
+            },
+            "label": "Catégorie"
+          },
+          "summary": {
+            "label": "Biographie"
+          }
+        },
+        "filters": {
+          "accessedDate": "Date d'accès",
+          "albumTitle": "Nom de l'album",
+          "appliedDate": "Date d’application",
+          "artistName": "Nom de l'artiste",
+          "bitrate": "Débit",
+          "creationDate": "Date de création",
+          "dateJoined": "Date d'inscription",
+          "domain": "Domaine",
+          "duration": "Durée",
+          "expirationDate": "Date d'expiration",
+          "firstSeen": "Date de découverte",
+          "followers": "Abonnés",
+          "handledDate": "Date de traitement",
+          "itemsCount": "Éléments",
+          "lastActivity": "Dernière activité",
+          "lastSeen": "Date de dernier aperçu",
+          "modificationDate": "Date de modification",
+          "name": "Nom",
+          "receivedMessages": "Messages reçus",
+          "releaseDate": "Date de sortie",
+          "size": "Taille",
+          "trackTitle": "Nom de la piste",
+          "uploads": "Téléversements",
+          "username": "Nom d'utilisateur",
+          "users": "Utilisateur·ice·s"
+        },
+        "scopes": {
+          "edits": {
+            "description": "Accès aux modifications",
+            "label": "Modifications"
+          },
+          "favorites": {
+            "description": "Accéder aux favoris",
+            "label": "Favoris"
+          },
+          "filters": {
+            "description": "Accès aux filtres de contenu",
+            "label": "Filtres de contenu"
+          },
+          "follows": {
+            "description": "Accès aux abonnements",
+            "label": "Abonnements"
+          },
+          "libraries": {
+            "description": "Accès aux fichiers audio, audiothèques, artistes, albums et pistes",
+            "label": "Audiothèques et téléversements"
+          },
+          "listenings": {
+            "description": "Accès à l'historique d'écoute",
+            "label": "Écoutes"
+          },
+          "notifications": {
+            "description": "Accès aux notifications",
+            "label": "Notifications"
+          },
+          "playlists": {
+            "description": "Accès aux listes de lecture",
+            "label": "Listes de lecture"
+          },
+          "profile": {
+            "description": "Accès au courriel, nom d'utilisateur et informations du profil",
+            "label": "Profil"
+          },
+          "radios": {
+            "description": "Accès aux radios",
+            "label": "Radios"
+          },
+          "reports": {
+            "description": "Accéder aux signalements",
+            "label": "Signalements"
+          },
+          "security": {
+            "description": "Accès aux paramètres de sécurité tel que le mot de passe ou le processus d'authentification",
+            "label": "Sécurité"
+          }
+        }
+      }
+    },
+    "moderation": {
+      "useEditConfigs": {
+        "album": {
+          "releaseDate": "Date de sortie",
+          "title": "Titre"
+        },
+        "artist": {
+          "name": "Nom"
+        },
+        "cover": {
+          "label": "Couverture"
+        },
+        "description": {
+          "label": "Description"
+        },
+        "tags": {
+          "label": "Étiquettes"
+        },
+        "track": {
+          "copyright": "Copyright",
+          "license": "Licence",
+          "position": "Pagination",
+          "title": "Titre"
+        }
+      },
+      "useReport": {
+        "account": {
+          "label": "Signaler {'@'}{username}",
+          "typeLabel": "Compte"
+        },
+        "album": {
+          "label": "Signaler cet album…",
+          "typeLabel": "Album"
+        },
+        "artist": {
+          "label": "Signaler cet artiste…",
+          "typeLabel": "Artiste",
+          "unknownLabel": "Artiste inconnu"
+        },
+        "channel": {
+          "label": "Signaler cette chaîne…",
+          "typeLabel": "Chaîne"
+        },
+        "library": {
+          "label": "Signaler cette audiothèque…",
+          "typeLabel": "Audiothèque"
+        },
+        "playlist": {
+          "label": "Signaler cette liste de lecture…",
+          "typeLabel": "Liste de lecture"
+        },
+        "track": {
+          "label": "Signaler cette piste…",
+          "typeLabel": "Piste"
+        }
+      },
+      "useReportConfigs": {
+        "account": {
+          "label": "Compte",
+          "summary": "Biographie"
+        },
+        "album": {
+          "label": "Album",
+          "releaseDate": "Date de sortie",
+          "title": "Titre"
+        },
+        "artist": {
+          "label": "Artiste"
+        },
+        "channel": {
+          "label": "Chaîne"
+        },
+        "creationDate": {
+          "label": "Date de création"
+        },
+        "library": {
+          "description": "Description",
+          "label": "Audiothèque"
+        },
+        "musicbrainzId": {
+          "label": "ID MusicBrainz"
+        },
+        "name": {
+          "label": "Nom"
+        },
+        "playlist": {
+          "label": "Liste de lecture"
+        },
+        "tags": {
+          "label": "Étiquettes"
+        },
+        "track": {
+          "copyright": "Copyright",
+          "label": "Piste",
+          "license": "Licence",
+          "position": "Pagination",
+          "title": "Titre"
+        },
+        "visibility": {
+          "label": "Visibilité"
+        }
+      }
+    },
+    "useErrorHandler": {
+      "errorReportMessage": "Pour nous aider à comprendre pourquoi cela s'est produit, veuillez joindre une description détaillée de ce que vous avez fait qui a déclenché l'erreur.",
+      "errorReportTitle": "Une erreur inattendue s’est produite.",
+      "leaveFeedback": "Laisser un commentaire",
+      "unexpectedError": "Une erreur inattendue s’est produite."
+    },
+    "useThemeList": {
+      "browserDefault": "Défaut du navigateur",
+      "darkTheme": "Sombre",
+      "lightTheme": "Clair"
+    }
+  },
+  "init": {
+    "axios": {
+      "rateLimitDelay": "Vous avez envoyé trop de requêtes et êtes actuellement limité·e, merci de réessayer dans { delay }",
+      "rateLimitLater": "Vous avez envoyé trop de requêtes et êtes actuellement limité·e, merci de réessayer plus tard"
+    },
+    "sentry": {
+      "allow": "Autoriser",
+      "deny": "Refuser",
+      "funkwhaleInstance": "Instance Glitchtip officielle de Funkwhale",
+      "message": "Les traces de la pile seront partagées avec { 0 } afin de nous aider à comprendre comment et quand les erreurs se produisent.",
+      "title": "Pour améliorer la qualité de nos services, nous souhaitons recueillir des informations sur les crashs pendant votre session."
+    },
+    "serviceWorker": {
+      "actions": {
+        "later": "Plus tard",
+        "update": "Mettre à jour"
+      },
+      "newAppVersion": "Une nouvelle version de l'application est disponible."
+    }
+  },
+  "views": {
+    "Notifications": {
+      "button": {
+        "read": "Tout marquer comme lu",
+        "submit": "Compris !"
+      },
+      "empty": {
+        "notifications": "Pas encore de notifications"
+      },
+      "header": {
+        "funkwhaleSupport": "Vous aimez Funkwhale ?",
+        "instanceSupport": "Soutenir ce pod Funkwhale",
+        "messages": "Vos messages",
+        "notifications": "Vos notifications"
+      },
+      "label": {
+        "reminder": "Me le rappeler dans :",
+        "showRead": "Afficher les notifications lues"
+      },
+      "link": {
+        "donate": "Donner",
+        "help": "Découvrez d’autres façons d’aider"
+      },
+      "loading": {
+        "notifications": "Chargement des notifications…"
+      },
+      "message": {
+        "funkwhaleSupport": "Nous avons remarqué que vous êtes là depuis quelques temps. Si Funkwhale vous est utile, vous pouvez nous aider à le rendre encore meilleur !"
+      },
+      "option": {
+        "delay": {
+          "30": "30 jours",
+          "60": "60 jours",
+          "90": "90 jours",
+          "never": "Jamais"
+        }
+      },
+      "title": "Notifications"
+    },
+    "Search": {
+      "button": {
+        "submit": "Soumettre la recherche"
+      },
+      "header": {
+        "remote": "Rechercher un objet distant",
+        "rss": "S'abonner au fil RSS d'un podcast",
+        "search": "Rechercher"
+      },
+      "label": {
+        "albums": "Albums",
+        "artists": "Artistes",
+        "playlists": "Listes de lecture",
+        "podcasts": "Podcasts",
+        "radios": "Radios",
+        "series": "Séries",
+        "tags": "Étiquettes",
+        "tracks": "Pistes"
+      }
+    },
+    "admin": {
+      "ChannelDetail": {
+        "button": {
+          "delete": "Supprimer",
+          "openRemote": "Ouvrir le profil distant",
+          "refresh": "Rafraîchir depuis le serveur distant"
+        },
+        "header": {
+          "activity": "Activité",
+          "audioContent": "Contenu audio",
+          "channelData": "Données de la chaîne"
+        },
+        "label": {
+          "local": "Local"
+        },
+        "link": {
+          "django": "Voir dans l'administration Django",
+          "localProfile": "Ouvrir le profil local"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "La chaîne sera supprimée, ainsi que tous les envois, pistes et albums associés. Cette action est irréversible."
+            },
+            "header": "Supprimer cette chaîne ?"
+          }
+        },
+        "table": {
+          "activity": {
+            "edits": "Modifications",
+            "favorited": "Pistes favorites",
+            "firstSeen": "Vu pour la première fois",
+            "linkedReports": "Signalement liés",
+            "listenings": "Écoutes",
+            "playlists": "Listes de lecture"
+          },
+          "audioContent": {
+            "albums": "Albums",
+            "cachedSize": "Taille du cache",
+            "totalSize": "Taille totale",
+            "tracks": "Pistes",
+            "uploads": "Téléversements"
+          },
+          "channelData": {
+            "account": "Compte",
+            "category": "Catégorie",
+            "description": "Description",
+            "domain": "Domaine",
+            "name": "Nom",
+            "rss": "Fil RSS",
+            "url": "Adresse URL"
+          }
+        },
+        "warning": {
+          "stats": "Les statistiques sont calculées depuis les activités connues et le contenu sur votre instance, et ne reflètent pas l'activité générale de ce compte"
+        }
+      },
+      "CommonList": {
+        "title": {
+          "accounts": "Comptes",
+          "albums": "Albums",
+          "artists": "Artistes",
+          "channels": "Chaînes",
+          "invitations": "Invitations",
+          "libraries": "Audiothèques",
+          "tags": "Étiquettes",
+          "tracks": "Pistes",
+          "uploads": "Téléversements",
+          "users": "Utilisateur·ice·s"
+        }
+      },
+      "Settings": {
+        "header": {
+          "channels": "Chaînes",
+          "federation": "Fédération",
+          "instanceInfo": "Informations relatives à cette instance",
+          "moderation": "Modération",
+          "music": "Musique",
+          "playlists": "Listes de lecture",
+          "sections": "Sections",
+          "security": "Sécurité",
+          "settings": "Paramètres de l'instance",
+          "signups": "Inscriptions",
+          "stats": "Statistiques",
+          "subsonic": "Subsonic",
+          "ui": "Interface utilisateur·ice"
+        }
+      },
+      "library": {
+        "AlbumDetail": {
+          "button": {
+            "delete": "Supprimer",
+            "edit": "Éditer",
+            "remoteRefresh": "Rafraîchir depuis le serveur distant"
+          },
+          "header": {
+            "activity": "Activité",
+            "albumData": "Données de l'album",
+            "audioContent": "Contenu audio",
+            "local": "Local"
+          },
+          "link": {
+            "artist": "Artiste",
+            "django": "Voir dans l'administration Django",
+            "domain": "Domaine",
+            "edits": "Modifications",
+            "libraries": "Audiothèques",
+            "localProfile": "Ouvrir le profil local",
+            "musicbrainz": "Ouvrir sur MusicBrainz",
+            "remoteProfile": "Ouvrir le profil distant",
+            "reports": "Signalement liés",
+            "tracks": "Pistes",
+            "uploads": "Téléversements"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "L’album sera supprimé, ainsi que les téléversements, pistes, favoris et historique d'écoute associés. Cette action est irréversible."
+              },
+              "header": "Supprimer cet album ?"
+            }
+          },
+          "table": {
+            "activity": {
+              "favorited": "Pistes favorites",
+              "firstSeen": "Vu pour la première fois",
+              "listenings": "Écoutes",
+              "playlists": "Listes de lecture"
+            },
+            "album": {
+              "description": "Description",
+              "title": "Titre"
+            },
+            "audioContent": {
+              "cachedSize": "Taille du cache",
+              "totalSize": "Taille totale"
+            }
+          },
+          "warning": {
+            "stats": "Les statistiques sont calculées depuis les activités connues et le contenu sur votre instance, et ne reflètent pas l'activité générale de ce compte"
+          }
+        },
+        "ArtistDetail": {
+          "button": {
+            "delete": "Supprimer",
+            "edit": "Éditer",
+            "remoteRefresh": "Rafraîchir depuis le serveur distant"
+          },
+          "header": {
+            "activity": "Activité",
+            "artistData": "Données de l'artiste",
+            "audioContent": "Contenu audio",
+            "local": "Local"
+          },
+          "link": {
+            "albums": "Albums",
+            "category": "Catégorie",
+            "django": "Voir dans l'administration Django",
+            "domain": "Domaine",
+            "edits": "Modifications",
+            "libraries": "Audiothèques",
+            "localProfile": "Ouvrir le profil local",
+            "musicbrainz": "Ouvrir sur MusicBrainz",
+            "remoteProfile": "Ouvrir le profil distant",
+            "reports": "Signalement liés",
+            "tracks": "Pistes",
+            "uploads": "Téléversements"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "L’artiste sera supprimé, ainsi que les téléversements, pistes, albums, favoris et historique d'écoute associés. Cette action est irréversible."
+              },
+              "header": "Supprimer cet artiste ?"
+            }
+          },
+          "table": {
+            "activity": {
+              "favorited": "Pistes favorites",
+              "firstSeen": "Vu pour la première fois",
+              "listenings": "Écoutes",
+              "playlists": "Listes de lecture"
+            },
+            "artist": {
+              "description": "Description",
+              "name": "Nom"
+            },
+            "audioContent": {
+              "cachedSize": "Taille du cache",
+              "totalSize": "Taille totale"
+            }
+          },
+          "warning": {
+            "stats": "Les statistiques sont calculées depuis les activités connues et le contenu sur votre instance, et ne reflètent pas l'activité générale de ce compte"
+          }
+        },
+        "Base": {
+          "link": {
+            "albums": "Albums",
+            "artists": "Artistes",
+            "channels": "Chaînes",
+            "edits": "Modifications",
+            "libraries": "Audiothèques",
+            "tags": "Étiquettes",
+            "tracks": "Pistes",
+            "uploads": "Téléversements"
+          },
+          "menu": {
+            "secondary": "Menu secondaire"
+          },
+          "title": "Gérer l’audiothèque"
+        },
+        "EditsList": {
+          "header": {
+            "edits": "Modifications de l’audiothèque"
+          },
+          "title": "Modifications"
+        },
+        "LibraryDetail": {
+          "button": {
+            "delete": "Supprimer"
+          },
+          "header": {
+            "activity": "Activité",
+            "audioContent": "Contenu audio",
+            "libraryData": "Données de l’audiothèque",
+            "local": "Local"
+          },
+          "link": {
+            "account": "Compte",
+            "albums": "Albums",
+            "artists": "Artistes",
+            "django": "Voir dans l'administration Django",
+            "domain": "Domaine",
+            "remoteProfile": "Ouvrir le profil distant",
+            "reports": "Signalement liés",
+            "tracks": "Pistes",
+            "uploads": "Téléversements",
+            "visibility": "Visibilité"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "L’audiothèque sera supprimée, ainsi que les téléversements et abonnements associés. Cette action est irréversible."
+              },
+              "header": "Supprimer cette audiothèque ?"
+            }
+          },
+          "table": {
+            "activity": {
+              "firstSeen": "Vu pour la première fois",
+              "followers": "Abonnés"
+            },
+            "audioContent": {
+              "cachedSize": "Taille du cache",
+              "totalSize": "Taille totale"
+            },
+            "library": {
+              "description": "Description",
+              "name": "Nom"
+            }
+          },
+          "warning": {
+            "stats": "Les statistiques sont calculées depuis les activités connues et le contenu sur votre instance, et ne reflètent pas l'activité générale de ce compte"
+          }
+        },
+        "TagDetail": {
+          "button": {
+            "delete": "Supprimer"
+          },
+          "header": {
+            "activity": "Activité",
+            "audioContent": "Contenu audio",
+            "tagData": "Données du tag"
+          },
+          "link": {
+            "albums": "Albums",
+            "artists": "Artistes",
+            "django": "Voir dans l'administration Django",
+            "localProfile": "Ouvrir le profil local",
+            "tracks": "Pistes"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "Le tag sera supprimé ainsi que son lien avec des contenus existants, s'il y en a. Cette action est irréversible."
+              },
+              "header": "Supprimer ce tag ?"
+            }
+          },
+          "table": {
+            "activity": {
+              "firstSeen": "Vu pour la première fois"
+            },
+            "tag": {
+              "name": "Nom"
+            }
+          }
+        },
+        "TrackDetail": {
+          "button": {
+            "delete": "Supprimer",
+            "edit": "Éditer",
+            "remoteRefresh": "Rafraîchir depuis le serveur distant"
+          },
+          "header": {
+            "activity": "Activité",
+            "local": "Local",
+            "trackData": "Nom de la piste"
+          },
+          "link": {
+            "album": "Album",
+            "albumArtist": "Artiste de cet album",
+            "artist": "Artiste",
+            "django": "Voir dans l'administration Django",
+            "domain": "Domaine",
+            "edits": "Modifications",
+            "libraries": "Audiothèques",
+            "localProfile": "Ouvrir le profil local",
+            "musicbrainz": "Ouvrir sur MusicBrainz",
+            "remoteProfile": "Ouvrir le profil distant",
+            "reports": "Signalement liés",
+            "uploads": "Téléversements"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "La piste sera supprimée, ainsi que les téléversements, favoris et historique d’écoute associés. Cette action est irréversible."
+              },
+              "header": "Supprimer cette piste ?"
+            }
+          },
+          "table": {
+            "activity": {
+              "favorited": "Pistes favorites",
+              "firstSeen": "Vu pour la première fois",
+              "listenings": "Écoutes",
+              "playlists": "Listes de lecture"
+            },
+            "track": {
+              "copyright": "Copyright",
+              "description": "Description",
+              "discNumber": "Numéro de disque",
+              "license": "Licence",
+              "position": "Pagination",
+              "title": "Titre"
+            },
+            "trackData": {
+              "cachedSize": "Taille du cache",
+              "totalSize": "Taille totale"
+            }
+          },
+          "warning": {
+            "stats": "Les statistiques sont calculées depuis les activités connues et le contenu sur votre instance, et ne reflètent pas l'activité générale de ce compte"
+          }
+        },
+        "UploadDetail": {
+          "button": {
+            "delete": "Supprimer",
+            "download": "Télécharger"
+          },
+          "header": {
+            "activity": "Activité",
+            "audioContent": "Contenu audio",
+            "local": "Local",
+            "uploadData": "Date d'envoi"
+          },
+          "link": {
+            "account": "Compte",
+            "django": "Voir dans l'administration Django",
+            "domain": "Domaine",
+            "importStatus": "Statut de l'import",
+            "library": "Audiothèque",
+            "remoteProfile": "Ouvrir le profil distant",
+            "type": "Type",
+            "visibility": "Visibilité"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "Cette action est irréversible."
+              },
+              "header": "Supprimer cet envoi ?"
+            }
+          },
+          "notApplicable": "ND",
+          "table": {
+            "activity": {
+              "accessedDate": "Date d'accès",
+              "firstSeen": "Vu pour la première fois"
+            },
+            "audioContent": {
+              "bitrate": {
+                "label": "Bitrate",
+                "value": "{bitrate}/s"
+              },
+              "cachedSize": "Taille du cache",
+              "duration": "Durée",
+              "size": "Taille",
+              "track": "Piste"
+            },
+            "upload": {
+              "name": "Nom"
+            }
+          }
+        }
+      },
+      "moderation": {
+        "AccountsDetail": {
+          "button": {
+            "addPolicy": "Ajouter une politique de modération"
+          },
+          "description": {
+            "policy": "Les règles de modération vous aident à contrôler comment votre instance interagit avec un domaine ou compte donné"
+          },
+          "header": {
+            "accountData": "Données du compte",
+            "activePolicy": "Ce domaine est sujet à des règles de modération spécifiques",
+            "activity": "Activité",
+            "audioContent": "Contenu audio",
+            "localAccount": "Compte local",
+            "noPolicy": "Vous n'avez aucune règle en place pour ce compte."
+          },
+          "link": {
+            "albums": "Albums",
+            "artists": "Artistes",
+            "channels": "Chaînes",
+            "django": "Voir dans l'administration Django",
+            "domain": "Domaine",
+            "libraries": "Audiothèques",
+            "linkedReports": "Signalement liés",
+            "openProfile": "Ouvrir le profil",
+            "remoteProfile": "Ouvrir le profil distant",
+            "requests": "Signalements",
+            "tracks": "Pistes",
+            "uploads": "Téléversements"
+          },
+          "notApplicable": "ND",
+          "option": {
+            "permission": {
+              "library": "Audiothèque",
+              "moderation": "Modération",
+              "settings": "Paramètres"
+            }
+          },
+          "table": {
+            "accountData": {
+              "displayName": "Nom d'affichage",
+              "email": "Adresse de courriel",
+              "lastActivity": "Dernière activité",
+              "lastChecked": "Dernière vérification",
+              "loginStatus": {
+                "disabled": "Désactivé",
+                "enabled": "Activé",
+                "label": "Statut de connexion"
+              },
+              "permissions": "Permissions",
+              "signupDate": "Date d'inscription",
+              "userType": "Type",
+              "username": "Nom d'utilisateur"
+            },
+            "activity": {
+              "emittedFollows": "Suivi de l’audiothèque émise",
+              "emittedMessages": "Messages émis",
+              "firstSeen": "Vu pour la première fois",
+              "receivedFollows": "Suivis d’audiothèque reçus"
+            },
+            "audioContent": {
+              "cachedSize": "Taille du cache",
+              "megabyte": "Mo",
+              "totalSize": "Taille totale",
+              "uploadQuota": "Quota d’envoi"
+            }
+          },
+          "tooltip": {
+            "uploadQuota": "Déterminez la quantité de contenu que l'utilisateur peut importer. Laissez vide pour utiliser la valeur par défaut de l'instance."
+          },
+          "warning": {
+            "stats": "Les statistiques sont calculées depuis les activités connues et le contenu sur votre instance, et ne reflètent pas l'activité générale de ce compte"
+          }
+        },
+        "Base": {
+          "link": {
+            "accounts": "Comptes",
+            "domains": "Domaines",
+            "reports": "Signalements",
+            "userRequests": "Demandes d'utilisateur.trice.s"
+          },
+          "menu": {
+            "secondary": "Menu secondaire"
+          },
+          "title": "Modération"
+        },
+        "DomainsDetail": {
+          "button": {
+            "addPolicy": "Ajouter une politique de modération",
+            "addToAllowList": "Ajouter à la liste d'autorisations",
+            "refreshNodeInfo": "Rafraîchir les informations du nœud",
+            "removeFromAllowList": "Retirer de la liste d'autorisations"
+          },
+          "description": {
+            "policy": "Les règles de modération vous aident à contrôler comment votre instance interagit avec un domaine ou compte donné"
+          },
+          "header": {
+            "activePolicy": "Ce domaine est sujet à des règles de modération spécifiques",
+            "activity": "Activité",
+            "audioContent": "Contenu audio",
+            "instanceData": "Informations de l'instance",
+            "noPolicy": "Vous n'avez aucune règle en place pour ce domaine."
+          },
+          "link": {
+            "albums": "Albums",
+            "artists": "Artistes",
+            "channels": "Chaînes",
+            "django": "Voir dans l'administration Django",
+            "knownAccounts": "Comptes connus",
+            "libraries": "Audiothèques",
+            "tracks": "Pistes",
+            "uploads": "Téléversements",
+            "website": "Ouvrir le site web"
+          },
+          "notApplicable": "ND",
+          "table": {
+            "activity": {
+              "emittedFollows": "Suivi de l’audiothèque émise",
+              "emittedMessages": "Messages émis",
+              "firstSeen": "Vu pour la première fois",
+              "receivedFollows": "Suivis d’audiothèque reçus"
+            },
+            "audioContent": {
+              "cachedSize": "Taille du cache",
+              "totalSize": "Taille totale"
+            },
+            "instanceData": {
+              "domainName": "Nom",
+              "inAllowList": {
+                "false": "Non",
+                "label": "Présent sur la liste d'autorisations",
+                "true": "Oui"
+              },
+              "lastChecked": "Dernière vérification",
+              "nodeInfoStatus": {
+                "label": "Statut",
+                "value": "Erreur lors de la récupération des informations du nœud"
+              },
+              "software": {
+                "label": "Logiciel",
+                "value": "{name} ({version})"
+              },
+              "totalUsers": "Nombre total d'utilisateurs"
+            }
+          },
+          "warning": {
+            "stats": "Les statistiques sont calculées depuis les activités connues et le contenu sur votre instance, et ne reflètent pas l'activité générale de ce compte"
+          }
+        },
+        "DomainsList": {
+          "button": {
+            "add": "Ajouter"
+          },
+          "header": {
+            "domains": "Domaines",
+            "failure": "Erreur lors de la création du domaine"
+          },
+          "label": {
+            "addDomain": "Ajouter un domaine",
+            "addToAllowList": "Ajouter à la liste d'autorisations"
+          },
+          "title": "Domaines"
+        },
+        "ReportsList": {
+          "header": {
+            "reports": "Signalements"
+          },
+          "label": {
+            "search": "Rechercher",
+            "status": "Statut"
+          },
+          "option": {
+            "status": {
+              "all": "Tout",
+              "resolved": "Résolu",
+              "unresolved": "Non-résolu"
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Croissant",
+              "descending": "Décroissant",
+              "label": "Ordre"
+            },
+            "label": "Trier par"
+          },
+          "placeholder": {
+            "search": "Rechercher par titre, artiste, domaine…"
+          },
+          "title": "Signalements"
+        },
+        "RequestsList": {
+          "header": {
+            "userRequests": "Demandes d'utilisateur.trice.s"
+          },
+          "label": {
+            "search": "Rechercher",
+            "status": "Statut"
+          },
+          "option": {
+            "status": {
+              "all": "Tout",
+              "approved": "Approuvée",
+              "pending": "En attente",
+              "refused": "Refusé"
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Croissant",
+              "descending": "Décroissant",
+              "label": "Ordre"
+            },
+            "label": "Trier par"
+          },
+          "placeholder": {
+            "search": "Rechercher par nom d'utilisateur.trice"
+          },
+          "title": "Demandes d'utilisateur.trice.s"
+        }
+      },
+      "users": {
+        "Base": {
+          "link": {
+            "invitations": "Invitations",
+            "users": "Utilisateur·ice·s"
+          },
+          "menu": {
+            "secondary": "Menu secondaire"
+          },
+          "title": "Gérer les utilisateur·rices"
+        }
+      }
+    },
+    "auth": {
+      "Callback": {
+        "header": {
+          "loggingIn": "Connexion en cours…"
+        }
+      },
+      "EmailConfirm": {
+        "header": {
+          "failure": "Nous n'avons pas pu confirmer votre adresse de courriel",
+          "success": "Courriel confirmé"
+        },
+        "label": {
+          "confirmationCode": "Code de confirmation"
+        },
+        "link": {
+          "back": "Retourner à la page de connexion",
+          "login": "Poursuivre vers la page de connexion"
+        },
+        "message": {
+          "success": "Vous pouvez maintenant utiliser le service sans limitation"
+        },
+        "title": "Confirmer votre courriel"
+      },
+      "Login": {
+        "header": {
+          "login": "Connectez-vous à votre compte Funkwhale"
+        },
+        "title": "Connexion"
+      },
+      "PasswordReset": {
+        "button": {
+          "requestReset": "Demander la réinitialisation du mot de passe"
+        },
+        "header": {
+          "failure": "Erreur lors de la demande de réinitialisation de mot de passe",
+          "reset": "Réinitialiser votre mot de passe"
+        },
+        "help": {
+          "form": "Utilisez ce formulaire pour demander à réinitialiser votre mot de passe. Vous recevrez un courriel à l'adresse indiquée contenant les instructions de réinitialisation."
+        },
+        "label": {
+          "email": "Courriel du compte"
+        },
+        "link": {
+          "back": "Retour à la page de connexion"
+        },
+        "placeholder": {
+          "email": "Saisissez l'adresse de courriel associée à votre compte"
+        },
+        "title": "Réinitialiser votre mot de passe"
+      },
+      "PasswordResetConfirm": {
+        "button": {
+          "update": "Mettre à jour votre mot de passe"
+        },
+        "header": {
+          "failure": "Erreur pendant le changement de mot de passe",
+          "success": "Mot de passe modifié avec succès"
+        },
+        "label": {
+          "newPassword": "Nouveau mot de passe"
+        },
+        "link": {
+          "back": "Retour à la page de connexion",
+          "login": "Poursuivre vers la page de connexion"
+        },
+        "message": {
+          "requestSent": "Si l'adresse courriel que vous avez fourni est valide et associée à un compte utilisateur, vous allez recevoir un courriel contenant les instructions de réinitialisation au cours des prochaines minutes.",
+          "success": "Votre mot de passe a été mis à jour avec succès."
+        },
+        "title": "Changer votre mot de passe"
+      },
+      "Plugins": {
+        "title": "Gérer les greffons"
+      },
+      "ProfileActivity": {
+        "header": {
+          "playlists": "Listes de lecture",
+          "recentlyFavorited": "Récemment ajouté aux favoris",
+          "recentlyListened": "Écouté récemment"
+        }
+      },
+      "ProfileBase": {
+        "label": {
+          "self": "C'est vous !"
+        },
+        "link": {
+          "activity": "Activité",
+          "domainView": "Voir sur { domaine }",
+          "moderation": "Ouvrir dans l'interface de modération",
+          "overview": "Aperçu"
+        },
+        "title": "Profil de { username }"
+      },
+      "ProfileOverview": {
+        "button": {
+          "cancel": "Annuler",
+          "createChannel": "Créer une nouvelle chaîne",
+          "next": "Étape suivante",
+          "previous": "Étape précédente"
+        },
+        "header": {
+          "channels": "Chaînes",
+          "libraries": "Audiothèques utilisateur.trice.s",
+          "sharedLibraries": "Cet⋅te utilisateur.trice partage les audiothèques suivantes"
+        },
+        "link": {
+          "addNew": "Ajouter"
+        },
+        "modal": {
+          "createChannel": {
+            "artist": {
+              "header": "Chaîne de l'artiste"
+            },
+            "header": "Créer une chaîne",
+            "podcast": {
+              "header": "Chaîne de podcasts"
+            }
+          }
+        }
+      },
+      "Signup": {
+        "header": {
+          "createAccount": "Créer un compte Funkwhale"
+        },
+        "title": "Inscription"
+      }
+    },
+    "channels": {
+      "DetailBase": {
+        "button": {
+          "cancel": "Annuler",
+          "confirm": "Supprimer",
+          "delete": "Supprimer…",
+          "edit": "Éditer…",
+          "embed": "Insérer",
+          "play": "Jouer",
+          "updateChannel": "Mettre à jour la chaîne",
+          "upload": "Envoi"
+        },
+        "header": {
+          "artistChannel": "Chaîne de l'artiste",
+          "podcastChannel": "Chaîne de podcasts"
+        },
+        "link": {
+          "channelEpisodes": "Tous les épisodes",
+          "channelOverview": "Aperçu",
+          "channelTracks": "Pistes",
+          "domainView": "Voir sur { domaine }",
+          "mirrored": "Redondé depuis { domain }",
+          "moderation": "Ouvrir dans l'interface de modération"
+        },
+        "meta": {
+          "episodes": "{ n } épisode | { n } épisodes",
+          "listenings": "{ n } écoute | { n } écoutes",
+          "subscribers": "{ n } abonné·e | { n } abonné·e·s",
+          "tracks": "{ n } piste | { n } pistes"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "La chaîne sera supprimée, ainsi que tous les fichiers et données associés. Cette action est irréversible."
+            },
+            "header": "Supprimer cette chaîne ?"
+          },
+          "embed": {
+            "header": "Insérez cet artiste dans votre site web"
+          },
+          "subscribe": {
+            "fediverse": {
+              "content": {
+                "help": "Si vous utilisez Mastodon ou d'autres applications au sein du Fédivers, vous pouvez suivre ce compte :"
+              },
+              "header": "S'abonner sur le Fédivers"
+            },
+            "funkwhale": {
+              "header": "S'abonner sur Funkwhale"
+            },
+            "header": "S'abonner à cette chaîne",
+            "rss": {
+              "content": {
+                "help": "Copiez-collez l'URL suivante dans votre application de lecture de podcasts :"
+              },
+              "header": "S'abonner via RSS"
+            }
+          }
+        },
+        "title": "Chaîne"
+      },
+      "DetailOverview": {
+        "header": {
+          "albums": "Albums",
+          "latestEpisodes": "Derniers épisodes",
+          "latestTracks": "Dernières pistes",
+          "series": "Séries",
+          "uploadsFailure": "Certains envois n'ont pu être publiés",
+          "uploadsProcessing": "Les envois sont en cours de traitement",
+          "uploadsSuccess": "Les envois ont été publiés avec succès"
+        },
+        "link": {
+          "addAlbum": "Ajouter",
+          "erroredUploads": "Voir les envois en erreur",
+          "skippedUploads": "Voir les envois ignorés"
+        },
+        "message": {
+          "processing": "Vos envois sont en cours de traitement par Funkwhale et seront bientôt prêts à être diffusés."
+        },
+        "meta": {
+          "progress": "Envois traités : {finished}/{total}"
+        }
+      },
+      "SubscriptionsList": {
+        "button": {
+          "cancel": "Annuler",
+          "subscribe": "S'abonner"
+        },
+        "link": {
+          "addNew": "Ajouter"
+        },
+        "modal": {
+          "subscription": {
+            "header": "Abonnement"
+          }
+        },
+        "placeholder": {
+          "search": "Filtrer par nom…"
+        },
+        "title": "Abonnements"
+      }
+    },
+    "content": {
+      "Base": {
+        "link": {
+          "libraries": "Audiothèques",
+          "tracks": "Pistes"
+        },
+        "menu": {
+          "secondary": "Menu secondaire"
+        },
+        "title": "Ajouter du contenu"
+      },
+      "Home": {
+        "button": {
+          "start": "Commencer"
+        },
+        "description": {
+          "channel": {
+            "1": "Si vous êtes artiste ou podcasteur·euse, les chaînes sont faites pour vous !",
+            "2": "Publiez vos créations et faites des abonnés sur Funkwhale, dans le Fédivers ou bien depuis n'importe quelle application de lecture de podcasts."
+          },
+          "follow": "Vous pouvez suivre les audiothèques d'autres utilisateurs pour accéder à de la nouvelle musique. Les audiothèques publiques peuvent être suivies immédiatement, tandis que le suivi d'une audiothèque privée nécessite l'approbation de son propriétaire.",
+          "upload": "Stockez votre audiothèque personnelle dans Funkwhale pour en profiter n'importe où et la partager avec vos ami.e.s et votre famille."
+        },
+        "header": {
+          "channel": "Publiez vos créations dans une chaîne",
+          "follow": "Suivre des audiothèques distantes",
+          "upload": "Envoyer un contenu tiers dans une audiothèque"
+        },
+        "help": {
+          "uploadQuota": "Cette instance offre jusque {quota} d'espace disque à chaque utilisateur."
+        },
+        "title": "Ajouter et gérer du contenu"
+      },
+      "libraries": {
+        "Card": {
+          "button": {
+            "upload": "Envoi"
+          },
+          "label": {
+            "size": "Taille totale des fichiers de cette audiothèque"
+          },
+          "link": {
+            "details": "Détails de l'audiothèque"
+          },
+          "meta": {
+            "tracks": "{ n } piste | { n } pistes"
+          }
+        },
+        "FilesTable": {
+          "action": {
+            "delete": "Supprimer",
+            "restartImport": "Relancer l'importation"
+          },
+          "button": {
+            "showStatus": "Afficher plus d'information à propos du processus d'import pour cet envoi"
+          },
+          "empty": {
+            "noTracks": "Aucune piste n'a été ajoutée à cette audiothèque pour le moment"
+          },
+          "label": {
+            "importStatus": "Statut de l'import",
+            "search": "Rechercher"
+          },
+          "notApplicable": "ND",
+          "option": {
+            "status": {
+              "all": "Tout",
+              "draft": "Brouillon",
+              "failed": "Échoué",
+              "finished": "Terminé",
+              "pending": "En attente",
+              "skipped": "Ignoré"
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Croissant",
+              "descending": "Décroissant",
+              "label": "Sens"
+            },
+            "label": "Trier par"
+          },
+          "pagination": {
+            "results": "Affichage des résultats { start }-{ end } sur { total }"
+          },
+          "placeholder": {
+            "search": "Rechercher par titre, artiste, album…"
+          },
+          "table": {
+            "file": {
+              "header": {
+                "album": "Album",
+                "artist": "Artiste",
+                "duration": "Durée",
+                "importStatus": "Statut de l'import",
+                "size": "Taille",
+                "title": "Titre",
+                "uploadDate": "Date d'envoi"
+              }
+            }
+          }
+        },
+        "Form": {
+          "button": {
+            "confirm": "Supprimer l’audiothèque",
+            "create": "Créer l’audiothèque",
+            "delete": "Supprimer",
+            "update": "Mettre à jour l’audiothèque"
+          },
+          "description": {
+            "library": "Les audiothèques vous aident à organiser et à partager votre collection de musique. Vous pouvez téléverser votre propre collection musicale sur Funkwhale et la partager avec vos amis et votre famille.",
+            "visibility": "Vous pouvez partager votre audiothèque avec d'autres personnes, quelle que soit sa visibilité."
+          },
+          "header": {
+            "failure": "Erreur"
+          },
+          "label": {
+            "description": "Description",
+            "name": "Nom",
+            "visibility": "Visibilité"
+          },
+          "message": {
+            "libraryCreated": "Audiothèque créée",
+            "libraryDeleted": "Audiothèque supprimée",
+            "libraryUpdated": "Audiothèque mise à jour"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "L’audiothèque et toutes ses pistes seront supprimées. Cette action est irréversible."
+              },
+              "header": "Supprimer cette audiothèque ?"
+            }
+          },
+          "placeholder": {
+            "description": "Cette audiothèque contient ma musique personnelle, j'espère que vous l'aimerez.",
+            "name": "Mon audiothèque d’enfer"
+          }
+        },
+        "Home": {
+          "empty": {
+            "noLibrary": "On dirait que vous n'avez pas encore d’audiothèque, il est temps d'en créer une."
+          },
+          "header": {
+            "libraries": "Mes audiothèques"
+          },
+          "link": {
+            "createLibrary": "Créer une nouvelle audiothèque"
+          },
+          "loading": {
+            "libraries": "Chargement des audiothèques…"
+          }
+        },
+        "Quota": {
+          "button": {
+            "purge": "Nettoyer"
+          },
+          "header": {
+            "currentUsage": "Utilisation actuelle"
+          },
+          "label": {
+            "currentUsage": "{ current } utilisé·s sur { max } autorisé·s",
+            "errored": "Fichiers erronés",
+            "pending": "Fichiers en attente",
+            "percentUsed": "{progress} %",
+            "skipped": "Fichiers ignorés"
+          },
+          "link": {
+            "viewFiles": "Afficher les fichiers"
+          },
+          "loading": {
+            "currentUsage": "Chargement des données d'utilisation…"
+          },
+          "modal": {
+            "purgeErrored": {
+              "content": {
+                "description": "Les pistes téléversées mais pas encore complètement traitées pas le serveur seront supprimées. L'espace de stockage correspondant vous sera restitué."
+              },
+              "header": "Supprimer les fichiers erronés ?"
+            },
+            "purgePending": {
+              "content": {
+                "description": "Les pistes importées qui n'ont pas encore été complètement traitées par le serveur seront supprimées complètement. Le quota correspondant vous sera restitué."
+              },
+              "header": "Supprimer les fichiers en attente ?"
+            },
+            "purgeSkipped": {
+              "content": {
+                "description": "Les pistes téléversées mais ignorées pendant l'importation pour diverses raisons seront supprimées complètement. L'espace de stockage correspondant vous sera restitué."
+              },
+              "header": "Supprimer les fichiers ignorés ?"
+            }
+          }
+        }
+      },
+      "remote": {
+        "Card": {
+          "button": {
+            "cancel": "Annuler la demande d'abonnement",
+            "follow": "Suivre",
+            "pending": "Demande de suivi en attente de validation",
+            "unfollow": "Se désabonner"
+          },
+          "error": {
+            "follow": "Impossible de suivre la bibliothèque distante : {error}",
+            "unfollow": "Impossible d’arrêter le suivi de la bibliothèque distante : {error}"
+          },
+          "label": {
+            "scanFailure": "Problème lors de l'analyse",
+            "scanPartialSuccess": "Scanné avec des erreurs",
+            "scanPending": "Croissant",
+            "scanProgress": "Analyse en cours… ({ progress }%)",
+            "scanSuccess": "Analyse démarrée",
+            "sharingLink": "Lien de partage"
+          },
+          "link": {
+            "scan": "Analyser maintenant ",
+            "scanDetails": "Détails"
+          },
+          "message": {
+            "scanLaunched": "Scan démarré",
+            "scanSkipped": "Scan non lancé (le scan précédent est trop récent)"
+          },
+          "meta": {
+            "failedTracks": "Pistes échouées : {tracks}",
+            "lastUpdate": "Dernière mise à jour : ",
+            "tracks": "{ n } piste | { n } pistes"
+          },
+          "modal": {
+            "unfollow": {
+              "content": {
+                "warning": "En cessant de suivre cette audiothèque, vous perdez l’accès à son contenu."
+              },
+              "header": "Se désabonner de cette audiothèque ?"
+            }
+          },
+          "tooltip": {
+            "private": "Cette audiothèque est privée et son propriétaire doit vous approuver pour accéder à son contenu",
+            "public": "Cette audiothèque est publique et vous pouvez accéder à son contenu librement"
+          }
+        },
+        "Home": {
+          "button": {
+            "refresh": "Rafraîchir"
+          },
+          "description": {
+            "remoteLibraries": "Les audiothèques distantes appartiennent à d'autres utilisateurs du réseau. Vous pouvez y accéder tant qu'elles sont publiques ou qu'on vous en donne l'accès."
+          },
+          "header": {
+            "knownLibraries": "Audiothèques connues",
+            "remoteLibraries": "Audiothèques distantes"
+          },
+          "loading": {
+            "remoteLibraries": "Chargement des audiothèques distantes…"
+          }
+        },
+        "ScanForm": {
+          "button": {
+            "submit": "Soumettre la recherche"
+          },
+          "header": {
+            "failure": "Impossible de récupérer l’audiothèque distante"
+          },
+          "label": {
+            "search": "Rechercher une audiothèque distante"
+          },
+          "placeholder": {
+            "url": "Saisissez l’URL d’une audiothèque"
+          }
+        }
+      }
+    },
+    "library": {
+      "DetailAlbums": {
+        "empty": {
+          "follow": "Vous devez vous abonner à cette audiothèque pour voir son contenu.",
+          "upload": "Cette audiothèque est vide. Vous devriez y créer quelque chose !"
+        }
+      },
+      "DetailOverview": {
+        "empty": {
+          "follow": "Vous devez vous abonner à cette audiothèque pour voir son contenu.",
+          "upload": "Cette audiothèque est vide. Vous devriez y créer quelque chose !"
+        }
+      },
+      "DetailTracks": {
+        "empty": {
+          "follow": "Vous devez vous abonner à cette audiothèque pour voir son contenu.",
+          "upload": "Cette audiothèque est vide. Vous devriez y créer quelque chose !"
+        }
+      },
+      "Edit": {
+        "button": {
+          "accept": "Accepter",
+          "reject": "Rejeter"
+        },
+        "empty": {
+          "noFollowers": "Personne ne suit cette audiothèque"
+        },
+        "header": {
+          "followers": "Abonnés",
+          "libraryContents": "Contenu de l'audiothèque"
+        },
+        "loading": {
+          "followers": "Chargement des abonnés…"
+        },
+        "table": {
+          "action": {
+            "header": {
+              "action": "Action",
+              "date": "Date",
+              "status": "Statut",
+              "user": "Utilisateur·rice"
+            },
+            "status": {
+              "accepted": "Accepté",
+              "pending": "En attente de validation",
+              "rejected": "Rejeté"
+            }
+          }
+        }
+      },
+      "LibraryBase": {
+        "button": {
+          "edit": "Éditer",
+          "upload": "Envoi"
+        },
+        "description": {
+          "sharingLink": "Partagez ce lien avec d'autres utilisateur.trice.s afin qu'iels. puissent accéder à cette audiothèque en le copiant-collant dans la barre de recherche de leur pod."
+        },
+        "label": {
+          "instance": "Restreint",
+          "private": "Privé",
+          "public": "Public",
+          "sharingLink": "Lien de partage"
+        },
+        "link": {
+          "albums": "Albums",
+          "artists": "Artistes",
+          "domain": "Voir sur { domaine }",
+          "moderation": "Ouvrir dans l'interface de modération",
+          "owner": "Appartient à { username }",
+          "tracks": "Pistes"
+        },
+        "meta": {
+          "tracks": "{ n } piste | { n } pistes"
+        },
+        "title": "Audiothèque",
+        "tooltip": {
+          "instance": "Cette audiothèque est restreinte aux utilisateurs de ce pod uniquement",
+          "private": "Cette audiothèque est privée et son propriétaire doit vous approuver pour accéder à son contenu",
+          "public": "Cette audiothèque est publique et vous pouvez accéder à son contenu librement"
+        }
+      }
+    },
+    "playlists": {
+      "Detail": {
+        "button": {
+          "cancel": "Annuler",
+          "confirm": "Supprimer la liste de lecture",
+          "delete": "Supprimer",
+          "edit": "Éditer",
+          "embed": "Insérer",
+          "playAll": "Tout lire",
+          "stopEdit": "Arrêter l'édition"
+        },
+        "empty": {
+          "noTracks": "Il n'y a aucune piste dans cette liste de lecture pour le moment"
+        },
+        "header": {
+          "tracks": "Pistes"
+        },
+        "meta": {
+          "tracks": "Liste de lecture contenant { n } piste, par { username } | Liste de lecture contenant { n } pistes, par { username }"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "Cela supprimera définitivement cette playlist et ne pourra pas être annulé."
+            },
+            "header": "Voulez-vous supprimer la liste de lecture « { playlist } » ?"
+          },
+          "embed": {
+            "header": "Insérez cette playlist dans votre site web"
+          }
+        },
+        "title": "Liste de lecture"
+      },
+      "List": {
+        "button": {
+          "create": "Créer une liste de lecture",
+          "manage": "Gérer vos listes de lecture",
+          "search": "Rechercher"
+        },
+        "empty": {
+          "noResults": "Aucun résultat ne correspond à votre requête"
+        },
+        "header": {
+          "browse": "Parcourir les listes de lecture",
+          "playlists": "Listes de lecture"
+        },
+        "label": {
+          "search": "Rechercher"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Croissant",
+            "descending": "Décroissant",
+            "label": "Ordre"
+          },
+          "label": "Trier par"
+        },
+        "pagination": {
+          "results": "Résultats par page"
+        },
+        "placeholder": {
+          "search": "Saisissez un nom de playlist…"
+        }
+      }
+    },
+    "radios": {
+      "Detail": {
+        "button": {
+          "confirm": "Supprimer la radio",
+          "delete": "Supprimer",
+          "edit": "Éditer…"
+        },
+        "empty": {
+          "noTracks": "Aucune piste n'a été ajoutée à cette radio pour le moment"
+        },
+        "header": {
+          "radio": "La radio contient {tracks} pistes, de ",
+          "tracks": "Pistes"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "Cela supprimera définitivement cette radio et ne pourra pas être annulé."
+            },
+            "header": "Voulez-vous supprimer la radio « { radio } » ?"
+          }
+        },
+        "title": "Radio"
+      }
+    }
+  }
+}

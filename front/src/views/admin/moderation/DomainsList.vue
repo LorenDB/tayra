@@ -1,10 +1,56 @@
+<script setup lang="ts">
+import type { BackendError } from '~/types'
+
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import { computed, ref } from 'vue'
+
+import axios from 'axios'
+
+import DomainsTable from '~/components/manage/moderation/DomainsTable.vue'
+
+interface Props {
+  allowListEnabled: boolean
+}
+
+const props = defineProps<Props>()
+
+const { t } = useI18n()
+
+const router = useRouter()
+
+const labels = computed(() => ({
+  domains: t('views.admin.moderation.DomainsList.title')
+}))
+
+const domainName = ref('')
+const domainAllowed = ref(props.allowListEnabled || undefined)
+
+const isCreating = ref(false)
+const errors = ref([] as string[])
+const createDomain = async () => {
+  isCreating.value = true
+  errors.value = []
+
+  try {
+    const response = await axios.post('manage/federation/domains/', { name: domainName.value, allowed: domainAllowed.value })
+    router.push({
+      name: 'manage.moderation.domains.detail',
+      params: { id: response.data.name }
+    })
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isCreating.value = false
+}
+</script>
+
 <template>
   <main v-title="labels.domains">
     <section class="ui vertical stripe segment">
       <h2 class="ui left floated header">
-        <translate translate-context="*/Moderation/*/Noun">
-          Domains
-        </translate>
+        {{ $t('views.admin.moderation.DomainsList.header.domains') }}
       </h2>
       <form
         class="ui right floated form"
@@ -16,9 +62,7 @@
           class="ui negative message"
         >
           <h4 class="header">
-            <translate translate-context="Content/Moderation/Message.Title">
-              Error while creating domain
-            </translate>
+            {{ $t('views.admin.moderation.DomainsList.header.failure') }}
           </h4>
           <ul class="list">
             <li
@@ -31,7 +75,7 @@
         </div>
         <div class="inline fields">
           <div class="field">
-            <label for="add-domain"><translate translate-context="Content/Moderation/Form.Label/Verb">Add a domain</translate></label>
+            <label for="add-domain">{{ $t('views.admin.moderation.DomainsList.label.addDomain') }}</label>
             <input
               id="add-domain"
               v-model="domainName"
@@ -49,7 +93,7 @@
               type="checkbox"
               name="allowed"
             >
-            <label for="allowed"><translate translate-context="Content/Moderation/Action/Verb">Add to allow-list</translate></label>
+            <label for="allowed">{{ $t('views.admin.moderation.DomainsList.label.addToAllowList') }}</label>
           </div>
           <div class="field">
             <button
@@ -57,9 +101,7 @@
               type="submit"
               :disabled="isCreating"
             >
-              <translate translate-context="Content/Moderation/Button/Verb">
-                Add
-              </translate>
+              {{ $t('views.admin.moderation.DomainsList.button.add') }}
             </button>
           </div>
         </div>
@@ -69,47 +111,3 @@
     </section>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-
-import DomainsTable from '@/components/manage/moderation/DomainsTable'
-export default {
-  components: {
-    DomainsTable
-  },
-  props: { allowListEnabled: { type: Boolean, required: true } },
-  data () {
-    return {
-      domainName: '',
-      domainAllowed: this.allowListEnabled ? true : null,
-      isCreating: false,
-      errors: []
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        domains: this.$pgettext('*/Moderation/*/Noun', 'Domains')
-      }
-    }
-  },
-  methods: {
-    createDomain () {
-      const self = this
-      this.isCreating = true
-      this.errors = []
-      axios.post('manage/federation/domains/', { name: this.domainName, allowed: this.domainAllowed }).then((response) => {
-        this.isCreating = false
-        this.$router.push({
-          name: 'manage.moderation.domains.detail',
-          params: { id: response.data.name }
-        })
-      }, (error) => {
-        self.isCreating = false
-        self.errors = error.backendErrors
-      })
-    }
-  }
-}
-</script>

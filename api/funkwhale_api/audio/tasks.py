@@ -7,8 +7,7 @@ from django.utils import timezone
 
 from funkwhale_api.taskapp import celery
 
-from . import models
-from . import serializers
+from . import models, serializers
 
 logger = logging.getLogger(__name__)
 

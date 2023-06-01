@@ -1,3 +1,23 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+
+import ChannelsWidget from '~/components/audio/ChannelsWidget.vue'
+import TrackWidget from '~/components/audio/track/Widget.vue'
+import AlbumWidget from '~/components/audio/album/Widget.vue'
+import ArtistWidget from '~/components/audio/artist/Widget.vue'
+import RadioButton from '~/components/radios/Button.vue'
+
+interface Props {
+  id: string
+}
+
+const props = defineProps<Props>()
+
+const labels = computed(() => ({
+  title: `#${props.id}`
+}))
+</script>
+
 <template>
   <main v-title="labels.title">
     <section class="ui vertical stripe segment">
@@ -16,9 +36,7 @@
         :to="{name: 'manage.library.tags.detail', params: {id: id}}"
       >
         <i class="wrench icon" />
-        <translate translate-context="Content/Moderation/Link">
-          Open in moderation interface
-        </translate>
+        {{ $t('components.library.TagDetail.link.moderation') }}
       </router-link>
 
       <div class="ui hidden divider" />
@@ -28,20 +46,16 @@
           :controls="false"
           :filters="{playable: true, ordering: '-creation_date', tag: id, include_channels: 'false'}"
         >
-          <template slot="title">
+          <template #title>
             <router-link :to="{name: 'library.artists.browse', query: {tag: id}}">
-              <translate translate-context="*/*/*/Noun">
-                Artists
-              </translate>
+              {{ $t('components.library.TagDetail.link.artists') }}
             </router-link>
           </template>
         </artist-widget>
         <div class="ui hidden divider" />
         <div class="ui hidden divider" />
         <h3 class="ui header">
-          <translate translate-context="*/*/*">
-            Channels
-          </translate>
+          {{ $t('components.library.TagDetail.header.channels') }}
         </h3>
         <channels-widget
           :key="'channels' + id"
@@ -57,11 +71,9 @@
           :controls="false"
           :filters="{playable: true, ordering: '-creation_date', tag: id}"
         >
-          <template slot="title">
+          <template #title>
             <router-link :to="{name: 'library.albums.browse', query: {tag: id}}">
-              <translate translate-context="*/*/*">
-                Albums
-              </translate>
+              {{ $t('components.library.TagDetail.link.albums') }}
             </router-link>
           </template>
         </album-widget>
@@ -76,10 +88,8 @@
           :is-activity="false"
           :filters="{playable: true, ordering: '-creation_date', tag: id}"
         >
-          <template slot="title">
-            <translate translate-context="*/*/*">
-              Tracks
-            </translate>
+          <template #title>
+            {{ $t('components.library.TagDetail.header.tracks') }}
           </template>
         </track-widget>
         <div class="ui clearing hidden divider" />
@@ -87,38 +97,3 @@
     </section>
   </main>
 </template>
-
-<script>
-import ChannelsWidget from '@/components/audio/ChannelsWidget'
-import TrackWidget from '@/components/audio/track/Widget'
-import AlbumWidget from '@/components/audio/album/Widget'
-import ArtistWidget from '@/components/audio/artist/Widget'
-import RadioButton from '@/components/radios/Button'
-
-export default {
-  components: {
-    ArtistWidget,
-    AlbumWidget,
-    TrackWidget,
-    RadioButton,
-    ChannelsWidget
-  },
-  props: {
-    id: { type: String, required: true }
-  },
-  computed: {
-    labels () {
-      const title = `#${this.id}`
-      return {
-        title
-      }
-    },
-    isAuthenticated () {
-      return this.$store.state.auth.authenticated
-    },
-    hasFavorites () {
-      return this.$store.state.favorites.count > 0
-    }
-  }
-}
-</script>

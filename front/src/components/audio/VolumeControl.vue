@@ -1,3 +1,36 @@
+<script setup lang="ts">
+import { usePlayer } from '~/composables/audio/player'
+import { useTimeoutFn } from '@vueuse/core'
+import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { volume, mute } = usePlayer()
+const expanded = ref(false)
+
+const { t } = useI18n()
+const labels = computed(() => ({
+  unmute: t('components.audio.VolumeControl.button.unmute'),
+  mute: t('components.audio.VolumeControl.button.mute'),
+  slider: t('components.audio.VolumeControl.label.slider')
+}))
+
+const { start, stop } = useTimeoutFn(() => (expanded.value = false), 500, { immediate: false })
+
+const handleOver = () => {
+  stop()
+  expanded.value = true
+}
+
+const handleLeave = () => {
+  stop()
+  start()
+}
+
+const scroll = (event: WheelEvent) => {
+  volume.value += -Math.sign(event.deltaY) * 0.05
+}
+</script>
+
 <template>
   <button
     class="circular control button"
@@ -5,18 +38,19 @@
     @click.prevent.stop=""
     @mouseover="handleOver"
     @mouseleave="handleLeave"
+    @wheel.stop.prevent="scroll"
   >
     <span
-      v-if="sliderVolume === 0"
+      v-if="volume === 0"
       role="button"
       :title="labels.unmute"
       :aria-label="labels.unmute"
-      @click.prevent.stop="unmute"
+      @click.prevent.stop="mute"
     >
       <i class="volume off icon" />
     </span>
     <span
-      v-else-if="sliderVolume < 0.5"
+      v-else-if="volume < 0.5"
       role="button"
       :title="labels.mute"
       :aria-label="labels.mute"
@@ -40,61 +74,12 @@
       >{{ labels.slider }}</label>
       <input
         id="volume-slider"
-        v-model="sliderVolume"
+        v-model="volume"
         type="range"
         step="any"
         min="0"
-        :max="volumeSteps"
+        max="1"
       >
     </div>
   </button>
 </template>
-<script>
-import { mapActions } from 'vuex'
-
-export default {
-  data () {
-    return {
-      expanded: false,
-      timeout: null,
-      volumeSteps: 100
-    }
-  },
-  computed: {
-    sliderVolume: {
-      get () {
-        return this.$store.state.player.volume * this.volumeSteps
-      },
-      set (v) {
-        this.$store.commit('player/volume', v / this.volumeSteps)
-      }
-    },
-    labels () {
-      return {
-        unmute: this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Unmute'),
-        mute: this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Mute'),
-        slider: this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Adjust volume')
-      }
-    }
-  },
-  methods: {
-    ...mapActions({
-      mute: 'player/mute',
-      unmute: 'player/unmute',
-      toggleMute: 'player/toggleMute'
-    }),
-    handleOver () {
-      if (this.timeout) {
-        clearTimeout(this.timeout)
-      }
-      this.expanded = true
-    },
-    handleLeave () {
-      if (this.timeout) {
-        clearTimeout(this.timeout)
-      }
-      this.timeout = setTimeout(() => { this.expanded = false }, 500)
-    }
-  }
-}
-</script>

@@ -1,14 +1,13 @@
-import cryptography.exceptions
 import datetime
 import logging
-import pytz
 
+import cryptography.exceptions
+import pytz
+import requests
+import requests_http_message_signatures
 from django import forms
 from django.utils import timezone
 from django.utils.http import parse_http_date
-
-import requests
-import requests_http_message_signatures
 
 from . import exceptions, utils
 
@@ -74,10 +73,10 @@ def verify_django(django_request, public_key):
         signature = headers["Signature"]
     except KeyError:
         raise exceptions.MissingSignature
-    url = "http://noop{}".format(django_request.path)
+    url = f"http://noop{django_request.path}"
     query = django_request.META["QUERY_STRING"]
     if query:
-        url += "?{}".format(query)
+        url += f"?{query}"
     signature_headers = signature.split('headers="')[1].split('",')[0]
     expected = signature_headers.split(" ")
     logger.debug("Signature expected headers: %s", expected)

@@ -1,17 +1,123 @@
+<script setup lang="ts">
+import type { OrderingProps } from '~/composables/navigation/useOrdering'
+import type { Radio, BackendResponse } from '~/types'
+import type { RouteRecordName } from 'vue-router'
+import type { OrderingField } from '~/store/ui'
+
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRouteQuery } from '@vueuse/router'
+import { useI18n } from 'vue-i18n'
+import { syncRef } from '@vueuse/core'
+import { sortedUniq } from 'lodash-es'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+import $ from 'jquery'
+
+import Pagination from '~/components/vui/Pagination.vue'
+import RadioCard from '~/components/radios/Card.vue'
+
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useOrdering from '~/composables/navigation/useOrdering'
+import useErrorHandler from '~/composables/useErrorHandler'
+import usePage from '~/composables/navigation/usePage'
+import useLogger from '~/composables/useLogger'
+
+interface Props extends OrderingProps {
+  scope?: 'me' | 'all'
+
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  orderingConfigName?: RouteRecordName
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  scope: 'all',
+  orderingConfigName: undefined
+})
+
+const page = usePage()
+
+const q = useRouteQuery('query', '')
+const query = ref(q.value)
+syncRef(q, query, { direction: 'ltr' })
+
+const result = ref<BackendResponse<Radio>>()
+
+const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
+  ['creation_date', 'creation_date'],
+  ['name', 'name']
+]
+
+const logger = useLogger()
+const sharedLabels = useSharedLabels()
+
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props)
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  const params = {
+    scope: props.scope,
+    page: page.value,
+    page_size: paginateBy.value,
+    name__icontains: query.value,
+    ordering: orderingString.value
+  }
+
+  logger.time('Fetching radios')
+  try {
+    const response = await axios.get('radios/radios/', {
+      params
+    })
+
+    result.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+    result.value = undefined
+  } finally {
+    logger.timeEnd('Fetching radios')
+    isLoading.value = false
+  }
+}
+
+const store = useStore()
+const isAuthenticated = computed(() => store.state.auth.authenticated)
+const hasFavorites = computed(() => store.state.favorites.count > 0)
+
+watch([page, q, () => props.scope], fetchData)
+fetchData()
+
+const search = () => {
+  page.value = 1
+  q.value = query.value
+}
+
+onOrderingUpdate(() => {
+  page.value = 1
+  fetchData()
+})
+
+onMounted(() => $('.ui.dropdown').dropdown())
+
+const { t } = useI18n()
+const labels = computed(() => ({
+  searchPlaceholder: t('components.library.Radios.placeholder.search'),
+  title: t('components.library.Radios.title')
+}))
+
+const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value].sort((a, b) => a - b)))
+</script>
+
 <template>
   <main v-title="labels.title">
     <section class="ui vertical stripe segment">
       <h2 class="ui header">
-        <translate translate-context="Content/Radio/Title">
-          Browsing radios
-        </translate>
+        {{ $t('components.library.Radios.header.browse') }}
       </h2>
       <div class="ui hidden divider" />
       <div class="ui row">
         <h3 class="ui header">
-          <translate translate-context="Content/Radio/Title">
-            Instance radios
-          </translate>
+          {{ $t('components.library.Radios.header.instance') }}
         </h3>
         <div class="ui cards">
           <radio-card
@@ -23,38 +129,45 @@
             v-if="isAuthenticated && hasFavorites"
             :type="'favorites'"
           />
-          <radio-card :type="'random'" />
+          <radio-card
+            v-if="scope === 'all'"
+            :type="'random'"
+          />
+          <radio-card
+            v-if="scope === 'me'"
+            :type="'random_library'"
+          />
           <radio-card :type="'recently-added'" />
           <radio-card
-            v-if="$store.state.auth.authenticated"
+            v-if="$store.state.auth.authenticated && scope === 'all'"
             :type="'less-listened'"
+          />
+          <radio-card
+            v-if="$store.state.auth.authenticated && scope === 'me'"
+            :type="'less-listened_library'"
           />
         </div>
       </div>
 
       <div class="ui hidden divider" />
       <h3 class="ui header">
-        <translate translate-context="Content/Radio/Title">
-          User radios
-        </translate>
+        {{ $t('components.library.Radios.header.user') }}
       </h3>
       <router-link
+        v-if="isAuthenticated"
         class="ui success button"
         to="/library/radios/build"
-        exact
       >
-        <translate translate-context="Content/Radio/Button.Label/Verb">
-          Create your own radio
-        </translate>
+        {{ $t('components.library.Radios.button.create') }}
       </router-link>
       <div class="ui hidden divider" />
       <form
         :class="['ui', {'loading': isLoading}, 'form']"
-        @submit.prevent="updateQueryString();fetchData()"
+        @submit.prevent="search"
       >
         <div class="fields">
           <div class="field">
-            <label for="radios-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
+            <label for="radios-search">{{ $t('components.library.Radios.label.search') }}</label>
             <div class="ui action input">
               <input
                 id="radios-search"
@@ -66,14 +179,14 @@
               <button
                 class="ui icon button"
                 type="submit"
-                :aria-label="$pgettext('Content/Search/Input.Label/Noun', 'Search')"
+                :aria-label="t('components.library.Radios.button.search')"
               >
                 <i class="search icon" />
               </button>
             </div>
           </div>
           <div class="field">
-            <label for="radios-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
+            <label for="radios-ordering">{{ $t('components.library.Radios.ordering.label') }}</label>
             <select
               id="radios-ordering"
               v-model="ordering"
@@ -89,39 +202,33 @@
             </select>
           </div>
           <div class="field">
-            <label for="radios-ordering-direction"><translate translate-context="Content/Search/Dropdown.Label/Noun">Order</translate></label>
+            <label for="radios-ordering-direction">{{ $t('components.library.Radios.ordering.direction.label') }}</label>
             <select
               id="radios-ordering-direction"
               v-model="orderingDirection"
               class="ui dropdown"
             >
               <option value="+">
-                <translate translate-context="Content/Search/Dropdown">
-                  Ascending
-                </translate>
+                {{ $t('components.library.Radios.ordering.direction.ascending') }}
               </option>
               <option value="-">
-                <translate translate-context="Content/Search/Dropdown">
-                  Descending
-                </translate>
+                {{ $t('components.library.Radios.ordering.direction.descending') }}
               </option>
             </select>
           </div>
           <div class="field">
-            <label for="radios-results"><translate translate-context="Content/Search/Dropdown.Label/Noun">Results per page</translate></label>
+            <label for="radios-results">{{ $t('components.library.Radios.pagination.results') }}</label>
             <select
               id="radios-results"
               v-model="paginateBy"
               class="ui dropdown"
             >
-              <option :value="parseInt(12)">
-                12
-              </option>
-              <option :value="parseInt(25)">
-                25
-              </option>
-              <option :value="parseInt(50)">
-                50
+              <option
+                v-for="opt in paginateOptions"
+                :key="opt"
+                :value="opt"
+              >
+                {{ opt }}
               </option>
             </select>
           </div>
@@ -129,14 +236,12 @@
       </form>
       <div class="ui hidden divider" />
       <div
-        v-if="result && !result.results.length > 0"
+        v-if="result && result.results.length === 0"
         class="ui placeholder segment"
       >
         <div class="ui icon header">
           <i class="feed icon" />
-          <translate translate-context="Content/Radios/Placeholder">
-            No results matching your query
-          </translate>
+          {{ $t('components.library.Radios.empty.noResults') }}
         </div>
         <router-link
           v-if="$store.state.auth.authenticated"
@@ -144,9 +249,7 @@
           class="ui success button labeled icon"
         >
           <i class="rss icon" />
-          <translate translate-context="Content/*/Verb">
-            Create a radio
-          </translate>
+          {{ $t('components.library.Radios.button.add') }}
         </router-link>
       </div>
       <div
@@ -163,111 +266,11 @@
       <div class="ui center aligned basic segment">
         <pagination
           v-if="result && result.count > paginateBy"
-          :current="page"
+          v-model:current="page"
           :paginate-by="paginateBy"
           :total="result.count"
-          @page-changed="selectPage"
         />
       </div>
     </section>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import $ from 'jquery'
-
-import logger from '@/logging'
-
-import OrderingMixin from '@/components/mixins/Ordering'
-import PaginationMixin from '@/components/mixins/Pagination'
-import TranslationsMixin from '@/components/mixins/Translations'
-import RadioCard from '@/components/radios/Card'
-import Pagination from '@/components/Pagination'
-
-const FETCH_URL = 'radios/radios/'
-
-export default {
-  components: {
-    RadioCard,
-    Pagination
-  },
-  mixins: [OrderingMixin, PaginationMixin, TranslationsMixin],
-  props: {
-    defaultQuery: { type: String, required: false, default: '' },
-    scope: { type: String, required: false, default: 'all' }
-  },
-  data () {
-    return {
-      isLoading: true,
-      result: null,
-      page: parseInt(this.defaultPage),
-      query: this.defaultQuery,
-      orderingOptions: [['creation_date', 'creation_date'], ['name', 'name']]
-    }
-  },
-  computed: {
-    labels () {
-      const searchPlaceholder = this.$pgettext('Content/Search/Input.Placeholder', 'Enter a radio name…')
-      const title = this.$pgettext('*/*/*', 'Radios')
-      return {
-        searchPlaceholder,
-        title
-      }
-    },
-    isAuthenticated () {
-      return this.$store.state.auth.authenticated
-    },
-    hasFavorites () {
-      return this.$store.state.favorites.count > 0
-    }
-  },
-  watch: {
-    page () {
-      this.updateQueryString()
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  mounted () {
-    $('.ui.dropdown').dropdown()
-  },
-  methods: {
-    updateQueryString: function () {
-      history.pushState(
-        {},
-        null,
-        this.$route.path + '?' + new URLSearchParams(
-          {
-            query: this.query,
-            page: this.page,
-            paginateBy: this.paginateBy,
-            ordering: this.getOrderingAsString()
-          }).toString()
-      )
-    },
-    fetchData: function () {
-      const self = this
-      this.isLoading = true
-      const url = FETCH_URL
-      const params = {
-        scope: this.scope,
-        page: this.page,
-        page_size: this.paginateBy,
-        name__icontains: this.query,
-        ordering: this.getOrderingAsString()
-      }
-      logger.default.debug('Fetching radios')
-      axios.get(url, { params: params }).then(response => {
-        self.result = response.data
-        self.isLoading = false
-      })
-    },
-    selectPage: function (page) {
-      this.page = page
-    }
-  }
-}
-</script>

@@ -1,3 +1,73 @@
+<script setup lang="ts">
+import type { Actor } from '~/types'
+
+import { onBeforeRouteUpdate } from 'vue-router'
+import { computed, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+import useReport from '~/composables/moderation/useReport'
+
+interface Events {
+  (e: 'updated', value: Actor): void
+}
+
+interface Props {
+  username: string
+  domain?: string | null
+}
+
+const emit = defineEmits<Events>()
+const props = withDefaults(defineProps<Props>(), {
+  domain: null
+})
+
+const { report, getReportableObjects } = useReport()
+const store = useStore()
+
+const object = ref<Actor | null>(null)
+
+const displayName = computed(() => object.value?.name ?? object.value?.preferred_username)
+const fullUsername = computed(() => props.domain
+  ? `${props.username}@${props.domain}`
+  : `${props.username}@${store.getters['instance/domain']}`
+)
+
+const routerParams = computed(() => props.domain
+  ? { username: props.username, domain: props.domain }
+  : { username: props.username }
+)
+
+const { t } = useI18n()
+const labels = computed(() => ({
+  usernameProfile: t('views.auth.ProfileBase.title', { username: props.username })
+}))
+
+onBeforeRouteUpdate((to) => {
+  to.meta.preserveScrollPosition = true
+})
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  object.value = null
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(`federation/actors/${fullUsername.value}/`)
+    object.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+watch(props, fetchData, { immediate: true })
+</script>
+
 <template>
   <main
     v-title="labels.usernameProfile"
@@ -30,17 +100,14 @@
                 class="basic item"
               >
                 <i class="external icon" />
-                <translate
-                  :translate-params="{domain: object.domain}"
-                  translate-context="Content/*/Button.Label/Verb"
-                >View on %{ domain }</translate>
+                {{ $t('views.auth.ProfileBase.link.domainView', {domain: object.domain}) }}
               </a>
               <div
-                v-for="obj in getReportableObjs({account: object})"
+                v-for="obj in getReportableObjects({account: object})"
                 :key="obj.target.type + obj.target.id"
                 role="button"
                 class="basic item"
-                @click.stop.prevent="$store.dispatch('moderation/report', obj.target)"
+                @click.stop.prevent="report(obj)"
               >
                 <i class="share icon" /> {{ obj.label }}
               </div>
@@ -52,9 +119,7 @@
                 :to="{name: 'manage.moderation.accounts.detail', params: {id: object.full_username}}"
               >
                 <i class="wrench icon" />
-                <translate translate-context="Content/Moderation/Link">
-                  Open in moderation interface
-                </translate>
+                {{ $t('views.auth.ProfileBase.link.moderation') }}
               </router-link>
             </div>
           </button>
@@ -83,9 +148,7 @@
             <template v-if="object.full_username === $store.state.auth.fullUsername">
               <div class="ui very small hidden divider" />
               <div class="ui basic success label">
-                <translate translate-context="Content/Profile/Button.Paragraph">
-                  This is you!
-                </translate>
+                {{ $t('views.auth.ProfileBase.label.self') }}
               </div>
             </template>
           </h1>
@@ -96,7 +159,7 @@
               :field-name="'summary'"
               :update-url="`users/${$store.state.auth.username}/`"
               :can-update="$store.state.auth.authenticated && object.full_username === $store.state.auth.fullUsername"
-              @updated="$emit('updated', $event)"
+              @updated="emit('updated', $event)"
             />
           </div>
         </div>
@@ -106,27 +169,21 @@
               <div class="ui secondary pointing center aligned menu">
                 <router-link
                   class="item"
-                  :exact="true"
                   :to="{name: 'profile.overview', params: routerParams}"
                 >
-                  <translate translate-context="Content/Profile/Link">
-                    Overview
-                  </translate>
+                  {{ $t('views.auth.ProfileBase.link.overview') }}
                 </router-link>
                 <router-link
                   class="item"
-                  :exact="true"
                   :to="{name: 'profile.activity', params: routerParams}"
                 >
-                  <translate translate-context="Content/Profile/*">
-                    Activity
-                  </translate>
+                  {{ $t('views.auth.ProfileBase.link.activity') }}
                 </router-link>
               </div>
               <div class="ui hidden divider" />
               <router-view
                 :object="object"
-                @updated="fetch"
+                @updated="fetchData"
               />
             </div>
           </div>
@@ -135,82 +192,3 @@
     </div>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-
-import ReportMixin from '@/components/mixins/Report'
-
-export default {
-  mixins: [ReportMixin],
-  beforeRouteUpdate (to, from, next) {
-    to.meta.preserveScrollPosition = true
-    next()
-  },
-  props: {
-    username: { type: String, required: true },
-    domain: { type: String, required: false, default: null }
-  },
-  data () {
-    return {
-      object: null,
-      isLoading: false
-    }
-  },
-  computed: {
-    labels () {
-      const msg = this.$pgettext('Head/Profile/Title', "%{ username }'s profile")
-      const usernameProfile = this.$gettextInterpolate(msg, {
-        username: this.username
-      })
-      return {
-        usernameProfile
-      }
-    },
-    fullUsername () {
-      if (this.username && this.domain) {
-        return `${this.username}@${this.domain}`
-      } else {
-        return `${this.username}@${this.$store.getters['instance/domain']}`
-      }
-    },
-    routerParams () {
-      if (this.domain) {
-        return { username: this.username, domain: this.domain }
-      } else {
-        return { username: this.username }
-      }
-    },
-    displayName () {
-      return this.object.name || this.object.preferred_username
-    }
-  },
-  watch: {
-    domain () {
-      this.fetch()
-    },
-    username () {
-      this.fetch()
-    }
-  },
-  created () {
-    const authenticated = this.$store.state.auth.authenticated
-    if (!authenticated && this.domain && this.$store.getters['instance/domain'] !== this.domain) {
-      this.$router.push({ name: 'login', query: { next: this.$route.fullPath } })
-    } else {
-      this.fetch()
-    }
-  },
-  methods: {
-    fetch () {
-      const self = this
-      self.object = null
-      self.isLoading = true
-      axios.get(`federation/actors/${this.fullUsername}/`).then((response) => {
-        self.object = response.data
-        self.isLoading = false
-      })
-    }
-  }
-}
-</script>

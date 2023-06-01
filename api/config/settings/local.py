@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Local settings
 
@@ -8,8 +7,9 @@ Local settings
 - Add django-extensions as app
 """
 
-from .common import *  # noqa
+from funkwhale_api import __version__ as funkwhale_version
 
+from .common import *  # noqa
 
 # DEBUG
 # ------------------------------------------------------------------------------
@@ -78,6 +78,8 @@ DEBUG_TOOLBAR_PANELS = [
 # ------------------------------------------------------------------------------
 # INSTALLED_APPS += ('django_extensions', )
 
+INSTALLED_APPS += ("drf_spectacular",)
+
 # Debug toolbar is slow, we disable it for tests
 DEBUG_TOOLBAR_ENABLED = env.bool("DEBUG_TOOLBAR_ENABLED", default=DEBUG)
 if DEBUG_TOOLBAR_ENABLED:
@@ -96,6 +98,47 @@ CELERY_TASK_ALWAYS_EAGER = False
 
 CSRF_TRUSTED_ORIGINS = [o for o in ALLOWED_HOSTS]
 
+REST_FRAMEWORK["DEFAULT_SCHEMA_CLASS"] = "funkwhale_api.schema.CustomAutoSchema"
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Funkwhale API",
+    "DESCRIPTION": open("Readme.md").read(),
+    "VERSION": funkwhale_version,
+    "SCHEMA_PATH_PREFIX": "/api/(v[0-9])?",
+    "OAUTH_FLOWS": ["authorizationCode"],
+    "AUTHENTICATION_WHITELIST": [
+        "funkwhale_api.common.authentication.OAuth2Authentication",
+        "funkwhale_api.common.authentication.ApplicationTokenAuthentication",
+    ],
+    "SERVERS": [
+        {"url": "https://demo.funkwhale.audio", "description": "Demo Server"},
+        {
+            "url": "https://funkwhale.audio",
+            "description": "Read server with real content",
+        },
+        {
+            "url": "{protocol}://{domain}",
+            "description": "Custom server",
+            "variables": {
+                "domain": {
+                    "default": "yourdomain",
+                    "description": "Your Funkwhale Domain",
+                },
+                "protocol": {"enum": ["http", "https"], "default": "https"},
+            },
+        },
+    ],
+    "OAUTH2_FLOWS": ["authorizationCode"],
+    "OAUTH2_AUTHORIZATION_URL": "/authorize",
+    "OAUTH2_TOKEN_URL": "/api/v1/oauth/token/",
+    "PREPROCESSING_HOOKS": ["config.schema.custom_preprocessing_hook"],
+    "ENUM_NAME_OVERRIDES": {
+        "FederationChoiceEnum": "funkwhale_api.federation.models.TYPE_CHOICES",
+        "ReportTypeEnum": "funkwhale_api.moderation.models.REPORT_TYPES",
+        "PrivacyLevelEnum": "funkwhale_api.common.fields.PRIVACY_LEVEL_CHOICES",
+        "LibraryPrivacyLevelEnum": "funkwhale_api.music.models.LIBRARY_PRIVACY_LEVEL_CHOICES",
+    },
+    "COMPONENT_SPLIT_REQUEST": True,
+}
 
 if env.bool("WEAK_PASSWORDS", default=False):
     # Faster during tests

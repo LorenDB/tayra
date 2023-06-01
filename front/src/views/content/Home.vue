@@ -1,3 +1,20 @@
+<script setup lang="ts">
+import { humanSize } from '~/utils/filters'
+import { useI18n } from 'vue-i18n'
+import { computed } from 'vue'
+import { useStore } from '~/store'
+
+const { t } = useI18n()
+
+const labels = computed(() => ({
+  title: t('views.content.Home.title')
+}))
+
+const store = useStore()
+const quota = computed(() => store.state.instance.settings.users.upload_quota.value)
+const defaultQuota = computed(() => humanSize(quota.value * 1e6))
+</script>
+
 <template>
   <section
     v-title="labels.title"
@@ -6,98 +23,53 @@
     <div class="ui text container">
       <h1>{{ labels.title }}</h1>
       <p>
-        <strong><translate
-          translate-context="Content/Library/Paragraph"
-          :translate-params="{quota: defaultQuota}"
-        >This instance offers up to %{quota} of storage space for every user.</translate></strong>
+        <strong>{{ $t('views.content.Home.help.uploadQuota', { quota: defaultQuota }) }}</strong>
       </p>
       <div class="ui segment">
         <h2>
           <i class="feed icon" />&nbsp;
-          <translate translate-context="Content/Library/Title/Verb">
-            Publish your work in a channel
-          </translate>
+          {{ $t('views.content.Home.header.channel') }}
         </h2>
         <p>
-          <translate translate-context="Content/Library/Paragraph">
-            If you are a musician or a podcaster, channels are designed for you!
-          </translate>&#32;
-          <translate translate-context="Content/Library/Paragraph">
-            Share your work publicly and get subscribers on Funkwhale, the Fediverse or any podcasting application.
-          </translate>
+          {{ $t('views.content.Home.description.channel.1') }}&#32;{{ $t('views.content.Home.description.channel.2') }}
         </p>
         <router-link
-          :to="{name: 'profile.overview', params: {username: $store.state.auth.username}, hash: '#channels'}"
+          :to="{name: 'profile.overview', params: {username: store.state.auth.username}, hash: '#channels'}"
           class="ui primary button"
         >
-          <translate translate-context="Content/Library/Button.Label/Verb">
-            Get started
-          </translate>
+          {{ $t('views.content.Home.button.start') }}
         </router-link>
       </div>
       <div class="ui segment">
         <h2>
           <i class="cloud icon" />&nbsp;
-          <translate translate-context="Content/Library/Title/Verb">
-            Upload third-party content in a library
-          </translate>
+          {{ $t('views.content.Home.header.upload') }}
         </h2>
         <p>
-          <translate translate-context="Content/Library/Paragraph">
-            Upload your personal music library to Funkwhale to enjoy it from anywhere and share it with friends and family.
-          </translate>
+          {{ $t('views.content.Home.description.upload') }}
         </p>
         <router-link
           :to="{name: 'content.libraries.index'}"
           class="ui primary button"
         >
-          <translate translate-context="Content/Library/Button.Label/Verb">
-            Get started
-          </translate>
+          {{ $t('views.content.Home.button.start') }}
         </router-link>
       </div>
       <div class="ui segment">
         <h2>
           <i class="download icon" />&nbsp;
-          <translate translate-context="Content/Library/Title/Verb">
-            Follow remote libraries
-          </translate>
+          {{ $t('views.content.Home.header.follow') }}
         </h2>
         <p>
-          <translate translate-context="Content/Library/Paragraph">
-            Follow libraries from other users to get access to new music. Public libraries can be followed immediately, while following a private library requires approval from its owner.
-          </translate>
+          {{ $t('views.content.Home.description.follow') }}
         </p>
         <router-link
           :to="{name: 'content.remote.index'}"
           class="ui primary button"
         >
-          <translate translate-context="Content/Library/Button.Label/Verb">
-            Get started
-          </translate>
+          {{ $t('views.content.Home.button.start') }}
         </router-link>
       </div>
     </div>
   </section>
 </template>
-
-<script>
-import { humanSize } from '@/filters'
-
-export default {
-  computed: {
-    labels () {
-      return {
-        title: this.$pgettext('Content/Library/Title/Verb', 'Add and manage content')
-      }
-    },
-    defaultQuota () {
-      const quota =
-        this.$store.state.instance.settings.users.upload_quota.value *
-        1000 *
-        1000
-      return humanSize(quota)
-    }
-  }
-}
-</script>

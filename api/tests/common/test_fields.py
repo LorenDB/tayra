@@ -101,5 +101,5 @@ def test_generic_relation_filter_target_type_and_id(factories):
             }
         },
     )
-    qs = f.filter(note.__class__.objects.all(), "user:{}".format(user.username))
+    qs = f.filter(note.__class__.objects.all(), f"user:{user.username}")
     assert list(qs) == [note]

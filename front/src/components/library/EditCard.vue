@@ -1,14 +1,161 @@
+<script setup lang="ts">
+import type { ConfigField } from '~/composables/moderation/useEditConfigs'
+import type { Review, ReviewState, ReviewStatePayload } from '~/types'
+import type { Change } from 'diff'
+
+import { diffWordsWithSpace } from 'diff'
+import { useRouter } from 'vue-router'
+import { computed, ref } from 'vue'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+import useEditConfigs from '~/composables/moderation/useEditConfigs'
+import useErrorHandler from '~/composables/useErrorHandler'
+
+interface Events {
+  (e: 'approved', isApproved: boolean): void
+  (e: 'deleted'): void
+}
+
+interface Props {
+  obj: Review
+  currentState?: ReviewState
+}
+
+const emit = defineEmits<Events>()
+const props = withDefaults(defineProps<Props>(), {
+  currentState: () => ({})
+})
+
+const configs = useEditConfigs()
+const router = useRouter()
+const store = useStore()
+
+const canApprove = computed(() => !props.obj.is_applied && store.state.auth.availablePermissions.library)
+const canDelete = computed(() => {
+  if (props.obj.is_applied || props.obj.is_approved) return false
+  if (!store.state.auth.authenticated) return false
+
+  return props.obj.created_by.full_username === store.state.auth.fullUsername
+    || store.state.auth.availablePermissions.library
+})
+
+const previousState = computed(() => props.obj.is_applied
+  // mutation was applied, we use the previous state that is stored
+  // on the mutation itself
+  ? props.obj.previous_state
+  // mutation is not applied yet, so we use the current state that was
+  // passed to the component, if any
+  : props.currentState
+)
+
+const detailUrl = computed(() => {
+  if (!props.obj.target) return ''
+
+  const name = props.obj.target.type === 'track'
+    ? 'library.tracks.edit.detail'
+    : props.obj.target.type === 'album'
+      ? 'library.albums.edit.detail'
+      : props.obj.target.type === 'artist'
+        ? 'library.artists.edit.detail'
+        : undefined
+
+  return router.resolve({
+    name,
+    params: {
+      id: props.obj.target.id,
+      editId: props.obj.uuid
+    }
+  }).href
+})
+
+const updatedFields = computed(() => {
+  if (!props.obj?.target) return []
+
+  const payload = props.obj.payload
+  const fields = Object.keys(payload)
+
+  const state = previousState.value
+
+  return fields.map((id) => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const config = configs[props.obj.target!.type].fields.find((field) => id === field.id)
+    const getValueRepr = config?.getValueRepr ?? (v => v)
+
+    const result = {
+      id,
+      config,
+      new: payload[id],
+      newRepr: getValueRepr(payload[id]) ?? '',
+      old: undefined,
+      oldRepr: '',
+      diff: []
+    } as {
+      id: string
+      config: ConfigField
+      old?: ReviewStatePayload
+      new: ReviewStatePayload
+      oldRepr: string
+      newRepr: string
+      diff: Change[]
+    }
+
+    if (state?.[id]) {
+      const oldState = state[id]
+      result.old = oldState
+      result.oldRepr = getValueRepr('value' in oldState
+        ? oldState.value
+        : oldState
+      ) ?? ''
+
+      // we compute the diffs between the old and new values
+      result.diff = diffWordsWithSpace(result.oldRepr, result.newRepr)
+    }
+
+    return result
+  })
+})
+
+const isLoading = ref(false)
+const remove = async () => {
+  isLoading.value = true
+
+  try {
+    await axios.delete(`mutations/${props.obj.uuid}/`)
+    emit('deleted')
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+const approve = async (approved: boolean) => {
+  const url = approved
+    ? `mutations/${props.obj.uuid}/approve/`
+    : `mutations/${props.obj.uuid}/reject/`
+
+  isLoading.value = true
+
+  try {
+    await axios.post(url)
+    emit('approved', approved)
+    store.commit('ui/incrementNotifications', { count: -1, type: 'pendingReviewEdits' })
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
   <div class="ui fluid card">
     <div class="content">
       <h4 class="header">
         <router-link :to="detailUrl">
-          <translate
-            translate-context="Content/Library/Card/Short"
-            :translate-params="{id: obj.uuid.substring(0, 8)}"
-          >
-            Modification %{ id }
-          </translate>
+          {{ $t('components.library.EditCard.header.modification', {id: obj.uuid.substring(0, 8)}) }}
         </router-link>
       </h4>
       <div class="meta">
@@ -17,12 +164,7 @@
           :to="{name: 'library.tracks.detail', params: {id: obj.target.id }}"
         >
           <i class="music icon" />
-          <translate
-            translate-context="Content/Library/Card/Short"
-            :translate-params="{id: obj.target.id, name: obj.target.repr}"
-          >
-            Track #%{ id } - %{ name }
-          </translate>
+          {{ $t('components.library.EditCard.link.track', {id: obj.target.id, name: obj.target.repr}) }}
         </router-link>
         <br>
         <human-date
@@ -33,19 +175,19 @@
         <span class="right floated">
           <span v-if="obj.is_approved && obj.is_applied">
             <i class="success check icon" />
-            <translate translate-context="Content/Library/Card/Short">Approved and applied</translate>
+            {{ $t('components.library.EditCard.status.applied') }}
           </span>
           <span v-else-if="obj.is_approved">
             <i class="success check icon" />
-            <translate translate-context="Content/*/*/Short">Approved</translate>
+            {{ $t('components.library.EditCard.status.approved') }}
           </span>
           <span v-else-if="obj.is_approved === null">
             <i class="warning hourglass icon" />
-            <translate translate-context="Content/Admin/*/Noun">Pending review</translate>
+            {{ $t('components.library.EditCard.status.pending') }}
           </span>
           <span v-else-if="obj.is_approved === false">
             <i class="danger x icon" />
-            <translate translate-context="Content/Library/*/Short">Rejected</translate>
+            {{ $t('components.library.EditCard.status.rejected') }}
           </span>
         </span>
       </div>
@@ -64,19 +206,13 @@
         <thead>
           <tr>
             <th>
-              <translate translate-context="Content/Library/Card.Table.Header/Short">
-                Field
-              </translate>
+              {{ $t('components.library.EditCard.table.update.header.field') }}
             </th>
             <th>
-              <translate translate-context="Content/Library/Card.Table.Header/Short">
-                Old value
-              </translate>
+              {{ $t('components.library.EditCard.table.update.header.oldValue') }}
             </th>
             <th>
-              <translate translate-context="Content/Library/Card.Table.Header/Short">
-                New value
-              </translate>
+              {{ $t('components.library.EditCard.table.update.header.newValue') }}
             </th>
           </tr>
         </thead>
@@ -88,7 +224,7 @@
             <td>{{ field.id }}</td>
 
             <td v-if="field.diff">
-              <template v-if="field.config.type === 'attachment' && field.oldRepr">
+              <template v-if="field.config?.type === 'attachment' && field.oldRepr">
                 <img
                   class="ui image"
                   alt=""
@@ -97,8 +233,7 @@
               </template>
               <template v-else>
                 <span
-                  v-for="(part, key) in field.diff"
-                  v-if="!part.added"
+                  v-for="(part, key) in field.diff.filter(p => !p.added)"
                   :key="key"
                   :class="['diff', {removed: part.removed}]"
                 >
@@ -107,16 +242,14 @@
               </template>
             </td>
             <td v-else>
-              <translate translate-context="*/*/*">
-                N/A
-              </translate>
+              {{ $t('components.library.EditCard.table.update.notApplicable') }}
             </td>
 
             <td
               v-if="field.diff"
               :title="field.newRepr"
             >
-              <template v-if="field.config.type === 'attachment' && field.newRepr">
+              <template v-if="field.config?.type === 'attachment' && field.newRepr">
                 <img
                   class="ui image"
                   alt=""
@@ -125,8 +258,7 @@
               </template>
               <template v-else>
                 <span
-                  v-for="(part, key) in field.diff"
-                  v-if="!part.removed"
+                  v-for="(part, key) in field.diff.filter(p => !p.removed)"
                   :key="key"
                   :class="['diff', {added: part.added}]"
                 >
@@ -138,7 +270,7 @@
               v-else
               :title="field.newRepr"
             >
-              <template v-if="field.config.type === 'attachment' && field.newRepr">
+              <template v-if="field.config?.type === 'attachment' && field.newRepr">
                 <img
                   class="ui image"
                   alt=""
@@ -168,162 +300,39 @@
         :class="['ui', {loading: isLoading}, 'success', 'basic', 'button']"
         @click="approve(true)"
       >
-        <translate translate-context="Content/*/Button.Label/Verb">
-          Approve
-        </translate>
+        {{ $t('components.library.EditCard.button.approve') }}
       </button>
       <button
         v-if="canApprove && obj.is_approved === null"
         :class="['ui', {loading: isLoading}, 'warning', 'basic', 'button']"
         @click="approve(false)"
       >
-        <translate translate-context="Content/Library/Button.Label">
-          Reject
-        </translate>
+        {{ $t('components.library.EditCard.button.reject') }}
       </button>
       <dangerous-button
         v-if="canDelete"
         :class="['ui', {loading: isLoading}, 'basic danger button']"
         :action="remove"
       >
-        <translate translate-context="*/*/*/Verb">
-          Delete
-        </translate>
-        <p slot="modal-header">
-          <translate translate-context="Popup/Library/Title">
-            Delete this suggestion?
-          </translate>
-        </p>
-        <div slot="modal-content">
+        {{ $t('components.library.EditCard.button.delete') }}
+        <template #modal-header>
           <p>
-            <translate translate-context="Popup/Library/Paragraph">
-              The suggestion will be completely removed, this action is irreversible.
-            </translate>
+            {{ $t('components.library.EditCard.modal.delete.header') }}
           </p>
-        </div>
-        <p slot="modal-confirm">
-          <translate translate-context="*/*/*/Verb">
-            Delete
-          </translate>
-        </p>
+        </template>
+        <template #modal-content>
+          <div>
+            <p>
+              {{ $t('components.library.EditCard.modal.content.warning') }}
+            </p>
+          </div>
+        </template>
+        <template #modal-confirm>
+          <p>
+            {{ $t('components.library.EditCard.button.delete') }}
+          </p>
+        </template>
       </dangerous-button>
     </div>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import { diffWordsWithSpace } from 'diff'
-
-import edits from '@/edits'
-
-function castValue (value) {
-  if (value === null || value === undefined) {
-    return ''
-  }
-  return String(value)
-}
-
-export default {
-  props: {
-    obj: { type: Object, required: true },
-    currentState: { type: Object, required: false, default: function () { return { } } }
-  },
-  data () {
-    return {
-      isLoading: false
-    }
-  },
-  computed: {
-    configs: edits.getConfigs,
-    canApprove: edits.getCanApprove,
-    canDelete: edits.getCanDelete,
-    previousState () {
-      if (this.obj.is_applied) {
-        // mutation was applied, we use the previous state that is stored
-        // on the mutation itself
-        return this.obj.previous_state
-      }
-      // mutation is not applied yet, so we use the current state that was
-      // passed to the component, if any
-      return this.currentState
-    },
-    detailUrl () {
-      if (!this.obj.target) {
-        return ''
-      }
-      let namespace
-      const id = this.obj.target.id
-      if (this.obj.target.type === 'track') {
-        namespace = 'library.tracks.edit.detail'
-      }
-      if (this.obj.target.type === 'album') {
-        namespace = 'library.albums.edit.detail'
-      }
-      if (this.obj.target.type === 'artist') {
-        namespace = 'library.artists.edit.detail'
-      }
-      return this.$router.resolve({ name: namespace, params: { id, editId: this.obj.uuid } }).href
-    },
-
-    updatedFields () {
-      if (!this.obj || !this.obj.target) {
-        return []
-      }
-      const payload = this.obj.payload
-      const previousState = this.previousState
-      const fields = Object.keys(payload)
-      const self = this
-      return fields.map((f) => {
-        const fieldConfig = edits.getFieldConfig(self.configs, this.obj.target.type, f)
-        const dummyRepr = (v) => { return v }
-        const getValueRepr = fieldConfig.getValueRepr || dummyRepr
-        const d = {
-          id: f,
-          config: fieldConfig
-        }
-        if (previousState && previousState[f]) {
-          d.old = previousState[f]
-          d.oldRepr = castValue(getValueRepr(d.old.value))
-        }
-        d.new = payload[f]
-        d.newRepr = castValue(getValueRepr(d.new))
-        if (d.old) {
-          // we compute the diffs between the old and new values
-          d.diff = diffWordsWithSpace(d.oldRepr, d.newRepr)
-        }
-        return d
-      })
-    }
-  },
-  methods: {
-    remove () {
-      const self = this
-      this.isLoading = true
-      axios.delete(`mutations/${this.obj.uuid}/`).then((response) => {
-        self.$emit('deleted')
-        self.isLoading = false
-      }, () => {
-        self.isLoading = false
-      })
-    },
-    approve (approved) {
-      let url
-      if (approved) {
-        url = `mutations/${this.obj.uuid}/approve/`
-      } else {
-        url = `mutations/${this.obj.uuid}/reject/`
-      }
-      const self = this
-      this.isLoading = true
-      axios.post(url).then((response) => {
-        self.$emit('approved', approved)
-        self.isLoading = false
-        self.$store.commit('ui/incrementNotifications', { count: -1, type: 'pendingReviewEdits' })
-      }, () => {
-        self.isLoading = false
-      })
-    }
-  }
-}
-</script>

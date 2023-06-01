@@ -1,24 +1,21 @@
 import datetime
 import hashlib
-
-from django.core.files.base import ContentFile
-from django.http import request
-from django.utils.deconstruct import deconstructible
-
-import bleach.sanitizer
 import logging
-import markdown
 import os
 import shutil
 import uuid
 import xml.etree.ElementTree as ET
-
 from urllib.parse import parse_qs, urlencode, urlsplit, urlunsplit
 
-from django.conf import settings
+import bleach.sanitizer
+import markdown
 from django import urls
+from django.conf import settings
+from django.core.files.base import ContentFile
 from django.db import models, transaction
+from django.http import request
 from django.utils import timezone
+from django.utils.deconstruct import deconstructible
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +36,7 @@ def rename_file(instance, field_name, new_name, allow_missing_file=False):
     field = getattr(instance, field_name)
     current_name, extension = os.path.splitext(field.name)
 
-    new_name_with_extension = "{}{}".format(new_name, extension)
+    new_name_with_extension = f"{new_name}{extension}"
     try:
         shutil.move(field.path, new_name_with_extension)
     except FileNotFoundError:
@@ -74,7 +71,7 @@ def set_query_parameter(url, **kwargs):
 
 
 @deconstructible
-class ChunkedPath(object):
+class ChunkedPath:
     def sanitize_filename(self, filename):
         return filename.replace("/", "-")
 
@@ -91,7 +88,7 @@ class ChunkedPath(object):
             parts = chunks[:3] + [filename]
         else:
             ext = os.path.splitext(filename)[1][1:].lower()
-            new_filename = "".join(chunks[3:]) + ".{}".format(ext)
+            new_filename = "".join(chunks[3:]) + f".{ext}"
             parts = chunks[:3] + [new_filename]
         return os.path.join(self.root, *parts)
 
@@ -141,7 +138,7 @@ def chunk_queryset(source_qs, chunk_size):
 
 def join_url(start, end):
     if end.startswith("http://") or end.startswith("https://"):
-        # alread a full URL, joining makes no sense
+        # already a full URL, joining makes no sense
         return end
     if start.endswith("/") and end.startswith("/"):
         return start + end[1:]
@@ -230,7 +227,7 @@ def replace_prefix(queryset, field, old, new):
 
     on a whole table with a single query.
     """
-    qs = queryset.filter(**{"{}__startswith".format(field): old})
+    qs = queryset.filter(**{f"{field}__startswith": old})
     # we extract the part after the old prefix, and Concat it with our new prefix
     update = models.functions.Concat(
         models.Value(new),
@@ -311,7 +308,7 @@ HTMl_CLEANER = bleach.sanitizer.Cleaner(strip=True, tags=SAFE_TAGS)
 HTML_PERMISSIVE_CLEANER = bleach.sanitizer.Cleaner(
     strip=True,
     tags=SAFE_TAGS + ["h1", "h2", "h3", "h4", "h5", "h6", "div", "section", "article"],
-    attributes=["class", "rel", "alt", "title"],
+    attributes=["class", "rel", "alt", "title", "href"],
 )
 
 # support for additional tlds
@@ -356,7 +353,7 @@ def attach_content(obj, field, content_data):
     from . import models
 
     content_data = content_data or {}
-    existing = getattr(obj, "{}_id".format(field))
+    existing = getattr(obj, f"{field}_id")
 
     if existing:
         if same_content(getattr(obj, field), **content_data):
@@ -379,10 +376,9 @@ def attach_content(obj, field, content_data):
 
 @transaction.atomic
 def attach_file(obj, field, file_data, fetch=False):
-    from . import models
-    from . import tasks
+    from . import models, tasks
 
-    existing = getattr(obj, "{}_id".format(field))
+    existing = getattr(obj, f"{field}_id")
     if existing:
         getattr(obj, field).delete()
 
@@ -399,7 +395,7 @@ def attach_file(obj, field, file_data, fetch=False):
         name = [
             getattr(obj, field) for field in name_fields if getattr(obj, field, None)
         ][0]
-        filename = "{}-{}.{}".format(field, name, extension)
+        filename = f"{field}-{name}.{extension}"
         if "url" in file_data:
             attachment.url = file_data["url"]
         else:
@@ -491,4 +487,4 @@ def get_file_hash(file, algo=None, chunk_size=None, full_read=False):
         # sometimes, it's useful to only hash the beginning of the file, e.g
         # to avoid a lot of I/O when crawling large libraries
         hash.update(file.read(chunk_size))
-    return "{}:{}".format(algo, hash.hexdigest())
+    return f"{algo}:{hash.hexdigest()}"

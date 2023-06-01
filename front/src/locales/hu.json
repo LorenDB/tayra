@@ -1,0 +1,1030 @@
+{
+  "components": {
+    "auth": {
+      "Authorize": {
+        "header": {
+          "access": "{ app } hozzá akar férni a Funkwhale fiókodhoz"
+        },
+        "title": "Alkalmazás engedélyezése"
+      },
+      "SubsonicTokenForm": {
+        "message": {
+          "accessDisabled": "A hozzáférés le van tiltva"
+        }
+      },
+      "ApplicationEdit": {
+        "label": {
+          "accessToken": "Hozzáférés a szerkesztésekhez",
+          "appId": "Pályázati azonosító"
+        },
+        "header": {
+          "appDetails": "A kérelemre vonatkozó adatok"
+        },
+        "help": {
+          "appDetails": "Az alkalmazás azonosítója és a titka nagyon érzékeny adatok és jelszavakként kell kezelni őket. Ne ossza meg senkivel."
+        }
+      },
+      "Settings": {
+        "title": "Felhasználói fiók beállításai",
+        "header": {
+          "accountSettings": "Felhasználói fiók beállításai"
+        },
+        "table": {
+          "authorizedApps": {
+            "header": {
+              "application": "Pályázat"
+            }
+          },
+          "yourApps": {
+            "header": {
+              "application": "Pályázat"
+            }
+          }
+        },
+        "label": {
+          "newEmail": "Egy album"
+        },
+        "link": {
+          "newApp": "Alkalmazás engedélyezése"
+        },
+        "button": {
+          "removeApp": "Alkalmazás engedélyezése"
+        }
+      },
+      "Logout": {
+        "header": {
+          "confirm": "Biztos, hogy ki akar lépni?"
+        }
+      },
+      "Plugin": {
+        "header": {
+          "failure": "Hiba történt a módosítások mentése közben"
+        }
+      }
+    },
+    "About": {
+      "stat": {
+        "activeUsers": "{ n } aktív felhasználó | { n } aktív felhasználó",
+        "hoursOfMusic": "{ n } óra zene | { n } óra zene"
+      },
+      "title": "Rólunk",
+      "header": {
+        "aboutPod": "Erről az egyedről"
+      }
+    },
+    "Home": {
+      "stat": {
+        "activeUsers": "{ n } aktív felhasználó | { n } aktív felhasználó",
+        "hoursOfMusic": "{ n } óra zene | { n } óra zene"
+      },
+      "header": {
+        "aboutFunkwhale": "Funkwhaleról",
+        "about": "Erről a Funkwhale egyedről"
+      }
+    },
+    "audio": {
+      "artist": {
+        "Card": {
+          "meta": {
+            "episodes": "{ n } epizód | { n } epizód",
+            "tracks": "Egy szám | % { n } szám"
+          }
+        }
+      },
+      "ChannelCard": {
+        "meta": {
+          "episodes": "{ n } epizód | { n } epizód",
+          "tracks": "Egy szám | % { n } szám"
+        }
+      },
+      "ChannelSerieCard": {
+        "meta": {
+          "episodes": "{ n } epizód | { n } epizód"
+        }
+      },
+      "album": {
+        "Card": {
+          "meta": {
+            "tracks": "Egy szám | % { n } szám"
+          }
+        }
+      },
+      "Player": {
+        "meta": {
+          "position": "({ length } hosszú {index})"
+        }
+      },
+      "PlayButton": {
+        "button": {
+          "addToQueue": "Hozzáadás az aktuális lejátszási listához",
+          "addToPlaylist": "Hozzáadás lejátszási listához …",
+          "episodeDetails": "A kérelemre vonatkozó adatok",
+          "playAlbum": "Egy album",
+          "playPlaylist": "Hozzáférés a lejátszási listákhoz",
+          "playTrack": "Dal hozzáadása",
+          "trackDetails": "A kérelemre vonatkozó adatok"
+        }
+      },
+      "podcast": {
+        "Modal": {
+          "button": {
+            "addToFavorites": "Hozzáadás a kedvencekhez",
+            "addToPlaylist": "Hozzáadás lejátszási listához …",
+            "addToQueue": "Hozzáadás a lejátszási listához",
+            "episodeDetails": "A kérelemre vonatkozó adatok",
+            "startRadio": "Dal hozzáadása",
+            "trackDetails": "A kérelemre vonatkozó adatok",
+            "albumDetails": "Egy album",
+            "seriesDetails": "Egy album"
+          }
+        }
+      },
+      "track": {
+        "Modal": {
+          "button": {
+            "addToFavorites": "Hozzáadás a kedvencekhez",
+            "addToPlaylist": "Hozzáadás lejátszási listához …",
+            "addToQueue": "Hozzáadás a lejátszási listához",
+            "episodeDetails": "A kérelemre vonatkozó adatok",
+            "startRadio": "Dal hozzáadása",
+            "trackDetails": "A kérelemre vonatkozó adatok",
+            "albumDetails": "Egy album",
+            "seriesDetails": "Egy album"
+          }
+        },
+        "Table": {
+          "table": {
+            "header": {
+              "album": "Album",
+              "artist": "Előadó"
+            }
+          }
+        }
+      },
+      "SearchBar": {
+        "label": {
+          "album": "Album",
+          "artist": "Előadó"
+        }
+      },
+      "Search": {
+        "header": {
+          "albums": "Albumok"
+        }
+      },
+      "ChannelForm": {
+        "header": {
+          "error": "Hiba történt a módosítások mentése közben"
+        }
+      }
+    },
+    "library": {
+      "AlbumBase": {
+        "meta": {
+          "episodes": "{ n } epizód | { n } epizód",
+          "tracks": "Egy szám | % { n } szám"
+        },
+        "link": {
+          "addDescription": "Adj hozzá leírást…"
+        }
+      },
+      "ArtistBase": {
+        "title": "Előadó"
+      },
+      "radios": {
+        "Builder": {
+          "header": {
+            "matches": "Egy szám megfelelő a kombinált szűrőkkel | % { n } szám megfelelő a kombinált szűrőkkel"
+          },
+          "table": {
+            "filter": {
+              "header": {
+                "actions": "műveletek"
+              }
+            }
+          },
+          "button": {
+            "filter": "Szűrő hozzáadása"
+          },
+          "label": {
+            "filter": "Szűrők hozzáadása a rádió testreszabásához"
+          }
+        }
+      },
+      "FileUpload": {
+        "tooltip": {
+          "network": "Hálózati hiba történt ennek az állománynak a feltöltése közben"
+        },
+        "table": {
+          "upload": {
+            "header": {
+              "actions": "Pályázat"
+            }
+          }
+        },
+        "header": {
+          "failure": "Hiba történt a módosítások mentése közben",
+          "status": "Fiók állapota"
+        }
+      },
+      "EditForm": {
+        "placeholder": {
+          "summary": "Rövid összefoglaló a változtatásaidról."
+        }
+      },
+      "Albums": {
+        "link": {
+          "addMusic": "Adj hozzá zenét"
+        },
+        "title": "Albumok"
+      },
+      "Artists": {
+        "button": {
+          "upload": "Adj hozzá zenét"
+        },
+        "label": {
+          "search": "Előadó"
+        }
+      },
+      "TrackDetail": {
+        "table": {
+          "release": {
+            "album": "Album",
+            "artist": "Előadó"
+          }
+        },
+        "header": {
+          "playlists": "Hozzáférés a lejátszási listákhoz"
+        }
+      },
+      "TagDetail": {
+        "link": {
+          "albums": "Albumok"
+        }
+      },
+      "ImportStatusModal": {
+        "error": {
+          "importFailure": "Hiba történt a feltöltés feldolgozása közben. Több információ található lentebb.",
+          "unknownError": {
+            "message": "Ismeretlen hiba lépett fel"
+          }
+        }
+      },
+      "EditCard": {
+        "button": {
+          "approve": "Jóváhagyás"
+        },
+        "status": {
+          "approved": "Jóváhagyva",
+          "applied": "Jóváhagyva és alkalmazva"
+        }
+      },
+      "Podcasts": {
+        "button": {
+          "channel": "Hozzáférés a lejátszási listákhoz"
+        }
+      }
+    },
+    "favorites": {
+      "List": {
+        "header": {
+          "favorites": "Egy kedvenc | { n } kedvenc"
+        }
+      },
+      "TrackFavoriteIcon": {
+        "button": {
+          "add": "Hozzáadás a kedvencekhez"
+        }
+      }
+    },
+    "channels": {
+      "UploadModal": {
+        "meta": {
+          "files": "Egy kedvenc | { n } kedvenc"
+        },
+        "header": {
+          "uploadDetails": "A kérelemre vonatkozó adatok"
+        }
+      },
+      "AlbumSelect": {
+        "meta": {
+          "tracks": "Egy szám | % { n } szám"
+        },
+        "label": {
+          "album": "Album"
+        }
+      },
+      "LicenseSelect": {
+        "link": {
+          "license": "Erről a licencről"
+        }
+      },
+      "UploadForm": {
+        "help": {
+          "license": "Adjon hozzá licencet a feltöltéséhez, hogy bizonyos szabadságokat biztosítson a nyilvánosság számára."
+        }
+      },
+      "AlbumModal": {
+        "header": {
+          "newAlbum": "Egy album",
+          "newSeries": "Egy album"
+        }
+      },
+      "SubscribeButton": {
+        "title": {
+          "unsubscribe": "Egy kedvenc"
+        }
+      }
+    },
+    "AboutPod": {
+      "stat": {
+        "hoursOfMusic": "{ n } óra zene | { n } óra zene",
+        "activeUsers": "{ n } aktív felhasználó | { n } aktív felhasználó",
+        "albumsCount": "Album | Album",
+        "artistsCount": "Előadó | Előadó",
+        "listeningsCount": "{ n } meghalgatás | { n } meghalgatás",
+        "tracksCount": "Dal hozzáadása | Dal hozzáadása"
+      },
+      "title": "Rólunk",
+      "link": {
+        "about": "Erről az egyedről"
+      },
+      "header": {
+        "about": "Erről az egyedről"
+      },
+      "feature": {
+        "allowList": "Engedély-lista",
+        "anonymousAccess": "név nélküli hozzáférés"
+      }
+    },
+    "playlists": {
+      "Card": {
+        "meta": {
+          "tracks": "Egy szám | % { n } szám"
+        }
+      },
+      "PlaylistModal": {
+        "warning": {
+          "duplicate": "{ 0 } már benne van { 1 }ban."
+        },
+        "button": {
+          "addDuplicate": "Mindenképp adja hozzá",
+          "addToPlaylist": "Hozzáadás ehhez a lejátszási listához",
+          "addTrack": "Dal hozzáadása"
+        },
+        "header": {
+          "addToPlaylist": "Hozzáadás a lejátszási listához"
+        },
+        "label": {
+          "filter": "Szűrő hozzáadása"
+        }
+      },
+      "Editor": {
+        "button": {
+          "addDuplicate": "Mindenképp adja hozzá"
+        },
+        "error": {
+          "sync": "Hiba történt a módosítások mentése közben"
+        }
+      },
+      "TrackPlaylistIcon": {
+        "button": {
+          "add": "Hozzáadás lejátszási listához …"
+        }
+      }
+    },
+    "common": {
+      "Duration": {
+        "meta": {
+          "hours": "{ hours } óra { minutes } perc",
+          "minutes": "{ minutes } perc"
+        }
+      },
+      "UserMenu": {
+        "link": {
+          "about": "Rólunk"
+        }
+      },
+      "UserModal": {
+        "link": {
+          "about": "Rólunk"
+        },
+        "header": {
+          "options": "Pályázat"
+        }
+      },
+      "ActionTable": {
+        "message": {
+          "success": "Egy elemen sikeresen végrehajtódott a(z) { action } művelet | { n } elemen sikeresen végrehajtódott a(z) { action } művelet"
+        },
+        "label": {
+          "actions": "műveletek"
+        },
+        "button": {
+          "allSelected": "Mind az egy elem ki van választva | Mind az { n } elem ki van választva"
+        }
+      }
+    },
+    "notifications": {
+      "NotificationRow": {
+        "message": {
+          "libraryAcceptFollow": "{ username } elfogadta a  \"{ library }\" követésedet",
+          "libraryFollow": "{ username } követte a \"{ library }\" könyvtáradat",
+          "libraryPendingFollow": "{ username } követni akarja \"{ library }\" könyvtáradat"
+        },
+        "button": {
+          "approve": "Jóváhagyás"
+        }
+      }
+    },
+    "Sidebar": {
+      "link": {
+        "about": "Erről az egyedről",
+        "albums": "Albumok",
+        "artists": "Előadó"
+      },
+      "label": {
+        "add": "Tartalom hozzáadása",
+        "administration": "Adminisztráció"
+      },
+      "header": {
+        "administration": "Adminisztráció"
+      }
+    },
+    "manage": {
+      "library": {
+        "UploadsTable": {
+          "table": {
+            "upload": {
+              "header": {
+                "accessedDate": "Hozzáférés dátuma",
+                "account": "Fiók"
+              }
+            }
+          },
+          "option": {
+            "all": "Összes"
+          }
+        },
+        "LibrariesTable": {
+          "table": {
+            "library": {
+              "header": {
+                "account": "Fiók"
+              }
+            }
+          },
+          "option": {
+            "all": "Összes"
+          }
+        },
+        "TracksTable": {
+          "table": {
+            "track": {
+              "header": {
+                "album": "Album",
+                "artist": "Előadó"
+              }
+            }
+          }
+        },
+        "ArtistsTable": {
+          "table": {
+            "artist": {
+              "header": {
+                "albums": "Albumok"
+              }
+            }
+          },
+          "option": {
+            "all": "Összes"
+          }
+        },
+        "TagsTable": {
+          "table": {
+            "tag": {
+              "header": {
+                "albums": "Albumok"
+              }
+            }
+          }
+        },
+        "EditsCardList": {
+          "option": {
+            "all": "Összes",
+            "approved": "Jóváhagyva"
+          }
+        },
+        "AlbumsTable": {
+          "table": {
+            "album": {
+              "header": {
+                "artist": "Előadó"
+              }
+            }
+          },
+          "link": {
+            "moderation": "Adjon hozzá egy új moderációs szabályt"
+          }
+        }
+      },
+      "moderation": {
+        "ReportCard": {
+          "table": {
+            "object": {
+              "account": "Fiók"
+            }
+          },
+          "header": {
+            "actions": "műveletek"
+          }
+        },
+        "UserRequestCard": {
+          "header": {
+            "actions": "műveletek"
+          },
+          "button": {
+            "approve": "Jóváhagyás"
+          },
+          "table": {
+            "status": {
+              "approved": "Jóváhagyva"
+            }
+          }
+        },
+        "InstancePolicyForm": {
+          "header": {
+            "addRule": "Adjon hozzá egy új moderációs szabályt"
+          }
+        },
+        "NoteForm": {
+          "button": {
+            "add": "Jegyzet hozzáadása"
+          }
+        },
+        "DomainsTable": {
+          "action": {
+            "add": {
+              "label": "Hozzáadás az engedélyezett listához"
+            }
+          },
+          "option": {
+            "all": "Összes"
+          }
+        }
+      },
+      "ChannelsTable": {
+        "table": {
+          "channel": {
+            "header": {
+              "account": "Fiók",
+              "albums": "Albumok"
+            }
+          }
+        },
+        "option": {
+          "all": "Összes"
+        },
+        "link": {
+          "moderation": "Adjon hozzá egy új moderációs szabályt"
+        }
+      },
+      "users": {
+        "UsersTable": {
+          "table": {
+            "user": {
+              "header": {
+                "accountStatus": "Fiók állapota"
+              },
+              "accountStatus": {
+                "active": "Aktív"
+              },
+              "status": {
+                "admin": "Admin"
+              }
+            }
+          }
+        },
+        "InvitationsTable": {
+          "option": {
+            "all": "Összes"
+          }
+        }
+      }
+    },
+    "admin": {
+      "SignupFormBuilder": {
+        "table": {
+          "additionalFields": {
+            "header": {
+              "actions": "Pályázat"
+            }
+          }
+        },
+        "button": {
+          "add": "Új mező hozzáadása"
+        },
+        "label": {
+          "additionalField": "További mező",
+          "additionalFields": "További mezők"
+        }
+      }
+    },
+    "moderation": {
+      "ReportCategoryDropdown": {
+        "option": {
+          "all": "Összes"
+        }
+      },
+      "ReportModal": {
+        "header": {
+          "disabled": "Az anonim jelentések le vannak tiltva. Jelentés benyújtásához jelentkezzen be."
+        }
+      }
+    },
+    "federation": {
+      "FetchButton": {
+        "description": {
+          "failure": "Hiba történt az adatok frissítésekor:"
+        },
+        "table": {
+          "error": {
+            "value": {
+              "httpError": "HTTP-hiba történt a távoli kiszolgálóval való kapcsolatfelvétel közben"
+            }
+          }
+        }
+      }
+    },
+    "RemoteSearchForm": {
+      "label": {
+        "rss": {
+          "fieldPlaceholder": "{'@'}channel{'@'}pod.example vagy https://website.example/rss.xml"
+        }
+      }
+    },
+    "radios": {
+      "Button": {
+        "startRadio": "Dal hozzáadása"
+      }
+    },
+    "Queue": {
+      "meta": {
+        "queuePosition": "({ length } hosszú {index})"
+      }
+    }
+  },
+  "views": {
+    "channels": {
+      "DetailBase": {
+        "meta": {
+          "episodes": "{ n } epizód | { n } epizód",
+          "listenings": "{ n } meghalgatás | { n } meghalgatás",
+          "subscribers": "Egy kedvenc | { n } kedvenc",
+          "tracks": "Egy szám | % { n } szám"
+        }
+      },
+      "DetailOverview": {
+        "link": {
+          "addAlbum": "Új létrehozása"
+        },
+        "header": {
+          "albums": "Albumok"
+        }
+      },
+      "SubscriptionsList": {
+        "link": {
+          "addNew": "Új létrehozása"
+        }
+      }
+    },
+    "content": {
+      "libraries": {
+        "Card": {
+          "meta": {
+            "tracks": "Egy szám | % { n } szám"
+          }
+        },
+        "Quota": {
+          "label": {
+            "currentUsage": "{ current } felhasználva a megengetett { max }-bol"
+          }
+        },
+        "FilesTable": {
+          "table": {
+            "file": {
+              "header": {
+                "album": "Album",
+                "artist": "Előadó"
+              }
+            }
+          },
+          "option": {
+            "status": {
+              "all": "Összes"
+            }
+          }
+        }
+      },
+      "remote": {
+        "Card": {
+          "meta": {
+            "tracks": "Egy szám | % { n } szám"
+          }
+        }
+      },
+      "Home": {
+        "title": "Tartalom hozzáadása és kezelése"
+      },
+      "Base": {
+        "title": "Tartalom hozzáadása"
+      }
+    },
+    "library": {
+      "LibraryBase": {
+        "meta": {
+          "tracks": "Egy szám | % { n } szám"
+        },
+        "link": {
+          "albums": "Albumok",
+          "artists": "Előadó"
+        }
+      },
+      "Edit": {
+        "button": {
+          "accept": "Elfogadás"
+        },
+        "table": {
+          "action": {
+            "status": {
+              "accepted": "Elfogadva"
+            }
+          }
+        }
+      }
+    },
+    "auth": {
+      "ProfileBase": {
+        "title": "{ username } felhasználói fiókja",
+        "link": {
+          "activity": "Aktivitás"
+        }
+      },
+      "PasswordReset": {
+        "label": {
+          "email": "Fiók e-mail címe"
+        }
+      },
+      "ProfileOverview": {
+        "link": {
+          "addNew": "Új létrehozása"
+        }
+      },
+      "Signup": {
+        "header": {
+          "createAccount": "{ app } hozzá akar férni a Funkwhale fiókodhoz"
+        }
+      }
+    },
+    "Notifications": {
+      "option": {
+        "delay": {
+          "30": "30 nap",
+          "60": "60 nap",
+          "90": "90 nap"
+        }
+      }
+    },
+    "admin": {
+      "moderation": {
+        "AccountsDetail": {
+          "table": {
+            "accountData": {
+              "username": "Hozzáférés a kedvencekhez"
+            }
+          },
+          "header": {
+            "accountData": "Fiókadatok",
+            "activity": "Aktivitás"
+          },
+          "button": {
+            "addPolicy": "Adjon hozzá moderációs irányelvet"
+          },
+          "link": {
+            "albums": "Albumok"
+          }
+        },
+        "Base": {
+          "link": {
+            "accounts": "Fiókok"
+          }
+        },
+        "DomainsDetail": {
+          "header": {
+            "activity": "Aktivitás"
+          },
+          "button": {
+            "addPolicy": "Adjon hozzá moderációs irányelvet",
+            "addToAllowList": "Hozzáadás az engedélyezett listához"
+          },
+          "link": {
+            "albums": "Albumok"
+          }
+        },
+        "DomainsList": {
+          "button": {
+            "add": "Hozzáadás"
+          },
+          "label": {
+            "addToAllowList": "Hozzáadás az engedélyezett listához"
+          }
+        },
+        "ReportsList": {
+          "option": {
+            "status": {
+              "all": "Összes"
+            }
+          }
+        },
+        "RequestsList": {
+          "option": {
+            "status": {
+              "all": "Összes",
+              "approved": "Jóváhagyva"
+            }
+          }
+        }
+      },
+      "library": {
+        "UploadDetail": {
+          "table": {
+            "activity": {
+              "accessedDate": "Hozzáférés dátuma"
+            }
+          },
+          "link": {
+            "account": "Fiók"
+          },
+          "header": {
+            "activity": "Aktivitás"
+          }
+        },
+        "LibraryDetail": {
+          "link": {
+            "account": "Fiók",
+            "albums": "Albumok"
+          },
+          "header": {
+            "activity": "Aktivitás"
+          }
+        },
+        "AlbumDetail": {
+          "header": {
+            "activity": "Aktivitás",
+            "albumData": "Album adatai"
+          },
+          "link": {
+            "artist": "Előadó"
+          }
+        },
+        "ArtistDetail": {
+          "header": {
+            "activity": "Aktivitás"
+          },
+          "link": {
+            "albums": "Albumok"
+          }
+        },
+        "TagDetail": {
+          "header": {
+            "activity": "Aktivitás"
+          },
+          "link": {
+            "albums": "Albumok"
+          }
+        },
+        "TrackDetail": {
+          "header": {
+            "activity": "Aktivitás"
+          },
+          "link": {
+            "album": "Album",
+            "artist": "Előadó"
+          }
+        },
+        "Base": {
+          "link": {
+            "albums": "Albumok"
+          }
+        }
+      },
+      "ChannelDetail": {
+        "table": {
+          "channelData": {
+            "account": "Fiók"
+          },
+          "audioContent": {
+            "albums": "Albumok"
+          }
+        },
+        "header": {
+          "activity": "Aktivitás"
+        }
+      },
+      "CommonList": {
+        "title": {
+          "accounts": "Fiókok",
+          "albums": "Albumok"
+        }
+      }
+    },
+    "Search": {
+      "label": {
+        "albums": "Albumok"
+      }
+    },
+    "playlists": {
+      "List": {
+        "button": {
+          "create": "Hozzáférés a lejátszási listákhoz"
+        }
+      }
+    }
+  },
+  "init": {
+    "serviceWorker": {
+      "newAppVersion": "Az alkalmazás új verziója elérhető."
+    }
+  },
+  "composables": {
+    "locale": {
+      "useSharedLabels": {
+        "scopes": {
+          "libraries": {
+            "description": "Hozzáférés audiofájlokhoz, könyvtárakhoz, művészekhez, albumokhoz és műsorszámokhoz"
+          },
+          "filters": {
+            "description": "Hozzáférés a tartalomszűrőkhöz"
+          },
+          "profile": {
+            "description": "Hozzáférés az e-mail, felhasználónév és profil információkhoz"
+          },
+          "edits": {
+            "description": "Hozzáférés a szerkesztésekhez"
+          },
+          "follows": {
+            "description": "Hozzáférés a következőkhöz"
+          },
+          "listenings": {
+            "description": "Hozzáférés az előzményeidhez"
+          },
+          "reports": {
+            "description": "Hozzáférés a rádiókhoz"
+          },
+          "notifications": {
+            "description": "Hozzáférés az értesítésekhez"
+          },
+          "playlists": {
+            "description": "Hozzáférés a lejátszási listákhoz"
+          },
+          "radios": {
+            "description": "Hozzáférés a rádiókhoz"
+          }
+        },
+        "filters": {
+          "accessedDate": "Hozzáférés dátuma",
+          "albumTitle": "Album neve"
+        },
+        "fields": {
+          "privacyLevel": {
+            "label": "A tevékenység láthatósága"
+          }
+        }
+      }
+    },
+    "moderation": {
+      "useReport": {
+        "account": {
+          "typeLabel": "Fiók"
+        },
+        "album": {
+          "typeLabel": "Album"
+        },
+        "artist": {
+          "typeLabel": "Előadó"
+        }
+      },
+      "useReportConfigs": {
+        "account": {
+          "label": "Fiók"
+        },
+        "album": {
+          "label": "Album"
+        },
+        "artist": {
+          "label": "Előadó"
+        }
+      }
+    }
+  }
+}

@@ -16,10 +16,10 @@ def clean_artist_search(query, **kwargs):
     return _api.search_artists(query, **cleaned_kwargs)
 
 
-class API(object):
+class API:
     _api = _api
 
-    class artists(object):
+    class artists:
         search = cache_memoize(
             settings.MUSICBRAINZ_CACHE_DURATION,
             prefix="memoize:musicbrainz:clean_artist_search",
@@ -29,13 +29,13 @@ class API(object):
             prefix="memoize:musicbrainz:get_artist_by_id",
         )(_api.get_artist_by_id)
 
-    class images(object):
+    class images:
         get_front = cache_memoize(
             settings.MUSICBRAINZ_CACHE_DURATION,
             prefix="memoize:musicbrainz:get_image_front",
         )(_api.get_image_front)
 
-    class recordings(object):
+    class recordings:
         search = cache_memoize(
             settings.MUSICBRAINZ_CACHE_DURATION,
             prefix="memoize:musicbrainz:search_recordings",
@@ -45,7 +45,7 @@ class API(object):
             prefix="memoize:musicbrainz:get_recording_by_id",
         )(_api.get_recording_by_id)
 
-    class releases(object):
+    class releases:
         search = cache_memoize(
             settings.MUSICBRAINZ_CACHE_DURATION,
             prefix="memoize:musicbrainz:search_releases",
@@ -60,7 +60,7 @@ class API(object):
         )(_api.browse_releases)
         # get_image_front = _api.get_image_front
 
-    class release_groups(object):
+    class release_groups:
         search = cache_memoize(
             settings.MUSICBRAINZ_CACHE_DURATION,
             prefix="memoize:musicbrainz:search_release_groups",

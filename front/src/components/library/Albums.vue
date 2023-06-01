@@ -1,19 +1,136 @@
+<script setup lang="ts">
+import type { OrderingProps } from '~/composables/navigation/useOrdering'
+import type { Album, BackendResponse } from '~/types'
+import type { RouteRecordName } from 'vue-router'
+import type { OrderingField } from '~/store/ui'
+
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRouteQuery } from '@vueuse/router'
+import { useI18n } from 'vue-i18n'
+import { syncRef } from '@vueuse/core'
+import { sortedUniq } from 'lodash-es'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+import $ from 'jquery'
+
+import TagsSelector from '~/components/library/TagsSelector.vue'
+import AlbumCard from '~/components/audio/album/Card.vue'
+import Pagination from '~/components/vui/Pagination.vue'
+
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useOrdering from '~/composables/navigation/useOrdering'
+import useErrorHandler from '~/composables/useErrorHandler'
+import usePage from '~/composables/navigation/usePage'
+import useLogger from '~/composables/useLogger'
+
+interface Props extends OrderingProps {
+  scope?: 'me' | 'all'
+
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  orderingConfigName?: RouteRecordName
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  scope: 'all',
+  orderingConfigName: undefined
+})
+
+const page = usePage()
+
+const tags = useRouteQuery<string[]>('tag', [])
+
+const q = useRouteQuery('query', '')
+const query = ref(q.value)
+syncRef(q, query, { direction: 'ltr' })
+
+const result = ref<BackendResponse<Album>>()
+
+const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
+  ['creation_date', 'creation_date'],
+  ['title', 'album_title'],
+  ['release_date', 'release_date']
+]
+
+const logger = useLogger()
+const sharedLabels = useSharedLabels()
+
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props)
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  const params = {
+    scope: props.scope,
+    page: page.value,
+    page_size: paginateBy.value,
+    q: query.value,
+    ordering: orderingString.value,
+    playable: 'true',
+    tag: tags.value,
+    include_channels: 'true',
+    content_category: 'music'
+  }
+
+  logger.time('Fetching albums')
+  try {
+    const response = await axios.get('albums/', {
+      params,
+      paramsSerializer: {
+        indexes: null
+      }
+    })
+
+    result.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+    result.value = undefined
+  } finally {
+    logger.timeEnd('Fetching albums')
+    isLoading.value = false
+  }
+}
+
+const store = useStore()
+watch(() => store.state.moderation.lastUpdate, fetchData)
+watch([page, tags, q, () => props.scope], fetchData)
+fetchData()
+
+const search = () => {
+  page.value = 1
+  q.value = query.value
+}
+
+onOrderingUpdate(() => {
+  page.value = 1
+  fetchData()
+})
+
+onMounted(() => $('.ui.dropdown').dropdown())
+
+const { t } = useI18n()
+const labels = computed(() => ({
+  searchPlaceholder: t('components.library.Albums.placeholder.search'),
+  title: t('components.library.Albums.title')
+}))
+
+const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value].sort((a, b) => a - b)))
+</script>
+
 <template>
   <main v-title="labels.title">
     <section class="ui vertical stripe segment">
       <h2 class="ui header">
-        <translate translate-context="Content/Album/Title">
-          Browsing albums
-        </translate>
+        {{ $t('components.library.Albums.header.browse') }}
       </h2>
       <form
         :class="['ui', {'loading': isLoading}, 'form']"
-        @submit.prevent="updatePage();updateQueryString();fetchData()"
+        @submit.prevent="search"
       >
         <div class="fields">
           <div class="field">
             <label for="albums-search">
-              <translate translate-context="Content/Search/Input.Label/Noun">Search</translate>
+              {{ $t('components.library.Albums.label.search') }}
             </label>
             <div class="ui action input">
               <input
@@ -26,18 +143,18 @@
               <button
                 class="ui icon button"
                 type="submit"
-                :aria-label="$pgettext('Content/Search/Input.Label/Noun', 'Search')"
+                :aria-label="t('components.library.Albums.button.search')"
               >
                 <i class="search icon" />
               </button>
             </div>
           </div>
           <div class="field">
-            <label for="tags-search"><translate translate-context="*/*/*/Noun">Tags</translate></label>
+            <label for="tags-search">{{ $t('components.library.Albums.label.tags') }}</label>
             <tags-selector v-model="tags" />
           </div>
           <div class="field">
-            <label for="album-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
+            <label for="album-ordering">{{ $t('components.library.Albums.ordering.label') }}</label>
             <select
               id="album-ordering"
               v-model="ordering"
@@ -53,39 +170,33 @@
             </select>
           </div>
           <div class="field">
-            <label for="album-ordering-direction"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering direction</translate></label>
+            <label for="album-ordering-direction">{{ $t('components.library.Albums.ordering.direction.label') }}</label>
             <select
               id="album-ordering-direction"
               v-model="orderingDirection"
               class="ui dropdown"
             >
               <option value="+">
-                <translate translate-context="Content/Search/Dropdown">
-                  Ascending
-                </translate>
+                {{ $t('components.library.Albums.ordering.direction.ascending') }}
               </option>
               <option value="-">
-                <translate translate-context="Content/Search/Dropdown">
-                  Descending
-                </translate>
+                {{ $t('components.library.Albums.ordering.direction.descending') }}
               </option>
             </select>
           </div>
           <div class="field">
-            <label for="album-results"><translate translate-context="Content/Search/Dropdown.Label/Noun">Results per page</translate></label>
+            <label for="album-results">{{ $t('components.library.Albums.pagination.results') }}</label>
             <select
               id="album-results"
               v-model="paginateBy"
               class="ui dropdown"
             >
-              <option :value="parseInt(12)">
-                12
-              </option>
-              <option :value="parseInt(25)">
-                25
-              </option>
-              <option :value="parseInt(50)">
-                50
+              <option
+                v-for="opt in paginateOptions"
+                :key="opt"
+                :value="opt"
+              >
+                {{ opt }}
               </option>
             </select>
           </div>
@@ -117,9 +228,7 @@
         >
           <div class="ui icon header">
             <i class="compact disc icon" />
-            <translate translate-context="Content/Albums/Placeholder">
-              No results matching your query
-            </translate>
+            {{ $t('components.library.Albums.empty.noResults') }}
           </div>
           <router-link
             v-if="$store.state.auth.authenticated"
@@ -127,141 +236,18 @@
             class="ui success button labeled icon"
           >
             <i class="upload icon" />
-            <translate translate-context="Content/*/Verb">
-              Add some music
-            </translate>
+            {{ $t('components.library.Albums.link.addMusic') }}
           </router-link>
         </div>
       </div>
       <div class="ui center aligned basic segment">
         <pagination
           v-if="result && result.count > paginateBy"
-          :current="page"
+          v-model:current="page"
           :paginate-by="paginateBy"
           :total="result.count"
-          @page-changed="selectPage"
         />
       </div>
     </section>
   </main>
 </template>
-
-<script>
-import qs from 'qs'
-import axios from 'axios'
-import $ from 'jquery'
-
-import logger from '@/logging'
-
-import OrderingMixin from '@/components/mixins/Ordering'
-import PaginationMixin from '@/components/mixins/Pagination'
-import TranslationsMixin from '@/components/mixins/Translations'
-import AlbumCard from '@/components/audio/album/Card'
-import Pagination from '@/components/Pagination'
-import TagsSelector from '@/components/library/TagsSelector'
-
-const FETCH_URL = 'albums/'
-
-export default {
-  components: {
-    AlbumCard,
-    Pagination,
-    TagsSelector
-  },
-  mixins: [OrderingMixin, PaginationMixin, TranslationsMixin],
-  props: {
-    defaultQuery: { type: String, required: false, default: '' },
-    defaultTags: { type: Array, required: false, default: () => { return [] } },
-    scope: { type: String, required: false, default: 'all' }
-  },
-  data () {
-    return {
-      isLoading: true,
-      result: null,
-      page: parseInt(this.defaultPage),
-      query: this.defaultQuery,
-      tags: (this.defaultTags || []).filter((t) => { return t.length > 0 }),
-      orderingOptions: [['creation_date', 'creation_date'], ['title', 'album_title'], ['release_date', 'release_date']]
-    }
-  },
-  computed: {
-    labels () {
-      const searchPlaceholder = this.$pgettext('Content/Search/Input.Placeholder', 'Enter album title…')
-      const title = this.$pgettext('*/*/*', 'Albums')
-      return {
-        searchPlaceholder,
-        title
-      }
-    }
-  },
-  watch: {
-    page () {
-      this.updateQueryString()
-      this.fetchData()
-    },
-    '$store.state.moderation.lastUpdate': function () {
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  mounted () {
-    $('.ui.dropdown').dropdown()
-  },
-  methods: {
-    updateQueryString: function () {
-      history.pushState(
-        {},
-        null,
-        this.$route.path + '?' + new URLSearchParams(
-          {
-            query: this.query,
-            page: this.page,
-            tag: this.tags,
-            paginateBy: this.paginateBy,
-            ordering: this.getOrderingAsString()
-          }).toString()
-      )
-    },
-    fetchData: function () {
-      const self = this
-      this.isLoading = true
-      const url = FETCH_URL
-      const params = {
-        scope: this.scope,
-        page: this.page,
-        page_size: this.paginateBy,
-        q: this.query,
-        ordering: this.getOrderingAsString(),
-        playable: 'true',
-        tag: this.tags,
-        include_channels: 'true',
-        content_category: 'music'
-      }
-      logger.default.debug('Fetching albums')
-      axios.get(
-        url,
-        {
-          params: params,
-          paramsSerializer: function (params) {
-            return qs.stringify(params, { indices: false })
-          }
-        }
-      ).then(response => {
-        self.result = response.data
-        self.isLoading = false
-      }, () => {
-        self.result = null
-        self.isLoading = false
-      })
-    },
-    selectPage: function (page) {
-      this.page = page
-    },
-    updatePage () {
-      this.page = this.defaultPage
-    }
-  }
-}
-</script>

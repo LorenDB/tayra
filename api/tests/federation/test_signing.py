@@ -1,8 +1,9 @@
-import cryptography.exceptions
 import datetime
-from django.utils.http import http_date
-from django import forms
+
+import cryptography.exceptions
 import pytest
+from django import forms
+from django.utils.http import http_date
 
 from funkwhale_api.federation import keys, signing
 

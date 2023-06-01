@@ -1,3 +1,78 @@
+<script setup lang="ts">
+import type { ObjectId, RadioConfig } from '~/store/radios'
+
+import { useI18n } from 'vue-i18n'
+import { useStore } from '~/store'
+import { computed } from 'vue'
+
+interface Props {
+  customRadioId?: number | null
+  type?: string
+  clientOnly?: boolean
+  objectId?: ObjectId | number | string | null
+  radioConfig?: RadioConfig | null
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  customRadioId: null,
+  type: '',
+  clientOnly: false,
+  objectId: null,
+  radioConfig: null
+})
+
+const store = useStore()
+const running = computed(() => {
+  if (!store.state.radios.running) {
+    return false
+  }
+
+  const { current } = store.state.radios
+  return current?.type === props.type
+    && current?.customRadioId === props.customRadioId
+    && (
+      (typeof props.objectId === 'object' && current.objectId?.fullUsername === props.objectId?.fullUsername)
+        || current.objectId === props.objectId
+    )
+})
+
+const { t } = useI18n()
+const buttonLabel = computed(() => {
+  switch (props.radioConfig?.type) {
+    case 'tag':
+      return running.value
+        ? t('components.radios.Button.stopTagsRadio')
+        : t('components.radios.Button.startTagsRadio')
+    case 'artist':
+      return running.value
+        ? t('components.radios.Button.stopArtistsRadio')
+        : t('components.radios.Button.startArtistsRadio')
+    case 'playlist':
+      return running.value
+        ? t('components.radios.Button.stopPlaylistsRadio')
+        : t('components.radios.Button.startPlaylistsRadio')
+    default:
+      return running.value
+        ? t('components.radios.Button.stopRadio')
+        : t('components.radios.Button.startRadio')
+  }
+})
+
+const toggleRadio = () => {
+  if (running.value) {
+    return store.dispatch('radios/stop')
+  }
+
+  return store.dispatch('radios/start', {
+    type: props.type,
+    objectId: props.objectId,
+    customRadioId: props.customRadioId,
+    clientOnly: props.clientOnly,
+    config: props.radioConfig
+  })
+}
+</script>
+
 <template>
   <button
     :class="['ui', 'primary', {'inverted': running}, 'icon', 'labeled', 'button']"
@@ -7,53 +82,6 @@
       class="ui feed icon"
       role="button"
     />
-    <template v-if="running">
-      <translate translate-context="*/Player/Button.Label/Short, Verb">
-        Stop radio
-      </translate>
-    </template>
-    <template v-else>
-      <translate translate-context="*/Queue/Button.Label/Short, Verb">
-        Play radio
-      </translate>
-    </template>
+    {{ buttonLabel }}
   </button>
 </template>
-
-<script>
-
-import lodash from '@/lodash'
-export default {
-  props: {
-    customRadioId: { type: Number, required: false, default: null },
-    type: { type: String, required: false, default: '' },
-    clientOnly: { type: Boolean, default: false },
-    objectId: { type: [String, Number, Object], default: null }
-  },
-  computed: {
-    running () {
-      const state = this.$store.state.radios
-      const current = state.current
-      if (!state.running) {
-        return false
-      } else {
-        return current.type === this.type && lodash.isEqual(current.objectId, this.objectId) && current.customRadioId === this.customRadioId
-      }
-    }
-  },
-  methods: {
-    toggleRadio () {
-      if (this.running) {
-        this.$store.dispatch('radios/stop')
-      } else {
-        this.$store.dispatch('radios/start', {
-          type: this.type,
-          objectId: this.objectId,
-          customRadioId: this.customRadioId,
-          clientOnly: this.clientOnly
-        })
-      }
-    }
-  }
-}
-</script>

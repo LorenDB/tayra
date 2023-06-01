@@ -2,38 +2,36 @@ import base64
 import datetime
 import logging
 import urllib.parse
+
+import django.db.utils
+import requests.exceptions
 from django.conf import settings
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models import Count, Prefetch, Sum, F, Q
-import django.db.utils
+from django.db.models import Count, F, Prefetch, Q, Sum
 from django.utils import timezone
-
-from rest_framework import mixins
-from rest_framework import renderers
+from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
+from rest_framework import mixins, renderers
 from rest_framework import settings as rest_settings
 from rest_framework import views, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-
-import requests.exceptions
 
 from funkwhale_api.common import decorators as common_decorators
 from funkwhale_api.common import permissions as common_permissions
 from funkwhale_api.common import preferences
 from funkwhale_api.common import utils as common_utils
 from funkwhale_api.common import views as common_views
-from funkwhale_api.federation.authentication import SignatureAuthentication
 from funkwhale_api.federation import actors
 from funkwhale_api.federation import api_serializers as federation_api_serializers
 from funkwhale_api.federation import decorators as federation_decorators
 from funkwhale_api.federation import models as federation_models
 from funkwhale_api.federation import routes
 from funkwhale_api.federation import tasks as federation_tasks
+from funkwhale_api.federation.authentication import SignatureAuthentication
 from funkwhale_api.tags.models import Tag, TaggedItem
-from funkwhale_api.tags.serializers import TagSerializer
-from funkwhale_api.users.oauth import permissions as oauth_permissions
 from funkwhale_api.users.authentication import ScopedTokenAuthentication
+from funkwhale_api.users.oauth import permissions as oauth_permissions
 
 from . import filters, licenses, models, serializers, tasks, utils
 
@@ -54,7 +52,8 @@ def get_libraries(filter_uploads):
         uploads = filter_uploads(obj, uploads)
         uploads = uploads.playable_by(actor)
         qs = models.Library.objects.filter(
-            pk__in=uploads.values_list("library", flat=True), channel=None,
+            pk__in=uploads.values_list("library", flat=True),
+            channel=None,
         ).annotate(_uploads_count=Count("uploads"))
         qs = qs.prefetch_related("actor")
         page = self.paginate_queryset(qs)
@@ -65,7 +64,10 @@ def get_libraries(filter_uploads):
         serializer = federation_api_serializers.LibrarySerializer(qs, many=True)
         return Response(serializer.data)
 
-    return libraries
+    return extend_schema(
+        responses=federation_api_serializers.LibrarySerializer(many=True),
+        parameters=[OpenApiParameter("id", location="query", exclude=True)],
+    )(action(methods=["get"], detail=True)(libraries))
 
 
 def refetch_obj(obj, queryset):
@@ -99,7 +101,7 @@ def refetch_obj(obj, queryset):
     return obj
 
 
-class HandleInvalidSearch(object):
+class HandleInvalidSearch:
     def list(self, *args, **kwargs):
         try:
             return super().list(*args, **kwargs)
@@ -166,11 +168,9 @@ class ArtistViewSet(
             Prefetch("albums", queryset=albums), TAG_PREFETCH
         )
 
-    libraries = action(methods=["get"], detail=True)(
-        get_libraries(
-            filter_uploads=lambda o, uploads: uploads.filter(
-                Q(track__artist=o) | Q(track__album__artist=o)
-            )
+    libraries = get_libraries(
+        lambda o, uploads: uploads.filter(
+            Q(track__artist=o) | Q(track__album__artist=o)
         )
     )
 
@@ -230,9 +230,7 @@ class AlbumViewSet(
             Prefetch("tracks", queryset=tracks), TAG_PREFETCH
         )
 
-    libraries = action(methods=["get"], detail=True)(
-        get_libraries(filter_uploads=lambda o, uploads: uploads.filter(track__album=o))
-    )
+    libraries = get_libraries(lambda o, uploads: uploads.filter(track__album=o))
 
     def get_serializer_class(self):
         if self.action in ["create"]:
@@ -301,7 +299,13 @@ class LibraryViewSet(
 
     follows = action
 
-    @action(methods=["get"], detail=True)
+    @extend_schema(
+        responses=federation_api_serializers.LibraryFollowSerializer(many=True)
+    )
+    @action(
+        methods=["get"],
+        detail=True,
+    )
     @transaction.non_atomic_requests
     def follows(self, request, *args, **kwargs):
         library = self.get_object()
@@ -313,13 +317,15 @@ class LibraryViewSet(
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = federation_api_serializers.LibraryFollowSerializer(
-                page, many=True
+                page, many=True, required=False
             )
             return self.get_paginated_response(serializer.data)
 
-        serializer = self.get_serializer(queryset, many=True)
+        serializer = self.get_serializer(queryset, many=True, required=False)
         return Response(serializer.data)
 
+    # TODO quickfix, basically specifying the response would be None
+    @extend_schema(responses=None)
     @action(
         methods=["get", "post", "delete"],
         detail=False,
@@ -429,9 +435,7 @@ class TrackViewSet(
         )
         return queryset.prefetch_related(TAG_PREFETCH)
 
-    libraries = action(methods=["get"], detail=True)(
-        get_libraries(filter_uploads=lambda o, uploads: uploads.filter(track=o))
-    )
+    libraries = get_libraries(lambda o, uploads: uploads.filter(track=o))
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -513,7 +517,7 @@ def should_transcode(upload, format, max_bitrate=None):
         # upload should have a mimetype, otherwise we cannot transcode
         format_need_transcoding = False
     elif upload.mimetype == utils.EXTENSION_TO_MIMETYPE[format]:
-        # requested format sould be different than upload mimetype, otherwise
+        # requested format should be different than upload mimetype, otherwise
         # there is no need to transcode
         format_need_transcoding = False
 
@@ -528,8 +532,8 @@ def should_transcode(upload, format, max_bitrate=None):
 
 
 def get_content_disposition(filename):
-    filename = "filename*=UTF-8''{}".format(urllib.parse.quote(filename))
-    return "attachment; {}".format(filename)
+    filename = f"filename*=UTF-8''{urllib.parse.quote(filename)}"
+    return f"attachment; {filename}"
 
 
 def record_downloads(f):
@@ -631,6 +635,7 @@ class ListenMixin(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     anonymous_policy = "setting"
     lookup_field = "uuid"
 
+    @extend_schema(responses=bytes)
     def retrieve(self, request, *args, **kwargs):
         config = {
             "explicit_file": request.GET.get("upload"),
@@ -671,8 +676,13 @@ def handle_stream(track, request, download, explicit_file, format, max_bitrate):
     )
 
 
+class AudioRenderer(renderers.JSONRenderer):
+    media_type = "audio/*"
+
+
+@extend_schema_view(get=extend_schema(operation_id="get_track_file"))
 class ListenViewSet(ListenMixin):
-    pass
+    renderer_classes = [AudioRenderer]
 
 
 class MP3Renderer(renderers.JSONRenderer):
@@ -683,6 +693,7 @@ class MP3Renderer(renderers.JSONRenderer):
 class StreamViewSet(ListenMixin):
     renderer_classes = [MP3Renderer]
 
+    @extend_schema(operation_id="get_track_stream", responses=bytes)
     def retrieve(self, request, *args, **kwargs):
         config = {
             "explicit_file": None,
@@ -743,6 +754,10 @@ class UploadViewSet(
             qs = qs.playable_by(actor)
         return qs
 
+    @extend_schema(
+        responses=tasks.metadata.TrackMetadataSerializer(),
+        operation_id="get_upload_metadata",
+    )
     @action(methods=["get"], detail=True, url_path="audio-file-metadata")
     def audio_file_metadata(self, request, *args, **kwargs):
         upload = self.get_object()
@@ -801,6 +816,9 @@ class Search(views.APIView):
     required_scope = "libraries"
     anonymous_policy = "setting"
 
+    @extend_schema(
+        operation_id="get_search_results", responses=serializers.SearchResultSerializer
+    )
     def get(self, request, *args, **kwargs):
         query = request.GET.get("query", request.GET.get("q", "")) or ""
         query = query.strip()
@@ -808,17 +826,10 @@ class Search(views.APIView):
             return Response({"detail": "empty query"}, status=400)
         try:
             results = {
-                # 'tags': serializers.TagSerializer(self.get_tags(query), many=True).data,
-                "artists": serializers.ArtistWithAlbumsSerializer(
-                    self.get_artists(query), many=True
-                ).data,
-                "tracks": serializers.TrackSerializer(
-                    self.get_tracks(query), many=True
-                ).data,
-                "albums": serializers.AlbumSerializer(
-                    self.get_albums(query), many=True
-                ).data,
-                "tags": TagSerializer(self.get_tags(query), many=True).data,
+                "artists": self.get_artists(query),
+                "tracks": self.get_tracks(query),
+                "albums": self.get_albums(query),
+                "tags": self.get_tags(query),
             }
         except django.db.utils.ProgrammingError as e:
             if "in tsquery:" in str(e):
@@ -826,7 +837,7 @@ class Search(views.APIView):
             else:
                 raise
 
-        return Response(results, status=200)
+        return Response(serializers.SearchResultSerializer(results).data, status=200)
 
     def get_tracks(self, query):
         query_obj = utils.get_fts_query(
@@ -912,6 +923,7 @@ class OembedView(views.APIView):
     permission_classes = [oauth_permissions.ScopePermission]
     required_scope = "libraries"
     anonymous_policy = "setting"
+    serializer_class = serializers.OembedSerializer
 
     def get(self, request, *args, **kwargs):
         serializer = serializers.OembedSerializer(data=request.GET)

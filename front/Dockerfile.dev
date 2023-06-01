@@ -1,0 +1,14 @@
+FROM node:18-alpine
+
+# needed to compile translations
+RUN apk add --no-cache jq bash coreutils python3
+
+EXPOSE 8080
+WORKDIR /app/
+COPY scripts/ ./scripts/
+ADD package.json yarn.lock  ./
+RUN yarn install
+
+COPY . .
+
+CMD ["yarn", "serve"]

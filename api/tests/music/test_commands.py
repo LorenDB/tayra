@@ -1,10 +1,13 @@
 import os
+
 import pytest
 
 from funkwhale_api.common import utils as common_utils
-from funkwhale_api.music.management.commands import check_inplace_files
-from funkwhale_api.music.management.commands import fix_uploads
-from funkwhale_api.music.management.commands import prune_library
+from funkwhale_api.music.management.commands import (
+    check_inplace_files,
+    fix_uploads,
+    prune_library,
+)
 
 DATA_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -59,14 +62,14 @@ def test_fix_uploads_mimetype(factories, mocker):
     ogg_path = os.path.join(DATA_DIR, "test.ogg")
     upload1 = factories["music.Upload"](
         audio_file__from_path=mp3_path,
-        source="file://{}".format(mp3_path),
+        source=f"file://{mp3_path}",
         mimetype="application/x-empty",
     )
 
     # this one already has a mimetype set, to it should not be updated
     upload2 = factories["music.Upload"](
         audio_file__from_path=ogg_path,
-        source="file://{}".format(ogg_path),
+        source=f"file://{ogg_path}",
         mimetype="audio/something",
     )
     c = fix_uploads.Command()
@@ -176,7 +179,7 @@ def test_prune_library(factories, mocker):
 def test_check_inplace_files_dry_run(factories, tmpfile):
     prunable = factories["music.Upload"](source="file:///notfound", audio_file=None)
     not_prunable = factories["music.Upload"](
-        source="file://{}".format(tmpfile.name), audio_file=None
+        source=f"file://{tmpfile.name}", audio_file=None
     )
     c = check_inplace_files.Command()
     c.handle(dry_run=True)
@@ -189,9 +192,7 @@ def test_check_inplace_files_dry_run(factories, tmpfile):
 def test_check_inplace_files_no_dry_run(factories, tmpfile):
     prunable = factories["music.Upload"](source="file:///notfound", audio_file=None)
     not_prunable = [
-        factories["music.Upload"](
-            source="file://{}".format(tmpfile.name), audio_file=None
-        ),
+        factories["music.Upload"](source=f"file://{tmpfile.name}", audio_file=None),
         factories["music.Upload"](source="upload://"),
         factories["music.Upload"](source="https://"),
     ]

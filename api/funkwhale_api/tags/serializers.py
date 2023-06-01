@@ -1,6 +1,5 @@
-from rest_framework import serializers
-
 from django.conf import settings
+from rest_framework import serializers
 
 from . import models
 
@@ -15,7 +14,7 @@ class TagNameField(serializers.CharField):
     def to_internal_value(self, value):
         value = super().to_internal_value(value)
         if not models.TAG_REGEX.match(value):
-            raise serializers.ValidationError('Invalid tag "{}"'.format(value))
+            raise serializers.ValidationError(f'Invalid tag "{value}"')
         return value
 
 

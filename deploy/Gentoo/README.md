@@ -1,6 +1,6 @@
-### Gentoo init scripts 
+### Gentoo init scripts
 
-Copy the files to  `/etc/init.d/`
+Copy the files to `/etc/init.d/`
 
 ```
 # cp /path/to/scripts/funkwhale_* /etc/init.d/

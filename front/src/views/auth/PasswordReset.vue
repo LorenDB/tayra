@@ -1,3 +1,48 @@
+<script setup lang="ts">
+import type { BackendError } from '~/types'
+
+import { computed, ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+
+import axios from 'axios'
+
+interface Props {
+  defaultEmail: string
+}
+
+const props = defineProps<Props>()
+
+const { t } = useI18n()
+
+const router = useRouter()
+
+const labels = computed(() => ({
+  placeholder: t('views.auth.PasswordReset.placeholder.email'),
+  reset: t('views.auth.PasswordReset.title')
+}))
+
+const email = ref(props.defaultEmail)
+const errors = ref([] as string[])
+const isLoading = ref(false)
+const submit = async () => {
+  isLoading.value = true
+  errors.value = []
+
+  try {
+    await axios.post('auth/password/reset/', { email: email.value })
+    router.push({ name: 'auth.password-reset-confirm' })
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const emailInput = ref()
+onMounted(() => emailInput.value.focus())
+</script>
+
 <template>
   <main
     v-title="labels.reset"
@@ -6,9 +51,7 @@
     <section class="ui vertical stripe segment">
       <div class="ui small text container">
         <h2>
-          <translate translate-context="*/Login/*/Verb">
-            Reset your password
-          </translate>
+          {{ $t('views.auth.PasswordReset.header.reset') }}
         </h2>
         <form
           class="ui form"
@@ -20,9 +63,7 @@
             class="ui negative message"
           >
             <h4 class="header">
-              <translate translate-context="Content/Signup/Card.Title">
-                Error while asking for a password reset
-              </translate>
+              {{ $t('views.auth.PasswordReset.header.failure') }}
             </h4>
             <ul class="list">
               <li
@@ -34,15 +75,13 @@
             </ul>
           </div>
           <p>
-            <translate translate-context="Content/Signup/Paragraph">
-              Use this form to request a password reset. We will send an e-mail to the given address with instructions to reset your password.
-            </translate>
+            {{ $t('views.auth.PasswordReset.help.form') }}
           </p>
           <div class="field">
-            <label for="account-email"><translate translate-context="Content/Signup/Input.Label">Account's e-mail address</translate></label>
+            <label for="account-email">{{ $t('views.auth.PasswordReset.label.email') }}</label>
             <input
               id="account-email"
-              ref="email"
+              ref="emailInput"
               v-model="email"
               required
               type="email"
@@ -52,71 +91,16 @@
             >
           </div>
           <router-link :to="{path: '/login'}">
-            <translate translate-context="Content/Signup/Link">
-              Back to login
-            </translate>
+            {{ $t('views.auth.PasswordReset.link.back') }}
           </router-link>
           <button
             :class="['ui', {'loading': isLoading}, 'right', 'floated', 'success', 'button']"
             type="submit"
           >
-            <translate translate-context="Content/Signup/Button.Label/Verb">
-              Ask for a password reset
-            </translate>
+            {{ $t('views.auth.PasswordReset.button.requestReset') }}
           </button>
         </form>
       </div>
     </section>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-
-export default {
-  props: { defaultEmail: { type: String, required: true } },
-  data () {
-    return {
-      email: this.defaultEmail,
-      isLoading: false,
-      errors: []
-    }
-  },
-  computed: {
-    labels () {
-      const reset = this.$pgettext('*/Login/*/Verb', 'Reset your password')
-      const placeholder = this.$pgettext('Content/Signup/Input.Placeholder', 'Enter the e-mail address linked to your account'
-      )
-      return {
-        reset,
-        placeholder
-      }
-    }
-  },
-  mounted () {
-    this.$refs.email.focus()
-  },
-  methods: {
-    submit () {
-      const self = this
-      self.isLoading = true
-      self.errors = []
-      const payload = {
-        email: this.email
-      }
-      return axios.post('auth/password/reset/', payload).then(
-        response => {
-          self.isLoading = false
-          self.$router.push({
-            name: 'auth.password-reset-confirm'
-          })
-        },
-        error => {
-          self.errors = error.backendErrors
-          self.isLoading = false
-        }
-      )
-    }
-  }
-}
-</script>

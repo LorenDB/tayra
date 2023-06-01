@@ -3,39 +3,35 @@ import logging
 import time
 import uuid
 
+import feedparser
+import pytz
+import requests
 from django.conf import settings
 from django.db import transaction
 from django.db.models import Q
-from django.utils import timezone
-
-import feedparser
-import requests
-import pytz
-
-from rest_framework import serializers
-
 from django.templatetags.static import static
 from django.urls import reverse
+from django.utils import timezone
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
+from rest_framework import serializers
 
+from funkwhale_api.common import locales, preferences
 from funkwhale_api.common import serializers as common_serializers
-from funkwhale_api.common import utils as common_utils
-from funkwhale_api.common import locales
-from funkwhale_api.common import preferences
 from funkwhale_api.common import session
+from funkwhale_api.common import utils as common_utils
 from funkwhale_api.federation import actors
 from funkwhale_api.federation import models as federation_models
 from funkwhale_api.federation import serializers as federation_serializers
 from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.moderation import mrf
 from funkwhale_api.music import models as music_models
-from funkwhale_api.music import serializers as music_serializers
+from funkwhale_api.music.serializers import COVER_WRITE_FIELD, CoverField
 from funkwhale_api.tags import models as tags_models
 from funkwhale_api.tags import serializers as tags_serializers
 from funkwhale_api.users import serializers as users_serializers
 
-from . import categories
-from . import models
-
+from . import categories, models
 
 logger = logging.getLogger(__name__)
 
@@ -66,16 +62,16 @@ class ChannelMetadataSerializer(serializers.Serializer):
 
         if child not in categories.ITUNES_CATEGORIES[parent]:
             raise serializers.ValidationError(
-                '"{}" is not a valid subcategory for "{}"'.format(child, parent)
+                f'"{child}" is not a valid subcategory for "{parent}"'
             )
 
         return child
 
 
 class ChannelCreateSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=music_models.MAX_LENGTHS["ARTIST_NAME"])
+    name = serializers.CharField(max_length=federation_models.MAX_LENGTHS["ACTOR_NAME"])
     username = serializers.CharField(
-        max_length=music_models.MAX_LENGTHS["ARTIST_NAME"],
+        max_length=federation_models.MAX_LENGTHS["ACTOR_NAME"],
         validators=[users_serializers.ASCIIUsernameValidator()],
     )
     description = common_serializers.ContentSerializer(allow_null=True)
@@ -84,7 +80,7 @@ class ChannelCreateSerializer(serializers.Serializer):
         choices=music_models.ARTIST_CONTENT_CATEGORY_CHOICES
     )
     metadata = serializers.DictField(required=False)
-    cover = music_serializers.COVER_WRITE_FIELD
+    cover = COVER_WRITE_FIELD
 
     def validate(self, validated_data):
         existing_channels = self.context["actor"].owned_channels.count()
@@ -135,7 +131,8 @@ class ChannelCreateSerializer(serializers.Serializer):
             metadata=validated_data["metadata"],
         )
         channel.actor = models.generate_actor(
-            validated_data["username"], name=validated_data["name"],
+            validated_data["username"],
+            name=validated_data["name"],
         )
 
         channel.library = music_models.Library.objects.create(
@@ -155,14 +152,14 @@ NOOP = object()
 
 
 class ChannelUpdateSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=music_models.MAX_LENGTHS["ARTIST_NAME"])
+    name = serializers.CharField(max_length=federation_models.MAX_LENGTHS["ACTOR_NAME"])
     description = common_serializers.ContentSerializer(allow_null=True)
     tags = tags_serializers.TagsListField()
     content_category = serializers.ChoiceField(
         choices=music_models.ARTIST_CONTENT_CATEGORY_CHOICES
     )
     metadata = serializers.DictField(required=False)
-    cover = music_serializers.COVER_WRITE_FIELD
+    cover = COVER_WRITE_FIELD
 
     def validate(self, validated_data):
         validated_data = super().validate(validated_data)
@@ -232,8 +229,26 @@ class ChannelUpdateSerializer(serializers.Serializer):
         return ChannelSerializer(obj, context=self.context).data
 
 
+class SimpleChannelArtistSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    fid = serializers.URLField()
+    mbid = serializers.CharField()
+    name = serializers.CharField()
+    creation_date = serializers.DateTimeField()
+    modification_date = serializers.DateTimeField()
+    is_local = serializers.BooleanField()
+    content_category = serializers.CharField()
+    description = common_serializers.ContentSerializer(allow_null=True, required=False)
+    cover = CoverField(allow_null=True, required=False)
+    channel = serializers.UUIDField(allow_null=True, required=False)
+    tracks_count = serializers.IntegerField(source="_tracks_count", required=False)
+    tags = serializers.ListField(
+        child=serializers.CharField(), source="_prefetched_tagged_items", required=False
+    )
+
+
 class ChannelSerializer(serializers.ModelSerializer):
-    artist = serializers.SerializerMethodField()
+    artist = SimpleChannelArtistSerializer()
     actor = serializers.SerializerMethodField()
     downloads_count = serializers.SerializerMethodField()
     attributed_to = federation_serializers.APIActorSerializer()
@@ -254,28 +269,40 @@ class ChannelSerializer(serializers.ModelSerializer):
             "downloads_count",
         ]
 
-    def get_artist(self, obj):
-        return music_serializers.serialize_artist_simple(obj.artist)
-
     def to_representation(self, obj):
         data = super().to_representation(obj)
         if self.context.get("subscriptions_count"):
             data["subscriptions_count"] = self.get_subscriptions_count(obj)
         return data
 
-    def get_subscriptions_count(self, obj):
+    def get_subscriptions_count(self, obj) -> int:
         return obj.actor.received_follows.exclude(approved=False).count()
 
-    def get_downloads_count(self, obj):
+    def get_downloads_count(self, obj) -> int:
         return getattr(obj, "_downloads_count", None) or 0
 
+    @extend_schema_field(federation_serializers.APIActorSerializer)
     def get_actor(self, obj):
         if obj.attributed_to == actors.get_service_actor():
             return None
         return federation_serializers.APIActorSerializer(obj.actor).data
 
+    @extend_schema_field(OpenApiTypes.URI)
     def get_url(self, obj):
         return obj.actor.url
+
+
+class InlineSubscriptionSerializer(serializers.Serializer):
+    uuid = serializers.UUIDField()
+    channel = serializers.UUIDField(source="target__channel__uuid")
+
+
+class AllSubscriptionsSerializer(serializers.Serializer):
+    results = InlineSubscriptionSerializer(source="*", many=True)
+    count = serializers.SerializerMethodField()
+
+    def get_count(self, o) -> int:
+        return len(o)
 
 
 class SubscriptionSerializer(serializers.Serializer):
@@ -310,7 +337,7 @@ def retrieve_feed(url):
     except requests.exceptions.HTTPError as e:
         if e.response:
             raise FeedFetchException(
-                "Error while fetching feed: HTTP {}".format(e.response.status_code)
+                f"Error while fetching feed: HTTP {e.response.status_code}"
             )
         raise FeedFetchException("Error while fetching feed: unknown error")
     except requests.exceptions.Timeout:
@@ -318,9 +345,9 @@ def retrieve_feed(url):
     except requests.exceptions.ConnectionError:
         raise FeedFetchException("Error while fetching feed: connection error")
     except requests.RequestException as e:
-        raise FeedFetchException("Error while fetching feed: {}".format(e))
+        raise FeedFetchException(f"Error while fetching feed: {e}")
     except Exception as e:
-        raise FeedFetchException("Error while fetching feed: {}".format(e))
+        raise FeedFetchException(f"Error while fetching feed: {e}")
 
     return response
 
@@ -339,7 +366,7 @@ def get_channel_from_rss_url(url, raise_exception=False):
     parsed_feed = feedparser.parse(response.text)
     serializer = RssFeedSerializer(data=parsed_feed["feed"])
     if not serializer.is_valid(raise_exception=raise_exception):
-        raise FeedFetchException("Invalid xml content: {}".format(serializer.errors))
+        raise FeedFetchException(f"Invalid xml content: {serializer.errors}")
 
     # second mrf check with validated data
     urls_to_check = set()
@@ -369,9 +396,7 @@ def get_channel_from_rss_url(url, raise_exception=False):
         )
     )
     if parsed_feed.feed.get("rights"):
-        track_defaults["copyright"] = parsed_feed.feed.rights[
-            : music_models.MAX_LENGTHS["COPYRIGHT"]
-        ]
+        track_defaults["copyright"] = parsed_feed.feed.rights
     for entry in entries[: settings.PODCASTS_RSS_FEED_MAX_ITEMS]:
         logger.debug("Importing feed item %s", entry.id)
         s = RssFeedItemSerializer(data=entry)
@@ -509,7 +534,7 @@ class RssFeedSerializer(serializers.Serializer):
         else:
             artist_kwargs = {"pk": None}
             actor_kwargs = {"pk": None}
-            preferred_username = "rssfeed-{}".format(uuid.uuid4())
+            preferred_username = f"rssfeed-{uuid.uuid4()}"
             actor_defaults = {
                 "preferred_username": preferred_username,
                 "type": "Application",
@@ -531,9 +556,7 @@ class RssFeedSerializer(serializers.Serializer):
             **artist_kwargs,
             defaults={
                 "attributed_to": service_actor,
-                "name": validated_data["title"][
-                    : music_models.MAX_LENGTHS["ARTIST_NAME"]
-                ],
+                "name": validated_data["title"],
                 "content_category": "podcast",
             },
         )
@@ -571,7 +594,8 @@ class RssFeedSerializer(serializers.Serializer):
 
         # create/update the channel
         channel, created = models.Channel.objects.update_or_create(
-            pk=existing.pk if existing else None, defaults=channel_defaults,
+            pk=existing.pk if existing else None,
+            defaults=channel_defaults,
         )
         return channel
 
@@ -588,7 +612,7 @@ class ItunesDurationField(serializers.CharField):
             try:
                 int_parts.append(int(part))
             except (ValueError, TypeError):
-                raise serializers.ValidationError("Invalid duration {}".format(v))
+                raise serializers.ValidationError(f"Invalid duration {v}")
 
         if len(int_parts) == 2:
             hours = 0
@@ -596,7 +620,7 @@ class ItunesDurationField(serializers.CharField):
         elif len(int_parts) == 3:
             hours, minutes, seconds = int_parts
         else:
-            raise serializers.ValidationError("Invalid duration {}".format(v))
+            raise serializers.ValidationError(f"Invalid duration {v}")
 
         return (hours * 3600) + (minutes * 60) + seconds
 
@@ -735,16 +759,12 @@ class RssFeedItemSerializer(serializers.Serializer):
             {
                 "disc_number": validated_data.get("itunes_season", 1) or 1,
                 "position": validated_data.get("itunes_episode", 1) or 1,
-                "title": validated_data["title"][
-                    : music_models.MAX_LENGTHS["TRACK_TITLE"]
-                ],
+                "title": validated_data["title"],
                 "artist": channel.artist,
             }
         )
         if "rights" in validated_data:
-            track_defaults["copyright"] = validated_data["rights"][
-                : music_models.MAX_LENGTHS["COPYRIGHT"]
-            ]
+            track_defaults["copyright"] = validated_data["rights"]
 
         if "published_parsed" in validated_data:
             track_defaults["creation_date"] = datetime.datetime.fromtimestamp(
@@ -773,14 +793,15 @@ class RssFeedItemSerializer(serializers.Serializer):
 
         # create/update the track
         track, created = music_models.Track.objects.update_or_create(
-            **track_kwargs, defaults=track_defaults,
+            **track_kwargs,
+            defaults=track_defaults,
         )
         # optimisation for reducing SQL queries, because we cannot use select_related with
         # update or create, so we restore the cache by hand
         if existing_track:
             for field in ["attachment_cover", "description"]:
-                cached_id_value = getattr(existing_track, "{}_id".format(field))
-                new_id_value = getattr(track, "{}_id".format(field))
+                cached_id_value = getattr(existing_track, f"{field}_id")
+                new_id_value = getattr(track, f"{field}_id")
                 if new_id_value and cached_id_value == new_id_value:
                     setattr(track, field, getattr(existing_track, field))
 

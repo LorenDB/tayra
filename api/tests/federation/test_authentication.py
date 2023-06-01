@@ -1,6 +1,6 @@
 import pytest
 
-from funkwhale_api.federation import authentication, exceptions, keys, jsonld
+from funkwhale_api.federation import authentication, exceptions, jsonld, keys
 
 
 def test_authenticate(factories, mocker, api_request):
@@ -37,7 +37,7 @@ def test_authenticate(factories, mocker, api_request):
         **{
             "HTTP_DATE": prepared.headers["date"],
             "HTTP_SIGNATURE": prepared.headers["signature"],
-        }
+        },
     )
     authenticator = authentication.SignatureAuthentication()
     user, _ = authenticator.authenticate(django_request)
@@ -52,7 +52,7 @@ def test_authenticate(factories, mocker, api_request):
 def test_authenticate_skips_blocked_domain(factories, api_request):
     policy = factories["moderation.InstancePolicy"](block_all=True, for_domain=True)
     private, public = keys.get_key_pair()
-    actor_url = "https://{}/actor".format(policy.target_domain.name)
+    actor_url = f"https://{policy.target_domain.name}/actor"
 
     signed_request = factories["federation.SignedRequest"](
         auth__key=private, auth__key_id=actor_url + "#main-key", auth__headers=["date"]
@@ -63,7 +63,7 @@ def test_authenticate_skips_blocked_domain(factories, api_request):
         **{
             "HTTP_DATE": prepared.headers["date"],
             "HTTP_SIGNATURE": prepared.headers["signature"],
-        }
+        },
     )
     authenticator = authentication.SignatureAuthentication()
 
@@ -85,7 +85,7 @@ def test_authenticate_skips_blocked_actor(factories, api_request):
         **{
             "HTTP_DATE": prepared.headers["date"],
             "HTTP_SIGNATURE": prepared.headers["signature"],
-        }
+        },
     )
     authenticator = authentication.SignatureAuthentication()
 
@@ -98,7 +98,7 @@ def test_authenticate_ignore_inactive_policy(factories, api_request, mocker):
         block_all=True, for_domain=True, is_active=False
     )
     private, public = keys.get_key_pair()
-    actor_url = "https://{}/actor".format(policy.target_domain.name)
+    actor_url = f"https://{policy.target_domain.name}/actor"
 
     signed_request = factories["federation.SignedRequest"](
         auth__key=private, auth__key_id=actor_url + "#main-key", auth__headers=["date"]
@@ -126,7 +126,7 @@ def test_authenticate_ignore_inactive_policy(factories, api_request, mocker):
         **{
             "HTTP_DATE": prepared.headers["date"],
             "HTTP_SIGNATURE": prepared.headers["signature"],
-        }
+        },
     )
     authenticator = authentication.SignatureAuthentication()
     authenticator.authenticate(django_request)
@@ -169,7 +169,7 @@ def test_autenthicate_supports_blind_key_rotation(factories, mocker, api_request
         **{
             "HTTP_DATE": prepared.headers["date"],
             "HTTP_SIGNATURE": prepared.headers["signature"],
-        }
+        },
     )
     authenticator = authentication.SignatureAuthentication()
     user, _ = authenticator.authenticate(django_request)
@@ -186,7 +186,7 @@ def test_authenticate_checks_signature_with_allow_list(
     preferences["moderation__allow_list_enabled"] = True
     domain = factories["federation.Domain"](allowed=False)
     private, public = keys.get_key_pair()
-    actor_url = "https://{}/actor".format(domain.name)
+    actor_url = f"https://{domain.name}/actor"
 
     signed_request = factories["federation.SignedRequest"](
         auth__key=private, auth__key_id=actor_url + "#main-key", auth__headers=["date"]
@@ -197,7 +197,7 @@ def test_authenticate_checks_signature_with_allow_list(
         **{
             "HTTP_DATE": prepared.headers["date"],
             "HTTP_SIGNATURE": prepared.headers["signature"],
-        }
+        },
     )
     authenticator = authentication.SignatureAuthentication()
 

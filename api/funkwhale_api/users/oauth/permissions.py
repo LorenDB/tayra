@@ -1,5 +1,5 @@
-from rest_framework import permissions
 from django.core.exceptions import ImproperlyConfigured
+from rest_framework import permissions
 
 from funkwhale_api.common import preferences
 
@@ -55,12 +55,12 @@ class ScopePermission(permissions.BasePermission):
         anonymous_policy = getattr(view, "anonymous_policy", False)
         if anonymous_policy not in [True, False, "setting"]:
             raise ImproperlyConfigured(
-                "{} is not a valid value for anonymous_policy".format(anonymous_policy)
+                f"{anonymous_policy} is not a valid value for anonymous_policy"
             )
         if isinstance(scope_config, str):
             scope_config = {
-                "read": "read:{}".format(scope_config),
-                "write": "write:{}".format(scope_config),
+                "read": f"read:{scope_config}",
+                "write": f"write:{scope_config}",
             }
             action = METHOD_SCOPE_MAPPING[request.method.lower()]
             required_scope = scope_config[action]

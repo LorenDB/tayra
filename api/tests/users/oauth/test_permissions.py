@@ -1,7 +1,6 @@
 import pytest
 
-from funkwhale_api.users.oauth import scopes
-from funkwhale_api.users.oauth import permissions
+from funkwhale_api.users.oauth import permissions, scopes
 
 
 @pytest.mark.parametrize(

@@ -1,6 +1,6 @@
-import pytest
 import uuid
 
+import pytest
 from django.urls import reverse
 
 from funkwhale_api.users.oauth import scopes

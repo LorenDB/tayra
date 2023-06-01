@@ -1,0 +1,197 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../developer/architecture.md:1
+msgid "Project architecture"
+msgstr ""
+
+#: ../../developer/architecture.md:3
+msgid "Funkwhale is made up of several components. Understanding these components and what they do is important when contributing to Funkwhale's codebase. In this article, we'll break down each part of Funkwhale's architecture to help you understand what each component does."
+msgstr ""
+
+#: ../../developer/architecture.md:5
+msgid "Below is a diagram of Funkwhale's project setup."
+msgstr ""
+
+#: ../../developer/architecture.md:29
+msgid "Select a link below to see information about each component."
+msgstr ""
+
+#: ../../developer/architecture.md:35
+msgid "Entrypoints"
+msgstr ""
+
+#: ../../developer/architecture.md:37
+msgid "Users can access Funkwhale using a variety of entrypoints. They can make use of a Funkwhale application, a Subsonic-compatible application, or by calling the API directly. Each entrypoint interacts with the Funkwhale backend in the same way."
+msgstr ""
+
+#: ../../developer/architecture.md:39
+msgid "Funkwhale web app"
+msgstr ""
+
+#: ../../developer/architecture.md:41
+msgid "The Funkwhale web app is a {abbr}`SPA (Single Page Application)` written in [Vue.js](https://vuejs.org) and [Typescript](https://typescriptlang.org). This is the application most people associate with Funkwhale. Server admins usually run an instance of the web app alongside their Funkwhale {term}`pod`, but you can also connect a standalone web app to another pod."
+msgstr ""
+
+#: ../../developer/architecture.md:43
+msgid "The Funkwhale web app interacts with the Funkwhale API to fetch and update data. Using a service worker, the web app caches important information for offline use."
+msgstr ""
+
+#: ../../developer/architecture.md:45
+msgid "Funkwhale for Android"
+msgstr ""
+
+#: ../../developer/architecture.md:47
+msgid "Funkwhale for Android is the Funkwhale collective's official Android app written in [Kotlin](https://kotlinlang.org/). It interacts with the Funkwhale API to fetch and update data and stores information for offline playback."
+msgstr ""
+
+#: ../../developer/architecture.md:49
+msgid "Subsonic app"
+msgstr ""
+
+#: ../../developer/architecture.md:51
+msgid "Funkwhale supports a limited subset of the [Subsonic API](http://www.subsonic.org/pages/api.jsp) to support existing Subsonic apps. These apps can request data stored on a Funkwhale server by calling these endpoints."
+msgstr ""
+
+#: ../../developer/architecture.md:53
+msgid "Nginx/Apache reverse proxy"
+msgstr ""
+
+#: ../../developer/architecture.md:55
+msgid "The reverse proxy acts as a layer between a Funkwhale pod and the open internet. It enhances the pod's security and provides additional options to help increase performance."
+msgstr ""
+
+#: ../../developer/architecture.md:57
+msgid "When a user tries to communicate with a Funkwhale pod, the reverse proxy:"
+msgstr ""
+
+#: ../../developer/architecture.md:59
+msgid "Handles the HTTP/HTTPS requests and proxies them to the Funkwhale API server"
+msgstr ""
+
+#: ../../developer/architecture.md:60
+msgid "Serves requested static files, such as audio files and stylesheets"
+msgstr ""
+
+#: ../../developer/architecture.md:62
+msgid "Backend"
+msgstr ""
+
+#: ../../developer/architecture.md:64
+msgid "The Funkwhale backend is made up of a few components which are responsible for:"
+msgstr ""
+
+#: ../../developer/architecture.md:66
+msgid "Communicating with the user's entrypoint and actioning requests"
+msgstr ""
+
+#: ../../developer/architecture.md:67
+msgid "Maintaining data consistency"
+msgstr ""
+
+#: ../../developer/architecture.md:68
+msgid "Communicating with other Funkwhale pods (if federation is enabled)"
+msgstr ""
+
+#: ../../developer/architecture.md:70
+msgid "Django API server"
+msgstr ""
+
+#: ../../developer/architecture.md:72
+msgid "The Funkwhale API is a [REST API](https://developer.mozilla.org/en-US/docs/Glossary/REST) written in [Python](https://www.python.org/) using the [Django REST framework](https://www.django-rest-framework.org/). It is the central piece of the project and houses the application's logic."
+msgstr ""
+
+#: ../../developer/architecture.md:74
+msgid "The Funkwhale API is responsible for:"
+msgstr ""
+
+#: ../../developer/architecture.md:76
+msgid "Fetching requested data from the cache/database and returning it to the requester in a meaningful way"
+msgstr ""
+
+#: ../../developer/architecture.md:77
+msgid "Processing incoming data and writing it to the database in a meaningful way"
+msgstr ""
+
+#: ../../developer/architecture.md:78
+msgid "Delegating long-running tasks to workers to reduce load"
+msgstr ""
+
+#: ../../developer/architecture.md:80
+msgid "PostgreSQL database"
+msgstr ""
+
+#: ../../developer/architecture.md:82
+msgid "Funkwhale uses a [PostgreSQL database](https://www.postgresql.org/) to store data. All information that is served by and sent to the Funkwhale API is stored in this database."
+msgstr ""
+
+#: ../../developer/architecture.md:84
+msgid "The Funkwhale database makes heavy use of [indexes](https://www.postgresql.org/docs/current/indexes.html) for enhanced performance."
+msgstr ""
+
+#: ../../developer/architecture.md:86
+msgid "Redis cache and message queue"
+msgstr ""
+
+#: ../../developer/architecture.md:88
+msgid "Funkwhale uses [Redis](https://redis.io/) to cache information from the database and to store a queue of messages to send. We use this cache to avoid locking database resources and to speed up requests."
+msgstr ""
+
+#: ../../developer/architecture.md:90
+msgid "Celery worker"
+msgstr ""
+
+#: ../../developer/architecture.md:92
+msgid "Funkwhale has to handle a lot of tasks that take longer than the average HTTP request/response cycle. To ensure these tasks complete and don't impact the API's performance, they are offloaded to a [Celery](https://docs.celeryq.dev/en/stable/userguide/workers.html) task worker. The worker then works through all the tasks in its queue while the API handles real-time responses."
+msgstr ""
+
+#: ../../developer/architecture.md:94
+msgid "Some common tasks the Celery worker handles are:"
+msgstr ""
+
+#: ../../developer/architecture.md:96
+msgid "Importing uploaded music to the database"
+msgstr ""
+
+#: ../../developer/architecture.md:97
+msgid "Handling [ActivityPub](https://www.w3.org/TR/activitypub/) messages from other {term}`Fediverse` servers"
+msgstr ""
+
+#: ../../developer/architecture.md:98
+msgid "Scanning new content on remote pods"
+msgstr ""
+
+#: ../../developer/architecture.md:100
+msgid "Celery beat task scheduler"
+msgstr ""
+
+#: ../../developer/architecture.md:102
+msgid "In addition to handling tasks from the API, the Celery worker also needs to handle some recurring tasks. To manage these, we implement a [Celery beat](https://docs.celeryq.dev/en/stable/reference/celery.apps.beat.html#celery.apps.beat.Beat) scheduler. The scheduler is responsible for triggering tasks on a schedule and adding messages to the [queue](#redis-cache-and-message-queue) so the worker can work through them."
+msgstr ""
+
+#: ../../developer/architecture.md:104
+msgid "Some common recurring tasks are:"
+msgstr ""
+
+#: ../../developer/architecture.md:106
+msgid "Clearing the cache"
+msgstr ""
+
+#: ../../developer/architecture.md:107
+msgid "Refreshing content metadata"
+msgstr ""

@@ -1,16 +1,13 @@
 from django import forms
 from django.db.models import Q
-
-from django_filters import widgets
 from django_filters import rest_framework as filters
+from django_filters import widgets
+from drf_spectacular.utils import extend_schema_field
 
-from . import fields
-from . import models
-from . import search
-from . import utils
+from . import fields, models, search, utils
 
 
-class NoneObject(object):
+class NoneObject:
     def __eq__(self, other):
         return other.__class__ == NoneObject
 
@@ -49,9 +46,10 @@ class CoerceChoiceField(forms.ChoiceField):
         try:
             return [b for a, b in self.choices if v == a][0]
         except IndexError:
-            raise forms.ValidationError("Invalid value {}".format(value))
+            raise forms.ValidationError(f"Invalid value {value}")
 
 
+@extend_schema_field(bool)
 class NullBooleanFilter(filters.ChoiceFilter):
     field_class = CoerceChoiceField
 
@@ -65,9 +63,7 @@ class NullBooleanFilter(filters.ChoiceFilter):
             return qs
         if value == NONE:
             value = None
-        qs = self.get_method(qs)(
-            **{"%s__%s" % (self.field_name, self.lookup_expr): value}
-        )
+        qs = self.get_method(qs)(**{f"{self.field_name}__{self.lookup_expr}": value})
         return qs.distinct() if self.distinct else qs
 
 
@@ -219,7 +215,7 @@ class ActorScopeFilter(filters.CharFilter):
             if not self.library_field:
                 predicate = "pk__in"
             else:
-                predicate = "{}__in".format(self.library_field)
+                predicate = f"{self.library_field}__in"
             return Q(**{predicate: followed_libraries})
 
         elif scope.startswith("actor:"):
@@ -227,7 +223,8 @@ class ActorScopeFilter(filters.CharFilter):
             username, domain = full_username.split("@")
             try:
                 actor = federation_models.Actor.objects.get(
-                    preferred_username__iexact=username, domain_id=domain,
+                    preferred_username__iexact=username,
+                    domain_id=domain,
                 )
             except federation_models.Actor.DoesNotExist:
                 raise EmptyQuerySet()
@@ -235,7 +232,7 @@ class ActorScopeFilter(filters.CharFilter):
             return Q(**{self.actor_field: actor})
         elif scope.startswith("domain:"):
             domain = scope.split("domain:", 1)[1]
-            return Q(**{"{}__domain_id".format(self.actor_field): domain})
+            return Q(**{f"{self.actor_field}__domain_id": domain})
         else:
             raise EmptyQuerySet()
 

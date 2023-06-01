@@ -1,59 +1,142 @@
+<script setup lang="ts">
+import type { SmartSearchProps } from '~/composables/navigation/useSmartSearch'
+import type { OrderingProps } from '~/composables/navigation/useOrdering'
+import type { UserRequest, BackendResponse } from '~/types'
+import type { RouteRecordName } from 'vue-router'
+import type { OrderingField } from '~/store/ui'
+
+import { ref, computed, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+import UserRequestCard from '~/components/manage/moderation/UserRequestCard.vue'
+import Pagination from '~/components/vui/Pagination.vue'
+
+import useSmartSearch from '~/composables/navigation/useSmartSearch'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useOrdering from '~/composables/navigation/useOrdering'
+import useErrorHandler from '~/composables/useErrorHandler'
+import usePage from '~/composables/navigation/usePage'
+
+interface Props extends SmartSearchProps, OrderingProps {
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  defaultQuery?: string
+  orderingConfigName?: RouteRecordName
+  updateUrl?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  defaultQuery: '',
+  updateUrl: false,
+  orderingConfigName: undefined
+})
+
+const search = ref()
+
+const page = usePage()
+const result = ref<BackendResponse<UserRequest>>()
+
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props)
+const { onSearch, query, addSearchToken, getTokenValue } = useSmartSearch(props)
+
+const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
+  ['creation_date', 'creation_date'],
+  ['handled_date', 'handled_date']
+]
+
+const store = useStore()
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  const params = {
+    page: page.value,
+    page_size: paginateBy.value,
+    q: query.value,
+    ordering: orderingString.value
+  }
+
+  try {
+    const response = await axios.get('manage/moderation/requests/', {
+      params
+    })
+
+    result.value = response.data
+
+    if (query.value === 'status:pending') {
+      store.commit('ui/incrementNotifications', {
+        type: 'pendingReviewRequests',
+        value: response.data.count
+      })
+    }
+  } catch (error) {
+    useErrorHandler(error as Error)
+    result.value = undefined
+  } finally {
+    isLoading.value = false
+  }
+}
+
+onSearch(() => (page.value = 1))
+watch([page, query], fetchData)
+onOrderingUpdate(fetchData)
+fetchData()
+
+const { t } = useI18n()
+const sharedLabels = useSharedLabels()
+const labels = computed(() => ({
+  searchPlaceholder: t('views.admin.moderation.RequestsList.placeholder.search'),
+  reports: t('views.admin.moderation.RequestsList.title')
+}))
+</script>
+
 <template>
   <main v-title="labels.reports">
     <section class="ui vertical stripe segment">
       <h2 class="ui header">
-        <translate translate-context="*/Moderation/*/Noun">
-          User Requests
-        </translate>
+        {{ $t('views.admin.moderation.RequestsList.header.userRequests') }}
       </h2>
       <div class="ui hidden divider" />
       <div class="ui inline form">
         <div class="fields">
           <div class="ui field">
-            <label for="requests-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
-            <form @submit.prevent="search.query = $refs.search.value">
+            <label for="requests-search">{{ $t('views.admin.moderation.RequestsList.label.search') }}</label>
+            <form @submit.prevent="query = search.value">
               <input
                 id="requests-search"
                 ref="search"
                 name="search"
                 type="text"
-                :value="search.query"
+                :value="query"
                 :placeholder="labels.searchPlaceholder"
               >
             </form>
           </div>
           <div class="field">
-            <label for="requests-status"><translate translate-context="*/*/*">Status</translate></label>
+            <label for="requests-status">{{ $t('views.admin.moderation.RequestsList.label.status') }}</label>
             <select
               id="requests-status"
               class="ui dropdown"
               :value="getTokenValue('status', '')"
-              @change="addSearchToken('status', $event.target.value)"
+              @change="addSearchToken('status', ($event.target as HTMLSelectElement).value)"
             >
               <option value="">
-                <translate translate-context="Content/*/Dropdown">
-                  All
-                </translate>
+                {{ $t('views.admin.moderation.RequestsList.option.status.all') }}
               </option>
               <option value="pending">
-                <translate translate-context="Content/Library/*/Short">
-                  Pending
-                </translate>
+                {{ $t('views.admin.moderation.RequestsList.option.status.pending') }}
               </option>
               <option value="approved">
-                <translate translate-context="Content/*/*/Short">
-                  Approved
-                </translate>
+                {{ $t('views.admin.moderation.RequestsList.option.status.approved') }}
               </option>
               <option value="refused">
-                <translate translate-context="Content/*/*/Short">
-                  Refused
-                </translate>
+                {{ $t('views.admin.moderation.RequestsList.option.status.refused') }}
               </option>
             </select>
           </div>
           <div class="field">
-            <label for="requests-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
+            <label for="requests-ordering">{{ $t('views.admin.moderation.RequestsList.ordering.label') }}</label>
             <select
               id="requests-ordering"
               v-model="ordering"
@@ -69,21 +152,17 @@
             </select>
           </div>
           <div class="field">
-            <label for="requests-ordering-direction"><translate translate-context="Content/Search/Dropdown.Label/Noun">Order</translate></label>
+            <label for="requests-ordering-direction">{{ $t('views.admin.moderation.RequestsList.ordering.direction.label') }}</label>
             <select
               id="requests-ordering-direction"
               v-model="orderingDirection"
               class="ui dropdown"
             >
               <option value="+">
-                <translate translate-context="Content/Search/Dropdown">
-                  Ascending
-                </translate>
+                {{ $t('views.admin.moderation.RequestsList.ordering.direction.ascending') }}
               </option>
               <option value="-">
-                <translate translate-context="Content/Search/Dropdown">
-                  Descending
-                </translate>
+                {{ $t('views.admin.moderation.RequestsList.ordering.direction.descending') }}
               </option>
             </select>
           </div>
@@ -111,106 +190,12 @@
         <div class="ui center aligned basic segment">
           <pagination
             v-if="result.count > paginateBy"
-            :current="page"
+            v-model:current="page"
             :paginate-by="paginateBy"
             :total="result.count"
-            @page-changed="selectPage"
           />
         </div>
       </template>
     </section>
   </main>
 </template>
-
-<script>
-
-import axios from 'axios'
-import _ from '@/lodash'
-import time from '@/utils/time'
-import Pagination from '@/components/Pagination'
-import OrderingMixin from '@/components/mixins/Ordering'
-import TranslationsMixin from '@/components/mixins/Translations'
-import UserRequestCard from '@/components/manage/moderation/UserRequestCard'
-import { normalizeQuery, parseTokens } from '@/search'
-import SmartSearchMixin from '@/components/mixins/SmartSearch'
-
-export default {
-  components: {
-    Pagination,
-    UserRequestCard
-  },
-  mixins: [OrderingMixin, TranslationsMixin, SmartSearchMixin],
-  data () {
-    return {
-      time,
-      isLoading: false,
-      result: null,
-      page: 1,
-      search: {
-        query: this.defaultQuery,
-        tokens: parseTokens(normalizeQuery(this.defaultQuery))
-      },
-      orderingOptions: [
-        ['creation_date', 'creation_date'],
-        ['handled_date', 'handled_date']
-      ],
-      targets: {
-        track: {}
-      }
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        searchPlaceholder: this.$pgettext('Content/Search/Input.Placeholder', 'Search by username…'),
-        reports: this.$pgettext('*/Moderation/*/Noun', 'User Requests')
-      }
-    }
-  },
-  watch: {
-    search (newValue) {
-      this.page = 1
-      this.fetchData()
-    },
-    page () {
-      this.fetchData()
-    },
-    ordering () {
-      this.fetchData()
-    },
-    orderingDirection () {
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      const params = _.merge({
-        page: this.page,
-        page_size: this.paginateBy,
-        q: this.search.query,
-        ordering: this.getOrderingAsString()
-      }, this.filters)
-      const self = this
-      self.isLoading = true
-      this.result = null
-      axios.get('manage/moderation/requests/', { params: params }).then((response) => {
-        self.result = response.data
-        self.isLoading = false
-        if (self.search.query === 'status:pending') {
-          self.$store.commit('ui/incrementNotifications', { type: 'pendingReviewRequests', value: response.data.count })
-        }
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    selectPage: function (page) {
-      this.page = page
-    }
-  }
-}
-
-</script>

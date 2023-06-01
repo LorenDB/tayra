@@ -52,9 +52,9 @@ def test_import_files_stores_proper_data(factories, mocker, now, path):
         "import_files", str(library.uuid), path, async_=False, interactive=False
     )
     upload = library.uploads.last()
-    assert upload.import_reference == "cli-{}".format(now.isoformat())
+    assert upload.import_reference == f"cli-{now.isoformat()}"
     assert upload.import_status == "pending"
-    assert upload.source == "file://{}".format(path)
+    assert upload.source == f"file://{path}"
     assert upload.import_metadata == {
         "funkwhale": {
             "config": {"replace": False, "dispatch_outbox": False, "broadcast": False}
@@ -131,7 +131,7 @@ def test_import_files_skip_if_path_already_imported(factories, mocker):
 
     # existing one with same source
     factories["music.Upload"](
-        library=library, import_status="finished", source="file://{}".format(path)
+        library=library, import_status="finished", source=f"file://{path}"
     )
 
     call_command(
@@ -154,7 +154,7 @@ def test_import_files_in_place(factories, mocker, settings):
         interactive=False,
     )
     upload = library.uploads.last()
-    assert bool(upload.audio_file) is False
+    assert not upload.audio_file
     mocked_process.assert_called_once_with(upload_id=upload.pk)
 
 
@@ -165,7 +165,7 @@ def test_storage_rename_utf_8_files(factories):
 
 @pytest.mark.parametrize("name", ["modified", "moved", "created", "deleted"])
 def test_handle_event(name, mocker):
-    handler = mocker.patch.object(import_files, "handle_{}".format(name))
+    handler = mocker.patch.object(import_files, f"handle_{name}")
 
     event = {"type": name}
     stdout = mocker.Mock()
@@ -297,7 +297,10 @@ def test_handle_modified_skips_existing_checksum(tmpfile, factories, mocker):
         import_status="finished",
     )
     import_files.handle_modified(
-        event=event, stdout=stdout, library=library, in_place=True,
+        event=event,
+        stdout=stdout,
+        library=library,
+        in_place=True,
     )
     assert library.uploads.count() == 1
 
@@ -322,10 +325,14 @@ def test_handle_modified_update_existing_path_if_found(tmpfile, factories, mocke
         audio_file=None,
     )
     import_files.handle_modified(
-        event=event, stdout=stdout, library=library, in_place=True,
+        event=event,
+        stdout=stdout,
+        library=library,
+        in_place=True,
     )
     update_track_metadata.assert_called_once_with(
-        get_metadata.return_value, upload.track,
+        get_metadata.return_value,
+        upload.track,
     )
 
 
@@ -349,7 +356,10 @@ def test_handle_modified_update_existing_path_if_found_and_attributed_to(
         audio_file=None,
     )
     import_files.handle_modified(
-        event=event, stdout=stdout, library=library, in_place=True,
+        event=event,
+        stdout=stdout,
+        library=library,
+        in_place=True,
     )
     update_track_metadata.assert_not_called()
 
@@ -364,5 +374,5 @@ def test_import_files(factories, capsys):
 
     imported = library.uploads.filter(import_status="finished").count()
     assert imported > 0
-    assert "Successfully imported {} new tracks".format(imported) in captured.out
+    assert f"Successfully imported {imported} new tracks" in captured.out
     assert "For details, please refer to import reference" in captured.out

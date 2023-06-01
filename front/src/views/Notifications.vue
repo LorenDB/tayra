@@ -1,3 +1,94 @@
+<script setup lang="ts">
+import type { Notification } from '~/types'
+
+import moment from 'moment'
+import axios from 'axios'
+
+import { ref, reactive, computed, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useStore } from '~/store'
+
+import NotificationRow from '~/components/notifications/NotificationRow.vue'
+
+import useWebSocketHandler from '~/composables/useWebSocketHandler'
+import useErrorHandler from '~/composables/useErrorHandler'
+import useMarkdown from '~/composables/useMarkdown'
+
+const store = useStore()
+const supportMessage = useMarkdown(() => store.state.instance.settings.instance.support_message.value)
+const { t } = useI18n()
+
+const additionalNotifications = computed(() => store.getters['ui/additionalNotifications'])
+const showInstanceSupportMessage = computed(() => store.getters['ui/showInstanceSupportMessage'])
+const showFunkwhaleSupportMessage = computed(() => store.getters['ui/showFunkwhaleSupportMessage'])
+
+const labels = computed(() => ({
+  title: t('views.Notifications.title')
+}))
+
+const filters = reactive({
+  is_read: false
+})
+
+const isLoading = ref(false)
+const notifications = reactive({ count: 0, results: [] as Notification[] })
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get('federation/inbox/', { params: filters })
+    notifications.count = response.data.count
+    notifications.results = response.data.results
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+watch(filters, fetchData, { immediate: true })
+
+useWebSocketHandler('inbox.item_added', (event) => {
+  notifications.count += 1
+  notifications.results.unshift(event.item)
+})
+
+const instanceSupportMessageDelay = ref(60)
+const funkwhaleSupportMessageDelay = ref(60)
+
+const setDisplayDate = async (field: string, days: number) => {
+  try {
+    const response = await axios.patch(`users/${store.state.auth.username}/`, {
+      [field]: days
+        ? moment().add({ days })
+        : undefined
+    })
+
+    store.commit('auth/profilePartialUpdate', response.data)
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+}
+
+const markAllAsRead = async () => {
+  try {
+    await axios.post('federation/inbox/action/', {
+      action: 'read',
+      objects: 'all',
+      filters: {
+        is_read: false,
+        before: notifications.results[0]?.id
+      }
+    })
+
+    store.commit('ui/notifications', { type: 'inbox', count: 0 })
+    notifications.results = notifications.results.map(notification => ({ ...notification, is_read: true }))
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+}
+</script>
+
 <template>
   <main
     v-title="labels.title"
@@ -10,9 +101,7 @@
           class="ui container"
         >
           <h1 class="ui header">
-            <translate translate-context="Content/Notifications/Title">
-              Your messages
-            </translate>
+            {{ $t('views.Notifications.header.messages') }}
           </h1>
           <div class="ui two column stackable grid">
             <div
@@ -21,11 +110,9 @@
             >
               <div class="ui attached info message">
                 <h4 class="header">
-                  <translate translate-context="Content/Notifications/Header">
-                    Support this Funkwhale pod
-                  </translate>
+                  {{ $t('views.Notifications.header.instanceSupport') }}
                 </h4>
-                <div v-html="markdown.makeHtml($store.state.instance.settings.instance.support_message.value)" />
+                <sanitized-html :html="supportMessage" />
               </div>
               <div class="ui bottom attached segment">
                 <form
@@ -34,40 +121,31 @@
                 >
                   <div class="inline field">
                     <label for="instance-reminder-delay">
-                      <translate translate-context="Content/Notifications/Label">Remind me in:</translate>
+                      {{ $t('views.Notifications.label.reminder') }}
                     </label>
                     <select
                       id="instance-reminder-delay"
                       v-model="instanceSupportMessageDelay"
                     >
                       <option :value="30">
-                        <translate translate-context="*/*/*">
-                          30 days
-                        </translate>
+                        {{ $t('views.Notifications.option.delay.30') }}
                       </option>
                       <option :value="60">
-                        <translate translate-context="*/*/*">
-                          60 days
-                        </translate>
+                        {{ $t('views.Notifications.option.delay.60') }}
                       </option>
                       <option :value="90">
-                        <translate translate-context="*/*/*">
-                          90 days
-                        </translate>
+                        {{ $t('views.Notifications.option.delay.90') }}
                       </option>
-                      <option :value="null">
-                        <translate translate-context="*/*/*">
-                          Never
-                        </translate>
+                      <!-- NOTE: Postpone notification 100 years, so that the user never sees it -->
+                      <option :value="36500">
+                        {{ $t('views.Notifications.option.delay.never') }}
                       </option>
                     </select>
                     <button
                       type="submit"
                       class="ui right floated basic button"
                     >
-                      <translate translate-context="Content/Notifications/Button.Label">
-                        Got it!
-                      </translate>
+                      {{ $t('views.Notifications.button.submit') }}
                     </button>
                   </div>
                 </form>
@@ -79,14 +157,10 @@
             >
               <div class="ui info attached message">
                 <h4 class="header">
-                  <translate translate-context="Content/Notifications/Header">
-                    Do you like Funkwhale?
-                  </translate>
+                  {{ $t('views.Notifications.header.funkwhaleSupport') }}
                 </h4>
                 <p>
-                  <translate translate-context="Content/Notifications/Paragraph">
-                    We noticed you've been here for a while. If Funkwhale is useful to you, we could use your help to make it even better!
-                  </translate>
+                  {{ $t('views.Notifications.message.funkwhaleSupport') }}
                 </p>
                 <a
                   href="https://funkwhale.audio/support-us"
@@ -94,7 +168,7 @@
                   rel="noopener"
                   class="ui primary inverted button"
                 >
-                  <translate translate-context="Content/Notifications/Button.Label/Verb">Donate</translate>
+                  {{ $t('views.Notifications.link.donate') }}
                 </a>
                 <a
                   href="https://contribute.funkwhale.audio"
@@ -102,7 +176,7 @@
                   rel="noopener"
                   class="ui secondary inverted button"
                 >
-                  <translate translate-context="Content/Notifications/Button.Label/Verb">Discover other ways to help</translate>
+                  {{ $t('views.Notifications.link.help') }}
                 </a>
               </div>
               <div class="ui bottom attached segment">
@@ -112,40 +186,31 @@
                 >
                   <div class="inline field">
                     <label for="funkwhale-reminder-delay">
-                      <translate translate-context="Content/Notifications/Label">Remind me in:</translate>
+                      {{ $t('views.Notifications.label.reminder') }}
                     </label>
                     <select
                       id="funkwhale-reminder-delay"
                       v-model="funkwhaleSupportMessageDelay"
                     >
                       <option :value="30">
-                        <translate translate-context="*/*/*">
-                          30 days
-                        </translate>
+                        {{ $t('views.Notifications.option.delay.30') }}
                       </option>
                       <option :value="60">
-                        <translate translate-context="*/*/*">
-                          60 days
-                        </translate>
+                        {{ $t('views.Notifications.option.delay.60') }}
                       </option>
                       <option :value="90">
-                        <translate translate-context="*/*/*">
-                          90 days
-                        </translate>
+                        {{ $t('views.Notifications.option.delay.90') }}
                       </option>
-                      <option :value="null">
-                        <translate translate-context="*/*/*">
-                          Never
-                        </translate>
+                      <!-- NOTE: Postpone notification 100 years, so that the user never sees it -->
+                      <option :value="36500">
+                        {{ $t('views.Notifications.option.delay.never') }}
                       </option>
                     </select>
                     <button
                       type="submit"
                       class="ui right floated basic button"
                     >
-                      <translate translate-context="Content/Notifications/Button.Label">
-                        Got it!
-                      </translate>
+                      {{ $t('views.Notifications.button.submit') }}
                     </button>
                   </div>
                 </form>
@@ -154,9 +219,7 @@
           </div>
         </div>
         <h1 class="ui header">
-          <translate translate-context="Content/Notifications/Title">
-            Your notifications
-          </translate>
+          {{ $t('views.Notifications.header.notifications') }}
         </h1>
         <div class="ui toggle checkbox">
           <input
@@ -164,7 +227,7 @@
             v-model="filters.is_read"
             type="checkbox"
           >
-          <label for="show-read-notifications"><translate translate-context="Content/Notifications/Form.Label/Verb">Show read notifications</translate></label>
+          <label for="show-read-notifications">{{ $t('views.Notifications.label.showRead') }}</label>
         </div>
         <button
           v-if="filters.is_read === false && notifications.count > 0"
@@ -172,9 +235,7 @@
           @click.prevent="markAllAsRead"
         >
           <i class="ui check icon" />
-          <translate translate-context="Content/Notifications/Button.Label/Verb">
-            Mark all as read
-          </translate>
+          {{ $t('views.Notifications.button.read') }}
         </button>
         <div class="ui hidden divider" />
 
@@ -183,9 +244,7 @@
           :class="['ui', {'active': isLoading}, 'inverted', 'dimmer']"
         >
           <div class="ui text loader">
-            <translate translate-context="Content/Notifications/Paragraph">
-              Loading notifications…
-            </translate>
+            {{ $t('views.Notifications.loading.notifications') }}
           </div>
         </div>
 
@@ -202,118 +261,9 @@
           </tbody>
         </table>
         <p v-else-if="additionalNotifications === 0">
-          <translate translate-context="Content/Notifications/Paragraph">
-            No notification to show.
-          </translate>
+          {{ $t('views.Notifications.empty.notifications') }}
         </p>
       </div>
     </section>
   </main>
 </template>
-
-<script>
-import { mapState, mapGetters } from 'vuex'
-import axios from 'axios'
-import showdown from 'showdown'
-import moment from 'moment'
-
-import NotificationRow from '@/components/notifications/NotificationRow'
-
-export default {
-  components: {
-    NotificationRow
-  },
-  data () {
-    return {
-      isLoading: false,
-      markdown: new showdown.Converter(),
-      notifications: { count: 0, results: [] },
-      instanceSupportMessageDelay: 60,
-      funkwhaleSupportMessageDelay: 60,
-      filters: {
-        is_read: false
-      }
-    }
-  },
-  computed: {
-    ...mapState({
-      events: state => state.instance.events
-    }),
-    ...mapGetters({
-      additionalNotifications: 'ui/additionalNotifications',
-      showInstanceSupportMessage: 'ui/showInstanceSupportMessage',
-      showFunkwhaleSupportMessage: 'ui/showFunkwhaleSupportMessage'
-    }),
-    labels () {
-      return {
-        title: this.$pgettext('*/Notifications/*', 'Notifications')
-      }
-    }
-  },
-  watch: {
-    'filters.is_read' () {
-      this.fetch(this.filters)
-    }
-  },
-  created () {
-    this.fetch(this.filters)
-    this.$store.commit('ui/addWebsocketEventHandler', {
-      eventName: 'inbox.item_added',
-      id: 'notificationPage',
-      handler: this.handleNewNotification
-    })
-  },
-  destroyed () {
-    this.$store.commit('ui/removeWebsocketEventHandler', {
-      eventName: 'inbox.item_added',
-      id: 'notificationPage'
-    })
-  },
-  methods: {
-    handleNewNotification (event) {
-      this.notifications.count += 1
-      this.notifications.results.unshift(event.item)
-    },
-    setDisplayDate (field, days) {
-      const payload = {}
-      let newDisplayDate
-      if (days) {
-        newDisplayDate = moment().add({ days })
-      } else {
-        newDisplayDate = null
-      }
-      payload[field] = newDisplayDate
-      const self = this
-      axios.patch(`users/${this.$store.state.auth.username}/`, payload).then((response) => {
-        self.$store.commit('auth/profilePartialUpdate', response.data)
-      })
-    },
-    fetch (params) {
-      this.isLoading = true
-      const self = this
-      axios.get('federation/inbox/', { params: params }).then(response => {
-        self.isLoading = false
-        self.notifications = response.data
-      })
-    },
-    markAllAsRead () {
-      const self = this
-      const before = this.notifications.results[0].id
-      const payload = {
-        action: 'read',
-        objects: 'all',
-        filters: {
-          is_read: false,
-          before
-        }
-      }
-      axios.post('federation/inbox/action/', payload).then(response => {
-        self.$store.commit('ui/notifications', { type: 'inbox', count: 0 })
-        self.notifications.results.forEach(n => {
-          n.is_read = true
-        })
-      })
-    }
-  }
-}
-</script>

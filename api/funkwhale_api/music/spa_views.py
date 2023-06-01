@@ -1,16 +1,13 @@
 import urllib.parse
 
 from django.conf import settings
-from django.urls import reverse
 from django.db.models import Q
+from django.urls import reverse
 
-from funkwhale_api.common import preferences
-from funkwhale_api.common import middleware
-from funkwhale_api.common import utils
+from funkwhale_api.common import middleware, preferences, utils
 from funkwhale_api.playlists import models as playlists_models
 
-from . import models
-from . import serializers
+from . import models, serializers
 
 
 def get_twitter_card_metas(type, id):
@@ -112,7 +109,7 @@ def library_track(request, pk, redirect_to_ap):
                 "type": "application/json+oembed",
                 "href": (
                     utils.join_url(settings.FUNKWHALE_URL, reverse("api:v1:oembed"))
-                    + "?format=json&url={}".format(urllib.parse.quote_plus(track_url))
+                    + f"?format=json&url={urllib.parse.quote_plus(track_url)}"
                 ),
             }
         )
@@ -184,7 +181,7 @@ def library_album(request, pk, redirect_to_ap):
                 "type": "application/json+oembed",
                 "href": (
                     utils.join_url(settings.FUNKWHALE_URL, reverse("api:v1:oembed"))
-                    + "?format=json&url={}".format(urllib.parse.quote_plus(album_url))
+                    + f"?format=json&url={urllib.parse.quote_plus(album_url)}"
                 ),
             }
         )
@@ -248,7 +245,7 @@ def library_artist(request, pk, redirect_to_ap):
                 "type": "application/json+oembed",
                 "href": (
                     utils.join_url(settings.FUNKWHALE_URL, reverse("api:v1:oembed"))
-                    + "?format=json&url={}".format(urllib.parse.quote_plus(artist_url))
+                    + f"?format=json&url={urllib.parse.quote_plus(artist_url)}"
                 ),
             }
         )
@@ -300,7 +297,7 @@ def library_playlist(request, pk, redirect_to_ap):
                 "type": "application/json+oembed",
                 "href": (
                     utils.join_url(settings.FUNKWHALE_URL, reverse("api:v1:oembed"))
-                    + "?format=json&url={}".format(urllib.parse.quote_plus(obj_url))
+                    + f"?format=json&url={urllib.parse.quote_plus(obj_url)}"
                 ),
             }
         )

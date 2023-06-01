@@ -1,32 +1,30 @@
 import os
-import PIL
 
+import django_filters
+import PIL
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 
-import django_filters
-
-from funkwhale_api.common import serializers
-from funkwhale_api.common import utils
-from funkwhale_api.users import models
+from funkwhale_api.common import serializers, utils
 from funkwhale_api.federation import utils as federation_utils
+from funkwhale_api.users import models
 
 
-class TestActionFilterSet(django_filters.FilterSet):
+class FilterSetFixture(django_filters.FilterSet):
     class Meta:
         model = models.User
         fields = ["is_active"]
 
 
-class TestSerializer(serializers.ActionSerializer):
+class SerializerFixture(serializers.ActionSerializer):
     actions = [serializers.Action("test", allow_all=True)]
-    filterset_class = TestActionFilterSet
+    filterset_class = FilterSetFixture
 
     def handle_test(self, objects):
         return {"hello": "world"}
 
 
-class TestDangerousSerializer(serializers.ActionSerializer):
+class DangerousSerializerFixture(serializers.ActionSerializer):
     actions = [
         serializers.Action("test", allow_all=True),
         serializers.Action("test_dangerous"),
@@ -39,13 +37,13 @@ class TestDangerousSerializer(serializers.ActionSerializer):
         pass
 
 
-class TestDeleteOnlyInactiveSerializer(serializers.ActionSerializer):
+class DeleteOnlyInactiveSerializerFixture(serializers.ActionSerializer):
     actions = [
         serializers.Action(
             "test", allow_all=True, qs_filter=lambda qs: qs.filter(is_active=False)
         )
     ]
-    filterset_class = TestActionFilterSet
+    filterset_class = FilterSetFixture
 
     def handle_test(self, objects):
         pass
@@ -53,7 +51,7 @@ class TestDeleteOnlyInactiveSerializer(serializers.ActionSerializer):
 
 def test_action_serializer_validates_action():
     data = {"objects": "all", "action": "nope"}
-    serializer = TestSerializer(data, queryset=models.User.objects.none())
+    serializer = SerializerFixture(data, queryset=models.User.objects.none())
 
     assert serializer.is_valid() is False
     assert "action" in serializer.errors
@@ -61,7 +59,7 @@ def test_action_serializer_validates_action():
 
 def test_action_serializer_validates_objects():
     data = {"objects": "nope", "action": "test"}
-    serializer = TestSerializer(data, queryset=models.User.objects.none())
+    serializer = SerializerFixture(data, queryset=models.User.objects.none())
 
     assert serializer.is_valid() is False
     assert "objects" in serializer.errors
@@ -72,7 +70,7 @@ def test_action_serializers_objects_clean_ids(factories):
     factories["users.User"]()
 
     data = {"objects": [user1.pk], "action": "test"}
-    serializer = TestSerializer(data, queryset=models.User.objects.all())
+    serializer = SerializerFixture(data, queryset=models.User.objects.all())
 
     assert serializer.is_valid(raise_exception=True) is True
     assert list(serializer.validated_data["objects"]) == [user1]
@@ -83,19 +81,19 @@ def test_action_serializers_objects_clean_all(factories):
     user2 = factories["users.User"]()
 
     data = {"objects": "all", "action": "test"}
-    serializer = TestSerializer(data, queryset=models.User.objects.all())
+    serializer = SerializerFixture(data, queryset=models.User.objects.all())
 
     assert serializer.is_valid(raise_exception=True) is True
     assert list(serializer.validated_data["objects"]) == [user1, user2]
 
 
 def test_action_serializers_save(factories, mocker):
-    handler = mocker.spy(TestSerializer, "handle_test")
+    handler = mocker.spy(SerializerFixture, "handle_test")
     factories["users.User"]()
     factories["users.User"]()
 
     data = {"objects": "all", "action": "test"}
-    serializer = TestSerializer(data, queryset=models.User.objects.all())
+    serializer = SerializerFixture(data, queryset=models.User.objects.all())
 
     assert serializer.is_valid(raise_exception=True) is True
     result = serializer.save()
@@ -108,7 +106,7 @@ def test_action_serializers_filterset(factories):
     user2 = factories["users.User"](is_active=True)
 
     data = {"objects": "all", "action": "test", "filters": {"is_active": True}}
-    serializer = TestSerializer(data, queryset=models.User.objects.all())
+    serializer = SerializerFixture(data, queryset=models.User.objects.all())
 
     assert serializer.is_valid(raise_exception=True) is True
     assert list(serializer.validated_data["objects"]) == [user2]
@@ -116,7 +114,7 @@ def test_action_serializers_filterset(factories):
 
 def test_action_serializers_validates_at_least_one_object():
     data = {"objects": "all", "action": "test"}
-    serializer = TestSerializer(data, queryset=models.User.objects.none())
+    serializer = SerializerFixture(data, queryset=models.User.objects.none())
 
     assert serializer.is_valid() is False
     assert "non_field_errors" in serializer.errors
@@ -125,7 +123,7 @@ def test_action_serializers_validates_at_least_one_object():
 def test_dangerous_actions_refuses_all(factories):
     factories["users.User"]()
     data = {"objects": "all", "action": "test_dangerous"}
-    serializer = TestDangerousSerializer(data, queryset=models.User.objects.all())
+    serializer = DangerousSerializerFixture(data, queryset=models.User.objects.all())
 
     assert serializer.is_valid() is False
     assert "non_field_errors" in serializer.errors
@@ -136,7 +134,7 @@ def test_action_serializers_can_require_filter(factories):
     factories["users.User"](is_active=True)
 
     data = {"objects": "all", "action": "test"}
-    serializer = TestDeleteOnlyInactiveSerializer(
+    serializer = DeleteOnlyInactiveSerializerFixture(
         data, queryset=models.User.objects.all()
     )
 
@@ -157,7 +155,7 @@ def test_track_fields_for_update(mocker):
 
         on_updated_fields = mocker.stub()
 
-    class Obj(object):
+    class Obj:
         field1 = "value1"
         field2 = "value2"
 

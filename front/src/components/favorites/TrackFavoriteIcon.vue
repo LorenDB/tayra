@@ -1,3 +1,33 @@
+<script setup lang="ts">
+import type { QueueTrack } from '~/composables/audio/queue'
+import type { Track } from '~/types'
+
+import { useI18n } from 'vue-i18n'
+import { useStore } from '~/store'
+import { computed } from 'vue'
+
+interface Props {
+  track?: QueueTrack | Track
+  button?: boolean
+  border?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  track: () => ({} as Track),
+  button: false,
+  border: false
+})
+
+const { t } = useI18n()
+const store = useStore()
+
+const isFavorite = computed(() => store.getters['favorites/isFavorite'](props.track.id))
+const title = computed(() => isFavorite.value
+  ? t('components.favorites.TrackFavoriteIcon.button.remove')
+  : t('components.favorites.TrackFavoriteIcon.button.add')
+)
+</script>
+
 <template>
   <button
     v-if="button"
@@ -5,18 +35,12 @@
     @click.stop="$store.dispatch('favorites/toggle', track.id)"
   >
     <i class="heart icon" />
-    <translate
-      v-if="isFavorite"
-      translate-context="Content/Track/Button.Message"
-    >
-      In favorites
-    </translate>
-    <translate
-      v-else
-      translate-context="Content/Track/*/Verb"
-    >
-      Add to favorites
-    </translate>
+    <span v-if="isFavorite">
+      {{ $t('components.favorites.TrackFavoriteIcon.label.inFavorites') }}
+    </span>
+    <span v-else>
+      {{ $t('components.favorites.TrackFavoriteIcon.button.add') }}
+    </span>
   </button>
   <button
     v-else
@@ -28,26 +52,3 @@
     <i :class="['heart', {'pink': isFavorite}, 'basic', 'icon']" />
   </button>
 </template>
-
-<script>
-export default {
-  props: {
-    track: { type: Object, default: () => { return {} } },
-    button: { type: Boolean, default: false },
-    border: { type: Boolean, default: false }
-  },
-  computed: {
-    title () {
-      if (this.isFavorite) {
-        return this.$pgettext('Content/Track/Icon.Tooltip/Verb', 'Remove from favorites')
-      } else {
-        return this.$pgettext('Content/Track/*/Verb', 'Add to favorites')
-      }
-    },
-    isFavorite () {
-      return this.$store.getters['favorites/isFavorite'](this.track.id)
-    }
-  }
-
-}
-</script>

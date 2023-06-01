@@ -1,28 +1,25 @@
-
-.queue.segment.player-focused #queue-grid #player {
-  @include media("<desktop") {
-    padding-bottom: $bottom-player-height + 2rem;
-  }
-}
 .queue-controls {
-
   @include media("<desktop") {
     height: $bottom-player-height;
   }
 }
-.ui.fixed-header.segment {
+
+.ui.clearing.segment {
   background-color: var(--site-background);
   box-shadow: var(--secondary-menu-box-shadow);
+  margin: 0 !important;
 }
-.queue-enter-active, .queue-leave-active {
-  transition: all 0.2s ease-in-out;
-  .current-track, .queue-column {
-    opacity: 0;
-  }
+
+.queue-enter-active,
+.queue-leave-active {
+  transition: all 0.2s ease !important;
+  will-change: transform, opacity !important;
 }
-.queue-enter, .queue-leave-to {
-  transform: translateY(100vh);
-  opacity: 0;
+
+.queue-enter-from,
+.queue-leave-to {
+  opacity: 0 !important;
+  transform: translateY(5vh) !important;
 }
 
 .component-queue {
@@ -33,11 +30,10 @@
     }
   }
   &.main {
-    position: absolute;
+    position: fixed;
     min-height: 100vh;
     width: 100vw;
-    z-index: 1000;
-    padding-bottom: 3em;
+    z-index: 10000;
   }
   &.main > .button {
     position: fixed;
@@ -48,23 +44,11 @@
       display: none;
     }
   }
-  .queue.segment:not(.player-focused) {
-    #player {
-      @include media("<desktop") {
-        height: 0;
-        display: none;
-      }
-    }
-  }
+
   .queue.segment #player {
     padding: 0em;
     > * {
       padding: 0.5em;
-    }
-  }
-  .player-focused .grid > .ui.queue-column {
-    @include media("<desktop") {
-      display: none;
     }
   }
   .queue-column {
@@ -116,7 +100,7 @@
     @include media("<desktop") {
       padding: 1em;
     }
-    @include media(">desktop") {
+    @include media(">=desktop") {
       right: 1em;
       left: 38%;
     }
@@ -165,15 +149,29 @@
   .progress-area {
     overflow: hidden;
   }
-  .progress-wrapper, .warning.message {
-    max-width: 25em;
-    margin: 0 auto;
+  .progress-area .progress {
+    border-radius: 0.28571429rem;
+    overflow: hidden;
   }
+  .progress-wrapper, .warning.message {
+    width: 25em;
+  }
+  .ui.progress .bar {
+    transition: none;
+    width: 100%;
+    transform-origin: top left;
+    will-change: transform;
+
+    &.position {
+      transform: translate3d(calc(var(--fw-track-progress) - 100%), 0, 0);
+    }
+  }
+
   .ui.progress .buffer.bar {
     position: absolute;
     background-color: rgba(255, 255, 255, 0.15);
   }
-  .ui.progress:not([data-percent]):not(.indeterminate)
+  .ui.progress:not(.indeterminate)
     .bar.position:not(.buffer) {
     background: var(--vibrant-color);
   }
@@ -194,6 +192,10 @@
     animation-duration: 2s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
+
+    &:not(.buffer) {
+      background: transparent !important;
+    }
   }
   .ui.progress {
     margin: 0.5rem 0;
@@ -203,9 +205,6 @@
   }
   .progress {
     cursor: pointer;
-    .bar {
-      min-width: 0 !important;
-    }
   }
 
   .player-controls {
@@ -214,6 +213,13 @@
     }
     .icon {
       font-size: 1.1em;
+    }
+
+    button {
+      padding: 0;
+      border: none;
+      background-color: transparent;
+      color: inherit;
     }
   }
 
@@ -236,4 +242,241 @@
     }
   }
 
+  .radio-populating {
+    margin-top: 1em;
+    color: #333;
+    text-align: center;
+  }
+
+  .radio-message {
+    margin-top: 1em !important;
+    margin-right: 1em;
+  }
+}
+
+
+// Wvffle's styles
+.theme-light .cover-container.fullscreen {
+  background: #fff;
+}
+
+.component-queue {
+  #queue-grid {
+    display: grid;
+    grid-template-columns: 37.5% 62.5%;
+
+    #queue {
+      position: relative;
+    }
+
+    @include media("<desktop") {
+      grid-template-columns: 1fr 0;
+      &.show-player {
+        #queue {
+          display: none;
+        }
+      }
+
+      &.show-queue {
+        #player {
+          display: none;
+        }
+      }
+    }
+
+    #player {
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      max-width: 100vw;
+
+      .ui.header {
+        width: 100%;
+        max-width: 90%;
+      }
+
+      .cover-container {
+        width: 50vh;
+        max-width: 90%;
+        display: flex;
+
+        &.idle {
+          cursor: none;
+        }
+
+        &.fullscreen canvas {
+          transform: translateY(calc(50vh - 50vw));
+        }
+
+        .cover {
+          width: 100%;
+          position: relative;
+
+          canvas,
+          img {
+            width: 100%;
+            height: 100%;
+          }
+
+          canvas {
+            aspect-ratio: 1;
+          }
+
+          img {
+            object-fit: contain;
+            object-position: center;
+          }
+
+          &:hover .cover-buttons {
+            opacity: 1;
+            transform: translateY(0);
+          }
+
+          .cover-shadow {
+            transform: scale(1.2);
+            filter: blur(15vh);
+            border-radius: 22vh;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: -1;
+          }
+
+          .cover-buttons {
+            position: absolute;
+            bottom: 1em;
+            right: 1em;
+            z-index: 3;
+            display: flex;
+            flex-direction: row-reverse;
+            pointer-events: none;
+
+            @include media(">tablet") {
+              transition: all 0.2s ease-in-out;
+              opacity: 0;
+              transform: translateY(0.5em);
+            }
+
+            .tooltip {
+              z-index: 2;
+              pointer-events: all;
+            }
+
+            button {
+              z-index: 2;
+              padding: 0.78571429em;
+              pointer-events: all;
+
+              &:first-child {
+                margin-right: 0 !important;
+              }
+
+              i.icon {
+                display: inline-block;
+                margin-right: 0 !important;
+                display: contents;
+
+                &::before {
+                  display: flex;
+                  justify-content: center;
+                  width: 1em;
+                  height: 1em;
+                }
+              }
+            }
+          }
+        }
+
+        .track-info {
+          position: absolute;
+          z-index: 2;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          background: linear-gradient(to bottom, #0000, #000);
+          color: #fff;
+          text-align: left;
+          padding: 3em 1em 1em;
+
+          h1, h2 {
+            margin: 0;
+          }
+        }
+
+        &:not(.fullscreen) .track-info {
+          transition: none !important;
+        }
+      }
+
+      .progress-wrapper {
+        font-size: 1.5rem;
+        width: 54vh;
+        max-width: 90%;
+      }
+    }
+
+    > div {
+      height: calc(100vh - 4rem);
+      margin: 0 !important;
+
+      &:nth-child(2) {
+        display: grid;
+        grid-template-rows: auto 1fr;
+
+        > :nth-child(2) {
+          overflow-y: hidden;
+        }
+
+        .virtual-list {
+          height: 100%;
+          overflow-y: scroll;
+          padding-bottom: 2rem;
+        }
+      }
+    }
+  }
+
+  .queue-item {
+    height: 50px;
+    display: grid;
+    grid-template-columns: 10% auto 1fr 10% auto;
+    cursor: pointer;
+    padding: 0 0.875rem;
+
+    .heart {
+      &:not(.pink) {
+        color: rgba(0, 0, 0, 0.2)
+      }
+    }
+
+    .handle > .grip {
+      pointer-events: none;
+    }
+
+    > div {
+      display: flex;
+      align-items: center;
+    }
+
+    .title.ellipsis {
+      @include media("<tablet") {
+          max-width: 35vw;
+      }
+    }
+
+    // NOTE: Taken from semantic ui
+    &.active {
+      background: #E0E0E0;
+      color: #000000de;
+    }
+  }
+}
+
+.drag-container:not(.dragging) .hover .queue-item {
+  background: rgba(0,0,0,.05);
+  color: var(--text-color);
 }

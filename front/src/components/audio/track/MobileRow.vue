@@ -1,3 +1,61 @@
+<script setup lang="ts">
+import type { Track, Artist, Album, Playlist, Library, Channel, Actor } from '~/types'
+import type { PlayOptionsProps } from '~/composables/audio/usePlayOptions'
+
+import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+import { usePlayer } from '~/composables/audio/player'
+import { useQueue } from '~/composables/audio/queue'
+
+import usePlayOptions from '~/composables/audio/usePlayOptions'
+
+import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
+import TrackModal from '~/components/audio/track/Modal.vue'
+
+interface Props extends PlayOptionsProps {
+  track: Track
+  index: number
+
+  showArt?: boolean
+  isArtist?: boolean
+  isAlbum?: boolean
+
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  isPlayable?: boolean
+  tracks?: Track[]
+  artist?: Artist | null
+  album?: Album | null
+  playlist?: Playlist | null
+  library?: Library | null
+  channel?: Channel | null
+  account?: Actor | null
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  showArt: true,
+  isArtist: false,
+  isAlbum: false,
+
+  tracks: () => [],
+  artist: null,
+  album: null,
+  playlist: null,
+  library: null,
+  channel: null,
+  account: null
+})
+
+const showTrackModal = ref(false)
+
+const { currentTrack } = useQueue()
+const { isPlaying } = usePlayer()
+const { activateTrack } = usePlayOptions(props)
+
+const { t } = useI18n()
+const actionsButtonLabel = computed(() => t('components.audio.track.MobileRow.button.actions'))
+</script>
+
 <template>
   <div
     :class="[
@@ -11,38 +69,20 @@
       @click.prevent.exact="activateTrack(track, index)"
     >
       <img
-        v-if="
-          track.album && track.album.cover && track.album.cover.urls.original
-        "
-        v-lazy="
-          $store.getters['instance/absoluteUrl'](
-            track.album.cover.urls.medium_square_crop
-          )
-        "
+        v-if="track.album?.cover?.urls.original"
+        v-lazy="$store.getters['instance/absoluteUrl'](track.album.cover.urls.medium_square_crop)"
         alt=""
         class="ui artist-track mini image"
       >
       <img
-        v-else-if="
-          track.cover
-        "
-        v-lazy="
-          $store.getters['instance/absoluteUrl'](
-            track.cover.urls.medium_square_crop
-          )
-        "
+        v-else-if="track.cover"
+        v-lazy="$store.getters['instance/absoluteUrl'](track.cover.urls.medium_square_crop)"
         alt=""
         class="ui artist-track mini image"
       >
       <img
-        v-else-if="
-          track.artist.cover
-        "
-        v-lazy="
-          $store.getters['instance/absoluteUrl'](
-            track.artist.cover.urls.medium_square_crop
-          )
-        "
+        v-else-if="track.artist?.cover"
+        v-lazy="$store.getters['instance/absoluteUrl'](track.artist.cover.urls.medium_square_crop)"
         alt=""
         class="ui artist-track mini image"
       >
@@ -63,13 +103,14 @@
         :class="[
           'track-title',
           'mobile',
-          { 'play-indicator': isPlaying && currentTrack && track.id === currentTrack.id },
+          { 'play-indicator': isPlaying && track.id === currentTrack?.id },
         ]"
       >
         {{ track.title }}
       </p>
       <p class="track-meta mobile">
-        {{ track.artist.name }} <span>&#183;</span>
+        {{ track.artist?.name }}
+        <span class="middle middledot symbol" />
         <human-duration
           v-if="track.uploads[0] && track.uploads[0].duration"
           :duration="track.uploads[0].duration"
@@ -110,76 +151,11 @@
       <i class="ellipsis large vertical icon" />
     </div>
     <track-modal
-      :show="showTrackModal"
+      v-model:show="showTrackModal"
       :track="track"
       :index="index"
       :is-artist="isArtist"
       :is-album="isAlbum"
-      @update:show="showTrackModal = $event;"
     />
   </div>
 </template>
-
-<script>
-import { mapActions, mapGetters } from 'vuex'
-import TrackFavoriteIcon from '@/components/favorites/TrackFavoriteIcon'
-import TrackModal from '@/components/audio/track/Modal'
-import PlayOptionsMixin from '@/components/mixins/PlayOptions'
-
-export default {
-
-  components: {
-    TrackFavoriteIcon,
-    TrackModal
-  },
-  mixins: [PlayOptionsMixin],
-  props: {
-    tracks: { type: Array, required: true },
-    showAlbum: { type: Boolean, required: false, default: true },
-    showArtist: { type: Boolean, required: false, default: true },
-    showPosition: { type: Boolean, required: false, default: false },
-    showArt: { type: Boolean, required: false, default: true },
-    search: { type: Boolean, required: false, default: false },
-    filters: { type: Object, required: false, default: null },
-    nextUrl: { type: String, required: false, default: null },
-    displayActions: { type: Boolean, required: false, default: true },
-    showDuration: { type: Boolean, required: false, default: true },
-    index: { type: Number, required: true },
-    track: { type: Object, required: true },
-    isArtist: { type: Boolean, required: false, default: false },
-    isAlbum: { type: Boolean, required: false, default: false }
-  },
-  data () {
-    return {
-      showTrackModal: false
-    }
-  },
-  computed: {
-    ...mapGetters({
-      currentTrack: 'queue/currentTrack'
-    }),
-
-    isPlaying () {
-      return this.$store.state.player.playing
-    },
-    actionsButtonLabel () {
-      return this.$pgettext('Content/Track/Icon.Tooltip/Verb', 'Show track actions')
-    }
-  },
-
-  methods: {
-    prettyPosition (position, size) {
-      let s = String(position)
-      while (s.length < (size || 2)) {
-        s = '0' + s
-      }
-      return s
-    },
-
-    ...mapActions({
-      resumePlayback: 'player/resumePlayback',
-      pausePlayback: 'player/pausePlayback'
-    })
-  }
-}
-</script>

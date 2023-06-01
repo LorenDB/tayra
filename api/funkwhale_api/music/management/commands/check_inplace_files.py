@@ -2,7 +2,6 @@ import os
 from argparse import RawTextHelpFormatter
 
 from django.core.management.base import BaseCommand
-
 from django.db import transaction
 
 from funkwhale_api.music import models
@@ -14,7 +13,7 @@ def progress(buffer, count, total, status=""):
 
     bar = "=" * filled_len + "-" * (bar_len - filled_len)
 
-    buffer.write("[%s] %s/%s ...%s\r" % (bar, count, total, status))
+    buffer.write(f"[{bar}] {count}/{total} ...{status}\r")
     buffer.flush()
 
 
@@ -44,7 +43,7 @@ class Command(BaseCommand):
         candidates = models.Upload.objects.filter(source__startswith="file://")
         candidates = candidates.filter(audio_file__in=["", None])
         total = candidates.count()
-        self.stdout.write("Checking {} in-place imported files…".format(total))
+        self.stdout.write(f"Checking {total} in-place imported files…")
 
         missing = []
         for i, row in enumerate(candidates.values("id", "source").iterator()):
@@ -55,7 +54,7 @@ class Command(BaseCommand):
 
         if missing:
             for path, _ in missing:
-                self.stdout.write("  {}".format(path))
+                self.stdout.write(f"  {path}")
             self.stdout.write(
                 "The previous {} paths are referenced in database, but not found on disk!".format(
                     len(missing)
@@ -72,5 +71,5 @@ class Command(BaseCommand):
                 "Nothing was deleted, rerun this command with --no-dry-run to apply the changes"
             )
         else:
-            self.stdout.write("Deleting {} uploads…".format(to_delete.count()))
+            self.stdout.write(f"Deleting {to_delete.count()} uploads…")
             to_delete.delete()

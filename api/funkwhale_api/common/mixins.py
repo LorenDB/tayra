@@ -1,10 +1,9 @@
-from rest_framework import serializers
-
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
+from rest_framework import serializers
 
 
-class MultipleLookupDetailMixin(object):
+class MultipleLookupDetailMixin:
     lookup_value_regex = "[^/]+"
     lookup_field = "composite"
 

@@ -2,35 +2,37 @@ import datetime
 import json
 import logging
 import os
-import requests
 
+import requests
 from django.conf import settings
 from django.db import transaction
-from django.db.models import Q, F
+from django.db.models import F, Q
 from django.db.models.deletion import Collector
 from django.utils import timezone
 from dynamic_preferences.registries import global_preferences_registry
 from requests.exceptions import RequestException
 
 from funkwhale_api.audio import models as audio_models
-from funkwhale_api.common import preferences
 from funkwhale_api.common import models as common_models
-from funkwhale_api.common import session
+from funkwhale_api.common import preferences, session
 from funkwhale_api.common import utils as common_utils
 from funkwhale_api.moderation import mrf
 from funkwhale_api.music import models as music_models
 from funkwhale_api.taskapp import celery
 
-from . import activity
-from . import actors
-from . import exceptions
-from . import jsonld
-from . import keys
-from . import models, signing
-from . import serializers
-from . import routes
-from . import utils
-from . import webfinger
+from . import (
+    activity,
+    actors,
+    exceptions,
+    jsonld,
+    keys,
+    models,
+    routes,
+    serializers,
+    signing,
+    utils,
+    webfinger,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -168,7 +170,7 @@ def deliver_to_remote(delivery):
 
 def fetch_nodeinfo(domain_name):
     s = session.get_session()
-    wellknown_url = "https://{}/.well-known/nodeinfo".format(domain_name)
+    wellknown_url = f"https://{domain_name}/.well-known/nodeinfo"
     response = s.get(url=wellknown_url)
     response.raise_for_status()
     serializer = serializers.NodeInfoSerializer(data=response.json())
@@ -326,7 +328,7 @@ def fetch(fetch_obj):
         auth = None
     try:
         if url.startswith("webfinger://"):
-            # we first grab the correpsonding webfinger representation
+            # we first grab the corresponding webfinger representation
             # to get the ActivityPub actor ID
             webfinger_data = webfinger.get_resource(
                 "acct:" + url.replace("webfinger://", "")
@@ -338,7 +340,9 @@ def fetch(fetch_obj):
             if not payload:
                 return error("blocked", message="Blocked by MRF")
         response = session.get_session().get(
-            auth=auth, url=url, headers={"Accept": "application/activity+json"},
+            auth=auth,
+            url=url,
+            headers={"Accept": "application/activity+json"},
         )
         logger.debug("Remote answered with %s: %s", response.status_code, response.text)
         response.raise_for_status()
@@ -346,7 +350,7 @@ def fetch(fetch_obj):
         return error(
             "http",
             status_code=e.response.status_code if e.response else None,
-            message=response.text,
+            message=e.response.text,
         )
     except requests.exceptions.Timeout:
         return error("timeout")
@@ -425,7 +429,9 @@ def fetch(fetch_obj):
                 # first page fetch is synchronous, so that at least some data is available
                 # in the UI after subscription
                 result = fetch_collection(
-                    obj.actor.outbox_url, channel_id=obj.pk, max_pages=1,
+                    obj.actor.outbox_url,
+                    channel_id=obj.pk,
+                    max_pages=1,
                 )
             except Exception:
                 logger.exception(
@@ -473,7 +479,8 @@ class PreserveSomeDataCollector(Collector):
 @celery.app.task(name="federation.remove_actor")
 @transaction.atomic
 @celery.require_instance(
-    models.Actor.objects.all(), "actor",
+    models.Actor.objects.all(),
+    "actor",
 )
 def remove_actor(actor):
     # Then we broadcast the info over federation. We do this *before* deleting objects
@@ -531,7 +538,9 @@ def match_serializer(payload, conf):
 
 @celery.app.task(name="federation.fetch_collection")
 @celery.require_instance(
-    audio_models.Channel.objects.all(), "channel", allow_null=True,
+    audio_models.Channel.objects.all(),
+    "channel",
+    allow_null=True,
 )
 def fetch_collection(url, max_pages, channel, is_page=False):
     actor = actors.get_service_actor()
@@ -543,8 +552,8 @@ def fetch_collection(url, max_pages, channel, is_page=False):
         "total": 0,
     }
     if is_page:
-        # starting immediatly from a page, no need to fetch the wrapping collection
-        logger.debug("Fetch collection page immediatly at %s", url)
+        # starting immediately from a page, no need to fetch the wrapping collection
+        logger.debug("Fetch collection page immediately at %s", url)
         results["next_page"] = url
     else:
         logger.debug("Fetching collection object at %s", url)
@@ -564,7 +573,11 @@ def fetch_collection(url, max_pages, channel, is_page=False):
     for i in range(max_pages):
         page_url = results["next_page"]
         logger.debug("Handling page %s on max %s, at %s", i + 1, max_pages, page_url)
-        page = utils.retrieve_ap_object(page_url, actor=actor, serializer_class=None,)
+        page = utils.retrieve_ap_object(
+            page_url,
+            actor=actor,
+            serializer_class=None,
+        )
         try:
             items = page["orderedItems"]
         except KeyError:
@@ -614,3 +627,43 @@ def fetch_collection(url, max_pages, channel, is_page=False):
         results["errored"],
     )
     return results
+
+
+@celery.app.task(name="federation.check_all_remote_instance_availability")
+def check_all_remote_instance_availability():
+    domains = models.Domain.objects.all().prefetch_related()
+    for domain in domains:
+        if domain == settings.FUNKWHALE_HOSTNAME:
+            # No need to check the instance itself: Its always reachable
+            domain.reachable = True
+            domain.last_successful_contact = timezone.now()
+        else:
+            check_single_remote_instance_availability(domain)
+
+
+@celery.app.task(name="federation.check_single_remote_instance_availability")
+def check_single_remote_instance_availability(domain):
+    try:
+        response = requests.get(f"https://{domain.name}/api/v1/instance/nodeinfo/2.0/")
+        nodeinfo = response.json()
+    except Exception as e:
+        logger.info(
+            f"Domain {domain.name} could not be reached because of the following error : {e}. \
+            Setting domain as unreachable."
+        )
+        domain.reachable = False
+        domain.save()
+        return domain.reachable
+
+    if "version" in nodeinfo.keys():
+        domain.reachable = True
+        domain.last_successful_contact = timezone.now()
+        domain.save()
+        return domain.reachable
+    else:
+        logger.info(
+            f"Domain {domain.name} is not reachable at the moment. Setting domain as unreachable."
+        )
+        domain.reachable = False
+        domain.save()
+        return domain.reachable

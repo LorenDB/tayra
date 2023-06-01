@@ -1,13 +1,12 @@
 import os
 
 import pytest
-
-from django.utils import timezone
 from django.urls import reverse
+from django.utils import timezone
 
 from funkwhale_api.common import utils as common_utils
-from funkwhale_api.music import importers, models, tasks
 from funkwhale_api.federation import utils as federation_utils
+from funkwhale_api.music import importers, models, tasks
 
 DATA_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -154,11 +153,11 @@ def test_import_track_with_different_artist_than_release(factories, mocker):
 
 
 @pytest.mark.parametrize(
-    "extention,mimetype", [("ogg", "audio/ogg"), ("mp3", "audio/mpeg")]
+    "extension,mimetype", [("ogg", "audio/ogg"), ("mp3", "audio/mpeg")]
 )
-def test_audio_track_mime_type(extention, mimetype, factories):
+def test_audio_track_mime_type(extension, mimetype, factories):
 
-    name = ".".join(["test", extention])
+    name = ".".join(["test", extension])
     path = os.path.join(DATA_DIR, name)
     upload = factories["music.Upload"](audio_file__from_path=path, mimetype=None)
 
@@ -194,7 +193,7 @@ def test_track_get_file_size(factories):
 def test_track_get_file_size_in_place(factories):
     name = "test.mp3"
     path = os.path.join(DATA_DIR, name)
-    upload = factories["music.Upload"](in_place=True, source="file://{}".format(path))
+    upload = factories["music.Upload"](in_place=True, source=f"file://{path}")
 
     assert upload.get_file_size() == 297745
 
@@ -437,14 +436,14 @@ def test_artist_playable_by_anonymous(privacy_level, expected, factories):
 
 def test_upload_listen_url(factories):
     upload = factories["music.Upload"]()
-    expected = upload.track.listen_url + "?upload={}".format(upload.uuid)
+    expected = upload.track.listen_url + f"?upload={upload.uuid}"
 
     assert upload.listen_url == expected
 
 
 def test_upload_listen_url_no_download(factories):
     upload = factories["music.Upload"]()
-    expected = upload.track.listen_url + "?upload={}&download=false".format(upload.uuid)
+    expected = upload.track.listen_url + f"?upload={upload.uuid}&download=false"
 
     assert upload.listen_url_no_download == expected
 

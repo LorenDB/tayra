@@ -1,10 +1,9 @@
-import uuid
-import factory
 import random
+import uuid
+
+import factory
 import persisting_theory
-
 from django.conf import settings
-
 from faker.providers import internet as internet_provider
 
 
@@ -317,16 +316,16 @@ class FunkwhaleProvider(internet_provider.Provider):
 
     def federation_url(self, prefix="", local=False):
         def path_generator():
-            return "{}/{}".format(prefix, uuid.uuid4())
+            return f"{prefix}/{uuid.uuid4()}"
 
         domain = settings.FEDERATION_HOSTNAME if local else self.domain_name()
         protocol = "https"
         path = path_generator()
-        return "{}://{}/{}".format(protocol, domain, path)
+        return f"{protocol}://{domain}/{path}"
 
     def user_name(self):
         u = super().user_name()
-        return "{}{}".format(u, random.randint(10, 999))
+        return f"{u}{random.randint(10, 999)}"
 
     def music_genre(self):
         return random.choice(TAGS_DATA["genre"])

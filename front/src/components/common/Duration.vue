@@ -1,26 +1,28 @@
+<script setup lang="ts">
+import moment from 'moment'
+import { computed } from 'vue'
+
+interface Props {
+  seconds?: number
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  seconds: 0
+})
+
+const duration = computed(() => {
+  const momentDuration = moment.duration(props.seconds, 'seconds')
+  return { minutes: momentDuration.minutes(), hours: momentDuration.hours() }
+})
+</script>
+
 <template>
   <span>
-    <translate
-      v-if="durationData.hours > 0"
-      translate-context="Content/*/Paragraph"
-      :translate-params="{minutes: durationData.minutes, hours: durationData.hours}"
-    >%{ hours } h %{ minutes } min</translate>
-    <translate
-      v-else
-      translate-context="Content/*/Paragraph"
-      :translate-params="{minutes: durationData.minutes}"
-    >%{ minutes } min</translate>
+    <span v-if="duration.hours > 0">
+      {{ $t('components.common.Duration.meta.hours', duration) }}
+    </span>
+    <span v-else>
+      {{ $t('components.common.Duration.meta.minutes', duration) }}
+    </span>
   </span>
 </template>
-<script>
-import { secondsToObject } from '@/filters'
-
-export default {
-  props: { seconds: { type: Number, default: null } },
-  computed: {
-    durationData () {
-      return secondsToObject(this.seconds)
-    }
-  }
-}
-</script>

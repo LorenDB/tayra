@@ -1,4 +1,7 @@
+#!/usr/bin/env python3
+
 import argparse
+
 import polib
 
 
@@ -54,7 +57,7 @@ def contextualize(old_po, new_po, edit=False):
     )
     matches = match(missing, old)
     found = [m for m in matches if m[1] is not None]
-    print("Found {} matching entries".format(len(found)))
+    print(f"Found {len(found)} matching entries")
     if edit:
         print("Applying changes")
         for matched, matching in found:

@@ -1,3 +1,146 @@
+<script setup lang="ts">
+import type { Library } from '~/types'
+
+import { useTimeoutFn } from '@vueuse/core'
+import { computed, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+import RadioButton from '~/components/radios/Button.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+import useReport from '~/composables/moderation/useReport'
+
+interface Emits {
+  (e: 'followed'): void
+}
+
+interface Props {
+  initialLibrary: Library
+  displayFollow?: boolean
+  displayScan?: boolean
+  displayCopyFid?: boolean
+}
+
+const emit = defineEmits<Emits>()
+const props = withDefaults(defineProps<Props>(), {
+  displayFollow: true,
+  displayScan: true,
+  displayCopyFid: true
+})
+
+const { report, getReportableObjects } = useReport()
+const store = useStore()
+
+const library = ref(props.initialLibrary)
+const isLoadingFollow = ref(false)
+const showScan = ref(false)
+const latestScan = ref(props.initialLibrary.latest_scan)
+
+const scanProgress = computed(() => Math.min(latestScan.value.processed_files * 100 / latestScan.value.total_files, 100))
+const scanStatus = computed(() => latestScan.value?.status ?? 'unknown')
+const canLaunchScan = computed(() => scanStatus.value !== 'pending' && scanStatus.value !== 'scanning')
+const radioPlayable = computed(() => (
+  (library.value.actor.is_local || scanStatus.value === 'finished')
+  && (library.value.privacy_level === 'everyone' || library.value.follow?.approved)
+))
+
+const { t } = useI18n()
+const labels = computed(() => ({
+  tooltips: {
+    me: t('views.content.remote.Card.tooltip.private'),
+    everyone: t('views.content.remote.Card.tooltip.public')
+  }
+}))
+
+const launchScan = async () => {
+  try {
+    const response = await axios.post(`federation/libraries/${library.value.uuid}/scan/`)
+    if (response.data.status !== 'skipped') {
+      latestScan.value = response.data.scan
+    }
+
+    store.commit('ui/addMessage', {
+      date: new Date(),
+      content: response.data.status === 'skipped'
+        ? t('views.content.remote.Card.message.scanSkipped')
+        : t('views.content.remote.Card.message.scanLaunched')
+    })
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+}
+
+const follow = async () => {
+  isLoadingFollow.value = true
+  try {
+    const response = await axios.post('federation/follows/library/', { target: library.value.uuid })
+    library.value.follow = response.data
+    emit('followed')
+  } catch (error) {
+    console.error(error)
+    store.commit('ui/addMessage', {
+      content: t('views.content.remote.Card.error.follow', { error }),
+      date: new Date()
+    })
+  }
+
+  isLoadingFollow.value = false
+}
+
+const unfollow = async () => {
+  isLoadingFollow.value = true
+  try {
+    if (library.value.follow) {
+      await axios.delete(`federation/follows/library/${library.value.follow.uuid}/`)
+      library.value.follow = undefined
+    }
+  } catch (error) {
+    store.commit('ui/addMessage', {
+      content: t('views.content.remote.Card.error.unfollow', { error }),
+      date: new Date()
+    })
+  }
+
+  isLoadingFollow.value = false
+}
+
+const fetchScanStatus = async () => {
+  try {
+    if (!library.value.follow) {
+      return
+    }
+
+    const response = await axios.get(`federation/follows/library/${library.value.follow.uuid}/`)
+    latestScan.value = response.data.target.latest_scan
+
+    if (scanStatus.value === 'pending' || scanStatus.value === 'scanning') {
+      startFetching()
+    } else {
+      stopFetching()
+    }
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+}
+
+const { start: startFetching, stop: stopFetching } = useTimeoutFn(fetchScanStatus, 5000, { immediate: false })
+
+watch(showScan, (shouldShow) => {
+  if (shouldShow) {
+    if (scanStatus.value === 'pending' || scanStatus.value === 'scanning') {
+      fetchScanStatus()
+    }
+
+    return
+  }
+
+  stopFetching()
+})
+</script>
+
 <template>
   <div class="ui card">
     <div class="content">
@@ -12,10 +155,10 @@
           <i class="ellipsis vertical large icon nomargin" />
           <div class="menu">
             <button
-              v-for="obj in getReportableObjs({library, account: library.actor})"
+              v-for="obj in getReportableObjects({library, account: library.actor})"
               :key="obj.target.type + obj.target.id"
               class="item basic"
-              @click.stop.prevent="$store.dispatch('moderation/report', obj.target)"
+              @click.stop.prevent="report(obj)"
             >
               <i class="share icon" /> {{ obj.label }}
             </button>
@@ -48,14 +191,7 @@
       </div>
       <div class="meta">
         <i class="music icon" />
-        <translate
-          translate-context="*/*/*"
-          :translate-params="{count: library.uploads_count}"
-          :translate-n="library.uploads_count"
-          translate-plural="%{ count } tracks"
-        >
-          %{ count } track
-        </translate>
+        {{ $t('views.content.remote.Card.meta.tracks', library.uploads_count) }}
       </div>
       <div
         v-if="displayScan && latestScan"
@@ -63,43 +199,30 @@
       >
         <template v-if="latestScan.status === 'pending'">
           <i class="hourglass icon" />
-          <translate translate-context="Content/Library/Card.List item">
-            Scan pending
-          </translate>
+          {{ $t('views.content.remote.Card.label.scanPending') }}
         </template>
         <template v-if="latestScan.status === 'scanning'">
           <i class="loading spinner icon" />
-          <translate
-            translate-context="Content/Library/Card.List item"
-            :translate-params="{progress: scanProgress}"
-          >
-            Scanning… (%{ progress }%)
-          </translate>
+          {{ $t('views.content.remote.Card.label.scanProgress', {progress: scanProgress}) }}
         </template>
         <template v-else-if="latestScan.status === 'errored'">
           <i class="dangerdownload icon" />
-          <translate translate-context="Content/Library/Card.List item">
-            Problem during scanning
-          </translate>
+          {{ $t('views.content.remote.Card.label.scanFailure') }}
         </template>
         <template v-else-if="latestScan.status === 'finished' && latestScan.errored_files === 0">
           <i class="success download icon" />
-          <translate translate-context="Content/Library/Card.List item">
-            Scanned
-          </translate>
+          {{ $t('views.content.remote.Card.label.scanSuccess') }}
         </template>
         <template v-else-if="latestScan.status === 'finished' && latestScan.errored_files > 0">
           <i class="warning download icon" />
-          <translate translate-context="Content/Library/Card.List item">
-            Scanned with errors
-          </translate>
+          {{ $t('views.content.remote.Card.label.scanPartialSuccess') }}
         </template>
         <a
           href=""
           class="link right floated"
           @click.prevent="showScan = !showScan"
         >
-          <translate translate-context="Content/Library/Card.Button.Label/Noun">Details</translate>
+          {{ $t('views.content.remote.Card.link.scanDetails') }}
           <i
             v-if="showScan"
             class="angle down icon"
@@ -111,13 +234,9 @@
         </a>
         <div v-if="showScan">
           <template v-if="latestScan.modification_date">
-            <translate translate-context="Content/Library/Card.List item/Noun">
-              Last update:
-            </translate><human-date :date="latestScan.modification_date" /><br>
+            {{ $t('views.content.remote.Card.meta.lastUpdate') }}<human-date :date="latestScan.modification_date" /><br>
           </template>
-          <translate translate-context="Content/Library/Card.List item/Noun">
-            Failed tracks:
-          </translate> {{ latestScan.errored_files }}
+          {{ $t('views.content.remote.Card.meta.failedTracks', {tracks: latestScan.errored_files}) }}
         </div>
       </div>
       <div
@@ -129,7 +248,7 @@
           class="right floated link"
           @click.prevent="launchScan"
         >
-          <translate translate-context="Content/Library/Card.Button.Label/Verb">Scan now</translate> <i class="paper plane icon" />
+          {{ $t('views.content.remote.Card.link.scan') }}<i class="paper plane icon" />
         </a>
       </div>
     </div>
@@ -145,7 +264,7 @@
     >
       <div class="ui form">
         <div class="field">
-          <label :for="library.fid"><translate translate-context="Content/Library/Title">Sharing link</translate></label>
+          <label :for="library.fid">{{ $t('views.content.remote.Card.label.sharingLink') }}</label>
           <copy-input
             :id="library.fid"
             :button-classes="'basic'"
@@ -169,26 +288,20 @@
           :class="['ui', 'success', {'loading': isLoadingFollow}, 'button']"
           @click="follow()"
         >
-          <translate translate-context="Content/Library/Card.Button.Label/Verb">
-            Follow
-          </translate>
+          {{ $t('views.content.remote.Card.button.follow') }}
         </button>
         <template v-else-if="!library.follow.approved">
           <button
             class="ui disabled button"
           >
             <i class="hourglass icon" />
-            <translate translate-context="Content/Library/Card.Paragraph">
-              Follow request pending approval
-            </translate>
+            {{ $t('views.content.remote.Card.button.pending') }}
           </button>
           <button
             class="ui button"
             @click="unfollow"
           >
-            <translate translate-context="Content/Library/Card.Paragraph">
-              Cancel follow request
-            </translate>
+            {{ $t('views.content.remote.Card.button.cancel') }}
           </button>
         </template>
         <template v-else-if="library.follow.approved">
@@ -196,169 +309,27 @@
             :class="['ui', 'button']"
             :action="unfollow"
           >
-            <translate translate-context="*/Library/Button.Label/Verb">
-              Unfollow
-            </translate>
-            <p slot="modal-header">
-              <translate translate-context="Popup/Library/Title">
-                Unfollow this library?
-              </translate>
-            </p>
-            <div slot="modal-content">
+            {{ $t('views.content.remote.Card.button.unfollow') }}
+            <template #modal-header>
               <p>
-                <translate translate-context="Popup/Library/Paragraph">
-                  By unfollowing this library, you loose access to its content.
-                </translate>
+                {{ $t('views.content.remote.Card.modal.unfollow.header') }}
               </p>
-            </div>
-            <div slot="modal-confirm">
-              <translate translate-context="*/Library/Button.Label/Verb">
-                Unfollow
-              </translate>
-            </div>
+            </template>
+            <template #modal-content>
+              <div>
+                <p>
+                  {{ $t('views.content.remote.Card.modal.unfollow.content.warning') }}
+                </p>
+              </div>
+            </template>
+            <template #modal-confirm>
+              <div>
+                {{ $t('views.content.remote.Card.button.unfollow') }}
+              </div>
+            </template>
           </dangerous-button>
         </template>
       </template>
     </div>
   </div>
 </template>
-<script>
-import axios from 'axios'
-import ReportMixin from '@/components/mixins/Report'
-import RadioButton from '@/components/radios/Button'
-
-export default {
-  components: {
-    RadioButton
-  },
-  mixins: [ReportMixin],
-  props: {
-    initialLibrary: { type: Object, required: true },
-    displayFollow: { type: Boolean, default: true },
-    displayScan: { type: Boolean, default: true },
-    displayCopyFid: { type: Boolean, default: true }
-  },
-  data () {
-    return {
-      library: this.initialLibrary,
-      isLoadingFollow: false,
-      showScan: false,
-      scanTimeout: null,
-      latestScan: this.initialLibrary.latest_scan
-    }
-  },
-  computed: {
-    labels () {
-      const me = this.$pgettext('Content/Library/Card.Help text', 'This library is private and your approval from its owner is needed to access its content')
-      const everyone = this.$pgettext('Content/Library/Card.Help text', 'This library is public and you can access its content freely')
-
-      return {
-        tooltips: {
-          me,
-          everyone
-        }
-      }
-    },
-    scanProgress () {
-      const scan = this.latestScan
-      const progress = scan.processed_files * 100 / scan.total_files
-      return Math.min(parseInt(progress), 100)
-    },
-    scanStatus () {
-      if (this.latestScan) {
-        return this.latestScan.status
-      }
-      return 'unknown'
-    },
-    canLaunchScan () {
-      if (this.scanStatus === 'pending') {
-        return false
-      }
-      if (this.scanStatus === 'scanning') {
-        return false
-      }
-      return true
-    },
-    radioPlayable () {
-      return (
-        (this.library.actor.is_local || this.scanStatus === 'finished') &&
-        (this.library.privacy_level === 'everyone' || (this.library.follow && this.library.follow.is_approved))
-      )
-    }
-  },
-  watch: {
-    showScan (newValue, oldValue) {
-      if (newValue) {
-        if (this.scanStatus === 'pending' || this.scanStatus === 'scanning') {
-          this.fetchScanStatus()
-        }
-      } else {
-        if (this.scanTimeout) {
-          clearTimeout(this.scanTimeout)
-        }
-      }
-    }
-  },
-  methods: {
-    launchScan () {
-      const self = this
-      const successMsg = this.$pgettext('Content/Library/Message', 'Scan launched')
-      const skippedMsg = this.$pgettext('Content/Library/Message', 'Scan skipped (previous scan is too recent)')
-      axios.post(`federation/libraries/${this.library.uuid}/scan/`).then((response) => {
-        let msg
-        if (response.data.status === 'skipped') {
-          msg = skippedMsg
-        } else {
-          self.latestScan = response.data.scan
-          msg = successMsg
-        }
-        self.$store.commit('ui/addMessage', {
-          content: msg,
-          date: new Date()
-        })
-      })
-    },
-    follow () {
-      const self = this
-      this.isLoadingFollow = true
-      axios.post('federation/follows/library/', { target: this.library.uuid }).then((response) => {
-        self.library.follow = response.data
-        self.isLoadingFollow = false
-        self.$emit('followed')
-      }, error => {
-        self.isLoadingFollow = false
-        self.$store.commit('ui/addMessage', {
-          content: 'Cannot follow remote library: ' + error,
-          date: new Date()
-        })
-      })
-    },
-    unfollow () {
-      const self = this
-      this.isLoadingFollow = true
-      axios.delete(`federation/follows/library/${this.library.follow.uuid}/`).then((response) => {
-        self.$emit('deleted')
-        self.library.follow = null
-        self.isLoadingFollow = false
-      }, error => {
-        self.isLoadingFollow = false
-        self.$store.commit('ui/addMessage', {
-          content: 'Cannot unfollow remote library: ' + error,
-          date: new Date()
-        })
-      })
-    },
-    fetchScanStatus () {
-      const self = this
-      axios.get(`federation/follows/library/${this.library.follow.uuid}/`).then((response) => {
-        self.latestScan = response.data.target.latest_scan
-        if (self.scanStatus === 'pending' || self.scanStatus === 'scanning') {
-          self.scanTimeout = setTimeout(self.fetchScanStatus(), 5000)
-        } else {
-          clearTimeout(self.scanTimeout)
-        }
-      })
-    }
-  }
-}
-</script>

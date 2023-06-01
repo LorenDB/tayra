@@ -1,9 +1,7 @@
 import pytest
-
 from rest_framework import serializers
 
-from funkwhale_api.federation import contexts
-from funkwhale_api.federation import jsonld
+from funkwhale_api.federation import contexts, jsonld
 
 
 def test_expand_no_external_request():
@@ -337,7 +335,7 @@ def test_prepare_for_serializer_fallback():
 
 
 def test_jsonld_serializer_fallback():
-    class TestSerializer(jsonld.JsonLdSerializer):
+    class JsonLdSerializerFixture(jsonld.JsonLdSerializer):
         id = serializers.URLField()
         type = serializers.CharField()
         name = serializers.CharField()
@@ -378,7 +376,7 @@ def test_jsonld_serializer_fallback():
         "count": 42,
     }
 
-    serializer = TestSerializer(data=payload)
+    serializer = JsonLdSerializerFixture(data=payload)
     assert serializer.is_valid(raise_exception=True)
 
     assert serializer.validated_data == {
@@ -391,7 +389,7 @@ def test_jsonld_serializer_fallback():
 
 
 def test_jsonld_serializer_dereference(a_responses):
-    class TestSerializer(jsonld.JsonLdSerializer):
+    class JsonLdSerializerFixture(jsonld.JsonLdSerializer):
         id = serializers.URLField()
         type = serializers.CharField()
         followers = serializers.JSONField()
@@ -415,7 +413,7 @@ def test_jsonld_serializer_dereference(a_responses):
     }
 
     a_responses.get(followers_doc["id"], payload=followers_doc)
-    serializer = TestSerializer(data=payload)
+    serializer = JsonLdSerializerFixture(data=payload)
 
     assert serializer.is_valid(raise_exception=True)
     assert serializer.validated_data == {

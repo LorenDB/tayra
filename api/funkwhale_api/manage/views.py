@@ -1,29 +1,29 @@
-from rest_framework import mixins, response, viewsets
-from rest_framework import decorators as rest_decorators
-
 from django.db import transaction
-from django.db.models import Count, Prefetch, Q, Sum, OuterRef, Subquery
+from django.db.models import Count, OuterRef, Prefetch, Q, Subquery, Sum
 from django.db.models.functions import Coalesce, Length
 from django.shortcuts import get_object_or_404
+from drf_spectacular.utils import extend_schema
+from rest_framework import decorators as rest_decorators
+from rest_framework import mixins, response, viewsets
 
 from funkwhale_api.audio import models as audio_models
-from funkwhale_api.common.mixins import MultipleLookupDetailMixin
+from funkwhale_api.common import decorators
 from funkwhale_api.common import models as common_models
-from funkwhale_api.common import preferences, decorators
+from funkwhale_api.common import preferences
 from funkwhale_api.common import utils as common_utils
+from funkwhale_api.common.mixins import MultipleLookupDetailMixin
 from funkwhale_api.favorites import models as favorites_models
 from funkwhale_api.federation import models as federation_models
 from funkwhale_api.federation import tasks as federation_tasks
 from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.history import models as history_models
-from funkwhale_api.music import models as music_models
-from funkwhale_api.music import views as music_views
 from funkwhale_api.moderation import models as moderation_models
 from funkwhale_api.moderation import tasks as moderation_tasks
+from funkwhale_api.music import models as music_models
+from funkwhale_api.music import views as music_views
 from funkwhale_api.playlists import models as playlists_models
 from funkwhale_api.tags import models as tags_models
 from funkwhale_api.users import models as users_models
-
 
 from . import filters, serializers
 
@@ -93,6 +93,7 @@ class ManageArtistViewSet(
     required_scope = "instance:libraries"
     ordering_fields = ["creation_date", "name"]
 
+    @extend_schema(operation_id="admin_get_library_artist_stats")
     @rest_decorators.action(methods=["get"], detail=True)
     def stats(self, request, *args, **kwargs):
         artist = self.get_object()
@@ -135,6 +136,7 @@ class ManageAlbumViewSet(
     required_scope = "instance:libraries"
     ordering_fields = ["creation_date", "title", "release_date"]
 
+    @extend_schema(operation_id="admin_get_library_album_stats")
     @rest_decorators.action(methods=["get"], detail=True)
     def stats(self, request, *args, **kwargs):
         album = self.get_object()
@@ -196,6 +198,7 @@ class ManageTrackViewSet(
         "disc_number",
     ]
 
+    @extend_schema(operation_id="admin_get_track_stats")
     @rest_decorators.action(methods=["get"], detail=True)
     def stats(self, request, *args, **kwargs):
         track = self.get_object()
@@ -257,6 +260,7 @@ class ManageLibraryViewSet(
     filterset_class = filters.ManageLibraryFilterSet
     required_scope = "instance:libraries"
 
+    @extend_schema(operation_id="admin_get_library_stats")
     @rest_decorators.action(methods=["get"], detail=True)
     def stats(self, request, *args, **kwargs):
         library = self.get_object()
@@ -424,6 +428,7 @@ class ManageDomainViewSet(
         domain.refresh_from_db()
         return response.Response(domain.nodeinfo, status=200)
 
+    @extend_schema(operation_id="admin_get_federation_domain_stats")
     @rest_decorators.action(methods=["get"], detail=True)
     def stats(self, request, *args, **kwargs):
         domain = self.get_object()
@@ -468,6 +473,7 @@ class ManageActorViewSet(
 
         return obj
 
+    @extend_schema(operation_id="admin_get_account_stats")
     @rest_decorators.action(methods=["get"], detail=True)
     def stats(self, request, *args, **kwargs):
         obj = self.get_object()
@@ -529,7 +535,7 @@ class ManageReportViewSet(
 
     def perform_update(self, serializer):
         is_handled = serializer.instance.is_handled
-        if not is_handled and serializer.validated_data.get("is_handled") is True:
+        if not is_handled and serializer.validated_data.get("is_handled"):
             # report was resolved, we assign to the mod making the request
             serializer.save(assigned_to=self.request.user.actor)
         else:
@@ -686,7 +692,10 @@ class ManageChannelViewSet(
     queryset = (
         audio_models.Channel.objects.all()
         .order_by("-id")
-        .select_related("attributed_to", "actor",)
+        .select_related(
+            "attributed_to",
+            "actor",
+        )
         .prefetch_related(
             Prefetch(
                 "artist",
@@ -706,6 +715,7 @@ class ManageChannelViewSet(
     required_scope = "instance:libraries"
     ordering_fields = ["creation_date", "name"]
 
+    @extend_schema(operation_id="admin_get_channel_stats")
     @rest_decorators.action(methods=["get"], detail=True)
     def stats(self, request, *args, **kwargs):
         channel = self.get_object()

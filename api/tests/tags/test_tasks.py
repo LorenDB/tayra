@@ -29,7 +29,8 @@ def test_add_tags_batch(factories):
     data = {artist.pk: [rock_tag.pk, rap_tag.pk]}
 
     tasks.add_tags_batch(
-        data, model=artist.__class__,
+        data,
+        model=artist.__class__,
     )
 
     assert artist.get_tags() == ["Rap", "Rock"]

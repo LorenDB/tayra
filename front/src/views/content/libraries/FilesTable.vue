@@ -1,67 +1,189 @@
+<script setup lang="ts">
+import type { SmartSearchProps } from '~/composables/navigation/useSmartSearch'
+import type { OrderingProps } from '~/composables/navigation/useOrdering'
+import type { ImportStatus, BackendResponse, Upload } from '~/types'
+import type { RouteRecordName } from 'vue-router'
+import type { OrderingField } from '~/store/ui'
+
+import { humanSize, truncate } from '~/utils/filters'
+import { computed, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+import time from '~/utils/time'
+import axios from 'axios'
+
+import ImportStatusModal from '~/components/library/ImportStatusModal.vue'
+import ActionTable from '~/components/common/ActionTable.vue'
+import Pagination from '~/components/vui/Pagination.vue'
+
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useSmartSearch from '~/composables/navigation/useSmartSearch'
+import useOrdering from '~/composables/navigation/useOrdering'
+import useErrorHandler from '~/composables/useErrorHandler'
+import usePage from '~/composables/navigation/usePage'
+
+interface Events {
+  (e: 'fetch-start'): void
+}
+
+interface Props extends SmartSearchProps, OrderingProps {
+  filters?: object
+  needsRefresh?: boolean
+  customObjects?: any[]
+
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  orderingConfigName?: RouteRecordName
+  defaultQuery?: string
+  updateUrl?: boolean
+}
+
+const emit = defineEmits<Events>()
+const props = withDefaults(defineProps<Props>(), {
+  defaultQuery: '',
+  updateUrl: false,
+  filters: () => ({}),
+  needsRefresh: false,
+  customObjects: () => [],
+  orderingConfigName: undefined
+})
+
+const search = ref()
+
+const page = usePage()
+const result = ref<BackendResponse<Upload>>()
+
+const { onSearch, query, addSearchToken, getTokenValue } = useSmartSearch(props)
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props)
+
+const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
+  ['creation_date', 'creation_date'],
+  ['title', 'track_title'],
+  ['size', 'size'],
+  ['duration', 'duration'],
+  ['bitrate', 'bitrate'],
+  ['album_title', 'album_title'],
+  ['artist_name', 'artist_name']
+]
+
+const { t } = useI18n()
+const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
+const actions = computed(() => [
+  {
+    name: 'delete',
+    label: t('views.content.libraries.FilesTable.action.delete'),
+    isDangerous: true,
+    allowAll: true,
+    confirmColor: 'danger'
+  },
+  {
+    name: 'relaunch_import',
+    label: t('views.content.libraries.FilesTable.action.restartImport'),
+    isDangerous: true,
+    allowAll: true,
+    filterCheckable: (filter: { import_status: ImportStatus }) => {
+      return filter.import_status !== 'finished'
+    }
+  }
+])
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  emit('fetch-start')
+  isLoading.value = true
+  const params = {
+    page: page.value,
+    page_size: paginateBy.value,
+    q: query.value,
+    ordering: orderingString.value,
+    include_channels: 'true',
+    ...props.filters
+  }
+
+  try {
+    const response = await axios.get('/uploads/', {
+      params
+    })
+
+    result.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+    result.value = undefined
+  } finally {
+    isLoading.value = false
+  }
+}
+
+onSearch(() => (page.value = 1))
+onOrderingUpdate(() => (page.value = 1))
+watch(page, fetchData)
+fetchData()
+
+const sharedLabels = useSharedLabels()
+const labels = computed(() => ({
+  searchPlaceholder: t('views.content.libraries.FilesTable.placeholder.search'),
+  showStatus: t('views.content.libraries.FilesTable.button.showStatus')
+}))
+
+const detailedUpload = ref()
+const showUploadDetailModal = ref(false)
+
+const getImportStatusChoice = (importStatus: ImportStatus) => {
+  return sharedLabels.fields.import_status.choices[importStatus]
+}
+</script>
+
 <template>
   <div>
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
           <label for="files-search">
-            <translate translate-context="Content/Search/Input.Label/Noun">Search</translate>
+            {{ $t('views.content.libraries.FilesTable.label.search') }}
           </label>
-          <form @submit.prevent="search.query = $refs.search.value">
+          <form @submit.prevent="query = search.value">
             <input
               id="files-search"
               ref="search"
               name="search"
               type="text"
-              :value="search.query"
+              :value="query"
               :placeholder="labels.searchPlaceholder"
             >
           </form>
         </div>
         <div class="field">
           <label for="import-status">
-            <translate translate-context="Content/*/*/Noun">Import status</translate>
+            {{ $t('views.content.libraries.FilesTable.label.importStatus') }}
           </label>
           <select
             id="import-status"
             class="ui dropdown"
             :value="getTokenValue('status', '')"
-            @change="addSearchToken('status', $event.target.value)"
+            @change="addSearchToken('status', ($event.target as HTMLSelectElement).value)"
           >
             <option value>
-              <translate translate-context="Content/*/Dropdown">
-                All
-              </translate>
+              {{ $t('views.content.libraries.FilesTable.option.status.all') }}
             </option>
             <option value="draft">
-              <translate translate-context="Content/Library/*/Short">
-                Draft
-              </translate>
+              {{ $t('views.content.libraries.FilesTable.option.status.draft') }}
             </option>
             <option value="pending">
-              <translate translate-context="Content/Library/*/Short">
-                Pending
-              </translate>
+              {{ $t('views.content.libraries.FilesTable.option.status.pending') }}
             </option>
             <option value="skipped">
-              <translate translate-context="Content/Library/*">
-                Skipped
-              </translate>
+              {{ $t('views.content.libraries.FilesTable.option.status.skipped') }}
             </option>
             <option value="errored">
-              <translate translate-context="Content/Library/Dropdown">
-                Failed
-              </translate>
+              {{ $t('views.content.libraries.FilesTable.option.status.failed') }}
             </option>
             <option value="finished">
-              <translate translate-context="Content/Library/*">
-                Finished
-              </translate>
+              {{ $t('views.content.libraries.FilesTable.option.status.finished') }}
             </option>
           </select>
         </div>
         <div class="field">
           <label for="ordering-select">
-            <translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate>
+            {{ $t('views.content.libraries.FilesTable.ordering.label') }}
           </label>
           <select
             id="ordering-select"
@@ -79,7 +201,7 @@
         </div>
         <div class="field">
           <label for="ordering-direction">
-            <translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering direction</translate>
+            {{ $t('views.content.libraries.FilesTable.ordering.direction.label') }}
           </label>
           <select
             id="ordering-direction"
@@ -87,22 +209,19 @@
             class="ui dropdown"
           >
             <option value="+">
-              <translate translate-context="Content/Search/Dropdown">
-                Ascending
-              </translate>
+              {{ $t('views.content.libraries.FilesTable.ordering.direction.ascending') }}
             </option>
             <option value="-">
-              <translate translate-context="Content/Search/Dropdown">
-                Descending
-              </translate>
+              {{ $t('views.content.libraries.FilesTable.ordering.direction.descending') }}
             </option>
           </select>
         </div>
       </div>
     </div>
     <import-status-modal
+      v-if="detailedUpload"
+      v-model:show="showUploadDetailModal"
       :upload="detailedUpload"
-      :show.sync="showUploadDetailModal"
     />
     <div class="dimmable">
       <div
@@ -112,16 +231,12 @@
         <div class="ui loader" />
       </div>
       <div
-        v-else-if="!result && result.results.length === 0 && !needsRefresh"
+        v-else-if="!result || result?.results.length === 0 && !needsRefresh"
         class="ui placeholder segment"
       >
         <div class="ui icon header">
           <i class="upload icon" />
-          <translate
-            translate-context="Content/Home/Placeholder"
-          >
-            No tracks have been added to this library yet
-          </translate>
+          {{ $t('views.content.libraries.FilesTable.empty.noTracks') }}
         </div>
       </div>
       <action-table
@@ -137,51 +252,36 @@
         @action-launched="fetchData"
         @refresh="fetchData"
       >
-        <template slot="header-cells">
+        <template #header-cells>
           <th>
-            <translate translate-context="*/*/*/Noun">
-              Title
-            </translate>
+            {{ $t('views.content.libraries.FilesTable.table.file.header.title') }}
           </th>
           <th>
-            <translate translate-context="*/*/*/Noun">
-              Artist
-            </translate>
+            {{ $t('views.content.libraries.FilesTable.table.file.header.artist') }}
           </th>
           <th>
-            <translate translate-context="*/*/*">
-              Album
-            </translate>
+            {{ $t('views.content.libraries.FilesTable.table.file.header.album') }}
           </th>
           <th>
-            <translate translate-context="*/*/*/Noun">
-              Upload date
-            </translate>
+            {{ $t('views.content.libraries.FilesTable.table.file.header.uploadDate') }}
           </th>
           <th>
-            <translate translate-context="Content/*/*/Noun">
-              Import status
-            </translate>
+            {{ $t('views.content.libraries.FilesTable.table.file.header.importStatus') }}
           </th>
           <th>
-            <translate translate-context="Content/*/*">
-              Duration
-            </translate>
+            {{ $t('views.content.libraries.FilesTable.table.file.header.duration') }}
           </th>
           <th>
-            <translate translate-context="Content/*/*/Noun">
-              Size
-            </translate>
+            {{ $t('views.content.libraries.FilesTable.table.file.header.size') }}
           </th>
         </template>
         <template
-          slot="row-cells"
-          slot-scope="scope"
+          #row-cells="scope"
         >
           <template v-if="scope.obj.track">
             <td>
               <router-link :to="{name: 'library.tracks.detail', params: {id: scope.obj.track.id }}">
-                {{ scope.obj.track.title|truncate(25) }}
+                {{ truncate(scope.obj.track.title, 25) }}
               </router-link>
             </td>
             <td>
@@ -189,7 +289,7 @@
                 href=""
                 class="discrete link"
                 @click.prevent="addSearchToken('artist', scope.obj.track.artist.name)"
-              >{{ scope.obj.track.artist.name|truncate(20) }}</a>
+              >{{ truncate(scope.obj.track.artist.name, 20) }}</a>
             </td>
             <td>
               <a
@@ -197,12 +297,12 @@
                 href=""
                 class="discrete link"
                 @click.prevent="addSearchToken('album', scope.obj.track.album.title)"
-              >{{ scope.obj.track.album.title|truncate(20) }}</a>
+              >{{ truncate(scope.obj.track.album.title, 20) }}</a>
             </td>
           </template>
           <template v-else>
             <td :title="scope.obj.source">
-              {{ scope.obj.source | truncate(25) }}
+              {{ truncate(scope.obj.source, 25) }}
             </td>
             <td />
             <td />
@@ -214,12 +314,12 @@
             <a
               href=""
               class="discrete link"
-              :title="sharedLabels.fields.import_status.choices[scope.obj.import_status].help"
+              :title="getImportStatusChoice(scope.obj.import_status).help"
               @click.prevent="addSearchToken('status', scope.obj.import_status)"
-            >{{ sharedLabels.fields.import_status.choices[scope.obj.import_status].label }}</a>
+            >{{ getImportStatusChoice(scope.obj.import_status).label }}</a>
             <button
               class="ui tiny basic icon button"
-              :title="sharedLabels.fields.import_status.detailTitle"
+              :title="sharedLabels.fields.import_status.label"
               :aria-label="labels.showStatus"
               @click="detailedUpload = scope.obj; showUploadDetailModal = true"
             >
@@ -227,20 +327,16 @@
             </button>
           </td>
           <td v-if="scope.obj.duration">
-            {{ scope.obj.duration | duration }}
+            {{ time.parse(scope.obj.duration) }}
           </td>
           <td v-else>
-            <translate translate-context="*/*/*">
-              N/A
-            </translate>
+            {{ $t('views.content.libraries.FilesTable.notApplicable') }}
           </td>
           <td v-if="scope.obj.size">
-            {{ scope.obj.size | humanSize }}
+            {{ humanSize(scope.obj.size) }}
           </td>
           <td v-else>
-            <translate translate-context="*/*/*">
-              N/A
-            </translate>
+            {{ $t('views.content.libraries.FilesTable.notApplicable') }}
           </td>
         </template>
       </action-table>
@@ -248,170 +344,15 @@
     <div>
       <pagination
         v-if="result && result.count > paginateBy"
+        v-model:current="page"
         :compact="true"
-        :current="page"
         :paginate-by="paginateBy"
         :total="result.count"
-        @page-changed="page = $event; fetchData()"
       />
 
       <span v-if="result && result.results.length > 0">
-        <translate
-          translate-context="Content/*/Paragraph"
-          :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
-        >Showing results %{ start }-%{ end } on %{ total }</translate>
+        {{ $t('views.content.libraries.FilesTable.pagination.results', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
       </span>
     </div>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import _ from '@/lodash'
-import time from '@/utils/time'
-import { normalizeQuery, parseTokens } from '@/search'
-
-import Pagination from '@/components/Pagination'
-import ActionTable from '@/components/common/ActionTable'
-import OrderingMixin from '@/components/mixins/Ordering'
-import TranslationsMixin from '@/components/mixins/Translations'
-import SmartSearchMixin from '@/components/mixins/SmartSearch'
-import ImportStatusModal from '@/components/library/ImportStatusModal'
-
-export default {
-  components: {
-    Pagination,
-    ActionTable,
-    ImportStatusModal
-  },
-  mixins: [OrderingMixin, TranslationsMixin, SmartSearchMixin],
-  props: {
-    filters: { type: Object, required: false, default: function () { return {} } },
-    needsRefresh: { type: Boolean, required: false, default: false },
-    customObjects: {
-      type: Array,
-      required: false,
-      default: () => {
-        return []
-      }
-    }
-  },
-  data () {
-    return {
-      time,
-      detailedUpload: {},
-      showUploadDetailModal: false,
-      isLoading: false,
-      result: null,
-      page: 1,
-      search: {
-        query: this.defaultQuery,
-        tokens: parseTokens(normalizeQuery(this.defaultQuery))
-      },
-      orderingOptions: [
-        ['creation_date', 'creation_date'],
-        ['title', 'track_title'],
-        ['size', 'size'],
-        ['duration', 'duration'],
-        ['bitrate', 'bitrate'],
-        ['album_title', 'album_title'],
-        ['artist_name', 'artist_name']
-      ]
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        searchPlaceholder: this.$pgettext(
-          'Content/Library/Input.Placeholder',
-          'Search by title, artist, album…'
-        ),
-        showStatus: this.$pgettext('Content/Library/Button.Label/Verb', 'Show information about the upload status for this track')
-      }
-    },
-    actionFilters () {
-      const currentFilters = {
-        q: this.search.query,
-        include_channels: 'true'
-      }
-      if (this.filters) {
-        return _.merge(currentFilters, this.filters)
-      } else {
-        return currentFilters
-      }
-    },
-    actions () {
-      const deleteMsg = this.$pgettext('*/*/*/Verb', 'Delete')
-      const relaunchMsg = this.$pgettext(
-        'Content/Library/Dropdown/Verb',
-        'Restart import'
-      )
-      return [
-        {
-          name: 'delete',
-          label: deleteMsg,
-          isDangerous: true,
-          allowAll: true
-        },
-        {
-          name: 'relaunch_import',
-          label: relaunchMsg,
-          isDangerous: true,
-          allowAll: true,
-          filterCheckable: f => {
-            return f.import_status !== 'finished'
-          }
-        }
-      ]
-    }
-  },
-  watch: {
-    orderingDirection: function () {
-      this.page = 1
-      this.fetchData()
-    },
-    page: function () {
-      this.fetchData()
-    },
-    ordering: function () {
-      this.page = 1
-      this.fetchData()
-    },
-    search (newValue) {
-      this.page = 1
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      this.$emit('fetch-start')
-      const params = _.merge(
-        {
-          page: this.page,
-          page_size: this.paginateBy,
-          ordering: this.getOrderingAsString(),
-          q: this.search.query,
-          include_channels: 'true'
-        },
-        this.filters || {}
-      )
-      const self = this
-      self.isLoading = true
-      self.checked = []
-      axios.get('/uploads/', { params: params }).then(
-        response => {
-          self.result = response.data
-          self.isLoading = false
-        },
-        error => {
-          self.isLoading = false
-          self.errors = error.backendErrors
-        }
-      )
-    }
-  }
-}
-</script>

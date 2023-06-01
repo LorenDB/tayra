@@ -1,3 +1,104 @@
+<script setup lang="ts">
+import type { BackendError } from '~/types'
+
+import axios from 'axios'
+import { useVModel } from '@vueuse/core'
+import { reactive, ref, watch } from 'vue'
+import { useStore } from '~/store'
+import useFormData from '~/composables/useFormData'
+
+interface Events {
+  (e: 'update:modelValue', value: string | null): void
+  (e: 'delete'): void
+}
+
+interface Props {
+  modelValue: string | null
+  imageClass?: string
+  required?: boolean
+  name?: string | undefined
+  initialValue?: string | undefined
+}
+
+const emit = defineEmits<Events>()
+const props = withDefaults(defineProps<Props>(), {
+  imageClass: '',
+  required: false,
+  name: undefined,
+  initialValue: undefined
+})
+
+const value = useVModel(props, 'modelValue', emit)
+
+const attachment = ref()
+const isLoading = ref(false)
+const errors = reactive([] as string[])
+const attachmentId = Math.random().toString(36).substring(7)
+
+const input = ref()
+const file = ref()
+const submit = async () => {
+  isLoading.value = true
+  errors.length = 0
+  file.value = input.value.files[0]
+
+  const formData = useFormData({ file: file.value })
+
+  try {
+    const { data } = await axios.post('attachments/', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+
+    attachment.value = data
+    value.value = data.uuid
+  } catch (error) {
+    if (error as BackendError) {
+      const { backendErrors } = error as BackendError
+      errors.push(...backendErrors)
+    }
+  } finally {
+    isLoading.value = false
+  }
+}
+
+const remove = async (uuid: string, sendEvent = true) => {
+  isLoading.value = true
+  errors.length = 0
+
+  try {
+    await axios.delete(`attachments/${uuid}/`)
+    attachment.value = null
+
+    if (sendEvent) emit('delete')
+  } catch (error) {
+    if (error as BackendError) {
+      const { backendErrors } = error as BackendError
+      errors.push(...backendErrors)
+    }
+  } finally {
+    isLoading.value = false
+  }
+}
+
+const initialValue = ref(props.initialValue ?? props.modelValue)
+watch(value, (to, from) => {
+  // NOTE: Remove old attachment if it's not the original one
+  if (from !== initialValue.value && typeof from === 'string') {
+    remove(from, false)
+  }
+
+  // NOTE: We want to bring back the original attachment, let's delete the current one
+  if (attachment.value && to === initialValue.value) {
+    remove(attachment.value.uuid)
+  }
+})
+
+const store = useStore()
+const getAttachmentUrl = (uuid: string) => {
+  return store.getters['instance/absoluteUrl'](`api/v1/attachments/${uuid}/proxy?next=medium_square_crop`)
+}
+</script>
+
 <template>
   <div class="ui form">
     <div
@@ -6,9 +107,7 @@
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/*/Error message.Title">
-          Your attachment cannot be saved
-        </translate>
+        {{ $t('components.common.AttachmentInput.header.failure') }}
       </h4>
       <ul class="list">
         <li
@@ -21,7 +120,7 @@
     </div>
     <div class="ui field">
       <span id="avatarLabel">
-        <slot name="label" />
+        <slot />
       </span>
       <div class="ui stackable grid row">
         <div class="three wide column">
@@ -29,13 +128,13 @@
             v-if="value && value === initialValue"
             alt=""
             :class="['ui', imageClass, 'image']"
-            :src="$store.getters['instance/absoluteUrl'](`api/v1/attachments/${value}/proxy?next=medium_square_crop`)"
+            :src="getAttachmentUrl(value)"
           >
           <img
             v-else-if="attachment"
             alt=""
             :class="['ui', imageClass, 'image']"
-            :src="$store.getters['instance/absoluteUrl'](`api/v1/attachments/${attachment.uuid}/proxy?next=medium_square_crop`)"
+            :src="getAttachmentUrl(attachment.uuid)"
           >
           <div
             v-else
@@ -45,40 +144,36 @@
         <div class="eleven wide column">
           <div class="file-input">
             <label :for="attachmentId">
-              <translate translate-context="*/*/*">Upload New Picture…</translate>
+              {{ $t('components.common.AttachmentInput.label.upload') }}
             </label>
             <input
               :id="attachmentId"
-              ref="attachment"
+              ref="input"
+              :name="name"
+              :required="required || undefined"
               class="ui input"
               type="file"
-              accept="image/x-png,image/jpeg"
+              accept="image/png,image/jpeg"
               @change="submit"
             >
           </div>
           <div class="ui very small hidden divider" />
           <p>
-            <translate translate-context="Content/*/Paragraph">
-              PNG or JPG. Dimensions should be between 1400x1400px and 3000x3000px. Maximum file size allowed is 5MB.
-            </translate>
+            {{ $t('components.common.AttachmentInput.help.upload') }}
           </p>
           <button
             v-if="value"
             class="ui basic tiny button"
-            @click.stop.prevent="remove(value)"
+            @click.stop.prevent="remove(value as string)"
           >
-            <translate translate-context="Content/Radio/Button.Label/Verb">
-              Remove
-            </translate>
+            {{ $t('components.common.AttachmentInput.button.remove') }}
           </button>
           <div
             v-if="isLoading"
             class="ui active inverted dimmer"
           >
             <div class="ui indeterminate text loader">
-              <translate translate-context="Content/*/*/Noun">
-                Uploading file…
-              </translate>
+              {{ $t('components.common.AttachmentInput.loader.uploading') }}
             </div>
           </div>
         </div>
@@ -86,74 +181,3 @@
     </div>
   </div>
 </template>
-<script>
-import axios from 'axios'
-
-export default {
-  props: {
-    value: { type: String, default: null },
-    imageClass: { type: String, default: '', required: false }
-  },
-  data () {
-    return {
-      attachment: null,
-      isLoading: false,
-      errors: [],
-      initialValue: this.value,
-      attachmentId: Math.random().toString(36).substring(7)
-    }
-  },
-  watch: {
-    value (v) {
-      if (this.attachment && v === this.initialValue) {
-        // we had a reset to initial value
-        this.remove(this.attachment.uuid)
-      }
-    }
-  },
-  methods: {
-    submit () {
-      this.isLoading = true
-      this.errors = []
-      const self = this
-      this.file = this.$refs.attachment.files[0]
-      const formData = new FormData()
-      formData.append('file', this.file)
-      axios
-        .post('attachments/', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        })
-        .then(
-          response => {
-            this.isLoading = false
-            self.attachment = response.data
-            self.$emit('input', self.attachment.uuid)
-          },
-          error => {
-            self.isLoading = false
-            self.errors = error.backendErrors
-          }
-        )
-    },
-    remove (uuid) {
-      this.isLoading = true
-      this.errors = []
-      const self = this
-      axios.delete(`attachments/${uuid}/`)
-        .then(
-          response => {
-            this.isLoading = false
-            self.attachment = null
-            self.$emit('delete')
-          },
-          error => {
-            self.isLoading = false
-            self.errors = error.backendErrors
-          }
-        )
-    }
-  }
-}
-</script>

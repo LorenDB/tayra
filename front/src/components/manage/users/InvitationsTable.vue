@@ -1,19 +1,120 @@
+<script setup lang="ts">
+import type { OrderingProps } from '~/composables/navigation/useOrdering'
+import type { RouteRecordName } from 'vue-router'
+import type { OrderingField } from '~/store/ui'
+
+import { watchDebounced } from '@vueuse/core'
+import { computed, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+import moment from 'moment'
+import axios from 'axios'
+
+import ActionTable from '~/components/common/ActionTable.vue'
+import Pagination from '~/components/vui/Pagination.vue'
+
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useOrdering from '~/composables/navigation/useOrdering'
+import useErrorHandler from '~/composables/useErrorHandler'
+import usePage from '~/composables/navigation/usePage'
+
+interface Props extends OrderingProps {
+  filters?: object
+
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  orderingConfigName?: RouteRecordName
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  filters: () => ({}),
+  orderingConfigName: undefined
+})
+
+const page = usePage()
+type ResponseType = { count: number, results: any[] }
+const result = ref<null | ResponseType>(null)
+
+const { onOrderingUpdate, orderingString, paginateBy, ordering } = useOrdering(props)
+
+const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
+  ['expiration_date', 'expiration_date'],
+  ['creation_date', 'creation_date']
+]
+
+const query = ref('')
+const isOpen = ref(false)
+const { t } = useI18n()
+const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
+const actions = computed(() => [
+  {
+    name: 'delete',
+    label: t('components.manage.users.InvitationsTable.action.delete'),
+    filterCheckable: (obj: { users: unknown[], expiration_date: Date }) => {
+      return obj.users.length === 0 && moment().isBefore(obj.expiration_date)
+    }
+  }
+])
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  const params = {
+    page: page.value,
+    page_size: paginateBy.value,
+    q: query.value,
+    ordering: orderingString.value,
+    is_open: isOpen.value,
+    ...props.filters
+  }
+
+  try {
+    const response = await axios.get('/manage/users/invitations/', {
+      params
+    })
+
+    result.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+    result.value = null
+  } finally {
+    isLoading.value = false
+  }
+}
+
+const forceFetchFirstPage = async () => {
+  page.value = 1
+  return fetchData()
+}
+
+watchDebounced(query, forceFetchFirstPage, { debounce: 300 })
+onOrderingUpdate(forceFetchFirstPage)
+watch(isOpen, forceFetchFirstPage)
+
+watch(page, fetchData)
+fetchData()
+
+const sharedLabels = useSharedLabels()
+const labels = computed(() => ({
+  searchPlaceholder: t('components.manage.users.InvitationsTable.placeholder.search')
+}))
+</script>
+
 <template>
   <div>
     <div class="ui inline form">
       <div class="fields">
         <div class="ui field">
-          <label for="invitations-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
+          <label for="invitations-search">{{ $t('components.manage.users.InvitationsTable.label.search') }}</label>
           <input
             id="invitations-search"
-            v-model="search"
+            v-model="query"
             name="search"
             type="text"
             :placeholder="labels.searchPlaceholder"
           >
         </div>
         <div class="field">
-          <label for="invitations-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
+          <label for="invitations-ordering">{{ $t('components.manage.users.InvitationsTable.ordering.label') }}</label>
           <select
             id="invitations-ordering"
             v-model="ordering"
@@ -29,26 +130,20 @@
           </select>
         </div>
         <div class="field">
-          <label for="invitations-status"><translate translate-context="*/*/*">Status</translate></label>
+          <label for="invitations-status">{{ $t('components.manage.users.InvitationsTable.label.status') }}</label>
           <select
             id="invitations-status"
             v-model="isOpen"
             class="ui dropdown"
           >
             <option :value="null">
-              <translate translate-context="Content/*/Dropdown">
-                All
-              </translate>
+              {{ $t('components.manage.users.InvitationsTable.option.all') }}
             </option>
             <option :value="true">
-              <translate translate-context="Content/Admin/Dropdown/Adjective">
-                Open
-              </translate>
+              {{ $t('components.manage.users.InvitationsTable.option.open') }}
             </option>
             <option :value="false">
-              <translate translate-context="Content/Admin/Dropdown/Adjective">
-                Expired/used
-              </translate>
+              {{ $t('components.manage.users.InvitationsTable.option.expired') }}
             </option>
           </select>
         </div>
@@ -69,44 +164,31 @@
         :filters="actionFilters"
         @action-launched="fetchData"
       >
-        <template slot="header-cells">
+        <template #header-cells>
           <th>
-            <translate translate-context="*/*/*">
-              Owner
-            </translate>
+            {{ $t('components.manage.users.InvitationsTable.table.invitation.header.owner') }}
           </th>
           <th>
-            <translate translate-context="Content/Admin/Table.Label/Noun">
-              User
-            </translate>
+            {{ $t('components.manage.users.InvitationsTable.table.invitation.header.user') }}
           </th>
           <th>
-            <translate translate-context="*/*/*">
-              Status
-            </translate>
+            {{ $t('components.manage.users.InvitationsTable.table.invitation.header.status') }}
           </th>
           <th>
-            <translate translate-context="Content/*/*/Noun">
-              Creation date
-            </translate>
+            {{ $t('components.manage.users.InvitationsTable.table.invitation.header.creationDate') }}
           </th>
           <th>
-            <translate translate-context="Content/Admin/Table.Label/Noun">
-              Expiration date
-            </translate>
+            {{ $t('components.manage.users.InvitationsTable.table.invitation.header.expirationDate') }}
           </th>
           <th>
-            <translate translate-context="Content/Admin/Table.Label/Noun">
-              Code
-            </translate>
+            {{ $t('components.manage.users.InvitationsTable.table.invitation.header.code') }}
           </th>
         </template>
         <template
-          slot="row-cells"
-          slot-scope="scope"
+          #row-cells="scope"
         >
           <td>
-            <router-link :to="{name: 'manage.users.users.detail', params: {id: scope.obj.id }}">
+            <router-link :to="{name: 'manage.moderation.accounts.detail', params: {id: scope.obj.id }}">
               {{ scope.obj.owner.username }}
             </router-link>
           </td>
@@ -119,15 +201,15 @@
             <span
               v-if="scope.obj.users.length > 0"
               class="ui success basic label"
-            ><translate translate-context="Content/Admin/Table">Used</translate></span>
+            >{{ $t('components.manage.users.InvitationsTable.label.used') }}</span>
             <span
               v-else-if="moment().isAfter(scope.obj.expiration_date)"
               class="ui danger basic label"
-            ><translate translate-context="Content/Admin/Table">Expired</translate></span>
+            >{{ $t('components.manage.users.InvitationsTable.label.expired') }}</span>
             <span
               v-else
               class="ui basic label"
-            ><translate translate-context="Content/Admin/Table">Not used</translate></span>
+            >{{ $t('components.manage.users.InvitationsTable.label.unused') }}</span>
           </td>
           <td>
             <human-date :date="scope.obj.creation_date" />
@@ -144,136 +226,15 @@
     <div>
       <pagination
         v-if="result && result.count > paginateBy"
+        v-model:current="page"
         :compact="true"
-        :current="page"
         :paginate-by="paginateBy"
         :total="result.count"
-        @page-changed="selectPage"
       />
 
       <span v-if="result && result.results.length > 0">
-        <translate
-          translate-context="Content/*/Paragraph"
-          translate-plural="Showing results %{ start } to %{ end } from %{ total }"
-          :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
-          :translate-n="result.count"
-        >
-          Showing one result
-        </translate>
+        {{ $t('components.manage.users.InvitationsTable.pagination.results', { start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count }, result.results.length) }}
       </span>
     </div>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import moment from 'moment'
-import _ from '@/lodash'
-import Pagination from '@/components/Pagination'
-import ActionTable from '@/components/common/ActionTable'
-import OrderingMixin from '@/components/mixins/Ordering'
-import TranslationsMixin from '@/components/mixins/Translations'
-
-export default {
-  components: {
-    Pagination,
-    ActionTable
-  },
-  mixins: [OrderingMixin, TranslationsMixin],
-  props: {
-    filters: { type: Object, required: false, default: function () { return {} } }
-  },
-  data () {
-    return {
-      moment,
-      isLoading: false,
-      result: null,
-      page: 1,
-      search: '',
-      isOpen: null,
-      orderingOptions: [
-        ['expiration_date', 'expiration_date'],
-        ['creation_date', 'creation_date']
-      ]
-
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        searchPlaceholder: this.$pgettext('Content/Admin/Input.Placeholder/Verb', 'Search by username, e-mail address, code…')
-      }
-    },
-    actionFilters () {
-      const currentFilters = {
-        q: this.search
-      }
-      if (this.filters) {
-        return _.merge(currentFilters, this.filters)
-      } else {
-        return currentFilters
-      }
-    },
-    actions () {
-      const deleteLabel = this.$pgettext('*/*/*/Verb', 'Delete')
-      return [
-        {
-          name: 'delete',
-          label: deleteLabel,
-          filterCheckable: (obj) => {
-            return obj.users.length === 0 && moment().isBefore(obj.expiration_date)
-          }
-        }
-      ]
-    }
-  },
-  watch: {
-    search (newValue) {
-      this.page = 1
-      this.fetchData()
-    },
-    page () {
-      this.fetchData()
-    },
-    ordering () {
-      this.page = 1
-      this.fetchData()
-    },
-    isOpen () {
-      this.page = 1
-      this.fetchData()
-    },
-    orderingDirection () {
-      this.page = 1
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      const params = _.merge({
-        page: this.page,
-        page_size: this.paginateBy,
-        q: this.search,
-        is_open: this.isOpen,
-        ordering: this.getOrderingAsString()
-      }, this.filters)
-      const self = this
-      self.isLoading = true
-      self.checked = []
-      axios.get('/manage/users/invitations/', { params: params }).then((response) => {
-        self.result = response.data
-        self.isLoading = false
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    selectPage: function (page) {
-      this.page = page
-    }
-  }
-}
-</script>

@@ -1,7 +1,6 @@
 import pytest
 
-from funkwhale_api.federation import routes
-from funkwhale_api.federation import serializers
+from funkwhale_api.federation import routes, serializers
 
 
 def test_pleroma_actor_from_ap_with_tags(factories):
@@ -296,7 +295,8 @@ def test_reel2bits_upload_delete(factories):
     }
 
     routes.inbox_delete(
-        payload, context={"actor": actor, "raise_exception": True, "activity": payload},
+        payload,
+        context={"actor": actor, "raise_exception": True, "activity": payload},
     )
 
     with pytest.raises(upload.track.DoesNotExist):

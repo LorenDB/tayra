@@ -1,0 +1,133 @@
+{
+  "components": {
+    "auth": {
+      "Authorize": {
+        "header": {
+          "access": "{ app } 이 Funkwhale 계정에 접근하려고 합니다"
+        }
+      }
+    },
+    "About": {
+      "stat": {
+        "activeUsers": "{ count } 활성 사용자"
+      }
+    },
+    "Home": {
+      "stat": {
+        "activeUsers": "{ count } 활성 사용자"
+      }
+    },
+    "audio": {
+      "artist": {
+        "Card": {
+          "meta": {
+            "episodes": "{ count } 에피소드",
+            "tracks": "{ count } 트랙"
+          }
+        }
+      },
+      "ChannelCard": {
+        "meta": {
+          "episodes": "{ count } 에피소드",
+          "tracks": "{ count } 트랙"
+        }
+      },
+      "ChannelSerieCard": {
+        "meta": {
+          "episodes": "{ count } 에피소드"
+        }
+      },
+      "album": {
+        "Card": {
+          "meta": {
+            "tracks": "{ count } 트랙"
+          }
+        }
+      }
+    },
+    "library": {
+      "AlbumBase": {
+        "meta": {
+          "episodes": "{ count } 에피소드",
+          "tracks": "{ count } 트랙"
+        }
+      }
+    },
+    "favorites": {
+      "List": {
+        "header": {
+          "favorites": "{ count } 즐겨찾기"
+        }
+      }
+    },
+    "channels": {
+      "AlbumSelect": {
+        "meta": {
+          "tracks": "{ count } 트랙"
+        }
+      }
+    },
+    "playlists": {
+      "Card": {
+        "meta": {
+          "tracks": "{ count } 트랙"
+        }
+      }
+    },
+    "AboutPod": {
+      "stat": {
+        "activeUsers": "{ count } 활성 사용자",
+        "listeningsCount": "{ count } 듣는중"
+      }
+    },
+    "RemoteSearchForm": {
+      "label": {
+        "rss": {
+          "fieldPlaceholder": "{'@'}channel{'@'}pod.example 또는 https://website.example/rss.xml"
+        }
+      }
+    }
+  },
+  "views": {
+    "channels": {
+      "DetailBase": {
+        "meta": {
+          "episodes": "{ count } 에피소드",
+          "listenings": "{ count } 듣는중",
+          "subscribers": "{ count } 구독자",
+          "tracks": "{ count } 트랙"
+        }
+      }
+    },
+    "content": {
+      "libraries": {
+        "Card": {
+          "meta": {
+            "tracks": "{ count } 트랙"
+          }
+        }
+      },
+      "remote": {
+        "Card": {
+          "meta": {
+            "tracks": "{ count } 트랙"
+          }
+        }
+      }
+    },
+    "library": {
+      "LibraryBase": {
+        "meta": {
+          "tracks": "{ count } 트랙"
+        }
+      }
+    },
+    "auth": {
+      "Signup": {
+        "header": {
+          "createAccount": "{ app } 이 Funkwhale 계정에 접근하려고 합니다"
+        }
+      }
+    }
+  }
+}

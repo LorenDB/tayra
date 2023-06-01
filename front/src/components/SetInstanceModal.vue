@@ -1,12 +1,77 @@
+<script setup lang="ts">
+import { ref, computed, watch, nextTick } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useVModel } from '@vueuse/core'
+import { useStore } from '~/store'
+import { uniq } from 'lodash-es'
+
+import axios from 'axios'
+
+import SemanticModal from '~/components/semantic/Modal.vue'
+
+interface Events {
+  (e: 'update:show', show: boolean): void
+}
+
+interface Props {
+  show: boolean
+}
+
+const emit = defineEmits<Events>()
+const props = defineProps<Props>()
+
+const show = useVModel(props, 'show', emit)
+
+const instanceUrl = ref('')
+
+const store = useStore()
+const suggestedInstances = computed(() => {
+  const serverUrl = store.state.instance.frontSettings.defaultServerUrl
+
+  return uniq([
+    store.state.instance.instanceUrl,
+    ...store.state.instance.knownInstances,
+    serverUrl.endsWith('/') ? serverUrl : serverUrl + '/',
+    store.getters['instance/defaultInstance']
+  ]).slice(1)
+})
+
+watch(() => store.state.instance.instanceUrl, () => store.dispatch('instance/fetchSettings'))
+
+const { t } = useI18n()
+const isError = ref(false)
+const isLoading = ref(false)
+const checkAndSwitch = async (url: string) => {
+  isError.value = false
+  isLoading.value = true
+
+  try {
+    const instanceUrl = new URL(url.startsWith('https://') || url.startsWith('http://') ? url : `https://${url}`).origin
+    await axios.get(instanceUrl + '/api/v1/instance/nodeinfo/2.0/')
+
+    show.value = false
+    store.commit('ui/addMessage', {
+      content: t('components.SetInstanceModal.message.newUrl', { url: instanceUrl }),
+      date: new Date()
+    })
+
+    await nextTick()
+    store.dispatch('instance/setUrl', instanceUrl)
+  } catch (error) {
+    isError.value = true
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
-  <modal
-    :show="show"
-    @update:show="$emit('update:show', $event); isError = false"
+  <semantic-modal
+    v-model:show="show"
+    @update:show="isError = false"
   >
     <h3 class="header">
-      <translate translate-context="Popup/Instance/Title">
-        Choose your instance
-      </translate>
+      {{ $t('components.SetInstanceModal.header.chooseInstance') }}
     </h3>
     <div class="scrolling content">
       <div
@@ -15,20 +80,14 @@
         class="ui negative message"
       >
         <h4 class="header">
-          <translate translate-context="Popup/Instance/Error message.Title">
-            It is not possible to connect to the given URL
-          </translate>
+          {{ $t('components.SetInstanceModal.header.failure') }}
         </h4>
         <ul class="list">
           <li>
-            <translate translate-context="Popup/Instance/Error message.List item">
-              The server might be down
-            </translate>
+            {{ $t('components.SetInstanceModal.help.serverDown') }}
           </li>
           <li>
-            <translate translate-context="Popup/Instance/Error message.List item">
-              The given address is not a Funkwhale server
-            </translate>
+            {{ $t('components.SetInstanceModal.help.notFunkwhaleServer') }}
           </li>
         </ul>
       </div>
@@ -38,22 +97,24 @@
       >
         <p
           v-if="$store.state.instance.instanceUrl"
-          v-translate="{url: $store.state.instance.instanceUrl, hostname: instanceHostname }"
           class="description"
-          translate-context="Popup/Login/Paragraph"
         >
-          You are currently connected to <a
-            href="%{ url }"
-            target="_blank"
-          >%{ hostname }&nbsp;<i class="external icon" /></a>. If you continue, you will be disconnected from your current instance and all your local data will be deleted.
+          <i18n-t keypath="components.SetInstanceModal.message.currentConnection">
+            <a
+              :href="$store.state.instance.instanceUrl"
+              target="_blank"
+            >
+              {{ $store.getters['instance/domain'] }}
+              <i class="external icon" />
+            </a>
+          </i18n-t>
+          {{ $t('', {url: $store.state.instance.instanceUrl, hostname: $store.getters['instance/domain']}) }}
         </p>
         <p v-else>
-          <translate translate-context="Popup/Instance/Paragraph">
-            To continue, please select the Funkwhale instance you want to connect to. Enter the address directly, or select one of the suggested choices.
-          </translate>
+          {{ $t('components.SetInstanceModal.help.selectPod') }}
         </p>
         <div class="field">
-          <label for="instance-picker"><translate translate-context="Popup/Instance/Input.Label/Noun">Instance URL</translate></label>
+          <label for="instance-picker">{{ $t('components.SetInstanceModal.label.url') }}</label>
           <div class="ui action input">
             <input
               id="instance-picker"
@@ -65,9 +126,7 @@
               type="submit"
               :class="['ui', 'icon', {loading: isLoading}, 'button']"
             >
-              <translate translate-context="*/*/Button.Label/Verb">
-                Submit
-              </translate>
+              {{ $t('components.SetInstanceModal.button.submit') }}
             </button>
           </div>
         </div>
@@ -79,9 +138,7 @@
       >
         <div class="field">
           <h4>
-            <translate translate-context="Popup/Instance/List.Label">
-              Suggested choices
-            </translate>
+            {{ $t('components.SetInstanceModal.header.suggestions') }}
           </h4>
           <button
             v-for="(url, key) in suggestedInstances"
@@ -96,113 +153,8 @@
     </div>
     <div class="actions">
       <button class="ui basic cancel button">
-        <translate translate-context="*/*/Button.Label/Verb">
-          Cancel
-        </translate>
+        {{ $t('components.SetInstanceModal.button.cancel') }}
       </button>
     </div>
-  </modal>
+  </semantic-modal>
 </template>
-
-<script>
-import Modal from '@/components/semantic/Modal'
-import axios from 'axios'
-import _ from '@/lodash'
-
-export default {
-  components: {
-    Modal
-  },
-  props: { show: { type: Boolean, required: true } },
-  data () {
-    return {
-      instanceUrl: null,
-      nodeinfo: null,
-      isError: false,
-      isLoading: false,
-      path: 'api/v1/instance/nodeinfo/2.0/'
-    }
-  },
-  computed: {
-    suggestedInstances () {
-      const instances = this.$store.state.instance.knownInstances.slice(0)
-      if (this.$store.state.instance.frontSettings.defaultServerUrl) {
-        let serverUrl = this.$store.state.instance.frontSettings.defaultServerUrl
-        if (!serverUrl.endsWith('/')) {
-          serverUrl = serverUrl + '/'
-        }
-        instances.push(serverUrl)
-      }
-      const self = this
-      instances.push(this.$store.getters['instance/defaultUrl'](), 'https://demo.funkwhale.audio/')
-      return _.uniq(instances.filter((e) => { return e !== self.$store.state.instance.instanceUrl }))
-    },
-    instanceHostname () {
-      const url = this.$store.state.instance.instanceUrl
-      const parser = document.createElement('a')
-      parser.href = url
-      return parser.hostname
-    }
-  },
-  watch: {
-    '$store.state.instance.instanceUrl' () {
-      this.$store.dispatch('instance/fetchSettings')
-      this.fetchNodeInfo()
-    }
-  },
-  methods: {
-    fetchNodeInfo () {
-      const self = this
-      axios.get('instance/nodeinfo/2.0/').then(response => {
-        self.nodeinfo = response.data
-      })
-    },
-    fetchUrl (url) {
-      let urlFetch = url
-      if (!urlFetch.endsWith('/')) {
-        urlFetch = `${urlFetch}/${this.path}`
-      } else {
-        urlFetch = `${urlFetch}${this.path}`
-      }
-      if (!urlFetch.startsWith('https://') && !urlFetch.startsWith('http://')) {
-        urlFetch = `https://${urlFetch}`
-      }
-      return urlFetch
-    },
-    requestDistantNodeInfo (url) {
-      const self = this
-      axios.get(this.fetchUrl(url)).then(function (response) {
-        self.isLoading = false
-        if (!url.startsWith('https://') && !url.startsWith('http://')) {
-          url = `https://${url}`
-        }
-        self.switchInstance(url)
-      }).catch(function () {
-        self.isLoading = false
-        self.isError = true
-      })
-    },
-    switchInstance (url) {
-      // Here we disconnect from the current instance and reconnect to the new one. No check is performed…
-      this.$emit('update:show', false)
-      this.isError = false
-      const msg = this.$pgettext('*/Instance/Message', 'You are now using the Funkwhale instance at %{ url }')
-      this.$store.commit('ui/addMessage', {
-        content: this.$gettextInterpolate(msg, { url: url }),
-        date: new Date()
-      })
-      const self = this
-      this.$nextTick(() => {
-        self.$store.commit('instance/instanceUrl', null)
-        self.$store.dispatch('instance/setUrl', url)
-      })
-    },
-    checkAndSwitch (url) {
-      // First we have to check if the address is a valid FW server. If yes, we switch:
-      this.isError = false // Clear error message if any…
-      this.isLoading = true
-      this.requestDistantNodeInfo(url)
-    }
-  }
-}
-</script>

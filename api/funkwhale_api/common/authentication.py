@@ -1,23 +1,12 @@
-from django.conf import settings
-from django.utils.translation import ugettext as _
-
-from django.core.cache import cache
-
 from allauth.account.utils import send_email_confirmation
+from django.core.cache import cache
+from django.utils.translation import ugettext as _
 from oauth2_provider.contrib.rest_framework.authentication import (
     OAuth2Authentication as BaseOAuth2Authentication,
 )
 from rest_framework import exceptions
 
 from funkwhale_api.users import models as users_models
-
-
-def should_verify_email(user):
-    if user.is_superuser:
-        return False
-    has_unverified_email = not user.has_verified_primary_email
-    mandatory_verification = settings.ACCOUNT_EMAIL_VERIFICATION != "optional"
-    return has_unverified_email and mandatory_verification
 
 
 class UnverifiedEmail(Exception):
@@ -27,7 +16,7 @@ class UnverifiedEmail(Exception):
 
 def resend_confirmation_email(request, user):
     THROTTLE_DELAY = 500
-    cache_key = "auth:resent-email-confirmation:{}".format(user.pk)
+    cache_key = f"auth:resent-email-confirmation:{user.pk}"
     if cache.get(cache_key):
         return False
 
@@ -45,7 +34,7 @@ class OAuth2Authentication(BaseOAuth2Authentication):
             resend_confirmation_email(request, e.user)
 
 
-class ApplicationTokenAuthentication(object):
+class ApplicationTokenAuthentication:
     def authenticate(self, request):
         try:
             header = request.headers["Authorization"]
@@ -68,7 +57,7 @@ class ApplicationTokenAuthentication(object):
             msg = _("User account is disabled.")
             raise exceptions.AuthenticationFailed(msg)
 
-        if should_verify_email(user):
+        if user.should_verify_email():
             raise UnverifiedEmail(user)
 
         request.scopes = application.scope.split()

@@ -1,3 +1,116 @@
+<script setup lang="ts">
+import type { BackendError, Application } from '~/types'
+
+import axios from 'axios'
+import { useI18n } from 'vue-i18n'
+import { whenever } from '@vueuse/core'
+import { ref, computed } from 'vue'
+
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useScopes from '~/composables/auth/useScopes'
+import useFormData from '~/composables/useFormData'
+
+interface Props {
+  clientId: string
+  redirectUri: string
+  scope: 'me' | 'all'
+  responseType: string
+  nonce: string
+  state: string
+}
+
+const props = defineProps<Props>()
+
+const { t } = useI18n()
+const sharedLabels = useSharedLabels()
+const knownScopes = useScopes()
+
+const supportedScopes = ['read', 'write']
+for (const scope of knownScopes) {
+  supportedScopes.push(`read:${scope.id}`)
+  supportedScopes.push(`write:${scope.id}`)
+}
+
+const application = ref()
+
+const errors = ref([] as string[])
+const isLoading = ref(false)
+const fetchApplication = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(`oauth/apps/${props.clientId}/`)
+    application.value = response.data as Application
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const code = ref()
+const submit = async () => {
+  isLoading.value = true
+
+  try {
+    const data = useFormData({
+      redirect_uri: props.redirectUri,
+      scope: props.scope,
+      allow: 'true',
+      client_id: props.clientId,
+      response_type: props.responseType,
+      state: props.state,
+      nonce: props.nonce
+    })
+
+    const response = await axios.post('oauth/authorize/', data, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    })
+
+    if (props.redirectUri !== 'urn:ietf:wg:oauth:2.0:oob') {
+      window.location.href = response.data.redirect_uri
+      return
+    }
+
+    code.value = response.data.code
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const labels = computed(() => ({
+  title: t('components.auth.Authorize.title')
+}))
+
+const requestedScopes = computed(() => props.scope.split(' '))
+const unknownRequestedScopes = computed(() => requestedScopes.value.filter(scope => !supportedScopes.includes(scope)))
+const topicScopes = computed(() => {
+  const requested = requestedScopes.value
+
+  const write = requested.includes('write')
+  const read = requested.includes('read')
+
+  return knownScopes.map(scope => {
+    const { id } = scope
+    return {
+      id,
+      icon: scope.icon,
+      label: sharedLabels.scopes[id].label,
+      description: sharedLabels.scopes[id].description,
+      read: read || requested.includes(`read:${id}`),
+      write: write || requested.includes(`write:${id}`)
+    }
+  }).filter(scope => scope.read || scope.write)
+})
+
+whenever(() => props.clientId, fetchApplication, { immediate: true })
+</script>
+
 <template>
   <main
     v-title="labels.title"
@@ -6,9 +119,7 @@
     <section class="ui vertical stripe segment">
       <div class="ui small text container">
         <h2>
-          <i class="lock open icon" /><translate translate-context="Content/Auth/Title/Verb">
-            Authorize third-party app
-          </translate>
+          <i class="lock open icon" />{{ $t('components.auth.Authorize.header.authorize') }}
         </h2>
         <div
           v-if="errors.length > 0"
@@ -19,17 +130,13 @@
             v-if="application"
             class="header"
           >
-            <translate translate-context="Popup/Moderation/Error message">
-              Error while authorizing application
-            </translate>
+            {{ $t('components.auth.Authorize.header.authorizeFailure') }}
           </h4>
           <h4
             v-else
             class="header"
           >
-            <translate translate-context="Popup/Moderation/Error message">
-              Error while fetching application data
-            </translate>
+            {{ $t('components.auth.Authorize.header.fetchFailure') }}
           </h4>
           <ul class="list">
             <li
@@ -52,12 +159,7 @@
           @submit.prevent="submit"
         >
           <h3>
-            <translate
-              translate-context="Content/Auth/Title"
-              :translate-params="{app: application.name}"
-            >
-              %{ app } wants to access your Funkwhale account
-            </translate>
+            {{ $t('components.auth.Authorize.header.access', {app_name: application.name}) }}
           </h3>
 
           <h4
@@ -70,20 +172,20 @@
               :class="['ui', 'basic', 'right floated', 'tiny', 'vertically-spaced component-label label']"
             >
               <i class="pencil icon" />
-              <translate translate-context="Content/Auth/Label/Noun">Write-only</translate>
+              {{ $t('components.auth.Authorize.header.writeOnly') }}
             </span>
             <span
               v-else-if="!topic.write && topic.read"
               :class="['ui', 'basic', 'right floated', 'tiny', 'vertically-spaced component-label label']"
             >
-              <translate translate-context="Content/Auth/Label/Noun">Read-only</translate>
+              {{ $t('components.auth.Authorize.header.readOnly') }}
             </span>
             <span
               v-else-if="topic.write && topic.read"
               :class="['ui', 'basic', 'right floated', 'tiny', 'vertically-spaced component-label label']"
             >
               <i class="pencil icon" />
-              <translate translate-context="Content/Auth/Label/Noun">Full access</translate>
+              {{ $t('components.auth.Authorize.header.allScopes') }}
             </span>
             <i :class="[topic.icon, 'icon']" />
             <div class="content">
@@ -94,7 +196,7 @@
             </div>
           </h4>
           <div v-if="unknownRequestedScopes.length > 0">
-            <p><strong><translate translate-context="Content/Auth/Paragraph">The application is also requesting the following unknown permissions:</translate></strong></p>
+            <p><strong>{{ $t('components.auth.Authorize.message.unknownPermissions') }}</strong></p>
             <ul
               v-for="(unknownscope, key) in unknownRequestedScopes"
               :key="key"
@@ -107,169 +209,26 @@
             type="submit"
           >
             <i class="lock open icon" />
-            <translate
-              translate-context="Content/Signup/Button.Label/Verb"
-              :translate-params="{app: application.name}"
-            >
-              Authorize %{ app }
-            </translate>
+            {{ $t('components.auth.Authorize.button.authorize', { app: application.name }) }}
           </button>
           <p
             v-if="redirectUri === 'urn:ietf:wg:oauth:2.0:oob'"
-            key="1"
-            v-translate
-            translate-context="Content/Auth/Paragraph"
           >
-            You will be shown a code to copy-paste in the application.
+            {{ $t('components.auth.Authorize.help.copyCode') }}
           </p>
           <p
             v-else
-            key="2"
-            v-translate="{url: redirectUri}"
-            translate-context="Content/Auth/Paragraph"
-            :translate-params="{url: redirectUri}"
           >
-            You will be redirected to <strong>%{ url }</strong>
+            <i18n-t keypath="components.auth.Authorize.help.redirect">
+              <strong>{{ redirectUri }}</strong>
+            </i18n-t>
           </p>
         </form>
         <div v-else-if="code">
-          <p><strong><translate translate-context="Content/Auth/Paragraph">Copy-paste the following code in the application:</translate></strong></p>
+          <p><strong>{{ $t('components.auth.Authorize.help.pasteCode') }}</strong></p>
           <copy-input :value="code" />
         </div>
       </div>
     </section>
   </main>
 </template>
-
-<script>
-import TranslationsMixin from '@/components/mixins/Translations'
-
-import axios from 'axios'
-
-import { checkRedirectToLogin } from '@/utils'
-export default {
-  mixins: [TranslationsMixin],
-  props: {
-    clientId: { type: String, required: true },
-    redirectUri: { type: String, required: true },
-    scope: { type: String, required: true },
-    responseType: { type: String, required: true },
-    nonce: { type: String, required: true },
-    state: { type: String, required: true }
-  },
-  data () {
-    return {
-      application: null,
-      isLoading: false,
-      errors: [],
-      code: null,
-      knownScopes: [
-        { id: 'profile', icon: 'user' },
-        { id: 'libraries', icon: 'book' },
-        { id: 'favorites', icon: 'heart' },
-        { id: 'listenings', icon: 'music' },
-        { id: 'follows', icon: 'users' },
-        { id: 'playlists', icon: 'list' },
-        { id: 'radios', icon: 'rss' },
-        { id: 'filters', icon: 'eye slash' },
-        { id: 'notifications', icon: 'bell' },
-        { id: 'edits', icon: 'pencil alternate' },
-        { id: 'security', icon: 'lock' },
-        { id: 'reports', icon: 'warning sign' }
-      ]
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        title: this.$pgettext('Head/Authorize/Title', 'Allow application')
-      }
-    },
-    requestedScopes () {
-      return (this.scope || '').split(' ')
-    },
-    supportedScopes () {
-      const supported = ['read', 'write']
-      this.knownScopes.forEach(s => {
-        supported.push(`read:${s.id}`)
-        supported.push(`write:${s.id}`)
-      })
-      return supported
-    },
-    unknownRequestedScopes () {
-      const self = this
-      return this.requestedScopes.filter(s => {
-        return self.supportedScopes.indexOf(s) < 0
-      })
-    },
-    topicScopes () {
-      const self = this
-      const requested = this.requestedScopes
-      let write = false
-      let read = false
-      if (requested.indexOf('read') > -1) {
-        read = true
-      }
-      if (requested.indexOf('write') > -1) {
-        write = true
-      }
-
-      return this.knownScopes.map(s => {
-        const id = s.id
-        return {
-          id: id,
-          icon: s.icon,
-          label: self.sharedLabels.scopes[s.id].label,
-          description: self.sharedLabels.scopes[s.id].description,
-          read: read || requested.indexOf(`read:${id}`) > -1,
-          write: write || requested.indexOf(`write:${id}`) > -1
-        }
-      }).filter(c => {
-        return c.read || c.write
-      })
-    }
-  },
-  created () {
-    checkRedirectToLogin(this.$store, this.$router)
-    if (this.clientId) {
-      this.fetchApplication()
-    }
-  },
-  methods: {
-    fetchApplication () {
-      this.isLoading = true
-      const self = this
-      axios.get(`oauth/apps/${this.clientId}/`).then((response) => {
-        self.isLoading = false
-        self.application = response.data
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    submit () {
-      this.isLoading = true
-      const self = this
-      const data = new FormData()
-      data.set('redirect_uri', this.redirectUri)
-      data.set('scope', this.scope)
-      data.set('allow', true)
-      data.set('client_id', this.clientId)
-      data.set('response_type', this.responseType)
-      data.set('state', this.state)
-      data.set('nonce', this.nonce)
-      axios.post('oauth/authorize/', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' } }).then((response) => {
-        if (self.redirectUri === 'urn:ietf:wg:oauth:2.0:oob') {
-          self.isLoading = false
-          self.code = response.data.code
-        } else {
-          window.location.href = response.data.redirect_uri
-        }
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    }
-  }
-}
-</script>

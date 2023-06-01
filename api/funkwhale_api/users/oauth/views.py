@@ -1,21 +1,22 @@
 import json
+import secrets
 import urllib.parse
 
 from django import http
-from django.utils import timezone
 from django.db.models import Q
-from rest_framework import mixins, permissions, response, views, viewsets
-from rest_framework.decorators import action
-
+from django.utils import timezone
+from drf_spectacular.utils import extend_schema
 from oauth2_provider import exceptions as oauth2_exceptions
 from oauth2_provider import views as oauth_views
 from oauth2_provider.settings import oauth2_settings
+from rest_framework import mixins, permissions, response, views, viewsets
+from rest_framework.decorators import action
 
 from funkwhale_api.common import throttling
 
 from .. import models
-from .permissions import ScopePermission
 from . import serializers
+from .permissions import ScopePermission
 
 
 class ApplicationViewSet(
@@ -45,6 +46,19 @@ class ApplicationViewSet(
             "authenticated": "authenticated-oauth-app",
         }
     }
+
+    def create(self, request, *args, **kwargs):
+        request_data = request.data.copy()
+        secret = secrets.token_hex(64)
+        request_data["client_secret"] = secret
+        serializer = self.get_serializer(data=request_data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        data = serializer.data
+        # Since the serializer returns a hashed secret, we need to override it for the response.
+        data["client_secret"] = secret
+        return response.Response(data, status=201, headers=headers)
 
     def get_serializer_class(self):
         if self.request.method.lower() == "post":
@@ -83,6 +97,7 @@ class ApplicationViewSet(
             qs = qs.filter(user=self.request.user)
         return qs
 
+    @extend_schema(operation_id="refresh_oauth_token")
     @action(
         detail=True,
         methods=["post"],
@@ -184,7 +199,7 @@ class AuthorizeView(views.APIView, oauth_views.AuthorizationView):
         except models.Application.DoesNotExist:
             return self.json_payload({"non_field_errors": ["Invalid application"]}, 400)
 
-    def redirect(self, redirect_to, application, token=None):
+    def redirect(self, redirect_to, application):
         if self.request.is_ajax():
             # Web client need this to be able to redirect the user
             query = urllib.parse.urlparse(redirect_to).query
@@ -193,7 +208,7 @@ class AuthorizeView(views.APIView, oauth_views.AuthorizationView):
                 {"redirect_uri": redirect_to, "code": code}, status_code=200
             )
 
-        return super().redirect(redirect_to, application, token)
+        return super().redirect(redirect_to, application)
 
     def error_response(self, error, application):
         if isinstance(error, oauth2_exceptions.FatalClientError):

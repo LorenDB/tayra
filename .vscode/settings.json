@@ -1,0 +1,14 @@
+{
+  "python.defaultInterpreterPath": "/workspace/funkwhale/api/.venv/bin/python",
+  "python.testing.cwd": "/workspace/funkwhale/api",
+  "python.envFile": "/workspace/funkwhale/.gitpod/.env",
+  "python.testing.pytestArgs": ["--cov=funkwhale_api", "tests/"],
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true,
+  "vitest.enable": true,
+  "vitest.commandLine": "yarn vitest",
+  "i18n-ally.localesPaths": ["front/src/locales"],
+  "i18n-ally.pathMatcher": "*.json",
+  "i18n-ally.enabledFrameworks": ["vue"],
+  "i18n-ally.keystyle": "nested"
+}

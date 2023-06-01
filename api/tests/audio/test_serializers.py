@@ -4,7 +4,6 @@ import uuid
 import feedparser
 import pytest
 import pytz
-
 from django.templatetags.static import static
 from django.urls import reverse
 
@@ -14,7 +13,6 @@ from funkwhale_api.common import utils as common_utils
 from funkwhale_api.federation import actors
 from funkwhale_api.federation import serializers as federation_serializers
 from funkwhale_api.federation import utils as federation_utils
-from funkwhale_api.music import serializers as music_serializers
 
 
 def test_channel_serializer_create(factories, mocker):
@@ -216,7 +214,7 @@ def test_channel_serializer_representation(factories, to_api_date):
     channel = factories["audio.Channel"](artist__description=content)
     setattr(channel, "_downloads_count", 12)
     expected = {
-        "artist": music_serializers.serialize_artist_simple(channel.artist),
+        "artist": serializers.SimpleChannelArtistSerializer(channel.artist).data,
         "uuid": str(channel.uuid),
         "creation_date": to_api_date(channel.creation_date),
         "actor": federation_serializers.APIActorSerializer(channel.actor).data,
@@ -240,7 +238,7 @@ def test_channel_serializer_external_representation(factories, to_api_date):
     channel = factories["audio.Channel"](artist__description=content, external=True)
 
     expected = {
-        "artist": music_serializers.serialize_artist_simple(channel.artist),
+        "artist": serializers.SimpleChannelArtistSerializer(channel.artist).data,
         "uuid": str(channel.uuid),
         "creation_date": to_api_date(channel.creation_date),
         "actor": None,
@@ -666,7 +664,7 @@ def test_rss_feed_item_serializer_create(factories):
 
     expected_uuid = uuid.uuid3(
         uuid.NAMESPACE_URL,
-        "rss://{}-16f66fff-41ae-4a1c-9101-2746218c4f32".format(channel.pk),
+        f"rss://{channel.pk}-16f66fff-41ae-4a1c-9101-2746218c4f32",
     )
     assert upload.library == channel.library
     assert upload.import_status == "finished"
@@ -693,7 +691,7 @@ def test_rss_feed_item_serializer_update(factories):
     channel = factories["audio.Channel"](rss_url=rss_url, external=True)
     expected_uuid = uuid.uuid3(
         uuid.NAMESPACE_URL,
-        "rss://{}-16f66fff-41ae-4a1c-9101-2746218c4f32".format(channel.pk),
+        f"rss://{channel.pk}-16f66fff-41ae-4a1c-9101-2746218c4f32",
     )
     upload = factories["music.Upload"](
         track__uuid=expected_uuid,

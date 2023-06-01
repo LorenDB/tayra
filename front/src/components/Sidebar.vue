@@ -1,3 +1,130 @@
+<script setup lang="ts">
+import type { RouteRecordName } from 'vue-router'
+
+import { computed, ref, watch, watchEffect, onMounted } from 'vue'
+import { setI18nLanguage, SUPPORTED_LOCALES } from '~/init/locale'
+import { useCurrentElement } from '@vueuse/core'
+import { setupDropdown } from '~/utils/fomantic'
+import { useRoute } from 'vue-router'
+import { useStore } from '~/store'
+import { useI18n } from 'vue-i18n'
+
+import SemanticModal from '~/components/semantic/Modal.vue'
+import UserModal from '~/components/common/UserModal.vue'
+import SearchBar from '~/components/audio/SearchBar.vue'
+import UserMenu from '~/components/common/UserMenu.vue'
+import Logo from '~/components/Logo.vue'
+
+import useThemeList from '~/composables/useThemeList'
+import useTheme from '~/composables/useTheme'
+
+interface Events {
+  (e: 'show:set-instance-modal'): void
+}
+
+interface Props {
+  width: number
+}
+
+const emit = defineEmits<Events>()
+defineProps<Props>()
+
+const store = useStore()
+const { theme } = useTheme()
+const themes = useThemeList()
+const { t, locale: i18nLocale } = useI18n()
+
+const route = useRoute()
+const isCollapsed = ref(true)
+watch(() => route.path, () => (isCollapsed.value = true))
+
+const additionalNotifications = computed(() => store.getters['ui/additionalNotifications'])
+const logoUrl = computed(() => store.state.auth.authenticated ? 'library.index' : 'index')
+
+const labels = computed(() => ({
+  mainMenu: t('components.Sidebar.label.main'),
+  selectTrack: t('components.Sidebar.label.play'),
+  pendingFollows: t('components.Sidebar.label.follows'),
+  pendingReviewEdits: t('components.Sidebar.label.edits'),
+  pendingReviewReports: t('components.Sidebar.label.reports'),
+  language: t('components.Sidebar.label.language'),
+  theme: t('components.Sidebar.label.theme'),
+  addContent: t('components.Sidebar.label.add'),
+  administration: t('components.Sidebar.label.administration')
+}))
+
+type SidebarMenuTabs = 'explore' | 'myLibrary'
+const expanded = ref<SidebarMenuTabs>('explore')
+
+const ROUTE_MAPPINGS: Record<SidebarMenuTabs, RouteRecordName[]> = {
+  explore: [
+    'search',
+    'library.index',
+    'library.podcasts.browse',
+    'library.albums.browse',
+    'library.albums.detail',
+    'library.artists.browse',
+    'library.artists.detail',
+    'library.tracks.detail',
+    'library.playlists.browse',
+    'library.playlists.detail',
+    'library.radios.browse',
+    'library.radios.detail'
+  ],
+  myLibrary: [
+    'library.me',
+    'library.albums.me',
+    'library.artists.me',
+    'library.playlists.me',
+    'library.radios.me',
+    'favorites'
+  ]
+}
+
+watchEffect(() => {
+  if (ROUTE_MAPPINGS.explore.includes(route.name as RouteRecordName)) {
+    expanded.value = 'explore'
+    return
+  }
+
+  if (ROUTE_MAPPINGS.myLibrary.includes(route.name as RouteRecordName)) {
+    expanded.value = 'myLibrary'
+    return
+  }
+
+  expanded.value = store.state.auth.authenticated ? 'myLibrary' : 'explore'
+})
+
+const moderationNotifications = computed(() =>
+  store.state.ui.notifications.pendingReviewEdits
+    + store.state.ui.notifications.pendingReviewReports
+    + store.state.ui.notifications.pendingReviewRequests
+)
+
+const showLanguageModal = ref(false)
+const locale = ref(i18nLocale.value)
+watch(locale, (locale) => {
+  setI18nLanguage(locale)
+})
+
+const isProduction = import.meta.env.PROD
+const showUserModal = ref(false)
+const showThemeModal = ref(false)
+
+const el = useCurrentElement()
+watchEffect(() => {
+  if (store.state.auth.authenticated) {
+    setupDropdown('.admin-dropdown', el.value)
+  }
+
+  setupDropdown('.user-dropdown', el.value)
+})
+
+onMounted(() => {
+  document.getElementById('fake-sidebar')?.classList.add('loaded')
+})
+</script>
+
 <template>
   <aside :class="['ui', 'vertical', 'left', 'visible', 'wide', {'collapsed': isCollapsed}, 'sidebar', 'component-sidebar']">
     <header class="ui basic segment header-wrapper">
@@ -7,7 +134,7 @@
       >
         <i class="logo bordered inverted vibrant big icon">
           <logo class="logo" />
-          <span class="visually-hidden">Home</span>
+          <span class="visually-hidden">{{ $t('components.Sidebar.link.home') }}</span>
         </i>
       </router-link>
       <nav class="top ui compact right aligned inverted text menu">
@@ -27,9 +154,7 @@
               </div>
               <div class="menu">
                 <h3 class="header">
-                  <translate translate-context="Sidebar/Admin/Title/Noun">
-                    Administration
-                  </translate>
+                  {{ $t('components.Sidebar.header.administration') }}
                 </h3>
                 <div class="divider" />
                 <router-link
@@ -44,9 +169,7 @@
                   >
                     {{ $store.state.ui.notifications.pendingReviewEdits }}
                   </div>
-                  <translate translate-context="*/*/*/Noun">
-                    Library
-                  </translate>
+                  {{ $t('components.Sidebar.link.library') }}
                 </router-link>
                 <router-link
                   v-if="$store.state.auth.availablePermissions['moderation']"
@@ -54,33 +177,27 @@
                   :to="{name: 'manage.moderation.reports.list', query: {q: 'resolved:no'}}"
                 >
                   <div
-                    v-if="$store.state.ui.notifications.pendingReviewReports + $store.state.ui.notifications.pendingReviewRequests> 0"
+                    v-if="$store.state.ui.notifications.pendingReviewReports + $store.state.ui.notifications.pendingReviewRequests > 0"
                     :title="labels.pendingReviewReports"
                     :class="['ui', 'circular', 'mini', 'right floated', 'accent', 'label']"
                   >
                     {{ $store.state.ui.notifications.pendingReviewReports + $store.state.ui.notifications.pendingReviewRequests }}
                   </div>
-                  <translate translate-context="*/Moderation/*">
-                    Moderation
-                  </translate>
+                  {{ $t('components.Sidebar.link.moderation') }}
                 </router-link>
                 <router-link
                   v-if="$store.state.auth.availablePermissions['settings']"
                   class="item"
                   :to="{name: 'manage.users.users.list'}"
                 >
-                  <translate translate-context="*/*/*/Noun">
-                    Users
-                  </translate>
+                  {{ $t('components.Sidebar.link.users') }}
                 </router-link>
                 <router-link
                   v-if="$store.state.auth.availablePermissions['settings']"
                   class="item"
                   :to="{path: '/manage/settings'}"
                 >
-                  <translate translate-context="*/*/*/Noun">
-                    Settings
-                  </translate>
+                  {{ $t('components.Sidebar.link.settings') }}
                 </router-link>
               </div>
             </div>
@@ -98,10 +215,10 @@
           <div class="item">
             <div class="ui user-dropdown dropdown">
               <img
-                v-if="$store.state.auth.authenticated && $store.state.auth.profile.avatar && $store.state.auth.profile.avatar.urls.medium_square_crop"
+                v-if="$store.state.auth.authenticated && $store.state.auth.profile?.avatar && $store.state.auth.profile?.avatar.urls.medium_square_crop"
                 class="ui avatar image"
                 alt=""
-                :src="$store.getters['instance/absoluteUrl']($store.state.auth.profile.avatar.urls.medium_square_crop)"
+                :src="$store.getters['instance/absoluteUrl']($store.state.auth.profile?.avatar.urls.medium_square_crop)"
               >
               <actor-avatar
                 v-else-if="$store.state.auth.authenticated"
@@ -118,8 +235,8 @@
                 {{ $store.state.ui.notifications.inbox + additionalNotifications }}
               </div>
               <user-menu
+                v-bind="$attrs"
                 :width="width"
-                v-on="$listeners"
               />
             </div>
           </div>
@@ -131,10 +248,10 @@
             @click.prevent.exact="showUserModal = !showUserModal"
           >
             <img
-              v-if="$store.state.auth.authenticated && $store.state.auth.profile.avatar && $store.state.auth.profile.avatar.urls.medium_square_crop"
+              v-if="$store.state.auth.authenticated && $store.state.auth.profile?.avatar?.urls.medium_square_crop"
               class="ui avatar image"
               alt=""
-              :src="$store.getters['instance/absoluteUrl']($store.state.auth.profile.avatar.urls.medium_square_crop)"
+              :src="$store.getters['instance/absoluteUrl']($store.state.auth.profile?.avatar.urls.medium_square_crop)"
             >
             <actor-avatar
               v-else-if="$store.state.auth.authenticated"
@@ -153,16 +270,14 @@
           </a>
         </template>
         <user-modal
-          :show="showUserModal"
-          @showThemeModalEvent="showThemeModal=true"
-          @showLanguageModalEvent="showLanguageModal=true"
-          @update:show="showUserModal = $event"
+          v-model:show="showUserModal"
+          @show-theme-modal-event="showThemeModal=true"
+          @show-language-modal-event="showLanguageModal=true"
         />
-        <modal
+        <semantic-modal
           ref="languageModal"
+          v-model:show="showLanguageModal"
           :fullscreen="false"
-          :show="showLanguageModal"
-          @update:show="showLanguageModal = $event"
         >
           <i
             role="button"
@@ -176,25 +291,24 @@
           </div>
           <div class="content">
             <fieldset
-              v-for="(language, key) in $language.available"
+              v-for="(language, key) in SUPPORTED_LOCALES"
               :key="key"
             >
               <input
-                :id="key"
-                v-model="languageSelection"
+                :id="`${key}`"
+                v-model="locale"
                 type="radio"
                 name="language"
                 :value="key"
               >
-              <label :for="key">{{ language }}</label>
+              <label :for="`${key}`">{{ language }}</label>
             </fieldset>
           </div>
-        </modal>
-        <modal
+        </semantic-modal>
+        <semantic-modal
           ref="themeModal"
+          v-model:show="showThemeModal"
           :fullscreen="false"
-          :show="showThemeModal"
-          @update:show="showThemeModal = $event"
         >
           <i
             role="button"
@@ -208,20 +322,20 @@
           </div>
           <div class="content">
             <fieldset
-              v-for="theme in themes"
-              :key="theme.key"
+              v-for="th in themes"
+              :key="th.key"
             >
               <input
-                :id="theme.key"
-                v-model="themeSelection"
+                :id="th.key"
+                v-model="theme"
                 type="radio"
                 name="theme"
-                :value="theme.key"
+                :value="th.key"
               >
-              <label :for="theme.key">{{ theme.name }}</label>
+              <label :for="th.key">{{ th.name }}</label>
             </fieldset>
           </div>
-        </modal>
+        </semantic-modal>
         <div class="item collapse-button-wrapper">
           <button
             :class="['ui', 'basic', 'big', {'vibrant': !isCollapsed}, 'inverted icon', 'collapse', 'button']"
@@ -243,18 +357,14 @@
         class="ui fluid tiny primary button"
         :to="{name: 'login'}"
       >
-        <translate translate-context="*/Login/*/Verb">
-          Login
-        </translate>
+        {{ $t('components.Sidebar.link.login') }}
       </router-link>
       <div class="ui small hidden divider" />
       <router-link
         class="ui fluid tiny button"
         :to="{path: '/signup'}"
       >
-        <translate translate-context="*/Signup/Link/Verb">
-          Create an account
-        </translate>
+        {{ $t('components.Sidebar.link.createAccount') }}
       </router-link>
     </div>
     <nav
@@ -266,33 +376,29 @@
         id="navigation-label"
         class="visually-hidden"
       >
-        <translate translate-context="*/*/*">
-          Main navigation
-        </translate>
+        {{ $t('components.Sidebar.header.main') }}
       </h1>
       <div class="ui small hidden divider" />
       <section
-        :class="['ui', 'bottom', 'attached', {active: selectedTab === 'library'}, 'tab']"
         :aria-label="labels.mainMenu"
+        class="ui bottom attached active tab"
       >
         <nav
           class="ui vertical large fluid inverted menu"
           role="navigation"
           :aria-label="labels.mainMenu"
         >
-          <div :class="[{collapsed: !exploreExpanded}, 'collapsible item']">
+          <div :class="[{ collapsed: expanded !== 'explore' }, 'collapsible item']">
             <h2
               class="header"
               role="button"
               tabindex="0"
-              @click="exploreExpanded = true"
-              @focus="exploreExpanded = true"
+              @click="expanded = 'explore'"
+              @focus="expanded = 'explore'"
             >
-              <translate translate-context="*/*/*/Verb">
-                Explore
-              </translate>
+              {{ $t('components.Sidebar.header.explore') }}
               <i
-                v-if="!exploreExpanded"
+                v-if="expanded !== 'explore'"
                 class="angle right icon"
               />
             </h2>
@@ -301,129 +407,113 @@
                 class="item"
                 :to="{name: 'search'}"
               >
-                <i class="search icon" /><translate translate-context="Sidebar/Navigation/List item.Link/Verb">
-                  Search
-                </translate>
+                <i class="search icon" />
+                {{ $t('components.Sidebar.link.search') }}
               </router-link>
               <router-link
                 class="item"
-                :exact="true"
                 :to="{name: 'library.index'}"
+                active-class="_active"
               >
-                <i class="music icon" /><translate translate-context="Sidebar/Navigation/List item.Link/Verb">
-                  Browse
-                </translate>
+                <i class="music icon" />
+                {{ $t('components.Sidebar.link.browse') }}
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.podcasts.browse'}"
               >
-                <i class="podcast icon" /><translate translate-context="*/*/*">
-                  Podcasts
-                </translate>
+                <i class="podcast icon" />
+                {{ $t('components.Sidebar.link.podcasts') }}
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.albums.browse'}"
               >
-                <i class="compact disc icon" /><translate translate-context="*/*/*">
-                  Albums
-                </translate>
+                <i class="compact disc icon" />
+                {{ $t('components.Sidebar.link.albums') }}
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.artists.browse'}"
               >
-                <i class="user icon" /><translate translate-context="*/*/*">
-                  Artists
-                </translate>
+                <i class="user icon" />
+                {{ $t('components.Sidebar.link.artists') }}
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.playlists.browse'}"
               >
-                <i class="list icon" /><translate translate-context="*/*/*">
-                  Playlists
-                </translate>
+                <i class="list icon" />
+                {{ $t('components.Sidebar.link.playlists') }}
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.radios.browse'}"
               >
-                <i class="feed icon" /><translate translate-context="*/*/*">
-                  Radios
-                </translate>
+                <i class="feed icon" />
+                {{ $t('components.Sidebar.link.radios') }}
               </router-link>
             </div>
           </div>
           <div
             v-if="$store.state.auth.authenticated"
-            :class="[{collapsed: !myLibraryExpanded}, 'collapsible item']"
+            :class="[{ collapsed: expanded !== 'myLibrary' }, 'collapsible item']"
           >
             <h3
               class="header"
               role="button"
               tabindex="0"
-              @click="myLibraryExpanded = true"
-              @focus="myLibraryExpanded = true"
+              @click="expanded = 'myLibrary'"
+              @focus="expanded = 'myLibrary'"
             >
-              <translate translate-context="*/*/*/Noun">
-                My Library
-              </translate>
+              {{ $t('components.Sidebar.header.library') }}
               <i
-                v-if="!myLibraryExpanded"
+                v-if="expanded !== 'myLibrary'"
                 class="angle right icon"
               />
             </h3>
             <div class="menu">
               <router-link
                 class="item"
-                :exact="true"
                 :to="{name: 'library.me'}"
               >
-                <i class="music icon" /><translate translate-context="Sidebar/Navigation/List item.Link/Verb">
-                  Browse
-                </translate>
+                <i class="music icon" />
+                {{ $t('components.Sidebar.link.browse') }}
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.albums.me'}"
               >
-                <i class="compact disc icon" /><translate translate-context="*/*/*">
-                  Albums
-                </translate>
+                <i class="compact disc icon" />
+                {{ $t('components.Sidebar.link.albums') }}
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.artists.me'}"
               >
-                <i class="user icon" /><translate translate-context="*/*/*">
-                  Artists
-                </translate>
+                <i class="user icon" />
+                {{ $t('components.Sidebar.link.artists') }}
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.playlists.me'}"
               >
-                <i class="list icon" /><translate translate-context="*/*/*">
-                  Playlists
-                </translate>
+                <i class="list icon" />
+                {{ $t('components.Sidebar.link.playlists') }}
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.radios.me'}"
               >
-                <i class="feed icon" /><translate translate-context="*/*/*">
-                  Radios
-                </translate>
+                <i class="feed icon" />
+                {{ $t('components.Sidebar.link.radios') }}
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'favorites'}"
               >
-                <i class="heart icon" /><translate translate-context="Sidebar/Favorites/List item.Link/Noun">
-                  Favorites
-                </translate>
+                <i class="heart icon" />
+                {{ $t('components.Sidebar.link.favorites') }}
               </router-link>
             </div>
           </div>
@@ -432,37 +522,33 @@
             class="header item"
             :to="{name: 'subscriptions'}"
           >
-            <translate translate-context="*/*/*">
-              Channels
-            </translate>
+            {{ $t('components.Sidebar.link.channels') }}
           </router-link>
           <div class="item">
             <h3 class="header">
-              <translate translate-context="Footer/About/List item.Link">
-                More
-              </translate>
+              {{ $t('components.Sidebar.header.more') }}
             </h3>
             <div class="menu">
               <router-link
                 class="item"
                 to="/about"
+                active-class="router-link-exact-active active"
               >
-                <i class="info icon" /><translate translate-context="Sidebar/*/List item.Link">
-                  About this pod
-                </translate>
+                <i class="info icon" />
+                {{ $t('components.Sidebar.link.about') }}
               </router-link>
             </div>
           </div>
           <div
-            v-if="!production"
+            v-if="!isProduction"
             class="item"
           >
             <a
               role="button"
               href=""
               class="link item"
-              @click.prevent="$emit('show:set-instance-modal')"
-            >Switch instance</a>
+              @click.prevent="emit('show:set-instance-modal')"
+            >{{ $t('components.Sidebar.link.switchInstance') }}</a>
           </div>
         </nav>
       </section>
@@ -470,249 +556,6 @@
   </aside>
 </template>
 
-<script>
-import { mapState, mapActions, mapGetters } from 'vuex'
-import UserModal from '@/components/common/UserModal'
-import Logo from '@/components/Logo'
-import SearchBar from '@/components/audio/SearchBar'
-import UserMenu from '@/components/common/UserMenu'
-import Modal from '@/components/semantic/Modal'
-
-import $ from 'jquery'
-
-export default {
-  name: 'Sidebar',
-  components: {
-    SearchBar,
-    Logo,
-    UserMenu,
-    UserModal,
-    Modal
-  },
-  props: {
-    width: { type: Number, required: true }
-  },
-  data () {
-    return {
-      selectedTab: 'library',
-      isCollapsed: true,
-      fetchInterval: null,
-      exploreExpanded: false,
-      myLibraryExpanded: false,
-      showUserModal: false,
-      showLanguageModal: false,
-      showThemeModal: false,
-      languageSelection: this.$language.current,
-      themeSelection: this.$store.state.ui.theme
-    }
-  },
-  destroy () {
-    if (this.fetchInterval) {
-      clearInterval(this.fetchInterval)
-    }
-  },
-  computed: {
-    ...mapState({
-      queue: state => state.queue,
-      url: state => state.route.path
-    }),
-    ...mapGetters({
-      additionalNotifications: 'ui/additionalNotifications'
-    }),
-    labels () {
-      const mainMenu = this.$pgettext('Sidebar/*/Hidden text', 'Main menu')
-      const selectTrack = this.$pgettext('Sidebar/Player/Hidden text', 'Play this track')
-      const pendingFollows = this.$pgettext('Sidebar/Notifications/Hidden text', 'Pending follow requests')
-      const pendingReviewEdits = this.$pgettext('Sidebar/Moderation/Hidden text', 'Pending review edits')
-      const language = this.$pgettext(
-        'Sidebar/Settings/Dropdown.Label/Short, Verb',
-        'Language')
-      const theme = this.$pgettext(
-        'Sidebar/Settings/Dropdown.Label/Short, Verb',
-        'Theme')
-      return {
-        pendingFollows,
-        mainMenu,
-        selectTrack,
-        pendingReviewEdits,
-        language,
-        theme,
-        addContent: this.$pgettext('*/Library/*/Verb', 'Add content'),
-        administration: this.$pgettext('Sidebar/Admin/Title/Noun', 'Administration')
-      }
-    },
-    logoUrl () {
-      if (this.$store.state.auth.authenticated) {
-        return 'library.index'
-      } else {
-        return 'index'
-      }
-    },
-    focusedMenu () {
-      const mapping = {
-        search: 'exploreExpanded',
-        'library.index': 'exploreExpanded',
-        'library.podcasts.browse': 'exploreExpanded',
-        'library.albums.browse': 'exploreExpanded',
-        'library.albums.detail': 'exploreExpanded',
-        'library.artists.browse': 'exploreExpanded',
-        'library.artists.detail': 'exploreExpanded',
-        'library.tracks.detail': 'exploreExpanded',
-        'library.playlists.browse': 'exploreExpanded',
-        'library.playlists.detail': 'exploreExpanded',
-        'library.radios.browse': 'exploreExpanded',
-        'library.radios.detail': 'exploreExpanded',
-        'library.me': 'myLibraryExpanded',
-        'library.albums.me': 'myLibraryExpanded',
-        'library.artists.me': 'myLibraryExpanded',
-        'library.playlists.me': 'myLibraryExpanded',
-        'library.radios.me': 'myLibraryExpanded',
-        favorites: 'myLibraryExpanded'
-      }
-      const m = mapping[this.$route.name]
-      if (m) {
-        return m
-      }
-
-      if (this.$store.state.auth.authenticated) {
-        return 'myLibraryExpanded'
-      } else {
-        return 'exploreExpanded'
-      }
-    },
-    moderationNotifications () {
-      return (
-        this.$store.state.ui.notifications.pendingReviewEdits +
-        this.$store.state.ui.notifications.pendingReviewReports +
-        this.$store.state.ui.notifications.pendingReviewRequests
-      )
-    },
-    production () {
-      return process.env.NODE_ENV === 'production'
-    },
-    themes () {
-      return [
-        {
-          name: this.$pgettext('Sidebar/Settings/Dropdown.Label/Theme name', 'Light'),
-          key: 'light'
-        },
-        {
-          name: this.$pgettext('Sidebar/Settings/Dropdown.Label/Theme name', 'Dark'),
-          key: 'dark'
-        }
-      ]
-    }
-  },
-  watch: {
-    url: function () {
-      this.isCollapsed = true
-    },
-    '$store.state.moderation.lastUpdate': function () {
-      this.applyContentFilters()
-    },
-    '$store.state.auth.authenticated': {
-      immediate: true,
-      handler (v) {
-        if (v) {
-          this.$nextTick(() => {
-            this.setupDropdown('.user-dropdown')
-            this.setupDropdown('.admin-dropdown')
-          })
-        } else {
-          this.$nextTick(() => {
-            this.setupDropdown('.user-dropdown')
-          })
-        }
-      }
-    },
-    '$store.state.auth.availablePermissions': {
-      immediate: true,
-      handler (v) {
-        this.$nextTick(() => {
-          this.setupDropdown('.admin-dropdown')
-        })
-      },
-      deep: true
-    },
-    focusedMenu: {
-      immediate: true,
-      handler (n) {
-        if (n) {
-          this[n] = true
-        }
-      }
-    },
-    myLibraryExpanded (v) {
-      if (v) {
-        this.exploreExpanded = false
-      }
-    },
-    exploreExpanded (v) {
-      if (v) {
-        this.myLibraryExpanded = false
-      }
-    },
-    languageSelection: function (v) {
-      this.$store.dispatch('ui/currentLanguage', v)
-      this.$refs.languageModal.closeModal()
-    },
-    themeSelection: function (v) {
-      this.$store.dispatch('ui/theme', v)
-      this.$refs.themeModal.closeModal()
-    }
-  },
-  mounted () {
-    this.$nextTick(() => {
-      document.getElementById('fake-sidebar').classList.add('loaded')
-    })
-  },
-  methods: {
-    ...mapActions({
-      cleanTrack: 'queue/cleanTrack'
-    }),
-    applyContentFilters () {
-      const artistIds = this.$store.getters['moderation/artistFilters']().map((f) => {
-        return f.target.id
-      })
-
-      if (artistIds.length === 0) {
-        return
-      }
-      const self = this
-      const tracks = this.tracks.slice().reverse()
-      tracks.forEach(async (t, i) => {
-        // we loop from the end because removing index from the start can lead to removing the wrong tracks
-        const realIndex = tracks.length - i - 1
-        const matchArtist = artistIds.indexOf(t.artist.id) > -1
-        if (matchArtist) {
-          return await self.cleanTrack(realIndex)
-        }
-        if (t.album && artistIds.indexOf(t.album.artist.id) > -1) {
-          return await self.cleanTrack(realIndex)
-        }
-      })
-    },
-    setupDropdown (selector) {
-      const self = this
-      $(self.$el).find(selector).dropdown({
-        selectOnKeydown: false,
-        action: function (text, value, $el) {
-          // used ton ensure focusing the dropdown and clicking via keyboard
-          // works as expected
-          const link = $($el).closest('a')
-          const url = link.attr('href')
-          if (url.startsWith('http')) {
-            window.open(url, '_blank').focus()
-          } else {
-            self.$router.push(url)
-          }
-          $(self.$el).find(selector).dropdown('hide')
-        }
-      })
-    }
-  }
-}
-</script>
 <style>
 [type="radio"] {
   position: absolute;

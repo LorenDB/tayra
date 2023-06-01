@@ -1,7 +1,6 @@
 import hashlib
 import time
 
-
 # https://github.com/jlieth/legacy-scrobbler
 from .funkwhale_startup import PLUGIN
 
@@ -60,7 +59,7 @@ def submit_scrobble_v1(session, scrobble_time, track, session_key, scrobble_url)
     else:
         raise ScrobblerException(response.text)
 
-    PLUGIN["logger"].debug("Scrobble successfull!")
+    PLUGIN["logger"].debug("Scrobble successful!")
 
 
 def submit_now_playing_v1(session, track, session_key, now_playing_url):
@@ -76,7 +75,7 @@ def submit_now_playing_v1(session, track, session_key, now_playing_url):
     else:
         raise ScrobblerException(response.text)
 
-    PLUGIN["logger"].debug("Now playing successfull!")
+    PLUGIN["logger"].debug("Now playing successful!")
 
 
 def get_scrobble_payload(track, date, suffix="[0]"):
@@ -85,16 +84,16 @@ def get_scrobble_payload(track, date, suffix="[0]"):
     """
     upload = track.uploads.filter(duration__gte=0).first()
     data = {
-        "a{}".format(suffix): track.artist.name,
-        "t{}".format(suffix): track.title,
-        "l{}".format(suffix): upload.duration if upload else 0,
-        "b{}".format(suffix): (track.album.title if track.album else "") or "",
-        "n{}".format(suffix): track.position or "",
-        "m{}".format(suffix): str(track.mbid or ""),
-        "o{}".format(suffix): "P",  # Source: P = chosen by user
+        f"a{suffix}": track.artist.name,
+        f"t{suffix}": track.title,
+        f"l{suffix}": upload.duration if upload else 0,
+        f"b{suffix}": (track.album.title if track.album else "") or "",
+        f"n{suffix}": track.position or "",
+        f"m{suffix}": str(track.mbid or ""),
+        f"o{suffix}": "P",  # Source: P = chosen by user
     }
     if date:
-        data["i{}".format(suffix)] = int(date.timestamp())
+        data[f"i{suffix}"] = int(date.timestamp())
     return data
 
 
@@ -139,7 +138,13 @@ def handshake_v2(username, password, session, api_key, api_secret, scrobble_url)
 
 
 def submit_scrobble_v2(
-    session, track, scrobble_time, session_key, scrobble_url, api_key, api_secret,
+    session,
+    track,
+    scrobble_time,
+    session_key,
+    scrobble_url,
+    api_key,
+    api_secret,
 ):
     params = {
         "method": "track.scrobble",

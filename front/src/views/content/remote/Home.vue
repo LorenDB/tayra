@@ -1,3 +1,45 @@
+<script setup lang="ts">
+import type { Library, LibraryFollow } from '~/types'
+
+import { ref } from 'vue'
+
+import axios from 'axios'
+
+import ScanForm from './ScanForm.vue'
+import LibraryCard from './Card.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+
+const existingFollows = ref()
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get('federation/follows/library/', { params: { page_size: 100, ordering: '-creation_date' } })
+    existingFollows.value = response.data
+
+    for (const follow of existingFollows.value.results) {
+      follow.target.follow = follow
+    }
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+fetchData()
+
+const getLibraryFromFollow = (follow: LibraryFollow) => {
+  const { target } = follow
+  target.follow = follow
+  return target as Library
+}
+
+const scanResult = ref()
+</script>
+
 <template>
   <div class="ui vertical aligned stripe segment">
     <div
@@ -5,9 +47,7 @@
       :class="['ui', {'active': isLoading}, 'inverted', 'dimmer']"
     >
       <div class="ui text loader">
-        <translate translate-context="Content/Library/Paragraph">
-          Loading remote libraries…
-        </translate>
+        {{ $t('views.content.remote.Home.loading.remoteLibraries') }}
       </div>
     </div>
     <div
@@ -15,14 +55,10 @@
       class="ui text container"
     >
       <h1 class="ui header">
-        <translate translate-context="Content/Library/Title/Noun">
-          Remote libraries
-        </translate>
+        {{ $t('views.content.remote.Home.header.remoteLibraries') }}
       </h1>
       <p>
-        <translate translate-context="Content/Library/Paragraph">
-          Remote libraries are owned by other users on the network. You can access them as long as they are public or you are granted access.
-        </translate>
+        {{ $t('views.content.remote.Home.description.remoteLibraries') }}
       </p>
       <scan-form @scanned="scanResult = $event" />
       <div class="ui hidden divider" />
@@ -38,16 +74,15 @@
       </div>
       <template v-if="existingFollows && existingFollows.count > 0">
         <h2>
-          <translate translate-context="Content/Library/Title">
-            Known libraries
-          </translate>
+          {{ $t('views.content.remote.Home.header.knownLibraries') }}
         </h2>
         <a
           href=""
           class="discrete link"
-          @click.prevent="fetch()"
+          @click.prevent="fetchData"
         >
-          <i :class="['ui', 'circular', 'refresh', 'icon']" /> <translate translate-context="Content/*/Button.Label/Short, Verb">Refresh</translate>
+          <i :class="['ui', 'circular', 'refresh', 'icon']" />
+          {{ $t('views.content.remote.Home.button.refresh') }}
         </a>
         <div class="ui hidden divider" />
         <div class="ui two cards">
@@ -55,56 +90,11 @@
             v-for="follow in existingFollows.results"
             :key="follow.fid"
             :initial-library="getLibraryFromFollow(follow)"
-            @deleted="fetch()"
-            @followed="fetch()"
+            @deleted="fetchData"
+            @followed="fetchData"
           />
         </div>
       </template>
     </div>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import ScanForm from './ScanForm'
-import LibraryCard from './Card'
-
-export default {
-  components: {
-    ScanForm,
-    LibraryCard
-  },
-  data () {
-    return {
-      isLoading: false,
-      scanResult: null,
-      existingFollows: null,
-      errors: []
-    }
-  },
-  created () {
-    this.fetch()
-  },
-  methods: {
-    fetch () {
-      this.isLoading = true
-      const self = this
-      axios.get('federation/follows/library/', { params: { page_size: 100, ordering: '-creation_date' } }).then((response) => {
-        self.existingFollows = response.data
-        self.existingFollows.results.forEach(f => {
-          f.target.follow = f
-        })
-        self.isLoading = false
-      }, error => {
-        self.isLoading = false
-        self.errors.push(error)
-      })
-    },
-    getLibraryFromFollow (follow) {
-      const d = follow.target
-      d.follow = follow
-      return d
-    }
-  }
-}
-</script>

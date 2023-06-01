@@ -1,3 +1,40 @@
+<script setup lang="ts">
+import type { Track } from '~/types'
+
+import PodcastRow from '~/components/audio/podcast/Row.vue'
+import TrackMobileRow from '~/components/audio/track/MobileRow.vue'
+import Pagination from '~/components/vui/Pagination.vue'
+
+interface Props {
+  tracks: Track[]
+  showPosition?: boolean
+  showArt?: boolean
+  showDuration?: boolean
+  displayActions?: boolean
+  isArtist?: boolean
+  isAlbum?: boolean
+  isPodcast?: boolean
+  paginateResults?: boolean
+  paginateBy?: number
+  page?: number
+  total?: number
+}
+
+withDefaults(defineProps<Props>(), {
+  showPosition: false,
+  showArt: true,
+  showDuration: true,
+  displayActions: true,
+  isArtist: false,
+  isAlbum: false,
+  isPodcast: true,
+  paginateResults: true,
+  paginateBy: 25,
+  page: 1,
+  total: 0
+})
+</script>
+
 <template>
   <div>
     <div class="ui hidden divider" />
@@ -27,24 +64,15 @@
         class="ui center aligned basic segment desktop-and-up"
       >
         <pagination
+          v-bind="$attrs"
           :total="total"
           :current="page"
           :paginate-by="paginateBy"
-          v-on="$listeners"
         />
       </div>
     </div>
 
-    <div
-      :class="['track-table', 'ui', 'unstackable', 'grid', 'tablet-and-below']"
-    >
-      <div
-        v-if="isLoading"
-        class="ui inverted active dimmer"
-      >
-        <div class="ui loader" />
-      </div>
-
+    <div :class="['track-table', 'ui', 'unstackable', 'grid', 'tablet-and-below']">
       <!-- For each item, build a row -->
 
       <track-mobile-row
@@ -66,63 +94,12 @@
       >
         <pagination
           v-if="paginateResults"
+          v-bind="$attrs"
           :total="total"
           :current="page"
           :compact="true"
-          v-on="$listeners"
         />
       </div>
     </div>
   </div>
 </template>
-
-<script>
-import PodcastRow from '@/components/audio/podcast/Row'
-import TrackMobileRow from '@/components/audio/track/MobileRow'
-import Pagination from '@/components/Pagination'
-
-export default {
-  components: {
-    TrackMobileRow,
-    Pagination,
-    PodcastRow
-  },
-
-  props: {
-    tracks: { type: Array, required: true },
-    showAlbum: { type: Boolean, required: false, default: true },
-    showArtist: { type: Boolean, required: false, default: true },
-    showPosition: { type: Boolean, required: false, default: false },
-    showArt: { type: Boolean, required: false, default: true },
-    search: { type: Boolean, required: false, default: false },
-    filters: { type: Object, required: false, default: null },
-    nextUrl: { type: String, required: false, default: null },
-    displayActions: { type: Boolean, required: false, default: true },
-    showDuration: { type: Boolean, required: false, default: true },
-    isArtist: { type: Boolean, required: false, default: false },
-    isAlbum: { type: Boolean, required: false, default: false },
-    paginateResults: { type: Boolean, required: false, default: true },
-    total: { type: Number, required: false, default: 0 },
-    page: { type: Number, required: false, default: 1 },
-    paginateBy: { type: Number, required: false, default: 25 },
-    isPodcast: { type: Boolean, required: true },
-    defaultCover: { type: Object, required: false, default: () => { return {} } }
-  },
-
-  data () {
-    return {
-      isLoading: false
-    }
-  },
-
-  computed: {
-    labels () {
-      return {
-        title: this.$pgettext('*/*/*/Noun', 'Title'),
-        album: this.$pgettext('*/*/*/Noun', 'Album'),
-        artist: this.$pgettext('*/*/*/Noun', 'Artist')
-      }
-    }
-  }
-}
-</script>

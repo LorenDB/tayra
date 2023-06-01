@@ -1,8 +1,8 @@
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.postgres.fields import JSONField
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
+from django.db.models import JSONField
 from django.utils import timezone
 
 from funkwhale_api.music.models import Track
@@ -51,6 +51,8 @@ class RadioSession(models.Model):
     related_object = GenericForeignKey(
         "related_object_content_type", "related_object_id"
     )
+    CONFIG_VERSION = 0
+    config = JSONField(encoder=DjangoJSONEncoder, blank=True, null=True)
 
     def save(self, **kwargs):
         self.radio.clean(self)

@@ -1,0 +1,4616 @@
+{
+  "App": {
+    "loading": "Načítání..."
+  },
+  "components": {
+    "About": {
+      "description": {
+        "findApp": "Používejte Funkwhale na dalších zařízeních s našimi aplikacemi.",
+        "funkwhale": "Funkwhale je komunitou řízený projekt, který vám umožňuje poslouchat a sdílet hudbu a zvuk skrz decentralizovanou a otevřenou síť.",
+        "publicContent": "Poslouchejte veřejně dostupná alba a playlisty sdílené na tomto podu.",
+        "quota": "Uživatelé tohoto podu mají také k dispozici { quota } volného prostoru pro nahrání vlastního obsahu!",
+        "signup": "Zaregistrujte se, abyste měli přehled oblíbených skladeb, vytvářet seznamy, objevovat obsah a mnoho dalšího!"
+      },
+      "header": {
+        "aboutPod": "O tomto podu",
+        "findApp": "Najít aplikaci",
+        "funkwhale": "Sociální platforma pro užívání a sdílení hudby",
+        "publicContent": "Procházet veřejně dostupný obsah",
+        "signup": "Zaregistrovat se"
+      },
+      "help": {
+        "closedRegistrations": "Registrace na tomto podu jsou uzavřené. Můžete se zaregistrovat na jiném skrz odkaz níže."
+      },
+      "link": {
+        "findOtherPod": "Hledat další pod",
+        "learnMore": "Dozvědět se více"
+      },
+      "message": {
+        "greeting": "Zdravím, {username}",
+        "loggedIn": "Již jste přihlášení!"
+      },
+      "placeholder": {
+        "noDescription": "Popis není dostupný"
+      },
+      "stat": {
+        "activeUsers": "Žádní aktivní uživatelé | {n} aktivní uživatel | {n} aktivních uživatelů",
+        "hoursOfMusic": "0 hodin hudby | {n} hodina hudby | {n} hodin hudby"
+      },
+      "title": "O aplikaci"
+    },
+    "AboutPod": {
+      "feature": {
+        "allowList": "Seznam povolených",
+        "anonymousAccess": "Anonymní přístup",
+        "federation": "Federace",
+        "quota": "Prostor pro nahrávání",
+        "registrations": "Registrace",
+        "status": {
+          "closed": "Uzavřeny",
+          "disabled": "Zakázáno",
+          "enabled": "Povoleno",
+          "open": "Otevřeny"
+        },
+        "version": "Verze Funkwhale"
+      },
+      "header": {
+        "about": "O tomto podu",
+        "contact": "Kontakt",
+        "features": "Vlastnosti",
+        "rules": "Pravidla",
+        "statistics": "Statistiky",
+        "terms": "Podmínky užívání a zásady ochrany osobních údajů"
+      },
+      "link": {
+        "about": "O tomto podu",
+        "features": "Vlastnosti",
+        "introduction": "Úvod",
+        "rules": "Pravidla",
+        "statistics": "Statistiky",
+        "terms": "Podmínky a zásady ochrany osobních údajů"
+      },
+      "message": {
+        "contact": "Pošlete nám e-mail: { contactEmail }"
+      },
+      "notApplicable": "Nedostupné",
+      "placeholder": {
+        "noDescription": "Popis není dostupný",
+        "noRules": "Nejsou dostupná žádná pravidla",
+        "noTerms": "Nejsou dostupné podmínky používání"
+      },
+      "stat": {
+        "activeUsers": "Žádní aktivní uživatelé | {n} aktivní uživatel | {n} aktivních uživatelů",
+        "albumsCount": "0 alb | {n} album | {n} alb",
+        "artistsCount": "0 interpretů | {n} interpret | {n} interpretů",
+        "hoursOfMusic": "0 hodin hudby | {n} hodina hudby | {n} hodin hudby",
+        "listeningsCount": "0 posluchačů | {n} posluchač | {n} posluchačů",
+        "tracksCount": "0 skladeb | {n} skladba | {n} skladeb"
+      },
+      "title": "O podu"
+    },
+    "Home": {
+      "description": {
+        "funkwhale": {
+          "paragraph1": "Tento pod provozuje Funkwhale - projekt podporovaný komunitou umožňující poslouchat a sdílet hudbu v rámci otevřené, decentralizované sítě.",
+          "paragraph2": "Funkwhale je volný software vyvíjený přátelskou komunitou dobrovolníků."
+        },
+        "quota": "Uživatelé tohoto podu mají také k dispozici { quota } volného prostoru pro nahrání vlastního obsahu!",
+        "signup": "Zaregistrujte se, abyste měli přehled oblíbených skladeb, vytvářet seznamy, objevovat obsah a mnoho dalšího!"
+      },
+      "header": {
+        "about": "O tomto Funkwhale podu",
+        "aboutFunkwhale": "O Funkwhale",
+        "contact": "Kontakt",
+        "links": "Užitečné odkazy",
+        "login": "Přihlásit se",
+        "newAlbums": "Nedávno přidaná alba",
+        "newChannels": "Nové kanály",
+        "signup": "Zaregistrovat se",
+        "statistics": "Statistiky",
+        "welcome": "Vítejte na { podName }!"
+      },
+      "help": {
+        "registrationsClosed": "Registrace na tomto podu jsou uzavřené. Můžete se zaregistrovat na jiném skrz odkaz níže."
+      },
+      "link": {
+        "findOtherPod": "Hledat další pody",
+        "funkwhale": "Navštívit funkwhale.audio",
+        "learnMore": "Dozvědět se více",
+        "mobileApps": {
+          "description": "Používejte Funkwhale na dalších zařízeních s našimi aplikacemi",
+          "label": "Mobilní aplikace"
+        },
+        "publicContent": {
+          "description": "Poslouchejte veřejně dostupná alba a playlisty sdílené na tomto podu.",
+          "label": "Procházet veřejně dostupný obsah"
+        },
+        "rules": "Pravidla serveru",
+        "userGuides": {
+          "description": "Zjistěte vše, co potřebujete vědět o Funkwhale a jeho vlastnostech",
+          "label": "Uživatelské příručky"
+        },
+        "viewMore": "Zobrazit další…"
+      },
+      "placeholder": {
+        "noDescription": "Popis není dostupný"
+      },
+      "stat": {
+        "activeUsers": "Žádní aktivní uživatelé | {n} aktivní uživatel | {n} aktivních uživatelů",
+        "hoursOfMusic": "0 hodin hudby | {n} hodina hudby | {n} hodin hudby"
+      },
+      "title": "Domů"
+    },
+    "PageNotFound": {
+      "header": {
+        "pageNotFound": "Stránka nenalezena!"
+      },
+      "link": {
+        "home": "Přejít na domovskou stránku"
+      },
+      "message": {
+        "pageNotFound": "Stránka, kterou hledáte, bohužel neexistuje:"
+      },
+      "title": "Stránka nenalezena"
+    },
+    "Queue": {
+      "button": {
+        "clear": "Vyčistit",
+        "close": "Zavřít",
+        "stopRadio": "Zastavit rádio"
+      },
+      "header": {
+        "failure": "Skladbu nelze načíst",
+        "noSources": "Skladba nemá žádný dostupný zdroj.",
+        "radio": "Hraje vám rádio"
+      },
+      "label": {
+        "addArtistContentFilter": "Skrýt obsah od tohoto interpreta…",
+        "duration": "Délka",
+        "enterFullscreen": "Přejít do režimu na celou obrazovku",
+        "exitFullscreen": "Odejít z režimu na celou obrazovku",
+        "favorite": "Oblíbit skladbu",
+        "next": "Další skladba",
+        "pause": "Pozastavit",
+        "play": "Hrát",
+        "populatingRadio": "Načítání skladby rádia...",
+        "previous": "Předchozí skladba",
+        "queue": "Fronta",
+        "remove": "Odstranit",
+        "restart": "Obnovit skladbu",
+        "selectTrack": "Vybrat skladbu",
+        "showCoverArt": "Zobrazit přebal",
+        "showVisualizer": "Zobrazit MoonDrop vizualizér"
+      },
+      "message": {
+        "automaticPlay": "Další skladba se automaticky spustí za několik sekund…",
+        "radio": "Nové skladby se přidají automaticky.",
+        "webglUnsupported": "Váš prohlížeč nejspíš nepodporuje WebGL2."
+      },
+      "meta": {
+        "end": "Konec",
+        "queuePosition": "Skladba { index } z { length }",
+        "startTime": "00:00",
+        "unknownAlbum": "Neznámé Album",
+        "unknownArtist": "Neznámý Interpret"
+      },
+      "warning": {
+        "connectivity": "Možná máte problémy s připojením."
+      }
+    },
+    "RemoteSearchForm": {
+      "button": {
+        "fediverse": "Fediverse",
+        "rss": "RSS",
+        "search": "Hledat"
+      },
+      "description": {
+        "fediverse": "Použijte tento formulář pro odběr kanálu, který je hostovaný někde jinde ve Fediverse.",
+        "rss": "Použijte tento formulář pro odběr RSS kanálu z jeho URL."
+      },
+      "error": {
+        "fetchFailed": "Nepodařilo se získat tento objekt"
+      },
+      "header": {
+        "fetchFailed": "Chyba při získávání objektu"
+      },
+      "label": {
+        "fediverse": {
+          "fieldLabel": "Fediverse objekt",
+          "fieldPlaceholder": "{'@'}uzivatelskejmeno{'@'}example.com",
+          "title": "Fediverse objekt"
+        },
+        "rss": {
+          "fieldLabel": "Umístění RSS kanálu",
+          "fieldPlaceholder": "https://website.example.com/rss.xml",
+          "title": "Odebírat RSS kanál podcastu"
+        }
+      },
+      "warning": {
+        "unsupported": "Tento druh objektu není prozatím podporován"
+      }
+    },
+    "SetInstanceModal": {
+      "button": {
+        "cancel": "Zrušit",
+        "submit": "Odeslat"
+      },
+      "header": {
+        "chooseInstance": "Zvolte si instanci",
+        "failure": "Na zadanou adresu URL se nelze připojit",
+        "suggestions": "Navržené volby"
+      },
+      "help": {
+        "notFunkwhaleServer": "Na zadané adrese neběží žádný Funkwhale server",
+        "selectPod": "Pro pokračování prosím zvolte Funkwhale instanci, ke které se chcete připojit. Zadejte adresu přímo, nebo vyberte jednu z nabízených možností.",
+        "serverDown": "Server je možná nedostupný"
+      },
+      "label": {
+        "url": "URL instance"
+      },
+      "message": {
+        "currentConnection": "Aktuálně jste připojeni k { 0 }. Když budete pokračovat, budete odpojeni od vaší aktuální instance a vaše lokální data budou vymazána.",
+        "newUrl": "Právě používáte Funkwhale instanci na adrese { url }"
+      }
+    },
+    "ShortcutsModal": {
+      "button": {
+        "close": "Zavřít"
+      },
+      "header": {
+        "modal": "Klávesové zkratky"
+      },
+      "shortcut": {
+        "audio": {
+          "clearQueue": "Vymazat frontu",
+          "decreaseVolume": "Snížit hlasitost",
+          "expandQueue": "Zobrazit frontu/přehrávač",
+          "increaseVolume": "Zvýšit hlasitost",
+          "label": "Klávesové zkratky přehrávače",
+          "playNext": "Přehrát následující skladbu",
+          "playPause": "Pozastavit/spustit aktuální stopu",
+          "playPrevious": "Přehrát předchozí skladbu",
+          "seekBack30": "Posunout zpět o 30s",
+          "seekBack5": "Posunout zpět o 5s",
+          "seekForward30": "Posunout dopředu o 30s",
+          "seekForward5": "Posunout dopředu o 5s",
+          "shuffleQueue": "Zamíchat frontu",
+          "toggleFavorite": "Přepnout příznak Oblíbené",
+          "toggleLoop": "Přepnout opakování fronty",
+          "toggleMute": "Přepnout ztlumení"
+        },
+        "general": {
+          "focus": "Přejít do vyhledávacího pole",
+          "label": "Obecné klávesové zkratky",
+          "show": "Zobrazit dostupné klávesové zkratky",
+          "unfocus": "Opustit vyhledávací pole"
+        }
+      }
+    },
+    "Sidebar": {
+      "header": {
+        "administration": "Administrace",
+        "explore": "Prohlížet",
+        "library": "Moje knihovna",
+        "main": "Hlavní navigace",
+        "more": "Další"
+      },
+      "label": {
+        "add": "Přidat obsah",
+        "administration": "Administrace",
+        "edits": "Úpravy čekající na kontrolu",
+        "follows": "Čekající žádosti o sledování",
+        "language": "Jazyk",
+        "main": "Hlavní menu",
+        "play": "Přehrát tuto skladbu",
+        "reports": "Recenze čekající na kontrolu",
+        "theme": "Motiv"
+      },
+      "link": {
+        "about": "O tomto podu",
+        "albums": "Alba",
+        "artists": "Interpreti",
+        "browse": "Procházet",
+        "channels": "Kanály",
+        "createAccount": "Vytvořit účet",
+        "favorites": "Oblíbené",
+        "home": "Domů",
+        "library": "Knihovna",
+        "login": "Přihlášení",
+        "moderation": "Moderování",
+        "playlists": "Playlisty",
+        "podcasts": "Podcasty",
+        "radios": "Rádia",
+        "search": "Hledat",
+        "settings": "Nastavení",
+        "switchInstance": "Změnit instanci",
+        "users": "Uživatelé"
+      }
+    },
+    "admin": {
+      "SettingsGroup": {
+        "button": {
+          "save": "Uložit"
+        },
+        "header": {
+          "error": "Chyba při ukládání nastavení.",
+          "image": "Aktuální obrázek"
+        },
+        "message": {
+          "success": "Nastavení úspěšně aktualizováno."
+        }
+      },
+      "SignupFormBuilder": {
+        "button": {
+          "add": "Přidat nové pole",
+          "edit": "Upravit formulář",
+          "preview": "Náhled Formuláře"
+        },
+        "help": {
+          "additionalFields": "Dodatečná pole, která se zobrazí ve formuláři. Zobrazí se pouze, když je povolena manuální kontrola registrací.",
+          "helpText": "Volitelný text, který se zobrazí na začátku registračního formuláře."
+        },
+        "label": {
+          "additionalField": "Dodatečné pole",
+          "additionalFields": "Dodatečná pole",
+          "delete": "Odstranit",
+          "helpText": "Pomocný text",
+          "moveDown": "Přesunout níž",
+          "moveUp": "Přesunout výš"
+        },
+        "table": {
+          "additionalFields": {
+            "header": {
+              "actions": "Akce",
+              "label": "Štítek pole",
+              "required": "Vyžadováno",
+              "type": "Druh pole"
+            },
+            "required": {
+              "false": "Ne",
+              "true": "Ano"
+            },
+            "type": {
+              "long": "Dlouhý text",
+              "short": "Krátký text"
+            }
+          }
+        }
+      }
+    },
+    "audio": {
+      "ChannelCard": {
+        "meta": {
+          "episodes": "Žádné díly | {n} díl | {n} dílů",
+          "tracks": "Žádné skladby | {n} skladba | {n} skladeb"
+        },
+        "title": "Aktualizováno dne { date }"
+      },
+      "ChannelEntries": {
+        "help": {
+          "subscribe": "Pro zobrazení obsahu tohoto kanálu může být nutné ho odebírat."
+        }
+      },
+      "ChannelForm": {
+        "header": {
+          "error": "Chyba při ukládání kanálu."
+        },
+        "help": {
+          "discography": "Publikujte svou hudbu jako hezkou diskografii alb a singlů.",
+          "podcast": "Hostujte své epizody a průběžně informujte svoji komunitu.",
+          "podcastFields": "Používá se pro pole itunes:email a itunes:name, které vyžadují některé platformy jako např. Spotify či iTunes.",
+          "username": "Používá se v URL adresách a pro sledování kanálu ve Fediverse. Nelze později změnit."
+        },
+        "label": {
+          "category": "Kategorie",
+          "description": "Popis",
+          "discography": "Diskografie Interpreta",
+          "email": "E-mailová adresa majitele",
+          "image": "Obrázek Kanálu",
+          "language": "Jazyk",
+          "name": "Název",
+          "owner": "Vlastník",
+          "podcast": "Podcasty",
+          "subcategory": "Podkategorie",
+          "tags": "Tagy",
+          "username": "ID Fediverse účtu"
+        },
+        "legend": {
+          "purpose": "Na co bude tento kanál použit?"
+        },
+        "loader": {
+          "loading": "Nahrávání"
+        },
+        "placeholder": {
+          "name": "Úžasný název kanálu",
+          "username": "uzasnynazevkanalu"
+        }
+      },
+      "ChannelSerieCard": {
+        "meta": {
+          "episodes": "Žádné díly | {n} díl | {n} dílů"
+        }
+      },
+      "ChannelSeries": {
+        "button": {
+          "showMore": "Zobrazit více"
+        },
+        "help": {
+          "subscribe": "Pro zobrazení obsahu tohoto kanálu může být nutné ho odebírat."
+        }
+      },
+      "ChannelsWidget": {
+        "button": {
+          "showMore": "Zobrazit více"
+        }
+      },
+      "EmbedWizard": {
+        "button": {
+          "copy": "Kopírovat"
+        },
+        "header": {
+          "preview": "Náhled"
+        },
+        "help": {
+          "anonymous": "Kontaktujte prosím své administrátory a požádejte je, aby dané nastavení změnili.",
+          "embed": "Zkopírujte a vložte tento kód do HTML kódu vaší webové stránky",
+          "width": "Ponechte prázdné pro responzivní widget"
+        },
+        "label": {
+          "embed": "Kód pro vložení",
+          "height": "Výška widgetu",
+          "width": "Šířka widgetu"
+        },
+        "message": {
+          "copy": "Text zkopírován do schránky!"
+        },
+        "warning": {
+          "anonymous": "Sdílení nebude fungovat, protože tento pod nepovoluje anonymním uživatelům přístup k obsahu."
+        }
+      },
+      "LibraryFollowButton": {
+        "button": {
+          "cancel": "Zrušit požadavek o sledování",
+          "follow": "Sledovat",
+          "unfollow": "Přestat sledovat"
+        }
+      },
+      "PlayButton": {
+        "button": {
+          "addToPlaylist": "Přidat do playlistu",
+          "addToQueue": "Přidat do současné fronty",
+          "discretePlay": "Přehrát",
+          "episodeDetails": "Podrobnosti",
+          "hideArtist": "Skrýt obsah od tohoto interpreta",
+          "playAlbum": "Přehrát album",
+          "playArtist": "Přehrát interpreta",
+          "playNext": "Přehrát jako další",
+          "playNow": "Přehrát teď",
+          "playPlaylist": "Přehrát playlist",
+          "playTrack": "Přehrát skladbu",
+          "playTracks": "Přehrát skladby",
+          "report": "Nahlásit…",
+          "startRadio": "Hrát podobnou hudbu",
+          "trackDetails": "Podrobnosti skladby"
+        },
+        "title": {
+          "more": "Další…",
+          "unavailable": "Tato skladba není dostupná v žádné vám přístupné knihovně"
+        }
+      },
+      "Player": {
+        "header": {
+          "player": "Ovládání přehrávače"
+        },
+        "label": {
+          "addArtistContentFilter": "Skrýt obsah od tohoto interpreta…",
+          "audioPlayer": "Hudební přehrávač",
+          "clearQueue": "Vyčistit frontu",
+          "expandQueue": "Rozbalit",
+          "loopingDisabled": "Opakování vypnuto. Klikněte pro opakování jedné skladby.",
+          "loopingSingle": "Opakování jedné skladby. Klikněte pro opakování celé fronty.",
+          "loopingWholeQueue": "Opakování celé fronty. Klikněte pro vypnutí opakování.",
+          "mute": "Ztlumit",
+          "nextTrack": "Další skladba",
+          "pause": "Pozastavit",
+          "play": "Přehrát",
+          "previousTrack": "Předchozí skladba",
+          "shuffleQueue": "Zamíchat frontu",
+          "unmute": "Zrušit ztlumení"
+        },
+        "meta": {
+          "position": "{index} z {length}",
+          "unknownAlbum": "Neznámé Album",
+          "unknownArtist": "Neznámý Interpret"
+        }
+      },
+      "PlayerControls": {
+        "labels": {
+          "next": "Další skladba",
+          "pause": "Pozastavit",
+          "play": "Přehrát",
+          "previous": "Předchozí skladba"
+        }
+      },
+      "Search": {
+        "empty": {
+          "noAlbums": "Žádné album neodpovídá zadání",
+          "noArtists": "Žádný interpret neodpovídá zadání"
+        },
+        "header": {
+          "albums": "Alba",
+          "artists": "Interpreti",
+          "search": "Hledat trochu muziky"
+        },
+        "placeholder": {
+          "search": "Interpret, album, skladba…"
+        }
+      },
+      "SearchBar": {
+        "empty": {
+          "noResults": "Omlouváme se, ale vaše hledání nevrátilo výsledek"
+        },
+        "header": {
+          "noResults": "Nic nenalezeno"
+        },
+        "label": {
+          "album": "Album",
+          "artist": "Interpret",
+          "category": {
+            "federation": "Federace",
+            "podcasts": "Podcasty"
+          },
+          "search": "Hledat obsah",
+          "tag": "Značka",
+          "track": "Skladba"
+        },
+        "link": {
+          "fediverse": "Hledat na fediverse",
+          "more": "Další výsledky 🡒",
+          "rss": "Odebírát podcast skrz RSS"
+        },
+        "placeholder": {
+          "search": "Hledat interprety, alba, skladby…"
+        }
+      },
+      "VolumeControl": {
+        "button": {
+          "mute": "Ztlumit",
+          "unmute": "Zrušit ztlumení"
+        },
+        "label": {
+          "slider": "Upravit hlasitost"
+        }
+      },
+      "album": {
+        "Card": {
+          "meta": {
+            "tracks": "Žádné skladby | {n} skladba | {n} skladeb"
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": "Zobrazit více"
+          }
+        }
+      },
+      "artist": {
+        "Card": {
+          "meta": {
+            "episodes": "Žádné díly | {n} díl | {n} dílů",
+            "tracks": "Žádné skladby | {n} skladba | {n} skladeb"
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": "Zobrazit více"
+          }
+        }
+      },
+      "podcast": {
+        "MobileRow": {
+          "button": {
+            "actions": "Zobrazit akce skladby"
+          }
+        },
+        "Modal": {
+          "button": {
+            "addToFavorites": "Přidat do oblíbených",
+            "addToPlaylist": "Přidat do playlistu",
+            "addToQueue": "Přidat do fronty",
+            "albumDetails": "Zobrazit album",
+            "artistDetails": "Zobrazit interpreta",
+            "channelDetails": "Zobrazit kanál",
+            "episodeDetails": "Podrobnosti dílu",
+            "playNext": "Přehrát jako další",
+            "playNow": "Přehrát teď",
+            "removeFromFavorites": "Odebrat z oblíbených",
+            "seriesDetails": "Zobrazit sérii",
+            "startRadio": "Přehrát rádio",
+            "trackDetails": "Podrobnosti skladby"
+          }
+        }
+      },
+      "track": {
+        "MobileRow": {
+          "button": {
+            "actions": "Zobrazit akce skladby"
+          }
+        },
+        "Modal": {
+          "button": {
+            "addToFavorites": "Přidat do oblíbených",
+            "addToPlaylist": "Přidat do playlistu",
+            "addToQueue": "Přidat do fronty",
+            "albumDetails": "Zobrazit album",
+            "artistDetails": "Zobrazit interpreta",
+            "channelDetails": "Zobrazit kanál",
+            "episodeDetails": "Podrobnosti dílu",
+            "playNext": "Přehrát jako další",
+            "playNow": "Přehrát teď",
+            "removeFromFavorites": "Odebrat z oblíbených",
+            "seriesDetails": "Zobrazit sérii",
+            "startRadio": "Přehrát rádio",
+            "trackDetails": "Podrobnosti skladby"
+          }
+        },
+        "Table": {
+          "table": {
+            "header": {
+              "album": "Album",
+              "artist": "Interpret",
+              "title": "Název"
+            }
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": "Zobrazit více"
+          },
+          "empty": {
+            "noResults": "Nic nenalezeno"
+          }
+        }
+      }
+    },
+    "auth": {
+      "ApplicationEdit": {
+        "button": {
+          "regenerateToken": "Vytvořit nový token"
+        },
+        "header": {
+          "appDetails": "Podrobnosti Aplikace",
+          "appSecretWarning": "Schovejte si kopii tohoto tokenu na nějakém bězpečném místě.",
+          "editApp": "Upravit aplikaci"
+        },
+        "help": {
+          "appDetails": "ID aplikace a tajný klíč jsou opravdu citlivé údaje a musí se s nimi zacházet jako s hesly. Nesdělujte je nikomu."
+        },
+        "label": {
+          "accessToken": "Přístupový token",
+          "appId": "ID aplikace",
+          "appSecret": "Tajný klíč aplikace"
+        },
+        "link": {
+          "settings": "Zpět do nastavení"
+        },
+        "message": {
+          "appSecretWarning": "Po opuštění této obrazovky ho již znovu nezobrazíte."
+        },
+        "title": "Upravit aplikaci"
+      },
+      "ApplicationForm": {
+        "button": {
+          "create": "Vytvořit aplikaci",
+          "update": "Aktualizovat aplikaci"
+        },
+        "header": {
+          "failure": "Nemůžeme uložit vaše změny"
+        },
+        "help": {
+          "redirectUri": "Použijte \"urn:ietf:wg:oauth:2.0:oob\" jako URI pro přesměrování, pokud se do vaší aplikace nepřistupuje skrz web."
+        },
+        "label": {
+          "name": "Název",
+          "redirectUri": "Adresa přesměrování",
+          "scopes": {
+            "description": "Povolení čtení nebo zápisu implikuje totéž pro všechny podmožnosti.",
+            "label": "Rozsah",
+            "read": {
+              "description": "Přístup k uživatelským datům pouze ke čtení",
+              "label": "Číst"
+            },
+            "write": {
+              "description": "Přístup k uživatelským datům pouze pro zápis",
+              "label": "Zapisovat"
+            }
+          }
+        }
+      },
+      "ApplicationNew": {
+        "link": {
+          "settings": "Zpět do nastavení"
+        },
+        "title": "Vytvořit novou aplikaci"
+      },
+      "Authorize": {
+        "button": {
+          "authorize": "Autorizovat {app}"
+        },
+        "header": {
+          "access": "{app_name} chce přistupovat k vašemu Funkwhale účtu",
+          "allScopes": "Plný přístup",
+          "authorize": "Autorizovat aplikaci třetí strany",
+          "authorizeFailure": "Chyba při získávání dat aplikace",
+          "fetchFailure": "Chyba při získávání dat aplikace",
+          "readOnly": "Pouze ke čtení",
+          "writeOnly": "Pouze pro zápis"
+        },
+        "help": {
+          "copyCode": "Zobrazí se vám kód pro vložení do aplikace",
+          "pasteCode": "Zkopírujte a vložte následující kód do aplikace:",
+          "redirect": "Budete přesměrováni na { 0 }"
+        },
+        "message": {
+          "unknownPermissions": "Aplikace dále požaduje následující neznámá oprávnění:"
+        },
+        "title": "Povolit aplikaci"
+      },
+      "LoginForm": {
+        "button": {
+          "login": "Přihlásit se"
+        },
+        "header": {
+          "loginFailure": "Nemůžeme vás přihlásit"
+        },
+        "help": {
+          "approvalRequired": "Pokud jste se registrovali nedávno, je možné, že musíte počkat na potvrzení účtu moderátorským týmem nebo musíte potvrdit svou e-mailovou adresu.",
+          "invalidCredentials": "Ujistěte se, že zadané uživatelské jméno a heslo je správné a že jste si ověřili e-mailovou adresu."
+        },
+        "label": {
+          "password": "Heslo",
+          "username": "Uživatelské jméno nebo email"
+        },
+        "link": {
+          "createAccount": "Vytvořit účet",
+          "resetPassword": "Resetovat heslo"
+        },
+        "message": {
+          "redirect": "Budete přesměrováni na {domain} pro autorizování"
+        },
+        "placeholder": {
+          "username": "Zadejte vaše uživatelské jméno nebo email"
+        }
+      },
+      "Logout": {
+        "button": {
+          "logout": "Ano, odhlaste mě!"
+        },
+        "header": {
+          "confirm": "Opravdu se chcete odhlásit?",
+          "unauthenticated": "Nejste aktuálně přihlášeni"
+        },
+        "link": {
+          "login": "Přihlásit se!"
+        },
+        "message": {
+          "loggedIn": "Jste aktuálně přihlášen jako {username}"
+        },
+        "title": "Odhlásit se"
+      },
+      "Plugin": {
+        "button": {
+          "save": "Uložit",
+          "scan": "Skenovat"
+        },
+        "description": {
+          "library": "Knihovna, do které se mají soubory importovat."
+        },
+        "header": {
+          "failure": "Chyba při ukládání pluginu"
+        },
+        "label": {
+          "library": "Knihovna",
+          "pluginEnabled": "Povoleno"
+        },
+        "link": {
+          "documentation": "Dokumentace"
+        }
+      },
+      "Settings": {
+        "button": {
+          "delete": "Odstranit",
+          "deleteAccount": "Smazat můj účet…",
+          "deleteAccountConfirm": "Smazat můj účet",
+          "disableSubsonic": "Odebrat přístup",
+          "edit": "Upravit",
+          "password": "Změnit heslo",
+          "refresh": "Obnovit",
+          "remove": "Odstranit",
+          "removeApp": "Odstranit aplikaci",
+          "revoke": "Odvolat",
+          "revokeAccess": "Odvolat přístup",
+          "update": "Aktualizovat",
+          "updateSettings": "Aktualizovat nastavení"
+        },
+        "description": {
+          "authorizedApps": "Tento seznam obsahuje všechny aplikace, které mají přístup k datům vašeho účtu.",
+          "changeEmail": "Změnit e-mailovou adresu spojenou s tímto účtem. Pošleme na ni potvrzení.",
+          "changePassword": {
+            "paragraph1": "Změna vašeho hesla vyvolá také změnu hesla pro Subsonic API, pokud je používáno.",
+            "paragraph2": "Budete muset aktualizovat heslo na všech klientech, kde je používáno."
+          },
+          "contentFilters": "Filtry obsahu vám pomáhají skrýt obsah, který ve službě nechcete vidět.",
+          "deleteAccount": "Můžete natrvalo a nevratně smazat svůj účet a všechna související data pomocí formuláře níže. Budete požádáni o potvrzení.",
+          "plugins": "Použijte pluginy pro rozšíření Funkwhale a získání dalších funkcí.",
+          "yourApps": "Tento seznam obsahuje všechny aplikace, které jste vytvořili."
+        },
+        "header": {
+          "accountFailure": "Nemůžeme smazat váš účet",
+          "accountSettings": "Nastavení účtu",
+          "authorizedApps": "Autorizované aplikace",
+          "avatar": "Avatar",
+          "avatarFailure": "Váš avatar nemůže být uložen",
+          "changeEmail": "Změnit e-mailovou adresu",
+          "changePassword": "Změnit heslo",
+          "contentFilters": "Filtry obsahu",
+          "deleteAccount": "Smazat můj účet",
+          "emailFailure": "Vaši e-mailovou adresu nelze změnit",
+          "hiddenArtists": "Skrytí interpreti",
+          "noApps": "K vašemu účtu nejsou připojeny žádné aplikace.",
+          "noPersonalApps": "Zatím nemáte registrované žádné aplikace.",
+          "passwordFailure": "Vaše heslo nemůže být změněno",
+          "plugins": "Pluginy",
+          "settingsUpdated": "Nastavení aktualizováno",
+          "updateFailure": "Vaše nastavení nemůže být aktualizováno",
+          "yourApps": "Vaše aplikace"
+        },
+        "help": {
+          "changePassword": "Prosím ujistěte se, že jste zadali správné heslo",
+          "noApps": "Pokud jste povolili aplikacím třetích stran přístup k vašim datům, budou tyto aplikace zde vypsány.",
+          "noPersonalApps": "Vytvořte nějakou pro spojení Funkwhale s aplikacemi třetích stran."
+        },
+        "label": {
+          "avatar": "Avatar",
+          "currentPassword": "Aktuální heslo",
+          "newEmail": "Nová e-mailová adresa",
+          "newPassword": "Nové heslo",
+          "password": "Heslo"
+        },
+        "link": {
+          "managePlugins": "Spravovat pluginy",
+          "newApp": "Vytvořit novou aplikaci"
+        },
+        "message": {
+          "confirmDelete": "Požadavek o smazání byl odeslán, váš účet a obsah bude zanedlouho vymazán",
+          "currentEmail": "Vaše aktuální e-mailová adresa je {email}"
+        },
+        "modal": {
+          "changePassword": {
+            "content": {
+              "logout": "Budete odhlášeni z tohoto sezení a musíte se přihlásit znovu",
+              "subsonic": "Vaše Subsonic heslo bude změněno na nové, náhodně vygenerované. Všechna zařízení využívající původní heslo se odhlásí",
+              "warning": "Změna vašeho hesla bude mít následující následky"
+            },
+            "header": "Změnit vaše heslo?"
+          },
+          "deleteAccount": {
+            "content": {
+              "warning": "Tato akce je nevratná a trvale odstraní všechna vaše data ze serveru. Budete okamžitě odhlášen."
+            },
+            "header": "Přejete si smazat váš účet?"
+          },
+          "deleteApp": {
+            "content": {
+              "warning": "Kompletně odstraní aplikaci a všechny přidružené tokeny."
+            },
+            "header": "Odstranit aplikaci {app}?"
+          },
+          "revokeApp": {
+            "content": {
+              "warning": "Zabrání této aplikaci v přístupu ke službě pod vaším účtem."
+            },
+            "header": "Odvolat přístup pro aplikaci {app}?"
+          }
+        },
+        "table": {
+          "artists": {
+            "header": {
+              "creationDate": "Datum vytvoření",
+              "name": "Název"
+            }
+          },
+          "authorizedApps": {
+            "header": {
+              "application": "Aplikace",
+              "permissions": "Oprávnění"
+            }
+          },
+          "yourApps": {
+            "header": {
+              "application": "Aplikace",
+              "creationDate": "Datum vytvoření",
+              "scopes": "Pohledy"
+            }
+          }
+        },
+        "title": "Nastavení účtu",
+        "warning": {
+          "deleteAccount": "Váš účet bude ze serveru smazán během několika minut. Akce bude předána také ostatním serverům, které mohou mít kopie některých vašich dat, aby případně došlo k jejich odstranění. Mějte prosím na vědomí, že některé z těchto serverů mohou být nedostupné nebo mohou nevyhovět tomuto požadavku."
+        }
+      },
+      "SignupForm": {
+        "button": {
+          "create": "Vytvořit můj účet"
+        },
+        "header": {
+          "login": "Přihlásit k vašemu Funkwhale účtu",
+          "signupFailure": "Váš účet nemůže být vytvořen."
+        },
+        "label": {
+          "email": "Emailová adresa",
+          "invitation": "Kód pozvánky",
+          "password": "Heslo",
+          "username": "Uživatelské jméno"
+        },
+        "message": {
+          "accountCreated": "Váš účet byl úspěšně vytvořen. Před přihlášením si prosím ověřte svoji e-mailovou adresu.",
+          "awaitingReview": "Vaše žádost o registraci byla úspěšně odeslána. Po zkontrolování moderátorem vám přijde oznámení e-mailem.",
+          "registrationClosed": "Registrace není na této instanci povolena. Pro založení účtu budete potřebovat pozvánku.",
+          "requiresReview": "Registrace jsou na tomto podu otevřené, ale před potvrzením je musí zkontrolovat moderátor."
+        },
+        "placeholder": {
+          "email": "Potvrďte svou emailovou adresu",
+          "invitation": "Zadejte kód pozvánky (pozor na velikost písmen)",
+          "username": "Zadejte vaše uživatelské jméno"
+        }
+      },
+      "SubsonicTokenForm": {
+        "button": {
+          "confirmDisable": "Odebrat přístup",
+          "confirmNewPassword": "Požádat o heslo",
+          "disable": "Zrušit přístup k Subsonic",
+          "newPassword": "Požádat o nové heslo"
+        },
+        "description": {
+          "subsonic": {
+            "paragraph1": "Funkwhale je kompatibilní s přehrávači které podporují Subsonic API.",
+            "paragraph2": "Můžete je použít k poslechu oblíbené hudby v offline režimu, například na telefonu nebo tabletu.",
+            "paragraph3": "Přistupovat k Funkwhale z těchto klientů ale vyžaduje samostatné heslo, které můžete nastavit níže."
+          }
+        },
+        "header": {
+          "error": "Chyba",
+          "subsonic": "Heslo k Subsonic API"
+        },
+        "label": {
+          "subsonicField": "Heslo k Subsonic API"
+        },
+        "link": {
+          "apps": "Objevte jak využívat Funkwhale z jiných aplikací"
+        },
+        "message": {
+          "accessDisabled": "Přístup odepřen",
+          "passwordUpdated": "Heslo změněno",
+          "unavailable": "Subsonic API není na této instanci dostupné."
+        },
+        "modal": {
+          "disableSubsonic": {
+            "content": {
+              "warning": "Kompletně zakáže přístup k Subsonic API pro tento účet."
+            },
+            "header": "Vypnout Subsonic API?"
+          },
+          "newPassword": {
+            "content": {
+              "warning": "Toto vás odhlásí z existujících zařízení, které používají současné heslo."
+            },
+            "header": "Požádat o nové heslo k Subsonic API?"
+          }
+        }
+      }
+    },
+    "channels": {
+      "AlbumForm": {
+        "header": {
+          "error": "Chyba při vytváření pravidla"
+        },
+        "label": {
+          "albumTitle": "Název"
+        }
+      },
+      "AlbumModal": {
+        "button": {
+          "cancel": "Zrušit",
+          "create": "Vytvořit"
+        },
+        "header": {
+          "newAlbum": "Nová hodnota",
+          "newSeries": "Nová hodnota"
+        }
+      },
+      "AlbumSelect": {
+        "label": {
+          "album": "Album",
+          "series": "Série"
+        },
+        "meta": {
+          "tracks": "Žádné skladby | {n} skladba | {n} skladeb"
+        },
+        "option": {
+          "none": "Žádné"
+        }
+      },
+      "LicenseSelect": {
+        "label": {
+          "license": "Licence"
+        },
+        "link": {
+          "license": "O této instanci"
+        },
+        "option": {
+          "none": "Žádná"
+        }
+      },
+      "SubscribeButton": {
+        "help": {
+          "auth": "Pro odebírání této knihovny musíte být přihlášení"
+        },
+        "title": {
+          "subscribe": "Odebírat",
+          "unsubscribe": "{ count } oblíbená"
+        }
+      },
+      "UploadForm": {
+        "button": {
+          "edit": "Upravit",
+          "ignore": "Ignorovat",
+          "remove": "Odstranit",
+          "resume": "Pokračovat",
+          "retry": "Opakovat"
+        },
+        "description": {
+          "extensions": "Podporované přípony: { extensions }"
+        },
+        "header": {
+          "error": "Chyba při odesílání změn"
+        },
+        "help": {
+          "license": "Přidejte ke své nahrávce licenci, aby veřejnost měla určité svobody."
+        },
+        "label": {
+          "channel": "Kanál",
+          "openBrowser": "Procházet…"
+        },
+        "message": {
+          "dragAndDrop": "Pro nahrání přetáhněte soubory sem, nebo otevřte prohlížeč",
+          "pending": "Máte koncepty čekající na zveřejnění."
+        },
+        "status": {
+          "errored": "Skončilo chybou",
+          "pending": "Čeká",
+          "uploading": "Nahrávání"
+        },
+        "warning": {
+          "quota": "Nemáte již žádný prostor pro nahrávání vašich souborů. Prosím kontaktujte moderátory."
+        }
+      },
+      "UploadMetadataForm": {
+        "label": {
+          "description": "Popis",
+          "image": "Přebal skladby",
+          "position": "Pozice",
+          "tags": "Tagy",
+          "title": "Název"
+        }
+      },
+      "UploadModal": {
+        "button": {
+          "cancel": "Zrušit",
+          "close": "Zavřít",
+          "finishLater": "Dokončeno",
+          "next": "Další stopa",
+          "previous": "Předchozí stopa",
+          "publish": "Publikovat",
+          "update": "Aktualizovat"
+        },
+        "header": {
+          "processing": "Zpracování",
+          "publish": "Publikovat zvuk",
+          "uploadDetails": "Nahrát data",
+          "uploadFiles": "Soubory k nahrání"
+        },
+        "meta": {
+          "files": "{ n } oblíbená | { n } oblíbené",
+          "quota": "Zbývající prostor úložiště"
+        }
+      }
+    },
+    "common": {
+      "ActionTable": {
+        "button": {
+          "allSelected": "{ n } položka vybrána | Všechny { n } položky vybrány",
+          "go": "Pokračovat",
+          "launch": "Spustit",
+          "refresh": "Obnovit obsah tabulky",
+          "select": "Vybrat",
+          "selectAll": "Vybrat filtr",
+          "selectCurrentPage": "Vybrat pouze aktuální stránku",
+          "selectElement": "Vybrat { n } prvek | Vybrat všechny { n } prvky",
+          "selected": "{ n } z { total } vybrán | { n } z { total } vybrány"
+        },
+        "header": {
+          "error": "Chyba při provádění operace"
+        },
+        "label": {
+          "actions": "Akce",
+          "performAction": "Informace pro vývojáře"
+        },
+        "message": {
+          "needsRefresh": "Obsah byl aktualizován, klikněte na obnovit pro zobrazení aktuálního obsahu",
+          "success": "Akce { action } byla úspěšně zahájena pro { n } položku | Akce { action } byla úspěšně zahájena pro { n } položky"
+        },
+        "modal": {
+          "performAction": {
+            "content": {
+              "warning": "Tato akce může ovlivnit mnoho prvků nebo může mít nevratné následky - prosím ujistěte se, že si to opravdu přejete."
+            },
+            "header": "Přejete si provést operaci { action } na { n } položce? | Přejete si provést operaci { action } na { n } položkách?"
+          }
+        }
+      },
+      "AttachmentInput": {
+        "button": {
+          "remove": "Odstranit"
+        },
+        "header": {
+          "failure": "Váš avatar nemůže být uložen"
+        },
+        "help": {
+          "upload": "PNG nebo JPG. Rozlišení musí být mezi 1400x1400px a 3000x3000px. Maximální velikost souboru je 5 MB."
+        },
+        "label": {
+          "upload": "Nahrát Nový Obrázek…"
+        },
+        "loader": {
+          "uploading": "Nahrávání…"
+        }
+      },
+      "CollapseLink": {
+        "button": {
+          "collapse": "Sbalit",
+          "expand": "Rozbalit"
+        }
+      },
+      "ContentForm": {
+        "button": {
+          "preview": "Náhled",
+          "write": "Zapsat"
+        },
+        "empty": {
+          "noContent": "Čekající na kontrolu"
+        },
+        "help": {
+          "markdown": "Je podporována syntaxe Markdown"
+        },
+        "placeholder": {
+          "input": "Sem napište pár slov…"
+        }
+      },
+      "CopyInput": {
+        "button": {
+          "copy": "Kopírovat"
+        },
+        "message": {
+          "success": "Text vložen do schránky!"
+        }
+      },
+      "DangerousButton": {
+        "button": {
+          "cancel": "Zrušit",
+          "confirm": "Potvrdit"
+        },
+        "header": {
+          "confirm": "Přejete si potvrdit tuto akci?"
+        }
+      },
+      "Duration": {
+        "meta": {
+          "hours": "{ hours } h { minutes } min",
+          "minutes": "{ minutes } min"
+        }
+      },
+      "EmptyState": {
+        "button": {
+          "refresh": "Obnovit"
+        },
+        "header": {
+          "noResults": "Žádné výsledky nebyly nalezeny."
+        }
+      },
+      "ExpandableDiv": {
+        "button": {
+          "less": "Zobrazit méně",
+          "more": "Zobrazit více"
+        }
+      },
+      "InlineSearchBar": {
+        "button": {
+          "clear": "Vyčistit"
+        },
+        "label": {
+          "search": "Hledat"
+        },
+        "placeholder": {
+          "search": "Hledat…"
+        }
+      },
+      "LoginModal": {
+        "description": {
+          "noAccess": "Nemáte přístup"
+        },
+        "header": {
+          "unauthenticated": "Bez autentizace"
+        },
+        "link": {
+          "login": "Přihlásit se",
+          "signup": "Zaregistrovat se"
+        }
+      },
+      "RenderedDescription": {
+        "button": {
+          "cancel": "Zrušit",
+          "edit": "Upravit",
+          "less": "Zobrazit méně",
+          "more": "Zobrazit více",
+          "update": "Můj úžasný popis"
+        },
+        "empty": {
+          "noDescription": "Popis není dostupný"
+        },
+        "header": {
+          "failure": "Chyba při provádění operace"
+        }
+      },
+      "UserLink": {
+        "link": {
+          "username": "{'@'}{username}"
+        }
+      },
+      "UserMenu": {
+        "label": {
+          "language": "Změnit jazyk",
+          "shortcuts": "Klávesové zkratky",
+          "theme": "Změnit motiv"
+        },
+        "link": {
+          "about": "O aplikaci",
+          "chat": "Diskuzní místnost",
+          "docs": "Dokumentace",
+          "forum": "Fórum",
+          "git": "Databáze problémů",
+          "login": "Přihlásit se",
+          "logout": "Odhlásit se",
+          "notifications": "Oznámení",
+          "profile": "Profil",
+          "settings": "Nastavení",
+          "signup": "Zaregistrovat se",
+          "support": "Pomoc"
+        }
+      },
+      "UserModal": {
+        "button": {
+          "switchInstance": "Použít jinou instanci"
+        },
+        "header": {
+          "options": "Akce"
+        },
+        "label": {
+          "language": "Změnit jazyk",
+          "shortcuts": "Klávesové zkratky",
+          "theme": "Změnit motiv"
+        },
+        "link": {
+          "about": "O aplikaci",
+          "chat": "Diskuzní místnost",
+          "docs": "Dokumentace",
+          "forum": "Fórum",
+          "git": "Databáze problémů",
+          "login": "Přihlásit se",
+          "logout": "Odhlásit se",
+          "notifications": "Oznámení",
+          "profile": "Profil",
+          "settings": "Nastavení",
+          "signup": "Zaregistrovat se",
+          "support": "Pomoc"
+        }
+      }
+    },
+    "favorites": {
+      "List": {
+        "empty": {
+          "noFavorites": "Stopu nelze přidat do playlistu"
+        },
+        "header": {
+          "favorites": "{ n } oblíbená | { n } oblíbené"
+        },
+        "link": {
+          "library": "Procházet knihovnu"
+        },
+        "loader": {
+          "loading": "Načítání vašich oblíbených…"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Vzestupně",
+            "descending": "Sestupně",
+            "label": "Pořadí"
+          },
+          "label": "Řazení"
+        },
+        "pagination": {
+          "results": "Výsledků na stránku"
+        },
+        "title": "Vaše Oblíbené"
+      },
+      "TrackFavoriteIcon": {
+        "button": {
+          "add": "Přidat do oblíbených",
+          "remove": "Odebrat z oblíbených"
+        },
+        "label": {
+          "inFavorites": "V oblíbených"
+        }
+      }
+    },
+    "federation": {
+      "FetchButton": {
+        "button": {
+          "close": "Zavřít",
+          "reload": "Zavřít a obnovit stránku"
+        },
+        "description": {
+          "failure": "Došlo k chybě při pokusu o aktualizaci dat:",
+          "pending": "Požadavek o obnovení nebyl serverem zpracován ve vymezeném čase. Bude zpracován později.",
+          "skipped": "Vzdálený server odpověděl, ale vrácená data nejsou podporována Funkwhale.",
+          "success": "Data byla úspěšně aktualizována ze vzdáleného serveru."
+        },
+        "header": {
+          "failure": "Chyba obnovení",
+          "pending": "Obnovit čekající",
+          "refresh": "Obnova objektu ze vzdáleného serveru…",
+          "saveFailure": "Chyba při ukládání nastavení",
+          "skipped": "Obnovení bylo přeskočeno",
+          "success": "Obnovení úspěšné"
+        },
+        "loader": {
+          "awaitingResult": "Čekání na výsledek…",
+          "fetchRequest": "Posílám požadavek o stažení…"
+        },
+        "table": {
+          "error": {
+            "label": {
+              "detail": "Detail chyby",
+              "type": "Typ chyby"
+            },
+            "value": {
+              "connectionError": "Ke vzdáleném serveru se nelze připojit",
+              "httpError": "Došlo k chybě HTTP při pokusu kontaktovat vzdálený server",
+              "httpStatus": "Vzdálený server vrátil odpověď HTTP { status }",
+              "invalidAttributesError": "Data získaná ze vzdáleného serveru mají neplatné nebo chybějící atributy",
+              "invalidJsonError": "Vzdálený server vrátil neplatná JSON nebo JSON-LD data",
+              "timeoutError": "Vzdálený server neodpověděl dostatečně rychle",
+              "unknownError": "Neznámá chyba"
+            }
+          }
+        }
+      },
+      "LibraryWidget": {
+        "button": {
+          "showMore": "Zobrazit více"
+        },
+        "empty": {
+          "noMatch": "Žádná odpovídající knihovna."
+        }
+      }
+    },
+    "forms": {
+      "PasswordInput": {
+        "button": {
+          "copy": "Kopírovat"
+        },
+        "message": {
+          "copy": "Text vložen do schránky!"
+        },
+        "title": "Zobrazit/skrýt heslo"
+      }
+    },
+    "library": {
+      "AlbumBase": {
+        "link": {
+          "addDescription": "Přidejte popis…"
+        },
+        "meta": {
+          "episodes": "{ n } interpret | { n } interpreti",
+          "tracks": "Žádné skladby | {n} skladba | {n} skladeb"
+        },
+        "title": "Album"
+      },
+      "AlbumDetail": {
+        "description": {
+          "libraries": "Toto album se vyskytuje v následujících knihovnách:"
+        },
+        "header": {
+          "episodes": "Epizody",
+          "libraries": "Knihovny uživatele",
+          "tracks": "Skladby"
+        },
+        "meta": {
+          "volume": "Hlasitost { number }"
+        }
+      },
+      "AlbumDropdown": {
+        "button": {
+          "cancel": "Zrušit",
+          "delete": "Odstranit",
+          "edit": "Upravit",
+          "embed": "Vložit",
+          "more": "Další…"
+        },
+        "link": {
+          "discogs": "Hledat na Discogs",
+          "django": "Zobrazit v administraci Django",
+          "domain": "Členem od { date }",
+          "moderation": "Otevřít v rozhraní pro moderaci",
+          "musicbrainz": "Zobrazit na MusicBrainz"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "Knihovna bude odstraněna, společně se souvisejícími nahranými soubory a sledováními. Tato akce je nevratná."
+            },
+            "header": "Odstranit toto album?"
+          },
+          "embed": {
+            "header": "Vložit toto album do webové stránky"
+          }
+        }
+      },
+      "AlbumEdit": {
+        "header": {
+          "edit": "Upravit toto album",
+          "suggest": "Navrhněte úpravu u tohoto alba"
+        },
+        "message": {
+          "remote": "Tento objekt je spravován jiným serverem, nemůžete ho upravovat."
+        }
+      },
+      "Albums": {
+        "button": {
+          "search": "Hledat"
+        },
+        "empty": {
+          "noResults": "Žádný interpret neodpovídá zadání"
+        },
+        "header": {
+          "browse": "Procházení alb"
+        },
+        "label": {
+          "search": "Hledat",
+          "tags": "Tagy"
+        },
+        "link": {
+          "addMusic": "Hledat trochu muziky"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Vzestupně",
+            "descending": "Sestupně",
+            "label": "Směr řazení"
+          },
+          "label": "Řazení"
+        },
+        "pagination": {
+          "results": "Výsledků na stránku"
+        },
+        "placeholder": {
+          "search": "Zadejte název alba…"
+        },
+        "title": "Alba"
+      },
+      "ArtistBase": {
+        "button": {
+          "cancel": "Zrušit",
+          "edit": "Upravit",
+          "embed": "Vložit",
+          "more": "Další…",
+          "play": "Přehrát všechna alba"
+        },
+        "link": {
+          "discogs": "Hledat na Discogs",
+          "django": "Zobrazit v administraci Django",
+          "domain": "Členem od { date }",
+          "moderation": "Otevřít v rozhraní pro moderaci",
+          "musicbrainz": "Zobrazit na MusicBrainz",
+          "wikipedia": "Hledat na Wikipedii"
+        },
+        "meta": {
+          "albums": "{ n } albu | { n } albech",
+          "tracks": "0 skladeb v | {count} skladba v | {count} skladeb v"
+        },
+        "modal": {
+          "embed": {
+            "header": "Vložit díla tohoto interpreta do webové stránky"
+          }
+        },
+        "title": "Interpret"
+      },
+      "ArtistDetail": {
+        "button": {
+          "filter": "Odstranit filtr",
+          "more": "Načíst další…"
+        },
+        "description": {
+          "library": "Tento interpret se vyskytuje v následujících knihovnách:"
+        },
+        "header": {
+          "album": "Alba tohoto interpreta",
+          "library": "Knihovny uživatele",
+          "track": "Nové skladby od tohoto interpreta"
+        },
+        "link": {
+          "filter": "Přehled filtrů"
+        },
+        "message": {
+          "filter": "Některý obsah související s tímto interpretem je nastaven jako skrytý."
+        }
+      },
+      "ArtistEdit": {
+        "header": {
+          "edit": "Upravit tohoto interpreta",
+          "suggest": "Navrhněte úpravu u tohoto interpreta"
+        },
+        "message": {
+          "remote": "Tento objekt je spravován jiným serverem, nemůžete ho upravovat."
+        }
+      },
+      "Artists": {
+        "button": {
+          "search": "Hledat",
+          "upload": "Hledat trochu muziky"
+        },
+        "empty": {
+          "noResults": "Žádný interpret neodpovídá zadání"
+        },
+        "header": {
+          "browse": "Procházení interpretů"
+        },
+        "label": {
+          "excludeCompilation": "Vynechat Kompilační Umělce",
+          "search": "Jméno interpreta",
+          "tags": "Tagy"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Vzestupně",
+            "descending": "Sestupně",
+            "label": "Směr řazení"
+          },
+          "label": "Řazení"
+        },
+        "pagination": {
+          "results": "Výsledků na stránku"
+        },
+        "placeholder": {
+          "search": "Hledat…"
+        },
+        "title": "Interpreti"
+      },
+      "EditCard": {
+        "button": {
+          "approve": "Schválit",
+          "delete": "Odstranit",
+          "reject": "Odmítnout"
+        },
+        "header": {
+          "modification": "Úprava { id }"
+        },
+        "link": {
+          "track": "Stopa #{ id } - { name }"
+        },
+        "modal": {
+          "content": {
+            "warning": "Doporučení bude kompletně odstraněno, tato akce je nevratná."
+          },
+          "delete": {
+            "header": "Odstranit toto doporučení?"
+          }
+        },
+        "status": {
+          "applied": "Schváleno a aplikováno",
+          "approved": "Schváleno",
+          "pending": "Čekající na kontrolu",
+          "rejected": "Odmítnuto"
+        },
+        "table": {
+          "update": {
+            "header": {
+              "field": "Pole",
+              "newValue": "Nová hodnota",
+              "oldValue": "Původní hodnota"
+            },
+            "notApplicable": "N/A"
+          }
+        }
+      },
+      "EditForm": {
+        "button": {
+          "cancel": "Zrušit",
+          "clear": "Vyčistit",
+          "new": "Odeslat další úpravu",
+          "reset": "Resetovat na výchozí hodnotu",
+          "showAll": "Zobrazit všechny úpravy",
+          "showUnreviewed": "Omezit na úpravy bez revize",
+          "submit": "Odeslat a aplikovat úpravu",
+          "suggest": "Odeslat návrh"
+        },
+        "empty": {
+          "suggestEdit": "Navrhněte změnu prostřednictvím formuláře níže"
+        },
+        "header": {
+          "failure": "Chyba při odesílání změn",
+          "recentEdits": "Přijaté úpravy",
+          "success": "Vaše úprava byla úspěšně odeslána.",
+          "unreviewed": "Poslední úpravy čekající na kontrolu"
+        },
+        "label": {
+          "summary": "Shrnutí (volitelné)"
+        },
+        "message": {
+          "noPermission": "Nemáte oprávnění upravovat tento objekt, ale můžete navrhnout jeho změnu. Návrh na změnu bude po odeslání zkontrolován a případně schválen."
+        },
+        "notApplicable": "N/A",
+        "placeholder": {
+          "summary": "Krátké shrnutí popisující provedené změny."
+        }
+      },
+      "FileUpload": {
+        "button": {
+          "cancel": "Zrušit",
+          "retry": "Knihovny a nahrané soubory"
+        },
+        "description": {
+          "import": "Znovu spustit import",
+          "previousImport": "Výsledky předchozího importu:"
+        },
+        "empty": {
+          "noFiles": "0"
+        },
+        "header": {
+          "failure": "Chyba při odesílání hlášení",
+          "local": "Nahrát hudbu z '~/vašeho lokálního úložiště",
+          "server": "Stav importu",
+          "status": "Stav importu"
+        },
+        "label": {
+          "extensions": "Podporované přípony: { extensions }",
+          "remainingSpace": "Zbývající prostor úložiště",
+          "uploadWidget": "Klikněte pro výběr souborů nebo myší přetáhněte soubory či složky k nahrání"
+        },
+        "link": {
+          "picard": "Doporučujeme pro tyto účely použít MusicBrainz Picard.",
+          "processing": "Zpracování",
+          "uploading": "Nahrávání"
+        },
+        "message": {
+          "listener": "Tato stránka se vás ptá, zda chcete odejít - data, která jste vložili, mohou být ztracena.",
+          "local": {
+            "copyright": "Nenahrávejte obsah chráněný copyrightem do veřejné knihovny, mohlo by dojít k porušení zákona",
+            "format": "Hudební soubory, které nahráváte, jsou ve formátu OGG, Flac, MP3 nebo AIFF",
+            "message": "Chystáte se nahrát hudbu do své knihovny. Před zahájením prosím zajistěte, že:",
+            "tag": "Nahrávané hudební soubory jsou otagovány korektně."
+          }
+        },
+        "table": {
+          "upload": {
+            "header": {
+              "actions": "Akce",
+              "filename": "Název souboru",
+              "size": "Velikost",
+              "status": "Stav"
+            },
+            "progress": "{percent}%",
+            "status": {
+              "pending": "Čeká",
+              "uploaded": "Nahráno",
+              "uploading": "Nahrávání…"
+            }
+          }
+        },
+        "tooltip": {
+          "denied": "Nahrání zamítnuto, zkontrolujte zda soubor není příliš velký a že nedošlo k vyčerpání povolené kapacity",
+          "extension": "Neplatný typ souboru. Ujistěte se, že nahrávate zvukový soubor. Podporovány jsou soubory typu { extensions }",
+          "network": "Během nahrávání tohoto souboru došlo k chybě sítě",
+          "retry": "Opakovat",
+          "size": "Nelze nahrát tento soubor, zkontrolujte zda není příliš velký",
+          "timeout": "Vypršel čas nahrávání, zkuste to prosím znovu"
+        }
+      },
+      "FsBrowser": {
+        "button": {
+          "import": "Importováno"
+        }
+      },
+      "FsLogs": {
+        "empty": {
+          "notStarted": "Import zatím nezačal"
+        }
+      },
+      "Home": {
+        "header": {
+          "newChannels": "Nové kanály",
+          "playlists": "Playlisty",
+          "recentlyAdded": "Poslední přidané",
+          "recentlyFavorited": "Poslední oblíbené",
+          "recentlyListened": "Poslední poslechnuté"
+        },
+        "title": "Knihovna"
+      },
+      "ImportStatusModal": {
+        "button": {
+          "close": "Zavřít"
+        },
+        "error": {
+          "importFailure": "Došlo k chybě při zpracování nahrávaných dat. Podrobnosti naleznete níže.",
+          "invalidMetadata": {
+            "label": "Neplatná metadata",
+            "message": "Metadata v souboru jsou neplatná, nebo některé povinné položky chybí."
+          },
+          "unknownError": {
+            "label": "Neznámá chyba",
+            "message": "Došlo k neznámé chybě"
+          }
+        },
+        "header": {
+          "importDetail": "Detaily importu"
+        },
+        "link": {
+          "documentation": "Přečíst dokumentaci k této chybě",
+          "support": "Založit vlákno na podpoře (vložit informace pro ladění do zprávy)"
+        },
+        "message": {
+          "importDetail": "Nahrávání je ve frontě a bude brzy serverem zpracováno.",
+          "importSuccess": "Nahrávání bylo serverem úspěšně zpracováno."
+        },
+        "table": {
+          "error": {
+            "debug": "Informace pro vývojáře",
+            "errorDetail": "Detail chyby",
+            "errorType": "Typ chyby",
+            "help": "Získat pomoc"
+          }
+        },
+        "warning": {
+          "importSkipped": "Nahrávání bylo přeskočeno, protože podobný soubor se již nachází v jedné z vašich knihoven."
+        }
+      },
+      "Podcasts": {
+        "button": {
+          "cancel": "Zrušit",
+          "channel": "Vytvořit novou knihovnu",
+          "feed": "Použití Funkwhale",
+          "search": "Hledat",
+          "subscribe": "Odebírat"
+        },
+        "empty": {
+          "noResults": "Žádný interpret neodpovídá zadání"
+        },
+        "header": {
+          "browse": "Procházení interpretů"
+        },
+        "label": {
+          "search": "Název podcastu",
+          "tags": "Tagy"
+        },
+        "modal": {
+          "subscription": {
+            "header": "Popis"
+          }
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Vzestupně",
+            "descending": "Sestupně",
+            "label": "Směr řazení"
+          },
+          "label": "Řazení"
+        },
+        "pagination": {
+          "results": "Výsledků na stránku"
+        },
+        "placeholder": {
+          "search": "Hledat…"
+        },
+        "title": "Podcasty"
+      },
+      "Radios": {
+        "button": {
+          "add": "Vytvořit mé vlastní rádio",
+          "create": "Vytvořit mé vlastní rádio",
+          "search": "Hledat"
+        },
+        "empty": {
+          "noResults": "Žádný interpret neodpovídá zadání"
+        },
+        "header": {
+          "browse": "Procházení rádií",
+          "instance": "Rádia instance",
+          "user": "Rádia uživatele"
+        },
+        "label": {
+          "search": "Hledat"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Vzestupně",
+            "descending": "Sestupně",
+            "label": "Pořadí"
+          },
+          "label": "Řazení"
+        },
+        "pagination": {
+          "results": "Výsledků na stránku"
+        },
+        "placeholder": {
+          "search": "Zadejte název rádia…"
+        },
+        "title": "Rádia"
+      },
+      "TagDetail": {
+        "header": {
+          "channels": "Kanály",
+          "tracks": "Skladby"
+        },
+        "link": {
+          "albums": "Alba",
+          "artists": "Interpreti",
+          "moderation": "Otevřít v rozhraní pro moderaci"
+        }
+      },
+      "TagSelector": {
+        "placeholder": {
+          "search": "Hledat…"
+        }
+      },
+      "TrackBase": {
+        "button": {
+          "cancel": "Zrušit",
+          "delete": "Odstranit",
+          "download": "Stáhnout",
+          "edit": "Upravit",
+          "embed": "Vložit",
+          "more": "Další…",
+          "play": "Přehrát"
+        },
+        "link": {
+          "discogs": "Hledat na Discogs",
+          "django": "Zobrazit v administraci Django",
+          "domain": "Členem od { date }",
+          "moderation": "Otevřít v rozhraní pro moderaci",
+          "wikipedia": "Hledat na Wikipedii"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "Knihovna bude odstraněna, společně se souvisejícími nahranými soubory a sledováními. Tato akce je nevratná."
+            },
+            "header": "Odstranit tento tag?"
+          },
+          "embed": {
+            "header": "Vložit tuto stopu do webové stránky"
+          }
+        },
+        "subtitle": {
+          "with-uploader": "Nahrál uživatel {0} dne {1}",
+          "without-uploader": "Nahráno dne {0}"
+        },
+        "title": "Stopa"
+      },
+      "TrackDetail": {
+        "description": {
+          "library": "Tato stopa se nachází v následujících knihovnách:"
+        },
+        "header": {
+          "episode": "Podrobnosti",
+          "library": "Vzdálené knihovny",
+          "playlists": "Vytvořit playlist",
+          "release": "Datum vydání",
+          "track": "Podrobnosti"
+        },
+        "link": {
+          "musicbrainz": "Zobrazit na MusicBrainz"
+        },
+        "notApplicable": "N/A",
+        "table": {
+          "release": {
+            "album": "Album",
+            "artist": "Interpret",
+            "copyright": "Copyright",
+            "license": "Licence",
+            "series": "Série",
+            "url": "URL",
+            "year": "Rok"
+          },
+          "track": {
+            "bitrate": {
+              "label": "Datový tok",
+              "value": "{bitrate}/s"
+            },
+            "codec": "Kód",
+            "downloads": "Stáhnout",
+            "duration": "Délka",
+            "size": "Velikost"
+          }
+        }
+      },
+      "TrackEdit": {
+        "header": {
+          "edit": "Upravit tuto stopu",
+          "suggest": "Navrhnout úpravu této skladby"
+        },
+        "message": {
+          "remote": " Tento objekt je spravován jiným serverem, nemůžete ho upravovat."
+        }
+      },
+      "radios": {
+        "Builder": {
+          "button": {
+            "filter": "Přidat filtr",
+            "save": "Uložit"
+          },
+          "description": {
+            "builder": "Můžete použít toto rozhraní k výrobě vlastního rádia, které bude hrát hudbu dle vašich kritérií."
+          },
+          "header": {
+            "builder": "Výroba rádia",
+            "created": "Rádio vytvořeno",
+            "matches": "0 stop odpovídajících zadaným filtrům | { n } skladba odpovídající zadaným filtrům | { n } skladeb odpovídajích zadaným filtrům",
+            "updated": "Rádio aktualizováno"
+          },
+          "label": {
+            "description": "Popis",
+            "filter": "Přidat filtry pro úpravu rádia",
+            "name": "Název rádia",
+            "public": "Zobrazit veřejně"
+          },
+          "option": {
+            "filter": "Vybrat filtr"
+          },
+          "placeholder": {
+            "description": "Můj úžasný popis",
+            "name": "Moje úžasné rádio"
+          },
+          "table": {
+            "filter": {
+              "header": {
+                "actions": "Akce",
+                "candidates": "Kandidáti",
+                "config": "Nastavení",
+                "exclude": "Vyloučit",
+                "name": "Název filtru"
+              }
+            }
+          },
+          "title": "Výroba rádia"
+        },
+        "Filter": {
+          "cancelButton": "Zrušit",
+          "excludeLabel": "Vyloučit",
+          "matchingTracks": "0 skladeb odpovídajících filtru | {n} skladba odpovídající filtru | {n} skladeb odpovídajících filtru",
+          "matchingTracksModalHeader": "Skladby odpovídající filtru",
+          "removeButton": "Odstranit"
+        }
+      }
+    },
+    "manage": {
+      "ChannelsTable": {
+        "label": {
+          "category": "Kategorie",
+          "search": "Hledat"
+        },
+        "link": {
+          "local": "Místní",
+          "moderation": "Otevřít v rozhraní pro moderaci"
+        },
+        "option": {
+          "all": "Vše"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Vzestupně",
+            "descending": "Sestupně",
+            "label": "Směr řazení"
+          },
+          "label": "Řazení"
+        },
+        "pagination": {
+          "results": "Zobrazeny výsledky { start }-{ end } z { total }"
+        },
+        "placeholder": {
+          "search": "Hledat dle domény, uživatele, biografie…"
+        },
+        "table": {
+          "channel": {
+            "header": {
+              "account": "Účet",
+              "albums": "Alba",
+              "creationDate": "Datum vytvoření",
+              "domain": "Doména",
+              "name": "Název",
+              "tracks": "Skladby"
+            }
+          }
+        }
+      },
+      "library": {
+        "AlbumsTable": {
+          "action": {
+            "delete": {
+              "label": "Odstranit",
+              "warning": "Vybraná alba budou odstraněna, společně se souvisejícími nahranými soubory, skladbami, oblíbenými položkami a historií poslechu. Tuto akci nelze vrátit."
+            }
+          },
+          "label": {
+            "search": "Hledat"
+          },
+          "link": {
+            "local": "Místní",
+            "moderation": "Otevřít v rozhraní pro moderaci"
+          },
+          "notApplicable": "N/A",
+          "ordering": {
+            "direction": {
+              "ascending": "Vzestupně",
+              "descending": "Sestupně",
+              "label": "Směr řazení"
+            },
+            "label": "Řazení"
+          },
+          "pagination": {
+            "results": "Zobrazeny výsledky { start }-{ end } z { total }"
+          },
+          "placeholder": {
+            "search": "Hledat dle domény, názvu, interpreta, MusicBrainz ID…"
+          },
+          "table": {
+            "album": {
+              "header": {
+                "artist": "Interpret",
+                "creationDate": "Datum vytvoření",
+                "domain": "Doména",
+                "name": "Název",
+                "releaseDate": "Datum vydání",
+                "tracks": "Skladby"
+              }
+            }
+          }
+        },
+        "ArtistsTable": {
+          "action": {
+            "delete": {
+              "label": "Odstranit",
+              "warning": "Vybraný interpret bude odstraněn, společně se souvisejícími nahranými soubory, skladbami, alby, oblíbenými položkami a historií poslechu. Tuto akci nelze vrátit."
+            }
+          },
+          "label": {
+            "category": "Kategorie",
+            "search": "Hledat"
+          },
+          "link": {
+            "local": "Místní"
+          },
+          "option": {
+            "all": "Vše"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Vzestupně",
+              "descending": "Sestupně",
+              "label": "Směr řazení"
+            },
+            "label": "Řazení"
+          },
+          "pagination": {
+            "results": "Zobrazeny výsledky { start }-{ end } z { total }"
+          },
+          "placeholder": {
+            "search": "Hledat dle domény, názvu, MusicBrainz ID…"
+          },
+          "table": {
+            "artist": {
+              "header": {
+                "albums": "Alba",
+                "creationDate": "Datum vytvoření",
+                "domain": "Doména",
+                "name": "Název",
+                "tracks": "Skladby"
+              }
+            }
+          }
+        },
+        "EditsCardList": {
+          "label": {
+            "search": "Hledat",
+            "status": "Stav"
+          },
+          "option": {
+            "all": "Vše",
+            "approved": "Schváleno",
+            "pending": "Čekající na kontrolu",
+            "rejected": "Odmítnuto"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Vzestupně",
+              "descending": "Sestupně",
+              "label": "Pořadí"
+            },
+            "label": "Řazení"
+          },
+          "pagination": {
+            "results": "Zobrazeny výsledky { start }-{ end } z { total }"
+          },
+          "placeholder": {
+            "search": "Hledat dle účtu, shrnutí, domény…"
+          }
+        },
+        "LibrariesTable": {
+          "action": {
+            "delete": {
+              "label": "Odstranit",
+              "warning": "Vybraná knihovna bude odstraněna, společně se souvisejícími nahranými soubory a sledováními. Tuto akci nelze vrátit."
+            }
+          },
+          "label": {
+            "search": "Hledat",
+            "visibility": "Viditelnost"
+          },
+          "link": {
+            "local": "Místní"
+          },
+          "option": {
+            "all": "Vše"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Vzestupně",
+              "descending": "Sestupně",
+              "label": "Směr řazení"
+            },
+            "label": "Řazení"
+          },
+          "pagination": {
+            "results": "Zobrazeny výsledky { start }-{ end } z { total }"
+          },
+          "placeholder": {
+            "search": "Hledat dle domény, názvu, popisu…"
+          },
+          "table": {
+            "library": {
+              "header": {
+                "account": "Účet",
+                "creationDate": "Datum vytvoření",
+                "domain": "Doména",
+                "followers": "Sledující",
+                "name": "Název",
+                "uploads": "Nahrané soubory",
+                "visibility": "Viditelnost"
+              }
+            }
+          }
+        },
+        "TagsTable": {
+          "action": {
+            "delete": {
+              "label": "Odstranit",
+              "warning": "Zvolený tag bude odstraněn včetně všech případných vazeb na existující obsah. Tato akce je nevratná."
+            }
+          },
+          "label": {
+            "search": "Hledat"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Vzestupně",
+              "descending": "Sestupně",
+              "label": "Směr řazení"
+            },
+            "label": "Řazení"
+          },
+          "pagination": {
+            "results": "Zobrazeny výsledky { start }-{ end } z { total }"
+          },
+          "placeholder": {
+            "search": "Hledat dle názvu"
+          },
+          "table": {
+            "tag": {
+              "header": {
+                "albums": "Alba",
+                "artists": "Interpreti",
+                "creationDate": "Datum vytvoření",
+                "name": "Název",
+                "tracks": "Skladby"
+              }
+            }
+          }
+        },
+        "TracksTable": {
+          "action": {
+            "delete": {
+              "label": "Odstranit",
+              "warning": "Vybrané skladby budou odstraněny, společně se souvisejícími nahranými soubory, oblíbenými položkami a historií poslechu. Tuto akci nelze vrátit."
+            }
+          },
+          "label": {
+            "search": "Hledat"
+          },
+          "link": {
+            "local": "Místní"
+          },
+          "notApplicable": "N/A",
+          "ordering": {
+            "direction": {
+              "ascending": "Vzestupně",
+              "descending": "Sestupně",
+              "label": "Směr řazení"
+            },
+            "label": "Řazení"
+          },
+          "pagination": {
+            "results": "Zobrazeny výsledky { start }-{ end } z { total }"
+          },
+          "placeholder": {
+            "search": "Hledat dle domény, názvu, interpreta, alba, MusicBrainz ID…"
+          },
+          "table": {
+            "track": {
+              "header": {
+                "album": "Album",
+                "artist": "Interpret",
+                "creationDate": "Datum vytvoření",
+                "domain": "Doména",
+                "license": "Licence",
+                "title": "Název"
+              }
+            }
+          }
+        },
+        "UploadsTable": {
+          "action": {
+            "delete": {
+              "label": "Odstranit",
+              "warning": "Vybrané nahrané soubory budou odstraněny. Tato akce je nevratná."
+            }
+          },
+          "label": {
+            "search": "Hledat",
+            "status": "Stav",
+            "visibility": "Viditelnost"
+          },
+          "link": {
+            "local": "Místní"
+          },
+          "notApplicable": "N/A",
+          "option": {
+            "all": "Vše",
+            "failed": "Neúspěšné",
+            "finished": "Dokončeno",
+            "pending": "Čeká",
+            "skipped": "Vynecháno"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Vzestupně",
+              "descending": "Sestupně",
+              "label": "Směr řazení"
+            },
+            "label": "Řazení"
+          },
+          "pagination": {
+            "results": "Zobrazeny výsledky { start }-{ end } z { total }"
+          },
+          "placeholder": {
+            "search": "Hledat dle domény, názvu, odkazu, zdroje…"
+          },
+          "table": {
+            "upload": {
+              "header": {
+                "accessedDate": "Datum přístupu",
+                "account": "Účet",
+                "creationDate": "Datum vytvoření",
+                "domain": "Doména",
+                "importStatus": "Stav importu",
+                "library": "Knihovna",
+                "name": "Název",
+                "size": "Velikost",
+                "visibility": "Viditelnost"
+              }
+            }
+          }
+        }
+      },
+      "moderation": {
+        "AccountsTable": {
+          "action": {
+            "purge": {
+              "label": "Vyčistit"
+            }
+          },
+          "label": {
+            "search": "Hledat"
+          },
+          "link": {
+            "local": "Místní účet"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Vzestupně",
+              "descending": "Sestupně",
+              "label": "Směr řazení"
+            },
+            "label": "Řazení"
+          },
+          "pagination": {
+            "results": "Zobrazeny výsledky { start }-{ end } z { total }"
+          },
+          "placeholder": {
+            "search": "Hledat dle domény, uživatele, biografie…"
+          },
+          "table": {
+            "account": {
+              "header": {
+                "domain": "Doména",
+                "firstSeen": "Prvně viděno",
+                "lastSeen": "Naposledy viděno",
+                "moderationRule": "Pod moderačním pravidlem",
+                "name": "Název",
+                "uploads": "Nahrané soubory"
+              },
+              "moderationRule": "Ano"
+            }
+          }
+        },
+        "DomainsTable": {
+          "action": {
+            "add": {
+              "label": "Přidat do seznamu povolených"
+            },
+            "purge": {
+              "label": "Vyčistit"
+            },
+            "remove": {
+              "label": "Odebrat ze seznamu povolených"
+            }
+          },
+          "empty": {
+            "noPods": "Žádné další pody nenalezeny"
+          },
+          "label": {
+            "inList": "Nachází se na seznamu povolených",
+            "search": "Hledat"
+          },
+          "link": {
+            "list": "Tato doména se vyskytuje na vašem seznamu povolených"
+          },
+          "option": {
+            "all": "Vše",
+            "no": "Ne",
+            "yes": "Ano"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Vzestupně",
+              "descending": "Sestupně",
+              "label": "Směr řazení"
+            },
+            "label": "Řazení"
+          },
+          "pagination": {
+            "results": "Zobrazeny výsledky { start }-{ end } z { total }"
+          },
+          "placeholder": {
+            "search": "Hledat dle názvu…"
+          },
+          "table": {
+            "domain": {
+              "header": {
+                "firstSeen": "Prvně viděno",
+                "moderationRule": "Pod moderačním pravidlem",
+                "name": "Název",
+                "receivedMessages": "Přijaté zprávy",
+                "users": "Uživatelé"
+              },
+              "moderationRule": "Ano"
+            }
+          }
+        },
+        "InstancePolicyCard": {
+          "button": {
+            "edit": "Upravit"
+          },
+          "header": {
+            "rule": "Pravidlo"
+          },
+          "label": {
+            "blockAll": "Blokovat vše",
+            "muteActivity": "Ztišit aktivitu",
+            "muteNotifications": "Ztišit oznámení",
+            "reason": "Důvod",
+            "rejectMedia": "Odmítnout mediální soubory"
+          },
+          "status": {
+            "enabled": "Zapnuto",
+            "paused": "Pozastaveno"
+          }
+        },
+        "InstancePolicyForm": {
+          "button": {
+            "cancel": "Zrušit",
+            "confirm": "Odstranit pravidlo moderování",
+            "create": "Vytvořit",
+            "delete": "Odstranit",
+            "update": "Aktualizovat"
+          },
+          "header": {
+            "addRule": "Přidat nové pravidlo moderování",
+            "editRule": "Upravit pravidlo moderace",
+            "failure": "Chyba při vytváření pravidla"
+          },
+          "label": {
+            "blockAll": "Blokovat vše",
+            "customizeRule": "Nebo upravte vaše pravidlo",
+            "policyDisabled": "Vypnuto",
+            "policyEnabled": "Zapnuto",
+            "policyReason": "Důvod",
+            "rejectMedia": "Odmítnout mediální soubory",
+            "silenceActivity": "Ztišit aktivitu",
+            "silenceNotifications": "Ztišit oznámení"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "Tuto akci nelze vrátit"
+              },
+              "header": "Odstranit toto pravidlo moderace?"
+            }
+          },
+          "tooltip": {
+            "blockAll": "Blokovat vše z tohoto účtu nebo domény. Zabrání veškeré interakci a vymaže související obsah (nahraná data, knihovny, sledování, atd.)",
+            "isActive": "Použijte tuto volbu pro dočasnou (de)aktivaci zásady, bez jejího odstranění.",
+            "rejectMedia": "Nestahovat žádné mediální soubory (audio, obaly, avatar…) z tohoto účtu nebo domény. Existující obsah bude také smazán.",
+            "silenceActivity": "Skrýt obsah účtu nebo domény (neplatí pro sledující).",
+            "silenceNotifications": "Zabránit účtu nebo doméně vyvolat oznámení (neplatí pro sledující).",
+            "summary": "Vysvětlete proč aplikujte tuto zásadu. Bude to informace pro vás a v závislosti na nastavení instance může být viditelná veřejně, aby se uživatelé seznámili s pravidly moderace."
+          }
+        },
+        "InstancePolicyModal": {
+          "button": {
+            "close": "Zavřít",
+            "show": "Pravidla moderace…"
+          },
+          "modal": {
+            "manage": {
+              "content": {
+                "warning": "Na tuto entitu jsou aplikována specifická pravidla moderace"
+              },
+              "header": "Spravovat pravidla moderování pro { obj }"
+            }
+          }
+        },
+        "NoteForm": {
+          "button": {
+            "add": "Přidat obsah"
+          },
+          "header": {
+            "failure": "Chyba při odesílání poznámky"
+          },
+          "placeholder": {
+            "summary": "Popište jaká opatření byla podniknuta, případně jiné související aktivity…"
+          }
+        },
+        "NotesThread": {
+          "button": {
+            "delete": "Odstranit"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "Poznámka bude ostraněna. Tato akce je nevratná."
+              },
+              "header": "Odstranit tuto poznámku?"
+            }
+          }
+        },
+        "ReportCard": {
+          "button": {
+            "confirmDelete": "Odstranit",
+            "delete": "Smazat nahlášený objekt",
+            "resolve": "Vyřešit",
+            "unresolve": "Není vyřešeno"
+          },
+          "header": {
+            "actions": "Akce",
+            "message": "Zpráva",
+            "notes": "Interní poznámka",
+            "reportedObject": "Ohlášený objekt"
+          },
+          "link": {
+            "moderation": "Otevřít v rozhraní pro moderaci",
+            "publicPage": "Zobrazit veřejnou stránku",
+            "report": "Ohlásit { id }"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "Objekt související s tímto hlášením bude odstraněn a hlášení bude označeno jako vyřešené. Odstranění je nevratné."
+              },
+              "header": "Smazat nahlášený objekt?"
+            }
+          },
+          "notApplicable": "N/A",
+          "table": {
+            "object": {
+              "account": "Účet",
+              "domain": "Doména",
+              "local": "Místní",
+              "owner": "Vlastník",
+              "type": "Typ"
+            },
+            "report": {
+              "category": "Kategorie",
+              "creationDate": "Datum vytvoření",
+              "submittedBy": "Odeslal"
+            },
+            "status": {
+              "assignedTo": "Přiřazeno k",
+              "internalNotes": "Interní poznámka",
+              "resolutionDate": "Datum vyřešení",
+              "resolved": "Vyřešeno",
+              "status": "Stav",
+              "unresolved": "Nevyřešeno"
+            }
+          },
+          "warning": {
+            "objectDeleted": "Objekt náležící k tomuto hlášení byl odstraněn."
+          }
+        },
+        "UserRequestCard": {
+          "button": {
+            "approve": "Schválit",
+            "reject": "Zamítnout"
+          },
+          "header": {
+            "actions": "Akce",
+            "notes": "Interní poznámka",
+            "signup": "Zpráva"
+          },
+          "link": {
+            "request": "Ohlásit { id }"
+          },
+          "message": {
+            "signup": "Tento uživatel se chce zaregistrovat na Váš pod."
+          },
+          "notApplicable": "N/A",
+          "table": {
+            "request": {
+              "creationDate": "Datum vytvoření",
+              "submittedBy": "Odeslal"
+            },
+            "status": {
+              "approved": "Schváleno",
+              "assignedTo": "Přiřazeno k",
+              "internalNotes": "Interní poznámka",
+              "pending": "Čeká",
+              "refused": "Pozastaveno",
+              "resolutionDate": "Datum rozhodnutí",
+              "status": "Stav"
+            }
+          }
+        }
+      },
+      "users": {
+        "InvitationForm": {
+          "button": {
+            "clear": "Vyčistit",
+            "new": "Získat novou pozvánku"
+          },
+          "header": {
+            "failure": "Chyba při vytváření pozvánky"
+          },
+          "label": {
+            "invite": "Kód pozvánky"
+          },
+          "placeholder": {
+            "invitation": "Ponechte prázdné pro náhodný kód"
+          },
+          "table": {
+            "invitation": {
+              "header": {
+                "code": "Kód",
+                "link": "Odkaz pro sdílení"
+              }
+            }
+          }
+        },
+        "InvitationsTable": {
+          "action": {
+            "delete": "Odstranit"
+          },
+          "label": {
+            "expired": "Vypršel",
+            "search": "Hledat",
+            "status": "Stav",
+            "unused": "Nevyužito",
+            "used": "Využito"
+          },
+          "option": {
+            "all": "Vše",
+            "expired": "Vypršel/použit",
+            "open": "Otevřít"
+          },
+          "ordering": {
+            "label": "Řazení"
+          },
+          "pagination": {
+            "results": "Zobrazuji nula výsledků | Zobrazuji jeden výsledek | Zobrazuji {start}. až {end} výsledek z {total} výsledků"
+          },
+          "placeholder": {
+            "search": "Hledat dle uživatele, emailové adresy, kódu…"
+          },
+          "table": {
+            "invitation": {
+              "header": {
+                "code": "Kód",
+                "creationDate": "Datum vytvoření",
+                "expirationDate": "Datum vypršení",
+                "owner": "Vlastník",
+                "status": "Stav",
+                "user": "Uživatel"
+              }
+            }
+          }
+        },
+        "UsersTable": {
+          "label": {
+            "search": "Hledat"
+          },
+          "notApplicable": "N/A",
+          "ordering": {
+            "direction": {
+              "ascending": "Vzestupně",
+              "descending": "Sestupně",
+              "label": "Směr řazení"
+            },
+            "label": "Řazení"
+          },
+          "pagination": {
+            "results": "Zobrazuji nula výsledků | Zobrazuji jeden výsledek | Zobrazuji {start}. až {end} výsledek z {total} výsledků"
+          },
+          "permission": {
+            "library": "Knihovna",
+            "moderation": "Moderování",
+            "settings": "Nastavení"
+          },
+          "placeholder": {
+            "search": "Hledat dle uživatele, emailové adresy, názvu…"
+          },
+          "table": {
+            "user": {
+              "accountStatus": {
+                "active": "Aktivní",
+                "inactive": "Neaktivní"
+              },
+              "header": {
+                "accountStatus": "Stav účtu",
+                "email": "Email",
+                "lastActivity": "Poslední aktivita",
+                "permissions": "Oprávnění",
+                "signup": "Registrace",
+                "status": "Stav",
+                "username": "Uživatelské jméno"
+              },
+              "status": {
+                "admin": "Administrátor",
+                "regular": "Běžný uživatel",
+                "staff": "Člen teamu"
+              }
+            }
+          }
+        }
+      }
+    },
+    "moderation": {
+      "FilterModal": {
+        "button": {
+          "cancel": "Zrušit",
+          "hide": "Skrýt obsah"
+        },
+        "header": {
+          "failure": "Chyba při vytváření filtru",
+          "modal": "Přejete si skrýt obsah od interpreta \"{ name }\"?"
+        },
+        "help": {
+          "createFilter": "Můžete spravovat a aktualizovat své filtry kdykoliv v nastavení vašeho účtu."
+        },
+        "message": {
+          "success": "Filtr obsahu úspěšně přidán"
+        },
+        "warning": {
+          "createFilter": {
+            "listIntro": "Neuvidíte skladby, alba a uživatelskou aktivitu spojenou s tímto interpretem:",
+            "listItem1": "V oblíbených a historii poslechu jiných uživatelů",
+            "listItem2": "Ve widgetu \"Poslední přidané\"",
+            "listItem3": "Ve výpisu interpretů a alb",
+            "listItem4": "V návrzích rádia"
+          }
+        }
+      },
+      "ReportCategoryDropdown": {
+        "label": {
+          "category": "Kategorie"
+        },
+        "option": {
+          "all": "Vše"
+        }
+      },
+      "ReportModal": {
+        "button": {
+          "cancel": "Zrušit",
+          "submit": "Odeslat hlášení"
+        },
+        "description": {
+          "email": "Použijeme uvedený email v případě potřeby vás kontaktovat ohledně tohoto hlášení.",
+          "forwardToDomain": "Přeposlat anonymizovanou kopii tohoto hlášení serveru, který tento prvek hostuje.",
+          "message": "Použijte toto pole pro poskytnutí doplňujících informací pro moderátora, který bude zpracovávat vaše hlášení.",
+          "modal": "Použijte tento formulář pro odeslání hlášení našemu týmu moderátorů"
+        },
+        "error": {
+          "nodeinfoFetch": "Nelze získat info o uzlu: {error}"
+        },
+        "header": {
+          "disabled": "Anonymní hlášení jsou vypnuta, pro odeslání hlášení se prosím přihlaste.",
+          "modal": "Přejete si nahlásit tento objekt?",
+          "submissionFailure": "Chyba při odesílání hlášení"
+        },
+        "label": {
+          "email": "Email",
+          "forwardToDomain": "Přeposlat na {domain}",
+          "message": "Zpráva"
+        },
+        "message": {
+          "submissionSuccess": "Hlášení úspěšně odesláno, děkujeme"
+        }
+      }
+    },
+    "notifications": {
+      "NotificationRow": {
+        "button": {
+          "approve": "Schválit",
+          "markRead": "Označit jako přečtené",
+          "markUnread": "Označit jako nepřečtené",
+          "reject": "Odmítnout"
+        },
+        "message": {
+          "libraryAcceptFollow": "{ username } schválil váš přístup ke knihovně \"{ library }\"",
+          "libraryFollow": "{ username } sleduje vaši knihovnu \"{ library }\"",
+          "libraryPendingFollow": "{ username } chce sledovat vaši knihovnu \"{ library }\"",
+          "libraryReject": "Odmítli jste požadavek uživatele {username} sledovat \"{library}\""
+        }
+      }
+    },
+    "playlists": {
+      "Card": {
+        "meta": {
+          "tracks": "Žádné skladby | {n} skladba | {n} skladeb"
+        }
+      },
+      "Editor": {
+        "button": {
+          "addDuplicate": "Přesto přidat",
+          "clear": "Vyčistit playlist",
+          "copy": "Kopírovat skladby ve frontě do playlistu",
+          "insertFromQueue": "Vložit z fronty ({ n } skladba) | Vložit z fronty ({ n } skladeb"
+        },
+        "error": {
+          "sync": "Došlo k chybě při ukládání změn"
+        },
+        "header": {
+          "editor": "Editor playlistu"
+        },
+        "help": {
+          "reorder": "Přetáhněte myší řádky pro změnu pořadí stop v playlistu"
+        },
+        "loading": {
+          "sync": "Synchronizace změn na server…"
+        },
+        "message": {
+          "sync": "Změny synchronizovány se serverem"
+        },
+        "modal": {
+          "clearPlaylist": {
+            "content": {
+              "warning": "Odstraní nevratně všechny skladby z tohoto playlistu."
+            },
+            "header": "Přejete si vyprázdnit seznam skladeb \"{ playlist }\"?"
+          }
+        },
+        "warning": {
+          "duplicate": "Některé skladby ve frontě se v tomto playlistu již nacházejí:"
+        }
+      },
+      "Form": {
+        "button": {
+          "create": "Vytvořit playlist",
+          "update": "Aktualizovat playlist"
+        },
+        "header": {
+          "createFailure": "Playlist nemůže být vytvořen",
+          "createPlaylist": "Vytvořit nový playlist",
+          "createSuccess": "Playlist vytvořen",
+          "updateSuccess": "Playlist aktualizován"
+        },
+        "label": {
+          "name": "Název playlistu",
+          "visibility": "Viditelnost playlistu"
+        },
+        "placeholder": {
+          "name": "Můj úžasný playlist"
+        }
+      },
+      "PlaylistModal": {
+        "button": {
+          "addDuplicate": "Přesto přidat",
+          "addToPlaylist": "Přidat do tohoto playlistu",
+          "addTrack": "Přidat stopu",
+          "cancel": "Zrušit",
+          "edit": "Upravit"
+        },
+        "empty": {
+          "noPlaylists": "Playlist nemůže být vytvořen"
+        },
+        "header": {
+          "addFailure": "Stopu nelze přidat do playlistu",
+          "addToPlaylist": "Přidat do seznamu skladeb",
+          "available": "Dostupné playlisty",
+          "manage": "Spravovat playlisty",
+          "noResults": "Žádné výsledky odpovídající filtru",
+          "track": "{title}, od interpreta {artist}"
+        },
+        "label": {
+          "filter": "Název filtru"
+        },
+        "placeholder": {
+          "filterPlaylist": "Zadejte název seznamu skladeb"
+        },
+        "table": {
+          "edit": {
+            "header": {
+              "edit": "Upravit",
+              "lastModification": "Poslední změna",
+              "name": "Název",
+              "tracks": "Skladby"
+            }
+          }
+        },
+        "warning": {
+          "duplicate": "{ 0 } se už nachází v { 1 }."
+        }
+      },
+      "TrackPlaylistIcon": {
+        "button": {
+          "add": "Přidat do playlistu…"
+        }
+      },
+      "Widget": {
+        "button": {
+          "create": "Vytvořit playlist",
+          "more": "Zobrazit více"
+        },
+        "placeholder": {
+          "noPlaylists": "Playlist nemůže být vytvořen"
+        }
+      }
+    },
+    "radios": {
+      "Button": {
+        "startArtistsRadio": "Spustit interpretové rádio",
+        "startPlaylistsRadio": "Spustit playlistové rádio",
+        "startRadio": "Přehrát stopu",
+        "startTagsRadio": "Spustit značkové rádio",
+        "stopArtistsRadio": "Zastavit interpretové rádio",
+        "stopPlaylistsRadio": "Zastavit playlistové rádio",
+        "stopRadio": "Zastavit rádio",
+        "stopTagsRadio": "Zastavit značkové rádio"
+      },
+      "Card": {
+        "button": {
+          "edit": "Upravit"
+        }
+      }
+    },
+    "tags": {
+      "List": {
+        "button": {
+          "more": "Zobrazit 1 další tag | Zobrazit { n } další tagy"
+        }
+      }
+    },
+    "vui": {
+      "Pagination": {
+        "label": "Stránkování",
+        "next": "Další stopa",
+        "previous": "Předchozí stopa"
+      }
+    }
+  },
+  "composables": {
+    "audio": {
+      "usePlayOptions": {
+        "addToQueueMessage": "{n} skladeb bylo přidáno do fronty | { n } skladba byla přidána do fronty | { n } skladeb bylo přidány do fronty"
+      }
+    },
+    "locale": {
+      "useSharedLabels": {
+        "fields": {
+          "contentCategory": {
+            "choices": {
+              "music": "Hudba",
+              "other": "Ostatní",
+              "podcast": "Podcast"
+            },
+            "label": "Filtry obsahu"
+          },
+          "importStatus": {
+            "choices": {
+              "draft": {
+                "help": "Tato stopa byla nahrána a čeká na zpracování serverem",
+                "label": "Koncept"
+              },
+              "errored": {
+                "help": "Tato stopa nemůže být zpracována, prosím zajistěte její korektní otagování",
+                "label": "Skončilo chybou"
+              },
+              "finished": {
+                "help": "Importováno",
+                "label": "Dokončeno"
+              },
+              "pending": {
+                "help": "Tato stopa byla nahrána a čeká na zpracování serverem",
+                "label": "Čeká"
+              },
+              "skipped": {
+                "help": "Tato stopa se již nachází v některé z vašich knihoven",
+                "label": "Vynecháno"
+              }
+            },
+            "label": "Klikněte pro zobrazení více informací o procesu importování"
+          },
+          "privacyLevel": {
+            "choices": {
+              "instance": "Všichni z této instance",
+              "private": "Nikdo kromě mě",
+              "public": "Všichni, napříč všemi instancemi"
+            },
+            "help": "Určete stupeň viditelnosti vaší aktivity",
+            "label": "Viditelnost aktivity",
+            "shortChoices": {
+              "instance": "Instance",
+              "private": "Soukromé",
+              "public": "Všichni"
+            }
+          },
+          "reportType": {
+            "choices": {
+              "illegalContent": "Nelegální obsah",
+              "invalidMetadata": "Neplatná metadata",
+              "offensiveContent": "Urážlivý obsah",
+              "other": "Ostatní",
+              "takedownRequest": "Požadavek o odstranění"
+            },
+            "label": "Kategorie"
+          },
+          "summary": {
+            "label": "Biografie"
+          }
+        },
+        "filters": {
+          "accessedDate": "Datum přístupu",
+          "albumTitle": "Název alba",
+          "appliedDate": "Aplikované datum",
+          "artistName": "Jméno interpreta",
+          "bitrate": "Datový tok",
+          "creationDate": "Datum vytvoření",
+          "dateJoined": "Datum registrace",
+          "domain": "Doména",
+          "duration": "Délka",
+          "expirationDate": "Datum vypršení",
+          "firstSeen": "Poprvé viděn dne",
+          "followers": "Sledující",
+          "handledDate": "Datum zpracování",
+          "itemsCount": "Položky",
+          "lastActivity": "Poslední aktivita",
+          "lastSeen": "Naposledy viděn dne",
+          "modificationDate": "Datum úpravy",
+          "name": "Název",
+          "receivedMessages": "Přijaté zprávy",
+          "releaseDate": "Datum vydání",
+          "size": "Velikost",
+          "trackTitle": "Název skladby",
+          "uploads": "Nahrané soubory",
+          "username": "Uživatelské jméno",
+          "users": "Uživatelé"
+        },
+        "scopes": {
+          "edits": {
+            "description": "Přístup k úpravám",
+            "label": "Úpravy"
+          },
+          "favorites": {
+            "description": "Přístup k oblíbeným",
+            "label": "Oblíbené"
+          },
+          "filters": {
+            "description": "Přístup k filtrům obsahu",
+            "label": "Filtry obsahu"
+          },
+          "follows": {
+            "description": "Přístup ke sledování",
+            "label": "Sleduje"
+          },
+          "libraries": {
+            "description": "Přístup k hudebním souborům, knihovnám, interpretům, albům a stopám",
+            "label": "Knihovny a nahrané soubory"
+          },
+          "listenings": {
+            "description": "Přístup k historii poslechu",
+            "label": "Poslechy"
+          },
+          "notifications": {
+            "description": "Přístup k oznámením",
+            "label": "Oznámení"
+          },
+          "playlists": {
+            "description": "Přístup k playlistům",
+            "label": "Playlisty"
+          },
+          "profile": {
+            "description": "Přístup k emailu, uživatelskému jménu a informacím o profilu",
+            "label": "Profil"
+          },
+          "radios": {
+            "description": "Přístup k rádiím",
+            "label": "Rádia"
+          },
+          "reports": {
+            "description": "Přístup k rádiím",
+            "label": "Hlášení"
+          },
+          "security": {
+            "description": "Přístup k bezpečnostním nastavením, jako např. heslo a autorizace",
+            "label": "Zabezpečení"
+          }
+        }
+      }
+    },
+    "moderation": {
+      "useEditConfigs": {
+        "album": {
+          "releaseDate": "Datum vydání",
+          "title": "Název"
+        },
+        "artist": {
+          "name": "Název"
+        },
+        "cover": {
+          "label": "Přebal"
+        },
+        "description": {
+          "label": "Popis"
+        },
+        "tags": {
+          "label": "Tagy"
+        },
+        "track": {
+          "copyright": "Copyright",
+          "license": "Licence",
+          "position": "Pozice",
+          "title": "Název"
+        }
+      },
+      "useReport": {
+        "account": {
+          "label": "Nahlásit {'@'}{username}",
+          "typeLabel": "Účet"
+        },
+        "album": {
+          "label": "Nahlásit toto album…",
+          "typeLabel": "Album"
+        },
+        "artist": {
+          "label": "Nahlásit tohoto interpreta…",
+          "typeLabel": "Interpret",
+          "unknownLabel": "Neznámý interpret"
+        },
+        "channel": {
+          "label": "Nahlásit toto album…",
+          "typeLabel": "Kanál"
+        },
+        "library": {
+          "label": "Nahlásit tuto knihovnu…",
+          "typeLabel": "Knihovna"
+        },
+        "playlist": {
+          "label": "Nahlásit tento playlist…",
+          "typeLabel": "Playlist"
+        },
+        "track": {
+          "label": "Nahlásit tuto stopu…",
+          "typeLabel": "Stopa"
+        }
+      },
+      "useReportConfigs": {
+        "account": {
+          "label": "Účet",
+          "summary": "Biografie"
+        },
+        "album": {
+          "label": "Album",
+          "releaseDate": "Datum vydání",
+          "title": "Název"
+        },
+        "artist": {
+          "label": "Interpret"
+        },
+        "channel": {
+          "label": "Kanál"
+        },
+        "creationDate": {
+          "label": "Datum vytvoření"
+        },
+        "library": {
+          "description": "Popis",
+          "label": "Knihovna"
+        },
+        "musicbrainzId": {
+          "label": "MusicBrainz ID"
+        },
+        "name": {
+          "label": "Název"
+        },
+        "playlist": {
+          "label": "Playlist"
+        },
+        "tags": {
+          "label": "Tagy"
+        },
+        "track": {
+          "copyright": "Copyright",
+          "label": "Stopa",
+          "license": "Licence",
+          "position": "Pozice",
+          "title": "Název"
+        },
+        "visibility": {
+          "label": "Viditelnost"
+        }
+      }
+    },
+    "useErrorHandler": {
+      "errorReportMessage": "Abychom pochopili, co se stalo, prosím připojte detailní popis toho, co se stalo, když chyba nastala.",
+      "errorReportTitle": "Nastala neočekávaná chyba.",
+      "leaveFeedback": "Zanechat zpětnou vazbu",
+      "unexpectedError": "Nastala neočekávaná chyba."
+    },
+    "useThemeList": {
+      "browserDefault": "Výchozí nastavení prohlížeče",
+      "darkTheme": "Tmavé",
+      "lightTheme": "Světlé"
+    }
+  },
+  "init": {
+    "axios": {
+      "rateLimitDelay": "Překročili jste limit počtu požadavků, zkuste to prosím znovu za { delay }",
+      "rateLimitLater": "Překročili jste limit počtu požadavků, zkuste to prosím znovu později"
+    },
+    "sentry": {
+      "allow": "Povolit",
+      "deny": "Zakázat",
+      "funkwhaleInstance": "Oficiální Funkwhale instance Glitchtip",
+      "message": "Chyby budou sdíleny s { 0 }, abychom lépe pochopili co chybu způsobilo.",
+      "title": "Abychom zlepšili kvalitu našich služeb, rádi bychom sbírali informace o pádech aplikace během vašeho sezení."
+    },
+    "serviceWorker": {
+      "actions": {
+        "later": "Později",
+        "update": "Aktualizovat"
+      },
+      "newAppVersion": "Nová verze aplikace je dostupná."
+    }
+  },
+  "views": {
+    "Notifications": {
+      "button": {
+        "read": "Označit vše jako přečtené",
+        "submit": "Chápu!"
+      },
+      "empty": {
+        "notifications": "Žádná oznámení ke zobrazení"
+      },
+      "header": {
+        "funkwhaleSupport": "Líbí se vám Funkwhale?",
+        "instanceSupport": "Podpořte tento Funkwhale pod",
+        "messages": "Vaše zprávy",
+        "notifications": "Vaše oznámení"
+      },
+      "label": {
+        "reminder": "Připomenout za:",
+        "showRead": "Zobrazit přečtená oznámení"
+      },
+      "link": {
+        "donate": "Přispějte",
+        "help": "Objevte další způsoby, jak můžete projektu pomoct"
+      },
+      "loading": {
+        "notifications": "Načítání upozornění…"
+      },
+      "message": {
+        "funkwhaleSupport": "Všimli jsme si že se zde již nějaký čas nacházíte. Pokud je pro vás Funkwhale přínosný, pomozte nám ho prosím dále vylepšovat!"
+      },
+      "option": {
+        "delay": {
+          "30": "30 dní",
+          "60": "60 dní",
+          "90": "90 dní",
+          "never": "Nikdy"
+        }
+      },
+      "title": "Oznámení"
+    },
+    "Search": {
+      "button": {
+        "submit": "Odeslat hlášení"
+      },
+      "header": {
+        "remote": "Hledat ve vzdálené knihovně",
+        "rss": "Odebírat RSS kanál podcastu",
+        "search": "Hledat"
+      },
+      "label": {
+        "albums": "Alba",
+        "artists": "Interpreti",
+        "playlists": "Playlisty",
+        "podcasts": "Podcasty",
+        "radios": "Rádia",
+        "series": "Série",
+        "tags": "Tagy",
+        "tracks": "Skladby"
+      }
+    },
+    "admin": {
+      "ChannelDetail": {
+        "button": {
+          "delete": "Odstranit",
+          "openRemote": "Otevřít vzdálený profil",
+          "refresh": "Obnovit ze vzdáleného serveru"
+        },
+        "header": {
+          "activity": "Aktivita",
+          "audioContent": "Obsah audia",
+          "channelData": "Data instance"
+        },
+        "label": {
+          "local": "Místní"
+        },
+        "link": {
+          "django": "Zobrazit v administraci Django",
+          "localProfile": "Otevřít místní profil"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "Knihovna bude odstraněna, společně se souvisejícími nahranými soubory a sledováními. Tato akce je nevratná."
+            },
+            "header": "Odstranit tuto poznámku?"
+          }
+        },
+        "table": {
+          "activity": {
+            "edits": "Úpravy",
+            "favorited": "Oblíbené skladby",
+            "firstSeen": "Prvně viděno",
+            "linkedReports": "Odkazy na hlášení",
+            "listenings": "Poslechy",
+            "playlists": "Playlisty"
+          },
+          "audioContent": {
+            "albums": "Alba",
+            "cachedSize": "Velikost v cache",
+            "totalSize": "Celková velikost",
+            "tracks": "Skladby",
+            "uploads": "Nahrané soubory"
+          },
+          "channelData": {
+            "account": "Účet",
+            "category": "Kategorie",
+            "description": "Popis",
+            "domain": "Doména",
+            "name": "Název",
+            "rss": "RSS kanál",
+            "url": "URL"
+          }
+        },
+        "warning": {
+          "stats": "Statistiky jsou generovány na základě aktivity a obsahu na vaší instanci a neukazují obecnou aktivitu tohoto objektu"
+        }
+      },
+      "CommonList": {
+        "title": {
+          "accounts": "Účty",
+          "albums": "Alba",
+          "artists": "Interpreti",
+          "channels": "Kanály",
+          "invitations": "Pozvánky",
+          "libraries": "Knihovny",
+          "tags": "Tagy",
+          "tracks": "Skladby",
+          "uploads": "Nahrané soubory",
+          "users": "Uživatelé"
+        }
+      },
+      "Settings": {
+        "header": {
+          "channels": "Kanály",
+          "federation": "Federace",
+          "instanceInfo": "Informace o instanci",
+          "moderation": "Moderování",
+          "music": "Hudba",
+          "playlists": "Playlisty",
+          "sections": "Sekce",
+          "security": "Zabezpečení",
+          "settings": "Nastavení instance",
+          "signups": "Registrace",
+          "stats": "Statistiky",
+          "subsonic": "Subsonic",
+          "ui": "Uživatelské rozhraní"
+        }
+      },
+      "library": {
+        "AlbumDetail": {
+          "button": {
+            "delete": "Odstranit",
+            "edit": "Upravit",
+            "remoteRefresh": "Obnovit ze vzdáleného serveru"
+          },
+          "header": {
+            "activity": "Aktivita",
+            "albumData": "Data alba",
+            "audioContent": "Obsah audia",
+            "local": "Místní"
+          },
+          "link": {
+            "artist": "Interpret",
+            "django": "Zobrazit v administraci Django",
+            "domain": "Doména",
+            "edits": "Úpravy",
+            "libraries": "Knihovny",
+            "localProfile": "Otevřít místní profil",
+            "musicbrainz": "Otevřít na MusicBrainz",
+            "remoteProfile": "Otevřít vzdálený profil",
+            "reports": "Odkazy na hlášení",
+            "tracks": "Skladby",
+            "uploads": "Nahrané soubory"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "Album bude odstraněno, společně se souvisejícími nahranými soubory, skladbami, oblíbenými položkami a historií poslechu. Tuto akci nelze vrátit."
+              },
+              "header": "Odstranit toto album?"
+            }
+          },
+          "table": {
+            "activity": {
+              "favorited": "Oblíbené skladby",
+              "firstSeen": "Prvně viděno",
+              "listenings": "Poslechy",
+              "playlists": "Playlisty"
+            },
+            "album": {
+              "description": "Popis",
+              "title": "Název"
+            },
+            "audioContent": {
+              "cachedSize": "Velikost v cache",
+              "totalSize": "Celková velikost"
+            }
+          },
+          "warning": {
+            "stats": "Statistiky jsou generovány na základě aktivity a obsahu na vaší instanci a neukazují obecnou aktivitu tohoto objektu"
+          }
+        },
+        "ArtistDetail": {
+          "button": {
+            "delete": "Odstranit",
+            "edit": "Upravit",
+            "remoteRefresh": "Obnovit ze vzdáleného serveru"
+          },
+          "header": {
+            "activity": "Aktivita",
+            "artistData": "Data interpreta",
+            "audioContent": "Obsah audia",
+            "local": "Místní"
+          },
+          "link": {
+            "albums": "Alba",
+            "category": "Kategorie",
+            "django": "Zobrazit v administraci Django",
+            "domain": "Doména",
+            "edits": "Úpravy",
+            "libraries": "Knihovny",
+            "localProfile": "Otevřít místní profil",
+            "musicbrainz": "Otevřít na MusicBrainz",
+            "remoteProfile": "Otevřít vzdálený profil",
+            "reports": "Odkazy na hlášení",
+            "tracks": "Skladby",
+            "uploads": "Nahrané soubory"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "Interpret bude odstraněn, společně se souvisejícími nahranými soubory, skladbami, alby, oblíbenými položkami a historií poslechu. Tuto akci nelze vrátit."
+              },
+              "header": "Odstranit tohoto interpreta?"
+            }
+          },
+          "table": {
+            "activity": {
+              "favorited": "Oblíbené skladby",
+              "firstSeen": "Prvně viděno",
+              "listenings": "Poslechy",
+              "playlists": "Playlisty"
+            },
+            "artist": {
+              "description": "Popis",
+              "name": "Název"
+            },
+            "audioContent": {
+              "cachedSize": "Velikost v cache",
+              "totalSize": "Celková velikost"
+            }
+          },
+          "warning": {
+            "stats": "Statistiky jsou generovány na základě aktivity a obsahu na vaší instanci a neukazují obecnou aktivitu tohoto objektu"
+          }
+        },
+        "Base": {
+          "link": {
+            "albums": "Alba",
+            "artists": "Interpreti",
+            "channels": "Kanály",
+            "edits": "Úpravy",
+            "libraries": "Knihovny",
+            "tags": "Tagy",
+            "tracks": "Skladby",
+            "uploads": "Nahrané soubory"
+          },
+          "menu": {
+            "secondary": "Podmenu"
+          },
+          "title": "Spravovat knihovnu"
+        },
+        "EditsList": {
+          "header": {
+            "edits": "Úpravy knihovny"
+          },
+          "title": "Úpravy"
+        },
+        "LibraryDetail": {
+          "button": {
+            "delete": "Odstranit"
+          },
+          "header": {
+            "activity": "Aktivita",
+            "audioContent": "Obsah audia",
+            "libraryData": "Data knihovny",
+            "local": "Místní"
+          },
+          "link": {
+            "account": "Účet",
+            "albums": "Alba",
+            "artists": "Interpreti",
+            "django": "Zobrazit v administraci Django",
+            "domain": "Doména",
+            "remoteProfile": "Otevřít vzdálený profil",
+            "reports": "Odkazy na hlášení",
+            "tracks": "Skladby",
+            "uploads": "Nahrané soubory",
+            "visibility": "Viditelnost"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "Knihovna bude odstraněna, společně se souvisejícími nahranými soubory a sledováními. Tato akce je nevratná."
+              },
+              "header": "Odstranit tuto knihovnu?"
+            }
+          },
+          "table": {
+            "activity": {
+              "firstSeen": "Prvně viděno",
+              "followers": "Sledující"
+            },
+            "audioContent": {
+              "cachedSize": "Velikost v cache",
+              "totalSize": "Celková velikost"
+            },
+            "library": {
+              "description": "Popis",
+              "name": "Název"
+            }
+          },
+          "warning": {
+            "stats": "Statistiky jsou generovány na základě aktivity a obsahu na vaší instanci a neukazují obecnou aktivitu tohoto objektu"
+          }
+        },
+        "TagDetail": {
+          "button": {
+            "delete": "Odstranit"
+          },
+          "header": {
+            "activity": "Aktivita",
+            "audioContent": "Obsah audia",
+            "tagData": "Tagy"
+          },
+          "link": {
+            "albums": "Alba",
+            "artists": "Interpreti",
+            "django": "Zobrazit v administraci Django",
+            "localProfile": "Otevřít místní profil",
+            "tracks": "Skladby"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "Tag bude odstraněn včetně všech vazeb na existující položky. Tato akce je nevratná."
+              },
+              "header": "Odstranit tento tag?"
+            }
+          },
+          "table": {
+            "activity": {
+              "firstSeen": "Prvně viděno"
+            },
+            "tag": {
+              "name": "Název"
+            }
+          }
+        },
+        "TrackDetail": {
+          "button": {
+            "delete": "Odstranit",
+            "edit": "Upravit",
+            "remoteRefresh": "Obnovit ze vzdáleného serveru"
+          },
+          "header": {
+            "activity": "Aktivita",
+            "local": "Místní",
+            "trackData": "Data skladby"
+          },
+          "link": {
+            "album": "Album",
+            "albumArtist": "Interpret alba",
+            "artist": "Interpret",
+            "django": "Zobrazit v administraci Django",
+            "domain": "Doména",
+            "edits": "Úpravy",
+            "libraries": "Knihovny",
+            "localProfile": "Otevřít místní profil",
+            "musicbrainz": "Otevřít na MusicBrainz",
+            "remoteProfile": "Otevřít vzdálený profil",
+            "reports": "Odkazy na hlášení",
+            "uploads": "Nahrané soubory"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "Stopa bude odstraněna, společně se všemi souvisejícími nahranými soubory, oblíbenými a historií poslechů. Tato akce je nevratná."
+              },
+              "header": "Odstranit tento tag?"
+            }
+          },
+          "table": {
+            "activity": {
+              "favorited": "Oblíbené skladby",
+              "firstSeen": "Prvně viděno",
+              "listenings": "Poslechy",
+              "playlists": "Playlisty"
+            },
+            "track": {
+              "copyright": "Copyright",
+              "description": "Popis",
+              "discNumber": "Číslo disku",
+              "license": "Licence",
+              "position": "Pozice",
+              "title": "Název"
+            },
+            "trackData": {
+              "cachedSize": "Velikost v cache",
+              "totalSize": "Celková velikost"
+            }
+          },
+          "warning": {
+            "stats": "Statistiky jsou generovány na základě aktivity a obsahu na vaší instanci a neukazují obecnou aktivitu tohoto objektu"
+          }
+        },
+        "UploadDetail": {
+          "button": {
+            "delete": "Odstranit",
+            "download": "Stáhnout"
+          },
+          "header": {
+            "activity": "Aktivita",
+            "audioContent": "Obsah audia",
+            "local": "Místní",
+            "uploadData": "Datum nahrání"
+          },
+          "link": {
+            "account": "Účet",
+            "django": "Zobrazit v administraci Django",
+            "domain": "Doména",
+            "importStatus": "Stav importu",
+            "library": "Knihovna",
+            "remoteProfile": "Otevřít vzdálený profil",
+            "type": "Typ",
+            "visibility": "Viditelnost"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "Nahraný soubor bude odstraněn. Tato akce je nevratná."
+              },
+              "header": "Odstranit tyto nahrané soubory?"
+            }
+          },
+          "notApplicable": "N/A",
+          "table": {
+            "activity": {
+              "accessedDate": "Datum přístupu",
+              "firstSeen": "Prvně viděno"
+            },
+            "audioContent": {
+              "bitrate": {
+                "label": "Datový tok",
+                "value": "{bitrate}/s"
+              },
+              "cachedSize": "Velikost v cache",
+              "duration": "Délka",
+              "size": "Velikost",
+              "track": "Stopa"
+            },
+            "upload": {
+              "name": "Název"
+            }
+          }
+        }
+      },
+      "moderation": {
+        "AccountsDetail": {
+          "button": {
+            "addPolicy": "Přidat zásadu moderování"
+          },
+          "description": {
+            "policy": "Zásady moderování vám pomáhají řídit interakci mezi vaší instancí a danou doménou nebo účtem"
+          },
+          "header": {
+            "accountData": "Data účtu",
+            "activePolicy": "Na tuto doménu jsou aplikována specifická pravidla moderace",
+            "activity": "Aktivita",
+            "audioContent": "Obsah audia",
+            "localAccount": "Místní účet",
+            "noPolicy": "Pro tento účet nemáte aplikována žádná pravidla."
+          },
+          "link": {
+            "albums": "Alba",
+            "artists": "Interpreti",
+            "channels": "Kanály",
+            "django": "Zobrazit v administraci Django",
+            "domain": "Doména",
+            "libraries": "Knihovny",
+            "linkedReports": "Odkazy na hlášení",
+            "openProfile": "Otevřít profil",
+            "remoteProfile": "Otevřít vzdálený profil",
+            "requests": "Požádat o heslo",
+            "tracks": "Skladby",
+            "uploads": "Nahrané soubory"
+          },
+          "notApplicable": "N/A",
+          "option": {
+            "permission": {
+              "library": "Knihovna",
+              "moderation": "Moderování",
+              "settings": "Nastavení"
+            }
+          },
+          "table": {
+            "accountData": {
+              "displayName": "Zobrazované jméno",
+              "email": "Emailová adresa",
+              "lastActivity": "Poslední aktivita",
+              "lastChecked": "Naposledy kontrolováno",
+              "loginStatus": {
+                "disabled": "Vypnuto",
+                "enabled": "Zapnuto",
+                "label": "Stav přihlášení"
+              },
+              "permissions": "Oprávnění",
+              "signupDate": "Datum registrace",
+              "userType": "Typ",
+              "username": "Uživatelské jméno"
+            },
+            "activity": {
+              "emittedFollows": "Vydaná sledování knihovny",
+              "emittedMessages": "Vydané zprávy",
+              "firstSeen": "Prvně viděno",
+              "receivedFollows": "Přijatá sledování knihovny"
+            },
+            "audioContent": {
+              "cachedSize": "Velikost v cache",
+              "megabyte": "MB",
+              "totalSize": "Celková velikost",
+              "uploadQuota": "Vyhrazený prostor pro nahrávání"
+            }
+          },
+          "tooltip": {
+            "uploadQuota": "Určete kolik obsahu může uživatel nahrát. Ponechte prázdné pro použití výchozí hodnoty této instance."
+          },
+          "warning": {
+            "stats": "Statistiky jsou generovány na základě aktivity a obsahu na vaší instanci a neukazují obecnou aktivitu tohoto objektu"
+          }
+        },
+        "Base": {
+          "link": {
+            "accounts": "Účty",
+            "domains": "Domény",
+            "reports": "Hlášení",
+            "userRequests": "Uživatelské příručky"
+          },
+          "menu": {
+            "secondary": "Podmenu"
+          },
+          "title": "Moderování"
+        },
+        "DomainsDetail": {
+          "button": {
+            "addPolicy": "Přidat zásadu moderování",
+            "addToAllowList": "Přidat do seznamu povolených",
+            "refreshNodeInfo": "Obnovit informace o uzlu",
+            "removeFromAllowList": "Odebrat ze seznamu povolených"
+          },
+          "description": {
+            "policy": "Zásady moderování vám pomáhají řídit interakci mezi vaší instancí a danou doménou nebo účtem"
+          },
+          "header": {
+            "activePolicy": "Tato doména podléhá specifickým moderačním pravidlům",
+            "activity": "Aktivita",
+            "audioContent": "Obsah audia",
+            "instanceData": "Data instance",
+            "noPolicy": "Pro tuto doménu nemáte aplikována žádná pravidla."
+          },
+          "link": {
+            "albums": "Alba",
+            "artists": "Interpreti",
+            "channels": "Kanály",
+            "django": "Zobrazit v administraci Django",
+            "knownAccounts": "Známé účty",
+            "libraries": "Knihovny",
+            "tracks": "Skladby",
+            "uploads": "Nahrané soubory",
+            "website": "Otevřít web"
+          },
+          "notApplicable": "N/A",
+          "table": {
+            "activity": {
+              "emittedFollows": "Vyslaná sledování knihovny",
+              "emittedMessages": "Vyslané zprávy",
+              "firstSeen": "Prvně viděno",
+              "receivedFollows": "Přijatá sledování knihovny"
+            },
+            "audioContent": {
+              "cachedSize": "Velikost v cache",
+              "totalSize": "Celková velikost"
+            },
+            "instanceData": {
+              "domainName": "Název",
+              "inAllowList": {
+                "false": "Ne",
+                "label": "Nachází se na seznamu povolených",
+                "true": "Ano"
+              },
+              "lastChecked": "Naposledy kontrolováno",
+              "nodeInfoStatus": {
+                "label": "Stav",
+                "value": "Chyba při získávání dat uzlu"
+              },
+              "software": {
+                "label": "Software",
+                "value": "{name} ({version})"
+              },
+              "totalUsers": "Celkem uživatelů"
+            }
+          },
+          "warning": {
+            "stats": "Statistiky jsou generovány na základě aktivity a obsahu na vaší instanci. Nereflektují obecnou aktivitu tohoto objektu"
+          }
+        },
+        "DomainsList": {
+          "button": {
+            "add": "Přidat"
+          },
+          "header": {
+            "domains": "Domény",
+            "failure": "Chyba při vytváření domény"
+          },
+          "label": {
+            "addDomain": "Přidat doménu",
+            "addToAllowList": "Přidat do seznamu povolených"
+          },
+          "title": "Domény"
+        },
+        "ReportsList": {
+          "header": {
+            "reports": "Hlášení"
+          },
+          "label": {
+            "search": "Hledat",
+            "status": "Stav"
+          },
+          "option": {
+            "status": {
+              "all": "Vše",
+              "resolved": "Vyřešeno",
+              "unresolved": "Nevyřešeno"
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Vzestupně",
+              "descending": "Sestupně",
+              "label": "Pořadí"
+            },
+            "label": "Řazení"
+          },
+          "placeholder": {
+            "search": "Hledat dle účtu, shrnutí, domény…"
+          },
+          "title": "Hlášení"
+        },
+        "RequestsList": {
+          "header": {
+            "userRequests": "Žádosti o registraci"
+          },
+          "label": {
+            "search": "Hledat",
+            "status": "Stav"
+          },
+          "option": {
+            "status": {
+              "all": "Vše",
+              "approved": "Schváleno",
+              "pending": "Čeká",
+              "refused": "Odmítnuto"
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Vzestupně",
+              "descending": "Sestupně",
+              "label": "Pořadí"
+            },
+            "label": "Řazení"
+          },
+          "placeholder": {
+            "search": "Hledat podle uživatelského jména"
+          },
+          "title": "Žádosti o registraci"
+        }
+      },
+      "users": {
+        "Base": {
+          "link": {
+            "invitations": "Pozvánky",
+            "users": "Uživatelé"
+          },
+          "menu": {
+            "secondary": "Podmenu"
+          },
+          "title": "Spravovat uživatele"
+        }
+      }
+    },
+    "auth": {
+      "Callback": {
+        "header": {
+          "loggingIn": "Přihlašování…"
+        }
+      },
+      "EmailConfirm": {
+        "header": {
+          "failure": "Nepovedlo se ověřit vaši e-mailovou adresu",
+          "success": "E-mailová adresa potvrzena"
+        },
+        "label": {
+          "confirmationCode": "Potvrzovací kód"
+        },
+        "link": {
+          "back": "Návrat k přihlášení",
+          "login": "Pokračovat k přihlášení"
+        },
+        "message": {
+          "success": "Nyní můžete službu využívat bez omezení"
+        },
+        "title": "Potvrďte svou e-mailovou adresu"
+      },
+      "Login": {
+        "header": {
+          "login": "Přihlásit se k vašemu Funkwhale účtu"
+        },
+        "title": "Přihlásit se"
+      },
+      "PasswordReset": {
+        "button": {
+          "requestReset": "Požádat o obnovení hesla"
+        },
+        "header": {
+          "failure": "Chyba při žádosti o obnovení hesla",
+          "reset": "Obnovit heslo"
+        },
+        "help": {
+          "form": "Použijte tento formulář pro požádání o obnovení hesla. Na zadanou adresu bude odeslán e-mail s instrukcemi pro obnovu vašeho hesla."
+        },
+        "label": {
+          "email": "Emailová adresa účtu"
+        },
+        "link": {
+          "back": "Zpět na přihlášení"
+        },
+        "placeholder": {
+          "email": "Zadejte e-mailovou adresu spojenou s vaším účtem"
+        },
+        "title": "Obnovit heslo"
+      },
+      "PasswordResetConfirm": {
+        "button": {
+          "update": "Aktualizovat vaše heslo"
+        },
+        "header": {
+          "failure": "Chyba při změně hesla",
+          "success": "Heslo úspěšně změněno"
+        },
+        "label": {
+          "newPassword": "Nové heslo"
+        },
+        "link": {
+          "back": "Zpět na přihlášení",
+          "login": "Pokračovat k přihlášení"
+        },
+        "message": {
+          "requestSent": "Pokud je e-mailová adresa zadaná v předchozím kroku platná a náleží nějakému uživatelskému účtu, obdržíte během několika minut e-mail s pokyny pro obnovení hesla.",
+          "success": "Vaše heslo bylo úspěšně změněno."
+        },
+        "title": "Změna hesla"
+      },
+      "Plugins": {
+        "title": "Spravovat pluginy"
+      },
+      "ProfileActivity": {
+        "header": {
+          "playlists": "Seznamy skladeb",
+          "recentlyFavorited": "Poslední oblíbené",
+          "recentlyListened": "Poslední poslechnuté"
+        }
+      },
+      "ProfileBase": {
+        "label": {
+          "self": "To jste vy!"
+        },
+        "link": {
+          "activity": "Aktivita",
+          "domainView": "Zobrazit na {domain}",
+          "moderation": "Otevřít v rozhraní pro moderaci",
+          "overview": "Náhled"
+        },
+        "title": "Profil uživatele { username }"
+      },
+      "ProfileOverview": {
+        "button": {
+          "cancel": "Zrušit",
+          "createChannel": "Vytvořit kanál",
+          "next": "Další krok",
+          "previous": "Předchozí krok"
+        },
+        "header": {
+          "channels": "Kanály",
+          "libraries": "Knihovny uživatele",
+          "sharedLibraries": "Tento uživatel sdílel následující knihovny"
+        },
+        "link": {
+          "addNew": "Přidat nový"
+        },
+        "modal": {
+          "createChannel": {
+            "artist": {
+              "header": "Kanál interpreta"
+            },
+            "header": "Vytvořit kanál",
+            "podcast": {
+              "header": "Podcastový kanál"
+            }
+          }
+        }
+      },
+      "Signup": {
+        "header": {
+          "createAccount": "Vytvořit účet Funkwhale"
+        },
+        "title": "Zaregistrovat se"
+      }
+    },
+    "channels": {
+      "DetailBase": {
+        "button": {
+          "cancel": "Zrušit",
+          "confirm": "Odstranit",
+          "delete": "Odstranit…",
+          "edit": "Upravit…",
+          "embed": "Vložit",
+          "play": "Přehrát",
+          "updateChannel": "Aktualizovat kanál",
+          "upload": "Nahrát"
+        },
+        "header": {
+          "artistChannel": "Kanál interpreta",
+          "podcastChannel": "Podcastový kanál"
+        },
+        "link": {
+          "channelEpisodes": "Všechny díly",
+          "channelOverview": "Přehled",
+          "channelTracks": "Skladby",
+          "domainView": "Zobrazit na {domain}",
+          "mirrored": "Zrcadleno z {domain}",
+          "moderation": "Otevřít v rozhraní pro moderaci"
+        },
+        "meta": {
+          "episodes": "Žádné díly | {n} díl | {n} dílů",
+          "listenings": "Neposlechnuto | { n } poslech | { n } poslechů",
+          "subscribers": "Žádní odběratelé | {n} odběratel | {n} odběratelů",
+          "tracks": "Žádné skladby | {n} skladba | {n} skladeb"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "Kanál bude odstraněn, společně se souvisejícími nahranými soubory a sledováními. Tato akce je nevratná."
+            },
+            "header": "Odstranit tento kanál?"
+          },
+          "embed": {
+            "header": "Vložit díla tohoto interpreta na vaše webové stránky"
+          },
+          "subscribe": {
+            "fediverse": {
+              "content": {
+                "help": "Pokud používáte Mastodon nebo jinou aplikaci fungující ve fediverzu, můžete odebírat tento účet:"
+              },
+              "header": "Odebírat na Fediverse"
+            },
+            "funkwhale": {
+              "header": "Odebírat na Funkwhale"
+            },
+            "header": "Odebírat tento kanál",
+            "rss": {
+              "content": {
+                "help": "Zkopírujte a vložte následující kód do aplikace:"
+              },
+              "header": "Odebírat skrz RSS"
+            }
+          }
+        },
+        "title": "Kanál"
+      },
+      "DetailOverview": {
+        "header": {
+          "albums": "Alba",
+          "latestEpisodes": "Poslední díly",
+          "latestTracks": "Poslední skladby",
+          "series": "Série",
+          "uploadsFailure": "Některé nahrávky se nepodařilo publikovat",
+          "uploadsProcessing": "Nahrávky se zpracovávájí",
+          "uploadsSuccess": "Nahrávky úspěšně publikovány"
+        },
+        "link": {
+          "addAlbum": "Přidat nové",
+          "erroredUploads": "Zobrazit nahrávky s chybami",
+          "skippedUploads": "Zobrazit přeskočené nahrávky"
+        },
+        "message": {
+          "processing": "Vaše nahrávky se zpracovávájí a budou brzy publikovány."
+        },
+        "meta": {
+          "progress": "Zpracované nahrávky: {finished}/{total}"
+        }
+      },
+      "SubscriptionsList": {
+        "button": {
+          "cancel": "Zrušit",
+          "subscribe": "Odebírat"
+        },
+        "link": {
+          "addNew": "Přidat nový"
+        },
+        "modal": {
+          "subscription": {
+            "header": "Odběr"
+          }
+        },
+        "placeholder": {
+          "search": "Filtrovat dle názvu…"
+        },
+        "title": "Odebírané Kanály"
+      }
+    },
+    "content": {
+      "Base": {
+        "link": {
+          "libraries": "Knihovny",
+          "tracks": "Skladby"
+        },
+        "menu": {
+          "secondary": "Podmenu"
+        },
+        "title": "Přidat obsah"
+      },
+      "Home": {
+        "button": {
+          "start": "Začínáme"
+        },
+        "description": {
+          "channel": {
+            "1": "Pokud jste hudebník nebo tvoříte podcasty, kanály jsou dělané přímo pro vás!",
+            "2": "Sdílejte svoji tvorbu veřejně a získávejte odběratele na Funkwhale, Fediverzu nebo v jakékoli podcastové aplikaci."
+          },
+          "follow": "Můžete sledovat knihovny jiných uživatelů pro získání přístupu k nové hudbě. Veřejné knihovny můžete začít sledovat okamžitě, privátní knihovny vyžadují schválení vlastníka.",
+          "upload": "Nahrejte svoji hudební knihovnu na Funkwhale a užijte si ji kdekoliv budete chtít a sdílejte ji se svými přáteli a rodinou."
+        },
+        "header": {
+          "channel": "Publikovat tvorbu do kanálu",
+          "follow": "Sledovat vzdálené knihovny",
+          "upload": "Nahrát do knihovny obsah třetí strany"
+        },
+        "help": {
+          "uploadQuota": "Tato instance nabízí každému uživateli až {quota} diskového prostoru."
+        },
+        "title": "Přidat a spravovat obsah"
+      },
+      "libraries": {
+        "Card": {
+          "button": {
+            "upload": "Nahrát"
+          },
+          "label": {
+            "size": "Celková velikost souborů v této knihovně"
+          },
+          "link": {
+            "details": "Úpravy knihovny"
+          },
+          "meta": {
+            "tracks": "Žádné skladby | {n} skladba | {n} skladeb"
+          }
+        },
+        "FilesTable": {
+          "action": {
+            "delete": "Odstranit",
+            "restartImport": "Znovu spustit import"
+          },
+          "button": {
+            "showStatus": "Klikněte pro zobrazení více informací o procesu importování"
+          },
+          "empty": {
+            "noTracks": "Stopu nelze přidat do playlistu"
+          },
+          "label": {
+            "importStatus": "Stav importu",
+            "search": "Hledat"
+          },
+          "notApplicable": "N/A",
+          "option": {
+            "status": {
+              "all": "Vše",
+              "draft": "Koncept",
+              "failed": "Neúspěšné",
+              "finished": "Dokončeno",
+              "pending": "Čeká",
+              "skipped": "Vynecháno"
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Vzestupně",
+              "descending": "Sestupně",
+              "label": "Směr řazení"
+            },
+            "label": "Řazení"
+          },
+          "pagination": {
+            "results": "Zobrazeny výsledky { start }-{ end } z { total }"
+          },
+          "placeholder": {
+            "search": "Hledat dle názvu, interpreta, alba…"
+          },
+          "table": {
+            "file": {
+              "header": {
+                "album": "Album",
+                "artist": "Interpret",
+                "duration": "Délka",
+                "importStatus": "Stav importu",
+                "size": "Velikost",
+                "title": "Název",
+                "uploadDate": "Datum nahrání"
+              }
+            }
+          }
+        },
+        "Form": {
+          "button": {
+            "confirm": "Odstranit knihovnu",
+            "create": "Vytvořit knihovnu",
+            "delete": "Odstranit",
+            "update": "Aktualizovat knihovnu"
+          },
+          "description": {
+            "library": "Knihovny vám pomáhají organizovat a sdílet vaše sbírky hudby. Můžete nahrát svou vlastní hudební kolekci na Funkwhale a sdílet se svými přáteli a rodinou.",
+            "visibility": "Můžete sdílet svou knihovnu s jinými lidmi, bez ohledu na její viditelnost."
+          },
+          "header": {
+            "failure": "Chyba"
+          },
+          "label": {
+            "description": "Popis",
+            "name": "Název",
+            "visibility": "Viditelnost"
+          },
+          "message": {
+            "libraryCreated": "Knihovna vytvořena",
+            "libraryDeleted": "Knihovna odstraněna",
+            "libraryUpdated": "Knihovna aktualizována"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "Knihovna a veškerý její obsah budou odstraněny. Tato akce je nevratná."
+              },
+              "header": "Odstranit tuto knihovnu?"
+            }
+          },
+          "placeholder": {
+            "description": "Tato knihovna obsahuje mou hudbu, doufám že se vám líbí.",
+            "name": "Moje úžasná knihovna"
+          }
+        },
+        "Home": {
+          "empty": {
+            "noLibrary": "Zdá se že nemáte žádnou knihovnu, je na čase nějakou vytvořit."
+          },
+          "header": {
+            "libraries": "Moje knihovny"
+          },
+          "link": {
+            "createLibrary": "Vytvořit novou knihovnu"
+          },
+          "loading": {
+            "libraries": "Načítání knihoven…"
+          }
+        },
+        "Quota": {
+          "button": {
+            "purge": "Vyčistit"
+          },
+          "header": {
+            "currentUsage": "Aktuální využití"
+          },
+          "label": {
+            "currentUsage": "{ current } využito z { max } povolených",
+            "errored": "Soubory s chybou",
+            "pending": "Čekající soubory",
+            "percentUsed": "{progress}%",
+            "skipped": "Vynechané soubory"
+          },
+          "link": {
+            "viewFiles": "Zobrazit soubory"
+          },
+          "loading": {
+            "currentUsage": "Načítání informací o využití…"
+          },
+          "modal": {
+            "purgeErrored": {
+              "content": {
+                "description": "Uvolní místo vymazáním nahraných stop, které nemohly být zpracovány serverem."
+              },
+              "header": "Vyčistit soubory s chybou?"
+            },
+            "purgePending": {
+              "content": {
+                "description": "Uvolní místo vymazáním nahraných ale zatím nezpracovaných stop."
+              },
+              "header": "Vyčistit čekající soubory?"
+            },
+            "purgeSkipped": {
+              "content": {
+                "description": "Uvolní místo vymazáním nahraných stop, které byly přeskočeny během importu."
+              },
+              "header": "Vyčistit vynechané soubory?"
+            }
+          }
+        }
+      },
+      "remote": {
+        "Card": {
+          "button": {
+            "cancel": "Zrušit požadavek o sledování",
+            "follow": "Sledovat",
+            "pending": "Žádost o sledování čeká na schválení",
+            "unfollow": "Přestat sledovat"
+          },
+          "error": {
+            "follow": "Nepodařilo se sledovat vzdálenou knihovnu: {error}",
+            "unfollow": "Nepodařilo se zrušit sledování vzdálené knihovny: {error}"
+          },
+          "label": {
+            "scanFailure": "Během skenování se vyskytl problém",
+            "scanPartialSuccess": "Skenováno s chybami",
+            "scanPending": "Čeká na sken",
+            "scanProgress": "Skenuji… ({ progress }%)",
+            "scanSuccess": "Skenováno",
+            "sharingLink": "Odkaz pro sdílení"
+          },
+          "link": {
+            "scan": "Skenovat nyní ",
+            "scanDetails": "Podrobnosti"
+          },
+          "message": {
+            "scanLaunched": "Skenování zahájeno",
+            "scanSkipped": "Skenování vynecháno (příliš brzy po předchozím skenu)"
+          },
+          "meta": {
+            "failedTracks": "Neúspěšné skladby: {tracks}",
+            "lastUpdate": "Poslední aktualizace: ",
+            "tracks": "Žádné skladby | {n} skladba | {n} skladeb"
+          },
+          "modal": {
+            "unfollow": {
+              "content": {
+                "warning": "Ukončením sledování této knihovny ztratíte přístup k jejímu obsahu."
+              },
+              "header": "Přestat sledovat tuto knihovnu?"
+            }
+          },
+          "tooltip": {
+            "private": "Tato knihovna je soukromá a pro přístup k ní je nutný souhlas vlastníka",
+            "public": "Tato knihovna je veřejná a její obsah je volně přístupný"
+          }
+        },
+        "Home": {
+          "button": {
+            "refresh": "Obnovit"
+          },
+          "description": {
+            "remoteLibraries": "Vzdálené knihovny jsou vlastněny ostatními uživateli na síti. Můžete k nim přistupovat pokud jsou veřejné, nebo pokud je vám udělen přístup."
+          },
+          "header": {
+            "knownLibraries": "Známé knihovny",
+            "remoteLibraries": "Vzdálené knihovny"
+          },
+          "loading": {
+            "remoteLibraries": "Načítání vzdálených knihoven…"
+          }
+        },
+        "ScanForm": {
+          "button": {
+            "submit": "Odeslat hlášení"
+          },
+          "header": {
+            "failure": "Nepodařilo se získat vzdálenou knihovnu"
+          },
+          "label": {
+            "search": "Hledat ve vzdálené knihovně"
+          },
+          "placeholder": {
+            "url": "Zadejte URL knihovny"
+          }
+        }
+      }
+    },
+    "library": {
+      "DetailAlbums": {
+        "empty": {
+          "follow": "Nejspíš budete muset sledovat tuto knihovnu pro zobrzení jejího obsahu.",
+          "upload": "Tato knihovna je prázdná, měli byste sem něco nahrát!"
+        }
+      },
+      "DetailOverview": {
+        "empty": {
+          "follow": "Nejspíš budete muset sledovat tuto knihovnu pro zobrzení jejího obsahu.",
+          "upload": "Tato knihovna je prázdná, měli byste sem něco nahrát!"
+        }
+      },
+      "DetailTracks": {
+        "empty": {
+          "follow": "Nejspíš budete muset sledovat tuto knihovnu pro zobrzení jejího obsahu.",
+          "upload": "Tato knihovna je prázdná, měli byste sem něco nahrát!"
+        }
+      },
+      "Edit": {
+        "button": {
+          "accept": "Přijmout",
+          "reject": "Odmítnout"
+        },
+        "empty": {
+          "noFollowers": "Nikdo nesleduje tuto knihovnu"
+        },
+        "header": {
+          "followers": "Sledující",
+          "libraryContents": "Obsah knihovny"
+        },
+        "loading": {
+          "followers": "Načítání sledujících…"
+        },
+        "table": {
+          "action": {
+            "header": {
+              "action": "Akce",
+              "date": "Datum",
+              "status": "Stav",
+              "user": "Uživatel"
+            },
+            "status": {
+              "accepted": "Přijato",
+              "pending": "Čeká na schválení",
+              "rejected": "Odmítnuto"
+            }
+          }
+        }
+      },
+      "LibraryBase": {
+        "button": {
+          "edit": "Upravit",
+          "upload": "Nahrát"
+        },
+        "description": {
+          "sharingLink": "Sdílejte tento odkaz s ostatními, aby mohli požádat o přístup k vaší knihovně vložením do vyhledávacího pole na jejich podu."
+        },
+        "label": {
+          "instance": "Omezeno",
+          "private": "Soukromé",
+          "public": "Veřejné",
+          "sharingLink": "Odkaz pro sdílení"
+        },
+        "link": {
+          "albums": "Alba",
+          "artists": "Interpreti",
+          "domain": "Zobrazit na {domain}",
+          "moderation": "Otevřít v rozhraní pro moderaci",
+          "owner": "Vlastněno uživatelem { username }",
+          "tracks": "Skladby"
+        },
+        "meta": {
+          "tracks": "Žádné skladby | { n } skladba | { n } skladeb"
+        },
+        "title": "Knihovna",
+        "tooltip": {
+          "instance": "Tato knihovna je omezená pouze na tento pod",
+          "private": "Tato knihovna je soukromá a pro přístup k ní je nutný souhlas vlastníka",
+          "public": "Tato knihovna je veřejná a její obsah je volně přístupný"
+        }
+      }
+    },
+    "playlists": {
+      "Detail": {
+        "button": {
+          "cancel": "Zrušit",
+          "confirm": "Odstranit seznam skladeb",
+          "delete": "Odstranit",
+          "edit": "Upravit",
+          "embed": "Vložit",
+          "playAll": "Přehrát vše",
+          "stopEdit": "Přestat upravovat"
+        },
+        "empty": {
+          "noTracks": "V tomto seznamu skladeb zatím nejsou žádné skladby"
+        },
+        "header": {
+          "tracks": "Skladby"
+        },
+        "meta": {
+          "tracks": "Seznam skladeb obsahující { n } skladbu, od { username } | Seznam skladeb obsahující { n } skladeb, od { username }"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "Kompletně a nevratně smaže tento playlist."
+            },
+            "header": "Opravdu chcete odstranit seznam skladeb \"{ playlist }\"?"
+          },
+          "embed": {
+            "header": "Vložit tento playlist na vaši webovou stránku"
+          }
+        },
+        "title": "Seznam skladeb"
+      },
+      "List": {
+        "button": {
+          "create": "Vytvořit seznam skladeb",
+          "manage": "Spravovat vaše seznamy skladeb",
+          "search": "Hledat"
+        },
+        "empty": {
+          "noResults": "Žádný výsledek odpovídající dotazu"
+        },
+        "header": {
+          "browse": "Procházení seznamů skladeb",
+          "playlists": "Seznamy skladeb"
+        },
+        "label": {
+          "search": "Hledat"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Vzestupně",
+            "descending": "Sestupně",
+            "label": "Pořadí"
+          },
+          "label": "Řazení"
+        },
+        "pagination": {
+          "results": "Výsledků na stránku"
+        },
+        "placeholder": {
+          "search": "Zadejte název seznamu skladeb…"
+        }
+      }
+    },
+    "radios": {
+      "Detail": {
+        "button": {
+          "confirm": "Odstranit rádio",
+          "delete": "Smazat",
+          "edit": "Upravit…"
+        },
+        "empty": {
+          "noTracks": "Do tohoto rádia nebyly zatím přidány žádné skladby"
+        },
+        "header": {
+          "radio": "Rádio obsahující {tracks} skladeb, vytvořil ",
+          "tracks": "Skladby"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "Kompletně a nevratně smaže toto rádio."
+            },
+            "header": "Přejete si odstranit rádio \"{ radio }\"?"
+          }
+        },
+        "title": "Rádio"
+      }
+    }
+  }
+}

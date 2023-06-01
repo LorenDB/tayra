@@ -1,3 +1,16 @@
+<script setup lang="ts">
+import type { Library } from '~/types'
+
+import ArtistWidget from '~/components/audio/artist/Widget.vue'
+
+interface Props {
+  object: Library
+  isOwner: boolean
+}
+
+defineProps<Props>()
+</script>
+
 <template>
   <section>
     <template v-if="$store.getters['ui/layoutVersion'] === 'small'">
@@ -16,43 +29,22 @@
       :controls="false"
       :filters="{playable: true, ordering: '-creation_date', library: object.uuid}"
     >
-      <empty-state slot="empty-state">
-        <p>
-          <translate
-            v-if="isOwner"
-            key="1"
-            translate-context="*/*/*"
-          >
-            This library is empty, you should upload something in it!
-          </translate>
-          <translate
-            v-else
-            key="2"
-            translate-context="*/*/*"
-          >
-            You may need to follow this library to see its content.
-          </translate>
-        </p>
-      </empty-state>
+      <template #empty-state>
+        <empty-state>
+          <p>
+            <span
+              v-if="isOwner"
+            >
+              {{ $t('views.library.DetailOverview.empty.upload') }}
+            </span>
+            <span
+              v-else
+            >
+              {{ $t('views.library.DetailOverview.empty.follow') }}
+            </span>
+          </p>
+        </empty-state>
+      </template>
     </artist-widget>
   </section>
 </template>
-
-<script>
-import ArtistWidget from '@/components/audio/artist/Widget'
-
-export default {
-  components: {
-    ArtistWidget
-  },
-  props: {
-    object: { type: Object, required: true },
-    isOwner: { type: Boolean, required: true }
-  },
-  data () {
-    return {
-      query: ''
-    }
-  }
-}
-</script>

@@ -1,11 +1,11 @@
 import datetime
 import io
-import magic
 import os
 import pathlib
 import urllib.parse
 import uuid
 
+import magic
 import pytest
 from django.db.models import Prefetch
 from django.urls import reverse
@@ -13,8 +13,8 @@ from django.utils import timezone
 
 from funkwhale_api.common import utils
 from funkwhale_api.federation import api_serializers as federation_api_serializers
-from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.federation import tasks as federation_tasks
+from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.music import licenses, models, serializers, tasks, views
 from funkwhale_api.users import authentication as users_authentication
 
@@ -459,7 +459,7 @@ def test_stream(factories, logged_in_api_client, mocker, settings):
         reverse("api:v1:stream-detail", kwargs={"uuid": str(upload.track.uuid)})
         + ".mp3"
     )
-    assert url.endswith("/{}.mp3".format(upload.track.uuid))
+    assert url.endswith(f"/{upload.track.uuid}.mp3")
     response = logged_in_api_client.get(url)
 
     assert response.status_code == 200
@@ -978,7 +978,7 @@ def test_can_get_libraries_for_music_entities(
         library=channel.library, playable=True, track=upload.track
     )
 
-    url = reverse("api:v1:{}s-libraries".format(entity), kwargs={"pk": data[entity].pk})
+    url = reverse(f"api:v1:{entity}s-libraries", kwargs={"pk": data[entity].pk})
 
     response = api_client.get(url)
     expected = federation_api_serializers.LibrarySerializer(library).data
@@ -1026,8 +1026,8 @@ def test_oembed_track(factories, no_api_auth, api_client, settings):
     settings.FUNKWHALE_EMBED_URL = "http://embed"
     track = factories["music.Track"](album__with_cover=True)
     url = reverse("api:v1:oembed")
-    track_url = "https://test.com/library/tracks/{}".format(track.pk)
-    iframe_src = "http://embed?type=track&id={}".format(track.pk)
+    track_url = f"https://test.com/library/tracks/{track.pk}"
+    iframe_src = f"http://embed?type=track&id={track.pk}"
     expected = {
         "version": "1.0",
         "type": "rich",
@@ -1035,7 +1035,7 @@ def test_oembed_track(factories, no_api_auth, api_client, settings):
         "provider_url": settings.FUNKWHALE_URL,
         "height": 150,
         "width": 600,
-        "title": "{} by {}".format(track.title, track.artist.name),
+        "title": f"{track.title} by {track.artist.name}",
         "description": track.full_name,
         "thumbnail_url": federation_utils.full_url(
             track.album.attachment_cover.file.crop["200x200"].url
@@ -1062,8 +1062,8 @@ def test_oembed_album(factories, no_api_auth, api_client, settings):
     track = factories["music.Track"](album__with_cover=True)
     album = track.album
     url = reverse("api:v1:oembed")
-    album_url = "https://test.com/library/albums/{}".format(album.pk)
-    iframe_src = "http://embed?type=album&id={}".format(album.pk)
+    album_url = f"https://test.com/library/albums/{album.pk}"
+    iframe_src = f"http://embed?type=album&id={album.pk}"
     expected = {
         "version": "1.0",
         "type": "rich",
@@ -1071,8 +1071,8 @@ def test_oembed_album(factories, no_api_auth, api_client, settings):
         "provider_url": settings.FUNKWHALE_URL,
         "height": 400,
         "width": 600,
-        "title": "{} by {}".format(album.title, album.artist.name),
-        "description": "{} by {}".format(album.title, album.artist.name),
+        "title": f"{album.title} by {album.artist.name}",
+        "description": f"{album.title} by {album.artist.name}",
         "thumbnail_url": federation_utils.full_url(
             album.attachment_cover.file.crop["200x200"].url
         ),
@@ -1099,8 +1099,8 @@ def test_oembed_artist(factories, no_api_auth, api_client, settings):
     album = track.album
     artist = track.artist
     url = reverse("api:v1:oembed")
-    artist_url = "https://test.com/library/artists/{}".format(artist.pk)
-    iframe_src = "http://embed?type=artist&id={}".format(artist.pk)
+    artist_url = f"https://test.com/library/artists/{artist.pk}"
+    iframe_src = f"http://embed?type=artist&id={artist.pk}"
     expected = {
         "version": "1.0",
         "type": "rich",
@@ -1138,8 +1138,8 @@ def test_oembed_playlist(factories, no_api_auth, api_client, settings):
     ).track
     playlist.insert_many([track])
     url = reverse("api:v1:oembed")
-    playlist_url = "https://test.com/library/playlists/{}".format(playlist.pk)
-    iframe_src = "http://embed?type=playlist&id={}".format(playlist.pk)
+    playlist_url = f"https://test.com/library/playlists/{playlist.pk}"
+    iframe_src = f"http://embed?type=playlist&id={playlist.pk}"
     expected = {
         "version": "1.0",
         "type": "rich",
@@ -1346,12 +1346,14 @@ def test_search_get(logged_in_api_client, factories):
     factories["tags.Tag"]()
 
     url = reverse("api:v1:search")
-    expected = {
-        "artists": [serializers.ArtistWithAlbumsSerializer(artist).data],
-        "albums": [serializers.AlbumSerializer(album).data],
-        "tracks": [serializers.TrackSerializer(track).data],
-        "tags": [views.TagSerializer(tag).data],
-    }
+    expected = serializers.SearchResultSerializer(
+        {
+            "artists": [artist],
+            "albums": [album],
+            "tracks": [track],
+            "tags": [tag],
+        }
+    ).data
 
     response = logged_in_api_client.get(url, {"q": "foo"})
 

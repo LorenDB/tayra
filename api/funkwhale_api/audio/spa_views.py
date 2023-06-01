@@ -3,12 +3,9 @@ import urllib.parse
 from django.conf import settings
 from django.db.models import Q
 from django.urls import reverse
-
 from rest_framework import serializers
 
-from funkwhale_api.common import preferences
-from funkwhale_api.common import middleware
-from funkwhale_api.common import utils
+from funkwhale_api.common import middleware, preferences, utils
 from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.music import spa_views
 
@@ -64,7 +61,7 @@ def channel_detail(query, redirect_to_ap):
             "rel": "alternate",
             "type": "application/rss+xml",
             "href": obj.get_rss_url(),
-            "title": "{} - RSS Podcast Feed".format(obj.artist.name),
+            "title": f"{obj.artist.name} - RSS Podcast Feed",
         },
     )
 
@@ -76,7 +73,7 @@ def channel_detail(query, redirect_to_ap):
                 "type": "application/json+oembed",
                 "href": (
                     utils.join_url(settings.FUNKWHALE_URL, reverse("api:v1:oembed"))
-                    + "?format=json&url={}".format(urllib.parse.quote_plus(obj_url))
+                    + f"?format=json&url={urllib.parse.quote_plus(obj_url)}"
                 ),
             }
         )

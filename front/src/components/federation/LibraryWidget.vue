@@ -1,3 +1,51 @@
+<script setup lang="ts">
+import type { Library } from '~/types'
+
+import { ref, reactive } from 'vue'
+
+import axios from 'axios'
+
+import LibraryCard from '~/views/content/remote/Card.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+
+interface Events {
+  (e: 'loaded', libraries: Library[]): void
+}
+
+interface Props {
+  url: string
+}
+
+const emit = defineEmits<Events>()
+const props = defineProps<Props>()
+
+const nextPage = ref()
+const libraries = reactive([] as Library[])
+const isLoading = ref(false)
+const fetchData = async (url = props.url) => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(url, {
+      params: {
+        page_size: 6
+      }
+    })
+
+    nextPage.value = response.data.next
+    libraries.push(...response.data.results)
+    emit('loaded', libraries)
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+fetchData()
+</script>
+
 <template>
   <div class="wrapper">
     <h3
@@ -10,15 +58,13 @@
       v-if="!isLoading && libraries.length > 0"
       class="ui subtitle"
     >
-      <slot name="subtitle" />
+      <slot />
     </p>
     <p
       v-if="!isLoading && libraries.length === 0"
       class="ui subtitle"
     >
-      <translate translate-context="Content/Federation/Paragraph">
-        No matching library.
-      </translate>
+      {{ $t('components.federation.LibraryWidget.empty.noMatch') }}
     </p>
     <div class="ui hidden divider" />
     <div class="ui cards">
@@ -44,69 +90,8 @@
         :class="['ui', 'basic', 'button']"
         @click="fetchData(nextPage)"
       >
-        <translate translate-context="*/*/Button,Label">
-          Show more
-        </translate>
+        {{ $t('components.federation.LibraryWidget.button.showMore') }}
       </button>
     </template>
   </div>
 </template>
-
-<script>
-import _ from '@/lodash'
-import axios from 'axios'
-import LibraryCard from '@/views/content/remote/Card'
-
-export default {
-  components: {
-    LibraryCard
-  },
-  props: {
-    url: { type: String, required: true }
-  },
-  data () {
-    return {
-      libraries: [],
-      limit: 6,
-      isLoading: false,
-      errors: null,
-      previousPage: null,
-      nextPage: null
-    }
-  },
-  watch: {
-    offset () {
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData(this.url)
-  },
-  methods: {
-    fetchData (url) {
-      this.isLoading = true
-      const self = this
-      const params = _.clone({})
-      params.page_size = this.limit
-      params.offset = this.offset
-      axios.get(url, { params: params }).then((response) => {
-        self.previousPage = response.data.previous
-        self.nextPage = response.data.next
-        self.isLoading = false
-        self.libraries = [...self.libraries, ...response.data.results]
-        self.$emit('loaded', self.libraries)
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    updateOffset (increment) {
-      if (increment) {
-        this.offset += this.limit
-      } else {
-        this.offset = Math.max(this.offset - this.limit, 0)
-      }
-    }
-  }
-}
-</script>

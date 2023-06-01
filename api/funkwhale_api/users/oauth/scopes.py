@@ -5,7 +5,7 @@ class Scope:
         self.children = children or []
 
     def copy(self, prefix):
-        return Scope("{}:{}".format(prefix, self.id))
+        return Scope(f"{prefix}:{self.id}")
 
 
 BASE_SCOPES = [
@@ -98,7 +98,7 @@ def get_from_permissions(**permissions):
 
     final = LOGGED_IN_SCOPES
     for permission_name, value in permissions.items():
-        if value is False:
+        if not value:
             continue
         config = models.PERMISSIONS_CONFIGURATION[permission_name]
         final = final | config["scopes"]

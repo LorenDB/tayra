@@ -1,42 +1,105 @@
+<script setup lang="ts">
+import type { BackendError } from '~/types'
+import type { RouteLocationRaw } from 'vue-router'
+
+import { ref, reactive, computed, onMounted, nextTick } from 'vue'
+import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import { useStore } from '~/store'
+
+import PasswordInput from '~/components/forms/PasswordInput.vue'
+
+interface Props {
+  next?: RouteLocationRaw
+  buttonClasses?: string
+  showSignup?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  next: '/library',
+  buttonClasses: 'success',
+  showSignup: true
+})
+
+const domain = location.hostname
+const { t } = useI18n()
+const store = useStore()
+const router = useRouter()
+
+const credentials = reactive({
+  username: '',
+  password: ''
+})
+
+const labels = computed(() => ({
+  usernamePlaceholder: t('components.auth.LoginForm.placeholder.username')
+}))
+
+const username = ref()
+onMounted(async () => {
+  await nextTick()
+  username.value?.focus()
+})
+
+const isLoading = ref(false)
+const errors = ref([] as string[])
+const submit = async () => {
+  isLoading.value = true
+
+  try {
+    if (domain === store.getters['instance/domain']) {
+      await store.dispatch('auth/login', { credentials })
+      await router.push(props.next)
+    } else {
+      await store.dispatch('auth/oauthLogin', props.next)
+    }
+  } catch (error) {
+    const backendError = error as BackendError
+
+    if (backendError.response?.status === 400) {
+      errors.value = ['invalid_credentials']
+    } else {
+      errors.value = backendError.backendErrors
+    }
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
   <form
     class="ui form"
     @submit.prevent="submit()"
   >
     <div
-      v-if="error"
+      v-if="errors.length > 0"
       role="alert"
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/Login/Error message.Title">
-          We cannot log you in
-        </translate>
+        {{ $t('components.auth.LoginForm.header.loginFailure') }}
       </h4>
       <ul class="list">
-        <li v-if="error == 'invalid_credentials' && $store.state.instance.settings.moderation.signup_approval_enabled.value">
-          <translate translate-context="Content/Login/Error message.List item/Call to action">
-            If you signed-up recently, you may need to wait before our moderation team review your account, or verify your e-mail address.
-          </translate>
+        <li v-if="errors[0] == 'invalid_credentials' && $store.state.instance.settings.moderation.signup_approval_enabled.value">
+          {{ $t('components.auth.LoginForm.help.approvalRequired') }}
         </li>
-        <li v-else-if="error == 'invalid_credentials'">
-          <translate translate-context="Content/Login/Error message.List item/Call to action">
-            Please double-check that your username and password combination is correct and make sure you verified your e-mail address.
-          </translate>
+        <li v-else-if="errors[0] == 'invalid_credentials'">
+          {{ $t('components.auth.LoginForm.help.invalidCredentials') }}
         </li>
         <li v-else>
-          {{ error }}
+          {{ errors[0] }}
         </li>
       </ul>
     </div>
-    <template v-if="$store.getters['instance/appDomain'] === $store.getters['instance/domain']">
+    <template v-if="domain === $store.getters['instance/domain']">
       <div class="field">
         <label for="username-field">
-          <translate translate-context="Content/Login/Input.Label/Noun">Username or e-mail address</translate>
+          {{ $t('components.auth.LoginForm.label.username') }}
           <template v-if="showSignup">
-            |
+            <span class="middle pipe symbol" />
             <router-link :to="{path: '/signup'}">
-              <translate translate-context="*/Signup/Link/Verb">Create an account</translate>
+              {{ $t('components.auth.LoginForm.link.createAccount') }}
             </router-link>
           </template>
         </label>
@@ -53,12 +116,13 @@
       </div>
       <div class="field">
         <label for="password-field">
-          <translate translate-context="*/*/*">Password</translate> |
+          {{ $t('components.auth.LoginForm.label.password') }}
+          <span class="middle pipe symbol" />
           <router-link
             tabindex="1"
             :to="{name: 'auth.password-reset', query: {email: credentials.username}}"
           >
-            <translate translate-context="*/Login/*/Verb">Reset your password</translate>
+            {{ $t('components.auth.LoginForm.link.resetPassword') }}
           </router-link>
         </label>
         <password-input
@@ -70,100 +134,14 @@
     </template>
     <template v-else>
       <p>
-        <translate
-          translate-context="Contant/Auth/Paragraph"
-          :translate-params="{domain: $store.getters['instance/domain']}"
-        >
-          You will be redirected to %{ domain } to authenticate.
-        </translate>
+        {{ $t('components.auth.LoginForm.message.redirect', { domain: $store.getters['instance/domain'] }) }}
       </p>
     </template>
     <button
       :class="['ui', {'loading': isLoading}, 'right', 'floated', buttonClasses, 'button']"
       type="submit"
     >
-      <translate translate-context="*/Login/*/Verb">
-        Login
-      </translate>
+      {{ $t('components.auth.LoginForm.button.login') }}
     </button>
   </form>
 </template>
-
-<script>
-import PasswordInput from '@/components/forms/PasswordInput'
-
-export default {
-  components: {
-    PasswordInput
-  },
-  props: {
-    next: { type: String, default: '/library' },
-    buttonClasses: { type: String, default: 'success' },
-    showSignup: { type: Boolean, default: true }
-  },
-  data () {
-    return {
-      // We need to initialize the component with any
-      // properties that will be used in it
-      credentials: {
-        username: '',
-        password: ''
-      },
-      error: '',
-      isLoading: false
-    }
-  },
-  computed: {
-    labels () {
-      const usernamePlaceholder = this.$pgettext('Content/Login/Input.Placeholder', 'Enter your username or e-mail address')
-      return {
-        usernamePlaceholder
-      }
-    }
-  },
-  created () {
-    if (this.$store.state.auth.authenticated) {
-      this.$router.push(this.next)
-    }
-  },
-  mounted () {
-    if (this.$refs.username) {
-      this.$refs.username.focus()
-    }
-  },
-  methods: {
-    async submit () {
-      if (this.$store.getters['instance/appDomain'] === this.$store.getters['instance/domain']) {
-        return await this.submitSession()
-      } else {
-        this.isLoading = true
-        await this.$store.dispatch('auth/oauthLogin', this.next)
-      }
-    },
-    async submitSession () {
-      const self = this
-      self.isLoading = true
-      this.error = ''
-      const credentials = {
-        username: this.credentials.username,
-        password: this.credentials.password
-      }
-      this.$store
-        .dispatch('auth/login', {
-          credentials,
-          next: this.next,
-          onError: error => {
-            if (error.response.status === 400) {
-              self.error = 'invalid_credentials'
-            } else {
-              self.error = error.backendErrors[0]
-            }
-          }
-        })
-        .then(e => {
-          self.isLoading = false
-        })
-    }
-  }
-}
-</script>

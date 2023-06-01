@@ -1,6 +1,61 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import { ref, computed } from 'vue'
+
+import axios from 'axios'
+
+import ChannelsWidget from '~/components/audio/ChannelsWidget.vue'
+import PlaylistWidget from '~/components/playlists/Widget.vue'
+import TrackWidget from '~/components/audio/track/Widget.vue'
+import AlbumWidget from '~/components/audio/album/Widget.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+import useLogger from '~/composables/useLogger'
+
+interface Props {
+  scope?: string
+}
+
+withDefaults(defineProps<Props>(), {
+  scope: 'all'
+})
+
+const artists = ref([])
+
+const logger = useLogger()
+
+const { t } = useI18n()
+const labels = computed(() => ({
+  title: t('components.library.Home.title')
+}))
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  logger.time('Loading latest artists')
+
+  const params = {
+    ordering: '-creation_date',
+    playable: true
+  }
+
+  try {
+    const response = await axios.get('artists/', { params })
+    artists.value = response.data.results
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+  logger.timeEnd('Loading latest artists')
+}
+
+fetchData()
+</script>
+
 <template>
   <main
-    :key="$router.currentRoute.name"
+    :key="$route?.name ?? undefined"
     v-title="labels.title"
   >
     <section class="ui vertical stripe segment">
@@ -8,12 +63,11 @@
         <div class="column">
           <track-widget
             :url="'history/listenings/'"
-            :filters="{scope: scope, ordering: '-creation_date'}"
+            :filters="{ scope, ordering: '-creation_date' }"
+            :websocket-handlers="['Listen']"
           >
-            <template slot="title">
-              <translate translate-context="Content/Home/Title">
-                Recently listened
-              </translate>
+            <template #title>
+              {{ $t('components.library.Home.header.recentlyListened') }}
             </template>
           </track-widget>
         </div>
@@ -22,10 +76,8 @@
             :url="'favorites/tracks/'"
             :filters="{scope: scope, ordering: '-creation_date'}"
           >
-            <template slot="title">
-              <translate translate-context="Content/Home/Title">
-                Recently favorited
-              </translate>
+            <template #title>
+              {{ $t('components.library.Home.header.recentlyFavorited') }}
             </template>
           </track-widget>
         </div>
@@ -34,10 +86,8 @@
             :url="'playlists/'"
             :filters="{scope: scope, playable: true, ordering: '-modification_date'}"
           >
-            <template slot="title">
-              <translate translate-context="*/*/*">
-                Playlists
-              </translate>
+            <template #title>
+              {{ $t('components.library.Home.header.playlists') }}
             </template>
           </playlist-widget>
         </div>
@@ -46,19 +96,15 @@
       <div class="ui stackable one column grid">
         <div class="column">
           <album-widget :filters="{scope: scope, playable: true, ordering: '-creation_date'}">
-            <template slot="title">
-              <translate translate-context="Content/Home/Title">
-                Recently added
-              </translate>
+            <template #title>
+              {{ $t('components.library.Home.header.recentlyAdded') }}
             </template>
           </album-widget>
         </div>
       </div>
       <template v-if="scope === 'all'">
         <h3 class="ui header">
-          <translate translate-context="*/*/*">
-            New channels
-          </translate>
+          {{ $t('components.library.Home.header.newChannels') }}
         </h3>
         <channels-widget
           :show-modification-date="true"
@@ -69,60 +115,3 @@
     </section>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import logger from '@/logging'
-import ChannelsWidget from '@/components/audio/ChannelsWidget'
-import TrackWidget from '@/components/audio/track/Widget'
-import AlbumWidget from '@/components/audio/album/Widget'
-import PlaylistWidget from '@/components/playlists/Widget'
-
-const ARTISTS_URL = 'artists/'
-
-export default {
-  name: 'Library',
-  components: {
-    TrackWidget,
-    AlbumWidget,
-    PlaylistWidget,
-    ChannelsWidget
-  },
-  props: {
-    scope: { type: String, default: 'all' }
-  },
-  data () {
-    return {
-      artists: [],
-      isLoadingArtists: false
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        title: this.$pgettext('Head/Home/Title', 'Library')
-      }
-    }
-  },
-  created () {
-    this.fetchArtists()
-  },
-  methods: {
-    fetchArtists () {
-      const self = this
-      this.isLoadingArtists = true
-      const params = {
-        ordering: '-creation_date',
-        playable: true
-      }
-      const url = ARTISTS_URL
-      logger.default.time('Loading latest artists')
-      axios.get(url, { params: params }).then(response => {
-        self.artists = response.data.results
-        logger.default.timeEnd('Loading latest artists')
-        self.isLoadingArtists = false
-      })
-    }
-  }
-}
-</script>

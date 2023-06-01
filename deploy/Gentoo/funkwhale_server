@@ -1,29 +1,41 @@
 #!/sbin/openrc-run
+# shellcheck shell=bash
 
-NAME=funkwhaleserver
-PIDFILE=/var/run/$NAME.pid
-USER=funkwhale
-DAEMON_ARGS="config.asgi:application -w 4 -k uvicorn.workers.UvicornWorker -b 127.0.0.1:5000 "
-Gunicorn=/srv/funkwhale/virtualenv/bin/gunicorn
-WORKDIR=/srv/funkwhale/api
+NAME="funkwhaleserver"
+PIDFILE="/var/run/$NAME.pid"
+USER="funkwhale"
+DAEMON_ARGS="config.asgi:application --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 127.0.0.1:5000"
+Gunicorn="/srv/funkwhale/venv/bin/gunicorn"
+WORKDIR="/srv/funkwhale/api"
 
 depend() {
-        need net redis postgresql nginx funkwhale_beat funkwhale_worker
+  need net redis postgresql nginx funkwhale_beat funkwhale_worker
 }
 
 start() {
-	ebegin "Starting Funkwhale Server"
-        cd /srv/funkwhale/api
-	set -a && source /srv/funkwhale/config/.env && set +a
-        echo 'Starting Funkwhale Server'
-	start-stop-daemon --start --user $USER --make-pidfile --pidfile $PIDFILE  -d $WORKDIR  --exec $Gunicorn -- $DAEMON_ARGS >> /var/log/funk/server.log 2>&1&
-	echo 'Funkwhale Server started'
-	echo
-	eend $?
+  ebegin "Starting Funkwhale Server"
+  cd /srv/funkwhale/api || exit 1
+
+  # shellcheck disable=SC1091
+  set -a && source /srv/funkwhale/config/.env && set +a
+
+  echo "Starting Funkwhale Server"
+  # shellcheck disable=SC2086
+  start-stop-daemon --start \
+    --user "$USER" \
+    --make-pidfile \
+    --pidfile "$PIDFILE" \
+    --chdir "$WORKDIR" \
+    --exec "$Gunicorn" \
+    -- $DAEMON_ARGS \
+    >> /var/log/funk/server.log 2>&1 &
+  echo "Funkwhale Server started"
+  echo
+  eend $?
 }
 
 stop() {
-	ebegin "Stopping Funkwhale"
-	start-stop-daemon --stop --pidfile $PIDFILE
-	eend $?
+  ebegin "Stopping Funkwhale"
+  start-stop-daemon --stop --pidfile "$PIDFILE"
+  eend $?
 }

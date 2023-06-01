@@ -1,0 +1,4561 @@
+{
+  "App": {
+    "loading": "Carregant..."
+  },
+  "components": {
+    "About": {
+      "description": {
+        "findApp": "Utilitzeu Funkwhale en d'altres terminals amb les nostres aplicacions",
+        "funkwhale": "Aquest pod funciona amb Funkwhale, un projecte impulsat per la comunitat que us permet escoltar i compartir música i àudio en una xarxa oberta descentralitzada.",
+        "publicContent": "Escolteu els àlbums públics i les llistes de reproducció compartides en aquest pod",
+        "quota": "Els usuaris d’aquest pod també aconsegueixen % {quota} d’emmagatzematge gratuït per penjar el seu propi contingut!",
+        "signup": "Registra't ara per fer un seguiment dels teus favorits, crear llistes de reproducció, descobrir contingut nou i molt més!"
+      },
+      "header": {
+        "aboutPod": "Quant a aquesta instància",
+        "findApp": "Trobar una altra instàncies",
+        "funkwhale": "Una plataforma social per gaudir i compartir música",
+        "publicContent": "Explorar el contingut públic",
+        "signup": "Inscripció"
+      },
+      "link": {
+        "findOtherPod": "Trobar una altra instàncies",
+        "learnMore": "Aprèn més"
+      },
+      "message": {
+        "greeting": "Hola {username}",
+        "loggedIn": "Ja t'has registrat!"
+      },
+      "placeholder": {
+        "noDescription": "Descripció no disponible."
+      },
+      "stat": {
+        "activeUsers": "{ n } usuari actiu | { n } usuaris actius",
+        "hoursOfMusic": "{ n } hora de música | { n } hores de música"
+      },
+      "title": "Pàgina d’informació"
+    },
+    "AboutPod": {
+      "feature": {
+        "allowList": "Llista d'autorització",
+        "anonymousAccess": "Accés anònim",
+        "federation": "Federació",
+        "quota": "Quota de pujada",
+        "registrations": "Inscripcions",
+        "status": {
+          "closed": "Tancat",
+          "disabled": "Desactivat",
+          "enabled": "Activat",
+          "open": "Obert"
+        },
+        "version": "Versió de Funkwhale"
+      },
+      "header": {
+        "about": "Quant a aquesta instància",
+        "contact": "Contacte",
+        "features": "Característiques",
+        "rules": "Regles",
+        "statistics": "Estadístiques",
+        "terms": "Termes i política de privacitat"
+      },
+      "link": {
+        "about": "Quant a aquesta instància",
+        "features": "Característiques",
+        "introduction": "Invitacions",
+        "rules": "Regles",
+        "statistics": "Estadístiques",
+        "terms": "Termes i política de privacitat"
+      },
+      "message": {
+        "contact": "Envia'ns un correu: { contactEmail }"
+      },
+      "notApplicable": "No disponible",
+      "placeholder": {
+        "noDescription": "Descripció no disponible.",
+        "noRules": "Sense regles disponibles.",
+        "noTerms": "No hi ha termes disponibles."
+      },
+      "stat": {
+        "activeUsers": "{ n } usuari actiu | { n } usuaris actius",
+        "albumsCount": "Àlbum | Àlbum",
+        "artistsCount": "Artista | Artista",
+        "hoursOfMusic": "{ n } hora de música | { n } hores de música",
+        "listeningsCount": "Audicions | Audicions",
+        "tracksCount": "Pista | Pista"
+      },
+      "title": "Pàgina d’informació"
+    },
+    "Home": {
+      "description": {
+        "funkwhale": {
+          "paragraph1": "Aquest pod funciona amb Funkwhale, un projecte impulsat per la comunitat que us permet escoltar i compartir música i àudio en una xarxa oberta descentralitzada.",
+          "paragraph2": "Funkwhale és gratuït i desenvolupat per una comunitat acollidora de voluntaris."
+        },
+        "quota": "Els usuaris d’aquest pod també aconsegueixen % {quota} d’emmagatzematge gratuït per penjar el seu propi contingut!",
+        "signup": "Registra't ara per fer un seguiment dels teus favorits, crear llistes de reproducció, descobrir contingut nou i molt més!"
+      },
+      "header": {
+        "about": "Quant a aquesta instància de Funkwhale",
+        "aboutFunkwhale": "Quant a Funkwhale",
+        "contact": "Contacte",
+        "links": "Enllaços útils",
+        "login": "Iniciar sessió",
+        "newAlbums": "Àlbums afegits recentment",
+        "newChannels": "Canals nous",
+        "signup": "Inscripció",
+        "statistics": "Estadístiques",
+        "welcome": "Benvinguts a { podName }!"
+      },
+      "link": {
+        "findOtherPod": "Trobar una altra instàncies",
+        "funkwhale": "Visitar funkwhale.audio",
+        "learnMore": "Aprèn més",
+        "mobileApps": {
+          "description": "Utilitzeu Funkwhale en d'altres terminals amb les nostres aplicacions",
+          "label": "Aplicacions mòbils"
+        },
+        "publicContent": {
+          "description": "Escolteu els àlbums públics i les llistes de reproducció compartides en aquest pod",
+          "label": "Explorar el contingut públic"
+        },
+        "rules": "Regles del servidor",
+        "userGuides": {
+          "description": "Descobreix tot allò que necessites saber sobre Funkwhale i les seves funcions",
+          "label": "Guies d'utilització"
+        },
+        "viewMore": "Veure més …"
+      },
+      "placeholder": {
+        "noDescription": "Descripció no disponible."
+      },
+      "stat": {
+        "activeUsers": "{ n } usuari actiu | { n } usuaris actius",
+        "hoursOfMusic": "{ n } hora de música | { n } hores de música"
+      },
+      "title": "Inici"
+    },
+    "PageNotFound": {
+      "header": {
+        "pageNotFound": "Pàgina no trobada!"
+      },
+      "link": {
+        "home": "Tornar a la pàgina d'inici"
+      },
+      "message": {
+        "pageNotFound": "Ens sap greu, la pàgina que has demanat no existeix:"
+      },
+      "title": "Pàgina no trobada"
+    },
+    "Queue": {
+      "button": {
+        "clear": "Netejar",
+        "close": "Tancar",
+        "stopRadio": "Parar la ràdio"
+      },
+      "header": {
+        "failure": "La pista no s'ha pogut carregar",
+        "radio": "Estàs escoltant la ràdio"
+      },
+      "label": {
+        "addArtistContentFilter": "Amagar la informació d'aquest artista …",
+        "duration": "Durada",
+        "enterFullscreen": "Obre la pantalla completa",
+        "exitFullscreen": "Sortir de la pantalla completa",
+        "favorite": "Pista preferida",
+        "next": "Pista següent",
+        "pause": "Pausa",
+        "play": "Reproduir",
+        "previous": "Pista anterior",
+        "queue": "Cua de reproducció",
+        "remove": "Retirar",
+        "restart": "Pista següent",
+        "selectTrack": "Selecciona una pista"
+      },
+      "message": {
+        "automaticPlay": "La següent pista serà reproduïda automàticament en pocs segons …",
+        "radio": "Les noves pistes s'afegiran automàticament aquí."
+      },
+      "meta": {
+        "queuePosition": "Pista { index } de { length }",
+        "startTime": "00:00",
+        "unknownAlbum": "Àlbum desconegut",
+        "unknownArtist": "Artista desconegut"
+      },
+      "warning": {
+        "connectivity": "És possible que tingueu un problema de connectivitat."
+      }
+    },
+    "RemoteSearchForm": {
+      "button": {
+        "fediverse": "Fedivers",
+        "rss": "RSS",
+        "search": "Buscar"
+      },
+      "description": {
+        "fediverse": "Utilitzeu aquest formulari per recuperar un objecte allotjat en algun altre lloc en la fediverse."
+      },
+      "error": {
+        "fetchFailed": "No es pot recuperar aquest objecte"
+      },
+      "header": {
+        "fetchFailed": "Error obtenint l'objecte"
+      },
+      "label": {
+        "fediverse": {
+          "fieldLabel": "Element informat",
+          "fieldPlaceholder": "{'@'}usuari{'@'}exemple.com",
+          "title": "Subscriu-te a la Fediverse"
+        },
+        "rss": {
+          "fieldLabel": "Ubicació del canal",
+          "fieldPlaceholder": "{'@'}channel{'@'}pod.example o https://website.example/rss.xml",
+          "title": "Subscriu-te al flux RSS d'un podcast"
+        }
+      },
+      "warning": {
+        "unsupported": "Aquest tipus d'objecte encara no és compatible"
+      }
+    },
+    "SetInstanceModal": {
+      "button": {
+        "cancel": "Cancelar",
+        "submit": "Envia"
+      },
+      "header": {
+        "chooseInstance": "Escull la teva instància",
+        "failure": "No és possible conectar-se a la URL assenyalada",
+        "suggestions": "Opcions suggerides"
+      },
+      "help": {
+        "notFunkwhaleServer": "L’adreça indicada no és un servidor Funkwhale",
+        "selectPod": "Per continuar, si us plau selecciona la instància de Funkwahale on et vols conectar. Introdueix directamente l'adreça o selecciona una de les suggerides.",
+        "serverDown": "El servidor pot estar inactiu"
+      },
+      "label": {
+        "url": "Adreça de la instància"
+      },
+      "message": {
+        "newUrl": "Ara utilitzeu la instància de Funkwhale a { url }"
+      }
+    },
+    "ShortcutsModal": {
+      "button": {
+        "close": "Tancar"
+      },
+      "header": {
+        "modal": "Dreceres de teclat"
+      },
+      "shortcut": {
+        "audio": {
+          "clearQueue": "Netejar la cua",
+          "decreaseVolume": "Disminueix el volum",
+          "expandQueue": "Expandir la cua/la vista del reproductor",
+          "increaseVolume": "Augmentar el volum",
+          "label": "Dreceres del reproductor d'àudio",
+          "playNext": "Reproduir la següent pista",
+          "playPause": "Pausa/reproduir la pista actual",
+          "playPrevious": "Reprodueix la pista anterior",
+          "seekBack30": "Ves enrere 30 segons",
+          "seekBack5": "Ves enrere 5 segons",
+          "seekForward30": "Avançar 30 segons",
+          "seekForward5": "Avançar 5 segons",
+          "shuffleQueue": "Cua barrejada",
+          "toggleFavorite": "Canviar els favorits",
+          "toggleLoop": "Canvia el bucle de la cua",
+          "toggleMute": "Commuta el silenci"
+        },
+        "general": {
+          "focus": "Focus a la barra de cerca",
+          "label": "Dreceres principals",
+          "show": "Mostra les dreceres del teclat disponibles",
+          "unfocus": "Treure el focus de la barra de recerca"
+        }
+      }
+    },
+    "Sidebar": {
+      "header": {
+        "administration": "Administració",
+        "explore": "Explorar",
+        "library": "La meva biblioteca",
+        "main": "Paginació",
+        "more": "Més"
+      },
+      "label": {
+        "add": "Afegir contingut",
+        "administration": "Administració",
+        "edits": "Revisió de modificacions pendents",
+        "follows": "Sol·licituds de seguiment pendents",
+        "language": "Idioma",
+        "main": "Menú principal",
+        "play": "Reprodueix aquesta pista",
+        "theme": "Tema"
+      },
+      "link": {
+        "about": "Quant a aquesta instància",
+        "albums": "Àlbums",
+        "artists": "Artistes",
+        "browse": "Navega",
+        "channels": "Canals",
+        "createAccount": "Crear un compte",
+        "favorites": "Preferides",
+        "home": "Inici",
+        "library": "Biblioteca",
+        "login": "Iniciar sessió",
+        "moderation": "Moderació",
+        "playlists": "Llistes de reproducció",
+        "podcasts": "Podcasts",
+        "radios": "Ràdios",
+        "search": "Buscar",
+        "settings": "Paràmetres",
+        "switchInstance": "Canviar d'instància",
+        "users": "Usuaris"
+      }
+    },
+    "admin": {
+      "SettingsGroup": {
+        "button": {
+          "save": "Guardar"
+        },
+        "header": {
+          "error": "Error guardant els canvis",
+          "image": "Imatge actual"
+        },
+        "message": {
+          "success": "Paràmetres actualitzats amb èxit."
+        }
+      },
+      "SignupFormBuilder": {
+        "button": {
+          "add": "Afegeix un camp nou",
+          "edit": "Editar el formulari",
+          "preview": "Previsualitzar formulari"
+        },
+        "help": {
+          "additionalFields": "Camps addicionals per al formulari. Només es mostren si la validació manual del registre està activada.",
+          "helpText": "Text opcional que es mostrarà al principi del formulari d'inscripció."
+        },
+        "label": {
+          "additionalField": "Camp addicional",
+          "additionalFields": "Camps addicionals",
+          "delete": "Suprimir",
+          "helpText": "Text d'ajuda",
+          "moveDown": "Mou cap a baix",
+          "moveUp": "Mou cap a dalt"
+        },
+        "table": {
+          "additionalFields": {
+            "header": {
+              "actions": "Accions",
+              "label": "Nom del camp",
+              "required": "Obligatori",
+              "type": "Tipus de camp"
+            },
+            "required": {
+              "false": "No",
+              "true": "Sí"
+            },
+            "type": {
+              "long": "Text llarg",
+              "short": "Text curt"
+            }
+          }
+        }
+      }
+    },
+    "audio": {
+      "ChannelCard": {
+        "meta": {
+          "episodes": "{ n } episodi | { n } episodis",
+          "tracks": "{ n } pista | { n } pistes"
+        },
+        "title": "Actualitzat el { date }"
+      },
+      "ChannelEntries": {
+        "help": {
+          "subscribe": "És possible que hagueu de subscriure-vos aquesta biblioteca per veure'n el contingut."
+        }
+      },
+      "ChannelForm": {
+        "header": {
+          "error": "Error guardant el canal"
+        },
+        "help": {
+          "discography": "Publiqueu música que feu com ara una bonica discografia d'àlbums o senzills.",
+          "podcast": "Allotja els teus episodis i mantén la teva comunitat actualitzada.",
+          "username": "S'utilitza en URLs i per seguir aquest canal a la federació. No es pot canviar més tard."
+        },
+        "label": {
+          "category": "Categoria",
+          "description": "Descripció",
+          "discography": "Discografia de l'artista",
+          "email": "Confirma el teu correu electrònic",
+          "image": "Imatge del canal",
+          "language": "Idioma",
+          "name": "Nom",
+          "owner": "Propietari",
+          "podcast": "Podcasts",
+          "subcategory": "Subcategoria",
+          "tags": "Etiquetes"
+        },
+        "legend": {
+          "purpose": "Per a què s'utilitzarà aquest canal?"
+        },
+        "loader": {
+          "loading": "Carregant"
+        },
+        "placeholder": {
+          "name": "Nom fantàstic del canal",
+          "username": "nomfantàsticdelcanal"
+        }
+      },
+      "ChannelSerieCard": {
+        "meta": {
+          "episodes": "{ n } episodi | { n } episodis"
+        }
+      },
+      "ChannelSeries": {
+        "button": {
+          "showMore": "Mostra més"
+        },
+        "help": {
+          "subscribe": "És possible que hagueu de subscriure-vos aquesta biblioteca per veure'n els continguts."
+        }
+      },
+      "ChannelsWidget": {
+        "button": {
+          "showMore": "Mostra més"
+        }
+      },
+      "EmbedWizard": {
+        "button": {
+          "copy": "Copiar"
+        },
+        "header": {
+          "preview": "Previsualització"
+        },
+        "help": {
+          "anonymous": "Poseu-vos en contacte amb els administradors i demaneu-los que actualitzin la configuració corresponent.",
+          "embed": "Còpia i enganxa aquest codi dins l'HTML de la vostra web",
+          "width": "Deixeu-ho en blanc per a un giny responsiu"
+        },
+        "label": {
+          "embed": "Codi incrustat",
+          "height": "Alçada del giny",
+          "width": "Amplada del giny"
+        },
+        "message": {
+          "copy": "Text copiat al porta-retalls!"
+        },
+        "warning": {
+          "anonymous": "L'ús compartit no funcionarà perquè aquesta pod no permet als usuaris anònims accedir al contingut."
+        }
+      },
+      "LibraryFollowButton": {
+        "button": {
+          "cancel": "Cancel·lar la petició de seguiment",
+          "follow": "Seguir",
+          "unfollow": "Deixar de seguir"
+        }
+      },
+      "PlayButton": {
+        "button": {
+          "addToPlaylist": "Afegir a la llista de reproducció …",
+          "addToQueue": "Afegir a la cua de reproducció actual",
+          "discretePlay": "Reproduir",
+          "episodeDetails": "Detalls de l'episodi",
+          "hideArtist": "Amagar la informació d'aquest artista",
+          "playAlbum": "Reproduir tots els àlbums",
+          "playArtist": "Llista de reproducció",
+          "playNext": "Reproduir el següent",
+          "playNow": "Reproduir ara",
+          "playPlaylist": "Buidar la llista de reproducció",
+          "playTrack": "Reprodueix la pista",
+          "playTracks": "Reprodueix la pista",
+          "report": "Informar …",
+          "startRadio": "Reproduir cançons semblants",
+          "trackDetails": "Detalls de la pista"
+        },
+        "title": {
+          "more": "Més …",
+          "unavailable": "Aquesta pista no està disponible en cap la biblioteca on hi tens accés"
+        }
+      },
+      "Player": {
+        "header": {
+          "player": "Dreceres del reproductor d'àudio"
+        },
+        "label": {
+          "addArtistContentFilter": "Amagar la informació d'aquest artista …",
+          "audioPlayer": "Reproductor multimèdia",
+          "clearQueue": "Neteja la cua de reproducció",
+          "expandQueue": "Expandir la cua",
+          "loopingDisabled": "Bucle desactivat. Clica per activar el bucle d'una sola pista.",
+          "loopingSingle": "Bucle en una sola pista. Cliqueu per canviar al bucle complet de la cua.",
+          "loopingWholeQueue": "Bucle a tota la cua. Cliqueu per inhabilitar el bucle.",
+          "mute": "Silencia",
+          "nextTrack": "Pista següent",
+          "pause": "Pausa",
+          "play": "Reproduir",
+          "previousTrack": "Pista anterior",
+          "shuffleQueue": "Barreja la teva cua",
+          "unmute": "Activar el so"
+        },
+        "meta": {
+          "position": "{ index } de { length }",
+          "unknownAlbum": "Àlbum desconegut",
+          "unknownArtist": "Artista desconegut"
+        }
+      },
+      "PlayerControls": {
+        "labels": {
+          "next": "Següent pista",
+          "pause": "Pausa",
+          "play": "Play",
+          "previous": "Pista anterior"
+        }
+      },
+      "Search": {
+        "empty": {
+          "noAlbums": "Cap àlbum correspon a la teva consulta",
+          "noArtists": "Cap artista coincideix amb la teva consulta"
+        },
+        "header": {
+          "albums": "Àlbums",
+          "artists": "Artistes",
+          "search": "Cercar música"
+        },
+        "placeholder": {
+          "search": "Artista, àlbum, pista …"
+        }
+      },
+      "SearchBar": {
+        "empty": {
+          "noResults": "Disculpeu, no hi ha resultats per a aquesta cerca"
+        },
+        "header": {
+          "noResults": "No s'han trobat coincidències"
+        },
+        "label": {
+          "album": "Àlbum",
+          "artist": "Artista",
+          "category": {
+            "federation": "Federació",
+            "podcasts": "Podcasts"
+          },
+          "search": "Cercar música",
+          "tag": "Etiqueta",
+          "track": "Pista"
+        },
+        "link": {
+          "fediverse": "Cercar a la fediverse",
+          "more": "Més resultats 🡒",
+          "rss": "Subscriu-te a un podcast a través de RSS"
+        },
+        "placeholder": {
+          "search": "Cercar per artista, àlbum, pistes, …"
+        }
+      },
+      "VolumeControl": {
+        "button": {
+          "mute": "Silencia",
+          "unmute": "Activar el so"
+        },
+        "label": {
+          "slider": "Ajustar volum"
+        }
+      },
+      "album": {
+        "Card": {
+          "meta": {
+            "tracks": "{ n } pista | { n } pistes"
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": "Mostra més"
+          }
+        }
+      },
+      "artist": {
+        "Card": {
+          "meta": {
+            "episodes": "{ n } episodi | { n } episodis",
+            "tracks": "{ n } pista | { n } pistes"
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": "Mostra més"
+          }
+        }
+      },
+      "podcast": {
+        "MobileRow": {
+          "button": {
+            "actions": "Mostra les modificacions llegides"
+          }
+        },
+        "Modal": {
+          "button": {
+            "addToFavorites": "Afegir a favorits",
+            "addToPlaylist": "Afegir a la llista de reproducció …",
+            "addToQueue": "Afegir a la cua de reproducció",
+            "albumDetails": "Nou àlbum",
+            "artistDetails": "Artistes ocults",
+            "channelDetails": "Canals nous",
+            "episodeDetails": "Detalls de l'episodi",
+            "playNext": "Reproduir el següent",
+            "playNow": "Reproduir ara",
+            "removeFromFavorites": "Elimina dels preferits",
+            "seriesDetails": "Nova sèrie",
+            "startRadio": "Reprodueix la pista",
+            "trackDetails": "Detalls de la pista"
+          }
+        }
+      },
+      "track": {
+        "MobileRow": {
+          "button": {
+            "actions": "Mostra les modificacions llegides"
+          }
+        },
+        "Modal": {
+          "button": {
+            "addToFavorites": "Afegir a favorits",
+            "addToPlaylist": "Afegir a la llista de reproducció …",
+            "addToQueue": "Afegir a la cua de reproducció",
+            "albumDetails": "Nou àlbum",
+            "artistDetails": "Artistes ocults",
+            "channelDetails": "Canals nous",
+            "episodeDetails": "Detalls de l'episodi",
+            "playNext": "Reproduir el següent",
+            "playNow": "Reproduir ara",
+            "removeFromFavorites": "Elimina dels preferits",
+            "seriesDetails": "Nova sèrie",
+            "startRadio": "Reprodueix la pista",
+            "trackDetails": "Detalls de la pista"
+          }
+        },
+        "Table": {
+          "table": {
+            "header": {
+              "album": "Àlbum",
+              "artist": "Artista",
+              "title": "Títol"
+            }
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": "Mostra més"
+          },
+          "empty": {
+            "noResults": "No s'ha trobat cap resultat"
+          }
+        }
+      }
+    },
+    "auth": {
+      "ApplicationEdit": {
+        "header": {
+          "appDetails": "Detalls de l'aplicació",
+          "editApp": "Editar l'aplicació"
+        },
+        "help": {
+          "appDetails": "L'ID i el secret de l'aplicació són valors realment sensibles i han de ser tractats com les contrasenyes. No els comparteixis amb ningú."
+        },
+        "label": {
+          "accessToken": "Accés deshabilitat",
+          "appId": "ID de l'aplicació",
+          "appSecret": "Secret de l'aplicació"
+        },
+        "link": {
+          "settings": "Tornar a la configuració"
+        },
+        "message": {
+          "appSecretWarning": "No podràs tornar-ho a veure un cop surtis d'aquesta pantalla."
+        },
+        "title": "Editar l'aplicació"
+      },
+      "ApplicationForm": {
+        "button": {
+          "create": "Crear una aplicació",
+          "update": "Actualitza l'aplicació"
+        },
+        "header": {
+          "failure": "No es poden desar els teus canvis"
+        },
+        "help": {
+          "redirectUri": "Utilitza \"urn:ietf:wg:oauth:2.0:oob\" com a URI de redirecció si la vostra aplicació no es serveix al web."
+        },
+        "label": {
+          "name": "Nom",
+          "redirectUri": "URI de redirecció",
+          "scopes": {
+            "description": "Comprovar els àmbits pare “Llegir” o “Escriure” implica l’accés a tots els àmbits fill que en deriven.",
+            "read": {
+              "description": "Accés a llegir només les dades d'utilització",
+              "label": "Llegir"
+            },
+            "write": {
+              "description": "Accés només per escrit a les dades de l'usuari",
+              "label": "Escriure"
+            }
+          }
+        }
+      },
+      "ApplicationNew": {
+        "link": {
+          "settings": "Tornar a la configuració"
+        },
+        "title": "Crear una nova aplicació"
+      },
+      "Authorize": {
+        "button": {
+          "authorize": "Autoritzar { app }"
+        },
+        "header": {
+          "access": "{ app } vol accedir al vostre compte Funkwhale",
+          "allScopes": "Accés total",
+          "authorize": "Autoritzar una aplicació de tercers",
+          "authorizeFailure": "Error autoritzant l'aplicació",
+          "fetchFailure": "Error obtenint les dades de l'aplicació",
+          "readOnly": "Només llegir",
+          "writeOnly": "Només d'escriptura"
+        },
+        "help": {
+          "copyCode": "Se us mostrarà un codi per copiar i enganxar a l’aplicació.",
+          "pasteCode": "Copia i enganxa el codi de seguiment a la vostra aplicació:",
+          "redirect": "Es redirigirà a { 0 }"
+        },
+        "message": {
+          "unknownPermissions": "L’aplicació també sol·licita els següents permisos desconeguts:"
+        },
+        "title": "Autoritzar l'aplicació"
+      },
+      "LoginForm": {
+        "button": {
+          "login": "Iniciar sessió"
+        },
+        "header": {
+          "loginFailure": "No es pot iniciar la sessió"
+        },
+        "help": {
+          "approvalRequired": "Si us heu registrat recentment, potser haureu d'esperar que el nostre equip de moderació revisi el vostre compte, o verifiqui el vostre correu electrònic.",
+          "invalidCredentials": "Si us plau verifica que el teu nom d'usuari i la contrasenya són correctes i que heu verificat el correu electrònic."
+        },
+        "label": {
+          "password": "Contrasenya",
+          "username": "Nom d'usuari o correu"
+        },
+        "link": {
+          "createAccount": "Crear un compte",
+          "resetPassword": "Restabliu la contrasenya"
+        },
+        "message": {
+          "redirect": "Seràs redirigit a {domain} per autenticar-te"
+        },
+        "placeholder": {
+          "username": "Introdueix el teu nom d'usuari o bé el teu correu electrònic"
+        }
+      },
+      "Logout": {
+        "button": {
+          "logout": "Sí, tanca la sessió!"
+        },
+        "header": {
+          "confirm": "Segur que vols tancat la sessió?",
+          "unauthenticated": "Actualment esteu connectat com a { username }"
+        },
+        "link": {
+          "login": "Iniciar sessió"
+        },
+        "message": {
+          "loggedIn": "Actualment esteu connectat com a { username }"
+        },
+        "title": "Tancar sessió"
+      },
+      "Plugin": {
+        "button": {
+          "save": "Guardar",
+          "scan": "Anàlisis realitzat"
+        },
+        "description": {
+          "library": "Biblioteca on s'han d'importar els arxius."
+        },
+        "header": {
+          "failure": "Error guardant els canvis"
+        },
+        "label": {
+          "library": "Biblioteca",
+          "pluginEnabled": "Activat"
+        },
+        "link": {
+          "documentation": "Documentació"
+        }
+      },
+      "Settings": {
+        "button": {
+          "delete": "Suprimir",
+          "deleteAccount": "Esborra el meu compte …",
+          "deleteAccountConfirm": "Esborrar el meu compte",
+          "disableSubsonic": "Desactivar l'accés",
+          "edit": "Editar",
+          "password": "Canviar la contrasenya",
+          "refresh": "Recarregar",
+          "remove": "Retirar",
+          "removeApp": "Suprimir l'aplicació",
+          "revoke": "Revocar",
+          "revokeAccess": "Revocar l'accés",
+          "update": "Actualitzar",
+          "updateSettings": "Actualitza els paràmetres"
+        },
+        "description": {
+          "authorizedApps": "Aquesta és la llista d'aplicacions que tenen accés a les dades del teu compte.",
+          "changeEmail": "Canviar l'adreça de correu associada amb el teu compte. T'enviarem una confirmació amb la nova adreça.",
+          "changePassword": {
+            "paragraph1": "Si canvieu la vostra contrasenya també canviarà la vostra contrasenya de l’API Subsonic si l’heu sol·licitat.",
+            "paragraph2": "Haureu d’actualitzar la vostra contrasenya als vostres clients que utilitzin aquesta contrasenya."
+          },
+          "contentFilters": "Els filtres de contingut us ajuden a amagar el contingut que no voleu veure al servei.",
+          "deleteAccount": "Podeu suprimir de manera permanent i irreversible el vostre compte i totes les dades associades mitjançant el formulari següent. Se us demanarà confirmació.",
+          "yourApps": "Aquesta és la llista d'aplicacions que has creat."
+        },
+        "header": {
+          "accountFailure": "No es pot suprimir el vostre compte",
+          "accountSettings": "Configuració del compte",
+          "authorizedApps": "Apps autoritzades",
+          "avatar": "Avatar",
+          "avatarFailure": "No s'ha pogut guardar el teu avatar",
+          "changeEmail": "Confirma el teu correu electrònic",
+          "changePassword": "Canviar la meva contrasenya",
+          "contentFilters": "Filtres de continguts",
+          "deleteAccount": "Esborrar el meu compte",
+          "emailFailure": "No hem pogut confirmar la teva adreça de correu electrònic",
+          "hiddenArtists": "Artistes ocults",
+          "noApps": "No teniu cap aplicació connectada amb el vostre compte.",
+          "noPersonalApps": "Encara no teniu cap aplicació configurada.",
+          "passwordFailure": "La vostra contrasenya no es pot canviar",
+          "plugins": "Plugins",
+          "settingsUpdated": "Paràmetres actualitzats",
+          "updateFailure": "La vostra configuració no es pot actualitzar",
+          "yourApps": "Les vostres aplicacions"
+        },
+        "help": {
+          "changePassword": "Si us plau verifica que la teva contrasenya és correcta",
+          "noApps": "Si autoritzes a donar les teves dades a aplicacions de tercers, aquestes aplicacions seran llistades aquí.",
+          "noPersonalApps": "Creeu-ne un per integrar Funkwhale amb aplicacions de tercers."
+        },
+        "label": {
+          "avatar": "Avatar",
+          "currentPassword": "Nova contrasenya",
+          "newEmail": "Adreça de correu electrònic",
+          "newPassword": "Nova contrasenya",
+          "password": "Contrasenya"
+        },
+        "link": {
+          "managePlugins": "Gestionar les llistes de reproducció",
+          "newApp": "Crear una nova aplicació"
+        },
+        "message": {
+          "confirmDelete": "S'ha enviat la sol·licitud de supressió, el vostre compte i el contingut associat és suprimiran en breu",
+          "currentEmail": "Actualment esteu connectat com a { username }"
+        },
+        "modal": {
+          "changePassword": {
+            "content": {
+              "logout": "Es tancarà la sessió d’aquest compte i hauràs d’iniciar sessió amb la nou",
+              "subsonic": "La vostra contrasenya Subsonic es canviarà a una altra nova i aleatòria, i us iniciarà la sessió des dels dispositius que utilitzen la contrasenya antiga de Subsonic",
+              "warning": "Canviar la teva contrasenya tindrà les següents conseqüències:"
+            },
+            "header": "Canviar la teva contrasenya?"
+          },
+          "deleteAccount": {
+            "content": {
+              "warning": "Això és irreversible i eliminarà les vostres dades de manera permanent dels nostres servidors. Seràs desconnectat immediatament."
+            },
+            "header": "Vols esborrar el teu compte?"
+          },
+          "deleteApp": {
+            "content": {
+              "warning": "Això suprimirà permanentment l’aplicació i tots els testimonis associats."
+            },
+            "header": "Suprimir l'aplicació \"{ application }\"?"
+          },
+          "revokeApp": {
+            "content": {
+              "warning": "Això evitarà que aquesta aplicació accedeixi al servei en nom vostre."
+            },
+            "header": "Revoca l'accés de les aplicacons \"{ application }\"?"
+          }
+        },
+        "table": {
+          "artists": {
+            "header": {
+              "creationDate": "Data de creació",
+              "name": "Nom"
+            }
+          },
+          "authorizedApps": {
+            "header": {
+              "application": "Aplicació",
+              "permissions": "Permisos"
+            }
+          },
+          "yourApps": {
+            "header": {
+              "application": "Aplicació",
+              "creationDate": "Data de creació",
+              "scopes": "Àmbits"
+            }
+          }
+        },
+        "title": "Configuració del compte",
+        "warning": {
+          "deleteAccount": "El vostre compte es suprimirà dels nostres servidors en pocs minuts. També notificarem a d'atres servidors que puguin tenir una còpia d’algunes de les vostres dades perquè puguin procedir a la seva eliminació. Tingueu en compte que alguns d’aquests servidors poden estar fora de línia o no voler fer-ho."
+        }
+      },
+      "SignupForm": {
+        "button": {
+          "create": "Crear el meu compte"
+        },
+        "header": {
+          "login": "Iniciar sessió amb el teu compte de Funkwhale",
+          "signupFailure": "No es pot crear el vostre compte."
+        },
+        "label": {
+          "email": "Adreça de correu electrònic",
+          "invitation": "Codi d'invitació",
+          "password": "Contrasenya",
+          "username": "Nom d'usuari"
+        },
+        "message": {
+          "accountCreated": "S'ha creat el compte correctament. Verifiqueu el correu electrònic abans d'intentar connectar-vos.",
+          "awaitingReview": "S'ha enviat correctament la vostra petició d'inscripció. Es notificarà per correu electrònic quan l'equip de moderació hagi revisat la vostra petició.",
+          "registrationClosed": "Les inscripcions estan tancades en aquesta instància, necessites un codi d'inscripció per registrar-te.",
+          "requiresReview": "Els registres en aquesta instància estan oberts, però són revisats per moderadors abans de ser acceptats."
+        },
+        "placeholder": {
+          "email": "Confirma el teu correu electrònic",
+          "invitation": "Introdueix el codi d'invitació (No distingeix entre majúscules i minúscules)",
+          "username": "Introdueix el nom del teu usuari"
+        }
+      },
+      "SubsonicTokenForm": {
+        "button": {
+          "confirmDisable": "Desactivar l'accés",
+          "confirmNewPassword": "Demanar una contrasenya",
+          "disable": "Desactivar l'accés via Subsonic",
+          "newPassword": "Demanar una nova contrasenya"
+        },
+        "description": {
+          "subsonic": {
+            "paragraph1": "Funkwhale és compatible amb altres reproductors de música que suporten l'API Subsonic.",
+            "paragraph2": "Pots utilitzar-lo per gaudir, per exemple, de la vostra llista de reproducció i de la música sense connexió, al telèfon intel·ligent o a la tauleta.",
+            "paragraph3": "Tanmateix, accedir a Funkwhale des d’aquests clients requereix una contrasenya separada que pots definir a continuació."
+          }
+        },
+        "header": {
+          "error": "Error",
+          "subsonic": "Contrasenya de l'API Subsonic"
+        },
+        "label": {
+          "subsonicField": "Contrasenya de l'API Subsonic"
+        },
+        "link": {
+          "apps": "Descobreix com utilitzar Funkwhale des d'altres aplicacions"
+        },
+        "message": {
+          "accessDisabled": "Accés desactivat",
+          "passwordUpdated": "Contrasenya actualitzada",
+          "unavailable": "L'API Subsonic no està disponible per aquesta instància de Funkwahale."
+        },
+        "modal": {
+          "disableSubsonic": {
+            "content": {
+              "warning": "Això desactivarà completament l’accés a l’API Subsonic des del teu compte."
+            },
+            "header": "Desactivar l'accés a l'API Subsonic?"
+          },
+          "newPassword": {
+            "content": {
+              "warning": "Això us donarà accés als dispositius existents que utilitzin la contrasenya actual."
+            },
+            "header": "Demanar una nova contrasenya per l'API Subsonic?"
+          }
+        }
+      }
+    },
+    "channels": {
+      "AlbumForm": {
+        "header": {
+          "error": "Error al crear"
+        },
+        "label": {
+          "albumTitle": "Títol"
+        }
+      },
+      "AlbumModal": {
+        "button": {
+          "cancel": "Cancelar",
+          "create": "Crear"
+        },
+        "header": {
+          "newAlbum": "Nou àlbum",
+          "newSeries": "Nova sèrie"
+        }
+      },
+      "AlbumSelect": {
+        "label": {
+          "album": "Àlbum",
+          "series": "Sèries"
+        },
+        "meta": {
+          "tracks": "{ n } pista | { n } pistes"
+        },
+        "option": {
+          "none": "Cap"
+        }
+      },
+      "LicenseSelect": {
+        "label": {
+          "license": "Llicència"
+        },
+        "link": {
+          "license": "Quant a aquesta llicència"
+        },
+        "option": {
+          "none": "Cap"
+        }
+      },
+      "SubscribeButton": {
+        "help": {
+          "auth": "És possible que hagueu de subscriure-vos aquesta biblioteca per veure'n el contingut."
+        },
+        "title": {
+          "subscribe": "Subscriu-te",
+          "unsubscribe": "Cancel·lar subscripció"
+        }
+      },
+      "UploadForm": {
+        "button": {
+          "edit": "Editar",
+          "ignore": "Ometre",
+          "remove": "Retirar",
+          "resume": "Reprèn",
+          "retry": "Tornar a intentar"
+        },
+        "description": {
+          "extensions": "Suporta les extensions: { extensions }"
+        },
+        "header": {
+          "error": "Error al publicar"
+        },
+        "help": {
+          "license": "Afegeix una llicència de la teva càrrega per assegurar les llibertats del teu públic."
+        },
+        "label": {
+          "channel": "Canal",
+          "openBrowser": "Navega …"
+        },
+        "message": {
+          "dragAndDrop": "Deixeu anar aquí els fitxers o obriu el navegador per pujar els fitxers",
+          "pending": "Teniu algunes pujades pendents de publicació."
+        },
+        "status": {
+          "errored": "Per error",
+          "pending": "Pendent",
+          "uploading": "Carregant"
+        },
+        "warning": {
+          "quota": "No us queda espai per poder carregar els fitxers. Contacteu amb els moderadors."
+        }
+      },
+      "UploadMetadataForm": {
+        "label": {
+          "description": "Descripció",
+          "image": "Imatge de la pista",
+          "position": "Posició",
+          "tags": "Eitquetes",
+          "title": "Títol"
+        }
+      },
+      "UploadModal": {
+        "button": {
+          "cancel": "Cancelar",
+          "close": "Tancar",
+          "finishLater": "Acabar més tard",
+          "next": "Següent pas",
+          "previous": "Pas anterior",
+          "publish": "Publicar",
+          "update": "Actualitzar"
+        },
+        "header": {
+          "processing": "Processant càrregues",
+          "publish": "Publicar àudio",
+          "uploadDetails": "Detalls de la pujada",
+          "uploadFiles": "Fitxers per pujar"
+        },
+        "meta": {
+          "files": "{ n } fitxer | { n } fitxers",
+          "quota": "Espai d’emmagatzematge restant:"
+        }
+      }
+    },
+    "common": {
+      "ActionTable": {
+        "button": {
+          "allSelected": "Únic element seleccionat | Tots els { n } elements seleccionats",
+          "go": "Vés",
+          "launch": "Iniciar",
+          "refresh": "El contingut de la taula s'ha actualitzat",
+          "select": "Selecciona",
+          "selectAll": "Seleccionar un filtre",
+          "selectCurrentPage": "Seleccionar només la pàgina actual",
+          "selectElement": "Selecciona l'element | Selecciona tots els { total } elements",
+          "selected": "{ n } de { total } seleccionat | { n } de { total } seleccionats"
+        },
+        "header": {
+          "error": "Error aplicant l’acció"
+        },
+        "label": {
+          "actions": "Accions",
+          "performAction": "Informació de depuració"
+        },
+        "message": {
+          "needsRefresh": "S'ha actualitzat el contingut, refresca per veure el contingut actualitzat",
+          "success": "L'acció  { action } està en marxa en { n } element | L'acció  { action } està en marxa en { n } elements"
+        },
+        "modal": {
+          "performAction": {
+            "content": {
+              "warning": "Això pot afectar molts elements o tenir conseqüències irreversibles, comproveu que és realment el que voleu."
+            },
+            "header": "Vols executar l'acció { action } de { n } element? | Vols executar l'acció { action } de { n } elements?"
+          }
+        }
+      },
+      "AttachmentInput": {
+        "button": {
+          "remove": "Retirar"
+        },
+        "header": {
+          "failure": "No s'ha pogut guardar el seu adjunt"
+        },
+        "help": {
+          "upload": "PNG o JPG. Les dimensions haurien de ser entre 1400x1400px i 3000x3000px. La mida màxima permesa per al fitxer són 5MB."
+        },
+        "label": {
+          "upload": "Carregar una imatge nova …"
+        },
+        "loader": {
+          "uploading": "Carregant el fitxer …"
+        }
+      },
+      "CollapseLink": {
+        "button": {
+          "collapse": "Amaga",
+          "expand": "Expandir"
+        }
+      },
+      "ContentForm": {
+        "button": {
+          "preview": "Previsualització",
+          "write": "Escriu"
+        },
+        "empty": {
+          "noContent": "No hi ha res a previsualitzar."
+        },
+        "help": {
+          "markdown": "Es pot utilitzar la sintaxi Markdown."
+        },
+        "placeholder": {
+          "input": "Escriu alguna cosa aquí…"
+        }
+      },
+      "CopyInput": {
+        "button": {
+          "copy": "Copiar"
+        },
+        "message": {
+          "success": "Text copiat al porta-retalls!"
+        }
+      },
+      "DangerousButton": {
+        "button": {
+          "cancel": "Cancelar",
+          "confirm": "Confirmar"
+        },
+        "header": {
+          "confirm": "Vols confirmar aquesta acció?"
+        }
+      },
+      "Duration": {
+        "meta": {
+          "hours": "{ hours } h { minutes } min",
+          "minutes": "{ minutes } min"
+        }
+      },
+      "EmptyState": {
+        "button": {
+          "refresh": "Recarregar"
+        },
+        "header": {
+          "noResults": "No s'ha trobat cap resultat."
+        }
+      },
+      "ExpandableDiv": {
+        "button": {
+          "less": "Mostrar menys",
+          "more": "Mostra més"
+        }
+      },
+      "InlineSearchBar": {
+        "button": {
+          "clear": "Netejar"
+        },
+        "label": {
+          "search": "Buscar"
+        },
+        "placeholder": {
+          "search": "Buscar …"
+        }
+      },
+      "LoginModal": {
+        "description": {
+          "noAccess": "No tens accés"
+        },
+        "header": {
+          "unauthenticated": "Desconnectat"
+        },
+        "link": {
+          "login": "Iniciar sessió",
+          "signup": "Inscripció"
+        }
+      },
+      "RenderedDescription": {
+        "button": {
+          "cancel": "Cancelar",
+          "edit": "Editar",
+          "less": "Mostrar menys",
+          "more": "Mostra més",
+          "update": "Actualitza la descripció"
+        },
+        "empty": {
+          "noDescription": "Descripció no disponible"
+        },
+        "header": {
+          "failure": "Error al actualitzar la descripció"
+        }
+      },
+      "UserLink": {
+        "link": {
+          "username": "{'@'}{usuari}"
+        }
+      },
+      "UserMenu": {
+        "label": {
+          "language": "Idioma",
+          "shortcuts": "Dreceres de teclat",
+          "theme": "Canviar tema"
+        },
+        "link": {
+          "about": "Pàgina d’informació",
+          "chat": "Sala de xat",
+          "docs": "Documentació",
+          "forum": "Fòrum",
+          "git": "Seguiment de problemes",
+          "login": "Iniciar sessió",
+          "logout": "Tancar sessió",
+          "notifications": "Notificacions",
+          "profile": "Perfil",
+          "settings": "Paràmetres",
+          "signup": "Inscripció",
+          "support": "Text d'ajuda"
+        }
+      },
+      "UserModal": {
+        "button": {
+          "switchInstance": "Utilitzar una altre instància"
+        },
+        "header": {
+          "options": "Accions"
+        },
+        "label": {
+          "language": "Idioma",
+          "shortcuts": "Dreceres de teclat",
+          "theme": "Canviar tema"
+        },
+        "link": {
+          "about": "Pàgina d’informació",
+          "chat": "Sala de xat",
+          "docs": "Documentació",
+          "forum": "Fòrum",
+          "git": "Seguiment de problemes",
+          "login": "Iniciar sessió",
+          "logout": "Tancar sessió",
+          "notifications": "Notificacions",
+          "profile": "Perfil",
+          "settings": "Paràmetres",
+          "signup": "Inscripció",
+          "support": "Text d'ajuda"
+        }
+      }
+    },
+    "favorites": {
+      "List": {
+        "empty": {
+          "noFavorites": "Encara no s'ha afegit cap pista a preferits"
+        },
+        "header": {
+          "favorites": "{ n } favorit | { n } favorits"
+        },
+        "link": {
+          "library": "Navegueu per la biblioteca"
+        },
+        "loader": {
+          "loading": "Carregant els vostres favorits …"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Ascendent",
+            "descending": "Descendent",
+            "label": "Ordre"
+          },
+          "label": "Ordenar"
+        },
+        "pagination": {
+          "results": "Resultats per pàgina"
+        },
+        "title": "Els teus preferits"
+      },
+      "TrackFavoriteIcon": {
+        "button": {
+          "add": "Afegir a favorits",
+          "remove": "Elimina dels preferits"
+        },
+        "label": {
+          "inFavorites": "A favorits"
+        }
+      }
+    },
+    "federation": {
+      "FetchButton": {
+        "button": {
+          "close": "Tancar",
+          "reload": "Tancar i recarregar la pàgina"
+        },
+        "description": {
+          "failure": "S'ha produït un error quan s'intentava actualitzar les dades:",
+          "pending": "La petició d'actualització no s'ha realitzat a temps pel servidor. Serà realitzada més tard.",
+          "skipped": "El servidor remot va respondre, però les dades retornades no van ser admeses per Funkwhale.",
+          "success": "Les dades s'han actualitzat correctament des del servidor remot."
+        },
+        "header": {
+          "failure": "Error de recàrrega",
+          "pending": "Actualització pendent",
+          "refresh": "Actualització de l'objecte des del servidor remot …",
+          "saveFailure": "Error guardant els canvis",
+          "skipped": "S'ha omès l'actualització",
+          "success": "Actualització realitzada"
+        },
+        "loader": {
+          "awaitingResult": "Esperant el resultat …",
+          "fetchRequest": "Sol·licita una cerca …"
+        },
+        "table": {
+          "error": {
+            "label": {
+              "detail": "Detalls de l'error",
+              "type": "Tipus d'error"
+            },
+            "value": {
+              "connectionError": "Impossible connectar amb el servidor remot",
+              "httpError": "S'ha produït un error HTTP mentre es contactava amb el servidor remot",
+              "httpStatus": "El servidor remot ha contestat amb HTTP { status }",
+              "invalidAttributesError": "Les dades retornades pel servidor remot tenien atributs invàlids o en faltaven",
+              "invalidJsonError": "El servidor de retorn ha retornat dades invàlides de JSON o JSON-LD",
+              "timeoutError": "El servidor remot no va respondre prou ràpidament",
+              "unknownError": "Error desconegut"
+            }
+          }
+        }
+      },
+      "LibraryWidget": {
+        "button": {
+          "showMore": "Mostra més"
+        },
+        "empty": {
+          "noMatch": "Sense biblioteques coincidents."
+        }
+      }
+    },
+    "forms": {
+      "PasswordInput": {
+        "button": {
+          "copy": "Copiar"
+        },
+        "message": {
+          "copy": "Text copiat al porta-retalls!"
+        },
+        "title": "Mostra/amaga la contrasenya"
+      }
+    },
+    "library": {
+      "AlbumBase": {
+        "link": {
+          "addDescription": "Afegeix una descripció …"
+        },
+        "meta": {
+          "episodes": "{ n } episodi | { n } episodis",
+          "tracks": "{ n } pista | { n } pistes"
+        },
+        "title": "Àlbum"
+      },
+      "AlbumDetail": {
+        "description": {
+          "libraries": "Aquest àlbum es troba en les següents biblioteques:"
+        },
+        "header": {
+          "episodes": "Episodis",
+          "libraries": "Biblioteques d'usuaris",
+          "tracks": "Pistes"
+        },
+        "meta": {
+          "volume": "Volum { number }"
+        }
+      },
+      "AlbumDropdown": {
+        "button": {
+          "cancel": "Cancelar",
+          "delete": "Suprimir …",
+          "edit": "Editar",
+          "embed": "Incrustar",
+          "more": "Més …"
+        },
+        "link": {
+          "discogs": "Cerca a Discogs",
+          "django": "Visualitza amb l'administrador Django's",
+          "domain": "replicat des de {domain}",
+          "moderation": "Obrir dins la interfície de moderació",
+          "musicbrainz": "Visualitza a MusicBrainz"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "L'àlbum serà suprimit, així com els fitxers i les dades associades. Aquesta acció és irreversible."
+            },
+            "header": "Suprimir aquest àlbum?"
+          },
+          "embed": {
+            "header": "Inserir aquest àlbum a la teva pàgina"
+          }
+        }
+      },
+      "AlbumEdit": {
+        "header": {
+          "edit": "Editar aquest àlbum",
+          "suggest": "Suggereix un canvi en aquest àlbum"
+        },
+        "message": {
+          "remote": "Aquest objecte és gestionat per un altre servidor, no el podeu editar."
+        }
+      },
+      "Albums": {
+        "button": {
+          "search": "Buscar"
+        },
+        "empty": {
+          "noResults": "No hi ha resultats coincidents amb la teva consulta"
+        },
+        "header": {
+          "browse": "Navegueu pels àlbums"
+        },
+        "label": {
+          "search": "Buscar",
+          "tags": "Eitquetes"
+        },
+        "link": {
+          "addMusic": "Afegir música"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Ascendent",
+            "descending": "Descendent",
+            "label": "Direcció d'ordre"
+          },
+          "label": "Ordenar"
+        },
+        "pagination": {
+          "results": "Resultats per pàgina"
+        },
+        "placeholder": {
+          "search": "Introduir el nom de l'àlbum …"
+        },
+        "title": "Àlbums"
+      },
+      "ArtistBase": {
+        "button": {
+          "cancel": "Cancelar",
+          "edit": "Editar",
+          "embed": "Incrustar",
+          "more": "Més …",
+          "play": "Reproduir tots els àlbums"
+        },
+        "link": {
+          "discogs": "Cerca a Discogs",
+          "django": "Visualitza amb l'administrador Django's",
+          "domain": "replicat des de {domain}",
+          "moderation": "Obrir dins la interfície de moderació",
+          "musicbrainz": "Visualitza a MusicBrainz",
+          "wikipedia": "Cercar a la Viquipèdia"
+        },
+        "meta": {
+          "albums": "{ n } àlbums | { n } àlbums",
+          "tracks": "{ n } pista dins | { n } pistes dins"
+        },
+        "modal": {
+          "embed": {
+            "header": "Incrusta l'obra d'aquest artista a la teva pàgina web"
+          }
+        },
+        "title": "Artista"
+      },
+      "ArtistDetail": {
+        "button": {
+          "filter": "Suprimir vel filtre",
+          "more": "Carrega'n més …"
+        },
+        "description": {
+          "library": "Aquest artista es troba a les següents biblioteques:"
+        },
+        "header": {
+          "album": "Àlbums d'aquest artista",
+          "library": "Biblioteques d'usuaris",
+          "track": "Pistes d'aquest artista"
+        },
+        "link": {
+          "filter": "Revisa els meus filtres"
+        },
+        "message": {
+          "filter": "Actualment, esteu ocultant contingut relacionat amb aquest artista."
+        }
+      },
+      "ArtistEdit": {
+        "header": {
+          "edit": "Editar l'artista",
+          "suggest": "Suggereix un canvi en aquest artista"
+        },
+        "message": {
+          "remote": "Aquest objecte és gestionat per un altre servidor, no el podeu editar."
+        }
+      },
+      "Artists": {
+        "button": {
+          "search": "Buscar",
+          "upload": "Afegir música"
+        },
+        "empty": {
+          "noResults": "No hi ha resultats coincidents amb la teva consulta"
+        },
+        "header": {
+          "browse": "Navegueu pels artistes"
+        },
+        "label": {
+          "excludeCompilation": "Excloure recopilacions d'artistes",
+          "search": "Nom de l'artista",
+          "tags": "Eitquetes"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Ascendent",
+            "descending": "Descendent",
+            "label": "Direcció d'ordre"
+          },
+          "label": "Ordenar"
+        },
+        "pagination": {
+          "results": "Resultats per pàgina"
+        },
+        "placeholder": {
+          "search": "Buscar …"
+        },
+        "title": "Artistes"
+      },
+      "EditCard": {
+        "button": {
+          "approve": "Aprovar",
+          "delete": "Suprimir",
+          "reject": "Rebutjar"
+        },
+        "header": {
+          "modification": "Modificatició { id }"
+        },
+        "link": {
+          "track": "Pista #{ id } - { name }"
+        },
+        "modal": {
+          "content": {
+            "warning": "El suggeriment s’eliminarà completament, aquesta acció és irreversible."
+          },
+          "delete": {
+            "header": "Suprimir aquesta suggerència?"
+          }
+        },
+        "status": {
+          "applied": "Aprovat i aplicat",
+          "approved": "Aprovat",
+          "pending": "Verificació pendent",
+          "rejected": "Rebutjat"
+        },
+        "table": {
+          "update": {
+            "header": {
+              "field": "Camp",
+              "newValue": "Nou valor",
+              "oldValue": "Valor antic"
+            },
+            "notApplicable": "No disponible"
+          }
+        }
+      },
+      "EditForm": {
+        "button": {
+          "cancel": "Cancelar",
+          "clear": "Netejar",
+          "new": "Envia una altre modificació",
+          "reset": "Reiniciar al valor inicial",
+          "showAll": "Mostra totes les modificacions",
+          "showUnreviewed": "Restringiu les edicions no revisades",
+          "submit": "Envia i aplica la modificació",
+          "suggest": "Enviar suggerències"
+        },
+        "empty": {
+          "suggestEdit": "Suggereix un canvi mitjançant el formulari següent."
+        },
+        "header": {
+          "failure": "Error trametent les modificaions",
+          "recentEdits": "Modificacions recents",
+          "success": "L’edició s’ha enviat correctament.",
+          "unreviewed": "Modificacions recents pendents de revisió"
+        },
+        "label": {
+          "summary": "Resum (opcional)"
+        },
+        "message": {
+          "noPermission": "No teniu permís per editar aquest objecte, però podeu suggerir canvis. Un cop enviats, els suggeriments es revisaran abans de l'aprovació."
+        },
+        "notApplicable": "No disponible",
+        "placeholder": {
+          "summary": "Una breu resum descrivint els teus canvis."
+        }
+      },
+      "FileUpload": {
+        "button": {
+          "cancel": "Cancelar",
+          "retry": "Tornar a intentar càrregues fallides"
+        },
+        "description": {
+          "import": "Rellançar la importació",
+          "previousImport": "Resultats de la teva importació anterior:"
+        },
+        "empty": {
+          "noFiles": "0"
+        },
+        "header": {
+          "failure": "Error al enviar l'informe",
+          "server": "Estat de la importació",
+          "status": "Estat de la importació"
+        },
+        "label": {
+          "extensions": "Suporta les extensions: { extensions }",
+          "remainingSpace": "Espai d’emmagatzematge restant",
+          "uploadWidget": "Feu clic per seleccionar fitxers per carregar o arrossega i deixa anar fitxers o directoris"
+        },
+        "link": {
+          "picard": "Us recomanem que utilitzeu Picard per a aquest propòsit.",
+          "processing": "Processant",
+          "uploading": "Carregant"
+        },
+        "message": {
+          "listener": "Aquesta pàgina et demana que confirmis que vols sortir - és possible que no es guardin les dades que has introduït.",
+          "local": {
+            "copyright": "No pengis contingut amb drets d'autor en una biblioteca pública, en cas contrari, podries infringir la llei",
+            "format": "L'arxiu de música que has carregat està ben etiquetat.",
+            "message": "Estàs apunt de carregar música a la teva biblioteca. Abans de començar, assegurat de:",
+            "tag": "L'arxiu de música que has carregat està ben etiquetat."
+          }
+        },
+        "table": {
+          "upload": {
+            "header": {
+              "actions": "Accions",
+              "filename": "Nom del fitxer",
+              "size": "Mida",
+              "status": "Estat"
+            },
+            "status": {
+              "pending": "Pendent",
+              "uploaded": "Carregat",
+              "uploading": "Carregant …"
+            }
+          }
+        },
+        "tooltip": {
+          "denied": "Pujada denegada, assegurat que el fitxer no sigui massa gran i que no hagis acabat la teva quota",
+          "extension": "El tipus de fitxer no és vàlid, assegurat de carregar un fitxer d'àudio. Les extensions de fitxers compatibles són { extensions }",
+          "network": "S'ha produït un error de xarxa mentre es pujava aquest fitxer",
+          "retry": "Tornar a intentar",
+          "size": "És impossible carregar aquest fitxer, assegurat que no és massa gran",
+          "timeout": "S'ha esgotat el temps de pujada, si us plau torna a provar-ho"
+        }
+      },
+      "FsBrowser": {
+        "button": {
+          "import": "Importat"
+        }
+      },
+      "FsLogs": {
+        "empty": {
+          "notStarted": "La importació encara no ha començat"
+        }
+      },
+      "Home": {
+        "header": {
+          "newChannels": "Canals nous",
+          "playlists": "Llistes de reproducció",
+          "recentlyAdded": "Afegit recentment",
+          "recentlyFavorited": "Afegit a preferits recentment",
+          "recentlyListened": "Escoltats recentment"
+        },
+        "title": "Biblioteca"
+      },
+      "ImportStatusModal": {
+        "button": {
+          "close": "Tancar"
+        },
+        "error": {
+          "importFailure": "S'ha produït un error durant la càrrega. Trobaràs més informació a sota.",
+          "invalidMetadata": {
+            "label": "Metadades invàlides",
+            "message": "La metadada inclosa en el fitxer és invalida o falten alguns camps obligatoris."
+          },
+          "unknownError": {
+            "label": "Error desconegut",
+            "message": "S'ha produït un error desconegut"
+          }
+        },
+        "header": {
+          "importDetail": "Detalls de la importació"
+        },
+        "link": {
+          "documentation": "Llegir la documentació d'aquest error",
+          "support": "Obrir un fil de suport (incloure la informació de depuració a continuació dins el missatge)"
+        },
+        "message": {
+          "importDetail": "La càrrega encara està pendent i aviat serà processada pel servidor.",
+          "importSuccess": "La pujada ha sigut processada correctament pel servidor."
+        },
+        "table": {
+          "error": {
+            "debug": "Informació de depuració",
+            "errorDetail": "Detalls de l'error",
+            "errorType": "Tipus d'error",
+            "help": "Obtenir ajuda"
+          }
+        },
+        "warning": {
+          "importSkipped": "S'ha omès la càrrega, ja que una de semblant ja està disponible en una de les teves biblioteques."
+        }
+      },
+      "Podcasts": {
+        "button": {
+          "cancel": "Cancelar",
+          "channel": "Crear un canal",
+          "feed": "Subscriu-te al flux RSS d'un podcast",
+          "search": "Buscar",
+          "subscribe": "Subscriu-te"
+        },
+        "empty": {
+          "noResults": "No hi ha resultats coincidents amb la teva consulta"
+        },
+        "header": {
+          "browse": "Navegueu pels artistes"
+        },
+        "label": {
+          "search": "Podcast",
+          "tags": "Eitquetes"
+        },
+        "modal": {
+          "subscription": {
+            "header": "Subscripció"
+          }
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Ascendent",
+            "descending": "Descendent",
+            "label": "Direcció d'ordre"
+          },
+          "label": "Ordenar"
+        },
+        "pagination": {
+          "results": "Resultats per pàgina"
+        },
+        "placeholder": {
+          "search": "Buscar …"
+        },
+        "title": "Podcasts"
+      },
+      "Radios": {
+        "button": {
+          "add": "Crear una ràdio",
+          "create": "Crear la teva pròpia ràdio",
+          "search": "Buscar"
+        },
+        "empty": {
+          "noResults": "No hi ha resultats coincidents amb la teva consulta"
+        },
+        "header": {
+          "browse": "Navegueu per les ràdios",
+          "instance": "Ràdios de la instància",
+          "user": "Ràdios dels usuaris"
+        },
+        "label": {
+          "search": "Buscar"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Ascendent",
+            "descending": "Descendent",
+            "label": "Ordre"
+          },
+          "label": "Ordenar"
+        },
+        "pagination": {
+          "results": "Resultats per pàgina"
+        },
+        "placeholder": {
+          "search": "Introdueix un nom per la ràdio …"
+        },
+        "title": "Ràdios"
+      },
+      "TagDetail": {
+        "header": {
+          "channels": "Canals",
+          "tracks": "Pistes"
+        },
+        "link": {
+          "albums": "Àlbums",
+          "artists": "Artistes",
+          "moderation": "Obrir dins la interfície de moderació"
+        }
+      },
+      "TagSelector": {
+        "placeholder": {
+          "search": "Buscar …"
+        }
+      },
+      "TrackBase": {
+        "button": {
+          "cancel": "Cancelar",
+          "delete": "Suprimir …",
+          "download": "Descarregar",
+          "edit": "Editar",
+          "embed": "Incrustar",
+          "more": "Més …",
+          "play": "Reproduir"
+        },
+        "link": {
+          "discogs": "Cerca a Discogs",
+          "django": "Visualitza amb l'administrador Django's",
+          "domain": "replicat des de {domain}",
+          "moderation": "Obrir dins la interfície de moderació",
+          "wikipedia": "Cercar a la Viquipèdia"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "La pista serà suprimida, així com els fitxers i les dades associades. Aquesta acció és irreversible."
+            },
+            "header": "Suprimir aquesta pista?"
+          },
+          "embed": {
+            "header": "Incrusta aquesta pista a la teva pàgina web"
+          }
+        },
+        "title": "Pista"
+      },
+      "TrackDetail": {
+        "description": {
+          "library": "Aquesta pista és present en una d'aquestes biblioteques:"
+        },
+        "header": {
+          "episode": "Detalls de l'episodi",
+          "library": "Biblioteques relacionades",
+          "playlists": "Llistes de reproducció relacionades",
+          "release": "Detalls de la publicació",
+          "track": "Detalls de la pista"
+        },
+        "link": {
+          "musicbrainz": "Visualitza a MusicBrainz"
+        },
+        "notApplicable": "No disponible",
+        "table": {
+          "release": {
+            "album": "Àlbum",
+            "artist": "Artista",
+            "copyright": "Drets d'autor",
+            "license": "Llicència",
+            "series": "Sèrie",
+            "url": "URL",
+            "year": "Any"
+          },
+          "track": {
+            "bitrate": {
+              "label": "Taxa de bits"
+            },
+            "codec": "Codec",
+            "downloads": "Descarregar",
+            "duration": "Durada",
+            "size": "Mida"
+          }
+        }
+      },
+      "TrackEdit": {
+        "header": {
+          "edit": "Edita aquesta pista",
+          "suggest": "Suggereix una canvi en aquesta pista"
+        },
+        "message": {
+          "remote": "Aquest objecte és gestionat per un altre servidor, no el podeu editar."
+        }
+      },
+      "radios": {
+        "Builder": {
+          "button": {
+            "filter": "Afegir filtre",
+            "save": "Guardar"
+          },
+          "description": {
+            "builder": "Podeu utilitzar aquesta interfície per crear la vostra pròpia ràdio personalitzada, que reproduirà les pistes d’acord amb els vostres criteris."
+          },
+          "header": {
+            "builder": "Editor",
+            "created": "Ràdio creada",
+            "matches": "{ n } pista corresponent als filtres seleccionats | { n } pistes corresponents als filtres seleccionats",
+            "updated": "Ràdio actualitzada"
+          },
+          "label": {
+            "description": "Descripció",
+            "filter": "Afegir filtres per personalitzar la teva ràdio",
+            "name": "Nom de la ràdio",
+            "public": "Mostrar públicament"
+          },
+          "option": {
+            "filter": "Seleccionar un filtre"
+          },
+          "placeholder": {
+            "description": "La meva descripció genial",
+            "name": "La meva ràdio genial"
+          },
+          "table": {
+            "filter": {
+              "header": {
+                "actions": "Accions",
+                "candidates": "Pistes candidates",
+                "config": "Configuració",
+                "exclude": "Excloure",
+                "name": "Nom del filtre"
+              }
+            }
+          },
+          "title": "Editor de ràdio"
+        },
+        "Filter": {
+          "cancelButton": "Cancelar",
+          "excludeLabel": "Excloure",
+          "matchingTracksModalHeader": "Pistes coincidents amb el filtre",
+          "removeButton": "Retirar"
+        }
+      }
+    },
+    "manage": {
+      "ChannelsTable": {
+        "label": {
+          "category": "Categoria",
+          "search": "Buscar"
+        },
+        "link": {
+          "local": "Local",
+          "moderation": "Obrir dins la interfície de moderació"
+        },
+        "option": {
+          "all": "Tot"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Ascendent",
+            "descending": "Descendent",
+            "label": "Direcció d'ordre"
+          },
+          "label": "Ordenar"
+        },
+        "pagination": {
+          "results": "Mostra els resultats { start }-{ end } de { total }"
+        },
+        "placeholder": {
+          "search": "Cercar per domini, nom d'usuari, compte…"
+        },
+        "table": {
+          "channel": {
+            "header": {
+              "account": "Compte",
+              "albums": "Àlbums",
+              "creationDate": "Data de creació",
+              "domain": "Domini",
+              "name": "Nom",
+              "tracks": "Pistes"
+            }
+          }
+        }
+      },
+      "library": {
+        "AlbumsTable": {
+          "action": {
+            "delete": {
+              "label": "Suprimir",
+              "warning": "Els àlbums seleccionats s’eliminaran, així com les pistes associades, les càrregues, els preferits i l’historial d’escolta. Aquesta acció és irreversible."
+            }
+          },
+          "label": {
+            "search": "Buscar"
+          },
+          "link": {
+            "local": "Local",
+            "moderation": "Obrir dins la interfície de moderació"
+          },
+          "notApplicable": "No disponible",
+          "ordering": {
+            "direction": {
+              "ascending": "Ascendent",
+              "descending": "Descendent",
+              "label": "Direcció d'ordre"
+            },
+            "label": "Ordenar"
+          },
+          "pagination": {
+            "results": "Mostra els resultats { start }-{ end } de { total }"
+          },
+          "placeholder": {
+            "search": "Buscar per domini, títol, artista, MusicBrainz ID …"
+          },
+          "table": {
+            "album": {
+              "header": {
+                "artist": "Artista",
+                "creationDate": "Data de creació",
+                "domain": "Domini",
+                "name": "Títol",
+                "releaseDate": "Data de publicació",
+                "tracks": "Pistes"
+              }
+            }
+          }
+        },
+        "ArtistsTable": {
+          "action": {
+            "delete": {
+              "label": "Suprimir",
+              "warning": "L’artista seleccionat s’eliminarà, així com les càrregues associades, les pistes, els àlbums, els preferits i l’historial d’escolta. Aquesta acció és irreversible."
+            }
+          },
+          "label": {
+            "category": "Categoria",
+            "search": "Buscar"
+          },
+          "link": {
+            "local": "Local"
+          },
+          "option": {
+            "all": "Tot"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Ascendent",
+              "descending": "Descendent",
+              "label": "Direcció d'ordre"
+            },
+            "label": "Ordenar"
+          },
+          "pagination": {
+            "results": "Mostra els resultats { start }-{ end } de { total }"
+          },
+          "placeholder": {
+            "search": "Buscar per domini, nom, MusicBrainz ID, …"
+          },
+          "table": {
+            "artist": {
+              "header": {
+                "albums": "Àlbums",
+                "creationDate": "Data de creació",
+                "domain": "Domini",
+                "name": "Nom",
+                "tracks": "Pistes"
+              }
+            }
+          }
+        },
+        "EditsCardList": {
+          "label": {
+            "search": "Cercar",
+            "status": "Estat"
+          },
+          "option": {
+            "all": "Tot",
+            "approved": "Aprovat",
+            "pending": "Verificació pendent",
+            "rejected": "Rebutjat"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Ascendent",
+              "descending": "Descendent",
+              "label": "Ordre"
+            },
+            "label": "Ordenar"
+          },
+          "pagination": {
+            "results": "Mostra els resultats { start }-{ end } de { total }"
+          },
+          "placeholder": {
+            "search": "Cerca per compte, resum, domini …"
+          }
+        },
+        "LibrariesTable": {
+          "action": {
+            "delete": {
+              "label": "Suprimir",
+              "warning": "La biblioteca seleccionada serà suprimida, així com les càrregues associades i els seguidors."
+            }
+          },
+          "label": {
+            "search": "Buscar",
+            "visibility": "Visibilitat"
+          },
+          "link": {
+            "local": "Local"
+          },
+          "option": {
+            "all": "Tot"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Ascendent",
+              "descending": "Descendent",
+              "label": "Direcció d'ordre"
+            },
+            "label": "Ordenar"
+          },
+          "pagination": {
+            "results": "Mostra els resultats { start }-{ end } de { total }"
+          },
+          "placeholder": {
+            "search": "Busca per domini, nom, descripció, …"
+          },
+          "table": {
+            "library": {
+              "header": {
+                "account": "Compte",
+                "creationDate": "Data de creació",
+                "domain": "Domini",
+                "followers": "Seguidors",
+                "name": "Nom",
+                "uploads": "Pujades",
+                "visibility": "Visibilitat"
+              }
+            }
+          }
+        },
+        "TagsTable": {
+          "action": {
+            "delete": {
+              "label": "Suprimir",
+              "warning": "L'etiqueta seleccionada s'eliminarà i es desenllaçarà amb el contingut existent, si n’hi ha. Aquesta acció és irreversible."
+            }
+          },
+          "label": {
+            "search": "Buscar"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Ascendent",
+              "descending": "Descendent",
+              "label": "Direcció d'ordre"
+            },
+            "label": "Ordenar"
+          },
+          "pagination": {
+            "results": "Mostra els resultats { start }-{ end } de { total }"
+          },
+          "placeholder": {
+            "search": "Cercar per nom"
+          },
+          "table": {
+            "tag": {
+              "header": {
+                "albums": "Àlbums",
+                "artists": "Artistes",
+                "creationDate": "Data de creació",
+                "name": "Nom",
+                "tracks": "Pistes"
+              }
+            }
+          }
+        },
+        "TracksTable": {
+          "action": {
+            "delete": {
+              "label": "Suprimir",
+              "warning": "Les pistes seleccionades s’eliminaran, així com les càrregues associades, els preferits i l’historial d’escolta. Aquesta acció és irreversible."
+            }
+          },
+          "label": {
+            "search": "Buscar"
+          },
+          "link": {
+            "local": "Local"
+          },
+          "notApplicable": "No disponible",
+          "ordering": {
+            "direction": {
+              "ascending": "Ascendent",
+              "descending": "Descendent",
+              "label": "Direcció d'ordre"
+            },
+            "label": "Ordenar"
+          },
+          "pagination": {
+            "results": "Mostra els resultats { start }-{ end } de { total }"
+          },
+          "placeholder": {
+            "search": "Buscar per domini, títol, artista, àlbum, MusicBrainz ID …"
+          },
+          "table": {
+            "track": {
+              "header": {
+                "album": "Àlbum",
+                "artist": "Artista",
+                "creationDate": "Data de creació",
+                "domain": "Domini",
+                "license": "Llicència",
+                "title": "Títol"
+              }
+            }
+          }
+        },
+        "UploadsTable": {
+          "action": {
+            "delete": {
+              "label": "Suprimir",
+              "warning": "La càrrega seleccionada s'eliminarà. Aquesta acció és irreversible."
+            }
+          },
+          "label": {
+            "search": "Buscar",
+            "status": "Estat",
+            "visibility": "Visibilitat"
+          },
+          "link": {
+            "local": "Local"
+          },
+          "notApplicable": "No disponible",
+          "option": {
+            "all": "Tot",
+            "failed": "Fallat",
+            "finished": "Acabat",
+            "pending": "Pendent",
+            "skipped": "Omès"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Ascendent",
+              "descending": "Descendent",
+              "label": "Direcció d'ordre"
+            },
+            "label": "Ordenar"
+          },
+          "pagination": {
+            "results": "Mostra els resultats { start }-{ end } de { total }"
+          },
+          "placeholder": {
+            "search": "Buscar per domini, nom d'usuari, referències, …"
+          },
+          "table": {
+            "upload": {
+              "header": {
+                "accessedDate": "Data d'accés",
+                "account": "Compte",
+                "creationDate": "Data de creació",
+                "domain": "Domini",
+                "importStatus": "Estat de la importació",
+                "library": "Biblioteca",
+                "name": "Nom",
+                "size": "Mida",
+                "visibility": "Visibilitat"
+              }
+            }
+          }
+        }
+      },
+      "moderation": {
+        "AccountsTable": {
+          "action": {
+            "purge": {
+              "label": "Netejar"
+            }
+          },
+          "label": {
+            "search": "Buscar"
+          },
+          "link": {
+            "local": "Compte local"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Ascendent",
+              "descending": "Descendent",
+              "label": "Direcció d'ordre"
+            },
+            "label": "Ordenar"
+          },
+          "pagination": {
+            "results": "Mostra els resultats { start }-{ end } de { total }"
+          },
+          "placeholder": {
+            "search": "Cercar per domini, nom d'usuari, bio, .…"
+          },
+          "table": {
+            "account": {
+              "header": {
+                "domain": "Domini",
+                "firstSeen": "Vist per primera vegada",
+                "lastSeen": "Vist la darrera vegada",
+                "moderationRule": "Sota la regla de moderació",
+                "name": "Nom",
+                "uploads": "Pujades"
+              },
+              "moderationRule": "Sí"
+            }
+          }
+        },
+        "DomainsTable": {
+          "action": {
+            "add": {
+              "label": "Afegir a la llista de permesos"
+            },
+            "purge": {
+              "label": "Netejar"
+            },
+            "remove": {
+              "label": "Eliminar de la llista d'autoritzacions"
+            }
+          },
+          "empty": {
+            "noPods": "No s'han trobat coincidències"
+          },
+          "label": {
+            "inList": "Present a la llista de permisos",
+            "search": "Buscar"
+          },
+          "link": {
+            "list": "Aquest domini està present a la vostra llista de permisos"
+          },
+          "option": {
+            "all": "Tot",
+            "no": "No",
+            "yes": "Sí"
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Ascendent",
+              "descending": "Descendent",
+              "label": "Direcció d'ordre"
+            },
+            "label": "Ordenar"
+          },
+          "pagination": {
+            "results": "Mostra els resultats { start }-{ end } de { total }"
+          },
+          "placeholder": {
+            "search": "Cercar per nom …"
+          },
+          "table": {
+            "domain": {
+              "header": {
+                "firstSeen": "Vist per primera vegada",
+                "moderationRule": "Sota la regla de moderació",
+                "name": "Nom",
+                "receivedMessages": "Missatges rebuts",
+                "users": "Usuaris"
+              },
+              "moderationRule": "Sí"
+            }
+          }
+        },
+        "InstancePolicyCard": {
+          "button": {
+            "edit": "Editar"
+          },
+          "header": {
+            "rule": "Regla"
+          },
+          "label": {
+            "blockAll": "Bloquejar-ho tot",
+            "muteActivity": "Silencia l'activitat",
+            "muteNotifications": "Silencia les notificacions",
+            "reason": "Raó",
+            "rejectMedia": "Rebutjar els fitxers multimèdia"
+          },
+          "status": {
+            "enabled": "Activat",
+            "paused": "Pausa"
+          }
+        },
+        "InstancePolicyForm": {
+          "button": {
+            "cancel": "Cancelar",
+            "confirm": "Suprimir la regla de moderació",
+            "create": "Crear",
+            "delete": "Suprimir",
+            "update": "Actualitzar"
+          },
+          "header": {
+            "addRule": "Afegir una nova regla de moderació",
+            "editRule": "Editar les regles de moderació",
+            "failure": "Error creant la regla"
+          },
+          "label": {
+            "blockAll": "Bloquejar-ho tot",
+            "customizeRule": "O personalitzeu la vostra regla",
+            "policyDisabled": "Desactivat",
+            "policyEnabled": "Activat",
+            "policyReason": "Raó",
+            "rejectMedia": "Rebutjar els fitxers multimèdia",
+            "silenceActivity": "Silencia l'activitat",
+            "silenceNotifications": "Silencia les notificacions"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "Aquesta acció és irreversible."
+              },
+              "header": "Suprimir la regla de moderació?"
+            }
+          },
+          "tooltip": {
+            "blockAll": "Bloquejar-ho tot des d'aquest compte o domini. Això evitarà qualsevol interacció amb l’entitat, i es netejarà el contingut relacionat (pistes, biblioteques, seguidors, …)",
+            "isActive": "Utilitzeu aquest paràmetre per activar/desactivar temporalment la regla sense eliminar-la totalment.",
+            "rejectMedia": "No descarregueu cap fitxer multimèdia (àudio, portada, avatar del compte, …) des d'aquest compte o domini. Això també eliminarà el contingut existent.",
+            "silenceActivity": "Amagar el contingut del compte o domini, excepte pels seguidors.",
+            "silenceNotifications": "Eviteu que el compte o el domini desencadenin notificacions, llevat dels seguidors.",
+            "summary": "Explica perquè apliques aquesta regla. En funció de la configuració de la vostra instància,  això us ajudarà a recordar per què heu actuat així en aquest compte o aquest domini i que es pot mostrar públicament per ajudar als usuaris a entendre quines són les normes de moderació."
+          }
+        },
+        "InstancePolicyModal": {
+          "button": {
+            "close": "Tancar",
+            "show": "Regles de moderació …"
+          },
+          "modal": {
+            "manage": {
+              "content": {
+                "warning": "Aquest domini està subjecte a normes de moderació específiques"
+              },
+              "header": "Gestioneu les regles de moderació de { obj }"
+            }
+          }
+        },
+        "NoteForm": {
+          "button": {
+            "add": "Afegir una nota"
+          },
+          "header": {
+            "failure": "Error al enviar la nota"
+          },
+          "placeholder": {
+            "summary": "Descriu quines accions s'han dut a terme, o qualsevol altra novetat …"
+          }
+        },
+        "NotesThread": {
+          "button": {
+            "delete": "Suprimir"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "La nota s'eliminarà. Aquesta acció és irreversible."
+              },
+              "header": "Suprimir aquesta nota?"
+            }
+          }
+        },
+        "ReportCard": {
+          "button": {
+            "confirmDelete": "Suprimir",
+            "delete": "Suprimeix l'objecte notificat",
+            "resolve": "Resoldre",
+            "unresolve": "No resolt"
+          },
+          "header": {
+            "actions": "Accions",
+            "message": "Missatge",
+            "notes": "Notes internes",
+            "reportedObject": "Element informat"
+          },
+          "link": {
+            "moderation": "Obrir dins la interfície de moderació",
+            "publicPage": "Veure la pàgina pública",
+            "report": "Informe { id }"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "S'eliminarà l'objecte associat amb aquest informe i es marcarà com a resolt. La supressió és irreversible."
+              },
+              "header": "Suprimir l'objecte notificat?"
+            }
+          },
+          "notApplicable": "No disponible",
+          "table": {
+            "object": {
+              "account": "Compte",
+              "domain": "Domini",
+              "local": "Local",
+              "owner": "Propietari",
+              "type": "Tipus"
+            },
+            "report": {
+              "category": "Categoria",
+              "creationDate": "Data de creació",
+              "submittedBy": "Envia't per"
+            },
+            "status": {
+              "assignedTo": "Assignat a",
+              "internalNotes": "Notes internes",
+              "resolutionDate": "Data de resolució",
+              "resolved": "Resolt",
+              "status": "Estat",
+              "unresolved": "No resolt"
+            }
+          },
+          "warning": {
+            "objectDeleted": "L'objecte associat a aquest informe es va suprimir."
+          }
+        },
+        "UserRequestCard": {
+          "button": {
+            "approve": "Aprovar",
+            "reject": "Rebutjar"
+          },
+          "header": {
+            "actions": "Accions",
+            "notes": "Notes internes",
+            "signup": "Missatge"
+          },
+          "link": {
+            "request": "Petició { id }"
+          },
+          "message": {
+            "signup": "Aquest usuari es vol registrar a la vostra instància."
+          },
+          "notApplicable": "No disponible",
+          "table": {
+            "request": {
+              "creationDate": "Data de creació",
+              "submittedBy": "Envia't per"
+            },
+            "status": {
+              "approved": "Aprovat",
+              "assignedTo": "Assignat a",
+              "internalNotes": "Notes internes",
+              "pending": "Pendent",
+              "refused": "Rebutjat",
+              "status": "Estat"
+            }
+          }
+        }
+      },
+      "users": {
+        "InvitationForm": {
+          "button": {
+            "clear": "Netejar",
+            "new": "Obtenir una nova invitació"
+          },
+          "header": {
+            "failure": "Error creant la invitació"
+          },
+          "label": {
+            "invite": "Codi d'invitació"
+          },
+          "placeholder": {
+            "invitation": "Deixar en blanc per obtenir un codi aleatori"
+          },
+          "table": {
+            "invitation": {
+              "header": {
+                "code": "Codi",
+                "link": "Compartir enllaç"
+              }
+            }
+          }
+        },
+        "InvitationsTable": {
+          "action": {
+            "delete": "Suprimir"
+          },
+          "label": {
+            "expired": "Caducat",
+            "search": "Buscar",
+            "status": "Estat",
+            "unused": "No utilitzat",
+            "used": "Utilitzat"
+          },
+          "option": {
+            "all": "Tot",
+            "expired": "Caducat/utilitzat",
+            "open": "Obert"
+          },
+          "ordering": {
+            "label": "Ordenar"
+          },
+          "pagination": {
+            "results": "Esperant el resultat … | Esperant el resultat …"
+          },
+          "placeholder": {
+            "search": "Cercar per nom d'usuari, correu electrònic, codi, …"
+          },
+          "table": {
+            "invitation": {
+              "header": {
+                "code": "Codi",
+                "creationDate": "Data de creació",
+                "expirationDate": "Data de caducitat",
+                "owner": "Propietari",
+                "status": "Estat",
+                "user": "Usuari"
+              }
+            }
+          }
+        },
+        "UsersTable": {
+          "label": {
+            "search": "Cercar"
+          },
+          "notApplicable": "No disponible",
+          "ordering": {
+            "direction": {
+              "ascending": "Ascendent",
+              "descending": "Descendent",
+              "label": "Direcció d'ordre"
+            },
+            "label": "Ordenar"
+          },
+          "pagination": {
+            "results": "Esperant el resultat … | Esperant el resultat …"
+          },
+          "permission": {
+            "library": "Biblioteca",
+            "moderation": "Moderació",
+            "settings": "Paràmetres"
+          },
+          "placeholder": {
+            "search": "Cercar per nom d'usuari, correu electrònic, nom, …"
+          },
+          "table": {
+            "user": {
+              "accountStatus": {
+                "active": "Actiu",
+                "inactive": "Inactiu"
+              },
+              "header": {
+                "accountStatus": "Estat del compte",
+                "email": "Correu electrònic",
+                "lastActivity": "Última activitat",
+                "permissions": "Permisos",
+                "signup": "Inscripció",
+                "status": "Estat",
+                "username": "Nom d'usuari"
+              },
+              "status": {
+                "admin": "Administrador",
+                "regular": "Usuari estàndard",
+                "staff": "Membre de l'equip"
+              }
+            }
+          }
+        }
+      }
+    },
+    "moderation": {
+      "FilterModal": {
+        "button": {
+          "cancel": "Cancelar",
+          "hide": "Amagar el contingut"
+        },
+        "header": {
+          "failure": "Error creant el filtre",
+          "modal": "Vols ocultar el contingut de l’artista \"{ name }\"?"
+        },
+        "help": {
+          "createFilter": "Podeu gestionar i actualitzar els filtres en qualsevol moment des de la configuració del vostre compte."
+        },
+        "message": {
+          "success": "S'ha afegit el filtre de contingut"
+        },
+        "warning": {
+          "createFilter": {
+            "listIntro": "No veureu pistes, àlbums ni activitats relacionades amb aquest usuari:",
+            "listItem1": "Dins els preferits d'altres usuaris i l'historiador de reproduccions",
+            "listItem2": "Dins el giny \"Afegit recentment\"",
+            "listItem3": "Dins les llistes d'artistes i àlbums",
+            "listItem4": "Dins les sugerències de la ràdio"
+          }
+        }
+      },
+      "ReportCategoryDropdown": {
+        "label": {
+          "category": "Categoria"
+        },
+        "option": {
+          "all": "Tot"
+        }
+      },
+      "ReportModal": {
+        "button": {
+          "cancel": "Cancelar",
+          "submit": "Enviar l'informe"
+        },
+        "description": {
+          "email": "Utilitzarem aquesta adreça de correu electrònic per si hem de contactar amb vosaltres sobre aquest informe.",
+          "forwardToDomain": "Reenvia una copa anònima del teu informe al servidor que allotja aquest element.",
+          "message": "Utilitzeu aquest camp per proporcionar un context addicional al moderador que gestionarà l'informe.",
+          "modal": "Utilitzeu aquest formulari per enviar un informe al nostre equip de moderació."
+        },
+        "header": {
+          "disabled": "Els informes anònims estan deshabilitats, si us plau inicia sessió per a enviar l'informe.",
+          "modal": "Vols informar sobre aquest objecte?",
+          "submissionFailure": "Error al enviar l'informe"
+        },
+        "label": {
+          "email": "Correu electrònic",
+          "forwardToDomain": "Reenvia a {domain}",
+          "message": "Missatge"
+        },
+        "message": {
+          "submissionSuccess": "L'informe s'ha enviat correctament, gràcies"
+        }
+      }
+    },
+    "notifications": {
+      "NotificationRow": {
+        "button": {
+          "approve": "Aprovar",
+          "markRead": "Marcat com a llegit",
+          "markUnread": "Marcat com a no llegit",
+          "reject": "Rebutjar"
+        },
+        "message": {
+          "libraryAcceptFollow": "{ username } ha acceptat el seguiment de la biblioteca \"{ library }\"",
+          "libraryFollow": "{ username } ha seguit la teva biblioteca \"{ library }\"",
+          "libraryPendingFollow": "{ username } vol seguir la teva biblioteca \"{ library }\"",
+          "libraryReject": "Has rebutjat la petició de {username} per seguir \"{library}\""
+        }
+      }
+    },
+    "playlists": {
+      "Card": {
+        "meta": {
+          "tracks": "{ n } pista | { n } pistes"
+        }
+      },
+      "Editor": {
+        "button": {
+          "addDuplicate": "Afegeix de totes maneres",
+          "clear": "Buidar la llista de reproducció",
+          "copy": "Copiar les cançons de la cua de reproducció a la llista de reproducció",
+          "insertFromQueue": "Insereix des de la cua ({ n } pista) | Insereix des de la cua ({ n } pistes)"
+        },
+        "error": {
+          "sync": "S'ha produït una error mentre es guardaven els canvis"
+        },
+        "header": {
+          "editor": "Editor de lla llista de reproducció"
+        },
+        "help": {
+          "reorder": "Arrossega i deixa anar les files per reordenar les cançons de lla llista de reproducció"
+        },
+        "loading": {
+          "sync": "Sincronització dels canvis amb el servidor …"
+        },
+        "message": {
+          "sync": "Canvis sincronitzats amb el servidor"
+        },
+        "modal": {
+          "clearPlaylist": {
+            "content": {
+              "warning": "Això eliminarà totes les pistes d'aquesta llista de reproducció i aquesta acció no es podrà desfer."
+            },
+            "header": "Vols buidar la llista de reproducció \"{ playlist }\"?"
+          }
+        },
+        "warning": {
+          "duplicate": "Algunes pistes de la vostra cua ja es troben en aquesta llista de reproducció:"
+        }
+      },
+      "Form": {
+        "button": {
+          "create": "Crear una llista de reproducció",
+          "update": "Actualitzar la llista de reproducció"
+        },
+        "header": {
+          "createFailure": "No s’ha pogut crear la llista de reproducció",
+          "createPlaylist": "Crear una nova llista de reproducció",
+          "createSuccess": "Llista de reproducció creada",
+          "updateSuccess": "Llista de reproducció actualitzada"
+        },
+        "label": {
+          "name": "Nom de la llista de reproducció",
+          "visibility": "Visibilitat de la llista de reproducció"
+        },
+        "placeholder": {
+          "name": "La meva impressionant llista de reproducció"
+        }
+      },
+      "PlaylistModal": {
+        "button": {
+          "addDuplicate": "Afegeix de totes maneres",
+          "addToPlaylist": "Afegir a la llista de reproducció",
+          "addTrack": "Afegir pista",
+          "cancel": "Cancelar",
+          "edit": "Editar"
+        },
+        "empty": {
+          "noPlaylists": "Encara no s'ha creat cap llista de reproducció"
+        },
+        "header": {
+          "addFailure": "La pista no es pot afegir a la llista de reproducció",
+          "addToPlaylist": "Afegir a la llista de reproducció",
+          "available": "Llistes de reproducció disponibles",
+          "manage": "Gestionar les llistes de reproducció",
+          "noResults": "No hi ha cap resultat coincident amb aquest filtre",
+          "track": "{title}, de {artist}"
+        },
+        "label": {
+          "filter": "Filtrar"
+        },
+        "placeholder": {
+          "filterPlaylist": "Introduir el nom de la llista de reproducció"
+        },
+        "table": {
+          "edit": {
+            "header": {
+              "edit": "Editar",
+              "lastModification": "Última modificació",
+              "name": "Nom",
+              "tracks": "Pistes"
+            }
+          }
+        },
+        "warning": {
+          "duplicate": "{ 0 } ja és a { 1 }."
+        }
+      },
+      "TrackPlaylistIcon": {
+        "button": {
+          "add": "Afegir a la llista de reproducció …"
+        }
+      },
+      "Widget": {
+        "button": {
+          "create": "Crear una llista de reproducció",
+          "more": "Mostra més"
+        },
+        "placeholder": {
+          "noPlaylists": "Encara no s'ha creat cap llista de reproducció"
+        }
+      }
+    },
+    "radios": {
+      "Button": {
+        "startRadio": "Reprodueix la pista",
+        "stopRadio": "Parar la ràdio"
+      },
+      "Card": {
+        "button": {
+          "edit": "Editar"
+        }
+      }
+    },
+    "tags": {
+      "List": {
+        "button": {
+          "more": "Mostra una etiqueta extra | Mostra { n } etiquetes extres"
+        }
+      }
+    },
+    "vui": {
+      "Pagination": {
+        "label": "Paginació",
+        "next": "Següent pas",
+        "previous": "Pas anterior"
+      }
+    }
+  },
+  "composables": {
+    "audio": {
+      "usePlayOptions": {
+        "addToQueueMessage": "{ n } pista ha estat afegida a la teva cua | { n } pistes han estat afegides a la teva cua"
+      }
+    },
+    "locale": {
+      "useSharedLabels": {
+        "fields": {
+          "contentCategory": {
+            "choices": {
+              "music": "Música",
+              "other": "Altres",
+              "podcast": "Podcast"
+            },
+            "label": "Categoria de contingut"
+          },
+          "importStatus": {
+            "choices": {
+              "draft": {
+                "help": "Aquesta pista s’ha carregat, però encara no s'ha programat per processar-la",
+                "label": "Esborrany"
+              },
+              "errored": {
+                "help": "No s'ha pogut processar aquesta pista, assegurat que estigui correctament etiquetada",
+                "label": "Per error"
+              },
+              "finished": {
+                "help": "Importat",
+                "label": "Acabat"
+              },
+              "pending": {
+                "help": "Aquesta pista s’ha carregat, però el servidor encara no l’ha processat",
+                "label": "Pendent"
+              },
+              "skipped": {
+                "help": "Aquesta pista ja hi és dins una de les teves biblioteques",
+                "label": "Omès"
+              }
+            },
+            "label": "Feu clic per mostrar més informació sobre el procés d'importació per a aquesta càrrega"
+          },
+          "privacyLevel": {
+            "choices": {
+              "instance": "Tothom d'aquesta instància",
+              "private": "Només jo",
+              "public": "Tothom, en totes les instàncies"
+            },
+            "help": "Determina el nivell de la visibilitat de la teva activitat",
+            "label": "Visualitzar l'activitat",
+            "shortChoices": {
+              "instance": "Instància",
+              "private": "Privat",
+              "public": "Tothom"
+            }
+          },
+          "reportType": {
+            "choices": {
+              "illegalContent": "Contingut il·legal",
+              "invalidMetadata": "Metadades invàlides",
+              "offensiveContent": "Contingut ofensiu",
+              "other": "Altres",
+              "takedownRequest": "Sol·licitud de canvis"
+            },
+            "label": "Categoria"
+          },
+          "summary": {
+            "label": "Bio"
+          }
+        },
+        "filters": {
+          "accessedDate": "Data d'accés",
+          "albumTitle": "Nom de l'àlbum",
+          "artistName": "Nom de l'artista",
+          "bitrate": "Taxa de bits",
+          "creationDate": "Data de creació",
+          "dateJoined": "Data d'inscripció",
+          "domain": "Domini",
+          "duration": "Durada",
+          "expirationDate": "Data de caducitat",
+          "firstSeen": "Data de descoberta",
+          "followers": "Seguidors",
+          "itemsCount": "Elements",
+          "lastActivity": "Última activitat",
+          "lastSeen": "Data de la darrera visita",
+          "modificationDate": "Data de modificació",
+          "name": "Nom",
+          "receivedMessages": "Missatges rebuts",
+          "releaseDate": "Data de publicació",
+          "size": "Mida",
+          "trackTitle": "Nom de la pista",
+          "uploads": "Pujades",
+          "username": "Nom d'usuari",
+          "users": "Usuaris"
+        },
+        "scopes": {
+          "edits": {
+            "description": "Accés deshabilitat",
+            "label": "Modificacions"
+          },
+          "favorites": {
+            "label": "Preferides"
+          },
+          "filters": {
+            "description": "Accés als filtres de contingut",
+            "label": "Filtres de continguts"
+          },
+          "follows": {
+            "description": "Accés als seguidors",
+            "label": "Seguidors"
+          },
+          "libraries": {
+            "description": "Accés als arxius d'àudio, biblioteques, artistes, àlbums i cançons",
+            "label": "Biblioteques i càrregues"
+          },
+          "listenings": {
+            "description": "Accés a l'historial de reproduccions",
+            "label": "Audicions"
+          },
+          "notifications": {
+            "description": "Accés a les notificacions",
+            "label": "Notificacions"
+          },
+          "playlists": {
+            "description": "Accés a la llista de reproducció",
+            "label": "Llistes de reproducció"
+          },
+          "profile": {
+            "description": "Accés al correu, nom d'usuari i informació del perfil",
+            "label": "Perfil"
+          },
+          "radios": {
+            "description": "Accés a les ràdios",
+            "label": "Ràdios"
+          },
+          "reports": {
+            "description": "Accés a les ràdios",
+            "label": "Informes"
+          },
+          "security": {
+            "label": "Seguretat"
+          }
+        }
+      }
+    },
+    "moderation": {
+      "useEditConfigs": {
+        "album": {
+          "releaseDate": "Data de publicació",
+          "title": "Títol"
+        },
+        "artist": {
+          "name": "Nom"
+        },
+        "cover": {
+          "label": "Caràtula"
+        },
+        "description": {
+          "label": "Descripció"
+        },
+        "tags": {
+          "label": "Etiquetes"
+        },
+        "track": {
+          "copyright": "Drets d'autor",
+          "license": "Llicència",
+          "position": "Posició",
+          "title": "Títol"
+        }
+      },
+      "useReport": {
+        "account": {
+          "label": "Denunciar {'@'}{username}",
+          "typeLabel": "Compte"
+        },
+        "album": {
+          "label": "Informar sobre aquest àlbum …",
+          "typeLabel": "Àlbum"
+        },
+        "artist": {
+          "label": "Informar sobre aquest artista…",
+          "typeLabel": "Artista",
+          "unknownLabel": "Artista desconegut"
+        },
+        "channel": {
+          "label": "Informar sobre aquest canal…",
+          "typeLabel": "Canal"
+        },
+        "library": {
+          "label": "Informar sobre aquesta biblioteca …",
+          "typeLabel": "Biblioteca"
+        },
+        "playlist": {
+          "label": "Informar sobre aquesta llista de reproducció …",
+          "typeLabel": "Llista de reproducció"
+        },
+        "track": {
+          "label": "Informe sobre aquesta cançó …",
+          "typeLabel": "Pista"
+        }
+      },
+      "useReportConfigs": {
+        "account": {
+          "label": "Compte",
+          "summary": "Bio"
+        },
+        "album": {
+          "label": "Àlbum",
+          "releaseDate": "Data de publicació",
+          "title": "Títol"
+        },
+        "artist": {
+          "label": "Artista"
+        },
+        "channel": {
+          "label": "Canal"
+        },
+        "creationDate": {
+          "label": "Data de creació"
+        },
+        "library": {
+          "description": "Descripció",
+          "label": "Biblioteca"
+        },
+        "musicbrainzId": {
+          "label": "ID MusicBrainz"
+        },
+        "name": {
+          "label": "Nom"
+        },
+        "playlist": {
+          "label": "Llista de reproducció"
+        },
+        "tags": {
+          "label": "Eitquetes"
+        },
+        "track": {
+          "copyright": "Drets d'autor",
+          "label": "Pista",
+          "license": "Llicència",
+          "position": "Posició",
+          "title": "Títol"
+        },
+        "visibility": {
+          "label": "Visibilitat"
+        }
+      }
+    },
+    "useErrorHandler": {
+      "errorReportTitle": "S'ha produit un error inesperat.",
+      "unexpectedError": "S'ha produit un error inesperat."
+    },
+    "useThemeList": {
+      "darkTheme": "Fosc",
+      "lightTheme": "Clar"
+    }
+  },
+  "init": {
+    "axios": {
+      "rateLimitDelay": "Heu enviat massa sol·licituds i heu estat limitades, torneu-ho a provar en {retard}",
+      "rateLimitLater": "Heu enviat massa peticions i heu estat limitats. Torneu-ho a provar més endavant"
+    },
+    "sentry": {
+      "allow": "Permetre",
+      "deny": "Denegar"
+    },
+    "serviceWorker": {
+      "actions": {
+        "later": "Més tard",
+        "update": "Actualitzar"
+      },
+      "newAppVersion": "Una nova versió de l'aplicació està disponible."
+    }
+  },
+  "views": {
+    "Notifications": {
+      "button": {
+        "read": "Marca-ho tot com a llegit",
+        "submit": "Entesos!"
+      },
+      "empty": {
+        "notifications": "No hi ha notificacions."
+      },
+      "header": {
+        "funkwhaleSupport": "T'agrada Funkwhale?",
+        "instanceSupport": "Dóna suport a aquest pod de Funkwhale",
+        "messages": "Els vostres",
+        "notifications": "Les vostres notificacions"
+      },
+      "label": {
+        "reminder": "Recordeu-me a:",
+        "showRead": "Mostra les modificacions llegides"
+      },
+      "link": {
+        "donate": "Donar",
+        "help": "Descobreix altres maneres d'ajudar"
+      },
+      "loading": {
+        "notifications": "Carregant les notificacions …"
+      },
+      "message": {
+        "funkwhaleSupport": "Ens hem adonat que heu estat aquí durant un temps. Si Funkwhale us és útil, podríeu ajudar-nos per millorar-lo!"
+      },
+      "option": {
+        "delay": {
+          "30": "30 dies",
+          "60": "60 dies",
+          "90": "90 dies",
+          "never": "Mai"
+        }
+      },
+      "title": "Notificacions"
+    },
+    "Search": {
+      "button": {
+        "submit": "Enviar l'informe"
+      },
+      "header": {
+        "remote": "Busca una objecte remot",
+        "rss": "Subscriu-te al flux RSS d'un podcast",
+        "search": "Buscar"
+      },
+      "label": {
+        "albums": "Àlbums",
+        "artists": "Artistes",
+        "playlists": "Llistes de reproducció",
+        "podcasts": "Podcasts",
+        "radios": "Ràdios",
+        "series": "Sèries",
+        "tags": "Etiquetes",
+        "tracks": "Pistes"
+      }
+    },
+    "admin": {
+      "ChannelDetail": {
+        "button": {
+          "delete": "Suprimir",
+          "openRemote": "Obrir el perfil remot",
+          "refresh": "Actualitza des del servidor remot"
+        },
+        "header": {
+          "activity": "Activitat",
+          "audioContent": "Contingut d'àudio",
+          "channelData": "Dades del canal"
+        },
+        "label": {
+          "local": "Local"
+        },
+        "link": {
+          "django": "Visualitza amb l'administrador Django's",
+          "localProfile": "Obrir el perfil local"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "El canal serà suprimit, així com les càrregues associades, les pistes i els àlbums. Aquesta acció és irreversible."
+            },
+            "header": "Suprimir aquest canal?"
+          }
+        },
+        "table": {
+          "activity": {
+            "edits": "Modificacions",
+            "favorited": "Pistes preferides",
+            "firstSeen": "Vist per primera vegada",
+            "linkedReports": "Informes relacionats",
+            "listenings": "Audicions",
+            "playlists": "Llistes de reproducció"
+          },
+          "audioContent": {
+            "albums": "Àlbums",
+            "cachedSize": "Mida de la memòria cau",
+            "totalSize": "Tamany total",
+            "tracks": "Pistes",
+            "uploads": "Pujades"
+          },
+          "channelData": {
+            "account": "Compte",
+            "category": "Categoria",
+            "description": "Descripció",
+            "domain": "Domini",
+            "name": "Nom",
+            "rss": "Flux RSS",
+            "url": "URL"
+          }
+        },
+        "warning": {
+          "stats": "Les estadístiques es calculen a partir de l’activitat i el contingut coneguts de la vostra instància i no reflecteixen l’activitat general d’aquest objecte"
+        }
+      },
+      "CommonList": {
+        "title": {
+          "accounts": "Comptes",
+          "albums": "Àlbums",
+          "artists": "Artistes",
+          "channels": "Canals",
+          "invitations": "Invitacions",
+          "libraries": "Biblioteques",
+          "tags": "Eitquetes",
+          "tracks": "Pistes",
+          "uploads": "Pujades",
+          "users": "Usuaris"
+        }
+      },
+      "Settings": {
+        "header": {
+          "channels": "Canals",
+          "federation": "Federació",
+          "instanceInfo": "Informació d'aquesta instància",
+          "moderation": "Moderació",
+          "music": "Música",
+          "playlists": "Llistes de reproducció",
+          "sections": "Seccions",
+          "security": "Seguretat",
+          "settings": "Paràmetres de la instància",
+          "signups": "Inscripcions",
+          "stats": "Estadístiques",
+          "subsonic": "Subsonic",
+          "ui": "Interfície d'usuari"
+        }
+      },
+      "library": {
+        "AlbumDetail": {
+          "button": {
+            "delete": "Suprimir",
+            "edit": "Editar",
+            "remoteRefresh": "Actualitza des del servidor remot"
+          },
+          "header": {
+            "activity": "Activitat",
+            "albumData": "Dades de l'àlbum",
+            "audioContent": "Contingut d'àudio",
+            "local": "Local"
+          },
+          "link": {
+            "artist": "Artista",
+            "django": "Visualitza amb l'administrador Django's",
+            "domain": "Domini",
+            "edits": "Modificacions",
+            "libraries": "Biblioteques",
+            "localProfile": "Obrir el perfil local",
+            "musicbrainz": "Obrir dins MusicBrainz",
+            "remoteProfile": "Obrir el perfil remot",
+            "reports": "Informes relacionats",
+            "tracks": "Pistes",
+            "uploads": "Pujades"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "L’àlbum s’eliminarà, així com les càrregues associades, les pistes, els preferits i l’historial d’escolta. Aquesta acció és irreversible."
+              },
+              "header": "Suprimir aquest àlbum?"
+            }
+          },
+          "table": {
+            "activity": {
+              "favorited": "Pistes preferides",
+              "firstSeen": "Vist per primera vegada",
+              "listenings": "Audicions",
+              "playlists": "Llistes de reproducció"
+            },
+            "album": {
+              "description": "Descripció",
+              "title": "Títol"
+            },
+            "audioContent": {
+              "cachedSize": "Mida de la memòria cau",
+              "totalSize": "Tamany total"
+            }
+          },
+          "warning": {
+            "stats": "Les estadístiques es calculen a partir de l’activitat i el contingut coneguts de la vostra instància i no reflecteixen l’activitat general d’aquest objecte"
+          }
+        },
+        "ArtistDetail": {
+          "button": {
+            "delete": "Suprimir",
+            "edit": "Editar",
+            "remoteRefresh": "Actualitza des del servidor remot"
+          },
+          "header": {
+            "activity": "Activitat",
+            "artistData": "Dades de l'artista",
+            "audioContent": "Contingut d'àudio",
+            "local": "Local"
+          },
+          "link": {
+            "albums": "Àlbums",
+            "category": "Categoria",
+            "django": "Visualitza amb l'administrador Django's",
+            "domain": "Domini",
+            "edits": "Modificacions",
+            "libraries": "Biblioteques",
+            "localProfile": "Obrir el perfil local",
+            "musicbrainz": "Obrir dins MusicBrainz",
+            "remoteProfile": "Obrir el perfil remot",
+            "reports": "Informes relacionats",
+            "tracks": "Pistes",
+            "uploads": "Pujades"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "L’artista s’eliminarà, així com les càrregues associades, les pistes, els àlbums, els preferits i l’historial d’escolta. Aquesta acció és irreversible."
+              },
+              "header": "Suprimir aquest artista?"
+            }
+          },
+          "table": {
+            "activity": {
+              "favorited": "Pistes preferides",
+              "firstSeen": "Vist per primera vegada",
+              "listenings": "Audicions",
+              "playlists": "Llistes de reproducció"
+            },
+            "artist": {
+              "description": "Descripció",
+              "name": "Nom"
+            },
+            "audioContent": {
+              "cachedSize": "Mida de la memòria cau",
+              "totalSize": "Tamany total"
+            }
+          },
+          "warning": {
+            "stats": "Les estadístiques es calculen a partir de l’activitat i el contingut coneguts de la vostra instància i no reflecteixen l’activitat general d’aquest objecte"
+          }
+        },
+        "Base": {
+          "link": {
+            "albums": "Àlbums",
+            "artists": "Artistes",
+            "channels": "Canals",
+            "edits": "Modificacions",
+            "libraries": "Biblioteques",
+            "tags": "Eitquetes",
+            "tracks": "Pistes",
+            "uploads": "Pujades"
+          },
+          "menu": {
+            "secondary": "Menú secundari"
+          },
+          "title": "Gestionar la biblioteca"
+        },
+        "EditsList": {
+          "header": {
+            "edits": "Modificacions de la biblioteca"
+          },
+          "title": "Modificacions"
+        },
+        "LibraryDetail": {
+          "button": {
+            "delete": "Suprimir"
+          },
+          "header": {
+            "activity": "Activitat",
+            "audioContent": "Contingut d'àudio",
+            "libraryData": "Dades de la biblioteca",
+            "local": "Local"
+          },
+          "link": {
+            "account": "Compte",
+            "albums": "Àlbums",
+            "artists": "Artistes",
+            "django": "Visualitza amb l'administrador Django's",
+            "domain": "Domini",
+            "remoteProfile": "Obrir el perfil remot",
+            "reports": "Informes relacionats",
+            "tracks": "Pistes",
+            "uploads": "Pujades",
+            "visibility": "Visibilitat"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "La biblioteca serà suprimida, així com les càrregues associades, i els seguidors. Aquesta acció és irreversible."
+              },
+              "header": "Suprimir la biblioteca?"
+            }
+          },
+          "table": {
+            "activity": {
+              "firstSeen": "Vist per primera vegada",
+              "followers": "Seguidors"
+            },
+            "audioContent": {
+              "cachedSize": "Mida de la memòria cau",
+              "totalSize": "Tamany total"
+            },
+            "library": {
+              "description": "Descripció",
+              "name": "Nom"
+            }
+          },
+          "warning": {
+            "stats": "Les estadístiques es calculen a partir de l’activitat i el contingut coneguts de la vostra instància i no reflecteixen l’activitat general d’aquest objecte"
+          }
+        },
+        "TagDetail": {
+          "button": {
+            "delete": "Suprimir"
+          },
+          "header": {
+            "activity": "Activitat",
+            "audioContent": "Contingut d'àudio",
+            "tagData": "Dades de l'etiqueta"
+          },
+          "link": {
+            "albums": "Àlbums",
+            "artists": "Artistes",
+            "django": "Visualitza amb l'administrador Django's",
+            "localProfile": "Obrir el perfil local",
+            "tracks": "Pistes"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "L'etiqueta es suprimirà i es desvincularà de qualsevol entitat existent. Aquesta acció és irreversible."
+              },
+              "header": "Suprimir aquesta etiqueta?"
+            }
+          },
+          "table": {
+            "activity": {
+              "firstSeen": "Vist per primera vegada"
+            },
+            "tag": {
+              "name": "Nom"
+            }
+          }
+        },
+        "TrackDetail": {
+          "button": {
+            "delete": "Suprimir",
+            "edit": "Editar",
+            "remoteRefresh": "Actualitza des del servidor remot"
+          },
+          "header": {
+            "activity": "Activitat",
+            "local": "Local",
+            "trackData": "Dades de la pista"
+          },
+          "link": {
+            "album": "Àlbum",
+            "albumArtist": "Àlbum d'aquest artista",
+            "artist": "Artista",
+            "django": "Visualitza amb l'administrador Django's",
+            "domain": "Domini",
+            "edits": "Modificacions",
+            "libraries": "Biblioteques",
+            "localProfile": "Obrir el perfil local",
+            "musicbrainz": "Obrir dins MusicBrainz",
+            "remoteProfile": "Obrir el perfil remot",
+            "reports": "Informes relacionats",
+            "uploads": "Pujades"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "La pista s’eliminarà, així com les càrregues associades, els preferits i l’historial d’escolta. Aquesta acció és irreversible."
+              },
+              "header": "Suprimir aquesta pista?"
+            }
+          },
+          "table": {
+            "activity": {
+              "favorited": "Pistes preferides",
+              "firstSeen": "Vist per primera vegada",
+              "listenings": "Audicions",
+              "playlists": "Llistes de reproducció"
+            },
+            "track": {
+              "copyright": "Drets d'autor",
+              "description": "Descripció",
+              "discNumber": "Número de disc",
+              "license": "Llicència",
+              "position": "Posició",
+              "title": "Títol"
+            },
+            "trackData": {
+              "cachedSize": "Mida de la memòria cau",
+              "totalSize": "Tamany total"
+            }
+          },
+          "warning": {
+            "stats": "Les estadístiques es calculen a partir de l’activitat i el contingut coneguts de la vostra instància i no reflecteixen l’activitat general d’aquest objecte"
+          }
+        },
+        "UploadDetail": {
+          "button": {
+            "delete": "Suprimir",
+            "download": "Descarregar"
+          },
+          "header": {
+            "activity": "Activitat",
+            "audioContent": "Contingut d'àudio",
+            "local": "Local",
+            "uploadData": "Data de pujada"
+          },
+          "link": {
+            "account": "Compte",
+            "django": "Visualitza amb l'administrador Django's",
+            "domain": "Domini",
+            "importStatus": "Estat de la importació",
+            "library": "Biblioteca",
+            "remoteProfile": "Obrir el perfil remot",
+            "type": "Tipus",
+            "visibility": "Visibilitat"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "La càrrega s'eliminarà. Aquesta acció és irreversible."
+              },
+              "header": "Suprimir aquest enviament?"
+            }
+          },
+          "notApplicable": "No disponible",
+          "table": {
+            "activity": {
+              "accessedDate": "Data d'accés",
+              "firstSeen": "Vist per primera vegada"
+            },
+            "audioContent": {
+              "bitrate": {
+                "label": "Taxa de bits"
+              },
+              "cachedSize": "Mida de la memòria cau",
+              "duration": "Durada",
+              "size": "Mida",
+              "track": "Pista"
+            },
+            "upload": {
+              "name": "Nom"
+            }
+          }
+        }
+      },
+      "moderation": {
+        "AccountsDetail": {
+          "button": {
+            "addPolicy": "Afegir una nova política de moderació"
+          },
+          "description": {
+            "policy": "Les regles de moderació t'ajudaran a controlar com la vostra instància interactua amb un domini o un compte determinat."
+          },
+          "header": {
+            "accountData": "Dades del compte",
+            "activePolicy": "Aquest domini està subjecta a normes de moderació específiques",
+            "activity": "Activitat",
+            "audioContent": "Contingut d'àudio",
+            "localAccount": "Compte local",
+            "noPolicy": "No teniu cap norma per a aquest compte."
+          },
+          "link": {
+            "albums": "Àlbums",
+            "artists": "Artistes",
+            "channels": "Canals",
+            "django": "Visualitza amb l'administrador Django's",
+            "domain": "Domini",
+            "libraries": "Biblioteques",
+            "linkedReports": "Informes relacionats",
+            "openProfile": "Obrir el perfil",
+            "remoteProfile": "Obrir el perfil remot",
+            "requests": "Peticions",
+            "tracks": "Pistes",
+            "uploads": "Pujades"
+          },
+          "notApplicable": "No disponible",
+          "option": {
+            "permission": {
+              "library": "Biblioteca",
+              "moderation": "Moderació",
+              "settings": "Paràmetres"
+            }
+          },
+          "table": {
+            "accountData": {
+              "displayName": "Mostra el nom",
+              "email": "Adreça de correu electrònic",
+              "lastActivity": "Última activitat",
+              "lastChecked": "Última comprovació",
+              "loginStatus": {
+                "disabled": "Desactivat",
+                "enabled": "Activat",
+                "label": "Estat de la sessió"
+              },
+              "permissions": "Permisos",
+              "signupDate": "Data d'inscripció",
+              "userType": "Tipus",
+              "username": "Nom d'usuari"
+            },
+            "activity": {
+              "emittedFollows": "Segueix la biblioteca emesa",
+              "emittedMessages": "Missatges emesos",
+              "firstSeen": "Vist per primera vegada",
+              "receivedFollows": "Seguidors de la biblioteca rebuts"
+            },
+            "audioContent": {
+              "cachedSize": "Mida de la memòria cau",
+              "megabyte": "MB",
+              "totalSize": "Tamany total",
+              "uploadQuota": "Quota de pujada"
+            }
+          },
+          "tooltip": {
+            "uploadQuota": "Determineu la quantitat de contingut que l'usuari pot carregar. Deixeu-ho en blanc per utilitzar el valor per defecte de la instància."
+          },
+          "warning": {
+            "stats": "Les estadístiques es calculen a partir de l’activitat i el contingut coneguts de la vostra instància i no reflecteixen l’activitat general d’aquest objecte"
+          }
+        },
+        "Base": {
+          "link": {
+            "accounts": "Comptes",
+            "domains": "Dominis",
+            "reports": "Informes",
+            "userRequests": "Peticions de l'usuari"
+          },
+          "menu": {
+            "secondary": "Menú secundari"
+          },
+          "title": "Moderació"
+        },
+        "DomainsDetail": {
+          "button": {
+            "addPolicy": "Afegir una nova política de moderació",
+            "addToAllowList": "Afegir a la llista de permesos",
+            "refreshNodeInfo": "Actualitza la informació del node",
+            "removeFromAllowList": "Eliminar de la llista d'autoritzacions"
+          },
+          "description": {
+            "policy": "Les regles de moderació t'ajudaran a controlar com la vostra instància interactua amb un domini o un compte determinat."
+          },
+          "header": {
+            "activePolicy": "Aquest domini està subjecta a normes de moderació específiques",
+            "activity": "Activitat",
+            "audioContent": "Contingut d'àudio",
+            "instanceData": "Dades de la instància",
+            "noPolicy": "No teniu cap norma per a aquest domini."
+          },
+          "link": {
+            "albums": "Àlbums",
+            "artists": "Artistes",
+            "channels": "Canals",
+            "django": "Visualitza amb l'administrador Django's",
+            "knownAccounts": "Comptes coneguts",
+            "libraries": "Biblioteques",
+            "tracks": "Pistes",
+            "uploads": "Pujades",
+            "website": "Obrir la web"
+          },
+          "notApplicable": "No disponible",
+          "table": {
+            "activity": {
+              "emittedFollows": "Segueix la biblioteca emesa",
+              "emittedMessages": "Missatges emesos",
+              "firstSeen": "Vist per primera vegada",
+              "receivedFollows": "Seguidors de la biblioteca rebuts"
+            },
+            "audioContent": {
+              "cachedSize": "Mida de la memòria cau",
+              "totalSize": "Tamany total"
+            },
+            "instanceData": {
+              "domainName": "Nom",
+              "inAllowList": {
+                "false": "No",
+                "label": "Present a la llista de permisos",
+                "true": "Sí"
+              },
+              "lastChecked": "Última comprovació",
+              "nodeInfoStatus": {
+                "label": "Estat",
+                "value": "Error obtenint informació del node"
+              },
+              "software": {
+                "label": "Programari"
+              },
+              "totalUsers": "Usuaris totals"
+            }
+          },
+          "warning": {
+            "stats": "Les estadístiques es calculen a partir de l’activitat i el contingut coneguts de la vostra instància i no reflecteixen l’activitat general d’aquest objecte"
+          }
+        },
+        "DomainsList": {
+          "button": {
+            "add": "Afegir"
+          },
+          "header": {
+            "domains": "Dominis",
+            "failure": "Error creant el domini"
+          },
+          "label": {
+            "addDomain": "Afegir un domini",
+            "addToAllowList": "Afegir a la llista de permesos"
+          },
+          "title": "Dominis"
+        },
+        "ReportsList": {
+          "header": {
+            "reports": "Informes"
+          },
+          "label": {
+            "search": "Buscar",
+            "status": "Estat"
+          },
+          "option": {
+            "status": {
+              "all": "Tot",
+              "resolved": "Resolt",
+              "unresolved": "No resolt"
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Ascendent",
+              "descending": "Descendent",
+              "label": "Ordre"
+            },
+            "label": "Ordenar"
+          },
+          "placeholder": {
+            "search": "Cerca per compte, resum, domini …"
+          },
+          "title": "Informes"
+        },
+        "RequestsList": {
+          "header": {
+            "userRequests": "Peticions de l'usuari"
+          },
+          "label": {
+            "search": "Buscar",
+            "status": "Estat"
+          },
+          "option": {
+            "status": {
+              "all": "Tot",
+              "approved": "Aprovat",
+              "pending": "Pendent",
+              "refused": "Rebutjat"
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Ascendent",
+              "descending": "Descendent",
+              "label": "Ordre"
+            },
+            "label": "Ordenar"
+          },
+          "placeholder": {
+            "search": "Cercar per nom d'usuari…"
+          },
+          "title": "Peticions de l'usuari"
+        }
+      },
+      "users": {
+        "Base": {
+          "link": {
+            "invitations": "Invitacions",
+            "users": "Usuaris"
+          },
+          "menu": {
+            "secondary": "Menú secundari"
+          },
+          "title": "Gestionar els usuaris"
+        }
+      }
+    },
+    "auth": {
+      "Callback": {
+        "header": {
+          "loggingIn": "Carregant les biblioteques …"
+        }
+      },
+      "EmailConfirm": {
+        "header": {
+          "failure": "No hem pogut confirmar la teva adreça de correu electrònic",
+          "success": "Correu electrònic confirmat"
+        },
+        "label": {
+          "confirmationCode": "Codi de confirmació"
+        },
+        "link": {
+          "back": "Torna a la pàgina d'inici de sessió",
+          "login": "Iniciar la sessió"
+        },
+        "message": {
+          "success": "Ara podeu utilitzar el servei sense limitacions."
+        },
+        "title": "Confirma el teu correu electrònic"
+      },
+      "Login": {
+        "header": {
+          "login": "Iniciar sessió amb el teu compte de Funkwhale"
+        },
+        "title": "Iniciar sessió"
+      },
+      "PasswordReset": {
+        "button": {
+          "requestReset": "Sol·licitar el restabliment de la contrasenya"
+        },
+        "header": {
+          "failure": "Error demanant el restabliment de la contrasenya",
+          "reset": "Restabliu la contrasenya"
+        },
+        "help": {
+          "form": "Utilitza aquest formulari per sol·licitar el restabliment de la contrasenya. Enviarem un correu electrònic a l’adreça indicada amb instruccions per restablir la teva contrasenya."
+        },
+        "label": {
+          "email": "Correu del compte"
+        },
+        "link": {
+          "back": "Tornar a la pàgina de connexió"
+        },
+        "placeholder": {
+          "email": "Introdueix el correu electrònic associat al vostre compte"
+        },
+        "title": "Restabliu la contrasenya"
+      },
+      "PasswordResetConfirm": {
+        "button": {
+          "update": "Actualitzar la teva contrasenya"
+        },
+        "header": {
+          "failure": "Error al canviar de contrasenya",
+          "success": "Contrasenya actualitzada correctament"
+        },
+        "label": {
+          "newPassword": "Nova contrasenya"
+        },
+        "link": {
+          "back": "Tornar a la pàgina de connexió",
+          "login": "Iniciar la sessió"
+        },
+        "message": {
+          "requestSent": "Si l'adreça de correu electrònic proporcionada al pas anterior és vàlida i està vinculada a un compte d'usuari, hauríes de rebre un correu electrònic amb les instruccions de restabliment durant els propers minuts.",
+          "success": "La vostra contrasenya s'ha actualitzat correctament."
+        },
+        "title": "Canviar la teva contrasenya"
+      },
+      "Plugins": {
+        "title": "Gestionar les llistes de reproducció"
+      },
+      "ProfileActivity": {
+        "header": {
+          "playlists": "Llistes de reproducció",
+          "recentlyFavorited": "Afegit a preferits recentment",
+          "recentlyListened": "Escoltats recentment"
+        }
+      },
+      "ProfileBase": {
+        "label": {
+          "self": "Ets tu!"
+        },
+        "link": {
+          "activity": "Activitat",
+          "domainView": "replicat des de {domain}",
+          "moderation": "Obrir dins la interfície de moderació",
+          "overview": "Visió general"
+        },
+        "title": "Perfil de { username }"
+      },
+      "ProfileOverview": {
+        "button": {
+          "cancel": "Cancelar",
+          "createChannel": "Crear un canal",
+          "next": "Següent pas",
+          "previous": "Pas anterior"
+        },
+        "header": {
+          "channels": "Canals",
+          "libraries": "Biblioteques de l'usuari",
+          "sharedLibraries": "Aquest usuari ha compartit les biblioteques que segueix."
+        },
+        "link": {
+          "addNew": "Afegeix nou"
+        },
+        "modal": {
+          "createChannel": {
+            "artist": {
+              "header": "Canal de l'artista"
+            },
+            "header": "Crear un canal",
+            "podcast": {
+              "header": "Canal de podcast"
+            }
+          }
+        }
+      },
+      "Signup": {
+        "header": {
+          "createAccount": "Crear un compte a Funkwhale"
+        },
+        "title": "Inscripció"
+      }
+    },
+    "channels": {
+      "DetailBase": {
+        "button": {
+          "cancel": "Cancelar",
+          "confirm": "Suprimir",
+          "delete": "Suprimir …",
+          "edit": "Editar …",
+          "embed": "Incrustar",
+          "play": "Reproduir",
+          "updateChannel": "Actualitza el canal",
+          "upload": "Carregar"
+        },
+        "header": {
+          "artistChannel": "Canal de l'artista",
+          "podcastChannel": "Canal de podcast"
+        },
+        "link": {
+          "channelEpisodes": "Episodis",
+          "channelOverview": "Visió general",
+          "channelTracks": "Pistes",
+          "domainView": "replicat des de {domain}",
+          "mirrored": "replicat des de {domain}",
+          "moderation": "Obrir dins la interfície de moderació"
+        },
+        "meta": {
+          "episodes": "{ n } episodi | { n } episodis",
+          "listenings": "{ n } pista | { n } pistes",
+          "subscribers": "{ n } subscriptor | { n } subscriptors",
+          "tracks": "{ n } pista | { n } pistes"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "El canal serà suprimit, així com els fitxers i les dades associades. Aquesta acció és irreversible."
+            },
+            "header": "Suprimir aquest canal?"
+          },
+          "embed": {
+            "header": "Incrusta l'obra d'aquest artista a la teva pàgina web"
+          },
+          "subscribe": {
+            "fediverse": {
+              "content": {
+                "help": "Si utilitzeu Mastodon o altres aplicacions de la fediverse, també us podeu subscriure a aquest compte:"
+              },
+              "header": "Subscriu-te a la Fediverse"
+            },
+            "funkwhale": {
+              "header": "Subscriu-te a Funkwhale"
+            },
+            "header": "Subscriure-te a aquest canal",
+            "rss": {
+              "content": {
+                "help": "Copia i enganxa la URL següent en la teva aplicació de podcasts preferida:"
+              },
+              "header": "Subscriure-te via RSS"
+            }
+          }
+        },
+        "title": "Canal"
+      },
+      "DetailOverview": {
+        "header": {
+          "albums": "Àlbums",
+          "latestEpisodes": "Darrers episodis",
+          "latestTracks": "Darreres pistes",
+          "series": "Sèries",
+          "uploadsFailure": "No s'han pogut publicar algunes de les càrregues",
+          "uploadsProcessing": "S'estant processant les pujades",
+          "uploadsSuccess": "S'han publicat les pujades correctament"
+        },
+        "link": {
+          "addAlbum": "Afegeix nou",
+          "erroredUploads": "Mostra les càrregues errònies",
+          "skippedUploads": "Visualitza les càrregues que s'han saltat"
+        },
+        "message": {
+          "processing": "Funkwhale està processant les pujades i es publicaran ben aviat."
+        },
+        "meta": {
+          "progress": "Càrregues processades:"
+        }
+      },
+      "SubscriptionsList": {
+        "button": {
+          "cancel": "Cancelar",
+          "subscribe": "Subscriu-te"
+        },
+        "link": {
+          "addNew": "Afegeix nou"
+        },
+        "modal": {
+          "subscription": {
+            "header": "Subscripció"
+          }
+        },
+        "placeholder": {
+          "search": "Filtrar per nom…"
+        },
+        "title": "Canals subscrits"
+      }
+    },
+    "content": {
+      "Base": {
+        "link": {
+          "libraries": "Biblioteques",
+          "tracks": "Pistes"
+        },
+        "menu": {
+          "secondary": "Menú secundari"
+        },
+        "title": "Afegir contingut"
+      },
+      "Home": {
+        "button": {
+          "start": "Començar"
+        },
+        "description": {
+          "channel": {
+            "1": "Si ets músic o fas podcasts, els canals estan dissenyats per a tu!",
+            "2": "Comparteix el teu treball públicament i guanya subscriptors a Funkwhale, a la Fediverse o a qualsevol aplicació per a podcasts."
+          },
+          "follow": "Pots seguir biblioteques d'altres usuaris per tenir accés a nova música. Les biblioteques públiques poden seguir-se immediatament, però seguir les biblioteques privades requereix l'aprovació del seu propietari.",
+          "upload": "Carrega la teva biblioteca de música personal a Funkwhale per poder gaudir-ne des de qualsevol lloc i compartir-la amb amics i família."
+        },
+        "header": {
+          "channel": "Publiqueu el vostre treball en un canal",
+          "follow": "Seguir les biblioteques remotes",
+          "upload": "Carrega contingut de tercers a una biblioteca"
+        },
+        "help": {
+          "uploadQuota": "Aquesta instància ofereix fins a {quota} d'emmagatzematge per a cada usuari."
+        },
+        "title": "Agregar i gestionar contingut"
+      },
+      "libraries": {
+        "Card": {
+          "button": {
+            "upload": "Carregar"
+          },
+          "label": {
+            "size": "Mida total dels fitxers en aquesta biblioteca"
+          },
+          "link": {
+            "details": "Modificacions de la biblioteca"
+          },
+          "meta": {
+            "tracks": "{ n } pista | { n } pistes"
+          }
+        },
+        "FilesTable": {
+          "action": {
+            "delete": "Suprimir",
+            "restartImport": "Rellançar la importació"
+          },
+          "button": {
+            "showStatus": "Feu clic per mostrar més informació sobre el procés d'importació per a aquesta càrrega"
+          },
+          "empty": {
+            "noTracks": "Encara no s'ha afegit cap pista a aquesta biblioteca"
+          },
+          "label": {
+            "importStatus": "Estat de la importació",
+            "search": "Buscar"
+          },
+          "notApplicable": "No disponible",
+          "option": {
+            "status": {
+              "all": "Tot",
+              "draft": "Esborrany",
+              "failed": "Fallat",
+              "finished": "Acabat",
+              "pending": "Pendent",
+              "skipped": "Omès"
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "Ascendent",
+              "descending": "Descendent",
+              "label": "Direcció d'ordre"
+            },
+            "label": "Ordenar"
+          },
+          "pagination": {
+            "results": "Mostra els resultats { start }-{ end } de { total }"
+          },
+          "placeholder": {
+            "search": "Cercar per títol, artista, àlbum …"
+          },
+          "table": {
+            "file": {
+              "header": {
+                "album": "Àlbum",
+                "artist": "Artista",
+                "duration": "Durada",
+                "importStatus": "Estat de la importació",
+                "size": "Mida",
+                "title": "Títol",
+                "uploadDate": "Data de pujada"
+              }
+            }
+          }
+        },
+        "Form": {
+          "button": {
+            "confirm": "Suprimir la llibreria",
+            "create": "Crear una biblioteca",
+            "delete": "Suprimir",
+            "update": "Actualitzar la biblioteca"
+          },
+          "description": {
+            "library": "Les biblioteques t'ajuden a organitzar i compartir la teva col·lecció de música.  Pots pujar-la a Funkwahale i compartir-la amb els teus amics i familiars.",
+            "visibility": "Pots compartir la teva biblioteca amb altres persones, independentment de la seva visibilitat."
+          },
+          "header": {
+            "failure": "Error"
+          },
+          "label": {
+            "description": "Descripció",
+            "name": "Nom",
+            "visibility": "Visibilitat"
+          },
+          "message": {
+            "libraryCreated": "Biblioteca creada",
+            "libraryDeleted": "Biblioteca suprimida",
+            "libraryUpdated": "Biblioteca actualitzada"
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": "La biblioteca i totes les seves pistes seran suprimides. Aquesta acció és irreversible."
+              },
+              "header": "Suprimir la biblioteca?"
+            }
+          },
+          "placeholder": {
+            "description": "Aquesta biblioteca conté la meva música personal, desitjo que t'agradi.",
+            "name": "La meva impressionant biblioteca"
+          }
+        },
+        "Home": {
+          "empty": {
+            "noLibrary": "Sembla que no tens biblioteca, és hora de crear-ne una."
+          },
+          "header": {
+            "libraries": "Les meves biblioteques"
+          },
+          "link": {
+            "createLibrary": "Crear una nova biblioteca"
+          },
+          "loading": {
+            "libraries": "Carregant les biblioteques …"
+          }
+        },
+        "Quota": {
+          "button": {
+            "purge": "Netejar"
+          },
+          "header": {
+            "currentUsage": "Ús actual"
+          },
+          "label": {
+            "currentUsage": "{ current } usats del { max } permesos",
+            "errored": "Arxius erronis",
+            "pending": "Fitxers pendents",
+            "skipped": "Arxius ignorats"
+          },
+          "link": {
+            "viewFiles": "Visualitza els fitxers"
+          },
+          "loading": {
+            "currentUsage": "Carregant dades d'utilització …"
+          },
+          "modal": {
+            "purgeErrored": {
+              "content": {
+                "description": "Elimina les pistes carregades que el servidor no ha pogut processar completament, es retornarà l’espai d’emmagatzematge corresponent.."
+              },
+              "header": "Suprimir els fitxers erronis?"
+            },
+            "purgePending": {
+              "content": {
+                "description": "Les pistes importades que encara no s’han processat completament pel servidor s’eliminaran completament. Es tornrà la quota corresponent."
+              },
+              "header": "Suprimir els fitxers pendents?"
+            },
+            "purgeSkipped": {
+              "content": {
+                "description": "Les pistes carregades però ignorades durant la importació per diversos motius s’eliminaran completament. Us retornarà l’espai d’emmagatzematge corresponent."
+              },
+              "header": "Suprimir els fitxers omesos?"
+            }
+          }
+        }
+      },
+      "remote": {
+        "Card": {
+          "button": {
+            "cancel": "Cancel·lar la petició de seguiment",
+            "follow": "Seguir",
+            "pending": "Petició de seguiment pendent d'aprovació",
+            "unfollow": "Deixar de seguir"
+          },
+          "error": {
+            "follow": "No s'ha pogut seguir la biblioteca remota: {error}",
+            "unfollow": "No s'ha pogut de deixar de seguir la biblioteca remota: {error}"
+          },
+          "label": {
+            "scanFailure": "Problema durant l'anàlisi",
+            "scanPartialSuccess": "Anàlisis amb errors",
+            "scanPending": "Anàlisi pendent",
+            "scanProgress": "Analitzant … ({ progress }%)",
+            "scanSuccess": "Anàlisis realitzat",
+            "sharingLink": "Compartir enllaç"
+          },
+          "link": {
+            "scan": "Analitzar ara",
+            "scanDetails": "Detalls"
+          },
+          "message": {
+            "scanLaunched": "Anàlisi iniciat",
+            "scanSkipped": "L’anàlisi s’ha omès (l’anàlisi anterior és massa recent)"
+          },
+          "meta": {
+            "failedTracks": "Pistes fallides:",
+            "lastUpdate": "Última actualització:",
+            "tracks": "{ n } pista | { n } pistes"
+          },
+          "modal": {
+            "unfollow": {
+              "content": {
+                "warning": "Si deixes de seguir aquesta biblioteca, perdràs l'accés al seu contingut."
+              },
+              "header": "Vols deixar de seguir aquesta biblioteca?"
+            }
+          },
+          "tooltip": {
+            "private": "Aquesta biblioteca és privada i es necessita l'aprovació del seu propietari per tal d'accedir al seu contingut",
+            "public": "Aquesta biblioteca és pública i pots accedir lliurement al seu contingut"
+          }
+        },
+        "Home": {
+          "button": {
+            "refresh": "Recarregar"
+          },
+          "description": {
+            "remoteLibraries": "Les biblioteques remotes són propietat d'altres usuaris de la xarxa. Pots accedir-hi sempre que siguin públiques hi tinguis accés."
+          },
+          "header": {
+            "knownLibraries": "Biblioteques conegudes",
+            "remoteLibraries": "Biblioteques remotes"
+          },
+          "loading": {
+            "remoteLibraries": "Carregant les biblioteques remotes …"
+          }
+        },
+        "ScanForm": {
+          "button": {
+            "submit": "Enviar l'informe"
+          },
+          "header": {
+            "failure": "Impossible recuperar la biblioteca remota"
+          },
+          "label": {
+            "search": "Busca una biblioteca remota"
+          },
+          "placeholder": {
+            "url": "Introduir la URL de la biblioteca"
+          }
+        }
+      }
+    },
+    "library": {
+      "DetailAlbums": {
+        "empty": {
+          "follow": "És possible que hagueu de seguir aquesta biblioteca per veure'n el contingut.",
+          "upload": "Aquesta biblioteca és buida, hauríeu de pujar-hi alguna cosa!"
+        }
+      },
+      "DetailOverview": {
+        "empty": {
+          "follow": "És possible que hagueu de seguir aquesta biblioteca per veure'n el contingut.",
+          "upload": "Aquesta biblioteca és buida, hauríeu de pujar-hi alguna cosa!"
+        }
+      },
+      "DetailTracks": {
+        "empty": {
+          "follow": "És possible que hagueu de seguir aquesta biblioteca per veure'n el contingut.",
+          "upload": "Aquesta biblioteca és buida, hauríeu de pujar-hi alguna cosa!"
+        }
+      },
+      "Edit": {
+        "button": {
+          "accept": "Acceptar",
+          "reject": "Rebutjar"
+        },
+        "empty": {
+          "noFollowers": "Ningú segueix aquesta biblioteca"
+        },
+        "header": {
+          "followers": "Seguidors",
+          "libraryContents": "Continguts de la biblioteca"
+        },
+        "loading": {
+          "followers": "Carregant els seguidors …"
+        },
+        "table": {
+          "action": {
+            "header": {
+              "action": "Acció",
+              "date": "Data",
+              "status": "Estat",
+              "user": "Usuari"
+            },
+            "status": {
+              "accepted": "Acceptat",
+              "pending": "Pendent d'aprovació",
+              "rejected": "Rebutjat"
+            }
+          }
+        }
+      },
+      "LibraryBase": {
+        "button": {
+          "edit": "Editar",
+          "upload": "Carregar"
+        },
+        "description": {
+          "sharingLink": "Comparteix aquest enllaç amb d'altres usuaris perquè puguin sol·licitar l'accés a aquesta biblioteca copiant-lo i enganxant-lo en la barra de cerca de la seva instància."
+        },
+        "label": {
+          "instance": "Restringit",
+          "private": "Privat",
+          "public": "Públic",
+          "sharingLink": "Compartir enllaç"
+        },
+        "link": {
+          "albums": "Àlbums",
+          "artists": "Artistes",
+          "domain": "replicat des de {domain}",
+          "moderation": "Obrir dins la interfície de moderació",
+          "owner": "El propietari és { username }",
+          "tracks": "Pistes"
+        },
+        "meta": {
+          "tracks": "{ n } pista | { n } pistes"
+        },
+        "title": "Biblioteca",
+        "tooltip": {
+          "instance": "Aquesta biblioteca està restringida a usuaris d'aquesta instància",
+          "private": "Aquesta biblioteca és privada i es necessita l'aprovació del seu propietari per tal d'accedir al seu contingut",
+          "public": "Aquesta biblioteca és pública i pots accedir lliurement al seu contingut"
+        }
+      }
+    },
+    "playlists": {
+      "Detail": {
+        "button": {
+          "cancel": "Cancelar",
+          "confirm": "Suprimir la llista de reproducció",
+          "delete": "Suprimir",
+          "edit": "Editar",
+          "embed": "Incrustar",
+          "playAll": "Reproduir-ho tot",
+          "stopEdit": "Parar l'edició"
+        },
+        "empty": {
+          "noTracks": "Encara no hi ha pistes en aquesta llista de reproducció"
+        },
+        "header": {
+          "tracks": "Pistes"
+        },
+        "meta": {
+          "tracks": "La llista de reproducció conté { n } cançó, de { username } | La llista de reproducció conté { n } cançons, de { username }"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "Això eliminarà completament aquesta llista de reproducció i no es podrà desfer l'acció."
+            },
+            "header": "Vols eliminar aquesta llista de reproducció \"{ playlist }\"?"
+          },
+          "embed": {
+            "header": "Incrustar aquesta llista de reproducció a la teva pàgina web"
+          }
+        },
+        "title": "Llista de reproducció"
+      },
+      "List": {
+        "button": {
+          "create": "Crear una llista de reproducció",
+          "manage": "Gestiona les teves llistes de distribució",
+          "search": "Buscar"
+        },
+        "empty": {
+          "noResults": "No hi ha resultats coincidents amb la teva consulta"
+        },
+        "header": {
+          "browse": "Navegueu per la llistes de reproducció",
+          "playlists": "Llistes de reproducció"
+        },
+        "label": {
+          "search": "Buscar"
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "Ascendent",
+            "descending": "Descendent",
+            "label": "Ordre"
+          },
+          "label": "Ordenar"
+        },
+        "pagination": {
+          "results": "Resultats per pàgina"
+        },
+        "placeholder": {
+          "search": "Introduir el nom de la llista de reproducció …"
+        }
+      }
+    },
+    "radios": {
+      "Detail": {
+        "button": {
+          "confirm": "Suprimir la ràdio",
+          "delete": "Esborrar",
+          "edit": "Editar …"
+        },
+        "empty": {
+          "noTracks": "Encara no s'ha afegit cap pista a aquesta ràdio"
+        },
+        "header": {
+          "tracks": "Pistes"
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": "Això eliminarà completament aquesta ràdio i no es podrà desfer."
+            },
+            "header": "Vols suprimir aquesta ràdio \"{ radio }\"?"
+          }
+        },
+        "title": "Ràdio"
+      }
+    }
+  }
+}

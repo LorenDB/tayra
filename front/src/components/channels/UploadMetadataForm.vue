@@ -1,8 +1,43 @@
+<script setup lang="ts">
+import type { Upload, Track } from '~/types'
+
+import { reactive, computed, watch } from 'vue'
+
+import TagsSelector from '~/components/library/TagsSelector.vue'
+import AttachmentInput from '~/components/common/AttachmentInput.vue'
+
+type Values = Pick<Track, 'title' | 'position' | 'tags'> & { cover: string | null, description: string }
+interface Events {
+  (e: 'update:values', values: Values): void
+}
+
+interface Props {
+  upload: Upload
+  values: Partial<Values> | null
+}
+
+const emit = defineEmits<Events>()
+const props = withDefaults(defineProps<Props>(), {
+  values: null
+})
+
+const newValues = reactive<Values>({
+  description: '',
+  title: '',
+  tags: [],
+  cover: null,
+  ...(props.values ?? props.upload.import_metadata ?? {})
+})
+
+const isLoading = computed(() => !props.upload)
+watch(newValues, (values) => emit('update:values', values), { immediate: true })
+</script>
+
 <template>
   <div :class="['ui', {loading: isLoading}, 'form']">
     <div class="ui required field">
       <label for="upload-title">
-        <translate translate-context="*/*/*/Noun">Title</translate>
+        {{ $t('components.channels.UploadMetadataForm.label.title') }}
       </label>
       <input
         v-model="newValues.title"
@@ -11,21 +46,15 @@
     </div>
     <attachment-input
       v-model="newValues.cover"
-      :required="false"
-      @delete="newValues.cover = null"
+      @delete="newValues.cover = ''"
     >
-      <translate
-        slot="label"
-        translate-context="Content/Channel/*"
-      >
-        Track Picture
-      </translate>
+      {{ $t('components.channels.UploadMetadataForm.label.image') }}
     </attachment-input>
     <div class="ui small hidden divider" />
     <div class="ui two fields">
       <div class="ui field">
         <label for="upload-tags">
-          <translate translate-context="*/*/*/Noun">Tags</translate>
+          {{ $t('components.channels.UploadMetadataForm.label.tags') }}
         </label>
         <tags-selector
           id="upload-tags"
@@ -35,7 +64,7 @@
       </div>
       <div class="ui field">
         <label for="upload-position">
-          <translate translate-context="*/*/*/Short, Noun">Position</translate>
+          {{ $t('components.channels.UploadMetadataForm.label.position') }}
         </label>
         <input
           v-model="newValues.position"
@@ -47,7 +76,7 @@
     </div>
     <div class="ui field">
       <label for="upload-description">
-        <translate translate-context="*/*/*">Description</translate>
+        {{ $t('components.channels.UploadMetadataForm.label.description') }}
       </label>
       <content-form
         v-model="newValues.description"
@@ -56,37 +85,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import TagsSelector from '@/components/library/TagsSelector'
-import AttachmentInput from '@/components/common/AttachmentInput'
-
-export default {
-  components: {
-    TagsSelector,
-    AttachmentInput
-  },
-  props: {
-    upload: { type: Object, required: true },
-    values: { type: Object, required: true }
-  },
-  data () {
-    return {
-      newValues: { ...this.values } || this.upload.import_metadata
-    }
-  },
-  computed: {
-    isLoading () {
-      return !!this.metadata
-    }
-  },
-  watch: {
-    newValues: {
-      handler (v) {
-        this.$emit('values', v)
-      },
-      immediate: true
-    }
-  }
-}
-</script>

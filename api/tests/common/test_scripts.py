@@ -20,7 +20,7 @@ def command():
     ],
 )
 def test_script_command_list(command, script_name, mocker):
-    mocked = mocker.patch("funkwhale_api.common.scripts.{}.main".format(script_name))
+    mocked = mocker.patch(f"funkwhale_api.common.scripts.{script_name}.main")
 
     command.handle(script_name=script_name, interactive=False)
 
@@ -168,7 +168,7 @@ def test_migrate_to_user_libraries_update_actors_shared_inbox_url(factories, std
 def test_migrate_to_user_libraries_generate_actor_urls(
     factories, part, settings, stdout
 ):
-    field = "{}_url".format(part)
+    field = f"{part}_url"
     ok = factories["users.User"]().create_actor()
     local = factories["federation.Actor"](local=True, **{field: None})
     remote = factories["federation.Actor"](local=False, **{field: None})

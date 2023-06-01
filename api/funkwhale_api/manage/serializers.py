@@ -1,14 +1,15 @@
 from django.conf import settings
 from django.db import transaction
-
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from funkwhale_api.audio import models as audio_models
 from funkwhale_api.common import fields as common_fields
 from funkwhale_api.common import serializers as common_serializers
 from funkwhale_api.common import utils as common_utils
-from funkwhale_api.federation import models as federation_models
 from funkwhale_api.federation import fields as federation_fields
+from funkwhale_api.federation import models as federation_models
 from funkwhale_api.federation import tasks as federation_tasks
 from funkwhale_api.moderation import models as moderation_models
 from funkwhale_api.moderation import serializers as moderation_serializers
@@ -49,7 +50,7 @@ class ManageUserSimpleSerializer(serializers.ModelSerializer):
 
 class ManageUserSerializer(serializers.ModelSerializer):
     permissions = PermissionsSerializer(source="*")
-    upload_quota = serializers.IntegerField(allow_null=True)
+    upload_quota = serializers.IntegerField(allow_null=True, required=False)
     actor = serializers.SerializerMethodField()
 
     class Meta:
@@ -84,12 +85,11 @@ class ManageUserSerializer(serializers.ModelSerializer):
         permissions = validated_data.pop("permissions", {})
         if permissions:
             for p, value in permissions.items():
-                setattr(instance, "permission_{}".format(p), value)
-            instance.save(
-                update_fields=["permission_{}".format(p) for p in permissions.keys()]
-            )
+                setattr(instance, f"permission_{p}", value)
+            instance.save(update_fields=[f"permission_{p}" for p in permissions.keys()])
         return instance
 
+    @extend_schema_field(OpenApiTypes.OBJECT)
     def get_actor(self, obj):
         if obj.actor:
             return ManageBaseActorSerializer(obj.actor).data
@@ -167,10 +167,10 @@ class ManageDomainSerializer(serializers.ModelSerializer):
             "nodeinfo_fetch_date",
         ]
 
-    def get_actors_count(self, o):
+    def get_actors_count(self, o) -> int:
         return getattr(o, "actors_count", 0)
 
-    def get_outbox_activities_count(self, o):
+    def get_outbox_activities_count(self, o) -> int:
         return getattr(o, "outbox_activities_count", 0)
 
 
@@ -227,13 +227,13 @@ class ManageBaseActorSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["creation_date", "instance_policy"]
 
-    def get_is_local(self, o):
+    def get_is_local(self, o) -> bool:
         return o.domain_id == settings.FEDERATION_HOSTNAME
 
 
 class ManageActorSerializer(ManageBaseActorSerializer):
     uploads_count = serializers.SerializerMethodField()
-    user = ManageUserSerializer()
+    user = ManageUserSerializer(allow_null=True)
 
     class Meta:
         model = federation_models.Actor
@@ -244,7 +244,7 @@ class ManageActorSerializer(ManageBaseActorSerializer):
         ]
         read_only_fields = ["creation_date", "instance_policy"]
 
-    def get_uploads_count(self, o):
+    def get_uploads_count(self, o) -> int:
         return getattr(o, "uploads_count", 0)
 
 
@@ -258,7 +258,7 @@ class ManageActorActionSerializer(common_serializers.ActionSerializer):
         common_utils.on_commit(federation_tasks.purge_actors.delay, ids=list(ids))
 
 
-class TargetSerializer(serializers.Serializer):
+class ManageTargetSerializer(serializers.Serializer):
     type = serializers.ChoiceField(choices=["domain", "actor"])
     id = serializers.CharField()
 
@@ -280,7 +280,7 @@ class TargetSerializer(serializers.Serializer):
 
 
 class ManageInstancePolicySerializer(serializers.ModelSerializer):
-    target = TargetSerializer()
+    target = ManageTargetSerializer()
     actor = federation_fields.ActorRelatedField(read_only=True)
 
     class Meta:
@@ -369,6 +369,7 @@ class ManageBaseAlbumSerializer(serializers.ModelSerializer):
             "tracks_count",
         ]
 
+    @extend_schema_field(OpenApiTypes.INT)
     def get_tracks_count(self, o):
         return getattr(o, "_tracks_count", None)
 
@@ -401,6 +402,7 @@ class ManageNestedAlbumSerializer(ManageBaseAlbumSerializer):
         model = music_models.Album
         fields = ManageBaseAlbumSerializer.Meta.fields + ["tracks_count"]
 
+    @extend_schema_field(OpenApiTypes.INT)
     def get_tracks_count(self, obj):
         return getattr(obj, "tracks_count", None)
 
@@ -413,7 +415,7 @@ class ManageArtistSerializer(
     tracks_count = serializers.SerializerMethodField()
     albums_count = serializers.SerializerMethodField()
     channel = serializers.SerializerMethodField()
-    cover = music_serializers.cover_field
+    cover = music_serializers.CoverField(allow_null=True)
 
     class Meta:
         model = music_models.Artist
@@ -427,16 +429,20 @@ class ManageArtistSerializer(
             "content_category",
         ]
 
+    @extend_schema_field(OpenApiTypes.INT)
     def get_tracks_count(self, obj):
         return getattr(obj, "_tracks_count", None)
 
+    @extend_schema_field(OpenApiTypes.INT)
     def get_albums_count(self, obj):
         return getattr(obj, "_albums_count", None)
 
+    @extend_schema_field({"type": "array", "items": {"type": "string"}})
     def get_tags(self, obj):
         tagged_items = getattr(obj, "_prefetched_tagged_items", [])
         return [ti.tag.name for ti in tagged_items]
 
+    @extend_schema_field(OpenApiTypes.STR)
     def get_channel(self, obj):
         if "channel" in obj._state.fields_cache and obj.get_channel():
             return str(obj.channel.uuid)
@@ -462,9 +468,10 @@ class ManageAlbumSerializer(
             "tracks_count",
         ]
 
-    def get_tracks_count(self, o):
+    def get_tracks_count(self, o) -> int:
         return len(o.tracks.all())
 
+    @extend_schema_field({"type": "array", "items": {"type": "string"}})
     def get_tags(self, obj):
         tagged_items = getattr(obj, "_prefetched_tagged_items", [])
         return [ti.tag.name for ti in tagged_items]
@@ -482,8 +489,8 @@ class ManageTrackSerializer(
     music_serializers.OptionalDescriptionMixin, ManageNestedTrackSerializer
 ):
     artist = ManageNestedArtistSerializer()
-    album = ManageTrackAlbumSerializer()
-    attributed_to = ManageBaseActorSerializer()
+    album = ManageTrackAlbumSerializer(allow_null=True)
+    attributed_to = ManageBaseActorSerializer(allow_null=True)
     uploads_count = serializers.SerializerMethodField()
     tags = serializers.SerializerMethodField()
     cover = music_serializers.cover_field
@@ -499,9 +506,11 @@ class ManageTrackSerializer(
             "cover",
         ]
 
+    @extend_schema_field(OpenApiTypes.INT)
     def get_uploads_count(self, obj):
         return getattr(obj, "uploads_count", None)
 
+    @extend_schema_field({"type": "array", "items": {"type": "string"}})
     def get_tags(self, obj):
         tagged_items = getattr(obj, "_prefetched_tagged_items", [])
         return [ti.tag.name for ti in tagged_items]
@@ -586,9 +595,10 @@ class ManageLibrarySerializer(serializers.ModelSerializer):
             "creation_date",
         ]
 
-    def get_uploads_count(self, obj):
-        return getattr(obj, "_uploads_count", obj.uploads_count)
+    def get_uploads_count(self, obj) -> int:
+        return getattr(obj, "_uploads_count", int(obj.uploads_count))
 
+    @extend_schema_field(OpenApiTypes.INT)
     def get_followers_count(self, obj):
         return getattr(obj, "followers_count", None)
 
@@ -668,12 +678,15 @@ class ManageTagSerializer(ManageBaseAlbumSerializer):
             "artists_count",
         ]
 
+    @extend_schema_field(OpenApiTypes.INT)
     def get_tracks_count(self, obj):
         return getattr(obj, "_tracks_count", None)
 
+    @extend_schema_field(OpenApiTypes.INT)
     def get_albums_count(self, obj):
         return getattr(obj, "_albums_count", None)
 
+    @extend_schema_field(OpenApiTypes.INT)
     def get_artists_count(self, obj):
         return getattr(obj, "_artists_count", None)
 
@@ -705,11 +718,13 @@ class ManageNoteSerializer(ManageBaseNoteSerializer):
 
 
 class ManageReportSerializer(serializers.ModelSerializer):
-    assigned_to = ManageBaseActorSerializer()
-    target_owner = ManageBaseActorSerializer()
-    submitter = ManageBaseActorSerializer()
+    assigned_to = ManageBaseActorSerializer(allow_null=True, required=False)
+    target_owner = ManageBaseActorSerializer(required=False)
+    submitter = ManageBaseActorSerializer(required=False)
     target = moderation_serializers.TARGET_FIELD
-    notes = serializers.SerializerMethodField()
+    notes = ManageBaseNoteSerializer(
+        allow_null=True, source="_prefetched_notes", many=True, default=[]
+    )
 
     class Meta:
         model = moderation_models.Report
@@ -744,10 +759,6 @@ class ManageReportSerializer(serializers.ModelSerializer):
             "summary",
         ]
 
-    def get_notes(self, o):
-        notes = getattr(o, "_prefetched_notes", [])
-        return ManageBaseNoteSerializer(notes, many=True).data
-
 
 class ManageUserRequestSerializer(serializers.ModelSerializer):
     assigned_to = ManageBaseActorSerializer()
@@ -777,6 +788,7 @@ class ManageUserRequestSerializer(serializers.ModelSerializer):
             "metadata",
         ]
 
+    @extend_schema_field(ManageBaseNoteSerializer)
     def get_notes(self, o):
         notes = getattr(o, "_prefetched_notes", [])
         return ManageBaseNoteSerializer(notes, many=True).data

@@ -1,3 +1,14 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+const labels = computed(() => ({
+  title: t('views.admin.library.Base.title'),
+  secondaryMenu: t('views.admin.library.Base.menu.secondary')
+}))
+</script>
+
 <template>
   <div
     v-title="labels.title"
@@ -12,82 +23,51 @@
         class="ui item"
         :to="{name: 'manage.library.edits'}"
       >
-        <translate translate-context="*/Admin/*/Noun">
-          Edits
-        </translate>
+        {{ $t('views.admin.library.Base.link.edits') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.channels'}"
       >
-        <translate translate-context="*/*/*">
-          Channels
-        </translate>
+        {{ $t('views.admin.library.Base.link.channels') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.library.artists'}"
       >
-        <translate translate-context="*/*/*/Noun">
-          Artists
-        </translate>
+        {{ $t('views.admin.library.Base.link.artists') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.library.albums'}"
       >
-        <translate translate-context="*/*/*">
-          Albums
-        </translate>
+        {{ $t('views.admin.library.Base.link.albums') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.library.tracks'}"
       >
-        <translate translate-context="*/*/*">
-          Tracks
-        </translate>
+        {{ $t('views.admin.library.Base.link.tracks') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.library.libraries'}"
       >
-        <translate translate-context="*/*/*/Noun">
-          Libraries
-        </translate>
+        {{ $t('views.admin.library.Base.link.libraries') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.library.uploads'}"
       >
-        <translate translate-context="*/*/*">
-          Uploads
-        </translate>
+        {{ $t('views.admin.library.Base.link.uploads') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.library.tags'}"
       >
-        <translate translate-context="*/*/*/Noun">
-          Tags
-        </translate>
+        {{ $t('views.admin.library.Base.link.tags') }}
       </router-link>
     </nav>
     <router-view :key="$route.fullPath" />
   </div>
 </template>
-
-<script>
-export default {
-  computed: {
-    labels () {
-      const title = this.$pgettext('Head/Admin/Title', 'Manage library')
-      const secondaryMenu = this.$pgettext('Menu/*/Hidden text', 'Secondary menu')
-      return {
-        title,
-        secondaryMenu
-      }
-    }
-  }
-}
-</script>
