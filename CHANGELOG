@@ -31,12 +31,12 @@ Update instructions:
   ```
 
   .. note::
-     If you need to customize your nginx template, e.g. to work around `problems with
-     Docker's resolver <https://docs.funkwhale.audio/admin/external-storages.html#no-resolver-found>`_, you can mount your
-     custom nginx configuration into the container. Uncomment the commented volumes in the `nginx` section of your `docker-compose.yml`.
-  	 Additionally you need to update the paths in `nginx/funkwhale.template`.
-  	 Replace all occurrences of `/funkwhale` by `/usr/share/nginx/html`.
-     This loads the templates from your `nginx` folder and overrides the template files in the Docker container.
+   If you need to customize your nginx template, e.g. to work around `problems with
+   Docker's resolver <https://docs.funkwhale.audio/admin/external-storages.html#no-resolver-found>`_, you can mount your
+   custom nginx configuration into the container. Uncomment the commented volumes in the `nginx` section of your `docker-compose.yml`.
+   Additionally you need to update the paths in `nginx/funkwhale.template`.
+   Replace all occurrences of `/funkwhale` by `/usr/share/nginx/html`.
+   This loads the templates from your `nginx` folder and overrides the template files in the Docker container.
 
   ```
   docker-compose up -d
@@ -47,11 +47,13 @@ Update instructions:
   2. Stop your containers using the **docker-compose** syntax.
 
   .. code-block:: sh
+
      sudo docker-compose down
 
   3. Bring the containers back up using the **docker compose** syntax.
 
   .. code-block:: sh
+
      sudo docker compose up -d
 
   After this you can continue to use the **docker compose** syntax for all Docker management tasks.
