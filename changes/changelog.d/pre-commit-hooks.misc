@@ -1,8 +1,0 @@
-Add pre-commit hooks
-
-- flake8
-- black
-- isort
-- pyupgrade
-- prettier
-- codespell

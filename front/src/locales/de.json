@@ -1445,7 +1445,7 @@
           "tracks": "Titel"
         },
         "meta": {
-          "volume": "Band { number }"
+          "volume": "Datenträger { number }"
         }
       },
       "AlbumDropdown": {

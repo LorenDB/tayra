@@ -1,1 +1,0 @@
-Fix content form autofocus despite `autofocus` prop being set to `false` (#1924)

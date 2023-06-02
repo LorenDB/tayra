@@ -1,2 +1,0 @@
-Change unmaintained PyMemoize library to django-cache-memoize
-to enable Python 3.10 support

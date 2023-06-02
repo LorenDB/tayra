@@ -107,6 +107,14 @@ http {
             proxy_pass   http://funkwhale-api/api/subsonic/rest/;
         }
 
+        location /media/__sized__/ {
+            alias /protected/media/__sized__/;
+        }
+
+        location /media/attachments/ {
+            alias /protected/media/attachments/;
+        }
+
         location /.well-known/ {
             include /etc/nginx/funkwhale_proxy.conf;
             proxy_pass   http://funkwhale-api;

@@ -1,1 +1,0 @@
-Allow summary field of actors to be blank. This leaves actors valid that have a blank (`""`) summary field and allows follows from those.

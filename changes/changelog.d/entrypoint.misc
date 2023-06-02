@@ -1,1 +1,0 @@
-Move database url composition from custom script to django settings

@@ -1,1 +1,0 @@
-Pin Alpine package versions in API Dockerfile (fixes part of CI build issues).

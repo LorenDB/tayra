@@ -1,3 +1,0 @@
-The automatically generated 'DATABASE_URL' configuration in the docker setup is deprecated, please
-configure either the 'DATABASE_URL' environment variable or the 'DATABASE_HOST', 'DATABASE_USER' and
-'DATABASE_PASSWORD' environment variables instead.
