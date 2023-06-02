@@ -28,12 +28,13 @@ Update instructions:
   curl -L -o /srv/funkwhale/docker-compose.yml "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/${FUNKWHALE_VERSION}/deploy/docker-compose.yml"
   ```
 
-  .. note::
-  If you need to customize your nginx template, e.g. to work around `problems with Docker's resolver <https://docs.funkwhale.audio/admin/external-storages.html#no-resolver-found>`\_, you can mount your
+  :::{note}
+  If you need to customize your nginx template, e.g. to work around [problems with Docker's resolver](https://docs.funkwhale.audio/admin/external-storages.html#no-resolver-found), you can mount your
   custom nginx configuration into the container. Uncomment the commented volumes in the `nginx` section of your `docker-compose.yml`.
   Additionally you need to update the paths in `nginx/funkwhale.template`.
   Replace all occurrences of `/funkwhale` by `/usr/share/nginx/html`.
   This loads the templates from your `nginx` folder and overrides the template files in the Docker container.
+  :::
 
   ```
   docker-compose up -d
@@ -41,16 +42,18 @@ Update instructions:
 
 - The Docker instructions now use the updated Docker compose plugin. If you previously used the `docker-compose` standalone installation, do the following while upgrading:
 
-  1. Download the `Docker compose plugin <https://docs.docker.com/compose/install/linux/#install-using-the-repository>`\_
+  1. Download the [Docker compose plugin](https://docs.docker.com/compose/install/linux/#install-using-the-repository)
   2. Stop your containers using the **docker-compose** syntax.
 
-  .. code-block:: sh
+  ```sh
   sudo docker-compose down
+  ```
 
   3. Bring the containers back up using the **docker compose** syntax.
 
-  .. code-block:: sh
+  ```sh
   sudo docker compose up -d
+  ```
 
   After this you can continue to use the **docker compose** syntax for all Docker management tasks.
 
@@ -267,9 +270,9 @@ Deprecation:
 - Deprecate the api manage.py script in favor of the funkwhale-manage entrypoint
 - That's the last minor version series that supports python3.7. Funkwhale 1.4 will remove support for
   it. #1693
-- The automatically generated 'DATABASE_URL' configuration in the docker setup is deprecated, please
-  configure either the 'DATABASE_URL' environment variable or the 'DATABASE_HOST', 'DATABASE_USER' and
-  'DATABASE_PASSWORD' environment variables instead.
+- The automatically generated `DATABASE_URL` configuration in the docker setup is deprecated, please
+  configure either the `DATABASE_URL` environment variable or the `DATABASE_HOST`, `DATABASE_USER` and
+  `DATABASE_PASSWORD` environment variables instead.
 
 Removal:
 
