@@ -55,7 +55,7 @@ Update instructions:
      sudo docker compose up -d
 
   After this you can continue to use the **docker compose** syntax for all Docker management tasks.
-- Upgrade Postgres to version 15. [Make sure to migrate!](https://docs.funkwhale.audio/administrator_documentation/upgrade_docs/docker.html#upgrade-the-postgres-container)
+- Upgrade Postgres to version 15. [Make sure to migrate!](https://docs.funkwhale.audio/administrator/upgrade/docker.html#upgrade-the-postgres-container)
 - With this update Funkwhale starts using poetry to maintain its dependencies. We therefore recommend
   removing the old virtualenv by running `rm -rf /srv/funkwhale/virtualenv`.
 
