@@ -11,8 +11,8 @@
     "serve": "vite preview",
     "test": "vitest run",
     "test:unit": "vitest run --coverage",
-    "lint": "eslint --cache --cache-strategy content --ext .ts,.js,.vue,.json,.html src test public/embed.html",
-    "lint:tsc": "vue-tsc --noEmit --incremental",
+    "lint": "eslint --cache --cache-strategy content --ext .ts,.js,.vue,.json,.html src test cypress public/embed.html",
+    "lint:tsc": "vue-tsc --noEmit --incremental && tsc --noEmit --incremental -p cypress",
     "fix-fomantic-css": "scripts/fix-fomantic-css.sh",
     "postinstall": "yarn run fix-fomantic-css"
   },
