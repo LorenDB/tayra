@@ -3,47 +3,56 @@
 # This file is distributed under the same license as the funkwhale package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-01 14:05+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2023-06-04 12:50+0000\n"
+"Last-Translator: Thomas <thovi98@gmail.com>\n"
+"Language-Team: French <https://translate.funkwhale.audio/projects/"
+"documentation/administrator-installation-debian/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.17\n"
 "Generated-By: Babel 2.11.0\n"
 
 #: ../../administrator_documentation/installation_docs/debian.md:1
 msgid "Install Funkwhale on Debian"
-msgstr ""
+msgstr "Installer Funkwhale sur Debian"
 
 #: ../../administrator_documentation/installation_docs/debian.md:3
 msgid ""
 "We support [Debian](https://debian.org) and Debian-based Linux "
 "distributions. Follow these steps to set up Funkwhale on a Debian server."
 msgstr ""
+"Nous supportons [Debian](https://debian.org) et les distributions Linux "
+"basées sur Debian. Suivez ces étapes pour configurer Funkwhale sur un "
+"serveur Debian."
 
 #: ../../administrator_documentation/installation_docs/debian.md:10
 msgid "Before you begin"
-msgstr ""
+msgstr "Avant de commencer"
 
 #: ../../administrator_documentation/installation_docs/debian.md:12
 msgid ""
 "Set a `FUNKWHALE_VERSION` variable to the version you want to install. "
 "You will use this version for all commands in this guide."
 msgstr ""
+"Configurez une variable `FUNKWHALE_VERSION`avec la version que vous désirez "
+"installer. Vous allez utiliser cette version pour toutes les commandes dans "
+"ce guide."
 
 #: ../../administrator_documentation/installation_docs/debian.md:18
 msgid "Install `curl`"
-msgstr ""
+msgstr "Installez `curl`"
 
 #: ../../administrator_documentation/installation_docs/debian.md:25
 msgid "1. Install Funkwhale dependencies"
-msgstr ""
+msgstr "1. Installez les dépendances de Funkwhale"
 
 #: ../../administrator_documentation/installation_docs/debian.md:27
 msgid ""
@@ -52,20 +61,28 @@ msgid ""
 "to install everything at once. You can pass the information from this "
 "file to `apt` using the following command:"
 msgstr ""
+"Pour installer Funkwhale sur votre serveur, vous devez d’abord installer ses "
+"dépendances. Nous fournissons toutes les dépendances dans un simple fichier "
+"pour vous aider à tout installer d’un coup. Vous pouvez transmettre l’"
+"information de ce fichier à `apt` en utilisant la commande suivante :"
 
 #: ../../administrator_documentation/installation_docs/debian.md:33
 msgid "When prompted, hit {kbd}`y` to confirm the install."
 msgstr ""
+"Lorsque vous y êtes invité, appuyez sur {kbd}`y` pour confirmer "
+"l'installation."
 
 #: ../../administrator_documentation/installation_docs/debian.md:35
 msgid ""
 "That's it! `apt` installs all dependencies and tells you once it has "
 "finished."
 msgstr ""
+"C’est tout ! `apt` installe toutes les dépendances et vous informe lorsque c’"
+"est terminé."
 
 #: ../../administrator_documentation/installation_docs/debian.md:37
 msgid "2. Create a Funkwhale user"
-msgstr ""
+msgstr "2. Créer un utilisateur Funkwhale"
 
 #: ../../administrator_documentation/installation_docs/debian.md:39
 msgid ""
@@ -73,6 +90,10 @@ msgid ""
 "administration. Doing this makes it easy to make sure you're running "
 "commands from the right place. Follow these steps to set up your user."
 msgstr ""
+"C’est une bonne pratique que de créer un utilisateur sur votre serveur pour "
+"l’administration de Funkwhale. En faisant cela, il est plus facile de s’"
+"assurer que vous exécutez une commande depuis la bonne place. Suivez les "
+"étapes suivantes pour configurer votre utilisateur."
 
 #: ../../administrator_documentation/installation_docs/debian.md:41
 msgid ""
@@ -429,4 +450,3 @@ msgid ""
 "That's it! certbot renews your certificate every 60 days, so you don't "
 "need to worry about renewing it."
 msgstr ""
-
