@@ -1,4 +1,3 @@
-
 import type { NavigationGuardNext, RouteLocationNamedRaw, RouteLocationNormalized } from 'vue-router'
 import type { Permission } from '~/store/auth'
 
