@@ -38,7 +38,7 @@ def handler_create_user(
     utils.logger.debug("Creating user…")
     user = serializer.save(request=request)
     utils.logger.debug("Setting permissions and other attributes…")
-    user.is_staff = is_staff
+    user.is_staff = is_staff or is_superuser  # Always set staff if superuser is set
     user.upload_quota = upload_quota
     user.is_superuser = is_superuser
     for permission in permissions:

@@ -32,6 +32,22 @@ def test_user_create_handler(factories, mocker, now):
     assert user.all_permissions == expected_permissions
 
 
+def test_user_implicit_staff():
+    kwargs = {
+        "username": "helloworld",
+        "password": "securepassword",
+        "is_superuser": True,
+        "email": "hello@world.email",
+        "upload_quota": 35,
+        "permissions": ["moderation"],
+    }
+    user = users.handler_create_user(**kwargs)
+
+    assert user.username == kwargs["username"]
+    assert user.is_superuser == kwargs["is_superuser"]
+    assert user.is_staff is True
+
+
 def test_user_delete_handler_soft(factories, mocker, now):
     user1 = factories["federation.Actor"](local=True).user
     actor1 = user1.actor
