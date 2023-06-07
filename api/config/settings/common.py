@@ -281,9 +281,9 @@ ADDITIONAL_APPS = env.list("ADDITIONAL_APPS", default=[])
 List of Django apps to load in addition to Funkwhale plugins and apps.
 """
 INSTALLED_APPS = (
-    DJANGO_APPS
+    LOCAL_APPS
+    + DJANGO_APPS
     + THIRD_PARTY_APPS
-    + LOCAL_APPS
     + tuple(ADDITIONAL_APPS)
     + tuple(plugins.trigger_filter(plugins.PLUGINS_APPS, [], enabled=True))
 )
