@@ -84,7 +84,7 @@ You need to create some local data to mimic a production environment.
 1. Create a superuser so you can log in to your local app:
 
    ```sh
-   sudo docker compose -f dev.yml run --rm api funkwhale-manage createsuperuser
+   sudo docker compose -f dev.yml run --rm api funkwhale-manage fw users create --superuser
    ```
 
 2. Add some fake data to populate the database. The following command creates 25 artists with random albums, tracks, and metadata.
@@ -187,7 +187,7 @@ To run a reverse proxy for your app:
    export COMPOSE_PROJECT_NAME=node2
    export VUE_PORT=1234  # this has to be unique for each instance
    sudo docker compose -f dev.yml run --rm api funkwhale-manage migrate
-   sudo docker compose -f dev.yml run --rm api funkwhale-manage createsuperuser
+   sudo docker compose -f dev.yml run --rm api funkwhale-manage fw users create --superuser
    sudo docker compose -f dev.yml up nginx api front nginx api celeryworker
    ```
 

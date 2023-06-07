@@ -154,7 +154,7 @@ Once you've filled in your environment file, you can set up Funkwhale. Follow th
 4. Create your superuser.
 
    ```{code-block} sh
-   sudo docker compose run --rm api funkwhale-manage createsuperuser
+   sudo docker compose run --rm api funkwhale-manage fw users create --superuser
    ```
 
 5. Launch all the containers to bring up your pod.
