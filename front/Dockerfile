@@ -1,16 +1,17 @@
 FROM --platform=linux/amd64 node:18-alpine as builder
 
-WORKDIR /app
-COPY package.json yarn.lock /app/
-COPY src /app/src/
-COPY scripts /app/scripts
-COPY public /app/public
-COPY vite.config.ts index.html pwa-manifest.json /app/
-
 RUN apk add --no-cache jq bash coreutils python3 build-base
-RUN yarn install
-RUN yarn build:deployment
 
+WORKDIR /app
+
+COPY package.json yarn.lock /app/
+COPY scripts /app/scripts
+RUN yarn install
+
+COPY public /app/public
+COPY src /app/src
+COPY index.html pwa-manifest.json vite.config.ts /app/
+RUN yarn build:deployment
 
 FROM nginx:1.23.4-alpine as production
 
