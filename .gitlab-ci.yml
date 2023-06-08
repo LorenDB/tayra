@@ -424,21 +424,14 @@ deploy_docs:
   needs:
     - job: build_docs
       artifacts: true
-  before_script:
-    - apk add openssh-client rsync
-    - mkdir -p ~/.ssh
-    - echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
-    - eval `ssh-agent -s`
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-  script:
-    - rsync -r -e "ssh -p 2282" $CI_PROJECT_DIR/public/ docs@docs.funkwhale.audio:/htdocs/$CI_COMMIT_REF_NAME
   rules:
     - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
 
   image: $CI_REGISTRY/funkwhale/ci/python:3.11
   variables:
     GIT_STRATEGY: none
+  script:
+    - rsync -r -e "ssh -p 2282" $CI_PROJECT_DIR/public/ docs@docs.funkwhale.audio:/htdocs/$CI_COMMIT_REF_NAME
 
 .docker:
   interruptible: false
