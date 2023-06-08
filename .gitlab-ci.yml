@@ -293,6 +293,18 @@ test_front:
     reports:
       junit: front/coverage/cobertura-coverage.xml
 
+build_metadata:
+  stage: build
+
+  image: $CI_REGISTRY/funkwhale/ci/python:3.11
+  variables:
+    GIT_FETCH_EXTRA_FLAGS: --prune
+  script:
+    - scripts/build_metadata.py --format env | tee build_metadata.env
+  artifacts:
+    reports:
+      dotenv: build_metadata.env
+
 build_api_schema:
   stage: build
   needs:
