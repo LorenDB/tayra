@@ -927,7 +927,7 @@ quarters
 quesadilla
 quilt
 quote
-racoon
+raccoon
 radish
 ragweed
 railroad
