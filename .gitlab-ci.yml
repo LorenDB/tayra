@@ -27,7 +27,7 @@ workflow:
     - if: >
         $CI_PROJECT_NAMESPACE == "funkwhale" &&
         (
-          $CI_COMMIT_BRANCH =~ /(stable|develop)/ ||
+          $CI_COMMIT_BRANCH =~ /^(stable|develop)$/ ||
           $CI_COMMIT_TAG
         )
     # Run for merge requests from any repo or branches
