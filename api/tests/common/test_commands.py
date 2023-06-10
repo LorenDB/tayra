@@ -1,5 +1,8 @@
+import os
+
 import pytest
 from django.core.management import call_command
+from django.core.management.base import CommandError
 
 from funkwhale_api.federation import models as federation_models
 from funkwhale_api.music import models as music_models
@@ -97,3 +100,19 @@ def test_load_test_data_skip_dependencies(factories):
 
     assert music_models.Artist.objects.count() == 5
     assert music_models.Album.objects.count() == 10
+
+
+commands = ["createsuperuser", "makemigrations"]
+
+
+@pytest.mark.parametrize("command", commands)
+def test_blocked_commands(command):
+    with pytest.raises(CommandError):
+        call_command(command)
+
+
+@pytest.mark.parametrize("command", commands)
+def test_unblocked_commands(command, mocker):
+    mocker.patch.dict(os.environ, {"FORCE": "1"})
+
+    call_command(command)
