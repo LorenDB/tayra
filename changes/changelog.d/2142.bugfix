@@ -1,0 +1,1 @@
+Fixed Fomantic UI dropdown messing with Vue internals in radio builder (#2142)
