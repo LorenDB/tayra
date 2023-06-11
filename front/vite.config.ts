@@ -70,6 +70,8 @@ export default defineConfig(({ mode }) => ({
   test: {
     environment: 'jsdom',
     globals: true,
+    reporters: ['default', 'junit'],
+    outputFile: "./test_results.xml",
     coverage: {
       src: './src',
       all: true,

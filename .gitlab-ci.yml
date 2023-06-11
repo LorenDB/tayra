@@ -288,7 +288,10 @@ test_front:
     - yarn test:unit
   artifacts:
     reports:
-      junit: front/coverage/cobertura-coverage.xml
+      junit: front/test_results.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: front/coverage/cobertura-coverage.xml
 
 build_metadata:
   stage: build
