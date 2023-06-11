@@ -31,7 +31,8 @@ syncRef(pageQuery, page, {
   transform: {
     ltr: (left) => +left,
     rtl: (right) => right.toString()
-  }
+  },
+  direction: 'both'
 })
 
 const q = useRouteQuery('q', '')
@@ -113,7 +114,7 @@ const currentType = computed(() => types.value.find(({ id }) => id === type.valu
 const axiosParams = computed(() => {
   const params = new URLSearchParams({
     q: query.value,
-    page: page.value as unknown as string,
+    page: pageQuery.value,
     page_size: paginateBy.value as unknown as string
   })
 
@@ -171,10 +172,12 @@ const search = async () => {
 }
 
 watch(type, () => {
+  if (page.value === 1) return search()
   page.value = 1
-  search()
 })
 
+// NOTE: When we watch `page`, the `pageQuery` value is never updated for some reason
+watch(pageQuery, search)
 search()
 
 const labels = computed(() => ({
