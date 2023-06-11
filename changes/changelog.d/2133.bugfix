@@ -1,0 +1,1 @@
+Fixed stale data in indexedDB after logout (#2133)
