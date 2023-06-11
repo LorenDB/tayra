@@ -10,7 +10,7 @@
     "build:deployment": "vite build",
     "serve": "vite preview",
     "test": "vitest run",
-    "test:unit": "vitest run",
+    "test:unit": "vitest run --coverage",
     "lint": "eslint --ext .ts,.js,.vue,.json,.html src test public/embed.html",
     "lint:tsc": "vue-tsc --noEmit",
     "fix-fomantic-css": "scripts/fix-fomantic-css.sh",

@@ -276,9 +276,6 @@ test_front:
   needs:
     - job: lint_front
   rules:
-    # Disabled for now since no vitest dom emulation is providing
-    # AudioContext, which is required for our HTML audio player
-    - when: never
     - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
     - changes: [front/**/*]
 
