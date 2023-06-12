@@ -2,8 +2,8 @@
 // graphical login until the vue3 branch is merged
 Cypress.Commands.add('login', () => {
   cy.fixture('testuser.json').then((user) => {
-    var username = user["username"]
-    var password = user["password"]
+    const username = user.username
+    const password = user.password
     cy.visit('/login')
     cy.wait(1000)
     cy.getCookie('csrftoken').then(($cookie) => {
@@ -15,12 +15,12 @@ Cypress.Commands.add('login', () => {
         form: true,
         headers: {
           'X-CSRFTOKEN': csrfToken,
-          Referer: Cypress.config().baseUrl + '/login',
+          Referer: Cypress.config().baseUrl + '/login'
         },
         body: {
           username,
           password
-        },
+        }
       })
     })
   })

@@ -2,8 +2,8 @@ describe('The login', () => {
   it('is working with UI', () => {
     cy.fixture('testuser.json').then((user) => {
       cy.visit('/login')
-      cy.get('input[name=username]').type(user['username'])
-      cy.get('input[name=password]').type(`${user['password']}{enter}`)
+      cy.get('input[name=username]').type(user.username)
+      cy.get('input[name=password]').type(`${user.password}{enter}`)
     })
 
     cy.url().should('include', '/library')

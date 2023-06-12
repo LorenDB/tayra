@@ -17,7 +17,6 @@ describe('Favorites', () => {
         $favButton.click()
         // In case everything worked the favorite button should be pink
         cy.wrap($favButton).should('have.class', 'pink')
-
       })
 
       cy.get('.favorite-icon.pink').then(($unfavButton) => {
