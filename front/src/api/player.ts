@@ -131,7 +131,12 @@ export class HTMLSound implements Sound {
   }
 
   async play () {
-    return this.#audio.play()
+    try {
+      await this.#audio.play()
+    } catch (err) {
+      console.error('>> AUDIO PLAY ERROR', err, this)
+      this.isErrored.value = true
+    }
   }
 
   async pause () {
