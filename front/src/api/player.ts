@@ -17,6 +17,7 @@ export interface Sound {
   readonly audioNode: IAudioNode<IAudioContext>
   readonly isErrored: Ref<boolean>
   readonly isLoaded: Ref<boolean>
+  readonly isDisposed: Ref<boolean>
   readonly currentTime: number
   readonly playable: boolean
   readonly duration: number
@@ -51,6 +52,7 @@ export class HTMLSound implements Sound {
 
   readonly isErrored = ref(false)
   readonly isLoaded = ref(false)
+  readonly isDisposed = ref(false)
 
   audioNode = createAudioSource(this.#audio)
   onSoundLoop: EventHookOn<HTMLSound>
@@ -112,12 +114,15 @@ export class HTMLSound implements Sound {
   }
 
   async preload () {
+    this.isDisposed.value = false
     this.isErrored.value = false
     console.log('CALLING PRELOAD ON', this)
     this.#audio.load()
   }
 
   async dispose () {
+    if (this.isDisposed.value) return
+
     // Remove all event listeners
     this.#scope.stop()
 
@@ -128,6 +133,8 @@ export class HTMLSound implements Sound {
     // Cancel any request downloading the source
     this.#audio.src = ''
     this.#audio.load()
+
+    this.isDisposed.value = true
   }
 
   async play () {

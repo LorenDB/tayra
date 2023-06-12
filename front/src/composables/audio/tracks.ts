@@ -101,6 +101,11 @@ export const useTracks = createGlobalState(() => {
         setTimeout(() => playNext(), 0)
       })
 
+      // NOTE: When the sound is disposed, we need to delete it from the cache (#2157)
+      whenever(sound.isDisposed, () => {
+        soundCache.delete(track.id)
+      })
+
       // NOTE: Bump current track to ensure that it lives despite enqueueing 3 tracks as next track:
       //
       //       In every queue we have 3 tracks that are cached, in the order, they're being played:
