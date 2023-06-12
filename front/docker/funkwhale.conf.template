@@ -128,6 +128,7 @@ server {
     }
 
     location /manifest.json {
-        return 302 /api/v1/instance/spa-manifest.json;
+        # If the reverse proxy is terminating SSL, nginx gets confused and redirects to http, hence the full URL
+        return 302 ${FUNKWHALE_PROTOCOL}://${FUNKWHALE_HOSTNAME}/api/v1/instance/spa-manifest.json;
     }
 }
