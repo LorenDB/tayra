@@ -10,7 +10,7 @@ RUN yarn install
 
 COPY public /app/public
 COPY src /app/src
-COPY index.html pwa-manifest.json vite.config.ts /app/
+COPY index.html pwa-manifest.json tsconfig.json vite.config.ts /app/
 RUN yarn build:deployment
 
 FROM nginx:1.23.4-alpine as production
