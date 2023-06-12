@@ -103,7 +103,8 @@ watch([uuid, object], ([uuid, object], [lastUuid, lastObject]) => {
 
 const route = useRoute()
 watchEffect(() => {
-  if (!store.state.auth.authenticated && store.getters['instance/domain'] !== object.value?.actor.domain) {
+  if (!object.value) return
+  if (!store.state.auth.authenticated && store.getters['instance/domain'] !== object.value.actor.domain) {
     router.push({ name: 'login', query: { next: route.fullPath } })
   }
 })
