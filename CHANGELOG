@@ -22,25 +22,26 @@ Update instructions:
   In this small example we show you how to save the old config and update it
   correctly:
 
-  ```
-  export FUNKWHALE_VERSION="1.3.0"
-  cd /srv/funkwhale
-  docker-compose down
-  mv docker-compose.yml docker-compose.bak
-  curl -L -o /srv/funkwhale/docker-compose.yml "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/${FUNKWHALE_VERSION}/deploy/docker-compose.yml"
-  ```
+  .. code-block::
+
+   export FUNKWHALE_VERSION="1.3.0"
+   cd /srv/funkwhale
+   docker-compose down
+   mv docker-compose.yml docker-compose.bak
+   curl -L -o /srv/funkwhale/docker-compose.yml "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/${FUNKWHALE_VERSION}/deploy/docker-compose.yml"
 
   .. note::
    If you need to customize your nginx template, e.g. to work around `problems with
    Docker's resolver <https://docs.funkwhale.audio/admin/external-storages.html#no-resolver-found>`_, you can mount your
-   custom nginx configuration into the container. Uncomment the commented volumes in the `nginx` section of your `docker-compose.yml`.
-   Additionally you need to update the paths in `nginx/funkwhale.template`.
-   Replace all occurrences of `/funkwhale` by `/usr/share/nginx/html`.
-   This loads the templates from your `nginx` folder and overrides the template files in the Docker container.
+   custom nginx configuration into the container. Uncomment the commented volumes in the ``nginx`` section of your ``docker-compose.yml``.
+   Additionally you need to update the paths in ``nginx/funkwhale.template``.
+   Replace all occurrences of ``/funkwhale`` by ``/usr/share/nginx/html``.
+   This loads the templates from your ``nginx`` folder and overrides the template files in the Docker container.
 
-  ```
-  docker-compose up -d
-  ```
+  .. code-block::
+
+   docker-compose up -d
+
 - The Docker instructions now use the updated Docker compose plugin. If you previously used the ``docker-compose`` standalone installation, do the following while upgrading:
 
   1. Download the `Docker compose plugin <https://docs.docker.com/compose/install/linux/#install-using-the-repository>`_
@@ -57,9 +58,9 @@ Update instructions:
      sudo docker compose up -d
 
   After this you can continue to use the **docker compose** syntax for all Docker management tasks.
-- Upgrade Postgres to version 15. [Make sure to migrate!](https://docs.funkwhale.audio/administrator/upgrade/docker.html#upgrade-the-postgres-container)
+- Upgrade Postgres to version 15. `Make sure to migrate! <https://docs.funkwhale.audio/administrator/upgrade/docker.html#upgrade-the-postgres-container>`_
 - With this update Funkwhale starts using poetry to maintain its dependencies. We therefore recommend
-  removing the old virtualenv by running `rm -rf /srv/funkwhale/virtualenv`.
+  removing the old virtualenv by running ``rm -rf /srv/funkwhale/virtualenv``.
 
 
 Features:
