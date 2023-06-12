@@ -960,13 +960,13 @@ dev = ["PyTest", "PyTest (<5)", "PyTest-Cov", "PyTest-Cov (<2.6)", "bump2version
 
 [[package]]
 name = "dj-rest-auth"
-version = "2.2.7"
+version = "2.2.8"
 description = "Authentication and Registration in Django Rest Framework"
 category = "main"
 optional = false
 python-versions = ">=3.5"
 files = [
-    {file = "dj-rest-auth-2.2.7.tar.gz", hash = "sha256:911bcf377df68c958a7f534def7715b61f3d887a46fbb53ca7666244b7c0b143"},
+    {file = "dj-rest-auth-2.2.8.tar.gz", hash = "sha256:9fb3492888185ede8b2064ad6803120c7b0b83ab08e2347a02e9b44282374242"},
 ]
 
 [package.dependencies]
@@ -3865,4 +3865,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "f2ac0136a301aaedc8937230d12cf02ecb020551942de8731ae2e44afe8992c1"
+content-hash = "818b10150eaecaf513e91b73e69cc81a6ad8c67f881f90e6f441d128517712ca"
