@@ -298,10 +298,15 @@ build_metadata:
   variables:
     GIT_FETCH_EXTRA_FLAGS: --prune
   script:
-    - scripts/build_metadata.py --format env | tee build_metadata.env
+    - make build-metadata
+    - make docker-metadata
   artifacts:
     reports:
       dotenv: build_metadata.env
+    paths:
+      - docker-bake.json
+      - docker-bake.api.json
+      - docker-bake.front.json
 
 build_api_schema:
   stage: build
@@ -436,6 +441,8 @@ docker:
   tags: [docker, privileged, multiarch]
   stage: build
   needs:
+    - job: build_metadata
+      artifacts: true
     - job: test_api
       optional: true
     - job: test_front
@@ -488,9 +495,6 @@ docker:
     - make docker-build BUILD_ARGS="--metadata-file metadata.json $BUILD_ARGS"
     - cat metadata.json
   artifacts:
-    name: docker_build_files_${CI_COMMIT_REF_NAME}
+    name: docker_metadata_${CI_COMMIT_REF_NAME}
     paths:
-      - docker-bake.json
-      - docker-bake.api.json
-      - docker-bake.front.json
       - metadata.json

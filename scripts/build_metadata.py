@@ -76,8 +76,6 @@ def latest_tag_on_branch() -> str:
     """
     Return the latest tag on the current branch.
     """
-    if "CI" in os.environ:
-        sh("git fetch origin --tags")
     return sh("git describe --tags --abbrev=0")
 
 
