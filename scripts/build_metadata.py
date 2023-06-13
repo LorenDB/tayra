@@ -67,15 +67,17 @@ class Metadata(TypedDict):
     """
 
 
-def sh(cmd: str):
+def sh(cmd: str, **kwargs):
     logger.debug("running command: %s", cmd)
-    return check_output(shlex.split(cmd), text=True).strip()
+    return check_output(shlex.split(cmd), text=True, **kwargs).strip()
 
 
 def latest_tag_on_branch() -> str:
     """
     Return the latest tag on the current branch.
     """
+    if "CI" in os.environ:
+        sh("git fetch origin --tags")
     return sh("git describe --tags --abbrev=0")
 
 
