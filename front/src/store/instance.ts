@@ -126,16 +126,21 @@ const logger = useLogger()
 // 1. use the url provided in settings.json, if any
 // 2. use the url specified when building via VUE_APP_INSTANCE_URL
 // 3. use the current url
-const instanceUrl = import.meta.env.VUE_APP_INSTANCE_URL as string ?? location.origin
+let DEFAULT_INSTANCE_URL = `${location.origin}/`
+try {
+  DEFAULT_INSTANCE_URL = new URL(import.meta.env.VUE_APP_INSTANCE_URL as string).href
+} catch (e) {
+  logger.warn('Invalid VUE_APP_INSTANCE_URL, falling back to current url', e)
+}
 
 const store: Module<State, RootState> = {
   namespaced: true,
   state: {
     frontSettings: {
-      defaultServerUrl: instanceUrl,
+      defaultServerUrl: DEFAULT_INSTANCE_URL,
       additionalStylesheets: []
     },
-    instanceUrl,
+    instanceUrl: DEFAULT_INSTANCE_URL,
     knownInstances: [],
     nodeinfo: null,
     settings: {
@@ -190,40 +195,31 @@ const store: Module<State, RootState> = {
       state.nodeinfo = value
     },
     instanceUrl: (state, value) => {
-      if (value && !value.endsWith('/')) {
-        value = value + '/'
-      }
+      try {
+        const { href } = new URL(value)
+        state.instanceUrl = href
+        axios.defaults.baseURL = `${href}api/v1/`
 
-      state.instanceUrl = value
-
-      // append the URL to the list (and remove existing one if needed)
-      if (value) {
-        const index = state.knownInstances.indexOf(value)
-        if (index > -1) {
-          state.knownInstances.splice(index, 1)
-        }
-        state.knownInstances.splice(0, 0, value)
-      }
-
-      if (!value) {
+        // append the URL to the list (and remove existing one if needed)
+        const index = state.knownInstances.indexOf(href)
+        if (index > -1) state.knownInstances.splice(index, 1)
+        state.knownInstances.unshift(href)
+      } catch (e) {
+        logger.error('Invalid instance URL', e)
         axios.defaults.baseURL = undefined
-        return
       }
-      const suffix = 'api/v1/'
-      axios.defaults.baseURL = state.instanceUrl + suffix
     }
   },
   getters: {
-    absoluteUrl: (state) => (relativeUrl: string) => {
+    absoluteUrl: (_state, getters) => (relativeUrl: string) => {
       if (relativeUrl.startsWith('http')) return relativeUrl
-      if (state.instanceUrl?.endsWith('/') && relativeUrl.startsWith('/')) {
-        relativeUrl = relativeUrl.slice(1)
-      }
-
-      return (state.instanceUrl ?? instanceUrl) + relativeUrl
+      return relativeUrl.startsWith('/')
+        ? `${getters.url.href}${relativeUrl.slice(1)}`
+        : `${getters.url.href}${relativeUrl}`
     },
-    domain: (state) => new URL(state.instanceUrl ?? instanceUrl).hostname,
-    defaultInstance: () => instanceUrl
+    url: (state) => new URL(state.instanceUrl ?? DEFAULT_INSTANCE_URL),
+    domain: (_state, getters) => getters.url.hostname,
+    defaultInstance: () => DEFAULT_INSTANCE_URL
   },
   actions: {
     setUrl ({ commit }, url) {
@@ -269,7 +265,7 @@ const store: Module<State, RootState> = {
 
       for (const [key, value] of Object.entries(response.data as FrontendSettings)) {
         if (key === 'defaultServerUrl' && !value) {
-          state.frontSettings.defaultServerUrl = instanceUrl
+          state.frontSettings.defaultServerUrl = DEFAULT_INSTANCE_URL
           continue
         }
 
