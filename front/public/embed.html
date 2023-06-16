@@ -73,7 +73,13 @@
       // NOTE: Add a transcoded MP3 src at the end for browsers
       //       that do not support other codecs to be able to play it :)
       if (sources.length > 0 && !sources.some(({ mimetype }) => mimetype === 'audio/mpeg')) {
-        const url = new URL(sources[0].listen_url)
+        const source = sources[0].listen_url
+        const url = new URL(source.test(/^https?:/) 
+          ? source 
+          : source[0] === '/'
+            ? `${baseUrl}${source}`
+            : `${baseUrl}/${source}`
+        )
         url.searchParams.set('to', 'mp3')
         sources.push({ mimetype: 'audio/mpeg', listen_url: url.toString() })
       }

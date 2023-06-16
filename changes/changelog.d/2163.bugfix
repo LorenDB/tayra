@@ -1,0 +1,1 @@
+Fixed embedded player crash when API returns relative listen URL. (#2163)
