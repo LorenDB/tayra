@@ -7,11 +7,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <meta name="generator" content="Funkwhale">
 
-  <link rel="icon" href="favicon.ico">
+  <link rel="icon" href="/favicon.ico">
 
   <title>Funkwhale Widget</title>
 
-  <link rel="stylesheet" href="embed.css">
+  <link rel="stylesheet" href="/embed.css">
 
   <script type="module">
     import { createApp, reactive, nextTick } from 'https://unpkg.com/petite-vue@0.4.1?module'
@@ -35,7 +35,7 @@
     }
 
     // Cover
-    const DEFAULT_COVER = 'embed-default-cover.jpeg'
+    const DEFAULT_COVER = '/embed-default-cover.jpeg'
     const cover = reactive({ value: DEFAULT_COVER })
 
     const fetchArtistCover = async (id) => {
@@ -387,7 +387,7 @@
     class="logo-link"
     tabindex="-1"
   >
-    <img src="logo-white.svg" />
+    <img src="/logo-white.svg" />
   </a>
 </template>
 
