@@ -39,7 +39,7 @@ backup.html, ../administrator/upgrade/backup.html
 admin/migration.html, ../administrator/installation/migrate.html
 admin/commands.html, ../administrator/manage-script/index.html
 admin/mrf.html, ../administrator/configuration/mrf.html
-admin/url.html, ../administrator/configuration/change_url.html
+admin/url.html, ../administrator/configuration/change-url.html
 admin/optimization.html, ../administrator/configuration/optimize.html
 architecture.html, ../developer/architecture.html
 contributing.html, ../developer/index.html
