@@ -1,0 +1,1 @@
+Fix location of the nginx config template for docker deployments (#2146)
