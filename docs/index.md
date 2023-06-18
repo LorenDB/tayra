@@ -96,6 +96,17 @@ contributor/translation
 
 ```{toctree}
 ---
+maxdepth: 1
+caption: Specifications
+hidden: true
+---
+
+specs/nodeinfo21/index
+
+```
+
+```{toctree}
+---
 caption: Reference
 maxdepth: 1
 hidden: true

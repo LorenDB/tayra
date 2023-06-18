@@ -69,13 +69,19 @@ templates_path = ["_templates"]
 # You can specify multiple suffix as a list of string:
 #
 # source_suffix = ['.rst', '.md']
-source_suffix = ".rst"
+source_suffix = ".md"
 
 # The root toctree document.
 root_doc = "index"
 
 # Enable colon fences
-myst_enable_extensions = ["colon_fence", "attrs_block"]
+myst_enable_extensions = [
+    "colon_fence",
+    "attrs_block",
+    "tasklist",
+    "fieldlist",
+    "deflist",
+]
 
 # Autogenerate anchors
 
