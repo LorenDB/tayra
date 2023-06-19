@@ -313,7 +313,6 @@ build_metadata:
       - docker-bake.api.json
       - docker-bake.front.json
 
-
 test_integration:
   interruptible: true
   stage: test
