@@ -30,6 +30,9 @@ variables:
         prefix: front-node_modules
         files: [front/yarn.lock]
       paths: [front/node_modules]
+    - key:
+        prefix: front-lint
+        files: [front/.eslintcache]
 
   # Cache for api related jobs
   # Include the python version to prevent loosing caches in the test matrix

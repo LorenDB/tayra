@@ -97,3 +97,6 @@ _build
 # Docker
 docker-bake.*.json
 metadata.json
+
+# Eslint
+.eslintcache
