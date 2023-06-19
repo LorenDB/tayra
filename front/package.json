@@ -12,7 +12,7 @@
     "test": "vitest run",
     "test:unit": "vitest run --coverage",
     "lint": "eslint --cache --cache-strategy content --ext .ts,.js,.vue,.json,.html src test public/embed.html",
-    "lint:tsc": "vue-tsc --noEmit",
+    "lint:tsc": "vue-tsc --noEmit --incremental",
     "fix-fomantic-css": "scripts/fix-fomantic-css.sh",
     "postinstall": "yarn run fix-fomantic-css"
   },

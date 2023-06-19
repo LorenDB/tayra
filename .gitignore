@@ -98,5 +98,6 @@ _build
 docker-bake.*.json
 metadata.json
 
-# Eslint
+# Linting
 .eslintcache
+tsconfig.tsbuildinfo
