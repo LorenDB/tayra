@@ -5877,10 +5877,10 @@ vue-tsc@1.0.24:
     "@volar/vue-language-core" "1.0.24"
     "@volar/vue-typescript" "1.0.24"
 
-vue-upload-component@3.1.6:
-  version "3.1.6"
-  resolved "https://registry.yarnpkg.com/vue-upload-component/-/vue-upload-component-3.1.6.tgz#38c9c750b9177c897795a9979c45b7def6e5b374"
-  integrity sha512-MAQ0UCZ39/Y54yJc/K3JdVg2h/IcKMaJISG6CD6y3zacAbVb7YtNz2rYE/zpnyDez+9IOygEvwX8TtUgsl3YGg==
+vue-upload-component@3.1.8:
+  version "3.1.8"
+  resolved "https://registry.yarnpkg.com/vue-upload-component/-/vue-upload-component-3.1.8.tgz#6c79aaf3c34c596ec40bbdde0f625d4855fb275a"
+  integrity sha512-8LHCrgmEZPg+1hbkKjQgMce2uasmGLEnIsLE8YG+vNyfNDuaQA71T+5t6kdDSG/szeh+E8mjb26uEd9WkVSFtg==
 
 vue-virtual-scroller@2.0.0-beta.7:
   version "2.0.0-beta.7"
