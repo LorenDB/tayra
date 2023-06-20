@@ -1,12 +1,13 @@
 describe('Favorites', () => {
   it('can be done from album list view', () => {
+    // First we need to login
     cy.login()
 
+    // Then we can visit the home page
     cy.visit('/')
-    cy.wait(4000)
 
     cy.get('.item.collapse-button-wrapper').click()
-    cy.contains('Albums').click()
+    cy.contains('Albums').click({ force: true })
 
     cy.get('.component-album-card').first().within(() => {
       cy.get('a').first().click()
