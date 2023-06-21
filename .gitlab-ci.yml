@@ -314,9 +314,13 @@ build_metadata:
       - docker-bake.front.json
 
 test_integration:
-  interruptible: true
   stage: test
-  image: cypress/base:16.14.2
+  rules:
+    - if: $RUN_CYPRESS
+  interruptible: true
+
+  image: cypress/base:18.12.1
+  cache: *front_cache
   before_script:
     - cd front
     - yarn install
