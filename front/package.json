@@ -89,7 +89,6 @@
     "eslint-plugin-vue": "9.8.0",
     "jsdom": "20.0.3",
     "jsonc-eslint-parser": "2.1.0",
-    "p-limit": "4.0.0",
     "rollup-plugin-visualizer": "5.9.0",
     "sass": "1.57.1",
     "sinon": "15.0.2",
