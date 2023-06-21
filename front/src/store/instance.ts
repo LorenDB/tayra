@@ -248,7 +248,7 @@ const store: Module<State, RootState> = {
       const response = await axios.get('instance/settings/')
         .catch(err => logger.error('Error while fetching settings', err.response.data))
 
-      if (!Array.isArray(response?.data)) return
+      if (!response?.data || !Array.isArray(response?.data)) return
 
       logger.info('Successfully fetched instance settings')
 
