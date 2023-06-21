@@ -253,7 +253,7 @@ const store: Module<State, RootState> = {
       logger.info('Successfully fetched instance settings')
 
       type SettingsSection = { section: string, name: string }
-      const sections = response?.data.reduce((map: Record<string, Record<string, SettingsSection>>, entry: SettingsSection) => {
+      const sections = response.data.reduce((map: Record<string, Record<string, SettingsSection>>, entry: SettingsSection) => {
         map[entry.section] ??= {}
         map[entry.section][entry.name] = entry
         return map

@@ -23,5 +23,6 @@ yarn-error.log*
 # Bundle anayzer
 stats.html
 
+# Cypress
 cypress/screenshots
 cypress/videos
