@@ -20,7 +20,7 @@
 
     // Params
     const params = new URL(location.href).searchParams
-    const baseUrl = params.get('instance') ?? params.get('b') ?? ''
+    let baseUrl = params.get('instance') ?? params.get('b') ?? location.origin
     const type = params.get('type')
     const id = params.get('id')
 
@@ -32,6 +32,14 @@
 
     if (id === null || isNaN(+id)) {
       error.value = `The embed widget couldn't read the provided media ID: ${id}.`
+    }
+
+    // Standardize base URL
+    try {
+      baseUrl = new URL(baseUrl).origin
+    } catch (err) {
+      console.error(err)
+      error.value = `The embed widget couldn't read the provided instance URL: ${baseUrl}.`
     }
 
     // Cover
