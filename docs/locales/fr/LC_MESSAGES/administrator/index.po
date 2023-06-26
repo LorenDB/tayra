@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-01 14:39+0100\n"
-"PO-Revision-Date: 2023-06-04 12:50+0000\n"
+"PO-Revision-Date: 2023-06-27 20:50+0000\n"
 "Last-Translator: Thomas <thovi98@gmail.com>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/"
 "documentation/administrator-index/fr/>\n"
@@ -27,10 +27,12 @@ msgstr "Commencer"
 #: ../../administrator/index.md:3
 msgid "Follow the guides in this section to set up and administrate your pod."
 msgstr ""
+"Suivez les guides dans cette section pour configurer et administrer votre "
+"pod."
 
 #: ../../administrator/index.md:9
 msgid "Install Funkwhale on your server"
-msgstr ""
+msgstr "Installer Funkwhale sur votre serveur"
 
 #: ../../administrator/index.md:11
 msgid ""
@@ -39,20 +41,26 @@ msgid ""
 "guides](installation/index.md). Choose the installation method that works"
 " for you!"
 msgstr ""
+"Funkwhale est auto-hébergée, ce qui signifie que vous l’exécutez sur votre "
+"propre serveur. Pour configurer votre propre pod Funkwhale, suivez [nos "
+"guides d’installation](installation/index.md). Choisissez la méthode d’"
+"installation qui fonctionne pour vous !"
 
 #: ../../administrator/index.md:13
 msgid "Configure your Funkwhale pod"
-msgstr ""
+msgstr "Configurez votre pod Funkwhale"
 
 #: ../../administrator/index.md:15
 msgid ""
 "Once you've installed Funkwhale, you can use [the guides in this "
 "section](configuration/index.md) to configure it."
 msgstr ""
+"Une fois que vous avez installé Funkwhale, vous pouvez utiliser [les guides "
+"dans cette section](configuration/index.md) pour le configurer."
 
 #: ../../administrator/index.md:17
 msgid "Upgrade your Funkwhale pod"
-msgstr ""
+msgstr "Mettre à jour votre pod Funkwhale"
 
 #: ../../administrator/index.md:19
 msgid ""
@@ -61,10 +69,14 @@ msgid ""
 "moving from our deprecated mono-container Docker setup, check out our "
 "[migration guide](migration.md)."
 msgstr ""
+"Funkwhale sort de nouvelles mises à jour régulièrement. Pour rester à jour "
+"avec ces modifications, suivez nos [guides de mises à jour](upgrade/index.md)"
+". Si vous venez de notre configuration dépréciée Docker mono-container, "
+"suivez nos [guides de migration](migration.md)."
 
 #: ../../administrator/index.md:21
 msgid "Manage your Funkwhale pod"
-msgstr ""
+msgstr "Gérer votre pod Funkwhale"
 
 #: ../../administrator/index.md:23
 msgid ""
@@ -75,6 +87,12 @@ msgid ""
 "dashboard](django/index.md) and our [management script](manage-"
 "script/index.md) to get started."
 msgstr ""
+"Funkwhale fournir des outils pour gérer le contenu et les utilisateurs de "
+"votre pod Funkwhale. En plus des [outils de modération de l’interface](../"
+"moderator/index.md), les administrateurs de pod peuvent utiliser certains "
+"outils supplémentaires pour une administration plus poussée. Suivez notre ["
+"guide du tableau de bord de Django](django/index.md) et notre [script de "
+"gestion](manage-script/index.md) pour commencer."
 
 #~ msgid ""
 #~ "Funkwhale is self-hosted, meaning you"
