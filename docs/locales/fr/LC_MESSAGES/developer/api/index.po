@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-01 14:05+0100\n"
-"PO-Revision-Date: 2023-06-24 20:50+0000\n"
+"PO-Revision-Date: 2023-06-27 20:50+0000\n"
 "Last-Translator: Thomas <thovi98@gmail.com>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/"
 "documentation/developer-api-index/fr/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: ../../developer_documentation/api/index.md:7
 msgid "API explorer"
-msgstr ""
+msgstr "Explorateur API"
 
 #: ../../developer_documentation/api/index.md:7
 msgid "Resources"
@@ -30,7 +30,7 @@ msgstr "Ressources"
 
 #: ../../developer_documentation/api/index.md:1
 msgid "Funkwhale API"
-msgstr ""
+msgstr "API Funkwhale"
 
 #: ../../developer_documentation/api/index.md:3
 msgid ""
@@ -40,6 +40,10 @@ msgid ""
 "is the central component of the project and houses the application's "
 "logic."
 msgstr ""
+"l’API Funkwhale est un [API REST](https://developer.mozilla.org/en-US/docs/"
+"Glossary/REST) écrit en [Python](https://www.python.org/) utilisant[Django "
+"REST framework](https://www.django-rest-framework.org/). C’est le composant "
+"central du projet et abrite la logique de l’application."
 
 #: ../../developer_documentation/api/index.md:5
 msgid ""
@@ -48,3 +52,8 @@ msgid ""
 "currently working on Funkwhale API v2, but this is a work in progress and"
 " not yet ready for production use."
 msgstr ""
+"L'API actuelle (v1) est **stable**, ce qui signifie que nous nous engageons "
+"à ne pas introduire de changements radicaux et à maintenir la compatibilité. "
+"Nous travaillons actuellement sur l'API Funkwhale v2, mais il s'agit d'un "
+"travail en cours et il n'est pas encore prêt pour une utilisation en "
+"production."
