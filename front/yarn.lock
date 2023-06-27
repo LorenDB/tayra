@@ -2630,6 +2630,14 @@ automation-events@^6.0.1, automation-events@^6.0.5:
     "@babel/runtime" "^7.22.5"
     tslib "^2.5.3"
 
+automation-events@^6.0.6:
+  version "6.0.6"
+  resolved "https://registry.yarnpkg.com/automation-events/-/automation-events-6.0.6.tgz#19981024e1bfc1e393bb786b1a89380114759f06"
+  integrity sha512-0gFiz0TCa0iLm5XBOFtXrcOmA8RB8jOFkj2IWiNnhr0LeahfGQny9ccs1+yYJBJuhKAWUu/lTsXsYELsjvuP0Q==
+  dependencies:
+    "@babel/runtime" "^7.22.5"
+    tslib "^2.6.0"
+
 available-typed-arrays@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/available-typed-arrays/-/available-typed-arrays-1.0.5.tgz#92f95616501069d07d10edb2fc37d3e1c65123b7"
@@ -5284,7 +5292,16 @@ standardized-audio-context-mock@9.6.18:
     tslib "^2.5.0"
     vehicles "^9.0.1"
 
-standardized-audio-context@25.3.52, standardized-audio-context@^25.3.46:
+standardized-audio-context@25.3.53:
+  version "25.3.53"
+  resolved "https://registry.yarnpkg.com/standardized-audio-context/-/standardized-audio-context-25.3.53.tgz#b7366724ed95913ed75f235e8cbeffcce5694db7"
+  integrity sha512-uLtKsl/ZDPCwKqw8lzPtJXQJYp4uF4E9A2srNMj6nxmvFaZbJPx0X9pWuYcV/kMsmlIkRxBpofyDG1AdodW0fA==
+  dependencies:
+    "@babel/runtime" "^7.22.5"
+    automation-events "^6.0.6"
+    tslib "^2.6.0"
+
+standardized-audio-context@^25.3.46:
   version "25.3.52"
   resolved "https://registry.yarnpkg.com/standardized-audio-context/-/standardized-audio-context-25.3.52.tgz#46683a8230c065dcb00c33ba336df2d7d31a7406"
   integrity sha512-rVWhfpVwsgmWgx+rb+K8st+nTPiceKCe+/J6RYzFIGsvbAWIM9k0IRMpQXFv7Pysvze9WRFIrnhtwMmfJhw0Xg==
@@ -5531,6 +5548,11 @@ tslib@^2.4.0, tslib@^2.5.0, tslib@^2.5.3:
   version "2.5.3"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.5.3.tgz#24944ba2d990940e6e982c4bea147aba80209913"
   integrity sha512-mSxlJJwl3BMEQCUNnxXBU9jP4JBktcEGhURcPR6VQVlnP0FdDEsIaz0C35dXNGLyRfrATNofF0F5p2KPxQgB+w==
+
+tslib@^2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.6.0.tgz#b295854684dbda164e181d259a22cd779dcd7bc3"
+  integrity sha512-7At1WUettjcSRHXCyYtTselblcHl9PJFFVKiCAy/bY97+BPZXSQ2wbq0P9s8tK2G7dFQfNnlJnPAiArVBVBsfA==
 
 tsutils@^3.21.0:
   version "3.21.0"
