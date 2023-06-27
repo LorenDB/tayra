@@ -73,7 +73,7 @@ class Command(BaseCommand):
 
         self.stdout.write(f"Found {to_change.count()} uploads to update.")
 
-        target = options["target"] if options["target"] else options["source"]
+        target = options.get("target", options["source"])
 
         for upl in to_change:
             upl.audio_file = str(upl.source).replace(str(prefix), str(target))
