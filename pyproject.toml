@@ -6,7 +6,6 @@ directory = "changes/changelog.d/"
 start_string = ".. towncrier\n"
 template = "changes/template.rst"
 issue_format = ""
-title_format = "{version} (unreleased)"
 underlines = "-"
 
 [[tool.towncrier.section]]
