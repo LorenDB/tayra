@@ -39,7 +39,7 @@ backup.html, ../administrator/upgrade/backup.html
 admin/migration.html, ../administrator/installation/migrate.html
 admin/commands.html, ../administrator/manage-script/index.html
 admin/mrf.html, ../administrator/configuration/mrf.html
-admin/url.html, ../administrator/configuration/change_url.html
+admin/url.html, ../administrator/configuration/change-url.html
 admin/optimization.html, ../administrator/configuration/optimize.html
 architecture.html, ../developer/architecture.html
 contributing.html, ../developer/index.html
@@ -52,3 +52,4 @@ documentation/index.html, ../contributor/documentation.html
 translators.html, ../contributor/translation.html
 federation.html, ../developer/federation/index.html
 upgrading.html, ../administrator/upgrade/index.html
+administrator_documentation/upgrade_docs/docker.html, ../../administrator/upgrade/docker.html

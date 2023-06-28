@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, reactive, watch, watchEffect, onMounted } from 'vue'
+import { computed, ref, reactive, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
@@ -84,7 +84,11 @@ const fetchCandidates = async () => {
   }
 }
 
-watch(filters, fetchCandidates)
+// NOTE: Whenever we modify filters array, we refetch the candidates automatically
+watch(filters, fetchCandidates, {
+  deep: true
+})
+
 const checkErrors = computed(() => checkResult.value?.errors ?? [])
 
 const isPublic = ref(true)
@@ -107,6 +111,7 @@ const fetchFilters = async () => {
   }
 }
 
+let filterId = Number.MIN_SAFE_INTEGER
 const isLoading = ref(false)
 const fetchData = async () => {
   isLoading.value = true
@@ -114,10 +119,10 @@ const fetchData = async () => {
   try {
     const response = await axios.get(`radios/radios/${props.id}/`)
     filters.length = 0
-    filters.push(...response.data.config.map((filter: FilterConfig) => ({
-      config: filter,
-      filter: availableFilters.find(available => available.type === filter.type),
-      hash: +new Date()
+    filters.push(...response.data.config.map((config: FilterConfig) => ({
+      config,
+      filter: availableFilters.find(available => available.type === config.type),
+      hash: filterId++
     })))
 
     radioName.value = response.data.name
@@ -130,28 +135,19 @@ const fetchData = async () => {
   isLoading.value = false
 }
 
-fetchFilters().then(() => watchEffect(fetchData))
+fetchFilters().then(() => fetchData())
 
 const add = async () => {
-  if (currentFilter.value) {
-    filters.push({
-      config: {} as FilterConfig,
-      filter: currentFilter.value,
-      hash: +new Date()
-    })
-  }
-
-  return fetchCandidates()
-}
-
-const updateConfig = async (index: number, field: keyof FilterConfig, value: unknown) => {
-  filters[index].config[field] = value
-  return fetchCandidates()
+  if (!currentFilter.value) return
+  filters.push({
+    config: {} as FilterConfig,
+    filter: currentFilter.value,
+    hash: +new Date()
+  })
 }
 
 const deleteFilter = async (index: number) => {
   filters.splice(index, 1)
-  return fetchCandidates()
 }
 
 const success = ref(false)
@@ -325,11 +321,8 @@ onMounted(() => {
             <builder-filter
               v-for="(f, index) in filters"
               :key="f.hash"
-              :index="index"
-              :config="f.config"
-              :filter="f.filter"
-              @update-config="updateConfig"
-              @delete="deleteFilter"
+              v-model:data="filters[index]"
+              @delete="deleteFilter(index)"
             />
           </tbody>
         </table>

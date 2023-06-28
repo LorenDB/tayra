@@ -7,6 +7,9 @@ import axios from 'axios'
 import useLogger from '~/composables/useLogger'
 import useFormData from '~/composables/useFormData'
 
+import { clear as clearIDB } from 'idb-keyval'
+import { useQueue } from '~/composables/audio/queue'
+
 export type Permission = 'settings' | 'library' | 'moderation'
 export interface State {
   authenticated: boolean
@@ -167,6 +170,7 @@ const store: Module<State, RootState> = {
       } catch (error) {
         console.log('Error while logging out, probably logged in via oauth')
       }
+
       const modules = [
         'auth',
         'favorites',
@@ -175,9 +179,20 @@ const store: Module<State, RootState> = {
         'queue',
         'radios'
       ]
-      modules.forEach(m => {
-        commit(`${m}/reset`, null, { root: true })
-      })
+
+      for (const module of modules) {
+        commit(`${module}/reset`, null, { root: true })
+      }
+
+      // Clear session storage
+      sessionStorage.clear()
+
+      // Clear track queue
+      await useQueue().clear()
+
+      // Clear all indexedDB data
+      await clearIDB()
+
       logger.info('Log out, goodbye!')
     },
 

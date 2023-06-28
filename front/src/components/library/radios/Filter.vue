@@ -6,8 +6,8 @@ import type { Track } from '~/types'
 import axios from 'axios'
 import $ from 'jquery'
 
-import { useCurrentElement } from '@vueuse/core'
-import { ref, onMounted, watch } from 'vue'
+import { useCurrentElement, useVModel } from '@vueuse/core'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useStore } from '~/store'
 import { clone } from 'lodash-es'
 
@@ -20,35 +20,33 @@ type Filter = { candidates: { count: number, sample: Track[] } }
 type ResponseType = { filters: Array<Filter> }
 
 interface Events {
-  (e: 'update-config', index: number, name: string, value: number[] | boolean): void
-  (e: 'delete', index: number): void
+  (e: 'update:data', name: string, value: number[] | boolean): void
+  (e: 'delete'): void
 }
 
 interface Props {
-  index: number
-
-  filter: BuilderFilter
-  config: FilterConfig
+  data: {
+    filter: BuilderFilter
+    config: FilterConfig
+  }
 }
 
 const emit = defineEmits<Events>()
 const props = defineProps<Props>()
+const data = useVModel(props, 'data', emit)
 
 const store = useStore()
 
 const checkResult = ref<Filter | null>(null)
 const showCandidadesModal = ref(false)
-const exclude = ref(props.config.not)
+const exclude = computed({
+  get: () => data.value.config.not,
+  set: (value: boolean) => (data.value.config.not = value)
+})
 
 const el = useCurrentElement()
 onMounted(() => {
-  for (const field of props.filter.fields) {
-    const selector = ['.dropdown']
-
-    if (field.type === 'list') {
-      selector.push('.multiple')
-    }
-
+  for (const field of data.value.filter.fields) {
     const settings: SemanticUI.DropdownSettings = {
       onChange (value) {
         value = $(this).dropdown('get value').split(',')
@@ -57,15 +55,19 @@ onMounted(() => {
           value = value.map((number: string) => parseInt(number))
         }
 
-        value.value = value
-        emit('update-config', props.index, field.name, value)
+        data.value.config[field.name] = value
         fetchCandidates()
       }
     }
 
+    let selector = field.type === 'list'
+      ? '.dropdown.multiple'
+      : '.dropdown'
+
     if (field.autocomplete) {
-      selector.push('.autocomplete')
-      // @ts-expect-error custom field?
+      selector += '.autocomplete'
+
+      // @ts-expect-error Semantic UI types are incomplete
       settings.fields = field.autocomplete_fields
       settings.minCharacters = 1
       settings.apiSettings = {
@@ -85,15 +87,15 @@ onMounted(() => {
       }
     }
 
-    $(el.value).find(selector.join('')).dropdown(settings)
+    $(el.value).find(selector).dropdown(settings)
   }
 })
 
 const fetchCandidates = async () => {
   const params = {
     filters: [{
-      ...clone(props.config),
-      type: props.filter.type
+      ...clone(data.value.config),
+      type: data.value.filter.type
     }]
   }
 
@@ -106,11 +108,12 @@ const fetchCandidates = async () => {
 }
 
 watch(exclude, fetchCandidates)
+fetchCandidates()
 </script>
 
 <template>
   <tr>
-    <td>{{ filter.label }}</td>
+    <td>{{ data.filter.label }}</td>
     <td>
       <div class="ui toggle checkbox">
         <input
@@ -118,7 +121,6 @@ watch(exclude, fetchCandidates)
           v-model="exclude"
           name="public"
           type="checkbox"
-          @change="$emit('update-config', index, 'not', exclude)"
         >
         <label
           for="exclude-filter"
@@ -130,33 +132,34 @@ watch(exclude, fetchCandidates)
     </td>
     <td>
       <div
-        v-for="f in filter.fields"
+        v-for="f in data.filter.fields"
         :key="f.name"
         class="ui field"
       >
-        <div :class="['ui', 'search', 'selection', 'dropdown', {'autocomplete': f.autocomplete}, {'multiple': f.type === 'list'}]">
+        <div :class="['ui', 'search', 'selection', 'dropdown', { autocomplete: f.autocomplete }, { multiple: f.type === 'list' }]">
           <i class="dropdown icon" />
           <div class="default text">
             {{ f.placeholder }}
           </div>
           <input
-            v-if="f.type === 'list' && config[f.name as keyof FilterConfig]"
+            v-if="f.type === 'list' && data.config[f.name as keyof FilterConfig]"
             :id="f.name"
-            :value="(config[f.name as keyof FilterConfig] as string[]).join(',')"
+            :value="(data.config[f.name as keyof FilterConfig] as string[]).join(',')"
             type="hidden"
           >
           <div
-            v-if="typeof config[f.name as keyof FilterConfig] === 'object'"
+            v-if="typeof data.config[f.name as keyof FilterConfig] === 'object'"
             class="ui menu"
           >
             <div
-              v-for="(v, i) in config[f.name as keyof FilterConfig] as object"
-              :key="i"
+              v-for="(v, i) in data.config[f.name as keyof FilterConfig] as object"
+              v-once
+              :key="data.config.ids?.[i] ?? v"
               class="ui item"
               :data-value="v"
             >
-              <template v-if="config.names">
-                {{ config.names[i] }}
+              <template v-if="data.config.names">
+                {{ data.config.names[i] }}
               </template>
               <template v-else>
                 {{ v }}
@@ -170,7 +173,7 @@ watch(exclude, fetchCandidates)
       <a
         v-if="checkResult"
         href=""
-        :class="['ui', {'success': checkResult.candidates.count > 10}, 'label']"
+        :class="['ui', { success: checkResult.candidates.count > 10 }, 'label']"
         @click.prevent="showCandidadesModal = !showCandidadesModal"
       >
         {{ $t('components.library.radios.Filter.matchingTracks', checkResult.candidates.count) }}
@@ -200,7 +203,7 @@ watch(exclude, fetchCandidates)
     <td>
       <button
         class="ui danger button"
-        @click="$emit('delete', index)"
+        @click="emit('delete')"
       >
         {{ $t('components.library.radios.Filter.removeButton') }}
       </button>

@@ -324,7 +324,7 @@ export const useQueue = createGlobalState(() => {
   const clear = async () => {
     await currentSound.value?.pause()
     await currentSound.value?.seekTo(0)
-    currentSound.value?.dispose()
+    await currentSound.value?.dispose()
 
     clearRadio.value = true
 

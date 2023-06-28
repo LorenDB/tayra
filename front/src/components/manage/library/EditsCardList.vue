@@ -61,9 +61,7 @@ interface TargetType {
 }
 
 type Targets = Exclude<StateTarget, undefined>['type']
-const targets = reactive({
-  track: {}
-}) as Record<Targets, Record<string, TargetType>>
+const targets = reactive<Record<Targets, Record<string, TargetType>>>(Object.create(null))
 
 const fetchTargets = async () => {
   // we request target data via the API so we can display previous state
@@ -96,6 +94,7 @@ const fetchTargets = async () => {
     })
 
     for (const payload of response?.data?.results ?? []) {
+      targets[key as keyof typeof targets] ??= Object.create(null)
       targets[key as keyof typeof targets][payload.id] = {
         payload,
         currentState: configs[key as keyof typeof targets].fields.reduce((state, field) => {

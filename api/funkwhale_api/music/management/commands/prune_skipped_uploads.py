@@ -22,7 +22,7 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, **options):
         skipped = models.Upload.objects.filter(import_status="skipped")
-        count = len(skipped)
+        count = skipped.count()
         if options["force"]:
             skipped.delete()
             print(f"Deleted {count} entries from the database.")

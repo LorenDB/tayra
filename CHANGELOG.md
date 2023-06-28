@@ -9,6 +9,76 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 <!-- towncrier -->
 
+## 1.3.1 (2023-06-27)
+
+Upgrade instructions are available at
+https://docs.funkwhale.audio/admin/upgrading.html
+
+Bugfixes:
+
+- Dynamically add report targets to the map to avoid missing keys (#2121)
+- Fix location of the nginx config template for docker deployments (#2146)
+- Fix pagination on search page (#2134)
+- Fix Prune skipped uploads is OOM killed (#2136)
+- Fixed Fomantic UI dropdown messing with Vue internals in radio builder (#2142)
+- Fixed premature login redirect on podcast detail page (#2155)
+- Fixed stale data in indexedDB after logout (#2133)
+- Make sure dependency pins are working with pip install (Restores python3.7 support)
+- Make sure embed codes generated before 1.3.0 are still working
+- Make sure the SPA Manifest is fetched using the right protocol (#2151)
+- Moved modals above all content (#2154)
+- Raise SystemExit exception in API manage.py script
+- Remove track from cache when it gets disposed outside of the cache handler (#2157)
+- Standardize instanceUrl value in instance store (#2113)
+- Fix for banner images not being served on pods.
+- Fixed PWA Window theme color.
+
+Documentation:
+
+- Fix instructions for using custom nginx configurations in our documentation
+
+Other:
+
+- Don't run CI on branch containing stable or develop
+
+Contributors to our Issues:
+
+- AMoonRabbit
+- Asier Iturralde Sarasola
+- Bertille D.
+- Casuallynoted
+- Ciarán Ainsworth
+- Daniel Jeller
+- Georg Krause
+- JuniorJPDJ
+- Kasper Seweryn
+- Mathieu Jourdan
+- NaiveTub
+- Ricardo
+- Virgile Robles
+- nouts
+- petitminion
+
+Contributors to our Merge Requests:
+
+- AMoonRabbit
+- Ciarán Ainsworth
+- Georg Krause
+- JuniorJPDJ
+- Kasper Seweryn
+- jooola
+- petitminion
+
+Committers:
+
+- AMoonRabbit
+- Georg Krause
+- jo
+- JuniorJPDJ
+- Kasper Seweryn
+- Moon Rabbit
+- Petitminion
+
 ## 1.3.0 (2023-06-01)
 
 Upgrade instructions are available at

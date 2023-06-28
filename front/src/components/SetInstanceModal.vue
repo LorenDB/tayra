@@ -33,7 +33,7 @@ const suggestedInstances = computed(() => {
     ...store.state.instance.knownInstances,
     serverUrl.endsWith('/') ? serverUrl : serverUrl + '/',
     store.getters['instance/defaultInstance']
-  ]).slice(1)
+  ])
 })
 
 watch(() => store.state.instance.instanceUrl, () => store.dispatch('instance/fetchSettings'))

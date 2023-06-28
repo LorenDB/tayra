@@ -132,6 +132,12 @@ server {
         add_header Access-Control-Allow-Origin '*';
     }
 
+    # Allow direct access to only specific subdirectories in /media
+    location /media/dynamic_preferences/ {
+        alias ${MEDIA_ROOT}/dynamic_preferences/;
+        add_header Access-Control-Allow-Origin '*';
+    }
+
     # This is an internal location that is used to serve
     # media (uploaded) files once correct permission / authentication
     # has been checked on API side.
@@ -157,6 +163,7 @@ server {
     }
 
     location /manifest.json {
-        return 302 /api/v1/instance/spa-manifest.json;
+        # If the reverse proxy is terminating SSL, nginx gets confused and redirects to http, hence the full URL
+        return 302 ${FUNKWHALE_PROTOCOL}://${FUNKWHALE_HOSTNAME}/api/v1/instance/spa-manifest.json;
     }
 }

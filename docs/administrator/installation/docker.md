@@ -238,8 +238,8 @@ The frontend container ships default Nginx templates which serve content to the 
 2. Download the Nginx template files to the `/srv/funkwhale/nginx` directory.
 
    ```{code-block} sh
-   curl -L -o /srv/funkwhale/nginx/funkwhale.template "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/${FUNKWHALE_VERSION}/deploy/docker.nginx.template"
-   curl -L -o /srv/funkwhale/nginx/funkwhale_proxy.conf "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/${FUNKWHALE_VERSION}/deploy/docker.funkwhale_proxy.conf"
+   curl -L -o /srv/funkwhale/nginx/funkwhale.template "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/${FUNKWHALE_VERSION}/front/docker/funkwhale.conf.template"
+   curl -L -o /srv/funkwhale/nginx/funkwhale_proxy.conf "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/${FUNKWHALE_VERSION}/front/docker/funkwhale_proxy.conf"
    ```
 
 3. Make any changes you want to make to these files.

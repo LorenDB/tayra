@@ -83,7 +83,7 @@ services:
       # Uncomment if you want to use your previous nginx config, please let us
       # know what special configuration you need, so we can support it with out
       # upstream nginx configuration!
-      #- "./nginx/funkwhale.template:/etc/nginx/conf.d/funkwhale.template:ro"
+      #- "./nginx/funkwhale.template:/etc/nginx/templates/default.conf.template:ro"
       #- "./nginx/funkwhale_proxy.conf:/etc/nginx/funkwhale_proxy.conf:ro"
 
       - "${MUSIC_DIRECTORY_SERVE_PATH-/srv/funkwhale/data/music}:${MUSIC_DIRECTORY_PATH-/music}:ro"
