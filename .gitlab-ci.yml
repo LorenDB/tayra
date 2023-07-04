@@ -128,11 +128,8 @@ review_docs:
     - mkdir docs-review
     - cd docs
     - apt-get update
-    - apt-get install -y graphviz git
+    - apt-get install -y graphviz
     - poetry install
-    - git switch develop && git pull
-    - git switch stable && git pull
-    - git switch $CI_COMMIT_BRANCH && git pull
   script:
     - poetry run python3 -m sphinx . $BUILD_PATH
   artifacts:
@@ -381,9 +378,6 @@ build_docs:
     - apt-get update
     - apt-get install -y graphviz
     - poetry install
-    - poetry run pip install --no-deps --editable ../api
-    - git branch stable --track origin/stable || true
-    - git branch develop --track origin/develop || true
   script:
     - ./build_docs.sh
   artifacts:
