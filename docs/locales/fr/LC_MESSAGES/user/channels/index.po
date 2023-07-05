@@ -8,8 +8,9 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-01 14:05+0100\n"
-"PO-Revision-Date: 2023-06-27 20:50+0000\n"
-"Last-Translator: Thomas <thovi98@gmail.com>\n"
+"PO-Revision-Date: 2023-07-06 01:50+0000\n"
+"Last-Translator: \"Fun.k.whale Trad\" <fun.k.whale@users.noreply.translate."
+"funkwhale.audio>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/"
 "documentation/user-channels-index/fr/>\n"
 "Language: fr\n"
@@ -22,19 +23,19 @@ msgstr ""
 
 #: ../../user_documentation/channels/index.md:12
 msgid "Manage your channels"
-msgstr ""
+msgstr "Gérer vos chaînes"
 
 #: ../../user_documentation/channels/index.md:24
 msgid "Manage channel content"
-msgstr ""
+msgstr "Gérer le contenu de la chaîne"
 
 #: ../../user_documentation/channels/index.md:37
 msgid "Follow channels"
-msgstr ""
+msgstr "Suivre des chaînes"
 
 #: ../../user_documentation/channels/index.md:1
 msgid "Channels"
-msgstr ""
+msgstr "Chaînes"
 
 #: ../../user_documentation/channels/index.md:3
 msgid ""
@@ -42,10 +43,13 @@ msgid ""
 "enable you to create and share your creations with the whole "
 "{term}`Fediverse`."
 msgstr ""
+"Utilisez les chaînes pour publier votre propre contenu audio sur Funkwhale. "
+"Les chaînes vous permettent de créer et de partager vos créations avec "
+"l'ensemble du {term}`Fediverse`."
 
 #: ../../user_documentation/channels/index.md:5
 msgid "Funkwhale supports two types of channel:"
-msgstr ""
+msgstr "Funkwhale supporte deux types de chaînes :"
 
 #: ../../user_documentation/channels/index.md:7
 msgid ""
@@ -53,10 +57,15 @@ msgid ""
 "also use their favorite {term}`podcatcher` to listen to podcasts using "
 "{abbr}`RSS (Really Simple Syndication)`."
 msgstr ""
+"**Podcasts** – diffuser votre podcast sur Fediverse. Les auditeurs peuvent "
+"également utiliser leur {term}`podcatcher` favori pour écouter les podcasts "
+"en utilisant un {abbr}`RSS (Really Simple Syndication)`."
 
 #: ../../user_documentation/channels/index.md:8
 msgid "**Artist Discography** – upload your own music and create a following."
 msgstr ""
+"**Discographie d'artiste** – téléchargez votre propre musique et créez un "
+"suivi."
 
 #: ../../user_documentation/channels/index.md:10
 msgid "Follow the guides in this section to get started."
