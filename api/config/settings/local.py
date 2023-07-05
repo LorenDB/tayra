@@ -76,7 +76,7 @@ DEBUG_TOOLBAR_PANELS = [
 
 # django-extensions
 # ------------------------------------------------------------------------------
-# INSTALLED_APPS += ('django_extensions', )
+INSTALLED_APPS += ("django_extensions",)
 
 INSTALLED_APPS += ("drf_spectacular",)
 
