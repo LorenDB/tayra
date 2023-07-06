@@ -362,7 +362,7 @@ deploy_documentation:
     - eval `ssh-agent -s`
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
   script:
-    - rsync -r -e --delete "ssh -p 2282" $CI_PROJECT_DIR/public/ docs@docs.funkwhale.audio:/htdocs/$CI_COMMIT_REF_NAME
+    - rsync -r --delete -e "ssh -p 2282" $CI_PROJECT_DIR/public/ docs@docs.funkwhale.audio:/htdocs/$CI_COMMIT_REF_NAME
   rules:
     - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
 
