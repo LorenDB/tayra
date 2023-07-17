@@ -154,12 +154,14 @@ services:
 
   docs:
     build: docs
-    command: python3 serve.py
+    command: make clean dev
+    working_dir: /src/docs
+    user: 1000:1000
     volumes:
-      - ".:/app/"
+      - .:/src
     ports:
-      - "35730:35730"
-      - "8001:8001"
+      - 8001:8001
+      - 35730:35730
 
   api-docs:
     image: swaggerapi/swagger-ui:v3.37.2

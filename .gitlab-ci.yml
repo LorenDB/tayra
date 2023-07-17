@@ -118,21 +118,16 @@ review_docs:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes: [docs/**/*]
 
-  image: $CI_REGISTRY/funkwhale/ci/python-funkwhale-api:3.11
-  variables:
-    BUILD_PATH: "../docs-review"
+  image: $CI_REGISTRY/funkwhale/ci/python-funkwhale-docs:3.11
   environment:
     name: review/docs/$CI_COMMIT_REF_NAME
     url: http://$CI_PROJECT_NAMESPACE.pages.funkwhale.audio/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/docs-review/index.html
   cache: *docs_cache
   before_script:
-    - mkdir docs-review
     - cd docs
-    - apt-get update
-    - apt-get install -y graphviz
-    - poetry install
+    - make install
   script:
-    - poetry run python3 -m sphinx . $BUILD_PATH
+    - make build BUILD_DIR=../docs-review
   artifacts:
     expire_in: 2 weeks
     paths:
@@ -372,19 +367,13 @@ build_docs:
     - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
     - changes: [docs/**/*]
 
-  image: $CI_REGISTRY/funkwhale/ci/python-funkwhale-api:3.11
-  variables:
-    BUILD_PATH: "../public"
-    GIT_STRATEGY: clone
-    GIT_DEPTH: 0
+  image: $CI_REGISTRY/funkwhale/ci/python-funkwhale-docs:3.11
   cache: *docs_cache
   before_script:
     - cd docs
-    - apt-get update
-    - apt-get install -y graphviz
-    - poetry install
+    - make install
   script:
-    - ./build_docs.sh
+    - make build-all BUILD_DIR=../public
   artifacts:
     expire_in: 2 weeks
     paths:

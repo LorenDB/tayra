@@ -1,5 +1,19 @@
 FROM python:3.11
 
-RUN apt-get update && apt-get install -y graphviz
-RUN pip install sphinx livereload sphinx_rtd_theme django-environ django myst-parser sphinx-design sphinx-multiversion sphinxcontrib-mermaid sphinx-copybutton
-WORKDIR /app/docs
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ARG PIP_NO_CACHE_DIR=1
+
+RUN set -eux \
+    && DEBIAN_FRONTEND=noninteractive apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    curl \
+    git \
+    graphviz \
+    make \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN set -eux \
+    && pip install --upgrade pip \
+    && pip install setuptools wheel pipx \
+    && PIPX_BIN_DIR=/usr/local/bin pipx install poetry
