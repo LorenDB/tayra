@@ -53,7 +53,8 @@ ENV PATH="/venv/bin:$PATH"
 COPY --from=requirements /requirements.txt /requirements.txt
 COPY --from=requirements /dev-requirements.txt /dev-requirements.txt
 
-RUN set -eux; \
+RUN --mount=type=cache,target=~/.cache/pip; \
+  set -eux; \
   pip3 install --upgrade pip; \
   pip3 install setuptools wheel; \
   # Currently we are unable to relieably build rust-based packages on armv7. This
@@ -69,7 +70,8 @@ RUN set -eux; \
   watchfiles==0.18.1
 
 ARG install_dev_deps=0
-RUN set -eux; \
+RUN --mount=type=cache,target=~/.cache/pip; \
+  set -eux; \ 
   if [ "$install_dev_deps" = "1" ] ; then \
    grep -Ev 'cryptography|lxml|pillow|psycopg2|watchfiles' /dev-requirements.txt \
    | pip3 install -r /dev/stdin \
@@ -111,7 +113,8 @@ ENV PATH="/venv/bin:$PATH"
 COPY . /app
 WORKDIR /app
 
-RUN set -eux; \
+RUN --mount=type=cache,target=~/.cache/pip; \
+  set -eux; \ 
   pip3 install --no-deps --editable .
 
 ENV IS_DOCKER_SETUP=true
