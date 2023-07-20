@@ -329,6 +329,10 @@ export const useQueue = createGlobalState(() => {
     clearRadio.value = true
 
     const lastTracks = [...tracks.value]
+
+    // Clear shuffled tracks
+    shuffledIds.value.length = 0
+
     tracks.value.length = 0
     await delMany(lastTracks)
 
