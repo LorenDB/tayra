@@ -71,7 +71,7 @@ RUN --mount=type=cache,target=~/.cache/pip; \
 
 ARG install_dev_deps=0
 RUN --mount=type=cache,target=~/.cache/pip; \
-  set -eux; \ 
+  set -eux; \
   if [ "$install_dev_deps" = "1" ] ; then \
    grep -Ev 'cryptography|lxml|pillow|psycopg2|watchfiles' /dev-requirements.txt \
    | pip3 install -r /dev/stdin \
@@ -114,7 +114,7 @@ COPY . /app
 WORKDIR /app
 
 RUN --mount=type=cache,target=~/.cache/pip; \
-  set -eux; \ 
+  set -eux; \
   pip3 install --no-deps --editable .
 
 ENV IS_DOCKER_SETUP=true
