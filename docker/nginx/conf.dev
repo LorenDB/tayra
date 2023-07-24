@@ -92,7 +92,7 @@ http {
             add_header Content-Security-Policy "connect-src https: http: 'self'; default-src 'self'; script-src 'self' unpkg.com 'unsafe-inline' 'unsafe-eval'; style-src https: http: 'self' 'unsafe-inline'; img-src https: http: 'self' data:; font-src https: http: 'self' data:; object-src 'none'; media-src https: http: 'self' data:";
             add_header Referrer-Policy "strict-origin-when-cross-origin";
 
-            proxy_pass   http://funkwhale-front/embed.html;
+            proxy_pass   http://funkwhale-front;
             expires 1d;
         }
 
@@ -105,14 +105,6 @@ http {
         location /rest/ {
             include /etc/nginx/funkwhale_proxy.conf;
             proxy_pass   http://funkwhale-api/api/subsonic/rest/;
-        }
-
-        location /media/__sized__/ {
-            alias /protected/media/__sized__/;
-        }
-
-        location /media/attachments/ {
-            alias /protected/media/attachments/;
         }
 
         location /.well-known/ {
