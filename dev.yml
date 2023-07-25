@@ -71,7 +71,6 @@ services:
       - "DATABASE_URL=postgresql://postgres@postgres/postgres"
       - "CACHE_URL=redis://redis:6379/0"
       - "STATIC_ROOT=/staticfiles"
-      - "MEDIA_ROOT=/data/media"
 
     depends_on:
       - postgres
@@ -103,7 +102,6 @@ services:
       - "FUNKWHALE_PROTOCOL=${FUNKWHALE_PROTOCOL-http}"
       - "DATABASE_URL=postgresql://postgres@postgres/postgres"
       - "CACHE_URL=redis://redis:6379/0"
-      - "MEDIA_ROOT=/data/media"
     volumes:
       - ./api:/app
       - "${MUSIC_DIRECTORY_SERVE_PATH-./data/music}:/music:ro"
