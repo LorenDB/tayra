@@ -20,7 +20,6 @@ class PlaylistViewSet(
     mixins.ListModelMixin,
     viewsets.GenericViewSet,
 ):
-
     serializer_class = serializers.PlaylistSerializer
     queryset = (
         models.Playlist.objects.all()

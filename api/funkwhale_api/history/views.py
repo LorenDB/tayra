@@ -17,7 +17,6 @@ class ListeningViewSet(
     mixins.RetrieveModelMixin,
     viewsets.GenericViewSet,
 ):
-
     serializer_class = serializers.ListeningSerializer
     queryset = models.Listening.objects.all().select_related(
         "user__actor__attachment_icon"

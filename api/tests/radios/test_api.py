@@ -135,7 +135,6 @@ def test_clean_config_is_called_on_serializer_save(mocker, factories):
 
 @pytest.mark.parametrize("radio_type", ["random", "less-listened", "favorites"])
 def test_create_radio_session(radio_type, logged_in_api_client):
-
     url = reverse("api:v1:radios:sessions-list")
     response = logged_in_api_client.post(url, {"radio_type": radio_type})
 

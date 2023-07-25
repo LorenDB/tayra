@@ -674,7 +674,6 @@ class ManageChannelViewSet(
     mixins.DestroyModelMixin,
     viewsets.GenericViewSet,
 ):
-
     url_lookups = [
         {
             "lookup_field": "uuid",

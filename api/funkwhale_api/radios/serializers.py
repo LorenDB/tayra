@@ -54,7 +54,6 @@ class RadioSessionTrackSerializer(serializers.ModelSerializer):
 
 
 class RadioSessionSerializer(serializers.ModelSerializer):
-
     related_object_id = serializers.CharField(required=False, allow_null=True)
 
     class Meta:

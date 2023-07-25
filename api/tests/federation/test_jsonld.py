@@ -237,7 +237,6 @@ async def test_fetch_many(a_responses):
 
 
 def test_dereference():
-
     followers_doc = {
         "@context": jsonld.get_default_context(),
         "id": "https://noop/federation/actors/demo/followers",

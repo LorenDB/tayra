@@ -2,7 +2,6 @@ from funkwhale_api.radios import filters
 
 
 def test_clean_config_artist_name_sorting(factories):
-
     artist3 = factories["music.Artist"](name="The Green Eyes")
     artist2 = factories["music.Artist"](name="The Green Eyed Machine")
     artist1 = factories["music.Artist"](name="The Green Seed")
@@ -21,7 +20,6 @@ def test_clean_config_artist_name_sorting(factories):
 
 
 def test_clean_config_tag_name_sorting(factories):
-
     tag3 = factories["tags.Tag"](name="Rock")
     tag2 = factories["tags.Tag"](name="Classic")
     tag1 = factories["tags.Tag"](name="Punk")

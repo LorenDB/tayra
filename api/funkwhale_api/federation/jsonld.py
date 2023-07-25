@@ -154,7 +154,6 @@ def dereference(value, references):
 
 
 def get_value(value, keep=None, attr=None):
-
     if keep == "first":
         value = value[0]
         if attr:
@@ -253,7 +252,6 @@ class JsonLdSerializer(serializers.Serializer):
 
     def run_validation(self, data=empty):
         if data and data is not empty:
-
             self.jsonld_context = data.get("@context", [])
             if self.context.get("expand", self.jsonld_expand):
                 try:

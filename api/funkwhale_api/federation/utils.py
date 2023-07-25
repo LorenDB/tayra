@@ -145,7 +145,6 @@ def is_local(url) -> bool:
 
 
 def get_actor_data_from_username(username):
-
     parts = username.split("@")
 
     return {
@@ -243,7 +242,6 @@ FID_MODEL_LABELS = [
 
 
 def get_object_by_fid(fid, local=None):
-
     if local:
         parsed = urllib.parse.urlparse(fid)
         if parsed.netloc != settings.FEDERATION_HOSTNAME:

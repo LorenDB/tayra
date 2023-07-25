@@ -138,7 +138,6 @@ def test_channel_update_permission(logged_in_api_client, factories):
 
 
 def test_channel_delete(logged_in_api_client, factories, mocker):
-
     actor = logged_in_api_client.user.create_actor()
     channel = factories["audio.Channel"](attributed_to=actor)
 
@@ -336,7 +335,6 @@ def test_channel_rss_feed_authentication_required(factories, api_client, prefere
 
 
 def test_channel_metadata_choices(factories, api_client):
-
     expected = {
         "language": [
             {"value": code, "label": name} for code, name in locales.ISO_639_CHOICES

@@ -267,7 +267,11 @@ REPLACEMENTS = {
             ("background", "var(--site-background)"),
             ("color", "var(--text-color)"),
         ],
-        ("::-webkit-selection", "::-moz-selection", "::selection",): [
+        (
+            "::-webkit-selection",
+            "::-moz-selection",
+            "::selection",
+        ): [
             ("color", "var(--text-selection-color)"),
             ("background-color", "var(--text-selection-background)"),
         ],
@@ -448,7 +452,10 @@ REPLACEMENTS = {
         ): [
             ("color", "var(--input-focus-placeholder-color)"),
         ],
-        (".ui.form .field > label", ".ui.form .inline.fields .field > label",): [
+        (
+            ".ui.form .field > label",
+            ".ui.form .inline.fields .field > label",
+        ): [
             ("color", "var(--form-label-color)"),
         ],
     },
@@ -779,7 +786,10 @@ REPLACEMENTS = {
             ".structured",
             "tablet stackable",
         ],
-        (".ui.table", ".ui.table > thead > tr > th",): [
+        (
+            ".ui.table",
+            ".ui.table > thead > tr > th",
+        ): [
             ("color", "var(--text-color)"),
             ("background", "var(--table-background)"),
         ],

@@ -46,7 +46,6 @@ class RelatedFilterSet(filters.FilterSet):
 
 
 class ChannelFilterSet(filters.FilterSet):
-
     channel = filters.CharFilter(field_name="_", method="filter_channel")
 
     def filter_channel(self, queryset, name, value):
@@ -70,7 +69,6 @@ class ChannelFilterSet(filters.FilterSet):
 
 
 class LibraryFilterSet(filters.FilterSet):
-
     library = filters.CharFilter(field_name="_", method="filter_library")
 
     def filter_library(self, queryset, name, value):
@@ -96,7 +94,6 @@ class ArtistFilter(
     audio_filters.IncludeChannelsFilterSet,
     moderation_filters.HiddenContentFilterSet,
 ):
-
     q = fields.SearchFilter(search_fields=["name"], fts_search_fields=["body_text"])
     playable = filters.BooleanFilter(field_name="_", method="filter_playable")
     has_albums = filters.BooleanFilter(field_name="_", method="filter_has_albums")

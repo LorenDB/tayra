@@ -756,7 +756,6 @@ class FollowActionSerializer(serializers.Serializer):
 
 
 class AcceptFollowSerializer(FollowActionSerializer):
-
     type = serializers.ChoiceField(choices=["Accept"])
     action_type = "accept"
 
@@ -770,7 +769,6 @@ class AcceptFollowSerializer(FollowActionSerializer):
 
 
 class RejectFollowSerializer(FollowActionSerializer):
-
     type = serializers.ChoiceField(choices=["Reject"])
     action_type = "reject"
 

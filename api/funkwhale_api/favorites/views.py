@@ -19,7 +19,6 @@ class TrackFavoriteViewSet(
     mixins.ListModelMixin,
     viewsets.GenericViewSet,
 ):
-
     filterset_class = filters.TrackFavoriteFilter
     serializer_class = serializers.UserTrackFavoriteSerializer
     queryset = models.TrackFavorite.objects.all().select_related(

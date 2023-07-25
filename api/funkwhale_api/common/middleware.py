@@ -167,7 +167,6 @@ def render_tags(tags):
     <meta hello="world" />
     """
     for tag in tags:
-
         yield "<{tag} {attrs} />".format(
             tag=tag.pop("tag"),
             attrs=" ".join(
@@ -408,7 +407,6 @@ class PymallocMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-
         if tracemalloc.is_tracing():
             snapshot = tracemalloc.take_snapshot()
             stats = snapshot.statistics("lineno")

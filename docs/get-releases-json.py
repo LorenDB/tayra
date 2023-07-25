@@ -7,7 +7,6 @@ from distutils.version import StrictVersion
 
 
 def get_versions():
-
     output = subprocess.check_output(
         ["git", "tag", "-l", "--format=%(creatordate:iso-strict)|%(refname:short)"]
     )
@@ -16,7 +15,7 @@ def get_versions():
     for line in output.decode().splitlines():
         try:
             date, tag = line.split("|")
-        except (ValueError):
+        except ValueError:
             continue
 
         if not date or not tag:

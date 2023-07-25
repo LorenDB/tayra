@@ -208,7 +208,6 @@ class InboxItemViewSet(
     mixins.RetrieveModelMixin,
     viewsets.GenericViewSet,
 ):
-
     queryset = (
         models.InboxItem.objects.select_related("activity__actor")
         .prefetch_related("activity__object", "activity__target")
@@ -239,7 +238,6 @@ class InboxItemViewSet(
 class FetchViewSet(
     mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
 ):
-
     queryset = models.Fetch.objects.select_related("actor")
     serializer_class = api_serializers.FetchSerializer
     permission_classes = [permissions.IsAuthenticated]
