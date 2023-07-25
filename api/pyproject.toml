@@ -29,7 +29,7 @@ python = "^3.7"
 
 # Django
 dj-rest-auth = { extras = ["with_social"], version = "2.2.8" }
-django = "==3.2.19"
+django = "==3.2.20"
 django-allauth = "==0.42.0"
 django-cache-memoize = "0.1.10"
 django-cacheops = "==6.1"
