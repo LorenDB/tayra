@@ -1,15 +1,3 @@
-// import Logger from 'js-logger'
-//
-// Logger.useDefaults({
-//   defaultLevel: import.meta.env.DEV
-//     ? Logger.DEBUG
-//     : Logger.WARN
-// })
-//
-// export default (logger?: string) => logger
-//   ? Logger.get(logger)
-//   : Logger
-
 type LogLevel = 'info' | 'warn' | 'error' | 'debug' | 'time'
 
 const LOG_LEVEL_LABELS: Record<LogLevel, string> = {
@@ -75,6 +63,7 @@ const createLoggerFn = (level: LogLevel) => {
       if (import.meta.env.PROD) return
     }
 
+    // eslint-disable-next-line no-console
     console[level === 'time' ? 'debug' : level](
       '%c %c [%s] %c %s %c%s',
       `background: ${LOG_LEVEL_BACKGROUND[level]};border-radius:1em`,
