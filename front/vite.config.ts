@@ -12,6 +12,9 @@ const port = +(process.env.VUE_PORT ?? 8080)
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   envPrefix: ['VUE_', 'FUNKWHALE_SENTRY_'],
+  build: {
+    sourcemap: true
+  },
   plugins: [
     // https://github.com/vitejs/vite/tree/main/packages/plugin-vue
     Vue(),
@@ -55,7 +58,7 @@ export default defineConfig(({ mode }) => ({
     },
     setupFiles: [
       './test/setup/mock-audio-context.ts',
-      './test/setup/mock-vue-i18n.ts',
+      './test/setup/mock-vue-i18n.ts'
     ]
   }
 }))
