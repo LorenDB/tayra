@@ -225,7 +225,9 @@ const store: Module<State, RootState> = {
       commit('notifications', { type: 'pendingReviewRequests', count: response.data.count })
     },
 
-    async currentLanguage ({ commit, rootState }, value) {
+    async currentLanguage ({ commit, rootState, state }, value) {
+      if (state.selectedLanguage && state.currentLanguage === value) return
+
       commit('currentLanguage', value)
       if (rootState.auth.authenticated) {
         await axios.post('users/settings', { language: value })
