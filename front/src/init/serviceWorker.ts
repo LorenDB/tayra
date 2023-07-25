@@ -10,8 +10,21 @@ const logger = useLogger()
 
 export const install: InitModule = ({ store }) => {
   const updateSW = registerSW({
-    onRegisterError () {
-      logger.error('SW install error')
+    onRegisterError (error) {
+      const importStatementsSupported = navigator.userAgent.includes('Chrome')
+        || navigator.userAgent.includes('Chromium')
+        || navigator.userAgent.includes('Opera')
+        || navigator.userAgent.includes('Brave')
+
+      if (import.meta.env.DEV && !importStatementsSupported) {
+        logger.warn(
+          'Service Worker is not supported in your browser in development mode.\n',
+          'For more information, please refer to \'Support for ECMAScript modules\' section at:\n',
+          'https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorker#browser_compatibility'
+        )
+      }
+
+      logger.error('Service Worker install error:', error)
     },
     onOfflineReady () {
       logger.info('Funkwhale is being served from cache by a service worker.')
