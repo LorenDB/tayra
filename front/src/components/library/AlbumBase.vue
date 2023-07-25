@@ -15,6 +15,7 @@ import TagsList from '~/components/tags/List.vue'
 import AlbumDropdown from './AlbumDropdown.vue'
 
 import useErrorHandler from '~/composables/useErrorHandler'
+import useLogger from '~/composables/useLogger'
 
 interface Events {
   (e: 'deleted'): void
@@ -38,6 +39,8 @@ const isAlbum = computed(() => object.value?.artist.content_category === 'music'
 const isSerie = computed(() => object.value?.artist.content_category === 'podcast')
 const totalDuration = computed(() => sum((object.value?.tracks ?? []).map(track => track.uploads[0]?.duration ?? 0)))
 const publicLibraries = computed(() => libraries.value?.filter(library => library.privacy_level === 'everyone') ?? [])
+
+const logger = useLogger()
 
 const { t } = useI18n()
 const labels = computed(() => ({
@@ -93,7 +96,7 @@ const fetchTracks = async () => {
       tracks.push(...response.data.results)
     }
   } catch (error) {
-    console.error(error)
+    logger.error(error)
   } finally {
     isLoadingTracks.value = false
   }

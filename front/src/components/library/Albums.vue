@@ -72,7 +72,7 @@ const fetchData = async () => {
     content_category: 'music'
   }
 
-  logger.time('Fetching albums')
+  const stop = logger.time('Fetching albums')
   try {
     const response = await axios.get('albums/', {
       params,
@@ -86,7 +86,7 @@ const fetchData = async () => {
     useErrorHandler(error as Error)
     result.value = undefined
   } finally {
-    logger.timeEnd('Fetching albums')
+    stop()
     isLoading.value = false
   }
 }

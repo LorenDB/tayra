@@ -3,9 +3,12 @@ import type { InitModule } from '~/types'
 import { watchEffect, watch } from 'vue'
 import { useWebSocket, whenever } from '@vueuse/core'
 import useWebSocketHandler from '~/composables/useWebSocketHandler'
+import useLogger from '~/composables/useLogger'
 import { CLIENT_RADIOS } from '~/utils/clientRadios'
 
 export const install: InitModule = ({ store }) => {
+  const logger = useLogger()
+
   watch(() => store.state.instance.instanceUrl, () => {
     const url = store.getters['instance/absoluteUrl']('api/v1/activity')
       .replace(/^http/, 'ws')
@@ -25,7 +28,7 @@ export const install: InitModule = ({ store }) => {
     })
 
     watchEffect(() => {
-      console.log('Websocket status:', status.value)
+      logger.log('Websocket status:', status.value)
     })
   }, { immediate: true })
 

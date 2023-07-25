@@ -34,7 +34,6 @@ export default (props: OrderingProps) => {
   })
 
   const queryOrdering = useRouteQuery('ordering', perfOrderingDirection.value + perfOrdering.value)
-  console.log(queryOrdering.value)
 
   watch(queryOrdering, (ordering) => {
     perfOrderingDirection.value = ordering[0] === '-' ? '-' : '+'
