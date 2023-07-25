@@ -53,7 +53,6 @@ To set up your Docker environment:
    ```text
    MEDIA_URL=http://localhost:8000/media/
    STATIC_URL=http://localhost:8000/staticfiles/
-   MEDIA_ROOT=/data/media
    ```
 
 3. Create a network for federation support
