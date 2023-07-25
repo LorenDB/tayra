@@ -206,5 +206,5 @@ services:
 networks:
   internal:
   federation:
-    external:
-      name: federation
+    name: federation
+    external: true
