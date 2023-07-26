@@ -51,6 +51,7 @@ review_front:
     VUE_APP_ROUTER_BASE_URL: /-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/front-review/
     VUE_APP_INSTANCE_URL: https://demo.funkwhale.audio
     NODE_ENV: review
+    NODE_OPTIONS: --max-old-space-size=4096
   before_script:
     - apk add --no-cache jq bash coreutils python3
     - rm -rf front-review
@@ -311,6 +312,7 @@ build_front:
   image: node:18-alpine
   variables:
     <<: *keep_git_files_permissions
+    NODE_OPTIONS: --max-old-space-size=4096
   before_script:
     - apk add --no-cache jq bash coreutils python3
     - cd front
