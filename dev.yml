@@ -115,7 +115,6 @@ services:
       - "node3.funkwhale.test:172.17.0.1"
 
   nginx:
-    command: /entrypoint.sh
     env_file:
       - .env.dev
       - .env
@@ -134,8 +133,7 @@ services:
       - api
       - front
     volumes:
-      - ./docker/nginx/conf.dev:/etc/nginx/nginx.conf.template:ro
-      - ./docker/nginx/entrypoint.sh:/entrypoint.sh:ro
+      - ./docker/nginx/conf.dev:/etc/nginx/templates/default.conf.template:ro
       - "${MUSIC_DIRECTORY_SERVE_PATH-./data/music}:/music:ro"
       - ./deploy/funkwhale_proxy.conf:/etc/nginx/funkwhale_proxy.conf:ro
       - "./front:/frontend:ro"
