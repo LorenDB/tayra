@@ -64,7 +64,7 @@ const fetchFavorites = async () => {
     ordering: orderingString.value
   }
 
-  const stop = logger.time('Loading user favorites')
+  const measureLoading = logger.time('Loading user favorites')
   try {
     const response = await axios.get('tracks/', { params })
 
@@ -81,7 +81,7 @@ const fetchFavorites = async () => {
   } catch (error) {
     useErrorHandler(error as Error)
   } finally {
-    stop()
+    measureLoading()
     isLoading.value = false
   }
 }

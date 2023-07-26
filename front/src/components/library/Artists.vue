@@ -73,7 +73,7 @@ const fetchData = async () => {
     has_albums: excludeCompilation.value
   }
 
-  const stop = logger.time('Fetching artists')
+  const measureLoading = logger.time('Fetching artists')
   try {
     const response = await axios.get('artists/', {
       params,
@@ -87,7 +87,7 @@ const fetchData = async () => {
     useErrorHandler(error as Error)
     result.value = undefined
   } finally {
-    stop()
+    measureLoading()
     isLoading.value = false
   }
 }

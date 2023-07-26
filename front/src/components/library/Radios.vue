@@ -64,7 +64,7 @@ const fetchData = async () => {
     ordering: orderingString.value
   }
 
-  const stop = logger.time('Fetching radios')
+  const measureLoading = logger.time('Fetching radios')
   try {
     const response = await axios.get('radios/radios/', {
       params
@@ -75,7 +75,7 @@ const fetchData = async () => {
     useErrorHandler(error as Error)
     result.value = undefined
   } finally {
-    stop()
+    measureLoading()
     isLoading.value = false
   }
 }
