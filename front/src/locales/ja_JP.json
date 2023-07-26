@@ -31,7 +31,7 @@
       },
       "stat": {
         "activeUsers": "{ count } 人のアクティブユーザー",
-        "hoursOfMusic": "時間の音楽"
+        "hoursOfMusic": "0 時間分の音楽 | {n} 時間分の音楽 | {n} 時間分の音楽"
       },
       "title": "このポッドについて"
     },
@@ -79,7 +79,7 @@
         "activeUsers": "アクティブユーザー",
         "albumsCount": "アルバム",
         "artistsCount": "アーティスト",
-        "hoursOfMusic": "時間の音楽",
+        "hoursOfMusic": "0 時間分の音楽 | {n} 時間分の音楽 | {n} 時間分の音楽",
         "listeningsCount": "再生",
         "tracksCount": "曲"
       },
@@ -130,7 +130,7 @@
       },
       "stat": {
         "activeUsers": "{ count } 人のアクティブユーザー",
-        "hoursOfMusic": "{ count } 時間分の音楽"
+        "hoursOfMusic": "0 時間分の音楽 | {n} 時間分の音楽 | {n} 時間分の音楽"
       },
       "title": "ホーム"
     },
@@ -154,21 +154,30 @@
       },
       "header": {
         "failure": "曲を読み込むことができませんでした",
+        "noSources": "この曲には利用可能な情報がありません。",
         "radio": "ラジオを再生中です"
       },
       "label": {
         "addArtistContentFilter": "このアーティストのコンテンツを隠す…",
         "duration": "再生時間",
+        "enterFullscreen": "フルスクリーンモードにする",
+        "exitFullscreen": "フルスクリーンモードから離れる",
+        "favorite": "曲をお気に入りにする",
         "next": "次の曲",
         "pause": "停止する",
         "play": "再生",
+        "populatingRadio": "ラジオの曲を取得しています...",
         "previous": "前の曲",
         "queue": "再生キュー",
-        "remove": "除く"
+        "remove": "除く",
+        "restart": "曲の再生を再開",
+        "selectTrack": "曲を選ぶ",
+        "showCoverArt": "カバーアートを表示"
       },
       "message": {
         "automaticPlay": "次の曲を数秒以内に自動的に再生します…",
-        "radio": "新しい曲は自動的に追加されます。"
+        "radio": "新しい曲は自動的に追加されます。",
+        "webglUnsupported": "あなたのブラウザーはWebGL2をサポートしていないようです。"
       },
       "meta": {
         "queuePosition": "{ length } 曲中 { index } 曲目",
@@ -190,8 +199,11 @@
         "fediverse": "このフォームを利用して、Fediverseのどこかでホストされているチャンネルを購読しましょう。",
         "rss": "このフォームを利用して、URLからRSSフィードを購読しましょう。"
       },
+      "error": {
+        "fetchFailed": "このオブジェクトを読み込むことができません"
+      },
       "header": {
-        "fetchFailed": "オブジェクトをフェッチ中にエラーが発生しました"
+        "fetchFailed": "オブジェクトを取得中にエラーが発生しました"
       },
       "label": {
         "fediverse": {
@@ -296,6 +308,7 @@
         "radios": "ラジオ",
         "search": "検索する",
         "settings": "設定",
+        "switchInstance": "インスタンスを切り替える",
         "users": "ユーザー"
       }
     },
@@ -364,6 +377,10 @@
       "ChannelForm": {
         "header": {
           "error": "チャンネルの保存中にエラーが発生しました。"
+        },
+        "help": {
+          "discography": "あなたが作成した音楽を投稿します。アルバムとシングルの魅力的なディスコグラフィーとして。",
+          "podcast": "あなたのエピソードをホストし、コミュニティに最新情報を提供しましょう。"
         },
         "label": {
           "category": "カテゴリ",
@@ -482,6 +499,14 @@
           "position": "{ length } 曲中 { index } 曲目",
           "unknownAlbum": "不明なアルバム",
           "unknownArtist": "不明なアーティスト"
+        }
+      },
+      "PlayerControls": {
+        "labels": {
+          "next": "次の曲",
+          "pause": "停止",
+          "play": "再生",
+          "previous": "前の曲"
         }
       },
       "Search": {
@@ -655,6 +680,9 @@
         "header": {
           "failure": "変更を保存できません"
         },
+        "help": {
+          "redirectUri": "もしあなたのアプリケーションをWeb上で利用できない場合、\"urn:ietf:wg:oauth:2.0:oob\"をリダイレクトURIとして利用してください"
+        },
         "label": {
           "name": "名前",
           "redirectUri": "リダイレクトURL",
@@ -686,8 +714,8 @@
           "access": "{ app } があなたのFunkwhaleアカウントへのアクセスを要求しています",
           "allScopes": "フルアクセス",
           "authorize": "サードパーティアプリを認証",
-          "authorizeFailure": "アプリケーションの認証中にエラーが発生しました",
-          "fetchFailure": "アプリケーションのデータをフェッチ中にエラーが発生しました",
+          "authorizeFailure": "アプリケーションデータを取得中にエラーが発生しました",
+          "fetchFailure": "アプリケーションデータを取得中にエラーが発生しました",
           "readOnly": "読込専用",
           "writeOnly": "書き込み専用"
         },
@@ -1020,6 +1048,7 @@
         "label": {
           "description": "説明",
           "image": "曲画像",
+          "position": "トラックナンバー",
           "tags": "タグ",
           "title": "曲名"
         }
@@ -1271,10 +1300,13 @@
         },
         "description": {
           "failure": "データの更新中にエラーが発生しました:",
+          "pending": "更新リクエストがこのサーバーでは時間内に処理されませんでした。後ほど処理されます。",
+          "skipped": "リモートサーバーから応答はありましたが、返されたデータはFunkwhaleではサポートされていません。",
           "success": "リモートサーバーからのデータが正常に更新されました。"
         },
         "header": {
           "failure": "更新エラー",
+          "pending": "更新保留中",
           "refresh": "リモートサーバーからのオブジェクトを更新中…",
           "saveFailure": "設定の保存中にエラーが発生しました",
           "skipped": "更新がスキップされました",
@@ -1282,7 +1314,7 @@
         },
         "loader": {
           "awaitingResult": "フェッチの結果を待っています…",
-          "fetchRequest": "フェッチをリクエストする…"
+          "fetchRequest": "フェッチをリクエストしています…"
         },
         "table": {
           "error": {
@@ -1293,8 +1325,10 @@
             "value": {
               "connectionError": "リモートのサーバーに接続できません",
               "httpError": "リモートサーバーとの通信中にHTTPエラーが発生しました",
-              "invalidAttributesError": "リモートサーバーから返されたデータに無効な属性があるか、属性がありません",
+              "httpStatus": "リモートサーバーが HTTP {status} を返しました",
+              "invalidAttributesError": "リモートサーバーから返されたデータに無効な属性があるか、属性自体がありません",
               "invalidJsonError": "リモートのサーバーが無効なJSONまたはJSON-LDデータを返しました",
+              "timeoutError": "リモートサーバーが十分なスピードで応答しませんでした",
               "unknownError": "不明なエラー"
             }
           }
@@ -1505,7 +1539,13 @@
         "header": {
           "modification": "修正 { id }"
         },
+        "link": {
+          "track": "曲 #{id} - {name}"
+        },
         "modal": {
+          "content": {
+            "warning": "この提案は完全に削除され、この削除アクションを取り消すことはできません。"
+          },
           "delete": {
             "header": "この提案を削除しますか？"
           }
@@ -1519,7 +1559,9 @@
         "table": {
           "update": {
             "header": {
-              "field": "フィールド"
+              "field": "フィールド",
+              "newValue": "新しい値",
+              "oldValue": "古い値"
             },
             "notApplicable": "N/A"
           }
@@ -1529,21 +1571,25 @@
         "button": {
           "cancel": "キャンセル",
           "clear": "クリア",
+          "new": "別の編集を提案",
           "reset": "初期値にリセット",
+          "showAll": "すべての編集を表示",
           "suggest": "提案を提出"
         },
         "empty": {
           "suggestEdit": "下記のフォームを利用して変更を提案する"
         },
         "header": {
+          "failure": "編集の提出中にエラーが発生しました",
           "recentEdits": "最近の編集",
+          "success": "あなたの編集は無事に提出されました。",
           "unreviewed": "チェック待ちの最近の編集"
         },
         "label": {
           "summary": "概要（オプション）"
         },
         "message": {
-          "noPermission": "あなたにはこのオブジェクトを編集する権限はありませんが、変更を提案することができます。一度提案すると、認められる前にその提案はレビューされます。"
+          "noPermission": "あなたにはこのオブジェクトを編集する権限はありませんが、変更を提案することができます。一度提案すると、承認される前にその提案はレビューされます。"
         },
         "notApplicable": "N/A",
         "placeholder": {
@@ -1810,7 +1856,8 @@
       },
       "TrackEdit": {
         "header": {
-          "edit": "この曲を編集する"
+          "edit": "この曲を編集する",
+          "suggest": "このアルバムについての編集を提案"
         },
         "message": {
           "remote": " このオブジェクトは別のサーバーで管理されており、あなたはこれを編集できません。"
@@ -2548,7 +2595,7 @@
           "modal": "このフォームを利用してモデレーションチームに通報の届け出をしてください"
         },
         "error": {
-          "nodeinfoFetch": "ノードの情報をフェッチできませんでした: {error}"
+          "nodeinfoFetch": "Node infoを取得できませんでした: {error}"
         },
         "header": {
           "disabled": "匿名での通報は無効となっています。ログインして通報を提出してください。",
@@ -2802,9 +2849,11 @@
         },
         "scopes": {
           "edits": {
+            "description": "編集へのアクセス",
             "label": "編集"
           },
           "favorites": {
+            "description": "お気に入りへのアクセス",
             "label": "お気に入り"
           },
           "filters": {
@@ -2871,6 +2920,7 @@
         "track": {
           "copyright": "コピーライト",
           "license": "ライセンス",
+          "position": "トラックナンバー",
           "title": "曲名"
         }
       },
@@ -2944,6 +2994,7 @@
           "copyright": "コピーライト",
           "label": "曲",
           "license": "ライセンス",
+          "position": "トラックナンバー",
           "title": "曲名"
         },
         "visibility": {
@@ -2963,7 +3014,9 @@
   },
   "init": {
     "sentry": {
-      "funkwhaleInstance": "Funkwhaleの公式Glitchtipインスタンス"
+      "allow": "許可",
+      "funkwhaleInstance": "Funkwhaleの公式Glitchtipインスタンス",
+      "title": "私たちのサービスの質を高めるため、あなたのセッション中のクラッシュに関する情報を集めたい。"
     },
     "serviceWorker": {
       "actions": {
@@ -2998,6 +3051,9 @@
       },
       "loading": {
         "notifications": "通知を読み込んでいます…"
+      },
+      "message": {
+        "funkwhaleSupport": "どうやら、このサーバーに一定期間いらっしゃるようですね。もしFunkwhaleがあなたのお役に立つのであれば、Funkwhaleをより良いものにするためにあなたの助けが必要です！"
       },
       "option": {
         "delay": {
@@ -3341,6 +3397,7 @@
               "description": "説明",
               "discNumber": "ディスク番号",
               "license": "ライセンス",
+              "position": "トラックナンバー",
               "title": "曲名"
             },
             "trackData": {
@@ -4054,6 +4111,7 @@
             "remoteLibraries": "リモートのライブラリは、Funkwhaleネットワーク上の他のユーザーが所有しています。ライブラリが公開されている、またはライブラリへのアクセス権を得ている限りは、アクセスできます。"
           },
           "header": {
+            "knownLibraries": "既知のライブラリ",
             "remoteLibraries": "リモートのライブラリ"
           },
           "loading": {
@@ -4129,7 +4187,7 @@
           "upload": "アップロード"
         },
         "description": {
-          "sharingLink": "以下のリンクを他のユーザーとシェアしてみましょう。そのユーザーが属するポッドの検索バーに以下のリンクをコピー＆ペーストすることで、このライブラリにアクセスすることができます。"
+          "sharingLink": "以下のリンクを他のユーザーとシェアしてみましょう。他のユーザーが属するポッドの検索バーに以下のリンクをコピー＆ペーストすることで、このライブラリにアクセスすることができます。"
         },
         "label": {
           "private": "プライベート",
@@ -4141,7 +4199,7 @@
           "artists": "アーティスト",
           "domain": "{ domain }で聞く",
           "moderation": "モデレーション画面で開く",
-          "owner": "{ username }が所有しています",
+          "owner": "{ username }が所有",
           "tracks": "曲一覧"
         },
         "meta": {
