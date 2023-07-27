@@ -683,3 +683,10 @@ def test_check_remote_instance_unreachable(factories, r_mock):
     tasks.check_all_remote_instance_availability()
     domain = models.Domain.objects.get(name=domain.name)
     assert domain.reachable is False
+
+
+def test_check_all_remote_instance_skips_local(settings, factories, r_mock):
+    domain = factories["federation.Domain"]()
+    settings.FUNKWHALE_HOSTNAME = domain.name
+    tasks.check_all_remote_instance_availability()
+    assert not r_mock.called
