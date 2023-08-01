@@ -1,8 +1,20 @@
+{% if config.reverse_proxy %}
+upstream fw {
+    server ${FUNKWHALE_API_IP}:${FUNKWHALE_API_PORT};
+}
+{% else %}
 
 upstream funkwhale-api {
     # depending on your setup, you may want to update this
     server ${FUNKWHALE_API_IP}:${FUNKWHALE_API_PORT};
 }
+{% endif %}
+{% if config.proxy_frontend %}
+
+upstream funkwhale-front {
+    server ${FUNKWHALE_FRONT_IP}:${FUNKWHALE_FRONT_PORT};
+}
+{% endif %}
 
 # Required for websocket support.
 map $http_upgrade $connection_upgrade {
@@ -10,16 +22,63 @@ map $http_upgrade $connection_upgrade {
     ''      close;
 }
 
+{% if not config.inside_docker %}
+server {
+    listen 80;
+    listen [::]:80;
+    # update this to match your instance name
+    server_name ${FUNKWHALE_HOSTNAME};
+
+    # useful for Let's Encrypt
+    location /.well-known/acme-challenge/ {
+        allow all;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+{% endif %}
 
 server {
+{% if not config.inside_docker %}
+    listen      443 ssl http2;
+    listen [::]:443 ssl http2;
+
+    server_name ${FUNKWHALE_HOSTNAME};
+
+    # TLS
+    # Feel free to use your own configuration for SSL here or simply remove the
+    # lines and move the configuration to the previous server block if you
+    # don't want to run funkwhale behind https (this is not recommended)
+    # have a look here for let's encrypt configuration:
+    # https://certbot.eff.org/all-instructions/#debian-9-stretch-nginx
+    ssl_protocols TLSv1.2;
+    ssl_ciphers HIGH:!MEDIUM:!LOW:!aNULL:!NULL:!SHA;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_certificate     /etc/letsencrypt/live/${FUNKWHALE_HOSTNAME}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${FUNKWHALE_HOSTNAME}/privkey.pem;
+
+    # HSTS
+    add_header Strict-Transport-Security "max-age=31536000";
+
+{% else %}
     listen      80;
     listen [::]:80;
 
     server_name _;
 
+{% endif %}
 
     # General configs
+{% if not config.reverse_proxy %}
+{% if config.inside_docker %}
     root /usr/share/nginx/html;
+{% else %}
+    root ${FUNKWHALE_FRONTEND_PATH},
+{% endif %}
+{% endif %}
     client_max_body_size ${NGINX_MAX_BODY_SIZE};
     charset utf-8;
 
@@ -49,27 +108,51 @@ server {
         text/x-cross-domain-policy;
     # end of compression settings
 
+{% if not config.reverse_proxy %}
     # headers
     add_header Content-Security-Policy "default-src 'self'; connect-src https: wss: http: ws: 'self' 'unsafe-eval'; script-src 'self' 'wasm-unsafe-eval'; style-src https: http: 'self' 'unsafe-inline'; img-src https: http: 'self' data:; font-src https: http: 'self' data:; media-src https: http: 'self' data:; object-src 'none'";
     add_header Referrer-Policy "strict-origin-when-cross-origin";
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header Service-Worker-Allowed "/";
+{% endif %}
 
+{% if not config.reverse_proxy %}
     location /api/ {
         include /etc/nginx/funkwhale_proxy.conf;
         # This is needed if you have file import via upload enabled.
         client_max_body_size ${NGINX_MAX_BODY_SIZE};
         proxy_pass   http://funkwhale-api;
     }
+{% endif %}
 
     location / {
         expires 1d;
+{% if config.proxy_frontend and not config.reverse_proxy %}
+        proxy_pass http://funkwhale-front;
+{% elif not config.proxy_frontend and config.reverse_proxy %}
+        proxy_pass http://fw
+{% else %}
+{% if config.inside_docker %}
         alias /usr/share/nginx/html/;
+{% else %}
+        alias ${FUNKWHALE_FRONTEND_PATH}/,
+{% endif %}
         try_files $uri $uri/ /index.html;
+{% endif %}
     }
 
+{% if not config.reverse_proxy %}
+{% if config.proxy_frontend %}
+    location = /embed.html {
+        proxy_pass http://funkwhale-front;
+{% else %}
     location ~ "/(front/)?embed.html" {
+{% if config.inside_docker %}
         alias /usr/share/nginx/html/embed.html;
+{% else %}
+        alias ${FUNKWHALE_FRONTEND_PATH}/embed.html,
+{% endif %}
+{% endif %}
         add_header Content-Security-Policy "connect-src https: http: 'self'; default-src 'self'; script-src 'self' unpkg.com 'unsafe-inline' 'unsafe-eval'; style-src https: http: 'self' 'unsafe-inline'; img-src https: http: 'self' data:; font-src https: http: 'self' data:; object-src 'none'; media-src https: http: 'self' data:";
         add_header Referrer-Policy "strict-origin-when-cross-origin";
 
@@ -139,4 +222,10 @@ server {
         return 302 ${FUNKWHALE_PROTOCOL}://${FUNKWHALE_HOSTNAME}/api/v1/instance/spa-manifest.json;
     }
 
+{% if config.proxy_frontend %}
+    location /staticfiles/ {
+        alias /usr/share/nginx/html/staticfiles/;
+    }
+{% endif %}
+{% endif %}
 }
