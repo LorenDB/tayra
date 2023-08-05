@@ -1,6 +1,6 @@
-import type { MaybeComputedRef } from '@vueuse/core'
+import type { MaybeRefOrGetter } from '@vueuse/core'
 
-import { resolveUnref } from '@vueuse/core'
+import { toValue } from '@vueuse/core'
 import { computed } from 'vue'
 import showdown from 'showdown'
 
@@ -51,6 +51,6 @@ const markdown = new showdown.Converter({
 })
 
 export const useMarkdownRaw = (md: string) => markdown.makeHtml(md)
-export const useMarkdownComputed = (md: MaybeComputedRef<string>) => computed(() => useMarkdownRaw(resolveUnref(md)))
+export const useMarkdownComputed = (md: MaybeRefOrGetter<string>) => computed(() => useMarkdownRaw(toValue(md)))
 
 export default useMarkdownComputed
