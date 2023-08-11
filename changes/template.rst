@@ -2,7 +2,7 @@
 {{ top_underline * ((versiondata.version + versiondata.date)|length + 3)}}
 
 Upgrade instructions are available at
-https://docs.funkwhale.audio/admin/upgrading.html
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 {% for section, _ in sections.items() %}
 {% if sections[section] %}

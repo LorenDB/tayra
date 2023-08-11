@@ -41,6 +41,7 @@ admin/commands.html, ../administrator/manage-script/index.html
 admin/mrf.html, ../administrator/configuration/mrf.html
 admin/url.html, ../administrator/configuration/change-url.html
 admin/optimization.html, ../administrator/configuration/optimize.html
+admin/upgrading.html, ../administrator/upgrade/index.html
 architecture.html, ../developer/architecture.html
 contributing.html, ../developer/index.html
 api.html, ../developer/api/index.html
