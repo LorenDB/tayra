@@ -6,6 +6,7 @@ import VueI18n from '@intlify/unplugin-vue-i18n/vite'
 
 import manifest from './pwa-manifest.json'
 import Vue from '@vitejs/plugin-vue'
+import VueMacros from 'unplugin-vue-macros/vite'
 
 const port = +(process.env.VUE_PORT ?? 8080)
 
@@ -16,8 +17,13 @@ export default defineConfig(({ mode }) => ({
     sourcemap: true
   },
   plugins: [
-    // https://github.com/vitejs/vite/tree/main/packages/plugin-vue
-    Vue(),
+    // https://vue-macros.sxzz.moe/
+    VueMacros({
+      plugins: {
+        // https://github.com/vitejs/vite/tree/main/packages/plugin-vue
+        vue: Vue(),
+      }
+    }),
 
     // https://github.com/intlify/bundle-tools/tree/main/packages/vite-plugin-vue-i18n
     VueI18n({
