@@ -6,8 +6,8 @@ import showdown from 'showdown'
 
 showdown.extension('openExternalInNewTab', {
   type: 'output',
-  regex: /<a.+?href.+">/g,
-  replace (text: string) {
+  regex: /<a.+?href.+?">/g,
+  replace(text: string) {
     const matches = text.match(/href="(.+)">/) ?? []
 
     const url = matches[1] ?? './'
@@ -26,7 +26,7 @@ showdown.extension('openExternalInNewTab', {
 showdown.extension('linkifyTags', {
   type: 'language',
   regex: /#[^\W]+/g,
-  replace (text: string) {
+  replace(text: string) {
     return `<a href="/library/tags/${text.slice(1)}">${text}</a>`
   }
 })
