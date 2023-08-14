@@ -68,32 +68,69 @@ await fetchData()
 </script>
 
 <template>
-  <div :class="[
-    { active: currentTrack && track.id === currentTrack.id },
-    'track-row podcast row',
-  ]" @dblclick="activateTrack(track, index)">
-    <div v-if="showArt" class="image left floated column" role="button"
-      @click.prevent.exact="activateTrack(track, index)">
-      <img v-if="track.cover?.urls.original"
-        v-lazy="$store.getters['instance/absoluteUrl'](track.cover.urls.medium_square_crop)" alt=""
-        class="ui artist-track mini image">
-      <img v-else-if="defaultCover" v-lazy="$store.getters['instance/absoluteUrl'](defaultCover.urls.medium_square_crop)"
-        alt="" class="ui artist-track mini image">
-      <img v-else alt="" class="ui artist-track mini image" src="../../../assets/audio/default-cover.png">
+  <div
+    :class="[
+      { active: currentTrack && track.id === currentTrack.id },
+      'track-row podcast row',
+    ]"
+    @dblclick="activateTrack(track, index)"
+  >
+    <div
+      v-if="showArt"
+      class="image left floated column"
+      role="button"
+      @click.prevent.exact="activateTrack(track, index)"
+    >
+      <img
+        v-if="track.cover?.urls.original"
+        v-lazy="$store.getters['instance/absoluteUrl'](track.cover.urls.medium_square_crop)"
+        alt=""
+        class="ui artist-track mini image"
+      >
+      <img
+        v-else-if="defaultCover"
+        v-lazy="$store.getters['instance/absoluteUrl'](defaultCover.urls.medium_square_crop)"
+        alt=""
+        class="ui artist-track mini image"
+      >
+      <img
+        v-else
+        alt=""
+        class="ui artist-track mini image"
+        src="../../../assets/audio/default-cover.png"
+      >
     </div>
-    <div tabindex="0" class="content left floated column">
-      <a class="podcast-episode-title ellipsis" @click.prevent.exact="activateTrack(track, index)">{{ track.title }}</a>
-      <p v-if="renderedDescription" class="podcast-episode-meta">
+    <div
+      tabindex="0"
+      class="content left floated column"
+    >
+      <a
+        class="podcast-episode-title ellipsis"
+        @click.prevent.exact="activateTrack(track, index)"
+      >{{ track.title }}</a>
+      <p
+        v-if="renderedDescription"
+        class="podcast-episode-meta"
+      >
         <SanitizedHtml :html="renderedDescription" />
       </p>
     </div>
-    <div v-if="displayActions" class="meta right floated column">
-      <play-button id="playmenu" class="play-button basic icon" :dropdown-only="true" :is-playable="track.is_playable"
+    <div
+      v-if="displayActions"
+      class="meta right floated column"
+    >
+      <play-button
+        id="playmenu"
+        class="play-button basic icon"
+        :dropdown-only="true"
+        :is-playable="track.is_playable"
         :dropdown-icon-classes="[
           'ellipsis',
           'vertical',
           'large really discrete',
-        ]" :track="track" />
+        ]"
+        :track="track"
+      />
     </div>
   </div>
 </template>

@@ -53,6 +53,7 @@ const getFile = () => {
 // NOTE: We're pushing all logs to the end of the event loop
 const createLoggerFn = (level: LogLevel) => {
   // NOTE: We don't want to handle logs ourselves in tests
+  // eslint-disable-next-line no-console
   if (import.meta.env.VITEST) return console[level]
 
   return (...args: any[]) => {
