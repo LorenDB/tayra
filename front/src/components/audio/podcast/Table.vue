@@ -16,7 +16,6 @@ interface Props {
   isPodcast?: boolean
   paginateResults?: boolean
   paginateBy?: number
-  page?: number
   total?: number
 }
 
@@ -30,9 +29,10 @@ withDefaults(defineProps<Props>(), {
   isPodcast: true,
   paginateResults: true,
   paginateBy: 25,
-  page: 1,
   total: 0
 })
+
+const { page } = defineModels<{ page: number, }>()
 </script>
 
 <template>
@@ -44,61 +44,24 @@ withDefaults(defineProps<Props>(), {
     <slot name="header" />
 
     <div>
-      <div
-        :class="['track-table', 'ui', 'unstackable', 'grid', 'tablet-and-up']"
-      >
+      <div :class="['track-table', 'ui', 'unstackable', 'grid', 'tablet-and-up']">
         <!-- For each item, build a row -->
-        <podcast-row
-          v-for="(track, index) in tracks"
-          :key="track.id"
-          :track="track"
-          :index="index"
-          :tracks="tracks"
-          :display-actions="displayActions"
-          :show-duration="showDuration"
-          :is-podcast="isPodcast"
-        />
+        <podcast-row v-for="(track, index) in tracks" :key="track.id" :track="track" :index="index" :tracks="tracks"
+          :display-actions="displayActions" :show-duration="showDuration" :is-podcast="isPodcast" />
       </div>
-      <div
-        v-if="paginateResults"
-        class="ui center aligned basic segment desktop-and-up"
-      >
-        <pagination
-          v-bind="$attrs"
-          :total="total"
-          :current="page"
-          :paginate-by="paginateBy"
-        />
+      <div v-if="paginateResults" class="ui center aligned basic segment desktop-and-up">
+        <pagination v-bind="$attrs" :total="total" v-model:current="page" :paginate-by="paginateBy" />
       </div>
     </div>
 
     <div :class="['track-table', 'ui', 'unstackable', 'grid', 'tablet-and-below']">
       <!-- For each item, build a row -->
 
-      <track-mobile-row
-        v-for="(track, index) in tracks"
-        :key="track.id"
-        :track="track"
-        :index="index"
-        :tracks="tracks"
-        :show-position="showPosition"
-        :show-art="showArt"
-        :show-duration="showDuration"
-        :is-artist="isArtist"
-        :is-album="isAlbum"
-        :is-podcast="isPodcast"
-      />
-      <div
-        v-if="paginateResults"
-        class="ui center aligned basic segment tablet-and-below"
-      >
-        <pagination
-          v-if="paginateResults"
-          v-bind="$attrs"
-          :total="total"
-          :current="page"
-          :compact="true"
-        />
+      <track-mobile-row v-for="(track, index) in tracks" :key="track.id" :track="track" :index="index" :tracks="tracks"
+        :show-position="showPosition" :show-art="showArt" :show-duration="showDuration" :is-artist="isArtist"
+        :is-album="isAlbum" :is-podcast="isPodcast" />
+      <div v-if="paginateResults" class="ui center aligned basic segment tablet-and-below">
+        <pagination v-if="paginateResults" v-bind="$attrs" :total="total" v-model:current="page" :compact="true" />
       </div>
     </div>
   </div>

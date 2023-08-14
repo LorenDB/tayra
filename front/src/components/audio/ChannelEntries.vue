@@ -62,46 +62,17 @@ watch(page, fetchData, { immediate: true })
   <div>
     <slot />
     <div class="ui hidden divider" />
-    <div
-      v-if="isLoading"
-      class="ui inverted active dimmer"
-    >
+    <div v-if="isLoading" class="ui inverted active dimmer">
       <div class="ui loader" />
     </div>
-    <podcast-table
-      v-if="isPodcast"
-      v-model:page="page"
-      :default-cover="defaultCover"
-      :is-podcast="isPodcast"
-      :show-art="true"
-      :show-position="false"
-      :tracks="channels"
-      :show-artist="false"
-      :show-album="false"
-      :paginate-results="true"
-      :total="count"
-      :paginate-by="limit"
-    />
-    <track-table
-      v-else
-      v-model:page="page"
-      :default-cover="defaultCover"
-      :is-podcast="isPodcast"
-      :show-art="true"
-      :show-position="false"
-      :tracks="channels"
-      :show-artist="false"
-      :show-album="false"
-      :paginate-results="true"
-      :total="count"
-      :paginate-by="limit"
-      :filters="filters"
-    />
+    <podcast-table v-if="isPodcast" v-model:page="page" :paginate-by="limit" :default-cover="defaultCover"
+      :is-podcast="isPodcast" :show-art="true" :show-position="false" :tracks="channels" :show-artist="false"
+      :show-album="false" :paginate-results="true" :total="count" />
+    <track-table v-else v-model:page="page" :default-cover="defaultCover" :is-podcast="isPodcast" :show-art="true"
+      :show-position="false" :tracks="channels" :show-artist="false" :show-album="false" :paginate-results="true"
+      :total="count" :paginate-by="limit" :filters="filters" />
     <template v-if="!isLoading && channels.length === 0">
-      <empty-state
-        :refresh="true"
-        @refresh="fetchData()"
-      >
+      <empty-state :refresh="true" @refresh="fetchData()">
         <p>
           {{ $t('components.audio.ChannelEntries.help.subscribe') }}
         </p>
