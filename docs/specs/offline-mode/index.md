@@ -20,7 +20,10 @@ The first thing the app needs to be able to do is detect when it has gone offlin
 
 ### UX/UI communication
 
-To make it clear that the app can't be used in offline mode, we need to disable interface elements so that it is clear to users both visually and textually that they cannot interact with it.
+To ensure that users don't get frustrated by non-interactive elements, the app should be **disabled** when in an offline state. This should be clearly communicated to users in the following ways:
+
+1. All interactive elements should be visibly disabled and their aria-status updated to inform users that no actions are possible.
+2. A prominent banner should inform users that their device is offline and that most actions are not possible until connectivity returns.
 
 ### Offline behavior
 
@@ -42,7 +45,6 @@ When the device comes back online, the app should do the following:
 
 - Can we cache any other content that would improve the user experience?
 - What information do we need to convey to users when the device goes offline?
-- How should we format this warning so that users don't miss it, but so that it also isn't too disruptive?
 
 ## Minimum viable product
 

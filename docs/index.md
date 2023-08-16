@@ -102,6 +102,7 @@ hidden: true
 ---
 
 specs/nodeinfo21/index
+specs/offline-mode/index
 
 ```
 
