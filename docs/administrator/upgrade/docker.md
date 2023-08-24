@@ -83,6 +83,8 @@ Funkwhale depends on Postgres for its database container. To upgrade Postgres, y
 
 To update your Postgres container, follow these steps:
 
+
+
 1. Stop all Funkwhale services
 
    ```console
@@ -92,9 +94,9 @@ To update your Postgres container, follow these steps:
 2. Create a backup of your Funkwhale database. We will import this into the new postgres container later.
 
    ```console
-   # docker compose exec -i postgres pg_dump -U postgres postgres > db_dump.sql
+   # docker compose run --rm postgres pg_dump -U postgres postgres > db_dump.sql
    ```
-
+   
 3. Move the {file}`data/postgres` directory to another location to back it up
 
    ```console
