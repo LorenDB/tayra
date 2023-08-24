@@ -317,7 +317,11 @@ test_integration:
   interruptible: true
 
   image: cypress/base:18.12.1
-  cache: *front_cache
+  cache:
+    - *front_cache
+    - key:
+      paths:
+        - /root/.cache/Cypress
   before_script:
     - cd front
     - yarn install
