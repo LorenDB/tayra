@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.10\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-24 18:14+0100\n"
-"PO-Revision-Date: 2023-08-24 12:45+0000\n"
+"PO-Revision-Date: 2023-08-24 13:12+0000\n"
 "Last-Translator: MhP <martin.hpg@protonmail.ch>\n"
 "Language-Team: Spanish <https://translate.funkwhale.audio/projects/"
 "documentation/user-libraries-follow/es/>\n"
@@ -31,7 +31,7 @@ msgstr ""
 
 #: ../../user/libraries/follow.md:9
 msgid "Use a sharing link"
-msgstr ""
+msgstr "Usa un enlace para compartir"
 
 #: ../../user/libraries/follow.md:11
 msgid "If you've received a sharing link, you can use this to follow a library. To do this:"
