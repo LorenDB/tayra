@@ -128,7 +128,7 @@ def test_inplace_to_s3_dryrun(factories):
     upload = factories["music.Upload"](in_place=True, source="file:///music/music.mp3")
     call_command("inplace_to_s3", "--source", "/music")
     assert upload.source == "file:///music/music.mp3"
-    assert upload.audio_file is None
+    assert not upload.audio_file
 
 
 data = [
