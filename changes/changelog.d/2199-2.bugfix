@@ -1,0 +1,2 @@
+
+Fetch the nodeinfo endpoint from .well-known/nodeinfo when checking instance availability
