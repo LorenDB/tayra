@@ -6364,10 +6364,10 @@ vue3-gettext@2.3.4:
     pofile "^1.1.3"
     tslib "^2.4.0"
 
-vue3-lazyload@0.3.6:
-  version "0.3.6"
-  resolved "https://registry.yarnpkg.com/vue3-lazyload/-/vue3-lazyload-0.3.6.tgz#87c509e7f0139ea5e00eb76c368519905ad19678"
-  integrity sha512-UcVnEN9JzxeFBa7nNAPWKXHTtvVAzWYhBSvRU+Gmx9MdTGLWKwjZiNSyB1Os25jr9HaFHWY0DaU8uugXkGu9Gw==
+vue3-lazyload@0.3.8:
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/vue3-lazyload/-/vue3-lazyload-0.3.8.tgz#82749a6b89a4d475c9a7fa409d0cff6c4abbd59d"
+  integrity sha512-UiJHRT7mzry102WbhtrRgJh+f8Z8u4Z+H1RU4dvPmQeq7wFSDFxZB9iJOWGihH2FscXN/8rMGLDOQJAmjwqpCg==
   dependencies:
     vue-demi "^0.12.5"
 
