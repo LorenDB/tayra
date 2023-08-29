@@ -1181,7 +1181,8 @@ if BROWSABLE_API_ENABLED:
     )
 
 REST_AUTH_SERIALIZERS = {
-    "PASSWORD_RESET_SERIALIZER": "funkwhale_api.users.serializers.PasswordResetSerializer"  # noqa
+    "PASSWORD_RESET_SERIALIZER": "funkwhale_api.users.serializers.PasswordResetSerializer",  # noqa
+    "PASSWORD_RESET_CONFIRM_SERIALIZER": "funkwhale_api.users.serializers.PasswordResetConfirmSerializer",  # noqa
 }
 REST_SESSION_LOGIN = False
 
