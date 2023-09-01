@@ -1,2 +1,0 @@
-Fix ordering when querystring contains `+` prefix
-Resolve multiple updates to ordering fields

@@ -1,2 +1,0 @@
-Resolve race condition regarding axios when initializing the frontend
-Prevent sending same language setting to backend multiple times
