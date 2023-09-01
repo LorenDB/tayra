@@ -93,6 +93,7 @@ review_front:
     VUE_APP_ROUTER_BASE_URL: /-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/front-review/
     VUE_APP_INSTANCE_URL: https://demo.funkwhale.audio
     NODE_ENV: review
+    NODE_OPTIONS: --max-old-space-size=4096
   environment:
     name: review/front/$CI_COMMIT_REF_NAME
     url: http://$CI_PROJECT_NAMESPACE.pages.funkwhale.audio/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/front-review/index.html
@@ -403,6 +404,7 @@ build_front:
   image: $CI_REGISTRY/funkwhale/ci/node-python:18
   variables:
     <<: *keep_git_files_permissions
+    NODE_OPTIONS: --max-old-space-size=4096
   cache: *front_cache
   before_script:
     - cd front

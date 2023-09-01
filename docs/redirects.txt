@@ -41,6 +41,7 @@ admin/commands.html, ../administrator/manage-script/index.html
 admin/mrf.html, ../administrator/configuration/mrf.html
 admin/url.html, ../administrator/configuration/change-url.html
 admin/optimization.html, ../administrator/configuration/optimize.html
+admin/upgrading.html, ../administrator/upgrade/index.html
 architecture.html, ../developer/architecture.html
 contributing.html, ../developer/index.html
 api.html, ../developer/api/index.html
@@ -53,3 +54,6 @@ translators.html, ../contributor/translation.html
 federation.html, ../developer/federation/index.html
 upgrading.html, ../administrator/upgrade/index.html
 administrator_documentation/upgrade_docs/docker.html, ../../administrator/upgrade/docker.html
+upgrading/0.17.html, ../user/libraries/index.html
+admin/external-storages.html, ../../administrator/configuration/object-storage.html
+admin/external-storage.html#no-resolver-found, ../../administrator/configuration/object-storage.html#troubleshooting

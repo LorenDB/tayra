@@ -32,7 +32,7 @@ Each API call returns HTTP headers to pass the following information:
 - How many more requests in the scope can be made within the rate-limit timeframe (`X-RateLimit-Remaining`)
 - How much time does the client need to wait to send another request (`Retry-After`)
 
-For more information, check our [rate limit documentation](https://docs.funkwhale.audio/admin/configuration.html#api-configuration)
+For more information, check our [rate limit documentation](https://docs.funkwhale.audio/developer/api/rate-limit.html)
 
 ## Resources
 

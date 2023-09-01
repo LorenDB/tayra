@@ -26,6 +26,9 @@ module.exports = {
     // NOTE: Nicer for the eye
     'operator-linebreak': ['error', 'before'],
 
+    // NOTE: We have a logger instance
+    'no-console': 'error',
+
     // NOTE: Handled by typescript
     '@typescript-eslint/no-unused-vars': 'off',
     'no-use-before-define': 'off',

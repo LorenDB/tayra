@@ -4,6 +4,10 @@ import { createEventHook, refDefault, type EventHookOn, useEventListener } from 
 import { createAudioSource } from '~/composables/audio/audio-api'
 import { effectScope, reactive, ref, type Ref } from 'vue'
 
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
+
 export interface SoundSource {
   uuid: string
   mimetype: string
@@ -73,7 +77,7 @@ export class HTMLSound implements Sound {
     this.#audio.src = source
     this.#audio.preload = 'auto'
 
-    console.log('CREATED SOUND INSTANCE', this)
+    logger.log('CREATED SOUND INSTANCE', this)
 
     this.#scope.run(() => {
       useEventListener(this.#audio, 'ended', () => this.#soundEndEventHook.trigger(this))
@@ -84,19 +88,19 @@ export class HTMLSound implements Sound {
       })
 
       useEventListener(this.#audio, 'waiting', () => {
-        console.log('>> AUDIO WAITING', this)
+        logger.log('>> AUDIO WAITING', this)
       })
 
       useEventListener(this.#audio, 'playing', () => {
-        console.log('>> AUDIO PLAYING', this)
+        logger.log('>> AUDIO PLAYING', this)
       })
 
       useEventListener(this.#audio, 'stalled', () => {
-        console.log('>> AUDIO STALLED', this)
+        logger.log('>> AUDIO STALLED', this)
       })
 
       useEventListener(this.#audio, 'suspend', () => {
-        console.log('>> AUDIO SUSPEND', this)
+        logger.log('>> AUDIO SUSPEND', this)
       })
 
       useEventListener(this.#audio, 'loadeddata', () => {
@@ -106,7 +110,7 @@ export class HTMLSound implements Sound {
 
       useEventListener(this.#audio, 'error', (err) => {
         if (this.#ignoreError) return
-        console.error('>> AUDIO ERRORED', err, this)
+        logger.error('>> AUDIO ERRORED', err, this)
         this.isErrored.value = true
         this.isLoaded.value = true
       })
@@ -116,7 +120,7 @@ export class HTMLSound implements Sound {
   async preload () {
     this.isDisposed.value = false
     this.isErrored.value = false
-    console.log('CALLING PRELOAD ON', this)
+    logger.log('CALLING PRELOAD ON', this)
     this.#audio.load()
   }
 
@@ -141,7 +145,7 @@ export class HTMLSound implements Sound {
     try {
       await this.#audio.play()
     } catch (err) {
-      console.error('>> AUDIO PLAY ERROR', err, this)
+      logger.error('>> AUDIO PLAY ERROR', err, this)
       this.isErrored.value = true
     }
   }

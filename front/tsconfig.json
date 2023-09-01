@@ -10,7 +10,8 @@
       "vitest/globals",
       "vite/client",
       "vue/ref-macros",
-      "vite-plugin-pwa/client"
+      "vite-plugin-pwa/client",
+      "unplugin-vue-macros/macros-global"
     ],
     "paths": {
       "#/*": ["src/worker/*"],
@@ -24,5 +25,17 @@
     "src/**/*.vue",
     "vite.config.ts",
     "test/**/*.ts"
-  ]
+  ],
+  "vueCompilerOptions": {
+    "plugins": [
+      "@vue-macros/volar/define-options",
+      "@vue-macros/volar/define-models",
+      "@vue-macros/volar/define-props",
+      "@vue-macros/volar/define-props-refs",
+      "@vue-macros/volar/short-vmodel",
+      "@vue-macros/volar/define-slots",
+      "@vue-macros/volar/export-props",
+      "@vue-macros/volar/jsx-directive"
+    ]
+  }
 }

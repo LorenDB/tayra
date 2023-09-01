@@ -71,6 +71,7 @@ watch(page, fetchData, { immediate: true })
     <podcast-table
       v-if="isPodcast"
       v-model:page="page"
+      :paginate-by="limit"
       :default-cover="defaultCover"
       :is-podcast="isPodcast"
       :show-art="true"
@@ -80,7 +81,6 @@ watch(page, fetchData, { immediate: true })
       :show-album="false"
       :paginate-results="true"
       :total="count"
-      :paginate-by="limit"
     />
     <track-table
       v-else

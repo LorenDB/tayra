@@ -632,7 +632,7 @@ def fetch_collection(url, max_pages, channel, is_page=False):
 def check_all_remote_instance_availability():
     domains = models.Domain.objects.all().prefetch_related()
     for domain in domains:
-        if domain == settings.FUNKWHALE_HOSTNAME:
+        if domain.name == settings.FUNKWHALE_HOSTNAME:
             # No need to check the instance itself: Its always reachable
             domain.reachable = True
             domain.last_successful_contact = timezone.now()
@@ -643,8 +643,7 @@ def check_all_remote_instance_availability():
 @celery.app.task(name="federation.check_single_remote_instance_availability")
 def check_single_remote_instance_availability(domain):
     try:
-        response = requests.get(f"https://{domain.name}/api/v1/instance/nodeinfo/2.0/")
-        nodeinfo = response.json()
+        nodeinfo = fetch_nodeinfo(domain.name)
     except Exception as e:
         logger.info(
             f"Domain {domain.name} could not be reached because of the following error : {e}. \

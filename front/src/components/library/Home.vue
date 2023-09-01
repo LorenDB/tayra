@@ -32,7 +32,7 @@ const labels = computed(() => ({
 const isLoading = ref(false)
 const fetchData = async () => {
   isLoading.value = true
-  logger.time('Loading latest artists')
+  const measureLoading = logger.time('Loading latest artists')
 
   const params = {
     ordering: '-creation_date',
@@ -47,7 +47,7 @@ const fetchData = async () => {
   }
 
   isLoading.value = false
-  logger.timeEnd('Loading latest artists')
+  measureLoading()
 }
 
 fetchData()

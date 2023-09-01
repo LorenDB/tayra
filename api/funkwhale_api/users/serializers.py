@@ -3,15 +3,18 @@ import re
 from allauth.account import models as allauth_models
 from dj_rest_auth.registration.serializers import RegisterSerializer as RS
 from dj_rest_auth.registration.serializers import get_adapter
+from dj_rest_auth.serializers import PasswordResetConfirmSerializer as PRCS
 from dj_rest_auth.serializers import PasswordResetSerializer as PRS
 from django.contrib import auth
 from django.contrib.auth.forms import PasswordResetForm
 from django.core import validators
 from django.utils.deconstruct import deconstructible
+from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from funkwhale_api.activity import serializers as activity_serializers
 from funkwhale_api.common import models as common_models
@@ -250,6 +253,34 @@ class PasswordResetSerializer(PRS):
 
     def get_email_options(self):
         return {"extra_email_context": adapters.get_email_context()}
+
+
+class PasswordResetConfirmSerializer(PRCS):
+    def validate(self, attrs):
+        from allauth.account.forms import default_token_generator
+        from django.utils.http import urlsafe_base64_decode as uid_decoder
+
+        UserModel = auth.get_user_model()
+        # Decode the uidb64 (allauth use base36) to uid to get User object
+        try:
+            uid = force_str(uid_decoder(attrs["uid"]))
+            self.user = UserModel._default_manager.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist):
+            raise ValidationError({"uid": [_("Invalid value")]})
+
+        if not default_token_generator.check_token(self.user, attrs["token"]):
+            raise ValidationError({"token": [_("Invalid value")]})
+
+        self.custom_validation(attrs)
+        # Construct SetPasswordForm instance
+        self.set_password_form = self.set_password_form_class(
+            user=self.user,
+            data=attrs,
+        )
+        if not self.set_password_form.is_valid():
+            raise serializers.ValidationError(self.set_password_form.errors)
+
+        return attrs
 
 
 class UserDeleteSerializer(serializers.Serializer):

@@ -5,6 +5,8 @@ import type { SUPPORTED_LOCALES } from '~/init/locale'
 import axios from 'axios'
 import moment from 'moment'
 
+import useLogger from '~/composables/useLogger'
+
 type SupportedExtension = 'flac' | 'ogg' | 'mp3' | 'opus' | 'aac' | 'm4a' | 'aiff' | 'aif'
 
 export type WebSocketEventName = 'inbox.item_added' | 'import.status_updated' | 'mutation.created' | 'mutation.updated'
@@ -49,6 +51,8 @@ export interface State {
   notifications: Record<NotificationsKey, number>
   websocketEventsHandlers: Record<WebSocketEventName, WebSocketHandlers>
 }
+
+const logger = useLogger()
 
 const store: Module<State, RootState> = {
   namespaced: true,
@@ -225,7 +229,9 @@ const store: Module<State, RootState> = {
       commit('notifications', { type: 'pendingReviewRequests', count: response.data.count })
     },
 
-    async currentLanguage ({ commit, rootState }, value) {
+    async currentLanguage ({ commit, rootState, state }, value) {
+      if (state.selectedLanguage && state.currentLanguage === value) return
+
       commit('currentLanguage', value)
       if (rootState.auth.authenticated) {
         await axios.post('users/settings', { language: value })
@@ -234,7 +240,7 @@ const store: Module<State, RootState> = {
 
     websocketEvent ({ state }, event: WebSocketEvent) {
       const handlers = state.websocketEventsHandlers[event.type]
-      console.log('Dispatching websocket event', event, handlers)
+      logger.log('Dispatching websocket event', event, handlers)
       if (!handlers) {
         return
       }

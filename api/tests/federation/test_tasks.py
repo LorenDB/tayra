@@ -669,7 +669,18 @@ def test_fetch_collection(mocker, r_mock):
 def test_check_all_remote_instance_reachable(factories, r_mock):
     domain = factories["federation.Domain"]()
     r_mock.get(
-        f"https://{domain.name}/api/v1/instance/nodeinfo/2.0/", json={"version": "2"}
+        f"https://{domain.name}/api/v1/instance/nodeinfo/2.0", json={"version": "2"}
+    )
+    r_mock.get(
+        f"https://{domain.name}/.well-known/nodeinfo",
+        json={
+            "links": [
+                {
+                    "rel": "http://nodeinfo.diaspora.software/ns/schema/2.0",
+                    "href": f"https://{domain.name}/api/v1/instance/nodeinfo/2.0",
+                }
+            ]
+        },
     )
     tasks.check_all_remote_instance_availability()
     domain = models.Domain.objects.get(name=domain.name)
@@ -683,3 +694,10 @@ def test_check_remote_instance_unreachable(factories, r_mock):
     tasks.check_all_remote_instance_availability()
     domain = models.Domain.objects.get(name=domain.name)
     assert domain.reachable is False
+
+
+def test_check_all_remote_instance_skips_local(settings, factories, r_mock):
+    domain = factories["federation.Domain"]()
+    settings.FUNKWHALE_HOSTNAME = domain.name
+    tasks.check_all_remote_instance_availability()
+    assert not r_mock.called

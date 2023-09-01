@@ -16,7 +16,6 @@ interface Props {
   isPodcast?: boolean
   paginateResults?: boolean
   paginateBy?: number
-  page?: number
   total?: number
 }
 
@@ -30,9 +29,10 @@ withDefaults(defineProps<Props>(), {
   isPodcast: true,
   paginateResults: true,
   paginateBy: 25,
-  page: 1,
   total: 0
 })
+
+const { page } = defineModels<{ page: number, }>()
 </script>
 
 <template>
@@ -44,9 +44,7 @@ withDefaults(defineProps<Props>(), {
     <slot name="header" />
 
     <div>
-      <div
-        :class="['track-table', 'ui', 'unstackable', 'grid', 'tablet-and-up']"
-      >
+      <div :class="['track-table', 'ui', 'unstackable', 'grid', 'tablet-and-up']">
         <!-- For each item, build a row -->
         <podcast-row
           v-for="(track, index) in tracks"
@@ -65,8 +63,8 @@ withDefaults(defineProps<Props>(), {
       >
         <pagination
           v-bind="$attrs"
+          v-model:current="page"
           :total="total"
-          :current="page"
           :paginate-by="paginateBy"
         />
       </div>
@@ -95,8 +93,8 @@ withDefaults(defineProps<Props>(), {
         <pagination
           v-if="paginateResults"
           v-bind="$attrs"
+          v-model:current="page"
           :total="total"
-          :current="page"
           :compact="true"
         />
       </div>

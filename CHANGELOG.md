@@ -9,10 +9,74 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 <!-- towncrier -->
 
+## 1.3.2 (2023-09-01)
+
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
+
+Enhancements:
+
+- Enable sourcemaps for production builds
+- Use logger composable instead of window.console
+
+Bugfixes:
+
+- Clear shuffled id list on queue clear (#2192)
+- Fetch the nodeinfo endpoint from .well-known/nodeinfo when checking instance availability
+- Fix instance checking its own availability (#2199)
+- Fix multiarch docker builds #2211
+- Fix ordering when querystring contains `+` prefix
+  Resolve multiple updates to ordering fields
+- Fix password reset via email
+- Make podcast episode pagination reactive (#2205)
+- Render HTML in podcast short description (#2206)
+- Resolve race condition regarding axios when initializing the frontend
+  Prevent sending same language setting to backend multiple times
+
+Documentation:
+
+- Fixed incorrect upgrade instructions link in docs.
+
+Contributors to our Issues:
+
+- Ciarán Ainsworth
+- Georg Krause
+- Kasper Seweryn
+- Kay Borowski
+- Marcos Peña
+- Mathieu Jourdan
+- Virgile Robles
+- codl
+- jooola
+- petitminion
+- tinglycraniumplacidly
+- unkn0wwn52
+
+Contributors to our Merge Requests:
+
+- Ciarán Ainsworth
+- Georg Krause
+- JuniorJPDJ
+- Kasper Seweryn
+- Marcos Peña
+- Virgile Robles
+- codl
+- jooola
+- petitminion
+
+Committers:
+
+- Ciarán Ainsworth
+- codl
+- Georg Krause
+- jo
+- Kasper Seweryn
+- petitminion
+
 ## 1.3.1 (2023-06-27)
 
 Upgrade instructions are available at
-https://docs.funkwhale.audio/admin/upgrading.html
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Bugfixes:
 
@@ -82,7 +146,7 @@ Committers:
 ## 1.3.0 (2023-06-01)
 
 Upgrade instructions are available at
-https://docs.funkwhale.audio/admin/upgrading.html
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Update instructions:
 
@@ -496,7 +560,8 @@ Committers:
 
 ## 1.2.9 (2022-11-25)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Bugfixes:
 
@@ -535,7 +600,8 @@ Contributors to our Merge Requests:
 
 ## 1.2.8 (2022-09-12)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Features:
 
@@ -590,7 +656,8 @@ Contributors to our Merge Requests:
 
 ## 1.2.7 (2022-07-14)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Bugfixes:
 
@@ -613,7 +680,8 @@ Contributors to our Merge Requests:
 
 ## 1.2.6 (2022-07-04)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Bugfixes:
 
@@ -662,7 +730,8 @@ Contributors to our Merge Requests:
 
 ## 1.2.5 (2022-05-07)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Enhancements:
 
@@ -711,7 +780,8 @@ Contributors to our Merge Requests:
 
 ## 1.2.4 (2022-04-23)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Enhancements:
 
@@ -752,7 +822,8 @@ Committers:
 
 ## 1.2.3 (2022-03-18)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Enhancements:
 
@@ -808,7 +879,8 @@ Committers
 
 ## 1.2.2 (2022-02-04)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Bugfixes:
 
@@ -862,7 +934,8 @@ Committers
 
 ## 1.2.1 (2022-01-06)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Bugfixes:
 
@@ -891,7 +964,8 @@ Committers:
 
 ## 1.2.0 (2021-12-27)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Due to a bug in our CI Pipeline, you need to download the frontend artifact here: https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/81069/artifacts/download
 
@@ -1086,13 +1160,15 @@ Contributors to our Merge Requests:
 
 ## 1.1.4 (2021-08-02)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 - Pinned version of asgiref to avoid trouble with latest release. For further information, see #1516
 
 ## 1.1.3 (2021-08-02)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Enhancements:
 
@@ -1108,7 +1184,8 @@ Bugfixes:
 
 ## 1.1.2 (2021-05-19)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Enhancements:
 
@@ -1123,7 +1200,8 @@ Bugfixes:
 
 ## 1.1.1 (2021-04-13)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Enhancements:
 
@@ -1140,7 +1218,8 @@ Bugfixes:
 
 ## 1.1 (2021-03-10)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Enhancements:
 
@@ -1222,7 +1301,8 @@ Contributors to this release (development, documentation, reviews):
 
 ## 1.1-rc2 (2021-03-01)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Bugfixes:
 
@@ -1233,7 +1313,8 @@ Bugfixes:
 
 ## 1.1-rc1 (2021-02-24)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Enhancements:
 
@@ -1292,7 +1373,8 @@ Contributors to this release (development, documentation, reviews):
 
 ## 1.0.1 (2020-10-31)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Enhancements:
 
@@ -1314,7 +1396,8 @@ Contributors to this release (development, documentation, reviews):
 
 ## 1.0 (2020-09-09)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 ### Dropped python 3.5 support [manual action required, non-docker only]
 
@@ -1444,7 +1527,8 @@ Contributors to this release (translation, development, documentation, reviews, 
 
 ## 0.21.2 (2020-07-27)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Enhancements:
 
@@ -1472,7 +1556,8 @@ Contributors to this release (development, documentation, reviews):
 
 ## 0.21.1 (2020-06-11)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Features:
 
@@ -1530,7 +1615,8 @@ This 0.21 release is dedicated to Agate, to thank her, for both having created t
 
 We are truly grateful as well to the dozens of people who contributed to this release with translations, development, documentation, reviews, design, testing, feedback, financial support, third-party projects and integrations… You made it possible!
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html, there are also additional operations you need to execute, listed in the changelog below (search "Manual action").
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html, there are also additional operations you need to execute, listed in the changelog below (search "Manual action").
 
 ### Channels and podcasts
 
@@ -1835,7 +1921,8 @@ Contributors to this release (translation, development, documentation, reviews, 
 
 ## 0.20.1 (2019-10-28)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 ### Denormalized audio permission logic in a separate table to enhance performance
 
@@ -1896,6 +1983,9 @@ Contributors to this release (translation, development, documentation, reviews, 
 Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
 
 ### Support for genres via tags
+
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 One of our most requested missing features is now available!
 
@@ -2206,7 +2296,8 @@ Contributors to this release (translation, development, documentation, reviews, 
 
 ## 0.19.1 (2019-06-28)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Enhancements:
 
@@ -2250,7 +2341,8 @@ Contributors to this release (committers and reviewers):
 
 ## 0.19.0 (2019-05-16)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 ### Edits on tracks, albums and artists
 
@@ -2454,7 +2546,8 @@ Contributors to this release (committers and translators):
 
 ## 0.18.3 (2019-03-21)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 ### Avoid mixed content when deploying mono-container behind proxy [Manual action required]
 
@@ -2497,7 +2590,8 @@ Documentation:
 
 ## 0.18.2 (2019-02-13)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Enhancements:
 
@@ -2514,7 +2608,8 @@ Bugfixes:
 
 ## 0.18.1 (2019-01-29)
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 ### Fix Gzip compression to avoid BREACH exploit [security] [manual action required]
 
@@ -2637,7 +2732,8 @@ as you can enjoy it today. Thank you so much Naomi <3
 Many thanks to the dozens of people that contributed to this release: translators, developers,
 bug hunters, admins and backers. You made it possible!
 
-Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html, ensure you also execute the instructions
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html, ensure you also execute the instructions
 marked with `[manual action required]` and `[manual action suggested]`.
 
 See `Full changelog` below for an exhaustive list of changes!

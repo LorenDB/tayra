@@ -8,7 +8,7 @@ The Funkwhale software is the core of the community project. While we have a cor
 
 Funkwhale's backend is written in [Python](https://www.python.org/) using [Django](https://www.djangoproject.com) and [Django REST framework](https://www.django-rest-framework.org/). Our web app is written in [Vue.js](https://vuejs.org/) and [Typescript](https://typescriptlang.org).
 
-Whether you're an experienced developer or you're just learning, check out our [developer guide](https://docs.funkwhale.audio/developers/index.html) to get started.
+Whether you're an experienced developer or you're just learning, check out our [developer guide](https://docs.funkwhale.audio/developer/index.html) to get started.
 
 ## Document Funkwhale
 
