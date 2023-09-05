@@ -15,7 +15,6 @@ import NoteForm from '~/components/manage/moderation/NoteForm.vue'
 import useReportConfigs from '~/composables/moderation/useReportConfigs'
 import useErrorHandler from '~/composables/useErrorHandler'
 import useMarkdown from '~/composables/useMarkdown'
-import useLogger from '~/composables/useLogger'
 
 interface Events {
   (e: 'updated', updating: { type: string }): void
@@ -30,7 +29,6 @@ const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 
 const configs = useReportConfigs()
-const logger = useLogger()
 
 const obj = ref(props.initObj)
 const summary = useMarkdown(() => obj.value.summary ?? '')
@@ -79,11 +77,11 @@ const actions = computed(() => {
         handler: async () => {
           try {
             await axios.delete(deleteUrl)
-            logger.info('Target deleted')
+            console.log('Target deleted')
             obj.value.target = undefined
             resolveReport(true)
           } catch (error) {
-            logger.error('Error while deleting target', error)
+            console.log('Error while deleting target', error)
             useErrorHandler(error as Error)
           }
         }

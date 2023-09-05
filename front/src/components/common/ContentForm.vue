@@ -4,8 +4,6 @@ import { useVModel, watchDebounced, useTextareaAutosize, syncRef } from '@vueuse
 import { ref, computed, watchEffect, onMounted, nextTick, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-import useLogger from '~/composables/useLogger'
-
 interface Events {
   (e: 'update:modelValue', value: string): void
 }
@@ -28,8 +26,6 @@ const props = withDefaults(defineProps<Props>(), {
   required: false
 })
 
-const logger = useLogger()
-
 const { t } = useI18n()
 const { textarea, input } = useTextareaAutosize()
 const value = useVModel(props, 'modelValue', emit)
@@ -51,7 +47,7 @@ const loadPreview = async () => {
     const response = await axios.post('text-preview/', { text: value.value, permissive: props.permissive })
     preview.value = response.data.rendered
   } catch (error) {
-    logger.error(error)
+    console.error(error)
   }
   isLoadingPreview.value = false
 }

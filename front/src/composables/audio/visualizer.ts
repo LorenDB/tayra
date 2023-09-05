@@ -4,8 +4,6 @@ import { AUDIO_CONTEXT, GAIN_NODE } from './audio-api'
 import { useResizeObserver, useStorage } from '@vueuse/core'
 import { watchEffect, ref, markRaw } from 'vue'
 
-import useLogger from '~/composables/useLogger'
-
 // @ts-expect-error butterchurn has no typings
 import butterchurnPresets from 'butterchurn-presets'
 
@@ -13,8 +11,6 @@ import butterchurnPresets from 'butterchurn-presets'
 import butterchurn from 'butterchurn'
 
 export const useMilkDrop = (canvas: Ref<HTMLCanvasElement>) => {
-  const logger = useLogger()
-
   const presets = Object.keys(butterchurnPresets)
   const visualizer = ref()
 
@@ -28,7 +24,7 @@ export const useMilkDrop = (canvas: Ref<HTMLCanvasElement>) => {
     const name = presetName.value
     if (name === undefined) return
 
-    logger.log(`Switching to preset: '${name}'`)
+    console.log(`Switching to preset: '${name}'`)
     visualizer.value?.loadPreset(butterchurnPresets[name], 1)
   })
 
@@ -71,7 +67,7 @@ export const useMilkDrop = (canvas: Ref<HTMLCanvasElement>) => {
     try {
       visualizer.value?.render()
     } catch (error) {
-      logger.error(error)
+      console.error(error)
       loadRandomPreset()
     }
   }

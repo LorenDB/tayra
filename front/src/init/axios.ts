@@ -118,7 +118,7 @@ export const install: InitModule = ({ store, router }) => {
 
   const refreshAuth = async (failedRequest: AxiosError) => {
     if (store.state.auth.oauth.accessToken) {
-      logger.warn('Failed request, refreshing auth…')
+      console.log('Failed request, refreshing auth…')
 
       try {
         // maybe the token was expired, let's try to refresh it

@@ -19,7 +19,6 @@ import RadioCard from '~/components/radios/Card.vue'
 import TagsList from '~/components/tags/List.vue'
 
 import useErrorHandler from '~/composables/useErrorHandler'
-import useLogger from '~/composables/useLogger'
 
 type QueryType = 'artists' | 'albums' | 'tracks' | 'playlists' | 'tags' | 'radios' | 'podcasts' | 'series' | 'rss'
 
@@ -35,8 +34,6 @@ syncRef(pageQuery, page, {
   },
   direction: 'both'
 })
-
-const logger = useLogger()
 
 const q = useRouteQuery('q', '')
 const query = ref(q.value)
@@ -212,7 +209,8 @@ const radioConfig = computed(() => {
         } as RadioConfig
     }
 
-    logger.warn('This type is not yet supported for radio')
+    // TODO (wvffle): Use logger
+    console.info('This type is not yet supported for radio')
   }
 
   return null

@@ -5,7 +5,6 @@ import ChannelsWidget from '~/components/audio/ChannelsWidget.vue'
 import LoginForm from '~/components/auth/LoginForm.vue'
 import SignupForm from '~/components/auth/SignupForm.vue'
 import useMarkdown from '~/composables/useMarkdown'
-import useLogger from '~/composables/useLogger'
 import { humanSize } from '~/utils/filters'
 import { useStore } from '~/store'
 import { computed } from 'vue'
@@ -19,7 +18,6 @@ const labels = computed(() => ({
 }))
 
 const store = useStore()
-const logger = useLogger()
 const nodeinfo = computed(() => store.state.instance.nodeinfo)
 
 const podName = computed(() => get(nodeinfo.value, 'metadata.nodeName') || 'Funkwhale')
@@ -56,7 +54,7 @@ const headerStyle = computed(() => {
 // TODO (wvffle): Check if needed
 const router = useRouter()
 whenever(() => store.state.auth.authenticated, () => {
-  logger.log('Authenticated, redirecting to /library…')
+  console.log('Authenticated, redirecting to /library…')
   router.push('/library')
 })
 </script>

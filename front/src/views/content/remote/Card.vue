@@ -12,7 +12,6 @@ import RadioButton from '~/components/radios/Button.vue'
 
 import useErrorHandler from '~/composables/useErrorHandler'
 import useReport from '~/composables/moderation/useReport'
-import useLogger from '~/composables/useLogger'
 
 interface Emits {
   (e: 'followed'): void
@@ -31,8 +30,6 @@ const props = withDefaults(defineProps<Props>(), {
   displayScan: true,
   displayCopyFid: true
 })
-
-const logger = useLogger()
 
 const { report, getReportableObjects } = useReport()
 const store = useStore()
@@ -83,7 +80,7 @@ const follow = async () => {
     library.value.follow = response.data
     emit('followed')
   } catch (error) {
-    logger.error(error)
+    console.error(error)
     store.commit('ui/addMessage', {
       content: t('views.content.remote.Card.error.follow', { error }),
       date: new Date()

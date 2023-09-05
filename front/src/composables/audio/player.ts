@@ -9,8 +9,6 @@ import { useStore } from '~/store'
 import axios from 'axios'
 import { useClamp } from '@vueuse/math'
 
-import useLogger from '~/composables/useLogger'
-
 // Looping
 export enum LoopingMode {
   None,
@@ -19,6 +17,7 @@ export enum LoopingMode {
 }
 
 // Pausing
+
 export enum PauseReason {
   UserInput,
   EndOfQueue,
@@ -26,8 +25,6 @@ export enum PauseReason {
   Errored,
   EndOfRadio
 }
-
-const logger = useLogger()
 
 const MODE_MAX = 1 + Math.max(...Object.values(LoopingMode).filter(mode => typeof mode === 'number') as number[])
 
@@ -134,12 +131,12 @@ export const usePlayer = createGlobalState(() => {
   const trackListenSubmissions = () => {
     const store = useStore()
     whenever(listenSubmitted, async () => {
-      logger.log('Listening submitted!')
+      console.log('Listening submitted!')
       if (!store.state.auth.authenticated) return
       if (!currentTrack.value) return
 
       await axios.post('history/listenings/', { track: currentTrack.value.id })
-        .catch((error) => logger.error('Could not record track in history', error))
+        .catch((error) => console.error('Could not record track in history', error))
     })
   }
 

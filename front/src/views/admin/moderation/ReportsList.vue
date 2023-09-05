@@ -20,7 +20,6 @@ import useSharedLabels from '~/composables/locale/useSharedLabels'
 import useOrdering from '~/composables/navigation/useOrdering'
 import useErrorHandler from '~/composables/useErrorHandler'
 import usePage from '~/composables/navigation/usePage'
-import useLogger from '~/composables/useLogger'
 
 interface Props extends SmartSearchProps, OrderingProps {
   mode?: 'card'
@@ -37,8 +36,6 @@ const props = withDefaults(defineProps<Props>(), {
   mode: 'card',
   orderingConfigName: undefined
 })
-
-const logger = useLogger()
 
 const search = ref()
 
@@ -71,7 +68,7 @@ const fetchData = async () => {
 
     result.value = response.data
     if (query.value === 'resolved:no') {
-      logger.log('Refreshing sidebar notifications')
+      console.log('Refreshing sidebar notifications')
       store.commit('ui/incrementNotifications', {
         type: 'pendingReviewReports',
         value: response.data.count

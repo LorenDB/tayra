@@ -168,7 +168,7 @@ const store: Module<State, RootState> = {
       try {
         await axios.post('users/logout')
       } catch (error) {
-        logger.error('Error while logging out, probably logged in via oauth', error)
+        console.log('Error while logging out, probably logged in via oauth')
       }
 
       const modules = [
@@ -249,11 +249,11 @@ const store: Module<State, RootState> = {
       const redirectUri = encodeURIComponent(`${location.origin}/auth/callback`)
       const params = `response_type=code&scope=${encodeURIComponent(NEEDED_SCOPES)}&redirect_uri=${redirectUri}&state=${next}&client_id=${state.oauth.clientId}`
       const authorizeUrl = `${rootState.instance.instanceUrl}authorize?${params}`
-      logger.log('Redirecting user...', authorizeUrl)
+      console.log('Redirecting user...', authorizeUrl)
       window.location.href = authorizeUrl
     },
     async handleOauthCallback ({ state, commit, dispatch }, authorizationCode) {
-      logger.log('Fetching token...')
+      console.log('Fetching token...')
       const payload = {
         client_id: state.oauth.clientId,
         client_secret: state.oauth.clientSecret,
