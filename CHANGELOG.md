@@ -9,6 +9,41 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 <!-- towncrier -->
 
+## 1.3.3 (2023-09-07)
+
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
+
+Bugfixes:
+
+- Revert changed logging to fix crashes
+
+Contributors to our Issues:
+
+- Alexandra Parker
+- Aurelien Vaillant
+- ChengChung
+- Ciarán Ainsworth
+- Georg Krause
+- Johann Queuniet
+- Kasper Seweryn
+- Mathieu Jourdan
+- Nicolas Derive
+- Puniko Nyan
+- Thomas
+- petitminion
+- philip ballinger
+
+Contributors to our Merge Requests:
+
+- Ciarán Ainsworth
+- Georg Krause
+- JuniorJPDJ
+- Kasper Seweryn
+- Marcos Peña
+- jooola
+- petitminion
+
 ## 1.3.2 (2023-09-01)
 
 Upgrade instructions are available at
