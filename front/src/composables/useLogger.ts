@@ -1,3 +1,5 @@
+import Stacktrace from 'stacktrace-js'
+
 type LogLevel = 'info' | 'warn' | 'error' | 'debug' | 'time'
 
 const LOG_LEVEL_LABELS: Record<LogLevel, string> = {
@@ -42,30 +44,32 @@ const FILETYPE_COLOR: Record<string, string> = {
   default: '#000'
 }
 
-const getFile = () => {
-  const { stack } = new Error()
-  const line = stack?.split('\n')[2] ?? ''
-  const [, method, url, lineNo] = line.match(/^(\w+)?(?:\/<)*@(.+?)(?:\?.*)?:(\d+):\d+$/) ?? []
-  const file = url.startsWith(location.origin) ? url.slice(location.origin.length) : url
-  return { method, file, lineNo }
-}
-
 // NOTE: We're pushing all logs to the end of the event loop
 const createLoggerFn = (level: LogLevel) => {
   // NOTE: We don't want to handle logs ourselves in tests
   // eslint-disable-next-line no-console
   if (import.meta.env.VITEST) return console[level]
 
-  return (...args: any[]) => {
+  // NOTE: Don't log time and debug in production
+  if (level === 'time' || level === 'debug') {
+    if (import.meta.env.PROD) return () => { }
+  }
+
+  return async (...args: any[]) => {
     const timestamp = new Date().toUTCString()
-    const { method, file, lineNo } = getFile()
+    const stacktrace = await Stacktrace.get()
+
+    // NOTE: First call is a call to logger.log, second one is a call to the function that called logger.log
+    const { functionName, fileName, lineNumber } = stacktrace[1]
+
+    let file = fileName
+
+    try {
+      const url = new URL(fileName ?? '')
+      file = url.pathname
+    } catch (error) { }
 
     const ext = file?.split('.').pop() ?? 'default'
-
-    // NOTE: Don't log time and debug in production
-    if (level === 'time' || level === 'debug') {
-      if (import.meta.env.PROD) return
-    }
 
     // eslint-disable-next-line no-console
     console[level === 'time' ? 'debug' : level](
@@ -76,9 +80,9 @@ const createLoggerFn = (level: LogLevel) => {
       `background: ${LOG_LEVEL_BACKGROUND[level]}; color: ${LOG_LEVEL_COLOR[level]}; border-radius: 1em 0 0 1em`,
       LOG_LEVEL_LABELS[level],
       `background: ${FILETYPE_BACKGROUND[ext]}; color: ${FILETYPE_COLOR[ext]}; border-radius: 0 1em 1em 0`,
-      method !== undefined
-        ? ` ${file}:${lineNo} ${method}() `
-        : ` ${file}:${lineNo} `,
+      functionName !== undefined
+        ? ` ${file}:${lineNumber} ${functionName}() `
+        : ` ${file}:${lineNumber} `,
       ...args
     )
   }
