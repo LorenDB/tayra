@@ -48,7 +48,7 @@ const FILETYPE_COLOR: Record<string, string> = {
 const createLoggerFn = (level: LogLevel) => {
   // NOTE: Don't log time and debug in production
   if (level === 'time' || level === 'debug') {
-    if (import.meta.env.PROD) return () => { }
+    if (import.meta.env.PROD) return () => undefined
   }
 
   return async (...args: any[]) => {
