@@ -1,4 +1,5 @@
 import datetime
+import json
 import logging
 import random
 from typing import List, Optional, Tuple
@@ -12,6 +13,7 @@ from funkwhale_api.federation import fields as federation_fields
 from funkwhale_api.federation import models as federation_models
 from funkwhale_api.moderation import filters as moderation_filters
 from funkwhale_api.music.models import Artist, Library, Track, Upload
+from funkwhale_api.radios import lb_recommendations
 from funkwhale_api.tags.models import Tag
 
 from . import filters, models
@@ -189,9 +191,7 @@ class CustomMultiple(SessionRadio):
 
     def validate_session(self, data, **context):
         data = super().validate_session(data, **context)
-        try:
-            data["config"] is not None
-        except KeyError:
+        if data.get("config") is None:
             raise serializers.ValidationError(
                 "You must provide a configuration for this radio"
             )
@@ -405,3 +405,58 @@ class RecentlyAdded(SessionRadio):
             Q(artist__content_category="music"),
             Q(creation_date__gt=date),
         )
+
+
+# Use this to experiment on the custom multiple radio with troi
+@registry.register(name="troi")
+class Troi(SessionRadio):
+    """
+    Receive a vuejs generated config and use it to launch a troi radio session.
+    The config data should follow :
+    {"patch": "troi_patch_name", "troi_arg1":"troi_arg_1", "troi_arg2": ...}
+    Validation of the config (args) is done by troi during track fetch.
+    Funkwhale only checks if the patch is implemented
+    """
+
+    config = serializers.JSONField(required=True)
+
+    def append_lb_config(self, data):
+        if self.session.user.settings is None:
+            logger.warning(
+                "No lb_user_name set in user settings. Some troi patches will fail"
+            )
+            return data
+        elif self.session.user.settings.get("lb_user_name") is None:
+            logger.warning(
+                "No lb_user_name set in user settings. Some troi patches will fail"
+            )
+        else:
+            data["user_name"] = self.session.user.settings["lb_user_name"]
+
+        if self.session.user.settings.get("lb_user_token") is None:
+            logger.warning(
+                "No lb_user_token set in user settings. Some troi patch will fail"
+            )
+        else:
+            data["user_token"] = self.session.user.settings["lb_user_token"]
+
+        return data
+
+    def get_queryset_kwargs(self):
+        kwargs = super().get_queryset_kwargs()
+        kwargs["config"] = self.session.config
+        return kwargs
+
+    def validate_session(self, data, **context):
+        data = super().validate_session(data, **context)
+        if data.get("config") is None:
+            raise serializers.ValidationError(
+                "You must provide a configuration for this radio"
+            )
+        return data
+
+    def get_queryset(self, **kwargs):
+        qs = super().get_queryset(**kwargs)
+        config = self.append_lb_config(json.loads(kwargs["config"]))
+
+        return lb_recommendations.run(config, candidates=qs)

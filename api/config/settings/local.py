@@ -149,3 +149,5 @@ MIDDLEWARE = (
     "funkwhale_api.common.middleware.ProfilerMiddleware",
     "funkwhale_api.common.middleware.PymallocMiddleware",
 ) + MIDDLEWARE
+
+TYPESENSE_API_KEY = "apikey"

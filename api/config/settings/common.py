@@ -272,6 +272,7 @@ LOCAL_APPS = (
     "funkwhale_api.playlists",
     "funkwhale_api.subsonic",
     "funkwhale_api.tags",
+    "funkwhale_api.typesense",
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -934,6 +935,11 @@ CELERY_BEAT_SCHEDULE = {
         ),
         "options": {"expires": 60 * 60},
     },
+    "typesense.build_canonical_index": {
+        "task": "typesense.build_canonical_index",
+        "schedule": crontab(day_of_week="*/2", minute="0", hour="3"),
+        "options": {"expires": 60 * 60 * 24},
+    },
 }
 
 if env.bool("ADD_ALBUM_TAGS_FROM_TRACKS", default=True):
@@ -1477,3 +1483,4 @@ TYPESENSE_HOST = env(
 Typesense hostname. Defaults to `localhost` on non-Docker deployments and to `typesense` on
 Docker deployments.
 """
+TYPESENSE_NUM_TYPO = env("TYPESENSE_NUM_TYPO", default=5)

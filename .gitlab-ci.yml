@@ -253,7 +253,7 @@ test_api:
     CACHE_URL: "redis://redis:6379/0"
   before_script:
     - cd api
-    - poetry install
+    - poetry install --all-extras
   script:
     - >
       poetry run pytest
@@ -354,7 +354,7 @@ build_api_schema:
     API_TYPE: "v1"
   before_script:
     - cd api
-    - poetry install
+    - poetry install --all-extras
     - poetry run funkwhale-manage migrate
   script:
     - poetry run funkwhale-manage spectacular --file ../docs/schema.yml

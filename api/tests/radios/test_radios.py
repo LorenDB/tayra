@@ -429,3 +429,28 @@ def test_can_start_custom_multiple_radio_from_api(api_client, factories):
             format="json",
         )
         assert response.status_code == 201
+
+
+def test_can_start_periodic_jams_troi_radio_from_api(api_client, factories):
+    factories["music.Track"].create_batch(5)
+    url = reverse("api:v1:radios:sessions-list")
+    config = {"patch": "periodic-jams", "type": "daily-jams"}
+    response = api_client.post(
+        url,
+        {"radio_type": "troi", "config": config},
+        format="json",
+    )
+    assert response.status_code == 201
+
+
+# to do : send error to api ?
+def test_can_catch_troi_radio_error(api_client, factories):
+    factories["music.Track"].create_batch(5)
+    url = reverse("api:v1:radios:sessions-list")
+    config = {"patch": "periodic-jams", "type": "not_existing_type"}
+    response = api_client.post(
+        url,
+        {"radio_type": "troi", "config": config},
+        format="json",
+    )
+    assert response.status_code == 201

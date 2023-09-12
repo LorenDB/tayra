@@ -6,3 +6,4 @@ from .common import *  # noqa
 
 DEBUG = True
 SECRET_KEY = "a_super_secret_key!"
+TYPESENSE_API_KEY = "apikey"
