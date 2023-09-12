@@ -70,7 +70,7 @@
         "terms": "Conditions d'utilisation et politique de respect de la vie privée"
       },
       "message": {
-        "contact": "Envoyez-nous un courriel : {'{{'} contactEmail {'}}'}"
+        "contact": "Envoyez-nous un courriel : { contactEmail }"
       },
       "notApplicable": "ND",
       "placeholder": {
