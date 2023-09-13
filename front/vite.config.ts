@@ -14,9 +14,6 @@ const port = +(process.env.VUE_PORT ?? 8080)
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   envPrefix: ['VUE_', 'FUNKWHALE_SENTRY_'],
-  build: {
-    sourcemap: true
-  },
   plugins: [
     // https://vue-macros.sxzz.moe/
     VueMacros({
