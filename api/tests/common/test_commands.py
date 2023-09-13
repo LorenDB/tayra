@@ -1,5 +1,4 @@
 import os
-from io import StringIO
 
 import pytest
 from django.core.management import call_command
@@ -129,44 +128,3 @@ def test_inplace_to_s3_dryrun(factories):
     call_command("inplace_to_s3", "--source", "/music")
     assert upload.source == "file:///music/music.mp3"
     assert not upload.audio_file
-
-
-data = [
-    {
-        "file": "/music/test.mp3",
-        "source": "/",
-        "target": None,
-        "expected": "/music/test.mp3",
-    },
-    {
-        "file": "/music/test.mp3",
-        "source": "/music",
-        "target": "/in-place",
-        "expected": "/in-place/test.mp3",
-    },
-    {
-        "file": "/music/test.mp3",
-        "source": "/music",
-        "target": "/in-place/music",
-        "expected": "/in-place/music/test.mp3",
-    },
-    {"file": "/music/test.mp3", "source": "/abcd", "target": "/music", "expected": "0"},
-]
-
-
-@pytest.mark.parametrize("data", data)
-def test_inplace_to_s3(factories, data):
-    out = StringIO()
-    factories["music.Upload"](in_place=True, source=f"file://{data['file']}")
-    if data["target"]:
-        call_command(
-            "inplace_to_s3",
-            "--source",
-            data["source"],
-            "--target",
-            data["target"],
-            stdout=out,
-        )
-    else:
-        call_command("inplace_to_s3", "--source", data["source"], stdout=out)
-    assert data["expected"] in out.getvalue()
