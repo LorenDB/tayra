@@ -4099,10 +4099,10 @@ follow-redirects@^1.15.0:
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.2.tgz#b460864144ba63f2681096f274c4e57026da2c13"
   integrity sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==
 
-fomantic-ui-css@2.9.2:
-  version "2.9.2"
-  resolved "https://registry.yarnpkg.com/fomantic-ui-css/-/fomantic-ui-css-2.9.2.tgz#b445206bb0c1547ff05abbecc4725107749f7f54"
-  integrity sha512-D2KogymuA0t7z7zLoekSorgpOKil+q8y09sfYmWP1LcEA1WYRcMKdm5okjnxn4eopl8j45WBnWrkgtobNSbY2w==
+fomantic-ui-css@2.9.3:
+  version "2.9.3"
+  resolved "https://registry.yarnpkg.com/fomantic-ui-css/-/fomantic-ui-css-2.9.3.tgz#5ee927654be50b77abfaff77bc0b6735e1d7a09c"
+  integrity sha512-7bM6p3QRpfZFofg7Fd3crzox2E/nBsPyyWDN+N4lnTjNMxgKltSaXJTfhLoK5xBA+wEoNtcmm6w6FQ5Drj+27A==
   dependencies:
     jquery "^3.4.0"
 
