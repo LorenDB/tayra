@@ -81,15 +81,27 @@ store.dispatch('auth/fetchUser')
 </script>
 
 <template>
-  <div :key="store.state.instance.instanceUrl" :class="{
-    'has-bottom-player': tracks.length > 0,
-    'queue-focused': store.state.ui.queueFocused
-  }">
+  <div
+    :key="store.state.instance.instanceUrl"
+    :class="{
+      'has-bottom-player': tracks.length > 0,
+      'queue-focused': store.state.ui.queueFocused
+    }"
+  >
     <!-- here, we display custom stylesheets, if any -->
-    <link v-for="url in customStylesheets" :key="url" rel="stylesheet" property="stylesheet" :href="url">
+    <link
+      v-for="url in customStylesheets"
+      :key="url"
+      rel="stylesheet"
+      property="stylesheet"
+      :href="url"
+    >
 
-    <sidebar :width="width" @show:set-instance-modal="showSetInstanceModal = !showSetInstanceModal"
-      @show:shortcuts-modal="toggleShortcutsModal" />
+    <sidebar
+      :width="width"
+      @show:set-instance-modal="showSetInstanceModal = !showSetInstanceModal"
+      @show:shortcuts-modal="toggleShortcutsModal"
+    />
     <set-instance-modal v-model:show="showSetInstanceModal" />
     <service-messages />
     <transition name="queue">

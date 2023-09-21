@@ -22,11 +22,11 @@ logger.debug('Environment variables:', import.meta.env)
 const app = createApp({
   name: 'Root',
   data: () => ({ ready: false }),
-  mounted() {
+  mounted () {
     this.ready = true
     logger.info('Everything loaded!')
   },
-  render() {
+  render () {
     if (this.ready) {
       return h(defineAsyncComponent(() => import('~/App.vue')))
     }
