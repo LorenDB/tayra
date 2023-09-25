@@ -1,9 +1,11 @@
 import datetime
 import json
 import logging
+import pickle
 import random
 from typing import List, Optional, Tuple
 
+from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.db import connection
 from django.db.models import Q
@@ -16,7 +18,7 @@ from funkwhale_api.music.models import Artist, Library, Track, Upload
 from funkwhale_api.tags.models import Tag
 
 from . import filters, lb_recommendations, models
-from .registries import registry
+from .registries_v2 import registry
 
 logger = logging.getLogger(__name__)
 
@@ -26,16 +28,6 @@ class SimpleRadio:
 
     def clean(self, instance):
         return
-
-    def pick(
-        self, choices: List[int], previous_choices: Optional[List[int]] = None
-    ) -> int:
-        if previous_choices:
-            choices = list(set(choices).difference(set(previous_choices)))
-        return random.sample(choices, 1)[0]
-
-    def pick_many(self, choices: List[int], quantity: int) -> int:
-        return random.sample(list(set(choices)), quantity)
 
     def weighted_pick(
         self,
@@ -62,18 +54,17 @@ class SessionRadio(SimpleRadio):
         return self.session
 
     def get_queryset(self, **kwargs):
-        if not self.session or not self.session.user:
-            return (
-                Track.objects.all()
-                .with_playable_uploads(actor=None)
-                .select_related("artist", "album__artist", "attributed_to")
-            )
-        else:
-            qs = (
-                Track.objects.all()
-                .with_playable_uploads(self.session.user.actor)
-                .select_related("artist", "album__artist", "attributed_to")
-            )
+        actor = None
+        try:
+            actor = self.session.user.actor
+        except KeyError:
+            pass  # Maybe logging would be helpful
+
+        qs = (
+            Track.objects.all()
+            .with_playable_uploads(actor=actor)
+            .select_related("artist", "album__artist", "attributed_to")
+        )
 
         query = moderation_filters.get_filtered_content_query(
             config=moderation_filters.USER_FILTER_CONFIG["TRACK"],
@@ -94,27 +85,76 @@ class SessionRadio(SimpleRadio):
         queryset = queryset.exclude(pk__in=already_played)
         return queryset
 
-    def get_choices(self, **kwargs):
+    def cache_batch_radio_track(self, **kwargs):
+        BATCH_SIZE = 100
+        # get cached RadioTracks if any
+        try:
+            cached_evaluated_radio_tracks = pickle.loads(
+                cache.get(f"radiotracks{self.session.id}")
+            )
+        except TypeError:
+            cached_evaluated_radio_tracks = None
+
+        # get the queryset and apply filters
         kwargs.update(self.get_queryset_kwargs())
         queryset = self.get_queryset(**kwargs)
-        if self.session:
-            queryset = self.filter_from_session(queryset)
-            if kwargs.pop("filter_playable", True):
-                queryset = queryset.playable_by(
-                    self.session.user.actor if self.session.user else None
-                )
-        queryset = self.filter_queryset(queryset)
-        return queryset
+        queryset = self.filter_from_session(queryset)
 
-    def pick(self, **kwargs):
-        return self.pick_many(quantity=1, **kwargs)[0]
+        if kwargs["filter_playable"] is True:
+            queryset = queryset.playable_by(
+                self.session.user.actor if self.session.user else None
+            )
+        queryset = self.filter_queryset(queryset)
+
+        # select a random batch of the qs
+        sliced_queryset = queryset.order_by("?")[:BATCH_SIZE]
+        if len(sliced_queryset) <= 0 and not cached_evaluated_radio_tracks:
+            raise ValueError("No more radio candidates")
+
+        # create the radio session tracks into db in bulk
+        self.session.add(sliced_queryset)
+
+        # evaluate the queryset to save it in cache
+        radio_tracks = list(sliced_queryset)
+
+        if cached_evaluated_radio_tracks is not None:
+            radio_tracks.extend(cached_evaluated_radio_tracks)
+        logger.info(
+            f"Setting redis cache for radio generation with radio id {self.session.id}"
+        )
+        cache.set(f"radiotracks{self.session.id}", pickle.dumps(radio_tracks), 3600)
+        cache.set(f"radioqueryset{self.session.id}", sliced_queryset, 3600)
+
+        return sliced_queryset
+
+    def get_choices(self, quantity, **kwargs):
+        if cache.get(f"radiotracks{self.session.id}"):
+            cached_radio_tracks = pickle.loads(
+                cache.get(f"radiotracks{self.session.id}")
+            )
+            logger.info("Using redis cache for radio generation")
+            radio_tracks = cached_radio_tracks
+            if len(radio_tracks) < quantity:
+                logger.info(
+                    "Not enough radio tracks in cache. Trying to generate new cache"
+                )
+                sliced_queryset = self.cache_batch_radio_track(**kwargs)
+            sliced_queryset = cache.get(f"radioqueryset{self.session.id}")
+        else:
+            sliced_queryset = self.cache_batch_radio_track(**kwargs)
+
+        return sliced_queryset[:quantity]
 
     def pick_many(self, quantity, **kwargs):
-        choices = self.get_choices(**kwargs)
-        picked_choices = super().pick_many(choices=choices, quantity=quantity)
         if self.session:
-            self.session.add(picked_choices)
-        return picked_choices
+            sliced_queryset = self.get_choices(quantity=quantity, **kwargs)
+        else:
+            logger.info(
+                "No radio session. Can't track user playback. Won't cache queryset results"
+            )
+            sliced_queryset = self.get_choices(quantity=quantity, **kwargs)
+
+        return sliced_queryset
 
     def validate_session(self, data, **context):
         return data

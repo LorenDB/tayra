@@ -1,3 +1,6 @@
+import pickle
+
+from django.core.cache import cache
 from django.db.models import Q
 from drf_spectacular.utils import extend_schema
 from rest_framework import mixins, status, viewsets
@@ -121,7 +124,7 @@ class RadioSessionViewSet(
         return context
 
 
-class RadioSessionTrackViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class V1_RadioSessionTrackViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     serializer_class = serializers.RadioSessionTrackSerializer
     queryset = models.RadioSessionTrack.objects.all()
     permission_classes = []
@@ -133,21 +136,19 @@ class RadioSessionTrackViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet)
         session = serializer.validated_data["session"]
         if not request.user.is_authenticated and not request.session.session_key:
             self.request.session.create()
-        try:
-            assert (request.user == session.user) or (
-                request.session.session_key == session.session_key
-                and session.session_key
-            )
-        except AssertionError:
+        if not request.user == session.user or (
+            not request.session.session_key == session.session_key
+            and not session.session_key
+        ):
             return Response(status=status.HTTP_403_FORBIDDEN)
+
         try:
-            session.radio.pick()
+            session.radio(api_version=1).pick()
         except ValueError:
             return Response(
                 "Radio doesn't have more candidates", status=status.HTTP_404_NOT_FOUND
             )
         session_track = session.session_tracks.all().latest("id")
-        # self.perform_create(serializer)
         # dirty override here, since we use a different serializer for creation and detail
         serializer = self.serializer_class(
             instance=session_track, context=self.get_serializer_context()
@@ -161,3 +162,99 @@ class RadioSessionTrackViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet)
         if self.action == "create":
             return serializers.RadioSessionTrackSerializerCreate
         return super().get_serializer_class(*args, **kwargs)
+
+
+class V2_RadioSessionViewSet(
+    mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
+):
+    """Returns a list of RadioSessions"""
+
+    serializer_class = serializers.RadioSessionSerializer
+    queryset = models.RadioSession.objects.all()
+    permission_classes = []
+
+    @action(detail=True, serializer_class=serializers.RadioSessionTrackSerializerCreate)
+    def tracks(self, request, pk, *args, **kwargs):
+        data = {"session": pk}
+        data["count"] = (
+            request.query_params["count"]
+            if "count" in request.query_params.keys()
+            else 1
+        )
+        serializer = serializers.RadioSessionTrackSerializerCreate(data=data)
+        serializer.is_valid(raise_exception=True)
+        session = serializer.validated_data["session"]
+
+        count = int(data["count"])
+        # this is used for test purpose.
+        filter_playable = (
+            request.query_params["filter_playable"]
+            if "filter_playable" in request.query_params.keys()
+            else True
+        )
+        if not request.user.is_authenticated and not request.session.session_key:
+            self.request.session.create()
+
+        if not request.user == session.user or (
+            not request.session.session_key == session.session_key
+            and not session.session_key
+        ):
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        try:
+            from . import radios_v2  # noqa
+
+            session.radio(api_version=2).pick_many(
+                count, filter_playable=filter_playable
+            )
+        except ValueError:
+            return Response(
+                "Radio doesn't have more candidates", status=status.HTTP_404_NOT_FOUND
+            )
+
+        # dirty override here, since we use a different serializer for creation and detail
+        evaluated_radio_tracks = pickle.loads(cache.get(f"radiotracks{session.id}"))
+        batch = evaluated_radio_tracks[:count]
+        serializer = TrackSerializer(
+            data=batch,
+            many="true",
+        )
+        serializer.is_valid()
+
+        # delete the tracks we sent from the cache
+        new_cached_radiotracks = evaluated_radio_tracks[count:]
+        cache.set(f"radiotracks{session.id}", pickle.dumps(new_cached_radiotracks))
+
+        return Response(
+            serializer.data,
+            status=status.HTTP_201_CREATED,
+        )
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.is_authenticated:
+            return queryset.filter(
+                Q(user=self.request.user)
+                | Q(session_key=self.request.session.session_key)
+            )
+
+        return queryset.filter(session_key=self.request.session.session_key).exclude(
+            session_key=None
+        )
+
+    def perform_create(self, serializer):
+        if (
+            not self.request.user.is_authenticated
+            and not self.request.session.session_key
+        ):
+            self.request.session.create()
+        return serializer.save(
+            user=self.request.user if self.request.user.is_authenticated else None,
+            session_key=self.request.session.session_key,
+        )
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["user"] = (
+            self.request.user if self.request.user.is_authenticated else None
+        )
+        return context

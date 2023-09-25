@@ -10,6 +10,10 @@ v2_patterns += [
         r"^instance/",
         include(("funkwhale_api.instance.urls", "instance"), namespace="instance"),
     ),
+    url(
+        r"^radios/",
+        include(("funkwhale_api.radios.urls_v2", "radios"), namespace="radios"),
+    ),
 ]
 
 urlpatterns = [url("", include((v2_patterns, "v2"), namespace="v2"))]

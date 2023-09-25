@@ -54,10 +54,6 @@ class RadioSession(models.Model):
     CONFIG_VERSION = 0
     config = JSONField(encoder=DjangoJSONEncoder, blank=True, null=True)
 
-    def save(self, **kwargs):
-        self.radio.clean(self)
-        super().save(**kwargs)
-
     @property
     def next_position(self):
         next_position = 1
@@ -68,16 +64,24 @@ class RadioSession(models.Model):
 
         return next_position
 
-    def add(self, track):
-        new_session_track = RadioSessionTrack.objects.create(
-            track=track, session=self, position=self.next_position
-        )
+    def add(self, tracks):
+        next_position = self.next_position
+        radio_session_tracks = []
+        for i, track in enumerate(tracks):
+            radio_session_track = RadioSessionTrack(
+                track=track, session=self, position=next_position + i
+            )
+            radio_session_tracks.append(radio_session_track)
 
-        return new_session_track
+        new_session_tracks = RadioSessionTrack.objects.bulk_create(radio_session_tracks)
 
-    @property
-    def radio(self):
-        from .registries import registry
+        return new_session_tracks
+
+    def radio(self, api_version):
+        if api_version == 2:
+            from .registries_v2 import registry
+        else:
+            from .registries import registry
 
         return registry[self.radio_type](session=self)
 

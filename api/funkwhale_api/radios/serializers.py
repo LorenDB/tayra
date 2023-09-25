@@ -40,9 +40,11 @@ class RadioSerializer(serializers.ModelSerializer):
 
 
 class RadioSessionTrackSerializerCreate(serializers.ModelSerializer):
+    count = serializers.IntegerField(required=False, allow_null=True)
+
     class Meta:
         model = models.RadioSessionTrack
-        fields = ("session",)
+        fields = ("session", "count")
 
 
 class RadioSessionTrackSerializer(serializers.ModelSerializer):
