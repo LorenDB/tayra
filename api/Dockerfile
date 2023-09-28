@@ -28,6 +28,7 @@ RUN set -eux; \
   cargo \
   curl \
   gcc \
+  g++ \
   git \
   jpeg-dev \
   libffi-dev \
