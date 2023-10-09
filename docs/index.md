@@ -105,6 +105,7 @@ specs/collections/index
 specs/nodeinfo21/index
 specs/offline-mode/index
 specs/quality-filter/index
+specs/multi-artist/index
 
 ```
 
