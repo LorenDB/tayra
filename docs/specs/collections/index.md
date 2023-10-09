@@ -251,24 +251,24 @@ Users must be able to unfollow collections by visiting the collection's page and
 ## Responsible parties
 
 - Backend group:
-    - Create new models and API endpoints to support collections
-    - Formulate a migration path for existing libraries
-    - Create a compatibility layer for calls between pods with **collections** and pods with **libraries**
+  - Create new models and API endpoints to support collections
+  - Formulate a migration path for existing libraries
+  - Create a compatibility layer for calls between pods with **collections** and pods with **libraries**
 - Design group: Create designs for the different ares of the app in which collections are to be shown:
-    - Search results
-    - The collection page
-    - The user library page
-    - Sharing menus for content
+  - Search results
+  - The collection page
+  - The user library page
+  - Sharing menus for content
 - Documentation group:
-    - Create UX copy for all designs (in collaboration with design group)
-    - Document the behavior of collections for end users
-    - Document the behavior of collections for admins
-    - Document the structure of the data/API for developers
+  - Create UX copy for all designs (in collaboration with design group)
+  - Document the behavior of collections for end users
+  - Document the behavior of collections for admins
+  - Document the structure of the data/API for developers
 - Frontend group:
-    - Create new collection page in line with designs
-    - Create new user library page in line with designs
-    - Update search results page to show collections
-    - Add new context menus for collection management
+  - Create new collection page in line with designs
+  - Create new user library page in line with designs
+  - Update search results page to show collections
+  - Add new context menus for collection management
 
 ## Open questions
 
