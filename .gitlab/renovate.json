@@ -70,6 +70,10 @@
         ],
         "fileFilters": ["changes/changelog.d/postgres.update"]
       }
+    },
+    {
+      "matchPackageNames": ["python"],
+      "rangeStrategy": "widen"
     }
   ]
 }
