@@ -32,7 +32,7 @@ This specification outlines the behaviors and workflows used in collections.
 
 **Collections** enable users to group content **they have uploaded**. Users can create as many collections as they want and can share collections with other users. Users cannot add remote content to their own collections as this content may be revoked by other users and this would break the user experience.
 
-The **library** is the container that holds all content a user has access to. This includes all content the user uploads and follows. The library can contain as many **collections** as the user wants to create.
+The **library** is the container that holds all content a user has access to. This includes all content the user uploads and follows. The library can contain as many **collections** as the user wants to create or follow.
 
 ## Information architecture
 
