@@ -19,6 +19,7 @@ tasks:
       gp ports await 5432
 
       poetry run funkwhale-manage migrate
+      poetry run funkwhale-manage fw users create --superuser --username gitpod --password funkwhale --email test@example.org
       poetry run funkwhale-manage gitpod init
     command: |
       echo "MEDIA_URL=`gp url 8000`/media/" >> ../.gitpod/.env
@@ -62,7 +63,7 @@ tasks:
       echo -e "    \u1b[34m⣀⠀⢀⡀⢀⣀\u1b[0m⠹⠇\u1b[34m⣀⡀⢀⡀⠀⣀    \u1b[0mTo sign in to the superuser account,"
       echo -e "    \u1b[34m⢻⣇⠘⣧⡈⠻⠶⠶⠟⢁⣾⠃⣸⡟    \u1b[0mplease use these credentials:"
       echo -e "    \u1b[34m⠀⠻⣦⡈⠻⠶⣶⣶⠶⠟⢁⣴⠟⠀"
-      echo -e "    \u1b[34m⠀⠀⠈⠻⠷⣦⣤⣤⣴⠾⠟⠁⠀⠀    gitpod\u1b[0m:\u1b[34mgitpod"
+      echo -e "    \u1b[34m⠀⠀⠈⠻⠷⣦⣤⣤⣴⠾⠟⠁⠀⠀    gitpod\u1b[0m:\u1b[34mfunkwhale"
       echo ""
 
 ports:

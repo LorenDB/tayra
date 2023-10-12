@@ -36,22 +36,7 @@ class Command(BaseCommand):
         self.stdout.write("")
 
     def init(self):
-        try:
-            user = User.objects.get(username="gitpod")
-        except Exception:
-            call_command(
-                "createsuperuser",
-                username="gitpod",
-                email="gitpod@example.com",
-                no_input=False,
-            )
-            user = User.objects.get(username="gitpod")
-
-        user.set_password("gitpod")
-        if not user.actor:
-            user.create_actor()
-
-        user.save()
+        user = User.objects.get(username="gitpod")
 
         # Allow anonymous access
         preferences.set("common__api_authentication_required", False)

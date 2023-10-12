@@ -18,7 +18,6 @@ services:
       - 6379:6379
 
   nginx:
-    command: /entrypoint.sh
     env_file:
       - ./.env
     image: nginx
@@ -33,11 +32,11 @@ services:
       - "FUNKWHALE_FRONT_IP=host.docker.internal"
       - "FUNKWHALE_FRONT_PORT=8080"
       - "FUNKWHALE_HOSTNAME=${FUNKWHALE_HOSTNAME-host.docker.internal}"
+      - "FUNKWHALE_PROTOCOL=https"
     volumes:
       - ../data/media:/protected/media:ro
       - ../data/music:/music:ro
       - ../data/staticfiles:/staticfiles:ro
       - ../deploy/funkwhale_proxy.conf:/etc/nginx/funkwhale_proxy.conf:ro
-      - ../docker/nginx/conf.dev:/etc/nginx/nginx.conf.template:ro
-      - ../docker/nginx/entrypoint.sh:/entrypoint.sh:ro
+      - ../docker/nginx/conf.dev:/etc/nginx/templates/default.conf.template:ro
       - ../front:/frontend:ro
