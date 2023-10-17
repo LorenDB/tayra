@@ -5,9 +5,9 @@
   "components": {
     "About": {
       "description": {
-        "findApp": "Utilitzeu Funkwhale en d'altres terminals amb les nostres aplicacions",
+        "findApp": "Utilitzeu Funkwhale en d'altres terminals amb les nostres aplicacions.",
         "funkwhale": "Aquest pod funciona amb Funkwhale, un projecte impulsat per la comunitat que us permet escoltar i compartir música i àudio en una xarxa oberta descentralitzada.",
-        "publicContent": "Escolteu els àlbums públics i les llistes de reproducció compartides en aquest pod",
+        "publicContent": "Escolteu els àlbums públics i les llistes de reproducció compartides en aquest pod.",
         "quota": "Els usuaris d’aquest pod també aconsegueixen % {quota} d’emmagatzematge gratuït per penjar el seu propi contingut!",
         "signup": "Registra't ara per fer un seguiment dels teus favorits, crear llistes de reproducció, descobrir contingut nou i molt més!"
       },
@@ -18,6 +18,9 @@
         "publicContent": "Explorar el contingut públic",
         "signup": "Inscripció"
       },
+      "help": {
+        "closedRegistrations": "Les inscripcions estan tancades en aquest pod. Podeu registrar-vos en un altre pod mitjançant l'enllaç següent."
+      },
       "link": {
         "findOtherPod": "Trobar una altra instàncies",
         "learnMore": "Aprèn més"
@@ -27,7 +30,7 @@
         "loggedIn": "Ja t'has registrat!"
       },
       "placeholder": {
-        "noDescription": "Descripció no disponible."
+        "noDescription": "Descripció no disponible"
       },
       "stat": {
         "activeUsers": "{ n } usuari actiu | { n } usuaris actius",
@@ -71,9 +74,9 @@
       },
       "notApplicable": "No disponible",
       "placeholder": {
-        "noDescription": "Descripció no disponible.",
-        "noRules": "Sense regles disponibles.",
-        "noTerms": "No hi ha termes disponibles."
+        "noDescription": "Descripció no disponible",
+        "noRules": "Sense regles disponibles",
+        "noTerms": "No hi ha termes disponibles"
       },
       "stat": {
         "activeUsers": "{ n } usuari actiu | { n } usuaris actius",
@@ -106,6 +109,9 @@
         "statistics": "Estadístiques",
         "welcome": "Benvinguts a { podName }!"
       },
+      "help": {
+        "registrationsClosed": "Les inscripcions estan tancades en aquest pod. Podeu registrar-vos en un altre pod mitjançant l'enllaç següent."
+      },
       "link": {
         "findOtherPod": "Trobar una altra instàncies",
         "funkwhale": "Visitar funkwhale.audio",
@@ -115,7 +121,7 @@
           "label": "Aplicacions mòbils"
         },
         "publicContent": {
-          "description": "Escolteu els àlbums públics i les llistes de reproducció compartides en aquest pod",
+          "description": "Escolteu els àlbums públics i les llistes de reproducció compartides en aquest pod.",
           "label": "Explorar el contingut públic"
         },
         "rules": "Regles del servidor",
@@ -126,7 +132,7 @@
         "viewMore": "Veure més …"
       },
       "placeholder": {
-        "noDescription": "Descripció no disponible."
+        "noDescription": "Descripció no disponible"
       },
       "stat": {
         "activeUsers": "{ n } usuari actiu | { n } usuaris actius",
@@ -154,6 +160,7 @@
       },
       "header": {
         "failure": "La pista no s'ha pogut carregar",
+        "noSources": "La pista no té fonts disponibles.",
         "radio": "Estàs escoltant la ràdio"
       },
       "label": {
@@ -165,17 +172,22 @@
         "next": "Pista següent",
         "pause": "Pausa",
         "play": "Reproduir",
+        "populatingRadio": "S'està recuperant la pista de ràdio...",
         "previous": "Pista anterior",
         "queue": "Cua de reproducció",
         "remove": "Retirar",
         "restart": "Pista següent",
-        "selectTrack": "Selecciona una pista"
+        "selectTrack": "Selecciona una pista",
+        "showCoverArt": "Mostra la portada",
+        "showVisualizer": "Mostra el visualitzador MoonDrop"
       },
       "message": {
         "automaticPlay": "La següent pista serà reproduïda automàticament en pocs segons …",
-        "radio": "Les noves pistes s'afegiran automàticament aquí."
+        "radio": "Les noves pistes s'afegiran automàticament aquí.",
+        "webglUnsupported": "Sembla que el vostre navegador no suporta WebGL2."
       },
       "meta": {
+        "end": "Fi",
         "queuePosition": "Pista { index } de { length }",
         "startTime": "00:00",
         "unknownAlbum": "Àlbum desconegut",
@@ -192,7 +204,8 @@
         "search": "Buscar"
       },
       "description": {
-        "fediverse": "Utilitzeu aquest formulari per recuperar un objecte allotjat en algun altre lloc en la fediverse."
+        "fediverse": "Utilitzeu aquest formulari per recuperar un objecte allotjat en algun altre lloc en la fediverse.",
+        "rss": "Utilitzeu aquest formulari per subscriure's a un canal RSS des del seu URL."
       },
       "error": {
         "fetchFailed": "No es pot recuperar aquest objecte"
@@ -235,6 +248,7 @@
         "url": "Adreça de la instància"
       },
       "message": {
+        "currentConnection": "Actualment esteu connectat a {0}. Si continueu, se us desconnectarà de la vostra instància actual i se suprimiran totes les vostres dades locals.",
         "newUrl": "Ara utilitzeu la instància de Funkwhale a { url }"
       }
     },
@@ -288,6 +302,7 @@
         "language": "Idioma",
         "main": "Menú principal",
         "play": "Reprodueix aquesta pista",
+        "reports": "Informes pendents de revisió",
         "theme": "Tema"
       },
       "link": {
@@ -317,7 +332,7 @@
           "save": "Guardar"
         },
         "header": {
-          "error": "Error guardant els canvis",
+          "error": "Error guardant els canvis.",
           "image": "Imatge actual"
         },
         "message": {
@@ -377,11 +392,12 @@
       },
       "ChannelForm": {
         "header": {
-          "error": "Error guardant el canal"
+          "error": "Error desant el canal."
         },
         "help": {
           "discography": "Publiqueu música que feu com ara una bonica discografia d'àlbums o senzills.",
           "podcast": "Allotja els teus episodis i mantén la teva comunitat actualitzada.",
+          "podcastFields": "S'utilitza per als camps itunes:email i itunes:name requerits per certes plataformes com Spotify o iTunes.",
           "username": "S'utilitza en URLs i per seguir aquest canal a la federació. No es pot canviar més tard."
         },
         "label": {
@@ -395,7 +411,8 @@
           "owner": "Propietari",
           "podcast": "Podcasts",
           "subcategory": "Subcategoria",
-          "tags": "Etiquetes"
+          "tags": "Etiquetes",
+          "username": "Identificador al Fedivers"
         },
         "legend": {
           "purpose": "Per a què s'utilitzarà aquest canal?"
@@ -459,7 +476,7 @@
       },
       "PlayButton": {
         "button": {
-          "addToPlaylist": "Afegir a la llista de reproducció …",
+          "addToPlaylist": "Afegir a la llista de reproducció",
           "addToQueue": "Afegir a la cua de reproducció actual",
           "discretePlay": "Reproduir",
           "episodeDetails": "Detalls de l'episodi",
@@ -510,7 +527,7 @@
         "labels": {
           "next": "Següent pista",
           "pause": "Pausa",
-          "play": "Play",
+          "play": "Reproducció",
           "previous": "Pista anterior"
         }
       },
@@ -598,7 +615,7 @@
         "Modal": {
           "button": {
             "addToFavorites": "Afegir a favorits",
-            "addToPlaylist": "Afegir a la llista de reproducció …",
+            "addToPlaylist": "Afegir a la llista de reproducció",
             "addToQueue": "Afegir a la cua de reproducció",
             "albumDetails": "Nou àlbum",
             "artistDetails": "Artistes ocults",
@@ -622,7 +639,7 @@
         "Modal": {
           "button": {
             "addToFavorites": "Afegir a favorits",
-            "addToPlaylist": "Afegir a la llista de reproducció …",
+            "addToPlaylist": "Afegir a la llista de reproducció",
             "addToQueue": "Afegir a la cua de reproducció",
             "albumDetails": "Nou àlbum",
             "artistDetails": "Artistes ocults",
@@ -657,8 +674,12 @@
     },
     "auth": {
       "ApplicationEdit": {
+        "button": {
+          "regenerateToken": "Regenerar testimoni"
+        },
         "header": {
           "appDetails": "Detalls de l'aplicació",
+          "appSecretWarning": "Guardeu una còpia d'aquest testimoni en un lloc segur.",
           "editApp": "Editar l'aplicació"
         },
         "help": {
@@ -693,6 +714,7 @@
           "redirectUri": "URI de redirecció",
           "scopes": {
             "description": "Comprovar els àmbits pare “Llegir” o “Escriure” implica l’accés a tots els àmbits fill que en deriven.",
+            "label": "Àmbits",
             "read": {
               "description": "Accés a llegir només les dades d'utilització",
               "label": "Llegir"
@@ -724,7 +746,7 @@
           "writeOnly": "Només d'escriptura"
         },
         "help": {
-          "copyCode": "Se us mostrarà un codi per copiar i enganxar a l’aplicació.",
+          "copyCode": "Se us mostrarà un codi per copiar i enganxar a l’aplicació",
           "pasteCode": "Copia i enganxa el codi de seguiment a la vostra aplicació:",
           "redirect": "Es redirigirà a { 0 }"
         },
@@ -768,7 +790,7 @@
           "unauthenticated": "Actualment esteu connectat com a { username }"
         },
         "link": {
-          "login": "Iniciar sessió"
+          "login": "Iniciar sessió!"
         },
         "message": {
           "loggedIn": "Actualment esteu connectat com a { username }"
@@ -819,6 +841,7 @@
           },
           "contentFilters": "Els filtres de contingut us ajuden a amagar el contingut que no voleu veure al servei.",
           "deleteAccount": "Podeu suprimir de manera permanent i irreversible el vostre compte i totes les dades associades mitjançant el formulari següent. Se us demanarà confirmació.",
+          "plugins": "Utilitzeu connectors per ampliar Funkwhale i obtenir funcions addicionals.",
           "yourApps": "Aquesta és la llista d'aplicacions que has creat."
         },
         "header": {
@@ -866,7 +889,7 @@
             "content": {
               "logout": "Es tancarà la sessió d’aquest compte i hauràs d’iniciar sessió amb la nou",
               "subsonic": "La vostra contrasenya Subsonic es canviarà a una altra nova i aleatòria, i us iniciarà la sessió des dels dispositius que utilitzen la contrasenya antiga de Subsonic",
-              "warning": "Canviar la teva contrasenya tindrà les següents conseqüències:"
+              "warning": "Canviar la teva contrasenya tindrà les següents conseqüències"
             },
             "header": "Canviar la teva contrasenya?"
           },
@@ -1030,7 +1053,7 @@
       },
       "SubscribeButton": {
         "help": {
-          "auth": "És possible que hagueu de subscriure-vos aquesta biblioteca per veure'n el contingut."
+          "auth": "És possible que hagueu de subscriure-vos a aquesta biblioteca per veure'n el contingut"
         },
         "title": {
           "subscribe": "Subscriu-te",
@@ -1098,7 +1121,7 @@
         },
         "meta": {
           "files": "{ n } fitxer | { n } fitxers",
-          "quota": "Espai d’emmagatzematge restant:"
+          "quota": "Espai d’emmagatzematge restant: {space}"
         }
       }
     },
@@ -1124,7 +1147,7 @@
         },
         "message": {
           "needsRefresh": "S'ha actualitzat el contingut, refresca per veure el contingut actualitzat",
-          "success": "L'acció  { action } està en marxa en { n } element | L'acció  { action } està en marxa en { n } elements"
+          "success": "L'acció { action } està en marxa en { n } element | L'acció { action } està en marxa en { n } elements"
         },
         "modal": {
           "performAction": {
@@ -1164,10 +1187,10 @@
           "write": "Escriu"
         },
         "empty": {
-          "noContent": "No hi ha res a previsualitzar."
+          "noContent": "No hi ha res a previsualitzar"
         },
         "help": {
-          "markdown": "Es pot utilitzar la sintaxi Markdown."
+          "markdown": "Es pot utilitzar la sintaxi Markdown"
         },
         "placeholder": {
           "input": "Escriu alguna cosa aquí…"
@@ -1428,7 +1451,7 @@
       "AlbumDropdown": {
         "button": {
           "cancel": "Cancelar",
-          "delete": "Suprimir …",
+          "delete": "Suprimir",
           "edit": "Editar",
           "embed": "Incrustar",
           "more": "Més …"
@@ -1631,7 +1654,7 @@
           "suggest": "Enviar suggerències"
         },
         "empty": {
-          "suggestEdit": "Suggereix un canvi mitjançant el formulari següent."
+          "suggestEdit": "Suggereix un canvi mitjançant el formulari següent"
         },
         "header": {
           "failure": "Error trametent les modificaions",
@@ -1664,6 +1687,7 @@
         },
         "header": {
           "failure": "Error al enviar l'informe",
+          "local": "Penja música des de '~/el teu emmagatzematge local",
           "server": "Estat de la importació",
           "status": "Estat de la importació"
         },
@@ -1681,7 +1705,7 @@
           "listener": "Aquesta pàgina et demana que confirmis que vols sortir - és possible que no es guardin les dades que has introduït.",
           "local": {
             "copyright": "No pengis contingut amb drets d'autor en una biblioteca pública, en cas contrari, podries infringir la llei",
-            "format": "L'arxiu de música que has carregat està ben etiquetat.",
+            "format": "L'arxiu de música que heu carregat està en format OGG, Flac, MP3 or AIFF",
             "message": "Estàs apunt de carregar música a la teva biblioteca. Abans de començar, assegurat de:",
             "tag": "L'arxiu de música que has carregat està ben etiquetat."
           }
@@ -1694,6 +1718,7 @@
               "size": "Mida",
               "status": "Estat"
             },
+            "progress": "{percent}%",
             "status": {
               "pending": "Pendent",
               "uploaded": "Carregat",
@@ -1859,7 +1884,7 @@
       "TrackBase": {
         "button": {
           "cancel": "Cancelar",
-          "delete": "Suprimir …",
+          "delete": "Suprimir",
           "download": "Descarregar",
           "edit": "Editar",
           "embed": "Incrustar",
@@ -1883,6 +1908,10 @@
           "embed": {
             "header": "Incrusta aquesta pista a la teva pàgina web"
           }
+        },
+        "subtitle": {
+          "with-uploader": "Penjat per {0} el {1}",
+          "without-uploader": "Penjat a {0}"
         },
         "title": "Pista"
       },
@@ -1913,7 +1942,8 @@
           },
           "track": {
             "bitrate": {
-              "label": "Taxa de bits"
+              "label": "Taxa de bits",
+              "value": "{bitrate}/s"
             },
             "codec": "Codec",
             "downloads": "Descarregar",
@@ -1928,7 +1958,7 @@
           "suggest": "Suggereix una canvi en aquesta pista"
         },
         "message": {
-          "remote": "Aquest objecte és gestionat per un altre servidor, no el podeu editar."
+          "remote": " ·Aquest objecte és gestionat per un altre servidor, no el podeu editar."
         }
       },
       "radios": {
@@ -1975,6 +2005,7 @@
         "Filter": {
           "cancelButton": "Cancelar",
           "excludeLabel": "Excloure",
+          "matchingTracks": "0 pistes que coincideixen amb el filtre | {n} filtre de coincidència de pistes | {n} pistes que coincideixen amb el filtre",
           "matchingTracksModalHeader": "Pistes coincidents amb el filtre",
           "removeButton": "Retirar"
         }
@@ -2448,7 +2479,7 @@
           "modal": {
             "delete": {
               "content": {
-                "warning": "Aquesta acció és irreversible."
+                "warning": "Aquesta acció és irreversible"
               },
               "header": "Suprimir la regla de moderació?"
             }
@@ -2459,7 +2490,7 @@
             "rejectMedia": "No descarregueu cap fitxer multimèdia (àudio, portada, avatar del compte, …) des d'aquest compte o domini. Això també eliminarà el contingut existent.",
             "silenceActivity": "Amagar el contingut del compte o domini, excepte pels seguidors.",
             "silenceNotifications": "Eviteu que el compte o el domini desencadenin notificacions, llevat dels seguidors.",
-            "summary": "Explica perquè apliques aquesta regla. En funció de la configuració de la vostra instància,  això us ajudarà a recordar per què heu actuat així en aquest compte o aquest domini i que es pot mostrar públicament per ajudar als usuaris a entendre quines són les normes de moderació."
+            "summary": "Explica perquè apliques aquesta regla. En funció de la configuració de la vostra instància, això us ajudarà a recordar per què heu actuat així en aquest compte o aquest domini i que es pot mostrar públicament per ajudar als usuaris a entendre quines són les normes de moderació."
           }
         },
         "InstancePolicyModal": {
@@ -2581,6 +2612,7 @@
               "internalNotes": "Notes internes",
               "pending": "Pendent",
               "refused": "Rebutjat",
+              "resolutionDate": "Data de resolució",
               "status": "Estat"
             }
           }
@@ -2630,7 +2662,7 @@
             "label": "Ordenar"
           },
           "pagination": {
-            "results": "Esperant el resultat … | Esperant el resultat …"
+            "results": "Es mostren zero resultats | Es mostra un resultat | Es mostren els resultats del {start} al {end} del {total}"
           },
           "placeholder": {
             "search": "Cercar per nom d'usuari, correu electrònic, codi, …"
@@ -2662,7 +2694,7 @@
             "label": "Ordenar"
           },
           "pagination": {
-            "results": "Esperant el resultat … | Esperant el resultat …"
+            "results": "Es mostren zero resultats | Es mostra un resultat | Es mostren els resultats del {start} al {end} del {total}"
           },
           "permission": {
             "library": "Biblioteca",
@@ -2740,7 +2772,10 @@
           "email": "Utilitzarem aquesta adreça de correu electrònic per si hem de contactar amb vosaltres sobre aquest informe.",
           "forwardToDomain": "Reenvia una copa anònima del teu informe al servidor que allotja aquest element.",
           "message": "Utilitzeu aquest camp per proporcionar un context addicional al moderador que gestionarà l'informe.",
-          "modal": "Utilitzeu aquest formulari per enviar un informe al nostre equip de moderació."
+          "modal": "Utilitzeu aquest formulari per enviar un informe al nostre equip de moderació"
+        },
+        "error": {
+          "nodeinfoFetch": "No es pot obtenir la informació del node: {error}"
         },
         "header": {
           "disabled": "Els informes anònims estan deshabilitats, si us plau inicia sessió per a enviar l'informe.",
@@ -2888,8 +2923,14 @@
     },
     "radios": {
       "Button": {
+        "startArtistsRadio": "Inicia les artistes de ràdio",
+        "startPlaylistsRadio": "Inicia les llistes de reproducció de ràdio",
         "startRadio": "Reprodueix la pista",
-        "stopRadio": "Parar la ràdio"
+        "startTagsRadio": "Inicia les etiquetes de ràdio",
+        "stopArtistsRadio": "Atura les artistes de ràdio",
+        "stopPlaylistsRadio": "Atura les llistes de reproducció de ràdio",
+        "stopRadio": "Parar la ràdio",
+        "stopTagsRadio": "Atura les etiquetes de ràdio"
       },
       "Card": {
         "button": {
@@ -2979,12 +3020,13 @@
             "label": "Categoria"
           },
           "summary": {
-            "label": "Bio"
+            "label": "Biografia"
           }
         },
         "filters": {
           "accessedDate": "Data d'accés",
           "albumTitle": "Nom de l'àlbum",
+          "appliedDate": "Data aplicada",
           "artistName": "Nom de l'artista",
           "bitrate": "Taxa de bits",
           "creationDate": "Data de creació",
@@ -2994,6 +3036,7 @@
           "expirationDate": "Data de caducitat",
           "firstSeen": "Data de descoberta",
           "followers": "Seguidors",
+          "handledDate": "Data tractada",
           "itemsCount": "Elements",
           "lastActivity": "Última activitat",
           "lastSeen": "Data de la darrera visita",
@@ -3013,6 +3056,7 @@
             "label": "Modificacions"
           },
           "favorites": {
+            "description": "Accés als preferits",
             "label": "Preferides"
           },
           "filters": {
@@ -3052,6 +3096,7 @@
             "label": "Informes"
           },
           "security": {
+            "description": "Accés a la configuració de seguretat, com ara contrasenya i autorització",
             "label": "Seguretat"
           }
         }
@@ -3116,7 +3161,7 @@
       "useReportConfigs": {
         "account": {
           "label": "Compte",
-          "summary": "Bio"
+          "summary": "Biografia"
         },
         "album": {
           "label": "Àlbum",
@@ -3161,10 +3206,13 @@
       }
     },
     "useErrorHandler": {
+      "errorReportMessage": "Per ajudar-nos a entendre per què va passar, adjunteu una descripció detallada del que vau fer que va provocar l'error.",
       "errorReportTitle": "S'ha produit un error inesperat.",
+      "leaveFeedback": "Deixa un comentari",
       "unexpectedError": "S'ha produit un error inesperat."
     },
     "useThemeList": {
+      "browserDefault": "Navegador predeterminat",
       "darkTheme": "Fosc",
       "lightTheme": "Clar"
     }
@@ -3176,7 +3224,10 @@
     },
     "sentry": {
       "allow": "Permetre",
-      "deny": "Denegar"
+      "deny": "Denegar",
+      "funkwhaleInstance": "La instància oficial de Glitchtip de Funkwhale",
+      "message": "Les traces de la pila es compartiran amb { 0 } per ajudar-nos a entendre com i quan es produeixen els errors.",
+      "title": "Per millorar la qualitat dels nostres serveis, ens agradaria recopilar informació sobre errors durant la sessió."
     },
     "serviceWorker": {
       "actions": {
@@ -3193,7 +3244,7 @@
         "submit": "Entesos!"
       },
       "empty": {
-        "notifications": "No hi ha notificacions."
+        "notifications": "No hi ha notificacions per mostrar"
       },
       "header": {
         "funkwhaleSupport": "T'agrada Funkwhale?",
@@ -3638,7 +3689,8 @@
             },
             "audioContent": {
               "bitrate": {
-                "label": "Taxa de bits"
+                "label": "Taxa de bits",
+                "value": "{bitrate}/s"
               },
               "cachedSize": "Mida de la memòria cau",
               "duration": "Durada",
@@ -3657,7 +3709,7 @@
             "addPolicy": "Afegir una nova política de moderació"
           },
           "description": {
-            "policy": "Les regles de moderació t'ajudaran a controlar com la vostra instància interactua amb un domini o un compte determinat."
+            "policy": "Les regles de moderació t'ajudaran a controlar com la vostra instància interactua amb un domini o un compte determinat"
           },
           "header": {
             "accountData": "Dades del compte",
@@ -3745,7 +3797,7 @@
             "removeFromAllowList": "Eliminar de la llista d'autoritzacions"
           },
           "description": {
-            "policy": "Les regles de moderació t'ajudaran a controlar com la vostra instància interactua amb un domini o un compte determinat."
+            "policy": "Les regles de moderació t'ajudaran a controlar com la vostra instància interactua amb un domini o un compte determinat"
           },
           "header": {
             "activePolicy": "Aquest domini està subjecta a normes de moderació específiques",
@@ -3790,7 +3842,8 @@
                 "value": "Error obtenint informació del node"
               },
               "software": {
-                "label": "Programari"
+                "label": "Programari",
+                "value": "{name} ({version})"
               },
               "totalUsers": "Usuaris totals"
             }
@@ -3866,7 +3919,7 @@
             "label": "Ordenar"
           },
           "placeholder": {
-            "search": "Cercar per nom d'usuari…"
+            "search": "Cercar per nom d'usuari"
           },
           "title": "Peticions de l'usuari"
         }
@@ -3887,7 +3940,7 @@
     "auth": {
       "Callback": {
         "header": {
-          "loggingIn": "Carregant les biblioteques …"
+          "loggingIn": "Iniciant sessió…"
         }
       },
       "EmailConfirm": {
@@ -3903,7 +3956,7 @@
           "login": "Iniciar la sessió"
         },
         "message": {
-          "success": "Ara podeu utilitzar el servei sense limitacions."
+          "success": "Ara podeu utilitzar el servei sense limitacions"
         },
         "title": "Confirma el teu correu electrònic"
       },
@@ -3988,7 +4041,7 @@
         "header": {
           "channels": "Canals",
           "libraries": "Biblioteques de l'usuari",
-          "sharedLibraries": "Aquest usuari ha compartit les biblioteques que segueix."
+          "sharedLibraries": "Aquest usuari ha compartit les següents biblioteques"
         },
         "link": {
           "addNew": "Afegeix nou"
@@ -4092,7 +4145,7 @@
           "processing": "Funkwhale està processant les pujades i es publicaran ben aviat."
         },
         "meta": {
-          "progress": "Càrregues processades:"
+          "progress": "Càrregues processades: {finished}/{total}"
         }
       },
       "SubscriptionsList": {
@@ -4224,7 +4277,7 @@
             "update": "Actualitzar la biblioteca"
           },
           "description": {
-            "library": "Les biblioteques t'ajuden a organitzar i compartir la teva col·lecció de música.  Pots pujar-la a Funkwahale i compartir-la amb els teus amics i familiars.",
+            "library": "Les biblioteques t'ajuden a organitzar i compartir la teva col·lecció de música. Pots pujar-la a Funkwahale i compartir-la amb els teus amics i familiars.",
             "visibility": "Pots compartir la teva biblioteca amb altres persones, independentment de la seva visibilitat."
           },
           "header": {
@@ -4278,6 +4331,7 @@
             "currentUsage": "{ current } usats del { max } permesos",
             "errored": "Arxius erronis",
             "pending": "Fitxers pendents",
+            "percentUsed": "{progress}%",
             "skipped": "Arxius ignorats"
           },
           "link": {
@@ -4326,10 +4380,10 @@
             "scanPending": "Anàlisi pendent",
             "scanProgress": "Analitzant … ({ progress }%)",
             "scanSuccess": "Anàlisis realitzat",
-            "sharingLink": "Compartir enllaç"
+            "sharingLink": "Compartint enllaç"
           },
           "link": {
-            "scan": "Analitzar ara",
+            "scan": "Analitzar ara · ",
             "scanDetails": "Detalls"
           },
           "message": {
@@ -4337,8 +4391,8 @@
             "scanSkipped": "L’anàlisi s’ha omès (l’anàlisi anterior és massa recent)"
           },
           "meta": {
-            "failedTracks": "Pistes fallides:",
-            "lastUpdate": "Última actualització:",
+            "failedTracks": "Pistes fallides: {tracks}",
+            "lastUpdate": "Última actualització: · ",
             "tracks": "{ n } pista | { n } pistes"
           },
           "modal": {
@@ -4447,7 +4501,7 @@
           "instance": "Restringit",
           "private": "Privat",
           "public": "Públic",
-          "sharingLink": "Compartir enllaç"
+          "sharingLink": "Compartint enllaç"
         },
         "link": {
           "albums": "Àlbums",
@@ -4544,6 +4598,7 @@
           "noTracks": "Encara no s'ha afegit cap pista a aquesta ràdio"
         },
         "header": {
+          "radio": "Ràdio que conté {tracks} cançons, per ",
           "tracks": "Pistes"
         },
         "modal": {
