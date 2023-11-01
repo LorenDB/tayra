@@ -25,7 +25,7 @@ exclude = ["tests"]
 funkwhale-manage = 'funkwhale_api.main:main'
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.8,<3.12"
 
 # Django
 dj-rest-auth = { extras = ["with_social"], version = "2.2.8" }
