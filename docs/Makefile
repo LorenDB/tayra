@@ -20,6 +20,9 @@ SPHINX_OPTS = -j $(CPU_CORES)
 SOURCE_DIR = .
 BUILD_DIR = _build
 
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
+
 # Dev
 dev: $(VENV)
 	poetry run _scripts/serve.py
@@ -57,10 +60,10 @@ swagger:
 	cp schema.yml "$(SWAGGER_BUILD_DIR)/schema.yml"
 
 # Releases
-$(BUILD_DIR)/releases.json:
+$(BUILD_DIR)/releases.json: $(BUILD_DIR)
 	../scripts/releases.py > "$@"
 
-$(BUILD_DIR)/latest.txt:
+$(BUILD_DIR)/latest.txt: $(BUILD_DIR)
 	../scripts/releases.py -r -q latest.id > "$@"
 
 releases: $(BUILD_DIR)/releases.json $(BUILD_DIR)/latest.txt
