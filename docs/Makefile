@@ -1,5 +1,10 @@
 SHELL = bash
+UNAME := $(shell uname)
+ifeq ($(UNAME), Linux)
 CPU_CORES = $(shell N=$$(nproc); echo $$(( $$N > 4 ? 4 : $$N )))
+else
+CPU_CORES = $(shell N=$$(sysctl -n hw.physicalcpu); echo $$(( $$N > 4 ? 4 : $$N )))
+endif
 
 # Install
 VENV = .venv
