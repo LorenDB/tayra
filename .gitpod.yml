@@ -48,6 +48,11 @@ tasks:
       yarn install
     command: yarn dev --host 0.0.0.0 --base ./
 
+  - name: Documentation
+    before: cd docs
+    init: make install
+    command: make dev
+
   - name: Welcome to Funkwhale development!
     env:
       COMPOSE_FILE: /workspace/funkwhale/.gitpod/docker-compose.yml
@@ -90,6 +95,10 @@ ports:
   - port: 8080
     visibility: private
     onOpen: ignore
+
+  - port: 8001
+    visibility: public
+    onOpen: notify
 
 vscode:
   extensions:
