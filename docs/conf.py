@@ -46,9 +46,9 @@ extensions = [
 source_suffix = ".md"
 include_patterns = [
     "_static/**",
-    "_templates/**",
     "*_documentation/**",
     "*.md",
+    "**/*.md",
     "*.rst",
     "logo.svg",
 ]
@@ -61,6 +61,7 @@ exclude_patterns = [
     "*.py",
     "*.sh",
 ]
+templates_path = ["_templates"]
 
 root_doc = "index"
 
