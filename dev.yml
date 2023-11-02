@@ -152,17 +152,6 @@ services:
       traefik.frontend.passHostHeader: true
       traefik.docker.network: federation
 
-  docs:
-    build: docs
-    command: make clean dev
-    working_dir: /src/docs
-    user: 1000:1000
-    volumes:
-      - .:/src
-    ports:
-      - 8001:8001
-      - 35730:35730
-
   api-docs:
     image: swaggerapi/swagger-ui:v3.37.2
     environment:
