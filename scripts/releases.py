@@ -11,7 +11,6 @@ from typing import Dict, List
 from packaging.version import InvalidVersion, Version
 
 logger = logging.getLogger(__name__)
-logger.addHandler(logging.NullHandler())
 
 
 def get_releases() -> List[Dict[str, str]]:
