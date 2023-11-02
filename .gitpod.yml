@@ -59,9 +59,10 @@ tasks:
       ENV_FILE: /workspace/funkwhale/.gitpod/.env
       VUE_EDITOR: code
       DJANGO_SETTINGS_MODULE: config.settings.local
-    init: pre-commit install
+    init: |
+      pre-commit install
+      pre-commit run --all
     command: |
-      pre-commit run --all && clear
       echo ""
       echo -e "    ⠀⠀⠸⣿⣷⣦⣄⣠⣶⣾⣿⠇⠀⠀    You can now start developing Funkwhale with gitpod!"
       echo -e "    ⠀⠀⠀⠈⠉⠻⣿⣿⠟⠉⠁⠀⠀⠀"
