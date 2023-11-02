@@ -30,7 +30,7 @@ $(BUILD_DIR):
 
 # Dev
 dev: $(VENV)
-	poetry run _scripts/serve.py
+	poetry run sphinx-autobuild . /tmp/_build/ --port 8001
 
 # I18n
 LOCALES = en_GB en_US fr

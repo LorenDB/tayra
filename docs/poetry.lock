@@ -669,6 +669,26 @@ lint = ["docutils-stubs", "flake8 (>=3.5.0)", "flake8-bugbear", "flake8-comprehe
 test = ["cython", "html5lib", "pytest (>=4.6)", "typed_ast"]
 
 [[package]]
+name = "sphinx-autobuild"
+version = "2021.3.14"
+description = "Rebuild Sphinx documentation on changes, with live-reload in the browser."
+category = "dev"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "sphinx-autobuild-2021.3.14.tar.gz", hash = "sha256:de1ca3b66e271d2b5b5140c35034c89e47f263f2cd5db302c9217065f7443f05"},
+    {file = "sphinx_autobuild-2021.3.14-py3-none-any.whl", hash = "sha256:8fe8cbfdb75db04475232f05187c776f46f6e9e04cacf1e49ce81bdac649ccac"},
+]
+
+[package.dependencies]
+colorama = "*"
+livereload = "*"
+sphinx = "*"
+
+[package.extras]
+test = ["pytest", "pytest-cov"]
+
+[[package]]
 name = "sphinx-copybutton"
 version = "0.5.2"
 description = "Add a copy button to each of your code cells."
@@ -945,4 +965,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "68e8ecdc189a3b61ed1e8d4889c71a8686dd68684962a4ca7f964de77073cb06"
+content-hash = "4b3f45e96f90e41f1d8b767463353fe420cee43794fb13383100f134e0ad23d6"
