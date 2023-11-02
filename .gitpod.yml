@@ -73,31 +73,38 @@ tasks:
       echo ""
 
 ports:
-  - port: 8000
+  - name: Funkwhale
+    port: 8000
     visibility: public
     onOpen: notify
 
-  - port: 5000
+  - name: Funkwhale API
+    port: 5000
     visibility: private
     onOpen: ignore
 
-  - port: 5432
+  - name: PostgreSQL
+    port: 5432
     visibility: private
     onOpen: ignore
 
-  - port: 5678
+  - name: Debugpy
+    port: 5678
     visibility: private
     onOpen: ignore
 
-  - port: 6379
+  - name: Redis
+    port: 6379
     visibility: private
     onOpen: ignore
 
-  - port: 8080
+  - name: Frontend
+    port: 8080
     visibility: private
     onOpen: ignore
 
-  - port: 8001
+  - name: Documentation
+    port: 8001
     visibility: public
     onOpen: notify
 
