@@ -1417,7 +1417,7 @@ def test_upload_checks_mbid_tag(temp_signal, factories, mocker):
     )
     mocker.patch("funkwhale_api.music.models.TrackActor.create_entries")
 
-    with temp_signal(signals.upload_import_status_updated) as handler:
+    with temp_signal(signals.upload_import_status_updated):
         tasks.process_upload(upload_id=upload.pk)
 
     upload.refresh_from_db()
