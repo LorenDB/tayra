@@ -56,33 +56,37 @@ def build_radio_queryset(patch, config, radio_qs):
     if not recommendations:
         raise ValueError("No candidates found by troi")
 
-    recommended_recording_mbids = [
+    recommended_mbids = [
         recommended_recording.mbid
         for recommended_recording in recommendations.playlists[0].recordings
     ]
 
     logger.info("Searching for MusicBrainz ID in Funkwhale database")
 
-    qs_mbid = music_models.Track.objects.all().filter(
-        mbid__in=recommended_recording_mbids
+    qs_recommended = (
+        music_models.Track.objects.all()
+        .filter(mbid__in=recommended_mbids)
+        .order_by("mbid", "pk")
+        .distinct("mbid")
     )
-    mbids_found = [str(i.mbid) for i in qs_mbid]
+    qs_recommended_mbid = [str(i.mbid) for i in qs_recommended]
 
-    recommended_recording_mbids_not_found = [
-        mbid for mbid in recommended_recording_mbids if mbid not in mbids_found
+    recommended_mbids_not_qs = [
+        mbid for mbid in recommended_mbids if mbid not in qs_recommended_mbid
     ]
-    cached_mbid_match = cache.get_many(recommended_recording_mbids_not_found)
+    cached_match = cache.get_many(recommended_mbids_not_qs)
+    cached_match_mbid = [str(i) for i in cached_match.keys()]
 
-    if qs_mbid and cached_mbid_match:
+    if qs_recommended and cached_match_mbid:
         logger.info("MusicBrainz IDs found in Funkwhale database and redis")
-        mbids_found = [str(i.mbid) for i in qs_mbid]
-        mbids_found.extend([i for i in cached_mbid_match.keys()])
-    elif qs_mbid and not cached_mbid_match:
+        qs_recommended_mbid.extend(cached_match_mbid)
+        mbids_found = qs_recommended_mbid
+    elif qs_recommended and not cached_match_mbid:
         logger.info("MusicBrainz IDs found in Funkwhale database")
-        mbids_found = mbids_found
-    elif not qs_mbid and cached_mbid_match:
+        mbids_found = qs_recommended_mbid
+    elif not qs_recommended and cached_match_mbid:
         logger.info("MusicBrainz IDs found in redis cache")
-        mbids_found = [i for i in cached_mbid_match.keys()]
+        mbids_found = cached_match_mbid
     else:
         logger.info(
             "Couldn't find any matches in Funkwhale database. Trying to match all"
@@ -106,23 +110,32 @@ def build_radio_queryset(patch, config, radio_qs):
         + str(end_time_resolv - start_time_resolv)
     )
 
-    cached_mbid_match = cache.get_many(recommended_recording_mbids_not_found)
+    cached_match = cache.get_many(recommended_mbids)
 
-    if not qs_mbid and not cached_mbid_match:
+    if not mbids_found and not cached_match:
         raise ValueError("No candidates found for troi radio")
 
-    logger.info("Radio generation with troi took " + str(end_time_resolv - start_time))
-    logger.info("qs_mbid is " + str(mbids_found))
+    mbids_found_pks = list(
+        music_models.Track.objects.all()
+        .filter(mbid__in=mbids_found)
+        .order_by("mbid", "pk")
+        .distinct("mbid")
+        .values_list("pk", flat=True)
+    )
 
-    if qs_mbid and cached_mbid_match:
+    mbids_found_pks_unique = [
+        i for i in mbids_found_pks if i not in cached_match.keys()
+    ]
+
+    if mbids_found and cached_match:
         return radio_qs.filter(
-            Q(mbid__in=mbids_found) | Q(pk__in=cached_mbid_match.values())
+            Q(pk__in=mbids_found_pks_unique) | Q(pk__in=cached_match.values())
         )
-    if qs_mbid and not cached_mbid_match:
-        return radio_qs.filter(mbid__in=mbids_found)
+    if mbids_found and not cached_match:
+        return radio_qs.filter(pk__in=mbids_found_pks_unique)
 
-    if not qs_mbid and cached_mbid_match:
-        return radio_qs.filter(pk__in=cached_mbid_match.values())
+    if not mbids_found and cached_match:
+        return radio_qs.filter(pk__in=cached_match.values())
 
 
 class TroiPatch:
