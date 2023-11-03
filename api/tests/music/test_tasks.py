@@ -1276,7 +1276,7 @@ def test_can_import_track_with_same_position_in_different_discs(factories, mocke
         },
         "position": upload.track.position,
         "disc_number": 2,
-        "mbid": None,
+        "mbid": str(uuid.uuid4()),
     }
 
     mocker.patch.object(metadata.TrackMetadataSerializer, "validated_data", data)
@@ -1310,7 +1310,7 @@ def test_can_import_track_with_same_position_in_same_discs_skipped(factories, mo
         },
         "position": upload.track.position,
         "disc_number": upload.track.disc_number,
-        "mbid": None,
+        "mbid": str(uuid.uuid4()),
     }
 
     mocker.patch.object(metadata.TrackMetadataSerializer, "validated_data", data)
