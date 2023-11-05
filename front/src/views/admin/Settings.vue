@@ -56,7 +56,7 @@ const groups = computed(() => [
     id: 'music',
     settings: [
       { name: 'music__transcoding_enabled' },
-      { name: 'music__transcoding_cache_duration' }
+      { name: 'music__transcoding_cache_duration' },
       { name: 'music__only_allow_musicbrainz_tagged_files' },
 
     ]
