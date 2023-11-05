@@ -15,7 +15,6 @@ users/followchannel.html, ../user/channels/follow.html
 users/follow.html, ../user/libraries/follow.html
 users/reports.html, ../user/reports/index.html
 users/builtinplugins.html, ../user/plugins/index.html
-moderator/index.html, ../moderator/index.html
 moderator/reports.html, ../moderator/reports/index.html
 moderator/domains.html, ../moderator/domains/index.html
 moderator/users.html, ../moderator/users/index.html
