@@ -32,3 +32,18 @@ class MusicCacheDuration(types.IntPreference):
         "will be erased and retranscoded on the next listening."
     )
     field_kwargs = {"required": False}
+
+
+@global_preferences_registry.register
+class MbidTaggedContent(types.BooleanPreference):
+    show_in_api = True
+    section = music
+    name = "only_allow_musicbrainz_tagged_files"
+    verbose_name = "Only allow Musicbrainz tagged files"
+    help_text = (
+        "Only Musicbrainz tagged files will be allowed to be uploaded on the server. "
+        "If files where uploaded before this settings will not affect them. "
+        "To clean the db from files not following mb tags use the funkwhale cli "
+        "or use quality filters"
+    )
+    default = False

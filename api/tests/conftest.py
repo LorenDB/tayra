@@ -429,8 +429,3 @@ def clear_license_cache(db):
 @pytest.fixture
 def faker():
     return factory.Faker._get_faker()
-
-
-@pytest.fixture()
-def dont_check_mbid(settings):
-    settings.ONLY_ALLOW_MUSICBRAINZ_TAGGED_FILES = False

@@ -247,10 +247,8 @@ def process_upload(upload, update_denormalization=True):
             return fail_import(
                 upload, "invalid_metadata", detail=detail, file_metadata=metadata_dump
             )
-        if (
-            settings.ONLY_ALLOW_MUSICBRAINZ_TAGGED_FILES is True
-            and not serializer.validated_data.get("mbid")
-        ):
+        check_mbid = preferences.get("music__only_allow_musicbrainz_tagged_files")
+        if check_mbid is True and not serializer.validated_data.get("mbid"):
             return fail_import(
                 upload,
                 "Uploading files without a MusicBrainz ID is not permitted in this pod",

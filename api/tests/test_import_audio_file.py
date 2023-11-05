@@ -364,7 +364,7 @@ def test_handle_modified_update_existing_path_if_found_and_attributed_to(
     update_track_metadata.assert_not_called()
 
 
-def test_import_files(factories, capsys, dont_check_mbid):
+def test_import_files(factories, capsys):
     # smoke test to ensure the command run properly
     library = factories["music.Library"](actor__local=True)
     call_command(

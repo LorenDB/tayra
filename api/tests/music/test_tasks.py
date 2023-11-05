@@ -1402,7 +1402,8 @@ def test_fs_import(factories, cache, mocker, settings):
     assert "Pruning dangling tracks" in cache.get("fs-import:logs")[-1]
 
 
-def test_upload_checks_mbid_tag(temp_signal, factories, mocker):
+def test_upload_checks_mbid_tag(temp_signal, factories, mocker, preferences):
+    preferences["music__only_allow_musicbrainz_tagged_files"] = True
     mocker.patch("funkwhale_api.federation.routes.outbox.dispatch")
     mocker.patch("funkwhale_api.music.tasks.populate_album_cover")
     mocker.patch("funkwhale_api.music.metadata.Metadata.get_picture")

@@ -1484,10 +1484,3 @@ Typesense hostname. Defaults to `localhost` on non-Docker deployments and to `ty
 Docker deployments.
 """
 TYPESENSE_NUM_TYPO = env("TYPESENSE_NUM_TYPO", default=5)
-
-ONLY_ALLOW_MUSICBRAINZ_TAGGED_FILES = env(
-    "ONLY_ALLOW_MUSICBRAINZ_TAGGED_FILES", default=False
-)
-"""
-If True, files without a Musicbrainz id will not be uploaded.
-"""
