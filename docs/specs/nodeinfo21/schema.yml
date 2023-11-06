@@ -470,13 +470,6 @@ components:
               format: url
             defaultUploadQuota:
               type: integer
-            library:
-              type: object
-              properties:
-                federationEnabled:
-                  type: boolean
-                anonymousCanListen:
-                  type: boolean
             supportedUploadExtensions:
               type: array
               items:
@@ -494,25 +487,32 @@ components:
               type: boolean
             instanceSupportMessage:
               type: string
-            instance_policy:
-              type: object
-              properties:
-                moderation_policy:
-                  type: string
-                  format: url
-                terms_of_service:
-                  type: string
-                  format: url
-                languages:
-                  type: array
-                  items:
-                    type: string
-                location:
-                  type: string
+            languages:
+              type: array
+              items:
+                type: string
+            location:
+              type: string
             content:
               type: object
               properties:
-                top_music_categories:
+                local:
+                  type: object
+                  properties:
+                    artists:
+                      type: number
+                    releases:
+                      type: number
+                    recordings:
+                      type: number
+                    hoursOfContent:
+                      type: number
+                  example:
+                    artists: 1000
+                    releases: 10000
+                    recordings: 150000
+                    hoursOfContent: 7500
+                topMusicCategories:
                   type: array
                   items:
                     type: object
@@ -522,7 +522,7 @@ components:
                     - "rock": 1256
                     - "jazz": 604
                     - "classical": 308
-                top_podcast_categories:
+                topPodcastCategories:
                   type: array
                   items:
                     type: object
@@ -535,9 +535,9 @@ components:
                 federation:
                   type: object
                   properties:
-                    followed_instances:
+                    followedInstances:
                       type: integer
-                    following_instances:
+                    followingInstances:
                       type: integer
             features:
               type: array
@@ -548,6 +548,8 @@ components:
                 - "podcasts"
                 - "collections"
                 - "audiobooks"
+                - "federation"
+                - "anonymousCanListen"
     Error:
       type: object
       properties:

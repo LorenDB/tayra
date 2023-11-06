@@ -55,12 +55,6 @@ The NodeInfo endpoint must contain all mandatory elements listed in the specific
 `defaultUploadQuota` (Number)
 : The default upload quota (in megabytes) allowed for new users
 
-`library.federationEnabled` (Boolean)
-: Whether federation is enabled
-
-`library.anonymousCanListen` (Boolean)
-: Whether public endpoints require authentication
-
 `supportedUploadExtensions` (Array\<String\>)
 : A list of file extensions enabled for upload
 
@@ -76,28 +70,37 @@ The NodeInfo endpoint must contain all mandatory elements listed in the specific
 `instanceSupportMessage` (String)
 : The support message associated with the instance
 
-`content.top_music_categories` (Array\<Object\>)
+`content.local` (Object)
+: An object containing a summary of local content
+
+`content.local.artists` (number)
+: The number of artists associated with local uploads on the pod
+
+`content.local.releases` (number)
+: The number of albums or series associated with local uploads on the pod
+
+`content.local.recordings` (number)
+: The number of tracks or episodes associated with local uploads on the pod
+
+`content.local.hoursOfContent` (number)
+: The total number of hours of content associated with local uploads on the pod
+
+`content.topMusicCategories` (Array\<Object\>)
 : The top three music genres and the number of uploads tagged with them
 
-`content.top_podcast_categories` (Array\<Object\>)
+`content.topPodcastCategories` (Array\<Object\>)
 : The top three podcast categories and the number of uploads tagged with them
 
-`instance_policy.moderation_policy` (String)
-: The moderation policy of the pod
-
-`instance_policy.terms_of_service` (String)
-: The terms of service of the pod
-
-`instance_policy.languages` (Array\<String\>)
+`languages` (Array\<String\>)
 : The languages spoken by the pod administrators
 
-`instance_policy.location` (String)
+`location` (String)
 : The country the pod is located in
 
-`federation.follows_instances` (Number)
+`federation.followsInstances` (Number)
 : The number of Funkwhale pods that the target pod follows
 
-`federation.following_instances` (Number)
+`federation.followingInstances` (Number)
 : The number of Funkwhale pods that publicly follow the target pod
 
 `features` (Array\<String\>)
@@ -141,7 +144,7 @@ Example response:
   },
   "metadata": {
     "actorId": "string",
-    "private": false,
+    "private": true,
     "shortDescription": "string",
     "longDescription": "string",
     "rules": "string",
@@ -150,10 +153,6 @@ Example response:
     "nodeName": "string",
     "banner": "string",
     "defaultUploadQuota": 0,
-    "library": {
-      "federationEnabled": true,
-      "anonymousCanListen": true
-    },
     "supportedUploadExtensions": ["string"],
     "allowList": {
       "enabled": true,
@@ -161,14 +160,16 @@ Example response:
     },
     "funkwhaleSupportMessageEnabled": true,
     "instanceSupportMessage": "string",
-    "instance_policy": {
-      "moderation_policy": "string",
-      "terms_of_service": "string",
-      "languages": ["string"],
-      "location": "string"
-    },
+    "languages": ["string"],
+    "location": "string",
     "content": {
-      "top_music_categories": [
+      "local": {
+        "artists": 1000,
+        "releases": 10000,
+        "recordings": 150000,
+        "hoursOfContent": 7500
+      },
+      "topMusicCategories": [
         {
           "rock": 1256
         },
@@ -179,7 +180,7 @@ Example response:
           "classical": 308
         }
       ],
-      "top_podcast_categories": [
+      "topPodcastCategories": [
         {
           "comedy": 12
         },
@@ -191,11 +192,18 @@ Example response:
         }
       ],
       "federation": {
-        "followed_instances": 0,
-        "following_instances": 0
+        "followedInstances": 0,
+        "followingInstances": 0
       }
     },
-    "features": ["channels", "podcasts", "collections", "audiobooks"]
+    "features": [
+      "channels",
+      "podcasts",
+      "collections",
+      "audiobooks",
+      "federation",
+      "anonymousCanListen"
+    ]
   }
 }
 ```
