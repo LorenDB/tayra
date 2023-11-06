@@ -36,6 +36,7 @@ Under a subsection labeled {guilabel}`Required metadata`:
 - A checkbox for {guilabel}`Album art`. If checked, only albums with associated art should be returned by the API
 - A checkbox for {guilabel}`Release date`. If checked, only albums with a properly formatted release date should be returned by the API
 - A checkbox for {guilabel}`Genre tags`. If checked, only content that is tagged with at least one genre tag should be returned by the API
+- A checkbox for {guilabel}`MusicBrainz ID`. If enabled, only content with a MusicBrainz ID is returns in API calls.
 
 The menu should also contain a {guilabel}`Quality filter` slider that allows admins to choose a **minimum** quality level. This level should be abstracted on the backend to apply a sensible value to all supported file formats.
 
@@ -53,6 +54,7 @@ The following configurable filters need to be applied:
 
 - `format`: a comma-separated list of accepted file formats (e.g. `mp3,ogg,vorbis,flac`). Only files matching the formats in the list should be returned if this filter is passed
 - `has_tags`: a boolean value that indicates whether the content should be tagged (`true`) or not (`false`)
+- `has_mbid`: a boolean value that indicates whether the content has a `mbid` tag associated (`true`) or not (`false`)
 - `quality`: an enum value that filters content based on the file quality. If no value is passed, uploads of any quality should be returned. Accepted values:
   - `low`
   - `medium`
