@@ -467,15 +467,15 @@ docker:
       variables:
         BUILD_ARGS: >
           --set *.platform=linux/amd64,linux/arm64,linux/arm/v7
-          --set *.cache-from=type=registry,ref=$DOCKER_CACHE_IMAGE:$CI_COMMIT_BRANCH
-          --set *.cache-to=type=registry,ref=$DOCKER_CACHE_IMAGE:$CI_COMMIT_BRANCH,mode=max
+          --set *.cache-from=type=registry,ref=$DOCKER_CACHE_IMAGE:$CI_COMMIT_BRANCH,oci-mediatypes=false
+          --set *.cache-to=type=registry,ref=$DOCKER_CACHE_IMAGE:$CI_COMMIT_BRANCH,mode=max,oci-mediatypes=false
           --push
 
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       variables:
         BUILD_ARGS: >
           --set *.platform=linux/amd64
-          --set *.cache-from=type=registry,ref=$DOCKER_CACHE_IMAGE:$CI_MERGE_REQUEST_TARGET_BRANCH_NAME
+          --set *.cache-from=type=registry,ref=$DOCKER_CACHE_IMAGE:$CI_MERGE_REQUEST_TARGET_BRANCH_NAME,oci-mediatypes=false
 
   image: $CI_REGISTRY/funkwhale/ci/docker:20
   services:
