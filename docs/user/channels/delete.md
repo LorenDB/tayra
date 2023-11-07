@@ -1,7 +1,7 @@
 # Delete a channel
 
 ```{warning}
-Deleting a channel is irreversible. If you delete a channel you also delete the content associated with it. Users won't be able to access the channel any more. You can't re-use the channel's __Fediverse handle__ for another channel.
+Deleting a channel is irreversible. If you delete a channel you also delete the content associated with it. Users won't be able to access the channel any more. You can't reuse the channel's __Fediverse handle__ for another channel.
 ```
 
 If you want to delete your channel, follow these steps:

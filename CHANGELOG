@@ -2766,7 +2766,7 @@ Bugfixes:
 
 - Downgraded channels dependency to 2.1.6 to fix denied uploads (#697)
 - Fixed cards display issues on medium/small screens (#707)
-- Fixed Embed component name that could lead to issue when developping on OSX (#696)
+- Fixed Embed component name that could lead to issue when developing on OSX (#696)
 - Fixed resizing issues for album cards on artist pages (#694)
 
 
@@ -4357,7 +4357,7 @@ deployed in various projects and supported by numerous clients.
 
 By offering this API in Funkwhale, we make it possible to access the instance
 library and listen to the music without from existing Subsonic clients, and
-without developping our own alternative clients for each and every platform.
+without developing our own alternative clients for each and every platform.
 
 Most advanced Subsonic clients support offline caching of music files,
 playlist management and search, which makes them well-suited for nomadic use.
