@@ -1276,7 +1276,7 @@ def test_can_import_track_with_same_position_in_different_discs(factories, mocke
         },
         "position": upload.track.position,
         "disc_number": 2,
-        "mbid": str(uuid.uuid4()),
+        "mbid": None,
     }
 
     mocker.patch.object(metadata.TrackMetadataSerializer, "validated_data", data)
@@ -1310,7 +1310,7 @@ def test_can_import_track_with_same_position_in_same_discs_skipped(factories, mo
         },
         "position": upload.track.position,
         "disc_number": upload.track.disc_number,
-        "mbid": str(uuid.uuid4()),
+        "mbid": None,
     }
 
     mocker.patch.object(metadata.TrackMetadataSerializer, "validated_data", data)
@@ -1407,7 +1407,6 @@ def test_upload_checks_mbid_tag(temp_signal, factories, mocker, preferences):
     mocker.patch("funkwhale_api.federation.routes.outbox.dispatch")
     mocker.patch("funkwhale_api.music.tasks.populate_album_cover")
     mocker.patch("funkwhale_api.music.metadata.Metadata.get_picture")
-    # mocker.spy(tasks, "get_track_from_import_metadata")
     track = factories["music.Track"](album__attachment_cover=None, mbid=None)
     path = os.path.join(DATA_DIR, "with_cover.opus")
 

@@ -41,9 +41,9 @@ class MbidTaggedContent(types.BooleanPreference):
     name = "only_allow_musicbrainz_tagged_files"
     verbose_name = "Only allow Musicbrainz tagged files"
     help_text = (
-        "Only Musicbrainz tagged files will be allowed to be uploaded on the server. "
-        "If files where uploaded before this settings will not affect them. "
-        "To clean the db from files not following mb tags use the funkwhale cli "
-        "or use quality filters"
+        "Requires uploaded files to be tagged with a MusicBrainz ID. "
+        "Enabling this setting has no impact on previously uploaded files. "
+        "You can use the CLI to clear files that don't contain an MBID or "
+        "or enable quality filtering to hide untagged content from API calls. "
     )
     default = False
