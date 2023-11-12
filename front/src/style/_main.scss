@@ -5,6 +5,8 @@ $desktop-sidebar-width: 275px;
 $widedesktop-sidebar-width: 275px;
 $bottom-player-height: 4rem;
 
+@import "@funkwhale/ui/style.css";
+
 @import "./globals/_fomantic.scss";
 @import "./vendor/_media.scss";
 
@@ -64,4 +66,3 @@ $bottom-player-height: 4rem;
 
 @import "./themes/light/_main.scss";
 @import "./themes/dark/_main.scss";
-@import "@funkwhale/ui/style.css";
