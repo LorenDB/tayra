@@ -312,7 +312,9 @@ test_integration:
     - if: $RUN_CYPRESS
   interruptible: true
 
-  image: cypress/base:18.12.1
+  image:
+    name: cypress/included:12.14.0
+    entrypoint: [""]
   cache:
     - *front_cache
     - key:
