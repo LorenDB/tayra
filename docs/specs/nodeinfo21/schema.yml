@@ -444,6 +444,18 @@ components:
             localComments:
               type: integer
               minimum: 0
+            listenings:
+              type: integer
+              minimum: 0
+            downloads:
+              type: integer
+              minimum: 0
+            favorites:
+              type: object
+              properties:
+                tracks:
+                  type: integer
+                  minimum: 0
         metadata:
           type: object
           properties:
@@ -456,13 +468,9 @@ components:
               type: string
             longDescription:
               type: string
-            rules:
-              type: string
             contactEmail:
               type: string
               format: email
-            terms:
-              type: string
             nodeName:
               type: string
             banner:

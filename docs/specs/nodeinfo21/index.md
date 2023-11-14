@@ -37,14 +37,8 @@ The NodeInfo endpoint must contain all mandatory elements listed in the specific
 `longDescription` (String)
 : A longer description of the pod
 
-`rules` (String)
-: A collection of rules users of the pod must abide by
-
 `contactEmail` (Email address)
 : The email address of the pod administrator
-
-`terms` (String)
-: The terms of use associated with the pod
 
 `nodeName`(String)
 : The name of the pod
@@ -140,16 +134,19 @@ Example response:
       "activeMonth": 0
     },
     "localPosts": 0,
-    "localComments": 0
+    "localComments": 0,
+    "listenings": 0,
+    "downloads": 0,
+    "favorites": {
+      "tracks": 0
+    }
   },
   "metadata": {
     "actorId": "string",
     "private": true,
     "shortDescription": "string",
     "longDescription": "string",
-    "rules": "string",
     "contactEmail": "user@example.com",
-    "terms": "string",
     "nodeName": "string",
     "banner": "string",
     "defaultUploadQuota": 0,
