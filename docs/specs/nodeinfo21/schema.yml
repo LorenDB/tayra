@@ -444,18 +444,6 @@ components:
             localComments:
               type: integer
               minimum: 0
-            listenings:
-              type: integer
-              minimum: 0
-            downloads:
-              type: integer
-              minimum: 0
-            favorites:
-              type: object
-              properties:
-                tracks:
-                  type: integer
-                  minimum: 0
         metadata:
           type: object
           properties:
@@ -524,22 +512,36 @@ components:
                   type: array
                   items:
                     type: object
-                    additionalProperties:
-                      type: integer
+                    properties:
+                      name:
+                        type: string
+                      count:
+                        type: integer
+                        minimum: 0
                   example:
-                    - "rock": 1256
-                    - "jazz": 604
-                    - "classical": 308
+                    - name: "rock"
+                      count: 1256
+                    - name: "jazz"
+                      count: 604
+                    - name: "classical"
+                      count: 308
                 topPodcastCategories:
                   type: array
                   items:
                     type: object
-                    additionalProperties:
-                      type: integer
+                    properties:
+                      name:
+                        type: string
+                      count:
+                        type: integer
+                        minimum: 0
                   example:
-                    - "comedy": 12
-                    - "politics": 4
-                    - "nature": 1
+                    - name: "comedy"
+                      count: 12
+                    - name: "politics"
+                      count: 4
+                    - name: "nature"
+                      count: 1
                 federation:
                   type: object
                   properties:
@@ -547,6 +549,21 @@ components:
                       type: integer
                     followingInstances:
                       type: integer
+            usage:
+              type: object
+              properties:
+                listenings:
+                  type: integer
+                  minimum: 0
+                downloads:
+                  type: integer
+                  minimum: 0
+                favorites:
+                  type: object
+                  properties:
+                    tracks:
+                      type: integer
+                      minimum: 0
             features:
               type: array
               items:

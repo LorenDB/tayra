@@ -67,22 +67,22 @@ The NodeInfo endpoint must contain all mandatory elements listed in the specific
 `content.local` (Object)
 : An object containing a summary of local content
 
-`content.local.artists` (number)
+`content.local.artists` (Number)
 : The number of artists associated with local uploads on the pod
 
-`content.local.releases` (number)
+`content.local.releases` (Number)
 : The number of albums or series associated with local uploads on the pod
 
-`content.local.recordings` (number)
+`content.local.recordings` (Number)
 : The number of tracks or episodes associated with local uploads on the pod
 
-`content.local.hoursOfContent` (number)
+`content.local.hoursOfContent` (Number)
 : The total number of hours of content associated with local uploads on the pod
 
-`content.topMusicCategories` (Array\<Object\>)
+`content.topMusicCategories` (Array\<{ `name`: String, `count`: Number}>)
 : The top three music genres and the number of uploads tagged with them
 
-`content.topPodcastCategories` (Array\<Object\>)
+`content.topPodcastCategories` (Array\<{ `name`: String, `count`: Number}>)
 : The top three podcast categories and the number of uploads tagged with them
 
 `languages` (Array\<String\>)
@@ -96,6 +96,15 @@ The NodeInfo endpoint must contain all mandatory elements listed in the specific
 
 `federation.followingInstances` (Number)
 : The number of Funkwhale pods that publicly follow the target pod
+
+`usage.listenings` (Number)
+: The total number of listenings on the pod
+
+`usage.downloads` (Number)
+: The total number of downloads (streams) the pod has served
+
+`usage.favorites.tracks` (Number)
+: The total number of track favorites recorded on the pod.
 
 `features` (Array\<String\>)
 : A list of enabled features
@@ -134,12 +143,7 @@ Example response:
       "activeMonth": 0
     },
     "localPosts": 0,
-    "localComments": 0,
-    "listenings": 0,
-    "downloads": 0,
-    "favorites": {
-      "tracks": 0
-    }
+    "localComments": 0
   },
   "metadata": {
     "actorId": "string",
@@ -168,29 +172,42 @@ Example response:
       },
       "topMusicCategories": [
         {
-          "rock": 1256
+          "name": "rock",
+          "count": 1256
         },
         {
-          "jazz": 604
+          "name": "jazz",
+          "count": 604
         },
         {
-          "classical": 308
+          "name": "classical",
+          "count": 308
         }
       ],
       "topPodcastCategories": [
         {
-          "comedy": 12
+          "name": "comedy",
+          "count": 12
         },
         {
-          "politics": 4
+          "name": "politics",
+          "count": 4
         },
         {
-          "nature": 1
+          "name": "nature",
+          "count": 1
         }
       ],
       "federation": {
         "followedInstances": 0,
         "followingInstances": 0
+      }
+    },
+    "usage": {
+      "listenings": 0,
+      "downloads": 0,
+      "favorites": {
+        "tracks": 0
       }
     },
     "features": [
