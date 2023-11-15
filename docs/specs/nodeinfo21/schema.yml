@@ -464,6 +464,7 @@ components:
             banner:
               type: string
               format: url
+              nullable: true
             defaultUploadQuota:
               type: integer
             supportedUploadExtensions:
@@ -477,6 +478,7 @@ components:
                   type: boolean
                 domains:
                   type: array
+                  nullable: true
                   items:
                     type: string
             funkwhaleSupportMessageEnabled:
