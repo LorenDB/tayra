@@ -23,7 +23,7 @@ The NodeInfo endpoint is used to communicate the features and capabilities of a 
 Read [the NodeInfo specification for more information](https://nodeinfo.diaspora.software/docson/index.html#/ns/schema/2.1#$$expand).
 :::
 
-The NodeInfo endpoint must contain all mandatory elements listed in the specification. In addition to this, Funkwhale's implementation should list additional details about the instance.
+The NodeInfo endpoint must contain all mandatory elements listed in the specification. In addition to this, Funkwhale's implementation should list additional details about the instance in the `metadata` object.
 
 `actorId` (URL)
 : The URL of the pod service actor
