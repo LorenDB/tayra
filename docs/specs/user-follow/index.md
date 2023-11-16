@@ -17,7 +17,7 @@ Activity
 : A verb that describes an action targeting an **Object**. This informs the receiving server what it needs to do with the object. For example: `Create`, `Delete`, `Undo`, `Follow`, `Block`.
 
 Actor
-: An ActivityPub object representing an entity capbable of performing actions. See the [ActivityPub specification][actor] for more details.
+: An ActivityPub object representing an entity capable of performing actions. See the [ActivityPub specification][actor] for more details.
 
 Requesting user
 : The user who sends a request. For example: If **Bob** requests to follow **Alice**, **Bob** is the requesting user.
@@ -264,7 +264,7 @@ The following working groups are responsible for implementing this feature:
 
 - The **Backend group** is responsible for building the API endpoints and ActivityPub S2S logic
 - The **Design group** is responsible for drafting designs for the web app interactions
-- The **Frontend group** is responsible for implementing the desigs from the **Design group** and adding support for the new API
+- The **Frontend group** is responsible for implementing the designs from the **Design group** and adding support for the new API
 - The **Documentation group** is responsible for finalizing the specification of the feature and documenting it for users
 
 ## Open questions
