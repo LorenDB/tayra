@@ -29,7 +29,7 @@ python = "^3.8,<3.12"
 
 # Django
 dj-rest-auth = { extras = ["with_social"], version = "2.2.8" }
-django = "==3.2.20"
+django = "==3.2.23"
 django-allauth = "==0.42.0"
 django-cache-memoize = "0.1.10"
 django-cacheops = "==6.1"
@@ -46,7 +46,7 @@ djangorestframework = "==3.14.0"
 drf-spectacular = "==0.26.1"
 markdown = "==3.4.4"
 persisting-theory = "==1.0"
-psycopg2 = "==2.9.7"
+psycopg2 = "==2.9.9"
 redis = "==4.5.5"
 
 # Django LDAP
@@ -66,7 +66,7 @@ gunicorn = "==20.1.0"
 uvicorn = { version = "==0.20.0", extras = ["standard"] }
 
 # Libs
-aiohttp = "==3.8.5"
+aiohttp = "==3.8.6"
 arrow = "==1.2.3"
 backports-zoneinfo = { version = "==0.2.1", python = "<3.9" }
 bleach = "==5.0.1"
@@ -109,9 +109,9 @@ factory-boy = "==3.2.1"
 faker = "==15.3.4"
 flake8 = "==3.9.2"
 ipdb = "==0.13.13"
-prompt-toolkit = "==3.0.39"
 pytest = "==7.2.2"
 pytest-asyncio = "==0.21.0"
+prompt-toolkit = "==3.0.41"
 pytest-cov = "==4.0.0"
 pytest-django = "==4.5.2"
 pytest-env = "==0.8.1"

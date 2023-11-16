@@ -24,7 +24,7 @@ class TagFilter(filters.FilterSet):
 
 def get_by_similar_tags(qs, tags):
     """
-    Return a queryset of obects with at least one matching tag.
+    Return a queryset of objects with at least one matching tag.
     Annotate the queryset so you can order later by number of matches.
     """
     qs = qs.filter(tagged_items__tag__name__in=tags).annotate(

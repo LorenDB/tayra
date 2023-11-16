@@ -9,6 +9,28 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 <!-- towncrier -->
 
+## 1.3.4 (2023-11-16)
+
+Upgrade instructions are available at
+https://docs.funkwhale.audio/administrator/upgrade/index.html
+
+Bugfixes:
+
+- Remove dangling dependency howler
+
+Documentation:
+
+- Fix a redirect loop on documentation for moderators
+
+Contributors to our Merge Requests:
+
+- Georg Krause
+- Thomas
+
+Committers:
+
+- Georg Krause
+
 ## 1.3.3 (2023-09-07)
 
 Upgrade instructions are available at
@@ -2638,7 +2660,7 @@ Bugfixes:
 
 - Downgraded channels dependency to 2.1.6 to fix denied uploads (#697)
 - Fixed cards display issues on medium/small screens (#707)
-- Fixed Embed component name that could lead to issue when developping on OSX (#696)
+- Fixed Embed component name that could lead to issue when developing on OSX (#696)
 - Fixed resizing issues for album cards on artist pages (#694)
 
 ## 0.18.1 (2019-01-29)
@@ -4160,7 +4182,7 @@ deployed in various projects and supported by numerous clients.
 
 By offering this API in Funkwhale, we make it possible to access the instance
 library and listen to the music without from existing Subsonic clients, and
-without developping our own alternative clients for each and every platform.
+without developing our own alternative clients for each and every platform.
 
 Most advanced Subsonic clients support offline caching of music files,
 playlist management and search, which makes them well-suited for nomadic use.
