@@ -11,6 +11,7 @@ from dynamic_preferences.api import viewsets as preferences_viewsets
 from dynamic_preferences.api.serializers import GlobalPreferenceSerializer
 from dynamic_preferences.registries import global_preferences_registry
 from rest_framework import generics, views
+from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 
 from funkwhale_api import __version__ as funkwhale_version
@@ -61,6 +62,8 @@ class InstanceSettings(generics.GenericAPIView):
 class NodeInfo(views.APIView):
     permission_classes = []
     authentication_classes = []
+    serializer_class = serializers.NodeInfo20Serializer
+    renderer_classes = (JSONRenderer,)
 
     @extend_schema(
         responses=serializers.NodeInfo20Serializer, operation_id="getNodeInfo20"
@@ -113,7 +116,7 @@ class NodeInfo(views.APIView):
                 data["endpoints"]["channels"] = reverse(
                     "federation:index:index-channels"
                 )
-        serializer = serializers.NodeInfo20Serializer(data)
+        serializer = self.serializer_class(data)
         return Response(
             serializer.data, status=200, content_type=NODEINFO_2_CONTENT_TYPE
         )
