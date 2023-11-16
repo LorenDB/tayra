@@ -1,3 +1,4 @@
+import pycountry
 from django.core.validators import FileExtensionValidator
 from django.forms import widgets
 from dynamic_preferences import types
@@ -170,3 +171,18 @@ class Banner(ImagePreference):
     default = None
     help_text = "This banner will be displayed on your pod's landing and about page. At least 600x100px recommended."
     field_kwargs = {"required": False}
+
+
+@global_preferences_registry.register
+class Location(types.ChoicePreference):
+    show_in_api = True
+    section = instance
+    name = "location"
+    verbose_name = "Server Location"
+    default = ""
+    choices = [(country.alpha_2, country.name) for country in pycountry.countries]
+    help_text = (
+        "The country or territory in which your server is located. This is displayed in the server's Nodeinfo "
+        "endpoint."
+    )
+    field_kwargs = {"choices": choices, "required": False}

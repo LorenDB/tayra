@@ -24,6 +24,7 @@ const groups = computed(() => [
     id: 'instance',
     settings: [
       { name: 'instance__name' },
+      { name: 'instance__location' },
       { name: 'instance__short_description' },
       { name: 'instance__long_description', fieldType: 'markdown', fieldParams: { charLimit: null, permissive: true } },
       { name: 'instance__contact_email' },

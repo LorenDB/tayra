@@ -217,6 +217,20 @@ const save = async () => {
           {{ v[1] }}
         </option>
       </select>
+      <select
+        v-else-if="setting.field.class === 'ChoiceField'"
+        :id="setting.identifier"
+        v-model="values[setting.identifier]"
+        class="ui search selection dropdown"
+      >
+        <option
+          v-for="v in setting.additional_data?.choices"
+          :key="v[0]"
+          :value="v[0]"
+        >
+          {{ v[1] }}
+        </option>
+      </select>
       <div v-else-if="setting.field.widget.class === 'ImageWidget'">
         <input
           :id="setting.identifier"
