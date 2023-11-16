@@ -81,6 +81,7 @@ class NodeInfo(views.APIView):
 
         data = {
             "software": {"version": funkwhale_version},
+            "services": {"inbound": ["atom1.0"], "outbound": ["atom1.0"]},
             "preferences": pref,
             "stats": cache_memoize(600, prefix="memoize:instance:stats")(stats.get)()
             if pref["instance__nodeinfo_stats_enabled"]

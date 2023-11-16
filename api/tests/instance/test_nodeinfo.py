@@ -14,7 +14,7 @@ def test_nodeinfo_default(api_client):
         "version": "2.0",
         "software": OrderedDict([("name", "funkwhale"), ("version", api_version)]),
         "protocols": ["activitypub"],
-        "services": OrderedDict([("inbound", []), ("outbound", [])]),
+        "services": OrderedDict([("inbound", ["atom1.0"]), ("outbound", ["atom1.0"])]),
         "openRegistrations": False,
         "usage": {
             "users": OrderedDict(
