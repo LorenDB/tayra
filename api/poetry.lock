@@ -2726,6 +2726,19 @@ files = [
 ]
 
 [[package]]
+name = "pycountry"
+version = "22.3.5"
+description = "ISO country, subdivision, language, currency and script definitions and their translations"
+optional = false
+python-versions = ">=3.6, <4"
+files = [
+    {file = "pycountry-22.3.5.tar.gz", hash = "sha256:b2163a246c585894d808f18783e19137cb70a0c18fb36748dc01fc6f109c1646"},
+]
+
+[package.dependencies]
+setuptools = "*"
+
+[[package]]
 name = "pycparser"
 version = "2.21"
 description = "C parser in Python"
@@ -4536,4 +4549,4 @@ typesense = ["typesense"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8,<3.12"
-content-hash = "89defcf9df569a1d3e2cdb50b29fd9161288dc88daa8c3e0e574ace88d196db2"
+content-hash = "5a259657d79f98ce6a7c377c5715aaf6f56d7ad4b9c420e784c81aa145c86b1d"

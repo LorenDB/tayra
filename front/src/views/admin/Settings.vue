@@ -80,6 +80,7 @@ const groups = computed(() => [
     label: t('views.admin.Settings.header.moderation'),
     id: 'moderation',
     settings: [
+      { name: 'moderation__languages' },
       { name: 'moderation__allow_list_enabled' },
       { name: 'moderation__allow_list_public' },
       { name: 'moderation__unauthenticated_report_types' }
