@@ -20,14 +20,14 @@ speedups = ["Brotli", "aiodns", "cchardet"]
 
 [[package]]
 name = "aioresponses"
-version = "0.7.4"
+version = "0.7.5"
 description = "Mock out requests made by ClientSession from aiohttp package"
 category = "dev"
 optional = false
 python-versions = "*"
 
 [package.dependencies]
-aiohttp = ">=2.0.0,<4.0.0"
+aiohttp = ">=3.3.0,<4.0.0"
 
 [[package]]
 name = "aiosignal"
@@ -596,7 +596,7 @@ django-allauth = {version = ">=0.40.0,<0.53.0", optional = true, markers = "extr
 djangorestframework = ">=3.7.0"
 
 [package.extras]
-with_social = ["django-allauth (>=0.40.0,<0.53.0)"]
+with-social = ["django-allauth (>=0.40.0,<0.53.0)"]
 
 [[package]]
 name = "Django"
@@ -1600,8 +1600,8 @@ pylint = ">=2.0,<3"
 pylint-plugin-utils = ">=0.7"
 
 [package.extras]
-for_tests = ["coverage", "django-tables2", "django-tastypie", "factory-boy", "pylint (>=2.13)", "pytest", "wheel"]
-with_django = ["Django"]
+for-tests = ["coverage", "django-tables2", "django-tastypie", "factory-boy", "pylint (>=2.13)", "pytest", "wheel"]
+with-django = ["Django"]
 
 [[package]]
 name = "pylint-plugin-utils"
@@ -1904,7 +1904,7 @@ urllib3 = ">=1.21.1,<1.27"
 
 [package.extras]
 socks = ["PySocks (>=1.5.6,!=1.5.7)"]
-use_chardet_on_py3 = ["chardet (>=3.0.2,<6)"]
+use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
 name = "requests-http-message-signatures"
@@ -1998,7 +1998,7 @@ grpcio = ["grpcio (>=1.21.1)"]
 httpx = ["httpx (>=0.16.0)"]
 huey = ["huey (>=2)"]
 opentelemetry = ["opentelemetry-distro (>=0.35b0)"]
-pure_eval = ["asttokens", "executing", "pure-eval"]
+pure-eval = ["asttokens", "executing", "pure-eval"]
 pymongo = ["pymongo (>=3.1)"]
 pyspark = ["pyspark (>=2.4.4)"]
 quart = ["blinker (>=1.1)", "quart (>=0.16.1)"]
@@ -2186,25 +2186,19 @@ typing-extensions = ">=4.2.0"
 zope-interface = ">=5"
 
 [package.extras]
-all-non-platform = ["twisted[conch,http2,serial,test,tls]"]
-all_non_platform = ["twisted[conch,http2,serial,test,tls]"]
+all-non-platform = ["twisted[conch,http2,serial,test,tls]", "twisted[conch,http2,serial,test,tls]"]
 conch = ["appdirs (>=1.4.0)", "bcrypt (>=3.1.3)", "cryptography (>=3.3)"]
 dev = ["coverage (>=6b1,<7)", "pyflakes (>=2.2,<3.0)", "python-subunit (>=1.4,<2.0)", "twisted[dev-release]", "twistedchecker (>=0.7,<1.0)"]
-dev-release = ["pydoctor (>=23.9.0,<23.10.0)", "sphinx (>=6,<7)", "sphinx-rtd-theme (>=1.3,<2.0)", "towncrier (>=23.6,<24.0)"]
-dev_release = ["pydoctor (>=23.9.0,<23.10.0)", "sphinx (>=6,<7)", "sphinx-rtd-theme (>=1.3,<2.0)", "towncrier (>=23.6,<24.0)"]
-gtk-platform = ["pygobject", "twisted[all-non-platform]"]
-gtk_platform = ["pygobject", "twisted[all-non-platform]"]
+dev-release = ["pydoctor (>=23.9.0,<23.10.0)", "pydoctor (>=23.9.0,<23.10.0)", "sphinx (>=6,<7)", "sphinx (>=6,<7)", "sphinx-rtd-theme (>=1.3,<2.0)", "sphinx-rtd-theme (>=1.3,<2.0)", "towncrier (>=23.6,<24.0)", "towncrier (>=23.6,<24.0)"]
+gtk-platform = ["pygobject", "pygobject", "twisted[all-non-platform]", "twisted[all-non-platform]"]
 http2 = ["h2 (>=3.0,<5.0)", "priority (>=1.1.0,<2.0)"]
-macos-platform = ["pyobjc-core", "pyobjc-framework-cfnetwork", "pyobjc-framework-cocoa", "twisted[all-non-platform]"]
-macos_platform = ["pyobjc-core", "pyobjc-framework-cfnetwork", "pyobjc-framework-cocoa", "twisted[all-non-platform]"]
+macos-platform = ["pyobjc-core", "pyobjc-core", "pyobjc-framework-cfnetwork", "pyobjc-framework-cfnetwork", "pyobjc-framework-cocoa", "pyobjc-framework-cocoa", "twisted[all-non-platform]", "twisted[all-non-platform]"]
 mypy = ["mypy (>=1.5.1,<1.6.0)", "mypy-zope (>=1.0.1,<1.1.0)", "twisted[all-non-platform,dev]", "types-pyopenssl", "types-setuptools"]
-osx-platform = ["twisted[macos-platform]"]
-osx_platform = ["twisted[macos-platform]"]
+osx-platform = ["twisted[macos-platform]", "twisted[macos-platform]"]
 serial = ["pyserial (>=3.0)", "pywin32 (!=226)"]
 test = ["cython-test-exception-raiser (>=1.0.2,<2)", "hypothesis (>=6.56)", "pyhamcrest (>=2)"]
 tls = ["idna (>=2.4)", "pyopenssl (>=21.0.0)", "service-identity (>=18.1.0)"]
-windows-platform = ["pywin32 (!=226)", "twisted[all-non-platform]"]
-windows_platform = ["pywin32 (!=226)", "twisted[all-non-platform]"]
+windows-platform = ["pywin32 (!=226)", "pywin32 (!=226)", "twisted[all-non-platform]", "twisted[all-non-platform]"]
 
 [[package]]
 name = "twisted-iocpsupport"
@@ -2437,7 +2431,7 @@ typesense = ["typesense"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8,<3.12"
-content-hash = "8a4a22c105efc0a430d62a535d2dc893e41373052d9c4b31e22e14a105200f20"
+content-hash = "85939cb972d9f931f7f77e47422637e2ffc6cc792ea85fa2a1d1568364635b25"
 
 [metadata.files]
 aiohttp = [
@@ -2530,8 +2524,8 @@ aiohttp = [
     {file = "aiohttp-3.8.6.tar.gz", hash = "sha256:b0cf2a4501bff9330a8a5248b4ce951851e415bdcce9dc158e76cfd55e15085c"},
 ]
 aioresponses = [
-    {file = "aioresponses-0.7.4-py2.py3-none-any.whl", hash = "sha256:1160486b5ea96fcae6170cf2bdef029b9d3a283b7dbeabb3d7f1182769bfb6b7"},
-    {file = "aioresponses-0.7.4.tar.gz", hash = "sha256:9b8c108b36354c04633bad0ea752b55d956a7602fe3e3234b939fc44af96f1d8"},
+    {file = "aioresponses-0.7.5-py2.py3-none-any.whl", hash = "sha256:0af13b077bde04ae965bc21981a1c6afd7dd17b861150d858de477d1c39c26a6"},
+    {file = "aioresponses-0.7.5.tar.gz", hash = "sha256:794b3e04837a683fd2c0c099bdf77f8d7ecdd284bc2c15203003518bf5cb8da8"},
 ]
 aiosignal = [
     {file = "aiosignal-1.3.1-py3-none-any.whl", hash = "sha256:f8376fb07dd1e86a584e4fcdec80b36b7f81aac666ebc724e2c090300dd83b17"},
