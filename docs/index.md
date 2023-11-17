@@ -129,6 +129,7 @@ hidden: true
 ---
 
 changelog
+changes/funkwhale-0-changelog
 
 ```
 
