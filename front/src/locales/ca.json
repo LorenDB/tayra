@@ -1273,12 +1273,12 @@
       },
       "UserLink": {
         "link": {
-          "username": "{'@'}{usuari}"
+          "username": "{'@'}{username}"
         }
       },
       "UserMenu": {
         "label": {
-          "language": "Idioma",
+          "language": "Llengua",
           "shortcuts": "Dreceres de teclat",
           "theme": "Canviar tema"
         },
