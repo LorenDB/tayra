@@ -251,8 +251,8 @@ def process_upload(upload, update_denormalization=True):
         if check_mbid and not serializer.validated_data.get("mbid"):
             return fail_import(
                 upload,
-                "Uploading files without a MusicBrainz ID is not permitted in this pod",
-                detail="You can tag you files with MusicBrainz Picard",
+                "Only content tagged with a MusicBrainz ID is permitted on this pod.",
+                detail="You can tag your files with MusicBrainz Picard",
             )
 
         final_metadata = collections.ChainMap(
