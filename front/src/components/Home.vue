@@ -264,7 +264,7 @@ whenever(() => store.state.auth.authenticated, () => {
               <div class="content">
                 <a
                   class="header"
-                  href="https://funkwhale.audio/en_US/apps"
+                  href="https://funkwhale.audio/apps"
                   target="_blank"
                   rel="noopener"
                 >

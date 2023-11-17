@@ -163,7 +163,7 @@ const markAllAsRead = async () => {
                   {{ $t('views.Notifications.message.funkwhaleSupport') }}
                 </p>
                 <a
-                  href="https://funkwhale.audio/support-us"
+                  href="https://funkwhale.audio/donate"
                   target="_blank"
                   rel="noopener"
                   class="ui primary inverted button"
