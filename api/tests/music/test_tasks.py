@@ -1424,8 +1424,8 @@ def test_upload_checks_mbid_tag(temp_signal, factories, mocker, preferences):
 
     assert upload.import_status == "errored"
     assert upload.import_details == {
-        "error_code": "Uploading files without a MusicBrainz ID is not permitted in this pod",
-        "detail": "You can tag you files with MusicBrainz Picard",
+        "error_code": "Only content tagged with a MusicBrainz ID is permitted on this pod.",
+        "detail": "You can tag your files with MusicBrainz Picard",
     }
 
 
