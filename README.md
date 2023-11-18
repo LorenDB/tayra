@@ -23,4 +23,4 @@ If you find a security issue or vulnerability, please report it on our [GitLab i
 
 ## Code of conduct
 
-The Funkwhale collective adheres to a [code of conduct](https://funkwhale.audio/en_US/code-of-conduct) in all our community spaces. Please familiarize yourself with this code and follow it when participating in discussions in our spaces.
+The Funkwhale collective adheres to a [code of conduct](https://funkwhale.audio/code-of-conduct) in all our community spaces. Please familiarize yourself with this code and follow it when participating in discussions in our spaces.
