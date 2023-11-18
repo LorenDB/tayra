@@ -1,8 +1,6 @@
-Funkwhale 0.x changelog
-=======================
+# Funkwhale 0.x changelog
 
-0.21.2 (2020-07-27)
--------------------
+## 0.21.2 (2020-07-27)
 
 Upgrade instructions are available at
 https://docs.funkwhale.audio/administrator/upgrade/index.html
@@ -13,7 +11,6 @@ Enhancements:
 - Can now filter subscribed content through API (#1116)
 - Support ordering=random for artists, albums, tracks and channels endpoints (#1145)
 - Use role=alert on forms/toast message to improve accessibility (#1134)
-
 
 Bugfixes:
 
@@ -32,17 +29,14 @@ Contributors to this release (development, documentation, reviews):
 - Bheesham Persaud
 - Ciarán Ainsworth
 
-
-0.21.1 (2020-06-11)
--------------------
+## 0.21.1 (2020-06-11)
 
 Upgrade instructions are available at
 https://docs.funkwhale.audio/administrator/upgrade/index.html
 
-
 Features:
 
-- Support a --watch mode with ``import_files`` to automatically add, update and remove files when filesystem is updated (#721)
+- Support a --watch mode with `import_files` to automatically add, update and remove files when filesystem is updated (#721)
 
 Enhancements:
 
@@ -52,7 +46,6 @@ Enhancements:
 - Removed unused masonry dependency (#1112)
 - Support for specifying itunes:email and itunes:name in channels for compatibility with third-party platforms (#1154)
 - Updated the /api/v1/libraries endpoint to support listing public libraries from other users/pods (#1151)
-
 
 Bugfixes:
 
@@ -64,25 +57,23 @@ Bugfixes:
 - Fixed a wording issue on artist channel page (#1117)
 - Fixed crash on python 3.5 with cli importer (#1155)
 - Fixed issue when displaying starred tracks on subsonic (#1082)
-- Fixed mimetype detection issue that broke transcoding on some tracks (#1093). Run ``python manage.py fix_uploads --mimetype`` to set proper mimetypes on existing uploads.
+- Fixed mimetype detection issue that broke transcoding on some tracks (#1093). Run `python manage.py fix_uploads --mimetype` to set proper mimetypes on existing uploads.
 - Fixed page not refreshing when switching between My Library and Explore sections (#1091)
 - Fixed recursive CLI importing crashing under Python 3.5 (#1148, #1147)
 - Fixed wrong album and track count in admin artist API (#1096)
 - Include tracks by album artist when filtering by artist on /api/v1/tracks (#1078)
 
-Small API breaking change in ``/api/v1/libraries``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Small API breaking change in `/api/v1/libraries`
 
 To allow easier crawling of public libraries on a pod,we had to make a slight breaking change
-to the behaviour of ``GET /api/v1/libraries``.
+to the behaviour of `GET /api/v1/libraries`.
 
 Before, it returned only libraries owned by the current user.
 
 Now, it returns all the accessible libraries (including ones from other users and pods).
 
 If you are consuming the API via a third-party client and need to retrieve your libraries,
-use the ``scope`` parameter, like this: ``GET /api/v1/libraries?scope=me``
-
+use the `scope` parameter, like this: `GET /api/v1/libraries?scope=me`
 
 Contributors to this release (development, documentation, reviews, testing):
 
@@ -93,9 +84,7 @@ Contributors to this release (development, documentation, reviews, testing):
 - Siren
 - Tony Wasserka
 
-
-0.21 "Agate" (2020-04-24)
--------------------------
+## 0.21 "Agate" (2020-04-24)
 
 This 0.21 release is dedicated to Agate, to thank her, for both having created the Funkwhale project, being the current lead developer, and for her courage of coming out. Thank you Agate from all the members of the Funkwhale community <3
 
@@ -104,8 +93,7 @@ We are truly grateful as well to the dozens of people who contributed to this re
 Upgrade instructions are available at
 https://docs.funkwhale.audio/administrator/upgrade/index.html, there are also additional operations you need to execute, listed in the changelog below (search "Manual action").
 
-Channels and podcasts
-^^^^^^^^^^^^^^^^^^^^^
+### Channels and podcasts
 
 Funkwhale 0.21 includes a brand new feature: Channels!
 
@@ -121,15 +109,13 @@ Many, many thanks to the numerous people who helped with the feature design, dev
 to the members of the working group who met every week for months in order to get this done, and the members of other third-party
 projects who took the time to work with us to ensure compatibility.
 
-Redesigned navigation, player and queue
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Redesigned navigation, player and queue
 
 This release includes a full redesign of our navigation, player and queue. Overall, it should provide
 a better, less confusing experience, especially on mobile devices. This redesign was suggested
 14 months ago, and took a while, but thanks to the involvement and feedback of many people, we got it done!
 
-Improved search bar for searching remote objects
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Improved search bar for searching remote objects
 
 The search bar now support fetching arbitrary objects using a URL. In particular, you can use this to quickly:
 
@@ -137,8 +123,7 @@ The search bar now support fetching arbitrary objects using a URL. In particular
 - Listen a public track from another pod
 - Subscribe to a channel
 
-Screening for sign-ups and custom sign-up form
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Screening for sign-ups and custom sign-up form
 
 Instance admins can now configure their pod so that registrations required manual approval from a moderator. This
 is especially useful on private or semi-private pods where you don't want to close registrations completely,
@@ -152,15 +137,13 @@ In addition, it's also possible to customize the sign-up form by:
 - Providing a custom help text, in markdown format
 - Including additional fields in the form, for instance to ask the user why they want to join. Data collected through these fields is included in the sign-up request and viewable by the mods
 
-Federated reports
-^^^^^^^^^^^^^^^^^
+### Federated reports
 
 It's now possible to send a copy of a report to the server hosting the reported object, in order to make moderation easier and more distributed.
 
 This feature is inspired by Mastodon's current design, and should work with at least Funkwhale and Mastodon servers.
 
-Improved search performance
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Improved search performance
 
 Our search engine went through a full rewrite to make it faster. This new engine is enabled
 by default when using the search bar, or when searching for artists, albums and tracks. It leverages
@@ -171,36 +154,37 @@ magnitude. This should be especially perceptible on pods with large databases, m
 or hard drives.
 
 We plan to remove the old engine in an upcoming release. In the meantime, if anything goes wrong,
-you can switch back by setting ``USE_FULL_TEXT_SEARCH=false`` in your ``.env`` file.
+you can switch back by setting `USE_FULL_TEXT_SEARCH=false` in your `.env` file.
 
-Enforced email verification
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Enforced email verification
 
-The brand new ``ACCOUNT_EMAIL_VERIFICATION_ENFORCE`` setting can be used to make email verification
-mandatory for your users. It defaults to ``false``, and doesn't apply to superuser accounts created through
+The brand new `ACCOUNT_EMAIL_VERIFICATION_ENFORCE` setting can be used to make email verification
+mandatory for your users. It defaults to `false`, and doesn't apply to superuser accounts created through
 the CLI.
 
 If you enable this, ensure you have a SMTP server configured too.
 
-More reliable CLI importer [manual action required]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### More reliable CLI importer [manual action required]
 
 Our CLI importer is now more reliable and less prone to Out-of-Memory issues, especially when scanning large libraries. (hundreds of GB or bigger)
 
 We've also improved the directory crawling logic, so that you don't have to use glob patterns or specify extensions when importing. As a result, the syntax for providing directories to the command as changed slightly.
 
-If you use the ``import_files`` command, this means you should replace scripts that look like this::
+If you use the `import_files` command, this means you should replace scripts that look like this:
 
-    python api/manage.py import_files $LIBRARY_ID "/srv/funkwhale/data/music/**/*.ogg" "/srv/funkwhale/data/music/**/*.mp3" --recursive --noinput
+```sh
+python api/manage.py import_files $LIBRARY_ID "/srv/funkwhale/data/music/**/*.ogg" "/srv/funkwhale/data/music/**/*.mp3" --recursive --noinput
+```
 
-By this::
+By this:
 
-    python api/manage.py import_files $LIBRARY_ID "/srv/funkwhale/data/music/" --recursive --noinput
+```sh
+python api/manage.py import_files $LIBRARY_ID "/srv/funkwhale/data/music/" --recursive --noinput
+```
 
 And Funkwhale will happily import any supported audio file from the specified directory.
 
-User management through the server CLI
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### User management through the server CLI
 
 We now support user creation (incl. non-admin accounts), update and removal directly
 from the server CLI. Typical use cases include:
@@ -210,76 +194,77 @@ from the server CLI. Typical use cases include:
 - Removing or granting permissions or upload quota to multiple users at once
 - Marking multiple users as inactive
 
-All user-related commands are available under the ``python manage.py fw users`` namespace.
-Please refer to the `Admin documentation <https://docs.funkwhale.audio/admin/commands.html#user-management>`_ for
+All user-related commands are available under the `python manage.py fw users` namespace.
+Please refer to the [Admin documentation](https://docs.funkwhale.audio/admin/commands.html#user-management) for
 more information and instructions.
 
-Progressive web app [Manual action sugFull list of changes
-^^^^^^^^^^^^^^^^^^^^gested, non-docker only]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Progressive web app [Manual action suggested, non-docker only]
 
 We've made Funkwhale's Web UI a Progressive Web Application (PWA), in order to improve the user experience
 during offline use, and on mobile devices.
 
 In order to fully benefit from this change, if your pod isn't deployed using Docker, ensure
-the following instruction is present in your nginx configuration::
+the following instruction is present in your nginx configuration:
 
-    location /front/ {
-        # Add the following line in the /front/ location
-        add_header Service-Worker-Allowed "/";
-    }
+```nginx
+location /front/ {
+    # Add the following line in the /front/ location
+    add_header Service-Worker-Allowed "/";
+}
+```
 
-Postgres docker changed environment variable [manual action required, docker multi-container only]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Postgres docker changed environment variable [manual action required, docker multi-container only]
 
 If you're running with docker and our multi-container setup, there was a breaking change starting in the 11.7 postgres image (https://github.com/docker-library/postgres/pull/658)
 
-You need to add this to your .env file: ``POSTGRES_HOST_AUTH_METHOD=trust``
+You need to add this to your .env file: `POSTGRES_HOST_AUTH_METHOD=trust`
 
 Newer deployments aren't affected.
 
-Upgrade from Postgres 10 to 11 [manual action required, docker all-in-one only]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Upgrade from Postgres 10 to 11 [manual action required, docker all-in-one only]
 
-With our upgrade to Alpine 3.10, the ``funkwhale/all-in-one`` image now includes PostgreSQL 11.
+With our upgrade to Alpine 3.10, the `funkwhale/all-in-one` image now includes PostgreSQL 11.
 
-In order to update to Funkwhale 0.21, you will first need to upgrade Funkwhale's PostgreSQL database, following the steps below::
+In order to update to Funkwhale 0.21, you will first need to upgrade Funkwhale's PostgreSQL database, following the steps below:
 
-    # open a shell as the Funkwhale user
-    sudo -u funkwhale -H bash
+```sh
+# open a shell as the Funkwhale user
+sudo -u funkwhale -H bash
 
-    # move to the funkwhale data directory
-    # (replace this with your own if you used a different path)
-    cd /srv/funkwhale/data
+# move to the funkwhale data directory
+# (replace this with your own if you used a different path)
+cd /srv/funkwhale/data
 
-    # stop the funkwhale container
-    docker stop funkwhale
+# stop the funkwhale container
+docker stop funkwhale
 
-    # backup the database files
-    cp -r data/ ../postgres.bak
+# backup the database files
+cp -r data/ ../postgres.bak
 
-    # Upgrade the database
-    docker run --rm \
-        -v $(pwd)/data:/var/lib/postgresql/10/data \
-        -v $(pwd)/upgraded-postgresql:/var/lib/postgresql/11/data \
-        -e PGUSER=funkwhale \
-        -e POSTGRES_INITDB_ARGS="-U funkwhale --locale C --encoding UTF8" \
-        tianon/postgres-upgrade:10-to-11
+# Upgrade the database
+docker run --rm \
+    -v $(pwd)/data:/var/lib/postgresql/10/data \
+    -v $(pwd)/upgraded-postgresql:/var/lib/postgresql/11/data \
+    -e PGUSER=funkwhale \
+    -e POSTGRES_INITDB_ARGS="-U funkwhale --locale C --encoding UTF8" \
+    tianon/postgres-upgrade:10-to-11
 
-    # replace the Postgres 10 files with Postgres 11 files
-    mv data/ postgres-10
-    mv upgraded-postgresql/ data
+# replace the Postgres 10 files with Postgres 11 files
+mv data/ postgres-10
+mv upgraded-postgresql/ data
+```
 
 Once you have completed the Funkwhale upgrade with our regular instructions and everything works properly,
-you can remove the backups/old files::
+you can remove the backups/old files:
 
-    sudo -u funkwhale -H bash
-    cd /srv/funkwhale/data
-    rm -rf ../postgres.bak
-    rm -rf postgres-10
+```sh
+sudo -u funkwhale -H bash
+cd /srv/funkwhale/data
+rm -rf ../postgres.bak
+rm -rf postgres-10
+```
 
-Full list of changes
-^^^^^^^^^^^^^^^^^^^^
+### Full list of changes
 
 Features:
 
@@ -303,7 +288,7 @@ Enhancements:
 - Changed footer to use instance name if available, and append ellipses if instance URL/Name is too long (#1012)
 - Favor local uploads when playing a track with multiple uploads (#1036)
 - Include only local content in nodeinfo stats, added downloads count
-- Make media and static files serving more reliable when reverse proxy X_FORWARDED_* headers are incorrect (#947)
+- Make media and static files serving more reliable when reverse proxy `X_FORWARDED_*` headers are incorrect (#947)
 - Order the playlist columns by modification date in the Browse tab (#775)
 - Reduced size of funkwhale/funkwhale docker images thanks to multi-stage builds (!1042)
 - Remember display settings in Album, Artist, Radio and Playlist views (#391)
@@ -409,15 +394,12 @@ Contributors to this release (translation, development, documentation, reviews, 
 - Xaloc
 - Xosé M
 
-0.20.1 (2019-10-28)
--------------------
+## 0.20.1 (2019-10-28)
 
 Upgrade instructions are available at
 https://docs.funkwhale.audio/administrator/upgrade/index.html
 
-
-Denormalized audio permission logic in a separate table to enhance performance
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Denormalized audio permission logic in a separate table to enhance performance
 
 With this release, we're introducing a performance enhancement that should reduce the load on the database and API
 servers (cf https://dev.funkwhale.audio/funkwhale/funkwhale/merge_requests/939).
@@ -426,13 +408,14 @@ Under the hood, we now maintain a separate table to link users to the tracks the
 by default, but should be enabled by default starting in Funkwhale 0.21.
 
 If you want to try it now, add
-``MUSIC_USE_DENORMALIZATION=True`` to your ``.env`` file, restart Funkwhale, and run the following command::
+`MUSIC_USE_DENORMALIZATION=True` to your `.env` file, restart Funkwhale, and run the following command:
 
-    python manage.py rebuild_music_permissions
+```sh
+python manage.py rebuild_music_permissions
+```
 
 This shouldn't cause any regression, but we'd appreciate if you could test this before the 0.21 release and report any unusual
 behaviour regarding tracks, albums and artists visibility.
-
 
 Enhancements:
 
@@ -442,7 +425,6 @@ Enhancements:
 - Placeholders will now be shown if no content is available across the application (#750)
 - Reduce the number of simultaneous DB connections under some deployment scenario
 - Support byYear filtering in Subsonic API (#936)
-
 
 Bugfixes:
 
@@ -455,11 +437,9 @@ Bugfixes:
 - Fixed pagination in subsonic getSongsByGenre endpoint (#954)
 - Fixed style glitches in dropdowns
 
-
 Documentation:
 
 - Documented how to create DB extension by hand in case of permission error during migrations (#934)
-
 
 Contributors to this release (translation, development, documentation, reviews, design):
 
@@ -473,23 +453,21 @@ Contributors to this release (translation, development, documentation, reviews, 
 - Mateus Mattei Garcia
 - Quentin PAGÈS
 
+## 0.20 (2019-10-04)
 
-0.20 (2019-10-04)
------------------
+Upgrade instructions are available at https://docs.funkwhale.audio/admin/upgrading.html
+
+### Support for genres via tags
 
 Upgrade instructions are available at
 https://docs.funkwhale.audio/administrator/upgrade/index.html
-
-
-Support for genres via tags
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 One of our most requested missing features is now available!
 
 Starting with Funkwhale 0.20,
 Funkwhale will automatically extract genre information from uploaded files and associate it
 with the corresponding tracks in the form of tags (similar to Mastodon or Twitter hashtags).
-Please refer to `our tagging documentation <https://docs.funkwhale.audio/users/upload.html#tagging-files>`_
+Please refer to [our tagging documentation](https://docs.funkwhale.audio/users/upload.html#tagging-files)
 for more information regarding the tagging process.
 
 Tags can also be associated with artists and albums, and updated after upload through the UI using
@@ -503,11 +481,10 @@ Tags are used in various places to enhance user experience:
 - The custom radio builder now supports using tags
 - Subsonic apps that support genres - such as DSub or Ultrasonic - should display this information as well
 
-If you are a pod admin and want to extract tags from already uploaded content, you run `this snippet <https://dev.funkwhale.audio/funkwhale/funkwhale/snippets/43>`__
-and `this snippet <https://dev.funkwhale.audio/funkwhale/funkwhale/snippets/44>`__ in a ``python manage.py shell``.
+If you are a pod admin and want to extract tags from already uploaded content, you run [this snippet](https://dev.funkwhale.audio/funkwhale/funkwhale/snippets/43)
+and [this snippet](https://dev.funkwhale.audio/funkwhale/funkwhale/snippets/44) in a `python manage.py shell`.
 
-Content and account reports
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Content and account reports
 
 It is now possible to report content, such as artists, tracks or libraries, as well as user accounts. Such reports are forwarded to the pod moderators,
 who can review it and delete reported content, block accounts or take any other action they deem necessary.
@@ -520,11 +497,10 @@ Federation of the reports will be supported in a future release.
 
 For more information about this feature, please check out our documentation:
 
--  `User documentation <https://docs.funkwhale.audio/moderator/reports.html>`__
--  `Moderator documentation <https://docs.funkwhale.audio/users/reports.html>`__
+- [User documentation](https://docs.funkwhale.audio/moderator/reports.html)
+- [Moderator documentation](https://docs.funkwhale.audio/users/reports.html)
 
-Account deletion
-^^^^^^^^^^^^^^^^
+### Account deletion
 
 Users can now delete their account themselves, without involving an administrator.
 
@@ -534,10 +510,9 @@ to other known servers on the federation.
 
 For more information about this feature, please check out our documentation:
 
--  `User documentation <https://docs.funkwhale.audio/users/account.html>`__
+- [User documentation](https://docs.funkwhale.audio/users/account.html)
 
-Landing and about page redesign [Manual action suggested]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Landing and about page redesign [Manual action suggested]
 
 In this release, we've completely redesigned the landing and about page, by making it more useful and adapted to your pod
 configuration. Among other things, the landing page will now include:
@@ -567,10 +542,9 @@ With this redesign, we've added a handful of additional pod settings:
 - Rules
 - Terms of service
 
-We recommend taking a few moments to fill these accordingly to your needs, by visiting ``/manage/settings``.
+We recommend taking a few moments to fill these accordingly to your needs, by visiting `/manage/settings`.
 
-Allow-list to restrict federation to trusted domains
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Allow-list to restrict federation to trusted domains
 
 The Allow-Listing feature grants pod moderators
 and administrators greater control over federation
@@ -585,10 +559,9 @@ allow-list will not have access to your pod's content
 or messages and will not be able to send anything to
 your pod.
 
-If you want to enable this feature on your pod, or learn more, please refer to `our documentation <https://docs.funkwhale.audio/moderator/listing.html>`_!
+If you want to enable this feature on your pod, or learn more, please refer to [our documentation](https://docs.funkwhale.audio/moderator/listing.html)!
 
-Periodic message to incite people to support their pod and Funkwhale
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Periodic message to incite people to support their pod and Funkwhale
 
 Users will now be reminded on a regular basis that they can help Funkwhale by donating or contributing.
 
@@ -596,9 +569,7 @@ If specified by the pod admin, a separate and custom message will also be displa
 
 Both messages will appear for the first time 15 days after signup, in the notifications tab. For each message, users can schedule a reminder for a later time, or disable the messages entirely.
 
-
-Replaced Daphne by Gunicorn/Uvicorn [manual action required, non-docker only]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Replaced Daphne by Gunicorn/Uvicorn [manual action required, non-docker only]
 
 To improve the performance, stability and reliability of Funkwhale's web processes,
 we now recommend using Gunicorn and Uvicorn instead of Daphne. This combination unlock new use cases such as:
@@ -608,79 +579,81 @@ we now recommend using Gunicorn and Uvicorn instead of Daphne. This combination 
 
 Based on our benchmarks, Gunicorn/Unicorn is also faster and more stable under higher workloads compared to Daphne.
 
-To benefit from this enhancement on existing instances, you need to add ``FUNKWHALE_WEB_WORKERS=1`` in your ``.env`` file
+To benefit from this enhancement on existing instances, you need to add `FUNKWHALE_WEB_WORKERS=1` in your `.env` file
 (use a higher number if you want to have more web worker processes).
 
-Then, edit your ``/etc/systemd/system/funkwhale-server.service`` and replace the ``ExecStart=`` line with
-``ExecStart=/srv/funkwhale/virtualenv/bin/gunicorn config.asgi:application -w ${FUNKWHALE_WEB_WORKERS} -k uvicorn.workers.UvicornWorker -b ${FUNKWHALE_API_IP}:${FUNKWHALE_API_PORT}``
+Then, edit your `/etc/systemd/system/funkwhale-server.service` and replace the `ExecStart=` line with
+`ExecStart=/srv/funkwhale/virtualenv/bin/gunicorn config.asgi:application -w ${FUNKWHALE_WEB_WORKERS} -k uvicorn.workers.UvicornWorker -b ${FUNKWHALE_API_IP}:${FUNKWHALE_API_PORT}`
 
-Then reload the configuration change with ``sudo systemctl daemon-reload`` and ``sudo systemctl restart funkwhale-server``.
+Then reload the configuration change with `sudo systemctl daemon-reload` and `sudo systemctl restart funkwhale-server`.
 
-
-Content-Security-Policy and additional security headers [manual action suggested]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Content-Security-Policy and additional security headers [manual action suggested]
 
 To improve the security and reduce the attack surface in case of a successful exploit, we suggest
 you add the following Content-Security-Policy to your nginx configuration.
 
-..note::
+````{note}
+If you are using an S3-compatible store to serve music, you will need to specify the URL of your S3 store in the ``media-src`` and ``img-src`` headers
 
-    If you are using an S3-compatible store to serve music, you will need to specify the URL of your S3 store in the ``media-src`` and ``img-src`` headers
+```nginx
+add_header Content-Security-Policy "...img-src 'self' https://<your-s3-URL> data:;...media-src https://<your-s3-URL> 'self' data:";
+```
+````
 
-    .. code-block::
+**On non-docker setups**, in `/etc/nginx/sites-available/funkwhale.conf`:
 
-        add_header Content-Security-Policy "...img-src 'self' https://<your-s3-URL> data:;...media-src https://<your-s3-URL> 'self' data:";
+```nginx
+server {
 
-**On non-docker setups**, in ``/etc/nginx/sites-available/funkwhale.conf``::
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; media-src 'self' data:";
+    add_header Referrer-Policy "strict-origin-when-cross-origin";
 
-    server {
-
+    location /front/ {
         add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; media-src 'self' data:";
         add_header Referrer-Policy "strict-origin-when-cross-origin";
-
-        location /front/ {
-            add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; media-src 'self' data:";
-            add_header Referrer-Policy "strict-origin-when-cross-origin";
-            add_header X-Frame-Options "SAMEORIGIN";
-            # … existing content here
-        }
-
-        # Also create a new location for the embeds to ensure external iframes work
-        # Simply copy-paste the /front/ location, but replace the following lines:
-        location /front/embed.html {
-            add_header X-Frame-Options "ALLOW";
-            alias ${FUNKWHALE_FRONTEND_PATH}/embed.html;
-        }
+        add_header X-Frame-Options "SAMEORIGIN";
+        # … existing content here
     }
 
-Then reload nginx with ``systemctl reload nginx``.
+    # Also create a new location for the embeds to ensure external iframes work
+    # Simply copy-paste the /front/ location, but replace the following lines:
+    location /front/embed.html {
+        add_header X-Frame-Options "ALLOW";
+        alias ${FUNKWHALE_FRONTEND_PATH}/embed.html;
+    }
+}
+```
 
-**On docker setups**, in ``/srv/funkwhalenginx/funkwhale.template``::
+Then reload nginx with `systemctl reload nginx`.
 
-    server {
+**On docker setups**, in `/srv/funkwhalenginx/funkwhale.template`:
 
+```nginx
+server {
+
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; media-src 'self' data:";
+    add_header Referrer-Policy "strict-origin-when-cross-origin";
+
+    location /front/ {
         add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; media-src 'self' data:";
         add_header Referrer-Policy "strict-origin-when-cross-origin";
-
-        location /front/ {
-            add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; media-src 'self' data:";
-            add_header Referrer-Policy "strict-origin-when-cross-origin";
-            add_header X-Frame-Options "SAMEORIGIN";
-            # … existing content here
-        }
-
-        # Also create a new location for the embeds to ensure external iframes work
-        # Simply copy-paste the /front/ location, but replace the following lines:
-        location /front/embed.html {
-            add_header X-Frame-Options "ALLOW";
-            alias /frontend/embed.html;
-        }
+        add_header X-Frame-Options "SAMEORIGIN";
+        # … existing content here
     }
 
-Then reload nginx with ``docker-compose restart nginx``.
+    # Also create a new location for the embeds to ensure external iframes work
+    # Simply copy-paste the /front/ location, but replace the following lines:
+    location /front/embed.html {
+        add_header X-Frame-Options "ALLOW";
+        alias /frontend/embed.html;
+    }
+}
 
-Rate limiting
-^^^^^^^^^^^^^
+```
+
+Then reload nginx with `docker-compose restart nginx`.
+
+### Rate limiting
 
 With this release, rate-limiting on the API is enabled by default, with high enough limits to ensure
 regular users of the app aren't affected. Requests beyond allowed limits are answered with a 429 HTTP error.
@@ -688,23 +661,23 @@ regular users of the app aren't affected. Requests beyond allowed limits are ans
 For anonymous requests, the limit is applied to the IP address of the client, and for authenticated requests, the limit
 is applied to the corresponding user account. By default, anonymous requests get a lower limit than authenticated requests.
 
-You can disable the rate-limiting feature by adding `THROTTLING_ENABLED=false` to your ``.env`` file and restarting the
+You can disable the rate-limiting feature by adding `THROTTLING_ENABLED=false` to your `.env` file and restarting the
 services. If you are using the Funkwhale API in your project or app and want to know more about the limits, please consult https://docs.funkwhale.audio/swagger/.
 
-Broken audio streaming when using S3/Minio and DSub [manual action required]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Broken audio streaming when using S3/Minio and DSub [manual action required]
 
 Some Subsonic clients, such as DSub, are sending an Authorization headers which was forwarded
 to the S3 storage when streaming, causing some issues. If you are using S3 or a compatible storage
-such as Minio, please add the following in your nginx ``~ /_protected/media/(.+)`` location::
+such as Minio, please add the following in your nginx `~ /_protected/media/(.+)` location:
 
-    # Needed to ensure DSub auth isn't forwarded to S3/Minio, see #932
-    proxy_set_header Authorization "";
+```nginx
+# Needed to ensure DSub auth isn't forwarded to S3/Minio, see #932
+proxy_set_header Authorization "";
+```
 
 And reload your nginx process.
 
-Detail
-^^^^^^
+### Detail
 
 Features:
 
@@ -717,7 +690,6 @@ Features:
 - Redesign of the landing and about pages (#872)
 - Support for genres, via tags (#432)
 - Users can now delete their account without admin intervention (#852)
-
 
 Enhancements:
 
@@ -747,7 +719,6 @@ Enhancements:
 - Add dropdown menu to track table (#531)
 - Display placeholder on homepage when there are no playlists (#892)
 - Make album cards height independent (#710)
-
 
 Bugfixes:
 
@@ -798,9 +769,7 @@ Contributors to this release (translation, development, documentation, reviews, 
 - Xaloc
 - Xosé M
 
-
-0.19.1 (2019-06-28)
--------------------
+## 0.19.1 (2019-06-28)
 
 Upgrade instructions are available at
 https://docs.funkwhale.audio/administrator/upgrade/index.html
@@ -818,7 +787,6 @@ Enhancements:
 - Clicking on the currently selected playlist in the Playlist popup will now close the popup (#807)
 - Favorites radio will not be visible if the user does not have any favorites (#419)
 
-
 Bugfixes:
 
 - Ensure empty but optional fields in file metadata don't error during import (#850)
@@ -833,7 +801,6 @@ Bugfixes:
 - Hide pod statistics on about page if those are disabled (#835)
 - Use ASCII filename before upload to S3 to avoid playback issues (#847)
 
-
 Contributors to this release (committers and reviewers):
 
 - Ciarán Ainsworth
@@ -847,16 +814,12 @@ Contributors to this release (committers and reviewers):
 - Mehdi
 - Reg
 
-
-0.19.0 (2019-05-16)
--------------------
+## 0.19.0 (2019-05-16)
 
 Upgrade instructions are available at
 https://docs.funkwhale.audio/administrator/upgrade/index.html
 
-
-Edits on tracks, albums and artists
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Edits on tracks, albums and artists
 
 Funkwhale was a bit annoying when it camed to metadata. Tracks, albums and artists profiles
 were created from audio file tags, but basically immutable after that (unless you had
@@ -873,8 +836,7 @@ Not all fields are currently modifiable using this feature. Especially, it's not
 to suggest a new album cover, or reassign a track to a different album or artist. Those will
 be implemented in a future release.
 
-Admin UI for tracks, albums, artists, libraries and uploads
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Admin UI for tracks, albums, artists, libraries and uploads
 
 As part of our ongoing effort to make Funkwhale easier to manage for instance owners,
 this release includes a brand new administration interface to deal with:
@@ -889,8 +851,7 @@ You can use this UI to quickly search for any object, delete objects in batch, u
 where they are coming from etc. This new UI should remove the need to go through Django's
 admin in the vast majority of cases (but also includes a link to Django's admin when needed).
 
-Artist hiding in the interface
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Artist hiding in the interface
 
 It's now possible for users to hide artists they don't want to see.
 
@@ -904,8 +865,7 @@ Content linked to hidden artists will not show up in the interface anymore. Espe
 
 Results linked to hidden artists will continue to show up in search results and their profile page remains accessible.
 
-OAuth2 authorization for better integration with third-party apps
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### OAuth2 authorization for better integration with third-party apps
 
 Funkwhale now support the OAuth2 authorization and authentication protocol which will allow
 third-party apps to interact with Funkwhale on behalf of users.
@@ -918,8 +878,7 @@ enabled in a future release).
 If you want to start building an app on top of Funkwhale's API, please check-out
 https://docs.funkwhale.audio/api.html and https://docs.funkwhale.audio/developers/authentication.html.
 
-Better error handling and display during import
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Better error handling and display during import
 
 Funkwhale should now be more resilient to missing tags in imported files, and give
 you more insights when something goes wrong, including the specific tags that were missing
@@ -927,8 +886,7 @@ or invalid, and additional debug information to share in your support requests.
 
 This information is available in all pages that list uploads, when clicking on the button next to the upload status.
 
-Support for S3-compatible storages to store media files
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Support for S3-compatible storages to store media files
 
 Storing all media files on the Funkwhale server itself may not be possible or desirable
 in all scenarios. You can now configure Funkwhale to store those files in a S3
@@ -937,27 +895,22 @@ bucket instead.
 Check-out https://docs.funkwhale.audio/admin/external-storages.html if you want to use
 this feature.
 
-Prune library command
-^^^^^^^^^^^^^^^^^^^^^
+### Prune library command
 
 Users are often surprised by Funkwhale's tendency to keep track, album and artist
 metadata even if no associated files exist.
 
-To help with that, we now offer a ``prune_library`` management command you can run
-to purge your database from obsolete entries. `Please refer to our documentation
-for usage instructions <https://docs.funkwhale.audio/admin/commands.html#pruning-library>`__.
+To help with that, we now offer a `prune_library` management command you can run
+to purge your database from obsolete entries. [Please refer to our documentation for usage instructions](https://docs.funkwhale.audio/admin/commands.html#pruning-library).
 
-Check in-place files command
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Check in-place files command
 
 When using in-place import with a living audio library, you'll quite often rename or
 remove files from the file system. Unfortunately, Funkwhale keeps a reference to those
 files in the database, which results in unplayable tracks.
 
-To help with that, we now offer a ``check_inplace_files`` management command you can run
-to purge your database from obsolete files. `Please refer to our documentation
-for usage instructions <https://docs.funkwhale.audio/admin/commands.html#remove-obsolete-files-from-database>`__.
-
+To help with that, we now offer a `check_inplace_files` management command you can run
+to purge your database from obsolete files. [Please refer to our documentation for usage instructions](https://docs.funkwhale.audio/admin/commands.html#remove-obsolete-files-from-database).
 
 Features:
 
@@ -971,7 +924,6 @@ Features:
 - Support OAuth2 authorization for better integration with third-party apps (#752)
 - Support S3-compatible storages for media files (#565)
 
-
 Enhancements:
 
 - [Experimental] Added a new "Similar" radio based on users history (suggested by @gordon)
@@ -980,13 +932,14 @@ Enhancements:
 - Added a prune_library management command to remove obsolete metadata from the database (#777)
 - Added admin options to disable login for users, ensure related content is deleted when deleting a user account (#809)
 - Added standardized translation context for all strings in the frontend to give accurate hints to translators.
-- Added twitter:* meta tags to detect tracks and albums players automatically on more sites (#578)
+- Added twitter:\* meta tags to detect tracks and albums players automatically on more sites (#578)
   Improved responsiveness of embedded player
 - Advertise the list of supported upload extensions in the Nodeinfo endpoint (#808)
 - Better handling of follow/accept messages to avoid and recover from desync between instances (#830)
 - Better workflow for connecting to another instance (#715)
 
   Changing the instance used is now better integrated in the App, and it is checked that the chosen instance and the suggested instances are valid and running Funkwhale servers.
+
 - Bumped dependencies to latest versions (#815)
 - Descriptions will now be shown underneath user libraries (#768)
 - Don't store unhandled ActivityPub messages in database (#776)
@@ -1005,7 +958,6 @@ Enhancements:
 - The buttons displaying an icon now always show a little divider between the icon and the text. (!620)
 - Use attributedTo instead of actor in library ActivityPub payload (#619)
 - Use network/depends_on instead of links in docker-compose.yml (!716)
-
 
 Bugfixes:
 
@@ -1031,7 +983,6 @@ Bugfixes:
 - Prevent skipping on file import if album_mbid is different (#772)
 - Use proper site name/domain in emails (#806)
 - Width of filter menus for radios has been set to stop text from overlapping the borders
-
 
 Documentation:
 
@@ -1068,25 +1019,21 @@ Contributors to this release (committers and translators):
 - Von
 - Zach Halasz
 
-0.18.3 (2019-03-21)
--------------------
+## 0.18.3 (2019-03-21)
 
 Upgrade instructions are available at
 https://docs.funkwhale.audio/administrator/upgrade/index.html
 
+### Avoid mixed content when deploying mono-container behind proxy [Manual action required]
 
-Avoid mixed content when deploying mono-container behind proxy [Manual action required]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_You are only concerned if you use the mono-container docker deployment behind a reverse proxy_
 
-*You are only concerned if you use the mono-container docker deployment behind a reverse proxy*
-
-Because of `an issue in our mono-container configuration <https://github.com/thetarkus/docker-funkwhale/issues/19>`_, users deploying Funkwhale via docker
+Because of [an issue in our mono-container configuration](https://github.com/thetarkus/docker-funkwhale/issues/19), users deploying Funkwhale via docker
 using our `funkwhale/all-in-one` image could face some mixed content warnings (and possibly other troubles)
 when browsing the Web UI.
 
-This is fixed in this release, but on existing deployments, you'll need to add ``NESTED_PROXY=1`` in your container
-environment (either in your ``.env`` file, or via your container management tool), then recreate your funkwhale container.
-
+This is fixed in this release, but on existing deployments, you'll need to add `NESTED_PROXY=1` in your container
+environment (either in your `.env` file, or via your container management tool), then recreate your funkwhale container.
 
 Enhancements:
 
@@ -1094,7 +1041,6 @@ Enhancements:
 - Ask for confirmation before leaving upload page if there is a an upload in process (#630)
 - Exclude in-place imported files from quota computation (#570)
 - Truncate filename in library file table to ensure correct display of the table. (#735)
-
 
 Bugfixes:
 
@@ -1112,15 +1058,12 @@ Bugfixes:
 - Include disc number in Subsonic responses (#765)
 - Do not send notification when rejecting a follow on a local library (#743)
 
-
 Documentation:
 
 - Added documentation on mono-container docker upgrade (#713)
 - Added documentation to set up let's encrypt certificate (#745)
 
-
-0.18.2 (2019-02-13)
--------------------
+## 0.18.2 (2019-02-13)
 
 Upgrade instructions are available at
 https://docs.funkwhale.audio/administrator/upgrade/index.html
@@ -1131,7 +1074,6 @@ Enhancements:
   IDs after deployments (#706)
 - Can now use a local file with FUNKWHALE_SPA_HTML_ROOT to avoid sending an HTTP request (#705)
 
-
 Bugfixes:
 
 - Downgraded channels dependency to 2.1.6 to fix denied uploads (#697)
@@ -1139,16 +1081,12 @@ Bugfixes:
 - Fixed Embed component name that could lead to issue when developing on OSX (#696)
 - Fixed resizing issues for album cards on artist pages (#694)
 
-
-0.18.1 (2019-01-29)
--------------------
+## 0.18.1 (2019-01-29)
 
 Upgrade instructions are available at
 https://docs.funkwhale.audio/administrator/upgrade/index.html
 
-
-Fix Gzip compression to avoid BREACH exploit [security] [manual action required]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Fix Gzip compression to avoid BREACH exploit [security] [manual action required]
 
 In the 0.18 release, we've enabled Gzip compression by default for various
 content types, including HTML and JSON. Unfortunately, enabling Gzip compression
@@ -1157,74 +1095,82 @@ on such content types could make BREACH-type exploits possible.
 We've removed the risky content-types from our nginx template files, to ensure new
 instances are safe, however, if you already have an instance, you need
 to double check that your host nginx virtualhost do not include the following
-values for the ``gzip_types`` settings::
+values for the `gzip_types` settings:
 
-   application/atom+xml
-   application/json
-   application/ld+json
-   application/activity+json
-   application/manifest+json
-   application/rss+xml
-   application/xhtml+xml
-   application/xml
+```
+application/atom+xml
+application/json
+application/ld+json
+application/activity+json
+application/manifest+json
+application/rss+xml
+application/xhtml+xml
+application/xml
+```
 
-For convenience, you can also replace the whole setting with the following snippet::
+For convenience, you can also replace the whole setting with the following snippet:
 
-   gzip_types
-      application/javascript
-      application/vnd.geo+json
-      application/vnd.ms-fontobject
-      application/x-font-ttf
-      application/x-web-app-manifest+json
-      font/opentype
-      image/bmp
-      image/svg+xml
-      image/x-icon
-      text/cache-manifest
-      text/css
-      text/plain
-      text/vcard
-      text/vnd.rim.location.xloc
-      text/vtt
-      text/x-component
-      text/x-cross-domain-policy;
+```
+gzip_types
+application/javascript
+application/vnd.geo+json
+application/vnd.ms-fontobject
+application/x-font-ttf
+application/x-web-app-manifest+json
+font/opentype
+image/bmp
+image/svg+xml
+image/x-icon
+text/cache-manifest
+text/css
+text/plain
+text/vcard
+text/vnd.rim.location.xloc
+text/vtt
+text/x-component
+text/x-cross-domain-policy;
+```
 
 Many thanks to @jibec for the report!
 
-Fix Apache configuration file for 0.18 [manual action required]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Fix Apache configuration file for 0.18 [manual action required]
 
 The way front is served has changed since 0.18. The Apache configuration can't serve 0.18 properly, leading to blank screens.
 
-If you are on an Apache setup, you will have to replace the `<Location "/api">` block with the following::
+If you are on an Apache setup, you will have to replace the `<Location "/api">` block with the following:
 
-   <Location "/">
-      # similar to nginx 'client_max_body_size 100M;'
-      LimitRequestBody 104857600
+```apache
+<Location "/">
+  # similar to nginx 'client_max_body_size 100M;'
+  LimitRequestBody 104857600
 
-      ProxyPass ${funkwhale-api}/
-      ProxyPassReverse ${funkwhale-api}/
-   </Location>
+  ProxyPass ${funkwhale-api}/
+  ProxyPassReverse ${funkwhale-api}/
+</Location>
+```
 
-And add some more `ProxyPass` directives so that the `Alias` part of your configuration file looks this way::
+And add some more `ProxyPass` directives so that the `Alias` part of your configuration file looks this way:
 
-   ProxyPass "/front" "!"
-   Alias /front /srv/funkwhale/front/dist
+```apache
+  ProxyPass "/front" "!"
+  Alias /front /srv/funkwhale/front/dist
 
-   ProxyPass "/media" "!"
-   Alias /media /srv/funkwhale/data/media
+  ProxyPass "/media" "!"
+  Alias /media /srv/funkwhale/data/media
 
-   ProxyPass "/staticfiles" "!"
-   Alias /staticfiles /srv/funkwhale/data/static
+  ProxyPass "/staticfiles" "!"
+  Alias /staticfiles /srv/funkwhale/data/static
+```
 
-In case you are using custom css and theming, you also need to match this block::
+In case you are using custom css and theming, you also need to match this block:
 
-   ProxyPass "/settings.json" "!"
-   Alias /settings.json /srv/funkwhale/custom/settings.json
+```apache2
+  ProxyPass "/settings.json" "!"
+  Alias /settings.json /srv/funkwhale/custom/settings.json
 
-   ProxyPass "/custom" "!"
-   Alias /custom /srv/funkwhale/custom
-
+  ProxyPass "/custom" "!"
+  Alias /custom /srv/funkwhale/custom
+```
 
 Enhancements:
 
@@ -1234,7 +1180,6 @@ Enhancements:
 - Hide pagination when there is only one page of results (#681)
 - Include shared/public playlists in Subsonic API responses (#684)
 - Use proper locale for date-related/duration strings (#670)
-
 
 Bugfixes:
 
@@ -1249,14 +1194,11 @@ Bugfixes:
 - Removed potential BREACH exploit because of Gzip compression (#678)
 - Upgraded kombu to fix an incompatibility with redis>=3
 
-
 Documentation:
 
 - Added user upload documentation at https://docs.funkwhale.audio/users/upload.html
 
-
-0.18 "Naomi" (2019-01-22)
--------------------------
+## 0.18 "Naomi" (2019-01-22)
 
 This release is dedicated to Naomi, an early contributor and beta tester of Funkwhale.
 Her positivity, love and support have been incredibly helpful and helped shape the project
@@ -1267,12 +1209,11 @@ bug hunters, admins and backers. You made it possible!
 
 Upgrade instructions are available at
 https://docs.funkwhale.audio/administrator/upgrade/index.html, ensure you also execute the instructions
-marked with ``[manual action required]`` and ``[manual action suggested]``.
+marked with `[manual action required]` and `[manual action suggested]`.
 
-See ``Full changelog`` below for an exhaustive list of changes!
+See `Full changelog` below for an exhaustive list of changes!
 
-Audio transcoding is back!
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Audio transcoding is back!
 
 After removal of our first, buggy transcoding implementation, we're proud to announce
 that this feature is back. It is enabled by default, and can be configured/disabled
@@ -1282,9 +1223,7 @@ This feature works in the browser, with federated/non-federated tracks and using
 Transcoded tracks are generated on the fly, and cached for a configurable amount of time,
 to reduce the load on the server.
 
-
-Licensing and copyright information
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Licensing and copyright information
 
 Funkwhale is now able to parse copyright and license data from file and store
 this information. Apart from displaying it on each track detail page,
@@ -1293,8 +1232,8 @@ will change in future releases.
 
 License and copyright data is also broadcasted over federation.
 
-License matching is done on the content of the ``License`` tag in the files,
-with a fallback on the ``Copyright`` tag.
+License matching is done on the content of the `License` tag in the files,
+with a fallback on the `Copyright` tag.
 
 Funkwhale will successfully extract licensing data for the following licenses:
 
@@ -1307,9 +1246,7 @@ Funkwhale will successfully extract licensing data for the following licenses:
 
 Support for other licenses such as Art Libre or WTFPL will be added in future releases.
 
-
-Instance-level moderation tools
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Instance-level moderation tools
 
 This release includes a first set of moderation tools that will give more control
 to admins about the way their instance federates with other instance and accounts on the network.
@@ -1325,9 +1262,7 @@ you can appoint one or multiple moderators to help with this task.
 I'd like to thank all Mastodon contributors, because some of the these tools are heavily
 inspired from what's being done in Mastodon. Thank you so much!
 
-
-Iframe widget to embed public tracks and albums [manual action required]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Iframe widget to embed public tracks and albums [manual action required]
 
 Funkwhale now supports embedding a lightweight audio player on external websites
 for album and tracks that are available in public libraries. Important pages,
@@ -1338,44 +1273,45 @@ or Twitter).
 To achieve that, we had to tweak the way Funkwhale front-end is served. You'll have
 to modify your nginx configuration when upgrading to keep your instance working.
 
-**On docker setups**, edit your ``/srv/funkwhale/nginx/funkwhale.template`` and replace
-the ``location /api/`` and `location /` blocks by the following snippets::
+**On docker setups**, edit your `/srv/funkwhale/nginx/funkwhale.template` and replace
+the `location /api/` and `location /` blocks by the following snippets:
 
-    location / {
-        include /etc/nginx/funkwhale_proxy.conf;
-        # this is needed if you have file import via upload enabled
-        client_max_body_size ${NGINX_MAX_BODY_SIZE};
-        proxy_pass   http://funkwhale-api/;
-    }
+```nginx
+location / {
+    include /etc/nginx/funkwhale_proxy.conf;
+    # this is needed if you have file import via upload enabled
+    client_max_body_size ${NGINX_MAX_BODY_SIZE};
+    proxy_pass   http://funkwhale-api/;
+}
 
-    location /front/ {
-        alias /frontend/;
-    }
+location /front/ {
+    alias /frontend/;
+}
+```
 
 The change of configuration will be picked when restarting your nginx container.
 
-**On non-docker setups**, edit your ``/etc/nginx/sites-available/funkwhale.conf`` file,
-and replace the ``location /api/`` and `location /` blocks by the following snippets::
+**On non-docker setups**, edit your `/etc/nginx/sites-available/funkwhale.conf` file,
+and replace the `location /api/` and `location /` blocks by the following snippets:
 
+```nginx
+location / {
+    include /etc/nginx/funkwhale_proxy.conf;
+    # this is needed if you have file import via upload enabled
+    client_max_body_size ${NGINX_MAX_BODY_SIZE};
+    proxy_pass   http://funkwhale-api/;
+}
 
-    location / {
-        include /etc/nginx/funkwhale_proxy.conf;
-        # this is needed if you have file import via upload enabled
-        client_max_body_size ${NGINX_MAX_BODY_SIZE};
-        proxy_pass   http://funkwhale-api/;
-    }
+location /front/ {
+    alias ${FUNKWHALE_FRONTEND_PATH}/;
+}
+```
 
-    location /front/ {
-        alias ${FUNKWHALE_FRONTEND_PATH}/;
-    }
+Replace `${FUNKWHALE_FRONTEND_PATH}` by the corresponding variable from your .env file,
+which should be `/srv/funkwhale/front/dist` by default, then reload your nginx process with
+`sudo systemctl reload nginx`.
 
-Replace ``${FUNKWHALE_FRONTEND_PATH}`` by the corresponding variable from your .env file,
-which should be ``/srv/funkwhale/front/dist`` by default, then reload your nginx process with
-``sudo systemctl reload nginx``.
-
-
-Alternative docker deployment method
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Alternative docker deployment method
 
 Thanks to the awesome work done by @thetarkus at https://github.com/thetarkus/docker-funkwhale,
 we're now able to provide an alternative and easier Docker deployment method!
@@ -1386,76 +1322,76 @@ all Funkwhale processes and services (database, redis, etc.) into a single, easi
 Both methods will coexist in parallel, as each one has pros and cons. You can learn more
 about this exciting new deployment option by visiting https://docs.funkwhale.audio/installation/docker.html!
 
-Automatically load .env file
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Automatically load .env file
 
 On non-docker deployments, earlier versions required you to source
-the config/.env file before launching any Funkwhale command, with ``export $(cat config/.env | grep -v ^# | xargs)``
+the config/.env file before launching any Funkwhale command, with `export $(cat config/.env | grep -v ^# | xargs)`
 This led to more complex and error prone deployment / setup.
 
 This is not the case anymore, and Funkwhale will automatically load this file if it's available.
 
-
-Delete pre 0.17 federated tracks [manual action suggested]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Delete pre 0.17 federated tracks [manual action suggested]
 
 If you were using Funkwhale before the 0.17 release and federated with other instances,
 it's possible that you still have some unplayable federated files in the database.
 
 To purge the database of those entries, you can run the following command:
 
-On docker setups::
+On docker setups:
 
-    docker-compose run --rm api python manage.py script delete_pre_017_federated_uploads --no-input
+```sh
+docker-compose run --rm api python manage.py script delete_pre_017_federated_uploads --no-input
+```
 
-On non-docker setups::
+On non-docker setups:
 
-    python manage.py script delete_pre_017_federated_uploads --no-input
+```sh
+python manage.py script delete_pre_017_federated_uploads --no-input
+```
 
-
-Enable gzip compression [manual action suggested]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Enable gzip compression [manual action suggested]
 
 Gzip compression will be enabled on new instances by default
 and will reduce the amount of bandwidth consumed by your instance.
 
 If you want to benefit from gzip compression on your instance,
-edit your reverse proxy virtualhost file (located at ``/etc/nginx/sites-available/funkwhale.conf``) and add the following snippet
-in the server block, then reload your nginx server::
+edit your reverse proxy virtualhost file (located at `/etc/nginx/sites-available/funkwhale.conf`) and add the following snippet
+in the server block, then reload your nginx server:
 
-    server {
-        # ... exiting configuration
+```nginx
+server {
+    # ...
 
-        # compression settings
-        gzip on;
-        gzip_comp_level    5;
-        gzip_min_length    256;
-        gzip_proxied       any;
-        gzip_vary          on;
+    # compression settings
+    gzip on;
+    gzip_comp_level    5;
+    gzip_min_length    256;
+    gzip_proxied       any;
+    gzip_vary          on;
 
-        gzip_types
-            application/javascript
-            application/vnd.geo+json
-            application/vnd.ms-fontobject
-            application/x-font-ttf
-            application/x-web-app-manifest+json
-            font/opentype
-            image/bmp
-            image/svg+xml
-            image/x-icon
-            text/cache-manifest
-            text/css
-            text/plain
-            text/vcard
-            text/vnd.rim.location.xloc
-            text/vtt
-            text/x-component
-            text/x-cross-domain-policy;
-        # end of compression settings
-    }
+    gzip_types
+        application/javascript
+        application/vnd.geo+json
+        application/vnd.ms-fontobject
+        application/x-font-ttf
+        application/x-web-app-manifest+json
+        font/opentype
+        image/bmp
+        image/svg+xml
+        image/x-icon
+        text/cache-manifest
+        text/css
+        text/plain
+        text/vcard
+        text/vnd.rim.location.xloc
+        text/vtt
+        text/x-component
+        text/x-cross-domain-policy;
+    # end of compression settings
+}
+```
 
-Full changelog
-^^^^^^^^^^^^^^
+### Full changelog
 
 Features:
 
@@ -1463,7 +1399,6 @@ Features:
 - Audio transcoding is back! (#272)
 - First set of instance level moderation tools (#580, !521)
 - Store licensing and copyright information from file metadata, if available (#308)
-
 
 Enhancements:
 
@@ -1502,7 +1437,6 @@ Enhancements:
 - Updated lots of dependencies (especially django 2.0->2.1), and removed unused dependencies (#657)
 - Improved test suite speed by reducing / disabling expensive operations (#648)
 
-
 Bugfixes:
 
 - Fixed parsing of embedded file cover for ogg files tagged with MusicBrainz (#469)
@@ -1533,31 +1467,25 @@ Bugfixes:
 - Refresh profile after user settings update to avoid cache issues (#606)
 - Use role=button instead of empty links for player controls (#610)
 
-
 Documentation:
 
 - Deploy documentation from the master branch instead of the develop branch to avoid inconsistencies (#642)
 - Document how to find and use library id when importing files in CLI (#562)
 - Fix documentation typos (#645)
 
+## 0.17 (2018-10-07)
 
-0.17 (2018-10-07)
------------------
-
-Per user libraries
-^^^^^^^^^^^^^^^^^^
+### Per user libraries
 
 This release contains a big change in music management. This has a lot of impact
 on how Funkwhale behaves, and you should have a look at
 https://docs.funkwhale.audio/upgrading/0.17.html for information
 about what changed and how to migrate.
 
-
 Features:
 
 - Per user libraries (#463, also fixes #160 and #147)
 - Authentication using a LDAP directory (#194)
-
 
 Enhancements:
 
@@ -1583,19 +1511,15 @@ Bugfixes:
 - Set sane width default for ui cards and center play button (#530)
 - Updated wrong icon and copy in play button dropdown (#436)
 
-
 Documentation:
 
 - Fixed wrong URLs for docker / nginx files in documentation (#537)
-
 
 Other:
 
 - Added a merge request template and more documentation about the changelog
 
-
-Using a LDAP directory to authenticate to your Funkwhale instance
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Using a LDAP directory to authenticate to your Funkwhale instance
 
 Funkwhale now support LDAP as an authentication source: you can configure
 your instance to delegate login to a LDAP directory, which is especially
@@ -1607,9 +1531,7 @@ You can use this authentication backend side by side with the classic one.
 Have a look at https://docs.funkwhale.audio/installation/ldap.html
 for detailed instructions on how to set this up.
 
-
-Simplified nginx setup [Docker: Manual action required]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Simplified nginx setup [Docker: Manual action required]
 
 We've received a lot of user feedback regarding our installation process,
 and it seems the proxy part is the one which is the most confusing and difficult.
@@ -1624,119 +1546,129 @@ On non-docker instances, you have nothing to do.
 
 If you have a dockerized instance, here is the upgrade path.
 
-First, tweak your .env file::
+First, tweak your .env file:
 
-    # remove the FUNKWHALE_URL variable
-    # and add the next variables
-    FUNKWHALE_HOSTNAME=yourdomain.funkwhale
-    FUNKWHALE_PROTOCOL=https
+```sh
+# remove the FUNKWHALE_URL variable
+# and add the next variables
+FUNKWHALE_HOSTNAME=yourdomain.funkwhale
+FUNKWHALE_PROTOCOL=https
 
-    # add the following variable, matching the path your app is deployed
-    # leaving the default should work fine if you deployed using the same
-    # paths as the documentation
-    FUNKWHALE_FRONTEND_PATH=/srv/funkwhale/front/dist
+# add the following variable, matching the path your app is deployed
+# leaving the default should work fine if you deployed using the same
+# paths as the documentation
+FUNKWHALE_FRONTEND_PATH=/srv/funkwhale/front/dist
+```
 
-Then, add the following block at the end of your docker-compose.yml file::
+Then, add the following block at the end of your docker-compose.yml file:
 
-    # existing services
-    api:
-        ...
-    celeryworker:
-        ...
+```yaml
+services:
+  # existing services
+  api:
+    # ...
+  celeryworker:
+    # ...
 
-    # new service
-    nginx:
-      image: nginx
-      env_file:
-        - .env
-      environment:
-        # Override those variables in your .env file if needed
-        - "NGINX_MAX_BODY_SIZE=${NGINX_MAX_BODY_SIZE-100M}"
-      volumes:
-        - "./nginx/funkwhale.template:/etc/nginx/conf.d/funkwhale.template:ro"
-        - "./nginx/funkwhale_proxy.conf:/etc/nginx/funkwhale_proxy.conf:ro"
-        - "${MUSIC_DIRECTORY_SERVE_PATH-/srv/funkwhale/data/music}:${MUSIC_DIRECTORY_SERVE_PATH-/srv/funkwhale/data/music}:ro"
-        - "${MEDIA_ROOT}:${MEDIA_ROOT}:ro"
-        - "${STATIC_ROOT}:${STATIC_ROOT}:ro"
-        - "${FUNKWHALE_FRONTEND_PATH}:/frontend:ro"
-      ports:
-        # override those variables in your .env file if needed
-        - "${FUNKWHALE_API_IP}:${FUNKWHALE_API_PORT}:80"
-      command: >
-          sh -c "envsubst \"`env | awk -F = '{printf \" $$%s\", $$1}'`\"
-          < /etc/nginx/conf.d/funkwhale.template
-          > /etc/nginx/conf.d/default.conf
-          && cat /etc/nginx/conf.d/default.conf
-          && nginx -g 'daemon off;'"
-      links:
-        - api
+  # new service
+  nginx:
+    image: nginx
+    env_file:
+      - .env
+    environment:
+      # Override those variables in your .env file if needed
+      - "NGINX_MAX_BODY_SIZE=${NGINX_MAX_BODY_SIZE-100M}"
+    volumes:
+      - "./nginx/funkwhale.template:/etc/nginx/conf.d/funkwhale.template:ro"
+      - "./nginx/funkwhale_proxy.conf:/etc/nginx/funkwhale_proxy.conf:ro"
+      - "${MUSIC_DIRECTORY_SERVE_PATH-/srv/funkwhale/data/music}:${MUSIC_DIRECTORY_SERVE_PATH-/srv/funkwhale/data/music}:ro"
+      - "${MEDIA_ROOT}:${MEDIA_ROOT}:ro"
+      - "${STATIC_ROOT}:${STATIC_ROOT}:ro"
+      - "${FUNKWHALE_FRONTEND_PATH}:/frontend:ro"
+    ports:
+      # override those variables in your .env file if needed
+      - "${FUNKWHALE_API_IP}:${FUNKWHALE_API_PORT}:80"
+    command: >
+      sh -c "envsubst \"`env | awk -F = '{printf \" $$%s\", $$1}'`\"
+      < /etc/nginx/conf.d/funkwhale.template
+      > /etc/nginx/conf.d/default.conf
+      && cat /etc/nginx/conf.d/default.conf
+      && nginx -g 'daemon off;'"
+    links:
+      - api
+```
 
 By doing that, you'll enable a dockerized nginx that will automatically be
 configured to serve your Funkwhale instance.
 
 Download the required configuration files for the nginx container:
 
-.. parsed-literal::
+```{parsed-literal}
+cd /srv/funkwhale
+mkdir nginx
+curl -L -o nginx/funkwhale.template "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/|version|/deploy/docker.nginx.template"
+curl -L -o nginx/funkwhale_proxy.conf "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/|version|/deploy/funkwhale_proxy.conf"
+```
 
-    cd /srv/funkwhale
-    mkdir nginx
-    curl -L -o nginx/funkwhale.template "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/|version|/deploy/docker.nginx.template"
-    curl -L -o nginx/funkwhale_proxy.conf "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/|version|/deploy/funkwhale_proxy.conf"
+Update the funkwhale.conf configuration of your server's reverse-proxy:
 
-Update the funkwhale.conf configuration of your server's reverse-proxy::
+```sh
+# the file should match something like that, upgrade all variables
+# between ${} to match the ones in your .env file,
+# and your SSL configuration if you're not using let's encrypt
+# The important thing is that you only have a single location block
+# that proxies everything to your dockerized nginx.
 
-    # the file should match something like that, upgrade all variables
-    # between ${} to match the ones in your .env file,
-    # and your SSL configuration if you're not using let's encrypt
-    # The important thing is that you only have a single location block
-    # that proxies everything to your dockerized nginx.
+sudo nano /etc/nginx/sites-enabled/funkwhale.conf
+```
 
-    sudo nano /etc/nginx/sites-enabled/funkwhale.conf
-    upstream fw {
-        # depending on your setup, you may want to update this
-        server ${FUNKWHALE_API_IP}:${FUNKWHALE_API_PORT};
+```nginx
+upstream fw {
+    # depending on your setup, you may want to update this
+    server ${FUNKWHALE_API_IP}:${FUNKWHALE_API_PORT};
+}
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    ''      close;
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name ${FUNKWHALE_HOSTNAME};
+    location / { return 301 https://$host$request_uri; }
+}
+server {
+    listen      443 ssl;
+    listen [::]:443 ssl;
+    server_name ${FUNKWHALE_HOSTNAME};
+
+    # TLS
+    ssl_protocols TLSv1.2;
+    ssl_ciphers HIGH:!MEDIUM:!LOW:!aNULL:!NULL:!SHA;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_certificate     /etc/letsencrypt/live/${FUNKWHALE_HOSTNAME}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${FUNKWHALE_HOSTNAME}/privkey.pem;
+
+    # HSTS
+    add_header Strict-Transport-Security "max-age=31536000";
+
+    location / {
+        include /etc/nginx/funkwhale_proxy.conf;
+        proxy_pass   http://fw/;
     }
-    map $http_upgrade $connection_upgrade {
-        default upgrade;
-        ''      close;
-    }
-
-    server {
-        listen 80;
-        listen [::]:80;
-        server_name ${FUNKWHALE_HOSTNAME};
-        location / { return 301 https://$host$request_uri; }
-    }
-    server {
-        listen      443 ssl;
-        listen [::]:443 ssl;
-        server_name ${FUNKWHALE_HOSTNAME};
-
-        # TLS
-        ssl_protocols TLSv1.2;
-        ssl_ciphers HIGH:!MEDIUM:!LOW:!aNULL:!NULL:!SHA;
-        ssl_prefer_server_ciphers on;
-        ssl_session_cache shared:SSL:10m;
-        ssl_certificate     /etc/letsencrypt/live/${FUNKWHALE_HOSTNAME}/fullchain.pem;
-        ssl_certificate_key /etc/letsencrypt/live/${FUNKWHALE_HOSTNAME}/privkey.pem;
-
-        # HSTS
-        add_header Strict-Transport-Security "max-age=31536000";
-
-        location / {
-            include /etc/nginx/funkwhale_proxy.conf;
-            proxy_pass   http://fw/;
-        }
-    }
+}
+```
 
 Check that your configuration is valid then reload:
 
-    sudo nginx -t
-    sudo systemctl reload nginx
+```sh
+sudo nginx -t
+sudo systemctl reload nginx
+```
 
-
-0.16.3 (2018-08-21)
--------------------
+## 0.16.3 (2018-08-21)
 
 Upgrade instructions are available at
 https://docs.funkwhale.audio/upgrading.html
@@ -1745,14 +1677,11 @@ Bugfixes:
 
 - Fixed front-end not contacting the proper path on the API (!385)
 
+## 0.16.2 (2018-08-21)
 
-0.16.2 (2018-08-21)
--------------------
-
-.. warning::
-
-  **This release is broken, do not use it. Upgrade to 0.16.3 or higher instead.**
-
+```{warning}
+**This release is broken, do not use it. Upgrade to 0.16.3 or higher instead.**
+```
 
 Upgrade instructions are available at
 https://docs.funkwhale.audio/upgrading.html
@@ -1764,9 +1693,7 @@ Bugfixes:
 - Fixed CLI importer syntax error because of async reserved keyword usage
   (#494)
 
-
-0.16.1 (2018-08-19)
--------------------
+## 0.16.1 (2018-08-19)
 
 Upgrade instructions are available at
 https://docs.funkwhale.audio/upgrading.html
@@ -1783,7 +1710,6 @@ Enhancements:
 - More permissive default permissions for front-end files (#388)
 - Simpler configuration and toolchain for the front-end using vue-cli (!375)
 - Use Howler to manage audio instead of our own dirty/untested code (#392)
-
 
 Bugfixes:
 
@@ -1808,40 +1734,39 @@ Bugfixes:
 - Smarter date parsing during import by replacing arrow with pendulum (#376)
 - Display public playlists properly for anonymous users (#488)
 
-
 i18n:
 
 - Added portuguese, spanish and german translations
 
-
-Custom themes for Funkwhale
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Custom themes for Funkwhale
 
 If you ever wanted to give a custom look and feel to your instance, this is now possible.
 
 Check https://docs.funkwhale.audio/configuration.html#theming if you want to know more!
 
-
-Fix Apache2 configuration file for media block [Manual action required]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Fix Apache2 configuration file for media block [Manual action required]
 
 The permission scope on the current Apache2 configuration file is too narrow, preventing thumbnails from being served.
 
-On Apache2 setups, you have to replace the following line::
+On Apache2 setups, you have to replace the following line:
 
-    <Directory /srv/funkwhale/data/media/albums>
+```apache
+<Directory /srv/funkwhale/data/media/albums>
+```
 
-with::
+with:
 
-    <Directory /srv/funkwhale/data/media>
+```apache
+<Directory /srv/funkwhale/data/media>
+```
 
-You can now restart your server::
+You can now restart your server:
 
-    sudo systemctl restart apache2
+```sh
+sudo systemctl restart apache2
+```
 
-
-0.16 (2018-07-22)
------------------
+## 0.16 (2018-07-22)
 
 Upgrade instructions are available at
 https://docs.funkwhale.audio/upgrading.html
@@ -1855,7 +1780,6 @@ Features:
 - Internationalized interface as well as translations for Arabic, French,
   Esperanto, Italian, Occitan, Polish, Portuguese and Swedish (#161, #167)
 - Users can now upload an avatar in their settings page (#257)
-
 
 Enhancements:
 
@@ -1874,7 +1798,6 @@ Enhancements:
 - The navigation bar of Library is now fixed (#375)
 - Use thumbnails for avatars and covers to reduce bandwidth
 
-
 Bugfixes:
 
 - Ensure 750 permissions on CI artifacts (#332)
@@ -1891,7 +1814,6 @@ Bugfixes:
 - Subsonic API login is now case insensitive (#339)
 - Validate Date header in HTTP Signatures (#328)
 
-
 Documentation:
 
 - Added troubleshotting and technical overview documentation (#256)
@@ -1900,15 +1822,12 @@ Documentation:
 - Fixed a couple of typos
 - Some cosmetic improvements to the doc
 
-
 i18n:
 
 - Arabic translation (!302)
 - Polish translation (!304)
 
-
-Library home and playlist page overhaul
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Library home and playlist page overhaul
 
 The library home page have been completely redesigned to include:
 
@@ -1920,9 +1839,7 @@ what you think about it!
 
 The playlist page have been updated as well.
 
-
-Internationalized interface
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Internationalized interface
 
 After months of work, we're proud to announce our interface is now ready
 for internationalization.
@@ -1932,9 +1849,7 @@ and we're ready to add more as needed.
 
 You can easily get involved at https://translate.funkwhale.audio/engage/funkwhale/
 
-
-Better handling of tracks with a different artist than the album artist
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Better handling of tracks with a different artist than the album artist
 
 Some tracks involve a different artist than the album artist (e.g. a featuring)
 and Funkwhale has been known to do weird things when importing such tracks, resulting
@@ -1943,9 +1858,7 @@ in albums that contained a single track, for instance.
 The situation should be improved with this release, as Funkwhale is now able to
 store separately the track and album artist, and display it properly in the interface.
 
-
-Users now have an ActivityPub Actor [Manual action required]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Users now have an ActivityPub Actor [Manual action required]
 
 In the process of implementing federation for user activity such as listening
 history, we are now making user profiles (a.k.a. ActivityPub actors) available through federation.
@@ -1955,19 +1868,21 @@ This does not means the federation is working, but this is a needed step to impl
 Those profiles will be created automatically for new users, but you have to run a command
 to create them for existing users.
 
-On docker setups::
+On docker setups:
 
-    docker-compose run --rm api python manage.py script create_actors --no-input
+```sh
+docker-compose run --rm api python manage.py script create_actors --no-input
+```
 
-On non-docker setups::
+On non-docker setups:
 
-    python manage.py script create_actors --no-input
+```sh
+python manage.py script create_actors --no-input
+```
 
 This should only take a few seconds to run. It is safe to interrupt the process or rerun it multiple times.
 
-
-Image thumbnails [Manual action required]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Image thumbnails [Manual action required]
 
 To reduce bandwidth usage on slow or limited connexions and improve performance
 in general, we now use smaller images in the front-end. For instance, if you have
@@ -1978,20 +1893,22 @@ when we don't actually need the original image.
 Thumbnail will be created automatically for new objects, however, you have
 to launch a manual command to deal with existing ones.
 
-On docker setups::
+On docker setups:
 
-    docker-compose run --rm api python manage.py script create_image_variations --no-input
+```sh
+docker-compose run --rm api python manage.py script create_image_variations --no-input
+```
 
-On non-docker setups::
+On non-docker setups:
 
-    python manage.py script create_image_variations --no-input
+```sh
+python manage.py script create_image_variations --no-input
+```
 
 This should be quite fast but may take up to a few minutes depending on the number
 of albums you have in database. It is safe to interrupt the process or rerun it multiple times.
 
-
-Improved search on federated tracks list
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Improved search on federated tracks list
 
 Having a powerful but easy-to-use search is important but difficult to achieve, especially
 if you do not want to have a real complex search interface.
@@ -2004,15 +1921,13 @@ tracks list (/manage/federation/tracks) at the moment, but depending on feedback
 
 This is the type of query you can run:
 
-- ``hello world``: search for "hello" and "world" in all the available fields
-- ``hello in:artist`` search for results where artist name is "hello"
-- ``spring in:artist,album`` search for results where artist name or album title contain "spring"
-- ``artist:hello`` search for results where artist name equals "hello"
-- ``artist:"System of a Down" domain:instance.funkwhale`` search for results where artist name equals "System of a Down" and inside "instance.funkwhale" library
+- `hello world`: search for "hello" and "world" in all the available fields
+- `hello in:artist` search for results where artist name is "hello"
+- `spring in:artist,album` search for results where artist name or album title contain "spring"
+- `artist:hello` search for results where artist name equals "hello"
+- `artist:"System of a Down" domain:instance.funkwhale` search for results where artist name equals "System of a Down" and inside "instance.funkwhale" library
 
-
-Ensure MEDIA_ROOT, STATIC_ROOT and MUSIC_DIRECTORY_* are set explicitly [Manual action required]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Ensure `MEDIA_ROOT`, `STATIC_ROOT` and `MUSIC_DIRECTORY_*` are set explicitly [Manual action required]
 
 In our default .env file, MEDIA_ROOT and STATIC_ROOT were commented by default, causing
 some deployment issues on non-docker setups when people forgot to uncomment them.
@@ -2026,55 +1941,54 @@ This also applies to in-place paths (MUSIC_DIRECTORY_PATH and MUSIC_DIRECTORY_SE
 whose values are now used directly to set up the proper Docker volumes.
 
 This will only affect new deployments though. If you want to benefit from this on an
-existing instance, do a backup of your ``.env`` and ``docker-compose.yml`` files and apply the following changes:
+existing instance, do a backup of your `.env` and `docker-compose.yml` files and apply the following changes:
 
-- Ensure ``MEDIA_ROOT`` is uncommented in your .env file and match the absolute path where media files are stored
-  on your host (``/srv/funkwhale/data/media`` by default)
-- Ensure ``STATIC_ROOT`` is uncommented in your .env file and match the absolute path where static files are stored
-  on your host (``/srv/funkwhale/data/static`` by default)
+- Ensure `MEDIA_ROOT` is uncommented in your .env file and match the absolute path where media files are stored
+  on your host (`/srv/funkwhale/data/media` by default)
+- Ensure `STATIC_ROOT` is uncommented in your .env file and match the absolute path where static files are stored
+  on your host (`/srv/funkwhale/data/static` by default)
 - If you use in-place import:
-    - Ensure MUSIC_DIRECTORY_PATH is uncommented and set to ``/music``
-    - Ensure MUSIC_DIRECTORY_SERVE_PATH is uncommented and set to the absolute path on your host were your music files
-      are stored (``/srv/funkwhale/data/music`` by default)
+  - Ensure MUSIC_DIRECTORY_PATH is uncommented and set to `/music`
+  - Ensure MUSIC_DIRECTORY_SERVE_PATH is uncommented and set to the absolute path on your host were your music files
+    are stored (`/srv/funkwhale/data/music` by default)
 - Edit your docker-compose.yml file to reflect the changes:
-    - Search for volumes (there should be two occurrences) that contains ``/app/funkwhale_api/media`` on the right side, and
-      replace the whole line with ``- "${MEDIA_ROOT}:${MEDIA_ROOT}"``
-    - Search for a volume that contains ``/app/staticfiles`` on the right side, and
-      replace the whole line with ``- "${STATIC_ROOT}:${STATIC_ROOT}"``
-    - If you use in-place import, search for volumes (there should be two occurrences) that contains ``/music:ro`` on the right side, and
-      replace the whole line with ``- "${MUSIC_DIRECTORY_SERVE_PATH}:${MUSIC_DIRECTORY_PATH}:ro"``
+  - Search for volumes (there should be two occurrences) that contains `/app/funkwhale_api/media` on the right side, and
+    replace the whole line with `- "${MEDIA_ROOT}:${MEDIA_ROOT}"`
+  - Search for a volume that contains `/app/staticfiles` on the right side, and
+    replace the whole line with `- "${STATIC_ROOT}:${STATIC_ROOT}"`
+  - If you use in-place import, search for volumes (there should be two occurrences) that contains `/music:ro` on the right side, and
+    replace the whole line with `- "${MUSIC_DIRECTORY_SERVE_PATH}:${MUSIC_DIRECTORY_PATH}:ro"`
 
-In the end, the ``volumes`` directives of your containers should look like that::
+In the end, the `volumes` directives of your containers should look like that:
 
-    ...
-    celeryworker
-      volumes:
-        - "${MUSIC_DIRECTORY_SERVE_PATH}:${MUSIC_DIRECTORY_PATH}:ro"
-        - "${MEDIA_ROOT}:${MEDIA_ROOT}"
-    ...
-    api:
-      volumes:
-        - "${MUSIC_DIRECTORY_SERVE_PATH}:${MUSIC_DIRECTORY_PATH}:ro"
-        - "${MEDIA_ROOT}:${MEDIA_ROOT}"
-        - "${STATIC_ROOT}:${STATIC_ROOT}"
-        - ./front/dist:/frontend
-    ...
+```yaml
+services:
+  # ...
+  celeryworker:
+    volumes:
+      - "${MUSIC_DIRECTORY_SERVE_PATH}:${MUSIC_DIRECTORY_PATH}:ro"
+      - "${MEDIA_ROOT}:${MEDIA_ROOT}"
+  # ...
+  api:
+    volumes:
+      - "${MUSIC_DIRECTORY_SERVE_PATH}:${MUSIC_DIRECTORY_PATH}:ro"
+      - "${MEDIA_ROOT}:${MEDIA_ROOT}"
+      - "${STATIC_ROOT}:${STATIC_ROOT}"
+      - ./front/dist:/frontend
+  # ...
+```
 
-
-Removed Cacheops dependency
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Removed Cacheops dependency
 
 We removed one of our dependency named django-cacheops. It was unly used in a few places,
 and not playing nice with other dependencies.
 
-You can safely remove this dependency in your environment with ``pip uninstall django-cacheops`` if you're
+You can safely remove this dependency in your environment with `pip uninstall django-cacheops` if you're
 not using docker.
 
-You can also safely remove any ``CACHEOPS_ENABLED`` setting from your environment file.
+You can also safely remove any `CACHEOPS_ENABLED` setting from your environment file.
 
-
-0.15 (2018-06-24)
------------------
+## 0.15 (2018-06-24)
 
 Upgrade instructions are available at
 https://docs.funkwhale.audio/upgrading.html
@@ -2089,12 +2003,10 @@ Features:
 - Management interface for users (#212)
 - New invite system (#248) New invite system
 
-
 Enhancements:
 
 - Added "TV" to the list of highlighted words during YouTube import (#154)
 - Command line import now accepts unlimited args (#242)
-
 
 Bugfixes:
 
@@ -2104,16 +2016,13 @@ Bugfixes:
 - Include user's current private playlists on playlist list (#302)
 - Remove link to generic radios, since they don't have detail pages (#324)
 
-
 Documentation:
 
 - Document that Funkwhale may be installed with YunoHost (#325)
 - Documented a saner layout with symlinks for in-place imports (#254)
 - Upgrade documentation now use the correct user on non-docker setups (#265)
 
-
-Invite system
-^^^^^^^^^^^^^
+### Invite system
 
 On closed instances, it has always been a little bit painful to create accounts
 by hand for new users. This release solve that by adding invitations.
@@ -2127,9 +2036,7 @@ if you need to print them or make them fancier ;)
 
 Invitations generation and management requires the "settings" permission.
 
-
-Removed front-end and back-end coupling
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Removed front-end and back-end coupling
 
 Even though Funkwhale's front-end has always been a Single Page Application,
 talking to an API, it was only able to talk to an API on the same domain.
@@ -2149,14 +2056,12 @@ by leveraging Gitlab CI and review apps, we are now able to deploy automatically
 a merge request, making it possible for anyone to review front-end changes easily, without
 the need to install a local environment.
 
+## 0.14.2 (2018-06-16)
 
-0.14.2 (2018-06-16)
--------------------
-
-.. warning::
-
-    This release contains a fix for a permission issue. You should upgrade
-    as soon as possible. Read the changelog below for more details.
+```{warning}
+This release contains a fix for a permission issue. You should upgrade
+as soon as possible. Read the changelog below for more details.
+```
 
 Upgrade instructions are available at
 https://docs.funkwhale.audio/upgrading.html
@@ -2179,11 +2084,9 @@ Bugfixes:
 - Fixed broken pagination in Subsonic API (#295)
 - Fixed duplicated websocket connection on timeline (#287)
 
-
 Documentation:
 
 - Improved documentation about in-place imports setup (#298)
-
 
 Other:
 
@@ -2191,9 +2094,7 @@ Other:
   formatting (#297)
 - Added bug and feature issue templates (#299)
 
-
-Permission issues on radios
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Permission issues on radios
 
 Because of an error in the way we checked user permissions on radios,
 public radios could be deleted by any logged-in user, even if they were not
@@ -2202,9 +2103,7 @@ the owner of the radio.
 We recommend instances owners to upgrade as fast as possible to avoid any abuse
 and data loss.
 
-
-Funkwhale is now licenced under AGPL-3
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Funkwhale is now licenced under AGPL-3
 
 Following the recent switch made by PixelFed
 (https://github.com/dansup/pixelfed/issues/143), we decided along with
@@ -2217,25 +2116,25 @@ switch for various reasons:
 As end users and instance owners, this does not change anything. You can
 continue to use Funkwhale exactly as you did before :)
 
-
-Apache support for websocket
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Apache support for websocket
 
 Up until now, our Apache2 configuration was not working with websockets. This is now
-solved by adding this at the beginning of your Apache2 configuration file::
+solved by adding this at the beginning of your Apache2 configuration file:
 
-    Define funkwhale-api-ws ws://localhost:5000
+```apache
+Define funkwhale-api-ws ws://localhost:5000
+```
 
-And this, before the "/api" block::
+And this, before the "/api" block:
 
-    # Activating WebSockets
-    ProxyPass "/api/v1/instance/activity" ${funkwhale-api-ws}/api/v1/instance/activity
+```apache
+# Activating WebSockets
+ProxyPass "/api/v1/instance/activity" ${funkwhale-api-ws}/api/v1/instance/activity
+```
 
 Websockets may not be supported in older versions of Apache2. Be sure to upgrade to the latest version available.
 
-
-Serving album covers in https (Apache2 proxy)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Serving album covers in https (Apache2 proxy)
 
 Two issues are addressed here. The first one was about Django replying with
 mixed content (http) when queried for covers. Setting up the `X-Forwarded-Proto`
@@ -2246,39 +2145,38 @@ Second issue was a problem of permission causing Apache a denied access to
 album cover folder. It is solved by adding another block for this path in
 the Apache configuration file for funkwhale.
 
-Here is how to modify your `funkwhale.conf` apache2 configuration::
+Here is how to modify your `funkwhale.conf` apache2 configuration:
 
-  <VirtualHost *:443>
+```apache
+<VirtualHost *:443>
+  # ...
+  #Add this new line
+  RequestHeader set X-Forwarded-Proto "https"
+  # ...
+  # Add this new block below the other <Directory/> blocks
+  # replace /srv/funkwhale/data/media with the path to your media directory
+  # if you're not using the standard layout.
+  <Directory /srv/funkwhale/data/media/albums>
+    Options FollowSymLinks
+    AllowOverride None
+    Require all granted
+  </Directory>
+  # ...
+</VirtualHost>
+```
 
-    ...
-    #Add this new line
-    RequestHeader set X-Forwarded-Proto "https"
-    ...
-    # Add this new block below the other <Directory/> blocks
-    # replace /srv/funkwhale/data/media with the path to your media directory
-    # if you're not using the standard layout.
-    <Directory /srv/funkwhale/data/media/albums>
-      Options FollowSymLinks
-      AllowOverride None
-      Require all granted
-    </Directory>
-    ...
-  </VirtualHost>
+### About the makemigrations warning
 
+You may sometimes get the following warning while applying migrations:
 
-About the makemigrations warning
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-You may sometimes get the following warning while applying migrations::
-
-    "Your models have changes that are not yet reflected in a migration, and so won't be applied."
+```
+"Your models have changes that are not yet reflected in a migration, and so won't be applied."
+```
 
 This is a warning, not an error, and it can be safely ignored.
-Never run the ``makemigrations`` command yourself.
+Never run the `makemigrations` command yourself.
 
-
-0.14.1 (2018-06-06)
--------------------
+## 0.14.1 (2018-06-06)
 
 Upgrade instructions are available at https://docs.funkwhale.audio/upgrading.html
 
@@ -2303,14 +2201,11 @@ Bugfixes:
 - Fixed broken track download modal (overflow and wrong URL) (#239)
 - Removed hardcoded size limit in file upload widget (#275)
 
-
 Documentation:
 
-- Added warning about _protected/music location in nginx configuration (#247)
+- Added warning about \_protected/music location in nginx configuration (#247)
 
-
-Removed alpha-state transcoding (#271)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Removed alpha-state transcoding (#271)
 
 A few months ago, a basic transcoding feature was implemented. Due to the way
 this feature was designed, it was slow, CPU intensive on the server side,
@@ -2322,54 +2217,54 @@ Based on that, we're currently removing support for transcoding
 can be tracked in https://dev.funkwhale.audio/funkwhale/funkwhale/issues/272.
 
 You don't have to do anything on your side, but you may want to remove
-the now obsolete configuration from your reverse proxy file (nginx only)::
+the now obsolete configuration from your reverse proxy file (nginx only):
 
-    # Remove those blocks:
+```nginx
+# Remove those blocks:
 
-    # transcode cache
-    proxy_cache_path /tmp/funkwhale-transcode levels=1:2 keys_zone=transcode:10m max_size=1g inactive=7d;
+# transcode cache
+proxy_cache_path /tmp/funkwhale-transcode levels=1:2 keys_zone=transcode:10m max_size=1g inactive=7d;
 
-    # Transcoding logic and caching
-    location = /transcode-auth {
-        include /etc/nginx/funkwhale_proxy.conf;
-        # needed so we can authenticate transcode requests, but still
-        # cache the result
-        internal;
-        set $query '';
-        # ensure we actually pass the jwt to the underlytin auth url
-        if ($request_uri ~* "[^\?]+\?(.*)$") {
-            set $query $1;
-        }
-        proxy_pass http://funkwhale-api/api/v1/trackfiles/viewable/?$query;
-        proxy_pass_request_body off;
-        proxy_set_header        Content-Length "";
+# Transcoding logic and caching
+location = /transcode-auth {
+    include /etc/nginx/funkwhale_proxy.conf;
+    # needed so we can authenticate transcode requests, but still
+    # cache the result
+    internal;
+    set $query '';
+    # ensure we actually pass the jwt to the underlytin auth url
+    if ($request_uri ~* "[^\?]+\?(.*)$") {
+        set $query $1;
     }
+    proxy_pass http://funkwhale-api/api/v1/trackfiles/viewable/?$query;
+    proxy_pass_request_body off;
+    proxy_set_header        Content-Length "";
+}
 
-    location /api/v1/trackfiles/transcode/ {
-        include /etc/nginx/funkwhale_proxy.conf;
-        # this block deals with authenticating and caching transcoding
-        # requests. Caching is heavily recommended as transcoding
-        # is a CPU intensive process.
-        auth_request /transcode-auth;
-        if ($args ~ (.*)jwt=[^&]*(.*)) {
-            set $cleaned_args $1$2;
-        }
-        proxy_cache_key "$scheme$request_method$host$uri$is_args$cleaned_args";
-        proxy_cache transcode;
-        proxy_cache_valid 200 7d;
-        proxy_ignore_headers "Set-Cookie";
-        proxy_hide_header "Set-Cookie";
-        add_header X-Cache-Status $upstream_cache_status;
-        proxy_pass   http://funkwhale-api;
+location /api/v1/trackfiles/transcode/ {
+    include /etc/nginx/funkwhale_proxy.conf;
+    # this block deals with authenticating and caching transcoding
+    # requests. Caching is heavily recommended as transcoding
+    # is a CPU intensive process.
+    auth_request /transcode-auth;
+    if ($args ~ (.*)jwt=[^&]*(.*)) {
+        set $cleaned_args $1$2;
     }
-    # end of transcoding logic
+    proxy_cache_key "$scheme$request_method$host$uri$is_args$cleaned_args";
+    proxy_cache transcode;
+    proxy_cache_valid 200 7d;
+    proxy_ignore_headers "Set-Cookie";
+    proxy_hide_header "Set-Cookie";
+    add_header X-Cache-Status $upstream_cache_status;
+    proxy_pass   http://funkwhale-api;
+}
+# end of transcoding logic
+```
 
-
-0.14 (2018-06-02)
------------------
+## 0.14 (2018-06-02)
 
 Upgrade instructions are available at
-  https://docs.funkwhale.audio/upgrading.html
+https://docs.funkwhale.audio/upgrading.html
 
 Features:
 
@@ -2379,7 +2274,6 @@ Features:
 - New action table component for quick and efficient batch actions (#228) This
   is implemented on the federated tracks pages, but will be included in other
   pages as well depending on the feedback.
-
 
 Enhancements:
 
@@ -2396,7 +2290,6 @@ Enhancements:
   correctly from third party apps that use this endpoint (#260)
 - Retructured music API to increase performance and remove useless endpoints
   (#224)
-
 
 Bugfixes:
 
@@ -2422,14 +2315,11 @@ Documentation:
 - Added missing subsonic configuration block in deployment vhost files (#249)
 - Moved upgrade doc under install doc in TOC (#251)
 
-
 Other:
 
 - Removed acoustid support, as the integration was buggy and error-prone (#106)
 
-
-Files management interface
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Files management interface
 
 This is the first bit of an ongoing work that will span several releases, to
 bring more powerful library management features to Funkwhale. This iteration
@@ -2437,8 +2327,7 @@ includes a basic file management interface where users with the "library"
 permission can list and search available files, order them using
 various criteria (size, bitrate, duration...) and delete them.
 
-New "upload" permission
-^^^^^^^^^^^^^^^^^^^^^^^
+### New "upload" permission
 
 This new permission is helpful if you want to give upload/import rights
 to some users, but don't want them to be able to manage the library as a whole:
@@ -2457,8 +2346,7 @@ On public/open instances, this will play well with the "upload" permission
 since everyone will be able to contribute to the instance library without
 an admin giving the permission to every single user.
 
-Smarter album cover importer
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Smarter album cover importer
 
 In earlier versions, covers where only imported when launching a YouTube import.
 Starting from this release, covers will be imported regardless of the import mode
@@ -2473,78 +2361,77 @@ This will only work for newly imported tracks and albums though. In the future,
 we may offer an option to refetch album covers from the interface, but in the
 meantime, you can use the following snippet:
 
-.. code-block:: python
+```python
+# Store this in /tmp/update_albums.py
+from funkwhale_api.music.models import Album, TrackFile
+from funkwhale_api.music.tasks import update_album_cover
 
-    # Store this in /tmp/update_albums.py
-    from funkwhale_api.music.models import Album, TrackFile
-    from funkwhale_api.music.tasks import update_album_cover
+albums_without_covers = Album.objects.filter(cover='')
+total = albums_without_covers.count()
+print('Found {} albums without cover'.format(total))
+for i, album in enumerate(albums_without_covers.iterator()):
+    print('[{}/{}] Fetching cover for {}...'.format(i+1, total, album.title))
+    f = TrackFile.objects.filter(track__album=album).filter(source__startswith='file://').first()
+    update_album_cover(album, track_file=f)
+```
 
-    albums_without_covers = Album.objects.filter(cover='')
-    total = albums_without_covers.count()
-    print('Found {} albums without cover'.format(total))
-    for i, album in enumerate(albums_without_covers.iterator()):
-        print('[{}/{}] Fetching cover for {}...'.format(i+1, total, album.title))
-        f = TrackFile.objects.filter(track__album=album).filter(source__startswith='file://').first()
-        update_album_cover(album, track_file=f)
+Then launch it:
 
-Then launch it::
+```sh
+# docker setups
+cat /tmp/update_albums.py | docker-compose run --rm api python manage.py shell -i python
 
-    # docker setups
-    cat /tmp/update_albums.py | docker-compose run --rm api python manage.py shell -i python
+# non-docker setups
+source /srv/funkwhale/load_env
+source /srv/funkwhale/virtualenv/bin/activate
+cat /tmp/update_albums.py | python manage.py shell -i python
 
-    # non-docker setups
-    source /srv/funkwhale/load_env
-    source /srv/funkwhale/virtualenv/bin/activate
-    cat /tmp/update_albums.py | python manage.py shell -i python
+# cleanup
+rm /tmp/update_albums.py
+```
 
-    # cleanup
-    rm /tmp/update_albums.py
+```{note}
+Depending on your number of albums, the previous snippet may take some time
+to execute. You can interrupt it at any time using ctrl-c and relaunch it later,
+as it's idempotent.
+```
 
-.. note::
-
-    Depending on your number of albums, the previous snippet may take some time
-    to execute. You can interrupt it at any time using ctrl-c and relaunch it later,
-    as it's idempotent.
-
-Music API changes
-^^^^^^^^^^^^^^^^^
+### Music API changes
 
 This release includes an API break. Even though the API is advertised
 as unstable, and not documented, here is a brief explanation of the change in
 case you are using the API in a client or in a script. Summary of the changes:
 
-- ``/api/v1/artists`` does not includes a list of tracks anymore. It was to heavy
+- `/api/v1/artists` does not includes a list of tracks anymore. It was to heavy
   to return all of this data all the time. You can get all tracks for an
-  artist using ``/api/v1/tracks?artist=artist_id``
-- Additionally, ``/api/v1/tracks`` now support an ``album`` filter to filter
+  artist using `/api/v1/tracks?artist=artist_id`
+- Additionally, `/api/v1/tracks` now support an `album` filter to filter
   tracks matching an album
-- ``/api/v1/artists/search``, ``/api/v1/albums/search`` and ``/api/v1/tracks/search``
-  endpoints are removed. Use ``/api/v1/{artists|albums|tracks}/?q=yourquery``
+- `/api/v1/artists/search`, `/api/v1/albums/search` and `/api/v1/tracks/search`
+  endpoints are removed. Use `/api/v1/{artists|albums|tracks}/?q=yourquery`
   instead. It's also more powerful, since you can combine search with other
   filters and ordering options.
-- ``/api/v1/requests/import-requests/search`` endpoint is removed as well.
-  Use ``/api/v1/requests/import-requests/?q=yourquery``
+- `/api/v1/requests/import-requests/search` endpoint is removed as well.
+  Use `/api/v1/requests/import-requests/?q=yourquery`
   instead. It's also more powerful, since you can combine search with other
   filters and ordering options.
 
 Of course, the front-end was updated to work with the new API, so this should
 not impact end-users in any way, apart from slight performance gains.
 
-.. note::
+```{note}
+The API is still not stable and may evolve again in the future. API freeze
+will come at a later point.
+```
 
-    The API is still not stable and may evolve again in the future. API freeze
-    will come at a later point.
-
-Flac files imports via upload
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Flac files imports via upload
 
 You have nothing to do to benefit from this, however, since Flac files
 tend to be a lot bigger than other files, you may want to increase the
-``client_max_body_size`` value in your Nginx configuration if you plan
+`client_max_body_size` value in your Nginx configuration if you plan
 to upload flac files.
 
-Missing subsonic configuration block in vhost files
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Missing subsonic configuration block in vhost files
 
 Because of a missing block in the sample Nginx and Apache configurations,
 instances that were deployed after the 0.13 release are likely to be unable
@@ -2554,26 +2441,28 @@ in the changelog).
 Ensure you have the following snippets in your Nginx or Apache configuration
 if you plan to use the Subsonic API.
 
-Nginx::
+Nginx:
 
-    location /rest/ {
-        include /etc/nginx/funkwhale_proxy.conf;
-        proxy_pass   http://funkwhale-api/api/subsonic/rest/;
-    }
+```nginx
+location /rest/ {
+    include /etc/nginx/funkwhale_proxy.conf;
+    proxy_pass   http://funkwhale-api/api/subsonic/rest/;
+}
+```
 
-Apache2::
+Apache2:
 
-    <Location "/rest">
-        ProxyPass ${funkwhale-api}/api/subsonic/rest
-        ProxyPassReverse ${funkwhale-api}/api/subsonic/rest
-     </Location>
+```apache
+<Location "/rest">
+    ProxyPass ${funkwhale-api}/api/subsonic/rest
+    ProxyPassReverse ${funkwhale-api}/api/subsonic/rest
+  </Location>
+```
 
-
-0.13 (2018-05-19)
------------------
+## 0.13 (2018-05-19)
 
 Upgrade instructions are available at
-  https://docs.funkwhale.audio/upgrading.html
+https://docs.funkwhale.audio/upgrading.html
 
 Features:
 
@@ -2582,13 +2471,11 @@ Features:
 - Store file length, size and bitrate (#195)
 - We now have a brand new instance settings interface in the front-end (#206)
 
-
 Enhancements:
 
 - Disabled browsable HTML API in production (#205)
 - Instances can now indicate on the nodeinfo endpoint if they want to remain
   private (#200)
-
 
 Bugfixes:
 
@@ -2601,9 +2488,7 @@ Bugfixes:
 - Removed Python 3.6 dependency (secrets module) (#198)
 - Uplayable tracks are now properly disabled in the interface (#199)
 
-
-Instance settings interface
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Instance settings interface
 
 Prior to this release, the only way to update instance settings (such as
 instance description, signup policy, federation configuration, etc.) was using
@@ -2615,11 +2500,9 @@ Starting from this release, we now offer a dedicated interface directly
 in the front-end. You can view and edit all your instance settings from here,
 assuming you have the required permissions.
 
-This interface is available at ``/manage/settings`` and via link in the sidebar.
+This interface is available at `/manage/settings` and via link in the sidebar.
 
-
-Storage of bitrate, size and length in database
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Storage of bitrate, size and length in database
 
 Starting with this release, when importing files, Funkwhale will store
 additional information about audio files:
@@ -2634,33 +2517,30 @@ we offer a command to deal with legacy files and populate the missing values.
 
 On docker setups:
 
-.. code-block:: shell
-
-    docker-compose run --rm api python manage.py fix_track_files
-
+```sh
+docker-compose run --rm api python manage.py fix_track_files
+```
 
 On non-docker setups:
 
-.. code-block:: shell
+```sh
+# from your activated virtualenv
+python manage.py fix_track_files
+```
 
-    # from your activated virtualenv
-    python manage.py fix_track_files
+```{note}
+The execution time for this command is proportional to the number of
+audio files stored on your instance. This is because we need to read the
+files from disk to fetch the data. You can run it in the background
+while Funkwhale is up.
 
-.. note::
+It's also safe to interrupt this command and rerun it at a later point, or run
+it multiple times.
 
-    The execution time for this command is proportional to the number of
-    audio files stored on your instance. This is because we need to read the
-    files from disk to fetch the data. You can run it in the background
-    while Funkwhale is up.
+Use the --dry-run flag to check how many files would be impacted.
+```
 
-    It's also safe to interrupt this command and rerun it at a later point, or run
-    it multiple times.
-
-    Use the --dry-run flag to check how many files would be impacted.
-
-
-Simpler permission system
-^^^^^^^^^^^^^^^^^^^^^^^^^
+### Simpler permission system
 
 Starting from this release, the permission system is much simpler. Up until now,
 we were using Django's built-in permission system, which was working, but also
@@ -2674,27 +2554,25 @@ you can migrate those to the new system.
 
 On docker setups:
 
-.. code-block:: shell
-
-    docker-compose run --rm api python manage.py script django_permissions_to_user_permissions --no-input
+```sh
+docker-compose run --rm api python manage.py script django_permissions_to_user_permissions --no-input
+```
 
 On non-docker setups:
 
-.. code-block:: shell
-
-    # in your virtualenv
-    python api/manage.py script django_permissions_to_user_permissions --no-input
+```sh
+# in your virtualenv
+python api/manage.py script django_permissions_to_user_permissions --no-input
+```
 
 There is still no dedicated interface to manage user permissions, but you
-can use the admin interface at ``/api/admin/users/user/`` for that purpose in
+can use the admin interface at `/api/admin/users/user/` for that purpose in
 the meantime.
 
-
-0.12 (2018-05-09)
------------------
+## 0.12 (2018-05-09)
 
 Upgrade instructions are available at
-  https://docs.funkwhale.audio/upgrading.html
+https://docs.funkwhale.audio/upgrading.html
 
 Features:
 
@@ -2702,25 +2580,20 @@ Features:
   as DSub (#75)
 - Use nodeinfo standard for publishing instance information (#192)
 
-
 Enhancements:
 
 - Play button now play tracks immediately instead of appending them to the
   queue (#99, #156)
 
-
 Bugfixes:
 
 - Fix broken federated import (#193)
-
 
 Documentation:
 
 - Up-to-date documentation for upgrading front-end files on docker setup (#132)
 
-
-Subsonic API
-^^^^^^^^^^^^
+### Subsonic API
 
 This release implements some core parts of the Subsonic API, which is widely
 deployed in various projects and supported by numerous clients.
@@ -2732,44 +2605,46 @@ without developing our own alternative clients for each and every platform.
 Most advanced Subsonic clients support offline caching of music files,
 playlist management and search, which makes them well-suited for nomadic use.
 
-Please see `our list of supported apps <https://funkwhale.audio/en_US/apps>`_
+Please see [our list of supported apps](https://funkwhale.audio/en_US/apps)
 for more information about supported clients and user instructions.
 
 At the instance-level, the Subsonic API is enabled by default, but require
 and additional endpoint to be added in you reverse-proxy configuration.
 
-On nginx, add the following block::
+On nginx, add the following block:
 
-    location /rest/ {
-        include /etc/nginx/funkwhale_proxy.conf;
-        proxy_pass   http://funkwhale-api/api/subsonic/rest/;
-    }
+```nginx
+location /rest/ {
+    include /etc/nginx/funkwhale_proxy.conf;
+    proxy_pass   http://funkwhale-api/api/subsonic/rest/;
+}
+```
 
-On Apache, add the following block::
+On Apache, add the following block:
 
-    <Location "/rest">
-        ProxyPass ${funkwhale-api}/api/subsonic/rest
-        ProxyPassReverse ${funkwhale-api}/api/subsonic/rest
-    </Location>
+```apache
+<Location "/rest">
+    ProxyPass ${funkwhale-api}/api/subsonic/rest
+    ProxyPassReverse ${funkwhale-api}/api/subsonic/rest
+</Location>
+```
 
 The Subsonic can be disabled at the instance level from the django admin.
 
-.. note::
+```{note}
+Because of Subsonic's API design which assumes cleartext storing of
+user passwords, we chose to have a dedicated, separate password
+for that purpose. Users can generate this password from their
+settings page in the web client.
+```
 
-    Because of Subsonic's API design which assumes cleartext storing of
-    user passwords, we chose to have a dedicated, separate password
-    for that purpose. Users can generate this password from their
-    settings page in the web client.
+### Nodeinfo standard for instance information and stats
 
-
-Nodeinfo standard for instance information and stats
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. warning::
-
-    The ``/api/v1/instance/stats/`` endpoint which was used to display
-    instance data in the about page is removed in favor of the new
-    ``/api/v1/instance/nodeinfo/2.0/`` endpoint.
+```{warning}
+The ``/api/v1/instance/stats/`` endpoint which was used to display
+instance data in the about page is removed in favor of the new
+``/api/v1/instance/nodeinfo/2.0/`` endpoint.
+```
 
 In earlier version, we where using a custom endpoint and format for
 our instance information and statistics. While this was working,
@@ -2790,41 +2665,45 @@ We offer two settings to manage nodeinfo in your Funkwhale instance:
    and user activity.
 
 To make your instance fully compatible with the nodeinfo protocol, you need to
-to edit your nginx configuration file::
+to edit your nginx configuration file:
 
-    # before
-    ...
-    location /.well-known/webfinger {
-        include /etc/nginx/funkwhale_proxy.conf;
-        proxy_pass   http://funkwhale-api/.well-known/webfinger;
-    }
-    ...
+```nginx
+# before
+# ...
+location /.well-known/webfinger {
+    include /etc/nginx/funkwhale_proxy.conf;
+    proxy_pass   http://funkwhale-api/.well-known/webfinger;
+}
+# ...
 
-    # after
-    ...
-    location /.well-known/ {
-        include /etc/nginx/funkwhale_proxy.conf;
-        proxy_pass   http://funkwhale-api/.well-known/;
-    }
-    ...
+# after
+# ...
+location /.well-known/ {
+    include /etc/nginx/funkwhale_proxy.conf;
+    proxy_pass   http://funkwhale-api/.well-known/;
+}
+# ...
+```
 
-You can do the same if you use apache::
+You can do the same if you use apache:
 
-    # before
-    ...
-    <Location "/.well-known/webfinger">
-      ProxyPass ${funkwhale-api}/.well-known/webfinger
-      ProxyPassReverse ${funkwhale-api}/.well-known/webfinger
-    </Location>
-    ...
+```apache
+# before
+# ...
+<Location "/.well-known/webfinger">
+  ProxyPass ${funkwhale-api}/.well-known/webfinger
+  ProxyPassReverse ${funkwhale-api}/.well-known/webfinger
+</Location>
+# ...
 
-    # after
-    ...
-    <Location "/.well-known/">
-      ProxyPass ${funkwhale-api}/.well-known/
-      ProxyPassReverse ${funkwhale-api}/.well-known/
-    </Location>
-    ...
+# after
+# ...
+<Location "/.well-known/">
+  ProxyPass ${funkwhale-api}/.well-known/
+  ProxyPassReverse ${funkwhale-api}/.well-known/
+</Location>
+# ...
+```
 
 This will ensure all well-known endpoints are proxied to funkwhale, and
 not just webfinger one.
@@ -2833,9 +2712,7 @@ Links:
 
 - About nodeinfo: https://github.com/jhass/nodeinfo
 
-
-0.11 (2018-05-06)
------------------
+## 0.11 (2018-05-06)
 
 Upgrade instructions are available at https://docs.funkwhale.audio/upgrading.html
 
@@ -2863,7 +2740,6 @@ Enhancements:
 - Store high-level settings (such as federation or auth-related ones) in
   database (#186)
 
-
 Bugfixes:
 
 - Ensure in place imported files get a proper mimetype (#183)
@@ -2872,7 +2748,6 @@ Bugfixes:
 - Fixed small UI glitches/bugs in federation tabs (#184)
 - X-sendfile not working with in place import (#182)
 
-
 Documentation:
 
 - Added a documentation area for third-party projects (#180)
@@ -2880,9 +2755,7 @@ Documentation:
 - Document that the database should use an utf-8 encoding (#185)
 - Foundations for API documentation with Swagger (#178)
 
-
-Database storage for high-level settings
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Database storage for high-level settings
 
 Due to the work done in #186, the following environment variables have been
 deprecated:
@@ -2905,9 +2778,7 @@ announcement when the variables won't be used anymore.
 Please browse https://docs.funkwhale.audio/configuration.html#instance-settings
 for more information about instance configuration using the web interface.
 
-
-System emails
-^^^^^^^^^^^^^
+### System emails
 
 Starting from this release, Funkwhale will send two types
 of emails:
@@ -2919,33 +2790,28 @@ Email sending is disabled by default, as it requires additional configuration.
 In this mode, emails are simply outputted on stdout.
 
 If you want to actually send those emails to your users, you should edit your
-.env file and tweak the ``EMAIL_CONFIG`` variable. See :data:`EMAIL_CONFIG <config.settings.common.EMAIL_CONFIG>`
+.env file and tweak the `EMAIL_CONFIG` variable. See :data:`EMAIL_CONFIG <config.settings.common.EMAIL_CONFIG>`
 for more details.
 
-.. note::
+```{note}
+As a result of these changes, the ``DJANGO_EMAIL_BACKEND`` variable,
+which was not documented, has no effect anymore. You can safely remove it from
+your .env file if it is set.
+```
 
-  As a result of these changes, the ``DJANGO_EMAIL_BACKEND`` variable,
-  which was not documented, has no effect anymore. You can safely remove it from
-  your .env file if it is set.
+### Proxy headers for non-docker deployments
 
-
-Proxy headers for non-docker deployments
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-For non-docker deployments, add ``--proxy-headers`` at the end of the ``daphne``
+For non-docker deployments, add `--proxy-headers` at the end of the `daphne`
 command in :file:`/etc/systemd/system/funkwhale-server.service`.
 
 This will ensure the application receive the correct IP address from the client
 and not the proxy's one.
 
-
-0.10 (2018-04-23)
------------------
+## 0.10 (2018-04-23)
 
 Features:
 
 - Can now import files in-place from the CLI importer (#155)
-
 
 Enhancements:
 
@@ -2956,7 +2822,6 @@ Enhancements:
 - Increased max_length on TrackFile.source, this will help when importing files
   with a really long path (#142)
 - Player is back in Queue tab (#150)
-
 
 Bugfixes:
 
@@ -2970,59 +2835,62 @@ Bugfixes:
 - Reset all sensitive front-end data on logout (#124)
 - Typos/not showing text due to i18n work (#175)
 
-
 Documentation:
 
 - Better documentation for hardware requirements and memory usage (#165)
 
-
-In-place import
-^^^^^^^^^^^^^^^
+### In-place import
 
 This release includes in-place imports for the CLI import. This means you can
 load gigabytes of music into funkwhale without worrying about about Funkwhale
 copying those music files in its internal storage and eating your disk space.
 
-`This new feature is documented here <https://docs.funkwhale.audio/importing-music.html#in-place-import>`_
+[This new feature is documented here](https://docs.funkwhale.audio/importing-music.html#in-place-import)
 and require additional configuration to ensure funkwhale and your webserver can
 serve those files properly.
 
 **Non-docker users:**
 
-Assuming your music is stored in ``/srv/funkwhale/data/music``, add the following
-block to your nginx configuration::
+Assuming your music is stored in `/srv/funkwhale/data/music`, add the following
+block to your nginx configuration:
 
-    location /_protected/music {
-        internal;
-        alias   /srv/funkwhale/data/music;
-    }
+```nginx
+location /_protected/music {
+    internal;
+    alias   /srv/funkwhale/data/music;
+}
+```
 
-And the following to your .env file::
+And the following to your .env file:
 
-    MUSIC_DIRECTORY_PATH=/srv/funkwhale/data/music
+```sh
+MUSIC_DIRECTORY_PATH=/srv/funkwhale/data/music
+```
 
 **Docker users:**
 
-Assuming your music is stored in ``/srv/funkwhale/data/music``, add the following
-block to your nginx configuration::
+Assuming your music is stored in `/srv/funkwhale/data/music`, add the following
+block to your nginx configuration:
 
-    location /_protected/music {
-        internal;
-        alias   /srv/funkwhale/data/music;
-    }
+```nginx
+location /_protected/music {
+    internal;
+    alias   /srv/funkwhale/data/music;
+}
+```
 
-Assuming you have the following volume directive in your ``docker-compose.yml``
-(it's the default): ``/srv/funkwhale/data/music:/music:ro``, then add
-the following to your .env file::
+Assuming you have the following volume directive in your `docker-compose.yml`
+(it's the default): `/srv/funkwhale/data/music:/music:ro`, then add
+the following to your .env file:
 
-    # this is the path in the container
-    MUSIC_DIRECTORY_PATH=/music
-    # this is the path on the host
-    MUSIC_DIRECTORY_SERVE_PATH=/srv/funkwhale/data/music
+```sh
+# this is the path in the container
+MUSIC_DIRECTORY_PATH=/music
+# this is the path on the host
+MUSIC_DIRECTORY_SERVE_PATH=/srv/funkwhale/data/music
+```
 
-
-0.9.1 (2018-04-17)
-------------------
+## 0.9.1 (2018-04-17)
 
 Bugfixes:
 
@@ -3030,15 +2898,12 @@ Bugfixes:
 - Fixed broken permission check on library scanning and too aggressive page
   validation
 
-
-0.9 (2018-04-17)
-----------------
+## 0.9 (2018-04-17)
 
 Features:
 
 - Add internationalization support (#5)
 - Can now follow and import music from remote libraries (#136, #137)
-
 
 Enhancements:
 
@@ -3047,9 +2912,7 @@ Enhancements:
 - We now use a proper user agent including instance version and url during
   outgoing requests
 
-
-Federation is here!
-^^^^^^^^^^^^^^^^^^^
+### Federation is here!
 
 This is for real this time, and includes:
 
@@ -3064,8 +2927,7 @@ those requests. You can also revoke the access at any time.
 Documentation was updated with relevant instructions to use and benefit
 from this new feature: https://docs.funkwhale.audio/federation.html
 
-Preparing internationalization
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Preparing internationalization
 
 Funkwhale's front-end as always been english-only, and this is a barrier
 to new users. The work make Funkwhale's interface translatable was started
@@ -3076,8 +2938,7 @@ the near future.
 Many thank to Baptiste for the hard work and for figuring out a proper solution
 to this difficult problem.
 
-Upgrade path
-^^^^^^^^^^^^
+### Upgrade path
 
 In addition to the usual instructions from
 https://docs.funkwhale.audio/upgrading.html, non-docker users will have
@@ -3091,28 +2952,27 @@ and keep disk usage to a minimum.
 In the future, they will also be needed to refetch music metadata or federated
 information periodically.
 
-Celery beat can be enabled easily::
+Celery beat can be enabled easily:
 
-    curl -L -o "/etc/systemd/system/funkwhale-beat.service" "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/develop/deploy/funkwhale-beat.service"
-    # Also edit /etc/systemd/system/funkwhale.target
-    # and ensure the Wants= line contains the following:
-    # Wants=funkwhale-server.service funkwhale-worker.service funkwhale-beat.service
-    nano /etc/systemd/system/funkwhale.target
-    # reload configuration
-    systemctl daemon-reload
+```sh
+curl -L -o "/etc/systemd/system/funkwhale-beat.service" "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/develop/deploy/funkwhale-beat.service"
+# Also edit /etc/systemd/system/funkwhale.target
+# and ensure the Wants= line contains the following:
+# Wants=funkwhale-server.service funkwhale-worker.service funkwhale-beat.service
+nano /etc/systemd/system/funkwhale.target
+# reload configuration
+systemctl daemon-reload
+```
 
 Docker users already have celerybeat enabled.
 
-
-0.8 (2018-04-02)
-----------------
+## 0.8 (2018-04-02)
 
 Features:
 
 - Add a detail page for radios (#64)
 - Implemented page title binding (#1)
 - Previous Track button restart playback after 3 seconds (#146)
-
 
 Enhancements:
 
@@ -3127,7 +2987,6 @@ Enhancements:
   (#131)
 - We now restrict some usernames from being used during signup (#139)
 
-
 Bugfixes:
 
 - Better error handling during file import (#120)
@@ -3136,14 +2995,11 @@ Bugfixes:
 - Upgraded to Python 3.6 to fix weird but harmless weakref error on django task
   (#121)
 
-
 Documentation:
 
 - Documented the upgrade process (#127)
 
-
-Preparing for federation
-^^^^^^^^^^^^^^^^^^^^^^^^
+### Preparing for federation
 
 Federation of music libraries is one of the most asked feature.
 While there is still a lot of work to do, this version includes
@@ -3157,38 +3013,36 @@ In order to prepare for federation (see #136 and #137), new API endpoints
 have been added under /federation and /.well-known/webfinger.
 
 For these endpoints to work, you will need to update your nginx configuration,
-and add the following snippets::
+and add the following snippets:
 
-    location /federation/ {
-        include /etc/nginx/funkwhale_proxy.conf;
-        proxy_pass   http://funkwhale-api/federation/;
-    }
-
-    location /.well-known/webfinger {
-        include /etc/nginx/funkwhale_proxy.conf;
-        proxy_pass   http://funkwhale-api/.well-known/webfinger;
-    }
+```nginx
+location /federation/ {
+    include /etc/nginx/funkwhale_proxy.conf;
+    proxy_pass   http://funkwhale-api/federation/;
+}
+location /.well-known/webfinger {
+    include /etc/nginx/funkwhale_proxy.conf;
+    proxy_pass   http://funkwhale-api/.well-known/webfinger;
+}
+```
 
 This will ensure federation endpoints will be reachable in the future.
 You can of course skip this part if you know you will not federate your instance.
 
-A new ``FEDERATION_ENABLED`` env var have also been added to control whether
+A new `FEDERATION_ENABLED` env var have also been added to control whether
 federation is enabled or not on the application side. This settings defaults
 to True, which should have no consequences at the moment, since actual
 federation is not implemented and the only available endpoints are for
 testing purposes.
 
-Add ``FEDERATION_ENABLED=false`` to your .env file to disable federation
+Add `FEDERATION_ENABLED=false` to your .env file to disable federation
 on the application side.
 
 To test and troubleshoot federation, we've added a bot account. This bot is available at @test@yourinstancedomain,
 and sending it "/ping", for example, via Mastodon, should trigger
 a response.
 
-
-
-0.7 (2018-03-21)
-----------------
+## 0.7 (2018-03-21)
 
 Features:
 
@@ -3198,7 +3052,6 @@ Features:
 - On artist page, albums are not sorted by release date, if any (#116)
 - Playlists are here \o/ :tada: (#3, #93, #94)
 - Use django-cacheops to cache common ORM requests (#117)
-
 
 Bugfixes:
 
@@ -3210,20 +3063,16 @@ Bugfixes:
 - Fixed synchronized start/stop radio buttons for all custom radios (#103)
 - Fixed typo and missing icon on homepage (#96)
 
-
 Documentation:
 
 - Up-to-date and complete development and contribution instructions in
   README.rst (#123)
 
-
-0.6.1 (2018-03-06)
-------------------
+## 0.6.1 (2018-03-06)
 
 Features:
 
 - Can now skip acoustid on file import with the --no-acoustid flag (#111)
-
 
 Bugfixes:
 
@@ -3231,29 +3080,24 @@ Bugfixes:
 - Added some feedback on the play button (#100)
 - Smarter pagination which takes a fixed size (#84)
 
-
 Other:
 
 - Completely removed django-cachalot from the codebase (#110). You can safely
   remove the CACHALOT_ENABLED setting from your .env file
 
-
-0.6 (2018-03-04)
-----------------
+## 0.6 (2018-03-04)
 
 Features:
 
 - Basic activity stream for listening and favorites (#23)
 - Switched to django-channels and daphne for serving HTTP and websocket (#34)
 
-Upgrades notes
-^^^^^^^^^^^^^^
+### Upgrades notes
 
 This version contains breaking changes in the way funkwhale is deployed,
 please read the notes carefully.
 
-Instance timeline
-^^^^^^^^^^^^^^^^^
+### Instance timeline
 
 A new "Activity" page is now available from the sidebar, where you can
 browse your instance activity. At the moment, this includes other users
@@ -3270,8 +3114,7 @@ but you can switch to a full private mode where nothing is shared.
 
 The setting form is available in your profile.
 
-Switch from gunicorn to daphne
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Switch from gunicorn to daphne
 
 This release include an important change in the way we serve the HTTP API.
 To prepare for new realtime features and enable websocket support in Funkwhale,
@@ -3284,26 +3127,27 @@ If you are using docker, please remove the command instruction inside the
 api service, as the up-to-date command is now included directly in the image
 as the default entry point:
 
-.. code-block:: yaml
+```yaml
+services:
+  api:
+    restart: unless-stopped
+    image: funkwhale/funkwhale:${FUNKWHALE_VERSION:-latest}
+    command: ./compose/django/gunicorn.sh # You can remove this line
+```
 
-    api:
-      restart: unless-stopped
-      image: funkwhale/funkwhale:${FUNKWHALE_VERSION:-latest}
-      command: ./compose/django/gunicorn.sh  # You can remove this line
-
-On non docker setups, you'll have to update the [Service] block of your
+On non docker setups, you'll have to update the `[Service]` block of your
 funkwhale-server systemd unit file to launch the application server using daphne instead of gunicorn.
 
 The new configuration should be similar to this:
 
-.. code-block:: ini
-
-    [Service]
-    User=funkwhale
-    # adapt this depending on the path of your funkwhale installation
-    WorkingDirectory=/srv/funkwhale/api
-    EnvironmentFile=/srv/funkwhale/config/.env
-    ExecStart=/usr/local/bin/daphne -b ${FUNKWHALE_API_IP} -p ${FUNKWHALE_API_PORT} config.asgi:application
+```ini
+[Service]
+User=funkwhale
+# adapt this depending on the path of your funkwhale installation
+WorkingDirectory=/srv/funkwhale/api
+EnvironmentFile=/srv/funkwhale/config/.env
+ExecStart=/usr/local/bin/daphne -b ${FUNKWHALE_API_IP} -p ${FUNKWHALE_API_PORT} config.asgi:application
+```
 
 Ensure you update funkwhale's dependencies as usual to install the required
 packages.
@@ -3312,25 +3156,23 @@ On both docker and non-docker setup, you'll also have to update your nginx
 configuration for websocket support. Ensure you have the following blocks
 included in your virtualhost file:
 
-.. code-block:: text
+```nginx
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    ''      close;
+}
 
-    map $http_upgrade $connection_upgrade {
-        default upgrade;
-        ''      close;
-    }
-
-    server {
-        ...
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection $connection_upgrade;
-    }
+server {
+    # ...
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection $connection_upgrade;
+}
+```
 
 Remember to reload your nginx server after the edit.
 
-
-0.5.4 (2018-02-28)
-------------------
+## 0.5.4 (2018-02-28)
 
 Features:
 
@@ -3341,16 +3183,13 @@ Bugfixes:
 - Fixed queue skipping tracks (#91)
 - Now loop properly on queue when we only have one track (#95)
 
-
-0.5.3 (2018-02-27)
-------------------
+## 0.5.3 (2018-02-27)
 
 Features:
 
 - Added admin interface for radios, track files, favorites and import requests (#80)
 - Added basic instance stats on /about (#82)
 - Search now unaccent letters for queries like "The Dø" or "Björk" yielding more results (#81)
-
 
 Bugfixes:
 
@@ -3361,14 +3200,11 @@ Bugfixes:
 - Now exclude tracks without file from radio candidates (#88)
 - skip to next track properly on 40X errors (#86)
 
-
 Other:
 
 - Switched to towncrier for changelog management and compilation
 
-
-0.5.2 (2018-02-26)
-------------------
+## 0.5.2 (2018-02-26)
 
 - Fixed broken file import due to wrong url (#73)
 - More accurate mimetype detection
@@ -3377,17 +3213,13 @@ Other:
 - We now have a favicon!
 - Fixed truncated play icon (#65)
 
-
-0.5.1 (2018-02-24)
-------------------
+## 0.5.1 (2018-02-24)
 
 - Front: Fixed broken ajax call on radio builder (#69)
 - Front: Shuffle now restart next track from beginning (#70)
 - Front: volume slider should now have the same style everywhere (#72)
 
-
-0.5 (2018-02-24)
-----------------
+## 0.5 (2018-02-24)
 
 - Front: Now reset player colors when track has no cover (#46)
 - Front: play button now disabled for unplayable tracks
@@ -3405,7 +3237,7 @@ Transcoding:
 
 Basic transcoding is now available to/from the following formats : ogg and mp3.
 
-*This is still an alpha feature at the moment, please report any bug.*
+_This is still an alpha feature at the moment, please report any bug._
 
 This relies internally on FFMPEG and can put some load on your server.
 It's definitely recommended you setup some caching for the transcoded files
@@ -3421,8 +3253,7 @@ to request music they'd like to see imported.
 Admins can browse those requests and mark them as completed when
 an import is made.
 
-0.4 (2018-02-18)
-----------------
+## 0.4 (2018-02-18)
 
 - Front: ambiant colors in player based on current track cover (#59)
 - Front: simplified front dev setup thanks to webpack proxy (#59)
@@ -3435,43 +3266,31 @@ an import is made.
   This is disabled by default, but feel free to enable it if you want
   to help us by sending your error reports :) (#8)
 
-
-0.3.5 (2018-01-07)
-------------------
+## 0.3.5 (2018-01-07)
 
 - Smarter BACKEND_URL in frontend
 
-
-0.3.4 (2018-01-07)
-------------------
+## 0.3.4 (2018-01-07)
 
 - Fixed wrong URL construction in ajax call
 
-
-0.3.3 (2018-01-07)
-------------------
+## 0.3.3 (2018-01-07)
 
 - Users can now create their own dynamic radios (#51)
 
-
-0.3.2
-------------------
+## 0.3.2
 
 - Fixed an issue in the main dockerfile
 
-
-0.3.1
-------------------
+## 0.3.1
 
 - Revamped all import logic, everything is more tested and consistent
 - Can now use Acoustid in file imports to automatically grab metadata from musicbrainz
 - Brand new file import wizard
 
+## 0.2.7
 
-0.2.7
-------------------
-
-- Shortcuts: can now use the ``f`` shortcut to toggle the currently playing track
+- Shortcuts: can now use the `f` shortcut to toggle the currently playing track
   as a favorite (#53)
 - Shortcuts: avoid collisions between shortcuts by using the exact modifier (#53)
 - Player: Added looping controls and shortcuts (#52)
@@ -3491,15 +3310,11 @@ an import is made.
 - Now use vuex to manage state for authentication
 - Now use vuex to manage state for player/queue/radios
 
-
-0.2.6 (2017-12-15)
-------------------
+## 0.2.6 (2017-12-15)
 
 - Fixed broken Dockerfile
 
-
-0.2.5 (2017-12-15)
-------------------
+## 0.2.5 (2017-12-15)
 
 Features:
 
@@ -3516,9 +3331,7 @@ Tech:
 
 - Django 2 compatibility, lot of packages upgrades (#47)
 
-
-0.2.4 (2017-12-14)
-------------------
+## 0.2.4 (2017-12-14)
 
 Features:
 
