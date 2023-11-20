@@ -491,6 +491,9 @@ components:
                 type: string
             location:
               type: string
+            codeOfConduct:
+              type: string
+              format: url
             content:
               type: object
               properties:

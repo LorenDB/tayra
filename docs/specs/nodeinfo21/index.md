@@ -91,6 +91,9 @@ The NodeInfo endpoint must contain all mandatory elements listed in the specific
 `location` (String)
 : The country the pod is located in
 
+`codeOfConduct` (String \<Url\>)
+: If the server admin has populated the **Rules** setting on their pod, this value is populated with the URL to the pod's about page: `<server_domain>/about/pod#rules`.
+
 `federation.followsInstances` (Number)
 : The number of Funkwhale pods that the target pod follows
 
@@ -163,6 +166,7 @@ Example response:
     "instanceSupportMessage": "string",
     "languages": ["string"],
     "location": "string",
+    "codeOfConduct": "string",
     "content": {
       "local": {
         "artists": 1000,
