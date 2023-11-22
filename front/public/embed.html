@@ -82,7 +82,8 @@
       //       that do not support other codecs to be able to play it :)
       if (sources.length > 0 && !sources.some(({ mimetype }) => mimetype === 'audio/mpeg')) {
         const source = sources[0].listen_url
-        const url = new URL(source.test(/^https?:/)
+        const regex = /^https?:/
+        const url = new URL(regex.test(source)
           ? source
           : source[0] === '/'
             ? `${baseUrl}${source}`
