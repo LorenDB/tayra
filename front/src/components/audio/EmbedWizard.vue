@@ -39,8 +39,7 @@ const iframeSrc = computed(() => {
 const frameWidth = computed(() => width.value ?? '100%')
 const embedCode = computed(() => `<iframe width="${frameWidth.value}" height="${height.value}" scrolling="no" frameborder="no" src="${iframeSrc.value.replace(/&/g, '&amp;')}"></iframe>`)
 
-const textarea = ref()
-const { copy, copied } = useClipboard({ source: textarea })
+const { copy, copied } = useClipboard({ source: embedCode })
 </script>
 
 <template>
@@ -103,8 +102,7 @@ const { copy, copied } = useClipboard({ source: textarea })
             {{ $t('components.audio.EmbedWizard.help.embed') }}
           </p>
           <textarea
-            ref="textarea"
-            :value="embedCode"
+            v-model="embedCode"
             rows="5"
             readonly
           />
