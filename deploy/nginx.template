@@ -50,7 +50,7 @@ server {
 
 
     # General configs
-    root ${FUNKWHALE_FRONTEND_PATH},
+    root ${FUNKWHALE_FRONTEND_PATH};
     client_max_body_size ${NGINX_MAX_BODY_SIZE};
     charset utf-8;
 
@@ -95,12 +95,12 @@ server {
 
     location / {
         expires 1d;
-        alias ${FUNKWHALE_FRONTEND_PATH}/,
+        alias ${FUNKWHALE_FRONTEND_PATH}/;
         try_files $uri $uri/ /index.html;
     }
 
     location ~ "/(front/)?embed.html" {
-        alias ${FUNKWHALE_FRONTEND_PATH}/embed.html,
+        alias ${FUNKWHALE_FRONTEND_PATH}/embed.html;
         add_header Content-Security-Policy "connect-src https: http: 'self'; default-src 'self'; script-src 'self' unpkg.com 'unsafe-inline' 'unsafe-eval'; style-src https: http: 'self' 'unsafe-inline'; img-src https: http: 'self' data:; font-src https: http: 'self' data:; object-src 'none'; media-src https: http: 'self' data:";
         add_header Referrer-Policy "strict-origin-when-cross-origin";
 
