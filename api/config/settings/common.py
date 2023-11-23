@@ -13,7 +13,11 @@ APPS_DIR = ROOT_DIR.path("funkwhale_api")
 
 env = environ.Env()
 ENV = env
-LOGLEVEL = env("LOGLEVEL", default="info").upper()
+# If DEBUG is `true`, we automatically set the loglevel to "DEBUG"
+# If DEBUG is `false`, we try to read the level from LOGLEVEL environment and default to "INFO"
+LOGLEVEL = (
+    "DEBUG" if env.bool("DEBUG", False) else env("LOGLEVEL", default="info").upper()
+)
 IS_DOCKER_SETUP = env.bool("IS_DOCKER_SETUP", False)
 
 
