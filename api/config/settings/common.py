@@ -18,6 +18,24 @@ ENV = env
 LOGLEVEL = (
     "DEBUG" if env.bool("DEBUG", False) else env("LOGLEVEL", default="info").upper()
 )
+"""
+Default logging level for the Funkwhale processes.
+
+.. note::
+    The `DEBUG` variable overrides the `LOGLEVEL` if it is set to `TRUE`.
+
+    The `LOGLEVEL` value only applies if `DEBUG` is `false` or not present.
+
+Available levels:
+
+- ``debug``
+- ``info``
+- ``warning``
+- ``error``
+- ``critical``
+
+"""
+
 IS_DOCKER_SETUP = env.bool("IS_DOCKER_SETUP", False)
 
 
@@ -38,19 +56,6 @@ if env("FUNKWHALE_SENTRY_DSN", default=None) is not None:
         release=version,
     )
     sentry_sdk.set_tag("instance", env("FUNKWHALE_HOSTNAME"))
-
-"""
-Default logging level for the Funkwhale processes
-
-Available levels:
-
-- ``debug``
-- ``info``
-- ``warning``
-- ``error``
-- ``critical``
-
-"""  # pylint: disable=W0105
 
 LOGGING_CONFIG = None
 logging.config.dictConfig(
