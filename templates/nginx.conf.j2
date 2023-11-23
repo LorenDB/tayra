@@ -3,11 +3,18 @@ upstream fw {
     server ${FUNKWHALE_API_IP}:${FUNKWHALE_API_PORT};
 }
 {% else %}
+{% if config.inside_docker %}
+upstream funkwhale-api {
+    # depending on your setup, you may want to update this
+    server ${FUNKWHALE_API_HOST}:${FUNKWHALE_API_PORT};
+}
+{% else %}
 
 upstream funkwhale-api {
     # depending on your setup, you may want to update this
     server ${FUNKWHALE_API_IP}:${FUNKWHALE_API_PORT};
 }
+{% endif %}
 {% endif %}
 {% if config.proxy_frontend %}
 
@@ -68,7 +75,7 @@ server {
     listen [::]:80;
 
     server_name _;
-
+PI_IP}:${FUNKWHALE_API_PORT};
 {% endif %}
 
     # General configs
@@ -76,7 +83,7 @@ server {
 {% if config.inside_docker %}
     root /usr/share/nginx/html;
 {% else %}
-    root ${FUNKWHALE_FRONTEND_PATH},
+    root ${FUNKWHALE_FRONTEND_PATH};
 {% endif %}
 {% endif %}
     client_max_body_size ${NGINX_MAX_BODY_SIZE};
@@ -130,12 +137,12 @@ server {
 {% if config.proxy_frontend and not config.reverse_proxy %}
         proxy_pass http://funkwhale-front;
 {% elif not config.proxy_frontend and config.reverse_proxy %}
-        proxy_pass http://fw
+        proxy_pass http://fw;
 {% else %}
 {% if config.inside_docker %}
         alias /usr/share/nginx/html/;
 {% else %}
-        alias ${FUNKWHALE_FRONTEND_PATH}/,
+        alias ${FUNKWHALE_FRONTEND_PATH}/;
 {% endif %}
         try_files $uri $uri/ /index.html;
 {% endif %}
@@ -150,7 +157,7 @@ server {
 {% if config.inside_docker %}
         alias /usr/share/nginx/html/embed.html;
 {% else %}
-        alias ${FUNKWHALE_FRONTEND_PATH}/embed.html,
+        alias ${FUNKWHALE_FRONTEND_PATH}/embed.html;
 {% endif %}
 {% endif %}
         add_header Content-Security-Policy "connect-src https: http: 'self'; default-src 'self'; script-src 'self' unpkg.com 'unsafe-inline' 'unsafe-eval'; style-src https: http: 'self' 'unsafe-inline'; img-src https: http: 'self' data:; font-src https: http: 'self' data:; object-src 'none'; media-src https: http: 'self' data:";

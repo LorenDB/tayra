@@ -1,7 +1,6 @@
-
 upstream funkwhale-api {
     # depending on your setup, you may want to update this
-    server ${FUNKWHALE_API_IP}:${FUNKWHALE_API_PORT};
+    server ${FUNKWHALE_API_HOST}:${FUNKWHALE_API_PORT};
 }
 
 upstream funkwhale-front {
