@@ -99,7 +99,7 @@ service-identity = "==21.1.0"
 unicode-slugify = "==0.1.5"
 
 [tool.poetry.group.dev.dependencies]
-aioresponses = "==0.7.5"
+aioresponses = "==0.7.6"
 asynctest = "==0.13.0"
 black = "==23.3.0"
 coverage = { version = "==6.5.0", extras = ["toml"] }
