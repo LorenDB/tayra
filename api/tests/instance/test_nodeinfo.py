@@ -155,6 +155,7 @@ def test_nodeinfo_21(api_client):
                     ("topPodcastCategories", []),
                 ]
             ),
+            "codeOfConduct": "",
         },
     }
 

@@ -205,6 +205,14 @@ class Metadata21Serializer(MetadataSerializer):
     location = serializers.CharField()
     content = MetadataContentSerializer()
     features = serializers.ListField(child=serializers.CharField())
+    codeOfConduct = serializers.SerializerMethodField()
+
+    def get_codeOfConduct(self, obj) -> str:
+        return (
+            full_url("/about/pod#rules")
+            if obj["preferences"].get("instance__rules")
+            else ""
+        )
 
 
 class NodeInfo20Serializer(serializers.Serializer):
