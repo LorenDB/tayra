@@ -20,7 +20,6 @@ server {
 
     server_name _;
 
-
     # General configs
     root /usr/share/nginx/html;
     client_max_body_size ${NGINX_MAX_BODY_SIZE};
@@ -62,6 +61,26 @@ server {
         include /etc/nginx/funkwhale_proxy.conf;
         # This is needed if you have file import via upload enabled.
         client_max_body_size ${NGINX_MAX_BODY_SIZE};
+        proxy_pass   http://funkwhale-api;
+    }
+
+    location ~ ^/library/(albums|tracks|artists|playlists)/ {
+        include /etc/nginx/funkwhale_proxy.conf;
+        proxy_pass   http://funkwhale-api;
+    }
+
+    location /channels/ {
+        include /etc/nginx/funkwhale_proxy.conf;
+        proxy_pass   http://funkwhale-api;
+    }
+
+    location ~ ^/@(vite-plugin-pwa|vite|id)/ {
+        include /etc/nginx/funkwhale_proxy.conf;
+        proxy_pass   http://funkwhale-front;
+    }
+
+    location /@ {
+        include /etc/nginx/funkwhale_proxy.conf;
         proxy_pass   http://funkwhale-api;
     }
 

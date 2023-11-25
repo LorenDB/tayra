@@ -79,6 +79,26 @@ server {
 
 
 
+    location ~ ^/library/(albums|tracks|artists|playlists)/ {
+        include /etc/nginx/funkwhale_proxy.conf;
+        proxy_pass   http://funkwhale-api;
+    }
+
+    location /channels/ {
+        include /etc/nginx/funkwhale_proxy.conf;
+        proxy_pass   http://funkwhale-api;
+    }
+
+    location ~ ^/@(vite-plugin-pwa|vite|id)/ {
+        include /etc/nginx/funkwhale_proxy.conf;
+        proxy_pass   http://funkwhale-front;
+    }
+
+    location /@ {
+        include /etc/nginx/funkwhale_proxy.conf;
+        proxy_pass   http://funkwhale-api;
+    }
+
     location / {
         expires 1d;
         include /etc/nginx/funkwhale_proxy.conf;
