@@ -75,7 +75,7 @@ server {
     listen [::]:80;
 
     server_name _;
-PI_IP}:${FUNKWHALE_API_PORT};
+
 {% endif %}
 
     # General configs
@@ -134,6 +134,7 @@ PI_IP}:${FUNKWHALE_API_PORT};
 
     location / {
         expires 1d;
+        include /etc/nginx/funkwhale_proxy.conf;
 {% if config.proxy_frontend and not config.reverse_proxy %}
         proxy_pass http://funkwhale-front;
 {% elif not config.proxy_frontend and config.reverse_proxy %}

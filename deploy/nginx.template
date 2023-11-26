@@ -95,6 +95,7 @@ server {
 
     location / {
         expires 1d;
+        include /etc/nginx/funkwhale_proxy.conf;
         alias ${FUNKWHALE_FRONTEND_PATH}/;
         try_files $uri $uri/ /index.html;
     }

@@ -63,6 +63,7 @@ server {
 
     location / {
         expires 1d;
+        include /etc/nginx/funkwhale_proxy.conf;
         alias /usr/share/nginx/html/;
         try_files $uri $uri/ /index.html;
     }
