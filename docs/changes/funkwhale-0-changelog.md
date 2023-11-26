@@ -2605,7 +2605,7 @@ without developing our own alternative clients for each and every platform.
 Most advanced Subsonic clients support offline caching of music files,
 playlist management and search, which makes them well-suited for nomadic use.
 
-Please see [our list of supported apps](https://funkwhale.audio/en_US/apps)
+Please see [our list of supported apps](https://funkwhale.audio/apps)
 for more information about supported clients and user instructions.
 
 At the instance-level, the Subsonic API is enabled by default, but require
