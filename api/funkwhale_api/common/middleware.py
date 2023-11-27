@@ -150,7 +150,9 @@ def get_default_head_tags(path):
         {
             "tag": "meta",
             "property": "og:image",
-            "content": utils.join_url(settings.FUNKWHALE_URL, "/front/favicon.png"),
+            "content": utils.join_url(
+                settings.FUNKWHALE_URL, "/android-chrome-512x512.png"
+            ),
         },
         {
             "tag": "meta",

@@ -196,9 +196,7 @@ request errors related to this.
 FUNKWHALE_SPA_HTML_CACHE_DURATION = env.int(
     "FUNKWHALE_SPA_HTML_CACHE_DURATION", default=60 * 15
 )
-FUNKWHALE_EMBED_URL = env(
-    "FUNKWHALE_EMBED_URL", default=FUNKWHALE_URL + "/front/embed.html"
-)
+FUNKWHALE_EMBED_URL = env("FUNKWHALE_EMBED_URL", default=FUNKWHALE_URL + "/embed.html")
 FUNKWHALE_SPA_REWRITE_MANIFEST = env.bool(
     "FUNKWHALE_SPA_REWRITE_MANIFEST", default=True
 )
