@@ -9,6 +9,94 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 <!-- towncrier -->
 
+## 1.4.0-rc1 (2023-11-28)
+
+Upgrade instructions are available at https://docs.funkwhale.audio/administrator/upgrade/index.html
+
+Features:
+
+- Add atom1.0 to node info services (#2085)
+- Add basic cypress testing
+- Add NodeInfo 2.1 (#2085)
+- Add support for Funkwhale UI library.
+- Add support for Python 3.12
+- Allow moderators to set moderation languages (#2085)
+- Allow to set the instances server location (#2085)
+- Cache radio queryset into redis. New radio track endpoint for api v2 is /api/v2/radios/sessions/{radiosessionid}/tracks (#2135)
+- Create a testing environment in production for ListenBrainz recommendation engine (troi-recommendation-playground) (#1861)
+- Generate all nginx configurations from one template
+- New management command to update Uploads which have been imported using --in-place and are now stored in s3 (#2156)
+- Add option to only allow MusicBrainz tagged file on a pod (#2083)
+- Prohibit the creation of new users using django's `createsuperuser` command in favor of our own CLI
+  entry point. Run `funkwhale-manage fw users create --superuser` instead. (#1288)
+
+Enhancements:
+
+- Add a management command to generate dummy notifications for testing
+- Add custom logging functionality (#2155)
+- Adding typesense container and api client (2104)
+- Cache pip package in api docker builds (#2193)
+- Connect loglevel and debug mode (#1538)
+- Get api version from python package
+- Log service worker registration error and add a warning about Firefox SW incompatibility in development mode
+- Maintain api version using poetry
+- Maloja: Submit album artists and duration and allow to disable server side metadata fixing
+- Replace pytz with zoneinfo in the API
+- Speed up linting and type-checking by using cache
+- Split front large bundles into smaller chunks
+- Support boolean config fields in plugins
+
+Bugfixes:
+
+- `postgres > db_dump.sql` cannot be used if the postgres container is stopped. Update command.
+- Avoid troi radio to give duplicates (#2231)
+- Fix help messages for running scripts using funkwhale-manage
+- Fix missing og meta tags (#2208)
+- Fix multiarch docker builds #2211
+- Fixed an issue where the copy button didn't copy the Embed code in the embed modal.
+- Fixed an issue with the nginx templates that caused issues when connecting to websockets.
+- Fixed development docker setup (2102)
+- Fixed development docker setup (2196)
+- Fixed embedded player crash when API returns relative listen URL. (#2163)
+- Fixed issue with regular expression in embed.
+- Make Artist ordering by name case insensitive
+- Make sure build requirements for ujson are met
+- Make sure embed codes generated before 1.3.0 are still working
+- Make sure funkwhale_api package and metadata are available for docs
+- Make sure meta tags link to embedded player correctly
+- Merge nginx configs for docker production and development setups (#1939)
+- Updated links to the Funkwhale website in the UI. (#2235)
+- Use correct data field for rate limiting identity field (#2248)
+
+Documentation:
+
+- Add missing `has_mbid` requirement to quality filter spec.
+- Add spec for user following.
+- Added CoC link to nodeinfo endpoint spec.
+- Added multi-artist support spec.
+- Added new collections spec.
+- Added NodeInfo 2.1 specification
+- Archived the pre-1.0 changelog
+- Updated nodeinfo spec to include usage statistics.
+- Updated the Nodeinfo 2 spec to address feedback from implementation.
+
+Other:
+
+- Add build metadata script
+- Don't run CI on branch containing stable or develop
+- Fix CI deploy docs job after stable branch merge
+- Format api container file
+- Lint api code using pylint
+- Make renovate not pinning the python version to the latest one
+- Rename CHANGELOG to CHANGELOG.md
+- Replace docs scripts with make
+- Rework the CI pipeline
+- Use buildx bake in docker job
+
+Removal:
+
+- Drop support for python3.7
+
 ## 1.3.4 (2023-11-16)
 
 Upgrade instructions are available at
