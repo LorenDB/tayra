@@ -160,7 +160,7 @@ def test_cannot_approve_reject_without_perm(
 
 
 def test_rate_limit(logged_in_api_client, now_time, settings, mocker):
-    expected_ident = {"type": "authenticated", "id": logged_in_api_client.user.pk}
+    expected_ident = {"type": "authenticated", "id": f"{logged_in_api_client.user.pk}"}
 
     expected = {
         "ident": expected_ident,
