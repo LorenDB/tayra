@@ -462,7 +462,7 @@ docker:
       variables:
         BUILD_ARGS: >
           --set *.platform=linux/amd64,linux/arm64,linux/arm/v7
-          --set *.no-cache
+          --no-cache
           --push
 
     - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
