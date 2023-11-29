@@ -105,7 +105,8 @@ server {
 
     location ~ ^/@(vite-plugin-pwa|vite|id)/ {
         include /etc/nginx/funkwhale_proxy.conf;
-        proxy_pass   http://funkwhale-front;
+        alias ${FUNKWHALE_FRONTEND_PATH}/;
+        try_files $uri $uri/ /index.html;
     }
 
     location /@ {

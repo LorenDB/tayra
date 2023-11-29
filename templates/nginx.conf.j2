@@ -113,23 +113,20 @@ server {
         text/x-component
         text/x-cross-domain-policy;
     # end of compression settings
-
 {% if not config.reverse_proxy %}
+
     # headers
     add_header Content-Security-Policy "default-src 'self'; connect-src https: wss: http: ws: 'self' 'unsafe-eval'; script-src 'self' 'wasm-unsafe-eval'; style-src https: http: 'self' 'unsafe-inline'; img-src https: http: 'self' data:; font-src https: http: 'self' data:; media-src https: http: 'self' data:; object-src 'none'";
     add_header Referrer-Policy "strict-origin-when-cross-origin";
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header Service-Worker-Allowed "/";
-{% endif %}
 
-{% if not config.reverse_proxy %}
     location /api/ {
         include /etc/nginx/funkwhale_proxy.conf;
         # This is needed if you have file import via upload enabled.
         client_max_body_size ${NGINX_MAX_BODY_SIZE};
         proxy_pass   http://funkwhale-api;
     }
-{% endif %}
 
     location ~ ^/library/(albums|tracks|artists|playlists)/ {
         include /etc/nginx/funkwhale_proxy.conf;
@@ -143,13 +140,23 @@ server {
 
     location ~ ^/@(vite-plugin-pwa|vite|id)/ {
         include /etc/nginx/funkwhale_proxy.conf;
+        {% if config.proxy_frontend  %}
         proxy_pass   http://funkwhale-front;
+        {% else %}
+        {% if config.inside_docker %}
+        alias /usr/share/nginx/html/;
+        {% else %}
+        alias ${FUNKWHALE_FRONTEND_PATH}/;
+        {% endif %}
+        try_files $uri $uri/ /index.html;
+        {% endif %}
     }
 
     location /@ {
         include /etc/nginx/funkwhale_proxy.conf;
         proxy_pass   http://funkwhale-api;
     }
+{% endif %}
 
     location / {
         expires 1d;
