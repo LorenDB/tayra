@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "funkwhale-api"
-version = "1.4.0-rc1"
+version = "1.4.0-rc2"
 description = "Funkwhale API"
 
 authors = ["Funkwhale Collective"]

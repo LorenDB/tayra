@@ -9,6 +9,17 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 <!-- towncrier -->
 
+## 1.4.0-rc2 (2023-11-30)
+
+Upgrade instructions are available at https://docs.funkwhale.audio/administrator/upgrade/index.html
+
+Changes since 1.4.0-rc1:
+
+Bugfixes:
+
+- Fix broken nginx templates for docker setup (#2252)
+- Fix docker builds in CI by using correct flag to disable cache
+
 ## 1.4.0-rc1 (2023-11-28)
 
 Upgrade instructions are available at https://docs.funkwhale.audio/administrator/upgrade/index.html
