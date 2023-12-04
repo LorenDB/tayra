@@ -33,7 +33,7 @@
         "noDescription": "Pas de description disponible"
       },
       "stat": {
-        "activeUsers": "Pas de comptes actifs | { n } compte actif | { n } comptes actifs",
+        "activeUsers": "Pas d’utilisateurs actifs | { n } utilisateur actif | { n } utilisateurs actifs",
         "hoursOfMusic": "heure de musique | heures de musique"
       },
       "title": "À propos"
