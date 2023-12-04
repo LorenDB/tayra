@@ -16,7 +16,7 @@
         "findApp": "Trouver une application",
         "funkwhale": "Une plateforme sociale pour apprécier et partager la musique",
         "publicContent": "Parcourir le contenu public",
-        "signup": "Inscription"
+        "signup": "S’inscrire"
       },
       "help": {
         "closedRegistrations": "Les inscriptions sont closes sur ce pod. Vous pouvez vous inscrire sur un autre pod en utilisant le lien ci-dessous."
@@ -33,7 +33,7 @@
         "noDescription": "Pas de description disponible"
       },
       "stat": {
-        "activeUsers": "{ n } compte actif | { n } comptes actifs",
+        "activeUsers": "Pas de comptes actifs | { n } compte actif | { n } comptes actifs",
         "hoursOfMusic": "heure de musique | heures de musique"
       },
       "title": "À propos"
