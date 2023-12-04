@@ -34,7 +34,7 @@
       },
       "stat": {
         "activeUsers": "Pas d’utilisateurs actifs | { n } utilisateur actif | { n } utilisateurs actifs",
-        "hoursOfMusic": "heure de musique | heures de musique"
+        "hoursOfMusic": "0 heures de musique | {n} heure de musique | {n} heures de musique"
       },
       "title": "À propos"
     },
