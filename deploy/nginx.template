@@ -192,4 +192,7 @@ server {
         return 302 ${FUNKWHALE_PROTOCOL}://${FUNKWHALE_HOSTNAME}/api/v1/instance/spa-manifest.json;
     }
 
+    location /staticfiles/ {
+        alias ${STATIC_ROOT}/;
+    }
 }

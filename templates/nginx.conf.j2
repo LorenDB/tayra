@@ -261,5 +261,10 @@ server {
         alias /usr/share/nginx/html/staticfiles/;
     }
 {% endif %}
+{% if not config.reverse_proxy and not config.inside_docker %}
+    location /staticfiles/ {
+        alias ${STATIC_ROOT}/;
+    }
+{% endif %}
 {% endif %}
 }

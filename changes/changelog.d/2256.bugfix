@@ -1,0 +1,1 @@
+Fix regression that prevent static files from being served in non-docker-deployments (#2256)
