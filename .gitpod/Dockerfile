@@ -6,6 +6,6 @@ RUN sudo apt update -y \
 
 RUN pyenv install 3.11 && pyenv global 3.11
 
-RUN pip install poetry pre-commit \
+RUN pip install poetry pre-commit jinja2 towncrier \
     && poetry config virtualenvs.create true \
     && poetry config virtualenvs.in-project true
