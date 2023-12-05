@@ -763,7 +763,7 @@
           "loginFailure": "Non podemos darche acceso"
         },
         "help": {
-          "approvalRequired": "Se te rexistraches recentemente, poderías ter que agardar un pouco para que se revise a conta ou verifique o teu email.",
+          "approvalRequired": "Se te rexistraches recentemente, poderías ter que agardar un pouco para que se revise a conta ou verifique o teu enderezo de correo.",
           "invalidCredentials": "Comproba que as credenciais son correctas e asegúrate de ter verificado o email."
         },
         "label": {
@@ -1280,7 +1280,7 @@
         "label": {
           "language": "Idioma",
           "shortcuts": "Atallos de teclado",
-          "theme": "Decorado"
+          "theme": "Cambiar aparencia"
         },
         "link": {
           "about": "Acerca de",
@@ -1307,7 +1307,7 @@
         "label": {
           "language": "Idioma",
           "shortcuts": "Atallos de teclado",
-          "theme": "Decorado"
+          "theme": "Cambiar aparencia"
         },
         "link": {
           "about": "Acerca de",
@@ -1539,7 +1539,7 @@
         },
         "modal": {
           "embed": {
-            "header": "Inclúe esta canción no teu sitio web"
+            "header": "Inclúe o traballo desta autora no teu sitio web"
           }
         },
         "title": "Artista"
@@ -1658,7 +1658,7 @@
         },
         "header": {
           "failure": "Erro ó gardar o axuste",
-          "recentEdits": "Recentemente engadida",
+          "recentEdits": "Edicións recentes",
           "success": "Enviouse correctamente a edición.",
           "unreviewed": "Edicións recentes agardando revisión"
         },
@@ -1749,9 +1749,9 @@
         "header": {
           "newChannels": "Novas canles",
           "playlists": "Listas de reprodución",
-          "recentlyAdded": "Recentemente engadida",
-          "recentlyFavorited": "Favorecida recentemente",
-          "recentlyListened": "Escoitada recentemente"
+          "recentlyAdded": "Últimas engadidas",
+          "recentlyFavorited": "Últimas favorecidas",
+          "recentlyListened": "Últimas escoitadas"
         },
         "title": "Biblioteca"
       },
@@ -2087,7 +2087,7 @@
                 "artist": "Artista",
                 "creationDate": "Data de creación",
                 "domain": "Dominio",
-                "name": "Título",
+                "name": "Nome",
                 "releaseDate": "Data da última vista",
                 "tracks": "Cancións"
               }
@@ -2485,7 +2485,7 @@
             }
           },
           "tooltip": {
-            "blockAll": "Bloquear todo desta conta ou dominio. Isto evitará calquera interacción coa entidade, e eliminará o contido relacionado (subidas, bibliotecas, seguimentos, etc.)",
+            "blockAll": "Bloquear todo desta conta ou dominio. Isto evitará calquera interacción coa entidade, e eliminará o contido relacionado (subidas, bibliotecas, seguimentos, etc.",
             "isActive": "Utiliza este axuste para activar/desactivar temporalmente a condición sen eliminala completamente.",
             "rejectMedia": "Non baixar ningún ficheiro de medios (audio, portada, avatar da conta…) desta conta ou dominio. Esto eliminará tamén o contido existente.",
             "silenceActivity": "Ocultar contido de conta ou dominio, excepto de seguidoras.",
@@ -4015,8 +4015,8 @@
       "ProfileActivity": {
         "header": {
           "playlists": "Listas de reprodución",
-          "recentlyFavorited": "Favorecida recentemente",
-          "recentlyListened": "Escoitada recentemente"
+          "recentlyFavorited": "Últimas favorecidas",
+          "recentlyListened": "Últimas escoitadas"
         }
       },
       "ProfileBase": {
@@ -4103,7 +4103,7 @@
             "header": "Eliminar esta Canle?"
           },
           "embed": {
-            "header": "Inclúe esta canción no teu sitio web"
+            "header": "Inclúe o traballo desta artista no teu sitio web"
           },
           "subscribe": {
             "fediverse": {
