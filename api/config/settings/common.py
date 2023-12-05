@@ -830,7 +830,7 @@ If you're using password auth (the extra slash is important)
 .. note::
 
     If you want to use Redis over unix sockets, you also need to update
-    :attr:`CELERY_BROKER_URL`, because the scheme differ from the one used by
+    :attr:`CELERY_BROKER_URL`, because the scheme differs from the one used by
     :attr:`CACHE_URL`.
 
 """
@@ -881,7 +881,7 @@ to use a different server or use Redis sockets to connect.
 
 Example:
 
-- ``redis://127.0.0.1:6379/0``
+- ``unix://127.0.0.1:6379/0``
 - ``redis+socket:///run/redis/redis.sock?virtual_host=0``
 
 """
