@@ -136,8 +136,8 @@ To update your Postgres container, follow these steps:
 Once you've updated your Postgres containers, you need to migrate your database. To do this:
 
 :::{include} /administrator/migration.md
-:start-line: 112
-:end-line: 129
+:start-line: 105
+:end-line: 132
 :::
 
 :::{seealso}
