@@ -3026,6 +3026,7 @@
         "filters": {
           "accessedDate": "Zugriffsdatum",
           "albumTitle": "Albumname",
+          "appliedDate": "Änderungsdatum",
           "artistName": "Name der Künstler·in",
           "bitrate": "Bitrate",
           "creationDate": "Erstellungsdatum",
@@ -3035,6 +3036,7 @@
           "expirationDate": "Ablaufdatum",
           "firstSeen": "Erstmals gesehen",
           "followers": "Abonnenten",
+          "handledDate": "Bearbeitungsdatum",
           "itemsCount": "Elemente",
           "lastActivity": "Letzte Aktivität",
           "lastSeen": "Zuletzt gesehen am",
@@ -3054,6 +3056,7 @@
             "label": "Bearbeitungen"
           },
           "favorites": {
+            "description": "Zugang zu den Favoriten",
             "label": "Favoriten"
           },
           "filters": {
@@ -3126,6 +3129,7 @@
       },
       "useReport": {
         "account": {
+          "label": "Melde {'@'}{username}",
           "typeLabel": "Konto"
         },
         "album": {
@@ -3134,7 +3138,8 @@
         },
         "artist": {
           "label": "Diese kunstschaffende Person melden…",
-          "typeLabel": "Künstler·in"
+          "typeLabel": "Künstler·in",
+          "unknownLabel": "Unbekannte*r Künstler*in"
         },
         "channel": {
           "label": "Diesen Kanal melden…",
@@ -3201,9 +3206,13 @@
       }
     },
     "useErrorHandler": {
+      "errorReportMessage": "Damit wir die Ursache des Fehlers besser verstehen können, füge bitte eine detaillierte Beschreibung des Vorgangs bei, der den Fehler ausgelöst hat.",
+      "errorReportTitle": "Ein unerwarteter Fehler ist aufgetreten.",
+      "leaveFeedback": "Feedback hinterlassen",
       "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten."
     },
     "useThemeList": {
+      "browserDefault": "Browser-Standard",
       "darkTheme": "Dunkel",
       "lightTheme": "Hell"
     }
@@ -3212,6 +3221,13 @@
     "axios": {
       "rateLimitDelay": "Du hast zu viele Anfragen gesendet und bist derzeit eingeschränkt. Bitte versuche es in { delay } noch einmal",
       "rateLimitLater": "Du hast zu viele Anfragen gesendet und bist derzeit eingeschränkt. Bitte versuche es später noch einmal"
+    },
+    "sentry": {
+      "allow": "Erlauben",
+      "deny": "Verweigern",
+      "funkwhaleInstance": "Funkwhale's offizieller Glitchtip-Server",
+      "message": "Die Fehlerberichte werden an { 0 } weitergegeben, damit wir besser verstehen, wie und wann die Fehler auftreten.",
+      "title": "Um die Qualität unseres Service zu verbessern, würden wir gerne Informationen über Abstürze während deiner Sitzung sammeln."
     },
     "serviceWorker": {
       "actions": {
@@ -3673,7 +3689,8 @@
             },
             "audioContent": {
               "bitrate": {
-                "label": "Bitrate"
+                "label": "Bitrate",
+                "value": "{Bitrate}/s"
               },
               "cachedSize": "Cache-Größe",
               "duration": "Dauer",
@@ -3825,7 +3842,8 @@
                 "value": "Fehler beim Abrufen der Knoten-Information"
               },
               "software": {
-                "label": "Software"
+                "label": "Software",
+                "value": "{name} ({version})"
               },
               "totalUsers": "Gesamtanzahl der Nutzenden"
             }
@@ -4313,6 +4331,7 @@
             "currentUsage": "{ current } von { max } belegt",
             "errored": "Fehlgeschlagene Dateien",
             "pending": "Ausstehende Dateien",
+            "percentUsed": "{progress}%",
             "skipped": "Übersprungene Dateien"
           },
           "link": {
@@ -4350,6 +4369,10 @@
             "follow": "Abonnieren",
             "pending": "Ausstehende Abonnements-Anfrage",
             "unfollow": "Abonnement beenden"
+          },
+          "error": {
+            "follow": "Kann entfernter Bibliothek nicht folgen: {error}",
+            "unfollow": "Entfernte Bibliothek kann nicht entfolgt werden: {error}"
           },
           "label": {
             "scanFailure": "Fehler beim Durchsuchen",
@@ -4568,12 +4591,14 @@
       "Detail": {
         "button": {
           "confirm": "Radio löschen",
+          "delete": "Löschen",
           "edit": "Bearbeiten…"
         },
         "empty": {
           "noTracks": "Diesem Radio wurden noch keine Titel hinzugefügt"
         },
         "header": {
+          "radio": "Radio mit {tracks} Titeln, von ",
           "tracks": "Titel"
         },
         "modal": {
