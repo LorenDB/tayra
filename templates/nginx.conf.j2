@@ -159,7 +159,9 @@ server {
 {% endif %}
 
     location / {
+{% if not config.reverse_proxy %}
         expires 1d;
+{% endif %}
         include /etc/nginx/funkwhale_proxy.conf;
 {% if config.proxy_frontend and not config.reverse_proxy %}
         proxy_pass http://funkwhale-front;

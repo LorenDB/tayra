@@ -78,7 +78,6 @@ server {
     # end of compression settings
 
     location / {
-        expires 1d;
         include /etc/nginx/funkwhale_proxy.conf;
         proxy_pass http://fw;
     }
