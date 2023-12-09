@@ -51,7 +51,7 @@ redis = "==4.5.5"
 
 # Django LDAP
 django-auth-ldap = "==4.1.0"
-python-ldap = "==3.4.3"
+python-ldap = "==3.4.4"
 
 # Channels
 channels = { extras = ["daphne"], version = "==4.0.0" }
