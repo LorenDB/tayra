@@ -65,7 +65,7 @@
     "@types/lodash-es": "4.17.12",
     "@types/moxios": "0.4.17",
     "@types/qs": "6.9.10",
-    "@types/semantic-ui": "2.2.7",
+    "@types/semantic-ui": "2.2.9",
     "@types/showdown": "2.0.0",
     "@types/vue-virtual-scroller": "npm:@earltp/vue-virtual-scroller",
     "@typescript-eslint/eslint-plugin": "5.48.2",

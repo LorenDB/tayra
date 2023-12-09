@@ -1939,10 +1939,10 @@
   dependencies:
     "@types/jquery" "*"
 
-"@types/semantic-ui@2.2.7":
-  version "2.2.7"
-  resolved "https://registry.yarnpkg.com/@types/semantic-ui/-/semantic-ui-2.2.7.tgz#4ae4242004aac11a21133d4f338e868b92605270"
-  integrity sha512-Uj6rby2GnuVyO7pj8vgUFsv5eaxb0ktpfasYcB/vXnSAeJ4cRjIOvxka+EoPjw3tPCY4/WlxRss8hsh7kRWzQg==
+"@types/semantic-ui@2.2.9":
+  version "2.2.9"
+  resolved "https://registry.yarnpkg.com/@types/semantic-ui/-/semantic-ui-2.2.9.tgz#9616e7a4e05c1eac421d7bbe464467b2611047b9"
+  integrity sha512-VS7BTgdQEzv1D+E/b9Y795b/i0AZ4bSgzZhSASVtvzudxU8sufXdFHazPGtBgVH8IoLkPoYNoNkgQ1Q3aFEi6g==
   dependencies:
     "@types/jquery" "*"
     "@types/semantic-ui-accordion" "*"
