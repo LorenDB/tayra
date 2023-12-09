@@ -1,0 +1,4616 @@
+{
+  "App": {
+    "loading": ""
+  },
+  "components": {
+    "About": {
+      "description": {
+        "findApp": "",
+        "funkwhale": "",
+        "publicContent": "",
+        "quota": "",
+        "signup": ""
+      },
+      "header": {
+        "aboutPod": "",
+        "findApp": "",
+        "funkwhale": "",
+        "publicContent": "",
+        "signup": ""
+      },
+      "help": {
+        "closedRegistrations": ""
+      },
+      "link": {
+        "findOtherPod": "",
+        "learnMore": ""
+      },
+      "message": {
+        "greeting": "",
+        "loggedIn": ""
+      },
+      "placeholder": {
+        "noDescription": ""
+      },
+      "stat": {
+        "activeUsers": "",
+        "hoursOfMusic": ""
+      },
+      "title": ""
+    },
+    "AboutPod": {
+      "feature": {
+        "allowList": "",
+        "anonymousAccess": "",
+        "federation": "",
+        "quota": "",
+        "registrations": "",
+        "status": {
+          "closed": "",
+          "disabled": "",
+          "enabled": "",
+          "open": ""
+        },
+        "version": ""
+      },
+      "header": {
+        "about": "",
+        "contact": "",
+        "features": "",
+        "rules": "",
+        "statistics": "",
+        "terms": ""
+      },
+      "link": {
+        "about": "",
+        "features": "",
+        "introduction": "",
+        "rules": "",
+        "statistics": "",
+        "terms": ""
+      },
+      "message": {
+        "contact": ""
+      },
+      "notApplicable": "",
+      "placeholder": {
+        "noDescription": "",
+        "noRules": "",
+        "noTerms": ""
+      },
+      "stat": {
+        "activeUsers": "",
+        "albumsCount": "",
+        "artistsCount": "",
+        "hoursOfMusic": "",
+        "listeningsCount": "",
+        "tracksCount": ""
+      },
+      "title": ""
+    },
+    "Home": {
+      "description": {
+        "funkwhale": {
+          "paragraph1": "",
+          "paragraph2": ""
+        },
+        "quota": "",
+        "signup": ""
+      },
+      "header": {
+        "about": "",
+        "aboutFunkwhale": "",
+        "contact": "",
+        "links": "",
+        "login": "",
+        "newAlbums": "",
+        "newChannels": "",
+        "signup": "",
+        "statistics": "",
+        "welcome": ""
+      },
+      "help": {
+        "registrationsClosed": ""
+      },
+      "link": {
+        "findOtherPod": "",
+        "funkwhale": "",
+        "learnMore": "",
+        "mobileApps": {
+          "description": "",
+          "label": ""
+        },
+        "publicContent": {
+          "description": "",
+          "label": ""
+        },
+        "rules": "",
+        "userGuides": {
+          "description": "",
+          "label": ""
+        },
+        "viewMore": ""
+      },
+      "placeholder": {
+        "noDescription": ""
+      },
+      "stat": {
+        "activeUsers": "",
+        "hoursOfMusic": ""
+      },
+      "title": ""
+    },
+    "PageNotFound": {
+      "header": {
+        "pageNotFound": ""
+      },
+      "link": {
+        "home": ""
+      },
+      "message": {
+        "pageNotFound": ""
+      },
+      "title": ""
+    },
+    "Queue": {
+      "button": {
+        "clear": "",
+        "close": "",
+        "stopRadio": ""
+      },
+      "header": {
+        "failure": "",
+        "noSources": "",
+        "radio": ""
+      },
+      "label": {
+        "addArtistContentFilter": "",
+        "duration": "",
+        "enterFullscreen": "",
+        "exitFullscreen": "",
+        "favorite": "",
+        "next": "",
+        "pause": "",
+        "play": "",
+        "populatingRadio": "",
+        "previous": "",
+        "queue": "",
+        "remove": "",
+        "restart": "",
+        "selectTrack": "",
+        "showCoverArt": "",
+        "showVisualizer": ""
+      },
+      "message": {
+        "automaticPlay": "",
+        "radio": "",
+        "webglUnsupported": ""
+      },
+      "meta": {
+        "end": "",
+        "queuePosition": "",
+        "startTime": "",
+        "unknownAlbum": "",
+        "unknownArtist": ""
+      },
+      "warning": {
+        "connectivity": ""
+      }
+    },
+    "RemoteSearchForm": {
+      "button": {
+        "fediverse": "",
+        "rss": "",
+        "search": ""
+      },
+      "description": {
+        "fediverse": "",
+        "rss": ""
+      },
+      "error": {
+        "fetchFailed": ""
+      },
+      "header": {
+        "fetchFailed": ""
+      },
+      "label": {
+        "fediverse": {
+          "fieldLabel": "",
+          "fieldPlaceholder": "",
+          "title": ""
+        },
+        "rss": {
+          "fieldLabel": "",
+          "fieldPlaceholder": "",
+          "title": ""
+        }
+      },
+      "warning": {
+        "unsupported": ""
+      }
+    },
+    "SetInstanceModal": {
+      "button": {
+        "cancel": "",
+        "submit": ""
+      },
+      "header": {
+        "chooseInstance": "",
+        "failure": "",
+        "suggestions": ""
+      },
+      "help": {
+        "notFunkwhaleServer": "",
+        "selectPod": "",
+        "serverDown": ""
+      },
+      "label": {
+        "url": ""
+      },
+      "message": {
+        "currentConnection": "",
+        "newUrl": ""
+      }
+    },
+    "ShortcutsModal": {
+      "button": {
+        "close": ""
+      },
+      "header": {
+        "modal": ""
+      },
+      "shortcut": {
+        "audio": {
+          "clearQueue": "",
+          "decreaseVolume": "",
+          "expandQueue": "",
+          "increaseVolume": "",
+          "label": "",
+          "playNext": "",
+          "playPause": "",
+          "playPrevious": "",
+          "seekBack30": "",
+          "seekBack5": "",
+          "seekForward30": "",
+          "seekForward5": "",
+          "shuffleQueue": "",
+          "toggleFavorite": "",
+          "toggleLoop": "",
+          "toggleMute": ""
+        },
+        "general": {
+          "focus": "",
+          "label": "",
+          "show": "",
+          "unfocus": ""
+        }
+      }
+    },
+    "Sidebar": {
+      "header": {
+        "administration": "",
+        "explore": "",
+        "library": "",
+        "main": "",
+        "more": ""
+      },
+      "label": {
+        "add": "",
+        "administration": "",
+        "edits": "",
+        "follows": "",
+        "language": "",
+        "main": "",
+        "play": "",
+        "reports": "",
+        "theme": ""
+      },
+      "link": {
+        "about": "",
+        "albums": "",
+        "artists": "",
+        "browse": "",
+        "channels": "",
+        "createAccount": "",
+        "favorites": "",
+        "home": "",
+        "library": "",
+        "login": "",
+        "moderation": "",
+        "playlists": "",
+        "podcasts": "",
+        "radios": "",
+        "search": "",
+        "settings": "",
+        "switchInstance": "",
+        "users": ""
+      }
+    },
+    "admin": {
+      "SettingsGroup": {
+        "button": {
+          "save": ""
+        },
+        "header": {
+          "error": "",
+          "image": ""
+        },
+        "message": {
+          "success": ""
+        }
+      },
+      "SignupFormBuilder": {
+        "button": {
+          "add": "",
+          "edit": "",
+          "preview": ""
+        },
+        "help": {
+          "additionalFields": "",
+          "helpText": ""
+        },
+        "label": {
+          "additionalField": "",
+          "additionalFields": "",
+          "delete": "",
+          "helpText": "",
+          "moveDown": "",
+          "moveUp": ""
+        },
+        "table": {
+          "additionalFields": {
+            "header": {
+              "actions": "",
+              "label": "",
+              "required": "",
+              "type": ""
+            },
+            "required": {
+              "false": "",
+              "true": ""
+            },
+            "type": {
+              "long": "",
+              "short": ""
+            }
+          }
+        }
+      }
+    },
+    "audio": {
+      "ChannelCard": {
+        "meta": {
+          "episodes": "",
+          "tracks": ""
+        },
+        "title": ""
+      },
+      "ChannelEntries": {
+        "help": {
+          "subscribe": ""
+        }
+      },
+      "ChannelForm": {
+        "header": {
+          "error": ""
+        },
+        "help": {
+          "discography": "",
+          "podcast": "",
+          "podcastFields": "",
+          "username": ""
+        },
+        "label": {
+          "category": "",
+          "description": "",
+          "discography": "",
+          "email": "",
+          "image": "",
+          "language": "",
+          "name": "",
+          "owner": "",
+          "podcast": "",
+          "subcategory": "",
+          "tags": "",
+          "username": ""
+        },
+        "legend": {
+          "purpose": ""
+        },
+        "loader": {
+          "loading": ""
+        },
+        "placeholder": {
+          "name": "",
+          "username": ""
+        }
+      },
+      "ChannelSerieCard": {
+        "meta": {
+          "episodes": ""
+        }
+      },
+      "ChannelSeries": {
+        "button": {
+          "showMore": ""
+        },
+        "help": {
+          "subscribe": ""
+        }
+      },
+      "ChannelsWidget": {
+        "button": {
+          "showMore": ""
+        }
+      },
+      "EmbedWizard": {
+        "button": {
+          "copy": ""
+        },
+        "header": {
+          "preview": ""
+        },
+        "help": {
+          "anonymous": "",
+          "embed": "",
+          "width": ""
+        },
+        "label": {
+          "embed": "",
+          "height": "",
+          "width": ""
+        },
+        "message": {
+          "copy": ""
+        },
+        "warning": {
+          "anonymous": ""
+        }
+      },
+      "LibraryFollowButton": {
+        "button": {
+          "cancel": "",
+          "follow": "",
+          "unfollow": ""
+        }
+      },
+      "PlayButton": {
+        "button": {
+          "addToPlaylist": "",
+          "addToQueue": "",
+          "discretePlay": "",
+          "episodeDetails": "",
+          "hideArtist": "",
+          "playAlbum": "",
+          "playArtist": "",
+          "playNext": "",
+          "playNow": "",
+          "playPlaylist": "",
+          "playTrack": "",
+          "playTracks": "",
+          "report": "",
+          "startRadio": "",
+          "trackDetails": ""
+        },
+        "title": {
+          "more": "",
+          "unavailable": ""
+        }
+      },
+      "Player": {
+        "header": {
+          "player": ""
+        },
+        "label": {
+          "addArtistContentFilter": "",
+          "audioPlayer": "",
+          "clearQueue": "",
+          "expandQueue": "",
+          "loopingDisabled": "",
+          "loopingSingle": "",
+          "loopingWholeQueue": "",
+          "mute": "",
+          "nextTrack": "",
+          "pause": "",
+          "play": "",
+          "previousTrack": "",
+          "shuffleQueue": "",
+          "unmute": ""
+        },
+        "meta": {
+          "position": "",
+          "unknownAlbum": "",
+          "unknownArtist": ""
+        }
+      },
+      "PlayerControls": {
+        "labels": {
+          "next": "",
+          "pause": "",
+          "play": "",
+          "previous": ""
+        }
+      },
+      "Search": {
+        "empty": {
+          "noAlbums": "",
+          "noArtists": ""
+        },
+        "header": {
+          "albums": "",
+          "artists": "",
+          "search": ""
+        },
+        "placeholder": {
+          "search": ""
+        }
+      },
+      "SearchBar": {
+        "empty": {
+          "noResults": ""
+        },
+        "header": {
+          "noResults": ""
+        },
+        "label": {
+          "album": "",
+          "artist": "",
+          "category": {
+            "federation": "",
+            "podcasts": ""
+          },
+          "search": "",
+          "tag": "",
+          "track": ""
+        },
+        "link": {
+          "fediverse": "",
+          "more": "",
+          "rss": ""
+        },
+        "placeholder": {
+          "search": ""
+        }
+      },
+      "VolumeControl": {
+        "button": {
+          "mute": "",
+          "unmute": ""
+        },
+        "label": {
+          "slider": ""
+        }
+      },
+      "album": {
+        "Card": {
+          "meta": {
+            "tracks": ""
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": ""
+          }
+        }
+      },
+      "artist": {
+        "Card": {
+          "meta": {
+            "episodes": "",
+            "tracks": ""
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": ""
+          }
+        }
+      },
+      "podcast": {
+        "MobileRow": {
+          "button": {
+            "actions": ""
+          }
+        },
+        "Modal": {
+          "button": {
+            "addToFavorites": "",
+            "addToPlaylist": "",
+            "addToQueue": "",
+            "albumDetails": "",
+            "artistDetails": "",
+            "channelDetails": "",
+            "episodeDetails": "",
+            "playNext": "",
+            "playNow": "",
+            "removeFromFavorites": "",
+            "seriesDetails": "",
+            "startRadio": "",
+            "trackDetails": ""
+          }
+        }
+      },
+      "track": {
+        "MobileRow": {
+          "button": {
+            "actions": ""
+          }
+        },
+        "Modal": {
+          "button": {
+            "addToFavorites": "",
+            "addToPlaylist": "",
+            "addToQueue": "",
+            "albumDetails": "",
+            "artistDetails": "",
+            "channelDetails": "",
+            "episodeDetails": "",
+            "playNext": "",
+            "playNow": "",
+            "removeFromFavorites": "",
+            "seriesDetails": "",
+            "startRadio": "",
+            "trackDetails": ""
+          }
+        },
+        "Table": {
+          "table": {
+            "header": {
+              "album": "",
+              "artist": "",
+              "title": ""
+            }
+          }
+        },
+        "Widget": {
+          "button": {
+            "more": ""
+          },
+          "empty": {
+            "noResults": ""
+          }
+        }
+      }
+    },
+    "auth": {
+      "ApplicationEdit": {
+        "button": {
+          "regenerateToken": ""
+        },
+        "header": {
+          "appDetails": "",
+          "appSecretWarning": "",
+          "editApp": ""
+        },
+        "help": {
+          "appDetails": ""
+        },
+        "label": {
+          "accessToken": "",
+          "appId": "",
+          "appSecret": ""
+        },
+        "link": {
+          "settings": ""
+        },
+        "message": {
+          "appSecretWarning": ""
+        },
+        "title": ""
+      },
+      "ApplicationForm": {
+        "button": {
+          "create": "",
+          "update": ""
+        },
+        "header": {
+          "failure": ""
+        },
+        "help": {
+          "redirectUri": ""
+        },
+        "label": {
+          "name": "",
+          "redirectUri": "",
+          "scopes": {
+            "description": "",
+            "label": "",
+            "read": {
+              "description": "",
+              "label": ""
+            },
+            "write": {
+              "description": "",
+              "label": ""
+            }
+          }
+        }
+      },
+      "ApplicationNew": {
+        "link": {
+          "settings": ""
+        },
+        "title": ""
+      },
+      "Authorize": {
+        "button": {
+          "authorize": ""
+        },
+        "header": {
+          "access": "",
+          "allScopes": "",
+          "authorize": "",
+          "authorizeFailure": "",
+          "fetchFailure": "",
+          "readOnly": "",
+          "writeOnly": ""
+        },
+        "help": {
+          "copyCode": "",
+          "pasteCode": "",
+          "redirect": ""
+        },
+        "message": {
+          "unknownPermissions": ""
+        },
+        "title": ""
+      },
+      "LoginForm": {
+        "button": {
+          "login": ""
+        },
+        "header": {
+          "loginFailure": ""
+        },
+        "help": {
+          "approvalRequired": "",
+          "invalidCredentials": ""
+        },
+        "label": {
+          "password": "",
+          "username": ""
+        },
+        "link": {
+          "createAccount": "",
+          "resetPassword": ""
+        },
+        "message": {
+          "redirect": ""
+        },
+        "placeholder": {
+          "username": ""
+        }
+      },
+      "Logout": {
+        "button": {
+          "logout": ""
+        },
+        "header": {
+          "confirm": "",
+          "unauthenticated": ""
+        },
+        "link": {
+          "login": ""
+        },
+        "message": {
+          "loggedIn": ""
+        },
+        "title": ""
+      },
+      "Plugin": {
+        "button": {
+          "save": "",
+          "scan": ""
+        },
+        "description": {
+          "library": ""
+        },
+        "header": {
+          "failure": ""
+        },
+        "label": {
+          "library": "",
+          "pluginEnabled": ""
+        },
+        "link": {
+          "documentation": ""
+        }
+      },
+      "Settings": {
+        "button": {
+          "delete": "",
+          "deleteAccount": "",
+          "deleteAccountConfirm": "",
+          "disableSubsonic": "",
+          "edit": "",
+          "password": "",
+          "refresh": "",
+          "remove": "",
+          "removeApp": "",
+          "revoke": "",
+          "revokeAccess": "",
+          "update": "",
+          "updateSettings": ""
+        },
+        "description": {
+          "authorizedApps": "",
+          "changeEmail": "",
+          "changePassword": {
+            "paragraph1": "",
+            "paragraph2": ""
+          },
+          "contentFilters": "",
+          "deleteAccount": "",
+          "plugins": "",
+          "yourApps": ""
+        },
+        "header": {
+          "accountFailure": "",
+          "accountSettings": "",
+          "authorizedApps": "",
+          "avatar": "",
+          "avatarFailure": "",
+          "changeEmail": "",
+          "changePassword": "",
+          "contentFilters": "",
+          "deleteAccount": "",
+          "emailFailure": "",
+          "hiddenArtists": "",
+          "noApps": "",
+          "noPersonalApps": "",
+          "passwordFailure": "",
+          "plugins": "",
+          "settingsUpdated": "",
+          "updateFailure": "",
+          "yourApps": ""
+        },
+        "help": {
+          "changePassword": "",
+          "noApps": "",
+          "noPersonalApps": ""
+        },
+        "label": {
+          "avatar": "",
+          "currentPassword": "",
+          "newEmail": "",
+          "newPassword": "",
+          "password": ""
+        },
+        "link": {
+          "managePlugins": "",
+          "newApp": ""
+        },
+        "message": {
+          "confirmDelete": "",
+          "currentEmail": ""
+        },
+        "modal": {
+          "changePassword": {
+            "content": {
+              "logout": "",
+              "subsonic": "",
+              "warning": ""
+            },
+            "header": ""
+          },
+          "deleteAccount": {
+            "content": {
+              "warning": ""
+            },
+            "header": ""
+          },
+          "deleteApp": {
+            "content": {
+              "warning": ""
+            },
+            "header": ""
+          },
+          "revokeApp": {
+            "content": {
+              "warning": ""
+            },
+            "header": ""
+          }
+        },
+        "table": {
+          "artists": {
+            "header": {
+              "creationDate": "",
+              "name": ""
+            }
+          },
+          "authorizedApps": {
+            "header": {
+              "application": "",
+              "permissions": ""
+            }
+          },
+          "yourApps": {
+            "header": {
+              "application": "",
+              "creationDate": "",
+              "scopes": ""
+            }
+          }
+        },
+        "title": "",
+        "warning": {
+          "deleteAccount": ""
+        }
+      },
+      "SignupForm": {
+        "button": {
+          "create": ""
+        },
+        "header": {
+          "login": "",
+          "signupFailure": ""
+        },
+        "label": {
+          "email": "",
+          "invitation": "",
+          "password": "",
+          "username": ""
+        },
+        "message": {
+          "accountCreated": "",
+          "awaitingReview": "",
+          "registrationClosed": "",
+          "requiresReview": ""
+        },
+        "placeholder": {
+          "email": "",
+          "invitation": "",
+          "username": ""
+        }
+      },
+      "SubsonicTokenForm": {
+        "button": {
+          "confirmDisable": "",
+          "confirmNewPassword": "",
+          "disable": "",
+          "newPassword": ""
+        },
+        "description": {
+          "subsonic": {
+            "paragraph1": "",
+            "paragraph2": "",
+            "paragraph3": ""
+          }
+        },
+        "header": {
+          "error": "",
+          "subsonic": ""
+        },
+        "label": {
+          "subsonicField": ""
+        },
+        "link": {
+          "apps": ""
+        },
+        "message": {
+          "accessDisabled": "",
+          "passwordUpdated": "",
+          "unavailable": ""
+        },
+        "modal": {
+          "disableSubsonic": {
+            "content": {
+              "warning": ""
+            },
+            "header": ""
+          },
+          "newPassword": {
+            "content": {
+              "warning": ""
+            },
+            "header": ""
+          }
+        }
+      }
+    },
+    "channels": {
+      "AlbumForm": {
+        "header": {
+          "error": ""
+        },
+        "label": {
+          "albumTitle": ""
+        }
+      },
+      "AlbumModal": {
+        "button": {
+          "cancel": "",
+          "create": ""
+        },
+        "header": {
+          "newAlbum": "",
+          "newSeries": ""
+        }
+      },
+      "AlbumSelect": {
+        "label": {
+          "album": "",
+          "series": ""
+        },
+        "meta": {
+          "tracks": ""
+        },
+        "option": {
+          "none": ""
+        }
+      },
+      "LicenseSelect": {
+        "label": {
+          "license": ""
+        },
+        "link": {
+          "license": ""
+        },
+        "option": {
+          "none": ""
+        }
+      },
+      "SubscribeButton": {
+        "help": {
+          "auth": ""
+        },
+        "title": {
+          "subscribe": "",
+          "unsubscribe": ""
+        }
+      },
+      "UploadForm": {
+        "button": {
+          "edit": "",
+          "ignore": "",
+          "remove": "",
+          "resume": "",
+          "retry": ""
+        },
+        "description": {
+          "extensions": ""
+        },
+        "header": {
+          "error": ""
+        },
+        "help": {
+          "license": ""
+        },
+        "label": {
+          "channel": "",
+          "openBrowser": ""
+        },
+        "message": {
+          "dragAndDrop": "",
+          "pending": ""
+        },
+        "status": {
+          "errored": "",
+          "pending": "",
+          "uploading": ""
+        },
+        "warning": {
+          "quota": ""
+        }
+      },
+      "UploadMetadataForm": {
+        "label": {
+          "description": "",
+          "image": "",
+          "position": "",
+          "tags": "",
+          "title": ""
+        }
+      },
+      "UploadModal": {
+        "button": {
+          "cancel": "",
+          "close": "",
+          "finishLater": "",
+          "next": "",
+          "previous": "",
+          "publish": "",
+          "update": ""
+        },
+        "header": {
+          "processing": "",
+          "publish": "",
+          "uploadDetails": "",
+          "uploadFiles": ""
+        },
+        "meta": {
+          "files": "",
+          "quota": ""
+        }
+      }
+    },
+    "common": {
+      "ActionTable": {
+        "button": {
+          "allSelected": "",
+          "go": "",
+          "launch": "",
+          "refresh": "",
+          "select": "",
+          "selectAll": "",
+          "selectCurrentPage": "",
+          "selectElement": "",
+          "selected": ""
+        },
+        "header": {
+          "error": ""
+        },
+        "label": {
+          "actions": "",
+          "performAction": ""
+        },
+        "message": {
+          "needsRefresh": "",
+          "success": ""
+        },
+        "modal": {
+          "performAction": {
+            "content": {
+              "warning": ""
+            },
+            "header": ""
+          }
+        }
+      },
+      "AttachmentInput": {
+        "button": {
+          "remove": ""
+        },
+        "header": {
+          "failure": ""
+        },
+        "help": {
+          "upload": ""
+        },
+        "label": {
+          "upload": ""
+        },
+        "loader": {
+          "uploading": ""
+        }
+      },
+      "CollapseLink": {
+        "button": {
+          "collapse": "",
+          "expand": ""
+        }
+      },
+      "ContentForm": {
+        "button": {
+          "preview": "",
+          "write": ""
+        },
+        "empty": {
+          "noContent": ""
+        },
+        "help": {
+          "markdown": ""
+        },
+        "placeholder": {
+          "input": ""
+        }
+      },
+      "CopyInput": {
+        "button": {
+          "copy": ""
+        },
+        "message": {
+          "success": ""
+        }
+      },
+      "DangerousButton": {
+        "button": {
+          "cancel": "",
+          "confirm": ""
+        },
+        "header": {
+          "confirm": ""
+        }
+      },
+      "Duration": {
+        "meta": {
+          "hours": "",
+          "minutes": ""
+        }
+      },
+      "EmptyState": {
+        "button": {
+          "refresh": ""
+        },
+        "header": {
+          "noResults": ""
+        }
+      },
+      "ExpandableDiv": {
+        "button": {
+          "less": "",
+          "more": ""
+        }
+      },
+      "InlineSearchBar": {
+        "button": {
+          "clear": ""
+        },
+        "label": {
+          "search": ""
+        },
+        "placeholder": {
+          "search": ""
+        }
+      },
+      "LoginModal": {
+        "description": {
+          "noAccess": ""
+        },
+        "header": {
+          "unauthenticated": ""
+        },
+        "link": {
+          "login": "",
+          "signup": ""
+        }
+      },
+      "RenderedDescription": {
+        "button": {
+          "cancel": "",
+          "edit": "",
+          "less": "",
+          "more": "",
+          "update": ""
+        },
+        "empty": {
+          "noDescription": ""
+        },
+        "header": {
+          "failure": ""
+        }
+      },
+      "UserLink": {
+        "link": {
+          "username": ""
+        }
+      },
+      "UserMenu": {
+        "label": {
+          "language": "",
+          "shortcuts": "",
+          "theme": ""
+        },
+        "link": {
+          "about": "",
+          "chat": "",
+          "docs": "",
+          "forum": "",
+          "git": "",
+          "login": "",
+          "logout": "",
+          "notifications": "",
+          "profile": "",
+          "settings": "",
+          "signup": "",
+          "support": ""
+        }
+      },
+      "UserModal": {
+        "button": {
+          "switchInstance": ""
+        },
+        "header": {
+          "options": ""
+        },
+        "label": {
+          "language": "",
+          "shortcuts": "",
+          "theme": ""
+        },
+        "link": {
+          "about": "",
+          "chat": "",
+          "docs": "",
+          "forum": "",
+          "git": "",
+          "login": "",
+          "logout": "",
+          "notifications": "",
+          "profile": "",
+          "settings": "",
+          "signup": "",
+          "support": ""
+        }
+      }
+    },
+    "favorites": {
+      "List": {
+        "empty": {
+          "noFavorites": ""
+        },
+        "header": {
+          "favorites": ""
+        },
+        "link": {
+          "library": ""
+        },
+        "loader": {
+          "loading": ""
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "",
+            "descending": "",
+            "label": ""
+          },
+          "label": ""
+        },
+        "pagination": {
+          "results": ""
+        },
+        "title": ""
+      },
+      "TrackFavoriteIcon": {
+        "button": {
+          "add": "",
+          "remove": ""
+        },
+        "label": {
+          "inFavorites": ""
+        }
+      }
+    },
+    "federation": {
+      "FetchButton": {
+        "button": {
+          "close": "",
+          "reload": ""
+        },
+        "description": {
+          "failure": "",
+          "pending": "",
+          "skipped": "",
+          "success": ""
+        },
+        "header": {
+          "failure": "",
+          "pending": "",
+          "refresh": "",
+          "saveFailure": "",
+          "skipped": "",
+          "success": ""
+        },
+        "loader": {
+          "awaitingResult": "",
+          "fetchRequest": ""
+        },
+        "table": {
+          "error": {
+            "label": {
+              "detail": "",
+              "type": ""
+            },
+            "value": {
+              "connectionError": "",
+              "httpError": "",
+              "httpStatus": "",
+              "invalidAttributesError": "",
+              "invalidJsonError": "",
+              "timeoutError": "",
+              "unknownError": ""
+            }
+          }
+        }
+      },
+      "LibraryWidget": {
+        "button": {
+          "showMore": ""
+        },
+        "empty": {
+          "noMatch": ""
+        }
+      }
+    },
+    "forms": {
+      "PasswordInput": {
+        "button": {
+          "copy": ""
+        },
+        "message": {
+          "copy": ""
+        },
+        "title": ""
+      }
+    },
+    "library": {
+      "AlbumBase": {
+        "link": {
+          "addDescription": ""
+        },
+        "meta": {
+          "episodes": "",
+          "tracks": ""
+        },
+        "title": ""
+      },
+      "AlbumDetail": {
+        "description": {
+          "libraries": ""
+        },
+        "header": {
+          "episodes": "",
+          "libraries": "",
+          "tracks": ""
+        },
+        "meta": {
+          "volume": ""
+        }
+      },
+      "AlbumDropdown": {
+        "button": {
+          "cancel": "",
+          "delete": "",
+          "edit": "",
+          "embed": "",
+          "more": ""
+        },
+        "link": {
+          "discogs": "",
+          "django": "",
+          "domain": "",
+          "moderation": "",
+          "musicbrainz": ""
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": ""
+            },
+            "header": ""
+          },
+          "embed": {
+            "header": ""
+          }
+        }
+      },
+      "AlbumEdit": {
+        "header": {
+          "edit": "",
+          "suggest": ""
+        },
+        "message": {
+          "remote": ""
+        }
+      },
+      "Albums": {
+        "button": {
+          "search": ""
+        },
+        "empty": {
+          "noResults": ""
+        },
+        "header": {
+          "browse": ""
+        },
+        "label": {
+          "search": "",
+          "tags": ""
+        },
+        "link": {
+          "addMusic": ""
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "",
+            "descending": "",
+            "label": ""
+          },
+          "label": ""
+        },
+        "pagination": {
+          "results": ""
+        },
+        "placeholder": {
+          "search": ""
+        },
+        "title": ""
+      },
+      "ArtistBase": {
+        "button": {
+          "cancel": "",
+          "edit": "",
+          "embed": "",
+          "more": "",
+          "play": ""
+        },
+        "link": {
+          "discogs": "",
+          "django": "",
+          "domain": "",
+          "moderation": "",
+          "musicbrainz": "",
+          "wikipedia": ""
+        },
+        "meta": {
+          "albums": "",
+          "tracks": ""
+        },
+        "modal": {
+          "embed": {
+            "header": ""
+          }
+        },
+        "title": ""
+      },
+      "ArtistDetail": {
+        "button": {
+          "filter": "",
+          "more": ""
+        },
+        "description": {
+          "library": ""
+        },
+        "header": {
+          "album": "",
+          "library": "",
+          "track": ""
+        },
+        "link": {
+          "filter": ""
+        },
+        "message": {
+          "filter": ""
+        }
+      },
+      "ArtistEdit": {
+        "header": {
+          "edit": "",
+          "suggest": ""
+        },
+        "message": {
+          "remote": ""
+        }
+      },
+      "Artists": {
+        "button": {
+          "search": "",
+          "upload": ""
+        },
+        "empty": {
+          "noResults": ""
+        },
+        "header": {
+          "browse": ""
+        },
+        "label": {
+          "excludeCompilation": "",
+          "search": "",
+          "tags": ""
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "",
+            "descending": "",
+            "label": ""
+          },
+          "label": ""
+        },
+        "pagination": {
+          "results": ""
+        },
+        "placeholder": {
+          "search": ""
+        },
+        "title": ""
+      },
+      "EditCard": {
+        "button": {
+          "approve": "",
+          "delete": "",
+          "reject": ""
+        },
+        "header": {
+          "modification": ""
+        },
+        "link": {
+          "track": ""
+        },
+        "modal": {
+          "content": {
+            "warning": ""
+          },
+          "delete": {
+            "header": ""
+          }
+        },
+        "status": {
+          "applied": "",
+          "approved": "",
+          "pending": "",
+          "rejected": ""
+        },
+        "table": {
+          "update": {
+            "header": {
+              "field": "",
+              "newValue": "",
+              "oldValue": ""
+            },
+            "notApplicable": ""
+          }
+        }
+      },
+      "EditForm": {
+        "button": {
+          "cancel": "",
+          "clear": "",
+          "new": "",
+          "reset": "",
+          "showAll": "",
+          "showUnreviewed": "",
+          "submit": "",
+          "suggest": ""
+        },
+        "empty": {
+          "suggestEdit": ""
+        },
+        "header": {
+          "failure": "",
+          "recentEdits": "",
+          "success": "",
+          "unreviewed": ""
+        },
+        "label": {
+          "summary": ""
+        },
+        "message": {
+          "noPermission": ""
+        },
+        "notApplicable": "",
+        "placeholder": {
+          "summary": ""
+        }
+      },
+      "FileUpload": {
+        "button": {
+          "cancel": "",
+          "retry": ""
+        },
+        "description": {
+          "import": "",
+          "previousImport": ""
+        },
+        "empty": {
+          "noFiles": ""
+        },
+        "header": {
+          "failure": "",
+          "local": "",
+          "server": "",
+          "status": ""
+        },
+        "label": {
+          "extensions": "",
+          "remainingSpace": "",
+          "uploadWidget": ""
+        },
+        "link": {
+          "picard": "",
+          "processing": "",
+          "uploading": ""
+        },
+        "message": {
+          "listener": "",
+          "local": {
+            "copyright": "",
+            "format": "",
+            "message": "",
+            "tag": ""
+          }
+        },
+        "table": {
+          "upload": {
+            "header": {
+              "actions": "",
+              "filename": "",
+              "size": "",
+              "status": ""
+            },
+            "progress": "",
+            "status": {
+              "pending": "",
+              "uploaded": "",
+              "uploading": ""
+            }
+          }
+        },
+        "tooltip": {
+          "denied": "",
+          "extension": "",
+          "network": "",
+          "retry": "",
+          "size": "",
+          "timeout": ""
+        }
+      },
+      "FsBrowser": {
+        "button": {
+          "import": ""
+        }
+      },
+      "FsLogs": {
+        "empty": {
+          "notStarted": ""
+        }
+      },
+      "Home": {
+        "header": {
+          "newChannels": "",
+          "playlists": "",
+          "recentlyAdded": "",
+          "recentlyFavorited": "",
+          "recentlyListened": ""
+        },
+        "title": ""
+      },
+      "ImportStatusModal": {
+        "button": {
+          "close": ""
+        },
+        "error": {
+          "importFailure": "",
+          "invalidMetadata": {
+            "label": "",
+            "message": ""
+          },
+          "unknownError": {
+            "label": "",
+            "message": ""
+          }
+        },
+        "header": {
+          "importDetail": ""
+        },
+        "link": {
+          "documentation": "",
+          "support": ""
+        },
+        "message": {
+          "importDetail": "",
+          "importSuccess": ""
+        },
+        "table": {
+          "error": {
+            "debug": "",
+            "errorDetail": "",
+            "errorType": "",
+            "help": ""
+          }
+        },
+        "warning": {
+          "importSkipped": ""
+        }
+      },
+      "Podcasts": {
+        "button": {
+          "cancel": "",
+          "channel": "",
+          "feed": "",
+          "search": "",
+          "subscribe": ""
+        },
+        "empty": {
+          "noResults": ""
+        },
+        "header": {
+          "browse": ""
+        },
+        "label": {
+          "search": "",
+          "tags": ""
+        },
+        "modal": {
+          "subscription": {
+            "header": ""
+          }
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "",
+            "descending": "",
+            "label": ""
+          },
+          "label": ""
+        },
+        "pagination": {
+          "results": ""
+        },
+        "placeholder": {
+          "search": ""
+        },
+        "title": ""
+      },
+      "Radios": {
+        "button": {
+          "add": "",
+          "create": "",
+          "search": ""
+        },
+        "empty": {
+          "noResults": ""
+        },
+        "header": {
+          "browse": "",
+          "instance": "",
+          "user": ""
+        },
+        "label": {
+          "search": ""
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "",
+            "descending": "",
+            "label": ""
+          },
+          "label": ""
+        },
+        "pagination": {
+          "results": ""
+        },
+        "placeholder": {
+          "search": ""
+        },
+        "title": ""
+      },
+      "TagDetail": {
+        "header": {
+          "channels": "",
+          "tracks": ""
+        },
+        "link": {
+          "albums": "",
+          "artists": "",
+          "moderation": ""
+        }
+      },
+      "TagSelector": {
+        "placeholder": {
+          "search": ""
+        }
+      },
+      "TrackBase": {
+        "button": {
+          "cancel": "",
+          "delete": "",
+          "download": "",
+          "edit": "",
+          "embed": "",
+          "more": "",
+          "play": ""
+        },
+        "link": {
+          "discogs": "",
+          "django": "",
+          "domain": "",
+          "moderation": "",
+          "wikipedia": ""
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": ""
+            },
+            "header": ""
+          },
+          "embed": {
+            "header": ""
+          }
+        },
+        "subtitle": {
+          "with-uploader": "",
+          "without-uploader": ""
+        },
+        "title": ""
+      },
+      "TrackDetail": {
+        "description": {
+          "library": ""
+        },
+        "header": {
+          "episode": "",
+          "library": "",
+          "playlists": "",
+          "release": "",
+          "track": ""
+        },
+        "link": {
+          "musicbrainz": ""
+        },
+        "notApplicable": "",
+        "table": {
+          "release": {
+            "album": "",
+            "artist": "",
+            "copyright": "",
+            "license": "",
+            "series": "",
+            "url": "",
+            "year": ""
+          },
+          "track": {
+            "bitrate": {
+              "label": "",
+              "value": ""
+            },
+            "codec": "",
+            "downloads": "",
+            "duration": "",
+            "size": ""
+          }
+        }
+      },
+      "TrackEdit": {
+        "header": {
+          "edit": "",
+          "suggest": ""
+        },
+        "message": {
+          "remote": ""
+        }
+      },
+      "radios": {
+        "Builder": {
+          "button": {
+            "filter": "",
+            "save": ""
+          },
+          "description": {
+            "builder": ""
+          },
+          "header": {
+            "builder": "",
+            "created": "",
+            "matches": "",
+            "updated": ""
+          },
+          "label": {
+            "description": "",
+            "filter": "",
+            "name": "",
+            "public": ""
+          },
+          "option": {
+            "filter": ""
+          },
+          "placeholder": {
+            "description": "",
+            "name": ""
+          },
+          "table": {
+            "filter": {
+              "header": {
+                "actions": "",
+                "candidates": "",
+                "config": "",
+                "exclude": "",
+                "name": ""
+              }
+            }
+          },
+          "title": ""
+        },
+        "Filter": {
+          "cancelButton": "",
+          "excludeLabel": "",
+          "matchingTracks": "",
+          "matchingTracksModalHeader": "",
+          "removeButton": ""
+        }
+      }
+    },
+    "manage": {
+      "ChannelsTable": {
+        "label": {
+          "category": "",
+          "search": ""
+        },
+        "link": {
+          "local": "",
+          "moderation": ""
+        },
+        "option": {
+          "all": ""
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "",
+            "descending": "",
+            "label": ""
+          },
+          "label": ""
+        },
+        "pagination": {
+          "results": ""
+        },
+        "placeholder": {
+          "search": ""
+        },
+        "table": {
+          "channel": {
+            "header": {
+              "account": "",
+              "albums": "",
+              "creationDate": "",
+              "domain": "",
+              "name": "",
+              "tracks": ""
+            }
+          }
+        }
+      },
+      "library": {
+        "AlbumsTable": {
+          "action": {
+            "delete": {
+              "label": "",
+              "warning": ""
+            }
+          },
+          "label": {
+            "search": ""
+          },
+          "link": {
+            "local": "",
+            "moderation": ""
+          },
+          "notApplicable": "",
+          "ordering": {
+            "direction": {
+              "ascending": "",
+              "descending": "",
+              "label": ""
+            },
+            "label": ""
+          },
+          "pagination": {
+            "results": ""
+          },
+          "placeholder": {
+            "search": ""
+          },
+          "table": {
+            "album": {
+              "header": {
+                "artist": "",
+                "creationDate": "",
+                "domain": "",
+                "name": "",
+                "releaseDate": "",
+                "tracks": ""
+              }
+            }
+          }
+        },
+        "ArtistsTable": {
+          "action": {
+            "delete": {
+              "label": "",
+              "warning": ""
+            }
+          },
+          "label": {
+            "category": "",
+            "search": ""
+          },
+          "link": {
+            "local": ""
+          },
+          "option": {
+            "all": ""
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "",
+              "descending": "",
+              "label": ""
+            },
+            "label": ""
+          },
+          "pagination": {
+            "results": ""
+          },
+          "placeholder": {
+            "search": ""
+          },
+          "table": {
+            "artist": {
+              "header": {
+                "albums": "",
+                "creationDate": "",
+                "domain": "",
+                "name": "",
+                "tracks": ""
+              }
+            }
+          }
+        },
+        "EditsCardList": {
+          "label": {
+            "search": "",
+            "status": ""
+          },
+          "option": {
+            "all": "",
+            "approved": "",
+            "pending": "",
+            "rejected": ""
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "",
+              "descending": "",
+              "label": ""
+            },
+            "label": ""
+          },
+          "pagination": {
+            "results": ""
+          },
+          "placeholder": {
+            "search": ""
+          }
+        },
+        "LibrariesTable": {
+          "action": {
+            "delete": {
+              "label": "",
+              "warning": ""
+            }
+          },
+          "label": {
+            "search": "",
+            "visibility": ""
+          },
+          "link": {
+            "local": ""
+          },
+          "option": {
+            "all": ""
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "",
+              "descending": "",
+              "label": ""
+            },
+            "label": ""
+          },
+          "pagination": {
+            "results": ""
+          },
+          "placeholder": {
+            "search": ""
+          },
+          "table": {
+            "library": {
+              "header": {
+                "account": "",
+                "creationDate": "",
+                "domain": "",
+                "followers": "",
+                "name": "",
+                "uploads": "",
+                "visibility": ""
+              }
+            }
+          }
+        },
+        "TagsTable": {
+          "action": {
+            "delete": {
+              "label": "",
+              "warning": ""
+            }
+          },
+          "label": {
+            "search": ""
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "",
+              "descending": "",
+              "label": ""
+            },
+            "label": ""
+          },
+          "pagination": {
+            "results": ""
+          },
+          "placeholder": {
+            "search": ""
+          },
+          "table": {
+            "tag": {
+              "header": {
+                "albums": "",
+                "artists": "",
+                "creationDate": "",
+                "name": "",
+                "tracks": ""
+              }
+            }
+          }
+        },
+        "TracksTable": {
+          "action": {
+            "delete": {
+              "label": "",
+              "warning": ""
+            }
+          },
+          "label": {
+            "search": ""
+          },
+          "link": {
+            "local": ""
+          },
+          "notApplicable": "",
+          "ordering": {
+            "direction": {
+              "ascending": "",
+              "descending": "",
+              "label": ""
+            },
+            "label": ""
+          },
+          "pagination": {
+            "results": ""
+          },
+          "placeholder": {
+            "search": ""
+          },
+          "table": {
+            "track": {
+              "header": {
+                "album": "",
+                "artist": "",
+                "creationDate": "",
+                "domain": "",
+                "license": "",
+                "title": ""
+              }
+            }
+          }
+        },
+        "UploadsTable": {
+          "action": {
+            "delete": {
+              "label": "",
+              "warning": ""
+            }
+          },
+          "label": {
+            "search": "",
+            "status": "",
+            "visibility": ""
+          },
+          "link": {
+            "local": ""
+          },
+          "notApplicable": "",
+          "option": {
+            "all": "",
+            "failed": "",
+            "finished": "",
+            "pending": "",
+            "skipped": ""
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "",
+              "descending": "",
+              "label": ""
+            },
+            "label": ""
+          },
+          "pagination": {
+            "results": ""
+          },
+          "placeholder": {
+            "search": ""
+          },
+          "table": {
+            "upload": {
+              "header": {
+                "accessedDate": "",
+                "account": "",
+                "creationDate": "",
+                "domain": "",
+                "importStatus": "",
+                "library": "",
+                "name": "",
+                "size": "",
+                "visibility": ""
+              }
+            }
+          }
+        }
+      },
+      "moderation": {
+        "AccountsTable": {
+          "action": {
+            "purge": {
+              "label": ""
+            }
+          },
+          "label": {
+            "search": ""
+          },
+          "link": {
+            "local": ""
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "",
+              "descending": "",
+              "label": ""
+            },
+            "label": ""
+          },
+          "pagination": {
+            "results": ""
+          },
+          "placeholder": {
+            "search": ""
+          },
+          "table": {
+            "account": {
+              "header": {
+                "domain": "",
+                "firstSeen": "",
+                "lastSeen": "",
+                "moderationRule": "",
+                "name": "",
+                "uploads": ""
+              },
+              "moderationRule": ""
+            }
+          }
+        },
+        "DomainsTable": {
+          "action": {
+            "add": {
+              "label": ""
+            },
+            "purge": {
+              "label": ""
+            },
+            "remove": {
+              "label": ""
+            }
+          },
+          "empty": {
+            "noPods": ""
+          },
+          "label": {
+            "inList": "",
+            "search": ""
+          },
+          "link": {
+            "list": ""
+          },
+          "option": {
+            "all": "",
+            "no": "",
+            "yes": ""
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "",
+              "descending": "",
+              "label": ""
+            },
+            "label": ""
+          },
+          "pagination": {
+            "results": ""
+          },
+          "placeholder": {
+            "search": ""
+          },
+          "table": {
+            "domain": {
+              "header": {
+                "firstSeen": "",
+                "moderationRule": "",
+                "name": "",
+                "receivedMessages": "",
+                "users": ""
+              },
+              "moderationRule": ""
+            }
+          }
+        },
+        "InstancePolicyCard": {
+          "button": {
+            "edit": ""
+          },
+          "header": {
+            "rule": ""
+          },
+          "label": {
+            "blockAll": "",
+            "muteActivity": "",
+            "muteNotifications": "",
+            "reason": "",
+            "rejectMedia": ""
+          },
+          "status": {
+            "enabled": "",
+            "paused": ""
+          }
+        },
+        "InstancePolicyForm": {
+          "button": {
+            "cancel": "",
+            "confirm": "",
+            "create": "",
+            "delete": "",
+            "update": ""
+          },
+          "header": {
+            "addRule": "",
+            "editRule": "",
+            "failure": ""
+          },
+          "label": {
+            "blockAll": "",
+            "customizeRule": "",
+            "policyDisabled": "",
+            "policyEnabled": "",
+            "policyReason": "",
+            "rejectMedia": "",
+            "silenceActivity": "",
+            "silenceNotifications": ""
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": ""
+              },
+              "header": ""
+            }
+          },
+          "tooltip": {
+            "blockAll": "",
+            "isActive": "",
+            "rejectMedia": "",
+            "silenceActivity": "",
+            "silenceNotifications": "",
+            "summary": ""
+          }
+        },
+        "InstancePolicyModal": {
+          "button": {
+            "close": "",
+            "show": ""
+          },
+          "modal": {
+            "manage": {
+              "content": {
+                "warning": ""
+              },
+              "header": ""
+            }
+          }
+        },
+        "NoteForm": {
+          "button": {
+            "add": ""
+          },
+          "header": {
+            "failure": ""
+          },
+          "placeholder": {
+            "summary": ""
+          }
+        },
+        "NotesThread": {
+          "button": {
+            "delete": ""
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": ""
+              },
+              "header": ""
+            }
+          }
+        },
+        "ReportCard": {
+          "button": {
+            "confirmDelete": "",
+            "delete": "",
+            "resolve": "",
+            "unresolve": ""
+          },
+          "header": {
+            "actions": "",
+            "message": "",
+            "notes": "",
+            "reportedObject": ""
+          },
+          "link": {
+            "moderation": "",
+            "publicPage": "",
+            "report": ""
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": ""
+              },
+              "header": ""
+            }
+          },
+          "notApplicable": "",
+          "table": {
+            "object": {
+              "account": "",
+              "domain": "",
+              "local": "",
+              "owner": "",
+              "type": ""
+            },
+            "report": {
+              "category": "",
+              "creationDate": "",
+              "submittedBy": ""
+            },
+            "status": {
+              "assignedTo": "",
+              "internalNotes": "",
+              "resolutionDate": "",
+              "resolved": "",
+              "status": "",
+              "unresolved": ""
+            }
+          },
+          "warning": {
+            "objectDeleted": ""
+          }
+        },
+        "UserRequestCard": {
+          "button": {
+            "approve": "",
+            "reject": ""
+          },
+          "header": {
+            "actions": "",
+            "notes": "",
+            "signup": ""
+          },
+          "link": {
+            "request": ""
+          },
+          "message": {
+            "signup": ""
+          },
+          "notApplicable": "",
+          "table": {
+            "request": {
+              "creationDate": "",
+              "submittedBy": ""
+            },
+            "status": {
+              "approved": "",
+              "assignedTo": "",
+              "internalNotes": "",
+              "pending": "",
+              "refused": "",
+              "resolutionDate": "",
+              "status": ""
+            }
+          }
+        }
+      },
+      "users": {
+        "InvitationForm": {
+          "button": {
+            "clear": "",
+            "new": ""
+          },
+          "header": {
+            "failure": ""
+          },
+          "label": {
+            "invite": ""
+          },
+          "placeholder": {
+            "invitation": ""
+          },
+          "table": {
+            "invitation": {
+              "header": {
+                "code": "",
+                "link": ""
+              }
+            }
+          }
+        },
+        "InvitationsTable": {
+          "action": {
+            "delete": ""
+          },
+          "label": {
+            "expired": "",
+            "search": "",
+            "status": "",
+            "unused": "",
+            "used": ""
+          },
+          "option": {
+            "all": "",
+            "expired": "",
+            "open": ""
+          },
+          "ordering": {
+            "label": ""
+          },
+          "pagination": {
+            "results": ""
+          },
+          "placeholder": {
+            "search": ""
+          },
+          "table": {
+            "invitation": {
+              "header": {
+                "code": "",
+                "creationDate": "",
+                "expirationDate": "",
+                "owner": "",
+                "status": "",
+                "user": ""
+              }
+            }
+          }
+        },
+        "UsersTable": {
+          "label": {
+            "search": ""
+          },
+          "notApplicable": "",
+          "ordering": {
+            "direction": {
+              "ascending": "",
+              "descending": "",
+              "label": ""
+            },
+            "label": ""
+          },
+          "pagination": {
+            "results": ""
+          },
+          "permission": {
+            "library": "",
+            "moderation": "",
+            "settings": ""
+          },
+          "placeholder": {
+            "search": ""
+          },
+          "table": {
+            "user": {
+              "accountStatus": {
+                "active": "",
+                "inactive": ""
+              },
+              "header": {
+                "accountStatus": "",
+                "email": "",
+                "lastActivity": "",
+                "permissions": "",
+                "signup": "",
+                "status": "",
+                "username": ""
+              },
+              "status": {
+                "admin": "",
+                "regular": "",
+                "staff": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "moderation": {
+      "FilterModal": {
+        "button": {
+          "cancel": "",
+          "hide": ""
+        },
+        "header": {
+          "failure": "",
+          "modal": ""
+        },
+        "help": {
+          "createFilter": ""
+        },
+        "message": {
+          "success": ""
+        },
+        "warning": {
+          "createFilter": {
+            "listIntro": "",
+            "listItem1": "",
+            "listItem2": "",
+            "listItem3": "",
+            "listItem4": ""
+          }
+        }
+      },
+      "ReportCategoryDropdown": {
+        "label": {
+          "category": ""
+        },
+        "option": {
+          "all": ""
+        }
+      },
+      "ReportModal": {
+        "button": {
+          "cancel": "",
+          "submit": ""
+        },
+        "description": {
+          "email": "",
+          "forwardToDomain": "",
+          "message": "",
+          "modal": ""
+        },
+        "error": {
+          "nodeinfoFetch": ""
+        },
+        "header": {
+          "disabled": "",
+          "modal": "",
+          "submissionFailure": ""
+        },
+        "label": {
+          "email": "",
+          "forwardToDomain": "",
+          "message": ""
+        },
+        "message": {
+          "submissionSuccess": ""
+        }
+      }
+    },
+    "notifications": {
+      "NotificationRow": {
+        "button": {
+          "approve": "",
+          "markRead": "",
+          "markUnread": "",
+          "reject": ""
+        },
+        "message": {
+          "libraryAcceptFollow": "",
+          "libraryFollow": "",
+          "libraryPendingFollow": "",
+          "libraryReject": ""
+        }
+      }
+    },
+    "playlists": {
+      "Card": {
+        "meta": {
+          "tracks": ""
+        }
+      },
+      "Editor": {
+        "button": {
+          "addDuplicate": "",
+          "clear": "",
+          "copy": "",
+          "insertFromQueue": ""
+        },
+        "error": {
+          "sync": ""
+        },
+        "header": {
+          "editor": ""
+        },
+        "help": {
+          "reorder": ""
+        },
+        "loading": {
+          "sync": ""
+        },
+        "message": {
+          "sync": ""
+        },
+        "modal": {
+          "clearPlaylist": {
+            "content": {
+              "warning": ""
+            },
+            "header": ""
+          }
+        },
+        "warning": {
+          "duplicate": ""
+        }
+      },
+      "Form": {
+        "button": {
+          "create": "",
+          "update": ""
+        },
+        "header": {
+          "createFailure": "",
+          "createPlaylist": "",
+          "createSuccess": "",
+          "updateSuccess": ""
+        },
+        "label": {
+          "name": "",
+          "visibility": ""
+        },
+        "placeholder": {
+          "name": ""
+        }
+      },
+      "PlaylistModal": {
+        "button": {
+          "addDuplicate": "",
+          "addToPlaylist": "",
+          "addTrack": "",
+          "cancel": "",
+          "edit": ""
+        },
+        "empty": {
+          "noPlaylists": ""
+        },
+        "header": {
+          "addFailure": "",
+          "addToPlaylist": "",
+          "available": "",
+          "manage": "",
+          "noResults": "",
+          "track": ""
+        },
+        "label": {
+          "filter": ""
+        },
+        "placeholder": {
+          "filterPlaylist": ""
+        },
+        "table": {
+          "edit": {
+            "header": {
+              "edit": "",
+              "lastModification": "",
+              "name": "",
+              "tracks": ""
+            }
+          }
+        },
+        "warning": {
+          "duplicate": ""
+        }
+      },
+      "TrackPlaylistIcon": {
+        "button": {
+          "add": ""
+        }
+      },
+      "Widget": {
+        "button": {
+          "create": "",
+          "more": ""
+        },
+        "placeholder": {
+          "noPlaylists": ""
+        }
+      }
+    },
+    "radios": {
+      "Button": {
+        "startArtistsRadio": "",
+        "startPlaylistsRadio": "",
+        "startRadio": "",
+        "startTagsRadio": "",
+        "stopArtistsRadio": "",
+        "stopPlaylistsRadio": "",
+        "stopRadio": "",
+        "stopTagsRadio": ""
+      },
+      "Card": {
+        "button": {
+          "edit": ""
+        }
+      }
+    },
+    "tags": {
+      "List": {
+        "button": {
+          "more": ""
+        }
+      }
+    },
+    "vui": {
+      "Pagination": {
+        "label": "",
+        "next": "",
+        "previous": ""
+      }
+    }
+  },
+  "composables": {
+    "audio": {
+      "usePlayOptions": {
+        "addToQueueMessage": ""
+      }
+    },
+    "locale": {
+      "useSharedLabels": {
+        "fields": {
+          "contentCategory": {
+            "choices": {
+              "music": "",
+              "other": "",
+              "podcast": ""
+            },
+            "label": ""
+          },
+          "importStatus": {
+            "choices": {
+              "draft": {
+                "help": "",
+                "label": ""
+              },
+              "errored": {
+                "help": "",
+                "label": ""
+              },
+              "finished": {
+                "help": "",
+                "label": ""
+              },
+              "pending": {
+                "help": "",
+                "label": ""
+              },
+              "skipped": {
+                "help": "",
+                "label": ""
+              }
+            },
+            "label": ""
+          },
+          "privacyLevel": {
+            "choices": {
+              "instance": "",
+              "private": "",
+              "public": ""
+            },
+            "help": "",
+            "label": "",
+            "shortChoices": {
+              "instance": "",
+              "private": "",
+              "public": ""
+            }
+          },
+          "reportType": {
+            "choices": {
+              "illegalContent": "",
+              "invalidMetadata": "",
+              "offensiveContent": "",
+              "other": "",
+              "takedownRequest": ""
+            },
+            "label": ""
+          },
+          "summary": {
+            "label": ""
+          }
+        },
+        "filters": {
+          "accessedDate": "",
+          "albumTitle": "",
+          "appliedDate": "",
+          "artistName": "",
+          "bitrate": "",
+          "creationDate": "",
+          "dateJoined": "",
+          "domain": "",
+          "duration": "",
+          "expirationDate": "",
+          "firstSeen": "",
+          "followers": "",
+          "handledDate": "",
+          "itemsCount": "",
+          "lastActivity": "",
+          "lastSeen": "",
+          "modificationDate": "",
+          "name": "",
+          "receivedMessages": "",
+          "releaseDate": "",
+          "size": "",
+          "trackTitle": "",
+          "uploads": "",
+          "username": "",
+          "users": ""
+        },
+        "scopes": {
+          "edits": {
+            "description": "",
+            "label": ""
+          },
+          "favorites": {
+            "description": "",
+            "label": ""
+          },
+          "filters": {
+            "description": "",
+            "label": ""
+          },
+          "follows": {
+            "description": "",
+            "label": ""
+          },
+          "libraries": {
+            "description": "",
+            "label": ""
+          },
+          "listenings": {
+            "description": "",
+            "label": ""
+          },
+          "notifications": {
+            "description": "",
+            "label": ""
+          },
+          "playlists": {
+            "description": "",
+            "label": ""
+          },
+          "profile": {
+            "description": "",
+            "label": ""
+          },
+          "radios": {
+            "description": "",
+            "label": ""
+          },
+          "reports": {
+            "description": "",
+            "label": ""
+          },
+          "security": {
+            "description": "",
+            "label": ""
+          }
+        }
+      }
+    },
+    "moderation": {
+      "useEditConfigs": {
+        "album": {
+          "releaseDate": "",
+          "title": ""
+        },
+        "artist": {
+          "name": ""
+        },
+        "cover": {
+          "label": ""
+        },
+        "description": {
+          "label": ""
+        },
+        "tags": {
+          "label": ""
+        },
+        "track": {
+          "copyright": "",
+          "license": "",
+          "position": "",
+          "title": ""
+        }
+      },
+      "useReport": {
+        "account": {
+          "label": "",
+          "typeLabel": ""
+        },
+        "album": {
+          "label": "",
+          "typeLabel": ""
+        },
+        "artist": {
+          "label": "",
+          "typeLabel": "",
+          "unknownLabel": ""
+        },
+        "channel": {
+          "label": "",
+          "typeLabel": ""
+        },
+        "library": {
+          "label": "",
+          "typeLabel": ""
+        },
+        "playlist": {
+          "label": "",
+          "typeLabel": ""
+        },
+        "track": {
+          "label": "",
+          "typeLabel": ""
+        }
+      },
+      "useReportConfigs": {
+        "account": {
+          "label": "",
+          "summary": ""
+        },
+        "album": {
+          "label": "",
+          "releaseDate": "",
+          "title": ""
+        },
+        "artist": {
+          "label": ""
+        },
+        "channel": {
+          "label": ""
+        },
+        "creationDate": {
+          "label": ""
+        },
+        "library": {
+          "description": "",
+          "label": ""
+        },
+        "musicbrainzId": {
+          "label": ""
+        },
+        "name": {
+          "label": ""
+        },
+        "playlist": {
+          "label": ""
+        },
+        "tags": {
+          "label": ""
+        },
+        "track": {
+          "copyright": "",
+          "label": "",
+          "license": "",
+          "position": "",
+          "title": ""
+        },
+        "visibility": {
+          "label": ""
+        }
+      }
+    },
+    "useErrorHandler": {
+      "errorReportMessage": "",
+      "errorReportTitle": "",
+      "leaveFeedback": "",
+      "unexpectedError": ""
+    },
+    "useThemeList": {
+      "browserDefault": "",
+      "darkTheme": "",
+      "lightTheme": ""
+    }
+  },
+  "init": {
+    "axios": {
+      "rateLimitDelay": "",
+      "rateLimitLater": ""
+    },
+    "sentry": {
+      "allow": "",
+      "deny": "",
+      "funkwhaleInstance": "",
+      "message": "",
+      "title": ""
+    },
+    "serviceWorker": {
+      "actions": {
+        "later": "",
+        "update": ""
+      },
+      "newAppVersion": ""
+    }
+  },
+  "views": {
+    "Notifications": {
+      "button": {
+        "read": "",
+        "submit": ""
+      },
+      "empty": {
+        "notifications": ""
+      },
+      "header": {
+        "funkwhaleSupport": "",
+        "instanceSupport": "",
+        "messages": "",
+        "notifications": ""
+      },
+      "label": {
+        "reminder": "",
+        "showRead": ""
+      },
+      "link": {
+        "donate": "",
+        "help": ""
+      },
+      "loading": {
+        "notifications": ""
+      },
+      "message": {
+        "funkwhaleSupport": ""
+      },
+      "option": {
+        "delay": {
+          "30": "",
+          "60": "",
+          "90": "",
+          "never": ""
+        }
+      },
+      "title": ""
+    },
+    "Search": {
+      "button": {
+        "submit": ""
+      },
+      "header": {
+        "remote": "",
+        "rss": "",
+        "search": ""
+      },
+      "label": {
+        "albums": "",
+        "artists": "",
+        "playlists": "",
+        "podcasts": "",
+        "radios": "",
+        "series": "",
+        "tags": "",
+        "tracks": ""
+      }
+    },
+    "admin": {
+      "ChannelDetail": {
+        "button": {
+          "delete": "",
+          "openRemote": "",
+          "refresh": ""
+        },
+        "header": {
+          "activity": "",
+          "audioContent": "",
+          "channelData": ""
+        },
+        "label": {
+          "local": ""
+        },
+        "link": {
+          "django": "",
+          "localProfile": ""
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": ""
+            },
+            "header": ""
+          }
+        },
+        "table": {
+          "activity": {
+            "edits": "",
+            "favorited": "",
+            "firstSeen": "",
+            "linkedReports": "",
+            "listenings": "",
+            "playlists": ""
+          },
+          "audioContent": {
+            "albums": "",
+            "cachedSize": "",
+            "totalSize": "",
+            "tracks": "",
+            "uploads": ""
+          },
+          "channelData": {
+            "account": "",
+            "category": "",
+            "description": "",
+            "domain": "",
+            "name": "",
+            "rss": "",
+            "url": ""
+          }
+        },
+        "warning": {
+          "stats": ""
+        }
+      },
+      "CommonList": {
+        "title": {
+          "accounts": "",
+          "albums": "",
+          "artists": "",
+          "channels": "",
+          "invitations": "",
+          "libraries": "",
+          "tags": "",
+          "tracks": "",
+          "uploads": "",
+          "users": ""
+        }
+      },
+      "Settings": {
+        "header": {
+          "channels": "",
+          "federation": "",
+          "instanceInfo": "",
+          "moderation": "",
+          "music": "",
+          "playlists": "",
+          "sections": "",
+          "security": "",
+          "settings": "",
+          "signups": "",
+          "stats": "",
+          "subsonic": "",
+          "ui": ""
+        }
+      },
+      "library": {
+        "AlbumDetail": {
+          "button": {
+            "delete": "",
+            "edit": "",
+            "remoteRefresh": ""
+          },
+          "header": {
+            "activity": "",
+            "albumData": "",
+            "audioContent": "",
+            "local": ""
+          },
+          "link": {
+            "artist": "",
+            "django": "",
+            "domain": "",
+            "edits": "",
+            "libraries": "",
+            "localProfile": "",
+            "musicbrainz": "",
+            "remoteProfile": "",
+            "reports": "",
+            "tracks": "",
+            "uploads": ""
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": ""
+              },
+              "header": ""
+            }
+          },
+          "table": {
+            "activity": {
+              "favorited": "",
+              "firstSeen": "",
+              "listenings": "",
+              "playlists": ""
+            },
+            "album": {
+              "description": "",
+              "title": ""
+            },
+            "audioContent": {
+              "cachedSize": "",
+              "totalSize": ""
+            }
+          },
+          "warning": {
+            "stats": ""
+          }
+        },
+        "ArtistDetail": {
+          "button": {
+            "delete": "",
+            "edit": "",
+            "remoteRefresh": ""
+          },
+          "header": {
+            "activity": "",
+            "artistData": "",
+            "audioContent": "",
+            "local": ""
+          },
+          "link": {
+            "albums": "",
+            "category": "",
+            "django": "",
+            "domain": "",
+            "edits": "",
+            "libraries": "",
+            "localProfile": "",
+            "musicbrainz": "",
+            "remoteProfile": "",
+            "reports": "",
+            "tracks": "",
+            "uploads": ""
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": ""
+              },
+              "header": ""
+            }
+          },
+          "table": {
+            "activity": {
+              "favorited": "",
+              "firstSeen": "",
+              "listenings": "",
+              "playlists": ""
+            },
+            "artist": {
+              "description": "",
+              "name": ""
+            },
+            "audioContent": {
+              "cachedSize": "",
+              "totalSize": ""
+            }
+          },
+          "warning": {
+            "stats": ""
+          }
+        },
+        "Base": {
+          "link": {
+            "albums": "",
+            "artists": "",
+            "channels": "",
+            "edits": "",
+            "libraries": "",
+            "tags": "",
+            "tracks": "",
+            "uploads": ""
+          },
+          "menu": {
+            "secondary": ""
+          },
+          "title": ""
+        },
+        "EditsList": {
+          "header": {
+            "edits": ""
+          },
+          "title": ""
+        },
+        "LibraryDetail": {
+          "button": {
+            "delete": ""
+          },
+          "header": {
+            "activity": "",
+            "audioContent": "",
+            "libraryData": "",
+            "local": ""
+          },
+          "link": {
+            "account": "",
+            "albums": "",
+            "artists": "",
+            "django": "",
+            "domain": "",
+            "remoteProfile": "",
+            "reports": "",
+            "tracks": "",
+            "uploads": "",
+            "visibility": ""
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": ""
+              },
+              "header": ""
+            }
+          },
+          "table": {
+            "activity": {
+              "firstSeen": "",
+              "followers": ""
+            },
+            "audioContent": {
+              "cachedSize": "",
+              "totalSize": ""
+            },
+            "library": {
+              "description": "",
+              "name": ""
+            }
+          },
+          "warning": {
+            "stats": ""
+          }
+        },
+        "TagDetail": {
+          "button": {
+            "delete": ""
+          },
+          "header": {
+            "activity": "",
+            "audioContent": "",
+            "tagData": ""
+          },
+          "link": {
+            "albums": "",
+            "artists": "",
+            "django": "",
+            "localProfile": "",
+            "tracks": ""
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": ""
+              },
+              "header": ""
+            }
+          },
+          "table": {
+            "activity": {
+              "firstSeen": ""
+            },
+            "tag": {
+              "name": ""
+            }
+          }
+        },
+        "TrackDetail": {
+          "button": {
+            "delete": "",
+            "edit": "",
+            "remoteRefresh": ""
+          },
+          "header": {
+            "activity": "",
+            "local": "",
+            "trackData": ""
+          },
+          "link": {
+            "album": "",
+            "albumArtist": "",
+            "artist": "",
+            "django": "",
+            "domain": "",
+            "edits": "",
+            "libraries": "",
+            "localProfile": "",
+            "musicbrainz": "",
+            "remoteProfile": "",
+            "reports": "",
+            "uploads": ""
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": ""
+              },
+              "header": ""
+            }
+          },
+          "table": {
+            "activity": {
+              "favorited": "",
+              "firstSeen": "",
+              "listenings": "",
+              "playlists": ""
+            },
+            "track": {
+              "copyright": "",
+              "description": "",
+              "discNumber": "",
+              "license": "",
+              "position": "",
+              "title": ""
+            },
+            "trackData": {
+              "cachedSize": "",
+              "totalSize": ""
+            }
+          },
+          "warning": {
+            "stats": ""
+          }
+        },
+        "UploadDetail": {
+          "button": {
+            "delete": "",
+            "download": ""
+          },
+          "header": {
+            "activity": "",
+            "audioContent": "",
+            "local": "",
+            "uploadData": ""
+          },
+          "link": {
+            "account": "",
+            "django": "",
+            "domain": "",
+            "importStatus": "",
+            "library": "",
+            "remoteProfile": "",
+            "type": "",
+            "visibility": ""
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": ""
+              },
+              "header": ""
+            }
+          },
+          "notApplicable": "",
+          "table": {
+            "activity": {
+              "accessedDate": "",
+              "firstSeen": ""
+            },
+            "audioContent": {
+              "bitrate": {
+                "label": "",
+                "value": ""
+              },
+              "cachedSize": "",
+              "duration": "",
+              "size": "",
+              "track": ""
+            },
+            "upload": {
+              "name": ""
+            }
+          }
+        }
+      },
+      "moderation": {
+        "AccountsDetail": {
+          "button": {
+            "addPolicy": ""
+          },
+          "description": {
+            "policy": ""
+          },
+          "header": {
+            "accountData": "",
+            "activePolicy": "",
+            "activity": "",
+            "audioContent": "",
+            "localAccount": "",
+            "noPolicy": ""
+          },
+          "link": {
+            "albums": "",
+            "artists": "",
+            "channels": "",
+            "django": "",
+            "domain": "",
+            "libraries": "",
+            "linkedReports": "",
+            "openProfile": "",
+            "remoteProfile": "",
+            "requests": "",
+            "tracks": "",
+            "uploads": ""
+          },
+          "notApplicable": "",
+          "option": {
+            "permission": {
+              "library": "",
+              "moderation": "",
+              "settings": ""
+            }
+          },
+          "table": {
+            "accountData": {
+              "displayName": "",
+              "email": "",
+              "lastActivity": "",
+              "lastChecked": "",
+              "loginStatus": {
+                "disabled": "",
+                "enabled": "",
+                "label": ""
+              },
+              "permissions": "",
+              "signupDate": "",
+              "userType": "",
+              "username": ""
+            },
+            "activity": {
+              "emittedFollows": "",
+              "emittedMessages": "",
+              "firstSeen": "",
+              "receivedFollows": ""
+            },
+            "audioContent": {
+              "cachedSize": "",
+              "megabyte": "",
+              "totalSize": "",
+              "uploadQuota": ""
+            }
+          },
+          "tooltip": {
+            "uploadQuota": ""
+          },
+          "warning": {
+            "stats": ""
+          }
+        },
+        "Base": {
+          "link": {
+            "accounts": "",
+            "domains": "",
+            "reports": "",
+            "userRequests": ""
+          },
+          "menu": {
+            "secondary": ""
+          },
+          "title": ""
+        },
+        "DomainsDetail": {
+          "button": {
+            "addPolicy": "",
+            "addToAllowList": "",
+            "refreshNodeInfo": "",
+            "removeFromAllowList": ""
+          },
+          "description": {
+            "policy": ""
+          },
+          "header": {
+            "activePolicy": "",
+            "activity": "",
+            "audioContent": "",
+            "instanceData": "",
+            "noPolicy": ""
+          },
+          "link": {
+            "albums": "",
+            "artists": "",
+            "channels": "",
+            "django": "",
+            "knownAccounts": "",
+            "libraries": "",
+            "tracks": "",
+            "uploads": "",
+            "website": ""
+          },
+          "notApplicable": "",
+          "table": {
+            "activity": {
+              "emittedFollows": "",
+              "emittedMessages": "",
+              "firstSeen": "",
+              "receivedFollows": ""
+            },
+            "audioContent": {
+              "cachedSize": "",
+              "totalSize": ""
+            },
+            "instanceData": {
+              "domainName": "",
+              "inAllowList": {
+                "false": "",
+                "label": "",
+                "true": ""
+              },
+              "lastChecked": "",
+              "nodeInfoStatus": {
+                "label": "",
+                "value": ""
+              },
+              "software": {
+                "label": "",
+                "value": ""
+              },
+              "totalUsers": ""
+            }
+          },
+          "warning": {
+            "stats": ""
+          }
+        },
+        "DomainsList": {
+          "button": {
+            "add": ""
+          },
+          "header": {
+            "domains": "",
+            "failure": ""
+          },
+          "label": {
+            "addDomain": "",
+            "addToAllowList": ""
+          },
+          "title": ""
+        },
+        "ReportsList": {
+          "header": {
+            "reports": ""
+          },
+          "label": {
+            "search": "",
+            "status": ""
+          },
+          "option": {
+            "status": {
+              "all": "",
+              "resolved": "",
+              "unresolved": ""
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "",
+              "descending": "",
+              "label": ""
+            },
+            "label": ""
+          },
+          "placeholder": {
+            "search": ""
+          },
+          "title": ""
+        },
+        "RequestsList": {
+          "header": {
+            "userRequests": ""
+          },
+          "label": {
+            "search": "",
+            "status": ""
+          },
+          "option": {
+            "status": {
+              "all": "",
+              "approved": "",
+              "pending": "",
+              "refused": ""
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "",
+              "descending": "",
+              "label": ""
+            },
+            "label": ""
+          },
+          "placeholder": {
+            "search": ""
+          },
+          "title": ""
+        }
+      },
+      "users": {
+        "Base": {
+          "link": {
+            "invitations": "",
+            "users": ""
+          },
+          "menu": {
+            "secondary": ""
+          },
+          "title": ""
+        }
+      }
+    },
+    "auth": {
+      "Callback": {
+        "header": {
+          "loggingIn": ""
+        }
+      },
+      "EmailConfirm": {
+        "header": {
+          "failure": "",
+          "success": ""
+        },
+        "label": {
+          "confirmationCode": ""
+        },
+        "link": {
+          "back": "",
+          "login": ""
+        },
+        "message": {
+          "success": ""
+        },
+        "title": ""
+      },
+      "Login": {
+        "header": {
+          "login": ""
+        },
+        "title": ""
+      },
+      "PasswordReset": {
+        "button": {
+          "requestReset": ""
+        },
+        "header": {
+          "failure": "",
+          "reset": ""
+        },
+        "help": {
+          "form": ""
+        },
+        "label": {
+          "email": ""
+        },
+        "link": {
+          "back": ""
+        },
+        "placeholder": {
+          "email": ""
+        },
+        "title": ""
+      },
+      "PasswordResetConfirm": {
+        "button": {
+          "update": ""
+        },
+        "header": {
+          "failure": "",
+          "success": ""
+        },
+        "label": {
+          "newPassword": ""
+        },
+        "link": {
+          "back": "",
+          "login": ""
+        },
+        "message": {
+          "requestSent": "",
+          "success": ""
+        },
+        "title": ""
+      },
+      "Plugins": {
+        "title": ""
+      },
+      "ProfileActivity": {
+        "header": {
+          "playlists": "",
+          "recentlyFavorited": "",
+          "recentlyListened": ""
+        }
+      },
+      "ProfileBase": {
+        "label": {
+          "self": ""
+        },
+        "link": {
+          "activity": "",
+          "domainView": "",
+          "moderation": "",
+          "overview": ""
+        },
+        "title": ""
+      },
+      "ProfileOverview": {
+        "button": {
+          "cancel": "",
+          "createChannel": "",
+          "next": "",
+          "previous": ""
+        },
+        "header": {
+          "channels": "",
+          "libraries": "",
+          "sharedLibraries": ""
+        },
+        "link": {
+          "addNew": ""
+        },
+        "modal": {
+          "createChannel": {
+            "artist": {
+              "header": ""
+            },
+            "header": "",
+            "podcast": {
+              "header": ""
+            }
+          }
+        }
+      },
+      "Signup": {
+        "header": {
+          "createAccount": ""
+        },
+        "title": ""
+      }
+    },
+    "channels": {
+      "DetailBase": {
+        "button": {
+          "cancel": "",
+          "confirm": "",
+          "delete": "",
+          "edit": "",
+          "embed": "",
+          "play": "",
+          "updateChannel": "",
+          "upload": ""
+        },
+        "header": {
+          "artistChannel": "",
+          "podcastChannel": ""
+        },
+        "link": {
+          "channelEpisodes": "",
+          "channelOverview": "",
+          "channelTracks": "",
+          "domainView": "",
+          "mirrored": "",
+          "moderation": ""
+        },
+        "meta": {
+          "episodes": "",
+          "listenings": "",
+          "subscribers": "",
+          "tracks": ""
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": ""
+            },
+            "header": ""
+          },
+          "embed": {
+            "header": ""
+          },
+          "subscribe": {
+            "fediverse": {
+              "content": {
+                "help": ""
+              },
+              "header": ""
+            },
+            "funkwhale": {
+              "header": ""
+            },
+            "header": "",
+            "rss": {
+              "content": {
+                "help": ""
+              },
+              "header": ""
+            }
+          }
+        },
+        "title": ""
+      },
+      "DetailOverview": {
+        "header": {
+          "albums": "",
+          "latestEpisodes": "",
+          "latestTracks": "",
+          "series": "",
+          "uploadsFailure": "",
+          "uploadsProcessing": "",
+          "uploadsSuccess": ""
+        },
+        "link": {
+          "addAlbum": "",
+          "erroredUploads": "",
+          "skippedUploads": ""
+        },
+        "message": {
+          "processing": ""
+        },
+        "meta": {
+          "progress": ""
+        }
+      },
+      "SubscriptionsList": {
+        "button": {
+          "cancel": "",
+          "subscribe": ""
+        },
+        "link": {
+          "addNew": ""
+        },
+        "modal": {
+          "subscription": {
+            "header": ""
+          }
+        },
+        "placeholder": {
+          "search": ""
+        },
+        "title": ""
+      }
+    },
+    "content": {
+      "Base": {
+        "link": {
+          "libraries": "",
+          "tracks": ""
+        },
+        "menu": {
+          "secondary": ""
+        },
+        "title": ""
+      },
+      "Home": {
+        "button": {
+          "start": ""
+        },
+        "description": {
+          "channel": {
+            "1": "",
+            "2": ""
+          },
+          "follow": "",
+          "upload": ""
+        },
+        "header": {
+          "channel": "",
+          "follow": "",
+          "upload": ""
+        },
+        "help": {
+          "uploadQuota": ""
+        },
+        "title": ""
+      },
+      "libraries": {
+        "Card": {
+          "button": {
+            "upload": ""
+          },
+          "label": {
+            "size": ""
+          },
+          "link": {
+            "details": ""
+          },
+          "meta": {
+            "tracks": ""
+          }
+        },
+        "FilesTable": {
+          "action": {
+            "delete": "",
+            "restartImport": ""
+          },
+          "button": {
+            "showStatus": ""
+          },
+          "empty": {
+            "noTracks": ""
+          },
+          "label": {
+            "importStatus": "",
+            "search": ""
+          },
+          "notApplicable": "",
+          "option": {
+            "status": {
+              "all": "",
+              "draft": "",
+              "failed": "",
+              "finished": "",
+              "pending": "",
+              "skipped": ""
+            }
+          },
+          "ordering": {
+            "direction": {
+              "ascending": "",
+              "descending": "",
+              "label": ""
+            },
+            "label": ""
+          },
+          "pagination": {
+            "results": ""
+          },
+          "placeholder": {
+            "search": ""
+          },
+          "table": {
+            "file": {
+              "header": {
+                "album": "",
+                "artist": "",
+                "duration": "",
+                "importStatus": "",
+                "size": "",
+                "title": "",
+                "uploadDate": ""
+              }
+            }
+          }
+        },
+        "Form": {
+          "button": {
+            "confirm": "",
+            "create": "",
+            "delete": "",
+            "update": ""
+          },
+          "description": {
+            "library": "",
+            "visibility": ""
+          },
+          "header": {
+            "failure": ""
+          },
+          "label": {
+            "description": "",
+            "name": "",
+            "visibility": ""
+          },
+          "message": {
+            "libraryCreated": "",
+            "libraryDeleted": "",
+            "libraryUpdated": ""
+          },
+          "modal": {
+            "delete": {
+              "content": {
+                "warning": ""
+              },
+              "header": ""
+            }
+          },
+          "placeholder": {
+            "description": "",
+            "name": ""
+          }
+        },
+        "Home": {
+          "empty": {
+            "noLibrary": ""
+          },
+          "header": {
+            "libraries": ""
+          },
+          "link": {
+            "createLibrary": ""
+          },
+          "loading": {
+            "libraries": ""
+          }
+        },
+        "Quota": {
+          "button": {
+            "purge": ""
+          },
+          "header": {
+            "currentUsage": ""
+          },
+          "label": {
+            "currentUsage": "",
+            "errored": "",
+            "pending": "",
+            "percentUsed": "",
+            "skipped": ""
+          },
+          "link": {
+            "viewFiles": ""
+          },
+          "loading": {
+            "currentUsage": ""
+          },
+          "modal": {
+            "purgeErrored": {
+              "content": {
+                "description": ""
+              },
+              "header": ""
+            },
+            "purgePending": {
+              "content": {
+                "description": ""
+              },
+              "header": ""
+            },
+            "purgeSkipped": {
+              "content": {
+                "description": ""
+              },
+              "header": ""
+            }
+          }
+        }
+      },
+      "remote": {
+        "Card": {
+          "button": {
+            "cancel": "",
+            "follow": "",
+            "pending": "",
+            "unfollow": ""
+          },
+          "error": {
+            "follow": "",
+            "unfollow": ""
+          },
+          "label": {
+            "scanFailure": "",
+            "scanPartialSuccess": "",
+            "scanPending": "",
+            "scanProgress": "",
+            "scanSuccess": "",
+            "sharingLink": ""
+          },
+          "link": {
+            "scan": "",
+            "scanDetails": ""
+          },
+          "message": {
+            "scanLaunched": "",
+            "scanSkipped": ""
+          },
+          "meta": {
+            "failedTracks": "",
+            "lastUpdate": "",
+            "tracks": ""
+          },
+          "modal": {
+            "unfollow": {
+              "content": {
+                "warning": ""
+              },
+              "header": ""
+            }
+          },
+          "tooltip": {
+            "private": "",
+            "public": ""
+          }
+        },
+        "Home": {
+          "button": {
+            "refresh": ""
+          },
+          "description": {
+            "remoteLibraries": ""
+          },
+          "header": {
+            "knownLibraries": "",
+            "remoteLibraries": ""
+          },
+          "loading": {
+            "remoteLibraries": ""
+          }
+        },
+        "ScanForm": {
+          "button": {
+            "submit": ""
+          },
+          "header": {
+            "failure": ""
+          },
+          "label": {
+            "search": ""
+          },
+          "placeholder": {
+            "url": ""
+          }
+        }
+      }
+    },
+    "library": {
+      "DetailAlbums": {
+        "empty": {
+          "follow": "",
+          "upload": ""
+        }
+      },
+      "DetailOverview": {
+        "empty": {
+          "follow": "",
+          "upload": ""
+        }
+      },
+      "DetailTracks": {
+        "empty": {
+          "follow": "",
+          "upload": ""
+        }
+      },
+      "Edit": {
+        "button": {
+          "accept": "",
+          "reject": ""
+        },
+        "empty": {
+          "noFollowers": ""
+        },
+        "header": {
+          "followers": "",
+          "libraryContents": ""
+        },
+        "loading": {
+          "followers": ""
+        },
+        "table": {
+          "action": {
+            "header": {
+              "action": "",
+              "date": "",
+              "status": "",
+              "user": ""
+            },
+            "status": {
+              "accepted": "",
+              "pending": "",
+              "rejected": ""
+            }
+          }
+        }
+      },
+      "LibraryBase": {
+        "button": {
+          "edit": "",
+          "upload": ""
+        },
+        "description": {
+          "sharingLink": ""
+        },
+        "label": {
+          "instance": "",
+          "private": "",
+          "public": "",
+          "sharingLink": ""
+        },
+        "link": {
+          "albums": "",
+          "artists": "",
+          "domain": "",
+          "moderation": "",
+          "owner": "",
+          "tracks": ""
+        },
+        "meta": {
+          "tracks": ""
+        },
+        "title": "",
+        "tooltip": {
+          "instance": "",
+          "private": "",
+          "public": ""
+        }
+      }
+    },
+    "playlists": {
+      "Detail": {
+        "button": {
+          "cancel": "",
+          "confirm": "",
+          "delete": "",
+          "edit": "",
+          "embed": "",
+          "playAll": "",
+          "stopEdit": ""
+        },
+        "empty": {
+          "noTracks": ""
+        },
+        "header": {
+          "tracks": ""
+        },
+        "meta": {
+          "tracks": ""
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": ""
+            },
+            "header": ""
+          },
+          "embed": {
+            "header": ""
+          }
+        },
+        "title": ""
+      },
+      "List": {
+        "button": {
+          "create": "",
+          "manage": "",
+          "search": ""
+        },
+        "empty": {
+          "noResults": ""
+        },
+        "header": {
+          "browse": "",
+          "playlists": ""
+        },
+        "label": {
+          "search": ""
+        },
+        "ordering": {
+          "direction": {
+            "ascending": "",
+            "descending": "",
+            "label": ""
+          },
+          "label": ""
+        },
+        "pagination": {
+          "results": ""
+        },
+        "placeholder": {
+          "search": ""
+        }
+      }
+    },
+    "radios": {
+      "Detail": {
+        "button": {
+          "confirm": "",
+          "delete": "",
+          "edit": ""
+        },
+        "empty": {
+          "noTracks": ""
+        },
+        "header": {
+          "radio": "",
+          "tracks": ""
+        },
+        "modal": {
+          "delete": {
+            "content": {
+              "warning": ""
+            },
+            "header": ""
+          }
+        },
+        "title": ""
+      }
+    }
+  }
+}
