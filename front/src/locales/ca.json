@@ -1,6 +1,6 @@
 {
   "App": {
-    "loading": "Carregant..."
+    "loading": "Carregant…"
   },
   "components": {
     "About": {
@@ -172,7 +172,7 @@
         "next": "Pista següent",
         "pause": "Pausa",
         "play": "Reproduir",
-        "populatingRadio": "S'està recuperant la pista de ràdio...",
+        "populatingRadio": "S'està recuperant la pista de ràdio…",
         "previous": "Pista anterior",
         "queue": "Cua de reproducció",
         "remove": "Retirar",
@@ -1958,7 +1958,7 @@
           "suggest": "Suggereix una canvi en aquesta pista"
         },
         "message": {
-          "remote": " ·Aquest objecte és gestionat per un altre servidor, no el podeu editar."
+          "remote": "Aquest objecte és gestionat per un altre servidor, no el podeu editar."
         }
       },
       "radios": {
