@@ -2485,7 +2485,7 @@
             }
           },
           "tooltip": {
-            "blockAll": "Block everything from this account or domain. This will prevent any interaction with the entity, and purge related content (uploads, libraries, follows, etc.",
+            "blockAll": "Block everything from this account or domain. This will prevent any interaction with the entity, and purge related content (uploads, libraries, follows, etc.)",
             "isActive": "Use this setting to temporarily enable/disable the policy without completely removing it.",
             "rejectMedia": "Hide account or domain content, except from followers.",
             "silenceActivity": "Hide account or domain content, except from followers.",
