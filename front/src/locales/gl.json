@@ -1,6 +1,6 @@
 {
   "App": {
-    "loading": "Cargando..."
+    "loading": "Cargando…"
   },
   "components": {
     "About": {
@@ -172,7 +172,7 @@
         "next": "Seguinte canción",
         "pause": "Pausar",
         "play": "Reproducir",
-        "populatingRadio": "Obtendo datos da radio...",
+        "populatingRadio": "Obtendo datos da radio…",
         "previous": "Canción anterior",
         "queue": "Cola",
         "remove": "Eliminar",
@@ -1958,7 +1958,7 @@
           "suggest": "Non podemos cargar a canción"
         },
         "message": {
-          "remote": " Este obxecto está xestionado noutro servidor, non podes editalo."
+          "remote": "Este obxecto está xestionado noutro servidor, non podes editalo."
         }
       },
       "radios": {
@@ -2485,7 +2485,7 @@
             }
           },
           "tooltip": {
-            "blockAll": "Bloquear todo desta conta ou dominio. Isto evitará calquera interacción coa entidade, e eliminará o contido relacionado (subidas, bibliotecas, seguimentos, etc.",
+            "blockAll": "Bloquear todo desta conta ou dominio. Isto evitará calquera interacción coa entidade, e eliminará o contido relacionado (subidas, bibliotecas, seguimentos, etc.)",
             "isActive": "Utiliza este axuste para activar/desactivar temporalmente a condición sen eliminala completamente.",
             "rejectMedia": "Non baixar ningún ficheiro de medios (audio, portada, avatar da conta…) desta conta ou dominio. Esto eliminará tamén o contido existente.",
             "silenceActivity": "Ocultar contido de conta ou dominio, excepto de seguidoras.",
