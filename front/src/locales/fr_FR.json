@@ -2485,7 +2485,7 @@
             }
           },
           "tooltip": {
-            "blockAll": "Tout bloquer de ce compte ou domaine. Cela empêche toute interaction avec l'entité, et purge le contenu lié (pistes, librairies, suivis, etc.)",
+            "blockAll": "Tout bloquer de ce compte ou domaine. Cela empêche toute interaction avec, et purge le contenu lié, telles que les pistes, audiothèques, abonnements, etc.",
             "isActive": "Utilisez ce paramètre pour activer/désactiver temporairement la règle sans la supprimer complètement.",
             "rejectMedia": "Ne jamais télécharger de médias (audio, album, couverture, avatar de compte…) de ce compte ou domaine. Cela purgera aussi le contenu existant.",
             "silenceActivity": "Cacher le contenu du compte ou du domaine, sauf aux abonnés.",
