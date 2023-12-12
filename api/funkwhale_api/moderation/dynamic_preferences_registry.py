@@ -1,3 +1,4 @@
+import pycountry
 from dynamic_preferences import types
 from dynamic_preferences.registries import global_preferences_registry
 from rest_framework import serializers
@@ -92,3 +93,18 @@ class SignupFormCustomization(common_preferences.SerializedPreference):
     required = False
     default = {}
     data_serializer_class = CustomFormSerializer
+
+
+@global_preferences_registry.register
+class Languages(common_preferences.StringListPreference):
+    show_in_api = True
+    section = moderation
+    name = "languages"
+    default = ["en"]
+    verbose_name = "Moderation languages"
+    help_text = (
+        "The language(s) spoken by the server moderator(s). Set this to inform users "
+        "what languages they should write reports and requests in."
+    )
+    choices = [(lang.alpha_3, lang.name) for lang in pycountry.languages]
+    field_kwargs = {"choices": choices, "required": False}

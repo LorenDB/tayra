@@ -11,6 +11,8 @@ import { delMany, getMany, setMany } from '~/composables/data/indexedDB'
 import { setGain } from '~/composables/audio/audio-api'
 import { useTracks } from '~/composables/audio/tracks'
 
+import useLogger from '~/composables/useLogger'
+
 import axios from 'axios'
 
 export interface QueueTrackSource {
@@ -35,6 +37,8 @@ export interface QueueTrack {
 
   sources: QueueTrackSource[]
 }
+
+const logger = useLogger()
 
 // Queue
 const tracks = useStorage('queue:tracks', [] as number[])
@@ -69,7 +73,7 @@ watchEffect(async () => {
         tracksById.set(track.id, track)
       }
     } catch (error) {
-      console.error(error)
+      logger.error(error)
     } finally {
       fetchingTracks.value = false
     }
@@ -344,7 +348,7 @@ export const useQueue = createGlobalState(() => {
     const store = useStore()
     watchEffect(() => {
       if (store.state.radios.running && currentIndex.value === tracks.value.length - 1) {
-        console.log('POPULATING QUEUE FROM RADIO')
+        logger.log('POPULATING QUEUE FROM RADIO')
         return store.dispatch('radios/populateQueue')
       }
     })
@@ -379,7 +383,7 @@ export const useQueue = createGlobalState(() => {
 
         currentIndex.value = index
         delete localStorage.queue
-      })().catch((error) => console.error('Could not successfully migrate between queue versions', error))
+      })().catch((error) => logger.error('Could not successfully migrate between queue versions', error))
     }
 
     if (localStorage.player) {
@@ -389,7 +393,7 @@ export const useQueue = createGlobalState(() => {
         setGain(volume ?? 0.7)
         delete localStorage.player
       } catch (error) {
-        console.error('Could not successfully migrate between player versions', error)
+        logger.error('Could not successfully migrate between player versions', error)
       }
     }
   }

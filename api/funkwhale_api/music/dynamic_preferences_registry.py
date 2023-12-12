@@ -32,3 +32,18 @@ class MusicCacheDuration(types.IntPreference):
         "will be erased and retranscoded on the next listening."
     )
     field_kwargs = {"required": False}
+
+
+@global_preferences_registry.register
+class MbidTaggedContent(types.BooleanPreference):
+    show_in_api = True
+    section = music
+    name = "only_allow_musicbrainz_tagged_files"
+    verbose_name = "Only allow Musicbrainz tagged files"
+    help_text = (
+        "Requires uploaded files to be tagged with a MusicBrainz ID. "
+        "Enabling this setting has no impact on previously uploaded files. "
+        "You can use the CLI to clear files that don't contain an MBID or "
+        "or enable quality filtering to hide untagged content from API calls. "
+    )
+    default = False

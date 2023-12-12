@@ -188,6 +188,19 @@ const submitAndScan = async () => {
             :html="useMarkdownRaw(field.help)"
           />
         </div>
+        <div
+          v-if="field.type === 'boolean'"
+          class="field"
+        >
+          <div class="ui toggle checkbox">
+            <input
+              :id="`plugin-${field.name}`"
+              v-model="values[field.name]"
+              type="checkbox"
+            >
+            <label :for="`plugin-${field.name}`">{{ field.label || field.name }}</label>
+          </div>
+        </div>
       </template>
     </template>
     <button

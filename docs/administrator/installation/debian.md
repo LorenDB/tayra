@@ -266,7 +266,7 @@ You can create several superusers.
 To start using Funkwhale, you need to create a superuser for your pod. This user has all the permissions needed to administrate the pod. Follow these steps to create a superuser.
 
 ```{code-block} sh
-sudo -u funkwhale venv/bin/funkwhale-manage createsuperuser
+sudo -u funkwhale venv/bin/funkwhale-manage fw users create --superuser
 ```
 
 That's it! You can log in as this user when you finish setting up Funkwhale.

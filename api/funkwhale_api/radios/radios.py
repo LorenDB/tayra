@@ -1,4 +1,5 @@
 import datetime
+import json
 import logging
 import random
 from typing import List, Optional, Tuple
@@ -14,7 +15,7 @@ from funkwhale_api.moderation import filters as moderation_filters
 from funkwhale_api.music.models import Artist, Library, Track, Upload
 from funkwhale_api.tags.models import Tag
 
-from . import filters, models
+from . import filters, lb_recommendations, models
 from .registries import registry
 
 logger = logging.getLogger(__name__)
@@ -61,11 +62,19 @@ class SessionRadio(SimpleRadio):
         return self.session
 
     def get_queryset(self, **kwargs):
-        qs = Track.objects.all()
-        if not self.session:
-            return qs
-        if not self.session.user:
-            return qs
+        if not self.session or not self.session.user:
+            return (
+                Track.objects.all()
+                .with_playable_uploads(actor=None)
+                .select_related("artist", "album__artist", "attributed_to")
+            )
+        else:
+            qs = (
+                Track.objects.all()
+                .with_playable_uploads(self.session.user.actor)
+                .select_related("artist", "album__artist", "attributed_to")
+            )
+
         query = moderation_filters.get_filtered_content_query(
             config=moderation_filters.USER_FILTER_CONFIG["TRACK"],
             user=self.session.user,
@@ -74,6 +83,16 @@ class SessionRadio(SimpleRadio):
 
     def get_queryset_kwargs(self):
         return {}
+
+    def filter_queryset(self, queryset):
+        return queryset
+
+    def filter_from_session(self, queryset):
+        already_played = self.session.session_tracks.all().values_list(
+            "track", flat=True
+        )
+        queryset = queryset.exclude(pk__in=already_played)
+        return queryset
 
     def get_choices(self, **kwargs):
         kwargs.update(self.get_queryset_kwargs())
@@ -87,16 +106,6 @@ class SessionRadio(SimpleRadio):
         queryset = self.filter_queryset(queryset)
         return queryset
 
-    def filter_queryset(self, queryset):
-        return queryset
-
-    def filter_from_session(self, queryset):
-        already_played = self.session.session_tracks.all().values_list(
-            "track", flat=True
-        )
-        queryset = queryset.exclude(pk__in=already_played)
-        return queryset
-
     def pick(self, **kwargs):
         return self.pick_many(quantity=1, **kwargs)[0]
 
@@ -104,8 +113,7 @@ class SessionRadio(SimpleRadio):
         choices = self.get_choices(**kwargs)
         picked_choices = super().pick_many(choices=choices, quantity=quantity)
         if self.session:
-            for choice in picked_choices:
-                self.session.add(choice)
+            self.session.add(picked_choices)
         return picked_choices
 
     def validate_session(self, data, **context):
@@ -405,3 +413,58 @@ class RecentlyAdded(SessionRadio):
             Q(artist__content_category="music"),
             Q(creation_date__gt=date),
         )
+
+
+# Use this to experiment on the custom multiple radio with troi
+@registry.register(name="troi")
+class Troi(SessionRadio):
+    """
+    Receive a vuejs generated config and use it to launch a troi radio session.
+    The config data should follow :
+    {"patch": "troi_patch_name", "troi_arg1":"troi_arg_1", "troi_arg2": ...}
+    Validation of the config (args) is done by troi during track fetch.
+    Funkwhale only checks if the patch is implemented
+    """
+
+    config = serializers.JSONField(required=True)
+
+    def append_lb_config(self, data):
+        if self.session.user.settings is None:
+            logger.warning(
+                "No lb_user_name set in user settings. Some troi patches will fail"
+            )
+            return data
+        elif self.session.user.settings.get("lb_user_name") is None:
+            logger.warning(
+                "No lb_user_name set in user settings. Some troi patches will fail"
+            )
+        else:
+            data["user_name"] = self.session.user.settings["lb_user_name"]
+
+        if self.session.user.settings.get("lb_user_token") is None:
+            logger.warning(
+                "No lb_user_token set in user settings. Some troi patch will fail"
+            )
+        else:
+            data["user_token"] = self.session.user.settings["lb_user_token"]
+
+        return data
+
+    def get_queryset_kwargs(self):
+        kwargs = super().get_queryset_kwargs()
+        kwargs["config"] = self.session.config
+        return kwargs
+
+    def validate_session(self, data, **context):
+        data = super().validate_session(data, **context)
+        if data.get("config") is None:
+            raise serializers.ValidationError(
+                "You must provide a configuration for this radio"
+            )
+        return data
+
+    def get_queryset(self, **kwargs):
+        qs = super().get_queryset(**kwargs)
+        config = self.append_lb_config(json.loads(kwargs["config"]))
+
+        return lb_recommendations.run(config, candidates=qs)

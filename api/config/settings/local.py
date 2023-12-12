@@ -76,7 +76,7 @@ DEBUG_TOOLBAR_PANELS = [
 
 # django-extensions
 # ------------------------------------------------------------------------------
-# INSTALLED_APPS += ('django_extensions', )
+INSTALLED_APPS += ("django_extensions",)
 
 INSTALLED_APPS += ("drf_spectacular",)
 
@@ -149,3 +149,5 @@ MIDDLEWARE = (
     "funkwhale_api.common.middleware.ProfilerMiddleware",
     "funkwhale_api.common.middleware.PymallocMiddleware",
 ) + MIDDLEWARE
+
+TYPESENSE_API_KEY = "apikey"

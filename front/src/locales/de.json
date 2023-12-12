@@ -30,7 +30,7 @@
         "loggedIn": "Du bist bereits eingeloggt!"
       },
       "placeholder": {
-        "noDescription": "Keine Beschreibung verfügbar."
+        "noDescription": "Keine Beschreibung verfügbar"
       },
       "stat": {
         "activeUsers": "{ n } aktive Person | { n } aktive Personen",
@@ -74,9 +74,9 @@
       },
       "notApplicable": "k. A.",
       "placeholder": {
-        "noDescription": "Keine Beschreibung verfügbar.",
-        "noRules": "Keine Regeln verfügbar.",
-        "noTerms": "Keine Bedingungen verfügbar."
+        "noDescription": "Keine Beschreibung verfügbar",
+        "noRules": "Keine Regeln verfügbar",
+        "noTerms": "Keine Bedingungen verfügbar"
       },
       "stat": {
         "activeUsers": "Eine aktive Person | { n } aktive Personen",
@@ -121,7 +121,7 @@
           "label": "Mobile Apps"
         },
         "publicContent": {
-          "description": "Höre öffentliche Alben und Wiedergabelisten an, die auf diesem Pod freigegeben werden",
+          "description": "Höre öffentliche Alben und Wiedergabelisten an, die auf diesem Pod freigegeben werden.",
           "label": "Öffentliche Inhalte durchsuchen"
         },
         "rules": "Serverregeln",
@@ -132,7 +132,7 @@
         "viewMore": "Mehr anzeigen…"
       },
       "placeholder": {
-        "noDescription": "Keine Beschreibung verfügbar."
+        "noDescription": "Keine Beschreibung verfügbar"
       },
       "stat": {
         "activeUsers": "{ n } aktive Person | { n } aktive Personen",
@@ -332,7 +332,7 @@
           "save": "Speichern"
         },
         "header": {
-          "error": "Fehler beim Speichern der Einstellungen",
+          "error": "Fehler beim Speichern der Einstellungen.",
           "image": "Aktuelles Bild"
         },
         "message": {
@@ -392,7 +392,7 @@
       },
       "ChannelForm": {
         "header": {
-          "error": "Fehler beim Speichern des Kanals"
+          "error": "Fehler beim Speichern des Kanals."
         },
         "help": {
           "discography": "Veröffentliche die Musik, die du machst, als schöne Diskographie von Alben und Singles.",
@@ -476,7 +476,7 @@
       },
       "PlayButton": {
         "button": {
-          "addToPlaylist": "Zu einer Wiedergabeliste hinzufügen…",
+          "addToPlaylist": "Zu einer Wiedergabeliste hinzufügen",
           "addToQueue": "Zur Warteschlange hinzufügen",
           "discretePlay": "Abspielen",
           "episodeDetails": "Details zu dieser Folge",
@@ -615,7 +615,7 @@
         "Modal": {
           "button": {
             "addToFavorites": "Zu den Favoriten hinzufügen",
-            "addToPlaylist": "Zu einer Wiedergabeliste hinzufügen…",
+            "addToPlaylist": "Zu einer Wiedergabeliste hinzufügen",
             "addToQueue": "Zur Warteschlange hinzufügen",
             "albumDetails": "Album ansehen",
             "artistDetails": "Künstler·innen ansehen",
@@ -639,7 +639,7 @@
         "Modal": {
           "button": {
             "addToFavorites": "Zu den Favoriten hinzufügen",
-            "addToPlaylist": "Zu einer Wiedergabeliste hinzufügen…",
+            "addToPlaylist": "Zu einer Wiedergabeliste hinzufügen",
             "addToQueue": "Zur Warteschlange hinzufügen",
             "albumDetails": "Album ansehen",
             "artistDetails": "Künstler·innen ansehen",
@@ -746,7 +746,7 @@
           "writeOnly": "Nur schreiben"
         },
         "help": {
-          "copyCode": "Dir wird ein Code angezeigt, der du in die Anwendung einfügen musst.",
+          "copyCode": "Dir wird ein Code angezeigt, der du in die Anwendung einfügen musst",
           "pasteCode": "Kopiere den folgenden Code in die Anwendung:",
           "redirect": "Du wirst zu { 0 } weitergeleitet"
         },
@@ -771,7 +771,7 @@
           "username": "Benutzername oder E-Mail-Adresse"
         },
         "link": {
-          "createAccount": "Konto erstellen",
+          "createAccount": "Erstelle ein Konto",
           "resetPassword": "Kennwort zurücksetzen"
         },
         "message": {
@@ -856,7 +856,7 @@
           "deleteAccount": "Mein Konto löschen",
           "emailFailure": "Deine E-Mail-Adresse kann nicht geändert werden",
           "hiddenArtists": "Verborgene Künstler·innen",
-          "noApps": "Du hast keine aktiven Moderationsregeln für dieses Konto.",
+          "noApps": "Aktuell ist keine Anwendung mit deinem Konto verbunden.",
           "noPersonalApps": "Du hast bisher keine Anwendung registriert.",
           "passwordFailure": "Dein Kennwort kann nicht geändert werden",
           "plugins": "Plugins",
@@ -882,14 +882,14 @@
         },
         "message": {
           "confirmDelete": "Dein Löschungsantrag wurde eingereicht. Dein Konto und deine Inhalte werden in Kürze gelöscht",
-          "currentEmail": "Deine aktuelle E-Mail-Adresse lautet { email }."
+          "currentEmail": "Deine aktuelle E-Mail-Adresse lautet {email}"
         },
         "modal": {
           "changePassword": {
             "content": {
               "logout": "Du wirst von dieser Sitzung abgemeldet und du musst dich mit deinem neuen Kennwort anmelden",
               "subsonic": "Dein Subsonic-Kennwort wird mit einem neuen zufälligen Kennwort ersetzt. Du wirst auf allen aktuell verbundenen Geräten abgemeldet, die noch das alte Kennwort nutzen",
-              "warning": "Wenn du dein Kennwort änderst, hat dies folgende Auswirkungen:"
+              "warning": "Wenn du dein Kennwort änderst, hat dies folgende Auswirkungen"
             },
             "header": "Möchtest du dein Kennwort ändern?"
           },
@@ -1098,7 +1098,7 @@
         "label": {
           "description": "Beschreibung",
           "image": "Titelbild",
-          "position": "Seitennummerierung",
+          "position": "Position",
           "tags": "Schlagwörter",
           "title": "Titel"
         }
@@ -1121,7 +1121,7 @@
         },
         "meta": {
           "files": "{ n } Datei | { n } Dateien",
-          "quota": "Verbleibender Speicherplatz:"
+          "quota": "Verbleibender Speicherplatz: {space}"
         }
       }
     },
@@ -1129,7 +1129,7 @@
       "ActionTable": {
         "button": {
           "allSelected": "Einziges Element ausgewählt | Alle { count } Elemente ausgewählt",
-          "go": "Los!",
+          "go": "Los",
           "launch": "Starten",
           "refresh": "Tabelleninhalt aktualisieren",
           "select": "Auswählen",
@@ -1187,10 +1187,10 @@
           "write": "Schreiben"
         },
         "empty": {
-          "noContent": "Es gibt nichts zum vorzeigen."
+          "noContent": "Es ist keine Vorschau verfügbar"
         },
         "help": {
-          "markdown": "Markdown-Syntax wird unterstützt."
+          "markdown": "Markdown-Syntax wird unterstützt"
         },
         "placeholder": {
           "input": "Schreibe hier ein paar Worte…"
@@ -1246,7 +1246,7 @@
       },
       "LoginModal": {
         "description": {
-          "noAccess": "Du bist nicht zugriffsberechtigt!"
+          "noAccess": "Du hast keinen Zugriff"
         },
         "header": {
           "unauthenticated": "Unauthorisiert"
@@ -1451,7 +1451,7 @@
       "AlbumDropdown": {
         "button": {
           "cancel": "Abbrechen",
-          "delete": "Löschen…",
+          "delete": "Löschen",
           "edit": "Bearbeiten",
           "embed": "Einbetten",
           "more": "Mehr…"
@@ -1535,7 +1535,7 @@
         },
         "meta": {
           "albums": "{ n } Alben | { n } Alben",
-          "tracks": "{ n } Titel in | { n } Titel in "
+          "tracks": "0 Titel in | {count} Titel in | {count} Titel in"
         },
         "modal": {
           "embed": {
@@ -1654,7 +1654,7 @@
           "suggest": "Empfehlung abschicken"
         },
         "empty": {
-          "suggestEdit": "Schlage eine Änderung mit dem untenstehenden Formular vor."
+          "suggestEdit": "Schlage eine Änderung mit dem untenstehenden Formular vor"
         },
         "header": {
           "failure": "Fehler beim Speichern der Änderungen",
@@ -1679,7 +1679,7 @@
           "retry": "Fehlgeschlagene Uploads wiederholen"
         },
         "description": {
-          "import": "Import-Ergebnisse:",
+          "import": "Import Status",
           "previousImport": "Ergebnisse des letzten Imports:"
         },
         "empty": {
@@ -1884,7 +1884,7 @@
       "TrackBase": {
         "button": {
           "cancel": "Abbrechen",
-          "delete": "Löschen…",
+          "delete": "Löschen",
           "download": "Herunterladen",
           "edit": "Bearbeiten",
           "embed": "Einbetten",
@@ -2479,7 +2479,7 @@
           "modal": {
             "delete": {
               "content": {
-                "warning": "Dieser Vorgang ist unwiderruflich."
+                "warning": "Diese Aktion kann nicht rückgängig gemacht werden"
               },
               "header": "Diese Moderationsregel löschen?"
             }
@@ -2772,7 +2772,7 @@
           "email": "Wir werden diese E-Mail-Adresse verwenden, wenn wir Dich bezüglich Deines Berichts kontaktieren müssen.",
           "forwardToDomain": "Leite eine anonymisierte Kopie deines Berichts an den Server weiter, auf dem sich dieses Element befindet.",
           "message": "Verwende dieses Feld, um dem Moderationsteam zusätzlichen Kontext bereitzustellen.",
-          "modal": "Mithilfe dieses Formulars kannst du einen Bericht an unser Moderationsteam senden."
+          "modal": "Nutze dieses Formular für eine Meldung an das Moderationsteam"
         },
         "error": {
           "nodeinfoFetch": "Informationen über diese Instanz können nicht abgerufen werden: {error}"
@@ -3026,6 +3026,7 @@
         "filters": {
           "accessedDate": "Zugriffsdatum",
           "albumTitle": "Albumname",
+          "appliedDate": "Änderungsdatum",
           "artistName": "Name der Künstler·in",
           "bitrate": "Bitrate",
           "creationDate": "Erstellungsdatum",
@@ -3034,7 +3035,8 @@
           "duration": "Dauer",
           "expirationDate": "Ablaufdatum",
           "firstSeen": "Erstmals gesehen",
-          "followers": "Abonnenten",
+          "followers": "Abonnent·innen",
+          "handledDate": "Bearbeitungsdatum",
           "itemsCount": "Elemente",
           "lastActivity": "Letzte Aktivität",
           "lastSeen": "Zuletzt gesehen am",
@@ -3054,6 +3056,7 @@
             "label": "Bearbeitungen"
           },
           "favorites": {
+            "description": "Zugang zu den Favoriten",
             "label": "Favoriten"
           },
           "filters": {
@@ -3120,12 +3123,13 @@
         "track": {
           "copyright": "Urheberrecht",
           "license": "Lizenz",
-          "position": "Seitennummerierung",
+          "position": "Position",
           "title": "Titel"
         }
       },
       "useReport": {
         "account": {
+          "label": "Melde {'@'}{username}",
           "typeLabel": "Konto"
         },
         "album": {
@@ -3134,7 +3138,8 @@
         },
         "artist": {
           "label": "Diese kunstschaffende Person melden…",
-          "typeLabel": "Künstler·in"
+          "typeLabel": "Künstler·in",
+          "unknownLabel": "Unbekannte*r Künstler*in"
         },
         "channel": {
           "label": "Diesen Kanal melden…",
@@ -3192,7 +3197,7 @@
           "copyright": "Urheberrecht",
           "label": "Titel",
           "license": "Lizenz",
-          "position": "Seitennummerierung",
+          "position": "Position",
           "title": "Titel"
         },
         "visibility": {
@@ -3201,9 +3206,13 @@
       }
     },
     "useErrorHandler": {
+      "errorReportMessage": "Damit wir die Ursache des Fehlers besser verstehen können, füge bitte eine detaillierte Beschreibung des Vorgangs bei, der den Fehler ausgelöst hat.",
+      "errorReportTitle": "Ein unerwarteter Fehler ist aufgetreten.",
+      "leaveFeedback": "Feedback hinterlassen",
       "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten."
     },
     "useThemeList": {
+      "browserDefault": "Browser-Standard",
       "darkTheme": "Dunkel",
       "lightTheme": "Hell"
     }
@@ -3212,6 +3221,13 @@
     "axios": {
       "rateLimitDelay": "Du hast zu viele Anfragen gesendet und bist derzeit eingeschränkt. Bitte versuche es in { delay } noch einmal",
       "rateLimitLater": "Du hast zu viele Anfragen gesendet und bist derzeit eingeschränkt. Bitte versuche es später noch einmal"
+    },
+    "sentry": {
+      "allow": "Erlauben",
+      "deny": "Verweigern",
+      "funkwhaleInstance": "Funkwhale's offizieller Glitchtip-Server",
+      "message": "Die Fehlerberichte werden an { 0 } weitergegeben, damit wir besser verstehen, wie und wann die Fehler auftreten.",
+      "title": "Um die Qualität unseres Service zu verbessern, würden wir gerne Informationen über Abstürze während deiner Sitzung sammeln."
     },
     "serviceWorker": {
       "actions": {
@@ -3228,7 +3244,7 @@
         "submit": "Verstanden!"
       },
       "empty": {
-        "notifications": "Keine Benachrichtigungen zum Anzeigen."
+        "notifications": "Es gibt keine neuen Benachrichtigungen"
       },
       "header": {
         "funkwhaleSupport": "Magst du Funkwhale?",
@@ -3624,7 +3640,7 @@
               "description": "Beschreibung",
               "discNumber": "CD-Nummer",
               "license": "Lizenz",
-              "position": "Seitennummerierung",
+              "position": "Position",
               "title": "Titel"
             },
             "trackData": {
@@ -3673,7 +3689,8 @@
             },
             "audioContent": {
               "bitrate": {
-                "label": "Bitrate"
+                "label": "Bitrate",
+                "value": "{Bitrate}/s"
               },
               "cachedSize": "Cache-Größe",
               "duration": "Dauer",
@@ -3692,7 +3709,7 @@
             "addPolicy": "Moderationsregel hinzufügen"
           },
           "description": {
-            "policy": "Mit Moderationsregeln legst du fest, wie deine Instanz mit einer bestimmten Domain oder einem bestimmten Konto interagiert."
+            "policy": "Mit Moderationsregeln legst du fest, wie deine Instanz mit einer bestimmten Domain oder einem bestimmten Konto interagiert"
           },
           "header": {
             "accountData": "Kontoübersicht",
@@ -3780,7 +3797,7 @@
             "removeFromAllowList": "Aus der Zulassungsliste entfernen"
           },
           "description": {
-            "policy": "Mit Moderationsregeln legst du fest, wie deine Instanz mit einer bestimmten Domain oder einem bestimmten Konto interagiert."
+            "policy": "Mit Moderationsregeln legst du fest, wie deine Instanz mit einer bestimmten Domain oder einem bestimmten Konto interagiert"
           },
           "header": {
             "activePolicy": "Für diese Domain gelten besondere Moderationsregeln",
@@ -3825,7 +3842,8 @@
                 "value": "Fehler beim Abrufen der Knoten-Information"
               },
               "software": {
-                "label": "Software"
+                "label": "Software",
+                "value": "{name} ({version})"
               },
               "totalUsers": "Gesamtanzahl der Nutzenden"
             }
@@ -3901,7 +3919,7 @@
             "label": "Sortieren nach"
           },
           "placeholder": {
-            "search": "Nach Nutzername suchen…"
+            "search": "Nach Benutzernamen suchen"
           },
           "title": "Nutzeranfragen"
         }
@@ -3938,7 +3956,7 @@
           "login": "Weiter zum Anmelden"
         },
         "message": {
-          "success": "Du kannst jetzt den Service unbegrenzt nutzen."
+          "success": "Du kannst jetzt den Service unbegrenzt nutzen"
         },
         "title": "E-Mail-Adresse bestätigen"
       },
@@ -4127,7 +4145,7 @@
           "processing": "Deine Uploads werden von Funkwhale verarbeitet und sehr bald abrufbar sein."
         },
         "meta": {
-          "progress": "Verarbeitete Uploads:"
+          "progress": "Verarbeitete Uploads: {finished}/{total}"
         }
       },
       "SubscriptionsList": {
@@ -4313,6 +4331,7 @@
             "currentUsage": "{ current } von { max } belegt",
             "errored": "Fehlgeschlagene Dateien",
             "pending": "Ausstehende Dateien",
+            "percentUsed": "{progress}%",
             "skipped": "Übersprungene Dateien"
           },
           "link": {
@@ -4350,6 +4369,10 @@
             "follow": "Abonnieren",
             "pending": "Ausstehende Abonnements-Anfrage",
             "unfollow": "Abonnement beenden"
+          },
+          "error": {
+            "follow": "Kann entfernter Bibliothek nicht folgen: {error}",
+            "unfollow": "Entfernte Bibliothek kann nicht entfolgt werden: {error}"
           },
           "label": {
             "scanFailure": "Fehler beim Durchsuchen",
@@ -4568,12 +4591,14 @@
       "Detail": {
         "button": {
           "confirm": "Radio löschen",
+          "delete": "Löschen",
           "edit": "Bearbeiten…"
         },
         "empty": {
           "noTracks": "Diesem Radio wurden noch keine Titel hinzugefügt"
         },
         "header": {
+          "radio": "Radio mit {tracks} Titeln, von ",
           "tracks": "Titel"
         },
         "modal": {

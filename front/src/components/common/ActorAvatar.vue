@@ -25,5 +25,5 @@ const defaultAvatarStyle = computed(() => ({ backgroundColor: `#${actorColor.val
     v-else
     :style="defaultAvatarStyle"
     class="ui avatar circular label"
-  >{{ actor.preferred_username[0] }}</span>
+  >{{ actor.preferred_username?.[0] || "" }}</span>
 </template>

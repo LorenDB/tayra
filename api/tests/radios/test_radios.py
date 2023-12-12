@@ -2,8 +2,8 @@ import json
 import random
 
 import pytest
-from django.core.exceptions import ValidationError
 from django.urls import reverse
+from rest_framework.exceptions import ValidationError
 
 from funkwhale_api.favorites.models import TrackFavorite
 from funkwhale_api.radios import models, radios, serializers
@@ -98,7 +98,7 @@ def test_can_get_choices_for_custom_radio(factories):
     session = factories["radios.CustomRadioSession"](
         custom_radio__config=[{"type": "artist", "ids": [artist.pk]}]
     )
-    choices = session.radio.get_choices(filter_playable=False)
+    choices = session.radio(api_version=1).get_choices(filter_playable=False)
 
     expected = [t.pk for t in tracks]
     assert list(choices.values_list("id", flat=True)) == expected
@@ -191,16 +191,17 @@ def test_can_get_track_for_session_from_api(factories, logged_in_api_client):
 
 
 def test_related_object_radio_validate_related_object(factories):
-    user = factories["users.User"]()
     # cannot start without related object
-    radio = radios.ArtistRadio()
+    radio = {"radio_type": "tag"}
+    serializer = serializers.RadioSessionSerializer()
     with pytest.raises(ValidationError):
-        radio.start_session(user)
+        serializer.validate(data=radio)
 
     # cannot start with bad related object type
-    radio = radios.ArtistRadio()
+    radio = {"radio_type": "tag", "related_object": "whatever"}
+    serializer = serializers.RadioSessionSerializer()
     with pytest.raises(ValidationError):
-        radio.start_session(user, related_object=user)
+        serializer.validate(data=radio)
 
 
 def test_can_start_artist_radio(factories):
@@ -391,7 +392,7 @@ def test_get_choices_for_custom_radio_exclude_artist(factories):
             {"type": "artist", "ids": [excluded_artist.pk], "not": True},
         ]
     )
-    choices = session.radio.get_choices(filter_playable=False)
+    choices = session.radio(api_version=1).get_choices(filter_playable=False)
 
     expected = [u.track.pk for u in included_uploads]
     assert list(choices.values_list("id", flat=True)) == expected
@@ -409,7 +410,7 @@ def test_get_choices_for_custom_radio_exclude_tag(factories):
             {"type": "tag", "names": ["rock"], "not": True},
         ]
     )
-    choices = session.radio.get_choices(filter_playable=False)
+    choices = session.radio(api_version=1).get_choices(filter_playable=False)
 
     expected = [u.track.pk for u in included_uploads]
     assert list(choices.values_list("id", flat=True)) == expected

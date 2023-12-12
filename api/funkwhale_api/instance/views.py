@@ -11,6 +11,7 @@ from dynamic_preferences.api import viewsets as preferences_viewsets
 from dynamic_preferences.api.serializers import GlobalPreferenceSerializer
 from dynamic_preferences.registries import global_preferences_registry
 from rest_framework import generics, views
+from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 
 from funkwhale_api import __version__ as funkwhale_version
@@ -58,9 +59,11 @@ class InstanceSettings(generics.GenericAPIView):
 
 
 @method_decorator(ensure_csrf_cookie, name="dispatch")
-class NodeInfo(views.APIView):
+class NodeInfo20(views.APIView):
     permission_classes = []
     authentication_classes = []
+    serializer_class = serializers.NodeInfo20Serializer
+    renderer_classes = (JSONRenderer,)
 
     @extend_schema(
         responses=serializers.NodeInfo20Serializer, operation_id="getNodeInfo20"
@@ -81,6 +84,7 @@ class NodeInfo(views.APIView):
 
         data = {
             "software": {"version": funkwhale_version},
+            "services": {"inbound": ["atom1.0"], "outbound": ["atom1.0"]},
             "preferences": pref,
             "stats": cache_memoize(600, prefix="memoize:instance:stats")(stats.get)()
             if pref["instance__nodeinfo_stats_enabled"]
@@ -112,7 +116,62 @@ class NodeInfo(views.APIView):
                 data["endpoints"]["channels"] = reverse(
                     "federation:index:index-channels"
                 )
-        serializer = serializers.NodeInfo20Serializer(data)
+        serializer = self.serializer_class(data)
+        return Response(
+            serializer.data, status=200, content_type=NODEINFO_2_CONTENT_TYPE
+        )
+
+
+class NodeInfo21(NodeInfo20):
+    serializer_class = serializers.NodeInfo21Serializer
+
+    @extend_schema(
+        responses=serializers.NodeInfo20Serializer, operation_id="getNodeInfo20"
+    )
+    def get(self, request):
+        pref = preferences.all()
+        if (
+            pref["moderation__allow_list_public"]
+            and pref["moderation__allow_list_enabled"]
+        ):
+            allowed_domains = list(
+                Domain.objects.filter(allowed=True)
+                .order_by("name")
+                .values_list("name", flat=True)
+            )
+        else:
+            allowed_domains = None
+
+        data = {
+            "software": {"version": funkwhale_version},
+            "services": {"inbound": ["atom1.0"], "outbound": ["atom1.0"]},
+            "preferences": pref,
+            "stats": cache_memoize(600, prefix="memoize:instance:stats")(stats.get)()
+            if pref["instance__nodeinfo_stats_enabled"]
+            else None,
+            "actorId": get_service_actor().fid,
+            "supportedUploadExtensions": SUPPORTED_EXTENSIONS,
+            "allowed_domains": allowed_domains,
+            "languages": pref.get("moderation__languages"),
+            "location": pref.get("instance__location"),
+            "content": cache_memoize(600, prefix="memoize:instance:content")(
+                stats.get_content
+            )()
+            if pref["instance__nodeinfo_stats_enabled"]
+            else None,
+            "features": [
+                "channels",
+                "podcasts",
+            ],
+        }
+
+        if not pref.get("common__api_authentication_required"):
+            data["features"].append("anonymousCanListen")
+
+        if pref.get("federation__enabled"):
+            data["features"].append("federation")
+
+        serializer = self.serializer_class(data)
         return Response(
             serializer.data, status=200, content_type=NODEINFO_2_CONTENT_TYPE
         )

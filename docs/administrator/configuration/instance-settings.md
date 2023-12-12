@@ -111,6 +111,9 @@ Transcoding enabled
 Transcoding cache duration
    The number of minutes you want to store transcoded files on your server. Funkwhale removes transcoded tracks that haven't been downloaded within this duration to save space.
 
+Only allow MusicBrainz tagged files
+   If enabled, only files tagged with a [MusicBrainz ID](https://musicbrainz.org/doc/MusicBrainz_Identifier) can be uploaded to the server. Users can use [MusicBrainz Picard](https://picard.musicbrainz.org/) to tag their content with a MBID. Enabling this setting **does not** remove files uploaded before the setting was enabled.
+
 ```
 
 ### Channels

@@ -11,12 +11,15 @@ import { useQueue } from '~/composables/audio/queue'
 import { soundImplementation } from '~/api/player'
 
 import useLRUCache from '~/composables/data/useLRUCache'
+import useLogger from '~/composables/useLogger'
 import store from '~/store'
 
 import axios from 'axios'
 
 const ALLOWED_PLAY_TYPES: (CanPlayTypeResult | undefined)[] = ['maybe', 'probably']
 const AUDIO_ELEMENT = document.createElement('audio')
+
+const logger = useLogger()
 
 const soundPromises = new Map<number, Promise<Sound>>()
 const soundCache = useLRUCache<number, Sound>({
@@ -95,7 +98,7 @@ export const useTracks = createGlobalState(() => {
       const sound = new SoundImplementation(sources)
 
       sound.onSoundEnd(() => {
-        console.log('TRACK ENDED, PLAYING NEXT')
+        logger.log('TRACK ENDED, PLAYING NEXT')
 
         // NOTE: We push it to the end of the job queue
         setTimeout(() => playNext(), 0)
@@ -140,7 +143,7 @@ export const useTracks = createGlobalState(() => {
       return sound
     }
 
-    console.log('NO TRACK IN CACHE, CREATING', track)
+    logger.log('NO TRACK IN CACHE, CREATING', track)
     const soundPromise = createSoundPromise()
     soundPromises.set(track.id, soundPromise)
     return soundPromise
@@ -171,7 +174,7 @@ export const useTracks = createGlobalState(() => {
 
     const { queue, currentIndex } = useQueue()
     if (queue.value.length <= index || index === -1) return
-    console.log('LOADING TRACK', index)
+    logger.log('LOADING TRACK', index)
 
     const track = queue.value[index]
     const sound = await createSound(track)
@@ -181,7 +184,7 @@ export const useTracks = createGlobalState(() => {
       return
     }
 
-    console.log('CONNECTING NODE', sound)
+    logger.log('CONNECTING NODE', sound)
 
     sound.audioNode.disconnect()
     connectAudioSource(sound.audioNode)

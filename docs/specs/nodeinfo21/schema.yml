@@ -1,0 +1,631 @@
+openapi: "3.0.3"
+info:
+  description: "Interactive documentation for [Funkwhale](https://funkwhale.audio) API."
+  version: "2.0.0"
+  title: "Funkwhale API"
+
+servers:
+  - url: "https://demo.funkwhale.audio"
+    description: "Demo server"
+  - url: "https://open.audio"
+    description: "Real server with real content"
+  - url: "https://{domain}"
+    description: "Custom server"
+    variables:
+      domain:
+        default: yourdomain
+        description: "Your Funkwhale Domain"
+      protocol:
+        enum:
+          - "http"
+          - "https"
+        default: "https"
+tags:
+  - name: Instance
+    description: Information about the server
+  - name: Content
+    description: Information about content on the server
+paths:
+  /api/v2/instance/nodeinfo/2.1:
+    get:
+      tags:
+        - Instance
+      summary: Retrieve nodeinfo data
+      description: Retrieve details about a Funkwhale server using the Nodeinfo standard
+      operationId: getNodeinfo
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Nodeinfo"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Nodeinfo"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /api/v2/tags/podcasts:
+    get:
+      tags:
+        - Content
+      summary: Retrieve podcast categories
+      description: Retrieve a list of podcast categories and the number of uploads tagged with those categories
+      operationId: getTagsPodcasts
+      parameters:
+        - name: q
+          in: query
+          required: false
+          description: A free text field to filter category names
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          description: The number of the result page you want to return
+          schema:
+            type: number
+        - name: page_size
+          in: query
+          required: false
+          description: The number of results to return on each page. Defaults to 50.
+          schema:
+            type: number
+        - name: ordering
+          in: query
+          required: false
+          description: |
+            The order in which results are presented. Preface with `-` to return items in descending order.
+          schema:
+            type: string
+            enum:
+              - "name"
+              - "creation_date"
+              - "tagged_items"
+              - "-name"
+              - "-creation_date"
+              - "-tagged_items"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Categories"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Categories"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /api/v2/tags/podcasts/{category}:
+    get:
+      tags:
+        - Content
+      summary: Retrieve podcast categories
+      description: Retrieve a list of podcast categories and the number of uploads tagged with those categories
+      operationId: getTagPodcasts
+      parameters:
+        - name: category
+          in: path
+          required: true
+          description: The category you want to return information about
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Category"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /api/v2/tags/music:
+    get:
+      tags:
+        - Content
+      summary: Retrieve music genres
+      description: Retrieve a list of music genres and the number of uploads tagged with those categories
+      operationId: getTagsMusic
+      parameters:
+        - name: q
+          in: query
+          required: false
+          description: A free text field to filter genre names
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          description: The number of the result page you want to return
+          schema:
+            type: number
+        - name: page_size
+          in: query
+          required: false
+          description: The number of results to return on each page. Defaults to 50.
+          schema:
+            type: number
+        - name: ordering
+          in: query
+          required: false
+          description: |
+            The order in which results are presented. Preface with `-` to return items in descending order.
+          schema:
+            type: string
+            enum:
+              - "name"
+              - "creation_date"
+              - "tagged_items"
+              - "-name"
+              - "-creation_date"
+              - "-tagged_items"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Genres"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Genres"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /api/v2/tags/music/{genre}:
+    get:
+      tags:
+        - Content
+      summary: Retrieve podcast categories
+      description: Retrieve a list of podcast categories and the number of uploads tagged with those categories
+      operationId: getTagMusic
+      parameters:
+        - name: genre
+          in: path
+          required: true
+          description: The genre you want to return information about
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Genre"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Genre"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+components:
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            code: 401
+            message: User not authorized
+        application/xml:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            code: 401
+            message: User not authorized
+  schemas:
+    Categories:
+      type: object
+      properties:
+        total:
+          type: number
+        next:
+          type: string
+          format: url
+        previous:
+          type: string
+          format: url
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/Category"
+      example:
+        total: 5
+        next: https://demo.funkwhale.audio/api/v2/categories?page=2&page_size=2&q=crime
+        previous: null
+        results:
+          - category: "True Crime"
+            created_date: "2020-01-01T00:00:00.000Z"
+            tagged_items: 5
+            results_page: "https://demo.funkwhale.audio/library/categories/True%20Crime"
+          - category: "True Stories"
+            created_date: "2023-12-15T23:32:52.000Z"
+            tagged_items: 200
+            results_page: "https://demo.funkwhale.audio/library/categories/True%20Stories"
+    Category:
+      type: object
+      properties:
+        category:
+          type: string
+        created_date:
+          type: string
+          format: date-time
+        tagged_items:
+          type: number
+        results_page:
+          type: string
+          format: url
+      example:
+        category: "True Crime"
+        created_date: "2020-01-01T00:00:00.000Z"
+        tagged_items: 5
+        results_page: "https://demo.funkwhale.audio/library/categories/True%20Crime"
+    Genres:
+      type: object
+      properties:
+        total:
+          type: number
+        next:
+          type: string
+          format: url
+        previous:
+          type: string
+          format: url
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/Genre"
+      example:
+        total: 5
+        next: https://demo.funkwhale.audio/api/v2/categories?page=2&page_size=2&q=rock
+        previous: null
+        results:
+          - genre: "Acoustic Rock"
+            created_date: "2020-01-01T00:00:00.000Z"
+            tagged_items: 5
+            results_page: "https://demo.funkwhale.audio/library/categories/Acoustic%20Rock"
+          - genre: "Surf Rock"
+            created_date: "2023-12-15T23:32:52.000Z"
+            tagged_items: 200
+            results_page: "https://demo.funkwhale.audio/library/categories/Surf%20Rock"
+    Genre:
+      type: object
+      properties:
+        genre:
+          type: string
+        created_date:
+          type: string
+          format: date-time
+        tagged_items:
+          type: number
+        results_page:
+          type: string
+          format: url
+      example:
+        genre: "Acoustic Rock"
+        created_date: "2020-01-01T00:00:00.000Z"
+        tagged_items: 5
+        results_page: "https://demo.funkwhale.audio/library/categories/Acoustic%20Rock"
+    Nodeinfo:
+      type: object
+      required:
+        - version
+        - software
+        - protocols
+        - services
+        - openRegistrations
+        - usage
+        - metadata
+      properties:
+        version:
+          type: string
+          enum:
+            - "2.1"
+        software:
+          type: object
+          required:
+            - name
+            - version
+          properties:
+            name:
+              type: string
+              enum:
+                - "Funkwhale"
+            version:
+              type: string
+              example: "1.4.0"
+            repository:
+              type: string
+              format: url
+              enum:
+                - "https://dev.funkwhale.audio/funkwhale/funkwhale"
+            homepage:
+              type: string
+              format: url
+              enum:
+                - "https://funkwhale.audio"
+        protocols:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            enum:
+              - "activitypub"
+              - "buddycloud"
+              - "dfrn"
+              - "diaspora"
+              - "libertree"
+              - "ostatus"
+              - "pumpio"
+              - "tent"
+              - "xmpp"
+              - "zot"
+          example:
+            - "activitypub"
+        services:
+          type: object
+          required:
+            - inbound
+            - outbound
+          properties:
+            inbound:
+              type: array
+              items:
+                type: string
+                enum:
+                  - "atom1.0"
+                  - "gnusocial"
+                  - "imap"
+                  - "pnut"
+                  - "pop3"
+                  - "pumpio"
+                  - "rss2.0"
+                  - "twitter"
+            outbound:
+              type: array
+              items:
+                type: string
+                enum:
+                  - "atom1.0"
+                  - "blogger"
+                  - "buddycloud"
+                  - "diaspora"
+                  - "dreamwidth"
+                  - "drupal"
+                  - "facebook"
+                  - "friendica"
+                  - "gnusocial"
+                  - "google"
+                  - "insanejournal"
+                  - "libertree"
+                  - "linkedin"
+                  - "livejournal"
+                  - "mediagoblin"
+                  - "myspace"
+                  - "pinterest"
+                  - "pnut"
+                  - "posterous"
+                  - "pumpio"
+                  - "redmatrix"
+                  - "rss2.0"
+                  - "smtp"
+                  - "tent"
+                  - "tumblr"
+                  - "twitter"
+                  - "wordpress"
+                  - "xmpp"
+        openRegistrations:
+          type: boolean
+        usage:
+          type: object
+          required:
+            - users
+          properties:
+            users:
+              type: object
+              properties:
+                total:
+                  type: integer
+                  minimum: 0
+                activeHalfYear:
+                  type: integer
+                  minimum: 0
+                activeMonth:
+                  type: integer
+                  minimum: 0
+            localPosts:
+              type: integer
+              minimum: 0
+            localComments:
+              type: integer
+              minimum: 0
+        metadata:
+          type: object
+          properties:
+            actorId:
+              type: string
+              format: url
+            private:
+              type: boolean
+            shortDescription:
+              type: string
+            longDescription:
+              type: string
+            contactEmail:
+              type: string
+              format: email
+            nodeName:
+              type: string
+            banner:
+              type: string
+              format: url
+              nullable: true
+            defaultUploadQuota:
+              type: integer
+            supportedUploadExtensions:
+              type: array
+              items:
+                type: string
+            allowList:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                domains:
+                  type: array
+                  nullable: true
+                  items:
+                    type: string
+            funkwhaleSupportMessageEnabled:
+              type: boolean
+            instanceSupportMessage:
+              type: string
+            languages:
+              type: array
+              items:
+                type: string
+            location:
+              type: string
+            codeOfConduct:
+              type: string
+              format: url
+            content:
+              type: object
+              properties:
+                local:
+                  type: object
+                  properties:
+                    artists:
+                      type: number
+                    releases:
+                      type: number
+                    recordings:
+                      type: number
+                    hoursOfContent:
+                      type: number
+                  example:
+                    artists: 1000
+                    releases: 10000
+                    recordings: 150000
+                    hoursOfContent: 7500
+                topMusicCategories:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      count:
+                        type: integer
+                        minimum: 0
+                  example:
+                    - name: "rock"
+                      count: 1256
+                    - name: "jazz"
+                      count: 604
+                    - name: "classical"
+                      count: 308
+                topPodcastCategories:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      count:
+                        type: integer
+                        minimum: 0
+                  example:
+                    - name: "comedy"
+                      count: 12
+                    - name: "politics"
+                      count: 4
+                    - name: "nature"
+                      count: 1
+                federation:
+                  type: object
+                  properties:
+                    followedInstances:
+                      type: integer
+                    followingInstances:
+                      type: integer
+            usage:
+              type: object
+              properties:
+                listenings:
+                  type: integer
+                  minimum: 0
+                downloads:
+                  type: integer
+                  minimum: 0
+                favorites:
+                  type: object
+                  properties:
+                    tracks:
+                      type: integer
+                      minimum: 0
+            features:
+              type: array
+              items:
+                type: string
+              example:
+                - "channels"
+                - "podcasts"
+                - "collections"
+                - "audiobooks"
+                - "federation"
+                - "anonymousCanListen"
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: This API uses OAuth 2 with the Authorization Code flow. You can register an app using the /oauth/apps/ endpoint.
+      flows:
+        authorizationCode:
+          authorizationUrl: /authorize
+          tokenUrl: /api/v1/oauth/token/
+          refreshUrl: /api/v1/oauth/token/
+          scopes:
+            "read": "Read-only access to all user data"
+            "write": "Write-only access on all user data"
+            "read:edits": "Read-only access to edits"
+            "write:edits": "Write-only access to edits"
+            "read:favorites": "Read-only access to favorites"
+            "write:favorites": "Write-only access to favorits"
+            "read:filters": "Read-only to to content filters"
+            "write:filters": "Write-only access to content-filters"
+            "read:follows": "Read-only to follows"
+            "write:follows": "Write-only access to follows"
+            "read:libraries": "Read-only access to library and uploads"
+            "write:libraries": "Write-only access to libraries"
+            "read:listenings": "Read-only access to listening history"
+            "write:listenings": "Write-only access to listening history"
+            "read:notifications": "Read-only access to notifications"
+            "write:notifications": "Write-only access to notifications"
+            "read:playlists": "Read-only access to playlists"
+            "write:playlists": "Write-only access to playlists"
+            "read:profile": "Read-only access to profile data"
+            "write:profile": "Write-only access to profile data"
+            "read:radios": "Read-only access to radios"
+            "write:radios": "Write-only access to radios"
+            "read:reports": "Read-only access to reports"
+            "write:reports": "Write-only access to reports"
+            "read:security": "Read-only access security settings"
+            "write:security": "write-only access security settings"
+
+security:
+  - oauth2: []

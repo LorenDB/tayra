@@ -9,6 +9,7 @@ import { useStore } from '~/store'
 import axios from 'axios'
 
 import updateQueryString from '~/composables/updateQueryString'
+import useLogger from '~/composables/useLogger'
 
 type Type = 'rss' | 'artists' | 'both'
 
@@ -37,6 +38,7 @@ const type = ref(props.initialType)
 const id = ref(props.initialId)
 const errors = ref([] as string[])
 
+const logger = useLogger()
 const { t } = useI18n()
 const labels = computed(() => ({
   title: type.value === 'rss'
@@ -102,7 +104,7 @@ const submit = () => {
 
 const isLoading = ref(false)
 const createFetch = async () => {
-  console.log(id.value, props.standalone)
+  logger.debug(id.value, props.standalone)
   if (!id.value) return
   if (props.standalone) {
     history.replaceState(history.state, '', updateQueryString(location.href, 'id', id.value))

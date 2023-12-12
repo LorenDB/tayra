@@ -8,80 +8,83 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-24 18:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.11.0\n"
+"Generated-By: Babel 2.12.1\n"
 
-#: ../../developer_documentation/workflows/release.md:1
+#: ../../developer/workflows/release.md:1
 msgid "Make a release"
 msgstr ""
 
-#: ../../developer_documentation/workflows/release.md:3
+#: ../../developer/workflows/release.md:3
 msgid ""
 "Once we're ready to release a new version of the software, we can use the"
 " following process:"
 msgstr ""
 
-#: ../../developer_documentation/workflows/release.md:5
+#: ../../developer/workflows/release.md:5
 msgid "Export the new release version"
 msgstr ""
 
-#: ../../developer_documentation/workflows/release.md:11
+#: ../../developer/workflows/release.md:11
 msgid "Export the previous release version"
 msgstr ""
 
-#: ../../developer_documentation/workflows/release.md:17
+#: ../../developer/workflows/release.md:17
 msgid ""
 "Pull the latest version of the `develop` branch. Use `stable` if you're "
 "releasing a bugfix."
 msgstr ""
 
-#: ../../developer_documentation/workflows/release.md
+#: ../../developer/workflows/release.md
 msgid "Bugfix release"
 msgstr ""
 
-#: ../../developer_documentation/workflows/release.md
+#: ../../developer/workflows/release.md
 msgid "Feature release"
 msgstr ""
 
-#: ../../developer_documentation/workflows/release.md:43
+#: ../../developer/workflows/release.md:43
 msgid "Compile the changelog"
 msgstr ""
 
-#: ../../developer_documentation/workflows/release.md:49
+#: ../../developer/workflows/release.md:49
 msgid "Check the output and fix typos and mistakes"
 msgstr ""
 
-#: ../../developer_documentation/workflows/release.md:50
+#: ../../developer/workflows/release.md:50
 msgid "Add a list of contributors"
 msgstr ""
 
-#: ../../developer_documentation/workflows/release.md:58
-msgid "Update the `__version__` variable to the next release version"
+#: ../../developer/workflows/release.md:58
+msgid "Update the next release version"
 msgstr ""
 
-#: ../../developer_documentation/workflows/release.md:64
+#: ../../developer/workflows/release.md:66
 msgid "Commit all changes"
 msgstr ""
 
-#: ../../developer_documentation/workflows/release.md:71
+#: ../../developer/workflows/release.md:73
 msgid "Create a tag"
 msgstr ""
 
-#: ../../developer_documentation/workflows/release.md:77
+#: ../../developer/workflows/release.md:79
 msgid "Publish the new tag to GitLab"
 msgstr ""
 
-#: ../../developer_documentation/workflows/release.md:83
+#: ../../developer/workflows/release.md:85
 msgid "Merge your changes into the alternate branch"
 msgstr ""
 
-#: ../../developer_documentation/workflows/release.md:107
+#: ../../developer/workflows/release.md:109
 msgid "Don't forget to create a blog post to announce the new release!"
 msgstr ""
+
+#~ msgid "Update the `__version__` variable to the next release version"
+#~ msgstr ""
 

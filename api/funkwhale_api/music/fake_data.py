@@ -15,7 +15,10 @@ def create_data(count=25):
         )
         for album in albums:
             factories.UploadFactory.create_batch(
-                track__album=album, size=random.randint(3, 18)
+                track__album=album,
+                size=random.randint(3, 18),
+                playable=True,
+                in_place=True,
             )
 
 

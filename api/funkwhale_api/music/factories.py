@@ -151,14 +151,17 @@ class TrackFactory(
         if created:
             self.save()
 
-    @factory.post_generation
-    def license(self, created, extracted, **kwargs):
+    # The @factory.post_generation is not used because we must
+    # not redefine the builtin `license` function.
+    def _license_post_generation(self, created, extracted, **kwargs):
         if not created:
             return
 
         if extracted:
             self.license = LicenseFactory(code=extracted)
             self.save()
+
+    license = factory.PostGeneration(_license_post_generation)
 
 
 @registry.register

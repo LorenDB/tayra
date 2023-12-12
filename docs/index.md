@@ -96,6 +96,22 @@ contributor/translation
 
 ```{toctree}
 ---
+maxdepth: 1
+caption: Specifications
+hidden: true
+---
+
+specs/collections/index
+specs/nodeinfo21/index
+specs/offline-mode/index
+specs/quality-filter/index
+specs/multi-artist/index
+specs/user-follow/index
+
+```
+
+```{toctree}
+---
 caption: Reference
 maxdepth: 1
 hidden: true
@@ -113,6 +129,7 @@ hidden: true
 ---
 
 changelog
+0.x Changelog <changes/funkwhale-0-changelog>
 
 ```
 

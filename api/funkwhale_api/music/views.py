@@ -583,7 +583,7 @@ def handle_serve(
             try:
                 f.download_audio_from_remote(actor=actor)
             except requests.exceptions.RequestException:
-                return Response({"detail": "Remove track is unavailable"}, status=503)
+                return Response({"detail": "Remote track is unavailable"}, status=503)
         data = f.get_audio_data()
         if data:
             f.duration = data["duration"]

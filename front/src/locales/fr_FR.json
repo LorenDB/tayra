@@ -5,9 +5,9 @@
   "components": {
     "About": {
       "description": {
-        "findApp": "Utiliser Funkwhale sur d'autres terminaux avec nos applications.",
+        "findApp": "Utiliser Funkwhale sur d'autres appareils avec nos applications.",
         "funkwhale": "Funkwhale est un projet communautaire qui vous permet d'écouter et de partager de la musique et des fichiers audio au sein d'un réseau ouvert et décentralisé.",
-        "publicContent": "Écouter les albums publics et les listes de lecture partagés sur ce pod.",
+        "publicContent": "Écouter les albums publics et les playlists disponibles sur ce pod.",
         "quota": "Les utilisateur·ices de ce pod bénéficient également de { quota } d'espace de stockage pour mettre en ligne leurs propres contenus !",
         "signup": "Inscrivez-vous maintenant pour conserver une trace de vos favoris, créer vos listes de lectures, découvrir de nouveaux contenus et bien plus encore !"
       },
@@ -16,7 +16,7 @@
         "findApp": "Trouver une application",
         "funkwhale": "Une plateforme sociale pour apprécier et partager la musique",
         "publicContent": "Parcourir le contenu public",
-        "signup": "Inscription"
+        "signup": "S’inscrire"
       },
       "help": {
         "closedRegistrations": "Les inscriptions sont closes sur ce pod. Vous pouvez vous inscrire sur un autre pod en utilisant le lien ci-dessous."
@@ -27,14 +27,14 @@
       },
       "message": {
         "greeting": "Bonjour {username}",
-        "loggedIn": "Vous êtes déjà connecté !"
+        "loggedIn": "Vous êtes déjà connecté·e !"
       },
       "placeholder": {
         "noDescription": "Pas de description disponible"
       },
       "stat": {
-        "activeUsers": "{ n } compte actif | { n } comptes actifs",
-        "hoursOfMusic": "heure de musique | heures de musique"
+        "activeUsers": "Pas d’utilisateurs actifs | { n } utilisateur actif | { n } utilisateurs actifs",
+        "hoursOfMusic": "0 heure de musique | {n} heure de musique | {n} heures de musique"
       },
       "title": "À propos"
     },
@@ -59,7 +59,7 @@
         "features": "Fonctionnalités",
         "rules": "Règles",
         "statistics": "Statistiques",
-        "terms": "Condititions d'utilisation et politique de respect de la vie privée"
+        "terms": "Conditions d'utilisation et politique de respect de la vie privée"
       },
       "link": {
         "about": "À propos de ce pod",
@@ -67,15 +67,15 @@
         "introduction": "Introduction",
         "rules": "Règles",
         "statistics": "Statistiques",
-        "terms": "Condititions d'utilisation et politique de respect de la vie privée"
+        "terms": "Conditions d'utilisation et politique de respect de la vie privée"
       },
       "message": {
-        "contact": "Envoyez-nous un courriel : {'{{'} contactEmail {'}}'}"
+        "contact": "Envoyez-nous un courriel : { contactEmail }"
       },
       "notApplicable": "ND",
       "placeholder": {
         "noDescription": "Pas de description disponible",
-        "noRules": "Aucune règle disponible",
+        "noRules": "Aucunes règles disponibles",
         "noTerms": "Aucune condition disponible"
       },
       "stat": {
@@ -183,9 +183,11 @@
       },
       "message": {
         "automaticPlay": "La piste suivante va se jouer automatiquement dans quelques secondes…",
-        "radio": "Les nouvelles pistes seront ajoutées ici automatiquement."
+        "radio": "Les nouvelles pistes seront ajoutées ici automatiquement.",
+        "webglUnsupported": "Votre navigateur semble ne pas supporter WebGL2."
       },
       "meta": {
+        "end": "Fin",
         "queuePosition": "Piste { index } sur { length }",
         "startTime": "00:00",
         "unknownAlbum": "Album Inconnu",
@@ -2483,7 +2485,7 @@
             }
           },
           "tooltip": {
-            "blockAll": "Tout bloquer de ce compte ou domaine. Cela empêche toute interaction avec l'entité, et purge le contenu lié (pistes, librairies, suivis, etc.)",
+            "blockAll": "Tout bloquer de ce compte ou domaine. Cela empêche toute interaction avec, et purge le contenu lié, telles que les pistes, audiothèques, abonnements, etc.",
             "isActive": "Utilisez ce paramètre pour activer/désactiver temporairement la règle sans la supprimer complètement.",
             "rejectMedia": "Ne jamais télécharger de médias (audio, album, couverture, avatar de compte…) de ce compte ou domaine. Cela purgera aussi le contenu existant.",
             "silenceActivity": "Cacher le contenu du compte ou du domaine, sauf aux abonnés.",

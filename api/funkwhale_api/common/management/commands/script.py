@@ -26,7 +26,7 @@ class Command(BaseCommand):
             script = available_scripts[name]
         except KeyError:
             raise CommandError(
-                "{} is not a valid script. Run funkwhale-manage for a "
+                "{} is not a valid script. Run funkwhale-manage script for a "
                 "list of available scripts".format(name)
             )
 
@@ -43,7 +43,7 @@ class Command(BaseCommand):
     def show_help(self):
         self.stdout.write("")
         self.stdout.write("Available scripts:")
-        self.stdout.write("Launch with: funkwhale-manage <script_name>")
+        self.stdout.write("Launch with: funkwhale-manage script <script_name>")
         available_scripts = self.get_scripts()
         for name, script in sorted(available_scripts.items()):
             self.stdout.write("")

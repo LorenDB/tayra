@@ -74,7 +74,7 @@ const fetchData = async () => {
     content_category: 'podcast'
   }
 
-  logger.time('Fetching podcasts')
+  const measureLoading = logger.time('Fetching podcasts')
   try {
     const response = await axios.get('artists/', {
       params,
@@ -88,7 +88,7 @@ const fetchData = async () => {
     useErrorHandler(error as Error)
     result.value = undefined
   } finally {
-    logger.timeEnd('Fetching podcasts')
+    measureLoading()
     isLoading.value = false
   }
 }

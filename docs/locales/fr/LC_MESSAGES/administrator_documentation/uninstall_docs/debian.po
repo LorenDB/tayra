@@ -1,0 +1,183 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
+"PO-Revision-Date: 2023-01-23 21:42+0000\n"
+"Last-Translator: Thomas <thovi98@gmail.com>\n"
+"Language-Team: French <https://translate.funkwhale.audio/projects/"
+"documentation/administrator_documentation-uninstall_docs-debian/fr/>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.14.2\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:1
+msgid "Uninstall Debian installation"
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:3
+msgid ""
+"To uninstall Funkwhale from your Debian server, follow the instructions in "
+"this guide."
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:6
+msgid ""
+"Removing Funkwhale data is __irreversible__. Make sure you [back up your "
+"data](../upgrade_docs/backup.md)."
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:14
+msgid "Stop the Funkwhale server"
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:16
+msgid ""
+"Before you uninstall anything from your server, you need to stop the "
+"Funkwhale systemd services."
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:18
+msgid "Stop all systemd services listed under the `funkwhale` target"
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:24
+msgid "Disable all systemd services to prevent launch at startup."
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:32
+msgid "Remove the service files."
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:41
+msgid "Reload all services to pick up the changes."
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:48
+msgid "Remove the reverse proxy"
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:50
+msgid ""
+"To stop serving Funkwhale from your web server, you need to remove your "
+"reverse proxy configuration."
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md
+msgid "Nginx"
+msgstr "Nginx"
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:58
+#: ../../administrator_documentation/uninstall_docs/debian.md:77
+#: ../../administrator_documentation/uninstall_docs/debian.md:54
+#: ../../administrator_documentation/uninstall_docs/debian.md:72
+msgid "Remove the configuration files from your web host."
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:66
+#: ../../administrator_documentation/uninstall_docs/debian.md:84
+#: ../../administrator_documentation/uninstall_docs/debian.md:62
+#: ../../administrator_documentation/uninstall_docs/debian.md:79
+msgid "Reload the web server."
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md
+msgid "Apache2"
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:92
+#: ../../administrator_documentation/uninstall_docs/debian.md:87
+msgid "Remove the Funkwhale database"
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:95
+#: ../../administrator_documentation/uninstall_docs/debian.md:90
+msgid ""
+"This action is __irreversible__. Make sure you have [backed up your data](../"
+"upgrade_docs/backup.md) before proceeding."
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:98
+#: ../../administrator_documentation/uninstall_docs/debian.md:93
+msgid ""
+"Once you have stopped the Funkwhale services, you can remove the Funkwhale "
+"database."
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:100
+#: ../../administrator_documentation/uninstall_docs/debian.md:95
+msgid "Navigate to your Funkwhale directory."
+msgstr "Naviguez jusque dans votre répertoire Funkwhale."
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:106
+#: ../../administrator_documentation/uninstall_docs/debian.md:101
+msgid "Delete the Funkwhale database."
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:112
+#: ../../administrator_documentation/uninstall_docs/debian.md:107
+msgid "Delete the Funkwhale user."
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:118
+#: ../../administrator_documentation/uninstall_docs/debian.md:113
+msgid "Delete  the Funkwhale account"
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:121
+#: ../../administrator_documentation/uninstall_docs/debian.md:116
+msgid ""
+"This action deletes the `/srv/funkwhale/` directory. Make sure you have "
+"[backed up any data](../upgrade_docs/backup.md) you want to keep."
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:124
+#: ../../administrator_documentation/uninstall_docs/debian.md:119
+msgid ""
+"Once you have removed the database, you can delete the `funkwhale` user and "
+"all associated data."
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:130
+#: ../../administrator_documentation/uninstall_docs/debian.md:125
+msgid ""
+"This deletes the `funkwhale` user and everything in their home directory (`/"
+"srv/funkwhale/`). If your content is hosted in an S3-compatible store, you "
+"need to delete this data separately."
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:132
+#: ../../administrator_documentation/uninstall_docs/debian.md:127
+msgid "Uninstall dependencies"
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:134
+#: ../../administrator_documentation/uninstall_docs/debian.md:129
+msgid "Funkwhale uses the following dependencies on your server:"
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md
+msgid "Apt"
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md
+msgid "Python"
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md:170
+#: ../../administrator_documentation/uninstall_docs/debian.md:160
+msgid "Uninstall any dependencies you don't need."
+msgstr ""
+
+#: ../../administrator_documentation/uninstall_docs/debian.md
+msgid "apt"
+msgstr ""

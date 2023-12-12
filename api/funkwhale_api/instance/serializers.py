@@ -12,6 +12,17 @@ class SoftwareSerializer(serializers.Serializer):
         return "funkwhale"
 
 
+class SoftwareSerializer_v2(SoftwareSerializer):
+    repository = serializers.SerializerMethodField()
+    homepage = serializers.SerializerMethodField()
+
+    def get_repository(self, obj):
+        return "https://dev.funkwhale.audio/funkwhale/funkwhale"
+
+    def get_homepage(self, obj):
+        return "https://funkwhale.audio"
+
+
 class ServicesSerializer(serializers.Serializer):
     inbound = serializers.ListField(child=serializers.CharField(), default=[])
     outbound = serializers.ListField(child=serializers.CharField(), default=[])
@@ -31,6 +42,8 @@ class UsersUsageSerializer(serializers.Serializer):
 
 class UsageSerializer(serializers.Serializer):
     users = UsersUsageSerializer()
+    localPosts = serializers.IntegerField(required=False)
+    localComments = serializers.IntegerField(required=False)
 
 
 class TotalCountSerializer(serializers.Serializer):
@@ -92,19 +105,14 @@ class MetadataSerializer(serializers.Serializer):
     private = serializers.SerializerMethodField()
     shortDescription = serializers.SerializerMethodField()
     longDescription = serializers.SerializerMethodField()
-    rules = serializers.SerializerMethodField()
     contactEmail = serializers.SerializerMethodField()
-    terms = serializers.SerializerMethodField()
     nodeName = serializers.SerializerMethodField()
     banner = serializers.SerializerMethodField()
     defaultUploadQuota = serializers.SerializerMethodField()
-    library = serializers.SerializerMethodField()
     supportedUploadExtensions = serializers.ListField(child=serializers.CharField())
     allowList = serializers.SerializerMethodField()
-    reportTypes = ReportTypeSerializer(source="report_types", many=True)
     funkwhaleSupportMessageEnabled = serializers.SerializerMethodField()
     instanceSupportMessage = serializers.SerializerMethodField()
-    endpoints = EndpointsSerializer()
     usage = MetadataUsageSerializer(source="stats", required=False)
 
     def get_private(self, obj) -> bool:
@@ -116,14 +124,8 @@ class MetadataSerializer(serializers.Serializer):
     def get_longDescription(self, obj) -> str:
         return obj["preferences"].get("instance__long_description")
 
-    def get_rules(self, obj) -> str:
-        return obj["preferences"].get("instance__rules")
-
     def get_contactEmail(self, obj) -> str:
         return obj["preferences"].get("instance__contact_email")
-
-    def get_terms(self, obj) -> str:
-        return obj["preferences"].get("instance__terms")
 
     def get_nodeName(self, obj) -> str:
         return obj["preferences"].get("instance__name")
@@ -136,15 +138,6 @@ class MetadataSerializer(serializers.Serializer):
 
     def get_defaultUploadQuota(self, obj) -> int:
         return obj["preferences"].get("users__upload_quota")
-
-    @extend_schema_field(NodeInfoLibrarySerializer)
-    def get_library(self, obj):
-        data = obj["stats"] or {}
-        data["federationEnabled"] = obj["preferences"].get("federation__enabled")
-        data["anonymousCanListen"] = not obj["preferences"].get(
-            "common__api_authentication_required"
-        )
-        return NodeInfoLibrarySerializer(data).data
 
     @extend_schema_field(AllowListStatSerializer)
     def get_allowList(self, obj):
@@ -164,6 +157,62 @@ class MetadataSerializer(serializers.Serializer):
     @extend_schema_field(MetadataUsageSerializer)
     def get_usage(self, obj):
         return MetadataUsageSerializer(obj["stats"]).data
+
+
+class Metadata20Serializer(MetadataSerializer):
+    library = serializers.SerializerMethodField()
+    reportTypes = ReportTypeSerializer(source="report_types", many=True)
+    endpoints = EndpointsSerializer()
+    rules = serializers.SerializerMethodField()
+    terms = serializers.SerializerMethodField()
+
+    def get_rules(self, obj) -> str:
+        return obj["preferences"].get("instance__rules")
+
+    def get_terms(self, obj) -> str:
+        return obj["preferences"].get("instance__terms")
+
+    @extend_schema_field(NodeInfoLibrarySerializer)
+    def get_library(self, obj):
+        data = obj["stats"] or {}
+        data["federationEnabled"] = obj["preferences"].get("federation__enabled")
+        data["anonymousCanListen"] = not obj["preferences"].get(
+            "common__api_authentication_required"
+        )
+        return NodeInfoLibrarySerializer(data).data
+
+
+class MetadataContentLocalSerializer(serializers.Serializer):
+    artists = serializers.IntegerField()
+    releases = serializers.IntegerField()
+    recordings = serializers.IntegerField()
+    hoursOfContent = serializers.IntegerField()
+
+
+class MetadataContentCategorySerializer(serializers.Serializer):
+    name = serializers.CharField()
+    count = serializers.IntegerField()
+
+
+class MetadataContentSerializer(serializers.Serializer):
+    local = MetadataContentLocalSerializer()
+    topMusicCategories = MetadataContentCategorySerializer(many=True)
+    topPodcastCategories = MetadataContentCategorySerializer(many=True)
+
+
+class Metadata21Serializer(MetadataSerializer):
+    languages = serializers.ListField(child=serializers.CharField())
+    location = serializers.CharField()
+    content = MetadataContentSerializer()
+    features = serializers.ListField(child=serializers.CharField())
+    codeOfConduct = serializers.SerializerMethodField()
+
+    def get_codeOfConduct(self, obj) -> str:
+        return (
+            full_url("/about/pod#rules")
+            if obj["preferences"].get("instance__rules")
+            else ""
+        )
 
 
 class NodeInfo20Serializer(serializers.Serializer):
@@ -196,9 +245,36 @@ class NodeInfo20Serializer(serializers.Serializer):
             usage = {"users": {"total": 0, "activeMonth": 0, "activeHalfyear": 0}}
         return UsageSerializer(usage).data
 
-    @extend_schema_field(MetadataSerializer)
+    @extend_schema_field(Metadata20Serializer)
     def get_metadata(self, obj):
-        return MetadataSerializer(obj).data
+        return Metadata20Serializer(obj).data
+
+
+class NodeInfo21Serializer(NodeInfo20Serializer):
+    version = serializers.SerializerMethodField()
+    software = SoftwareSerializer_v2()
+
+    def get_version(self, obj) -> str:
+        return "2.1"
+
+    @extend_schema_field(UsageSerializer)
+    def get_usage(self, obj):
+        usage = None
+        if obj["preferences"]["instance__nodeinfo_stats_enabled"]:
+            usage = obj["stats"]
+            usage["localPosts"] = 0
+            usage["localComments"] = 0
+        else:
+            usage = {
+                "users": {"total": 0, "activeMonth": 0, "activeHalfyear": 0},
+                "localPosts": 0,
+                "localComments": 0,
+            }
+        return UsageSerializer(usage).data
+
+    @extend_schema_field(Metadata21Serializer)
+    def get_metadata(self, obj):
+        return Metadata21Serializer(obj).data
 
 
 class SpaManifestIconSerializer(serializers.Serializer):

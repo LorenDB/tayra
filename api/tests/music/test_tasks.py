@@ -1400,3 +1400,53 @@ def test_fs_import(factories, cache, mocker, settings):
     }
     assert cache.get("fs-import:status") == "finished"
     assert "Pruning dangling tracks" in cache.get("fs-import:logs")[-1]
+
+
+def test_upload_checks_mbid_tag(temp_signal, factories, mocker, preferences):
+    preferences["music__only_allow_musicbrainz_tagged_files"] = True
+    mocker.patch("funkwhale_api.federation.routes.outbox.dispatch")
+    mocker.patch("funkwhale_api.music.tasks.populate_album_cover")
+    mocker.patch("funkwhale_api.music.metadata.Metadata.get_picture")
+    track = factories["music.Track"](album__attachment_cover=None, mbid=None)
+    path = os.path.join(DATA_DIR, "with_cover.opus")
+
+    upload = factories["music.Upload"](
+        track=None,
+        audio_file__from_path=path,
+        import_metadata={"funkwhale": {"track": {"uuid": str(track.uuid)}}},
+    )
+    mocker.patch("funkwhale_api.music.models.TrackActor.create_entries")
+
+    with temp_signal(signals.upload_import_status_updated):
+        tasks.process_upload(upload_id=upload.pk)
+
+    upload.refresh_from_db()
+
+    assert upload.import_status == "errored"
+    assert upload.import_details == {
+        "error_code": "Only content tagged with a MusicBrainz ID is permitted on this pod.",
+        "detail": "You can tag your files with MusicBrainz Picard",
+    }
+
+
+def test_upload_checks_mbid_tag_pass(temp_signal, factories, mocker, preferences):
+    preferences["music__only_allow_musicbrainz_tagged_files"] = True
+    mocker.patch("funkwhale_api.federation.routes.outbox.dispatch")
+    mocker.patch("funkwhale_api.music.tasks.populate_album_cover")
+    mocker.patch("funkwhale_api.music.metadata.Metadata.get_picture")
+    track = factories["music.Track"](album__attachment_cover=None, mbid=None)
+    path = os.path.join(DATA_DIR, "test.mp3")
+
+    upload = factories["music.Upload"](
+        track=None,
+        audio_file__from_path=path,
+        import_metadata={"funkwhale": {"track": {"uuid": str(track.uuid)}}},
+    )
+    mocker.patch("funkwhale_api.music.models.TrackActor.create_entries")
+
+    with temp_signal(signals.upload_import_status_updated):
+        tasks.process_upload(upload_id=upload.pk)
+
+    upload.refresh_from_db()
+
+    assert upload.import_status == "finished"

@@ -19,6 +19,7 @@ tasks:
       gp ports await 5432
 
       poetry run funkwhale-manage migrate
+      poetry run funkwhale-manage fw users create --superuser --username gitpod --password funkwhale --email test@example.org
       poetry run funkwhale-manage gitpod init
     command: |
       echo "MEDIA_URL=`gp url 8000`/media/" >> ../.gitpod/.env
@@ -47,48 +48,65 @@ tasks:
       yarn install
     command: yarn dev --host 0.0.0.0 --base ./
 
+  - name: Documentation
+    before: cd docs
+    init: make install
+    command: make dev
+
   - name: Welcome to Funkwhale development!
     env:
       COMPOSE_FILE: /workspace/funkwhale/.gitpod/docker-compose.yml
       ENV_FILE: /workspace/funkwhale/.gitpod/.env
       VUE_EDITOR: code
       DJANGO_SETTINGS_MODULE: config.settings.local
-    init: pre-commit install
+    init: |
+      pre-commit install
+      pre-commit run --all
     command: |
-      pre-commit run --all && clear
       echo ""
       echo -e "    ⠀⠀⠸⣿⣷⣦⣄⣠⣶⣾⣿⠇⠀⠀    You can now start developing Funkwhale with gitpod!"
       echo -e "    ⠀⠀⠀⠈⠉⠻⣿⣿⠟⠉⠁⠀⠀⠀"
       echo -e "    \u1b[34m⣀⠀⢀⡀⢀⣀\u1b[0m⠹⠇\u1b[34m⣀⡀⢀⡀⠀⣀    \u1b[0mTo sign in to the superuser account,"
       echo -e "    \u1b[34m⢻⣇⠘⣧⡈⠻⠶⠶⠟⢁⣾⠃⣸⡟    \u1b[0mplease use these credentials:"
       echo -e "    \u1b[34m⠀⠻⣦⡈⠻⠶⣶⣶⠶⠟⢁⣴⠟⠀"
-      echo -e "    \u1b[34m⠀⠀⠈⠻⠷⣦⣤⣤⣴⠾⠟⠁⠀⠀    gitpod\u1b[0m:\u1b[34mgitpod"
+      echo -e "    \u1b[34m⠀⠀⠈⠻⠷⣦⣤⣤⣴⠾⠟⠁⠀⠀    gitpod\u1b[0m:\u1b[34mfunkwhale"
       echo ""
 
 ports:
-  - port: 8000
+  - name: Funkwhale
+    port: 8000
     visibility: public
     onOpen: notify
 
-  - port: 5000
+  - name: Funkwhale API
+    port: 5000
     visibility: private
     onOpen: ignore
 
-  - port: 5432
+  - name: PostgreSQL
+    port: 5432
     visibility: private
     onOpen: ignore
 
-  - port: 5678
+  - name: Debugpy
+    port: 5678
     visibility: private
     onOpen: ignore
 
-  - port: 6379
+  - name: Redis
+    port: 6379
     visibility: private
     onOpen: ignore
 
-  - port: 8080
+  - name: Frontend
+    port: 8080
     visibility: private
     onOpen: ignore
+
+  - name: Documentation
+    port: 8001
+    visibility: public
+    onOpen: notify
 
 vscode:
   extensions:

@@ -3,18 +3,21 @@
 # This file is distributed under the same license as the funkwhale package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-01 14:05+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2023-06-27 20:50+0000\n"
+"Last-Translator: Thomas <thovi98@gmail.com>\n"
+"Language-Team: French <https://translate.funkwhale.audio/projects/"
+"documentation/administrator-installation-docker/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.17\n"
 "Generated-By: Babel 2.11.0\n"
 
 #: ../../administrator_documentation/installation_docs/docker.md:1
@@ -36,13 +39,16 @@ msgstr ""
 
 #: ../../administrator_documentation/installation_docs/docker.md:13
 msgid "Before you begin"
-msgstr ""
+msgstr "Avant de commencer"
 
 #: ../../administrator_documentation/installation_docs/docker.md:15
 msgid ""
 "Set a `FUNKWHALE_VERSION` variable to the version you want to install. "
 "You will use this version for all commands in this guide."
 msgstr ""
+"Configurez une variable `FUNKWHALE_VERSION`avec la version que vous désirez "
+"installer. Vous allez utiliser cette version pour toutes les commandes dans "
+"ce guide."
 
 #: ../../administrator_documentation/installation_docs/docker.md:21
 msgid ""
@@ -65,28 +71,38 @@ msgid ""
 "administration. Doing this makes it easy to make sure you're running "
 "commands from the right place. Follow these steps to set up your user."
 msgstr ""
+"C’est une bonne pratique que de créer un utilisateur sur votre serveur pour "
+"l’administration de Funkwhale. En faisant cela, il est plus facile de s’"
+"assurer que vous exécutez une commande depuis la bonne place. Suivez les "
+"étapes suivantes pour configurer votre utilisateur."
 
 #: ../../administrator_documentation/installation_docs/docker.md:33
 msgid ""
 "Create the `funkwhale` user and set its shell to `bash` and its home "
 "directory to `/srv/funkwhale`."
 msgstr ""
+"Créez l’utilisateur `funkwhale`et configurez son shell vers `bash`et son "
+"répertoire maison vers `/srv/funkwhale`."
 
 #: ../../administrator_documentation/installation_docs/docker.md:40
 msgid ""
 "To perform any tasks as the `funkwhale` user, prefix your commands with "
 "`sudo -u funkwhale`."
 msgstr ""
+"Pour opérer n’importe quelle tâche avec l’utilisateur `funkwhale`, précédez "
+"vos commandes avec `sudo -u funkwhale`."
 
 #: ../../administrator_documentation/installation_docs/docker.md:46
 msgid ""
 "Or log in as `funkwhale` with `sudo su funkwhale` before running your "
 "commands."
 msgstr ""
+"Ou connectez-vous comme `funkwhale` avec `sudo su funkwhale` avant d’"
+"exécuter vos commandes."
 
 #: ../../administrator_documentation/installation_docs/docker.md:54
 msgid "That's it! You've created your `funkwhale` user."
-msgstr ""
+msgstr "C’est tout ! Vous avez créé votre utilisateur `funkwhale`."
 
 #: ../../administrator_documentation/installation_docs/docker.md:56
 msgid "2. Download the project files"
@@ -314,4 +330,3 @@ msgid ""
 "That's it! certbot renews your certificate every 60 days, so you don't "
 "need to worry about renewing it."
 msgstr ""
-

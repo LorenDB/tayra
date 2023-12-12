@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.3.0-rc3\n"
+"Project-Id-Version: funkwhale 1.2.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:39+0100\n"
+"POT-Creation-Date: 2023-03-24 18:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,25 +57,25 @@ msgid "Add a list of contributors"
 msgstr ""
 
 #: ../../developer/workflows/release.md:58
-msgid "Update the `__version__` variable to the next release version"
+msgid "Update the next release version"
 msgstr ""
 
-#: ../../developer/workflows/release.md:64
+#: ../../developer/workflows/release.md:66
 msgid "Commit all changes"
 msgstr ""
 
-#: ../../developer/workflows/release.md:71
+#: ../../developer/workflows/release.md:73
 msgid "Create a tag"
 msgstr ""
 
-#: ../../developer/workflows/release.md:77
+#: ../../developer/workflows/release.md:79
 msgid "Publish the new tag to GitLab"
 msgstr ""
 
-#: ../../developer/workflows/release.md:83
+#: ../../developer/workflows/release.md:85
 msgid "Merge your changes into the alternate branch"
 msgstr ""
 
-#: ../../developer/workflows/release.md:107
+#: ../../developer/workflows/release.md:109
 msgid "Don't forget to create a blog post to announce the new release!"
 msgstr ""

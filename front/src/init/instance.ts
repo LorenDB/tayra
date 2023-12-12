@@ -3,22 +3,30 @@ import type { InitModule } from '~/types'
 
 import { whenever } from '@vueuse/core'
 
+import useLogger from '~/composables/useLogger'
+
 import axios from 'axios'
+
+const logger = useLogger()
 
 export const install: InitModule = async ({ store, router }) => {
   await store.dispatch('instance/fetchFrontSettings')
 
   const fetchNodeInfo = async () => {
-    const [{ data }] = await Promise.all([
-      axios.get<NodeInfo>('instance/nodeinfo/2.0/'),
-      store.dispatch('instance/fetchSettings')
-    ])
+    try {
+      const [{ data }] = await Promise.all([
+        axios.get<NodeInfo>('instance/nodeinfo/2.0/'),
+        store.dispatch('instance/fetchSettings')
+      ])
 
-    if (data.metadata.library.music?.hours) {
-      data.metadata.library.music.hours = Math.floor(data.metadata.library.music.hours)
+      if (data.metadata.library.music?.hours) {
+        data.metadata.library.music.hours = Math.floor(data.metadata.library.music.hours)
+      }
+
+      store.commit('instance/nodeinfo', data)
+    } catch (error) {
+      logger.error('Error while fetching node info', error)
     }
-
-    store.commit('instance/nodeinfo', data)
   }
 
   whenever(() => store.state.instance.instanceUrl, fetchNodeInfo)

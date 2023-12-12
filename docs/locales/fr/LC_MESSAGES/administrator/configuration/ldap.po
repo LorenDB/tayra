@@ -3,23 +3,26 @@
 # This file is distributed under the same license as the funkwhale package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-01 14:05+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2023-12-05 19:10+0000\n"
+"Last-Translator: Thomas <thovi98@gmail.com>\n"
+"Language-Team: French <https://translate.funkwhale.audio/projects/"
+"documentation/administrator-configuration-ldap/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.1\n"
 "Generated-By: Babel 2.11.0\n"
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:1
 msgid "Configure LDAP"
-msgstr ""
+msgstr "Configurer LDAP"
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:3
 msgid ""
@@ -28,14 +31,21 @@ msgid ""
 "login information. Funkwhale supports LDAP through the [Django LDAP "
 "authentication module](https://django-auth-ldap.readthedocs.io/)."
 msgstr ""
+"{abbr}`LDAP (Lightweight Directory Access Protocol)` est un protocol pour "
+"fournir des services d’annuaire. Il agit comme autorité centrale pour les "
+"informations de connexion des utilisateurs. Funkwhale prend en charge le "
+"protocole LDAP grâce au [module Django d’authentification LDAP](https"
+"://django-auth-ldap.readthedocs.io/)."
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:6
 msgid "LDAP users can't change their password in the app."
 msgstr ""
+"Les utilisateurs LDAP ne peuvent pas charger leur mot de passe dans "
+"l’application."
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:9
 msgid "Dependencies"
-msgstr ""
+msgstr "Dépendances"
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:11
 msgid ""
@@ -43,64 +53,75 @@ msgid ""
 "requirements files to make it easier to set up. If you aren't using LDAP,"
 " you can safely remove these."
 msgstr ""
+"Le support LDAP demande des dépendances supplémentaires. Nous les incluons "
+"dans nos fichiers d’exigence pour en simplifier l’installation. Si vous n’"
+"utilisiez pas LDAP, vous pouvez les supprimer en toute sécurité."
 
 #: ../../administrator_documentation/configuration_docs/ldap.md
 msgid "OS dependencies"
-msgstr ""
+msgstr "Dépendances système"
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:15
 msgid "`libldap2-dev`"
-msgstr ""
+msgstr "`libldap2-dev`"
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:16
 msgid "`libsasl2-dev`"
-msgstr ""
+msgstr "`libsasl2-dev`"
 
 #: ../../administrator_documentation/configuration_docs/ldap.md
 msgid "Python dependencies"
-msgstr ""
+msgstr "Dépendances Python"
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:22
 msgid "`python-ldap`"
-msgstr ""
+msgstr "`python-ldap`"
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:23
 msgid "`python-django-auth-ldap`"
-msgstr ""
+msgstr "`python-django-auth-ldap`"
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:27
 msgid "Environment variables"
-msgstr ""
+msgstr "Variables d’environnement"
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:29
 msgid ""
 "You can configure LDAP authentication using environment variables in your"
 " `.env` file."
 msgstr ""
+"Vous pouvez configurer l’authentification LDAP en utilisant les variables d’"
+"environnement dans votre fichier `.env` ."
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:31
 msgid "Basic features"
-msgstr ""
+msgstr "Fonctionnalités de base"
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:34
 msgid "Set this to `True` to enable LDAP support"
-msgstr ""
+msgstr "Mettez ce paramètre à `True` pour activer le support LDAP"
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:44
 msgid ""
 "The LDAP {abbr}`URI (Uniform Resource Identifier)` of your authentication"
 " server."
 msgstr ""
+"L’{abbr}`URI (Uniform Resource Identifier)` LDAP de votre serveur "
+"d’authentification."
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:53
 msgid ""
 "LDAP user {abbr}`DN (Distinguished Name)` to bind on so you can perform "
 "searches."
 msgstr ""
+"Les utilisateurs LDAP {abbr}`DN (Distinguished Name)` à lier pour pouvoir "
+"effectuer des recherches."
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:62
 msgid "LDAP user password for bind {abbr}`DN (Distinguished Name)`."
 msgstr ""
+"Les mots de passe des utilisateurs LDAP pour lier {abbr}`DN (Distinguished "
+"Name)`."
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:71
 msgid ""
@@ -109,28 +130,36 @@ msgid ""
 "syntax](https://social.technet.microsoft.com/wiki/contents/articles/5392"
 ".active-directory-ldap-syntax-filters.aspx)."
 msgstr ""
+"Le filtre des utilisateurs LDAP, utilisant `{0}` comme non d’utilisateur. "
+"Utilise le standard de la [syntaxe de recherche LDAP](https://social.technet."
+"microsoft.com/wiki/contents/articles/5392.active-directory-ldap-syntax-"
+"filters.aspx)."
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:80
 msgid "Set to `True` to enable LDAP StartTLS support."
-msgstr ""
+msgstr "Mettez le paramètre sur `True` pour activer le support LDAP StartTLS."
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:89
 msgid ""
 "The LDAP search root {abbr}`DN (Distinguished Name)`. Supports several "
 "entries in a comma-delimited list."
 msgstr ""
+"La racine de recherche LDAP {abbr}`DN (Distinguished Name)`. Prend en charge "
+"plusieurs entrées dans une liste délimitée par des virgules."
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:98
 msgid "A mapping of Django user attributes to LDAP values."
 msgstr ""
+"Une correspondance entre les attributs de l'utilisateur Django et les "
+"valeurs LDAP."
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:107
 msgid "Controls whether to use direct binding."
-msgstr ""
+msgstr "Contrôle s’il faut utiliser la liaison directe."
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:115
 msgid "Group features"
-msgstr ""
+msgstr "Fonctionnalités de groupe"
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:117
 msgid ""
@@ -138,28 +167,36 @@ msgid ""
 " is an advanced feature. Most users don't need to configure these "
 "settings."
 msgstr ""
+"Le protocole LDAP offre des fonctionnalités supplémentaires pour travailler "
+"avec des groupes. La configuration des groupes est une fonctionnalité "
+"avancée. La plupart des utilisateurs n'ont pas besoin de configurer ces "
+"paramètres."
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:120
 msgid ""
 "[Django's LDAP documentation](https://django-auth-"
 "ldap.readthedocs.io/en/latest/groups.html) for groups."
 msgstr ""
+"[La documentation LDAP d Django](https://django-auth-ldap.readthedocs.io/en/"
+"latest/groups.html) pour les groupes."
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:124
 msgid ""
 "The LDAP group search root {abbr}`DN (Distinguished Name)`. This needs to"
 " be set to `True` to enable group features."
 msgstr ""
+"La racine de recherche du groupe LDAP {abbr}`DN (Distinguished Name)`. Ce "
+"paramètre doit être réglé sur `True` pour activer les fonctions de groupe."
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:133
 msgid "The LDAP group filter."
-msgstr ""
+msgstr "Le filtre de groupe de LDAP."
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:142
 msgid "The group that users need to be a member of to authenticate."
 msgstr ""
+"Le groupe dont les utilisateurs doivent être membres pour s’authentifier."
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:151
 msgid "A group whose members can't authenticate."
-msgstr ""
-
+msgstr "Un groupe dont les membres ne peuvent pas s’authentifier."

@@ -19,7 +19,7 @@ services:
       - "./po:/po"
     networks:
       - internal
-    command: "yarn dev --host --base /front/"
+    command: "yarn dev --host"
 
   postgres:
     env_file:
@@ -71,7 +71,6 @@ services:
       - "DATABASE_URL=postgresql://postgres@postgres/postgres"
       - "CACHE_URL=redis://redis:6379/0"
       - "STATIC_ROOT=/staticfiles"
-      - "MEDIA_ROOT=/data/media"
 
     depends_on:
       - postgres
@@ -103,7 +102,6 @@ services:
       - "FUNKWHALE_PROTOCOL=${FUNKWHALE_PROTOCOL-http}"
       - "DATABASE_URL=postgresql://postgres@postgres/postgres"
       - "CACHE_URL=redis://redis:6379/0"
-      - "MEDIA_ROOT=/data/media"
     volumes:
       - ./api:/app
       - "${MUSIC_DIRECTORY_SERVE_PATH-./data/music}:/music:ro"
@@ -117,7 +115,6 @@ services:
       - "node3.funkwhale.test:172.17.0.1"
 
   nginx:
-    command: /entrypoint.sh
     env_file:
       - .env.dev
       - .env
@@ -136,8 +133,7 @@ services:
       - api
       - front
     volumes:
-      - ./docker/nginx/conf.dev:/etc/nginx/nginx.conf.template:ro
-      - ./docker/nginx/entrypoint.sh:/entrypoint.sh:ro
+      - ./docker/nginx/conf.dev:/etc/nginx/templates/default.conf.template:ro
       - "${MUSIC_DIRECTORY_SERVE_PATH-./data/music}:/music:ro"
       - ./deploy/funkwhale_proxy.conf:/etc/nginx/funkwhale_proxy.conf:ro
       - "./front:/frontend:ro"
@@ -156,15 +152,6 @@ services:
       traefik.frontend.passHostHeader: true
       traefik.docker.network: federation
 
-  docs:
-    build: docs
-    command: python3 serve.py
-    volumes:
-      - ".:/app/"
-    ports:
-      - "35730:35730"
-      - "8001:8001"
-
   api-docs:
     image: swaggerapi/swagger-ui:v3.37.2
     environment:
@@ -174,6 +161,19 @@ services:
     volumes:
       - "./docs/swagger.yml:/usr/share/nginx/html/swagger.yml"
       - "./docs/api:/usr/share/nginx/html/api"
+
+  typesense:
+    env_file:
+      - .env.dev
+      - .env
+    image: typesense/typesense:0.24.0
+    networks:
+      - internal
+    volumes:
+      - ./typesense/data:/data
+    command: --data-dir /data --enable-cors
+    profiles:
+      - typesense
 
   # minio:
   #   image: minio/minio
@@ -193,5 +193,5 @@ services:
 networks:
   internal:
   federation:
-    external:
-      name: federation
+    name: federation
+    external: true

@@ -18,14 +18,15 @@ const values = reactive({} as Record<string, unknown | Form | string>)
 const result = ref<boolean | null>(null)
 const errors = ref([] as string[])
 
-const fileRefs = reactive({} as Record<string, HTMLInputElement>)
-const setFileRef = (identifier: string) => (el: FunctionRef) => {
-  console.log(el)
-  fileRefs[identifier] = el as HTMLInputElement
-}
-
 const logger = useLogger()
 const store = useStore()
+
+// TODO (wvffle): Use VueUse
+const fileRefs = reactive({} as Record<string, HTMLInputElement>)
+const setFileRef = (identifier: string) => (el: FunctionRef) => {
+  logger.debug(el)
+  fileRefs[identifier] = el as HTMLInputElement
+}
 
 const settings = computed(() => {
   const byIdentifier = props.settingsData.reduce((acc, entry) => {
@@ -206,6 +207,20 @@ const save = async () => {
         :id="setting.identifier"
         v-model="values[setting.identifier]"
         multiple
+        class="ui search selection dropdown"
+      >
+        <option
+          v-for="v in setting.additional_data?.choices"
+          :key="v[0]"
+          :value="v[0]"
+        >
+          {{ v[1] }}
+        </option>
+      </select>
+      <select
+        v-else-if="setting.field.class === 'ChoiceField'"
+        :id="setting.identifier"
+        v-model="values[setting.identifier]"
         class="ui search selection dropdown"
       >
         <option

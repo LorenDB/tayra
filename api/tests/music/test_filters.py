@@ -3,9 +3,32 @@ import pytest
 from funkwhale_api.music import filters, models
 
 
+def test_artist_filter_ordering(factories, mocker):
+    # Lista de prueba
+    artist1 = factories["music.Artist"](name="Anita Muller")
+    artist2 = factories["music.Artist"](name="Jane Smith")
+    artist3 = factories["music.Artist"](name="Adam Johnson")
+    artist4 = factories["music.Artist"](name="anita iux")
+
+    qs = models.Artist.objects.all()
+
+    cf = factories["moderation.UserFilter"](for_artist=True)
+
+    # Request con ordenamiento
+    filterset = filters.ArtistFilter(
+        {"ordering": "name"}, request=mocker.Mock(user=cf.user), queryset=qs
+    )
+
+    expected_order = [artist3.name, artist4.name, artist1.name, artist2.name]
+    actual_order = list(filterset.qs.values_list("name", flat=True))
+
+    assert actual_order == expected_order
+
+
 def test_album_filter_hidden(factories, mocker, queryset_equal_list):
     factories["music.Album"]()
     cf = factories["moderation.UserFilter"](for_artist=True)
+
     hidden_album = factories["music.Album"](artist=cf.target_artist)
 
     qs = models.Album.objects.all()

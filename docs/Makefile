@@ -1,20 +1,85 @@
-# Minimal makefile for Sphinx documentation
-#
+SHELL = bash
+UNAME := $(shell uname)
+ifeq ($(UNAME), Linux)
+CPU_CORES = $(shell N=$$(nproc); echo $$(( $$N > 4 ? 4 : $$N )))
+else
+CPU_CORES = $(shell N=$$(sysctl -n hw.physicalcpu); echo $$(( $$N > 4 ? 4 : $$N )))
+endif
 
-# You can set these variables from the command line.
-SPHINXOPTS    =
-SPHINXBUILD   = python3 -msphinx
-SPHINXPROJ    = funkwhale
-SOURCEDIR     = .
-BUILDDIR      = _build
+# Install
+VENV = .venv
+export POETRY_VIRTUALENVS_IN_PROJECT=true
 
-# Put it first so that "make" without argument is like "make help".
-help:
-	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+$(VENV):
+	$(MAKE) install
 
-.PHONY: help Makefile
+install:
+	poetry install
+	poetry run pip install --no-deps --editable ../api
 
-# Catch-all target: route all unknown targets to Sphinx using the new
-# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
-%: Makefile
-	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+clean:
+	git clean -xdf .
+
+# Sphinx
+SPHINX_OPTS = -j $(CPU_CORES)
+SOURCE_DIR = .
+BUILD_DIR = _build
+
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
+
+# Dev
+dev: $(VENV)
+	poetry run sphinx-autobuild . /tmp/_build/ --port 8001
+
+# I18n
+LOCALES = en_GB en_US fr
+
+locale-generate: $(VENV)
+	poetry run sphinx-build -b gettext $(SOURCE_DIR) locales/gettext $(SPHINX_OPTS)
+
+locale-update: $(VENV)
+	poetry run sphinx-intl update -p locales/gettext $(foreach locale,$(LOCALES),-l $(locale))
+
+locale-prune-untranslated: $(VENV)
+	poetry run _scripts/locale-prune-untranslated.py
+
+# Swagger
+SWAGGER_VERSION = 5.1.2
+SWAGGER_RELEASE_URL = https://github.com/swagger-api/swagger-ui/archive/refs/tags/v$(SWAGGER_VERSION).tar.gz
+SWAGGER_BUILD_DIR = swagger
+
+swagger:
+	mkdir "$(SWAGGER_BUILD_DIR)"
+	curl -sSL "$(SWAGGER_RELEASE_URL)" | \
+		tar --extract \
+			--gzip \
+			--directory="$(SWAGGER_BUILD_DIR)" \
+			--strip-components=2 \
+			"swagger-ui-$(SWAGGER_VERSION)/dist"
+
+	sed -i \
+		"s#https://petstore.swagger.io/v2/swagger.json#schema.yml#g" \
+		"$(SWAGGER_BUILD_DIR)/swagger-initializer.js"
+
+	cp schema.yml "$(SWAGGER_BUILD_DIR)/schema.yml"
+
+# Releases
+$(BUILD_DIR)/releases.json: $(BUILD_DIR)
+	../scripts/releases.py > "$@"
+
+$(BUILD_DIR)/latest.txt: $(BUILD_DIR)
+	../scripts/releases.py -r -q latest.id > "$@"
+
+releases: $(BUILD_DIR)/releases.json $(BUILD_DIR)/latest.txt
+
+# Build
+build: $(VENV)
+	poetry run sphinx-build $(SOURCE_DIR) $(BUILD_DIR) $(SPHINX_OPTS)
+
+build-translated: $(VENV) locale-prune-untranslated
+	for locale in $(LOCALES); do \
+		poetry run sphinx-build $(SOURCE_DIR) $(BUILD_DIR)/$$locale $(SPHINX_OPTS) -D language=$$locale; \
+	done
+
+build-all: build build-translated releases swagger

@@ -349,7 +349,7 @@ class ScopesSerializer(serializers.Serializer):
 
 class IdentSerializer(serializers.Serializer):
     type = serializers.CharField()
-    id = serializers.IntegerField()
+    id = serializers.CharField()
 
 
 class RateLimitSerializer(serializers.Serializer):

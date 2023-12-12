@@ -1,6 +1,6 @@
 {
   "App": {
-    "loading": "加载中..."
+    "loading": "加载中…"
   },
   "components": {
     "About": {
@@ -109,6 +109,9 @@
         "statistics": "统计",
         "welcome": "欢迎来到 { podName }！"
       },
+      "help": {
+        "registrationsClosed": "本实例已关闭注册。您可以使用以下链接在其他实例注册。"
+      },
       "link": {
         "findOtherPod": "查看其他实例",
         "funkwhale": "访问 funkwhale.audio",
@@ -157,6 +160,7 @@
       },
       "header": {
         "failure": "此歌曲无法加载",
+        "noSources": "该音轨没有可用音源。",
         "radio": "您有一个电台正在播放"
       },
       "label": {
@@ -168,10 +172,13 @@
         "next": "下一首",
         "pause": "暂停",
         "play": "播放",
+        "populatingRadio": "迷人的广播曲目…",
         "previous": "上一首",
         "queue": "播放队列",
         "remove": "删除",
-        "restart": "从头开始"
+        "restart": "从头开始",
+        "selectTrack": "选择轨道",
+        "showCoverArt": "节目封面设计"
       },
       "message": {
         "automaticPlay": "下一首歌曲将在几秒钟后自动播放…",

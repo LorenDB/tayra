@@ -9,6 +9,8 @@ import { useStore } from '~/store'
 
 import ApplicationForm from '~/components/auth/ApplicationForm.vue'
 
+import useLogger from '~/composables/useLogger'
+
 interface Props {
   name?: string
   scopes?: string
@@ -27,6 +29,7 @@ const defaults = reactive({
   redirectUris: props.redirectUris
 })
 
+const logger = useLogger()
 const { t } = useI18n()
 const labels = computed(() => ({
   title: t('components.auth.ApplicationNew.title')
@@ -37,7 +40,7 @@ const store = useStore()
 
 const created = (application: Application) => {
   store.state.auth.applicationSecret = application.client_secret
-  console.log(application)
+  logger.debug(application)
   return router.push({
     name: 'settings.applications.edit',
     params: {

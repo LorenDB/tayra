@@ -2,6 +2,8 @@ import { DefaultMagicKeysAliasMap, tryOnScopeDispose, useEventListener } from '@
 import { isEqual, isMatch } from 'lodash-es'
 import { reactive } from 'vue'
 
+import useLogger from './useLogger'
+
 type KeyFilter = string | string[]
 
 interface Entry {
@@ -10,6 +12,7 @@ interface Entry {
   __location?: string
 }
 
+const logger = useLogger()
 const combinations = reactive(new Map())
 
 const current = new Set()
@@ -59,7 +62,7 @@ export default (key: KeyFilter, handler: () => unknown, prevent = false) => {
       }
 
       if (collisions.length) {
-        console.warn([
+        logger.warn([
           'onKeyboardShortcut detected a possible collision in:',
           `${entry.__location}: ${combination.join(' + ')}`,
           ...collisions

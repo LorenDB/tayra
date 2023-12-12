@@ -13,7 +13,29 @@ APPS_DIR = ROOT_DIR.path("funkwhale_api")
 
 env = environ.Env()
 ENV = env
-LOGLEVEL = env("LOGLEVEL", default="info").upper()
+# If DEBUG is `true`, we automatically set the loglevel to "DEBUG"
+# If DEBUG is `false`, we try to read the level from LOGLEVEL environment and default to "INFO"
+LOGLEVEL = (
+    "DEBUG" if env.bool("DEBUG", False) else env("LOGLEVEL", default="info").upper()
+)
+"""
+Default logging level for the Funkwhale processes.
+
+.. note::
+    The `DEBUG` variable overrides the `LOGLEVEL` if it is set to `TRUE`.
+
+    The `LOGLEVEL` value only applies if `DEBUG` is `false` or not present.
+
+Available levels:
+
+- ``debug``
+- ``info``
+- ``warning``
+- ``error``
+- ``critical``
+
+"""
+
 IS_DOCKER_SETUP = env.bool("IS_DOCKER_SETUP", False)
 
 
@@ -34,19 +56,6 @@ if env("FUNKWHALE_SENTRY_DSN", default=None) is not None:
         release=version,
     )
     sentry_sdk.set_tag("instance", env("FUNKWHALE_HOSTNAME"))
-
-"""
-Default logging level for the Funkwhale processes
-
-Available levels:
-
-- ``debug``
-- ``info``
-- ``warning``
-- ``error``
-- ``critical``
-
-"""  # pylint: disable=W0105
 
 LOGGING_CONFIG = None
 logging.config.dictConfig(
@@ -187,9 +196,7 @@ request errors related to this.
 FUNKWHALE_SPA_HTML_CACHE_DURATION = env.int(
     "FUNKWHALE_SPA_HTML_CACHE_DURATION", default=60 * 15
 )
-FUNKWHALE_EMBED_URL = env(
-    "FUNKWHALE_EMBED_URL", default=FUNKWHALE_URL + "/front/embed.html"
-)
+FUNKWHALE_EMBED_URL = env("FUNKWHALE_EMBED_URL", default=FUNKWHALE_URL + "/embed.html")
 FUNKWHALE_SPA_REWRITE_MANIFEST = env.bool(
     "FUNKWHALE_SPA_REWRITE_MANIFEST", default=True
 )
@@ -272,6 +279,7 @@ LOCAL_APPS = (
     "funkwhale_api.playlists",
     "funkwhale_api.subsonic",
     "funkwhale_api.tags",
+    "funkwhale_api.typesense",
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -281,9 +289,9 @@ ADDITIONAL_APPS = env.list("ADDITIONAL_APPS", default=[])
 List of Django apps to load in addition to Funkwhale plugins and apps.
 """
 INSTALLED_APPS = (
-    DJANGO_APPS
+    LOCAL_APPS
+    + DJANGO_APPS
     + THIRD_PARTY_APPS
-    + LOCAL_APPS
     + tuple(ADDITIONAL_APPS)
     + tuple(plugins.trigger_filter(plugins.PLUGINS_APPS, [], enabled=True))
 )
@@ -822,7 +830,7 @@ If you're using password auth (the extra slash is important)
 .. note::
 
     If you want to use Redis over unix sockets, you also need to update
-    :attr:`CELERY_BROKER_URL`, because the scheme differ from the one used by
+    :attr:`CELERY_BROKER_URL`, because the scheme differs from the one used by
     :attr:`CACHE_URL`.
 
 """
@@ -873,7 +881,7 @@ to use a different server or use Redis sockets to connect.
 
 Example:
 
-- ``redis://127.0.0.1:6379/0``
+- ``unix://127.0.0.1:6379/0``
 - ``redis+socket:///run/redis/redis.sock?virtual_host=0``
 
 """
@@ -933,6 +941,11 @@ CELERY_BEAT_SCHEDULE = {
             )
         ),
         "options": {"expires": 60 * 60},
+    },
+    "typesense.build_canonical_index": {
+        "task": "typesense.build_canonical_index",
+        "schedule": crontab(day_of_week="*/2", minute="0", hour="3"),
+        "options": {"expires": 60 * 60 * 24},
     },
 }
 
@@ -1459,3 +1472,22 @@ instead of request header.
 
 HASHING_ALGORITHM = "sha256"
 HASHING_CHUNK_SIZE = 1024 * 100
+
+"""
+Typenses Settings
+"""
+TYPESENSE_API_KEY = env("TYPESENSE_API_KEY", default=None)
+""" Typesense API key. This need to be defined in the .env file for Typenses to be activated."""
+TYPESENSE_PORT = env("TYPESENSE_PORT", default="8108")
+"""Typesense listening port"""
+TYPESENSE_PROTOCOL = env("TYPESENSE_PROTOCOL", default="http")
+"""Typesense listening protocol"""
+TYPESENSE_HOST = env(
+    "TYPESENSE_HOST",
+    default="typesense" if IS_DOCKER_SETUP else "localhost",
+)
+"""
+Typesense hostname. Defaults to `localhost` on non-Docker deployments and to `typesense` on
+Docker deployments.
+"""
+TYPESENSE_NUM_TYPO = env("TYPESENSE_NUM_TYPO", default=5)

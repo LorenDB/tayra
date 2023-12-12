@@ -3,18 +3,21 @@
 # This file is distributed under the same license as the funkwhale package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-01 14:39+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2023-12-05 19:10+0000\n"
+"Last-Translator: Thomas <thovi98@gmail.com>\n"
+"Language-Team: French <https://translate.funkwhale.audio/projects/"
+"documentation/user-channels-create/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.1\n"
 "Generated-By: Babel 2.11.0\n"
 
 #: ../../user/channels/create.md:1
@@ -49,16 +52,18 @@ msgstr ""
 
 #: ../../user/channels/create.md
 msgid "Desktop"
-msgstr ""
+msgstr "Bureau"
 
 #: ../../user/channels/create.md:25 ../../user/channels/create.md:42
 #: ../../user/channels/create.md:68 ../../user/channels/create.md:90
 msgid "Log in to your pod."
-msgstr ""
+msgstr "Connectez-vous à votre pod."
 
 #: ../../user/channels/create.md:26 ../../user/channels/create.md:69
 msgid "Select the upload icon ({fa}`upload`) in the top of the sidebar."
 msgstr ""
+"Sélectionnez l'icône de téléchargement ({fa}`téléversement`) en haut de la "
+"barre latérale."
 
 #: ../../user/channels/create.md:27 ../../user/channels/create.md:44
 #: ../../user/channels/create.md:70 ../../user/channels/create.md:92
@@ -127,11 +132,11 @@ msgstr ""
 
 #: ../../user/channels/create.md
 msgid "Mobile"
-msgstr ""
+msgstr "Téléphone mobile"
 
 #: ../../user/channels/create.md:43 ../../user/channels/create.md:91
 msgid "Select the upload icon ({fa}`upload`) at the top of the screen."
-msgstr ""
+msgstr "Sélectionnez l'icône de ({fa}`téléversement`) en haut de l'écran."
 
 #: ../../user/channels/create.md:56
 msgid ""
@@ -199,4 +204,3 @@ msgstr ""
 #~ " channel. Now you can [add some "
 #~ "episodes to it](upload_podcast.md)."
 #~ msgstr ""
-

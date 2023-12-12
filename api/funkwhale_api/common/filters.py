@@ -1,5 +1,6 @@
 from django import forms
 from django.db.models import Q
+from django.db.models.functions import Lower
 from django_filters import rest_framework as filters
 from django_filters import widgets
 from drf_spectacular.utils import extend_schema_field
@@ -239,3 +240,19 @@ class ActorScopeFilter(filters.CharFilter):
             raise EmptyQuerySet()
 
         return Q(**{self.actor_field: actor})
+
+
+class CaseInsensitiveNameOrderingFilter(filters.OrderingFilter):
+    def filter(self, qs, value):
+        order_by = []
+
+        if value is None:
+            return qs
+
+        for param in value:
+            if param == "name":
+                order_by.append(Lower("name"))
+            else:
+                order_by.append(self.get_ordering_value(param))
+
+        return qs.order_by(*order_by)

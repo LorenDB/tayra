@@ -7,7 +7,7 @@ from rest_framework import throttling as rest_throttling
 
 def get_ident(user, request):
     if user and user.is_authenticated:
-        return {"type": "authenticated", "id": user.pk}
+        return {"type": "authenticated", "id": f"{user.pk}"}
     ident = rest_throttling.BaseThrottle().get_ident(request)
 
     return {"type": "anonymous", "id": ident}

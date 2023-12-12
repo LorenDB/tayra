@@ -1,13 +1,26 @@
 #!/usr/bin/env bash
 
-set -eux
+# Given a commit hash, this script will update the version in api/pyproject.toml
+# The version must follow the pep440 specification https://peps.python.org/pep-0440/
 
-# given a commit hash, will append this to the version number stored
-# in api/funkwhale_api/__init__.py
+set -eu
 
-COMMIT=$1
-FILE="api/funkwhale_api/__init__.py"
+error() {
+  echo >&2 "error: $*"
+  exit 1
+}
 
-SUFFIX="\1+git.$COMMIT"
-EXPR=$(printf 's@__version__ = "(.*)"@__version__ = "%s"@' "$SUFFIX")
-sed -i -E "$EXPR" "$FILE"
+command -v git > /dev/null || error "git command not found!"
+command -v poetry > /dev/null || error "poetry command not found!"
+
+# We assume this script only runs in a git repository
+cd "$(git rev-parse --show-toplevel)/api"
+
+COMMIT_SHA="$1"
+
+CURRENT_VERSION="$(poetry version --short)"
+CURRENT_VERSION="${CURRENT_VERSION%%.dev*}"
+
+VERSION_SUFFIX="dev+$COMMIT_SHA"
+
+poetry version "$CURRENT_VERSION-$VERSION_SUFFIX"

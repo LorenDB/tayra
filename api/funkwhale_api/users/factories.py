@@ -1,11 +1,17 @@
+import sys
+
 import factory
-import pytz
 from django.contrib.auth.models import Permission
 from django.utils import timezone
 
 from funkwhale_api.factories import ManyToManyFromList, NoUpdateOnCreate, registry
 
 from . import models
+
+if sys.version_info < (3, 9):
+    from backports.zoneinfo import ZoneInfo
+else:
+    from zoneinfo import ZoneInfo
 
 
 @registry.register
@@ -159,7 +165,7 @@ class GrantFactory(factory.django.DjangoModelFactory):
 class AccessTokenFactory(factory.django.DjangoModelFactory):
     application = factory.SubFactory(ApplicationFactory)
     user = factory.SubFactory(UserFactory)
-    expires = factory.Faker("future_datetime", tzinfo=pytz.UTC)
+    expires = factory.Faker("future_datetime", tzinfo=ZoneInfo("UTC"))
     token = factory.Faker("uuid4")
     scope = "read"
 

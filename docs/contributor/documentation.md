@@ -15,7 +15,7 @@ We try to document Funkwhale as thoroughly as possible to make it easy for users
 To work on Funkwhale's documentation, you need the following:
 
 - [Git](https://git-scm.com): our version control system
-- [Docker](https://docs.docker.com/engine/install/) and [Docker Compose](https://docs.docker.com/compose/install/): used to run our development environment
+- [Poetry](https://python-poetry.org/): A python packaging tool and dependency manager
 - A text editor of your choice
 
 ## Tooling
@@ -36,31 +36,7 @@ Here are some basic rules to follow:
 
 ## Local setup
 
-We provide a docker container for our documentation to make it easy to work on docs with a real-time preview. Once you install [Docker](https://docs.docker.com/engine/install/) and [Docker Compose](https://docs.docker.com/compose/install/), do the following to get a live preview:
-
-1. Create a dummy `.env` file
-
-   ```{code-block} sh
-   touch .env
-   ```
-
-2. Create a dummy federation network
-
-   ```{code-block} sh
-   sudo docker network create federation
-   ```
-
-3. Build the container
-
-   ```{code-block} sh
-   sudo docker compose -f dev.yml build docs
-   ```
-
-4. Run the container
-
-   ```{code-block} sh
-   sudo docker compose -f dev.yml up docs
-   ```
+We provide a fully automated setup for a local live-preview of your changes. Make sure you meet the requirements outlined above and run `make dev`.
 
 A real-time preview of the documentation is available on `http://0.0.0.1:8001`
 

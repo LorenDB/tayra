@@ -3,18 +3,21 @@
 # This file is distributed under the same license as the funkwhale package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-01 14:05+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2023-12-05 19:10+0000\n"
+"Last-Translator: Thomas <thovi98@gmail.com>\n"
+"Language-Team: French <https://translate.funkwhale.audio/projects/"
+"documentation/user-libraries-content-delete/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.1\n"
 "Generated-By: Babel 2.11.0\n"
 
 #: ../../user_documentation/libraries/delete_content.md:1
@@ -34,16 +37,18 @@ msgstr ""
 
 #: ../../user_documentation/libraries/delete_content.md
 msgid "Desktop"
-msgstr ""
+msgstr "Bureau"
 
 #: ../../user_documentation/libraries/delete_content.md:15
 #: ../../user_documentation/libraries/delete_content.md:32
 msgid "Log in to your pod."
-msgstr ""
+msgstr "Connectez-vous à votre pod."
 
 #: ../../user_documentation/libraries/delete_content.md:16
 msgid "Select the upload icon ({fa}`upload`) in the top of the sidebar."
 msgstr ""
+"Sélectionnez l'icône de téléchargement ({fa}`téléversement`) en haut de la "
+"barre latérale."
 
 #: ../../user_documentation/libraries/delete_content.md:17
 #: ../../user_documentation/libraries/delete_content.md:34
@@ -51,21 +56,27 @@ msgid ""
 "Select {guilabel}`Get started` under {guilabel}`Upload third-party "
 "content in a library`."
 msgstr ""
+"Sélectionnez {guilabel}`Démarrer` sous {guilabel}`Téléverser du contenu "
+"tiers dans une bibliothèque`."
 
 #: ../../user_documentation/libraries/delete_content.md:18
 #: ../../user_documentation/libraries/delete_content.md:35
 msgid "A screen appears showing your upload quota and your libraries."
 msgstr ""
+"Un écran s'affiche, indiquant votre quota de téléchargement et vos "
+"bibliothèques."
 
 #: ../../user_documentation/libraries/delete_content.md:19
 #: ../../user_documentation/libraries/delete_content.md:36
 msgid "Select {guilabel}`Library Details` under the library you want to edit."
 msgstr ""
+"Sélectionnez {guilabel}`Détails de la bibliothèque` sous la bibliothèque que "
+"vous voulez éditer."
 
 #: ../../user_documentation/libraries/delete_content.md:20
 #: ../../user_documentation/libraries/delete_content.md:37
 msgid "Select the {guilabel}`✎ Edit` button at the top of the screen."
-msgstr ""
+msgstr "Sélectionnez le bouton {guilabel}`✎ Modifier` en haut de l'écran."
 
 #: ../../user_documentation/libraries/delete_content.md:21
 #: ../../user_documentation/libraries/delete_content.md:38
@@ -98,13 +109,12 @@ msgstr ""
 
 #: ../../user_documentation/libraries/delete_content.md
 msgid "Mobile"
-msgstr ""
+msgstr "Téléphone mobile"
 
 #: ../../user_documentation/libraries/delete_content.md:33
 msgid "Select the upload icon ({fa}`upload`) at the top of the screen."
-msgstr ""
+msgstr "Sélectionnez l'icône de ({fa}`téléversement`) en haut de l'écran."
 
 #: ../../user_documentation/libraries/delete_content.md:46
 msgid "That's it! You've successfully deleted the content from your library."
 msgstr ""
-

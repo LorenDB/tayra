@@ -65,7 +65,7 @@ const fetchData = async () => {
     playable: true
   }
 
-  logger.time('Fetching albums')
+  const measureLoading = logger.time('Fetching albums')
   try {
     const response = await axios.get('playlists/', {
       params
@@ -76,7 +76,7 @@ const fetchData = async () => {
     useErrorHandler(error as Error)
     result.value = undefined
   } finally {
-    logger.timeEnd('Fetching albums')
+    measureLoading()
     isLoading.value = false
   }
 }

@@ -36,12 +36,6 @@
       "enabled": false
     },
     {
-      "matchUpdateTypes": ["patch", "pin", "digest"],
-      "matchBaseBranches": ["develop"],
-      "automerge": true,
-      "automergeType": "branch"
-    },
-    {
       "matchManagers": ["npm"],
       "addLabels": ["Area::Frontend"]
     },
@@ -70,6 +64,10 @@
         ],
         "fileFilters": ["changes/changelog.d/postgres.update"]
       }
+    },
+    {
+      "matchPackageNames": ["python"],
+      "rangeStrategy": "widen"
     }
   ]
 }

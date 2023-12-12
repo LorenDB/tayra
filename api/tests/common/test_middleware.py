@@ -108,7 +108,7 @@ def test_get_default_head_tags(preferences, settings):
         {
             "tag": "meta",
             "property": "og:image",
-            "content": settings.FUNKWHALE_URL + "/front/favicon.png",
+            "content": settings.FUNKWHALE_URL + "/android-chrome-512x512.png",
         },
         {"tag": "meta", "property": "og:url", "content": settings.FUNKWHALE_URL + "/"},
     ]

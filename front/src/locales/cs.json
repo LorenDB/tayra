@@ -1,6 +1,6 @@
 {
   "App": {
-    "loading": "Načítání..."
+    "loading": "Načítání…"
   },
   "components": {
     "About": {
@@ -22,7 +22,7 @@
         "closedRegistrations": "Registrace na tomto podu jsou uzavřené. Můžete se zaregistrovat na jiném skrz odkaz níže."
       },
       "link": {
-        "findOtherPod": "Hledat další pod",
+        "findOtherPod": "Najít jiný pod",
         "learnMore": "Dozvědět se více"
       },
       "message": {
@@ -113,7 +113,7 @@
         "registrationsClosed": "Registrace na tomto podu jsou uzavřené. Můžete se zaregistrovat na jiném skrz odkaz níže."
       },
       "link": {
-        "findOtherPod": "Hledat další pody",
+        "findOtherPod": "Najít jiný pod",
         "funkwhale": "Navštívit funkwhale.audio",
         "learnMore": "Dozvědět se více",
         "mobileApps": {
@@ -172,7 +172,7 @@
         "next": "Další skladba",
         "pause": "Pozastavit",
         "play": "Hrát",
-        "populatingRadio": "Načítání skladby rádia...",
+        "populatingRadio": "Načítání skladby rádia…",
         "previous": "Předchozí skladba",
         "queue": "Fronta",
         "remove": "Odstranit",
@@ -1958,7 +1958,7 @@
           "suggest": "Navrhnout úpravu této skladby"
         },
         "message": {
-          "remote": " Tento objekt je spravován jiným serverem, nemůžete ho upravovat."
+          "remote": "Tento objekt je spravován jiným serverem, nemůžete ho upravovat."
         }
       },
       "radios": {

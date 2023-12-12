@@ -3,23 +3,26 @@
 # This file is distributed under the same license as the funkwhale package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-01 14:05+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2023-12-05 19:10+0000\n"
+"Last-Translator: Thomas <thovi98@gmail.com>\n"
+"Language-Team: French <https://translate.funkwhale.audio/projects/"
+"documentation/contributor-translation/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.1\n"
 "Generated-By: Babel 2.11.0\n"
 
 #: ../../contributor_documentation/translation.md:1
 msgid "Translate Funkwhale"
-msgstr ""
+msgstr "Traduire Funkwhale"
 
 #: ../../contributor_documentation/translation.md:3
 msgid ""
@@ -27,16 +30,22 @@ msgid ""
 "experience to all users. All of our UX copy and documentation is written "
 "in American English. This isn't accessible to all users."
 msgstr ""
+"Funkwhale dépend de traductions de la communauté pour fournir une expérience "
+"localisée pour tous les utilisateurs. Toutes nos copies d’expérience "
+"utilisateur et documentation sont écrits en anglais américain. Ceci n’est "
+"pas accessible à tous les utilisateurs."
 
 #: ../../contributor_documentation/translation.md:5
 msgid ""
 "If you are interested in helping us reach more users, we welcome "
 "contributions in all languages!"
 msgstr ""
+"Si vous êtes intéressé à nous aider à toucher plus d’utilisateurs, nous "
+"accueillons les contributions dans toutes les langues !"
 
 #: ../../contributor_documentation/translation.md:7
 msgid "Language coordination"
-msgstr ""
+msgstr "Coordination des langues"
 
 #: ../../contributor_documentation/translation.md:9
 msgid ""
@@ -46,6 +55,12 @@ msgid ""
 "your language isn't available in our platform yet, reach out on the forum"
 " and we'll set it up."
 msgstr ""
+"Chaque équipe de langue requiert un responsable qui peut vérifier les "
+"traductions. Vous pouvez voir une liste des langues et les équipes des "
+"responsables [sur notre forum](https://forum.funkwhale.audio/d/107"
+"-coordinate-translations). Si votre langue n’est pas encore disponible sur "
+"notre plateforme, contactez-nous sur notre forum et nous mettrons cela en "
+"place."
 
 #: ../../contributor_documentation/translation.md:11
 msgid ""
@@ -56,10 +71,17 @@ msgid ""
 "know [on the forum](https://forum.funkwhale.audio/d/18-language-specific-"
 "communities)."
 msgstr ""
+"Nous pouvons aussi créer des sections du forum qui sont spécifiques à un "
+"langage pour permettre aux utilisateurs de discuter de choses dans une autre "
+"langue que l’anglais. Les sections spécifiques à une langue requièrent des "
+"modérateurs qui peuvent faire respecter le Code de conduite. Si vous êtes "
+"intéressé dans la modération des sections spécifiques à une langue, faites-"
+"le nous savoir [sur le forum](https://forum.funkwhale.audio/d/18-language-"
+"specific-communities)."
 
 #: ../../contributor_documentation/translation.md:13
 msgid "Weblate"
-msgstr ""
+msgstr "Weblate"
 
 #: ../../contributor_documentation/translation.md:15
 msgid ""
@@ -67,6 +89,9 @@ msgid ""
 "platform. Weblate provides an easy-to-use web frontend for submitting "
 "localized strings."
 msgstr ""
+"Funkwhale utilise [Weblate](https://weblate.org) comme plateforme de "
+"traduction. Weblate fournit une interface web facile à utiliser pour "
+"soumettre des chaînes localisées."
 
 #: ../../contributor_documentation/translation.md:17
 msgid ""
@@ -75,26 +100,29 @@ msgid ""
 "to set up your language preferences. The following projects are available"
 " for translation:"
 msgstr ""
+"Pour débuter, créez un compte sur notre [instance Weblate](https://translate."
+"funkwhale.audio) et suivez les instructions pour configurer vos préférences "
+"de langage. Les projets suivants sont disponibles pour la traduction :"
 
 #: ../../contributor_documentation/translation.md:19
 msgid "Funkwhale: The Funkwhale web app"
-msgstr ""
+msgstr "Funkwhale : L’application web de Funkwhale"
 
 #: ../../contributor_documentation/translation.md:20
 msgid "Funkwhale for Android: Our official Android app"
-msgstr ""
+msgstr "Funkwhale pour Android : Notre application Android officielle"
 
 #: ../../contributor_documentation/translation.md:21
 msgid "Funkwhale.audio: Our website"
-msgstr ""
+msgstr "Funkwhale.audio : Notre site web"
 
 #: ../../contributor_documentation/translation.md:22
 msgid "Documentation: This documentation hub"
-msgstr ""
+msgstr "Documentation : Ce centre de documentation"
 
 #: ../../contributor_documentation/translation.md:24
 msgid "Guidelines"
-msgstr ""
+msgstr "Directives"
 
 #: ../../contributor_documentation/translation.md:26
 msgid ""
@@ -102,18 +130,23 @@ msgid ""
 "consistent with the source language. Where applicable, follow these "
 "guidelines:"
 msgstr ""
+"Nous faisons confiance à chaque équipe linguistique pour fournir des "
+"traductions dont le ton est cohérent avec celui de la langue source. Le cas "
+"échéant, suivez ces lignes directrices :"
 
 #: ../../contributor_documentation/translation.md:28
 msgid "Use gender-neutral language"
-msgstr ""
+msgstr "Utilisez un langage non genré"
 
 #: ../../contributor_documentation/translation.md:29
 msgid "Use informal speech patterns, including contractions"
-msgstr ""
+msgstr "Utilisez des modes d'expression informels, y compris des contractions"
 
 #: ../../contributor_documentation/translation.md:30
 msgid ""
 "Use sentence case for all content, including titles. For example: "
 "\"Language coordination\" rather than \"Language Coordination\""
 msgstr ""
-
+"Utilisez les casses de phrase pour tout le contenu, y compris les titres. "
+"Par exemple : \"Coordination linguistique\" plutôt que \"Coordination "
+"Linguistique\""

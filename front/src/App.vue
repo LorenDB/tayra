@@ -2,23 +2,27 @@
 import type { QueueTrack } from '~/composables/audio/queue'
 
 import { useIntervalFn, useStyleTag, useToggle, useWindowSize } from '@vueuse/core'
-import { computed, nextTick, onMounted, ref, watchEffect } from 'vue'
+import { computed, nextTick, onMounted, ref, watchEffect, defineAsyncComponent } from 'vue'
 
 import { useQueue } from '~/composables/audio/queue'
 import { useStore } from '~/store'
 
-import ChannelUploadModal from '~/components/channels/UploadModal.vue'
-import PlaylistModal from '~/components/playlists/PlaylistModal.vue'
-import FilterModal from '~/components/moderation/FilterModal.vue'
-import ReportModal from '~/components/moderation/ReportModal.vue'
-import SetInstanceModal from '~/components/SetInstanceModal.vue'
-import ServiceMessages from '~/components/ServiceMessages.vue'
-import ShortcutsModal from '~/components/ShortcutsModal.vue'
-import AudioPlayer from '~/components/audio/Player.vue'
-import Sidebar from '~/components/Sidebar.vue'
-import Queue from '~/components/Queue.vue'
-
 import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
+import useLogger from '~/composables/useLogger'
+
+const ChannelUploadModal = defineAsyncComponent(() => import('~/components/channels/UploadModal.vue'))
+const PlaylistModal = defineAsyncComponent(() => import('~/components/playlists/PlaylistModal.vue'))
+const FilterModal = defineAsyncComponent(() => import('~/components/moderation/FilterModal.vue'))
+const ReportModal = defineAsyncComponent(() => import('~/components/moderation/ReportModal.vue'))
+const SetInstanceModal = defineAsyncComponent(() => import('~/components/SetInstanceModal.vue'))
+const ServiceMessages = defineAsyncComponent(() => import('~/components/ServiceMessages.vue'))
+const ShortcutsModal = defineAsyncComponent(() => import('~/components/ShortcutsModal.vue'))
+const AudioPlayer = defineAsyncComponent(() => import('~/components/audio/Player.vue'))
+const Sidebar = defineAsyncComponent(() => import('~/components/Sidebar.vue'))
+const Queue = defineAsyncComponent(() => import('~/components/Queue.vue'))
+
+const logger = useLogger()
+logger.debug('App setup()')
 
 const store = useStore()
 
@@ -126,7 +130,3 @@ store.dispatch('auth/fetchUser')
     <shortcuts-modal v-model:show="showShortcutsModal" />
   </div>
 </template>
-
-<style lang="scss">
-@import "style/_main";
-</style>

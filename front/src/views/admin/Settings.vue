@@ -24,6 +24,7 @@ const groups = computed(() => [
     id: 'instance',
     settings: [
       { name: 'instance__name' },
+      { name: 'instance__location' },
       { name: 'instance__short_description' },
       { name: 'instance__long_description', fieldType: 'markdown', fieldParams: { charLimit: null, permissive: true } },
       { name: 'instance__contact_email' },
@@ -56,7 +57,9 @@ const groups = computed(() => [
     id: 'music',
     settings: [
       { name: 'music__transcoding_enabled' },
-      { name: 'music__transcoding_cache_duration' }
+      { name: 'music__transcoding_cache_duration' },
+      { name: 'music__only_allow_musicbrainz_tagged_files' }
+
     ]
   },
   {
@@ -78,6 +81,7 @@ const groups = computed(() => [
     label: t('views.admin.Settings.header.moderation'),
     id: 'moderation',
     settings: [
+      { name: 'moderation__languages' },
       { name: 'moderation__allow_list_enabled' },
       { name: 'moderation__allow_list_public' },
       { name: 'moderation__unauthenticated_report_types' }

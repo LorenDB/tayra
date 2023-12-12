@@ -247,6 +247,13 @@ def process_upload(upload, update_denormalization=True):
             return fail_import(
                 upload, "invalid_metadata", detail=detail, file_metadata=metadata_dump
             )
+        check_mbid = preferences.get("music__only_allow_musicbrainz_tagged_files")
+        if check_mbid and not serializer.validated_data.get("mbid"):
+            return fail_import(
+                upload,
+                "Only content tagged with a MusicBrainz ID is permitted on this pod.",
+                detail="You can tag your files with MusicBrainz Picard",
+            )
 
         final_metadata = collections.ChainMap(
             additional_data, serializer.validated_data, internal_config

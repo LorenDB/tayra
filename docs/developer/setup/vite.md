@@ -33,13 +33,7 @@ If you want to make changes to the frontend, you can use Vite to run a developme
    yarn install
    ```
 
-4. Compile the translations:
-
-   ```sh
-   yarn i18n-compile
-   ```
-
-5. Launch the development server:
+4. Launch the development server:
 
    ```sh
    yarn dev

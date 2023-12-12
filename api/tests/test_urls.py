@@ -12,5 +12,5 @@ def test_can_resolve_subsonic():
 
 
 def test_can_resolve_v2():
-    path = reverse("api:v2:instance:nodeinfo-2.0")
-    assert path == "/api/v2/instance/nodeinfo/2.0"
+    path = reverse("api:v2:instance:nodeinfo-2.1")
+    assert path == "/api/v2/instance/nodeinfo/2.1"

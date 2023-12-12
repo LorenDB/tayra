@@ -1,14 +1,20 @@
-FROM alpine:3.17 as pre-build
+FROM alpine:3.17 as requirements
 
 # We need this additional step to avoid having poetrys deps interacting with our
 # dependencies. This is only required until alpine 3.16 is released, since this
 # allows us to install poetry as package.
 
-RUN apk add --no-cache python3 py3-cryptography py3-pip poetry
-COPY pyproject.toml poetry.lock /
-RUN poetry export --without-hashes > requirements.txt
-RUN poetry export --with dev --without-hashes > dev-requirements.txt
+RUN set -eux; \
+  apk add --no-cache \
+  poetry \
+  py3-cryptography \
+  py3-pip \
+  python3
 
+COPY pyproject.toml poetry.lock /
+RUN set -eux; \
+  poetry export --without-hashes --extras typesense > requirements.txt; \
+  poetry export --without-hashes --with dev > dev-requirements.txt;
 
 FROM alpine:3.17 as builder
 
@@ -22,6 +28,7 @@ RUN set -eux; \
   cargo \
   curl \
   gcc \
+  g++ \
   git \
   jpeg-dev \
   libffi-dev \
@@ -41,15 +48,15 @@ RUN set -eux; \
   py3-watchfiles=0.18.1-r0 \
   python3-dev
 
-# create virtual env for next stage
+# Create virtual env
 RUN python3 -m venv --system-site-packages /venv
-# emulate activation by prefixing PATH
-ENV PATH="/venv/bin:/root/.local/bin:$PATH" VIRTUAL_ENV=/venv
+ENV PATH="/venv/bin:$PATH"
 
-COPY --from=pre-build /requirements.txt /requirements.txt
-COPY --from=pre-build /dev-requirements.txt /dev-requirements.txt
+COPY --from=requirements /requirements.txt /requirements.txt
+COPY --from=requirements /dev-requirements.txt /dev-requirements.txt
 
-RUN set -eux; \
+RUN --mount=type=cache,target=~/.cache/pip; \
+  set -eux; \
   pip3 install --upgrade pip; \
   pip3 install setuptools wheel; \
   # Currently we are unable to relieably build rust-based packages on armv7. This
@@ -65,7 +72,8 @@ RUN set -eux; \
   watchfiles==0.18.1
 
 ARG install_dev_deps=0
-RUN set -eux; \
+RUN --mount=type=cache,target=~/.cache/pip; \
+  set -eux; \
   if [ "$install_dev_deps" = "1" ] ; then \
     grep -Ev 'cryptography|lxml|pillow|psycopg2|watchfiles' /dev-requirements.txt \
     | pip3 install -r /dev/stdin \
@@ -76,7 +84,7 @@ RUN set -eux; \
     watchfiles==0.18.1; \
   fi
 
-FROM alpine:3.17 as image
+FROM alpine:3.17 as production
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
@@ -98,16 +106,17 @@ RUN set -eux; \
   py3-pillow=9.3.0-r0 \
   py3-psycopg2=2.9.5-r0 \
   py3-watchfiles=0.18.1-r0 \
-  python3
+  python3 \
+  tzdata
 
 COPY --from=builder /venv /venv
-# emulate activation by prefixing PATH
 ENV PATH="/venv/bin:$PATH"
 
 COPY . /app
 WORKDIR /app
 
-RUN set -eux; \
+RUN --mount=type=cache,target=~/.cache/pip; \
+  set -eux; \
   pip3 install --no-deps --editable .
 
 ENV IS_DOCKER_SETUP=true

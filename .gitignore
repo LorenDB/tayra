@@ -92,7 +92,15 @@ docs/_build
 po/*.po
 docs/swagger
 _build
-front/src/translations.json
-front/src/translations/*.json
-front/locales/en_US/LC_MESSAGES/app.po
 *.prof
+
+# Docker
+docker-bake.*.json
+metadata.json
+
+# Linting
+.eslintcache
+tsconfig.tsbuildinfo
+
+# Vscode
+.vscode/

@@ -42,7 +42,7 @@ const labels = computed(() => ({
 
 const signupRequiresApproval = computed(() => props.signupApprovalEnabled ?? store.state.instance.settings.moderation.signup_approval_enabled.value)
 const formCustomization = computed(() => props.customization ?? store.state.instance.settings.moderation.signup_form_customization.value)
-watchEffect(() => console.log(store.state.instance.settings.moderation.signup_approval_enabled.value))
+watchEffect(() => logger.debug(store.state.instance.settings.moderation.signup_approval_enabled.value))
 
 const payload = reactive({
   username: '',

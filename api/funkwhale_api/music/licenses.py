@@ -28,7 +28,7 @@ def load(data):
 
     for row in data:
         try:
-            license = existing_by_code[row["code"]]
+            license_ = existing_by_code[row["code"]]
         except KeyError:
             logger.debug("Loading new license: {}".format(row["code"]))
             to_create.append(
@@ -36,15 +36,15 @@ def load(data):
             )
         else:
             logger.debug("Updating license: {}".format(row["code"]))
-            stored = [getattr(license, f) for f in MODEL_FIELDS]
+            stored = [getattr(license_, f) for f in MODEL_FIELDS]
             wanted = [row[f] for f in MODEL_FIELDS]
             if wanted == stored:
                 continue
             # the object in database needs an update
             for f in MODEL_FIELDS:
-                setattr(license, f, row[f])
+                setattr(license_, f, row[f])
 
-            license.save()
+            license_.save()
 
     models.License.objects.bulk_create(to_create)
     return sorted(models.License.objects.all(), key=lambda o: o.code)
@@ -78,12 +78,12 @@ def match(*values):
         else:
             existing = load(LICENSES)
             _cache = existing
-        for license in existing:
-            if license.conf is None:
+        for license_ in existing:
+            if license_.conf is None:
                 continue
-            for i in license.conf["identifiers"]:
+            for i in license_.conf["identifiers"]:
                 if match_urls(url, i):
-                    return license
+                    return license_
 
 
 def match_urls(*urls):
