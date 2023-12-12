@@ -9,23 +9,13 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 <!-- towncrier -->
 
-## 1.4.0-rc2 (2023-11-30)
-
-Upgrade instructions are available at https://docs.funkwhale.audio/administrator/upgrade/index.html
-
-Changes since 1.4.0-rc1:
-
-Bugfixes:
-
-- Fix broken nginx templates for docker setup (#2252)
-- Fix docker builds in CI by using correct flag to disable cache
-
-## 1.4.0-rc1 (2023-11-28)
+## 1.4.0 (2023-12-12)
 
 Upgrade instructions are available at https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Features:
 
+- Add a management command to generate dummy notifications for testing
 - Add atom1.0 to node info services (#2085)
 - Add basic cypress testing
 - Add NodeInfo 2.1 (#2085)
@@ -36,14 +26,14 @@ Features:
 - Cache radio queryset into redis. New radio track endpoint for api v2 is /api/v2/radios/sessions/{radiosessionid}/tracks (#2135)
 - Create a testing environment in production for ListenBrainz recommendation engine (troi-recommendation-playground) (#1861)
 - Generate all nginx configurations from one template
-- New management command to update Uploads which have been imported using --in-place and are now stored in s3 (#2156)
-- Add option to only allow MusicBrainz tagged file on a pod (#2083)
+- New management command to update Uploads which have been imported using --in-place and are now
+  stored in s3 (#2156)
+- Only allow MusicBrainz tagged file on a pod (#2083)
 - Prohibit the creation of new users using django's `createsuperuser` command in favor of our own CLI
   entry point. Run `funkwhale-manage fw users create --superuser` instead. (#1288)
 
 Enhancements:
 
-- Add a management command to generate dummy notifications for testing
 - Add custom logging functionality (#2155)
 - Adding typesense container and api client (2104)
 - Cache pip package in api docker builds (#2193)
@@ -61,9 +51,12 @@ Bugfixes:
 
 - `postgres > db_dump.sql` cannot be used if the postgres container is stopped. Update command.
 - Avoid troi radio to give duplicates (#2231)
+- Do not cache all requests to avoid missing updates #2258
+- Fix broken nginx templates for docker setup (#2252)
 - Fix help messages for running scripts using funkwhale-manage
 - Fix missing og meta tags (#2208)
 - Fix multiarch docker builds #2211
+- Fix regression that prevent static files from being served in non-docker-deployments (#2256)
 - Fixed an issue where the copy button didn't copy the Embed code in the embed modal.
 - Fixed an issue with the nginx templates that caused issues when connecting to websockets.
 - Fixed development docker setup (2102)
@@ -107,6 +100,79 @@ Other:
 Removal:
 
 - Drop support for python3.7
+- This release doesn't support Debian 10 anymore. If you are still on Debian 10, we recommend
+  updating to a later version. Alternatively, install a supported Python version (>= Python 3.8). Python 3.11 is recommended.
+
+Contributors to our Issues:
+
+- AMoonRabbit
+- Alexandra Parker
+- ChengChung
+- Ciarán Ainsworth
+- Georg Krause
+- Ghost User
+- Johann Queuniet
+- JuniorJPDJ
+- Kasper Seweryn
+- Kay Borowski
+- Marcos Peña
+- Mathieu Jourdan
+- Nicolas Derive
+- Virgile Robles
+- jooola
+- petitminion
+- theit8514
+
+Contributors to our Merge Requests:
+
+- AMoonRabbit
+- Alexander Dunkel
+- Alexander Torre
+- Ciarán Ainsworth
+- Georg Krause
+- JuniorJPDJ
+- Kasper Seweryn
+- Kay Borowski
+- Marcos Peña
+- Mathieu Jourdan
+- Philipp Wolfer
+- Virgile Robles
+- interfect
+- jooola
+- petitminion
+
+Committers:
+
+- Aitor
+- Alexander Dunkel
+- alextprog
+- Aznörth Niryn
+- Ciarán Ainsworth
+- dignny
+- drakonicguy
+- Fun.k.whale Trad
+- Georg krause
+- Georg Krause
+- Jérémie Lorente
+- jo
+- jooola
+- josé m
+- Julian-Samuel Gebühr
+- JuniorJPDJ
+- Kasper Seweryn
+- Marcos Peña
+- Mathieu Jourdan
+- Matteo Piovanelli
+- Matyáš Caras
+- MhP
+- omarmaciasmolina
+- petitminion
+- Philipp Wolfer
+- ppom
+- Quentin PAGÈS
+- rinenweb
+- Thomas
+- Transcriber allium
 
 ## 1.3.4 (2023-11-16)
 

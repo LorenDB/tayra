@@ -1,1 +1,0 @@
-Fixed an issue with the nginx templates that caused issues when connecting to websockets.

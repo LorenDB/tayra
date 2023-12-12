@@ -1,2 +1,0 @@
-This release doesn't support Debian 10 anymore. If you are still on Debian 10, we recommend
-updating to a later version. Alternatively, install a supported Python version (>= Python 3.8). Python 3.11 is recommended.

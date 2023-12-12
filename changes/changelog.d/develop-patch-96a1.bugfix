@@ -1,1 +1,0 @@
-`postgres > db_dump.sql` cannot be used if the postgres container is stopped. Update command.
