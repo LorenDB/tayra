@@ -47,10 +47,10 @@ locale-prune-untranslated: $(VENV)
 # Swagger
 SWAGGER_VERSION = 5.1.2
 SWAGGER_RELEASE_URL = https://github.com/swagger-api/swagger-ui/archive/refs/tags/v$(SWAGGER_VERSION).tar.gz
-SWAGGER_BUILD_DIR = swagger
+SWAGGER_BUILD_DIR = "$(BUILD_DIR)/swagger"
 
 swagger:
-	mkdir "$(SWAGGER_BUILD_DIR)"
+	mkdir -p "$(SWAGGER_BUILD_DIR)"
 	curl -sSL "$(SWAGGER_RELEASE_URL)" | \
 		tar --extract \
 			--gzip \
