@@ -944,6 +944,13 @@
   dependencies:
     regenerator-runtime "^0.14.0"
 
+"@babel/runtime@^7.23.8":
+  version "7.23.9"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.23.9.tgz#47791a15e4603bb5f905bc0753801cf21d6345f7"
+  integrity sha512-0CX6F+BI2s9dkUqr08KFrAIZgNFj75rdBU/DjCyYLIaV/quFjkk6T+EJ2LkZHyZTbEV4L5p97mNkUsHl2wLFAw==
+  dependencies:
+    regenerator-runtime "^0.14.0"
+
 "@babel/template@^7.22.15":
   version "7.22.15"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.22.15.tgz#09576efc3830f0430f4548ef971dde1350ef2f38"
@@ -3054,6 +3061,14 @@ automation-events@^6.0.13:
   integrity sha512-V1D19taPDEB7LUph6FpJv9m2i+UpLR096sAbPKt92sRChCOA6Jt2bcofU/YAwG8F8/qZp3GrrscJ1FzaEHd68w==
   dependencies:
     "@babel/runtime" "^7.23.5"
+    tslib "^2.6.2"
+
+automation-events@^6.0.14:
+  version "6.0.14"
+  resolved "https://registry.yarnpkg.com/automation-events/-/automation-events-6.0.14.tgz#2e0a68760833a508ec2bab1df61986764a720668"
+  integrity sha512-CoxZlKaVDGfjdfOULxd6ws8gQ/WLCw7JXub4qb0LM55otKQL9j2BnlN07lT/0V75SGzLMOElfXpTvWqzzIHx0w==
+  dependencies:
+    "@babel/runtime" "^7.23.8"
     tslib "^2.6.2"
 
 available-typed-arrays@^1.0.5:
@@ -6441,7 +6456,16 @@ standardized-audio-context-mock@9.6.32:
     tslib "^2.6.2"
     vehicles "^9.0.14"
 
-standardized-audio-context@25.3.60, standardized-audio-context@^25.3.60:
+standardized-audio-context@25.3.63:
+  version "25.3.63"
+  resolved "https://registry.yarnpkg.com/standardized-audio-context/-/standardized-audio-context-25.3.63.tgz#2607a59c429e8075744b1d7202b47136dee4f228"
+  integrity sha512-6hB0GbZOx3Q0npxg1QMZTN/jioom3jMkVcr3EqZbwywytqykevtuCgZuaUJqntTzv7q2mEW9KsCUtFCpbWpCkw==
+  dependencies:
+    "@babel/runtime" "^7.23.8"
+    automation-events "^6.0.14"
+    tslib "^2.6.2"
+
+standardized-audio-context@^25.3.60:
   version "25.3.60"
   resolved "https://registry.yarnpkg.com/standardized-audio-context/-/standardized-audio-context-25.3.60.tgz#f37a0e35bac7ca230dd44fc66efb28949f6bb864"
   integrity sha512-h4ntLsHqnRESxyuU4C5/gvZTBqjBw1SoAR5lsQbqXPI4R3KKZTJWnMMpnRdiySr7cXokbEcepaPGGQ1V+UwlLw==
