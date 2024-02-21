@@ -2785,12 +2785,13 @@ windows-terminal = ["colorama (>=0.4.6)"]
 
 [[package]]
 name = "pyld"
-version = "2.0.3"
+version = "2.0.4"
 description = "Python implementation of the JSON-LD API"
 optional = false
 python-versions = "*"
 files = [
-    {file = "PyLD-2.0.3.tar.gz", hash = "sha256:287445f888c3a332ccbd20a14844c66c2fcbaeab3c99acd506a0788e2ebb2f82"},
+    {file = "PyLD-2.0.4-py3-none-any.whl", hash = "sha256:6dab9905644616df33f8755489fc9b354ed7d832d387b7d1974b4fbd3b8d2a89"},
+    {file = "PyLD-2.0.4.tar.gz", hash = "sha256:311e350f0dbc964311c79c28e86f84e195a81d06fef5a6f6ac2a4f6391ceeacc"},
 ]
 
 [package.dependencies]
@@ -4559,4 +4560,4 @@ typesense = ["typesense"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8,<3.12"
-content-hash = "fecd4da25c6e3b78e34eb8b990b95492a665b3ca22598c5ff23227973a098bf7"
+content-hash = "1cb72b0ec08e20c65fc13878a98fa142c8bd03d94be99d82263fd081b377b468"
