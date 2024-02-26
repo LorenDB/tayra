@@ -28,7 +28,7 @@ router.register(r"attachments", common_views.AttachmentViewSet, "attachments")
 v1_patterns = router.urls
 
 v1_patterns += [
-    url(r"^oembed/$", views.OembedView.as_view(), name="oembed"),
+    url(r"^oembed/?$", views.OembedView.as_view(), name="oembed"),
     url(
         r"^instance/",
         include(("funkwhale_api.instance.urls", "instance"), namespace="instance"),

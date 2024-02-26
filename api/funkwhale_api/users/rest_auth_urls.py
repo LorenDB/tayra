@@ -7,26 +7,26 @@ from . import views
 urlpatterns = [
     # URLs that do not require a session or valid token
     url(
-        r"^password/reset/$",
+        r"^password/reset/?$",
         views.PasswordResetView.as_view(),
         name="rest_password_reset",
     ),
     url(
-        r"^password/reset/confirm/$",
+        r"^password/reset/confirm/?$",
         views.PasswordResetConfirmView.as_view(),
         name="rest_password_reset_confirm",
     ),
     # URLs that require a user to be logged in with a valid session / token.
     url(
-        r"^user/$", rest_auth_views.UserDetailsView.as_view(), name="rest_user_details"
+        r"^user/?$", rest_auth_views.UserDetailsView.as_view(), name="rest_user_details"
     ),
     url(
-        r"^password/change/$",
+        r"^password/change/?$",
         views.PasswordChangeView.as_view(),
         name="rest_password_change",
     ),
     # Registration URLs
-    url(r"^registration/$", views.RegisterView.as_view(), name="rest_register"),
+    url(r"^registration/?$", views.RegisterView.as_view(), name="rest_register"),
     url(
         r"^registration/verify-email/?$",
         views.VerifyEmailView.as_view(),
