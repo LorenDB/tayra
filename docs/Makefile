@@ -14,7 +14,7 @@ $(VENV):
 	$(MAKE) install
 
 install:
-	poetry install
+	poetry install --no-root
 	poetry run pip install --no-deps --editable ../api
 
 clean:
