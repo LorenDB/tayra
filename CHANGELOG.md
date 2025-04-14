@@ -9,6 +9,20 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 <!-- towncrier -->
 
+## 1.4.1 (2025-04-14)
+
+Upgrade instructions are available at https://docs.funkwhale.audio/administrator/upgrade/index.html
+
+Bugfixes:
+
+- Fix 1.4.0 builds
+- Fix build script for documentation to properly deploy swagger
+- Make trailing slashes optional for all endpoints
+
+Documentation:
+
+- Fixed the sample Apache configuration
+
 ## 1.4.0 (2023-12-12)
 
 Upgrade instructions are available at https://docs.funkwhale.audio/administrator/upgrade/index.html
