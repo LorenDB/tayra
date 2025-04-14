@@ -466,14 +466,14 @@ docker:
     - if: $CI_COMMIT_TAG
       variables:
         BUILD_ARGS: >
-          --set *.platform=linux/amd64,linux/arm64,linux/arm/v7
+          --set *.platform=linux/amd64,linux/arm64
           --no-cache
           --push
 
     - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
       variables:
         BUILD_ARGS: >
-          --set *.platform=linux/amd64,linux/arm64,linux/arm/v7
+          --set *.platform=linux/amd64,linux/arm64
           --set *.cache-from=type=registry,ref=$DOCKER_CACHE_IMAGE:$CI_COMMIT_BRANCH,oci-mediatypes=false
           --set *.cache-to=type=registry,ref=$DOCKER_CACHE_IMAGE:$CI_COMMIT_BRANCH,mode=max,oci-mediatypes=false
           --push
