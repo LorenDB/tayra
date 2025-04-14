@@ -248,6 +248,9 @@ test_api:
     CACHE_URL: "redis://redis:6379/0"
   before_script:
     - cd api
+    - poetry env info
+    - poetry run pip install "setuptools==60.10.0" wheel
+    - poetry run pip install --no-use-pep517 django-allauth==0.42.0
     - poetry install --all-extras
   script:
     - >
@@ -351,6 +354,8 @@ build_api_schema:
     API_TYPE: "v1"
   before_script:
     - cd api
+    - poetry run pip install "setuptools==60.10.0" wheel
+    - poetry run pip install --no-use-pep517 django-allauth==0.42.0
     - poetry install --all-extras
     - poetry run funkwhale-manage migrate
   script:
