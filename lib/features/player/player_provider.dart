@@ -300,26 +300,40 @@ class PlayerNotifier extends StateNotifier<PlayerState> {
 
   /// Restore the queue state from persistent storage on app launch.
   Future<void> _restoreQueue() async {
-    final savedState = await QueuePersistenceService.restoreQueue();
-    if (savedState == null || savedState.queue.isEmpty) return;
+    try {
+      final savedState = await QueuePersistenceService.restoreQueue();
+      if (savedState == null || savedState.queue.isEmpty) return;
 
-    // Restore queue and playback state
-    state = state.copyWith(
-      queue: savedState.queue,
-      currentIndex: savedState.currentIndex,
-      isShuffled: savedState.isShuffled,
-      loopMode: _parseLoopMode(savedState.loopMode),
-    );
+      // Validate current index is within bounds
+      final validIndex = savedState.currentIndex.clamp(
+        0,
+        savedState.queue.length - 1,
+      );
 
-    // Seek to saved position but don't auto-play
-    if (savedState.position.inSeconds > 0) {
-      try {
-        await _loadTrackOnly(savedState.queue[savedState.currentIndex]);
-        await _handler.audioPlayer.seek(savedState.position);
-      } catch (_) {
-        // Failed to restore - clear corrupted state
-        await QueuePersistenceService.clearQueue();
+      // Restore queue and playback state
+      state = state.copyWith(
+        queue: savedState.queue,
+        currentIndex: validIndex,
+        isShuffled: savedState.isShuffled,
+        loopMode: _parseLoopMode(savedState.loopMode),
+      );
+
+      // Try to restore the track and position
+      if (validIndex < savedState.queue.length) {
+        try {
+          await _loadTrackOnly(savedState.queue[validIndex]);
+          if (savedState.position.inSeconds > 0) {
+            await _handler.audioPlayer.seek(savedState.position);
+          }
+        } catch (e) {
+          // Failed to load track - queue is still valid, just reset to start
+          state = state.copyWith(position: Duration.zero);
+        }
       }
+    } catch (e) {
+      // Failed to restore - clear corrupted state
+      await QueuePersistenceService.clearQueue();
+      state = const PlayerState();
     }
   }
 
@@ -429,7 +443,9 @@ class PlayerNotifier extends StateNotifier<PlayerState> {
   Future<void> _loadTrack(Track track, {required bool autoPlay}) async {
     try {
       final listenUrl = track.listenUrl;
-      if (listenUrl == null) return;
+      if (listenUrl == null) {
+        throw Exception('Track has no listen URL');
+      }
 
       final streamUrl = _api.getStreamUrl(listenUrl);
       final headers = _api.authHeaders;
@@ -481,8 +497,17 @@ class PlayerNotifier extends StateNotifier<PlayerState> {
           // Non-critical
         }
       }
+
+      state = state.copyWith(isLoading: false);
     } catch (e) {
       state = state.copyWith(isLoading: false);
+
+      // If this was supposed to auto-play and we have more tracks, skip to next
+      if (autoPlay && state.hasNext) {
+        // Wait a moment to avoid rapid-fire failures
+        await Future.delayed(const Duration(milliseconds: 500));
+        skipNext();
+      }
     }
   }
 
@@ -499,6 +524,7 @@ class PlayerNotifier extends StateNotifier<PlayerState> {
           final newIndex = 0;
           state = state.copyWith(currentIndex: newIndex);
           _loadAndPlay(state.queue[newIndex]);
+          _saveQueue(); // Save state after looping back to start
         }
         break;
       case LoopMode.off:
@@ -506,6 +532,7 @@ class PlayerNotifier extends StateNotifier<PlayerState> {
           skipNext();
         } else {
           state = state.copyWith(isPlaying: false);
+          _saveQueue(); // Save final state when queue ends
         }
         break;
     }
