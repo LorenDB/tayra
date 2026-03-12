@@ -5,6 +5,8 @@ import 'package:tayra/core/router/app_router.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/player/player_provider.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
+import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 
@@ -28,11 +30,30 @@ void main() async {
   // Initialize the audio handler before starting the app
   final audioHandler = await initAudioHandler();
 
+  // Create a provider container to access providers before runApp.
+  // This allows us to inject the API client into the audio handler
+  // so Android Auto works even when the app is launched in the background.
+  final container = ProviderContainer(
+    overrides: [audioHandlerProvider.overrideWithValue(audioHandler)],
+  );
+
+  // Inject dependencies into the audio handler for Android Auto.
+  // This ensures the handler can serve browse tree requests even if
+  // the UI hasn't been opened yet.
+  audioHandler.api = container.read(cachedFunkwhaleApiProvider);
+  audioHandler.browseMode = container.read(settingsProvider).browseMode;
+
+  // Listen for settings changes to update browse mode dynamically.
+  container.listen<SettingsState>(settingsProvider, (previous, next) {
+    audioHandler.browseMode = next.browseMode;
+  });
+
+  // Eagerly initialize the PlayerNotifier to wire up the onPlayTracks callback.
+  // This ensures Android Auto can start playback even when launched in the background.
+  container.read(playerProvider);
+
   runApp(
-    ProviderScope(
-      overrides: [audioHandlerProvider.overrideWithValue(audioHandler)],
-      child: const TayraApp(),
-    ),
+    UncontrolledProviderScope(container: container, child: const TayraApp()),
   );
 }
 
