@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:funkwhale/core/theme/app_theme.dart';
+import 'package:funkwhale/core/layout/responsive.dart';
 import 'package:funkwhale/features/player/mini_player.dart';
+import 'package:funkwhale/features/player/now_playing_panel.dart';
 import 'package:funkwhale/features/player/player_provider.dart';
 
-/// The main app shell with bottom navigation and persistent mini-player.
+/// The main app shell with adaptive navigation:
+/// - Compact (< 600px):  bottom navigation bar + mini-player
+/// - Medium/Expanded (>= 600px): side NavigationRail + now-playing panel
 class AppShell extends ConsumerWidget {
   final Widget child;
 
@@ -51,7 +55,74 @@ class AppShell extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentIndex = _currentIndex(context);
     final hasTrack = ref.watch(playerProvider).currentTrack != null;
+    final useSideNav = Responsive.useSideNavigation(context);
 
+    if (useSideNav) {
+      return _buildDesktopLayout(context, ref, currentIndex, hasTrack);
+    }
+    return _buildMobileLayout(context, ref, currentIndex, hasTrack);
+  }
+
+  // ── Desktop / tablet layout with NavigationRail ───────────────────────
+
+  Widget _buildDesktopLayout(
+    BuildContext context,
+    WidgetRef ref,
+    int currentIndex,
+    bool hasTrack,
+  ) {
+    final isExpanded = Responsive.isExpanded(context);
+
+    return Scaffold(
+      backgroundColor: AppTheme.background,
+      body: Row(
+        children: [
+          // ── Navigation Rail ──
+          _DesktopNavRail(
+            currentIndex: currentIndex,
+            extended: isExpanded,
+            onDestinationSelected: (i) {
+              if (i != currentIndex) {
+                context.go(_paths[i]);
+              }
+            },
+          ),
+
+          // ── Divider ──
+          const VerticalDivider(
+            width: 1,
+            thickness: 0.5,
+            color: AppTheme.divider,
+          ),
+
+          // ── Main content area ──
+          Expanded(child: child),
+
+          // ── Now Playing side panel (desktop only, when a track is loaded) ──
+          if (hasTrack && isExpanded) ...[
+            const VerticalDivider(
+              width: 1,
+              thickness: 0.5,
+              color: AppTheme.divider,
+            ),
+            const SizedBox(width: 340, child: NowPlayingPanel()),
+          ],
+        ],
+      ),
+
+      // Show mini-player at bottom on medium (tablet) sizes
+      bottomNavigationBar: hasTrack && !isExpanded ? const MiniPlayer() : null,
+    );
+  }
+
+  // ── Mobile layout with bottom navigation ──────────────────────────────
+
+  Widget _buildMobileLayout(
+    BuildContext context,
+    WidgetRef ref,
+    int currentIndex,
+    bool hasTrack,
+  ) {
     return Scaffold(
       backgroundColor: AppTheme.background,
       body: child,
@@ -116,6 +187,122 @@ class AppShell extends ConsumerWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// ── Desktop Navigation Rail ─────────────────────────────────────────────
+
+class _DesktopNavRail extends StatelessWidget {
+  final int currentIndex;
+  final bool extended;
+  final ValueChanged<int> onDestinationSelected;
+
+  const _DesktopNavRail({
+    required this.currentIndex,
+    required this.extended,
+    required this.onDestinationSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return NavigationRail(
+      selectedIndex: currentIndex,
+      onDestinationSelected: onDestinationSelected,
+      extended: extended,
+      minWidth: 64,
+      minExtendedWidth: 200,
+      backgroundColor: AppTheme.surfaceContainer,
+      indicatorColor: AppTheme.primary.withValues(alpha: 0.15),
+      selectedIconTheme: const IconThemeData(color: AppTheme.primary, size: 24),
+      unselectedIconTheme: const IconThemeData(
+        color: AppTheme.onBackgroundSubtle,
+        size: 24,
+      ),
+      selectedLabelTextStyle: const TextStyle(
+        color: AppTheme.primary,
+        fontSize: 13,
+        fontWeight: FontWeight.w600,
+      ),
+      unselectedLabelTextStyle: const TextStyle(
+        color: AppTheme.onBackgroundSubtle,
+        fontSize: 13,
+        fontWeight: FontWeight.w400,
+      ),
+      leading: Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: extended ? 16 : 8,
+        ),
+        child:
+            extended
+                ? Row(
+                  children: [
+                    Icon(
+                      Icons.music_note_rounded,
+                      color: AppTheme.primary,
+                      size: 28,
+                    ),
+                    const SizedBox(width: 10),
+                    const Text(
+                      'Funkwhale',
+                      style: TextStyle(
+                        color: AppTheme.onBackground,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                )
+                : Icon(
+                  Icons.music_note_rounded,
+                  color: AppTheme.primary,
+                  size: 28,
+                ),
+      ),
+      destinations: const [
+        NavigationRailDestination(
+          icon: Icon(Icons.home_rounded),
+          selectedIcon: Icon(Icons.home_rounded),
+          label: Text('Home'),
+        ),
+        NavigationRailDestination(
+          icon: Icon(Icons.library_music_outlined),
+          selectedIcon: Icon(Icons.library_music),
+          label: Text('Browse'),
+        ),
+        NavigationRailDestination(
+          icon: Icon(Icons.search_rounded),
+          selectedIcon: Icon(Icons.search_rounded),
+          label: Text('Search'),
+        ),
+        NavigationRailDestination(
+          icon: Icon(Icons.favorite_border_rounded),
+          selectedIcon: Icon(Icons.favorite_rounded),
+          label: Text('Favorites'),
+        ),
+        NavigationRailDestination(
+          icon: Icon(Icons.queue_music_rounded),
+          selectedIcon: Icon(Icons.queue_music_rounded),
+          label: Text('Playlists'),
+        ),
+      ],
+      trailing: Expanded(
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: IconButton(
+              icon: const Icon(
+                Icons.settings_outlined,
+                color: AppTheme.onBackgroundSubtle,
+              ),
+              onPressed: () => context.push('/settings'),
+              tooltip: 'Settings',
+            ),
+          ),
+        ),
       ),
     );
   }
