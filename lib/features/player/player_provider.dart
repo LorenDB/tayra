@@ -2,8 +2,10 @@ import 'dart:async';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:funkwhale/core/api/models.dart';
-import 'package:funkwhale/core/api/api_repository.dart';
+import 'package:funkwhale/core/api/cached_api_repository.dart';
+import 'package:funkwhale/core/api/api_client.dart';
+import 'package:funkwhale/core/cache/cache_manager.dart';
+import 'package:funkwhale/core/cache/audio_cache_service.dart';
 
 // ── Player state ────────────────────────────────────────────────────────
 
@@ -294,7 +296,10 @@ class PlayerNotifier extends StateNotifier<PlayerState> {
     );
   }
 
-  FunkwhaleApi get _api => _ref.read(funkwhaleApiProvider);
+  CachedFunkwhaleApi get _api => _ref.read(cachedFunkwhaleApiProvider);
+
+  AudioCacheService get _audioCache =>
+      AudioCacheService(CacheManager.instance, _ref.read(dioProvider));
 
   /// Play a list of tracks starting at the given index.
   Future<void> playTracks(List<Track> tracks, {int startIndex = 0}) async {
@@ -350,7 +355,7 @@ class PlayerNotifier extends StateNotifier<PlayerState> {
       final listenUrl = track.listenUrl;
       if (listenUrl == null) return;
 
-      final url = _api.getStreamUrl(listenUrl);
+      final streamUrl = _api.getStreamUrl(listenUrl);
       final headers = _api.authHeaders;
 
       // Build the MediaItem for the notification.
@@ -364,7 +369,25 @@ class PlayerNotifier extends StateNotifier<PlayerState> {
             track.duration != null ? Duration(seconds: track.duration!) : null,
       );
 
-      await _handler.playUrl(url: url, headers: headers, item: mediaItem);
+      // Check audio cache first — play from local file if available.
+      final cachedFile = await _audioCache.getCachedAudio(track);
+      if (cachedFile != null) {
+        await _handler.playUrl(
+          url: cachedFile.uri.toString(),
+          headers: const {},
+          item: mediaItem,
+        );
+      } else {
+        // Stream from server.
+        await _handler.playUrl(
+          url: streamUrl,
+          headers: headers,
+          item: mediaItem,
+        );
+
+        // Cache the audio file in the background for next time.
+        _audioCache.cacheAudio(track, streamUrl, headers);
+      }
 
       // Record listening history.
       try {

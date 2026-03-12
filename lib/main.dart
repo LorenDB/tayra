@@ -3,9 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:funkwhale/core/router/app_router.dart';
 import 'package:funkwhale/core/theme/app_theme.dart';
 import 'package:funkwhale/features/player/player_provider.dart';
+import 'package:funkwhale/core/cache/cache_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize the cache manager
+  await CacheManager.instance.initialize();
 
   // Initialize the audio handler before starting the app
   final audioHandler = await initAudioHandler();

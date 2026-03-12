@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:funkwhale/core/api/api_repository.dart';
-import 'package:funkwhale/core/api/models.dart';
+import 'package:funkwhale/core/api/cached_api_repository.dart';
 import 'package:funkwhale/core/theme/app_theme.dart';
 import 'package:funkwhale/core/widgets/track_list_tile.dart';
 import 'package:funkwhale/core/widgets/shimmer_loading.dart';
@@ -53,7 +52,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
     });
 
     try {
-      final api = ref.read(funkwhaleApiProvider);
+      final api = ref.read(cachedFunkwhaleApiProvider);
       final response = await api.getFavorites(page: 1);
       if (!mounted) return;
       setState(() {
@@ -79,7 +78,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
     setState(() => _isLoadingMore = true);
 
     try {
-      final api = ref.read(funkwhaleApiProvider);
+      final api = ref.read(cachedFunkwhaleApiProvider);
       final nextPage = _currentPage + 1;
       final response = await api.getFavorites(page: nextPage);
       if (!mounted) return;

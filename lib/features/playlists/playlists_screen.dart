@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:funkwhale/core/api/api_repository.dart';
-import 'package:funkwhale/core/api/models.dart';
+import 'package:funkwhale/core/api/cached_api_repository.dart';
 import 'package:funkwhale/core/theme/app_theme.dart';
 import 'package:funkwhale/core/widgets/shimmer_loading.dart';
 
@@ -12,7 +11,7 @@ import 'package:funkwhale/core/widgets/shimmer_loading.dart';
 final playlistsProvider = FutureProvider.autoDispose<List<Playlist>>((
   ref,
 ) async {
-  final api = ref.watch(funkwhaleApiProvider);
+  final api = ref.watch(cachedFunkwhaleApiProvider);
   final response = await api.getPlaylists(scope: 'me');
   return response.results;
 });
@@ -308,7 +307,7 @@ class _CreatePlaylistDialogState extends State<_CreatePlaylistDialog> {
     });
 
     try {
-      final api = widget.ref.read(funkwhaleApiProvider);
+      final api = widget.ref.read(cachedFunkwhaleApiProvider);
       await api.createPlaylist(name: name);
       if (!mounted) return;
       widget.onCreated();

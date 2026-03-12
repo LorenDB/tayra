@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:funkwhale/core/api/api_repository.dart';
-import 'package:funkwhale/core/api/models.dart';
+import 'package:funkwhale/core/api/cached_api_repository.dart';
 import 'package:funkwhale/core/theme/app_theme.dart';
 import 'package:funkwhale/features/playlists/playlists_screen.dart';
 
@@ -301,7 +300,7 @@ class _AddToPlaylistSheetState extends ConsumerState<_AddToPlaylistSheet> {
     });
 
     try {
-      final api = ref.read(funkwhaleApiProvider);
+      final api = ref.read(cachedFunkwhaleApiProvider);
       await api.addTracksToPlaylist(playlist.id, widget.trackIds);
 
       if (!mounted) return;
@@ -396,7 +395,7 @@ class _AddToPlaylistSheetState extends ConsumerState<_AddToPlaylistSheet> {
     setState(() => _isCreating = true);
 
     try {
-      final api = ref.read(funkwhaleApiProvider);
+      final api = ref.read(cachedFunkwhaleApiProvider);
       final playlist = await api.createPlaylist(name: name);
       await api.addTracksToPlaylist(playlist.id, widget.trackIds);
 
