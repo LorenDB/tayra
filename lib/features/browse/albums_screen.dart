@@ -162,7 +162,7 @@ class _AlbumGrid extends StatelessWidget {
       );
     }
 
-    final columns = Responsive.gridColumnCount(context, minItemWidth: 150);
+    final columns = Responsive.gridColumnCount(context, minItemWidth: 120);
 
     return GridView.builder(
       controller: scrollController,
