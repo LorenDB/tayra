@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:funkwhale/core/api/api_client.dart';
-import 'package:funkwhale/core/api/models.dart';
-import 'package:funkwhale/core/auth/auth_provider.dart';
+import 'package:tayra/core/api/api_client.dart';
+import 'package:tayra/core/api/models.dart';
+import 'package:tayra/core/auth/auth_provider.dart';
 
 // ── Repository provider ─────────────────────────────────────────────────
 

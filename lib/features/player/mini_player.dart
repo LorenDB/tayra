@@ -2,9 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:funkwhale/core/theme/app_theme.dart';
-import 'package:funkwhale/core/theme/palette_provider.dart';
-import 'package:funkwhale/features/player/player_provider.dart';
+import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/theme/palette_provider.dart';
+import 'package:tayra/features/player/player_provider.dart';
 
 /// Persistent mini-player bar shown above the bottom nav.
 class MiniPlayer extends ConsumerWidget {

@@ -106,7 +106,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   static const _keyRefreshToken = 'refresh_token';
   static const _keyClientId = 'client_id';
   static const _keyClientSecret = 'client_secret';
-  static const _appName = 'Funkwhale Flutter';
+  static const _appName = 'Tayra';
   static const _redirectUri = 'urn:ietf:wg:oauth:2.0:oob';
   static const _scopes = 'read write';
 

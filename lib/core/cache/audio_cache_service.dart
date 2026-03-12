@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-import 'package:funkwhale/core/cache/cache_manager.dart';
-import 'package:funkwhale/core/api/models.dart';
+import 'package:tayra/core/cache/cache_manager.dart';
+import 'package:tayra/core/api/models.dart';
 
 /// Service for caching audio files and cover art
 class AudioCacheService {

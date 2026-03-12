@@ -1,10 +1,10 @@
-# funkwhale
+# Tayra
 
-A new Flutter project.
+A modern music player client for Funkwhale servers.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project is a Flutter application for streaming music from Funkwhale servers.
 
 A few resources to get you started if this is your first Flutter project:
 

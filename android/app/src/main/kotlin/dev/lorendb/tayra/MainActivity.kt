@@ -1,4 +1,4 @@
-package audio.funkwhale.funkwhale
+package dev.lorendb.tayra
 
 import com.ryanheise.audioservice.AudioServiceActivity
 

@@ -1,14 +1,14 @@
-import 'package:funkwhale/core/api/api_repository.dart';
-import 'package:funkwhale/core/api/models.dart';
-import 'package:funkwhale/core/api/api_client.dart';
-import 'package:funkwhale/core/cache/cache_manager.dart';
+import 'package:tayra/core/api/api_repository.dart';
+import 'package:tayra/core/api/models.dart';
+import 'package:tayra/core/api/api_client.dart';
+import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Re-export types so consumers only need to import cached_api_repository.dart
-export 'package:funkwhale/core/api/api_repository.dart'
+export 'package:tayra/core/api/api_repository.dart'
     show funkwhaleApiProvider, FunkwhaleApi;
-export 'package:funkwhale/core/api/api_client.dart' show PaginatedResponse;
-export 'package:funkwhale/core/api/models.dart';
+export 'package:tayra/core/api/api_client.dart' show PaginatedResponse;
+export 'package:tayra/core/api/models.dart';
 
 /// Cached API repository that wraps FunkwhaleApi with caching layer.
 ///

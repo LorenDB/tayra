@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart' hide PlayerState;
-import 'package:funkwhale/core/api/models.dart';
-import 'package:funkwhale/core/theme/app_theme.dart';
-import 'package:funkwhale/core/theme/palette_provider.dart';
-import 'package:funkwhale/features/player/player_provider.dart';
-import 'package:funkwhale/features/favorites/favorites_provider.dart';
+import 'package:tayra/core/api/models.dart';
+import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/theme/palette_provider.dart';
+import 'package:tayra/features/player/player_provider.dart';
+import 'package:tayra/features/favorites/favorites_provider.dart';
 
 /// Full-screen Now Playing screen with album art, controls, and seek bar.
 class NowPlayingScreen extends ConsumerStatefulWidget {

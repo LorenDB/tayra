@@ -1,5 +1,5 @@
-name: funkwhale
-description: "A modern Funkwhale music player client."
+name: tayra
+description: "A modern music player client for Funkwhale servers."
 publish_to: 'none'
 version: 1.0.0+1
 

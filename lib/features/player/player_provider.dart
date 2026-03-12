@@ -2,11 +2,11 @@ import 'dart:async';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:funkwhale/core/api/cached_api_repository.dart';
-import 'package:funkwhale/core/api/api_client.dart';
-import 'package:funkwhale/core/cache/cache_manager.dart';
-import 'package:funkwhale/core/cache/audio_cache_service.dart';
-import 'package:funkwhale/features/player/queue_persistence_service.dart';
+import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/core/api/api_client.dart';
+import 'package:tayra/core/cache/cache_manager.dart';
+import 'package:tayra/core/cache/audio_cache_service.dart';
+import 'package:tayra/features/player/queue_persistence_service.dart';
 
 // ── Player state ────────────────────────────────────────────────────────
 
@@ -211,8 +211,8 @@ Future<FunkwhaleAudioHandler> initAudioHandler() async {
   final handler = await AudioService.init(
     builder: () => FunkwhaleAudioHandler(),
     config: const AudioServiceConfig(
-      androidNotificationChannelId: 'audio.funkwhale.player',
-      androidNotificationChannelName: 'Funkwhale Playback',
+      androidNotificationChannelId: 'dev.lorendb.tayra.player',
+      androidNotificationChannelName: 'Tayra Playback',
       androidNotificationOngoing: true,
       androidStopForegroundOnPause: true,
       androidNotificationIcon: 'mipmap/ic_launcher',

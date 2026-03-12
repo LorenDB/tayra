@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:funkwhale/core/api/cached_api_repository.dart';
-import 'package:funkwhale/core/theme/app_theme.dart';
-import 'package:funkwhale/core/widgets/track_list_tile.dart';
-import 'package:funkwhale/core/widgets/shimmer_loading.dart';
-import 'package:funkwhale/features/player/player_provider.dart';
-import 'package:funkwhale/features/favorites/favorites_provider.dart';
+import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/widgets/track_list_tile.dart';
+import 'package:tayra/core/widgets/shimmer_loading.dart';
+import 'package:tayra/features/player/player_provider.dart';
+import 'package:tayra/features/favorites/favorites_provider.dart';
 
 class FavoritesScreen extends ConsumerStatefulWidget {
   const FavoritesScreen({super.key});

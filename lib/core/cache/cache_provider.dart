@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:funkwhale/core/cache/cache_manager.dart';
+import 'package:tayra/core/cache/cache_manager.dart';
 
 /// Provider for the cache manager instance
 final cacheManagerProvider = Provider<CacheManager>((ref) {

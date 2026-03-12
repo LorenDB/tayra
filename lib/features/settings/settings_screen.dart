@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:funkwhale/core/auth/auth_provider.dart';
-import 'package:funkwhale/core/theme/app_theme.dart';
-import 'package:funkwhale/features/settings/settings_provider.dart';
-import 'package:funkwhale/core/cache/cache_provider.dart';
-import 'package:funkwhale/core/cache/cache_manager.dart';
+import 'package:tayra/core/auth/auth_provider.dart';
+import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/features/settings/settings_provider.dart';
+import 'package:tayra/core/cache/cache_provider.dart';
+import 'package:tayra/core/cache/cache_manager.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -158,8 +158,8 @@ class SettingsScreen extends ConsumerWidget {
           _SectionHeader(title: 'About'),
           _InfoTile(
             icon: Icons.info_outline_rounded,
-            title: 'Funkwhale',
-            subtitle: 'A free and open-source music server',
+            title: 'Tayra',
+            subtitle: 'A Funkwhale music player',
           ),
         ],
       ),

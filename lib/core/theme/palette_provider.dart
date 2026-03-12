@@ -3,7 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:palette_generator/palette_generator.dart';
-import 'package:funkwhale/core/theme/app_theme.dart';
+import 'package:tayra/core/theme/app_theme.dart';
 
 /// Extracts a dominant color from a network image URL.
 ///

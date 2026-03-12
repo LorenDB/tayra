@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:funkwhale/core/theme/app_theme.dart';
-import 'package:funkwhale/core/layout/responsive.dart';
-import 'package:funkwhale/features/player/mini_player.dart';
-import 'package:funkwhale/features/player/now_playing_panel.dart';
-import 'package:funkwhale/features/player/player_provider.dart';
+import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/layout/responsive.dart';
+import 'package:tayra/features/player/mini_player.dart';
+import 'package:tayra/features/player/now_playing_panel.dart';
+import 'package:tayra/features/player/player_provider.dart';
 
 /// The main app shell with adaptive navigation:
 /// - Compact (< 600px):  bottom navigation bar + mini-player
@@ -246,7 +246,7 @@ class _DesktopNavRail extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     const Text(
-                      'Funkwhale',
+                      'Tayra',
                       style: TextStyle(
                         color: AppTheme.onBackground,
                         fontSize: 18,
