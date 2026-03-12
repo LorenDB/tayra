@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:funkwhale/core/api/api_repository.dart';
-import 'package:funkwhale/core/api/models.dart';
+import 'package:funkwhale/core/api/cached_api_repository.dart';
 import 'package:funkwhale/core/theme/app_theme.dart';
 import 'package:funkwhale/core/widgets/cover_art.dart';
 import 'package:funkwhale/core/widgets/track_list_tile.dart';
@@ -12,7 +11,7 @@ import 'package:funkwhale/features/player/player_provider.dart';
 // ── Data providers ──────────────────────────────────────────────────────
 
 final recentAlbumsProvider = FutureProvider<List<Album>>((ref) async {
-  final api = ref.watch(funkwhaleApiProvider);
+  final api = ref.watch(cachedFunkwhaleApiProvider);
   final response = await api.getAlbums(
     ordering: '-creation_date',
     pageSize: 10,
@@ -21,13 +20,13 @@ final recentAlbumsProvider = FutureProvider<List<Album>>((ref) async {
 });
 
 final randomAlbumsProvider = FutureProvider<List<Album>>((ref) async {
-  final api = ref.watch(funkwhaleApiProvider);
+  final api = ref.watch(cachedFunkwhaleApiProvider);
   final response = await api.getAlbums(ordering: 'random', pageSize: 10);
   return response.results;
 });
 
 final recentTracksProvider = FutureProvider<List<Track>>((ref) async {
-  final api = ref.watch(funkwhaleApiProvider);
+  final api = ref.watch(cachedFunkwhaleApiProvider);
   final response = await api.getTracks(
     ordering: '-creation_date',
     pageSize: 15,

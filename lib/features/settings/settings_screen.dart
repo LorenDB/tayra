@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:funkwhale/core/auth/auth_provider.dart';
 import 'package:funkwhale/core/theme/app_theme.dart';
 import 'package:funkwhale/features/settings/settings_provider.dart';
+import 'package:funkwhale/core/cache/cache_provider.dart';
+import 'package:funkwhale/core/cache/cache_manager.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -12,6 +14,7 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
     final authState = ref.watch(authStateProvider);
+    final cacheStatsAsync = ref.watch(cacheStatsProvider);
 
     return Scaffold(
       backgroundColor: AppTheme.background,
@@ -84,6 +87,68 @@ class SettingsScreen extends ConsumerWidget {
             currentMode: settings.browseMode,
             onChanged: (mode) {
               ref.read(settingsProvider.notifier).setBrowseMode(mode);
+            },
+          ),
+
+          const SizedBox(height: 24),
+
+          // ── Cache section ─────────────────────────────────────────────
+          _SectionHeader(title: 'Cache'),
+          cacheStatsAsync.when(
+            loading: () => const _LoadingTile(),
+            error:
+                (_, __) =>
+                    const _ErrorTile(message: 'Failed to load cache info'),
+            data: (stats) => _CacheInfoTile(stats: stats),
+          ),
+          _CacheSizeLimitTile(
+            currentLimitMB: settings.cacheSizeLimitMB,
+            onChanged: (sizeMB) {
+              ref.read(settingsProvider.notifier).setCacheSizeLimit(sizeMB);
+              // Refresh cache stats
+              ref.invalidate(cacheStatsProvider);
+            },
+          ),
+          _ActionTile(
+            icon: Icons.delete_sweep_rounded,
+            title: 'Clear audio cache',
+            subtitle: 'Delete all downloaded audio files',
+            onTap: () async {
+              final confirmed = await showDialog<bool>(
+                context: context,
+                builder:
+                    (context) => _ConfirmDialog(
+                      title: 'Clear audio cache?',
+                      message:
+                          'All downloaded audio files will be deleted. Album and artist info will be kept.',
+                    ),
+              );
+              if (confirmed == true) {
+                await CacheManager.instance.clearAudio();
+                ref.invalidate(cacheStatsProvider);
+              }
+            },
+          ),
+          _ActionTile(
+            icon: Icons.delete_outline_rounded,
+            title: 'Clear all cache',
+            subtitle: 'Delete all cached data',
+            iconColor: AppTheme.error,
+            onTap: () async {
+              final confirmed = await showDialog<bool>(
+                context: context,
+                builder:
+                    (context) => _ConfirmDialog(
+                      title: 'Clear all cache?',
+                      message:
+                          'All cached data including album info, cover art, and audio files will be deleted.',
+                      confirmColor: AppTheme.error,
+                    ),
+              );
+              if (confirmed == true) {
+                await CacheManager.instance.clearAll();
+                ref.invalidate(cacheStatsProvider);
+              }
             },
           ),
 
@@ -381,6 +446,344 @@ class _ToggleChip extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+// ── Cache management widgets ────────────────────────────────────────────
+
+class _LoadingTile extends StatelessWidget {
+  const _LoadingTile();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceContainer,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: const Row(
+        children: [
+          Icon(
+            Icons.storage_rounded,
+            color: AppTheme.onBackgroundSubtle,
+            size: 22,
+          ),
+          SizedBox(width: 14),
+          Expanded(
+            child: Text(
+              'Loading cache info...',
+              style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 14),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ErrorTile extends StatelessWidget {
+  final String message;
+
+  const _ErrorTile({required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceContainer,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.error_outline, color: AppTheme.error, size: 22),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Text(
+              message,
+              style: const TextStyle(
+                color: AppTheme.onBackgroundMuted,
+                fontSize: 14,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CacheInfoTile extends StatelessWidget {
+  final CacheStats stats;
+
+  const _CacheInfoTile({required this.stats});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceContainer,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(
+                Icons.storage_rounded,
+                color: AppTheme.onBackgroundSubtle,
+                size: 22,
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Storage used',
+                      style: TextStyle(
+                        color: AppTheme.onBackground,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      '${stats.totalSizeMB} MB of ${stats.maxTotalSizeMB} MB',
+                      style: const TextStyle(
+                        color: AppTheme.onBackgroundMuted,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          // Progress bar
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: LinearProgressIndicator(
+              value: stats.usedPercentage / 100,
+              backgroundColor: AppTheme.surfaceContainerHigh,
+              valueColor: AlwaysStoppedAnimation<Color>(
+                stats.usedPercentage > 90 ? AppTheme.error : AppTheme.primary,
+              ),
+              minHeight: 6,
+            ),
+          ),
+          const SizedBox(height: 12),
+          // Breakdown
+          Row(
+            children: [
+              Expanded(
+                child: _CacheBreakdownItem(
+                  label: 'Audio',
+                  size: stats.audioSizeMB,
+                  count: stats.audioCount,
+                ),
+              ),
+              Expanded(
+                child: _CacheBreakdownItem(
+                  label: 'Metadata',
+                  size: stats.metadataSizeMB,
+                  count: stats.metadataCount,
+                ),
+              ),
+              Expanded(
+                child: _CacheBreakdownItem(
+                  label: 'Images',
+                  size: stats.imageSizeMB,
+                  count: stats.imageCount,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CacheBreakdownItem extends StatelessWidget {
+  final String label;
+  final String size;
+  final int count;
+
+  const _CacheBreakdownItem({
+    required this.label,
+    required this.size,
+    required this.count,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            color: AppTheme.onBackgroundMuted,
+            fontSize: 11,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          '$size MB',
+          style: const TextStyle(
+            color: AppTheme.onBackground,
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Text(
+          '$count items',
+          style: const TextStyle(
+            color: AppTheme.onBackgroundMuted,
+            fontSize: 10,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _CacheSizeLimitTile extends StatelessWidget {
+  final int currentLimitMB;
+  final ValueChanged<int> onChanged;
+
+  const _CacheSizeLimitTile({
+    required this.currentLimitMB,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceContainer,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(
+                Icons.settings_rounded,
+                color: AppTheme.onBackgroundSubtle,
+                size: 22,
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Cache size limit',
+                      style: TextStyle(
+                        color: AppTheme.onBackground,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      '$currentLimitMB MB',
+                      style: const TextStyle(
+                        color: AppTheme.primary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Slider(
+            value: currentLimitMB.toDouble(),
+            min: 100,
+            max: 2000,
+            divisions: 19,
+            activeColor: AppTheme.primary,
+            inactiveColor: AppTheme.surfaceContainerHigh,
+            onChanged: (value) => onChanged(value.toInt()),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '100 MB',
+                  style: const TextStyle(
+                    color: AppTheme.onBackgroundMuted,
+                    fontSize: 10,
+                  ),
+                ),
+                Text(
+                  '2 GB',
+                  style: const TextStyle(
+                    color: AppTheme.onBackgroundMuted,
+                    fontSize: 10,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ConfirmDialog extends StatelessWidget {
+  final String title;
+  final String message;
+  final Color? confirmColor;
+
+  const _ConfirmDialog({
+    required this.title,
+    required this.message,
+    this.confirmColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: AppTheme.surfaceContainerHigh,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      title: Text(title, style: const TextStyle(color: AppTheme.onBackground)),
+      content: Text(
+        message,
+        style: const TextStyle(color: AppTheme.onBackgroundMuted),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          style: TextButton.styleFrom(
+            foregroundColor: confirmColor ?? AppTheme.primary,
+          ),
+          child: const Text('Confirm'),
+        ),
+      ],
     );
   }
 }

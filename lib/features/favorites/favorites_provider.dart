@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:funkwhale/core/api/api_repository.dart';
+import 'package:funkwhale/core/api/cached_api_repository.dart';
 
 // ── Favorites state provider ────────────────────────────────────────────
 
@@ -16,7 +16,7 @@ class FavoriteTrackIdsNotifier extends StateNotifier<Set<int>> {
     _load();
   }
 
-  FunkwhaleApi get _api => _ref.read(funkwhaleApiProvider);
+  CachedFunkwhaleApi get _api => _ref.read(cachedFunkwhaleApiProvider);
 
   Future<void> _load() async {
     try {

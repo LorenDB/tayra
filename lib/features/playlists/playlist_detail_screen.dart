@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:funkwhale/core/api/api_repository.dart';
-import 'package:funkwhale/core/api/models.dart';
+import 'package:funkwhale/core/api/cached_api_repository.dart';
 import 'package:funkwhale/core/theme/app_theme.dart';
 import 'package:funkwhale/core/widgets/track_list_tile.dart';
 import 'package:funkwhale/core/widgets/shimmer_loading.dart';
@@ -36,7 +35,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
     });
 
     try {
-      final api = ref.read(funkwhaleApiProvider);
+      final api = ref.read(cachedFunkwhaleApiProvider);
       final results = await Future.wait([
         api.getPlaylist(widget.playlistId),
         api.getPlaylistTracks(widget.playlistId),
