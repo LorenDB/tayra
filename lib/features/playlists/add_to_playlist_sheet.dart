@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:funkwhale/core/api/cached_api_repository.dart';
-import 'package:funkwhale/core/theme/app_theme.dart';
-import 'package:funkwhale/features/playlists/playlists_screen.dart';
+import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/features/playlists/playlists_screen.dart';
 
 /// Shows a bottom sheet listing user playlists to add one or more tracks to.
 Future<void> showAddToPlaylistSheet(

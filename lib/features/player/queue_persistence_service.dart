@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:funkwhale/core/api/models.dart';
+import 'package:tayra/core/api/models.dart';
 
 /// Service for persisting and restoring the player queue state between app
 /// launches. Stores queue tracks, current index, position, and playback mode.

@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:funkwhale/core/auth/auth_provider.dart';
-import 'package:funkwhale/features/auth/presentation/login_screen.dart';
-import 'package:funkwhale/features/home/home_screen.dart';
-import 'package:funkwhale/features/browse/browse_screen.dart';
-import 'package:funkwhale/features/browse/artist_detail_screen.dart';
-import 'package:funkwhale/features/browse/album_detail_screen.dart';
-import 'package:funkwhale/features/settings/settings_screen.dart';
-import 'package:funkwhale/features/search/search_screen.dart';
-import 'package:funkwhale/features/favorites/favorites_screen.dart';
-import 'package:funkwhale/features/playlists/playlists_screen.dart';
-import 'package:funkwhale/features/playlists/playlist_detail_screen.dart';
-import 'package:funkwhale/features/player/now_playing_screen.dart';
-import 'package:funkwhale/features/player/queue_screen.dart';
-import 'package:funkwhale/core/widgets/app_shell.dart';
+import 'package:tayra/core/auth/auth_provider.dart';
+import 'package:tayra/features/auth/presentation/login_screen.dart';
+import 'package:tayra/features/home/home_screen.dart';
+import 'package:tayra/features/browse/browse_screen.dart';
+import 'package:tayra/features/browse/artist_detail_screen.dart';
+import 'package:tayra/features/browse/album_detail_screen.dart';
+import 'package:tayra/features/settings/settings_screen.dart';
+import 'package:tayra/features/search/search_screen.dart';
+import 'package:tayra/features/favorites/favorites_screen.dart';
+import 'package:tayra/features/playlists/playlists_screen.dart';
+import 'package:tayra/features/playlists/playlist_detail_screen.dart';
+import 'package:tayra/features/player/now_playing_screen.dart';
+import 'package:tayra/features/player/queue_screen.dart';
+import 'package:tayra/core/widgets/app_shell.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final authChangeNotifier = ref.watch(authChangeNotifierProvider);

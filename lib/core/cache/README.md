@@ -1,6 +1,6 @@
-# Funkwhale Cache Implementation
+# Tayra Cache Implementation
 
-This document describes the local cache system implemented for the Funkwhale Flutter app.
+This document describes the local cache system implemented for the Tayra music player app.
 
 ## Overview
 

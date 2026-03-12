@@ -1,12 +1,12 @@
-# Funkwhale Flutter App - Agent Guidelines
+# Tayra - Agent Guidelines
 
 This file provides coding guidelines for AI agents working on this Flutter/Dart codebase.
 
 ## Project Overview
 
-A Flutter-based Funkwhale music streaming client for Android with OAuth authentication, audio playback (just_audio + audio_service), and AMOLED dark theme with dynamic gradients.
+A Flutter-based music player client for Funkwhale servers, targeting Android with OAuth authentication, audio playback (just_audio + audio_service), and AMOLED dark theme with dynamic gradients.
 
-**Package name:** `funkwhale`  
+**Package name:** `tayra`  
 **Target:** Android only (device ID: `4859701e`, Android 16, CPH2655)
 
 ## Build & Deploy Commands
@@ -20,12 +20,12 @@ flutter build apk --debug
 adb -s 4859701e install -r build/app/outputs/flutter-apk/app-debug.apk
 
 # Launch app
-adb -s 4859701e shell am start -n audio.funkwhale.funkwhale/.MainActivity
+adb -s 4859701e shell am start -n dev.lorendb.tayra/.MainActivity
 
 # Combined build + deploy (use for efficiency)
 flutter build apk --debug && \
   adb -s 4859701e install -r build/app/outputs/flutter-apk/app-debug.apk && \
-  adb -s 4859701e shell am start -n audio.funkwhale.funkwhale/.MainActivity
+  adb -s 4859701e shell am start -n dev.lorendb.tayra/.MainActivity
 ```
 
 ### Testing
@@ -88,8 +88,8 @@ lib/
 // ✅ CORRECT - Use package imports exclusively
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:funkwhale/core/api/models.dart';
-import 'package:funkwhale/features/player/player_provider.dart';
+import 'package:tayra/core/api/models.dart';
+import 'package:tayra/features/player/player_provider.dart';
 
 // ❌ WRONG - Never use relative imports
 import '../../core/api/models.dart';
@@ -98,7 +98,7 @@ import '../../core/api/models.dart';
 #### Import Order
 1. Flutter SDK imports
 2. Third-party packages (Riverpod, dio, go_router, etc.)
-3. Local package imports (`package:funkwhale/...`)
+3. Local package imports (`package:tayra/...`)
 
 ### Naming Conventions
 

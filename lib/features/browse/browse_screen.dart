@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:funkwhale/core/theme/app_theme.dart';
-import 'package:funkwhale/features/settings/settings_provider.dart';
-import 'package:funkwhale/features/browse/albums_screen.dart';
-import 'package:funkwhale/features/browse/artists_screen.dart';
+import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/features/settings/settings_provider.dart';
+import 'package:tayra/features/browse/albums_screen.dart';
+import 'package:tayra/features/browse/artists_screen.dart';
 
 /// Browse tab wrapper that switches between Albums and Artists views
 /// based on the user's setting in [settingsProvider].

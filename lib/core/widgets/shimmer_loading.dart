@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:funkwhale/core/theme/app_theme.dart';
+import 'package:tayra/core/theme/app_theme.dart';
 
 /// Shimmering loading placeholder for lists.
 class ShimmerList extends StatelessWidget {

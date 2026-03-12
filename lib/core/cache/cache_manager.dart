@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
-import 'package:funkwhale/core/cache/cache_database.dart';
+import 'package:tayra/core/cache/cache_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Cache types for different kinds of data

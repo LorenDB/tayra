@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:funkwhale/core/theme/app_theme.dart';
+import 'package:tayra/core/theme/app_theme.dart';
 
 /// Reusable cover art widget with rounded corners and placeholder.
 class CoverArtWidget extends StatelessWidget {

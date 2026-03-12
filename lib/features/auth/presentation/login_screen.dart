@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:funkwhale/core/auth/auth_provider.dart';
-import 'package:funkwhale/core/theme/app_theme.dart';
+import 'package:tayra/core/auth/auth_provider.dart';
+import 'package:tayra/core/theme/app_theme.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -52,9 +52,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                Text('Funkwhale', style: textTheme.headlineLarge),
+                Text('Tayra', style: textTheme.headlineLarge),
                 const SizedBox(height: 8),
-                Text('Connect to your server', style: textTheme.bodyMedium),
+                Text(
+                  'Connect to your Funkwhale server',
+                  style: textTheme.bodyMedium,
+                ),
                 const SizedBox(height: 48),
 
                 if (_step == 0) ...[
