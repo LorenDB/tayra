@@ -54,6 +54,24 @@ static void my_application_activate(GApplication* application) {
   fl_dart_project_set_dart_entrypoint_arguments(project, self->dart_entrypoint_arguments);
 
   FlView* view = fl_view_new(project);
+  
+  // Enable all input events including touch before showing the widget
+  // This must be done before the widget is realized
+  GdkEventMask event_mask = static_cast<GdkEventMask>(
+      GDK_TOUCH_MASK |
+      GDK_BUTTON_PRESS_MASK |
+      GDK_BUTTON_RELEASE_MASK |
+      GDK_POINTER_MOTION_MASK |
+      GDK_SMOOTH_SCROLL_MASK
+  );
+  
+  gtk_widget_add_events(GTK_WIDGET(window), event_mask);
+  gtk_widget_add_events(GTK_WIDGET(view), event_mask);
+  
+  // Set the window to receive all device events
+  gtk_widget_set_support_multidevice(GTK_WIDGET(window), TRUE);
+  gtk_widget_set_support_multidevice(GTK_WIDGET(view), TRUE);
+  
   gtk_widget_show(GTK_WIDGET(view));
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(view));
 
