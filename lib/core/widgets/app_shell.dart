@@ -33,21 +33,9 @@ class AppShell extends ConsumerWidget {
       activeIcon: Icons.queue_music_rounded,
       label: 'Playlists',
     ),
-    (
-      icon: Icons.settings_outlined,
-      activeIcon: Icons.settings,
-      label: 'Settings',
-    ),
   ];
 
-  static const _paths = [
-    '/',
-    '/browse',
-    '/search',
-    '/favorites',
-    '/playlists',
-    '/settings',
-  ];
+  static const _paths = ['/', '/browse', '/search', '/favorites', '/playlists'];
 
   int _currentIndex(BuildContext context) {
     final location = GoRouterState.of(context).matchedLocation;

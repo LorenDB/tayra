@@ -55,6 +55,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   return ArtistDetailScreen(artistId: id);
                 },
               ),
+              GoRoute(
+                path: 'settings',
+                builder: (context, state) => const SettingsScreen(),
+              ),
             ],
           ),
           GoRoute(
@@ -121,12 +125,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 },
               ),
             ],
-          ),
-          GoRoute(
-            path: '/settings',
-            pageBuilder:
-                (context, state) =>
-                    const NoTransitionPage(child: SettingsScreen()),
           ),
         ],
       ),

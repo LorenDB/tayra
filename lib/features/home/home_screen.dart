@@ -143,7 +143,7 @@ class _GreetingHeader extends ConsumerWidget {
           Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: () => context.go('/settings'),
+              onTap: () => context.push('/settings'),
               borderRadius: BorderRadius.circular(20),
               child: Container(
                 width: 40,
