@@ -29,6 +29,15 @@ class CoverUrls {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'original': original,
+      'medium_square_crop': mediumSquareCrop,
+      'small_square_crop': smallSquareCrop,
+      'large_square_crop': largSquareCrop,
+    };
+  }
+
   /// Returns the best available URL, preferring medium crop.
   String? get best => mediumSquareCrop ?? largSquareCrop ?? original;
   String? get large => largSquareCrop ?? original ?? mediumSquareCrop;
@@ -47,6 +56,10 @@ class Cover {
         json['urls'] as Map<String, dynamic>? ?? const {},
       ),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {'uuid': uuid, 'urls': urls.toJson()};
   }
 }
 
@@ -106,6 +119,20 @@ class Artist {
               ? DateTime.tryParse(json['creation_date'] as String)
               : null,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'mbid': mbid,
+      'content_category': contentCategory,
+      'cover': cover?.toJson(),
+      'tracks_count': tracksCount,
+      'albums': albums.map((a) => a.toJson()).toList(),
+      'tags': tags,
+      'creation_date': creationDate?.toIso8601String(),
+    };
   }
 
   String? get coverUrl => cover?.urls.best;
@@ -181,6 +208,22 @@ class Album {
               .toList() ??
           const [],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'artist': artist?.toJson(),
+      'cover': cover?.toJson(),
+      'release_date': releaseDate,
+      'tracks_count': tracksCount,
+      'duration': duration,
+      'is_playable': isPlayable,
+      'tags': tags,
+      'creation_date': creationDate?.toIso8601String(),
+      'tracks': tracks.map((t) => t.toJson()).toList(),
+    };
   }
 
   String? get coverUrl => cover?.urls.best;
@@ -276,6 +319,23 @@ class Track {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'artist': artist?.toJson(),
+      'album': album?.toJson(),
+      'listen_url': listenUrl,
+      'position': position,
+      'disc_number': discNumber,
+      'cover': cover?.toJson(),
+      'is_playable': isPlayable,
+      'tags': tags,
+      'uploads': uploads.map((u) => u.toJson()).toList(),
+      'creation_date': creationDate?.toIso8601String(),
+    };
+  }
+
   /// Best cover URL: track cover → album cover
   String? get coverUrl => cover?.urls.best ?? album?.cover?.urls.best;
 
@@ -316,6 +376,17 @@ class Upload {
       mimetype: json['mimetype'] as String?,
       listenUrl: json['listen_url'] as String?,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'uuid': uuid,
+      'duration': duration,
+      'bitrate': bitrate,
+      'size': size,
+      'mimetype': mimetype,
+      'listen_url': listenUrl,
+    };
   }
 }
 

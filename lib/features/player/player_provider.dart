@@ -6,6 +6,7 @@ import 'package:funkwhale/core/api/cached_api_repository.dart';
 import 'package:funkwhale/core/api/api_client.dart';
 import 'package:funkwhale/core/cache/cache_manager.dart';
 import 'package:funkwhale/core/cache/audio_cache_service.dart';
+import 'package:funkwhale/features/player/queue_persistence_service.dart';
 
 // ── Player state ────────────────────────────────────────────────────────
 
@@ -236,6 +237,7 @@ class PlayerNotifier extends StateNotifier<PlayerState> {
   PlayerNotifier(this._ref) : super(const PlayerState()) {
     _handler = _ref.read(audioHandlerProvider);
     _init();
+    _restoreQueue();
   }
 
   AudioPlayer get audioPlayer => _handler.audioPlayer;
@@ -296,6 +298,66 @@ class PlayerNotifier extends StateNotifier<PlayerState> {
     );
   }
 
+  /// Restore the queue state from persistent storage on app launch.
+  Future<void> _restoreQueue() async {
+    final savedState = await QueuePersistenceService.restoreQueue();
+    if (savedState == null || savedState.queue.isEmpty) return;
+
+    // Restore queue and playback state
+    state = state.copyWith(
+      queue: savedState.queue,
+      currentIndex: savedState.currentIndex,
+      isShuffled: savedState.isShuffled,
+      loopMode: _parseLoopMode(savedState.loopMode),
+    );
+
+    // Seek to saved position but don't auto-play
+    if (savedState.position.inSeconds > 0) {
+      try {
+        await _loadTrackOnly(savedState.queue[savedState.currentIndex]);
+        await _handler.audioPlayer.seek(savedState.position);
+      } catch (_) {
+        // Failed to restore - clear corrupted state
+        await QueuePersistenceService.clearQueue();
+      }
+    }
+  }
+
+  /// Save the current queue state to persistent storage.
+  Future<void> _saveQueue() async {
+    if (state.queue.isEmpty) return;
+
+    await QueuePersistenceService.saveQueue(
+      queue: state.queue,
+      currentIndex: state.currentIndex,
+      position: state.position,
+      isShuffled: state.isShuffled,
+      loopMode: _loopModeToString(state.loopMode),
+    );
+  }
+
+  String _loopModeToString(LoopMode mode) {
+    switch (mode) {
+      case LoopMode.off:
+        return 'off';
+      case LoopMode.all:
+        return 'all';
+      case LoopMode.one:
+        return 'one';
+    }
+  }
+
+  LoopMode _parseLoopMode(String mode) {
+    switch (mode) {
+      case 'all':
+        return LoopMode.all;
+      case 'one':
+        return LoopMode.one;
+      default:
+        return LoopMode.off;
+    }
+  }
+
   CachedFunkwhaleApi get _api => _ref.read(cachedFunkwhaleApiProvider);
 
   AudioCacheService get _audioCache =>
@@ -306,6 +368,7 @@ class PlayerNotifier extends StateNotifier<PlayerState> {
     if (tracks.isEmpty) {
       state = const PlayerState();
       await _handler.audioPlayer.stop();
+      await QueuePersistenceService.clearQueue();
       return;
     }
 
@@ -316,12 +379,14 @@ class PlayerNotifier extends StateNotifier<PlayerState> {
     );
 
     await _loadAndPlay(tracks[startIndex]);
+    _saveQueue(); // Save queue after loading new tracks
   }
 
   /// Add tracks to the end of the queue.
   void addToQueue(List<Track> tracks) {
     if (tracks.isEmpty) return;
     state = state.copyWith(queue: [...state.queue, ...tracks]);
+    _saveQueue();
   }
 
   /// Insert a track to play next.
@@ -333,6 +398,7 @@ class PlayerNotifier extends StateNotifier<PlayerState> {
     final newQueue = List<Track>.from(state.queue);
     newQueue.insert(state.currentIndex + 1, track);
     state = state.copyWith(queue: newQueue);
+    _saveQueue();
   }
 
   /// Remove track at index from the queue.
@@ -348,9 +414,19 @@ class PlayerNotifier extends StateNotifier<PlayerState> {
       if (newIndex >= newQueue.length) newIndex = newQueue.length - 1;
     }
     state = state.copyWith(queue: newQueue, currentIndex: newIndex);
+    _saveQueue();
   }
 
   Future<void> _loadAndPlay(Track track) async {
+    await _loadTrack(track, autoPlay: true);
+  }
+
+  /// Load a track without playing (for queue restoration).
+  Future<void> _loadTrackOnly(Track track) async {
+    await _loadTrack(track, autoPlay: false);
+  }
+
+  Future<void> _loadTrack(Track track, {required bool autoPlay}) async {
     try {
       final listenUrl = track.listenUrl;
       if (listenUrl == null) return;
@@ -372,28 +448,38 @@ class PlayerNotifier extends StateNotifier<PlayerState> {
       // Check audio cache first — play from local file if available.
       final cachedFile = await _audioCache.getCachedAudio(track);
       if (cachedFile != null) {
-        await _handler.playUrl(
-          url: cachedFile.uri.toString(),
-          headers: const {},
-          item: mediaItem,
+        _handler.mediaItem.add(mediaItem);
+        await _handler.audioPlayer.setAudioSource(
+          AudioSource.uri(Uri.parse(cachedFile.uri.toString())),
         );
+        if (autoPlay) {
+          await _handler.audioPlayer.play();
+        }
       } else {
         // Stream from server.
-        await _handler.playUrl(
-          url: streamUrl,
-          headers: headers,
-          item: mediaItem,
+        _handler.mediaItem.add(mediaItem);
+        await _handler.audioPlayer.setAudioSource(
+          AudioSource.uri(
+            Uri.parse(streamUrl),
+            headers: headers,
+            tag: mediaItem.title,
+          ),
         );
+        if (autoPlay) {
+          await _handler.audioPlayer.play();
+        }
 
         // Cache the audio file in the background for next time.
         _audioCache.cacheAudio(track, streamUrl, headers);
       }
 
-      // Record listening history.
-      try {
-        await _api.recordListening(track.id);
-      } catch (_) {
-        // Non-critical
+      // Record listening history only if auto-playing.
+      if (autoPlay) {
+        try {
+          await _api.recordListening(track.id);
+        } catch (_) {
+          // Non-critical
+        }
       }
     } catch (e) {
       state = state.copyWith(isLoading: false);
@@ -441,6 +527,7 @@ class PlayerNotifier extends StateNotifier<PlayerState> {
     final newIndex = state.currentIndex + 1;
     state = state.copyWith(currentIndex: newIndex, isLoading: true);
     await _loadAndPlay(state.queue[newIndex]);
+    _saveQueue();
   }
 
   Future<void> skipPrevious() async {
@@ -455,10 +542,12 @@ class PlayerNotifier extends StateNotifier<PlayerState> {
     final newIndex = state.currentIndex - 1;
     state = state.copyWith(currentIndex: newIndex, isLoading: true);
     await _loadAndPlay(state.queue[newIndex]);
+    _saveQueue();
   }
 
   Future<void> seekTo(Duration position) async {
     await _handler.seek(position);
+    _saveQueue(); // Save position
   }
 
   void toggleShuffle() {
@@ -471,6 +560,7 @@ class PlayerNotifier extends StateNotifier<PlayerState> {
       if (current != null) newQueue.insert(0, current);
       state = state.copyWith(queue: newQueue, currentIndex: 0);
     }
+    _saveQueue();
   }
 
   void toggleLoopMode() {
@@ -485,6 +575,7 @@ class PlayerNotifier extends StateNotifier<PlayerState> {
         state = state.copyWith(loopMode: LoopMode.off);
         break;
     }
+    _saveQueue();
   }
 
   /// Jump to a specific index in the queue.
@@ -492,6 +583,7 @@ class PlayerNotifier extends StateNotifier<PlayerState> {
     if (index < 0 || index >= state.queue.length) return;
     state = state.copyWith(currentIndex: index, isLoading: true);
     await _loadAndPlay(state.queue[index]);
+    _saveQueue();
   }
 
   @override
