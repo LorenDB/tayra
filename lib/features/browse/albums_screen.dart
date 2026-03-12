@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:funkwhale/core/api/cached_api_repository.dart';
+import 'package:funkwhale/core/layout/responsive.dart';
 import 'package:funkwhale/core/theme/app_theme.dart';
 import 'package:funkwhale/core/widgets/cover_art.dart';
 import 'package:funkwhale/core/widgets/shimmer_loading.dart';
@@ -161,12 +162,14 @@ class _AlbumGrid extends StatelessWidget {
       );
     }
 
+    final columns = Responsive.gridColumnCount(context, minItemWidth: 150);
+
     return GridView.builder(
       controller: scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: columns,
         mainAxisSpacing: 16,
         crossAxisSpacing: 10,
         childAspectRatio: 0.68,

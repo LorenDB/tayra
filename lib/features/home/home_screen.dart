@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:funkwhale/core/api/cached_api_repository.dart';
+import 'package:funkwhale/core/layout/responsive.dart';
 import 'package:funkwhale/core/theme/app_theme.dart';
 import 'package:funkwhale/core/widgets/cover_art.dart';
 import 'package:funkwhale/core/widgets/track_list_tile.dart';
@@ -41,6 +42,8 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isWide = Responsive.isExpanded(context);
+
     return Scaffold(
       backgroundColor: AppTheme.background,
       body: RefreshIndicator(
@@ -64,25 +67,51 @@ class HomeScreen extends ConsumerWidget {
             // Greeting header with subtle gradient background
             SliverToBoxAdapter(child: _GreetingHeader()),
 
-            // Recently Added albums
-            const SliverToBoxAdapter(child: SizedBox(height: 8)),
-            const SliverToBoxAdapter(
-              child: _SectionHeader(title: 'Recently Added'),
-            ),
-            const SliverToBoxAdapter(child: SizedBox(height: 12)),
-            SliverToBoxAdapter(
-              child: _AlbumCarousel(provider: recentAlbumsProvider),
-            ),
-
-            // Random Picks albums
-            const SliverToBoxAdapter(child: SizedBox(height: 28)),
-            const SliverToBoxAdapter(
-              child: _SectionHeader(title: 'Random Picks'),
-            ),
-            const SliverToBoxAdapter(child: SizedBox(height: 12)),
-            SliverToBoxAdapter(
-              child: _AlbumCarousel(provider: randomAlbumsProvider),
-            ),
+            // ── Desktop: album grids side by side ──
+            if (isWide) ...[
+              const SliverToBoxAdapter(child: SizedBox(height: 8)),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: _AlbumGridSection(
+                          title: 'Recently Added',
+                          provider: recentAlbumsProvider,
+                        ),
+                      ),
+                      const SizedBox(width: 24),
+                      Expanded(
+                        child: _AlbumGridSection(
+                          title: 'Random Picks',
+                          provider: randomAlbumsProvider,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ] else ...[
+              // ── Mobile: horizontal carousels ──
+              const SliverToBoxAdapter(child: SizedBox(height: 8)),
+              const SliverToBoxAdapter(
+                child: _SectionHeader(title: 'Recently Added'),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 12)),
+              SliverToBoxAdapter(
+                child: _AlbumCarousel(provider: recentAlbumsProvider),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 28)),
+              const SliverToBoxAdapter(
+                child: _SectionHeader(title: 'Random Picks'),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 12)),
+              SliverToBoxAdapter(
+                child: _AlbumCarousel(provider: randomAlbumsProvider),
+              ),
+            ],
 
             // New Tracks vertical list
             const SliverToBoxAdapter(child: SizedBox(height: 28)),
@@ -93,7 +122,7 @@ class HomeScreen extends ConsumerWidget {
             const _TrackListSection(),
 
             // Bottom padding for mini player clearance
-            const SliverToBoxAdapter(child: SizedBox(height: 120)),
+            SliverToBoxAdapter(child: SizedBox(height: isWide ? 32 : 120)),
           ],
         ),
       ),
@@ -139,26 +168,28 @@ class _GreetingHeader extends ConsumerWidget {
               ],
             ),
           ),
-          Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: () => context.push('/settings'),
-              borderRadius: BorderRadius.circular(20),
-              child: Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: AppTheme.surfaceContainerHigh,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.settings_outlined,
-                  color: AppTheme.onBackgroundMuted,
-                  size: 20,
+          // Hide settings icon on desktop (available in nav rail)
+          if (!Responsive.useSideNavigation(context))
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () => context.push('/settings'),
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: AppTheme.surfaceContainerHigh,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.settings_outlined,
+                    color: AppTheme.onBackgroundMuted,
+                    size: 20,
+                  ),
                 ),
               ),
             ),
-          ),
         ],
       ),
     );
@@ -332,6 +363,167 @@ class _AlbumCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+// ── Album Grid Section (desktop) ────────────────────────────────────────
+
+class _AlbumGridSection extends ConsumerWidget {
+  final String title;
+  final FutureProvider<List<Album>> provider;
+
+  const _AlbumGridSection({required this.title, required this.provider});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final albumsAsync = ref.watch(provider);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            color: AppTheme.onBackground,
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(height: 12),
+        albumsAsync.when(
+          loading:
+              () => const SizedBox(
+                height: 200,
+                child: Center(
+                  child: CircularProgressIndicator(color: AppTheme.primary),
+                ),
+              ),
+          error:
+              (error, _) => _ErrorCard(
+                message: 'Could not load albums',
+                onRetry: () => ref.invalidate(provider),
+              ),
+          data: (albums) {
+            if (albums.isEmpty) {
+              return const SizedBox(
+                height: 150,
+                child: Center(
+                  child: Text(
+                    'No albums found',
+                    style: TextStyle(color: AppTheme.onBackgroundSubtle),
+                  ),
+                ),
+              );
+            }
+
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                final columns = (constraints.maxWidth / 160).floor().clamp(
+                  2,
+                  5,
+                );
+                return Wrap(
+                  spacing: 14,
+                  runSpacing: 16,
+                  children:
+                      albums.map((album) {
+                        final itemWidth =
+                            (constraints.maxWidth - (columns - 1) * 14) /
+                            columns;
+                        return SizedBox(
+                          width: itemWidth,
+                          child: _AlbumGridCard(album: album),
+                        );
+                      }).toList(),
+                );
+              },
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+/// Album card variant for grid layout - adapts its art size to available width.
+class _AlbumGridCard extends StatelessWidget {
+  final Album album;
+
+  const _AlbumGridCard({required this.album});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final artSize = constraints.maxWidth;
+        return GestureDetector(
+          onTap: () => context.push('/album/${album.id}'),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Stack(
+                children: [
+                  CoverArtWidget(
+                    imageUrl: album.coverUrl,
+                    size: artSize,
+                    borderRadius: 10,
+                    shadow: BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.4),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      height: artSize * 0.4,
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
+                        ),
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.transparent,
+                            Colors.black.withValues(alpha: 0.55),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                album.title,
+                style: const TextStyle(
+                  color: AppTheme.onBackground,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 2),
+              Text(
+                album.artist?.name ?? 'Unknown Artist',
+                style: const TextStyle(
+                  color: AppTheme.onBackgroundMuted,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

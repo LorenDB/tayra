@@ -1,12 +1,26 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:funkwhale/core/router/app_router.dart';
 import 'package:funkwhale/core/theme/app_theme.dart';
 import 'package:funkwhale/features/player/player_provider.dart';
 import 'package:funkwhale/core/cache/cache_manager.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize sqflite for desktop platforms
+  if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  }
+
+  // Initialize just_audio_media_kit for desktop platforms
+  if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
+    JustAudioMediaKit.ensureInitialized();
+  }
 
   // Initialize the cache manager
   await CacheManager.instance.initialize();
