@@ -1,4 +1,7 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
@@ -589,100 +592,169 @@ class _TrackListSection extends ConsumerWidget {
   }
 }
 
-// ── Year in Review Banner ────────────────────────────────────────────────
+// ── Year Review Banner ───────────────────────────────────────────────
 
-class _YearReviewBanner extends ConsumerWidget {
+class _YearReviewBanner extends ConsumerStatefulWidget {
   const _YearReviewBanner();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_YearReviewBanner> createState() => _YearReviewBannerState();
+}
+
+class _YearReviewBannerState extends ConsumerState<_YearReviewBanner>
+    with SingleTickerProviderStateMixin {
+  ui.FragmentShader? _shader;
+  late final Ticker _ticker;
+  double _elapsedSeconds = 0.0;
+
+  // Darkened gradient colours for better contrast against white text
+  static const _colorA = Color(0xFF4C45B2); // darkened purple (was 0xFF6C63FF)
+  static const _colorB = Color(0xFF009477); // darkened teal   (was 0xFF00D4AA)
+
+  @override
+  void initState() {
+    super.initState();
+    _ticker = createTicker((elapsed) {
+      setState(() {
+        _elapsedSeconds = elapsed.inMicroseconds / 1e6;
+      });
+    });
+    _loadShader();
+  }
+
+  Future<void> _loadShader() async {
+    try {
+      final program = await ui.FragmentProgram.fromAsset(
+        'assets/shaders/ripple.frag',
+      );
+      if (mounted) {
+        setState(() => _shader = program.fragmentShader());
+        _ticker.start();
+      }
+    } catch (_) {
+      // Shader failed to load — banner falls back to plain gradient
+    }
+  }
+
+  @override
+  void dispose() {
+    _ticker.dispose();
+    _shader?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final visible = ref.watch(yearReviewBannerVisibleProvider);
     if (!visible) return const SizedBox.shrink();
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: AppTheme.primaryGradient,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () {
-              final now = DateTime.now();
-              // In January, the "Year in Review" refers to the previous year
-              final year = now.month == 1 ? now.year - 1 : now.year;
-              context.push('/year-review/$year');
-            },
-            borderRadius: BorderRadius.circular(16),
-            splashColor: Colors.white.withValues(alpha: 0.1),
-            highlightColor: Colors.white.withValues(alpha: 0.05),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-              child: Row(
-                children: [
-                  Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.auto_awesome_rounded,
-                      color: Colors.white,
-                      size: 22,
-                    ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: CustomPaint(
+          painter:
+              _shader != null
+                  ? _RipplePainter(
+                    shader: _shader!,
+                    time: _elapsedSeconds,
+                    colorA: _colorA,
+                    colorB: _colorB,
+                  )
+                  : null,
+          // Fallback background when shader isn't ready yet
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: _shader != null ? null : LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [_colorA, _colorB], // use darkened colors
+              ),
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () {
+                  final now = DateTime.now();
+                  // In January, the "Year in Review" refers to the previous year
+                  final year = now.month == 1 ? now.year - 1 : now.year;
+                  context.push('/year-review/$year');
+                },
+                borderRadius: BorderRadius.circular(16),
+                splashColor: Colors.white.withValues(alpha: 0.1),
+                highlightColor: Colors.white.withValues(alpha: 0.05),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 18,
+                    vertical: 16,
                   ),
-                  const SizedBox(width: 14),
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Your Year in Review is ready',
-                          style: TextStyle(
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.2),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.auto_awesome_rounded,
+                          color: Colors.white,
+                          size: 22,
+                        ),
+                      ),
+                      const SizedBox(width: 14),
+                      const Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Your Year in Review is ready',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              'See your top tracks, artists & more',
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      // Dismiss button
+                      GestureDetector(
+                        onTap:
+                            () =>
+                                ref
+                                    .read(
+                                      yearReviewBannerVisibleProvider.notifier,
+                                    )
+                                    .dismiss(),
+                        child: Container(
+                          width: 28,
+                          height: 28,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.15),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.close_rounded,
                             color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
+                            size: 16,
                           ),
                         ),
-                        SizedBox(height: 2),
-                        Text(
-                          'See your top tracks, artists & more',
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  // Dismiss button
-                  GestureDetector(
-                    onTap:
-                        () =>
-                            ref
-                                .read(yearReviewBannerVisibleProvider.notifier)
-                                .dismiss(),
-                    child: Container(
-                      width: 28,
-                      height: 28,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.15),
-                        shape: BoxShape.circle,
                       ),
-                      child: const Icon(
-                        Icons.close_rounded,
-                        color: Colors.white,
-                        size: 16,
-                      ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
@@ -690,6 +762,50 @@ class _YearReviewBanner extends ConsumerWidget {
       ),
     );
   }
+}
+
+// ── Ripple shader painter ────────────────────────────────────────────
+
+class _RipplePainter extends CustomPainter {
+  const _RipplePainter({
+    required this.shader,
+    required this.time,
+    required this.colorA,
+    required this.colorB,
+  });
+
+  final ui.FragmentShader shader;
+  final double time;
+  final Color colorA;
+  final Color colorB;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // Uniforms must match the order declared in ripple.frag:
+    //   0: uTime       (float)
+    //   1,2: uResolution (vec2 → two floats)
+    //   3,4,5,6: uColorA   (vec4 → four floats, r g b a)
+    //   7,8,9,10: uColorB  (vec4 → four floats, r g b a)
+    shader
+      ..setFloat(0, time)
+      ..setFloat(1, size.width)
+      ..setFloat(2, size.height)
+      ..setFloat(3, colorA.r)
+      ..setFloat(4, colorA.g)
+      ..setFloat(5, colorA.b)
+      ..setFloat(6, colorA.a)
+      ..setFloat(7, colorB.r)
+      ..setFloat(8, colorB.g)
+      ..setFloat(9, colorB.b)
+      ..setFloat(10, colorB.a);
+
+    final paint = Paint()..shader = shader;
+    canvas.drawRect(Offset.zero & size, paint);
+  }
+
+  @override
+  bool shouldRepaint(_RipplePainter old) =>
+      old.time != time || old.shader != shader;
 }
 
 // ── Error Card with Retry ───────────────────────────────────────────────
