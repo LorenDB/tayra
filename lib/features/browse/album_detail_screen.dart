@@ -16,34 +16,60 @@ final _albumDetailProvider = FutureProvider.family<Album, int>((ref, albumId) {
   return api.getAlbum(albumId);
 });
 
-final _albumTracksProvider = FutureProvider.family<List<Track>, int>((
-  ref,
-  albumId,
-) async {
-  final api = ref.watch(cachedFunkwhaleApiProvider);
-  final allTracks = <Track>[];
-  int page = 1;
-  while (true) {
-    final response = await api.getTracks(
-      album: albumId,
-      ordering: 'position',
-      pageSize: 100,
-      page: page,
-    );
-    allTracks.addAll(response.results);
-    if (response.next == null) break;
-    page++;
+// Tracks are loaded page-by-page and emitted incrementally so the UI can
+// render the first batch immediately without waiting for all pages.
+class _AlbumTracksNotifier extends AsyncNotifier<List<Track>> {
+  final int albumId;
+
+  _AlbumTracksNotifier(this.albumId);
+
+  @override
+  Future<List<Track>> build() async {
+    return _fetchAllPages();
   }
-  allTracks.sort((a, b) {
-    final discA = a.discNumber ?? 1;
-    final discB = b.discNumber ?? 1;
-    if (discA != discB) return discA.compareTo(discB);
-    final posA = a.position ?? 0;
-    final posB = b.position ?? 0;
-    return posA.compareTo(posB);
-  });
-  return allTracks;
-});
+
+  Future<void> reload() async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(_fetchAllPages);
+  }
+
+  Future<List<Track>> _fetchAllPages() async {
+    final api = ref.read(cachedFunkwhaleApiProvider);
+    final allTracks = <Track>[];
+    int page = 1;
+    while (true) {
+      final response = await api.getTracks(
+        album: albumId,
+        ordering: 'position',
+        pageSize: 100,
+        page: page,
+      );
+      allTracks.addAll(response.results);
+      _sortTracks(allTracks);
+      // Emit after each page so the UI shows tracks as they arrive.
+      state = AsyncData(List<Track>.unmodifiable(allTracks));
+      if (response.next == null) break;
+      page++;
+    }
+    return List<Track>.unmodifiable(allTracks);
+  }
+
+  static void _sortTracks(List<Track> tracks) {
+    tracks.sort((a, b) {
+      final discA = a.discNumber ?? 1;
+      final discB = b.discNumber ?? 1;
+      if (discA != discB) return discA.compareTo(discB);
+      final posA = a.position ?? 0;
+      final posB = b.position ?? 0;
+      return posA.compareTo(posB);
+    });
+  }
+}
+
+final _albumTracksProvider =
+    AsyncNotifierProvider.family<_AlbumTracksNotifier, List<Track>, int>(
+      (int albumId) => _AlbumTracksNotifier(albumId),
+    );
 
 // ── Screen ──────────────────────────────────────────────────────────────
 
@@ -66,7 +92,7 @@ class AlbumDetailScreen extends ConsumerWidget {
               message: error.toString(),
               onRetry: () {
                 ref.invalidate(_albumDetailProvider(albumId));
-                ref.invalidate(_albumTracksProvider(albumId));
+                ref.read(_albumTracksProvider(albumId).notifier).reload();
               },
             ),
         data:
@@ -75,11 +101,8 @@ class AlbumDetailScreen extends ConsumerWidget {
               backgroundColor: AppTheme.surfaceContainer,
               onRefresh: () async {
                 ref.invalidate(_albumDetailProvider(albumId));
-                ref.invalidate(_albumTracksProvider(albumId));
-                await Future.wait([
-                  ref.read(_albumDetailProvider(albumId).future),
-                  ref.read(_albumTracksProvider(albumId).future),
-                ]);
+                ref.read(_albumTracksProvider(albumId).notifier).reload();
+                await ref.read(_albumDetailProvider(albumId).future);
               },
               child: _AlbumDetailBody(album: album, tracksAsync: tracksAsync),
             ),
@@ -137,7 +160,8 @@ class _AlbumDetailBody extends ConsumerWidget {
         // ── Track list ──
         tracksAsync.when(
           loading:
-              () => const SliverToBoxAdapter(
+              () => const SliverFillRemaining(
+                hasScrollBody: false,
                 child: Padding(
                   padding: EdgeInsets.only(top: 8),
                   child: ShimmerList(itemCount: 6, itemHeight: 56),
