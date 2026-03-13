@@ -103,6 +103,7 @@ class FunkwhaleApi {
         'page_size': pageSize,
         'ordering': ordering,
         'playable': true,
+        'include': 'uploads',
         if (album != null) 'album': album,
         if (artist != null) 'artist': artist,
         if (scope != null) 'scope': scope,
@@ -113,7 +114,10 @@ class FunkwhaleApi {
   }
 
   Future<Track> getTrack(int id) async {
-    final response = await _dio.get('$_baseUrl/api/v1/tracks/$id/');
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/tracks/$id/',
+      queryParameters: {'include': 'uploads'},
+    );
     return Track.fromJson(response.data);
   }
 

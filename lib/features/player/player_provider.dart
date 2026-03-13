@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:audio_service/audio_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
@@ -913,10 +914,16 @@ class PlayerNotifier extends Notifier<PlayerState> {
     try {
       final listenUrl = track.listenUrl;
       if (listenUrl == null) {
+        debugPrint(
+          'Track ${track.id} "${track.title}" has no listen URL. Uploads: ${track.uploads.length}',
+        );
         throw Exception('Track has no listen URL');
       }
 
       final streamUrl = _api.getStreamUrl(listenUrl);
+      debugPrint(
+        'Loading track ${track.id}: listenUrl=$listenUrl, streamUrl=$streamUrl',
+      );
       final headers = _api.authHeaders;
 
       // Build the MediaItem for the notification.
@@ -969,6 +976,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
       state = state.copyWith(isLoading: false);
     } catch (e) {
+      debugPrint('Failed to load track: $e');
       state = state.copyWith(isLoading: false);
 
       // If this was supposed to auto-play and we have more tracks, skip to next
@@ -976,6 +984,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
         // Wait a moment to avoid rapid-fire failures
         await Future.delayed(const Duration(milliseconds: 500));
         skipNext();
+      } else if (autoPlay && !state.hasNext) {
+        // No more tracks - clear the queue to stop infinite loading
+        debugPrint('No more playable tracks in queue, clearing player state');
+        state = const PlayerState();
       }
     }
   }
