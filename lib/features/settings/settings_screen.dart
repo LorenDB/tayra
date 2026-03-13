@@ -161,6 +161,12 @@ class SettingsScreen extends ConsumerWidget {
             title: 'Tayra',
             subtitle: 'A Funkwhale music player',
           ),
+          _ActionTile(
+            icon: Icons.balance_outlined,
+            title: 'Licenses',
+            subtitle: 'View open-source licenses',
+            onTap: () => {showLicensePage(context: context)},
+          ),
         ],
       ),
     );
