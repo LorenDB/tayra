@@ -6,6 +6,7 @@ import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
+import 'package:tayra/features/year_review/listen_history_provider.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -92,6 +93,12 @@ class SettingsScreen extends ConsumerWidget {
 
           const SizedBox(height: 24),
 
+          // ── Year in Review section ────────────────────────────────────
+          _SectionHeader(title: 'Year in Review'),
+          _YearReviewTile(),
+
+          const SizedBox(height: 24),
+
           // ── Cache section ─────────────────────────────────────────────
           _SectionHeader(title: 'Cache'),
           cacheStatsAsync.when(
@@ -156,11 +163,7 @@ class SettingsScreen extends ConsumerWidget {
 
           // ── About section ─────────────────────────────────────────────
           _SectionHeader(title: 'About'),
-          _InfoTile(
-            icon: Icons.info_outline_rounded,
-            title: 'Tayra',
-            subtitle: 'A Funkwhale music player',
-          ),
+          _AboutTile(),
           _ActionTile(
             icon: Icons.balance_outlined,
             title: 'Licenses',
@@ -168,6 +171,190 @@ class SettingsScreen extends ConsumerWidget {
             onTap: () => {showLicensePage(context: context)},
           ),
         ],
+      ),
+    );
+  }
+}
+
+// ── Year in Review tile ─────────────────────────────────────────────────
+
+class _YearReviewTile extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final listenCountAsync = ref.watch(totalListenCountProvider);
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceContainer,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => context.push('/year-review'),
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Row(
+              children: [
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: AppTheme.primaryGradient,
+                  ),
+                  child: const Icon(
+                    Icons.auto_awesome_rounded,
+                    color: Colors.white,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Year in Review',
+                        style: TextStyle(
+                          color: AppTheme.onBackground,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      listenCountAsync.when(
+                        loading:
+                            () => const Text(
+                              'Loading...',
+                              style: TextStyle(
+                                color: AppTheme.onBackgroundMuted,
+                                fontSize: 12,
+                              ),
+                            ),
+                        error:
+                            (_, __) => const Text(
+                              'See your listening recap',
+                              style: TextStyle(
+                                color: AppTheme.onBackgroundMuted,
+                                fontSize: 12,
+                              ),
+                            ),
+                        data:
+                            (count) => Text(
+                              count > 0
+                                  ? '$count total listens tracked'
+                                  : 'Start listening to build your recap',
+                              style: const TextStyle(
+                                color: AppTheme.onBackgroundMuted,
+                                fontSize: 12,
+                              ),
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Icon(
+                  Icons.chevron_right_rounded,
+                  color: AppTheme.onBackgroundSubtle,
+                  size: 20,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ── About tile (7-tap easter egg) ───────────────────────────────────────
+
+/// Tapping the About tile 7 times force-shows the Year in Review banner on
+/// the home screen, regardless of the current date. Useful for testing.
+class _AboutTile extends ConsumerStatefulWidget {
+  @override
+  ConsumerState<_AboutTile> createState() => _AboutTileState();
+}
+
+class _AboutTileState extends ConsumerState<_AboutTile> {
+  int _tapCount = 0;
+  static const int _tapsRequired = 3;
+
+  void _onLongPress() {
+    setState(() => _tapCount++);
+    if (_tapCount >= _tapsRequired) {
+      _tapCount = 0;
+      ref.read(yearReviewBannerVisibleProvider.notifier).forceShow();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Year in Review banner unlocked'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceContainer,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onLongPress: _onLongPress,
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Row(
+              children: [
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: AppTheme.surfaceContainerHigh,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(
+                    Icons.info_outline_rounded,
+                    color: AppTheme.onBackgroundMuted,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Tayra',
+                        style: TextStyle(
+                          color: AppTheme.onBackground,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        'A Funkwhale music player',
+                        style: TextStyle(
+                          color: AppTheme.onBackgroundMuted,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

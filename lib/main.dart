@@ -7,6 +7,7 @@ import 'package:tayra/features/player/player_provider.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
+import 'package:tayra/features/year_review/listen_history_service.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 import 'package:aptabase_flutter/aptabase_flutter.dart';
@@ -33,6 +34,9 @@ void main() async {
 
   // Initialize the cache manager
   await CacheManager.instance.initialize();
+
+  // Ensure the listen history table exists for year-in-review tracking
+  await ListenHistoryService.ensureTable();
 
   // Initialize the audio handler before starting the app
   final audioHandler = await initAudioHandler();

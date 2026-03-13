@@ -15,6 +15,7 @@ import 'package:tayra/features/playlists/playlists_screen.dart';
 import 'package:tayra/features/playlists/playlist_detail_screen.dart';
 import 'package:tayra/features/player/now_playing_screen.dart';
 import 'package:tayra/features/player/queue_screen.dart';
+import 'package:tayra/features/year_review/year_review_screen.dart';
 import 'package:tayra/core/widgets/app_shell.dart';
 
 class NavigationObserver extends NavigatorObserver {
@@ -100,6 +101,21 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 path: 'settings',
                 name: 'settings',
                 builder: (context, state) => const SettingsScreen(),
+              ),
+              GoRoute(
+                path: 'year-review',
+                name: 'year_review',
+                builder: (context, state) => const YearReviewSelectorScreen(),
+                routes: [
+                  GoRoute(
+                    path: ':year',
+                    name: 'year_review_detail',
+                    builder: (context, state) {
+                      final year = int.parse(state.pathParameters['year']!);
+                      return YearReviewScreen(year: year);
+                    },
+                  ),
+                ],
               ),
             ],
           ),

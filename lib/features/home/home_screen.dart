@@ -8,6 +8,7 @@ import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/core/widgets/track_list_tile.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/player/player_provider.dart';
+import 'package:tayra/features/year_review/listen_history_provider.dart';
 
 // ── Data providers ──────────────────────────────────────────────────────
 
@@ -66,6 +67,9 @@ class HomeScreen extends ConsumerWidget {
 
             // Greeting header with subtle gradient background
             SliverToBoxAdapter(child: _GreetingHeader()),
+
+            // Year in Review seasonal banner (Dec 15–31 or when force-shown)
+            SliverToBoxAdapter(child: _YearReviewBanner()),
 
             // ── Desktop: album grids side by side ──
             if (isWide) ...[
@@ -581,6 +585,109 @@ class _TrackListSection extends ConsumerWidget {
           }, childCount: tracks.length),
         );
       },
+    );
+  }
+}
+
+// ── Year in Review Banner ────────────────────────────────────────────────
+
+class _YearReviewBanner extends ConsumerWidget {
+  const _YearReviewBanner();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final visible = ref.watch(yearReviewBannerVisibleProvider);
+    if (!visible) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: AppTheme.primaryGradient,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {
+              final now = DateTime.now();
+              // In January, the "Year in Review" refers to the previous year
+              final year = now.month == 1 ? now.year - 1 : now.year;
+              context.push('/year-review/$year');
+            },
+            borderRadius: BorderRadius.circular(16),
+            splashColor: Colors.white.withValues(alpha: 0.1),
+            highlightColor: Colors.white.withValues(alpha: 0.05),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+              child: Row(
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.auto_awesome_rounded,
+                      color: Colors.white,
+                      size: 22,
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Your Year in Review is ready',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                          'See your top tracks, artists & more',
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  // Dismiss button
+                  GestureDetector(
+                    onTap:
+                        () =>
+                            ref
+                                .read(yearReviewBannerVisibleProvider.notifier)
+                                .dismiss(),
+                    child: Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.15),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.close_rounded,
+                        color: Colors.white,
+                        size: 16,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
