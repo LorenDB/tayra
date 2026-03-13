@@ -5,14 +5,55 @@ import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/features/player/player_provider.dart';
 
-class QueueScreen extends ConsumerWidget {
+class QueueScreen extends ConsumerStatefulWidget {
   const QueueScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<QueueScreen> createState() => _QueueScreenState();
+}
+
+class _QueueScreenState extends ConsumerState<QueueScreen> {
+  late ScrollController _scrollController;
+  bool _hasScrolled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToCurrentTrack(int currentIndex, int queueLength) {
+    if (_hasScrolled || currentIndex < 0 || currentIndex >= queueLength) return;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final itemHeight = 64.0;
+      final offset = currentIndex * itemHeight;
+      final maxScroll = _scrollController.position.maxScrollExtent;
+      _scrollController.animateTo(
+        offset.clamp(0.0, maxScroll),
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+      _hasScrolled = true;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final playerState = ref.watch(playerProvider);
     final queue = playerState.queue;
     final currentIndex = playerState.currentIndex;
+
+    if (!_hasScrolled && queue.isNotEmpty) {
+      _scrollToCurrentTrack(currentIndex, queue.length);
+    }
 
     return Scaffold(
       backgroundColor: AppTheme.background,
@@ -113,6 +154,7 @@ class QueueScreen extends ConsumerWidget {
         // Queue list
         Expanded(
           child: ListView.builder(
+            controller: _scrollController,
             physics: const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics(),
             ),
