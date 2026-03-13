@@ -743,6 +743,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
     _subscriptions.add(
       _handler.audioPlayer.playingStream.listen((isPlaying) {
         state = state.copyWith(isPlaying: isPlaying);
+        if (!isPlaying) {
+          _saveQueue(); // Save position when paused
+        }
       }),
     );
 
@@ -750,6 +753,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
     _subscriptions.add(
       _handler.audioPlayer.positionStream.listen((position) {
         state = state.copyWith(position: position);
+        // Save position periodically (every 2 seconds) to persistence
+        if (position.inSeconds % 2 == 0 && position.inSeconds > 0) {
+          _saveQueue();
+        }
       }),
     );
 
@@ -922,11 +929,15 @@ class PlayerNotifier extends Notifier<PlayerState> {
     Aptabase.instance.trackEvent('remove_from_queue');
   }
 
-  Future<void> _loadAndPlay(Track track) async {
-    await _loadTrack(track, autoPlay: true);
+  Future<void> _loadAndPlay(Track track, {Duration? initialPosition}) async {
+    await _loadTrack(track, autoPlay: true, initialPosition: initialPosition);
   }
 
-  Future<void> _loadTrack(Track track, {required bool autoPlay}) async {
+  Future<void> _loadTrack(
+    Track track, {
+    required bool autoPlay,
+    Duration? initialPosition,
+  }) async {
     try {
       final listenUrl = track.listenUrl;
       if (listenUrl == null) {
@@ -959,6 +970,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
         _handler.mediaItem.add(mediaItem);
         await _handler.audioPlayer.setAudioSource(
           AudioSource.uri(Uri.parse(cachedFile.uri.toString())),
+          initialPosition: initialPosition,
         );
         if (autoPlay) {
           await _handler.audioPlayer.play();
@@ -972,6 +984,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
             headers: headers,
             tag: mediaItem.title,
           ),
+          initialPosition: initialPosition,
         );
         if (autoPlay) {
           await _handler.audioPlayer.play();
@@ -1048,10 +1061,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       final track = state.currentTrack;
       if (track != null) {
         state = state.copyWith(isLoading: true);
-        await _loadAndPlay(track);
-        if (seekTo > Duration.zero) {
-          await _handler.audioPlayer.seek(seekTo);
-        }
+        await _loadAndPlay(track, initialPosition: seekTo);
         return;
       }
     }
