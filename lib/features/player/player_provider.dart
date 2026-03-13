@@ -10,6 +10,7 @@ import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/core/cache/audio_cache_service.dart';
 import 'package:tayra/features/player/queue_persistence_service.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
+import 'package:tayra/features/year_review/listen_history_service.dart';
 
 // ── Android Auto browse tree constants ──────────────────────────────────
 
@@ -985,6 +986,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
         } catch (_) {
           // Non-critical
         }
+
+        // Record locally for year-in-review stats.
+        ListenHistoryService.recordListen(track);
       }
 
       state = state.copyWith(isLoading: false);
