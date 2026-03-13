@@ -5,15 +5,35 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 
-/// Extracts a dominant color from a network image URL.
+/// Holds the primary and optional secondary accent colors extracted from an
+/// album image.
 ///
-/// Returns [AppTheme.primary] as fallback if extraction fails or the URL is
-/// null / empty.
-final dominantColorProvider = FutureProvider.family<Color, String?>((
+/// [secondary] is populated only when a second palette candidate is found
+/// that is both harmonious with [primary] and suitable for accent use (see
+/// [albumPaletteProvider] for the filtering criteria).
+class AlbumPalette {
+  final Color primary;
+  final Color? secondary;
+
+  const AlbumPalette({required this.primary, this.secondary});
+}
+
+/// Extracts up to two accent colors from a network image URL to enable
+/// gradient effects.  The [AlbumPalette.secondary] color is only set when a
+/// second palette candidate is found that:
+///   • is not near-black (lightness ≥ 0.12) or near-white (lightness ≤ 0.90),
+///   • has a minimum saturation of 0.20,
+///   • has a hue that differs from the primary by 10–75 °.
+///
+/// Both colors are contrast-adjusted for the AMOLED background before being
+/// returned.  Falls back to [AppTheme.primary] when extraction fails.
+final albumPaletteProvider = FutureProvider.family<AlbumPalette, String?>((
   ref,
   imageUrl,
 ) async {
-  if (imageUrl == null || imageUrl.isEmpty) return AppTheme.primary;
+  if (imageUrl == null || imageUrl.isEmpty) {
+    return const AlbumPalette(primary: AppTheme.primary);
+  }
 
   try {
     final imageProvider = CachedNetworkImageProvider(imageUrl);
@@ -23,17 +43,76 @@ final dominantColorProvider = FutureProvider.family<Color, String?>((
       maximumColorCount: 16,
     );
 
-    // Prefer vibrant, then dominant, then fall back to our theme primary.
-    final color =
+    // Primary: prefer vibrant → dominant → theme primary.
+    final rawPrimary =
         palette.vibrantColor?.color ??
         palette.dominantColor?.color ??
         AppTheme.primary;
+    final primary = _ensureContrast(rawPrimary);
 
-    return _ensureContrast(color);
+    // Candidate pool for the secondary color (tried in preference order).
+    final candidates = <Color?>[
+      palette.lightVibrantColor?.color,
+      palette.darkVibrantColor?.color,
+      palette.mutedColor?.color,
+      palette.lightMutedColor?.color,
+      palette.darkMutedColor?.color,
+    ];
+
+    Color? secondary;
+    for (final candidate in candidates) {
+      if (candidate == null) continue;
+      if (_isSuitableSecondary(candidate, primary)) {
+        secondary = _ensureContrast(candidate);
+        break;
+      }
+    }
+
+    return AlbumPalette(primary: primary, secondary: secondary);
   } catch (_) {
-    return AppTheme.primary;
+    return const AlbumPalette(primary: AppTheme.primary);
   }
 });
+
+/// Extracts a dominant color from a network image URL.
+///
+/// Returns [AppTheme.primary] as fallback if extraction fails or the URL is
+/// null / empty.
+final dominantColorProvider = FutureProvider.family<Color, String?>((
+  ref,
+  imageUrl,
+) async {
+  final albumPalette = await ref.watch(albumPaletteProvider(imageUrl).future);
+  return albumPalette.primary;
+});
+
+/// Returns true when [candidate] can serve as a harmonious second gradient
+/// color alongside [primary].
+///
+/// Rejects candidates that are:
+///   • near-black (lightness < 0.12) or near-white (lightness > 0.90) — these
+///     produce gradients that disappear against the AMOLED background or wash
+///     out to white,
+///   • low-saturation / grey (saturation < 0.20),
+///   • too close in hue to [primary] (< 10 °) — indistinguishable from it,
+///   • too far in hue from [primary] (> 75 °) — would look dissimilar.
+bool _isSuitableSecondary(Color candidate, Color primary) {
+  final hsl = HSLColor.fromColor(candidate);
+
+  // Reject near-black / near-white.
+  if (hsl.lightness < 0.12 || hsl.lightness > 0.90) return false;
+
+  // Reject low saturation (muddy/grey).
+  if (hsl.saturation < 0.20) return false;
+
+  // Compute circular hue distance (0–180 °).
+  final primaryHue = HSLColor.fromColor(primary).hue;
+  final diff = (hsl.hue - primaryHue).abs();
+  final circularDiff = diff > 180 ? 360 - diff : diff;
+
+  // Require 10–75 ° apart: visually distinct yet harmonious.
+  return circularDiff >= 10 && circularDiff <= 75;
+}
 
 /// Adjusts [color] so it has sufficient contrast against both the AMOLED black
 /// background and the white icons rendered on top of it.

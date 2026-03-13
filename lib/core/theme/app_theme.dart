@@ -26,12 +26,17 @@ class AppTheme {
     colors: [Color(0xFF6C63FF), Color(0xFF00D4AA)],
   );
 
-  static LinearGradient coverGlow(Color dominantColor) => LinearGradient(
+  static LinearGradient coverGlow(
+    Color dominantColor, [
+    Color? secondaryColor,
+  ]) => LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
     colors: [
       dominantColor.withValues(alpha: 0.35),
-      dominantColor.withValues(alpha: 0.08),
+      (secondaryColor ?? dominantColor).withValues(
+        alpha: secondaryColor != null ? 0.20 : 0.08,
+      ),
       background,
     ],
     stops: const [0.0, 0.5, 1.0],

@@ -60,11 +60,13 @@ class _NowPlayingPanelState extends ConsumerState<NowPlayingPanel> {
     if (track == null) return const SizedBox.shrink();
 
     final imageUrl = track.largeCoverUrl ?? track.coverUrl;
-    final dominantColorAsync = ref.watch(dominantColorProvider(imageUrl));
-    final glowColor = dominantColorAsync.maybeWhen(
-      data: (color) => color,
-      orElse: () => AppTheme.primary,
+    final paletteAsync = ref.watch(albumPaletteProvider(imageUrl));
+    final palette = paletteAsync.maybeWhen(
+      data: (p) => p,
+      orElse: () => const AlbumPalette(primary: AppTheme.primary),
     );
+    final glowColor = palette.primary;
+    final glowSecondaryColor = palette.secondary;
 
     return Container(
       color: AppTheme.surface,
@@ -98,7 +100,7 @@ class _NowPlayingPanelState extends ConsumerState<NowPlayingPanel> {
           // ── Album art ──
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: _buildAlbumArt(track, glowColor),
+            child: _buildAlbumArt(track, glowColor, glowSecondaryColor),
           ),
 
           const SizedBox(height: 20),
@@ -130,7 +132,7 @@ class _NowPlayingPanelState extends ConsumerState<NowPlayingPanel> {
 
   // ── Album art ────────────────────────────────────────────────────────
 
-  Widget _buildAlbumArt(Track track, Color glowColor) {
+  Widget _buildAlbumArt(Track track, Color primaryColor, Color? secondaryColor) {
     final imageUrl = track.largeCoverUrl ?? track.coverUrl;
 
     return AspectRatio(
@@ -140,10 +142,17 @@ class _NowPlayingPanelState extends ConsumerState<NowPlayingPanel> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: glowColor.withValues(alpha: 0.25),
+              color: primaryColor.withValues(alpha: 0.25),
               blurRadius: 30,
               spreadRadius: 2,
             ),
+            if (secondaryColor != null)
+              BoxShadow(
+                color: secondaryColor.withValues(alpha: 0.15),
+                blurRadius: 20,
+                spreadRadius: -2,
+                offset: const Offset(8, 8),
+              ),
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.4),
               blurRadius: 20,

@@ -122,10 +122,14 @@ class _AlbumDetailBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final imageUrl = album.largeCoverUrl ?? album.coverUrl;
-    final dominantColorAsync = ref.watch(dominantColorProvider(imageUrl));
-    final glowColor = dominantColorAsync.maybeWhen(
-      data: (color) => color,
+    final paletteAsync = ref.watch(albumPaletteProvider(imageUrl));
+    final glowColor = paletteAsync.maybeWhen(
+      data: (p) => p.primary,
       orElse: () => AppTheme.primary,
+    );
+    final glowSecondaryColor = paletteAsync.maybeWhen(
+      data: (p) => p.secondary,
+      orElse: () => null,
     );
 
     return CustomScrollView(
@@ -133,7 +137,11 @@ class _AlbumDetailBody extends ConsumerWidget {
       slivers: [
         // ── Album header with glow ──
         SliverToBoxAdapter(
-          child: _AlbumHeader(album: album, glowColor: glowColor),
+          child: _AlbumHeader(
+            album: album,
+            glowColor: glowColor,
+            glowSecondaryColor: glowSecondaryColor,
+          ),
         ),
 
         // ── Album info ──
@@ -235,8 +243,13 @@ class _AlbumDetailBody extends ConsumerWidget {
 class _AlbumHeader extends StatelessWidget {
   final Album album;
   final Color glowColor;
+  final Color? glowSecondaryColor;
 
-  const _AlbumHeader({required this.album, required this.glowColor});
+  const _AlbumHeader({
+    required this.album,
+    required this.glowColor,
+    this.glowSecondaryColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -248,7 +261,9 @@ class _AlbumHeader extends StatelessWidget {
         // ── Gradient glow background ──
         Container(
           height: topPadding + artSize + 100,
-          decoration: BoxDecoration(gradient: AppTheme.coverGlow(glowColor)),
+          decoration: BoxDecoration(
+            gradient: AppTheme.coverGlow(glowColor, glowSecondaryColor),
+          ),
         ),
 
         // ── Back button ──
