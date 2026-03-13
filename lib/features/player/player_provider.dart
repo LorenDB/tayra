@@ -3,6 +3,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/api/api_client.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
@@ -848,7 +849,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
       AudioCacheService(CacheManager.instance, ref.read(dioProvider));
 
   /// Play a list of tracks starting at the given index.
-  Future<void> playTracks(List<Track> tracks, {int startIndex = 0}) async {
+  Future<void> playTracks(
+    List<Track> tracks, {
+    int startIndex = 0,
+    String? source,
+  }) async {
     if (tracks.isEmpty) {
       state = const PlayerState();
       await _handler.audioPlayer.stop();
@@ -864,6 +869,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
     await _loadAndPlay(tracks[startIndex]);
     _saveQueue(); // Save queue after loading new tracks
+    Aptabase.instance.trackEvent('play_tracks', {
+      'count': tracks.length,
+      'start_index': startIndex,
+      'source': source ?? 'unknown',
+    });
   }
 
   /// Add tracks to the end of the queue.
@@ -871,18 +881,20 @@ class PlayerNotifier extends Notifier<PlayerState> {
     if (tracks.isEmpty) return;
     state = state.copyWith(queue: [...state.queue, ...tracks]);
     _saveQueue();
+    Aptabase.instance.trackEvent('add_to_queue', {'count': tracks.length});
   }
 
   /// Insert a track to play next.
   void playNext(Track track) {
     if (state.queue.isEmpty) {
-      playTracks([track]);
+      playTracks([track], source: 'play_next');
       return;
     }
     final newQueue = List<Track>.from(state.queue);
     newQueue.insert(state.currentIndex + 1, track);
     state = state.copyWith(queue: newQueue);
     _saveQueue();
+    Aptabase.instance.trackEvent('play_next');
   }
 
   /// Remove track at index from the queue.
@@ -899,6 +911,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     }
     state = state.copyWith(queue: newQueue, currentIndex: newIndex);
     _saveQueue();
+    Aptabase.instance.trackEvent('remove_from_queue');
   }
 
   Future<void> _loadAndPlay(Track track) async {
@@ -1028,6 +1041,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
     } else {
       await play();
     }
+    Aptabase.instance.trackEvent('toggle_play_pause', {
+      'action': state.isPlaying ? 'pause' : 'play',
+    });
   }
 
   Future<void> skipNext() async {
@@ -1036,6 +1052,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     state = state.copyWith(currentIndex: newIndex, isLoading: true);
     await _loadAndPlay(state.queue[newIndex]);
     _saveQueue();
+    Aptabase.instance.trackEvent('skip_next');
   }
 
   Future<void> skipPrevious() async {
@@ -1051,11 +1068,15 @@ class PlayerNotifier extends Notifier<PlayerState> {
     state = state.copyWith(currentIndex: newIndex, isLoading: true);
     await _loadAndPlay(state.queue[newIndex]);
     _saveQueue();
+    Aptabase.instance.trackEvent('skip_previous');
   }
 
   Future<void> seekTo(Duration position) async {
     await _handler.seek(position);
     _saveQueue(); // Save position
+    Aptabase.instance.trackEvent('seek', {
+      'position_seconds': position.inSeconds,
+    });
   }
 
   void toggleShuffle() {
@@ -1069,6 +1090,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
       state = state.copyWith(queue: newQueue, currentIndex: 0);
     }
     _saveQueue();
+    Aptabase.instance.trackEvent('toggle_shuffle', {
+      'enabled': state.isShuffled,
+    });
   }
 
   void toggleLoopMode() {
@@ -1084,6 +1108,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
         break;
     }
     _saveQueue();
+    Aptabase.instance.trackEvent('toggle_loop_mode', {
+      'mode': state.loopMode.name,
+    });
   }
 
   /// Jump to a specific index in the queue.
@@ -1092,5 +1119,6 @@ class PlayerNotifier extends Notifier<PlayerState> {
     state = state.copyWith(currentIndex: index, isLoading: true);
     await _loadAndPlay(state.queue[index]);
     _saveQueue();
+    Aptabase.instance.trackEvent('jump_to_queue', {'index': index});
   }
 }

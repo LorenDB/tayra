@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
 import 'package:tayra/features/auth/presentation/login_screen.dart';
 import 'package:tayra/features/home/home_screen.dart';
@@ -16,12 +17,45 @@ import 'package:tayra/features/player/now_playing_screen.dart';
 import 'package:tayra/features/player/queue_screen.dart';
 import 'package:tayra/core/widgets/app_shell.dart';
 
+class NavigationObserver extends NavigatorObserver {
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    super.didPush(route, previousRoute);
+    _logScreenView(route.settings.name);
+  }
+
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    super.didPop(route, previousRoute);
+    if (previousRoute != null) {
+      _logScreenView(previousRoute.settings.name);
+    }
+  }
+
+  @override
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
+    super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
+    _logScreenView(newRoute?.settings.name);
+  }
+
+  void _logScreenView(String? routeName) {
+    if (routeName != null && routeName.isNotEmpty) {
+      Aptabase.instance.trackEvent('screen_view', {'screen': routeName});
+    }
+  }
+}
+
+final navigationObserverProvider = Provider<NavigationObserver>((ref) {
+  return NavigationObserver();
+});
+
 final appRouterProvider = Provider<GoRouter>((ref) {
   final authChangeNotifier = ref.watch(authChangeNotifierProvider);
 
   return GoRouter(
     initialLocation: authChangeNotifier.state.isAuthenticated ? '/' : '/login',
     refreshListenable: authChangeNotifier,
+    observers: [ref.watch(navigationObserverProvider)],
     redirect: (context, state) {
       final isAuth = authChangeNotifier.state.isAuthenticated;
       final isLoginRoute = state.matchedLocation == '/login';
@@ -31,18 +65,24 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
-      GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
+      GoRoute(
+        path: '/login',
+        name: 'login',
+        builder: (context, state) => const LoginScreen(),
+      ),
       // Main shell with bottom nav
       ShellRoute(
         builder: (context, state, child) => AppShell(child: child),
         routes: [
           GoRoute(
             path: '/',
+            name: 'home',
             pageBuilder:
                 (context, state) => const NoTransitionPage(child: HomeScreen()),
             routes: [
               GoRoute(
                 path: 'album/:id',
+                name: 'album_detail',
                 builder: (context, state) {
                   final id = int.parse(state.pathParameters['id']!);
                   return AlbumDetailScreen(albumId: id);
@@ -50,6 +90,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               ),
               GoRoute(
                 path: 'artist/:id',
+                name: 'artist_detail',
                 builder: (context, state) {
                   final id = int.parse(state.pathParameters['id']!);
                   return ArtistDetailScreen(artistId: id);
@@ -57,18 +98,21 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               ),
               GoRoute(
                 path: 'settings',
+                name: 'settings',
                 builder: (context, state) => const SettingsScreen(),
               ),
             ],
           ),
           GoRoute(
             path: '/browse',
+            name: 'browse',
             pageBuilder:
                 (context, state) =>
                     const NoTransitionPage(child: BrowseScreen()),
             routes: [
               GoRoute(
                 path: 'artist/:id',
+                name: 'browse_artist_detail',
                 builder: (context, state) {
                   final id = int.parse(state.pathParameters['id']!);
                   return ArtistDetailScreen(artistId: id);
@@ -76,6 +120,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               ),
               GoRoute(
                 path: 'album/:id',
+                name: 'browse_album_detail',
                 builder: (context, state) {
                   final id = int.parse(state.pathParameters['id']!);
                   return AlbumDetailScreen(albumId: id);
@@ -85,12 +130,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/search',
+            name: 'search',
             pageBuilder:
                 (context, state) =>
                     const NoTransitionPage(child: SearchScreen()),
             routes: [
               GoRoute(
                 path: 'album/:id',
+                name: 'search_album_detail',
                 builder: (context, state) {
                   final id = int.parse(state.pathParameters['id']!);
                   return AlbumDetailScreen(albumId: id);
@@ -98,6 +145,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               ),
               GoRoute(
                 path: 'artist/:id',
+                name: 'search_artist_detail',
                 builder: (context, state) {
                   final id = int.parse(state.pathParameters['id']!);
                   return ArtistDetailScreen(artistId: id);
@@ -107,18 +155,21 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/favorites',
+            name: 'favorites',
             pageBuilder:
                 (context, state) =>
                     const NoTransitionPage(child: FavoritesScreen()),
           ),
           GoRoute(
             path: '/playlists',
+            name: 'playlists',
             pageBuilder:
                 (context, state) =>
                     const NoTransitionPage(child: PlaylistsScreen()),
             routes: [
               GoRoute(
                 path: ':id',
+                name: 'playlist_detail',
                 builder: (context, state) {
                   final id = int.parse(state.pathParameters['id']!);
                   return PlaylistDetailScreen(playlistId: id);
@@ -131,6 +182,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       // Full-screen routes (overlay the shell)
       GoRoute(
         path: '/now-playing',
+        name: 'now_playing',
         pageBuilder:
             (context, state) => CustomTransitionPage(
               child: const NowPlayingScreen(),
@@ -157,6 +209,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/queue',
+        name: 'queue',
         pageBuilder:
             (context, state) => CustomTransitionPage(
               child: const QueueScreen(),

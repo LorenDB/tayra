@@ -9,9 +9,16 @@ import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:just_audio_media_kit/just_audio_media_kit.dart';
+import 'package:aptabase_flutter/aptabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Aptabase.init(
+    "A-SH-1447414969",
+    InitOptions(host: "https://aptabase.lorendb.dev"),
+  );
+  Aptabase.instance.trackEvent("startup");
 
   // Initialize sqflite for desktop platforms
   if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
@@ -57,11 +64,36 @@ void main() async {
   );
 }
 
-class TayraApp extends ConsumerWidget {
+class TayraApp extends ConsumerStatefulWidget {
   const TayraApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<TayraApp> createState() => _TayraAppState();
+}
+
+class _TayraAppState extends ConsumerState<TayraApp>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.detached) {
+      Aptabase.instance.trackEvent('app_close');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final router = ref.watch(appRouterProvider);
 
     return MaterialApp.router(

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
 
 final dioProvider = Provider<Dio>((ref) {
@@ -9,6 +10,7 @@ final dioProvider = Provider<Dio>((ref) {
   dio.options.headers['Accept'] = 'application/json';
 
   dio.interceptors.add(AuthInterceptor(ref));
+  dio.interceptors.add(AnalyticsInterceptor());
   dio.interceptors.add(
     LogInterceptor(
       requestBody: false,
@@ -55,6 +57,36 @@ class AuthInterceptor extends Interceptor {
       }
     }
     handler.next(err);
+  }
+}
+
+class AnalyticsInterceptor extends Interceptor {
+  @override
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    Aptabase.instance.trackEvent('api_call', {
+      'method': response.requestOptions.method,
+      'status': response.statusCode,
+      'endpoint': _extractEndpoint(response.requestOptions.path),
+    });
+    handler.next(response);
+  }
+
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) {
+    Aptabase.instance.trackEvent('api_error', {
+      'method': err.requestOptions.method,
+      'status': err.response?.statusCode,
+      'endpoint': _extractEndpoint(err.requestOptions.path),
+      'error_type': err.type.name,
+      'error_message': err.message,
+    });
+    handler.next(err);
+  }
+
+  String _extractEndpoint(String path) {
+    // Extract endpoint without query params or IDs for privacy
+    final uri = Uri.parse(path);
+    return uri.pathSegments.take(2).join('/'); // e.g., 'api/v1/albums'
   }
 }
 
