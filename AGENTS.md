@@ -256,6 +256,14 @@ Place reusable widgets in `core/widgets/`:
 - **Audio:** just_audio ^0.9.42, audio_service ^0.18.15
 - **Storage:** flutter_secure_storage ^9.2.3, shared_preferences ^2.3.4
 - **UI:** cached_network_image ^3.4.1, shimmer ^3.0.0, palette_generator ^0.3.3+4
+- **Analytics:** Aptabase (for basic usage statistics, no user-identifying information logged)
+
+## Analytics
+
+This project uses Aptabase for analytics and event tracking. When implementing features or making changes that involve user interactions:
+- Only log basic statistics on what parts of the app are being used
+- Do NOT log potentially user-identifying information
+- Focus on aggregated usage data to improve the app
 
 ## Android Configuration Notes
 
