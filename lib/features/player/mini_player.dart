@@ -19,7 +19,10 @@ class MiniPlayer extends ConsumerWidget {
 
     final imageUrl = track.coverUrl;
     final dominantColorAsync = ref.watch(dominantColorProvider(imageUrl));
-    final accentColor = dominantColorAsync.valueOrNull ?? AppTheme.primary;
+    final accentColor = dominantColorAsync.maybeWhen(
+      data: (color) => color,
+      orElse: () => AppTheme.primary,
+    );
 
     return GestureDetector(
       onTap: () => context.push('/now-playing'),

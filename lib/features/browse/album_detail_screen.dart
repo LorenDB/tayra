@@ -84,7 +84,10 @@ class _AlbumDetailBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final imageUrl = album.largeCoverUrl ?? album.coverUrl;
     final dominantColorAsync = ref.watch(dominantColorProvider(imageUrl));
-    final glowColor = dominantColorAsync.valueOrNull ?? AppTheme.primary;
+    final glowColor = dominantColorAsync.maybeWhen(
+      data: (color) => color,
+      orElse: () => AppTheme.primary,
+    );
 
     return CustomScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
@@ -367,7 +370,10 @@ class _ActionButtons extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tracks = tracksAsync.valueOrNull ?? [];
+    final tracks = tracksAsync.maybeWhen(
+      data: (tracks) => tracks,
+      orElse: () => <Track>[],
+    );
     final hasTracks = tracks.isNotEmpty;
 
     return Padding(
