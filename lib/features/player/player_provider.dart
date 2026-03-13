@@ -696,6 +696,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
   late final FunkwhaleAudioHandler _handler;
   final List<StreamSubscription> _subscriptions = [];
 
+  /// Position to seek to the first time play() is called after a queue
+  /// restore.  Set by [_restoreQueue] and cleared once the seek is done.
+  Duration? _pendingRestorePosition;
+
   @override
   PlayerState build() {
     _handler = ref.read(audioHandlerProvider);
@@ -790,17 +794,19 @@ class PlayerNotifier extends Notifier<PlayerState> {
         loopMode: _parseLoopMode(savedState.loopMode),
       );
 
-      // Try to restore the track and position
-      if (validIndex < savedState.queue.length) {
-        try {
-          await _loadTrackOnly(savedState.queue[validIndex]);
-          if (savedState.position.inSeconds > 0) {
-            await _handler.audioPlayer.seek(savedState.position);
-          }
-        } catch (e) {
-          // Failed to load track - queue is still valid, just reset to start
-          state = state.copyWith(position: Duration.zero);
-        }
+      // Restore the saved playback position so it can be seeked to once the
+      // user taps play.  We intentionally do NOT call setAudioSource here
+      // because just_audio will buffer a network stream indefinitely when
+      // no play() follows, causing the UI to spin forever.
+      //
+      // _pendingRestorePosition being non-null is the signal that the audio
+      // source has not been loaded yet.  We always set it (even to zero) so
+      // that play() knows it must call _loadAndPlay first.
+      _pendingRestorePosition = savedState.position;
+      if (savedState.position.inSeconds > 0) {
+        // Reflect the position in the UI immediately so the scrubber shows
+        // where the user left off before they press play.
+        state = state.copyWith(position: savedState.position);
       }
     } catch (e) {
       // Failed to restore - clear corrupted state
@@ -862,6 +868,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       return;
     }
 
+    _pendingRestorePosition = null;
     state = state.copyWith(
       queue: tracks,
       currentIndex: startIndex,
@@ -917,11 +924,6 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
   Future<void> _loadAndPlay(Track track) async {
     await _loadTrack(track, autoPlay: true);
-  }
-
-  /// Load a track without playing (for queue restoration).
-  Future<void> _loadTrackOnly(Track track) async {
-    await _loadTrack(track, autoPlay: false);
   }
 
   Future<void> _loadTrack(Track track, {required bool autoPlay}) async {
@@ -1036,7 +1038,26 @@ class PlayerNotifier extends Notifier<PlayerState> {
     }
   }
 
-  Future<void> play() => _handler.play();
+  Future<void> play() async {
+    // If the queue was just restored from storage, no audio source has been
+    // loaded yet.  Load and play the current track, then seek to where the
+    // user left off.
+    if (_pendingRestorePosition != null) {
+      final seekTo = _pendingRestorePosition!;
+      _pendingRestorePosition = null;
+      final track = state.currentTrack;
+      if (track != null) {
+        state = state.copyWith(isLoading: true);
+        await _loadAndPlay(track);
+        if (seekTo > Duration.zero) {
+          await _handler.audioPlayer.seek(seekTo);
+        }
+        return;
+      }
+    }
+    await _handler.play();
+  }
+
   Future<void> pause() => _handler.pause();
 
   Future<void> togglePlayPause() async {
@@ -1052,6 +1073,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
   Future<void> skipNext() async {
     if (!state.hasNext) return;
+    _pendingRestorePosition = null;
     final newIndex = state.currentIndex + 1;
     state = state.copyWith(currentIndex: newIndex, isLoading: true);
     await _loadAndPlay(state.queue[newIndex]);
@@ -1069,6 +1091,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       return;
     }
     final newIndex = state.currentIndex - 1;
+    _pendingRestorePosition = null;
     state = state.copyWith(currentIndex: newIndex, isLoading: true);
     await _loadAndPlay(state.queue[newIndex]);
     _saveQueue();
@@ -1120,6 +1143,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// Jump to a specific index in the queue.
   Future<void> jumpTo(int index) async {
     if (index < 0 || index >= state.queue.length) return;
+    _pendingRestorePosition = null;
     state = state.copyWith(currentIndex: index, isLoading: true);
     await _loadAndPlay(state.queue[index]);
     _saveQueue();
