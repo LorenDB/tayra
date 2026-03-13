@@ -98,7 +98,20 @@ class _AlbumDetailBody extends ConsumerWidget {
         ),
 
         // ── Album info ──
-        SliverToBoxAdapter(child: _AlbumInfo(album: album)),
+        SliverToBoxAdapter(
+          child: tracksAsync.when(
+            data:
+                (tracks) => _AlbumInfo(
+                  album: album,
+                  totalDuration: tracks.fold<int>(
+                    0,
+                    (sum, track) => sum + (track.duration ?? 0),
+                  ),
+                ),
+            loading: () => _AlbumInfo(album: album),
+            error: (_, __) => _AlbumInfo(album: album),
+          ),
+        ),
 
         // ── Action buttons ──
         SliverToBoxAdapter(
@@ -242,11 +255,11 @@ class _AlbumHeader extends StatelessWidget {
 
 class _AlbumInfo extends StatelessWidget {
   final Album album;
+  final int? totalDuration;
 
-  const _AlbumInfo({required this.album});
+  const _AlbumInfo({required this.album, this.totalDuration});
 
-  String _formatDuration(int? totalSeconds) {
-    if (totalSeconds == null || totalSeconds == 0) return '';
+  String _formatDuration(int totalSeconds) {
     final hours = totalSeconds ~/ 3600;
     final minutes = (totalSeconds % 3600) ~/ 60;
     if (hours > 0) {
@@ -257,6 +270,13 @@ class _AlbumInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final displayDuration =
+        (album.duration != null && album.duration! > 0)
+            ? album.formattedDuration
+            : (totalDuration != null && totalDuration! > 0)
+            ? _formatDuration(totalDuration!)
+            : null;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
@@ -316,10 +336,10 @@ class _AlbumInfo extends StatelessWidget {
                   fontSize: 13,
                 ),
               ),
-              if (album.duration != null && album.duration! > 0) ...[
+              if (displayDuration != null) ...[
                 const _DotSeparator(),
                 Text(
-                  _formatDuration(album.duration),
+                  displayDuration,
                   style: const TextStyle(
                     color: AppTheme.onBackgroundMuted,
                     fontSize: 13,

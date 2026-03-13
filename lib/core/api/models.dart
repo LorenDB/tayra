@@ -233,6 +233,17 @@ class Album {
     if (releaseDate == null) return '';
     return releaseDate!.split('-').first;
   }
+
+  /// Formatted duration (e.g. "45 min" or "1h 12m")
+  String get formattedDuration {
+    if (duration == null || duration == 0) return '';
+    final hours = duration! ~/ 3600;
+    final minutes = (duration! % 3600) ~/ 60;
+    if (hours > 0) {
+      return '${hours}h ${minutes}m';
+    }
+    return '$minutes min';
+  }
 }
 
 // ── Track ───────────────────────────────────────────────────────────────
@@ -437,6 +448,17 @@ class Playlist {
               ? DateTime.tryParse(json['modification_date'] as String)
               : null,
     );
+  }
+
+  /// Formatted duration (e.g. "45 min" or "1h 12m")
+  String get formattedDuration {
+    if (duration == null || duration == 0) return '';
+    final hours = duration! ~/ 3600;
+    final minutes = (duration! % 3600) ~/ 60;
+    if (hours > 0) {
+      return '${hours}h ${minutes}m';
+    }
+    return '$minutes min';
   }
 }
 

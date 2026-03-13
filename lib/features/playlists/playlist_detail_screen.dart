@@ -313,13 +313,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
       '${playlist.tracksCount} ${playlist.tracksCount == 1 ? 'track' : 'tracks'}',
     );
     if (playlist.duration != null && playlist.duration! > 0) {
-      final hours = playlist.duration! ~/ 3600;
-      final minutes = (playlist.duration! % 3600) ~/ 60;
-      if (hours > 0) {
-        parts.add('${hours}h ${minutes}m');
-      } else {
-        parts.add('$minutes min');
-      }
+      parts.add(playlist.formattedDuration);
     }
     return parts.join(' · ');
   }
