@@ -29,18 +29,80 @@ final dominantColorProvider = FutureProvider.family<Color, String?>((
         palette.dominantColor?.color ??
         AppTheme.primary;
 
-    // Ensure the color isn't too dark (would be invisible on AMOLED black)
-    // or too desaturated. If it is, boost saturation and lightness slightly.
-    final hsl = HSLColor.fromColor(color);
-    if (hsl.lightness < 0.25 || hsl.saturation < 0.2) {
-      return hsl
-          .withSaturation((hsl.saturation + 0.3).clamp(0.0, 1.0))
-          .withLightness((hsl.lightness + 0.15).clamp(0.0, 0.6))
-          .toColor();
-    }
-
-    return color;
+    return _ensureContrast(color);
   } catch (_) {
     return AppTheme.primary;
   }
 });
+
+/// Adjusts [color] so it has sufficient contrast against both the AMOLED black
+/// background and the white icons rendered on top of it.
+///
+/// Strategy:
+///   1. Enforce a minimum saturation so the color is never muddy.
+///   2. Clamp lightness so the color always has a WCAG contrast ratio ≥ 3.0:1
+///      against white (icon color) — this caps how bright it can get.
+///   3. Raise lightness until the contrast ratio against pure black also
+///      reaches 3.0:1, staying within the white-contrast ceiling.
+///      If both constraints cannot be satisfied simultaneously (extremely
+///      narrow hue), fall back to [AppTheme.primary].
+Color _ensureContrast(Color color) {
+  const double minContrastRatio = 3.0;
+  const double minSaturation = 0.35;
+  const double lightnessStep = 0.02;
+
+  var hsl = HSLColor.fromColor(color);
+
+  // 1. Boost saturation if too grey.
+  if (hsl.saturation < minSaturation) {
+    hsl = hsl.withSaturation(minSaturation);
+  }
+
+  // 2. Find the maximum lightness that still gives 3:1 contrast against white.
+  //    White has luminance 1.0, so contrast = 1.05 / (l + 0.05) >= 3.0
+  //    → l <= (1.05 / 3.0) - 0.05 ≈ 0.30.
+  const double maxLightnessForWhiteContrast = 1.05 / minContrastRatio - 0.05;
+
+  if (hsl.lightness > maxLightnessForWhiteContrast) {
+    hsl = hsl.withLightness(maxLightnessForWhiteContrast);
+  }
+
+  // 3. Raise lightness until contrast against black is acceptable, staying
+  //    within the ceiling established above.
+  while (_contrastOnBlack(hsl.toColor()) < minContrastRatio &&
+      hsl.lightness < maxLightnessForWhiteContrast) {
+    hsl = hsl.withLightness(
+      (hsl.lightness + lightnessStep).clamp(0.0, maxLightnessForWhiteContrast),
+    );
+  }
+
+  // If after all adjustments neither constraint is satisfiable (the two
+  // contrast windows don't overlap for this hue), use the theme primary.
+  if (_contrastOnBlack(hsl.toColor()) < minContrastRatio) {
+    return AppTheme.primary;
+  }
+
+  return hsl.toColor();
+}
+
+/// Returns the WCAG contrast ratio of [color] against pure black.
+double _contrastOnBlack(Color color) {
+  // Relative luminance of the color (black has luminance 0).
+  final l = _relativeLuminance(color);
+  // contrast = (lighter + 0.05) / (darker + 0.05); black is always darker.
+  return (l + 0.05) / 0.05;
+}
+
+/// WCAG 2.1 relative luminance for an sRGB color.
+double _relativeLuminance(Color color) {
+  double linearize(double v) {
+    return v <= 0.03928
+        ? v / 12.92
+        : ((v + 0.055) / 1.055) * ((v + 0.055) / 1.055);
+  }
+
+  final r = linearize(color.r);
+  final g = linearize(color.g);
+  final b = linearize(color.b);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
