@@ -21,12 +21,28 @@ final _albumTracksProvider = FutureProvider.family<List<Track>, int>((
   albumId,
 ) async {
   final api = ref.watch(cachedFunkwhaleApiProvider);
-  final response = await api.getTracks(
-    album: albumId,
-    ordering: 'position',
-    pageSize: 100,
-  );
-  return response.results;
+  final allTracks = <Track>[];
+  int page = 1;
+  while (true) {
+    final response = await api.getTracks(
+      album: albumId,
+      ordering: 'position',
+      pageSize: 100,
+      page: page,
+    );
+    allTracks.addAll(response.results);
+    if (response.next == null) break;
+    page++;
+  }
+  allTracks.sort((a, b) {
+    final discA = a.discNumber ?? 1;
+    final discB = b.discNumber ?? 1;
+    if (discA != discB) return discA.compareTo(discB);
+    final posA = a.position ?? 0;
+    final posB = b.position ?? 0;
+    return posA.compareTo(posB);
+  });
+  return allTracks;
 });
 
 // ── Screen ──────────────────────────────────────────────────────────────

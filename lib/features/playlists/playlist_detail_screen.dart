@@ -36,18 +36,42 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
 
     try {
       final api = ref.read(cachedFunkwhaleApiProvider);
-      final results = await Future.wait([
-        api.getPlaylist(widget.playlistId),
-        api.getPlaylistTracks(widget.playlistId),
-      ]);
+
+      // Fetch playlist metadata and first page of tracks in parallel.
+      final firstPageFuture = api.getPlaylistTracks(
+        widget.playlistId,
+        pageSize: 100,
+      );
+      final playlistFuture = api.getPlaylist(widget.playlistId);
+      final results = await Future.wait([playlistFuture, firstPageFuture]);
+
+      final playlist = results[0] as Playlist;
+      final firstPage = results[1] as PaginatedResponse<PlaylistTrack>;
+
+      // Collect all tracks, fetching additional pages if needed.
+      final allTracks = <PlaylistTrack>[...firstPage.results];
+      if (firstPage.next != null) {
+        int page = 2;
+        while (true) {
+          final nextPage = await api.getPlaylistTracks(
+            widget.playlistId,
+            page: page,
+            pageSize: 100,
+          );
+          allTracks.addAll(nextPage.results);
+          if (nextPage.next == null) break;
+          page++;
+        }
+      }
+
+      // Sort by playlist index so tracks appear in the correct order.
+      allTracks.sort((a, b) => (a.index ?? 0).compareTo(b.index ?? 0));
 
       if (!mounted) return;
 
       setState(() {
-        _playlist = results[0] as Playlist;
-        final tracksResponse = results[1] as dynamic;
-        _playlistTracks =
-            (tracksResponse.results as List<dynamic>).cast<PlaylistTrack>();
+        _playlist = playlist;
+        _playlistTracks = allTracks;
         _isLoading = false;
       });
     } catch (e) {
