@@ -69,10 +69,27 @@ class HomeScreen extends ConsumerWidget {
             ),
 
             // Greeting header with subtle gradient background
-            SliverToBoxAdapter(child: _GreetingHeader()),
+            // Desktop: greeting in left column, banner in right column
+            if (isWide)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(child: _GreetingHeader()),
+                      const SizedBox(width: 24),
+                      Expanded(child: _YearReviewBannerPadded(isWide: isWide)),
+                    ],
+                  ),
+                ),
+              )
+            else
+              SliverToBoxAdapter(child: _GreetingHeader()),
 
             // Year in Review seasonal banner (Dec 15–31 or when force-shown)
-            SliverToBoxAdapter(child: _YearReviewBanner()),
+            // Mobile only - desktop shows it in the header row above
+            if (!isWide) const SliverToBoxAdapter(child: _YearReviewBanner()),
 
             // ── Desktop: album grids side by side ──
             if (isWide) ...[
@@ -595,7 +612,9 @@ class _TrackListSection extends ConsumerWidget {
 // ── Year Review Banner ───────────────────────────────────────────────
 
 class _YearReviewBanner extends ConsumerStatefulWidget {
-  const _YearReviewBanner();
+  const _YearReviewBanner({this.horizontalPadding = 16});
+
+  final double horizontalPadding;
 
   @override
   ConsumerState<_YearReviewBanner> createState() => _YearReviewBannerState();
@@ -649,7 +668,12 @@ class _YearReviewBannerState extends ConsumerState<_YearReviewBanner>
     if (!visible) return const SizedBox.shrink();
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+      padding: EdgeInsets.fromLTRB(
+        widget.horizontalPadding,
+        12,
+        widget.horizontalPadding,
+        4,
+      ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
         child: CustomPaint(
@@ -665,11 +689,14 @@ class _YearReviewBannerState extends ConsumerState<_YearReviewBanner>
           // Fallback background when shader isn't ready yet
           child: DecoratedBox(
             decoration: BoxDecoration(
-              gradient: _shader != null ? null : LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [_colorA, _colorB], // use darkened colors
-              ),
+              gradient:
+                  _shader != null
+                      ? null
+                      : LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [_colorA, _colorB], // use darkened colors
+                      ),
             ),
             child: Material(
               color: Colors.transparent,
@@ -761,6 +788,19 @@ class _YearReviewBannerState extends ConsumerState<_YearReviewBanner>
         ),
       ),
     );
+  }
+}
+
+// ── Year Review Banner Padded Wrapper ───────────────────────────────────
+
+class _YearReviewBannerPadded extends StatelessWidget {
+  const _YearReviewBannerPadded({required this.isWide});
+
+  final bool isWide;
+
+  @override
+  Widget build(BuildContext context) {
+    return _YearReviewBanner(horizontalPadding: isWide ? 0 : 16);
   }
 }
 
