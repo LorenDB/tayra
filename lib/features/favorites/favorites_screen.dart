@@ -118,6 +118,40 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
         .playTracks(tracks, startIndex: index, source: 'favorites_from_track');
   }
 
+  String _buildStatsText() {
+    if (_favorites.isEmpty) return '0 tracks';
+
+    final count = _favorites.length;
+    int totalDuration = 0;
+    bool hasMissingDuration = false;
+
+    for (final fav in _favorites) {
+      final d = fav.track.duration;
+      if (d != null) {
+        totalDuration += d;
+      } else {
+        hasMissingDuration = true;
+      }
+    }
+
+    final parts = <String>[];
+    parts.add('$count ${count == 1 ? 'track' : 'tracks'}');
+
+    if (totalDuration > 0) {
+      final hours = totalDuration ~/ 3600;
+      final minutes = (totalDuration % 3600) ~/ 60;
+      String durationStr;
+      if (hours > 0) {
+        durationStr = '${hours}h ${minutes}m';
+      } else {
+        durationStr = '$minutes min';
+      }
+      parts.add(hasMissingDuration ? '~ $durationStr' : durationStr);
+    }
+
+    return parts.join(' · ');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -220,7 +254,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
               child: Row(
                 children: [
                   Text(
-                    '${_favorites.length} tracks',
+                    _buildStatsText(),
                     style: const TextStyle(
                       color: AppTheme.onBackgroundMuted,
                       fontSize: 13,
