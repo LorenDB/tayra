@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
@@ -58,6 +59,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       _isLoading = true;
       _error = null;
     });
+
+    Aptabase.instance.trackEvent('search', {'query_length': query.length});
 
     try {
       final api = ref.read(cachedFunkwhaleApiProvider);
@@ -355,7 +358,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             onTap: () {
               ref
                   .read(playerProvider.notifier)
-                  .playTracks(tracks, startIndex: index);
+                  .playTracks(
+                    tracks,
+                    startIndex: index,
+                    source: 'search_results_from_track',
+                  );
             },
           );
         }),

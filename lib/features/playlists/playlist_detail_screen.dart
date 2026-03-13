@@ -63,17 +63,27 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
 
   void _playAll() {
     if (_tracks.isEmpty) return;
-    ref.read(playerProvider.notifier).playTracks(_tracks);
+    ref
+        .read(playerProvider.notifier)
+        .playTracks(_tracks, source: 'playlist_detail_play_all');
   }
 
   void _shuffleAll() {
     if (_tracks.isEmpty) return;
     final shuffled = List<Track>.from(_tracks)..shuffle();
-    ref.read(playerProvider.notifier).playTracks(shuffled);
+    ref
+        .read(playerProvider.notifier)
+        .playTracks(shuffled, source: 'playlist_detail_shuffle');
   }
 
   void _playFromIndex(int index) {
-    ref.read(playerProvider.notifier).playTracks(_tracks, startIndex: index);
+    ref
+        .read(playerProvider.notifier)
+        .playTracks(
+          _tracks,
+          startIndex: index,
+          source: 'playlist_detail_from_track',
+        );
   }
 
   @override

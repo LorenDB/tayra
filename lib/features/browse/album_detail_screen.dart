@@ -158,7 +158,11 @@ class _AlbumDetailBody extends ConsumerWidget {
                   onTap: () {
                     ref
                         .read(playerProvider.notifier)
-                        .playTracks(tracks, startIndex: index);
+                        .playTracks(
+                          tracks,
+                          startIndex: index,
+                          source: 'album_detail_from_track',
+                        );
                   },
                 );
               }, childCount: tracks.length),
@@ -388,7 +392,12 @@ class _ActionButtons extends ConsumerWidget {
                 onPressed:
                     hasTracks
                         ? () {
-                          ref.read(playerProvider.notifier).playTracks(tracks);
+                          ref
+                              .read(playerProvider.notifier)
+                              .playTracks(
+                                tracks,
+                                source: 'album_detail_play_all',
+                              );
                         }
                         : null,
                 icon: const Icon(Icons.play_arrow_rounded, size: 22),
@@ -424,7 +433,10 @@ class _ActionButtons extends ConsumerWidget {
                           final shuffled = List<Track>.from(tracks)..shuffle();
                           ref
                               .read(playerProvider.notifier)
-                              .playTracks(shuffled);
+                              .playTracks(
+                                shuffled,
+                                source: 'album_detail_shuffle',
+                              );
                         }
                         : null,
                 icon: const Icon(Icons.shuffle_rounded, size: 20),

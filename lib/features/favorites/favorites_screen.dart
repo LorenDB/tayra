@@ -106,12 +106,16 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
     if (_favorites.isEmpty) return;
     final tracks = _favorites.map((f) => f.track).toList();
     final shuffled = List<Track>.from(tracks)..shuffle();
-    ref.read(playerProvider.notifier).playTracks(shuffled);
+    ref
+        .read(playerProvider.notifier)
+        .playTracks(shuffled, source: 'favorites_shuffle');
   }
 
   void _playFromIndex(int index) {
     final tracks = _favorites.map((f) => f.track).toList();
-    ref.read(playerProvider.notifier).playTracks(tracks, startIndex: index);
+    ref
+        .read(playerProvider.notifier)
+        .playTracks(tracks, startIndex: index, source: 'favorites_from_track');
   }
 
   @override

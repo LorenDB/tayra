@@ -572,7 +572,11 @@ class _TrackListSection extends ConsumerWidget {
               onTap:
                   () => ref
                       .read(playerProvider.notifier)
-                      .playTracks(tracks, startIndex: index),
+                      .playTracks(
+                        tracks,
+                        startIndex: index,
+                        source: 'recent_tracks',
+                      ),
             );
           }, childCount: tracks.length),
         );
