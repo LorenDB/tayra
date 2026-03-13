@@ -1,0 +1,11 @@
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "tayra.jpg"
+  
+  # Adaptive icon configuration for Android
+  adaptive_icon_background: "#000000"
+  adaptive_icon_foreground: "tayra.jpg"
+  
+  # Min SDK version (already set to 21+ in your project)
+  min_sdk_android: 21
