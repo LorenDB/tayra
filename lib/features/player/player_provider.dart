@@ -685,21 +685,25 @@ Future<FunkwhaleAudioHandler> initAudioHandler() async {
 
 // ── Player notifier ─────────────────────────────────────────────────────
 
-final playerProvider = StateNotifierProvider<PlayerNotifier, PlayerState>((
-  ref,
-) {
-  return PlayerNotifier(ref);
-});
+final playerProvider = NotifierProvider<PlayerNotifier, PlayerState>(
+  PlayerNotifier.new,
+);
 
-class PlayerNotifier extends StateNotifier<PlayerState> {
-  final Ref _ref;
+class PlayerNotifier extends Notifier<PlayerState> {
   late final FunkwhaleAudioHandler _handler;
   final List<StreamSubscription> _subscriptions = [];
 
-  PlayerNotifier(this._ref) : super(const PlayerState()) {
-    _handler = _ref.read(audioHandlerProvider);
+  @override
+  PlayerState build() {
+    _handler = ref.read(audioHandlerProvider);
     _init();
-    _restoreQueue();
+    Future.microtask(() => _restoreQueue());
+    ref.onDispose(() {
+      for (final sub in _subscriptions) {
+        sub.cancel();
+      }
+    });
+    return const PlayerState();
   }
 
   AudioPlayer get audioPlayer => _handler.audioPlayer;
@@ -731,25 +735,21 @@ class PlayerNotifier extends StateNotifier<PlayerState> {
     // Listen to playback state.
     _subscriptions.add(
       _handler.audioPlayer.playingStream.listen((isPlaying) {
-        if (mounted) {
-          state = state.copyWith(isPlaying: isPlaying);
-        }
+        state = state.copyWith(isPlaying: isPlaying);
       }),
     );
 
     // Listen to position.
     _subscriptions.add(
       _handler.audioPlayer.positionStream.listen((position) {
-        if (mounted) {
-          state = state.copyWith(position: position);
-        }
+        state = state.copyWith(position: position);
       }),
     );
 
     // Listen to duration.
     _subscriptions.add(
       _handler.audioPlayer.durationStream.listen((duration) {
-        if (mounted && duration != null) {
+        if (duration != null) {
           state = state.copyWith(duration: duration);
         }
       }),
@@ -758,7 +758,6 @@ class PlayerNotifier extends StateNotifier<PlayerState> {
     // Listen to player state for loading.
     _subscriptions.add(
       _handler.audioPlayer.playerStateStream.listen((playerState) {
-        if (!mounted) return;
         state = state.copyWith(
           isLoading:
               playerState.processingState == ProcessingState.loading ||
@@ -842,10 +841,10 @@ class PlayerNotifier extends StateNotifier<PlayerState> {
     }
   }
 
-  CachedFunkwhaleApi get _api => _ref.read(cachedFunkwhaleApiProvider);
+  CachedFunkwhaleApi get _api => ref.read(cachedFunkwhaleApiProvider);
 
   AudioCacheService get _audioCache =>
-      AudioCacheService(CacheManager.instance, _ref.read(dioProvider));
+      AudioCacheService(CacheManager.instance, ref.read(dioProvider));
 
   /// Play a list of tracks starting at the given index.
   Future<void> playTracks(List<Track> tracks, {int startIndex = 0}) async {
@@ -1081,13 +1080,5 @@ class PlayerNotifier extends StateNotifier<PlayerState> {
     state = state.copyWith(currentIndex: index, isLoading: true);
     await _loadAndPlay(state.queue[index]);
     _saveQueue();
-  }
-
-  @override
-  void dispose() {
-    for (final sub in _subscriptions) {
-      sub.cancel();
-    }
-    super.dispose();
   }
 }

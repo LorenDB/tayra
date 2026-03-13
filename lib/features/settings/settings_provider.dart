@@ -27,18 +27,18 @@ class SettingsState {
 
 // ── Settings notifier ───────────────────────────────────────────────────
 
-final settingsProvider = StateNotifierProvider<SettingsNotifier, SettingsState>(
-  (ref) {
-    return SettingsNotifier();
-  },
+final settingsProvider = NotifierProvider<SettingsNotifier, SettingsState>(
+  SettingsNotifier.new,
 );
 
-class SettingsNotifier extends StateNotifier<SettingsState> {
+class SettingsNotifier extends Notifier<SettingsState> {
   static const _keyBrowseMode = 'browse_mode';
   static const _keyCacheSizeLimit = 'cache_max_size_mb';
 
-  SettingsNotifier() : super(const SettingsState()) {
-    _load();
+  @override
+  SettingsState build() {
+    Future.microtask(() => _load());
+    return const SettingsState();
   }
 
   Future<void> _load() async {

@@ -5,23 +5,23 @@ import 'package:tayra/core/api/cached_api_repository.dart';
 // ── Favorites state provider ────────────────────────────────────────────
 
 final favoriteTrackIdsProvider =
-    StateNotifierProvider<FavoriteTrackIdsNotifier, Set<int>>((ref) {
-      return FavoriteTrackIdsNotifier(ref);
-    });
+    NotifierProvider<FavoriteTrackIdsNotifier, Set<int>>(
+      FavoriteTrackIdsNotifier.new,
+    );
 
-class FavoriteTrackIdsNotifier extends StateNotifier<Set<int>> {
-  final Ref _ref;
-
-  FavoriteTrackIdsNotifier(this._ref) : super({}) {
-    _load();
+class FavoriteTrackIdsNotifier extends Notifier<Set<int>> {
+  @override
+  Set<int> build() {
+    Future.microtask(() => _load());
+    return {};
   }
 
-  CachedFunkwhaleApi get _api => _ref.read(cachedFunkwhaleApiProvider);
+  CachedFunkwhaleApi get _api => ref.read(cachedFunkwhaleApiProvider);
 
   Future<void> _load() async {
     try {
       final ids = await _api.getAllFavoriteTrackIds();
-      if (mounted) state = ids;
+      state = ids;
     } catch (_) {}
   }
 

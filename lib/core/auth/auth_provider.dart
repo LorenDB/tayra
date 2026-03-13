@@ -90,15 +90,15 @@ final authChangeNotifierProvider = Provider<AuthChangeNotifier>((ref) {
 
 // ── Auth notifier ───────────────────────────────────────────────────────
 
-final authStateProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
-  return AuthNotifier(ref);
-});
+final authStateProvider = NotifierProvider<AuthNotifier, AuthState>(
+  AuthNotifier.new,
+);
 
-class AuthNotifier extends StateNotifier<AuthState> {
-  final Ref _ref;
-
-  AuthNotifier(this._ref) : super(const AuthState()) {
-    _loadSavedAuth();
+class AuthNotifier extends Notifier<AuthState> {
+  @override
+  AuthState build() {
+    Future.microtask(() => _loadSavedAuth());
+    return const AuthState();
   }
 
   static const _keyServerUrl = 'server_url';
@@ -110,7 +110,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   static const _redirectUri = 'urn:ietf:wg:oauth:2.0:oob';
   static const _scopes = 'read write';
 
-  FlutterSecureStorage get _storage => _ref.read(secureStorageProvider);
+  FlutterSecureStorage get _storage => ref.read(secureStorageProvider);
 
   Future<void> _loadSavedAuth() async {
     try {

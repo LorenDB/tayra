@@ -88,7 +88,10 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
     // Extract dominant color from the current track's cover art.
     final imageUrl = track?.largeCoverUrl ?? track?.coverUrl;
     final dominantColorAsync = ref.watch(dominantColorProvider(imageUrl));
-    final glowColor = dominantColorAsync.valueOrNull ?? AppTheme.primary;
+    final glowColor = dominantColorAsync.maybeWhen(
+      data: (color) => color,
+      orElse: () => AppTheme.primary,
+    );
 
     return Scaffold(
       backgroundColor: AppTheme.background,
