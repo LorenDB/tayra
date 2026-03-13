@@ -169,6 +169,7 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
                   index == currentIndex + 1 && currentIndex >= 0;
 
               return Column(
+                key: ValueKey('queue_section_$index'),
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (showUpNextHeader)
@@ -196,33 +197,22 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
                         ],
                       ),
                     ),
-                  Dismissible(
-                    key: ValueKey('queue_${index}_${track.id}'),
-                    direction:
-                        index == currentIndex
-                            ? DismissDirection.none
-                            : DismissDirection.endToStart,
-                    background: Container(
-                      alignment: Alignment.centerRight,
-                      padding: const EdgeInsets.only(right: 24),
-                      color: AppTheme.error.withValues(alpha: 0.2),
-                      child: const Icon(
-                        Icons.delete_outline_rounded,
-                        color: AppTheme.error,
-                        size: 22,
-                      ),
-                    ),
-                    onDismissed: (_) {
+                  _DraggableQueueItem(
+                    track: track,
+                    index: index,
+                    isCurrentTrack: isCurrentTrack,
+                    queueLength: queue.length,
+                    onTap: () {
+                      ref.read(playerProvider.notifier).jumpTo(index);
+                    },
+                    onDismissed: () {
                       ref.read(playerProvider.notifier).removeFromQueue(index);
                     },
-                    child: _QueueTrackRow(
-                      track: track,
-                      index: index,
-                      isCurrentTrack: isCurrentTrack,
-                      onTap: () {
-                        ref.read(playerProvider.notifier).jumpTo(index);
-                      },
-                    ),
+                    onReorder: (oldIndex, newIndex) {
+                      ref
+                          .read(playerProvider.notifier)
+                          .reorderQueue(oldIndex, newIndex);
+                    },
                   ),
                 ],
               );
@@ -288,12 +278,16 @@ class _QueueTrackRow extends StatelessWidget {
   final int index;
   final bool isCurrentTrack;
   final VoidCallback onTap;
+  final bool showDragHandle;
+  final bool isDragging;
 
   const _QueueTrackRow({
     required this.track,
     required this.index,
     required this.isCurrentTrack,
     required this.onTap,
+    this.showDragHandle = false,
+    this.isDragging = false,
   });
 
   @override
@@ -380,14 +374,17 @@ class _QueueTrackRow extends StatelessWidget {
                     ),
                   ),
                 ),
-              // Drag handle hint (visual only)
-              if (!isCurrentTrack)
-                const Padding(
-                  padding: EdgeInsets.only(left: 8),
-                  child: Icon(
-                    Icons.drag_handle_rounded,
-                    color: AppTheme.onBackgroundSubtle,
-                    size: 18,
+              if (showDragHandle)
+                AnimatedOpacity(
+                  opacity: isDragging ? 0.5 : 1.0,
+                  duration: const Duration(milliseconds: 150),
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: 8),
+                    child: Icon(
+                      Icons.drag_handle_rounded,
+                      color: AppTheme.onBackgroundSubtle,
+                      size: 18,
+                    ),
                   ),
                 ),
             ],
@@ -459,6 +456,124 @@ class _PlayingIndicatorState extends State<_PlayingIndicator>
       decoration: BoxDecoration(
         color: AppTheme.primary,
         borderRadius: BorderRadius.circular(1.5),
+      ),
+    );
+  }
+}
+
+class _DraggableQueueItem extends StatefulWidget {
+  final dynamic track;
+  final int index;
+  final bool isCurrentTrack;
+  final int queueLength;
+  final VoidCallback onTap;
+  final VoidCallback onDismissed;
+  final void Function(int oldIndex, int newIndex) onReorder;
+
+  const _DraggableQueueItem({
+    required this.track,
+    required this.index,
+    required this.isCurrentTrack,
+    required this.queueLength,
+    required this.onTap,
+    required this.onDismissed,
+    required this.onReorder,
+  });
+
+  @override
+  State<_DraggableQueueItem> createState() => _DraggableQueueItemState();
+}
+
+class _DraggableQueueItemState extends State<_DraggableQueueItem> {
+  bool _isDragging = false;
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.isCurrentTrack) {
+      return Dismissible(
+        key: ValueKey('queue_${widget.index}_${widget.track.id}'),
+        direction: DismissDirection.none,
+        child: _QueueTrackRow(
+          track: widget.track,
+          index: widget.index,
+          isCurrentTrack: true,
+          onTap: widget.onTap,
+          showDragHandle: false,
+        ),
+      );
+    }
+
+    return LongPressDraggable<int>(
+      data: widget.index,
+      delay: const Duration(milliseconds: 200),
+      onDragStarted: () {
+        setState(() => _isDragging = true);
+      },
+      onDragEnd: (_) {
+        setState(() => _isDragging = false);
+      },
+      feedback: Material(
+        elevation: 8,
+        borderRadius: BorderRadius.circular(8),
+        child: Container(
+          width: MediaQuery.of(context).size.width - 32,
+          decoration: BoxDecoration(
+            color: AppTheme.surfaceContainerHigh,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: _QueueTrackRow(
+            track: widget.track,
+            index: widget.index,
+            isCurrentTrack: false,
+            onTap: () {},
+            showDragHandle: false,
+          ),
+        ),
+      ),
+      childWhenDragging: Container(
+        color: AppTheme.surfaceContainerHigh.withValues(alpha: 0.5),
+        height: 64,
+      ),
+      child: DragTarget<int>(
+        onWillAcceptWithDetails: (details) => details.data != widget.index,
+        onAcceptWithDetails: (details) {
+          widget.onReorder(details.data, widget.index);
+        },
+        builder: (context, candidateData, rejectedData) {
+          final isTarget = candidateData.isNotEmpty;
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            decoration: BoxDecoration(
+              color:
+                  isTarget
+                      ? AppTheme.primary.withValues(alpha: 0.1)
+                      : Colors.transparent,
+            ),
+            child: Dismissible(
+              key: ValueKey('queue_${widget.index}_${widget.track.id}'),
+              direction: DismissDirection.endToStart,
+              background: Container(
+                alignment: Alignment.centerRight,
+                padding: const EdgeInsets.only(right: 24),
+                color: AppTheme.error.withValues(alpha: 0.2),
+                child: const Icon(
+                  Icons.delete_outline_rounded,
+                  color: AppTheme.error,
+                  size: 22,
+                ),
+              ),
+              onDismissed: (_) => widget.onDismissed(),
+              child: _QueueTrackRow(
+                track: widget.track,
+                index: widget.index,
+                isCurrentTrack: false,
+                onTap: widget.onTap,
+                showDragHandle: true,
+                isDragging: _isDragging,
+              ),
+            ),
+          );
+        },
       ),
     );
   }

@@ -974,6 +974,35 @@ class PlayerNotifier extends Notifier<PlayerState> {
     Aptabase.instance.trackEvent('remove_from_queue');
   }
 
+  /// Reorder tracks in the queue.
+  void reorderQueue(int oldIndex, int newIndex) {
+    if (oldIndex < 0 || oldIndex >= state.queue.length) return;
+    if (newIndex < 0 || newIndex >= state.queue.length) return;
+
+    final newQueue = List<Track>.from(state.queue);
+    final track = newQueue.removeAt(oldIndex);
+
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    newQueue.insert(newIndex, track);
+
+    var newCurrentIndex = state.currentIndex;
+    if (oldIndex == state.currentIndex) {
+      newCurrentIndex = newIndex;
+    } else if (oldIndex < state.currentIndex &&
+        newIndex >= state.currentIndex) {
+      newCurrentIndex--;
+    } else if (oldIndex > state.currentIndex &&
+        newIndex <= state.currentIndex) {
+      newCurrentIndex++;
+    }
+
+    state = state.copyWith(queue: newQueue, currentIndex: newCurrentIndex);
+    _saveQueue();
+    Aptabase.instance.trackEvent('reorder_queue');
+  }
+
   Future<void> _loadAndPlay(Track track, {Duration? initialPosition}) async {
     await _loadTrack(track, autoPlay: true, initialPosition: initialPosition);
   }
