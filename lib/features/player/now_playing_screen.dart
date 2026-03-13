@@ -85,13 +85,15 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
     final playerState = ref.watch(playerProvider);
     final track = playerState.currentTrack;
 
-    // Extract dominant color from the current track's cover art.
+    // Extract accent colors from the current track's cover art.
     final imageUrl = track?.largeCoverUrl ?? track?.coverUrl;
-    final dominantColorAsync = ref.watch(dominantColorProvider(imageUrl));
-    final glowColor = dominantColorAsync.maybeWhen(
-      data: (color) => color,
-      orElse: () => AppTheme.primary,
+    final paletteAsync = ref.watch(albumPaletteProvider(imageUrl));
+    final palette = paletteAsync.maybeWhen(
+      data: (p) => p,
+      orElse: () => const AlbumPalette(primary: AppTheme.primary),
     );
+    final glowColor = palette.primary;
+    final glowSecondaryColor = palette.secondary;
 
     return Scaffold(
       backgroundColor: AppTheme.background,
@@ -124,7 +126,7 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
                           child: Column(
                             children: [
                               const SizedBox(height: 16),
-                              _buildAlbumArt(track, glowColor),
+                              _buildAlbumArt(track, glowColor, glowSecondaryColor),
                               const SizedBox(height: 36),
                               _buildTrackInfo(track),
                               const SizedBox(height: 28),
@@ -183,7 +185,7 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
 
   // ── Album art with radial glow ───────────────────────────────────────
 
-  Widget _buildAlbumArt(Track track, Color glowColor) {
+  Widget _buildAlbumArt(Track track, Color primaryColor, Color? secondaryColor) {
     final imageUrl = track.largeCoverUrl ?? track.coverUrl;
 
     return AnimatedBuilder(
@@ -195,7 +197,8 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
           child: Stack(
             alignment: Alignment.center,
             children: [
-              // Radial glow behind the art
+              // Radial glow behind the art; transitions from primary at the
+              // centre to secondary (if available) towards the edge.
               Container(
                 width: 320,
                 height: 320,
@@ -204,8 +207,14 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
                     center: Alignment.center,
                     radius: 0.8,
                     colors: [
-                      glowColor.withValues(alpha: 0.25 * _glowAnimation.value),
-                      glowColor.withValues(alpha: 0.08 * _glowAnimation.value),
+                      primaryColor.withValues(
+                        alpha: 0.25 * _glowAnimation.value,
+                      ),
+                      (secondaryColor ?? primaryColor).withValues(
+                        alpha:
+                            (secondaryColor != null ? 0.15 : 0.08) *
+                            _glowAnimation.value,
+                      ),
                       Colors.transparent,
                     ],
                   ),
@@ -219,7 +228,7 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen>
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: glowColor.withValues(alpha: 0.3),
+                      color: primaryColor.withValues(alpha: 0.3),
                       blurRadius: 40,
                       spreadRadius: 2,
                     ),
