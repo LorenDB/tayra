@@ -95,17 +95,29 @@ class AlbumDetailScreen extends ConsumerWidget {
                 ref.read(_albumTracksProvider(albumId).notifier).reload();
               },
             ),
-        data:
-            (album) => RefreshIndicator(
-              color: AppTheme.primary,
-              backgroundColor: AppTheme.surfaceContainer,
-              onRefresh: () async {
-                ref.invalidate(_albumDetailProvider(albumId));
-                ref.read(_albumTracksProvider(albumId).notifier).reload();
-                await ref.read(_albumDetailProvider(albumId).future);
-              },
-              child: _AlbumDetailBody(album: album, tracksAsync: tracksAsync),
+        data: (album) {
+          final imageUrl = album.largeCoverUrl ?? album.coverUrl;
+          final dominantColorAsync = ref.watch(dominantColorProvider(imageUrl));
+          final dominantColor = dominantColorAsync.maybeWhen(
+            data: (color) => color,
+            orElse: () => AppTheme.primary,
+          );
+
+          return RefreshIndicator(
+            color: dominantColor,
+            backgroundColor: AppTheme.surfaceContainer,
+            onRefresh: () async {
+              ref.invalidate(_albumDetailProvider(albumId));
+              ref.read(_albumTracksProvider(albumId).notifier).reload();
+              await ref.read(_albumDetailProvider(albumId).future);
+            },
+            child: _AlbumDetailBody(
+              album: album,
+              tracksAsync: tracksAsync,
+              dominantColor: dominantColor,
             ),
+          );
+        },
       ),
     );
   }
@@ -116,24 +128,22 @@ class AlbumDetailScreen extends ConsumerWidget {
 class _AlbumDetailBody extends ConsumerWidget {
   final Album album;
   final AsyncValue<List<Track>> tracksAsync;
+  final Color dominantColor;
 
-  const _AlbumDetailBody({required this.album, required this.tracksAsync});
+  const _AlbumDetailBody({
+    required this.album,
+    required this.tracksAsync,
+    required this.dominantColor,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final imageUrl = album.largeCoverUrl ?? album.coverUrl;
-    final dominantColorAsync = ref.watch(dominantColorProvider(imageUrl));
-    final glowColor = dominantColorAsync.maybeWhen(
-      data: (color) => color,
-      orElse: () => AppTheme.primary,
-    );
-
     return CustomScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: [
         // ── Album header with glow ──
         SliverToBoxAdapter(
-          child: _AlbumHeader(album: album, glowColor: glowColor),
+          child: _AlbumHeader(album: album, glowColor: dominantColor),
         ),
 
         // ── Album info ──
@@ -142,19 +152,24 @@ class _AlbumDetailBody extends ConsumerWidget {
             data:
                 (tracks) => _AlbumInfo(
                   album: album,
+                  dominantColor: dominantColor,
                   totalDuration: tracks.fold<int>(
                     0,
                     (sum, track) => sum + (track.duration ?? 0),
                   ),
                 ),
             loading: () => _AlbumInfo(album: album),
-            error: (_, __) => _AlbumInfo(album: album),
+            error: (_, _) => _AlbumInfo(album: album),
           ),
         ),
 
         // ── Action buttons ──
         SliverToBoxAdapter(
-          child: _ActionButtons(album: album, tracksAsync: tracksAsync),
+          child: _ActionButtons(
+            album: album,
+            tracksAsync: tracksAsync,
+            dominantColor: dominantColor,
+          ),
         ),
 
         // ── Track list ──
@@ -208,6 +223,7 @@ class _AlbumDetailBody extends ConsumerWidget {
                   track: track,
                   showTrackNumber: true,
                   showAlbumArt: false,
+                  dominantColor: dominantColor,
                   onTap: () {
                     ref
                         .read(playerProvider.notifier)
@@ -296,8 +312,13 @@ class _AlbumHeader extends StatelessWidget {
 class _AlbumInfo extends StatelessWidget {
   final Album album;
   final int? totalDuration;
+  final Color? dominantColor;
 
-  const _AlbumInfo({required this.album, this.totalDuration});
+  const _AlbumInfo({
+    required this.album,
+    this.totalDuration,
+    this.dominantColor,
+  });
 
   String _formatDuration(int totalSeconds) {
     final hours = totalSeconds ~/ 3600;
@@ -343,8 +364,8 @@ class _AlbumInfo extends StatelessWidget {
               onTap: () => context.push('/browse/artist/${album.artist!.id}'),
               child: Text(
                 album.artist!.name,
-                style: const TextStyle(
-                  color: AppTheme.primary,
+                style: TextStyle(
+                  color: dominantColor ?? AppTheme.primary,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                 ),
@@ -429,8 +450,13 @@ class _AlbumInfo extends StatelessWidget {
 class _ActionButtons extends ConsumerWidget {
   final Album album;
   final AsyncValue<List<Track>> tracksAsync;
+  final Color dominantColor;
 
-  const _ActionButtons({required this.album, required this.tracksAsync});
+  const _ActionButtons({
+    required this.album,
+    required this.tracksAsync,
+    required this.dominantColor,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -463,11 +489,9 @@ class _ActionButtons extends ConsumerWidget {
                 icon: const Icon(Icons.play_arrow_rounded, size: 22),
                 label: const Text('Play All'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.primary,
+                  backgroundColor: dominantColor,
                   foregroundColor: Colors.white,
-                  disabledBackgroundColor: AppTheme.primary.withValues(
-                    alpha: 0.3,
-                  ),
+                  disabledBackgroundColor: dominantColor.withValues(alpha: 0.3),
                   disabledForegroundColor: Colors.white.withValues(alpha: 0.4),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(22),
@@ -502,13 +526,16 @@ class _ActionButtons extends ConsumerWidget {
                 icon: const Icon(Icons.shuffle_rounded, size: 20),
                 label: const Text('Shuffle'),
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: AppTheme.onBackground,
+                  foregroundColor:
+                      hasTracks
+                          ? dominantColor
+                          : AppTheme.onBackgroundSubtle.withValues(alpha: 0.4),
                   disabledForegroundColor: AppTheme.onBackgroundSubtle
                       .withValues(alpha: 0.4),
                   side: BorderSide(
                     color:
                         hasTracks
-                            ? AppTheme.onBackgroundSubtle
+                            ? dominantColor
                             : AppTheme.onBackgroundSubtle.withValues(
                               alpha: 0.3,
                             ),

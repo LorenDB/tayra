@@ -10,6 +10,30 @@ import 'package:tayra/features/player/player_provider.dart';
 class MiniPlayer extends ConsumerWidget {
   const MiniPlayer({super.key});
 
+  Color _gradientSecondColor(
+    Color baseColor,
+    AsyncValue<Color> dominantColorAsync,
+  ) {
+    final hasCustomColor =
+        dominantColorAsync.hasValue &&
+        dominantColorAsync.value != AppTheme.primary;
+
+    if (hasCustomColor) {
+      final hsl = HSLColor.fromColor(baseColor);
+      if (hsl.lightness > 0.25) {
+        return hsl
+            .withLightness((hsl.lightness * 0.45).clamp(0.0, 1.0))
+            .toColor();
+      } else {
+        return hsl
+            .withLightness((hsl.lightness + 0.18).clamp(0.0, 1.0))
+            .toColor();
+      }
+    } else {
+      return AppTheme.primaryLight;
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playerState = ref.watch(playerProvider);
@@ -22,6 +46,10 @@ class MiniPlayer extends ConsumerWidget {
     final accentColor = dominantColorAsync.maybeWhen(
       data: (color) => color,
       orElse: () => AppTheme.primary,
+    );
+    final gradientSecondColor = _gradientSecondColor(
+      accentColor,
+      dominantColorAsync,
     );
 
     return GestureDetector(
@@ -40,12 +68,33 @@ class MiniPlayer extends ConsumerWidget {
         ),
         child: Column(
           children: [
-            // Progress indicator
-            LinearProgressIndicator(
-              value: playerState.progress,
-              backgroundColor: Colors.transparent,
-              color: accentColor,
-              minHeight: 2,
+            // Gradient progress bar
+            LayoutBuilder(
+              builder: (context, constraints) {
+                const barHeight = 2.0;
+                final filledWidth =
+                    constraints.maxWidth * playerState.progress.clamp(0.0, 1.0);
+                return SizedBox(
+                  height: barHeight,
+                  width: constraints.maxWidth,
+                  child: Stack(
+                    children: [
+                      // Inactive track background
+                      Container(height: barHeight, color: Colors.transparent),
+                      // Gradient filled portion
+                      Container(
+                        height: barHeight,
+                        width: filledWidth,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [accentColor, gradientSecondColor],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
             Expanded(
               child: Padding(

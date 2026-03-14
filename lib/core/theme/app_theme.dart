@@ -10,8 +10,8 @@ class AppTheme {
   static const Color surfaceContainer = Color(0xFF121212);
   static const Color surfaceContainerHigh = Color(0xFF1A1A1A);
   static const Color surfaceContainerHighest = Color(0xFF222222);
-  static const Color primary = Color(0xFF6C63FF); // Funkwhale purple-ish
-  static const Color primaryLight = Color(0xFF9D97FF);
+  static const Color primary = Color(0xFF0992F2); // Funkwhale purple-ish
+  static const Color primaryLight = Color.fromARGB(255, 108, 213, 255);
   static const Color secondary = Color(0xFF00D4AA); // Teal accent
   static const Color error = Color(0xFFFF6B6B);
   static const Color onBackground = Color(0xFFFFFFFF);
