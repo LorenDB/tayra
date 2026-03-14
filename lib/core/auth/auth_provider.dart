@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io';
 
 // ── Secure storage ──────────────────────────────────────────────────────
 
@@ -106,9 +107,12 @@ class AuthNotifier extends Notifier<AuthState> {
   static const _keyRefreshToken = 'refresh_token';
   static const _keyClientId = 'client_id';
   static const _keyClientSecret = 'client_secret';
-  static const _appName = 'Tayra';
   static const _redirectUri = 'urn:ietf:wg:oauth:2.0:oob';
   static const _scopes = 'read write';
+
+  Future<String> _getAppName() async {
+    return 'Tayra (${Platform.localHostname})';
+  }
 
   FlutterSecureStorage get _storage => ref.read(secureStorageProvider);
 
@@ -151,7 +155,7 @@ class AuthNotifier extends Notifier<AuthState> {
       final response = await dio.post(
         '$url/api/v1/oauth/apps/',
         data: {
-          'name': _appName,
+          'name': await _getAppName(),
           'scopes': _scopes,
           'redirect_uris': _redirectUri,
         },
