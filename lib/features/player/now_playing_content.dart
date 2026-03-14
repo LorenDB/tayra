@@ -113,15 +113,26 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
     );
 
     if (widget.layout == NowPlayingLayout.panel) {
-      return _buildPanelLayout(track, playerState, glowColor);
+      return _buildPanelLayout(
+        track,
+        playerState,
+        glowColor,
+        dominantColorAsync,
+      );
     }
-    return _buildScreenLayout(track, playerState, glowColor);
+    return _buildScreenLayout(
+      track,
+      playerState,
+      glowColor,
+      dominantColorAsync,
+    );
   }
 
   Widget _buildScreenLayout(
     Track track,
     PlayerState playerState,
     Color glowColor,
+    AsyncValue<Color> dominantColorAsync,
   ) {
     return Column(
       children: [
@@ -136,7 +147,13 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
                 const SizedBox(height: 36),
                 _buildTrackInfo(track, 22, 16, 13, 6, 4),
                 const SizedBox(height: 28),
-                _buildSeekBar(playerState, glowColor, 6, 16),
+                _buildSeekBar(
+                  playerState,
+                  glowColor,
+                  6,
+                  16,
+                  dominantColorAsync,
+                ),
                 const SizedBox(height: 20),
                 _buildTransportControls(playerState, glowColor, 64, 36, 34, 20),
                 const SizedBox(height: 32),
@@ -152,6 +169,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
     Track track,
     PlayerState playerState,
     Color glowColor,
+    AsyncValue<Color> dominantColorAsync,
   ) {
     return Container(
       color: AppTheme.surface,
@@ -175,7 +193,13 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
                   const SizedBox(height: 16),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: _buildSeekBar(playerState, glowColor, 5, 12),
+                    child: _buildSeekBar(
+                      playerState,
+                      glowColor,
+                      5,
+                      12,
+                      dominantColorAsync,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Padding(
@@ -431,11 +455,32 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
     );
   }
 
+  Color _getGradientSecondColor(
+    Color baseColor,
+    AsyncValue<Color> dominantColorAsync,
+  ) {
+    // If a custom color was extracted from album art
+    final hasCustomColor =
+        dominantColorAsync.hasValue &&
+        dominantColorAsync.value != AppTheme.primary;
+
+    if (hasCustomColor) {
+      final hsl = HSLColor.fromColor(baseColor);
+      return hsl
+          .withLightness((hsl.lightness + 0.18).clamp(0.0, 1.0))
+          .toColor();
+    } else {
+      // Fallback to primary theme → use primaryLight
+      return AppTheme.primaryLight;
+    }
+  }
+
   Widget _buildSeekBar(
     PlayerState playerState,
     Color glowColor,
     double thumbRadius,
     double overlayRadius,
+    AsyncValue<Color> dominantColorAsync,
   ) {
     final progress = _isSeeking ? _seekValue : playerState.progress;
     final currentPosition =
@@ -446,11 +491,16 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
             )
             : playerState.position;
 
+    final gradientSecondColor = _getGradientSecondColor(
+      glowColor,
+      dominantColorAsync,
+    );
+
     return Column(
       children: [
         SliderTheme(
           data: SliderThemeData(
-            activeTrackColor: glowColor,
+            activeTrackColor: Colors.transparent,
             inactiveTrackColor: AppTheme.surfaceContainerHighest,
             thumbColor: Colors.white,
             thumbShape: RoundSliderThumbShape(enabledThumbRadius: thumbRadius),
@@ -458,11 +508,47 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
             overlayColor: glowColor.withValues(alpha: 0.15),
             overlayShape: RoundSliderOverlayShape(overlayRadius: overlayRadius),
           ),
-          child: Slider(
-            value: progress.clamp(0.0, 1.0),
-            onChangeStart: _onSeekStart,
-            onChanged: _onSeekUpdate,
-            onChangeEnd: _onSeekEnd,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              const trackHeight = 3.0;
+              final totalWidth = constraints.maxWidth;
+              // Flutter's Slider insets its track by the overlay radius on
+              // each side so the thumb glow never clips the widget edges.
+              // Mirror that same inset here so the gradient aligns exactly
+              // with the Slider thumb position.
+              final inset = overlayRadius;
+              final trackWidth = totalWidth - inset * 2;
+              final filledWidth = trackWidth * progress.clamp(0.0, 1.0);
+              return Stack(
+                alignment: Alignment.centerLeft,
+                children: [
+                  // Gradient active track – inset to match Slider's track
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: inset),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        height: trackHeight,
+                        width: filledWidth,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [glowColor, gradientSecondColor],
+                          ),
+                          borderRadius: BorderRadius.circular(trackHeight / 2),
+                        ),
+                      ),
+                    ),
+                  ),
+                  // Transparent slider for interaction & thumb rendering
+                  Slider(
+                    value: progress.clamp(0.0, 1.0),
+                    onChangeStart: _onSeekStart,
+                    onChanged: _onSeekUpdate,
+                    onChangeEnd: _onSeekEnd,
+                  ),
+                ],
+              );
+            },
           ),
         ),
         Padding(

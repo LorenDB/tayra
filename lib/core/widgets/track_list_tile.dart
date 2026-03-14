@@ -14,6 +14,7 @@ class TrackListTile extends ConsumerWidget {
   final bool showAlbumArt;
   final bool showTrackNumber;
   final Widget? trailing;
+  final Color? dominantColor;
 
   const TrackListTile({
     super.key,
@@ -22,6 +23,7 @@ class TrackListTile extends ConsumerWidget {
     this.showAlbumArt = true,
     this.showTrackNumber = false,
     this.trailing,
+    this.dominantColor,
   });
 
   @override
@@ -46,7 +48,7 @@ class TrackListTile extends ConsumerWidget {
                     style: TextStyle(
                       color:
                           isCurrentTrack
-                              ? AppTheme.primary
+                              ? dominantColor ?? AppTheme.primary
                               : AppTheme.onBackgroundSubtle,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
@@ -72,7 +74,7 @@ class TrackListTile extends ConsumerWidget {
                       style: TextStyle(
                         color:
                             isCurrentTrack
-                                ? AppTheme.primary
+                                ? dominantColor ?? AppTheme.primary
                                 : AppTheme.onBackground,
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
@@ -86,7 +88,8 @@ class TrackListTile extends ConsumerWidget {
                       style: TextStyle(
                         color:
                             isCurrentTrack
-                                ? AppTheme.primaryLight
+                                ? (dominantColor ?? AppTheme.primary)
+                                    .withValues(alpha: 0.8)
                                 : AppTheme.onBackgroundMuted,
                         fontSize: 12,
                       ),
