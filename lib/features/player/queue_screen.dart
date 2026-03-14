@@ -6,7 +6,10 @@ import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/features/player/player_provider.dart';
 
 class QueueScreen extends ConsumerStatefulWidget {
-  const QueueScreen({super.key});
+  final ScrollController? scrollController;
+  final bool showAppBar;
+
+  const QueueScreen({super.key, this.scrollController, this.showAppBar = true});
 
   @override
   ConsumerState<QueueScreen> createState() => _QueueScreenState();
@@ -15,16 +18,24 @@ class QueueScreen extends ConsumerStatefulWidget {
 class _QueueScreenState extends ConsumerState<QueueScreen> {
   late ScrollController _scrollController;
   bool _hasScrolled = false;
+  bool _ownsController = false;
 
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
+    if (widget.scrollController != null) {
+      _scrollController = widget.scrollController!;
+    } else {
+      _scrollController = ScrollController();
+      _ownsController = true;
+    }
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    if (_ownsController) {
+      _scrollController.dispose();
+    }
     super.dispose();
   }
 
@@ -57,40 +68,43 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
 
     return Scaffold(
       backgroundColor: AppTheme.background,
-      appBar: AppBar(
-        backgroundColor: AppTheme.background,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_rounded,
-            color: AppTheme.onBackground,
-          ),
-          onPressed: () => context.pop(),
-        ),
-        title: const Text(
-          'Queue',
-          style: TextStyle(
-            color: AppTheme.onBackground,
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        actions: [
-          if (queue.isNotEmpty)
-            TextButton(
-              onPressed: () {
-                _showClearConfirmation(context, ref);
-              },
-              child: const Text(
-                'Clear',
-                style: TextStyle(
-                  color: AppTheme.error,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
+      appBar:
+          widget.showAppBar
+              ? AppBar(
+                backgroundColor: AppTheme.background,
+                leading: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_rounded,
+                    color: AppTheme.onBackground,
+                  ),
+                  onPressed: () => context.pop(),
                 ),
-              ),
-            ),
-        ],
-      ),
+                title: const Text(
+                  'Queue',
+                  style: TextStyle(
+                    color: AppTheme.onBackground,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                actions: [
+                  if (queue.isNotEmpty)
+                    TextButton(
+                      onPressed: () {
+                        _showClearConfirmation(context, ref);
+                      },
+                      child: const Text(
+                        'Clear',
+                        style: TextStyle(
+                          color: AppTheme.error,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                ],
+              )
+              : null,
       body:
           queue.isEmpty
               ? _buildEmptyState()
