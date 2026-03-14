@@ -1048,6 +1048,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
         );
         if (autoPlay) {
           await _handler.audioPlayer.play();
+          // setAudioSource briefly resets the player's `playing` flag to false,
+          // which causes playingStream to emit false before play() fires true.
+          // Set isPlaying eagerly here so the UI shows the correct icon
+          // immediately, without waiting for the stream event to arrive.
+          state = state.copyWith(isPlaying: true);
         }
       } else {
         // Stream from server.
@@ -1062,6 +1067,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
         );
         if (autoPlay) {
           await _handler.audioPlayer.play();
+          // setAudioSource briefly resets the player's `playing` flag to false,
+          // which causes playingStream to emit false before play() fires true.
+          // Set isPlaying eagerly here so the UI shows the correct icon
+          // immediately, without waiting for the stream event to arrive.
+          state = state.copyWith(isPlaying: true);
         }
 
         // Cache the audio file in the background for next time.
@@ -1145,13 +1155,14 @@ class PlayerNotifier extends Notifier<PlayerState> {
   Future<void> pause() => _handler.pause();
 
   Future<void> togglePlayPause() async {
-    if (state.isPlaying) {
+    final wasPlaying = state.isPlaying;
+    if (wasPlaying) {
       await pause();
     } else {
       await play();
     }
     Aptabase.instance.trackEvent('toggle_play_pause', {
-      'action': state.isPlaying ? 'pause' : 'play',
+      'action': wasPlaying ? 'pause' : 'play',
     });
   }
 
