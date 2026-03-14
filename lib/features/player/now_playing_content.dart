@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart' hide PlayerState;
+import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/models.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/theme/palette_provider.dart';
@@ -56,12 +57,6 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
   void dispose() {
     _glowAnimController?.dispose();
     super.dispose();
-  }
-
-  String _formatDuration(Duration d) {
-    final minutes = d.inMinutes;
-    final seconds = d.inSeconds.remainder(60);
-    return '$minutes:${seconds.toString().padLeft(2, '0')}';
   }
 
   void _onSeekStart(double value) {
@@ -557,7 +552,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                _formatDuration(currentPosition),
+                formatTrackDuration(currentPosition.inSeconds),
                 style: const TextStyle(
                   color: AppTheme.onBackgroundMuted,
                   fontSize: 12,
@@ -565,7 +560,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
                 ),
               ),
               Text(
-                _formatDuration(playerState.duration),
+                formatTrackDuration(playerState.duration.inSeconds),
                 style: const TextStyle(
                   color: AppTheme.onBackgroundMuted,
                   fontSize: 12,

@@ -310,22 +310,13 @@ class _AlbumInfo extends StatelessWidget {
     this.dominantColor,
   });
 
-  String _formatDuration(int totalSeconds) {
-    final hours = totalSeconds ~/ 3600;
-    final minutes = (totalSeconds % 3600) ~/ 60;
-    if (hours > 0) {
-      return '${hours}h ${minutes}m';
-    }
-    return '$minutes min';
-  }
-
   @override
   Widget build(BuildContext context) {
     final displayDuration =
         (album.duration != null && album.duration! > 0)
             ? album.formattedDuration
             : (totalDuration != null && totalDuration! > 0)
-            ? _formatDuration(totalDuration!)
+            ? formatTotalDuration(totalDuration!)
             : null;
 
     return Padding(

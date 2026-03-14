@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/widgets/album_card.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/core/widgets/track_list_tile.dart';
 import 'package:tayra/features/player/player_provider.dart';
@@ -321,9 +322,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 padding: EdgeInsets.only(
                   right: index < albums.length - 1 ? 14 : 0,
                 ),
-                child: _AlbumCard(
+                child: AlbumCard(
                   album: album,
                   onTap: () => context.push('/search/album/${album.id}'),
+                  width: 140,
+                  showGradientOverlay: false,
                 ),
               );
             },
@@ -459,64 +462,6 @@ class _ArtistChip extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// ── Album Card ──────────────────────────────────────────────────────────
-
-class _AlbumCard extends StatelessWidget {
-  final Album album;
-  final VoidCallback onTap;
-
-  const _AlbumCard({required this.album, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    const double cardWidth = 140;
-    const double artSize = 140;
-
-    return GestureDetector(
-      onTap: onTap,
-      child: SizedBox(
-        width: cardWidth,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CoverArtWidget(
-              imageUrl: album.coverUrl,
-              size: artSize,
-              borderRadius: 10,
-              shadow: BoxShadow(
-                color: Colors.black.withValues(alpha: 0.4),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              album.title,
-              style: const TextStyle(
-                color: AppTheme.onBackground,
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 2),
-            Text(
-              album.artist?.name ?? 'Unknown Artist',
-              style: const TextStyle(
-                color: AppTheme.onBackgroundMuted,
-                fontSize: 12,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),

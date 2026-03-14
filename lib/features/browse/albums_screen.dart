@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/layout/responsive.dart';
 import 'package:tayra/core/theme/app_theme.dart';
-import 'package:tayra/core/widgets/cover_art.dart';
+import 'package:tayra/core/widgets/album_card.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/browse/paginated_grid_mixin.dart';
 
@@ -106,93 +106,9 @@ class _AlbumGrid extends StatelessWidget {
         if (index >= albums.length) {
           return const _LoadingIndicator();
         }
-        return _AlbumCard(album: albums[index]);
-      },
-    );
-  }
-}
-
-// ── Album card ──────────────────────────────────────────────────────────
-
-class _AlbumCard extends StatelessWidget {
-  final Album album;
-
-  const _AlbumCard({required this.album});
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final imageSize = constraints.maxWidth;
-
-        return GestureDetector(
-          onTap: () => context.push('/browse/album/${album.id}'),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    CoverArtWidget(
-                      imageUrl: album.coverUrl,
-                      size: imageSize,
-                      borderRadius: 10,
-                      shadow: BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.4),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      child: Container(
-                        height: imageSize * 0.35,
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
-                          ),
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Colors.transparent,
-                              Colors.black.withValues(alpha: 0.55),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                album.title,
-                style: const TextStyle(
-                  color: AppTheme.onBackground,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 2),
-              Text(
-                album.artist?.name ?? 'Unknown Artist',
-                style: const TextStyle(
-                  color: AppTheme.onBackgroundMuted,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-          ),
+        return AlbumCard(
+          album: albums[index],
+          onTap: () => context.push('/browse/album/${albums[index].id}'),
         );
       },
     );

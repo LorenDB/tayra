@@ -29,6 +29,30 @@ Future<List<T>> fetchAllPages<T>(
   return all;
 }
 
+// ── Duration formatting ──────────────────────────────────────────────────
+
+/// Formats [seconds] as `m:ss` (e.g. `3:07`).
+///
+/// Used for individual track durations in track rows and the seek bar.
+String formatTrackDuration(int seconds) {
+  final m = seconds ~/ 60;
+  final s = seconds % 60;
+  return '$m:${s.toString().padLeft(2, '0')}';
+}
+
+/// Formats [totalSeconds] as a human-readable total duration.
+///
+/// Returns `'Xh Ym'` when hours ≥ 1, otherwise `'Y min'`.
+/// Used for album/playlist total duration labels.
+String formatTotalDuration(int totalSeconds) {
+  final hours = totalSeconds ~/ 3600;
+  final minutes = (totalSeconds % 3600) ~/ 60;
+  if (hours > 0) {
+    return '${hours}h ${minutes}m';
+  }
+  return '$minutes min';
+}
+
 // ── Track sorting ────────────────────────────────────────────────────────
 
 /// Sorts [tracks] in-place by disc number then track position.

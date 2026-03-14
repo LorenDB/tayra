@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/layout/responsive.dart';
 import 'package:tayra/core/theme/app_theme.dart';
-import 'package:tayra/core/widgets/cover_art.dart';
+import 'package:tayra/core/widgets/album_card.dart';
 import 'package:tayra/core/widgets/track_list_tile.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/player/player_provider.dart';
@@ -293,100 +293,16 @@ class _AlbumCarousel extends ConsumerWidget {
                 padding: EdgeInsets.only(
                   right: index < albums.length - 1 ? 14 : 0,
                 ),
-                child: _AlbumCard(album: albums[index]),
+                child: AlbumCard(
+                  album: albums[index],
+                  onTap: () => context.push('/album/${albums[index].id}'),
+                  width: 150,
+                ),
               );
             },
           ),
         );
       },
-    );
-  }
-}
-
-// ── Single Album Card ───────────────────────────────────────────────────
-
-class _AlbumCard extends StatelessWidget {
-  final Album album;
-
-  const _AlbumCard({required this.album});
-
-  @override
-  Widget build(BuildContext context) {
-    const double cardWidth = 150;
-    const double artSize = 150;
-
-    return GestureDetector(
-      onTap: () => context.push('/album/${album.id}'),
-      child: SizedBox(
-        width: cardWidth,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Album art with gradient overlay
-            Stack(
-              children: [
-                CoverArtWidget(
-                  imageUrl: album.coverUrl,
-                  size: artSize,
-                  borderRadius: 10,
-                  shadow: BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.4),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                  ),
-                ),
-                // Subtle gradient overlay on the bottom of the art
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    height: artSize * 0.45,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(10),
-                        bottomRight: Radius.circular(10),
-                      ),
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.transparent,
-                          Colors.black.withValues(alpha: 0.55),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            // Album title
-            Text(
-              album.title,
-              style: const TextStyle(
-                color: AppTheme.onBackground,
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 2),
-            // Artist name
-            Text(
-              album.artist?.name ?? 'Unknown Artist',
-              style: const TextStyle(
-                color: AppTheme.onBackgroundMuted,
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
@@ -457,7 +373,10 @@ class _AlbumGridSection extends ConsumerWidget {
                             columns;
                         return SizedBox(
                           width: itemWidth,
-                          child: _AlbumGridCard(album: album),
+                          child: AlbumCard(
+                            album: album,
+                            onTap: () => context.push('/album/${album.id}'),
+                          ),
                         );
                       }).toList(),
                 );
@@ -466,88 +385,6 @@ class _AlbumGridSection extends ConsumerWidget {
           },
         ),
       ],
-    );
-  }
-}
-
-/// Album card variant for grid layout - adapts its art size to available width.
-class _AlbumGridCard extends StatelessWidget {
-  final Album album;
-
-  const _AlbumGridCard({required this.album});
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final artSize = constraints.maxWidth;
-        return GestureDetector(
-          onTap: () => context.push('/album/${album.id}'),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
-                children: [
-                  CoverArtWidget(
-                    imageUrl: album.coverUrl,
-                    size: artSize,
-                    borderRadius: 10,
-                    shadow: BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.4),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      height: artSize * 0.4,
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
-                        ),
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.transparent,
-                            Colors.black.withValues(alpha: 0.55),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Text(
-                album.title,
-                style: const TextStyle(
-                  color: AppTheme.onBackground,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 2),
-              Text(
-                album.artist?.name ?? 'Unknown Artist',
-                style: const TextStyle(
-                  color: AppTheme.onBackgroundMuted,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }
