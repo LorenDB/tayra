@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/playlists/playlists_screen.dart';
@@ -260,7 +261,7 @@ class _AddToPlaylistSheetState extends ConsumerState<_AddToPlaylistSheet> {
                                     ),
                                     const SizedBox(height: 2),
                                     Text(
-                                      '${playlist.tracksCount} ${playlist.tracksCount == 1 ? 'track' : 'tracks'}',
+                                      pluralizeTrack(playlist.tracksCount),
                                       style: const TextStyle(
                                         color: AppTheme.onBackgroundMuted,
                                         fontSize: 12,

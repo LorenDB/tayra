@@ -53,6 +53,11 @@ String formatTotalDuration(int totalSeconds) {
   return '$minutes min';
 }
 
+// ── Pluralization helpers ────────────────────────────────────────────────
+
+/// Returns `'N track'` or `'N tracks'` depending on [n].
+String pluralizeTrack(int n) => '$n ${n == 1 ? 'track' : 'tracks'}';
+
 // ── Track sorting ────────────────────────────────────────────────────────
 
 /// Sorts [tracks] in-place by disc number then track position.

@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/widgets/empty_state.dart';
+import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/track_list_tile.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/player/player_provider.dart';
@@ -136,7 +138,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
     }
 
     final parts = <String>[];
-    parts.add('$count ${count == 1 ? 'track' : 'tracks'}');
+    parts.add(pluralizeTrack(count));
 
     if (totalDuration > 0) {
       final durationStr = formatTotalDuration(totalDuration);
@@ -173,60 +175,15 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
 
     // Error state
     if (_error != null && _favorites.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.error_outline_rounded,
-              color: AppTheme.error.withValues(alpha: 0.7),
-              size: 48,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              _error!,
-              style: const TextStyle(
-                color: AppTheme.onBackgroundMuted,
-                fontSize: 14,
-              ),
-            ),
-            const SizedBox(height: 16),
-            TextButton(onPressed: _loadFavorites, child: const Text('Retry')),
-          ],
-        ),
-      );
+      return InlineErrorState(message: _error!, onRetry: _loadFavorites);
     }
 
     // Empty state
     if (_favorites.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.favorite_border_rounded,
-              color: AppTheme.onBackgroundSubtle.withValues(alpha: 0.5),
-              size: 64,
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'No favorites yet',
-              style: TextStyle(
-                color: AppTheme.onBackgroundMuted,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(height: 6),
-            const Text(
-              'Tap the heart on any track to add it here',
-              style: TextStyle(
-                color: AppTheme.onBackgroundSubtle,
-                fontSize: 13,
-              ),
-            ),
-          ],
-        ),
+      return const EmptyState(
+        icon: Icons.favorite_border_rounded,
+        title: 'No favorites yet',
+        subtitle: 'Tap the heart on any track to add it here',
       );
     }
 

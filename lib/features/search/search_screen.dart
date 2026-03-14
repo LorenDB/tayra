@@ -7,6 +7,8 @@ import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/album_card.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
+import 'package:tayra/core/widgets/empty_state.dart';
+import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/track_list_tile.dart';
 import 'package:tayra/features/player/player_provider.dart';
 
@@ -142,96 +144,30 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
     // Error state
     if (_error != null) {
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.error_outline_rounded,
-              color: AppTheme.error.withValues(alpha: 0.7),
-              size: 48,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              _error!,
-              style: const TextStyle(
-                color: AppTheme.onBackgroundMuted,
-                fontSize: 14,
-              ),
-            ),
-            const SizedBox(height: 16),
-            TextButton(
-              onPressed: () => _performSearch(_lastQuery),
-              child: const Text('Retry'),
-            ),
-          ],
-        ),
+      return InlineErrorState(
+        message: _error!,
+        onRetry: () => _performSearch(_lastQuery),
       );
     }
 
     // Empty query - show initial state
     if (_lastQuery.isEmpty || _result == null) {
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.search_rounded,
-              color: AppTheme.onBackgroundSubtle.withValues(alpha: 0.5),
-              size: 72,
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Search for music',
-              style: TextStyle(
-                color: AppTheme.onBackgroundMuted,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(height: 6),
-            const Text(
-              'Find artists, albums, tracks, and tags',
-              style: TextStyle(
-                color: AppTheme.onBackgroundSubtle,
-                fontSize: 13,
-              ),
-            ),
-          ],
-        ),
+      return const EmptyState(
+        icon: Icons.search_rounded,
+        title: 'Search for music',
+        subtitle: 'Find artists, albums, tracks, and tags',
+        iconSize: 72,
       );
     }
 
     // No results
     if (_result!.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.music_off_rounded,
-              color: AppTheme.onBackgroundSubtle.withValues(alpha: 0.5),
-              size: 56,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'No results for "$_lastQuery"',
-              style: const TextStyle(
-                color: AppTheme.onBackgroundMuted,
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(height: 6),
-            const Text(
-              'Try a different search term',
-              style: TextStyle(
-                color: AppTheme.onBackgroundSubtle,
-                fontSize: 13,
-              ),
-            ),
-          ],
-        ),
+      return EmptyState(
+        icon: Icons.music_off_rounded,
+        title: 'No results for "$_lastQuery"',
+        subtitle: 'Try a different search term',
+        iconSize: 56,
+        titleFontSize: 15,
       );
     }
 
@@ -256,17 +192,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.fromLTRB(20, 16, 20, 12),
-          child: Text(
-            'Artists',
-            style: TextStyle(
-              color: AppTheme.onBackground,
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
+        const _SectionHeader(label: 'Artists', topPadding: 16),
         SizedBox(
           height: 100,
           child: ListView.builder(
@@ -298,17 +224,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.fromLTRB(20, 20, 20, 12),
-          child: Text(
-            'Albums',
-            style: TextStyle(
-              color: AppTheme.onBackground,
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
+        const _SectionHeader(label: 'Albums'),
         SizedBox(
           height: 200,
           child: ListView.builder(
@@ -342,17 +258,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.fromLTRB(20, 20, 20, 8),
-          child: Text(
-            'Tracks',
-            style: TextStyle(
-              color: AppTheme.onBackground,
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
+        const _SectionHeader(label: 'Tracks', bottomPadding: 8),
         ...tracks.asMap().entries.map((entry) {
           final index = entry.key;
           final track = entry.value;
@@ -379,17 +285,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.fromLTRB(20, 20, 20, 12),
-          child: Text(
-            'Tags',
-            style: TextStyle(
-              color: AppTheme.onBackground,
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
+        const _SectionHeader(label: 'Tags'),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Wrap(
@@ -464,6 +360,39 @@ class _ArtistChip extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+// ── Section Header ───────────────────────────────────────────────────────
+
+class _SectionHeader extends StatelessWidget {
+  final String label;
+
+  /// Top padding. Artists use 16; all other sections use 20 (default).
+  final double topPadding;
+
+  /// Bottom padding. Tracks use 8; all other sections use 12 (default).
+  final double bottomPadding;
+
+  const _SectionHeader({
+    required this.label,
+    this.topPadding = 20,
+    this.bottomPadding = 12,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(20, topPadding, 20, bottomPadding),
+      child: Text(
+        label,
+        style: const TextStyle(
+          color: AppTheme.onBackground,
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
         ),
       ),
     );

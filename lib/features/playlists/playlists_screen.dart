@@ -5,6 +5,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/widgets/empty_state.dart';
+import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 
 // ── Data provider ───────────────────────────────────────────────────────
@@ -48,12 +50,21 @@ class PlaylistsScreen extends ConsumerWidget {
       body: playlistsAsync.when(
         loading: () => const ShimmerList(itemCount: 6, itemHeight: 80),
         error:
-            (error, _) =>
-                _ErrorState(onRetry: () => ref.invalidate(playlistsProvider)),
+            (error, _) => InlineErrorState(
+              message: 'Could not load playlists',
+              onRetry: () => ref.invalidate(playlistsProvider),
+            ),
         data: (playlists) {
           if (playlists.isEmpty) {
-            return _EmptyState(
-              onCreatePressed: () => _showCreatePlaylistDialog(context, ref),
+            return EmptyState(
+              icon: Icons.queue_music_rounded,
+              title: 'No playlists yet',
+              subtitle: 'Create a playlist to organize your music',
+              action: ElevatedButton.icon(
+                onPressed: () => _showCreatePlaylistDialog(context, ref),
+                icon: const Icon(Icons.add_rounded, size: 20),
+                label: const Text('Create Playlist'),
+              ),
             );
           }
 
@@ -171,9 +182,7 @@ class _PlaylistCard extends StatelessWidget {
 
   String _buildSubtitle() {
     final parts = <String>[];
-    parts.add(
-      '${playlist.tracksCount} ${playlist.tracksCount == 1 ? 'track' : 'tracks'}',
-    );
+    parts.add(pluralizeTrack(playlist.tracksCount));
     if (playlist.duration != null && playlist.duration! > 0) {
       parts.add(formatTotalDuration(playlist.duration!));
     }
@@ -379,81 +388,6 @@ class _CreatePlaylistDialogState extends State<_CreatePlaylistDialog> {
                   ),
         ),
       ],
-    );
-  }
-}
-
-// ── Empty State ─────────────────────────────────────────────────────────
-
-class _EmptyState extends StatelessWidget {
-  final VoidCallback onCreatePressed;
-
-  const _EmptyState({required this.onCreatePressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.queue_music_rounded,
-            color: AppTheme.onBackgroundSubtle.withValues(alpha: 0.5),
-            size: 64,
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'No playlists yet',
-            style: TextStyle(
-              color: AppTheme.onBackgroundMuted,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 6),
-          const Text(
-            'Create a playlist to organize your music',
-            style: TextStyle(color: AppTheme.onBackgroundSubtle, fontSize: 13),
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton.icon(
-            onPressed: onCreatePressed,
-            icon: const Icon(Icons.add_rounded, size: 20),
-            label: const Text('Create Playlist'),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ── Error State ─────────────────────────────────────────────────────────
-
-class _ErrorState extends StatelessWidget {
-  final VoidCallback onRetry;
-
-  const _ErrorState({required this.onRetry});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.error_outline_rounded,
-            color: AppTheme.error.withValues(alpha: 0.7),
-            size: 48,
-          ),
-          const SizedBox(height: 12),
-          const Text(
-            'Could not load playlists',
-            style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 14),
-          ),
-          const SizedBox(height: 16),
-          TextButton(onPressed: onRetry, child: const Text('Retry')),
-        ],
-      ),
     );
   }
 }

@@ -10,30 +10,6 @@ import 'package:tayra/features/player/player_provider.dart';
 class MiniPlayer extends ConsumerWidget {
   const MiniPlayer({super.key});
 
-  Color _gradientSecondColor(
-    Color baseColor,
-    AsyncValue<Color> dominantColorAsync,
-  ) {
-    final hasCustomColor =
-        dominantColorAsync.hasValue &&
-        dominantColorAsync.value != AppTheme.primary;
-
-    if (hasCustomColor) {
-      final hsl = HSLColor.fromColor(baseColor);
-      if (hsl.lightness > 0.25) {
-        return hsl
-            .withLightness((hsl.lightness * 0.45).clamp(0.0, 1.0))
-            .toColor();
-      } else {
-        return hsl
-            .withLightness((hsl.lightness + 0.18).clamp(0.0, 1.0))
-            .toColor();
-      }
-    } else {
-      return AppTheme.primaryLight;
-    }
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playerState = ref.watch(playerProvider);
@@ -47,7 +23,7 @@ class MiniPlayer extends ConsumerWidget {
       data: (color) => color,
       orElse: () => AppTheme.primary,
     );
-    final gradientSecondColor = _gradientSecondColor(
+    final gradientSecondColor = AppTheme.gradientSecondColor(
       accentColor,
       dominantColorAsync,
     );
