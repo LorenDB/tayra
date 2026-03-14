@@ -20,6 +20,7 @@ class AuthState {
   final String? clientId;
   final String? clientSecret;
   final bool isLoading;
+  final bool isCheckingAuth;
   final String? error;
 
   const AuthState({
@@ -29,6 +30,7 @@ class AuthState {
     this.clientId,
     this.clientSecret,
     this.isLoading = false,
+    this.isCheckingAuth = false,
     this.error,
   });
 
@@ -41,6 +43,7 @@ class AuthState {
     String? clientId,
     String? clientSecret,
     bool? isLoading,
+    bool? isCheckingAuth,
     String? error,
   }) {
     return AuthState(
@@ -50,6 +53,7 @@ class AuthState {
       clientId: clientId ?? this.clientId,
       clientSecret: clientSecret ?? this.clientSecret,
       isLoading: isLoading ?? this.isLoading,
+      isCheckingAuth: isCheckingAuth ?? this.isCheckingAuth,
       error: error,
     );
   }
@@ -66,10 +70,13 @@ class AuthChangeNotifier extends ChangeNotifier {
 
   void updateState(AuthState newState) {
     final wasAuthenticated = _state.isAuthenticated;
+    final wasCheckingAuth = _state.isCheckingAuth;
     _state = newState;
 
-    // Only notify listeners when authentication status changes
-    if (wasAuthenticated != newState.isAuthenticated) {
+    // Notify listeners when authentication status or checking state changes
+    // (isCheckingAuth changes trigger router redirects away from the splash screen)
+    if (wasAuthenticated != newState.isAuthenticated ||
+        wasCheckingAuth != newState.isCheckingAuth) {
       notifyListeners();
     }
   }
@@ -99,7 +106,7 @@ class AuthNotifier extends Notifier<AuthState> {
   @override
   AuthState build() {
     Future.microtask(() => _loadSavedAuth());
-    return const AuthState();
+    return const AuthState(isCheckingAuth: true);
   }
 
   static const _keyServerUrl = 'server_url';
@@ -120,7 +127,10 @@ class AuthNotifier extends Notifier<AuthState> {
     try {
       final prefs = await SharedPreferences.getInstance();
       final serverUrl = prefs.getString(_keyServerUrl);
-      if (serverUrl == null) return;
+      if (serverUrl == null) {
+        state = const AuthState();
+        return;
+      }
 
       final accessToken = await _storage.read(key: _keyAccessToken);
       final refreshToken = await _storage.read(key: _keyRefreshToken);
@@ -135,9 +145,12 @@ class AuthNotifier extends Notifier<AuthState> {
           clientId: clientId,
           clientSecret: clientSecret,
         );
+      } else {
+        state = const AuthState();
       }
     } catch (_) {
       // Ignore errors on initial load
+      state = const AuthState();
     }
   }
 

@@ -54,18 +54,35 @@ final appRouterProvider = Provider<GoRouter>((ref) {
   final authChangeNotifier = ref.watch(authChangeNotifierProvider);
 
   return GoRouter(
-    initialLocation: authChangeNotifier.state.isAuthenticated ? '/' : '/login',
+    initialLocation: '/splash',
     refreshListenable: authChangeNotifier,
     observers: [ref.watch(navigationObserverProvider)],
     redirect: (context, state) {
-      final isAuth = authChangeNotifier.state.isAuthenticated;
-      final isLoginRoute = state.matchedLocation == '/login';
+      final authState = authChangeNotifier.state;
 
+      // While the initial auth check is in progress, stay on the splash screen.
+      if (authState.isCheckingAuth) {
+        return state.matchedLocation == '/splash' ? null : '/splash';
+      }
+
+      final isAuth = authState.isAuthenticated;
+      final isLoginRoute = state.matchedLocation == '/login';
+      final isSplashRoute = state.matchedLocation == '/splash';
+
+      if (isSplashRoute) return isAuth ? '/' : '/login';
       if (!isAuth && !isLoginRoute) return '/login';
       if (isAuth && isLoginRoute) return '/';
       return null;
     },
     routes: [
+      GoRoute(
+        path: '/splash',
+        name: 'splash',
+        builder:
+            (context, state) => const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            ),
+      ),
       GoRoute(
         path: '/login',
         name: 'login',
