@@ -53,6 +53,20 @@ class _AlbumsScreenState extends ConsumerState<AlbumsScreen> {
     }
   }
 
+  /// After updating the list, check if the content fills the viewport. If
+  /// the first page fits entirely on screen (no scrollable overflow), the
+  /// scroll listener never fires, so we proactively load the next page.
+  void _loadMoreIfNeeded() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _isLoadingMore || !_hasMore) return;
+      if (!_scrollController.hasClients) return;
+      final pos = _scrollController.position;
+      if (pos.maxScrollExtent - pos.pixels <= 300) {
+        _loadNextPage();
+      }
+    });
+  }
+
   Future<void> _loadNextPage() async {
     if (_isLoadingMore || !_hasMore) return;
     setState(() => _isLoadingMore = true);
@@ -67,6 +81,7 @@ class _AlbumsScreenState extends ConsumerState<AlbumsScreen> {
         _hasMore = result.next != null;
         _isLoadingMore = false;
       });
+      _loadMoreIfNeeded();
     }
   }
 
@@ -105,6 +120,7 @@ class _AlbumsScreenState extends ConsumerState<AlbumsScreen> {
                 _albums.addAll(response.results);
                 _hasMore = response.next != null;
               });
+              _loadMoreIfNeeded();
             }
           });
           return RefreshIndicator(
