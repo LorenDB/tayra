@@ -450,26 +450,6 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
     );
   }
 
-  Color _getGradientSecondColor(
-    Color baseColor,
-    AsyncValue<Color> dominantColorAsync,
-  ) {
-    // If a custom color was extracted from album art
-    final hasCustomColor =
-        dominantColorAsync.hasValue &&
-        dominantColorAsync.value != AppTheme.primary;
-
-    if (hasCustomColor) {
-      final hsl = HSLColor.fromColor(baseColor);
-      return hsl
-          .withLightness((hsl.lightness + 0.18).clamp(0.0, 1.0))
-          .toColor();
-    } else {
-      // Fallback to primary theme → use primaryLight
-      return AppTheme.primaryLight;
-    }
-  }
-
   Widget _buildSeekBar(
     PlayerState playerState,
     Color glowColor,
@@ -486,7 +466,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
             )
             : playerState.position;
 
-    final gradientSecondColor = _getGradientSecondColor(
+    final gradientSecondColor = AppTheme.gradientSecondColor(
       glowColor,
       dominantColorAsync,
     );

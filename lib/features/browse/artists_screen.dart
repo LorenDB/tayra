@@ -5,6 +5,8 @@ import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/layout/responsive.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
+import 'package:tayra/core/widgets/error_state.dart';
+import 'package:tayra/core/widgets/loading_indicator.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/browse/paginated_grid_mixin.dart';
 
@@ -41,7 +43,8 @@ class _ArtistsScreenState extends ConsumerState<ArtistsScreen>
     return firstPage.when(
       loading: () => const ShimmerList(showCircular: true, itemCount: 12),
       error:
-          (error, stack) => _ErrorView(
+          (error, stack) => CenteredErrorView(
+            title: 'Failed to load artists',
             message: error.toString(),
             onRetry: () => ref.invalidate(_artistsPageProvider(1)),
           ),
@@ -104,7 +107,7 @@ class _ArtistGrid extends StatelessWidget {
       itemCount: artists.length + (hasMore ? 1 : 0),
       itemBuilder: (context, index) {
         if (index >= artists.length) {
-          return const _LoadingIndicator();
+          return const PaginatedLoadingIndicator();
         }
         return _ArtistCard(artist: artists[index]);
       },
@@ -154,79 +157,6 @@ class _ArtistCard extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-// ── Loading indicator ───────────────────────────────────────────────────
-
-class _LoadingIndicator extends StatelessWidget {
-  const _LoadingIndicator();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: SizedBox(
-          width: 24,
-          height: 24,
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            color: AppTheme.primary,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// ── Error view ──────────────────────────────────────────────────────────
-
-class _ErrorView extends StatelessWidget {
-  final String message;
-  final VoidCallback onRetry;
-
-  const _ErrorView({required this.message, required this.onRetry});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.error_outline, color: AppTheme.error, size: 48),
-            const SizedBox(height: 16),
-            Text(
-              'Failed to load artists',
-              style: TextStyle(
-                color: AppTheme.onBackground,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              message,
-              style: const TextStyle(
-                color: AppTheme.onBackgroundMuted,
-                fontSize: 13,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton.icon(
-              onPressed: onRetry,
-              icon: const Icon(Icons.refresh, size: 18),
-              label: const Text('Retry'),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

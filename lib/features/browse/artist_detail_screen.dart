@@ -2,10 +2,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
+import 'package:tayra/core/widgets/dot_separator.dart';
+import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
+import 'package:tayra/core/widgets/tag_chip_list.dart';
 
 // ── Provider ────────────────────────────────────────────────────────────
 
@@ -33,7 +37,8 @@ class ArtistDetailScreen extends ConsumerWidget {
       body: artistAsync.when(
         loading: () => const _ArtistDetailShimmer(),
         error:
-            (error, stack) => _ErrorBody(
+            (error, stack) => DetailPageErrorBody(
+              title: 'Failed to load artist',
               message: error.toString(),
               onRetry: () => ref.invalidate(_artistDetailProvider(artistId)),
             ),
@@ -242,7 +247,7 @@ class _ArtistInfo extends StatelessWidget {
               ),
               const SizedBox(width: 4),
               Text(
-                '${artist.tracksCount} ${artist.tracksCount == 1 ? 'track' : 'tracks'}',
+                pluralizeTrack(artist.tracksCount),
                 style: const TextStyle(
                   color: AppTheme.onBackgroundMuted,
                   fontSize: 14,
@@ -270,31 +275,7 @@ class _ArtistInfo extends StatelessWidget {
           // ── Tags ──
           if (artist.tags.isNotEmpty) ...[
             const SizedBox(height: 12),
-            Wrap(
-              spacing: 8,
-              runSpacing: 6,
-              alignment: WrapAlignment.center,
-              children:
-                  artist.tags.map((tag) {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppTheme.surfaceContainerHigh,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Text(
-                        tag,
-                        style: const TextStyle(
-                          color: AppTheme.onBackgroundMuted,
-                          fontSize: 12,
-                        ),
-                      ),
-                    );
-                  }).toList(),
-            ),
+            TagChipList(tags: artist.tags),
           ],
         ],
       ),
@@ -350,18 +331,10 @@ class _AlbumListItem extends StatelessWidget {
                               fontSize: 13,
                             ),
                           ),
-                          const SizedBox(width: 8),
-                          const Text(
-                            '\u2022',
-                            style: TextStyle(
-                              color: AppTheme.onBackgroundSubtle,
-                              fontSize: 13,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
+                          const DotSeparator(),
                         ],
                         Text(
-                          '${album.tracksCount} ${album.tracksCount == 1 ? 'track' : 'tracks'}',
+                          pluralizeTrack(album.tracksCount),
                           style: const TextStyle(
                             color: AppTheme.onBackgroundSubtle,
                             fontSize: 13,
@@ -421,75 +394,6 @@ class _ArtistDetailShimmer extends StatelessWidget {
           const SizedBox(height: 32),
           // Albums shimmer
           const Expanded(child: ShimmerList(itemCount: 6)),
-        ],
-      ),
-    );
-  }
-}
-
-// ── Error body ──────────────────────────────────────────────────────────
-
-class _ErrorBody extends StatelessWidget {
-  final String message;
-  final VoidCallback onRetry;
-
-  const _ErrorBody({required this.message, required this.onRetry});
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        children: [
-          AppBar(
-            backgroundColor: Colors.transparent,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () => context.pop(),
-            ),
-          ),
-          Expanded(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(32),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(
-                      Icons.error_outline,
-                      color: AppTheme.error,
-                      size: 48,
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'Failed to load artist',
-                      style: TextStyle(
-                        color: AppTheme.onBackground,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      message,
-                      style: const TextStyle(
-                        color: AppTheme.onBackgroundMuted,
-                        fontSize: 13,
-                      ),
-                      textAlign: TextAlign.center,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton.icon(
-                      onPressed: onRetry,
-                      icon: const Icon(Icons.refresh, size: 18),
-                      label: const Text('Retry'),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );

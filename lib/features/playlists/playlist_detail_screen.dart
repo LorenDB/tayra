@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/widgets/empty_state.dart';
+import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/track_list_tile.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/player/player_provider.dart';
@@ -129,28 +131,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
         children: [
           _buildAppBar(title: 'Playlist'),
           Expanded(
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.error_outline_rounded,
-                    color: AppTheme.error.withValues(alpha: 0.7),
-                    size: 48,
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    _error!,
-                    style: const TextStyle(
-                      color: AppTheme.onBackgroundMuted,
-                      fontSize: 14,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextButton(onPressed: _loadData, child: const Text('Retry')),
-                ],
-              ),
-            ),
+            child: InlineErrorState(message: _error!, onRetry: _loadData),
           ),
         ],
       ),
@@ -248,35 +229,14 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
 
           // Empty state for tracks
           if (_playlistTracks.isEmpty)
-            SliverFillRemaining(
+            const SliverFillRemaining(
               hasScrollBody: false,
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.music_note_rounded,
-                      color: AppTheme.onBackgroundSubtle.withValues(alpha: 0.5),
-                      size: 48,
-                    ),
-                    const SizedBox(height: 12),
-                    const Text(
-                      'No tracks in this playlist',
-                      style: TextStyle(
-                        color: AppTheme.onBackgroundMuted,
-                        fontSize: 14,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      'Add tracks from the search or library',
-                      style: TextStyle(
-                        color: AppTheme.onBackgroundSubtle,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
+              child: EmptyState(
+                icon: Icons.music_note_rounded,
+                title: 'No tracks in this playlist',
+                subtitle: 'Add tracks from the search or library',
+                iconSize: 48,
+                titleFontSize: 14,
               ),
             ),
 
@@ -322,9 +282,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
 
   String _buildStatsText(Playlist playlist) {
     final parts = <String>[];
-    parts.add(
-      '${playlist.tracksCount} ${playlist.tracksCount == 1 ? 'track' : 'tracks'}',
-    );
+    parts.add(pluralizeTrack(playlist.tracksCount));
     if (playlist.duration != null && playlist.duration! > 0) {
       parts.add(playlist.formattedDuration);
     }

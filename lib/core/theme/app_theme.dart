@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
@@ -42,6 +43,30 @@ class AppTheme {
     end: Alignment.bottomCenter,
     colors: [primary.withValues(alpha: 0.06), Colors.transparent],
   );
+
+  /// Returns a lighter variant of [baseColor] to use as the second stop in a
+  /// two-colour gradient progress bar / seek bar.
+  ///
+  /// When album art yields a custom dominant colour, lightness is bumped by
+  /// +0.18. When the player falls back to the default primary, [primaryLight]
+  /// is returned so the gradient always looks intentional.
+  static Color gradientSecondColor(
+    Color baseColor,
+    AsyncValue<Color> dominantColorAsync,
+  ) {
+    final hasCustomColor =
+        dominantColorAsync.hasValue &&
+        dominantColorAsync.value != AppTheme.primary;
+
+    if (hasCustomColor) {
+      final hsl = HSLColor.fromColor(baseColor);
+      return hsl
+          .withLightness((hsl.lightness + 0.18).clamp(0.0, 1.0))
+          .toColor();
+    } else {
+      return AppTheme.primaryLight;
+    }
+  }
 
   // ── Theme data ────────────────────────────────────────────────────────
   static ThemeData get darkTheme {

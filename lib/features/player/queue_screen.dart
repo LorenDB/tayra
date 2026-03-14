@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
+import 'package:tayra/core/widgets/empty_state.dart';
 import 'package:tayra/features/player/player_provider.dart';
 
 class QueueScreen extends ConsumerStatefulWidget {
@@ -114,31 +115,10 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
   }
 
   Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.queue_music_rounded,
-            color: AppTheme.onBackgroundSubtle.withValues(alpha: 0.5),
-            size: 64,
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'Queue is empty',
-            style: TextStyle(
-              color: AppTheme.onBackgroundMuted,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 6),
-          const Text(
-            'Play some music to fill the queue',
-            style: TextStyle(color: AppTheme.onBackgroundSubtle, fontSize: 13),
-          ),
-        ],
-      ),
+    return const EmptyState(
+      icon: Icons.queue_music_rounded,
+      title: 'Queue is empty',
+      subtitle: 'Play some music to fill the queue',
     );
   }
 
