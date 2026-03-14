@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/track_list_tile.dart';
@@ -138,14 +139,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
     parts.add('$count ${count == 1 ? 'track' : 'tracks'}');
 
     if (totalDuration > 0) {
-      final hours = totalDuration ~/ 3600;
-      final minutes = (totalDuration % 3600) ~/ 60;
-      String durationStr;
-      if (hours > 0) {
-        durationStr = '${hours}h ${minutes}m';
-      } else {
-        durationStr = '$minutes min';
-      }
+      final durationStr = formatTotalDuration(totalDuration);
       parts.add(hasMissingDuration ? '~ $durationStr' : durationStr);
     }
 

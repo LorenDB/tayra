@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
@@ -174,18 +175,9 @@ class _PlaylistCard extends StatelessWidget {
       '${playlist.tracksCount} ${playlist.tracksCount == 1 ? 'track' : 'tracks'}',
     );
     if (playlist.duration != null && playlist.duration! > 0) {
-      parts.add(_formatDuration(playlist.duration!));
+      parts.add(formatTotalDuration(playlist.duration!));
     }
     return parts.join(' · ');
-  }
-
-  String _formatDuration(int totalSeconds) {
-    final hours = totalSeconds ~/ 3600;
-    final minutes = (totalSeconds % 3600) ~/ 60;
-    if (hours > 0) {
-      return '${hours}h ${minutes}m';
-    }
-    return '${minutes}m';
   }
 }
 

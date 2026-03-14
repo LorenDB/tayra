@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/features/player/player_provider.dart';
@@ -381,7 +382,7 @@ class _QueueTrackRow extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: Text(
-                    _formatDuration(track.duration!),
+                    formatTrackDuration(track.duration!),
                     style: const TextStyle(
                       color: AppTheme.onBackgroundSubtle,
                       fontSize: 12,
@@ -406,12 +407,6 @@ class _QueueTrackRow extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _formatDuration(int seconds) {
-    final m = seconds ~/ 60;
-    final s = seconds % 60;
-    return '$m:${s.toString().padLeft(2, '0')}';
   }
 }
 
