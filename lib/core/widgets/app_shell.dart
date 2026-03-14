@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/layout/responsive.dart';
 import 'package:tayra/features/player/mini_player.dart';
-import 'package:tayra/features/player/now_playing_panel.dart';
 import 'package:tayra/features/player/player_provider.dart';
+import 'package:tayra/core/widgets/side_panel.dart';
 
 /// The main app shell with adaptive navigation:
 /// - Compact (< 600px):  bottom navigation bar + mini-player
@@ -105,7 +105,7 @@ class AppShell extends ConsumerWidget {
               thickness: 0.5,
               color: AppTheme.divider,
             ),
-            const SizedBox(width: 340, child: NowPlayingPanel()),
+            const SizedBox(width: 340, child: SidePanel()),
           ],
         ],
       ),
