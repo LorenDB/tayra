@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:aptabase_flutter/aptabase_flutter.dart';
+import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/api/api_client.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
@@ -381,27 +382,15 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
           parentMediaId.substring(_BrowseIds.albumPrefix.length),
         );
         if (albumId == null) return [];
-        final allTracks = <Track>[];
-        int page = 1;
-        while (true) {
-          final response = await apiClient.getTracks(
+        final allTracks = await fetchAllPages(
+          (page) => apiClient.getTracks(
             album: albumId,
             ordering: 'position',
             pageSize: 100,
             page: page,
-          );
-          allTracks.addAll(response.results);
-          if (response.next == null) break;
-          page++;
-        }
-        allTracks.sort((a, b) {
-          final discA = a.discNumber ?? 1;
-          final discB = b.discNumber ?? 1;
-          if (discA != discB) return discA.compareTo(discB);
-          final posA = a.position ?? 0;
-          final posB = b.position ?? 0;
-          return posA.compareTo(posB);
-        });
+          ),
+        );
+        sortTracksByDiscAndPosition(allTracks);
         return allTracks
             .map(
               (track) => _trackToMediaItem(
@@ -434,18 +423,13 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
           parentMediaId.substring(_BrowseIds.playlistPrefix.length),
         );
         if (playlistId == null) return [];
-        final allPlaylistTracks = <PlaylistTrack>[];
-        int page = 1;
-        while (true) {
-          final response = await apiClient.getPlaylistTracks(
+        final allPlaylistTracks = await fetchAllPages(
+          (page) => apiClient.getPlaylistTracks(
             playlistId,
             page: page,
             pageSize: 100,
-          );
-          allPlaylistTracks.addAll(response.results);
-          if (response.next == null) break;
-          page++;
-        }
+          ),
+        );
         allPlaylistTracks.sort(
           (a, b) => (a.index ?? 0).compareTo(b.index ?? 0),
         );
@@ -534,27 +518,15 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
         // Determine which album this track belongs to and load all tracks.
         final track = await apiClient.getTrack(trackId);
         if (track.album != null) {
-          final allTracks = <Track>[];
-          int page = 1;
-          while (true) {
-            final response = await apiClient.getTracks(
+          final allTracks = await fetchAllPages(
+            (page) => apiClient.getTracks(
               album: track.album!.id,
               ordering: 'position',
               pageSize: 100,
               page: page,
-            );
-            allTracks.addAll(response.results);
-            if (response.next == null) break;
-            page++;
-          }
-          allTracks.sort((a, b) {
-            final discA = a.discNumber ?? 1;
-            final discB = b.discNumber ?? 1;
-            if (discA != discB) return discA.compareTo(discB);
-            final posA = a.position ?? 0;
-            final posB = b.position ?? 0;
-            return posA.compareTo(posB);
-          });
+            ),
+          );
+          sortTracksByDiscAndPosition(allTracks);
           final index = allTracks.indexWhere((t) => t.id == trackId);
           await onPlayTracks?.call(
             allTracks,
