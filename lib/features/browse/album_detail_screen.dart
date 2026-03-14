@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/theme/palette_provider.dart';
@@ -45,24 +46,13 @@ class _AlbumTracksNotifier extends AsyncNotifier<List<Track>> {
         page: page,
       );
       allTracks.addAll(response.results);
-      _sortTracks(allTracks);
+      sortTracksByDiscAndPosition(allTracks);
       // Emit after each page so the UI shows tracks as they arrive.
       state = AsyncData(List<Track>.unmodifiable(allTracks));
       if (response.next == null) break;
       page++;
     }
     return List<Track>.unmodifiable(allTracks);
-  }
-
-  static void _sortTracks(List<Track> tracks) {
-    tracks.sort((a, b) {
-      final discA = a.discNumber ?? 1;
-      final discB = b.discNumber ?? 1;
-      if (discA != discB) return discA.compareTo(discB);
-      final posA = a.position ?? 0;
-      final posB = b.position ?? 0;
-      return posA.compareTo(posB);
-    });
   }
 }
 

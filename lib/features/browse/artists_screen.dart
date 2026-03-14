@@ -6,6 +6,7 @@ import 'package:tayra/core/layout/responsive.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
+import 'package:tayra/features/browse/paginated_grid_mixin.dart';
 
 // ── Providers ───────────────────────────────────────────────────────────
 
@@ -24,82 +25,14 @@ class ArtistsScreen extends ConsumerStatefulWidget {
   ConsumerState<ArtistsScreen> createState() => _ArtistsScreenState();
 }
 
-class _ArtistsScreenState extends ConsumerState<ArtistsScreen> {
-  final ScrollController _scrollController = ScrollController();
-  final List<Artist> _artists = [];
-  int _currentPage = 1;
-  bool _hasMore = true;
-  bool _isLoadingMore = false;
+class _ArtistsScreenState extends ConsumerState<ArtistsScreen>
+    with PaginatedGridMixin<Artist, ArtistsScreen> {
+  @override
+  Future<PaginatedResponse<Artist>> fetchPage(int page) =>
+      ref.read(_artistsPageProvider(page).future);
 
   @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-  }
-
-  @override
-  void dispose() {
-    _scrollController.removeListener(_onScroll);
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-            _scrollController.position.maxScrollExtent - 300 &&
-        !_isLoadingMore &&
-        _hasMore) {
-      _loadNextPage();
-    }
-  }
-
-  /// After updating the list, check if the content fills the viewport. If
-  /// the first page fits entirely on screen (no scrollable overflow), the
-  /// scroll listener never fires, so we proactively load the next page.
-  void _loadMoreIfNeeded() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted || _isLoadingMore || !_hasMore) return;
-      if (!_scrollController.hasClients) return;
-      final pos = _scrollController.position;
-      if (pos.maxScrollExtent - pos.pixels <= 300) {
-        _loadNextPage();
-      }
-    });
-  }
-
-  Future<void> _loadNextPage() async {
-    if (_isLoadingMore || !_hasMore) return;
-    setState(() => _isLoadingMore = true);
-
-    final nextPage = _currentPage + 1;
-    // Trigger the provider for the next page
-    final result = await ref.read(_artistsPageProvider(nextPage).future);
-
-    if (mounted) {
-      setState(() {
-        _artists.addAll(result.results);
-        _currentPage = nextPage;
-        _hasMore = result.next != null;
-        _isLoadingMore = false;
-      });
-      _loadMoreIfNeeded();
-    }
-  }
-
-  Future<void> _refresh() async {
-    ref.invalidate(_artistsPageProvider(1));
-    final result = await ref.read(_artistsPageProvider(1).future);
-    if (mounted) {
-      setState(() {
-        _artists
-          ..clear()
-          ..addAll(result.results);
-        _currentPage = 1;
-        _hasMore = result.next != null;
-        _isLoadingMore = false;
-      });
-    }
-  }
+  void invalidatePage(int page) => ref.invalidate(_artistsPageProvider(page));
 
   @override
   Widget build(BuildContext context) {
@@ -113,41 +46,16 @@ class _ArtistsScreenState extends ConsumerState<ArtistsScreen> {
             onRetry: () => ref.invalidate(_artistsPageProvider(1)),
           ),
       data: (response) {
-        // Seed the local list from the first page on initial load
-        if (_artists.isEmpty && response.results.isNotEmpty) {
-          // Use addPostFrameCallback to avoid setState during build
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (mounted && _artists.isEmpty) {
-              setState(() {
-                _artists.addAll(response.results);
-                _hasMore = response.next != null;
-              });
-              _loadMoreIfNeeded();
-            }
-          });
-          // Show first page results directly while local list populates
-          return RefreshIndicator(
-            color: AppTheme.primary,
-            backgroundColor: AppTheme.surfaceContainer,
-            onRefresh: _refresh,
-            child: _ArtistGrid(
-              artists: response.results,
-              scrollController: _scrollController,
-              hasMore: response.next != null,
-              isLoadingMore: false,
-            ),
-          );
-        }
-
+        seedIfEmpty(response);
         return RefreshIndicator(
           color: AppTheme.primary,
           backgroundColor: AppTheme.surfaceContainer,
-          onRefresh: _refresh,
+          onRefresh: refresh,
           child: _ArtistGrid(
-            artists: _artists,
-            scrollController: _scrollController,
-            hasMore: _hasMore,
-            isLoadingMore: _isLoadingMore,
+            artists: items.isEmpty ? response.results : items,
+            scrollController: scrollController,
+            hasMore: items.isEmpty ? response.next != null : hasMore,
+            isLoadingMore: items.isEmpty ? false : isLoadingMore,
           ),
         );
       },

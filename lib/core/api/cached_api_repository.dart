@@ -41,6 +41,41 @@ class CachedFunkwhaleApi {
     }
   }
 
+  /// Generic cache-or-fetch pattern used by every read method:
+  ///  1. Return a fresh cache hit immediately (unless [forceRefresh]).
+  ///  2. On cache miss, call [fetch] and write the result to the cache.
+  ///  3. On network failure, fall back to a stale cache entry if available.
+  Future<T> _cachedFetch<T>({
+    required String cacheKey,
+    required CacheType cacheType,
+    required T Function(Map<String, dynamic>) fromJson,
+    required Map<String, dynamic> Function(T) toJson,
+    required Future<T> Function() fetch,
+    required Duration ttl,
+    bool forceRefresh = false,
+  }) async {
+    if (!forceRefresh) {
+      final hit = await _tryCache(cacheKey, fromJson);
+      if (hit != null) return hit;
+    }
+
+    try {
+      final result = await fetch();
+      _cache
+          .putMetadata(cacheKey, cacheType, toJson(result), ttl: ttl)
+          .catchError((_) {});
+      return result;
+    } catch (_) {
+      final stale = await _cache.getMetadataStale(cacheKey);
+      if (stale != null) {
+        try {
+          return fromJson(stale);
+        } catch (_) {}
+      }
+      rethrow;
+    }
+  }
+
   // ── Albums ──────────────────────────────────────────────────────────
 
   Future<PaginatedResponse<Album>> getAlbums({
@@ -55,72 +90,35 @@ class CachedFunkwhaleApi {
     final cacheKey =
         'albums_p${page}_s${pageSize}_o${ordering}_'
         'a${artist}_sc${scope}_q$q';
-
-    if (!forceRefresh) {
-      final hit = await _tryCache(
-        cacheKey,
-        (j) => PaginatedResponse.fromJson(j, Album.fromJson),
-      );
-      if (hit != null) return hit;
-    }
-
-    try {
-      final response = await _api.getAlbums(
-        page: page,
-        pageSize: pageSize,
-        ordering: ordering,
-        artist: artist,
-        scope: scope,
-        q: q,
-      );
-      _cache
-          .putMetadata(
-            cacheKey,
-            CacheType.recentAlbums,
-            _paginatedResponseToJson(response, _albumToJson),
-            ttl: const Duration(minutes: 5),
-          )
-          .catchError((_) {});
-      return response;
-    } catch (_) {
-      final stale = await _cache.getMetadataStale(cacheKey);
-      if (stale != null) {
-        try {
-          return PaginatedResponse.fromJson(stale, Album.fromJson);
-        } catch (_) {}
-      }
-      rethrow;
-    }
+    return _cachedFetch(
+      cacheKey: cacheKey,
+      cacheType: CacheType.recentAlbums,
+      fromJson: (j) => PaginatedResponse.fromJson(j, Album.fromJson),
+      toJson: (r) => _paginatedResponseToJson(r, _albumToJson),
+      fetch:
+          () => _api.getAlbums(
+            page: page,
+            pageSize: pageSize,
+            ordering: ordering,
+            artist: artist,
+            scope: scope,
+            q: q,
+          ),
+      ttl: const Duration(minutes: 5),
+      forceRefresh: forceRefresh,
+    );
   }
 
   Future<Album> getAlbum(int id, {bool forceRefresh = false}) async {
-    final cacheKey = 'album_$id';
-
-    if (!forceRefresh) {
-      final hit = await _tryCache(cacheKey, Album.fromJson);
-      if (hit != null) return hit;
-    }
-
-    try {
-      final album = await _api.getAlbum(id);
-      _cache
-          .putMetadata(
-            cacheKey,
-            CacheType.album,
-            _albumToJson(album),
-            ttl: const Duration(hours: 1),
-          )
-          .catchError((_) {});
-      return album;
-    } catch (_) {
-      final stale = await _cache.getMetadataStale(cacheKey);
-      if (stale != null) {
-        try {
-          return Album.fromJson(stale);
-        } catch (_) {}
-      }
-      rethrow;
-    }
+    return _cachedFetch(
+      cacheKey: 'album_$id',
+      cacheType: CacheType.album,
+      fromJson: Album.fromJson,
+      toJson: _albumToJson,
+      fetch: () => _api.getAlbum(id),
+      ttl: const Duration(hours: 1),
+      forceRefresh: forceRefresh,
+    );
   }
 
   // ── Artists ─────────────────────────────────────────────────────────
@@ -137,72 +135,35 @@ class CachedFunkwhaleApi {
     final cacheKey =
         'artists_p${page}_s${pageSize}_o${ordering}_'
         'h${hasAlbums}_sc${scope}_q$q';
-
-    if (!forceRefresh) {
-      final hit = await _tryCache(
-        cacheKey,
-        (j) => PaginatedResponse.fromJson(j, Artist.fromJson),
-      );
-      if (hit != null) return hit;
-    }
-
-    try {
-      final response = await _api.getArtists(
-        page: page,
-        pageSize: pageSize,
-        ordering: ordering,
-        hasAlbums: hasAlbums,
-        scope: scope,
-        q: q,
-      );
-      _cache
-          .putMetadata(
-            cacheKey,
-            CacheType.recentArtists,
-            _paginatedResponseToJson(response, _artistToJson),
-            ttl: const Duration(minutes: 5),
-          )
-          .catchError((_) {});
-      return response;
-    } catch (_) {
-      final stale = await _cache.getMetadataStale(cacheKey);
-      if (stale != null) {
-        try {
-          return PaginatedResponse.fromJson(stale, Artist.fromJson);
-        } catch (_) {}
-      }
-      rethrow;
-    }
+    return _cachedFetch(
+      cacheKey: cacheKey,
+      cacheType: CacheType.recentArtists,
+      fromJson: (j) => PaginatedResponse.fromJson(j, Artist.fromJson),
+      toJson: (r) => _paginatedResponseToJson(r, _artistToJson),
+      fetch:
+          () => _api.getArtists(
+            page: page,
+            pageSize: pageSize,
+            ordering: ordering,
+            hasAlbums: hasAlbums,
+            scope: scope,
+            q: q,
+          ),
+      ttl: const Duration(minutes: 5),
+      forceRefresh: forceRefresh,
+    );
   }
 
   Future<Artist> getArtist(int id, {bool forceRefresh = false}) async {
-    final cacheKey = 'artist_$id';
-
-    if (!forceRefresh) {
-      final hit = await _tryCache(cacheKey, Artist.fromJson);
-      if (hit != null) return hit;
-    }
-
-    try {
-      final artist = await _api.getArtist(id);
-      _cache
-          .putMetadata(
-            cacheKey,
-            CacheType.artist,
-            _artistToJson(artist),
-            ttl: const Duration(hours: 1),
-          )
-          .catchError((_) {});
-      return artist;
-    } catch (_) {
-      final stale = await _cache.getMetadataStale(cacheKey);
-      if (stale != null) {
-        try {
-          return Artist.fromJson(stale);
-        } catch (_) {}
-      }
-      rethrow;
-    }
+    return _cachedFetch(
+      cacheKey: 'artist_$id',
+      cacheType: CacheType.artist,
+      fromJson: Artist.fromJson,
+      toJson: _artistToJson,
+      fetch: () => _api.getArtist(id),
+      ttl: const Duration(hours: 1),
+      forceRefresh: forceRefresh,
+    );
   }
 
   // ── Tracks ──────────────────────────────────────────────────────────
@@ -220,105 +181,50 @@ class CachedFunkwhaleApi {
     final cacheKey =
         'tracks_p${page}_s${pageSize}_o${ordering}_'
         'al${album}_ar${artist}_sc${scope}_q$q';
-
-    if (!forceRefresh) {
-      final hit = await _tryCache(
-        cacheKey,
-        (j) => PaginatedResponse.fromJson(j, Track.fromJson),
-      );
-      if (hit != null) return hit;
-    }
-
-    try {
-      final response = await _api.getTracks(
-        page: page,
-        pageSize: pageSize,
-        ordering: ordering,
-        album: album,
-        artist: artist,
-        scope: scope,
-        q: q,
-      );
-      _cache
-          .putMetadata(
-            cacheKey,
-            CacheType.track,
-            _paginatedResponseToJson(response, _trackToJson),
-            ttl: const Duration(minutes: 5),
-          )
-          .catchError((_) {});
-      return response;
-    } catch (_) {
-      final stale = await _cache.getMetadataStale(cacheKey);
-      if (stale != null) {
-        try {
-          return PaginatedResponse.fromJson(stale, Track.fromJson);
-        } catch (_) {}
-      }
-      rethrow;
-    }
+    return _cachedFetch(
+      cacheKey: cacheKey,
+      cacheType: CacheType.track,
+      fromJson: (j) => PaginatedResponse.fromJson(j, Track.fromJson),
+      toJson: (r) => _paginatedResponseToJson(r, _trackToJson),
+      fetch:
+          () => _api.getTracks(
+            page: page,
+            pageSize: pageSize,
+            ordering: ordering,
+            album: album,
+            artist: artist,
+            scope: scope,
+            q: q,
+          ),
+      ttl: const Duration(minutes: 5),
+      forceRefresh: forceRefresh,
+    );
   }
 
   Future<Track> getTrack(int id, {bool forceRefresh = false}) async {
-    final cacheKey = 'track_$id';
-
-    if (!forceRefresh) {
-      final hit = await _tryCache(cacheKey, Track.fromJson);
-      if (hit != null) return hit;
-    }
-
-    try {
-      final track = await _api.getTrack(id);
-      _cache
-          .putMetadata(
-            cacheKey,
-            CacheType.track,
-            _trackToJson(track),
-            ttl: const Duration(hours: 1),
-          )
-          .catchError((_) {});
-      return track;
-    } catch (_) {
-      final stale = await _cache.getMetadataStale(cacheKey);
-      if (stale != null) {
-        try {
-          return Track.fromJson(stale);
-        } catch (_) {}
-      }
-      rethrow;
-    }
+    return _cachedFetch(
+      cacheKey: 'track_$id',
+      cacheType: CacheType.track,
+      fromJson: Track.fromJson,
+      toJson: _trackToJson,
+      fetch: () => _api.getTrack(id),
+      ttl: const Duration(hours: 1),
+      forceRefresh: forceRefresh,
+    );
   }
 
   // ── Search ──────────────────────────────────────────────────────────
 
   Future<SearchResult> search(String query, {bool forceRefresh = false}) async {
-    final cacheKey = 'search_$query';
-
-    if (!forceRefresh) {
-      final hit = await _tryCache(cacheKey, SearchResult.fromJson);
-      if (hit != null) return hit;
-    }
-
-    try {
-      final result = await _api.search(query);
-      _cache
-          .putMetadata(
-            cacheKey,
-            CacheType.searchResults,
-            _searchResultToJson(result),
-            ttl: const Duration(minutes: 2),
-          )
-          .catchError((_) {});
-      return result;
-    } catch (_) {
-      final stale = await _cache.getMetadataStale(cacheKey);
-      if (stale != null) {
-        try {
-          return SearchResult.fromJson(stale);
-        } catch (_) {}
-      }
-      rethrow;
-    }
+    return _cachedFetch(
+      cacheKey: 'search_$query',
+      cacheType: CacheType.searchResults,
+      fromJson: SearchResult.fromJson,
+      toJson: _searchResultToJson,
+      fetch: () => _api.search(query),
+      ttl: const Duration(minutes: 2),
+      forceRefresh: forceRefresh,
+    );
   }
 
   // ── Favorites ───────────────────────────────────────────────────────
@@ -328,36 +234,15 @@ class CachedFunkwhaleApi {
     int pageSize = 20,
     bool forceRefresh = false,
   }) async {
-    final cacheKey = 'favorites_p${page}_s$pageSize';
-
-    if (!forceRefresh) {
-      final hit = await _tryCache(
-        cacheKey,
-        (j) => PaginatedResponse.fromJson(j, Favorite.fromJson),
-      );
-      if (hit != null) return hit;
-    }
-
-    try {
-      final response = await _api.getFavorites(page: page, pageSize: pageSize);
-      _cache
-          .putMetadata(
-            cacheKey,
-            CacheType.track, // reuse type for favorites list
-            _paginatedResponseToJson(response, _favoriteToJson),
-            ttl: const Duration(minutes: 5),
-          )
-          .catchError((_) {});
-      return response;
-    } catch (_) {
-      final stale = await _cache.getMetadataStale(cacheKey);
-      if (stale != null) {
-        try {
-          return PaginatedResponse.fromJson(stale, Favorite.fromJson);
-        } catch (_) {}
-      }
-      rethrow;
-    }
+    return _cachedFetch(
+      cacheKey: 'favorites_p${page}_s$pageSize',
+      cacheType: CacheType.track, // reuse type for favorites list
+      fromJson: (j) => PaginatedResponse.fromJson(j, Favorite.fromJson),
+      toJson: (r) => _paginatedResponseToJson(r, _favoriteToJson),
+      fetch: () => _api.getFavorites(page: page, pageSize: pageSize),
+      ttl: const Duration(minutes: 5),
+      forceRefresh: forceRefresh,
+    );
   }
 
   Future<Set<int>> getAllFavoriteTrackIds({bool forceRefresh = false}) async {
@@ -407,70 +292,28 @@ class CachedFunkwhaleApi {
     String? scope,
     bool forceRefresh = false,
   }) async {
-    final cacheKey = 'playlists_p${page}_s${pageSize}_sc$scope';
-
-    if (!forceRefresh) {
-      final hit = await _tryCache(
-        cacheKey,
-        (j) => PaginatedResponse.fromJson(j, Playlist.fromJson),
-      );
-      if (hit != null) return hit;
-    }
-
-    try {
-      final response = await _api.getPlaylists(
-        page: page,
-        pageSize: pageSize,
-        scope: scope,
-      );
-      _cache
-          .putMetadata(
-            cacheKey,
-            CacheType.playlist,
-            _paginatedResponseToJson(response, _playlistToJson),
-            ttl: const Duration(minutes: 2),
-          )
-          .catchError((_) {});
-      return response;
-    } catch (_) {
-      final stale = await _cache.getMetadataStale(cacheKey);
-      if (stale != null) {
-        try {
-          return PaginatedResponse.fromJson(stale, Playlist.fromJson);
-        } catch (_) {}
-      }
-      rethrow;
-    }
+    return _cachedFetch(
+      cacheKey: 'playlists_p${page}_s${pageSize}_sc$scope',
+      cacheType: CacheType.playlist,
+      fromJson: (j) => PaginatedResponse.fromJson(j, Playlist.fromJson),
+      toJson: (r) => _paginatedResponseToJson(r, _playlistToJson),
+      fetch:
+          () => _api.getPlaylists(page: page, pageSize: pageSize, scope: scope),
+      ttl: const Duration(minutes: 2),
+      forceRefresh: forceRefresh,
+    );
   }
 
   Future<Playlist> getPlaylist(int id, {bool forceRefresh = false}) async {
-    final cacheKey = 'playlist_$id';
-
-    if (!forceRefresh) {
-      final hit = await _tryCache(cacheKey, Playlist.fromJson);
-      if (hit != null) return hit;
-    }
-
-    try {
-      final playlist = await _api.getPlaylist(id);
-      _cache
-          .putMetadata(
-            cacheKey,
-            CacheType.playlist,
-            _playlistToJson(playlist),
-            ttl: const Duration(minutes: 2),
-          )
-          .catchError((_) {});
-      return playlist;
-    } catch (_) {
-      final stale = await _cache.getMetadataStale(cacheKey);
-      if (stale != null) {
-        try {
-          return Playlist.fromJson(stale);
-        } catch (_) {}
-      }
-      rethrow;
-    }
+    return _cachedFetch(
+      cacheKey: 'playlist_$id',
+      cacheType: CacheType.playlist,
+      fromJson: Playlist.fromJson,
+      toJson: _playlistToJson,
+      fetch: () => _api.getPlaylist(id),
+      ttl: const Duration(minutes: 2),
+      forceRefresh: forceRefresh,
+    );
   }
 
   Future<PaginatedResponse<PlaylistTrack>> getPlaylistTracks(
@@ -479,40 +322,15 @@ class CachedFunkwhaleApi {
     int pageSize = 50,
     bool forceRefresh = false,
   }) async {
-    final cacheKey = 'playlist_tracks_${id}_p${page}_s$pageSize';
-
-    if (!forceRefresh) {
-      final hit = await _tryCache(
-        cacheKey,
-        (j) => PaginatedResponse.fromJson(j, PlaylistTrack.fromJson),
-      );
-      if (hit != null) return hit;
-    }
-
-    try {
-      final response = await _api.getPlaylistTracks(
-        id,
-        page: page,
-        pageSize: pageSize,
-      );
-      _cache
-          .putMetadata(
-            cacheKey,
-            CacheType.playlist,
-            _paginatedResponseToJson(response, _playlistTrackToJson),
-            ttl: const Duration(minutes: 2),
-          )
-          .catchError((_) {});
-      return response;
-    } catch (_) {
-      final stale = await _cache.getMetadataStale(cacheKey);
-      if (stale != null) {
-        try {
-          return PaginatedResponse.fromJson(stale, PlaylistTrack.fromJson);
-        } catch (_) {}
-      }
-      rethrow;
-    }
+    return _cachedFetch(
+      cacheKey: 'playlist_tracks_${id}_p${page}_s$pageSize',
+      cacheType: CacheType.playlist,
+      fromJson: (j) => PaginatedResponse.fromJson(j, PlaylistTrack.fromJson),
+      toJson: (r) => _paginatedResponseToJson(r, _playlistTrackToJson),
+      fetch: () => _api.getPlaylistTracks(id, page: page, pageSize: pageSize),
+      ttl: const Duration(minutes: 2),
+      forceRefresh: forceRefresh,
+    );
   }
 
   // ── Write operations (pass-through, invalidate cache) ───────────────

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/track_list_tile.dart';
@@ -37,32 +38,20 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
     try {
       final api = ref.read(cachedFunkwhaleApiProvider);
 
-      // Fetch playlist metadata and first page of tracks in parallel.
-      final firstPageFuture = api.getPlaylistTracks(
-        widget.playlistId,
-        pageSize: 100,
-      );
-      final playlistFuture = api.getPlaylist(widget.playlistId);
-      final results = await Future.wait([playlistFuture, firstPageFuture]);
-
-      final playlist = results[0] as Playlist;
-      final firstPage = results[1] as PaginatedResponse<PlaylistTrack>;
-
-      // Collect all tracks, fetching additional pages if needed.
-      final allTracks = <PlaylistTrack>[...firstPage.results];
-      if (firstPage.next != null) {
-        int page = 2;
-        while (true) {
-          final nextPage = await api.getPlaylistTracks(
+      // Fetch playlist metadata and all track pages in parallel.
+      final results = await Future.wait([
+        api.getPlaylist(widget.playlistId),
+        fetchAllPages(
+          (page) => api.getPlaylistTracks(
             widget.playlistId,
             page: page,
             pageSize: 100,
-          );
-          allTracks.addAll(nextPage.results);
-          if (nextPage.next == null) break;
-          page++;
-        }
-      }
+          ),
+        ),
+      ]);
+
+      final playlist = results[0] as Playlist;
+      final allTracks = results[1] as List<PlaylistTrack>;
 
       // Sort by playlist index so tracks appear in the correct order.
       allTracks.sort((a, b) => (a.index ?? 0).compareTo(b.index ?? 0));
