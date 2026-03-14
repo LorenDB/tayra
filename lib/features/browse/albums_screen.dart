@@ -203,70 +203,66 @@ class _AlbumCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Stack(
-                children: [
-                  CoverArtWidget(
-                    imageUrl: album.coverUrl,
-                    size: imageSize,
-                    borderRadius: 10,
-                    shadow: BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.4),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      height: imageSize * 0.35,
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
-                        ),
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.transparent,
-                            Colors.black.withValues(alpha: 0.55),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Stack(
+                  fit: StackFit.expand,
                   children: [
-                    Text(
-                      album.title,
-                      style: const TextStyle(
-                        color: AppTheme.onBackground,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
+                    CoverArtWidget(
+                      imageUrl: album.coverUrl,
+                      size: imageSize,
+                      borderRadius: 10,
+                      shadow: BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.4),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 2),
-                    Text(
-                      album.artist?.name ?? 'Unknown Artist',
-                      style: const TextStyle(
-                        color: AppTheme.onBackgroundMuted,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        height: imageSize * 0.35,
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
+                          ),
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withValues(alpha: 0.55),
+                            ],
+                          ),
+                        ),
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                album.title,
+                style: const TextStyle(
+                  color: AppTheme.onBackground,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 2),
+              Text(
+                album.artist?.name ?? 'Unknown Artist',
+                style: const TextStyle(
+                  color: AppTheme.onBackgroundMuted,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),
