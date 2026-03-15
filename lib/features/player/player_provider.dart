@@ -1016,10 +1016,35 @@ class PlayerNotifier extends Notifier<PlayerState> {
       final cachedFile = await _audioCache.getCachedAudio(track);
       if (cachedFile != null) {
         _handler.mediaItem.add(mediaItem);
-        await _handler.audioPlayer.setAudioSource(
-          AudioSource.uri(cachedFile.uri),
-          initialPosition: initialPosition,
-        );
+        try {
+          await _handler.audioPlayer.setAudioSource(
+            AudioSource.uri(cachedFile.uri),
+            initialPosition: initialPosition,
+          );
+        } catch (_) {
+          try {
+            await _handler.audioPlayer.setAudioSource(
+              AudioSource.uri(Uri.file(cachedFile.path)),
+              initialPosition: initialPosition,
+            );
+          } catch (_) {
+            // Stream from server as a final fallback
+            _handler.mediaItem.add(mediaItem);
+            await _handler.audioPlayer.setAudioSource(
+              AudioSource.uri(
+                Uri.parse(streamUrl),
+                headers: headers,
+                tag: mediaItem.title,
+              ),
+              initialPosition: initialPosition,
+            );
+            if (autoPlay) {
+              await _handler.audioPlayer.play();
+            }
+            return;
+          }
+        }
+
         if (autoPlay) {
           await _handler.audioPlayer.play();
         }
