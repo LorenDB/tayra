@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tayra/core/api/models.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
+import 'dart:math' as math;
 
 /// A card widget that displays an album's cover art, title, and artist name.
 ///
@@ -30,7 +31,12 @@ class AlbumCard extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget card = LayoutBuilder(
       builder: (context, constraints) {
-        final artSize = width ?? constraints.maxWidth;
+        final maxWidth = width ?? constraints.maxWidth;
+        const reservedHeightForText = 8 + 2 + 20 + 18; // spacers + estimated text heights (title + artist)
+        final double availableForArt = constraints.maxHeight.isFinite
+            ? constraints.maxHeight - reservedHeightForText
+            : maxWidth;
+        final artSize = math.max(0, math.min(maxWidth, availableForArt));
 
         return GestureDetector(
           onTap: onTap,
