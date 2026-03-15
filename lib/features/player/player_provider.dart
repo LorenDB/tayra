@@ -1017,7 +1017,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       if (cachedFile != null) {
         _handler.mediaItem.add(mediaItem);
         await _handler.audioPlayer.setAudioSource(
-          AudioSource.uri(Uri.parse(cachedFile.uri.toString())),
+          AudioSource.uri(cachedFile.uri),
           initialPosition: initialPosition,
         );
         if (autoPlay) {
