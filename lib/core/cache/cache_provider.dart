@@ -12,8 +12,9 @@ final audioCacheServiceProvider = Provider<AudioCacheService>((ref) {
   return AudioCacheService(CacheManager.instance);
 });
 
-/// Provider for cache statistics
-final cacheStatsProvider = FutureProvider<CacheStats>((ref) async {
+/// Provider for cache statistics (autoDispose so it refreshes each time the
+/// settings screen is opened rather than showing stale numbers).
+final cacheStatsProvider = FutureProvider.autoDispose<CacheStats>((ref) async {
   final cache = ref.watch(cacheManagerProvider);
   return await cache.getStats();
 });

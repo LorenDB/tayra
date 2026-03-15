@@ -66,11 +66,11 @@ class CachedFunkwhaleApi {
 
     try {
       final result = await fetch();
-      _cache
-          .putMetadata(cacheKey, cacheType, toJson(result), ttl: ttl)
-          .catchError((Object e) {
-            debugPrint('Cache: failed to write metadata for $cacheKey: $e');
-          });
+      try {
+        await _cache.putMetadata(cacheKey, cacheType, toJson(result), ttl: ttl);
+      } catch (e) {
+        debugPrint('Cache: failed to write metadata for $cacheKey: $e');
+      }
       // Fire-and-forget cover art caching for the fresh network result.
       if (coverUrls != null) {
         _scheduleCoverCaching(coverUrls(result));
