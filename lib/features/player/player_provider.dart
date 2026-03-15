@@ -6,9 +6,8 @@ import 'package:just_audio/just_audio.dart';
 import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
-import 'package:tayra/core/api/api_client.dart';
-import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/core/cache/audio_cache_service.dart';
+import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/features/player/queue_persistence_service.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:tayra/features/year_review/listen_history_service.dart';
@@ -711,6 +710,7 @@ final playerProvider = NotifierProvider<PlayerNotifier, PlayerState>(
 
 class PlayerNotifier extends Notifier<PlayerState> {
   late final FunkwhaleAudioHandler _handler;
+  late final AudioCacheService _audioCache;
   final List<StreamSubscription> _subscriptions = [];
 
   /// Position to seek to the first time play() is called after a queue
@@ -720,6 +720,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
   @override
   PlayerState build() {
     _handler = ref.read(audioHandlerProvider);
+    _audioCache = ref.read(audioCacheServiceProvider);
     _init();
     Future.microtask(() => _restoreQueue());
     ref.onDispose(() {
@@ -876,9 +877,6 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
   CachedFunkwhaleApi get _api => ref.read(cachedFunkwhaleApiProvider);
 
-  AudioCacheService get _audioCache =>
-      AudioCacheService(CacheManager.instance, ref.read(dioProvider));
-
   /// Play a list of tracks starting at the given index.
   Future<void> playTracks(
     List<Track> tracks, {
@@ -901,6 +899,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
     await _loadAndPlay(tracks[startIndex]);
     _saveQueue(); // Save queue after loading new tracks
+
+    // Pre-cache cover art and audio for queued tracks in the background.
+    _preCacheCoverArt(tracks);
+    _preCacheAudio(tracks, startIndex);
     Aptabase.instance.trackEvent('play_tracks', {
       'count': tracks.length,
       'start_index': startIndex,
@@ -1050,6 +1052,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
         _audioCache.cacheAudio(track, streamUrl, headers);
       }
 
+      // Cache cover art in the background (fire-and-forget).
+      final coverUrl = track.coverUrl;
+      if (coverUrl != null) {
+        _audioCache.cacheCoverArt(coverUrl);
+      }
+
       // Record listening history only if auto-playing.
       if (autoPlay) {
         try {
@@ -1076,6 +1084,34 @@ class PlayerNotifier extends Notifier<PlayerState> {
         // No more tracks - clear the queue to stop infinite loading
         debugPrint('No more playable tracks in queue, clearing player state');
         state = const PlayerState();
+      }
+    }
+  }
+
+  /// Pre-cache cover art for all tracks in the queue (background, fire-and-forget).
+  void _preCacheCoverArt(List<Track> tracks) {
+    for (final track in tracks) {
+      final coverUrl = track.coverUrl;
+      if (coverUrl != null) {
+        _audioCache.cacheCoverArt(coverUrl);
+      }
+    }
+  }
+
+  /// Pre-cache audio files for upcoming tracks in the queue so that
+  /// subsequent tracks play from local storage without buffering.
+  /// Downloads are sequential to avoid saturating the connection while the
+  /// current track is still streaming.
+  void _preCacheAudio(List<Track> tracks, int startIndex) {
+    final headers = _api.authHeaders;
+    // Cache the tracks *after* startIndex (the current track is already being
+    // cached / played inside _loadTrack).
+    final upcoming = tracks.skip(startIndex + 1);
+    for (final track in upcoming) {
+      final listenUrl = track.listenUrl;
+      if (listenUrl != null) {
+        final streamUrl = _api.getStreamUrl(listenUrl);
+        _audioCache.cacheAudio(track, streamUrl, headers);
       }
     }
   }

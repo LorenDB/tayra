@@ -16,6 +16,7 @@ import 'package:tayra/features/player/player_provider.dart';
 // ── Providers ───────────────────────────────────────────────────────────
 
 final _albumDetailProvider = FutureProvider.family<Album, int>((ref, albumId) {
+  ref.keepAlive();
   final api = ref.watch(cachedFunkwhaleApiProvider);
   return api.getAlbum(albumId);
 });
@@ -29,6 +30,7 @@ class _AlbumTracksNotifier extends AsyncNotifier<List<Track>> {
 
   @override
   Future<List<Track>> build() async {
+    ref.keepAlive();
     return _fetchAllPages();
   }
 

@@ -1,9 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tayra/core/cache/audio_cache_service.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 
 /// Provider for the cache manager instance
 final cacheManagerProvider = Provider<CacheManager>((ref) {
   return CacheManager.instance;
+});
+
+/// Provider for the audio/cover-art cache service (singleton)
+final audioCacheServiceProvider = Provider<AudioCacheService>((ref) {
+  return AudioCacheService(CacheManager.instance);
 });
 
 /// Provider for cache statistics
