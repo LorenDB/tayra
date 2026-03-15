@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
@@ -98,10 +99,11 @@ class CacheManager {
     final row = results.first;
     final expiresAt = row['expires_at'] as int?;
 
-    // Check if expired
+    // Check if expired — return null but do NOT delete the row.
+    // The stale row is kept so getMetadataStale() can serve it as an
+    // offline fallback.  LRU eviction in _enforceLimit() handles removal.
     if (expiresAt != null &&
         expiresAt < DateTime.now().millisecondsSinceEpoch) {
-      await deleteMetadata(key);
       return null;
     }
 
@@ -432,7 +434,12 @@ class CacheManager {
 
       final key = oldestAudio.first['cache_key'] as String;
       final size = oldestAudio.first['size_bytes'] as int;
-      await deleteFile(key);
+      try {
+        await deleteFile(key);
+      } catch (e) {
+        debugPrint('Cache: failed to evict audio file $key: $e');
+        break;
+      }
       audioSize -= size;
     }
 
@@ -462,7 +469,12 @@ class CacheManager {
       if (oldestImage.isNotEmpty) {
         final key = oldestImage.first['cache_key'] as String;
         final size = oldestImage.first['size_bytes'] as int;
-        await deleteFile(key);
+        try {
+          await deleteFile(key);
+        } catch (e) {
+          debugPrint('Cache: failed to evict cover art $key: $e');
+          break;
+        }
         metadataAndImageSize -= size;
         continue;
       }

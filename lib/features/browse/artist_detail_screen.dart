@@ -17,6 +17,7 @@ final _artistDetailProvider = FutureProvider.family<Artist, int>((
   ref,
   artistId,
 ) {
+  ref.keepAlive();
   final api = ref.watch(cachedFunkwhaleApiProvider);
   return api.getArtist(artistId);
 });

@@ -1,8 +1,11 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tayra/core/api/api_client.dart';
 import 'package:tayra/core/api/api_repository.dart';
 import 'package:tayra/core/api/models.dart';
-import 'package:tayra/core/api/api_client.dart';
+import 'package:tayra/core/cache/audio_cache_service.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tayra/core/cache/cache_provider.dart';
 
 // Re-export types so consumers only need to import cached_api_repository.dart
 export 'package:tayra/core/api/api_repository.dart'
@@ -20,8 +23,9 @@ export 'package:tayra/core/api/models.dart';
 class CachedFunkwhaleApi {
   final FunkwhaleApi _api;
   final CacheManager _cache;
+  final AudioCacheService _audioCache;
 
-  CachedFunkwhaleApi(this._api, this._cache);
+  CachedFunkwhaleApi(this._api, this._cache, this._audioCache);
 
   // ── Generic cache-or-fetch helpers ──────────────────────────────────
 
@@ -53,6 +57,7 @@ class CachedFunkwhaleApi {
     required Future<T> Function() fetch,
     required Duration ttl,
     bool forceRefresh = false,
+    List<String?> Function(T)? coverUrls,
   }) async {
     if (!forceRefresh) {
       final hit = await _tryCache(cacheKey, fromJson);
@@ -63,7 +68,13 @@ class CachedFunkwhaleApi {
       final result = await fetch();
       _cache
           .putMetadata(cacheKey, cacheType, toJson(result), ttl: ttl)
-          .catchError((_) {});
+          .catchError((Object e) {
+            debugPrint('Cache: failed to write metadata for $cacheKey: $e');
+          });
+      // Fire-and-forget cover art caching for the fresh network result.
+      if (coverUrls != null) {
+        _scheduleCoverCaching(coverUrls(result));
+      }
       return result;
     } catch (_) {
       final stale = await _cache.getMetadataStale(cacheKey);
@@ -73,6 +84,18 @@ class CachedFunkwhaleApi {
         } catch (_) {}
       }
       rethrow;
+    }
+  }
+
+  /// Kick off background cover-art downloads for a list of URLs (nulls ignored).
+  void _scheduleCoverCaching(List<String?> urls) {
+    for (final url in urls) {
+      if (url != null && url.isNotEmpty) {
+        _audioCache.cacheCoverArt(url).catchError((Object e) {
+          debugPrint('CachedFunkwhaleApi: cover art cache failed for $url: $e');
+          return null;
+        });
+      }
     }
   }
 
@@ -104,8 +127,9 @@ class CachedFunkwhaleApi {
             scope: scope,
             q: q,
           ),
-      ttl: const Duration(minutes: 5),
+      ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
+      coverUrls: (r) => r.results.map((a) => a.coverUrl).toList(),
     );
   }
 
@@ -116,8 +140,15 @@ class CachedFunkwhaleApi {
       fromJson: Album.fromJson,
       toJson: _albumToJson,
       fetch: () => _api.getAlbum(id),
-      ttl: const Duration(hours: 1),
+      ttl: const Duration(hours: 24),
       forceRefresh: forceRefresh,
+      coverUrls:
+          (a) => [
+            a.coverUrl,
+            a.largeCoverUrl,
+            a.artist?.coverUrl,
+            ...a.tracks.map((t) => t.coverUrl),
+          ],
     );
   }
 
@@ -149,8 +180,9 @@ class CachedFunkwhaleApi {
             scope: scope,
             q: q,
           ),
-      ttl: const Duration(minutes: 5),
+      ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
+      coverUrls: (r) => r.results.map((a) => a.coverUrl).toList(),
     );
   }
 
@@ -161,8 +193,9 @@ class CachedFunkwhaleApi {
       fromJson: Artist.fromJson,
       toJson: _artistToJson,
       fetch: () => _api.getArtist(id),
-      ttl: const Duration(hours: 1),
+      ttl: const Duration(hours: 24),
       forceRefresh: forceRefresh,
+      coverUrls: (a) => [a.coverUrl, ...a.albums.map((al) => al.coverUrl)],
     );
   }
 
@@ -196,8 +229,9 @@ class CachedFunkwhaleApi {
             scope: scope,
             q: q,
           ),
-      ttl: const Duration(minutes: 5),
+      ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
+      coverUrls: (r) => r.results.map((t) => t.coverUrl).toList(),
     );
   }
 
@@ -208,8 +242,9 @@ class CachedFunkwhaleApi {
       fromJson: Track.fromJson,
       toJson: _trackToJson,
       fetch: () => _api.getTrack(id),
-      ttl: const Duration(hours: 1),
+      ttl: const Duration(hours: 24),
       forceRefresh: forceRefresh,
+      coverUrls: (t) => [t.coverUrl],
     );
   }
 
@@ -222,8 +257,14 @@ class CachedFunkwhaleApi {
       fromJson: SearchResult.fromJson,
       toJson: _searchResultToJson,
       fetch: () => _api.search(query),
-      ttl: const Duration(minutes: 2),
+      ttl: const Duration(minutes: 10),
       forceRefresh: forceRefresh,
+      coverUrls:
+          (r) => [
+            ...r.albums.map((a) => a.coverUrl),
+            ...r.artists.map((a) => a.coverUrl),
+            ...r.tracks.map((t) => t.coverUrl),
+          ],
     );
   }
 
@@ -240,8 +281,9 @@ class CachedFunkwhaleApi {
       fromJson: (j) => PaginatedResponse.fromJson(j, Favorite.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _favoriteToJson),
       fetch: () => _api.getFavorites(page: page, pageSize: pageSize),
-      ttl: const Duration(minutes: 5),
+      ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
+      coverUrls: (r) => r.results.map((f) => f.track.coverUrl).toList(),
     );
   }
 
@@ -299,8 +341,11 @@ class CachedFunkwhaleApi {
       toJson: (r) => _paginatedResponseToJson(r, _playlistToJson),
       fetch:
           () => _api.getPlaylists(page: page, pageSize: pageSize, scope: scope),
-      ttl: const Duration(minutes: 2),
+      ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
+      coverUrls:
+          (r) =>
+              r.results.expand((p) => p.albumCovers).cast<String?>().toList(),
     );
   }
 
@@ -311,8 +356,9 @@ class CachedFunkwhaleApi {
       fromJson: Playlist.fromJson,
       toJson: _playlistToJson,
       fetch: () => _api.getPlaylist(id),
-      ttl: const Duration(minutes: 2),
+      ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
+      coverUrls: (p) => p.albumCovers.cast<String?>().toList(),
     );
   }
 
@@ -328,8 +374,9 @@ class CachedFunkwhaleApi {
       fromJson: (j) => PaginatedResponse.fromJson(j, PlaylistTrack.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _playlistTrackToJson),
       fetch: () => _api.getPlaylistTracks(id, page: page, pageSize: pageSize),
-      ttl: const Duration(minutes: 2),
+      ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
+      coverUrls: (r) => r.results.map((pt) => pt.track.coverUrl).toList(),
     );
   }
 
@@ -383,11 +430,22 @@ class CachedFunkwhaleApi {
       'release_date': album.releaseDate,
       'artist':
           album.artist != null
-              ? {'id': album.artist!.id, 'name': album.artist!.name}
+              ? {
+                'id': album.artist!.id,
+                'name': album.artist!.name,
+                'cover':
+                    album.artist!.cover != null
+                        ? _coverToJson(album.artist!.cover!)
+                        : null,
+              }
               : null,
       'cover': album.cover != null ? _coverToJson(album.cover!) : null,
       'tracks_count': album.tracksCount,
+      'duration': album.duration,
+      'is_playable': album.isPlayable,
+      'tags': album.tags,
       'creation_date': album.creationDate?.toIso8601String(),
+      'tracks': album.tracks.map(_trackToJson).toList(),
     };
   }
 
@@ -411,6 +469,8 @@ class CachedFunkwhaleApi {
       'title': track.title,
       'position': track.position,
       'disc_number': track.discNumber,
+      'is_playable': track.isPlayable,
+      'tags': track.tags,
       'artist':
           track.artist != null
               ? {'id': track.artist!.id, 'name': track.artist!.name}
@@ -499,5 +559,6 @@ class CachedFunkwhaleApi {
 final cachedFunkwhaleApiProvider = Provider<CachedFunkwhaleApi>((ref) {
   final api = ref.watch(funkwhaleApiProvider);
   final cache = CacheManager.instance;
-  return CachedFunkwhaleApi(api, cache);
+  final audioCache = ref.watch(audioCacheServiceProvider);
+  return CachedFunkwhaleApi(api, cache, audioCache);
 });
