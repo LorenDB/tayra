@@ -38,9 +38,9 @@ class CoverArtWidget extends StatelessWidget {
                 width: size,
                 height: size,
                 placeholder:
-                    (_, __) => _Placeholder(size: size, icon: placeholderIcon),
+                    (context, url) => _Placeholder(size: size, icon: placeholderIcon),
                 errorWidget:
-                    (_, __, ___) =>
+                    (context, url, error) =>
                         _Placeholder(size: size, icon: placeholderIcon),
               )
               : _Placeholder(size: size, icon: placeholderIcon),

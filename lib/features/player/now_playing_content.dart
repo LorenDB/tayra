@@ -369,8 +369,8 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
       return CachedNetworkImage(
         imageUrl: imageUrl,
         fit: BoxFit.cover,
-        placeholder: (_, __) => _buildPlaceholderArt(size),
-        errorWidget: (_, __, ___) => _buildPlaceholderArt(size),
+        placeholder: (context, url) => _buildPlaceholderArt(size),
+        errorWidget: (context, url, error) => _buildPlaceholderArt(size),
       );
     }
     return _buildPlaceholderArt(size);

@@ -904,7 +904,7 @@ class YearReviewSelectorScreen extends ConsumerWidget {
                       child: CircularProgressIndicator(color: AppTheme.primary),
                     ),
                 error:
-                    (_, __) => Center(
+                    (error, stack) => Center(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [

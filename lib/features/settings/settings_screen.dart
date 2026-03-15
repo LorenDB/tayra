@@ -104,7 +104,7 @@ class SettingsScreen extends ConsumerWidget {
           cacheStatsAsync.when(
             loading: () => const _LoadingTile(),
             error:
-                (_, __) =>
+                (error, stack) =>
                     const _ErrorTile(message: 'Failed to load cache info'),
             data: (stats) => _CacheInfoTile(stats: stats),
           ),
@@ -235,7 +235,7 @@ class _YearReviewTile extends ConsumerWidget {
                               ),
                             ),
                         error:
-                            (_, __) => const Text(
+                            (error, stack) => const Text(
                               'See your listening recap',
                               style: TextStyle(
                                 color: AppTheme.onBackgroundMuted,

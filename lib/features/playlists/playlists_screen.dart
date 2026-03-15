@@ -252,13 +252,13 @@ class _PlaylistMosaic extends StatelessWidget {
       height: h,
       fit: BoxFit.cover,
       placeholder:
-          (_, __) => Container(
+          (context, url) => Container(
             width: w,
             height: h,
             color: AppTheme.surfaceContainerHigh,
           ),
       errorWidget:
-          (_, __, ___) => Container(
+          (context, url, error) => Container(
             width: w,
             height: h,
             color: AppTheme.surfaceContainerHigh,
