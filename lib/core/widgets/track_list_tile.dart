@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/core/theme/app_theme.dart';
@@ -129,6 +130,9 @@ class _TrackMenuButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final albumAvailable = track.album != null;
+    final artistAvailable = track.artist != null;
+
     return PopupMenuButton<String>(
       icon: const Icon(
         Icons.more_vert,
@@ -157,53 +161,100 @@ class _TrackMenuButton extends ConsumerWidget {
           case 'add_playlist':
             showAddToPlaylistSheet(context, ref, trackIds: [track.id]);
             break;
+          case 'go_to_album':
+            if (albumAvailable) {
+              context.push('/album/${track.album!.id}');
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Album not available')),
+              );
+            }
+            break;
+          case 'go_to_artist':
+            if (artistAvailable) {
+              context.push('/artist/${track.artist!.id}');
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Artist not available')),
+              );
+            }
+            break;
         }
       },
-      itemBuilder:
-          (context) => [
-            const PopupMenuItem(
-              value: 'play_next',
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.queue_play_next,
-                    size: 20,
-                    color: AppTheme.onBackground,
-                  ),
-                  SizedBox(width: 12),
-                  Text('Play next'),
-                ],
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          value: 'play_next',
+          child: Row(
+            children: [
+              Icon(
+                Icons.queue_play_next,
+                size: 20,
+                color: AppTheme.onBackground,
               ),
-            ),
-            const PopupMenuItem(
-              value: 'add_queue',
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.playlist_add,
-                    size: 20,
-                    color: AppTheme.onBackground,
-                  ),
-                  SizedBox(width: 12),
-                  Text('Add to queue'),
-                ],
+              const SizedBox(width: 12),
+              const Text('Play next'),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 'add_queue',
+          child: Row(
+            children: [
+              Icon(
+                Icons.playlist_add,
+                size: 20,
+                color: AppTheme.onBackground,
               ),
-            ),
-            const PopupMenuItem(
-              value: 'add_playlist',
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.playlist_add_rounded,
-                    size: 20,
-                    color: AppTheme.onBackground,
-                  ),
-                  SizedBox(width: 12),
-                  Text('Add to playlist'),
-                ],
+              const SizedBox(width: 12),
+              const Text('Add to queue'),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 'add_playlist',
+          child: Row(
+            children: [
+              Icon(
+                Icons.playlist_add_rounded,
+                size: 20,
+                color: AppTheme.onBackground,
               ),
-            ),
-          ],
+              const SizedBox(width: 12),
+              const Text('Add to playlist'),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 'go_to_album',
+          enabled: albumAvailable,
+          child: Row(
+            children: [
+              Icon(
+                Icons.album,
+                size: 20,
+                color: albumAvailable ? AppTheme.onBackground : AppTheme.onBackgroundMuted,
+              ),
+              const SizedBox(width: 12),
+              const Text('Go to album'),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 'go_to_artist',
+          enabled: artistAvailable,
+          child: Row(
+            children: [
+              Icon(
+                Icons.person,
+                size: 20,
+                color: artistAvailable ? AppTheme.onBackground : AppTheme.onBackgroundMuted,
+              ),
+              const SizedBox(width: 12),
+              const Text('Go to artist'),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
