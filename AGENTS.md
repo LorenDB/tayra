@@ -9,6 +9,10 @@ A Flutter-based music player client for Funkwhale servers, targeting Android wit
 **Package name:** `tayra`  
 **Target:** Android only (device ID: `4859701e`, Android 16, CPH2655)
 
+## API reference
+
+The Swagger schema for the Funkwhale server API is available to reference in the schema.yml file in the root of the codebase.
+
 ## Build & Deploy Commands
 
 ### Standard Development
