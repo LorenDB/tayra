@@ -207,91 +207,97 @@ class _DesktopNavRail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return NavigationRail(
-      selectedIndex: currentIndex,
-      onDestinationSelected: onDestinationSelected,
-      extended: extended,
-      minWidth: 64,
-      minExtendedWidth: 200,
-      backgroundColor: AppTheme.surfaceContainer,
-      indicatorColor: AppTheme.primary.withValues(alpha: 0.15),
-      selectedIconTheme: const IconThemeData(color: AppTheme.primary, size: 24),
-      unselectedIconTheme: const IconThemeData(
-        color: AppTheme.onBackgroundSubtle,
-        size: 24,
-      ),
-      selectedLabelTextStyle: const TextStyle(
-        color: AppTheme.primary,
-        fontSize: 13,
-        fontWeight: FontWeight.w600,
-      ),
-      unselectedLabelTextStyle: const TextStyle(
-        color: AppTheme.onBackgroundSubtle,
-        fontSize: 13,
-        fontWeight: FontWeight.w400,
-      ),
-      leading: Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: 16,
-          horizontal: extended ? 16 : 8,
-        ),
-        child:
-            extended
+    return Container(
+      width: extended ? 200 : 64,
+      color: AppTheme.surfaceContainer,
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: 16,
+              horizontal: extended ? 16 : 8,
+            ),
+            child: extended
                 ? Row(
-                  children: [
-                    Icon(
-                      Icons.music_note_rounded,
-                      color: AppTheme.primary,
-                      size: 28,
-                    ),
-                    const SizedBox(width: 10),
-                    const Text(
-                      'Tayra',
-                      style: TextStyle(
-                        color: AppTheme.onBackground,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
+                    children: [
+                      Icon(
+                        Icons.music_note_rounded,
+                        color: AppTheme.primary,
+                        size: 28,
+                      ),
+                      const SizedBox(width: 10),
+                      const Text(
+                        'Tayra',
+                        style: TextStyle(
+                          color: AppTheme.onBackground,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  )
+                : Icon(
+                    Icons.music_note_rounded,
+                    color: AppTheme.primary,
+                    size: 28,
+                  ),
+          ),
+
+          // Destinations
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: List.generate(AppShell._tabs.length, (i) {
+                final tab = AppShell._tabs[i];
+                final isSelected = i == currentIndex;
+                final indicatorColor = AppTheme.primary.withValues(alpha: 0.15);
+                return Padding(
+                  padding: EdgeInsets.symmetric(vertical: 6, horizontal: extended ? 8 : 0),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(12),
+                      onTap: () => onDestinationSelected(i),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 180),
+                        padding: EdgeInsets.symmetric(horizontal: extended ? 12 : 8, vertical: 8),
+                        decoration: isSelected
+                            ? BoxDecoration(
+                                color: indicatorColor,
+                                borderRadius: BorderRadius.circular(12),
+                              )
+                            : null,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              isSelected ? tab.activeIcon : tab.icon,
+                              color: isSelected ? AppTheme.primary : AppTheme.onBackgroundSubtle,
+                              size: 24,
+                            ),
+                            if (extended) ...[
+                              const SizedBox(width: 12),
+                              Text(
+                                tab.label,
+                                style: TextStyle(
+                                  color: isSelected ? AppTheme.primary : AppTheme.onBackgroundSubtle,
+                                  fontSize: 13,
+                                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
                       ),
                     ),
-                  ],
-                )
-                : Icon(
-                  Icons.music_note_rounded,
-                  color: AppTheme.primary,
-                  size: 28,
-                ),
-      ),
-      destinations: const [
-        NavigationRailDestination(
-          icon: Icon(Icons.home_rounded),
-          selectedIcon: Icon(Icons.home_rounded),
-          label: Text('Home'),
-        ),
-        NavigationRailDestination(
-          icon: Icon(Icons.library_music_outlined),
-          selectedIcon: Icon(Icons.library_music),
-          label: Text('Browse'),
-        ),
-        NavigationRailDestination(
-          icon: Icon(Icons.search_rounded),
-          selectedIcon: Icon(Icons.search_rounded),
-          label: Text('Search'),
-        ),
-        NavigationRailDestination(
-          icon: Icon(Icons.favorite_border_rounded),
-          selectedIcon: Icon(Icons.favorite_rounded),
-          label: Text('Favorites'),
-        ),
-        NavigationRailDestination(
-          icon: Icon(Icons.queue_music_rounded),
-          selectedIcon: Icon(Icons.queue_music_rounded),
-          label: Text('Playlists'),
-        ),
-      ],
-      trailing: Expanded(
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
+                  ),
+                );
+              }),
+            ),
+          ),
+
+          // trailing settings button
+          Padding(
             padding: const EdgeInsets.only(bottom: 16),
             child: IconButton(
               icon: const Icon(
@@ -302,7 +308,7 @@ class _DesktopNavRail extends StatelessWidget {
               tooltip: 'Settings',
             ),
           ),
-        ),
+        ],
       ),
     );
   }
