@@ -32,11 +32,17 @@ class AlbumCard extends StatelessWidget {
     Widget card = LayoutBuilder(
       builder: (context, constraints) {
         final double maxWidth = width ?? constraints.maxWidth;
-        const double reservedHeightForText = 8.0 + 2.0 + 20.0 + 18.0; // spacers + estimated text heights (title + artist)
-        final double availableForArt = constraints.maxHeight.isFinite
-            ? constraints.maxHeight - reservedHeightForText
-            : maxWidth;
-        final double artSize = math.max(0.0, math.min(maxWidth, availableForArt)).toDouble();
+        const double reservedHeightForText =
+            8.0 +
+            2.0 +
+            20.0 +
+            18.0; // spacers + estimated text heights (title + artist)
+        final double availableForArt =
+            constraints.maxHeight.isFinite
+                ? constraints.maxHeight - reservedHeightForText
+                : maxWidth;
+        final double artSize =
+            math.max(0.0, math.min(maxWidth, availableForArt)).toDouble();
 
         return GestureDetector(
           onTap: onTap,

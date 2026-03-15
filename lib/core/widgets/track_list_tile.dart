@@ -181,80 +181,87 @@ class _TrackMenuButton extends ConsumerWidget {
             break;
         }
       },
-      itemBuilder: (context) => [
-        PopupMenuItem(
-          value: 'play_next',
-          child: Row(
-            children: [
-              Icon(
-                Icons.queue_play_next,
-                size: 20,
-                color: AppTheme.onBackground,
+      itemBuilder:
+          (context) => [
+            PopupMenuItem(
+              value: 'play_next',
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.queue_play_next,
+                    size: 20,
+                    color: AppTheme.onBackground,
+                  ),
+                  const SizedBox(width: 12),
+                  const Text('Play next'),
+                ],
               ),
-              const SizedBox(width: 12),
-              const Text('Play next'),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: 'add_queue',
-          child: Row(
-            children: [
-              Icon(
-                Icons.playlist_add,
-                size: 20,
-                color: AppTheme.onBackground,
+            ),
+            PopupMenuItem(
+              value: 'add_queue',
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.playlist_add,
+                    size: 20,
+                    color: AppTheme.onBackground,
+                  ),
+                  const SizedBox(width: 12),
+                  const Text('Add to queue'),
+                ],
               ),
-              const SizedBox(width: 12),
-              const Text('Add to queue'),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: 'add_playlist',
-          child: Row(
-            children: [
-              Icon(
-                Icons.playlist_add_rounded,
-                size: 20,
-                color: AppTheme.onBackground,
+            ),
+            PopupMenuItem(
+              value: 'add_playlist',
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.playlist_add_rounded,
+                    size: 20,
+                    color: AppTheme.onBackground,
+                  ),
+                  const SizedBox(width: 12),
+                  const Text('Add to playlist'),
+                ],
               ),
-              const SizedBox(width: 12),
-              const Text('Add to playlist'),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: 'go_to_album',
-          enabled: albumAvailable,
-          child: Row(
-            children: [
-              Icon(
-                Icons.album,
-                size: 20,
-                color: albumAvailable ? AppTheme.onBackground : AppTheme.onBackgroundMuted,
+            ),
+            PopupMenuItem(
+              value: 'go_to_album',
+              enabled: albumAvailable,
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.album,
+                    size: 20,
+                    color:
+                        albumAvailable
+                            ? AppTheme.onBackground
+                            : AppTheme.onBackgroundMuted,
+                  ),
+                  const SizedBox(width: 12),
+                  const Text('Go to album'),
+                ],
               ),
-              const SizedBox(width: 12),
-              const Text('Go to album'),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: 'go_to_artist',
-          enabled: artistAvailable,
-          child: Row(
-            children: [
-              Icon(
-                Icons.person,
-                size: 20,
-                color: artistAvailable ? AppTheme.onBackground : AppTheme.onBackgroundMuted,
+            ),
+            PopupMenuItem(
+              value: 'go_to_artist',
+              enabled: artistAvailable,
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.person,
+                    size: 20,
+                    color:
+                        artistAvailable
+                            ? AppTheme.onBackground
+                            : AppTheme.onBackgroundMuted,
+                  ),
+                  const SizedBox(width: 12),
+                  const Text('Go to artist'),
+                ],
               ),
-              const SizedBox(width: 12),
-              const Text('Go to artist'),
-            ],
-          ),
-        ),
-      ],
+            ),
+          ],
     );
   }
 }

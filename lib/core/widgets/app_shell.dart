@@ -218,31 +218,31 @@ class _DesktopNavRail extends StatelessWidget {
             // Header
             extended
                 ? Row(
-                    children: [
-                      Icon(
-                        Icons.music_note_rounded,
-                        color: AppTheme.primary,
-                        size: 28,
-                      ),
-                      const SizedBox(width: 10),
-                      const Text(
-                        'Tayra',
-                        style: TextStyle(
-                          color: AppTheme.onBackground,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  )
-                : Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: Icon(
+                  children: [
+                    Icon(
                       Icons.music_note_rounded,
                       color: AppTheme.primary,
                       size: 28,
                     ),
+                    const SizedBox(width: 10),
+                    const Text(
+                      'Tayra',
+                      style: TextStyle(
+                        color: AppTheme.onBackground,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                )
+                : Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Icon(
+                    Icons.music_note_rounded,
+                    color: AppTheme.primary,
+                    size: 28,
                   ),
+                ),
 
             const SizedBox(height: 8),
 
@@ -253,7 +253,9 @@ class _DesktopNavRail extends StatelessWidget {
                 children: List.generate(AppShell._tabs.length, (i) {
                   final tab = AppShell._tabs[i];
                   final isSelected = i == currentIndex;
-                  final indicatorColor = AppTheme.primary.withValues(alpha: 0.15);
+                  final indicatorColor = AppTheme.primary.withValues(
+                    alpha: 0.15,
+                  );
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 6.0),
                     child: Material(
@@ -264,20 +266,30 @@ class _DesktopNavRail extends StatelessWidget {
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 180),
                           width: double.infinity,
-                          padding: EdgeInsets.symmetric(horizontal: extended ? 12 : 8, vertical: 10),
-                          decoration: isSelected
-                              ? BoxDecoration(
-                                  color: indicatorColor,
-                                  borderRadius: BorderRadius.circular(12),
-                                )
-                              : null,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: extended ? 12 : 8,
+                            vertical: 10,
+                          ),
+                          decoration:
+                              isSelected
+                                  ? BoxDecoration(
+                                    color: indicatorColor,
+                                    borderRadius: BorderRadius.circular(12),
+                                  )
+                                  : null,
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: extended ? MainAxisAlignment.start : MainAxisAlignment.center,
+                            mainAxisAlignment:
+                                extended
+                                    ? MainAxisAlignment.start
+                                    : MainAxisAlignment.center,
                             children: [
                               Icon(
                                 isSelected ? tab.activeIcon : tab.icon,
-                                color: isSelected ? AppTheme.primary : AppTheme.onBackgroundSubtle,
+                                color:
+                                    isSelected
+                                        ? AppTheme.primary
+                                        : AppTheme.onBackgroundSubtle,
                                 size: 24,
                               ),
                               if (extended) ...[
@@ -285,9 +297,15 @@ class _DesktopNavRail extends StatelessWidget {
                                 Text(
                                   tab.label,
                                   style: TextStyle(
-                                    color: isSelected ? AppTheme.primary : AppTheme.onBackgroundSubtle,
+                                    color:
+                                        isSelected
+                                            ? AppTheme.primary
+                                            : AppTheme.onBackgroundSubtle,
                                     fontSize: 13,
-                                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                                    fontWeight:
+                                        isSelected
+                                            ? FontWeight.w600
+                                            : FontWeight.w400,
                                   ),
                                 ),
                               ],
