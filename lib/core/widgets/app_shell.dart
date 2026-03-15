@@ -210,14 +210,13 @@ class _DesktopNavRail extends StatelessWidget {
     return Container(
       width: extended ? 200 : 64,
       color: AppTheme.surfaceContainer,
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: 16,
-              horizontal: extended ? 16 : 8,
-            ),
-            child: extended
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: extended ? 16 : 8),
+        child: Column(
+          children: [
+            const SizedBox(height: 16),
+            // Header
+            extended
                 ? Row(
                     children: [
                       Icon(
@@ -236,79 +235,86 @@ class _DesktopNavRail extends StatelessWidget {
                       ),
                     ],
                   )
-                : Icon(
-                    Icons.music_note_rounded,
-                    color: AppTheme.primary,
-                    size: 28,
+                : Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Icon(
+                      Icons.music_note_rounded,
+                      color: AppTheme.primary,
+                      size: 28,
+                    ),
                   ),
-          ),
 
-          // Destinations
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: List.generate(AppShell._tabs.length, (i) {
-                final tab = AppShell._tabs[i];
-                final isSelected = i == currentIndex;
-                final indicatorColor = AppTheme.primary.withValues(alpha: 0.15);
-                return Padding(
-                  padding: EdgeInsets.symmetric(vertical: 6, horizontal: extended ? 8 : 0),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(12),
-                      onTap: () => onDestinationSelected(i),
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 180),
-                        padding: EdgeInsets.symmetric(horizontal: extended ? 12 : 8, vertical: 8),
-                        decoration: isSelected
-                            ? BoxDecoration(
-                                color: indicatorColor,
-                                borderRadius: BorderRadius.circular(12),
-                              )
-                            : null,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              isSelected ? tab.activeIcon : tab.icon,
-                              color: isSelected ? AppTheme.primary : AppTheme.onBackgroundSubtle,
-                              size: 24,
-                            ),
-                            if (extended) ...[
-                              const SizedBox(width: 12),
-                              Text(
-                                tab.label,
-                                style: TextStyle(
-                                  color: isSelected ? AppTheme.primary : AppTheme.onBackgroundSubtle,
-                                  fontSize: 13,
-                                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                                ),
+            const SizedBox(height: 8),
+
+            // Destinations
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: List.generate(AppShell._tabs.length, (i) {
+                  final tab = AppShell._tabs[i];
+                  final isSelected = i == currentIndex;
+                  final indicatorColor = AppTheme.primary.withValues(alpha: 0.15);
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6.0),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(12),
+                        onTap: () => onDestinationSelected(i),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 180),
+                          width: double.infinity,
+                          padding: EdgeInsets.symmetric(horizontal: extended ? 12 : 8, vertical: 10),
+                          decoration: isSelected
+                              ? BoxDecoration(
+                                  color: indicatorColor,
+                                  borderRadius: BorderRadius.circular(12),
+                                )
+                              : null,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: extended ? MainAxisAlignment.start : MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                isSelected ? tab.activeIcon : tab.icon,
+                                color: isSelected ? AppTheme.primary : AppTheme.onBackgroundSubtle,
+                                size: 24,
                               ),
+                              if (extended) ...[
+                                const SizedBox(width: 12),
+                                Text(
+                                  tab.label,
+                                  style: TextStyle(
+                                    color: isSelected ? AppTheme.primary : AppTheme.onBackgroundSubtle,
+                                    fontSize: 13,
+                                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                                  ),
+                                ),
+                              ],
                             ],
-                          ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              }),
-            ),
-          ),
-
-          // trailing settings button
-          Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: IconButton(
-              icon: const Icon(
-                Icons.settings_outlined,
-                color: AppTheme.onBackgroundSubtle,
+                  );
+                }),
               ),
-              onPressed: () => context.push('/settings'),
-              tooltip: 'Settings',
             ),
-          ),
-        ],
+
+            // trailing settings button
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: IconButton(
+                icon: const Icon(
+                  Icons.settings_outlined,
+                  color: AppTheme.onBackgroundSubtle,
+                ),
+                onPressed: () => context.push('/settings'),
+                tooltip: 'Settings',
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
