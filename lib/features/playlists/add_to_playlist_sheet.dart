@@ -181,7 +181,7 @@ class _AddToPlaylistSheetState extends ConsumerState<_AddToPlaylistSheet> {
                     ),
                   ),
               error:
-                  (_, __) => const Padding(
+                  (error, stack) => const Padding(
                     padding: EdgeInsets.all(32),
                     child: Center(
                       child: Text(

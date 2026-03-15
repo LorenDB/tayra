@@ -150,7 +150,7 @@ class _ArtistHeader extends StatelessWidget {
                 fit: BoxFit.cover,
                 width: screenWidth,
                 height: headerHeight,
-                errorWidget: (_, __, ___) => const SizedBox.shrink(),
+                errorWidget: (context, url, error) => const SizedBox.shrink(),
               ),
             ),
 

@@ -92,13 +92,13 @@ class MiniPlayer extends ConsumerWidget {
                                 imageUrl: track.coverUrl!,
                                 fit: BoxFit.cover,
                                 placeholder:
-                                    (_, __) => const Icon(
+                                    (context, url) => const Icon(
                                       Icons.album,
                                       color: AppTheme.onBackgroundSubtle,
                                       size: 24,
                                     ),
                                 errorWidget:
-                                    (_, __, ___) => const Icon(
+                                    (context, url, error) => const Icon(
                                       Icons.album,
                                       color: AppTheme.onBackgroundSubtle,
                                       size: 24,

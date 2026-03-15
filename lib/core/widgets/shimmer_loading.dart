@@ -25,7 +25,7 @@ class ShimmerList extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: itemCount,
         itemBuilder:
-            (_, __) => Padding(
+            (context, index) => Padding(
               padding: const EdgeInsets.symmetric(vertical: 6),
               child: Row(
                 children: [
@@ -92,7 +92,7 @@ class ShimmerGrid extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           itemCount: itemCount,
           itemBuilder:
-              (_, __) => Padding(
+              (context, index) => Padding(
                 padding: const EdgeInsets.only(right: 12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
