@@ -57,6 +57,34 @@ class HomeScreen extends ConsumerWidget {
         color: AppTheme.primary,
         backgroundColor: AppTheme.surfaceContainer,
         onRefresh: () async {
+          // Perform a network refresh via the cached API with forceRefresh=true
+          // so the cache is updated from the network (pull-to-refresh should
+          // fetch fresh data, not just return a cached hit).
+          final api = ref.read(cachedFunkwhaleApiProvider);
+          try {
+            await Future.wait([
+              api.getAlbums(
+                ordering: '-creation_date',
+                pageSize: 10,
+                forceRefresh: true,
+              ),
+              api.getAlbums(
+                ordering: 'random',
+                pageSize: 10,
+                forceRefresh: true,
+              ),
+              api.getListenings(
+                ordering: '-created',
+                pageSize: 15,
+                forceRefresh: true,
+              ),
+            ]);
+          } catch (_) {
+            // Ignore network errors here; providers will fall back to stale
+            // cache or show error states. We still invalidate so UI updates.
+          }
+
+          // Invalidate the providers so UI picks up the fresh cache data.
           ref.invalidate(recentAlbumsProvider);
           ref.invalidate(randomAlbumsProvider);
           ref.invalidate(recentTracksProvider);
