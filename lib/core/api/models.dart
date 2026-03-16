@@ -401,6 +401,25 @@ class Upload {
   }
 }
 
+// ── Listening ───────────────────────────────────────────────────────────
+
+class Listening {
+  final int id;
+  final Track track;
+  final DateTime? created;
+  const Listening({required this.id, required this.track, this.created});
+  factory Listening.fromJson(Map<String, dynamic> json) {
+    return Listening(
+      id: json['id'] as int,
+      track: Track.fromJson(json['track'] as Map<String, dynamic>),
+      created:
+          json['created'] != null
+              ? DateTime.tryParse(json['created'] as String)
+              : null,
+    );
+  }
+}
+
 // ── Playlist ────────────────────────────────────────────────────────────
 
 class Playlist {

@@ -380,6 +380,32 @@ class CachedFunkwhaleApi {
     );
   }
 
+  // ── Listenings ──────────────────────────────────────────────────────
+
+  Future<PaginatedResponse<Listening>> getListenings({
+    int page = 1,
+    int pageSize = 20,
+    String ordering = '-created',
+    bool forceRefresh = false,
+  }) async {
+    final cacheKey = 'listenings_p${page}_s${pageSize}_o${ordering}';
+    return _cachedFetch(
+      cacheKey: cacheKey,
+      cacheType: CacheType.track,
+      fromJson: (j) => PaginatedResponse.fromJson(j, Listening.fromJson),
+      toJson: (r) => _paginatedResponseToJson(r, _listeningToJson),
+      fetch:
+          () => _api.getListenings(
+            page: page,
+            pageSize: pageSize,
+            ordering: ordering,
+          ),
+      ttl: const Duration(hours: 1),
+      forceRefresh: forceRefresh,
+      coverUrls: (r) => r.results.map((l) => l.track.coverUrl).toList(),
+    );
+  }
+
   // ── Write operations (pass-through, invalidate cache) ───────────────
 
   Future<Playlist> createPlaylist({
@@ -542,6 +568,14 @@ class CachedFunkwhaleApi {
       'id': fav.id,
       'track': _trackToJson(fav.track),
       'creation_date': fav.creationDate?.toIso8601String(),
+    };
+  }
+
+  Map<String, dynamic> _listeningToJson(Listening listening) {
+    return {
+      'id': listening.id,
+      'track': _trackToJson(listening.track),
+      'created': listening.created?.toIso8601String(),
     };
   }
 
