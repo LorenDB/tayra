@@ -32,7 +32,7 @@ class NowPlayingContent extends ConsumerStatefulWidget {
 }
 
 class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   bool _isSeeking = false;
   double _seekValue = 0.0;
 
