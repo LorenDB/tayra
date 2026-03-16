@@ -5,6 +5,7 @@ import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/layout/responsive.dart';
 import 'package:tayra/features/player/mini_player.dart';
 import 'package:tayra/features/player/player_provider.dart';
+import 'package:tayra/features/search/search_screen.dart';
 import 'package:tayra/core/widgets/side_panel.dart';
 
 /// The main app shell with adaptive navigation:
@@ -23,11 +24,6 @@ class AppShell extends ConsumerWidget {
       label: 'Browse',
     ),
     (
-      icon: Icons.search_rounded,
-      activeIcon: Icons.search_rounded,
-      label: 'Search',
-    ),
-    (
       icon: Icons.favorite_border_rounded,
       activeIcon: Icons.favorite_rounded,
       label: 'Favorites',
@@ -39,7 +35,7 @@ class AppShell extends ConsumerWidget {
     ),
   ];
 
-  static const _paths = ['/', '/browse', '/search', '/favorites', '/playlists'];
+  static const _paths = ['/', '/browse', '/favorites', '/playlists'];
 
   int _currentIndex(BuildContext context) {
     final location = GoRouterState.of(context).matchedLocation;
@@ -319,16 +315,95 @@ class _DesktopNavRail extends StatelessWidget {
               ),
             ),
 
-            // trailing settings button
+            // trailing search + settings full-width buttons
             Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: IconButton(
-                icon: const Icon(
-                  Icons.settings_outlined,
-                  color: AppTheme.onBackgroundSubtle,
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: () => SearchScreen.show(context),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 180),
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: extended ? 12 : 8,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      mainAxisAlignment:
+                          extended
+                              ? MainAxisAlignment.start
+                              : MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.search_rounded,
+                          color: AppTheme.onBackgroundSubtle,
+                          size: 24,
+                        ),
+                        if (extended) ...[
+                          const SizedBox(width: 12),
+                          Text(
+                            'Search',
+                            style: TextStyle(
+                              color: AppTheme.onBackgroundSubtle,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
                 ),
-                onPressed: () => context.push('/settings'),
-                tooltip: 'Settings',
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: () => context.push('/settings'),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 180),
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: extended ? 12 : 8,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      mainAxisAlignment:
+                          extended
+                              ? MainAxisAlignment.start
+                              : MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.settings_outlined,
+                          color: AppTheme.onBackgroundSubtle,
+                          size: 24,
+                        ),
+                        if (extended) ...[
+                          const SizedBox(width: 12),
+                          Text(
+                            'Settings',
+                            style: TextStyle(
+                              color: AppTheme.onBackgroundSubtle,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
           ],

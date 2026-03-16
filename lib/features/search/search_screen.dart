@@ -15,6 +15,15 @@ import 'package:tayra/features/player/player_provider.dart';
 class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});
 
+  static Future<void> show(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => const SearchScreen(),
+    );
+  }
+
   @override
   ConsumerState<SearchScreen> createState() => _SearchScreenState();
 }
@@ -85,12 +94,42 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.background,
-      body: SafeArea(
-        child: Column(
-          children: [_buildSearchField(), Expanded(child: _buildBody())],
-        ),
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.9,
+      decoration: const BoxDecoration(
+        color: AppTheme.background,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      child: Column(
+        children: [
+          // Handle bar
+          Container(
+            margin: const EdgeInsets.only(top: 12),
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: AppTheme.onBackgroundSubtle,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          // Close button
+          Align(
+            alignment: Alignment.centerRight,
+            child: IconButton(
+              icon: const Icon(Icons.close_rounded),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+          Expanded(child: _buildBody()),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBody() {
+    return SafeArea(
+      child: Column(
+        children: [_buildSearchField(), Expanded(child: _buildResults())],
       ),
     );
   }
@@ -134,7 +173,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildResults() {
     // Loading state
     if (_isLoading) {
       return const Center(

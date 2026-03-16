@@ -9,6 +9,8 @@ import 'package:tayra/core/widgets/track_list_tile.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/player/player_provider.dart';
 import 'package:tayra/features/favorites/favorites_provider.dart';
+import 'package:tayra/features/search/search_screen.dart';
+import 'package:tayra/core/layout/responsive.dart';
 
 class FavoritesScreen extends ConsumerStatefulWidget {
   const FavoritesScreen({super.key});
@@ -162,6 +164,13 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
             fontWeight: FontWeight.w700,
           ),
         ),
+        actions: [
+          if (!Responsive.useSideNavigation(context))
+            IconButton(
+              icon: const Icon(Icons.search_rounded),
+              onPressed: () => SearchScreen.show(context),
+            ),
+        ],
       ),
       body: _buildBody(),
     );

@@ -12,6 +12,7 @@ import 'package:tayra/core/widgets/track_list_tile.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/player/player_provider.dart';
 import 'package:tayra/features/year_review/listen_history_provider.dart';
+import 'package:tayra/features/search/search_screen.dart';
 
 // ── Data providers ──────────────────────────────────────────────────────
 
@@ -194,8 +195,31 @@ class _GreetingHeader extends ConsumerWidget {
               ],
             ),
           ),
-          // Hide settings icon on desktop (available in nav rail)
-          if (!Responsive.useSideNavigation(context))
+          // Action buttons (hidden on desktop - available in nav rail)
+          if (!Responsive.useSideNavigation(context)) ...[
+            // Search button
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () => SearchScreen.show(context),
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  margin: const EdgeInsets.only(right: 8),
+                  decoration: BoxDecoration(
+                    color: AppTheme.surfaceContainerHigh,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.search_rounded,
+                    color: AppTheme.onBackgroundMuted,
+                    size: 20,
+                  ),
+                ),
+              ),
+            ),
+            // Settings button
             Material(
               color: Colors.transparent,
               child: InkWell(
@@ -216,6 +240,7 @@ class _GreetingHeader extends ConsumerWidget {
                 ),
               ),
             ),
+          ],
         ],
       ),
     );
