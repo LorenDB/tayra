@@ -32,11 +32,13 @@ final randomAlbumsProvider = FutureProvider<List<Album>>((ref) async {
 
 final recentTracksProvider = FutureProvider<List<Track>>((ref) async {
   final api = ref.watch(cachedFunkwhaleApiProvider);
-  final response = await api.getTracks(
-    ordering: '-creation_date',
-    pageSize: 15,
-  );
-  return response.results;
+  final response = await api.getListenings(ordering: '-created', pageSize: 15);
+  // Deduplicate tracks by ID, preserving listening order
+  final seen = <int>{};
+  return response.results
+      .where((l) => seen.add(l.track.id))
+      .map((l) => l.track)
+      .toList();
 });
 
 // ── Home Screen ─────────────────────────────────────────────────────────
@@ -137,10 +139,10 @@ class HomeScreen extends ConsumerWidget {
               ),
             ],
 
-            // New Tracks vertical list
+            // Recently Played Tracks vertical list
             const SliverToBoxAdapter(child: SizedBox(height: 28)),
             const SliverToBoxAdapter(
-              child: _SectionHeader(title: 'New Tracks'),
+              child: _SectionHeader(title: 'Recently Played Tracks'),
             ),
             const SliverToBoxAdapter(child: SizedBox(height: 8)),
             const _TrackListSection(),
@@ -406,7 +408,7 @@ class _TrackListSection extends ConsumerWidget {
       error:
           (error, _) => SliverToBoxAdapter(
             child: _ErrorCard(
-              message: 'Could not load tracks',
+              message: 'Could not load recent listens',
               onRetry: () => ref.invalidate(recentTracksProvider),
             ),
           ),
@@ -417,7 +419,7 @@ class _TrackListSection extends ConsumerWidget {
               padding: EdgeInsets.all(32),
               child: Center(
                 child: Text(
-                  'No tracks found',
+                  'No recent listens',
                   style: TextStyle(color: AppTheme.onBackgroundSubtle),
                 ),
               ),
@@ -436,7 +438,7 @@ class _TrackListSection extends ConsumerWidget {
                       .playTracks(
                         tracks,
                         startIndex: index,
-                        source: 'recent_tracks',
+                        source: 'recent_listenings',
                       ),
             );
           }, childCount: tracks.length),

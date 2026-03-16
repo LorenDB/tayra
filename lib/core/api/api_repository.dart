@@ -236,6 +236,22 @@ class FunkwhaleApi {
     );
   }
 
+  Future<PaginatedResponse<Listening>> getListenings({
+    int page = 1,
+    int pageSize = 20,
+    String ordering = '-created',
+  }) async {
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/history/listenings/',
+      queryParameters: {
+        'page': page,
+        'page_size': pageSize,
+        'ordering': ordering,
+      },
+    );
+    return PaginatedResponse.fromJson(response.data, Listening.fromJson);
+  }
+
   // ── Stream URL builder ──────────────────────────────────────────────
 
   String getStreamUrl(String listenUrl) {
