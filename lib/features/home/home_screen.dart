@@ -412,30 +412,56 @@ class _AlbumGridSection extends ConsumerWidget {
               );
             }
 
-            return LayoutBuilder(
-              builder: (context, constraints) {
-                final columns = (constraints.maxWidth / 160).floor().clamp(
-                  2,
-                  5,
-                );
-                return Wrap(
-                  spacing: 14,
-                  runSpacing: 16,
-                  children:
-                      albums.map((album) {
-                        final itemWidth =
-                            (constraints.maxWidth - (columns - 1) * 14) /
-                            columns;
-                        return SizedBox(
-                          width: itemWidth,
-                          child: AlbumCard(
-                            album: album,
-                            onTap: () => context.push('/album/${album.id}'),
-                          ),
-                        );
-                      }).toList(),
-                );
-              },
+            // Use a LayoutBuilder to rely on the actual incoming width and
+            // defensively handle very small or unusual constraints that can
+            // occur when the sidebar collapses or during breakpoint
+            // transitions. This avoids producing negative BoxConstraints.
+            // Constrain this section to the available width computed from
+            // MediaQuery to avoid malformed constraints during sidebar
+            // collapse / breakpoint transitions. Render a shrink-wrapped
+            // GridView so Flutter provides normalized constraints to grid
+            // children and avoids negative min-widths.
+            final mqWidth = MediaQuery.sizeOf(context).width;
+            final navWidth = Responsive.useSideNavigation(context) ? 80.0 : 0.0;
+            const horizontalPadding = 20.0; // parent Padding symmetric
+            final totalAvailable = (mqWidth - navWidth - horizontalPadding * 2)
+                .clamp(0.0, double.infinity);
+            final sectionAvailable = ((totalAvailable - 24) / 2).clamp(
+              0.0,
+              totalAvailable,
+            );
+
+            const double minItemWidth = 140.0;
+            const double spacing = 14.0;
+            final rawColumns =
+                ((sectionAvailable + spacing) / (minItemWidth + spacing))
+                    .floor();
+            final columns = rawColumns.clamp(1, 5);
+
+            return ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: 0,
+                maxWidth: sectionAvailable,
+              ),
+              child: GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.zero,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: columns,
+                  crossAxisSpacing: spacing,
+                  mainAxisSpacing: 16,
+                  childAspectRatio: 0.72,
+                ),
+                itemCount: albums.length,
+                itemBuilder: (context, index) {
+                  final album = albums[index];
+                  return AlbumCard(
+                    album: album,
+                    onTap: () => context.push('/album/${album.id}'),
+                  );
+                },
+              ),
             );
           },
         ),
