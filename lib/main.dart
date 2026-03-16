@@ -12,9 +12,41 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 import 'package:audio_service_mpris/audio_service_mpris.dart';
 import 'package:aptabase_flutter/aptabase_flutter.dart';
+// Optional: set a minimum window size on desktop platforms to avoid
+// rendering issues at very small sizes.
+import 'package:window_size/window_size.dart' as window_size;
+import 'dart:math' as math;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Configure a minimum window size on desktop platforms.
+  if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
+    try {
+      // On some window managers this call can throw or be a no-op; ignore
+      // errors to avoid crashing the startup path.
+      window_size.setWindowMinSize(const Size(640, 480));
+      // Also set an initial window size if the current size is smaller.
+      final current = window_size.getWindowInfo();
+      current
+          .then((info) {
+            final frame = info.frame;
+            if (frame != null && frame.width < 640) {
+              window_size.setWindowFrame(
+                Rect.fromLTWH(
+                  frame.left,
+                  frame.top,
+                  640,
+                  math.max(480, frame.height),
+                ),
+              );
+            }
+          })
+          .catchError((_) {});
+    } catch (_) {
+      // Ignore if the platform doesn't support this or the call fails.
+    }
+  }
 
   await Aptabase.init(
     "A-SH-1447414969",
