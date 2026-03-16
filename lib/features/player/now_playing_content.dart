@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart' hide PlayerState;
+import 'dart:ui' as ui;
+import 'package:flutter/scheduler.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/models.dart';
 import 'package:tayra/core/theme/app_theme.dart';
@@ -36,6 +39,14 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
   late final AnimationController? _glowAnimController;
   Animation<double>? _glowAnimation;
 
+  // Shader easter egg state
+  ui.FragmentShader? _gridShader;
+  ui.Image? _gridImage;
+  Ticker? _shaderTicker;
+  double _shaderElapsed = 0.0;
+  bool _showGridEasterEgg = false;
+  String? _shaderImageUrl; // last URL bound into the shader
+
   @override
   void initState() {
     super.initState();
@@ -56,7 +67,74 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
   @override
   void dispose() {
     _glowAnimController?.dispose();
+    _shaderTicker?.dispose();
+    _gridShader?.dispose();
+    _gridImage?.dispose();
     super.dispose();
+  }
+
+  Future<void> _loadGridShader() async {
+    try {
+      final program = await ui.FragmentProgram.fromAsset(
+        'assets/shaders/disco.frag',
+      );
+      if (mounted) {
+        setState(() => _gridShader = program.fragmentShader());
+      }
+    } catch (_) {
+      // Shader failed to load — ignore fallback
+    }
+  }
+
+  Future<void> _bindImageToShader(ImageProvider imageProvider) async {
+    try {
+      final config = ImageConfiguration(
+        bundle: DefaultAssetBundle.of(context),
+        devicePixelRatio: MediaQuery.of(context).devicePixelRatio,
+      );
+      final completer = Completer<ui.Image>();
+      final stream = imageProvider.resolve(config);
+      late final ImageStreamListener listener;
+      listener = ImageStreamListener(
+        (info, _) {
+          completer.complete(info.image.clone());
+          stream.removeListener(listener);
+        },
+        onError: (e, _) {
+          if (!completer.isCompleted) completer.completeError(e);
+          stream.removeListener(listener);
+        },
+      );
+      stream.addListener(listener);
+      final img = await completer.future;
+      if (mounted) {
+        _gridImage?.dispose();
+        _gridImage = img;
+        _gridShader?.setImageSampler(0, img);
+        setState(() {});
+      }
+    } catch (_) {
+      // ignore — shader keeps showing the previous image
+    }
+  }
+
+  Future<void> _toggleGridEasterEgg({ImageProvider? imageProvider}) async {
+    if (!_showGridEasterEgg) {
+      if (_gridShader == null) await _loadGridShader();
+
+      if (imageProvider != null) {
+        await _bindImageToShader(imageProvider);
+      }
+
+      _shaderTicker ??= createTicker((elapsed) {
+        setState(() => _shaderElapsed = elapsed.inMicroseconds / 1e6);
+      });
+      _shaderTicker!.start();
+      setState(() => _showGridEasterEgg = true);
+    } else {
+      _shaderTicker?.stop();
+      setState(() => _showGridEasterEgg = false);
+    }
   }
 
   void _onSeekStart(double value) {
@@ -101,6 +179,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
     }
 
     final imageUrl = track.largeCoverUrl ?? track.coverUrl;
+
     final dominantColorAsync = ref.watch(dominantColorProvider(imageUrl));
     final glowColor = dominantColorAsync.maybeWhen(
       data: (color) => color,
@@ -365,15 +444,52 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
   }
 
   Widget _buildAlbumArtImage(String? imageUrl, double? size) {
-    if (imageUrl != null) {
-      return CachedNetworkImage(
-        imageUrl: imageUrl,
-        fit: BoxFit.cover,
-        placeholder: (context, url) => _buildPlaceholderArt(size),
-        errorWidget: (context, url, error) => _buildPlaceholderArt(size),
-      );
-    }
-    return _buildPlaceholderArt(size);
+    final Widget imageWidget =
+        imageUrl != null
+            ? CachedNetworkImage(
+              imageUrl: imageUrl,
+              fit: BoxFit.cover,
+              placeholder: (context, url) => _buildPlaceholderArt(size),
+              errorWidget: (context, url, error) => _buildPlaceholderArt(size),
+              imageBuilder: (context, imageProvider) {
+                // Image is fully decoded and ready. If the shader is active
+                // and the URL changed, bind the raw ImageProvider directly —
+                // no boundary snapshot needed, no flicker.
+                if (_showGridEasterEgg && imageUrl != _shaderImageUrl) {
+                  _shaderImageUrl = imageUrl;
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (mounted) _bindImageToShader(imageProvider);
+                  });
+                }
+                return Image(image: imageProvider, fit: BoxFit.cover);
+              },
+            )
+            : _buildPlaceholderArt(size);
+
+    return GestureDetector(
+      onLongPress: () {
+        // Find the current ImageProvider from the cache to pass into the shader.
+        final provider =
+            imageUrl != null ? CachedNetworkImageProvider(imageUrl) : null;
+        _toggleGridEasterEgg(imageProvider: provider);
+      },
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          imageWidget,
+          if (_showGridEasterEgg && _gridShader != null)
+            Positioned.fill(
+              child: CustomPaint(
+                painter: _GridPainter(
+                  shader: _gridShader!,
+                  time: _shaderElapsed,
+                  image: _gridImage,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
   }
 
   Widget _buildPlaceholderArt(double? size) {
@@ -719,4 +835,34 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
       ),
     );
   }
+}
+
+class _GridPainter extends CustomPainter {
+  const _GridPainter({
+    required this.shader,
+    required this.time,
+    required this.image,
+  });
+
+  final ui.FragmentShader shader;
+  final double time;
+  final ui.Image? image;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (image != null) {
+      shader.setImageSampler(0, image!);
+    }
+    shader
+      ..setFloat(0, time)
+      ..setFloat(1, size.width)
+      ..setFloat(2, size.height);
+
+    final paint = Paint()..shader = shader;
+    canvas.drawRect(Offset.zero & size, paint);
+  }
+
+  @override
+  bool shouldRepaint(_GridPainter old) =>
+      old.time != time || old.shader != shader || old.image != image;
 }
