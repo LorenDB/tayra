@@ -6,6 +6,7 @@ import 'package:tayra/core/auth/auth_provider.dart';
 import 'package:tayra/features/auth/presentation/login_screen.dart';
 import 'package:tayra/features/home/home_screen.dart';
 import 'package:tayra/features/browse/browse_screen.dart';
+import 'package:tayra/features/radios/radios_screen.dart';
 import 'package:tayra/features/browse/artist_detail_screen.dart';
 import 'package:tayra/features/browse/album_detail_screen.dart';
 import 'package:tayra/features/settings/settings_screen.dart';
@@ -160,6 +161,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 },
               ),
             ],
+          ),
+          GoRoute(
+            path: '/radios',
+            name: 'radios',
+            pageBuilder:
+                (context, state) =>
+                    const NoTransitionPage(child: RadiosScreen()),
           ),
           GoRoute(
             path: '/search',

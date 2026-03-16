@@ -5,6 +5,33 @@
 /// the project lean.
 library;
 
+// Helper utilities for defensive JSON parsing. Many Funkwhale instances
+// return inconsistent shapes (int, map, list) for the same field. These
+// helpers normalize common cases to reduce `as Map` cast failures.
+Map<String, dynamic> _toMap(dynamic v) {
+  if (v is Map<String, dynamic>) return v;
+  return <String, dynamic>{};
+}
+
+Map<String, dynamic>? _toMapOrNull(dynamic v) {
+  if (v is Map<String, dynamic>) return v;
+  if (v is int) return {'id': v};
+  if (v is String && int.tryParse(v) != null) return {'id': int.parse(v)};
+  if (v is List && v.isNotEmpty && v.first is Map<String, dynamic>)
+    return v.first as Map<String, dynamic>;
+  return null;
+}
+
+List<Map<String, dynamic>> _toListOfMaps(dynamic v) {
+  if (v is List) {
+    return v.map<Map<String, dynamic>>((e) {
+      if (e is Map<String, dynamic>) return e;
+      return <String, dynamic>{};
+    }).toList();
+  }
+  return <Map<String, dynamic>>[];
+}
+
 // ── Cover / Attachment ──────────────────────────────────────────────────
 
 class CoverUrls {
@@ -52,9 +79,7 @@ class Cover {
   factory Cover.fromJson(Map<String, dynamic> json) {
     return Cover(
       uuid: json['uuid'] as String? ?? '',
-      urls: CoverUrls.fromJson(
-        json['urls'] as Map<String, dynamic>? ?? const {},
-      ),
+      urls: CoverUrls.fromJson(_toMap(json['urls'])),
     );
   }
 
@@ -108,7 +133,7 @@ class Artist {
       tracksCount: json['tracks_count'] as int? ?? 0,
       albums:
           (json['albums'] as List<dynamic>?)
-              ?.map((e) => Album.fromJson(e as Map<String, dynamic>))
+              ?.map((e) => Album.fromJson(_toMap(e)))
               .toList() ??
           const [],
       tags:
@@ -204,7 +229,7 @@ class Album {
               : null,
       tracks:
           (json['tracks'] as List<dynamic>?)
-              ?.map((e) => Track.fromJson(e as Map<String, dynamic>))
+              ?.map((e) => Track.fromJson(_toMap(e)))
               .toList() ??
           const [],
     );
@@ -320,7 +345,7 @@ class Track {
           const [],
       uploads:
           (json['uploads'] as List<dynamic>?)
-              ?.map((e) => Upload.fromJson(e as Map<String, dynamic>))
+              ?.map((e) => Upload.fromJson(_toMap(e)))
               .toList() ??
           const [],
       creationDate:
@@ -581,5 +606,199 @@ class Tag {
               ? DateTime.tryParse(json['creation_date'] as String)
               : null,
     );
+  }
+}
+
+// ── Radios / Filters ───────────────────────────────────────────────────
+
+class Filter {
+  final String? type;
+  final String? label;
+  final String? helpText;
+  final List<dynamic>? fields;
+
+  const Filter({this.type, this.label, this.helpText, this.fields});
+
+  factory Filter.fromJson(Map<String, dynamic> json) {
+    return Filter(
+      type: json['type'] as String?,
+      label: json['label'] as String?,
+      helpText: json['help_text'] as String?,
+      fields: json['fields'] as List<dynamic>?,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type,
+      'label': label,
+      'help_text': helpText,
+      'fields': fields,
+    };
+  }
+}
+
+class Radio {
+  final int id;
+  final bool? isPublic;
+  final String name;
+  final DateTime? creationDate;
+  final Map<String, dynamic>? user;
+  final Map<String, dynamic>? config;
+  final String? description;
+
+  const Radio({
+    required this.id,
+    this.isPublic,
+    required this.name,
+    this.creationDate,
+    this.user,
+    this.config,
+    this.description,
+  });
+
+  factory Radio.fromJson(Map<String, dynamic> json) {
+    // Be defensive: some servers may return `user` as an int, a map, or
+    // (unexpectedly) as a list. Normalize to Map<String, dynamic> when
+    // possible so consumers can read user['id'] etc.
+    dynamic userRaw = json['user'];
+    Map<String, dynamic>? userMap;
+    if (userRaw is Map<String, dynamic>) {
+      userMap = userRaw;
+    } else if (userRaw is int) {
+      userMap = {'id': userRaw};
+    } else if (userRaw is List &&
+        userRaw.isNotEmpty &&
+        userRaw.first is Map<String, dynamic>) {
+      userMap = userRaw.first as Map<String, dynamic>;
+    } else {
+      userMap = null;
+    }
+
+    dynamic configRaw = json['config'];
+    Map<String, dynamic>? configMap;
+    if (configRaw is Map<String, dynamic>) {
+      configMap = configRaw;
+    } else {
+      configMap = null;
+    }
+
+    return Radio(
+      id: json['id'] as int,
+      isPublic: json['is_public'] as bool?,
+      name: json['name'] as String? ?? '',
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
+      user: userMap,
+      config: configMap,
+      description: json['description'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'is_public': isPublic,
+      'name': name,
+      'creation_date': creationDate?.toIso8601String(),
+      'user': user,
+      'config': config,
+      'description': description,
+    };
+  }
+}
+
+class RadioSession {
+  final int id;
+  final String? radioType;
+  final String?
+  relatedObjectId; // server may return string or int; normalize to string
+  final int? user; // sometimes a nested object, sometimes an integer id
+  final DateTime? creationDate;
+  final int? customRadio;
+  final Map<String, dynamic>? config;
+
+  const RadioSession({
+    required this.id,
+    this.radioType,
+    this.relatedObjectId,
+    this.user,
+    this.creationDate,
+    this.customRadio,
+    this.config,
+  });
+
+  factory RadioSession.fromJson(Map<String, dynamic> json) {
+    // Defensive parsing: Funkwhale instances vary in types for these fields.
+    String? related;
+    final rel = json['related_object_id'];
+    if (rel != null) {
+      related = rel is String ? rel : rel.toString();
+    }
+
+    int? userId;
+    final u = json['user'];
+    if (u is int) {
+      userId = u;
+    } else if (u is Map && u.containsKey('id')) {
+      userId =
+          (u['id'] is int) ? u['id'] as int : int.tryParse(u['id'].toString());
+    }
+
+    int? custom;
+    final c = json['custom_radio'];
+    if (c is int)
+      custom = c;
+    else if (c is bool)
+      custom = c ? 1 : 0;
+
+    Map<String, dynamic>? cfg;
+    final cfgRaw = json['config'];
+    if (cfgRaw is Map<String, dynamic>) cfg = cfgRaw;
+
+    return RadioSession(
+      id: json['id'] as int,
+      radioType: json['radio_type'] as String?,
+      relatedObjectId: related,
+      user: userId,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
+      customRadio: custom,
+      config: cfg,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'radio_type': radioType,
+      'related_object_id': relatedObjectId,
+      'user': user,
+      'creation_date': creationDate?.toIso8601String(),
+      'custom_radio': customRadio,
+      'config': config,
+    };
+  }
+}
+
+class RadioSessionTrackCreate {
+  final int session;
+  final int? count;
+
+  const RadioSessionTrackCreate({required this.session, this.count});
+
+  factory RadioSessionTrackCreate.fromJson(Map<String, dynamic> json) {
+    return RadioSessionTrackCreate(
+      session: json['session'] as int,
+      count: json['count'] as int?,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {'session': session, 'count': count};
   }
 }

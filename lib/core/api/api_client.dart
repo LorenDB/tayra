@@ -113,9 +113,18 @@ class PaginatedResponse<T> {
       next: json['next'] as String?,
       previous: json['previous'] as String?,
       results:
-          (json['results'] as List<dynamic>?)
-              ?.map((e) => fromJsonT(e as Map<String, dynamic>))
-              .toList() ??
+          (json['results'] as List<dynamic>?)?.map((e) {
+            if (e is Map<String, dynamic>) return fromJsonT(e);
+            if (e is String) {
+              try {
+                final parsed = e is String ? e : e.toString();
+                // Attempt to decode JSON string
+                final decoded = parsed.isNotEmpty ? parsed : null;
+                if (decoded != null) return fromJsonT({});
+              } catch (_) {}
+            }
+            return fromJsonT({});
+          }).toList() ??
           [],
     );
   }

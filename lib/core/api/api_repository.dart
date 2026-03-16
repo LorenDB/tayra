@@ -15,8 +15,12 @@ final funkwhaleApiProvider = Provider<FunkwhaleApi>((ref) {
 class FunkwhaleApi {
   final Dio _dio;
   final Ref _ref;
+  String? _lastRadioSessionCookie;
 
   FunkwhaleApi(this._dio, this._ref);
+
+  /// Cookie returned by the last successful radio session creation (if any).
+  String? get lastRadioSessionCookie => _lastRadioSessionCookie;
 
   String get _baseUrl {
     final serverUrl = _ref.read(authStateProvider).serverUrl ?? '';
@@ -265,5 +269,270 @@ class FunkwhaleApi {
       return {'Authorization': 'Bearer $token'};
     }
     return {};
+  }
+
+  // ── Radios ─────────────────────────────────────────────────────────
+
+  Future<PaginatedResponse<Radio>> getRadios({
+    int page = 1,
+    int pageSize = 20,
+    String ordering = '-creation_date',
+    String? q,
+    String? scope,
+    String? name,
+  }) async {
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/radios/radios/',
+      queryParameters: {
+        'page': page,
+        'page_size': pageSize,
+        'ordering': ordering,
+        if (q != null) 'q': q,
+        if (scope != null) 'scope': scope,
+        if (name != null) 'name': name,
+      },
+    );
+
+    // The API may return either a paginated object with `results` or a
+    // plain list of radios. Be flexible and accept both shapes.
+    final data = response.data;
+    if (data is List<dynamic>) {
+      final results =
+          data.map<Radio>((e) {
+            if (e is Map<String, dynamic>) return Radio.fromJson(e);
+            if (e is List && e.isNotEmpty && e.first is Map<String, dynamic>) {
+              return Radio.fromJson(e.first as Map<String, dynamic>);
+            }
+            throw StateError(
+              'Unexpected radio list item type: ${e.runtimeType}',
+            );
+          }).toList();
+      return PaginatedResponse(
+        count: results.length,
+        next: null,
+        previous: null,
+        results: results,
+      );
+    }
+
+    if (data is Map<String, dynamic> && data['results'] is List<dynamic>) {
+      return PaginatedResponse.fromJson(data, Radio.fromJson);
+    }
+
+    throw StateError('Unexpected radios response shape: ${data.runtimeType}');
+  }
+
+  Future<Radio> createRadio({required Map<String, dynamic> body}) async {
+    final response = await _dio.post(
+      '$_baseUrl/api/v1/radios/radios/',
+      data: body,
+    );
+    return Radio.fromJson(response.data);
+  }
+
+  Future<Radio> getRadio(int id) async {
+    final response = await _dio.get('$_baseUrl/api/v1/radios/radios/$id/');
+    return Radio.fromJson(response.data);
+  }
+
+  Future<Radio> updateRadio(int id, Map<String, dynamic> body) async {
+    final response = await _dio.put(
+      '$_baseUrl/api/v1/radios/radios/$id/',
+      data: body,
+    );
+    return Radio.fromJson(response.data);
+  }
+
+  Future<Radio> patchRadio(int id, Map<String, dynamic> body) async {
+    final response = await _dio.patch(
+      '$_baseUrl/api/v1/radios/radios/$id/',
+      data: body,
+    );
+    return Radio.fromJson(response.data);
+  }
+
+  Future<void> deleteRadio(int id) async {
+    await _dio.delete('$_baseUrl/api/v1/radios/radios/$id/');
+  }
+
+  Future<Track> getRadioTrack(int id) async {
+    final opts =
+        _lastRadioSessionCookie != null
+            ? Options(headers: {'cookie': _lastRadioSessionCookie})
+            : null;
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/radios/radios/$id/tracks/',
+      options: opts,
+    );
+
+    final data = response.data;
+    // Common full track payload
+    if (data is Map<String, dynamic>) {
+      if (data.containsKey('id') && data.containsKey('listen_url')) {
+        return Track.fromJson(data);
+      }
+      if (data.containsKey('track')) {
+        final t = data['track'];
+        if (t is Map<String, dynamic>) return Track.fromJson(t);
+        if (t is int) return getTrack(t);
+        if (t is String && int.tryParse(t) != null)
+          return getTrack(int.parse(t));
+      }
+      if (data.containsKey('results') &&
+          data['results'] is List &&
+          (data['results'] as List).isNotEmpty) {
+        final first = (data['results'] as List).first;
+        if (first is Map<String, dynamic>) return Track.fromJson(first);
+        if (first is int) return getTrack(first);
+      }
+      // If it's a simple id map like {"id": 123}
+      if (data.containsKey('id') && data.keys.length == 1) {
+        final idVal = data['id'];
+        if (idVal is int) return getTrack(idVal);
+        if (idVal is String && int.tryParse(idVal) != null)
+          return getTrack(int.parse(idVal));
+      }
+    }
+
+    if (data is int) return getTrack(data);
+    if (data is String && int.tryParse(data) != null)
+      return getTrack(int.parse(data));
+    if (data is List && data.isNotEmpty) {
+      final first = data.first;
+      if (first is Map<String, dynamic>) return Track.fromJson(first);
+      if (first is int) return getTrack(first);
+    }
+
+    // Fallback: try to parse as track map and hope for the best
+    return Track.fromJson(data as Map<String, dynamic>);
+  }
+
+  Future<Filter> getRadioFilters() async {
+    final response = await _dio.get('$_baseUrl/api/v1/radios/radios/filters/');
+    final data = response.data;
+    if (data is Map<String, dynamic>) return Filter.fromJson(data);
+    if (data is List && data.isNotEmpty && data.first is Map<String, dynamic>) {
+      return Filter.fromJson(data.first as Map<String, dynamic>);
+    }
+    throw StateError('Unexpected radio filters response: ${data.runtimeType}');
+  }
+
+  Future<Radio> validateRadio(Map<String, dynamic> body) async {
+    final response = await _dio.post(
+      '$_baseUrl/api/v1/radios/radios/validate/',
+      data: body,
+    );
+    return Radio.fromJson(response.data);
+  }
+
+  Future<RadioSession> createRadioSession(Map<String, dynamic> body) async {
+    dynamic _fromResponse(dynamic data) {
+      if (data is Map<String, dynamic>) return RadioSession.fromJson(data);
+      if (data is int) return RadioSession(id: data);
+      if (data is String) {
+        final parsed = int.tryParse(data);
+        if (parsed != null) return RadioSession(id: parsed);
+      }
+      throw StateError(
+        'Unexpected radio session response: ${data.runtimeType}',
+      );
+    }
+
+    try {
+      final response = await _dio.post(
+        '$_baseUrl/api/v1/radios/sessions/',
+        data: body,
+      );
+      // Capture set-cookie header if provided by server
+      final setCookie = response.headers.map['set-cookie'];
+      if (setCookie != null && setCookie.isNotEmpty) {
+        _lastRadioSessionCookie = setCookie.join(';');
+      }
+      return _fromResponse(response.data);
+    } on DioException catch (e) {
+      // Some Funkwhale instances are picky about the request encoding.
+      // Log diagnostics and retry as form-encoded (matches schema alternatives).
+      // The caller should already surface the exception, but a retry here
+      // improves compatibility with servers that expect x-www-form-urlencoded.
+      // Primary attempt failed; continue with compatibility retries silently.
+
+      // Retry as form-encoded
+      try {
+        final opts = Options(contentType: Headers.formUrlEncodedContentType);
+        final response = await _dio.post(
+          '$_baseUrl/api/v1/radios/sessions/',
+          data: body,
+          options: opts,
+        );
+        final setCookie = response.headers.map['set-cookie'];
+        if (setCookie != null && setCookie.isNotEmpty) {
+          _lastRadioSessionCookie = setCookie.join(';');
+        }
+        return _fromResponse(response.data);
+      } on DioException catch (e2) {
+        // Mask authorization header when printing
+        final headers = Map.of(e2.requestOptions.headers);
+        if (headers.containsKey('Authorization')) {
+          headers['Authorization'] = 'REDACTED';
+        }
+        // Form-encoded retry failed; proceed to minimal-body retry silently.
+
+        // As a last attempt try a minimal body (only radio_type) which some
+        // Funkwhale instances accept for generic radios.
+        try {
+          final response = await _dio.post(
+            '$_baseUrl/api/v1/radios/sessions/',
+            data: {'radio_type': body['radio_type']},
+          );
+          final setCookie = response.headers.map['set-cookie'];
+          if (setCookie != null && setCookie.isNotEmpty) {
+            _lastRadioSessionCookie = setCookie.join(';');
+          }
+          return _fromResponse(response.data);
+        } on DioException catch (e3) {
+          final headers3 = Map.of(e3.requestOptions.headers);
+          if (headers3.containsKey('Authorization'))
+            headers3['Authorization'] = 'REDACTED';
+          // Minimal-body attempt also failed; rethrow so caller can handle.
+          rethrow;
+        }
+      }
+    }
+  }
+
+  Future<RadioSession> getRadioSession(int id) async {
+    final response = await _dio.get('$_baseUrl/api/v1/radios/sessions/$id/');
+    return RadioSession.fromJson(response.data);
+  }
+
+  Future<RadioSessionTrackCreate> getNextRadioTrack(
+    int session, {
+    int? count,
+  }) async {
+    final headers = <String, dynamic>{};
+    if (_lastRadioSessionCookie != null)
+      headers['cookie'] = _lastRadioSessionCookie;
+    final response = await _dio.post(
+      '$_baseUrl/api/v1/radios/tracks/',
+      data: {'session': session, if (count != null) 'count': count},
+      options: Options(headers: headers),
+    );
+    return RadioSessionTrackCreate.fromJson(response.data);
+  }
+
+  /// Post to the radios/tracks endpoint and return the raw response body.
+  /// Some servers return a Track object, others a small serializer object;
+  /// callers may need to handle both shapes, so provide the raw dynamic
+  /// response here.
+  Future<dynamic> postNextRadioTrackRaw(int session, {int? count}) async {
+    final headers = <String, dynamic>{};
+    if (_lastRadioSessionCookie != null)
+      headers['cookie'] = _lastRadioSessionCookie;
+    final response = await _dio.post(
+      '$_baseUrl/api/v1/radios/tracks/',
+      data: {'session': session, if (count != null) 'count': count},
+      options: Options(headers: headers),
+    );
+    return response.data;
   }
 }

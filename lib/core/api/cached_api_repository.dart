@@ -435,6 +435,45 @@ class CachedFunkwhaleApi {
 
   Map<String, String> get authHeaders => _api.authHeaders;
 
+  // ── Radios (pass-through) ─────────────────────────────────────────
+
+  Future<PaginatedResponse<Radio>> getRadios({
+    int page = 1,
+    int pageSize = 20,
+    String ordering = '-creation_date',
+    String? q,
+    String? scope,
+    String? name,
+  }) async {
+    return _api.getRadios(
+      page: page,
+      pageSize: pageSize,
+      ordering: ordering,
+      q: q,
+      scope: scope,
+      name: name,
+    );
+  }
+
+  Future<Track> getRadioTrack(int id) async {
+    return _api.getRadioTrack(id);
+  }
+
+  Future<RadioSession> createRadioSession(Map<String, dynamic> body) async {
+    return _api.createRadioSession(body);
+  }
+
+  Future<RadioSessionTrackCreate> getNextRadioTrack(
+    int session, {
+    int? count,
+  }) async {
+    return _api.getNextRadioTrack(session, count: count);
+  }
+
+  Future<dynamic> postNextRadioTrackRaw(int session, {int? count}) async {
+    return _api.postNextRadioTrackRaw(session, count: count);
+  }
+
   // ── Serialization helpers ───────────────────────────────────────────
 
   Map<String, dynamic> _paginatedResponseToJson<T>(
@@ -472,6 +511,18 @@ class CachedFunkwhaleApi {
       'tags': album.tags,
       'creation_date': album.creationDate?.toIso8601String(),
       'tracks': album.tracks.map(_trackToJson).toList(),
+    };
+  }
+
+  Map<String, dynamic> _radioToJson(Radio radio) {
+    return {
+      'id': radio.id,
+      'is_public': radio.isPublic,
+      'name': radio.name,
+      'creation_date': radio.creationDate?.toIso8601String(),
+      'description': radio.description,
+      'config': radio.config,
+      'user': radio.user,
     };
   }
 

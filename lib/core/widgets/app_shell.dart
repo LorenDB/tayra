@@ -23,6 +23,7 @@ class AppShell extends ConsumerWidget {
       activeIcon: Icons.library_music,
       label: 'Browse',
     ),
+    (icon: Icons.radio_outlined, activeIcon: Icons.radio, label: 'Radios'),
     (
       icon: Icons.favorite_border_rounded,
       activeIcon: Icons.favorite_rounded,
@@ -35,8 +36,8 @@ class AppShell extends ConsumerWidget {
     ),
   ];
 
-  static const _paths = ['/', '/browse', '/favorites', '/playlists'];
-  static const _names = ['home', 'browse', 'favorites', 'playlists'];
+  static const _paths = ['/', '/browse', '/radios', '/favorites', '/playlists'];
+  static const _names = ['home', 'browse', 'radios', 'favorites', 'playlists'];
 
   int _currentIndex(BuildContext context) {
     final location = GoRouterState.of(context).matchedLocation;
@@ -81,9 +82,8 @@ class AppShell extends ConsumerWidget {
             currentIndex: currentIndex,
             extended: isExpanded,
             onDestinationSelected: (i) {
-              // Navigate by route name to ensure we land on the shell
-              // route root for that tab (handles nested routes robustly).
-              context.goNamed(_names[i]);
+              // Navigate by path to avoid relying on named routes.
+              context.go(_paths[i]);
             },
           ),
 
@@ -145,7 +145,7 @@ class AppShell extends ConsumerWidget {
                     final isSelected = i == currentIndex;
                     return Expanded(
                       child: InkWell(
-                        onTap: () => context.goNamed(_names[i]),
+                        onTap: () => context.go(_paths[i]),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
