@@ -8,7 +8,7 @@
 PRODUCT_NAME = Tayra
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = audio.funkwhale.funkwhale
+PRODUCT_BUNDLE_IDENTIFIER = dev.lorendb.tayra
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2026 audio.funkwhale. All rights reserved.
