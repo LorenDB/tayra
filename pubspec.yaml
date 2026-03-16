@@ -68,3 +68,4 @@ flutter:
   uses-material-design: true
   shaders:
     - assets/shaders/ripple.frag
+    - assets/shaders/disco.frag
