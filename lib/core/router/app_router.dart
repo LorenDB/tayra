@@ -15,6 +15,7 @@ import 'package:tayra/features/playlists/playlist_detail_screen.dart';
 import 'package:tayra/features/player/now_playing_screen.dart';
 import 'package:tayra/features/player/queue_screen.dart';
 import 'package:tayra/features/year_review/year_review_screen.dart';
+import 'package:tayra/features/search/search_screen.dart';
 import 'package:tayra/core/widgets/app_shell.dart';
 
 class NavigationObserver extends NavigatorObserver {
@@ -156,6 +157,31 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 builder: (context, state) {
                   final id = int.parse(state.pathParameters['id']!);
                   return AlbumDetailScreen(albumId: id);
+                },
+              ),
+            ],
+          ),
+          GoRoute(
+            path: '/search',
+            name: 'search',
+            pageBuilder:
+                (context, state) =>
+                    const NoTransitionPage(child: SearchScreen()),
+            routes: [
+              GoRoute(
+                path: 'album/:id',
+                name: 'search_album_detail',
+                builder: (context, state) {
+                  final id = int.parse(state.pathParameters['id']!);
+                  return AlbumDetailScreen(albumId: id);
+                },
+              ),
+              GoRoute(
+                path: 'artist/:id',
+                name: 'search_artist_detail',
+                builder: (context, state) {
+                  final id = int.parse(state.pathParameters['id']!);
+                  return ArtistDetailScreen(artistId: id);
                 },
               ),
             ],
