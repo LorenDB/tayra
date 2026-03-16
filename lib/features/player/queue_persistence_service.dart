@@ -49,9 +49,17 @@ class QueuePersistenceService {
       // Deserialize tracks
       final queueJson = jsonDecode(queueJsonString) as List<dynamic>;
       final queue =
-          queueJson
-              .map((json) => Track.fromJson(json as Map<String, dynamic>))
-              .toList();
+          queueJson.map((json) {
+            if (json is Map<String, dynamic>) return Track.fromJson(json);
+            if (json is String) {
+              try {
+                final parsed = jsonDecode(json);
+                if (parsed is Map<String, dynamic>)
+                  return Track.fromJson(parsed);
+              } catch (_) {}
+            }
+            return Track.fromJson({});
+          }).toList();
 
       if (queue.isEmpty) return null;
 

@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:aptabase_flutter/aptabase_flutter.dart';
+import 'package:dio/dio.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/cache/audio_cache_service.dart';
@@ -876,6 +877,265 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }
 
   CachedFunkwhaleApi get _api => ref.read(cachedFunkwhaleApiProvider);
+
+  // Radio session state (when playing a radio stream)
+  int? _radioSessionId;
+  int? _radioId;
+  Timer? _radioFetchTimer;
+
+  Future<Track?> _parseTrackFromRaw(dynamic raw) async {
+    try {
+      // Direct track map
+      if (raw is Map<String, dynamic>) {
+        // Common full track payload with listen_url
+        if (raw.containsKey('id') && raw.containsKey('listen_url')) {
+          return Track.fromJson(raw);
+        }
+
+        // Wrapped track: { "track": {...} } or { "track": 123 }
+        if (raw.containsKey('track')) {
+          final trackVal = raw['track'];
+          if (trackVal is Map<String, dynamic>) {
+            return Track.fromJson(trackVal);
+          }
+          if (trackVal is int) {
+            try {
+              return await _api.getTrack(trackVal);
+            } catch (_) {
+              return null;
+            }
+          }
+          if (trackVal is String && int.tryParse(trackVal) != null) {
+            try {
+              return await _api.getTrack(int.parse(trackVal));
+            } catch (_) {
+              return null;
+            }
+          }
+        }
+
+        // Sometimes APIs return { "results": [...] } or similar
+        if (raw.containsKey('results') &&
+            raw['results'] is List &&
+            (raw['results'] as List).isNotEmpty) {
+          final first = (raw['results'] as List).first;
+          // Recurse to parse the first element
+          return await _parseTrackFromRaw(first);
+        }
+
+        // Occasionally the server returns just an id inside a map, e.g. {"id": 123}
+        if (raw.containsKey('id') && raw.keys.length == 1) {
+          final idVal = raw['id'];
+          if (idVal is int) {
+            try {
+              return await _api.getTrack(idVal);
+            } catch (_) {
+              return null;
+            }
+          }
+          if (idVal is String && int.tryParse(idVal) != null) {
+            try {
+              return await _api.getTrack(int.parse(idVal));
+            } catch (_) {
+              return null;
+            }
+          }
+        }
+      }
+
+      // List responses
+      if (raw is List && raw.isNotEmpty) {
+        final first = raw.first;
+        // If the first element is a map, try to parse it as a track
+        if (first is Map<String, dynamic>) {
+          return Track.fromJson(first);
+        }
+        // If list of ids
+        if (first is int) {
+          try {
+            return await _api.getTrack(first);
+          } catch (_) {
+            return null;
+          }
+        }
+        if (first is String && int.tryParse(first) != null) {
+          try {
+            return await _api.getTrack(int.parse(first));
+          } catch (_) {
+            return null;
+          }
+        }
+      }
+
+      // Raw is a plain int -> treat as track id
+      if (raw is int) {
+        try {
+          return await _api.getTrack(raw);
+        } catch (_) {
+          return null;
+        }
+      }
+
+      // Raw is a numeric string -> treat as id
+      if (raw is String && int.tryParse(raw) != null) {
+        try {
+          return await _api.getTrack(int.parse(raw));
+        } catch (_) {
+          return null;
+        }
+      }
+    } catch (_) {
+      // Swallow parse errors silently in production; defensive parsing
+      // paths above will fallback to other strategies.
+    }
+    return null;
+  }
+
+  /// Start radio playback for a given radio id. This creates a radio session
+  /// on the server, fetches the initial track, prefetches a small buffer of
+  /// upcoming tracks and then starts a background fetcher to keep the queue
+  /// populated.
+  Future<void> startRadio(int radioId) async {
+    try {
+      // related_object_id must be sent as an integer. Sending it as a
+      // string caused a server 500 on some Funkwhale instances.
+      RadioSession session;
+      try {
+        // Follow the official Funkwhale Android client: for radios from the
+        // radios list we should create a session with radio_type='custom'
+        // and include `custom_radio` with the radio id.
+        session = await _api.createRadioSession({
+          'radio_type': 'custom',
+          'custom_radio': radioId,
+        });
+      } on DioException catch (e) {
+        // Log detailed diagnostics and retry with the schema-expected
+        // string form. Some servers are inconsistent; this will surface
+        // the server response body for debugging.
+        debugPrint(
+          'createRadioSession DioException: '
+          'status=${e.response?.statusCode}, '
+          'data=${e.response?.data}, '
+          'request=${e.requestOptions.data}',
+        );
+
+        try {
+          session = await _api.createRadioSession({
+            'radio_type': 'radio',
+            'related_object_id': radioId.toString(),
+          });
+        } on DioException catch (e2) {
+          debugPrint(
+            'createRadioSession retry failed: '
+            'status=${e2.response?.statusCode}, '
+            'data=${e2.response?.data}, '
+            'request=${e2.requestOptions.data}',
+          );
+          rethrow;
+        }
+      }
+
+      _radioSessionId = session.id;
+      _radioId = radioId;
+
+      // Fetch the first track (raw) and try to parse it.
+      final rawFirst = await _api.postNextRadioTrackRaw(_radioSessionId!);
+      Track? first = await _parseTrackFromRaw(rawFirst);
+      if (first == null) {
+        // Fallback to the radio sample endpoint
+        try {
+          first = await _api.getRadioTrack(radioId);
+        } catch (_) {}
+      }
+      if (first == null) throw Exception('No track returned for radio');
+
+      // Play the initial track (this replaces the current queue).
+      await playTracks([first], source: 'radio');
+
+      // Prefetch a few upcoming tracks and append to queue.
+      for (var i = 0; i < 4; i++) {
+        try {
+          final raw = await _api.postNextRadioTrackRaw(_radioSessionId!);
+          final t = await _parseTrackFromRaw(raw);
+          if (t != null) addToQueue([t]);
+        } catch (_) {
+          break;
+        }
+      }
+
+      // Start a periodic task to keep queue populated when it gets low.
+      _radioFetchTimer?.cancel();
+      _radioFetchTimer = Timer.periodic(const Duration(seconds: 4), (_) async {
+        try {
+          if (_radioSessionId == null) return;
+          final ahead = state.queue.length - state.currentIndex - 1;
+          if (ahead < 3) {
+            final raw = await _api.postNextRadioTrackRaw(_radioSessionId!);
+            final t = await _parseTrackFromRaw(raw);
+            if (t != null) addToQueue([t]);
+          }
+        } catch (_) {
+          // ignore
+        }
+      });
+    } catch (e) {
+      // If session creation fails (500 on some servers) fall back to a
+      // session-less strategy: repeatedly call the radio sample endpoint
+      // GET /api/v1/radios/radios/{id}/tracks/ which many servers support.
+      debugPrint('startRadio encountered error creating session: $e');
+
+      try {
+        // First attempt to get one track via the sample endpoint.
+        final first = await _api.getRadioTrack(radioId);
+        if (first == null) throw Exception('No radio sample track');
+
+        _radioSessionId = null;
+        _radioId = radioId;
+
+        await playTracks([first], source: 'radio-fallback');
+
+        // Prefetch a few upcoming tracks using the sample endpoint.
+        for (var i = 0; i < 4; i++) {
+          try {
+            final t = await _api.getRadioTrack(radioId);
+            if (t != null) addToQueue([t]);
+          } catch (_) {
+            break;
+          }
+        }
+
+        // Periodic fetcher to keep queue populated.
+        _radioFetchTimer?.cancel();
+        _radioFetchTimer = Timer.periodic(const Duration(seconds: 4), (
+          _,
+        ) async {
+          try {
+            final ahead = state.queue.length - state.currentIndex - 1;
+            if (ahead < 3) {
+              final t = await _api.getRadioTrack(radioId);
+              if (t != null) addToQueue([t]);
+            }
+          } catch (_) {
+            // ignore repeated failures
+          }
+        });
+        return;
+      } catch (fallbackErr) {
+        // Fallback failed silently.
+      }
+
+      // Do not log errors here; caller/UI will surface failures if needed.
+    }
+  }
+
+  /// Stop radio background fetcher and clear radio session state. Does not
+  /// modify the current queue so the user can keep listening if desired.
+  Future<void> stopRadio() async {
+    _radioFetchTimer?.cancel();
+    _radioFetchTimer = null;
+    _radioSessionId = null;
+    _radioId = null;
+  }
 
   /// Play a list of tracks starting at the given index.
   Future<void> playTracks(

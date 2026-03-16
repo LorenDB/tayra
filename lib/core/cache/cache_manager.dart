@@ -116,7 +116,11 @@ class CacheManager {
     );
 
     final jsonStr = row['data'] as String;
-    return jsonDecode(jsonStr) as Map<String, dynamic>;
+    try {
+      final parsed = jsonDecode(jsonStr);
+      if (parsed is Map<String, dynamic>) return parsed;
+    } catch (_) {}
+    return <String, dynamic>{};
   }
 
   /// Put metadata into cache
@@ -167,7 +171,11 @@ class CacheManager {
     );
 
     final jsonStr = row['data'] as String;
-    return jsonDecode(jsonStr) as Map<String, dynamic>;
+    try {
+      final parsed = jsonDecode(jsonStr);
+      if (parsed is Map<String, dynamic>) return parsed;
+    } catch (_) {}
+    return <String, dynamic>{};
   }
 
   /// Delete metadata from cache
