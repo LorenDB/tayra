@@ -8,8 +8,8 @@ import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
 import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
-
-// ── Data provider ───────────────────────────────────────────────────────
+import 'package:tayra/features/search/search_screen.dart';
+import 'package:tayra/core/layout/responsive.dart';
 
 final playlistsProvider = FutureProvider.autoDispose<List<Playlist>>((
   ref,
@@ -41,6 +41,11 @@ class PlaylistsScreen extends ConsumerWidget {
           ),
         ),
         actions: [
+          if (!Responsive.useSideNavigation(context))
+            IconButton(
+              icon: const Icon(Icons.search_rounded),
+              onPressed: () => SearchScreen.show(context),
+            ),
           IconButton(
             icon: const Icon(Icons.add_rounded, color: AppTheme.onBackground),
             onPressed: () => _showCreatePlaylistDialog(context, ref),

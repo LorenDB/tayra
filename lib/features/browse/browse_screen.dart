@@ -4,6 +4,8 @@ import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:tayra/features/browse/albums_screen.dart';
 import 'package:tayra/features/browse/artists_screen.dart';
+import 'package:tayra/features/search/search_screen.dart';
+import 'package:tayra/core/layout/responsive.dart';
 
 /// Browse tab wrapper that switches between Albums and Artists views
 /// based on the user's setting in [settingsProvider].
@@ -19,6 +21,13 @@ class BrowseScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(browseMode == BrowseMode.albums ? 'Albums' : 'Artists'),
         backgroundColor: AppTheme.background,
+        actions: [
+          if (!Responsive.useSideNavigation(context))
+            IconButton(
+              icon: const Icon(Icons.search_rounded),
+              onPressed: () => SearchScreen.show(context),
+            ),
+        ],
       ),
       body:
           browseMode == BrowseMode.albums
