@@ -908,8 +908,8 @@ class _CacheSizeLimitTile extends StatelessWidget {
           const SizedBox(height: 12),
           Slider(
             value: currentLimitMB.toDouble(),
-            min: 100,
-            max: 2000,
+            min: 500,
+            max: 5000,
             divisions: 19,
             activeColor: AppTheme.primary,
             inactiveColor: AppTheme.surfaceContainerHigh,
@@ -921,14 +921,14 @@ class _CacheSizeLimitTile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '100 MB',
+                  '500 MB',
                   style: const TextStyle(
                     color: AppTheme.onBackgroundMuted,
                     fontSize: 10,
                   ),
                 ),
                 Text(
-                  '2 GB',
+                  '5 GB',
                   style: const TextStyle(
                     color: AppTheme.onBackgroundMuted,
                     fontSize: 10,
