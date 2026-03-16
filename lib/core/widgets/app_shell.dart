@@ -36,10 +36,13 @@ class AppShell extends ConsumerWidget {
   ];
 
   static const _paths = ['/', '/browse', '/favorites', '/playlists'];
+  static const _names = ['home', 'browse', 'favorites', 'playlists'];
 
   int _currentIndex(BuildContext context) {
     final location = GoRouterState.of(context).matchedLocation;
-    for (var i = 0; i < _paths.length; i++) {
+    // Check non-root tabs first so that paths like `/album/123` are treated
+    // as belonging to the Home tab (index 0).
+    for (var i = 1; i < _paths.length; i++) {
       if (location == _paths[i] || location.startsWith('${_paths[i]}/')) {
         return i;
       }
@@ -78,9 +81,9 @@ class AppShell extends ConsumerWidget {
             currentIndex: currentIndex,
             extended: isExpanded,
             onDestinationSelected: (i) {
-              if (i != currentIndex) {
-                context.go(_paths[i]);
-              }
+              // Navigate by route name to ensure we land on the shell
+              // route root for that tab (handles nested routes robustly).
+              context.goNamed(_names[i]);
             },
           ),
 
@@ -142,11 +145,7 @@ class AppShell extends ConsumerWidget {
                     final isSelected = i == currentIndex;
                     return Expanded(
                       child: InkWell(
-                        onTap: () {
-                          if (i != currentIndex) {
-                            context.go(_paths[i]);
-                          }
-                        },
+                        onTap: () => context.goNamed(_names[i]),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
