@@ -110,9 +110,35 @@ class CachedFunkwhaleApi {
     String? q,
     bool forceRefresh = false,
   }) async {
-    final cacheKey =
-        'albums_p${page}_s${pageSize}_o${ordering}_'
-        'a${artist}_sc${scope}_q$q';
+    // Avoid caching arbitrary pagination pages (can bloat DB with many
+    // near-duplicate pages). Only use the cache for the first page. For
+    // subsequent pages, attempt a direct network fetch and fall back to a
+    // stale first-page cache entry on failure.
+    final baseSuffix = '_s${pageSize}_o${ordering}_a${artist}_sc${scope}_q$q';
+    final cacheKey = 'albums_p${page}$baseSuffix';
+    final pageOneKey = 'albums_p1$baseSuffix';
+
+    if (page != 1) {
+      try {
+        return await _api.getAlbums(
+          page: page,
+          pageSize: pageSize,
+          ordering: ordering,
+          artist: artist,
+          scope: scope,
+          q: q,
+        );
+      } catch (_) {
+        final stale = await _cache.getMetadataStale(pageOneKey);
+        if (stale != null) {
+          try {
+            return PaginatedResponse.fromJson(stale, Album.fromJson);
+          } catch (_) {}
+        }
+        rethrow;
+      }
+    }
+
     return _cachedFetch(
       cacheKey: cacheKey,
       cacheType: CacheType.recentAlbums,
@@ -163,9 +189,32 @@ class CachedFunkwhaleApi {
     String? q,
     bool forceRefresh = false,
   }) async {
-    final cacheKey =
-        'artists_p${page}_s${pageSize}_o${ordering}_'
-        'h${hasAlbums}_sc${scope}_q$q';
+    final baseSuffix =
+        '_s${pageSize}_o${ordering}_h${hasAlbums}_sc${scope}_q$q';
+    final cacheKey = 'artists_p${page}$baseSuffix';
+    final pageOneKey = 'artists_p1$baseSuffix';
+
+    if (page != 1) {
+      try {
+        return await _api.getArtists(
+          page: page,
+          pageSize: pageSize,
+          ordering: ordering,
+          hasAlbums: hasAlbums,
+          scope: scope,
+          q: q,
+        );
+      } catch (_) {
+        final stale = await _cache.getMetadataStale(pageOneKey);
+        if (stale != null) {
+          try {
+            return PaginatedResponse.fromJson(stale, Artist.fromJson);
+          } catch (_) {}
+        }
+        rethrow;
+      }
+    }
+
     return _cachedFetch(
       cacheKey: cacheKey,
       cacheType: CacheType.recentArtists,
@@ -211,9 +260,33 @@ class CachedFunkwhaleApi {
     String? q,
     bool forceRefresh = false,
   }) async {
-    final cacheKey =
-        'tracks_p${page}_s${pageSize}_o${ordering}_'
-        'al${album}_ar${artist}_sc${scope}_q$q';
+    final baseSuffix =
+        '_s${pageSize}_o${ordering}_al${album}_ar${artist}_sc${scope}_q$q';
+    final cacheKey = 'tracks_p${page}$baseSuffix';
+    final pageOneKey = 'tracks_p1$baseSuffix';
+
+    if (page != 1) {
+      try {
+        return await _api.getTracks(
+          page: page,
+          pageSize: pageSize,
+          ordering: ordering,
+          album: album,
+          artist: artist,
+          scope: scope,
+          q: q,
+        );
+      } catch (_) {
+        final stale = await _cache.getMetadataStale(pageOneKey);
+        if (stale != null) {
+          try {
+            return PaginatedResponse.fromJson(stale, Track.fromJson);
+          } catch (_) {}
+        }
+        rethrow;
+      }
+    }
+
     return _cachedFetch(
       cacheKey: cacheKey,
       cacheType: CacheType.track,
@@ -275,8 +348,26 @@ class CachedFunkwhaleApi {
     int pageSize = 20,
     bool forceRefresh = false,
   }) async {
+    final baseSuffix = '_s${pageSize}';
+    final cacheKey = 'favorites_p${page}$baseSuffix';
+    final pageOneKey = 'favorites_p1$baseSuffix';
+
+    if (page != 1) {
+      try {
+        return await _api.getFavorites(page: page, pageSize: pageSize);
+      } catch (_) {
+        final stale = await _cache.getMetadataStale(pageOneKey);
+        if (stale != null) {
+          try {
+            return PaginatedResponse.fromJson(stale, Favorite.fromJson);
+          } catch (_) {}
+        }
+        rethrow;
+      }
+    }
+
     return _cachedFetch(
-      cacheKey: 'favorites_p${page}_s$pageSize',
+      cacheKey: cacheKey,
       cacheType: CacheType.track, // reuse type for favorites list
       fromJson: (j) => PaginatedResponse.fromJson(j, Favorite.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _favoriteToJson),
@@ -334,8 +425,30 @@ class CachedFunkwhaleApi {
     String? scope,
     bool forceRefresh = false,
   }) async {
+    final baseSuffix = '_s${pageSize}_sc${scope}';
+    final cacheKey = 'playlists_p${page}$baseSuffix';
+    final pageOneKey = 'playlists_p1$baseSuffix';
+
+    if (page != 1) {
+      try {
+        return await _api.getPlaylists(
+          page: page,
+          pageSize: pageSize,
+          scope: scope,
+        );
+      } catch (_) {
+        final stale = await _cache.getMetadataStale(pageOneKey);
+        if (stale != null) {
+          try {
+            return PaginatedResponse.fromJson(stale, Playlist.fromJson);
+          } catch (_) {}
+        }
+        rethrow;
+      }
+    }
+
     return _cachedFetch(
-      cacheKey: 'playlists_p${page}_s${pageSize}_sc$scope',
+      cacheKey: cacheKey,
       cacheType: CacheType.playlist,
       fromJson: (j) => PaginatedResponse.fromJson(j, Playlist.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _playlistToJson),
@@ -368,8 +481,26 @@ class CachedFunkwhaleApi {
     int pageSize = 50,
     bool forceRefresh = false,
   }) async {
+    final baseSuffix = '_s${pageSize}';
+    final cacheKey = 'playlist_tracks_${id}_p${page}$baseSuffix';
+    final pageOneKey = 'playlist_tracks_${id}_p1$baseSuffix';
+
+    if (page != 1) {
+      try {
+        return await _api.getPlaylistTracks(id, page: page, pageSize: pageSize);
+      } catch (_) {
+        final stale = await _cache.getMetadataStale(pageOneKey);
+        if (stale != null) {
+          try {
+            return PaginatedResponse.fromJson(stale, PlaylistTrack.fromJson);
+          } catch (_) {}
+        }
+        rethrow;
+      }
+    }
+
     return _cachedFetch(
-      cacheKey: 'playlist_tracks_${id}_p${page}_s$pageSize',
+      cacheKey: cacheKey,
       cacheType: CacheType.playlist,
       fromJson: (j) => PaginatedResponse.fromJson(j, PlaylistTrack.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _playlistTrackToJson),
@@ -388,7 +519,28 @@ class CachedFunkwhaleApi {
     String ordering = '-created',
     bool forceRefresh = false,
   }) async {
-    final cacheKey = 'listenings_p${page}_s${pageSize}_o${ordering}';
+    final baseSuffix = '_s${pageSize}_o${ordering}';
+    final cacheKey = 'listenings_p${page}$baseSuffix';
+    final pageOneKey = 'listenings_p1$baseSuffix';
+
+    if (page != 1) {
+      try {
+        return await _api.getListenings(
+          page: page,
+          pageSize: pageSize,
+          ordering: ordering,
+        );
+      } catch (_) {
+        final stale = await _cache.getMetadataStale(pageOneKey);
+        if (stale != null) {
+          try {
+            return PaginatedResponse.fromJson(stale, Listening.fromJson);
+          } catch (_) {}
+        }
+        rethrow;
+      }
+    }
+
     return _cachedFetch(
       cacheKey: cacheKey,
       cacheType: CacheType.track,

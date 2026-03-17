@@ -597,7 +597,12 @@ class CacheManager {
 
   /// Get cache directory for a specific file type
   Future<Directory> _getCacheDir(FileType type) async {
-    final appDir = await getApplicationCacheDirectory();
+    // Use application support directory for persistent cache storage.
+    // `getApplicationCacheDirectory` does not exist in `path_provider` and
+    // caused cache initialization to fail on startup; using
+    // `getApplicationSupportDirectory` provides a stable, persistent folder
+    // appropriate for app-managed cache files across platforms.
+    final appDir = await getApplicationSupportDirectory();
     final dir = Directory(p.join(appDir.path, type.name));
     if (!await dir.exists()) {
       await dir.create(recursive: true);
