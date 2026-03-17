@@ -997,6 +997,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// populated.
   Future<void> startRadio(int radioId) async {
     try {
+      try {
+        Aptabase.instance.trackEvent('radio_start_requested', {
+          'radio_id': radioId,
+        });
+      } catch (_) {}
       // related_object_id must be sent as an integer. Sending it as a
       // string caused a server 500 on some Funkwhale instances.
       RadioSession session;
@@ -1037,6 +1042,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
       _radioSessionId = session.id;
       _radioId = radioId;
+      try {
+        Aptabase.instance.trackEvent('radio_session_created', {
+          'radio_id': radioId,
+          'used_session': true,
+        });
+      } catch (_) {}
 
       // Fetch the first track (raw) and try to parse it.
       final rawFirst = await _api.postNextRadioTrackRaw(_radioSessionId!);
@@ -1051,6 +1062,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
       // Play the initial track (this replaces the current queue).
       await playTracks([first], source: 'radio');
+      try {
+        Aptabase.instance.trackEvent('radio_started', {
+          'radio_id': radioId,
+          'source': 'session',
+        });
+      } catch (_) {}
 
       // Prefetch a few upcoming tracks and append to queue.
       for (var i = 0; i < 4; i++) {
@@ -1075,6 +1092,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
             if (t != null) addToQueue([t]);
           }
         } catch (_) {
+          try {
+            Aptabase.instance.trackEvent('radio_fetch_error', {
+              'radio_id': radioId,
+            });
+          } catch (_) {}
           // ignore
         }
       });
@@ -1093,6 +1115,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
         _radioId = radioId;
 
         await playTracks([first], source: 'radio-fallback');
+        try {
+          Aptabase.instance.trackEvent('radio_started', {
+            'radio_id': radioId,
+            'source': 'fallback',
+          });
+        } catch (_) {}
 
         // Prefetch a few upcoming tracks using the sample endpoint.
         for (var i = 0; i < 4; i++) {
@@ -1116,6 +1144,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
               if (t != null) addToQueue([t]);
             }
           } catch (_) {
+            try {
+              Aptabase.instance.trackEvent('radio_fetch_error', {
+                'radio_id': radioId,
+              });
+            } catch (_) {}
             // ignore repeated failures
           }
         });
@@ -1135,6 +1168,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
     _radioFetchTimer = null;
     _radioSessionId = null;
     _radioId = null;
+    try {
+      Aptabase.instance.trackEvent('radio_stopped');
+    } catch (_) {}
   }
 
   /// Play a list of tracks starting at the given index.

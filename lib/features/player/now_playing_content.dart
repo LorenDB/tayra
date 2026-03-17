@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -120,6 +121,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
 
   Future<void> _toggleGridEasterEgg({ImageProvider? imageProvider}) async {
     if (!_showGridEasterEgg) {
+      Aptabase.instance.trackEvent('disco_easter_egg_triggered');
       if (_gridShader == null) await _loadGridShader();
 
       if (imageProvider != null) {

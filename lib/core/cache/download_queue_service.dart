@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/cache/cache_database.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
+import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 
 /// Per-item download states mirroring the SQLite `status` column.
@@ -97,6 +98,12 @@ class DownloadQueueService {
       });
     }
     await _emitState();
+    // Telemetry: user or system enqueued downloads
+    try {
+      Aptabase.instance.trackEvent('download_enqueued', {
+        'count': trackIds.length,
+      });
+    } catch (_) {}
     _processQueue(reader);
   }
 
@@ -110,6 +117,9 @@ class DownloadQueueService {
       whereArgs: [trackId],
     );
     await _emitState();
+    try {
+      Aptabase.instance.trackEvent('download_removed', {'track_id': trackId});
+    } catch (_) {}
   }
 
   /// Retry all failed items.
@@ -120,6 +130,9 @@ class DownloadQueueService {
       'error': null,
     }, where: "status = 'failed'");
     await _emitState();
+    try {
+      Aptabase.instance.trackEvent('download_retry_requested');
+    } catch (_) {}
     _processQueue(reader);
   }
 
@@ -186,6 +199,11 @@ class DownloadQueueService {
             try {
               final track = await api.getTrack(item.trackId);
               if (track.listenUrl != null) {
+                try {
+                  Aptabase.instance.trackEvent('download_started', {
+                    'track_id': item.trackId,
+                  });
+                } catch (_) {}
                 await audioSvc.cacheAudio(
                   track,
                   api.getStreamUrl(track.listenUrl!),
@@ -202,6 +220,11 @@ class DownloadQueueService {
                 whereArgs: [item.id],
               );
               try {
+                Aptabase.instance.trackEvent('download_completed', {
+                  'track_id': item.trackId,
+                });
+              } catch (_) {}
+              try {
                 ref.invalidate(isAudioCachedProvider(item.trackId));
               } catch (_) {}
             } catch (e, st) {
@@ -215,6 +238,12 @@ class DownloadQueueService {
                 where: 'id = ?',
                 whereArgs: [item.id],
               );
+              try {
+                Aptabase.instance.trackEvent('download_failed', {
+                  'track_id': item.trackId,
+                  'had_error': true,
+                });
+              } catch (_) {}
             }
             await _emitState();
           }

@@ -1,3 +1,4 @@
+import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -87,6 +88,9 @@ class SettingsScreen extends ConsumerWidget {
           _BrowseModeTile(
             currentMode: settings.browseMode,
             onChanged: (mode) {
+              Aptabase.instance.trackEvent("default_browse_mode_changed", {
+                "mode": mode,
+              });
               ref.read(settingsProvider.notifier).setBrowseMode(mode);
             },
           ),
@@ -288,6 +292,7 @@ class _AboutTileState extends ConsumerState<_AboutTile> {
     if (_tapCount >= _tapsRequired) {
       _tapCount = 0;
       ref.read(yearReviewBannerVisibleProvider.notifier).forceShow();
+      Aptabase.instance.trackEvent("manual_yearend_banner_triggered");
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Year in Review banner unlocked'),
