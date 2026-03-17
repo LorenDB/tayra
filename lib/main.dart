@@ -21,24 +21,27 @@ import 'dart:math' as math;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  const maxWidth = 450.0;
+  const maxHeight = 650.0;
+
   // Configure a minimum window size on desktop platforms.
   if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
     try {
       // On some window managers this call can throw or be a no-op; ignore
       // errors to avoid crashing the startup path.
-      window_size.setWindowMinSize(const Size(640, 480));
+      window_size.setWindowMinSize(const Size(maxWidth, maxHeight));
       // Also set an initial window size if the current size is smaller.
       final current = window_size.getWindowInfo();
       current
           .then((info) {
             final frame = info.frame;
-            if (frame != null && frame.width < 640) {
+            if (frame != null && frame.width < maxWidth) {
               window_size.setWindowFrame(
                 Rect.fromLTWH(
                   frame.left,
                   frame.top,
-                  640,
-                  math.max(480, frame.height),
+                  maxWidth,
+                  math.max(maxHeight, frame.height),
                 ),
               );
             }
