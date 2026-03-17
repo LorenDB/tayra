@@ -60,7 +60,10 @@ class ListenRecord {
     );
   }
 
-  factory ListenRecord.fromTrack(Track track) {
+  /// Create a ListenRecord from a Track. If [listenedSeconds] is provided
+  /// it will be stored in the record; otherwise the track's full duration
+  /// (if available) will be used.
+  factory ListenRecord.fromTrack(Track track, {int? listenedSeconds}) {
     return ListenRecord(
       trackId: track.id,
       trackTitle: track.title,
@@ -69,7 +72,7 @@ class ListenRecord {
       albumId: track.album?.id,
       albumTitle: track.albumTitle,
       coverUrl: track.coverUrl,
-      durationSeconds: track.duration,
+      durationSeconds: listenedSeconds ?? track.duration,
       listenedAt: DateTime.now(),
     );
   }
@@ -193,10 +196,16 @@ class ListenHistoryService {
   }
 
   /// Record a listen event for the given track.
-  static Future<void> recordListen(Track track) async {
+  /// Record a listen event for the given track. [listenedSeconds] should be
+  /// the number of seconds the user actually listened to this play session.
+  /// If omitted the track's full duration (if available) will be stored.
+  static Future<void> recordListen(Track track, {int? listenedSeconds}) async {
     try {
       final db = await CacheDatabase.instance.database;
-      final record = ListenRecord.fromTrack(track);
+      final record = ListenRecord.fromTrack(
+        track,
+        listenedSeconds: listenedSeconds,
+      );
       await db.insert(_tableName, record.toMap());
     } catch (_) {
       // Non-critical — silently fail

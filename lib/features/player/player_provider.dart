@@ -713,6 +713,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
   late final FunkwhaleAudioHandler _handler;
   late final AudioCacheService _audioCache;
   final List<StreamSubscription> _subscriptions = [];
+  // Map of trackId -> last recorded timestamp (ms) to debounce duplicate
+  // local listen records when multiple events fire during a track transition.
+  final Map<int, int> _lastRecordedAtMs = {};
 
   /// Position to seek to the first time play() is called after a queue
   /// restore.  Set by [_restoreQueue] and cleared once the seek is done.
@@ -763,7 +766,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
       _handler.audioPlayer.playingStream.listen((isPlaying) {
         state = state.copyWith(isPlaying: isPlaying);
         if (!isPlaying) {
-          _saveQueue(); // Save position when paused
+          // Save position when paused
+          _saveQueue();
+          // Try to record partial listen on pause; ignore failures.
+          try {
+            _recordCurrentTrackListen();
+          } catch (_) {}
         }
       }),
     );
@@ -1149,8 +1157,6 @@ class PlayerNotifier extends Notifier<PlayerState> {
       } catch (fallbackErr) {
         // Fallback failed silently.
       }
-
-      // Do not log errors here; caller/UI will surface failures if needed.
     }
   }
 
@@ -1267,7 +1273,44 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }
 
   Future<void> _loadAndPlay(Track track, {Duration? initialPosition}) async {
+    // Before loading a new track, record how long the currently-playing
+    // track was listened to (so skips and partial listens are tracked
+    // accurately). Ignore errors — this is non-critical.
+    try {
+      await _recordCurrentTrackListen(nextTrack: track);
+    } catch (_) {}
+
     await _loadTrack(track, autoPlay: true, initialPosition: initialPosition);
+  }
+
+  /// Record the currently-playing track into local listen history using the
+  /// player's current position as the listened duration. This is used to
+  /// capture skipped/partial listens accurately.
+  Future<void> _recordCurrentTrackListen({Track? nextTrack}) async {
+    final current = state.currentTrack;
+    if (current == null) return;
+
+    // If the next track to load is the same as the current one (initial
+    // load or reload), don't record a listen for it now.
+    if (nextTrack != null && current.id == nextTrack.id) return;
+
+    // Use the UI-updated position which tracks the player's position stream.
+    final listenedSeconds = state.position.inSeconds;
+    if (listenedSeconds <= 0) return; // nothing to record
+
+    // Debounce duplicate records for the same track within a short window.
+    final nowMs = DateTime.now().millisecondsSinceEpoch;
+    final lastMs = _lastRecordedAtMs[current.id];
+    if (lastMs != null && nowMs - lastMs < 5000) return;
+    try {
+      await ListenHistoryService.recordListen(
+        current,
+        listenedSeconds: listenedSeconds,
+      );
+      _lastRecordedAtMs[current.id] = nowMs;
+    } catch (_) {
+      // Non-critical — swallow failures
+    }
   }
 
   Future<void> _loadTrack(
@@ -1369,9 +1412,6 @@ class PlayerNotifier extends Notifier<PlayerState> {
         } catch (_) {
           // Non-critical
         }
-
-        // Record locally for year-in-review stats.
-        ListenHistoryService.recordListen(track);
       }
 
       state = state.copyWith(isLoading: false);
