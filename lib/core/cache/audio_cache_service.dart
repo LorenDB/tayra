@@ -216,15 +216,14 @@ class AudioCacheService {
 
   /// Get cache key for a cover URL.
   ///
-  /// Funkwhale cover URLs typically end in a generic filename like
-  /// `cover.jpg`, so using only the last path segment causes every album
-  /// and artist cover to collide on the same key.  Instead we hash the
-  /// full path (without query string) to produce a stable, unique key.
+  /// Funkwhale cover URLs often use a generic filename like `cover.jpg` and
+  /// may include query parameters to request resized variants.  Use the
+  /// full path _and_ query string when present so different thumbnail
+  /// sizes get separate cache keys instead of colliding.
   String _getCoverKey(String url) {
     final uri = Uri.parse(url);
-    // Use the full path without query params for uniqueness.
-    final path = uri.path;
-    return 'cover_${path.hashCode.toRadixString(16)}';
+    final pathAndQuery = uri.path + (uri.hasQuery ? '?${uri.query}' : '');
+    return 'cover_${pathAndQuery.hashCode.toRadixString(16)}';
   }
 
   /// Pre-cache tracks from an album (background operation)
