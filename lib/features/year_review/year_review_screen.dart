@@ -43,11 +43,10 @@ class _YearReviewScreenState extends ConsumerState<YearReviewScreen>
   @override
   void initState() {
     super.initState();
-    _animController =
-        AnimationController(
-          vsync: this,
-          duration: const Duration(milliseconds: 1200),
-        )..forward();
+    _animController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    )..forward();
     _loadShader();
   }
 
