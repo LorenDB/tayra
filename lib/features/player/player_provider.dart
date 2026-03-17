@@ -51,6 +51,7 @@ class PlayerState {
   final bool isShuffled;
   final LoopMode loopMode;
   final bool isLoading;
+  final int? loadingRadioId;
 
   const PlayerState({
     this.queue = const [],
@@ -61,6 +62,7 @@ class PlayerState {
     this.isShuffled = false,
     this.loopMode = LoopMode.off,
     this.isLoading = false,
+    this.loadingRadioId,
   });
 
   Track? get currentTrack =>
@@ -85,6 +87,8 @@ class PlayerState {
     bool? isShuffled,
     LoopMode? loopMode,
     bool? isLoading,
+    int? loadingRadioId,
+    bool clearLoadingRadioId = false,
   }) {
     return PlayerState(
       queue: queue ?? this.queue,
@@ -95,6 +99,8 @@ class PlayerState {
       isShuffled: isShuffled ?? this.isShuffled,
       loopMode: loopMode ?? this.loopMode,
       isLoading: isLoading ?? this.isLoading,
+      loadingRadioId:
+          clearLoadingRadioId ? null : (loadingRadioId ?? this.loadingRadioId),
     );
   }
 }
@@ -1012,6 +1018,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// upcoming tracks and then starts a background fetcher to keep the queue
   /// populated.
   Future<void> startRadio(int radioId) async {
+    state = state.copyWith(loadingRadioId: radioId);
     try {
       try {
         Aptabase.instance.trackEvent('radio_start_requested', {
@@ -1078,6 +1085,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
       // Play the initial track (this replaces the current queue).
       await playTracks([first], source: 'radio');
+      state = state.copyWith(clearLoadingRadioId: true);
       try {
         Aptabase.instance.trackEvent('radio_started', {
           'radio_id': radioId,
@@ -1085,7 +1093,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
         });
       } catch (_) {}
 
-      // A second track will automatically be preloaded by the subscription that watches the current index of the queue
+      // A second track will automatically be preloaded by the subscription that
+      // watches the current index of the queue
     } catch (e) {
       // If session creation fails (500 on some servers) fall back to a
       // session-less strategy: repeatedly call the radio sample endpoint
@@ -1101,6 +1110,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
         _radioId = radioId;
 
         await playTracks([first], source: 'radio-fallback');
+        state = state.copyWith(clearLoadingRadioId: true);
         try {
           Aptabase.instance.trackEvent('radio_started', {
             'radio_id': radioId,

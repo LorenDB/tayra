@@ -4,10 +4,8 @@ import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
-import 'package:tayra/core/widgets/track_list_tile.dart';
 import 'package:tayra/core/api/cached_api_repository.dart' as cached_api;
 import 'package:tayra/core/api/models.dart' as models;
-import 'package:tayra/core/api/models.dart' show Track;
 import 'package:tayra/features/player/player_provider.dart';
 
 class RadiosScreen extends ConsumerStatefulWidget {
@@ -66,16 +64,7 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
   }
 
   void _playRadio(models.Radio radio) {
-    // For now, create a session and then request the next track and play it.
-    // This is a minimal implementation — a fuller player integration would
-    // manage radio sessions and continuous playback.
-    final api = ref.read(cached_api.cachedFunkwhaleApiProvider);
     ref.read(playerProvider.notifier).pause();
-    // Use radio sessions for playback: create a session, then repeatedly
-    // request the next track and enqueue it. We'll load the first track and
-    // start playback.
-    // Delegate radio playback to the PlayerNotifier which handles sessions
-    // and background fetching.
     ref.read(playerProvider.notifier).startRadio(radio.id);
   }
 
@@ -116,6 +105,8 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
       itemCount: _radios.length,
       itemBuilder: (context, index) {
         final radio = _radios[index];
+        final playerState = ref.watch(playerProvider);
+        final isLoadingRadio = playerState.loadingRadioId == radio.id;
         // Radios don't map exactly to tracks; show a simple tile and a play
         // action that triggers a radio session.
         return ListTile(
@@ -134,10 +125,23 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
             Icons.radio_outlined,
             color: AppTheme.onBackgroundSubtle,
           ),
-          trailing: IconButton(
-            icon: const Icon(Icons.play_arrow_rounded, color: AppTheme.primary),
-            onPressed: () => _playRadio(radio),
-          ),
+          trailing:
+              isLoadingRadio
+                  ? const SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: AppTheme.primary,
+                    ),
+                  )
+                  : IconButton(
+                    icon: const Icon(
+                      Icons.play_arrow_rounded,
+                      color: AppTheme.primary,
+                    ),
+                    onPressed: () => _playRadio(radio),
+                  ),
         );
       },
     );
