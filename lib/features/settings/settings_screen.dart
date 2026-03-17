@@ -8,6 +8,7 @@ import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/features/year_review/listen_history_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -168,6 +169,7 @@ class SettingsScreen extends ConsumerWidget {
           // ── About section ─────────────────────────────────────────────
           _SectionHeader(title: 'About'),
           _AboutTile(),
+          _DonationTile(),
           _ActionTile(
             icon: Icons.balance_outlined,
             title: 'Licenses',
@@ -322,13 +324,9 @@ class _AboutTileState extends ConsumerState<_AboutTile> {
                 Container(
                   width: 36,
                   height: 36,
-                  decoration: BoxDecoration(
-                    color: AppTheme.surfaceContainerHigh,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
                   child: const Icon(
                     Icons.info_outline_rounded,
-                    color: AppTheme.onBackgroundMuted,
+                    color: AppTheme.onBackgroundSubtle,
                     size: 20,
                   ),
                 ),
@@ -982,6 +980,125 @@ class _ConfirmDialog extends StatelessWidget {
           child: const Text('Confirm'),
         ),
       ],
+    );
+  }
+}
+
+// ── Donation buttons tile ─────────────────────────────────────────────────
+
+class _DonationTile extends StatelessWidget {
+  static const _liberapayUrl = 'https://liberapay.com/LorenDB/donate';
+  static const _paypalUrl =
+      'https://www.paypal.com/donate/?business=LSTPU6GJTKCQE&no_recurring=0&item_name=Thank+you+for+supporting+continued+development+of+Tayra.&currency_code=USD';
+
+  const _DonationTile();
+
+  Future<void> _openUrl(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceContainer,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 36,
+            height: 36,
+            child: const Icon(
+              Icons.volunteer_activism_rounded,
+              color: AppTheme.onBackgroundSubtle,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Tayra is free and open-source. If you enjoy using it, consider supporting its development!',
+                  style: TextStyle(
+                    color: AppTheme.onBackgroundMuted,
+                    fontSize: 12,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _DonationButton(
+                        icon: Icons.volunteer_activism_outlined,
+                        label: 'Liberapay',
+                        onTap: () => _openUrl(_liberapayUrl),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _DonationButton(
+                        icon: Icons.payments_outlined,
+                        label: 'PayPal',
+                        onTap: () => _openUrl(_paypalUrl),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DonationButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  const _DonationButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppTheme.surfaceContainerHigh,
+      borderRadius: BorderRadius.circular(10),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(10),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, color: AppTheme.primary, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: const TextStyle(
+                  color: AppTheme.onBackground,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
