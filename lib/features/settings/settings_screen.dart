@@ -347,7 +347,7 @@ class _AboutTileState extends ConsumerState<_AboutTile> {
                       ),
                       SizedBox(height: 2),
                       Text(
-                        'A Funkwhale music player',
+                        'Copyright Loren Burkholder | Licensed MIT',
                         style: TextStyle(
                           color: AppTheme.onBackgroundMuted,
                           fontSize: 12,
