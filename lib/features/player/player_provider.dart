@@ -806,6 +806,13 @@ class PlayerNotifier extends Notifier<PlayerState> {
         );
       }),
     );
+
+    _subscriptions.add(
+      _handler.audioPlayer.currentIndexStream.listen((index) {
+        // Proactively prefetch radio tracks when near end of current track
+        _maybePrefetchRadioTrack();
+      }),
+    );
   }
 
   /// Restore the queue state from persistent storage on app launch.
@@ -890,6 +897,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
   int? _radioSessionId;
   int? _radioId;
   Timer? _radioFetchTimer;
+  bool _isPrefetchingRadioTrack = false;
 
   Future<Track?> _parseTrackFromRaw(dynamic raw) async {
     try {
@@ -1077,33 +1085,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
         });
       } catch (_) {}
 
-      try {
-        final raw = await _api.postNextRadioTrackRaw(_radioSessionId!);
-        final t = await _parseTrackFromRaw(raw);
-        if (t != null) addToQueue([t]);
-      } catch (_) {}
-
-      // Start a periodic task to keep queue populated when it gets low.
-      _radioFetchTimer?.cancel();
-      _radioFetchTimer = Timer.periodic(const Duration(seconds: 4), (_) async {
-        try {
-          if (_radioSessionId == null) return;
-          // Keep exactly one track ahead of the currently playing track.
-          final ahead = state.queue.length - state.currentIndex - 1;
-          if (ahead < 1) {
-            final raw = await _api.postNextRadioTrackRaw(_radioSessionId!);
-            final t = await _parseTrackFromRaw(raw);
-            if (t != null) addToQueue([t]);
-          }
-        } catch (_) {
-          try {
-            Aptabase.instance.trackEvent('radio_fetch_error', {
-              'radio_id': radioId,
-            });
-          } catch (_) {}
-          // ignore
-        }
-      });
+      // A second track will automatically be preloaded by the subscription that watches the current index of the queue
     } catch (e) {
       // If session creation fails (500 on some servers) fall back to a
       // session-less strategy: repeatedly call the radio sample endpoint
@@ -1167,9 +1149,31 @@ class PlayerNotifier extends Notifier<PlayerState> {
     _radioFetchTimer = null;
     _radioSessionId = null;
     _radioId = null;
+    _isPrefetchingRadioTrack = false;
     try {
       Aptabase.instance.trackEvent('radio_stopped');
     } catch (_) {}
+  }
+
+  Future<void> _maybePrefetchRadioTrack() async {
+    if (_radioSessionId == null && _radioId == null) return;
+    if (_isPrefetchingRadioTrack) return;
+    if (state.currentIndex < state.queue.length - 1) return;
+
+    _isPrefetchingRadioTrack = true;
+
+    try {
+      if (_radioSessionId != null) {
+        final raw = await _api.postNextRadioTrackRaw(_radioSessionId!);
+        final t = await _parseTrackFromRaw(raw);
+        if (t != null) addToQueue([t]);
+      } else if (_radioId != null) {
+        final t = await _api.getRadioTrack(_radioId!);
+        if (t != null) addToQueue([t]);
+      }
+    } catch (_) {}
+
+    _isPrefetchingRadioTrack = false;
   }
 
   /// Play a list of tracks starting at the given index.
