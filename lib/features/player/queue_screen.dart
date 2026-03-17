@@ -128,6 +128,7 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
     List queue,
     int currentIndex,
   ) {
+    final playerState = ref.watch(playerProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -196,6 +197,7 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
                     track: track,
                     index: index,
                     isCurrentTrack: isCurrentTrack,
+                    isPlaying: playerState.isPlaying,
                     queueLength: queue.length,
                     onTap: () {
                       ref.read(playerProvider.notifier).jumpTo(index);
@@ -272,6 +274,7 @@ class _QueueTrackRow extends StatelessWidget {
   final dynamic track;
   final int index;
   final bool isCurrentTrack;
+  final bool isPlaying;
   final VoidCallback onTap;
   final bool showDragHandle;
   final bool isDragging;
@@ -280,6 +283,7 @@ class _QueueTrackRow extends StatelessWidget {
     required this.track,
     required this.index,
     required this.isCurrentTrack,
+    this.isPlaying = false,
     required this.onTap,
     this.showDragHandle = false,
     this.isDragging = false,
@@ -303,7 +307,7 @@ class _QueueTrackRow extends StatelessWidget {
                 width: 32,
                 child:
                     isCurrentTrack
-                        ? const _PlayingIndicator()
+                        ? _PlayingIndicator(isPlaying: isPlaying)
                         : Text(
                           '${index + 1}',
                           style: const TextStyle(
@@ -393,7 +397,9 @@ class _QueueTrackRow extends StatelessWidget {
 // ── Playing Indicator (animated bars) ───────────────────────────────────
 
 class _PlayingIndicator extends StatefulWidget {
-  const _PlayingIndicator();
+  final bool isPlaying;
+
+  const _PlayingIndicator({required this.isPlaying});
 
   @override
   State<_PlayingIndicator> createState() => _PlayingIndicatorState();
@@ -409,7 +415,26 @@ class _PlayingIndicatorState extends State<_PlayingIndicator>
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
-    )..repeat(reverse: true);
+    );
+    if (widget.isPlaying) {
+      _controller.repeat(reverse: true);
+    } else {
+      // Set a neutral value so the static bars look balanced
+      _controller.value = 0.5;
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _PlayingIndicator oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isPlaying != widget.isPlaying) {
+      if (widget.isPlaying) {
+        _controller.repeat(reverse: true);
+      } else {
+        _controller.stop();
+        _controller.value = 0.5;
+      }
+    }
   }
 
   @override
@@ -454,6 +479,7 @@ class _DraggableQueueItem extends StatefulWidget {
   final dynamic track;
   final int index;
   final bool isCurrentTrack;
+  final bool isPlaying;
   final int queueLength;
   final VoidCallback onTap;
   final VoidCallback onDismissed;
@@ -463,6 +489,7 @@ class _DraggableQueueItem extends StatefulWidget {
     required this.track,
     required this.index,
     required this.isCurrentTrack,
+    required this.isPlaying,
     required this.queueLength,
     required this.onTap,
     required this.onDismissed,
@@ -487,6 +514,7 @@ class _DraggableQueueItemState extends State<_DraggableQueueItem> {
           index: widget.index,
           isCurrentTrack: true,
           onTap: widget.onTap,
+          isPlaying: widget.isPlaying,
           showDragHandle: false,
         ),
       );
@@ -557,6 +585,7 @@ class _DraggableQueueItemState extends State<_DraggableQueueItem> {
                 index: widget.index,
                 isCurrentTrack: false,
                 onTap: widget.onTap,
+                isPlaying: widget.isPlaying,
                 showDragHandle: true,
                 isDragging: _isDragging,
               ),
