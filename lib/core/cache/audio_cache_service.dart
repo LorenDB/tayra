@@ -70,9 +70,31 @@ class AudioCacheService {
         onReceiveProgress: onProgress,
       );
 
-      // Cache the file
+      // Cache the file. If the track or its album is manually marked as
+      // downloaded, persist the file as protected immediately so the LRU
+      // eviction skips it.
       final key = 'audio_${track.id}';
-      await _cache.putFile(key, FileType.audio, tempFile, resourceId: track.id);
+      final isTrackManual = await _cache.isManualDownloaded(
+        CacheType.track,
+        track.id,
+      );
+      final isAlbumManual =
+          track.album != null
+              ? await _cache.isManualDownloaded(
+                CacheType.album,
+                track.album!.id,
+              )
+              : false;
+      final isProtected = isTrackManual || isAlbumManual;
+      await _cache.putFile(
+        key,
+        FileType.audio,
+        tempFile,
+        resourceId: track.id,
+        resourceParentType: track.album != null ? CacheType.album : null,
+        resourceParentId: track.album?.id,
+        isProtected: isProtected,
+      );
 
       // Clean up temp file
       if (await tempFile.exists()) {
@@ -91,8 +113,17 @@ class AudioCacheService {
     }
   }
 
-  /// Check if an audio file is cached
+  /// Check if an audio file is cached.
+  ///
+  /// The filesystem is the primary source of truth: if the file exists on
+  /// disk (matching `audio_<trackId>.*`) the track is considered cached,
+  /// regardless of whether a DB row is present.  This prevents false-negatives
+  /// caused by DB/filesystem divergence (e.g. a successful download where the
+  /// DB insert subsequently failed).
   Future<bool> isAudioCached(int trackId) async {
+    // Filesystem check first — fast and authoritative.
+    if (await _cache.audioFileExistsOnDisk(trackId)) return true;
+    // Fall back to DB in case the audio dir isn't readable for some reason.
     final key = 'audio_$trackId';
     final file = await _cache.getFile(key);
     return file != null;

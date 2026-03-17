@@ -5,6 +5,7 @@ import 'package:tayra/core/router/app_router.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/player/player_provider.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
+import 'package:tayra/core/cache/download_queue_service.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:tayra/features/year_review/listen_history_service.dart';
@@ -100,6 +101,13 @@ void main() async {
   // Eagerly initialize the PlayerNotifier to wire up the onPlayTracks callback.
   // This ensures Android Auto can start playback even when launched in the background.
   container.read(playerProvider);
+
+  // Initialize and resume any persisted download queue using the main
+  // provider container so the service can read providers it needs.
+  try {
+    final queueSvc = container.read(downloadQueueServiceProvider);
+    await queueSvc.init(container);
+  } catch (_) {}
 
   runApp(
     UncontrolledProviderScope(container: container, child: const TayraApp()),

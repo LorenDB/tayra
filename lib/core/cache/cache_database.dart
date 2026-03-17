@@ -9,7 +9,7 @@ import 'package:path/path.dart';
 /// - cache_favorites: Stores favorite track IDs
 class CacheDatabase {
   static const _databaseName = 'funkwhale_cache.db';
-  static const _databaseVersion = 1;
+  static const _databaseVersion = 3;
 
   // Singleton pattern
   CacheDatabase._();
@@ -58,7 +58,10 @@ class CacheDatabase {
         size_bytes INTEGER NOT NULL,
         created_at INTEGER NOT NULL,
         last_accessed INTEGER NOT NULL,
-        resource_id INTEGER
+        resource_id INTEGER,
+        resource_parent_type TEXT,
+        resource_parent_id INTEGER,
+        is_protected INTEGER DEFAULT 0
       )
     ''');
 
@@ -67,6 +70,27 @@ class CacheDatabase {
       CREATE TABLE cache_favorites (
         track_id INTEGER PRIMARY KEY,
         added_at INTEGER NOT NULL
+      )
+    ''');
+
+    // Manual downloads table - tracks resources manually marked by the user
+    await db.execute('''
+      CREATE TABLE cache_manual_downloads (
+        resource_type TEXT NOT NULL,
+        resource_id INTEGER PRIMARY KEY,
+        added_at INTEGER NOT NULL
+      )
+    ''');
+
+    // Download queue table - persists the background download queue so it
+    // survives app restarts and tracks per-item state.
+    await db.execute('''
+      CREATE TABLE download_queue (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        track_id INTEGER NOT NULL,
+        status TEXT NOT NULL DEFAULT 'queued',
+        added_at INTEGER NOT NULL,
+        error TEXT
       )
     ''');
 
@@ -87,7 +111,50 @@ class CacheDatabase {
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    // Handle future schema migrations here
+    if (oldVersion < 2) {
+      // Add manual downloads table
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS cache_manual_downloads (
+          resource_type TEXT NOT NULL,
+          resource_id INTEGER PRIMARY KEY,
+          added_at INTEGER NOT NULL
+        )
+      ''');
+      // Add new columns to cache_files for older databases so that
+      // protection and parent linking work across migrations.
+      try {
+        await db.execute(
+          "ALTER TABLE cache_files ADD COLUMN resource_parent_type TEXT",
+        );
+      } catch (_) {}
+      try {
+        await db.execute(
+          "ALTER TABLE cache_files ADD COLUMN resource_parent_id INTEGER",
+        );
+      } catch (_) {}
+      try {
+        await db.execute(
+          "ALTER TABLE cache_files ADD COLUMN is_protected INTEGER DEFAULT 0",
+        );
+      } catch (_) {}
+    }
+    if (oldVersion < 3) {
+      // Add persistent download queue table
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS download_queue (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          track_id INTEGER NOT NULL,
+          status TEXT NOT NULL DEFAULT 'queued',
+          added_at INTEGER NOT NULL,
+          error TEXT
+        )
+      ''');
+      // Reset any items that were mid-download when the app was killed so
+      // they get retried on the next startup.
+      await db.execute(
+        "UPDATE download_queue SET status = 'queued', error = NULL WHERE status = 'downloading'",
+      );
+    }
   }
 
   /// Close the database connection

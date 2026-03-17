@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:async';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/core/cache/cache_provider.dart';
+import 'package:tayra/core/cache/cache_manager.dart';
+import 'package:tayra/core/cache/download_queue_service.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
 import 'package:tayra/core/widgets/error_state.dart';
@@ -209,6 +213,99 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                           onPressed: _tracks.isNotEmpty ? _shuffleAll : null,
                           isPrimary: false,
                         ),
+                      ),
+                      const SizedBox(width: 12),
+                      // Download toggle for playlist
+                      IconButton(
+                        onPressed:
+                            _tracks.isNotEmpty
+                                ? () async {
+                                  final mgr = ref.read(cacheManagerProvider);
+                                  try {
+                                    final isManual = await ref.read(
+                                      isManualPlaylistProvider(
+                                        playlist.id,
+                                      ).future,
+                                    );
+                                    await mgr.setManualDownloaded(
+                                      CacheType.playlist,
+                                      playlist.id,
+                                      !isManual,
+                                    );
+                                    // Also mark/unmark each track as manual so the
+                                    // per-track UI shows the downloaded accent.
+                                    for (final t in _tracks) {
+                                      try {
+                                        await mgr.setManualDownloaded(
+                                          CacheType.track,
+                                          t.id,
+                                          !isManual,
+                                        );
+                                        ref.invalidate(
+                                          isManualTrackProvider(t.id),
+                                        );
+                                      } catch (_) {}
+                                    }
+                                    await mgr.bulkSetFilesProtectedForParent(
+                                      CacheType.playlist,
+                                      playlist.id,
+                                      !isManual,
+                                    );
+                                    ref.invalidate(
+                                      isManualPlaylistProvider(playlist.id),
+                                    );
+
+                                    if (!isManual) {
+                                      final queue = ref.read(
+                                        downloadQueueServiceProvider,
+                                      );
+                                      final trackIds =
+                                          _tracks
+                                              .where((t) => t.listenUrl != null)
+                                              .map((t) => t.id)
+                                              .toList();
+                                      unawaited(queue.enqueue(trackIds, ref));
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            'Download queued for "${playlist.name}"',
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            'Download removed for "${playlist.name}"',
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  } catch (e, st) {
+                                    debugPrint(
+                                      'Playlist toggle manual failed: $e',
+                                    );
+                                    debugPrintStack(stackTrace: st);
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Failed to update download flag',
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  }
+                                }
+                                : null,
+                        icon: const Icon(Icons.download_rounded),
+                        color: AppTheme.onBackground,
                       ),
                     ],
                   ),
