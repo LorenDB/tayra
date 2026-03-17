@@ -6,6 +6,7 @@ import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
 import 'package:tayra/features/player/player_provider.dart';
+import 'package:tayra/features/player/mini_player.dart';
 
 class QueueScreen extends ConsumerStatefulWidget {
   final ScrollController? scrollController;
@@ -111,6 +112,13 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
           queue.isEmpty
               ? _buildEmptyState()
               : _buildQueueList(context, ref, queue, currentIndex),
+      // Show the mini-player fixed at the bottom of the queue screen so
+      // playback controls remain available while viewing/manipulating the
+      // queue.
+      bottomNavigationBar:
+          playerState.currentTrack != null
+              ? SafeArea(top: false, child: const MiniPlayer())
+              : null,
     );
   }
 
