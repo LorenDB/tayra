@@ -819,6 +819,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
         _maybePrefetchRadioTrack();
       }),
     );
+
+    // Sync initial playback state to avoid missing the first play event
+    // due to a race between stream subscription and playback starting.
+    state = state.copyWith(isPlaying: _handler.audioPlayer.playing);
   }
 
   /// Restore the queue state from persistent storage on app launch.
