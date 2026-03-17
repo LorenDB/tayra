@@ -241,76 +241,80 @@ class _DesktopNavRail extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-            // Destinations
+            // Destinations - make this area scrollable so the sidebar doesn't
+            // overflow on very short windows (e.g. landscape phones).
             Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: List.generate(AppShell._tabs.length, (i) {
-                  final tab = AppShell._tabs[i];
-                  final isSelected = i == currentIndex;
-                  final indicatorColor = AppTheme.primary.withValues(
-                    alpha: 0.15,
-                  );
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 6.0),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(12),
-                        onTap: () => onDestinationSelected(i),
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 180),
-                          width: double.infinity,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: extended ? 12 : 8,
-                            vertical: 10,
-                          ),
-                          decoration:
-                              isSelected
-                                  ? BoxDecoration(
-                                    color: indicatorColor,
-                                    borderRadius: BorderRadius.circular(12),
-                                  )
-                                  : null,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment:
-                                extended
-                                    ? MainAxisAlignment.start
-                                    : MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                isSelected ? tab.activeIcon : tab.icon,
-                                color:
-                                    isSelected
-                                        ? AppTheme.primary
-                                        : AppTheme.onBackgroundSubtle,
-                                size: 24,
-                              ),
-                              if (extended) ...[
-                                const SizedBox(width: 12),
-                                Text(
-                                  tab.label,
-                                  style: TextStyle(
-                                    color:
-                                        isSelected
-                                            ? AppTheme.primary
-                                            : AppTheme.onBackgroundSubtle,
-                                    fontSize: 13,
-                                    fontWeight:
-                                        isSelected
-                                            ? FontWeight.w600
-                                            : FontWeight.w400,
-                                  ),
+              child: SingleChildScrollView(
+                physics: const ClampingScrollPhysics(),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: List.generate(AppShell._tabs.length, (i) {
+                    final tab = AppShell._tabs[i];
+                    final isSelected = i == currentIndex;
+                    final indicatorColor = AppTheme.primary.withValues(
+                      alpha: 0.15,
+                    );
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 6.0),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(12),
+                          onTap: () => onDestinationSelected(i),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 180),
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: extended ? 12 : 8,
+                              vertical: 10,
+                            ),
+                            decoration:
+                                isSelected
+                                    ? BoxDecoration(
+                                      color: indicatorColor,
+                                      borderRadius: BorderRadius.circular(12),
+                                    )
+                                    : null,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment:
+                                  extended
+                                      ? MainAxisAlignment.start
+                                      : MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  isSelected ? tab.activeIcon : tab.icon,
+                                  color:
+                                      isSelected
+                                          ? AppTheme.primary
+                                          : AppTheme.onBackgroundSubtle,
+                                  size: 24,
                                 ),
+                                if (extended) ...[
+                                  const SizedBox(width: 12),
+                                  Text(
+                                    tab.label,
+                                    style: TextStyle(
+                                      color:
+                                          isSelected
+                                              ? AppTheme.primary
+                                              : AppTheme.onBackgroundSubtle,
+                                      fontSize: 13,
+                                      fontWeight:
+                                          isSelected
+                                              ? FontWeight.w600
+                                              : FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
                               ],
-                            ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                }),
+                    );
+                  }),
+                ),
               ),
             ),
 
