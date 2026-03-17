@@ -6,6 +6,7 @@ import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 import 'package:tayra/core/cache/cache_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:aptabase_flutter/aptabase_flutter.dart';
 
 /// Cache types for different kinds of data
 enum CacheType {
@@ -408,6 +409,14 @@ class CacheManager {
           );
         } catch (_) {}
       }
+      // Telemetry: manual download flag changed
+      try {
+        Aptabase.instance.trackEvent('manual_download_toggled', {
+          'resource_type': type.name,
+          'resource_id_set': resourceId,
+          'enabled': value,
+        });
+      } catch (_) {}
     }
   }
 

@@ -73,20 +73,42 @@ class AnalyticsInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
+    // Only record high-level error metadata to avoid sending potentially
+    // sensitive server responses or request bodies to the analytics backend.
     Aptabase.instance.trackEvent('api_error', {
       'method': err.requestOptions.method,
       'status': err.response?.statusCode,
       'endpoint': _extractEndpoint(err.requestOptions.path),
       'error_type': err.type.name,
-      'error_message': err.message,
+      // Avoid logging raw error messages or response bodies which may
+      // contain PII. Instead, surface whether a response was present.
+      'had_response': err.response != null,
     });
     handler.next(err);
   }
 
   String _extractEndpoint(String path) {
-    // Extract endpoint without query params or IDs for privacy
-    final uri = Uri.parse(path);
-    return uri.pathSegments.take(2).join('/'); // e.g., 'api/v1/albums'
+    // Extract a short, non-identifying endpoint name for analytics.
+    // We try to skip common prefixes like `api` and version segments
+    // (e.g. `v1`) and return the next path segment (the resource name)
+    // so we don't include numeric IDs or query params in events.
+    try {
+      final uri = Uri.parse(path);
+      final segs = uri.pathSegments.where((s) => s.isNotEmpty).toList();
+      var i = 0;
+      // Skip common prefixes like `api` and version segments (`v1`, `v2`, ...)
+      while (i < segs.length &&
+          (segs[i] == 'api' || RegExp(r'^v\\d+\$').hasMatch(segs[i]))) {
+        i++;
+      }
+      if (i < segs.length) return segs[i];
+      // If we couldn't extract a safe segment, return a generic placeholder
+      // instead of the full path which might contain numeric IDs.
+      return 'unknown_endpoint';
+    } catch (_) {
+      // If parsing fails, return a generic placeholder.
+      return 'unknown_endpoint';
+    }
   }
 }
 
