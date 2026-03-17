@@ -12,6 +12,42 @@ final audioCacheServiceProvider = Provider<AudioCacheService>((ref) {
   return AudioCacheService(CacheManager.instance);
 });
 
+/// Provider that reports whether a given track ID has cached audio.
+final isAudioCachedProvider = FutureProvider.family<bool, int>((
+  ref,
+  trackId,
+) async {
+  final svc = ref.watch(audioCacheServiceProvider);
+  return await svc.isAudioCached(trackId);
+});
+
+/// Provider that reports whether a given resource (track) has been marked as
+/// manually downloaded by the user.
+final isManualTrackProvider = FutureProvider.family<bool, int>((
+  ref,
+  trackId,
+) async {
+  final mgr = ref.watch(cacheManagerProvider);
+  return await mgr.isManualDownloaded(CacheType.track, trackId);
+});
+
+// Providers for other resource types (album, playlist)
+final isManualAlbumProvider = FutureProvider.family<bool, int>((
+  ref,
+  albumId,
+) async {
+  final mgr = ref.watch(cacheManagerProvider);
+  return await mgr.isManualDownloaded(CacheType.album, albumId);
+});
+
+final isManualPlaylistProvider = FutureProvider.family<bool, int>((
+  ref,
+  playlistId,
+) async {
+  final mgr = ref.watch(cacheManagerProvider);
+  return await mgr.isManualDownloaded(CacheType.playlist, playlistId);
+});
+
 /// Provider for cache statistics (autoDispose so it refreshes each time the
 /// settings screen is opened rather than showing stale numbers).
 final cacheStatsProvider = FutureProvider.autoDispose<CacheStats>((ref) async {

@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:async';
 import 'package:go_router/go_router.dart';
 import 'package:tayra/core/api/api_utils.dart';
+import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/favorites/favorites_provider.dart';
 import 'package:tayra/features/player/player_provider.dart';
 import 'package:tayra/features/playlists/add_to_playlist_sheet.dart';
 import 'package:tayra/core/api/models.dart';
+import 'package:tayra/core/cache/cache_provider.dart';
+import 'package:tayra/core/cache/cache_manager.dart';
 
 /// A row widget for a single track in a list.
 class TrackListTile extends ConsumerWidget {
@@ -32,6 +36,9 @@ class TrackListTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final playerState = ref.watch(playerProvider);
     final isCurrentTrack = playerState.currentTrack?.id == track.id;
+
+    final isCachedAsync = ref.watch(isAudioCachedProvider(track.id));
+    final isManualAsync = ref.watch(isManualTrackProvider(track.id));
 
     return Material(
       color: Colors.transparent,
@@ -112,7 +119,35 @@ class TrackListTile extends ConsumerWidget {
                     ),
                   ),
                 ),
-              trailing ?? FavoriteButton(trackId: track.id, size: 20),
+              // Show cached/manual-downloaded indicator, then favorite button
+              Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Cached indicator
+                    isCachedAsync.when(
+                      data: (isCached) {
+                        if (!isCached) return const SizedBox.shrink();
+                        // If manually downloaded, color with accent; otherwise muted
+                        final isManual = isManualAsync.asData?.value ?? false;
+                        return Icon(
+                          Icons.download_done,
+                          size: 18,
+                          color:
+                              isManual
+                                  ? (dominantColor ?? AppTheme.primary)
+                                  : AppTheme.onBackgroundSubtle,
+                        );
+                      },
+                      loading: () => const SizedBox.shrink(),
+                      error: (_, __) => const SizedBox.shrink(),
+                    ),
+                    const SizedBox(width: 8),
+                    trailing ?? FavoriteButton(trackId: track.id, size: 20),
+                  ],
+                ),
+              ),
               const SizedBox(width: 4),
               _TrackMenuButton(track: track),
             ],
@@ -132,6 +167,7 @@ class _TrackMenuButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final albumAvailable = track.album != null;
     final artistAvailable = track.artist != null;
+    final isManualAsync = ref.watch(isManualTrackProvider(track.id));
 
     return PopupMenuButton<String>(
       icon: const Icon(
@@ -143,7 +179,7 @@ class _TrackMenuButton extends ConsumerWidget {
       constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
       color: AppTheme.surfaceContainerHighest,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      onSelected: (value) {
+      onSelected: (value) async {
         final player = ref.read(playerProvider.notifier);
         switch (value) {
           case 'play_next':
@@ -160,6 +196,73 @@ class _TrackMenuButton extends ConsumerWidget {
             break;
           case 'add_playlist':
             showAddToPlaylistSheet(context, ref, trackIds: [track.id]);
+            break;
+          case 'toggle_manual':
+            try {
+              final mgr = ref.read(cacheManagerProvider);
+              final isManual = isManualAsync.asData?.value ?? false;
+              await mgr.setManualDownloaded(
+                CacheType.track,
+                track.id,
+                !isManual,
+              );
+              // Ensure the cached file is marked protected/unprotected so
+              // the LRU eviction skips manually downloaded files.
+              final key = 'audio_${track.id}';
+              unawaited(mgr.setFileProtected(key, !isManual));
+              // Refresh manual flag provider
+              ref.invalidate(isManualTrackProvider(track.id));
+              // If the track wasn't cached and the user just enabled
+              // manual download, queue a background download.
+              final wasCached = await ref.read(
+                isAudioCachedProvider(track.id).future,
+              );
+              if (!wasCached && !isManual) {
+                final api = ref.read(cachedFunkwhaleApiProvider);
+                if (track.listenUrl != null) {
+                  final streamUrl = api.getStreamUrl(track.listenUrl!);
+                  final headers = api.authHeaders;
+                  final audioSvc = ref.read(audioCacheServiceProvider);
+                  unawaited(
+                    audioSvc.cacheAudio(track, streamUrl, headers).then((file) {
+                      if (file != null)
+                        ref.invalidate(isAudioCachedProvider(track.id));
+                    }),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Download queued for "${track.title}"'),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Download added for "${track.title}"'),
+                    ),
+                  );
+                }
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      !isManual
+                          ? 'Download added for "${track.title}"'
+                          : 'Download removed for "${track.title}"',
+                    ),
+                  ),
+                );
+              }
+            } catch (e, st) {
+              debugPrint('Track toggle manual failed: $e');
+              debugPrintStack(stackTrace: st);
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Failed to update download flag'),
+                  ),
+                );
+              }
+            }
             break;
           case 'go_to_album':
             if (albumAvailable) {
@@ -222,6 +325,24 @@ class _TrackMenuButton extends ConsumerWidget {
                   ),
                   const SizedBox(width: 12),
                   const Text('Add to playlist'),
+                ],
+              ),
+            ),
+            PopupMenuItem(
+              value: 'toggle_manual',
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.download_rounded,
+                    size: 20,
+                    color: AppTheme.onBackground,
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    isManualAsync.asData?.value == true
+                        ? 'Remove download'
+                        : 'Download',
+                  ),
                 ],
               ),
             ),

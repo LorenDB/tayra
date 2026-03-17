@@ -74,6 +74,14 @@ class CacheManager {
   /// Initialize the cache manager
   Future<void> initialize() async {
     _config = await CacheConfig.load();
+    // Reconcile any files left on disk with the DB in case previous runs
+    // copied files but failed to insert DB rows (prevents cached files from
+    // being invisible to the UI).
+    try {
+      await reconcileAudioFiles();
+    } catch (e) {
+      debugPrint('CacheManager: reconcileAudioFiles failed: $e');
+    }
   }
 
   /// Update cache configuration
@@ -223,6 +231,9 @@ class CacheManager {
     FileType type,
     File sourceFile, {
     int? resourceId,
+    CacheType? resourceParentType,
+    int? resourceParentId,
+    bool isProtected = false,
   }) async {
     final db = await _db.database;
     final cacheDir = await _getCacheDir(type);
@@ -235,15 +246,32 @@ class CacheManager {
     final sizeBytes = await destFile.length();
     final now = DateTime.now().millisecondsSinceEpoch;
 
-    await db.insert('cache_files', {
-      'cache_key': key,
-      'file_type': type.name,
-      'file_path': destPath,
-      'size_bytes': sizeBytes,
-      'created_at': now,
-      'last_accessed': now,
-      'resource_id': resourceId,
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    // Ensure optional columns exist (defensive migration for very old DBs)
+    await _ensureCacheFilesColumns();
+
+    // Insert DB row. If the DB insert fails for any reason, remove the
+    // copied file to avoid leaving orphaned files on disk and rethrow so
+    // callers can handle the failure.
+    try {
+      await db.insert('cache_files', {
+        'cache_key': key,
+        'file_type': type.name,
+        'file_path': destPath,
+        'size_bytes': sizeBytes,
+        'created_at': now,
+        'last_accessed': now,
+        'resource_id': resourceId,
+        'resource_parent_type': resourceParentType?.name,
+        'resource_parent_id': resourceParentId,
+        'is_protected': isProtected ? 1 : 0,
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
+    } catch (e) {
+      // Attempt best-effort cleanup of the copied file
+      try {
+        if (await destFile.exists()) await destFile.delete();
+      } catch (_) {}
+      rethrow;
+    }
 
     await _enforceLimit();
   }
@@ -267,6 +295,143 @@ class CacheManager {
     }
 
     await db.delete('cache_files', where: 'cache_key = ?', whereArgs: [key]);
+  }
+
+  /// Mark cache file protected/unprotected by cache key.
+  Future<void> setFileProtected(String key, bool protected) async {
+    final db = await _db.database;
+    await _ensureCacheFilesColumns();
+    try {
+      await db.update(
+        'cache_files',
+        {'is_protected': protected ? 1 : 0},
+        where: 'cache_key = ?',
+        whereArgs: [key],
+      );
+    } catch (e) {
+      // Defensive migration: older DBs may lack the is_protected column.
+      // Try to add the column and retry once.
+      debugPrint(
+        'setFileProtected failed, attempting to add is_protected column: $e',
+      );
+      try {
+        await db.execute(
+          "ALTER TABLE cache_files ADD COLUMN is_protected INTEGER DEFAULT 0",
+        );
+      } catch (_) {}
+      // Retry update (ignore errors on retry)
+      try {
+        await db.update(
+          'cache_files',
+          {'is_protected': protected ? 1 : 0},
+          where: 'cache_key = ?',
+          whereArgs: [key],
+        );
+      } catch (_) {}
+    }
+  }
+
+  /// Bulk set protection flag for all files that reference a given parent
+  /// resource (album/playlist). This is faster than iterating per-file.
+  Future<void> bulkSetFilesProtectedForParent(
+    CacheType parentType,
+    int parentId,
+    bool protected,
+  ) async {
+    final db = await _db.database;
+    await _ensureCacheFilesColumns();
+    try {
+      await db.update(
+        'cache_files',
+        {'is_protected': protected ? 1 : 0},
+        where: 'resource_parent_type = ? AND resource_parent_id = ?',
+        whereArgs: [parentType.name, parentId],
+      );
+    } catch (e) {
+      // Defensive migration: add missing column then retry once.
+      debugPrint(
+        'bulkSetFilesProtectedForParent failed, attempting to add is_protected column: $e',
+      );
+      try {
+        await db.execute(
+          "ALTER TABLE cache_files ADD COLUMN is_protected INTEGER DEFAULT 0",
+        );
+      } catch (_) {}
+      try {
+        await db.update(
+          'cache_files',
+          {'is_protected': protected ? 1 : 0},
+          where: 'resource_parent_type = ? AND resource_parent_id = ?',
+          whereArgs: [parentType.name, parentId],
+        );
+      } catch (_) {}
+    }
+  }
+
+  // ── Manual downloads operations ───────────────────────────────────────
+
+  /// Mark or unmark a resource (track/album/playlist) as manually downloaded.
+  Future<void> setManualDownloaded(
+    CacheType type,
+    int resourceId,
+    bool value,
+  ) async {
+    final db = await _db.database;
+    if (value) {
+      await db.insert('cache_manual_downloads', {
+        'resource_type': type.name,
+        'resource_id': resourceId,
+        'added_at': DateTime.now().millisecondsSinceEpoch,
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
+    } else {
+      try {
+        await db.delete(
+          'cache_manual_downloads',
+          where: 'resource_id = ? AND resource_type = ?',
+          whereArgs: [resourceId, type.name],
+        );
+      } catch (e) {
+        debugPrint('setManualDownloaded delete failed: $e');
+        // If delete fails due to missing table (very old DB), attempt to create
+        try {
+          await db.execute('''
+            CREATE TABLE IF NOT EXISTS cache_manual_downloads (
+              resource_type TEXT NOT NULL,
+              resource_id INTEGER PRIMARY KEY,
+              added_at INTEGER NOT NULL
+            )
+          ''');
+          await db.delete(
+            'cache_manual_downloads',
+            where: 'resource_id = ? AND resource_type = ?',
+            whereArgs: [resourceId, type.name],
+          );
+        } catch (_) {}
+      }
+    }
+  }
+
+  /// Check if a resource is manually downloaded
+  Future<bool> isManualDownloaded(CacheType type, int resourceId) async {
+    final db = await _db.database;
+    final results = await db.query(
+      'cache_manual_downloads',
+      where: 'resource_id = ? AND resource_type = ?',
+      whereArgs: [resourceId, type.name],
+    );
+    return results.isNotEmpty;
+  }
+
+  /// Return all track IDs that have been marked as manually downloaded.
+  Future<List<int>> getManualDownloadedTrackIds() async {
+    final db = await _db.database;
+    final results = await db.query(
+      'cache_manual_downloads',
+      columns: ['resource_id'],
+      where: 'resource_type = ?',
+      whereArgs: [CacheType.track.name],
+    );
+    return results.map((r) => r['resource_id'] as int).toList();
   }
 
   // ── Favorites cache operations ─────────────────────────────────────────
@@ -405,6 +570,29 @@ class CacheManager {
     );
   }
 
+  /// Check if an audio file for [trackId] exists on disk.
+  ///
+  /// This is the primary source-of-truth check — it scans the audio cache
+  /// directory for any file whose name matches `audio_<trackId>.<ext>`.
+  /// Checking the filesystem directly prevents DB/disk divergence (e.g. a
+  /// file that exists but has no DB row will still be reported as cached).
+  Future<bool> audioFileExistsOnDisk(int trackId) async {
+    try {
+      final audioDir = await _getCacheDir(FileType.audio);
+      final prefix = 'audio_$trackId.';
+      final entities = audioDir.listSync();
+      for (final entity in entities) {
+        if (entity is File) {
+          final name = p.basename(entity.path);
+          if (name.startsWith(prefix)) return true;
+        }
+      }
+      return false;
+    } catch (_) {
+      return false;
+    }
+  }
+
   // ── Private helper methods ─────────────────────────────────────────────
 
   /// Get cache directory for a specific file type
@@ -415,6 +603,117 @@ class CacheManager {
       await dir.create(recursive: true);
     }
     return dir;
+  }
+
+  /// Ensure optional columns exist on the `cache_files` table. Uses
+  /// `PRAGMA table_info` to detect existing columns and performs `ALTER TABLE`
+  /// to add any missing columns. This avoids relying on exceptions from
+  /// executing statements against older DB schemas.
+  Future<void> _ensureCacheFilesColumns() async {
+    final db = await _db.database;
+    try {
+      final info = await db.rawQuery("PRAGMA table_info('cache_files')");
+      final existing = <String>{};
+      for (final row in info) {
+        final name = row['name'];
+        if (name is String) existing.add(name);
+      }
+
+      if (!existing.contains('resource_parent_type')) {
+        try {
+          await db.execute(
+            "ALTER TABLE cache_files ADD COLUMN resource_parent_type TEXT",
+          );
+        } catch (_) {}
+      }
+      if (!existing.contains('resource_parent_id')) {
+        try {
+          await db.execute(
+            "ALTER TABLE cache_files ADD COLUMN resource_parent_id INTEGER",
+          );
+        } catch (_) {}
+      }
+      if (!existing.contains('is_protected')) {
+        try {
+          await db.execute(
+            "ALTER TABLE cache_files ADD COLUMN is_protected INTEGER DEFAULT 0",
+          );
+        } catch (_) {}
+      }
+    } catch (e) {
+      // Best-effort: if anything goes wrong querying PRAGMA, attempt
+      // to add the columns defensively (older DBs on some platforms may
+      // behave differently). Ignore all errors — this is purely a
+      // defensive migration helper.
+      try {
+        await db.execute(
+          "ALTER TABLE cache_files ADD COLUMN resource_parent_type TEXT",
+        );
+      } catch (_) {}
+      try {
+        await db.execute(
+          "ALTER TABLE cache_files ADD COLUMN resource_parent_id INTEGER",
+        );
+      } catch (_) {}
+      try {
+        await db.execute(
+          "ALTER TABLE cache_files ADD COLUMN is_protected INTEGER DEFAULT 0",
+        );
+      } catch (_) {}
+    }
+  }
+
+  /// Reconcile audio files on disk with the database. This repairs cases
+  /// where a file exists in the cache directory but the corresponding DB
+  /// row is missing (e.g. leftover from earlier failures). It will insert
+  /// a minimal DB row so providers like `isAudioCachedProvider` return
+  /// true when the file is present.
+  Future<void> reconcileAudioFiles() async {
+    final db = await _db.database;
+    final audioDir = await _getCacheDir(FileType.audio);
+    final files = audioDir.listSync().whereType<File>();
+    for (final file in files) {
+      final name = p.basename(file.path);
+      // Expect filenames like 'audio_<id>.<ext>'
+      if (!name.startsWith('audio_')) continue;
+      final key = p.basenameWithoutExtension(name); // audio_<id>
+      final exists = await db.query(
+        'cache_files',
+        where: 'cache_key = ?',
+        whereArgs: [key],
+      );
+      if (exists.isNotEmpty) continue;
+
+      // Try to extract an integer resource_id from the key
+      int? resourceId;
+      try {
+        final parts = key.split('_');
+        if (parts.length >= 2) resourceId = int.tryParse(parts[1]);
+      } catch (_) {
+        resourceId = null;
+      }
+
+      final sizeBytes = await file.length();
+      final now = DateTime.now().millisecondsSinceEpoch;
+      try {
+        await db.insert('cache_files', {
+          'cache_key': key,
+          'file_type': FileType.audio.name,
+          'file_path': file.path,
+          'size_bytes': sizeBytes,
+          'created_at': now,
+          'last_accessed': now,
+          'resource_id': resourceId,
+          'resource_parent_type': null,
+          'resource_parent_id': null,
+          'is_protected': 0,
+        }, conflictAlgorithm: ConflictAlgorithm.replace);
+      } catch (e) {
+        debugPrint(
+          'reconcileAudioFiles: failed to insert row for ${file.path}: $e',
+        );
+      }
+    }
   }
 
   /// Enforce cache size limits using LRU eviction
@@ -430,12 +729,15 @@ class CacheManager {
 
     // Evict oldest audio files if over limit
     while (audioSize > _config.maxAudioSizeBytes) {
-      final oldestAudio = await db.query(
-        'cache_files',
-        where: 'file_type = ?',
-        whereArgs: [FileType.audio.name],
-        orderBy: 'last_accessed ASC',
-        limit: 1,
+      // Evict oldest audio files if over limit, but skip protected files
+      final oldestAudio = await db.rawQuery(
+        '''
+        SELECT cache_key, size_bytes FROM cache_files
+        WHERE file_type = ? AND (is_protected IS NULL OR is_protected = 0)
+        ORDER BY last_accessed ASC
+        LIMIT 1
+      ''',
+        [FileType.audio.name],
       );
 
       if (oldestAudio.isEmpty) break;
