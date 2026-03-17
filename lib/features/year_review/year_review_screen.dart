@@ -1,4 +1,6 @@
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
@@ -36,14 +38,30 @@ class YearReviewScreen extends ConsumerStatefulWidget {
 class _YearReviewScreenState extends ConsumerState<YearReviewScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _animController;
+  ui.FragmentProgram? _magicProgram;
 
   @override
   void initState() {
     super.initState();
-    _animController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1200),
-    )..forward();
+    _animController =
+        AnimationController(
+          vsync: this,
+          duration: const Duration(milliseconds: 1200),
+        )..forward();
+    _loadShader();
+  }
+
+  Future<void> _loadShader() async {
+    try {
+      final program = await ui.FragmentProgram.fromAsset(
+        'assets/shaders/magic_sparks.frag',
+      );
+      if (mounted) {
+        setState(() => _magicProgram = program);
+      }
+    } catch (e) {
+      debugPrint('Error loading shader: $e');
+    }
   }
 
   @override
@@ -94,7 +112,11 @@ class _YearReviewScreenState extends ConsumerState<YearReviewScreen>
           if (stats.isEmpty) {
             return _EmptyState(year: widget.year);
           }
-          return _ReviewContent(stats: stats, animController: _animController);
+          return _ReviewContent(
+            stats: stats,
+            animController: _animController,
+            magicProgram: _magicProgram,
+          );
         },
       ),
     );
@@ -193,8 +215,13 @@ class _AppBarRow extends StatelessWidget {
 class _ReviewContent extends StatelessWidget {
   final YearReviewStats stats;
   final AnimationController animController;
+  final ui.FragmentProgram? magicProgram;
 
-  const _ReviewContent({required this.stats, required this.animController});
+  const _ReviewContent({
+    required this.stats,
+    required this.animController,
+    this.magicProgram,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -209,7 +236,11 @@ class _ReviewContent extends StatelessWidget {
 
           // Hero card with year + total stats
           SliverToBoxAdapter(
-            child: _HeroCard(stats: stats, animController: animController),
+            child: _HeroCard(
+              stats: stats,
+              animController: animController,
+              magicProgram: magicProgram,
+            ),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 20)),
 
@@ -322,17 +353,150 @@ class _ReviewContent extends StatelessWidget {
 
 // ── Hero card ───────────────────────────────────────────────────────────
 
-class _HeroCard extends StatelessWidget {
+class _HeroCard extends StatefulWidget {
   final YearReviewStats stats;
   final AnimationController animController;
+  final ui.FragmentProgram? magicProgram;
 
-  const _HeroCard({required this.stats, required this.animController});
+  const _HeroCard({
+    required this.stats,
+    required this.animController,
+    this.magicProgram,
+  });
+
+  @override
+  State<_HeroCard> createState() => _HeroCardState();
+}
+
+class _HeroCardState extends State<_HeroCard>
+    with SingleTickerProviderStateMixin {
+  late final Ticker _ticker;
+  double _elapsedSeconds = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _ticker = createTicker((elapsed) {
+      setState(() {
+        _elapsedSeconds = elapsed.inMicroseconds / 1e6;
+      });
+    });
+    _checkTicker();
+  }
+
+  @override
+  void didUpdateWidget(_HeroCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _checkTicker();
+  }
+
+  void _checkTicker() {
+    if (widget.magicProgram != null && !_ticker.isActive) {
+      _ticker.start();
+    } else if (widget.magicProgram == null && _ticker.isActive) {
+      _ticker.stop();
+    }
+  }
+
+  @override
+  void dispose() {
+    _ticker.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
+
+    Widget card = Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFF6C63FF), Color(0xFF00D4AA)],
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppTheme.primary.withValues(alpha: 0.3),
+            blurRadius: 24,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '${widget.stats.year}',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 48,
+              fontWeight: FontWeight.w800,
+              letterSpacing: -1.5,
+              height: 1.0,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Year in Review',
+            style: TextStyle(
+              color: Colors.white.withValues(alpha: 0.85),
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              const Icon(
+                Icons.headphones_rounded,
+                color: Colors.white,
+                size: 20,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                widget.stats.formattedTotalTime,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'of listening',
+            style: TextStyle(
+              color: Colors.white.withValues(alpha: 0.7),
+              fontSize: 14,
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (widget.magicProgram != null) {
+      card = ShaderMask(
+        shaderCallback: (bounds) {
+          final shader = widget.magicProgram!.fragmentShader();
+          // Pass physical pixels to match FlutterFragCoord()
+          shader.setFloat(0, _elapsedSeconds);
+          shader.setFloat(1, bounds.width * devicePixelRatio);
+          shader.setFloat(2, bounds.height * devicePixelRatio);
+          return shader;
+        },
+        blendMode: BlendMode.plus,
+        child: card,
+      );
+    }
+
     return FadeTransition(
       opacity: CurvedAnimation(
-        parent: animController,
+        parent: widget.animController,
         curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
       ),
       child: SlideTransition(
@@ -341,80 +505,11 @@ class _HeroCard extends StatelessWidget {
           end: Offset.zero,
         ).animate(
           CurvedAnimation(
-            parent: animController,
+            parent: widget.animController,
             curve: const Interval(0.0, 0.6, curve: Curves.easeOutCubic),
           ),
         ),
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16),
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Color(0xFF6C63FF), Color(0xFF00D4AA)],
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: AppTheme.primary.withValues(alpha: 0.3),
-                blurRadius: 24,
-                offset: const Offset(0, 8),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${stats.year}',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 48,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: -1.5,
-                  height: 1.0,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'Year in Review',
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.85),
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  const Icon(
-                    Icons.headphones_rounded,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    stats.formattedTotalTime,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'of listening',
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.7),
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ),
-        ),
+        child: card,
       ),
     );
   }

@@ -71,3 +71,4 @@ flutter:
   shaders:
     - assets/shaders/ripple.frag
     - assets/shaders/disco.frag
+    - assets/shaders/magic_sparks.frag
