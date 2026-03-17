@@ -70,7 +70,7 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
     // This is a minimal implementation — a fuller player integration would
     // manage radio sessions and continuous playback.
     final api = ref.read(cached_api.cachedFunkwhaleApiProvider);
-    ref.read(playerProvider.notifier).playTracks([]);
+    ref.read(playerProvider.notifier).pause();
     // Use radio sessions for playback: create a session, then repeatedly
     // request the next track and enqueue it. We'll load the first track and
     // start playback.
