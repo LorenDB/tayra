@@ -1069,24 +1069,20 @@ class PlayerNotifier extends Notifier<PlayerState> {
         });
       } catch (_) {}
 
-      // Prefetch a few upcoming tracks and append to queue.
-      for (var i = 0; i < 4; i++) {
-        try {
-          final raw = await _api.postNextRadioTrackRaw(_radioSessionId!);
-          final t = await _parseTrackFromRaw(raw);
-          if (t != null) addToQueue([t]);
-        } catch (_) {
-          break;
-        }
-      }
+      try {
+        final raw = await _api.postNextRadioTrackRaw(_radioSessionId!);
+        final t = await _parseTrackFromRaw(raw);
+        if (t != null) addToQueue([t]);
+      } catch (_) {}
 
       // Start a periodic task to keep queue populated when it gets low.
       _radioFetchTimer?.cancel();
       _radioFetchTimer = Timer.periodic(const Duration(seconds: 4), (_) async {
         try {
           if (_radioSessionId == null) return;
+          // Keep exactly one track ahead of the currently playing track.
           final ahead = state.queue.length - state.currentIndex - 1;
-          if (ahead < 3) {
+          if (ahead < 1) {
             final raw = await _api.postNextRadioTrackRaw(_radioSessionId!);
             final t = await _parseTrackFromRaw(raw);
             if (t != null) addToQueue([t]);
@@ -1122,15 +1118,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
           });
         } catch (_) {}
 
-        // Prefetch a few upcoming tracks using the sample endpoint.
-        for (var i = 0; i < 4; i++) {
-          try {
-            final t = await _api.getRadioTrack(radioId);
-            if (t != null) addToQueue([t]);
-          } catch (_) {
-            break;
-          }
-        }
+        // Prefetch only one upcoming track using the sample endpoint.
+        try {
+          final t = await _api.getRadioTrack(radioId);
+          if (t != null) addToQueue([t]);
+        } catch (_) {}
 
         // Periodic fetcher to keep queue populated.
         _radioFetchTimer?.cancel();
@@ -1138,8 +1130,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
           _,
         ) async {
           try {
+            // Keep exactly one track ahead of the currently playing track.
             final ahead = state.queue.length - state.currentIndex - 1;
-            if (ahead < 3) {
+            if (ahead < 1) {
               final t = await _api.getRadioTrack(radioId);
               if (t != null) addToQueue([t]);
             }
