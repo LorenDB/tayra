@@ -408,7 +408,6 @@ class _HeroCardState extends State<_HeroCard>
     final devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
 
     Widget card = Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -484,8 +483,8 @@ class _HeroCardState extends State<_HeroCard>
           final shader = widget.magicProgram!.fragmentShader();
           // Pass physical pixels to match FlutterFragCoord()
           shader.setFloat(0, _elapsedSeconds);
-          shader.setFloat(1, bounds.width * devicePixelRatio);
-          shader.setFloat(2, bounds.height * devicePixelRatio);
+          shader.setFloat(1, bounds.width * devicePixelRatio * 0.85);
+          shader.setFloat(2, bounds.height * devicePixelRatio * 0.92);
           return shader;
         },
         blendMode: BlendMode.plus,
@@ -508,7 +507,10 @@ class _HeroCardState extends State<_HeroCard>
             curve: const Interval(0.0, 0.6, curve: Curves.easeOutCubic),
           ),
         ),
-        child: card,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: card,
+        ),
       ),
     );
   }
