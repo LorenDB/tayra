@@ -35,6 +35,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tayra-windows-msix
-          path: ./*.msix
+          path: ./build/windows/x64/runner/Release/tayra.msix
           retention-days: 14
           if-no-files-found: error
