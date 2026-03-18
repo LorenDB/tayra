@@ -666,40 +666,43 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
   ) {
     final notifier = ref.read(playerProvider.notifier);
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _buildSecondaryControl(
-          icon: Icons.shuffle_rounded,
-          isActive: playerState.isShuffled,
-          onPressed: () => notifier.toggleShuffle(),
-          iconSize: iconSize - 10,
-        ),
-        SizedBox(width: spacing),
-        _buildSkipControl(
-          icon: Icons.skip_previous_rounded,
-          enabled:
-              playerState.hasPrevious || playerState.position.inSeconds > 3,
-          onPressed: () => notifier.skipPrevious(),
-          iconSize: skipSize,
-        ),
-        SizedBox(width: spacing),
-        _buildPlayPauseButton(
-          playerState,
-          glowColor,
-          playButtonSize,
-          iconSize + 4,
-        ),
-        SizedBox(width: spacing),
-        _buildSkipControl(
-          icon: Icons.skip_next_rounded,
-          enabled: playerState.hasNext,
-          onPressed: () => notifier.skipNext(),
-          iconSize: skipSize,
-        ),
-        SizedBox(width: spacing),
-        _buildLoopControl(playerState.loopMode, iconSize: iconSize - 10),
-      ],
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _buildSecondaryControl(
+            icon: Icons.shuffle_rounded,
+            isActive: playerState.isShuffled,
+            onPressed: () => notifier.toggleShuffle(),
+            iconSize: iconSize - 10,
+          ),
+          SizedBox(width: spacing),
+          _buildSkipControl(
+            icon: Icons.skip_previous_rounded,
+            enabled:
+                playerState.hasPrevious || playerState.position.inSeconds > 3,
+            onPressed: () => notifier.skipPrevious(),
+            iconSize: skipSize,
+          ),
+          SizedBox(width: spacing),
+          _buildPlayPauseButton(
+            playerState,
+            glowColor,
+            playButtonSize,
+            iconSize + 4,
+          ),
+          SizedBox(width: spacing),
+          _buildSkipControl(
+            icon: Icons.skip_next_rounded,
+            enabled: playerState.hasNext,
+            onPressed: () => notifier.skipNext(),
+            iconSize: skipSize,
+          ),
+          SizedBox(width: spacing),
+          _buildLoopControl(playerState.loopMode, iconSize: iconSize - 10),
+        ],
+      ),
     );
   }
 
