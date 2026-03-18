@@ -65,6 +65,7 @@ dev_dependencies:
   json_serializable: ^6.13.0
   json_annotation: ^4.11.0
   flutter_launcher_icons: ^0.14.1
+  msix: ^3.16.13
 
 flutter:
   uses-material-design: true
@@ -74,3 +75,12 @@ flutter:
     - assets/shaders/ripple.frag
     - assets/shaders/disco.frag
     - assets/shaders/magic_sparks.frag
+
+msix_config:
+  display_name: Tayra
+  publisher_display_name: LorenDB
+  publisher: CN=LorenDB              # change if you get a real cert later
+  identity_name: dev.lorendb.tayra
+  logo_path: assets/tayra.png
+  trim_logo: false
+  icons_background_color: transparent
