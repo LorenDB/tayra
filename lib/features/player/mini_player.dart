@@ -18,14 +18,14 @@ class MiniPlayer extends ConsumerWidget {
     if (track == null) return const SizedBox.shrink();
 
     final imageUrl = track.coverUrl;
-    final dominantColorAsync = ref.watch(dominantColorProvider(imageUrl));
-    final accentColor = dominantColorAsync.maybeWhen(
+    final paletteAsync = ref.watch(paletteColorsProvider(imageUrl));
+    final accentColor = paletteAsync.maybeWhen(
       data: (color) => color,
       orElse: () => AppTheme.primary,
     );
     final gradientSecondColor = AppTheme.gradientSecondColor(
       accentColor,
-      dominantColorAsync,
+      paletteAsync,
     );
 
     return GestureDetector(
