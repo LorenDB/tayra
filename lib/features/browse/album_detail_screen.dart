@@ -97,8 +97,8 @@ class AlbumDetailScreen extends ConsumerWidget {
             ),
         data: (album) {
           final imageUrl = album.largeCoverUrl ?? album.coverUrl;
-          final dominantColorAsync = ref.watch(dominantColorProvider(imageUrl));
-          final dominantColor = dominantColorAsync.maybeWhen(
+          final paletteAsync = ref.watch(paletteColorsProvider(imageUrl));
+          final dominantColor = paletteAsync.maybeWhen(
             data: (color) => color,
             orElse: () => AppTheme.primary,
           );

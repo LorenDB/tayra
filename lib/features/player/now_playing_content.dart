@@ -182,33 +182,23 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
 
     final imageUrl = track.largeCoverUrl ?? track.coverUrl;
 
-    final dominantColorAsync = ref.watch(dominantColorProvider(imageUrl));
-    final glowColor = dominantColorAsync.maybeWhen(
+    final paletteAsync = ref.watch(paletteColorsProvider(imageUrl));
+    final glowColor = paletteAsync.maybeWhen(
       data: (color) => color,
       orElse: () => AppTheme.primary,
     );
 
     if (widget.layout == NowPlayingLayout.panel) {
-      return _buildPanelLayout(
-        track,
-        playerState,
-        glowColor,
-        dominantColorAsync,
-      );
+      return _buildPanelLayout(track, playerState, glowColor, paletteAsync);
     }
-    return _buildScreenLayout(
-      track,
-      playerState,
-      glowColor,
-      dominantColorAsync,
-    );
+    return _buildScreenLayout(track, playerState, glowColor, paletteAsync);
   }
 
   Widget _buildScreenLayout(
     Track track,
     PlayerState playerState,
     Color glowColor,
-    AsyncValue<Color> dominantColorAsync,
+    AsyncValue<Color> paletteAsync,
   ) {
     return Column(
       children: [
@@ -223,13 +213,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
                 const SizedBox(height: 36),
                 _buildTrackInfo(track, 22, 16, 13, 9, 4),
                 const SizedBox(height: 28),
-                _buildSeekBar(
-                  playerState,
-                  glowColor,
-                  6,
-                  16,
-                  dominantColorAsync,
-                ),
+                _buildSeekBar(playerState, glowColor, 6, 16, paletteAsync),
                 const SizedBox(height: 20),
                 _buildTransportControls(playerState, glowColor, 64, 36, 34, 20),
                 const SizedBox(height: 32),
@@ -245,7 +229,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
     Track track,
     PlayerState playerState,
     Color glowColor,
-    AsyncValue<Color> dominantColorAsync,
+    AsyncValue<Color> paletteAsync,
   ) {
     return Container(
       color: AppTheme.surface,
@@ -274,7 +258,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
                       glowColor,
                       5,
                       12,
-                      dominantColorAsync,
+                      paletteAsync,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -573,7 +557,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
     Color glowColor,
     double thumbRadius,
     double overlayRadius,
-    AsyncValue<Color> dominantColorAsync,
+    AsyncValue<Color> paletteAsync,
   ) {
     final progress = _isSeeking ? _seekValue : playerState.progress;
     final currentPosition =
@@ -586,7 +570,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
 
     final gradientSecondColor = AppTheme.gradientSecondColor(
       glowColor,
-      dominantColorAsync,
+      paletteAsync,
     );
 
     return Column(
