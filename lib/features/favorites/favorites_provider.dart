@@ -41,12 +41,13 @@ class FavoriteTrackIdsNotifier extends Notifier<Set<int>> {
         await _api.addFavorite(trackId);
       }
     } catch (_) {
-      // Revert on error
+      // Revert on error and rethrow so callers can surface an error
       if (isFav) {
         state = Set<int>.from(state)..add(trackId);
       } else {
         state = Set<int>.from(state)..remove(trackId);
       }
+      rethrow;
     }
   }
 
@@ -71,8 +72,17 @@ class FavoriteButton extends ConsumerWidget {
         color: isFav ? const Color(0xFFFF6B9D) : Colors.white54,
         size: size,
       ),
-      onPressed: () {
-        ref.read(favoriteTrackIdsProvider.notifier).toggle(trackId);
+      onPressed: () async {
+        try {
+          await ref.read(favoriteTrackIdsProvider.notifier).toggle(trackId);
+        } catch (e) {
+          // Show user-facing error and let the notifier already reverted state
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Failed to update favorite')),
+            );
+          }
+        }
       },
       padding: EdgeInsets.zero,
       constraints: BoxConstraints(minWidth: size + 8, minHeight: size + 8),
