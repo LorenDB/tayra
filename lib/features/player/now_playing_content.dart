@@ -221,7 +221,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
                 const SizedBox(height: 16),
                 _buildScreenAlbumArt(track, glowColor),
                 const SizedBox(height: 36),
-                _buildTrackInfo(track, 22, 16, 13, 6, 4),
+                _buildTrackInfo(track, 22, 16, 13, 9, 4),
                 const SizedBox(height: 28),
                 _buildSeekBar(
                   playerState,
@@ -264,7 +264,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
                   const SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: _buildTrackInfo(track, 16, 13, 3, 3, 0),
+                    child: _buildTrackInfo(track, 16, 13, 13, 3, 0),
                   ),
                   const SizedBox(height: 16),
                   Padding(
