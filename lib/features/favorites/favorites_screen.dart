@@ -50,7 +50,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
     }
   }
 
-  Future<void> _loadFavorites() async {
+  Future<void> _loadFavorites({bool forceRefresh = false}) async {
     setState(() {
       _isLoading = true;
       _error = null;
@@ -58,7 +58,10 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
 
     try {
       final api = ref.read(cachedFunkwhaleApiProvider);
-      final response = await api.getFavorites(page: 1);
+      final response = await api.getFavorites(
+        page: 1,
+        forceRefresh: forceRefresh,
+      );
       if (!mounted) return;
       setState(() {
         _favorites
@@ -68,6 +71,29 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
         _hasMore = response.next != null;
         _isLoading = false;
       });
+      // If the global favorite IDs provider contains IDs that are not present
+      // in the fetched first page (this can happen when favorites are added
+      // from other screens while this screen was not visible), perform a
+      // forced refresh to ensure the first page reflects recent additions.
+      final providerIds = ref.read(favoriteTrackIdsProvider);
+      final loadedIds = _favorites.map((f) => f.track.id).toSet();
+      final missing = providerIds.difference(loadedIds);
+      if (missing.isNotEmpty) {
+        try {
+          final fresh = await api.getFavorites(page: 1, forceRefresh: true);
+          if (!mounted) return;
+          setState(() {
+            _favorites
+              ..clear()
+              ..addAll(fresh.results);
+            _currentPage = 1;
+            _hasMore = fresh.next != null;
+            _isLoading = false;
+          });
+        } catch (_) {
+          // Ignore forced refresh failures — we already have a usable list.
+        }
+      }
     } catch (e) {
       if (!mounted) return;
       setState(() {
@@ -152,6 +178,31 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Keep the visible favorites list in sync with the global favorite IDs
+    // provider. Must register this listener during build (ConsumerState) so
+    // Riverpod can manage the listener lifecycle safely.
+    ref.listen<Set<int>>(favoriteTrackIdsProvider, (previous, next) {
+      if (!mounted) return;
+
+      final prev = previous ?? <int>{};
+
+      final removed = prev.difference(next);
+      final added = next.difference(prev);
+
+      // Remove unfavorited tracks immediately from the visible list.
+      if (removed.isNotEmpty) {
+        setState(() {
+          _favorites.removeWhere((f) => removed.contains(f.track.id));
+        });
+      }
+
+      // If favorites were added elsewhere, force-refresh the paginated
+      // favorites list from the network so the local cached page picks up
+      // the new items.
+      if (added.isNotEmpty) {
+        _loadFavorites(forceRefresh: true);
+      }
+    });
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
