@@ -5,6 +5,16 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 
+import 'package:tayra/core/cache/cache_manager.dart';
+import 'package:tayra/features/player/queue_persistence_service.dart';
+import 'package:tayra/features/year_review/listen_history_service.dart';
+import 'package:tayra/features/settings/settings_provider.dart';
+import 'package:tayra/features/home/home_screen.dart';
+import 'package:tayra/features/browse/albums_screen.dart';
+import 'package:tayra/features/browse/artists_screen.dart';
+import 'package:tayra/features/playlists/playlists_screen.dart';
+import 'package:tayra/features/favorites/favorites_provider.dart';
+
 // ── Secure storage ──────────────────────────────────────────────────────
 
 final secureStorageProvider = Provider<FlutterSecureStorage>((ref) {
@@ -101,6 +111,25 @@ final authChangeNotifierProvider = Provider<AuthChangeNotifier>((ref) {
 final authStateProvider = NotifierProvider<AuthNotifier, AuthState>(
   AuthNotifier.new,
 );
+
+// ── Auth state listener ─────────────────────────────────────────────────
+// This provider watches auth state and invalidates all cached data providers
+// when the user signs out. This ensures a fresh start when signing into
+// a different server.
+
+final authStateListenerProvider = Provider<void>((ref) {
+  ref.listen<AuthState>(authStateProvider, (previous, next) {
+    if (previous != null && previous.isAuthenticated && !next.isAuthenticated) {
+      ref.invalidate(recentAlbumsProvider);
+      ref.invalidate(randomAlbumsProvider);
+      ref.invalidate(recentTracksProvider);
+      ref.invalidate(albumsPageProvider(1));
+      ref.invalidate(artistsPageProvider(1));
+      ref.invalidate(playlistsProvider);
+      ref.invalidate(favoriteTrackIdsProvider);
+    }
+  });
+});
 
 class AuthNotifier extends Notifier<AuthState> {
   @override
@@ -273,6 +302,7 @@ class AuthNotifier extends Notifier<AuthState> {
   }
 
   Future<void> logout() async {
+    await _clearAllUserData();
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_keyServerUrl);
     await _storage.delete(key: _keyAccessToken);
@@ -280,6 +310,17 @@ class AuthNotifier extends Notifier<AuthState> {
     await _storage.delete(key: _keyClientId);
     await _storage.delete(key: _keyClientSecret);
     state = const AuthState();
+  }
+
+  Future<void> _clearAllUserData() async {
+    await CacheManager.instance.clearAll();
+    await QueuePersistenceService.clearQueue();
+    await ListenHistoryService.clearAll();
+    await SettingsNotifier.clearSettings();
+  }
+
+  Future<void> logoutAndClearData() async {
+    await logout();
   }
 
   Future<void> _saveAuth() async {

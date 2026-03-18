@@ -12,7 +12,7 @@ import 'package:tayra/features/browse/paginated_grid_mixin.dart';
 
 // ── Providers ───────────────────────────────────────────────────────────
 
-final _artistsPageProvider =
+final artistsPageProvider =
     FutureProvider.family<PaginatedResponse<Artist>, int>((ref, page) {
       final api = ref.watch(cachedFunkwhaleApiProvider);
       return api.getArtists(page: page, pageSize: 30, ordering: 'name');
@@ -31,14 +31,14 @@ class _ArtistsScreenState extends ConsumerState<ArtistsScreen>
     with PaginatedGridMixin<Artist, ArtistsScreen> {
   @override
   Future<PaginatedResponse<Artist>> fetchPage(int page) =>
-      ref.read(_artistsPageProvider(page).future);
+      ref.read(artistsPageProvider(page).future);
 
   @override
-  void invalidatePage(int page) => ref.invalidate(_artistsPageProvider(page));
+  void invalidatePage(int page) => ref.invalidate(artistsPageProvider(page));
 
   @override
   Widget build(BuildContext context) {
-    final firstPage = ref.watch(_artistsPageProvider(1));
+    final firstPage = ref.watch(artistsPageProvider(1));
 
     return firstPage.when(
       loading: () => const ShimmerList(showCircular: true, itemCount: 12),
@@ -46,7 +46,7 @@ class _ArtistsScreenState extends ConsumerState<ArtistsScreen>
           (error, stack) => CenteredErrorView(
             title: 'Failed to load artists',
             message: error.toString(),
-            onRetry: () => ref.invalidate(_artistsPageProvider(1)),
+            onRetry: () => ref.invalidate(artistsPageProvider(1)),
           ),
       data: (response) {
         seedIfEmpty(response);
