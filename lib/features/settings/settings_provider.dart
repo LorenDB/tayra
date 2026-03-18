@@ -72,4 +72,10 @@ class SettingsNotifier extends Notifier<SettingsState> {
     // Update cache manager configuration
     await CacheManager.instance.updateConfig(sizeMB);
   }
+
+  static Future<void> clearSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_keyBrowseMode);
+    await prefs.remove(_keyCacheSizeLimit);
+  }
 }

@@ -39,11 +39,9 @@ class AuthInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401) {
-      // Try to refresh the token
       final authNotifier = _ref.read(authStateProvider.notifier);
       final success = await authNotifier.refreshToken();
       if (success) {
-        // Retry the request with the new token
         final authState = _ref.read(authStateProvider);
         err.requestOptions.headers['Authorization'] =
             'Bearer ${authState.accessToken}';
@@ -51,9 +49,9 @@ class AuthInterceptor extends Interceptor {
           final response = await Dio().fetch(err.requestOptions);
           handler.resolve(response);
           return;
-        } catch (e) {
-          // Fall through to the error handler
-        }
+        } catch (e) {}
+      } else {
+        await authNotifier.logout();
       }
     }
     handler.next(err);

@@ -12,11 +12,12 @@ import 'package:tayra/features/browse/paginated_grid_mixin.dart';
 
 // ── Providers ───────────────────────────────────────────────────────────
 
-final _albumsPageProvider =
-    FutureProvider.family<PaginatedResponse<Album>, int>((ref, page) {
-      final api = ref.watch(cachedFunkwhaleApiProvider);
-      return api.getAlbums(page: page, pageSize: 30, ordering: 'title');
-    });
+final albumsPageProvider = FutureProvider.family<PaginatedResponse<Album>, int>(
+  (ref, page) {
+    final api = ref.watch(cachedFunkwhaleApiProvider);
+    return api.getAlbums(page: page, pageSize: 30, ordering: 'title');
+  },
+);
 
 // ── Screen ──────────────────────────────────────────────────────────────
 
@@ -31,14 +32,14 @@ class _AlbumsScreenState extends ConsumerState<AlbumsScreen>
     with PaginatedGridMixin<Album, AlbumsScreen> {
   @override
   Future<PaginatedResponse<Album>> fetchPage(int page) =>
-      ref.read(_albumsPageProvider(page).future);
+      ref.read(albumsPageProvider(page).future);
 
   @override
-  void invalidatePage(int page) => ref.invalidate(_albumsPageProvider(page));
+  void invalidatePage(int page) => ref.invalidate(albumsPageProvider(page));
 
   @override
   Widget build(BuildContext context) {
-    final firstPage = ref.watch(_albumsPageProvider(1));
+    final firstPage = ref.watch(albumsPageProvider(1));
 
     return firstPage.when(
       loading: () => const ShimmerList(itemCount: 12),
@@ -46,7 +47,7 @@ class _AlbumsScreenState extends ConsumerState<AlbumsScreen>
           (error, stack) => CenteredErrorView(
             title: 'Failed to load albums',
             message: error.toString(),
-            onRetry: () => ref.invalidate(_albumsPageProvider(1)),
+            onRetry: () => ref.invalidate(albumsPageProvider(1)),
           ),
       data: (response) {
         seedIfEmpty(response);
