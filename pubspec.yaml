@@ -50,6 +50,7 @@ dependencies:
 
   # Misc
   aptabase_flutter: ^0.4.1
+  device_info_plus: ^10.1.2
   equatable: ^2.0.7
   intl: ^0.20.2
   collection: ^1.19.0

@@ -1,9 +1,11 @@
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:io';
 
 import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/features/player/queue_persistence_service.dart';
@@ -147,7 +149,14 @@ class AuthNotifier extends Notifier<AuthState> {
   static const _scopes = 'read write';
 
   Future<String> _getAppName() async {
-    return 'Tayra (${Platform.localHostname})';
+    String deviceName;
+    if (Platform.isAndroid) {
+      final info = await DeviceInfoPlugin().androidInfo;
+      deviceName = '${info.manufacturer} ${info.model}';
+    } else {
+      deviceName = Platform.localHostname;
+    }
+    return 'Tayra ($deviceName)';
   }
 
   FlutterSecureStorage get _storage => ref.read(secureStorageProvider);
