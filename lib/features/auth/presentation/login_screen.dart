@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
 import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/widgets/logo_widget.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -38,19 +39,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 // Logo / branding area
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    gradient: AppTheme.primaryGradient,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: const Icon(
-                    Icons.music_note_rounded,
-                    color: Colors.white,
-                    size: 40,
-                  ),
-                ),
+                const LogoWidget(size: 80, borderRadius: 20),
                 const SizedBox(height: 24),
                 Text('Tayra', style: textTheme.headlineLarge),
                 const SizedBox(height: 8),
