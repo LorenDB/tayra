@@ -209,36 +209,6 @@ class _DesktopNavRail extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: extended ? 16 : 8),
         child: Column(
           children: [
-            const SizedBox(height: 16),
-            // Header
-            extended
-                ? Row(
-                  children: [
-                    Icon(
-                      Icons.music_note_rounded,
-                      color: AppTheme.primary,
-                      size: 28,
-                    ),
-                    const SizedBox(width: 10),
-                    const Text(
-                      'Tayra',
-                      style: TextStyle(
-                        color: AppTheme.onBackground,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                )
-                : Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Icon(
-                    Icons.music_note_rounded,
-                    color: AppTheme.primary,
-                    size: 28,
-                  ),
-                ),
-
             const SizedBox(height: 8),
 
             // Destinations - make this area scrollable so the sidebar doesn't
