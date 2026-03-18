@@ -318,23 +318,37 @@ class ListenHistoryService {
             )
             .toList();
 
-    // Top albums (by play count)
+    // Top albums (by engagement score: rewards both variety and repeats)
+    // Formula: SUM(LOG(play_count + 1)) for each unique track
+    // - More unique tracks = more terms in the sum
+    // - More plays per track = higher log value
     final topAlbumsResult = await db.rawQuery(
       '''
       SELECT
         album_title,
         artist_name,
         cover_url,
-        COUNT(*) as play_count,
-        COALESCE(SUM(duration_seconds), 0) as total_seconds
+        COUNT(DISTINCT track_id) as unique_tracks,
+        COUNT(*) as total_plays,
+        COALESCE(SUM(duration_seconds), 0) as total_seconds,
+        (
+          SELECT SUM(LOG(play_count + 1))
+          FROM (
+            SELECT track_id, COUNT(*) as play_count
+            FROM $_tableName t2
+            WHERE t2.album_id = $_tableName.album_id
+              AND t2.listened_at >= ? AND t2.listened_at < ?
+            GROUP BY t2.track_id
+          )
+        ) as engagement_score
       FROM $_tableName
       WHERE listened_at >= ? AND listened_at < ?
         AND album_title != ''
       GROUP BY album_id
-      ORDER BY play_count DESC
+      ORDER BY engagement_score DESC
       LIMIT 10
     ''',
-      [startMs, endMs],
+      [startMs, endMs, startMs, endMs],
     );
 
     final topAlbums =
@@ -344,7 +358,7 @@ class ListenHistoryService {
                 name: row['album_title'] as String,
                 subtitle: row['artist_name'] as String?,
                 coverUrl: row['cover_url'] as String?,
-                count: row['play_count'] as int,
+                count: ((row['engagement_score'] as double?) ?? 0).round(),
                 totalSeconds: row['total_seconds'] as int?,
               ),
             )
