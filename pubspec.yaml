@@ -68,6 +68,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/tayra.jpg
   shaders:
     - assets/shaders/ripple.frag
     - assets/shaders/disco.frag
