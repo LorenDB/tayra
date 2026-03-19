@@ -198,10 +198,26 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
       orElse: () => AppTheme.primary,
     );
 
-    if (widget.layout == NowPlayingLayout.panel) {
-      return _buildPanelLayout(track, playerState, glowColor, paletteAsync);
-    }
-    return _buildScreenLayout(track, playerState, glowColor, paletteAsync);
+    final content =
+        widget.layout == NowPlayingLayout.panel
+            ? _buildPanelLayout(track, playerState, glowColor, paletteAsync)
+            : _buildScreenLayout(track, playerState, glowColor, paletteAsync);
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onHorizontalDragEnd: (details) {
+        final v = details.primaryVelocity ?? 0;
+        if (v.abs() < 300) return;
+        if (v > 0) {
+          HapticFeedback.lightImpact();
+          ref.read(playerProvider.notifier).skipPrevious();
+        } else {
+          HapticFeedback.lightImpact();
+          ref.read(playerProvider.notifier).skipNext();
+        }
+      },
+      child: content,
+    );
   }
 
   Widget _buildScreenLayout(

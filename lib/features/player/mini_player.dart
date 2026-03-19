@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tayra/core/theme/app_theme.dart';
@@ -34,6 +35,18 @@ class MiniPlayer extends ConsumerWidget {
         if (details.primaryVelocity != null &&
             details.primaryVelocity! < -200) {
           context.push('/now-playing');
+        }
+      },
+      onHorizontalDragEnd: (details) {
+        final v = details.primaryVelocity ?? 0;
+        // Require a reasonably quick swipe to avoid accidental skips.
+        if (v.abs() < 300) return;
+        if (v > 0) {
+          HapticFeedback.lightImpact();
+          ref.read(playerProvider.notifier).skipPrevious();
+        } else {
+          HapticFeedback.lightImpact();
+          ref.read(playerProvider.notifier).skipNext();
         }
       },
       child: Container(
