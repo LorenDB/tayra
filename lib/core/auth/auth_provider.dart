@@ -134,6 +134,10 @@ final authStateListenerProvider = Provider<void>((ref) {
 });
 
 class AuthNotifier extends Notifier<AuthState> {
+  /// In-flight token refresh future. If a refresh is already in progress,
+  /// concurrent callers share this future instead of launching a second one.
+  Future<bool>? _refreshFuture;
+
   @override
   AuthState build() {
     Future.microtask(() => _loadSavedAuth());
@@ -186,8 +190,16 @@ class AuthNotifier extends Notifier<AuthState> {
       } else {
         state = const AuthState();
       }
-    } catch (_) {
-      // Ignore errors on initial load
+    } catch (e, stack) {
+      // A storage read failure is not the same as being logged out.
+      // Retrying is not meaningful here, but we should not silently treat
+      // a keystore/IO error as "no credentials". Log the error in debug
+      // mode and leave state as unauthenticated so the user can log in again
+      // rather than getting stuck on the splash screen.
+      assert(() {
+        debugPrint('AuthNotifier: error loading saved auth: $e\n$stack');
+        return true;
+      }());
       state = const AuthState();
     }
   }
@@ -279,7 +291,17 @@ class AuthNotifier extends Notifier<AuthState> {
   }
 
   /// Refresh the access token using the refresh token.
-  Future<bool> refreshToken() async {
+  ///
+  /// If a refresh is already in flight (e.g. from a concurrent 401), the
+  /// existing future is returned so that only one refresh request is made.
+  Future<bool> refreshToken() {
+    _refreshFuture ??= _doRefreshToken().whenComplete(() {
+      _refreshFuture = null;
+    });
+    return _refreshFuture!;
+  }
+
+  Future<bool> _doRefreshToken() async {
     if (state.refreshTokenValue == null) return false;
 
     try {
