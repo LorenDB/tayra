@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart' hide PlayerState;
@@ -136,6 +137,15 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
     } else {
       _shaderTicker?.stop();
       setState(() => _showGridEasterEgg = false);
+    }
+
+    // Provide immediate haptic feedback so the user feels the easter egg
+    // activation. Use a light impact which is subtle but noticeable on
+    // supported devices.
+    try {
+      HapticFeedback.lightImpact();
+    } catch (_) {
+      // Ignore haptic failures on platforms that don't support it.
     }
   }
 
