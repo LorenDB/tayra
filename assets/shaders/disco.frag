@@ -41,20 +41,29 @@ void main() {
     vec2 fragCoord = FlutterFragCoord().xy;
 
     // === Tunable parameters ===
-    const float CELL_SIZE    = 12.0;  // px per mirror tile
+    // Default target tile size in pixels. We'll scale this to exactly fit the
+    // containing image by computing an integer number of cells per axis so
+    // there are no partial cells at the edges.
+    const float CELL_SIZE    = 12.0;  // px per mirror tile (target)
     const float GAP          = 1.0;   // dark gap width (px)
     const float GLARE_RADIUS = 2.5;   // spill in cell-units (5×5 neighborhood)
     const float GLARE_GAIN   = 0.55;  // additive glare strength over the image
     const float RAINBOW_MIX  = 0.18;  // subtle rainbow tint — glints are mostly white
 
     // ── Which cell does this fragment live in? ───────────────────────────────
-    vec2 cell  = floor(fragCoord / CELL_SIZE);
-    vec2 local = mod(fragCoord, CELL_SIZE);
+    // Compute an integer number of cells that fit exactly into the image
+    // bounds so we never end up with partial cells at the edges. We pick the
+    // largest integer cell count that doesn't exceed the target CELL_SIZE.
+    vec2 cellCount = max(vec2(1.0), floor(uResolution / CELL_SIZE));
+    vec2 cellSize  = uResolution / cellCount; // actual per-axis cell size
+
+    vec2 cell  = floor(fragCoord / cellSize);
+    vec2 local = mod(fragCoord, cellSize);
 
     bool inGap = any(lessThan(local, vec2(GAP)));
 
     // ── Sample base texture at this cell's center ────────────────────────────
-    vec2 sampleUV = (cell + 0.5) * CELL_SIZE / uResolution;
+    vec2 sampleUV = (cell + vec2(0.5)) * cellSize / uResolution;
     vec4 tex = texture(uTexture, sampleUV);
 
     // ── Accumulate glare from neighbouring cells ─────────────────────────────
@@ -64,7 +73,7 @@ void main() {
     vec3  colorAcc  = vec3(0.0);
 
     // Fragment position in cell-space (so distances are in cell units)
-    vec2 fragInCells = fragCoord / CELL_SIZE;
+    vec2 fragInCells = fragCoord / cellSize;
 
     const int RADIUS = 2;  // sample ±2 cells → 5×5 = 25 taps
     for (int dy = -RADIUS; dy <= RADIUS; dy++) {
