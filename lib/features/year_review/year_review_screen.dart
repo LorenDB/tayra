@@ -81,7 +81,7 @@ class _YearReviewScreenState extends ConsumerState<YearReviewScreen>
               child: CircularProgressIndicator(color: AppTheme.primary),
             ),
         error:
-            (error, _) => Center(
+            (error, stack) => Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -91,11 +91,16 @@ class _YearReviewScreenState extends ConsumerState<YearReviewScreen>
                     size: 48,
                   ),
                   const SizedBox(height: 16),
-                  Text(
-                    'Could not load review data',
-                    style: const TextStyle(
-                      color: AppTheme.onBackgroundMuted,
-                      fontSize: 16,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Text(
+                      // Surface the actual error message to help debugging.
+                      error.toString(),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: AppTheme.onBackgroundMuted,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 8),
