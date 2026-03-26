@@ -101,6 +101,26 @@ double _relativeLuminance(Color color) {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
 
+/// Ensures [color] meets WCAG AA contrast (4.5:1) against a black background,
+/// which is required for body text and small icons.
+///
+/// If the color is already bright enough it is returned unchanged. Otherwise
+/// the HSL lightness is increased in small steps until the threshold is met,
+/// preserving the original hue and saturation so the color family stays the
+/// same. Passing [minimumContrast] lets callers override the target ratio
+/// (e.g. 3.0 for large/bold text, 4.5 for normal text, 7.0 for AAA).
+Color lightenForText(Color color, {double minimumContrast = 4.5}) {
+  const double lightnessStep = 0.02;
+  var hsl = HSLColor.fromColor(color);
+
+  while (_contrastOnBlack(hsl.toColor()) < minimumContrast &&
+      hsl.lightness < 1.0) {
+    hsl = hsl.withLightness((hsl.lightness + lightnessStep).clamp(0.0, 1.0));
+  }
+
+  return hsl.toColor();
+}
+
 @Deprecated('Use paletteColorsProvider instead')
 final dominantColorProvider = FutureProvider.family<Color, String?>((
   ref,
