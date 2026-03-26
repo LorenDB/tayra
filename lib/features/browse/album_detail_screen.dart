@@ -16,6 +16,7 @@ import 'package:tayra/core/widgets/tag_chip_list.dart';
 import 'package:tayra/core/widgets/track_list_tile.dart';
 import 'package:tayra/core/cache/download_queue_service.dart';
 import 'package:tayra/features/player/player_provider.dart';
+import 'package:tayra/features/playlists/add_to_playlist_sheet.dart';
 
 // ── Providers ───────────────────────────────────────────────────────────
 
@@ -344,6 +345,30 @@ class _AlbumHeader extends ConsumerWidget {
       }
     }
 
+    Future<void> addAlbumToPlaylist() async {
+      try {
+        // Ensure full track list is available before opening the sheet
+        final tracks = await ref.read(_albumTracksProvider(album.id).future);
+        final trackIds = tracks.map((t) => t.id).toList();
+        if (trackIds.isEmpty) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('No tracks to add')));
+          }
+          return;
+        }
+        showAddToPlaylistSheet(context, ref, trackIds: trackIds);
+      } catch (e) {
+        debugPrint('Failed to open add-to-playlist sheet: $e');
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Failed to add album to playlist')),
+          );
+        }
+      }
+    }
+
     return Stack(
       children: [
         // ── Gradient glow background ──
@@ -371,6 +396,7 @@ class _AlbumHeader extends ConsumerWidget {
             color: AppTheme.surfaceContainer,
             onSelected: (value) {
               if (value == 'download') toggleDownload();
+              if (value == 'add_playlist') addAlbumToPlaylist();
             },
             itemBuilder:
                 (_) => [
@@ -389,6 +415,23 @@ class _AlbumHeader extends ConsumerWidget {
                         Text(
                           isManual ? 'Remove download' : 'Download',
                           style: const TextStyle(color: AppTheme.onBackground),
+                        ),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: 'add_playlist',
+                    child: Row(
+                      children: const [
+                        Icon(
+                          Icons.playlist_add_rounded,
+                          size: 20,
+                          color: AppTheme.onBackground,
+                        ),
+                        SizedBox(width: 12),
+                        Text(
+                          'Add to playlist',
+                          style: TextStyle(color: AppTheme.onBackground),
                         ),
                       ],
                     ),
