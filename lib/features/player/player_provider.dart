@@ -694,7 +694,7 @@ Future<FunkwhaleAudioHandler> initAudioHandler() async {
     config: AudioServiceConfig(
       androidNotificationChannelId: 'dev.lorendb.tayra.player',
       androidNotificationChannelName: 'Tayra Playback',
-      androidNotificationOngoing: true,
+      androidNotificationOngoing: false,
       androidStopForegroundOnPause: true,
       androidNotificationIcon: 'mipmap/ic_launcher',
       androidBrowsableRootExtras: {
