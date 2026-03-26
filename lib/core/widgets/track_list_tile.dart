@@ -22,6 +22,12 @@ class TrackListTile extends ConsumerWidget {
   final Widget? trailing;
   final Color? dominantColor;
 
+  /// Lightened variant of [dominantColor] that meets WCAG AA contrast against
+  /// the dark background. Used for text and small icons. When omitted it falls
+  /// back to [dominantColor] (or [AppTheme.primary]) — callers that pass
+  /// [dominantColor] should also pass this.
+  final Color? textColor;
+
   const TrackListTile({
     super.key,
     required this.track,
@@ -30,6 +36,7 @@ class TrackListTile extends ConsumerWidget {
     this.showTrackNumber = false,
     this.trailing,
     this.dominantColor,
+    this.textColor,
   });
 
   @override
@@ -57,7 +64,7 @@ class TrackListTile extends ConsumerWidget {
                     style: TextStyle(
                       color:
                           isCurrentTrack
-                              ? dominantColor ?? AppTheme.primary
+                              ? textColor ?? dominantColor ?? AppTheme.primary
                               : AppTheme.onBackgroundSubtle,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
@@ -83,7 +90,7 @@ class TrackListTile extends ConsumerWidget {
                       style: TextStyle(
                         color:
                             isCurrentTrack
-                                ? dominantColor ?? AppTheme.primary
+                                ? textColor ?? dominantColor ?? AppTheme.primary
                                 : AppTheme.onBackground,
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
@@ -97,7 +104,9 @@ class TrackListTile extends ConsumerWidget {
                       style: TextStyle(
                         color:
                             isCurrentTrack
-                                ? (dominantColor ?? AppTheme.primary)
+                                ? (textColor ??
+                                        dominantColor ??
+                                        AppTheme.primary)
                                     .withValues(alpha: 0.8)
                                 : AppTheme.onBackgroundMuted,
                         fontSize: 12,
@@ -136,7 +145,9 @@ class TrackListTile extends ConsumerWidget {
                           size: 18,
                           color:
                               isManual
-                                  ? (dominantColor ?? AppTheme.primary)
+                                  ? (textColor ??
+                                      dominantColor ??
+                                      AppTheme.primary)
                                   : AppTheme.onBackgroundSubtle,
                         );
                       },

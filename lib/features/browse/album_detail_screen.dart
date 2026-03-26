@@ -102,6 +102,11 @@ class AlbumDetailScreen extends ConsumerWidget {
             data: (color) => color,
             orElse: () => AppTheme.primary,
           );
+          // Text-safe variant: same hue/saturation but lightened enough to
+          // meet WCAG AA (4.5:1) against the AMOLED black background. Used
+          // for text, small icons, and outlined-button foregrounds where the
+          // accent color itself may be too dark to read.
+          final textColor = lightenForText(dominantColor);
 
           return RefreshIndicator(
             color: dominantColor,
@@ -115,6 +120,7 @@ class AlbumDetailScreen extends ConsumerWidget {
               album: album,
               tracksAsync: tracksAsync,
               dominantColor: dominantColor,
+              textColor: textColor,
             ),
           );
         },
@@ -129,11 +135,13 @@ class _AlbumDetailBody extends ConsumerWidget {
   final Album album;
   final AsyncValue<List<Track>> tracksAsync;
   final Color dominantColor;
+  final Color textColor;
 
   const _AlbumDetailBody({
     required this.album,
     required this.tracksAsync,
     required this.dominantColor,
+    required this.textColor,
   });
 
   @override
@@ -157,6 +165,7 @@ class _AlbumDetailBody extends ConsumerWidget {
                 (tracks) => _AlbumInfo(
                   album: album,
                   dominantColor: dominantColor,
+                  textColor: textColor,
                   totalDuration: tracks.fold<int>(
                     0,
                     (sum, track) => sum + (track.duration ?? 0),
@@ -173,6 +182,7 @@ class _AlbumDetailBody extends ConsumerWidget {
             album: album,
             tracksAsync: tracksAsync,
             dominantColor: dominantColor,
+            textColor: textColor,
           ),
         ),
 
@@ -228,6 +238,7 @@ class _AlbumDetailBody extends ConsumerWidget {
                   showTrackNumber: true,
                   showAlbumArt: false,
                   dominantColor: dominantColor,
+                  textColor: textColor,
                   onTap: () {
                     ref
                         .read(playerProvider.notifier)
@@ -422,11 +433,13 @@ class _AlbumInfo extends StatelessWidget {
   final Album album;
   final int? totalDuration;
   final Color? dominantColor;
+  final Color? textColor;
 
   const _AlbumInfo({
     required this.album,
     this.totalDuration,
     this.dominantColor,
+    this.textColor,
   });
 
   @override
@@ -465,7 +478,7 @@ class _AlbumInfo extends StatelessWidget {
               child: Text(
                 album.artist!.name,
                 style: TextStyle(
-                  color: dominantColor ?? AppTheme.primary,
+                  color: textColor ?? dominantColor ?? AppTheme.primary,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                 ),
@@ -527,11 +540,13 @@ class _ActionButtons extends ConsumerWidget {
   final Album album;
   final AsyncValue<List<Track>> tracksAsync;
   final Color dominantColor;
+  final Color textColor;
 
   const _ActionButtons({
     required this.album,
     required this.tracksAsync,
     required this.dominantColor,
+    required this.textColor,
   });
 
   @override
@@ -596,14 +611,14 @@ class _ActionButtons extends ConsumerWidget {
                 style: OutlinedButton.styleFrom(
                   foregroundColor:
                       tracks.isNotEmpty
-                          ? dominantColor
+                          ? textColor
                           : AppTheme.onBackgroundSubtle.withValues(alpha: 0.4),
                   disabledForegroundColor: AppTheme.onBackgroundSubtle
                       .withValues(alpha: 0.4),
                   side: BorderSide(
                     color:
                         tracks.isNotEmpty
-                            ? dominantColor
+                            ? textColor
                             : AppTheme.onBackgroundSubtle.withValues(
                               alpha: 0.3,
                             ),
