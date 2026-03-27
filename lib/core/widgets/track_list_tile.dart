@@ -17,6 +17,7 @@ import 'package:tayra/core/cache/cache_manager.dart';
 class TrackListTile extends ConsumerWidget {
   final Track track;
   final VoidCallback? onTap;
+  final Future<void> Function()? onRemoveFromPlaylist;
   final bool showAlbumArt;
   final bool showTrackNumber;
   final Widget? trailing;
@@ -35,6 +36,7 @@ class TrackListTile extends ConsumerWidget {
     this.showAlbumArt = true,
     this.showTrackNumber = false,
     this.trailing,
+    this.onRemoveFromPlaylist,
     this.dominantColor,
     this.textColor,
   });
@@ -160,7 +162,10 @@ class TrackListTile extends ConsumerWidget {
                 ),
               ),
               const SizedBox(width: 4),
-              _TrackMenuButton(track: track),
+              _TrackMenuButton(
+                track: track,
+                onRemoveFromPlaylist: onRemoveFromPlaylist,
+              ),
             ],
           ),
         ),
@@ -171,8 +176,9 @@ class TrackListTile extends ConsumerWidget {
 
 class _TrackMenuButton extends ConsumerWidget {
   final Track track;
+  final Future<void> Function()? onRemoveFromPlaylist;
 
-  const _TrackMenuButton({required this.track});
+  const _TrackMenuButton({required this.track, this.onRemoveFromPlaylist});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -293,6 +299,15 @@ class _TrackMenuButton extends ConsumerWidget {
               );
             }
             break;
+          case 'remove_from_playlist':
+            if (onRemoveFromPlaylist != null) {
+              try {
+                await onRemoveFromPlaylist!();
+              } catch (e) {
+                debugPrint('Remove from playlist action failed: $e');
+              }
+            }
+            break;
         }
       },
       itemBuilder:
@@ -393,6 +408,21 @@ class _TrackMenuButton extends ConsumerWidget {
                 ],
               ),
             ),
+            if (onRemoveFromPlaylist != null)
+              PopupMenuItem(
+                value: 'remove_from_playlist',
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.remove_circle_outline,
+                      size: 20,
+                      color: AppTheme.error,
+                    ),
+                    const SizedBox(width: 12),
+                    const Text('Remove from playlist'),
+                  ],
+                ),
+              ),
           ],
     );
   }

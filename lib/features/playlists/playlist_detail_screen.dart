@@ -12,6 +12,7 @@ import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/track_list_tile.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/player/player_provider.dart';
+import 'package:tayra/features/playlists/playlists_screen.dart';
 
 class PlaylistDetailScreen extends ConsumerStatefulWidget {
   final int playlistId;
@@ -33,6 +34,75 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
   void initState() {
     super.initState();
     _loadData();
+  }
+
+  Future<void> _confirmRemoveTrack(
+    BuildContext context,
+    int playlistId,
+    int listIndex,
+  ) async {
+    if (!context.mounted) return;
+
+    final ok = await showDialog<bool>(
+      context: context,
+      builder:
+          (ctx) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            title: const Text(
+              'Remove track',
+              style: TextStyle(
+                color: AppTheme.onBackground,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            content: const Text(
+              'Remove this track from the playlist?',
+              style: TextStyle(color: AppTheme.onBackgroundMuted),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(color: AppTheme.onBackgroundMuted),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: const Text(
+                  'Remove',
+                  style: TextStyle(color: AppTheme.error),
+                ),
+              ),
+            ],
+          ),
+    );
+
+    if (ok != true) return;
+    if (!context.mounted) return;
+
+    // Optimistic UI update: remove locally then call API.
+    final removed = _playlistTracks.removeAt(listIndex);
+    setState(() {});
+    try {
+      final api = ref.read(cachedFunkwhaleApiProvider);
+      // Funkwhale v1.4.0: remove by list position (0-based)
+      await api.removeTrackFromPlaylist(playlistId, listIndex);
+      // Invalidate playlist metadata so counts update elsewhere.
+      ref.invalidate(playlistsProvider);
+    } catch (e) {
+      // Revert on error
+      _playlistTracks.insert(listIndex, removed);
+      setState(() {});
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Failed to remove track')));
+      }
+    }
   }
 
   Future<void> _loadData() async {
@@ -59,9 +129,10 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
       final playlist = results[0] as Playlist;
       final allTracks = results[1] as List<PlaylistTrack>;
 
-      // Sort by playlist index so tracks appear in the correct order.
-      allTracks.sort((a, b) => (a.index ?? 0).compareTo(b.index ?? 0));
-
+      // Trust server-returned order (same approach as the official Android client).
+      for (var i = 0; i < allTracks.length; i++) {
+        final pt = allTracks[i];
+      }
       if (!mounted) return;
 
       setState(() {
@@ -345,6 +416,12 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                 return TrackListTile(
                   track: playlistTrack.track,
                   onTap: () => _playFromIndex(index),
+                  // Provide a callback so the per-track popup menu can show
+                  // "Remove from playlist" and delegate confirmation +
+                  // removal to this screen (which owns the list state).
+                  onRemoveFromPlaylist: () async {
+                    await _confirmRemoveTrack(context, playlist.id, index);
+                  },
                 );
               }, childCount: _playlistTracks.length),
             ),

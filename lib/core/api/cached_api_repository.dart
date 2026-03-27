@@ -572,6 +572,11 @@ class CachedFunkwhaleApi {
     await _cache.deleteMetadata('playlist_$playlistId');
   }
 
+  Future<void> removeTrackFromPlaylist(int playlistId, int index) async {
+    await _api.removeTrackFromPlaylist(playlistId, index);
+    await _cache.deleteMetadata('playlist_$playlistId');
+  }
+
   Future<void> deletePlaylist(int id) async {
     await _api.deletePlaylist(id);
     await _cache.deleteMetadata('playlist_$id');
