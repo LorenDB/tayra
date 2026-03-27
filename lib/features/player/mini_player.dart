@@ -19,7 +19,9 @@ class MiniPlayer extends ConsumerWidget {
     if (track == null) return const SizedBox.shrink();
 
     final imageUrl = track.coverUrl;
-    final paletteAsync = ref.watch(paletteColorsProvider(imageUrl));
+    final paletteAsync = ref.watch(
+      paletteColorsProvider(encodePaletteKey(imageUrl, track.album?.coverUrl)),
+    );
     final accentColor = paletteAsync.maybeWhen(
       data: (color) => color,
       orElse: () => AppTheme.primary,

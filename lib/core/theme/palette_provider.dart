@@ -5,14 +5,39 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 
+/// Encode/decode helper for the provider family key.
+/// Format: "<imageUrl>|||<cacheKey>". Both parts may be empty.
+String encodePaletteKey(String? imageUrl, String? cacheKey) {
+  final u = imageUrl ?? '';
+  final k = cacheKey ?? '';
+  return '$u|||$k';
+}
+
+String? _decImageUrl(String? encoded) {
+  if (encoded == null || encoded.isEmpty) return null;
+  final parts = encoded.split('|||');
+  return parts.isNotEmpty && parts[0].isNotEmpty ? parts[0] : null;
+}
+
+String? _decCacheKey(String? encoded) {
+  if (encoded == null || encoded.isEmpty) return null;
+  final parts = encoded.split('|||');
+  return parts.length > 1 && parts[1].isNotEmpty ? parts[1] : null;
+}
+
 final paletteColorsProvider = FutureProvider.family<Color, String?>((
   ref,
-  imageUrl,
+  encodedKey,
 ) async {
+  final imageUrl = _decImageUrl(encodedKey);
+  final cacheKey = _decCacheKey(encodedKey);
   if (imageUrl == null || imageUrl.isEmpty) return AppTheme.primary;
 
   try {
-    final imageProvider = CachedNetworkImageProvider(imageUrl);
+    final imageProvider = CachedNetworkImageProvider(
+      imageUrl,
+      cacheKey: cacheKey,
+    );
     final palette = await PaletteGenerator.fromImageProvider(
       imageProvider,
       size: const ui.Size(100, 100),

@@ -98,7 +98,11 @@ class AlbumDetailScreen extends ConsumerWidget {
             ),
         data: (album) {
           final imageUrl = album.largeCoverUrl ?? album.coverUrl;
-          final paletteAsync = ref.watch(paletteColorsProvider(imageUrl));
+          // Use an encoded key that includes the preferred cache key which
+          // allows the palette generator to reuse the cached image bytes.
+          final paletteAsync = ref.watch(
+            paletteColorsProvider(encodePaletteKey(imageUrl, album.coverUrl)),
+          );
           final dominantColor = paletteAsync.maybeWhen(
             data: (color) => color,
             orElse: () => AppTheme.primary,
@@ -459,6 +463,11 @@ class _AlbumHeader extends ConsumerWidget {
               ),
               child: CoverArtWidget(
                 imageUrl: album.largeCoverUrl ?? album.coverUrl,
+                // If a smaller cover was already cached (albums list), prefer
+                // that cache entry so the detail page can show the image
+                // immediately even when a different (larger) URL is used by
+                // the server.
+                cacheKey: album.coverUrl,
                 size: artSize,
                 borderRadius: 12,
               ),

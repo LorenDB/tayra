@@ -192,7 +192,9 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
 
     final imageUrl = track.largeCoverUrl ?? track.coverUrl;
 
-    final paletteAsync = ref.watch(paletteColorsProvider(imageUrl));
+    final paletteAsync = ref.watch(
+      paletteColorsProvider(encodePaletteKey(imageUrl, track.album?.coverUrl)),
+    );
     final glowColor = paletteAsync.maybeWhen(
       data: (color) => color,
       orElse: () => AppTheme.primary,

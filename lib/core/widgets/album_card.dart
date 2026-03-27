@@ -54,6 +54,10 @@ class AlbumCard extends StatelessWidget {
                 children: [
                   CoverArtWidget(
                     imageUrl: album.coverUrl,
+                    // Provide a stable cacheKey (same as imageUrl) so when
+                    // a detail view requests a different size URL the
+                    // cached entry can still be reused.
+                    cacheKey: album.coverUrl,
                     size: artSize,
                     borderRadius: 10,
                     shadow: BoxShadow(
