@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/api/api_client.dart';
 import 'package:tayra/core/api/models.dart';
@@ -225,6 +226,30 @@ class FunkwhaleApi {
       '$_baseUrl/api/v1/playlists/$playlistId/add/',
       data: {'tracks': trackIds, 'allow_duplicates': false},
     );
+  }
+
+  /// Remove a track from a playlist by its playlist position index.
+  ///
+  /// Funkwhale v1.4.0 removes by index: POST /api/v1/playlists/{id}/remove/
+  /// with body {"index": <int>}. The schema.yml incorrectly references
+  /// PlaylistRequest for this body, but the actual implementation uses index.
+  Future<void> removeTrackFromPlaylist(int playlistId, int index) async {
+    final url = '$_baseUrl/api/v1/playlists/$playlistId/remove/';
+
+    try {
+      // Ensure we send JSON content-type (matches the official client/curl)
+      // and do not throw on non-2xx status codes (match Fuel/.awaitByteArrayResponseResult)
+      final response = await _dio.post(
+        url,
+        data: {'index': index},
+        options: Options(
+          contentType: Headers.jsonContentType,
+          validateStatus: (_) => true,
+        ),
+      );
+    } on DioException catch (err) {
+      rethrow;
+    }
   }
 
   Future<void> deletePlaylist(int id) async {
