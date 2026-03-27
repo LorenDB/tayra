@@ -10,6 +10,11 @@ class CoverArtWidget extends StatelessWidget {
   final IconData placeholderIcon;
   final BoxShadow? shadow;
 
+  /// Optional cache key to force using an alternative cache entry
+  /// (useful when the detail view requests a larger URL but a smaller
+  /// version was already cached under a different URL).
+  final String? cacheKey;
+
   const CoverArtWidget({
     super.key,
     this.imageUrl,
@@ -17,6 +22,7 @@ class CoverArtWidget extends StatelessWidget {
     this.borderRadius = 8,
     this.placeholderIcon = Icons.album,
     this.shadow,
+    this.cacheKey,
   });
 
   @override
@@ -32,16 +38,23 @@ class CoverArtWidget extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child:
           imageUrl != null && imageUrl!.isNotEmpty
-              ? CachedNetworkImage(
-                imageUrl: imageUrl!,
+              ? Image(
+                image: CachedNetworkImageProvider(
+                  imageUrl!,
+                  cacheKey: cacheKey,
+                ),
                 fit: BoxFit.cover,
                 width: size,
                 height: size,
-                placeholder:
-                    (context, url) =>
-                        _Placeholder(size: size, icon: placeholderIcon),
-                errorWidget:
-                    (context, url, error) =>
+                // Show placeholder until the first image frame is available.
+                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                  if (frame == null && !wasSynchronouslyLoaded) {
+                    return _Placeholder(size: size, icon: placeholderIcon);
+                  }
+                  return child;
+                },
+                errorBuilder:
+                    (context, error, stackTrace) =>
                         _Placeholder(size: size, icon: placeholderIcon),
               )
               : _Placeholder(size: size, icon: placeholderIcon),

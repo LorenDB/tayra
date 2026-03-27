@@ -77,6 +77,7 @@ class TrackListTile extends ConsumerWidget {
               if (showAlbumArt) ...[
                 CoverArtWidget(
                   imageUrl: track.coverUrl,
+                  cacheKey: track.album?.coverUrl ?? track.coverUrl,
                   size: 48,
                   borderRadius: 6,
                 ),

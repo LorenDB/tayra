@@ -189,6 +189,7 @@ class _ArtistHeader extends StatelessWidget {
             left: (screenWidth - imageSize) / 2,
             child: CoverArtWidget(
               imageUrl: artist.coverUrl,
+              cacheKey: artist.coverUrl,
               size: imageSize,
               borderRadius: imageSize / 2,
               placeholderIcon: Icons.person,
@@ -303,6 +304,7 @@ class _AlbumListItem extends StatelessWidget {
             children: [
               CoverArtWidget(
                 imageUrl: album.coverUrl,
+                cacheKey: album.coverUrl,
                 size: 64,
                 borderRadius: 8,
               ),
