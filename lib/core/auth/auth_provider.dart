@@ -35,6 +35,12 @@ class AuthState {
   final bool isCheckingAuth;
   final String? error;
 
+  /// When the app is logged out automatically (e.g. token refresh failed), this
+  /// holds the server URL the user was previously connected to. The login screen
+  /// uses this to pre-populate the server field and to detect a same-server
+  /// re-login so cached data can be preserved.
+  final String? pendingServerUrl;
+
   const AuthState({
     this.serverUrl,
     this.accessToken,
@@ -44,9 +50,14 @@ class AuthState {
     this.isLoading = false,
     this.isCheckingAuth = false,
     this.error,
+    this.pendingServerUrl,
   });
 
   bool get isAuthenticated => accessToken != null && serverUrl != null;
+
+  /// True when the user was automatically logged out and still needs to
+  /// re-authenticate (as opposed to having deliberately logged out).
+  bool get wasAutoLoggedOut => pendingServerUrl != null;
 
   AuthState copyWith({
     String? serverUrl,
@@ -57,6 +68,8 @@ class AuthState {
     bool? isLoading,
     bool? isCheckingAuth,
     String? error,
+    String? pendingServerUrl,
+    bool clearPendingServerUrl = false,
   }) {
     return AuthState(
       serverUrl: serverUrl ?? this.serverUrl,
@@ -67,6 +80,10 @@ class AuthState {
       isLoading: isLoading ?? this.isLoading,
       isCheckingAuth: isCheckingAuth ?? this.isCheckingAuth,
       error: error,
+      pendingServerUrl:
+          clearPendingServerUrl
+              ? null
+              : (pendingServerUrl ?? this.pendingServerUrl),
     );
   }
 }
@@ -273,10 +290,20 @@ class AuthNotifier extends Notifier<AuthState> {
       final accessToken = response.data['access_token'] as String;
       final refreshToken = response.data['refresh_token'] as String?;
 
+      // If we were auto-logged-out and the user is signing into a different
+      // server, clear the stale cache from the previous server before
+      // completing the new login.
+      final pendingServer = state.pendingServerUrl;
+      final newServer = state.serverUrl;
+      if (pendingServer != null && pendingServer != newServer) {
+        await _clearAllUserData();
+      }
+
       state = state.copyWith(
         accessToken: accessToken,
         refreshTokenValue: refreshToken,
         isLoading: false,
+        clearPendingServerUrl: true,
       );
 
       await _saveAuth();
@@ -332,6 +359,7 @@ class AuthNotifier extends Notifier<AuthState> {
     }
   }
 
+  /// Manual logout triggered by the user. Clears all cached data immediately.
   Future<void> logout() async {
     await _clearAllUserData();
     final prefs = await SharedPreferences.getInstance();
@@ -341,6 +369,22 @@ class AuthNotifier extends Notifier<AuthState> {
     await _storage.delete(key: _keyClientId);
     await _storage.delete(key: _keyClientSecret);
     state = const AuthState();
+  }
+
+  /// Automatic logout triggered by the system (e.g. token refresh failure).
+  ///
+  /// Unlike [logout], this preserves all cached data and remembers the server
+  /// URL so that re-authenticating to the same server can resume seamlessly
+  /// without discarding the cache.
+  Future<void> logoutAutomatically() async {
+    final previousServerUrl = state.serverUrl;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_keyServerUrl);
+    await _storage.delete(key: _keyAccessToken);
+    await _storage.delete(key: _keyRefreshToken);
+    await _storage.delete(key: _keyClientId);
+    await _storage.delete(key: _keyClientSecret);
+    state = AuthState(pendingServerUrl: previousServerUrl);
   }
 
   Future<void> _clearAllUserData() async {

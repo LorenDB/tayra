@@ -16,6 +16,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _serverController = TextEditingController();
   final _codeController = TextEditingController();
   int _step = 0; // 0 = server URL, 1 = auth code
+  bool _initializedFromAutoLogout = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Pre-populate the server URL field when the user was auto-logged-out.
+    // Only do this once on first build so we don't overwrite anything the user
+    // has typed.
+    if (!_initializedFromAutoLogout) {
+      final authState = ref.read(authStateProvider);
+      if (authState.wasAutoLoggedOut && authState.pendingServerUrl != null) {
+        _serverController.text = authState.pendingServerUrl!;
+        _initializedFromAutoLogout = true;
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -50,7 +66,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const SizedBox(height: 48),
 
                 if (_step == 0) ...[
-                  // Step 1: Server URL
+                  // Auto-logout notice — shown when the session expired
+                  if (authState.wasAutoLoggedOut) ...[
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: AppTheme.surfaceContainerHigh,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        'Your session expired. Sign back in to continue where you left off.',
+                        style: textTheme.bodySmall,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
                   TextField(
                     controller: _serverController,
                     decoration: const InputDecoration(
