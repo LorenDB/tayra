@@ -129,7 +129,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
   }
 
   Future<void> _onRefresh() async {
-    await _loadFavorites();
+    await _loadFavorites(forceRefresh: true);
     ref.read(favoriteTrackIdsProvider.notifier).refresh();
   }
 

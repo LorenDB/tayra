@@ -37,6 +37,16 @@ class _ArtistsScreenState extends ConsumerState<ArtistsScreen>
   void invalidatePage(int page) => ref.invalidate(artistsPageProvider(page));
 
   @override
+  Future<void> forceRefreshPage(int page) => ref
+      .read(cachedFunkwhaleApiProvider)
+      .getArtists(
+        page: page,
+        pageSize: 30,
+        ordering: 'name',
+        forceRefresh: true,
+      );
+
+  @override
   Widget build(BuildContext context) {
     final firstPage = ref.watch(artistsPageProvider(1));
 

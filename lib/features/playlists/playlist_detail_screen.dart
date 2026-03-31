@@ -105,23 +105,27 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
     }
   }
 
-  Future<void> _loadData() async {
-    setState(() {
-      _isLoading = true;
-      _error = null;
-    });
+  Future<void> _loadData({bool forceRefresh = false}) async {
+    // Only show the full loading skeleton on first load (no data yet).
+    if (_playlist == null) {
+      setState(() {
+        _isLoading = true;
+        _error = null;
+      });
+    }
 
     try {
       final api = ref.read(cachedFunkwhaleApiProvider);
 
       // Fetch playlist metadata and all track pages in parallel.
       final results = await Future.wait([
-        api.getPlaylist(widget.playlistId),
+        api.getPlaylist(widget.playlistId, forceRefresh: forceRefresh),
         fetchAllPages(
           (page) => api.getPlaylistTracks(
             widget.playlistId,
             page: page,
             pageSize: 100,
+            forceRefresh: forceRefresh,
           ),
         ),
       ]);
@@ -129,23 +133,31 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
       final playlist = results[0] as Playlist;
       final allTracks = results[1] as List<PlaylistTrack>;
 
-      // Trust server-returned order (same approach as the official Android client).
-      for (var i = 0; i < allTracks.length; i++) {
-        final pt = allTracks[i];
-      }
       if (!mounted) return;
 
       setState(() {
         _playlist = playlist;
         _playlistTracks = allTracks;
         _isLoading = false;
+        _error = null;
       });
     } catch (e) {
       if (!mounted) return;
-      setState(() {
-        _error = 'Failed to load playlist';
-        _isLoading = false;
-      });
+      // If we already have data loaded (e.g. pull-to-refresh failed), keep
+      // showing it rather than replacing the screen with an error state.
+      if (_playlist != null) {
+        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Could not refresh — showing cached data'),
+          ),
+        );
+      } else {
+        setState(() {
+          _error = 'Failed to load playlist';
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -219,7 +231,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
     return RefreshIndicator(
       color: AppTheme.primary,
       backgroundColor: AppTheme.surfaceContainer,
-      onRefresh: _loadData,
+      onRefresh: () => _loadData(forceRefresh: true),
       child: CustomScrollView(
         physics: const BouncingScrollPhysics(
           parent: AlwaysScrollableScrollPhysics(),

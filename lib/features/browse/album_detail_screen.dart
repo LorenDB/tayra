@@ -117,6 +117,21 @@ class AlbumDetailScreen extends ConsumerWidget {
             color: dominantColor,
             backgroundColor: AppTheme.surfaceContainer,
             onRefresh: () async {
+              final api = ref.read(cachedFunkwhaleApiProvider);
+              try {
+                await Future.wait([
+                  api.getAlbum(albumId, forceRefresh: true),
+                  api.getTracks(
+                    album: albumId,
+                    ordering: 'position',
+                    pageSize: 100,
+                    forceRefresh: true,
+                  ),
+                ]);
+              } catch (_) {
+                // Network failure — proceed with invalidation so stale
+                // cached data is served rather than leaving the UI stale.
+              }
               ref.invalidate(_albumDetailProvider(albumId));
               ref.read(_albumTracksProvider(albumId).notifier).reload();
               await ref.read(_albumDetailProvider(albumId).future);

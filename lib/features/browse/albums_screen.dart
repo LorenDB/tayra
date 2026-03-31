@@ -38,6 +38,16 @@ class _AlbumsScreenState extends ConsumerState<AlbumsScreen>
   void invalidatePage(int page) => ref.invalidate(albumsPageProvider(page));
 
   @override
+  Future<void> forceRefreshPage(int page) => ref
+      .read(cachedFunkwhaleApiProvider)
+      .getAlbums(
+        page: page,
+        pageSize: 30,
+        ordering: 'title',
+        forceRefresh: true,
+      );
+
+  @override
   Widget build(BuildContext context) {
     final firstPage = ref.watch(albumsPageProvider(1));
 

@@ -48,6 +48,10 @@ class ArtistDetailScreen extends ConsumerWidget {
               color: AppTheme.primary,
               backgroundColor: AppTheme.surfaceContainer,
               onRefresh: () async {
+                final api = ref.read(cachedFunkwhaleApiProvider);
+                try {
+                  await api.getArtist(artistId, forceRefresh: true);
+                } catch (_) {}
                 ref.invalidate(_artistDetailProvider(artistId));
                 await ref.read(_artistDetailProvider(artistId).future);
               },
