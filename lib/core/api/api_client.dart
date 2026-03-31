@@ -51,7 +51,7 @@ class AuthInterceptor extends Interceptor {
           return;
         } catch (e) {}
       } else {
-        await authNotifier.logout();
+        await authNotifier.logoutAutomatically();
       }
     }
     handler.next(err);
