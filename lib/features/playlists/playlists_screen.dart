@@ -76,7 +76,16 @@ class PlaylistsScreen extends ConsumerWidget {
           return RefreshIndicator(
             color: AppTheme.primary,
             backgroundColor: AppTheme.surfaceContainer,
-            onRefresh: () async => ref.invalidate(playlistsProvider),
+            onRefresh: () async {
+              final api = ref.read(cachedFunkwhaleApiProvider);
+              try {
+                await api.getPlaylists(scope: 'me', forceRefresh: true);
+              } catch (_) {
+                // If the network request fails, we still invalidate so the
+                // provider can serve stale cached data rather than hanging.
+              }
+              ref.invalidate(playlistsProvider);
+            },
             child: ListView.builder(
               physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics(),

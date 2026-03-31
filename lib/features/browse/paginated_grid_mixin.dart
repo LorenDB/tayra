@@ -35,6 +35,14 @@ mixin PaginatedGridMixin<T, W extends ConsumerStatefulWidget>
   /// Invalidate the provider for [page] so Riverpod refetches it.
   void invalidatePage(int page);
 
+  /// Override to bypass the metadata cache for [page] during pull-to-refresh.
+  ///
+  /// Called by [refresh] before [invalidatePage] + [fetchPage] so that fresh
+  /// data is written to the cache before the provider re-runs.  The default
+  /// implementation is a no-op; subclasses that use a cached API should
+  /// override this.
+  Future<void> forceRefreshPage(int page) async {}
+
   @override
   void initState() {
     super.initState();
@@ -91,6 +99,12 @@ mixin PaginatedGridMixin<T, W extends ConsumerStatefulWidget>
 
   /// Pull-to-refresh: re-fetch the first page and reset state.
   Future<void> refresh() async {
+    try {
+      await forceRefreshPage(1);
+    } catch (_) {
+      // Network failure — invalidate anyway so the provider serves stale
+      // cached data rather than hanging.
+    }
     invalidatePage(1);
     final result = await fetchPage(1);
     if (mounted) {
