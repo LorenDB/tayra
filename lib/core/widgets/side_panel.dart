@@ -67,7 +67,9 @@ class _QueuePanel extends StatelessWidget {
             ],
           ),
         ),
-        const Expanded(child: QueueScreen(showAppBar: false)),
+        Expanded(
+          child: QueueScreen(showAppBar: false, miniPlayerOnTap: onBack),
+        ),
       ],
     );
   }

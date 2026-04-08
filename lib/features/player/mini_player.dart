@@ -9,7 +9,11 @@ import 'package:tayra/features/player/player_provider.dart';
 
 /// Persistent mini-player bar shown above the bottom nav.
 class MiniPlayer extends ConsumerWidget {
-  const MiniPlayer({super.key});
+  /// Called when the user taps or swipes up on the mini-player.
+  /// If null, defaults to pushing the `/now-playing` route.
+  final VoidCallback? onTap;
+
+  const MiniPlayer({super.key, this.onTap});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,11 +36,11 @@ class MiniPlayer extends ConsumerWidget {
     );
 
     return GestureDetector(
-      onTap: () => context.push('/now-playing'),
+      onTap: () => onTap != null ? onTap!() : context.push('/now-playing'),
       onVerticalDragEnd: (details) {
         if (details.primaryVelocity != null &&
             details.primaryVelocity! < -200) {
-          context.push('/now-playing');
+          onTap != null ? onTap!() : context.push('/now-playing');
         }
       },
       onHorizontalDragEnd: (details) {
