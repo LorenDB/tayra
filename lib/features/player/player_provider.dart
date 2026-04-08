@@ -44,6 +44,7 @@ class _BrowseIds {
 
 class PlayerState {
   final List<Track> queue;
+  final List<Track> unshuffledQueue;
   final int currentIndex;
   final bool isPlaying;
   final Duration position;
@@ -55,6 +56,7 @@ class PlayerState {
 
   const PlayerState({
     this.queue = const [],
+    this.unshuffledQueue = const [],
     this.currentIndex = -1,
     this.isPlaying = false,
     this.position = Duration.zero,
@@ -80,6 +82,7 @@ class PlayerState {
 
   PlayerState copyWith({
     List<Track>? queue,
+    List<Track>? unshuffledQueue,
     int? currentIndex,
     bool? isPlaying,
     Duration? position,
@@ -92,6 +95,7 @@ class PlayerState {
   }) {
     return PlayerState(
       queue: queue ?? this.queue,
+      unshuffledQueue: unshuffledQueue ?? this.unshuffledQueue,
       currentIndex: currentIndex ?? this.currentIndex,
       isPlaying: isPlaying ?? this.isPlaying,
       position: position ?? this.position,
@@ -842,6 +846,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // Restore queue and playback state
       state = state.copyWith(
         queue: savedState.queue,
+        unshuffledQueue: savedState.unshuffledQueue,
         currentIndex: validIndex,
         isShuffled: savedState.isShuffled,
         loopMode: _parseLoopMode(savedState.loopMode),
@@ -874,6 +879,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
     await QueuePersistenceService.saveQueue(
       queue: state.queue,
+      unshuffledQueue: state.unshuffledQueue,
       currentIndex: state.currentIndex,
       position: state.position,
       isShuffled: state.isShuffled,
@@ -1573,14 +1579,33 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }
 
   void toggleShuffle() {
-    state = state.copyWith(isShuffled: !state.isShuffled);
-    if (state.isShuffled) {
+    if (!state.isShuffled) {
+      // Turning shuffle ON: save the original order, then shuffle
       final current = state.currentTrack;
       final newQueue = List<Track>.from(state.queue);
       if (current != null) newQueue.remove(current);
       newQueue.shuffle();
       if (current != null) newQueue.insert(0, current);
-      state = state.copyWith(queue: newQueue, currentIndex: 0);
+      state = state.copyWith(
+        isShuffled: true,
+        unshuffledQueue: List<Track>.from(state.queue),
+        queue: newQueue,
+        currentIndex: 0,
+      );
+    } else {
+      // Turning shuffle OFF: restore the original order, keeping current track
+      final current = state.currentTrack;
+      final restored = state.unshuffledQueue.isNotEmpty
+          ? List<Track>.from(state.unshuffledQueue)
+          : List<Track>.from(state.queue);
+      final newIndex =
+          current != null ? restored.indexOf(current) : state.currentIndex;
+      state = state.copyWith(
+        isShuffled: false,
+        unshuffledQueue: [],
+        queue: restored,
+        currentIndex: newIndex >= 0 ? newIndex : 0,
+      );
     }
     _saveQueue();
     Aptabase.instance.trackEvent('toggle_shuffle', {
