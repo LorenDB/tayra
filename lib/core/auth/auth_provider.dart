@@ -169,6 +169,11 @@ class AuthNotifier extends Notifier<AuthState> {
   static const _redirectUri = 'urn:ietf:wg:oauth:2.0:oob';
   static const _scopes = 'read write';
 
+  // On macOS the sandboxed Keychain requires a provisioning profile to persist
+  // items across launches, so we fall back to SharedPreferences for all auth
+  // fields on desktop. Android keeps using FlutterSecureStorage.
+  static bool get _useSecureStorage => Platform.isAndroid;
+
   Future<String> _getAppName() async {
     String deviceName;
     if (Platform.isAndroid) {
@@ -191,10 +196,22 @@ class AuthNotifier extends Notifier<AuthState> {
         return;
       }
 
-      final accessToken = await _storage.read(key: _keyAccessToken);
-      final refreshToken = await _storage.read(key: _keyRefreshToken);
-      final clientId = await _storage.read(key: _keyClientId);
-      final clientSecret = await _storage.read(key: _keyClientSecret);
+      final String? accessToken;
+      final String? refreshToken;
+      final String? clientId;
+      final String? clientSecret;
+
+      if (_useSecureStorage) {
+        accessToken = await _storage.read(key: _keyAccessToken);
+        refreshToken = await _storage.read(key: _keyRefreshToken);
+        clientId = await _storage.read(key: _keyClientId);
+        clientSecret = await _storage.read(key: _keyClientSecret);
+      } else {
+        accessToken = prefs.getString(_keyAccessToken);
+        refreshToken = prefs.getString(_keyRefreshToken);
+        clientId = prefs.getString(_keyClientId);
+        clientSecret = prefs.getString(_keyClientSecret);
+      }
 
       if (accessToken != null) {
         state = AuthState(
@@ -362,12 +379,7 @@ class AuthNotifier extends Notifier<AuthState> {
   /// Manual logout triggered by the user. Clears all cached data immediately.
   Future<void> logout() async {
     await _clearAllUserData();
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_keyServerUrl);
-    await _storage.delete(key: _keyAccessToken);
-    await _storage.delete(key: _keyRefreshToken);
-    await _storage.delete(key: _keyClientId);
-    await _storage.delete(key: _keyClientSecret);
+    await _deleteAuthCredentials();
     state = const AuthState();
   }
 
@@ -378,13 +390,24 @@ class AuthNotifier extends Notifier<AuthState> {
   /// without discarding the cache.
   Future<void> logoutAutomatically() async {
     final previousServerUrl = state.serverUrl;
+    await _deleteAuthCredentials();
+    state = AuthState(pendingServerUrl: previousServerUrl);
+  }
+
+  Future<void> _deleteAuthCredentials() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_keyServerUrl);
-    await _storage.delete(key: _keyAccessToken);
-    await _storage.delete(key: _keyRefreshToken);
-    await _storage.delete(key: _keyClientId);
-    await _storage.delete(key: _keyClientSecret);
-    state = AuthState(pendingServerUrl: previousServerUrl);
+    if (_useSecureStorage) {
+      await _storage.delete(key: _keyAccessToken);
+      await _storage.delete(key: _keyRefreshToken);
+      await _storage.delete(key: _keyClientId);
+      await _storage.delete(key: _keyClientSecret);
+    } else {
+      await prefs.remove(_keyAccessToken);
+      await prefs.remove(_keyRefreshToken);
+      await prefs.remove(_keyClientId);
+      await prefs.remove(_keyClientSecret);
+    }
   }
 
   Future<void> _clearAllUserData() async {
@@ -401,18 +424,33 @@ class AuthNotifier extends Notifier<AuthState> {
   Future<void> _saveAuth() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keyServerUrl, state.serverUrl!);
-    await _storage.write(key: _keyAccessToken, value: state.accessToken);
-    if (state.refreshTokenValue != null) {
-      await _storage.write(
-        key: _keyRefreshToken,
-        value: state.refreshTokenValue,
-      );
-    }
-    if (state.clientId != null) {
-      await _storage.write(key: _keyClientId, value: state.clientId);
-    }
-    if (state.clientSecret != null) {
-      await _storage.write(key: _keyClientSecret, value: state.clientSecret);
+    if (_useSecureStorage) {
+      await _storage.write(key: _keyAccessToken, value: state.accessToken);
+      if (state.refreshTokenValue != null) {
+        await _storage.write(
+          key: _keyRefreshToken,
+          value: state.refreshTokenValue,
+        );
+      }
+      if (state.clientId != null) {
+        await _storage.write(key: _keyClientId, value: state.clientId);
+      }
+      if (state.clientSecret != null) {
+        await _storage.write(key: _keyClientSecret, value: state.clientSecret);
+      }
+    } else {
+      if (state.accessToken != null) {
+        await prefs.setString(_keyAccessToken, state.accessToken!);
+      }
+      if (state.refreshTokenValue != null) {
+        await prefs.setString(_keyRefreshToken, state.refreshTokenValue!);
+      }
+      if (state.clientId != null) {
+        await prefs.setString(_keyClientId, state.clientId!);
+      }
+      if (state.clientSecret != null) {
+        await prefs.setString(_keyClientSecret, state.clientSecret!);
+      }
     }
   }
 }

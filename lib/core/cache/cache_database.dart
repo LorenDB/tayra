@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -23,8 +27,19 @@ class CacheDatabase {
     return _database!;
   }
 
+  Future<String> _getDatabasePath() async {
+    // On macOS, getDatabasesPath() returns NSDocumentDirectory which requires
+    // TCC permission in macOS 10.15+. Use Application Support instead, which
+    // is always writable by the app without user permission prompts.
+    if (!kIsWeb && Platform.isMacOS) {
+      final dir = await getApplicationSupportDirectory();
+      return dir.path;
+    }
+    return getDatabasesPath();
+  }
+
   Future<Database> _initDatabase() async {
-    final dbPath = await getDatabasesPath();
+    final dbPath = await _getDatabasePath();
     final path = join(dbPath, _databaseName);
 
     return await openDatabase(
@@ -166,7 +181,7 @@ class CacheDatabase {
 
   /// Delete the entire database (for testing or complete cache clear)
   Future<void> deleteDatabase() async {
-    final dbPath = await getDatabasesPath();
+    final dbPath = await _getDatabasePath();
     final path = join(dbPath, _databaseName);
     await databaseFactory.deleteDatabase(path);
     _database = null;
