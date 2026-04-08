@@ -12,7 +12,16 @@ class QueueScreen extends ConsumerStatefulWidget {
   final ScrollController? scrollController;
   final bool showAppBar;
 
-  const QueueScreen({super.key, this.scrollController, this.showAppBar = true});
+  /// Called when the user taps the mini-player at the bottom of the queue.
+  /// If null, the mini-player navigates to the full-screen now-playing route.
+  final VoidCallback? miniPlayerOnTap;
+
+  const QueueScreen({
+    super.key,
+    this.scrollController,
+    this.showAppBar = true,
+    this.miniPlayerOnTap,
+  });
 
   @override
   ConsumerState<QueueScreen> createState() => _QueueScreenState();
@@ -117,7 +126,16 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
       // queue.
       bottomNavigationBar:
           playerState.currentTrack != null
-              ? SafeArea(top: false, child: const MiniPlayer())
+              ? SafeArea(
+                top: false,
+                child: MiniPlayer(
+                  onTap:
+                      widget.miniPlayerOnTap ??
+                      () => context.canPop()
+                          ? context.pop()
+                          : context.push('/now-playing'),
+                ),
+              )
               : null,
     );
   }
