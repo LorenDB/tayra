@@ -1,4 +1,5 @@
 import 'package:aptabase_flutter/aptabase_flutter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -95,6 +96,18 @@ class SettingsScreen extends ConsumerWidget {
               ref.read(settingsProvider.notifier).setBrowseMode(mode);
             },
           ),
+          if (defaultTargetPlatform == TargetPlatform.android)
+            _SwitchTile(
+              icon: Icons.directions_car_outlined,
+              title: 'Android Auto recommendations',
+              subtitle: 'Show "For you" tab in Android Auto',
+              value: settings.showAndroidAutoRecommendations,
+              onChanged: (value) {
+                ref
+                    .read(settingsProvider.notifier)
+                    .setShowAndroidAutoRecommendations(value);
+              },
+            ),
 
           const SizedBox(height: 24),
 
@@ -516,6 +529,71 @@ class _ActionTile extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+// ── Switch tile ─────────────────────────────────────────────────────────
+
+class _SwitchTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  const _SwitchTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.value,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceContainer,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: AppTheme.onBackgroundSubtle, size: 22),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: AppTheme.onBackground,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    color: AppTheme.onBackgroundMuted,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Switch(
+            value: value,
+            onChanged: onChanged,
+            activeThumbColor: AppTheme.primary,
+            activeTrackColor: AppTheme.primary.withAlpha(100),
+          ),
+        ],
       ),
     );
   }

@@ -132,6 +132,11 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
   /// Determines what the second category in Android Auto displays.
   BrowseMode browseMode = BrowseMode.albums;
 
+  /// Whether to respond to Android Auto's "For you" recommendations query.
+  /// When false, an empty list is returned for the recent root so that AA
+  /// does not show a recommendations tab.
+  bool showRecommendations = true;
+
   /// Callback invoked when a track completes. The PlayerNotifier sets this
   /// to wire up its queue-advance / loop logic.
   void Function()? onTrackCompleted;
@@ -272,6 +277,12 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
 
     try {
       // ── Root categories ───────────────────────────────────────────
+      // When recommendations are disabled, return nothing for the recent root
+      // so Android Auto omits the "For you" tab entirely.
+      if (parentMediaId == _BrowseIds.recentRoot && !showRecommendations) {
+        return [];
+      }
+
       if (parentMediaId == _BrowseIds.root ||
           parentMediaId == _BrowseIds.recentRoot) {
         // Build category list based on browse mode setting.
