@@ -232,21 +232,44 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
       children: [
         _buildScreenTopBar(track),
         Expanded(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: Column(
-              children: [
-                const SizedBox(height: 16),
-                _buildScreenAlbumArt(track, glowColor),
-                const SizedBox(height: 36),
-                _buildTrackInfo(track, 22, 16, 13, 9, 4),
-                const SizedBox(height: 28),
-                _buildSeekBar(playerState, glowColor, 6, 16, paletteAsync),
-                const SizedBox(height: 20),
-                _buildTransportControls(playerState, glowColor, 64, 36, 34, 20),
-                const SizedBox(height: 32),
-              ],
-            ),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              // Compute the album art size from the true available space.
+              // Reserve space for the surrounding fixed-height content:
+              // top spacer(16) + gap(36) + track info(~80) + gap(28) +
+              // seek bar(~54) + gap(20) + controls(~64) + bottom spacer(32) ≈ 330px
+              const otherHeight = 330.0;
+              final artFromH =
+                  (constraints.maxHeight - otherHeight).clamp(120.0, 320.0);
+              // 32px horizontal padding on each side
+              final artFromW =
+                  (constraints.maxWidth - 64).clamp(120.0, 320.0);
+              final artSize = artFromH < artFromW ? artFromH : artFromW;
+
+              return SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 16),
+                    _buildScreenAlbumArt(track, glowColor, artSize),
+                    const SizedBox(height: 36),
+                    _buildTrackInfo(track, 22, 16, 13, 9, 4),
+                    const SizedBox(height: 28),
+                    _buildSeekBar(playerState, glowColor, 6, 16, paletteAsync),
+                    const SizedBox(height: 20),
+                    _buildTransportControls(
+                      playerState,
+                      glowColor,
+                      64,
+                      36,
+                      34,
+                      20,
+                    ),
+                    const SizedBox(height: 32),
+                  ],
+                ),
+              );
+            },
           ),
         ),
       ],
@@ -373,36 +396,41 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
     );
   }
 
-  Widget _buildScreenAlbumArt(Track track, Color glowColor) {
+  Widget _buildScreenAlbumArt(Track track, Color glowColor, double outerSize) {
     final imageUrl = track.largeCoverUrl ?? track.coverUrl;
+    final artSize = outerSize * (280.0 / 320.0);
 
     return AnimatedBuilder(
       animation: _glowAnimation!,
       builder: (context, child) {
         return SizedBox(
-          width: 320,
-          height: 320,
+          width: outerSize,
+          height: outerSize,
           child: Stack(
             alignment: Alignment.center,
             children: [
               Container(
-                width: 320,
-                height: 320,
+                width: outerSize,
+                height: outerSize,
                 decoration: BoxDecoration(
                   gradient: RadialGradient(
                     center: Alignment.center,
                     radius: 0.8,
                     colors: [
-                      glowColor.withValues(alpha: 0.25 * _glowAnimation!.value),
-                      glowColor.withValues(alpha: 0.08 * _glowAnimation!.value),
+                      glowColor.withValues(
+                        alpha: 0.25 * _glowAnimation!.value,
+                      ),
+                      glowColor.withValues(
+                        alpha: 0.08 * _glowAnimation!.value,
+                      ),
                       Colors.transparent,
                     ],
                   ),
                 ),
               ),
               Container(
-                width: 280,
-                height: 280,
+                width: artSize,
+                height: artSize,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
@@ -420,7 +448,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
                   ],
                 ),
                 clipBehavior: Clip.antiAlias,
-                child: _buildAlbumArtImage(imageUrl, 280),
+                child: _buildAlbumArtImage(imageUrl, artSize),
               ),
             ],
           ),
