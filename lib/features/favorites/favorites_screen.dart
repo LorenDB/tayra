@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/core/cache/download_queue_service.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
 import 'package:tayra/core/widgets/error_state.dart';
@@ -149,6 +152,38 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
         .playTracks(tracks, startIndex: index, source: 'favorites_from_track');
   }
 
+  Future<void> _downloadAll() async {
+    // Collect all track IDs from the already-loaded favorites, then also
+    // fetch any remaining pages so nothing is missed.
+    final trackIds = <int>{};
+    for (final fav in _favorites) {
+      trackIds.add(fav.track.id);
+    }
+
+    // If there are more pages we haven't loaded yet, fetch all remaining IDs
+    // via the lightweight "all IDs" endpoint.
+    if (_hasMore) {
+      try {
+        final api = ref.read(cachedFunkwhaleApiProvider);
+        final allIds = await api.getAllFavoriteTrackIds();
+        trackIds.addAll(allIds);
+      } catch (_) {
+        // Fall back to only the already-loaded tracks if the fetch fails.
+      }
+    }
+
+    if (trackIds.isEmpty) return;
+
+    final queue = ref.read(downloadQueueServiceProvider);
+    unawaited(queue.enqueue(trackIds.toList(), ref));
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Downloading all favorites')),
+      );
+    }
+  }
+
   String _buildStatsText() {
     if (_favorites.isEmpty) return '0 tracks';
 
@@ -221,6 +256,32 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
               icon: const Icon(Icons.search_rounded),
               onPressed: () => SearchScreen.show(context),
             ),
+          PopupMenuButton<String>(
+            icon: const Icon(
+              Icons.more_vert_rounded,
+              color: AppTheme.onBackground,
+            ),
+            color: AppTheme.surfaceContainer,
+            onSelected: (value) {
+              if (value == 'download_all') _downloadAll();
+            },
+            itemBuilder:
+                (_) => [
+                  const PopupMenuItem(
+                    value: 'download_all',
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.download_rounded,
+                          color: AppTheme.onBackground,
+                        ),
+                        SizedBox(width: 12),
+                        Text('Download all'),
+                      ],
+                    ),
+                  ),
+                ],
+          ),
         ],
       ),
       body: _buildBody(),
