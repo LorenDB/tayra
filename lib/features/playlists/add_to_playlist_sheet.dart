@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
-import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/playlists/playlists_screen.dart';
 
@@ -310,6 +310,12 @@ class _AddToPlaylistSheetState extends ConsumerState<_AddToPlaylistSheet> {
       // Invalidate playlists to refresh track counts.
       ref.invalidate(playlistsProvider);
 
+      try {
+        Aptabase.instance.trackEvent('tracks_added_to_playlist', {
+          'track_count': widget.trackIds.length,
+        });
+      } catch (_) {}
+
       setState(() {
         _addingToPlaylistId = null;
         _successMessage = 'Added to "${playlist.name}"';
@@ -404,6 +410,12 @@ class _AddToPlaylistSheetState extends ConsumerState<_AddToPlaylistSheet> {
       if (!mounted) return;
 
       ref.invalidate(playlistsProvider);
+
+      try {
+        Aptabase.instance.trackEvent('playlist_created_and_tracks_added', {
+          'track_count': widget.trackIds.length,
+        });
+      } catch (_) {}
 
       setState(() {
         _isCreating = false;

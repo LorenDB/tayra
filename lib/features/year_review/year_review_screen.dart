@@ -2,6 +2,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/features/year_review/listen_history_provider.dart';
@@ -1114,6 +1115,13 @@ class _YearCard extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
+            try {
+              Aptabase.instance.trackEvent('year_review_opened', {
+                'year': year,
+                'is_current_year': isCurrent,
+                'has_data': hasData,
+              });
+            } catch (_) {}
             Navigator.of(context).push(
               MaterialPageRoute(builder: (_) => YearReviewScreen(year: year)),
             );
