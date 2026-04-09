@@ -20,6 +20,10 @@ class FavoriteTrackIdsNotifier extends Notifier<Set<int>> {
 
   Future<void> _load() async {
     try {
+      // Seed with cached IDs immediately so heart icons appear while loading
+      final cached = await _api.getCachedFavoriteTrackIds();
+      if (cached.isNotEmpty) state = cached;
+      // Then overwrite with fresh data from the network
       final ids = await _api.getAllFavoriteTrackIds();
       state = ids;
     } catch (_) {}

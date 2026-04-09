@@ -378,15 +378,15 @@ class CachedFunkwhaleApi {
     );
   }
 
-  Future<Set<int>> getAllFavoriteTrackIds({bool forceRefresh = false}) async {
-    // Try cached favorites first
-    if (!forceRefresh) {
-      try {
-        final cached = await _cache.getFavorites();
-        if (cached.isNotEmpty) return cached;
-      } catch (_) {}
+  Future<Set<int>> getCachedFavoriteTrackIds() async {
+    try {
+      return await _cache.getFavorites();
+    } catch (_) {
+      return {};
     }
+  }
 
+  Future<Set<int>> getAllFavoriteTrackIds() async {
     try {
       final ids = await _api.getAllFavoriteTrackIds();
       // Update cache – clear and rebuild
