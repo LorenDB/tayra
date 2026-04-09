@@ -1498,6 +1498,29 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }
 
   void _onTrackCompleted() {
+    // Record the completed track using its full duration. This handles the
+    // case where _loadAndPlay (and thus _recordCurrentTrackListen) is never
+    // called — e.g. the last track in the queue with LoopMode.off. It also
+    // ensures the debounce window from a recent pause does not cause the
+    // natural completion to be missed. The debounce timestamp is cleared so
+    // the _recordCurrentTrackListen call inside _loadAndPlay (for the next
+    // track) can still fire normally.
+    final completedTrack = state.currentTrack;
+    if (completedTrack != null) {
+      final durationSeconds =
+          state.duration.inSeconds > 0
+              ? state.duration.inSeconds
+              : completedTrack.duration;
+      // Clear debounce so this forced record always goes through.
+      _lastRecordedAtMs.remove(completedTrack.id);
+      ListenHistoryService.recordListen(
+        completedTrack,
+        listenedSeconds: durationSeconds,
+      );
+      _lastRecordedAtMs[completedTrack.id] =
+          DateTime.now().millisecondsSinceEpoch;
+    }
+
     switch (state.loopMode) {
       case LoopMode.one:
         _handler.audioPlayer.seek(Duration.zero);
@@ -1606,9 +1629,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
     } else {
       // Turning shuffle OFF: restore the original order, keeping current track
       final current = state.currentTrack;
-      final restored = state.unshuffledQueue.isNotEmpty
-          ? List<Track>.from(state.unshuffledQueue)
-          : List<Track>.from(state.queue);
+      final restored =
+          state.unshuffledQueue.isNotEmpty
+              ? List<Track>.from(state.unshuffledQueue)
+              : List<Track>.from(state.queue);
       final newIndex =
           current != null ? restored.indexOf(current) : state.currentIndex;
       state = state.copyWith(
