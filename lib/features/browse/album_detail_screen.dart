@@ -56,12 +56,10 @@ class _AlbumTracksNotifier extends AsyncNotifier<List<Track>> {
         page: page,
       );
       allTracks.addAll(response.results);
-      sortTracksByDiscAndPosition(allTracks);
-      // Emit after each page so the UI shows tracks as they arrive.
-      state = AsyncData(List<Track>.unmodifiable(allTracks));
       if (response.next == null) break;
       page++;
     }
+    sortTracksByDiscAndPosition(allTracks);
     return List<Track>.unmodifiable(allTracks);
   }
 }
@@ -209,11 +207,13 @@ class _AlbumDetailBody extends ConsumerWidget {
         // ── Track list ──
         tracksAsync.when(
           loading:
-              () => const SliverFillRemaining(
-                hasScrollBody: false,
-                child: Padding(
-                  padding: EdgeInsets.only(top: 8),
-                  child: ShimmerList(itemCount: 6, itemHeight: 56),
+              () => SliverToBoxAdapter(
+                child: SizedBox(
+                  height: (56 + 12) * 6,
+                  child: const Padding(
+                    padding: EdgeInsets.only(top: 8),
+                    child: ShimmerList(itemCount: 6, itemHeight: 56),
+                  ),
                 ),
               ),
           error:
