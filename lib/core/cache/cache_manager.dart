@@ -242,6 +242,12 @@ class CacheManager {
     final filename = '$key$extension';
     final destPath = p.join(cacheDir.path, filename);
 
+    // Ensure the destination directory exists (belt-and-suspenders — _getCacheDir
+    // should have created it, but on macOS the directory may not be present if
+    // the app container is newly created or the path_provider returns an
+    // unexpected temp directory that shares the same cache root).
+    await Directory(p.dirname(destPath)).create(recursive: true);
+
     // Copy file to cache directory
     final destFile = await sourceFile.copy(destPath);
     final sizeBytes = await destFile.length();
