@@ -11,16 +11,24 @@ enum BrowseMode { albums, artists }
 class SettingsState {
   final BrowseMode browseMode;
   final int cacheSizeLimitMB;
+  final bool showAndroidAutoRecommendations;
 
   const SettingsState({
     this.browseMode = BrowseMode.albums,
     this.cacheSizeLimitMB = 500,
+    this.showAndroidAutoRecommendations = true,
   });
 
-  SettingsState copyWith({BrowseMode? browseMode, int? cacheSizeLimitMB}) {
+  SettingsState copyWith({
+    BrowseMode? browseMode,
+    int? cacheSizeLimitMB,
+    bool? showAndroidAutoRecommendations,
+  }) {
     return SettingsState(
       browseMode: browseMode ?? this.browseMode,
       cacheSizeLimitMB: cacheSizeLimitMB ?? this.cacheSizeLimitMB,
+      showAndroidAutoRecommendations:
+          showAndroidAutoRecommendations ?? this.showAndroidAutoRecommendations,
     );
   }
 }
@@ -34,6 +42,7 @@ final settingsProvider = NotifierProvider<SettingsNotifier, SettingsState>(
 class SettingsNotifier extends Notifier<SettingsState> {
   static const _keyBrowseMode = 'browse_mode';
   static const _keyCacheSizeLimit = 'cache_max_size_mb';
+  static const _keyShowAndroidAutoRecommendations = 'aa_show_recommendations';
 
   @override
   SettingsState build() {
@@ -51,10 +60,13 @@ class SettingsNotifier extends Notifier<SettingsState> {
     }
 
     final cacheSizeMB = prefs.getInt(_keyCacheSizeLimit) ?? 500;
+    final showRecommendations =
+        prefs.getBool(_keyShowAndroidAutoRecommendations) ?? true;
 
     state = state.copyWith(
       browseMode: browseMode,
       cacheSizeLimitMB: cacheSizeMB,
+      showAndroidAutoRecommendations: showRecommendations,
     );
   }
 
@@ -73,9 +85,16 @@ class SettingsNotifier extends Notifier<SettingsState> {
     await CacheManager.instance.updateConfig(sizeMB);
   }
 
+  Future<void> setShowAndroidAutoRecommendations(bool show) async {
+    state = state.copyWith(showAndroidAutoRecommendations: show);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyShowAndroidAutoRecommendations, show);
+  }
+
   static Future<void> clearSettings() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_keyBrowseMode);
     await prefs.remove(_keyCacheSizeLimit);
+    await prefs.remove(_keyShowAndroidAutoRecommendations);
   }
 }
