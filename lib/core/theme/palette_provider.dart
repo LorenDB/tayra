@@ -34,13 +34,20 @@ final paletteColorsProvider = FutureProvider.family<Color, String?>((
   if (imageUrl == null || imageUrl.isEmpty) return AppTheme.primary;
 
   try {
-    final imageProvider = CachedNetworkImageProvider(
-      imageUrl,
-      cacheKey: cacheKey,
+    // Wrap with ResizeImage so palette generation decodes a separate 100×100
+    // ui.Image instead of sharing the GPU texture that CoverArtWidget renders.
+    // Without this, PaletteGenerator.fromImageProvider resolves the same
+    // cached GPU texture that is concurrently being composited, causing Skia's
+    // "GrBackendTextureImageGenerator: Trying to use texture on two GrContexts!"
+    // assertion on some devices.
+    final imageProvider = ResizeImage(
+      CachedNetworkImageProvider(imageUrl, cacheKey: cacheKey),
+      width: 100,
+      height: 100,
+      allowUpscaling: false,
     );
     final palette = await PaletteGenerator.fromImageProvider(
       imageProvider,
-      size: const ui.Size(100, 100),
       maximumColorCount: 24,
     );
 
@@ -154,10 +161,14 @@ final dominantColorProvider = FutureProvider.family<Color, String?>((
   if (imageUrl == null || imageUrl.isEmpty) return AppTheme.primary;
 
   try {
-    final imageProvider = CachedNetworkImageProvider(imageUrl);
+    final imageProvider = ResizeImage(
+      CachedNetworkImageProvider(imageUrl),
+      width: 100,
+      height: 100,
+      allowUpscaling: false,
+    );
     final palette = await PaletteGenerator.fromImageProvider(
       imageProvider,
-      size: const ui.Size(100, 100),
       maximumColorCount: 16,
     );
 
