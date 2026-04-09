@@ -1,3 +1,4 @@
+import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -239,6 +240,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     final authState = ref.read(authStateProvider);
     if (authState.clientId != null && authState.error == null) {
+      Aptabase.instance.trackEvent('login_server_connected');
       setState(() => _step = 1);
     }
   }

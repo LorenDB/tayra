@@ -943,7 +943,7 @@ class _CacheBreakdownItem extends StatelessWidget {
   }
 }
 
-class _CacheSizeLimitTile extends StatelessWidget {
+class _CacheSizeLimitTile extends StatefulWidget {
   final int currentLimitMB;
   final ValueChanged<int> onChanged;
 
@@ -952,6 +952,11 @@ class _CacheSizeLimitTile extends StatelessWidget {
     required this.onChanged,
   });
 
+  @override
+  State<_CacheSizeLimitTile> createState() => _CacheSizeLimitTileState();
+}
+
+class _CacheSizeLimitTileState extends State<_CacheSizeLimitTile> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -986,7 +991,7 @@ class _CacheSizeLimitTile extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '$currentLimitMB MB',
+                      '\${widget.currentLimitMB} MB',
                       style: const TextStyle(
                         color: AppTheme.primary,
                         fontSize: 12,
@@ -1000,13 +1005,20 @@ class _CacheSizeLimitTile extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Slider(
-            value: currentLimitMB.toDouble(),
+            value: widget.currentLimitMB.toDouble(),
             min: 500,
             max: 5000,
             divisions: 19,
             activeColor: AppTheme.primary,
             inactiveColor: AppTheme.surfaceContainerHigh,
-            onChanged: (value) => onChanged(value.toInt()),
+            onChanged: (value) => widget.onChanged(value.toInt()),
+            onChangeEnd: (value) {
+              try {
+                Aptabase.instance.trackEvent('cache_size_limit_changed', {
+                  'size_mb': value.toInt(),
+                });
+              } catch (_) {}
+            },
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
