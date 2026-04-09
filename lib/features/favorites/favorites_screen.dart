@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:aptabase_flutter/aptabase_flutter.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/api/api_utils.dart';
@@ -174,6 +176,9 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
 
     if (trackIds.isEmpty) return;
 
+    Aptabase.instance.trackEvent('favorites_download_all', {
+      'count': trackIds.length,
+    });
     final queue = ref.read(downloadQueueServiceProvider);
     unawaited(queue.enqueue(trackIds.toList(), ref));
 

@@ -1,3 +1,4 @@
+import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -49,9 +50,17 @@ class MiniPlayer extends ConsumerWidget {
         if (v.abs() < 300) return;
         if (v > 0) {
           HapticFeedback.lightImpact();
+          Aptabase.instance.trackEvent('swipe_to_skip', {
+            'direction': 'previous',
+            'source': 'mini_player',
+          });
           ref.read(playerProvider.notifier).skipPrevious();
         } else {
           HapticFeedback.lightImpact();
+          Aptabase.instance.trackEvent('swipe_to_skip', {
+            'direction': 'next',
+            'source': 'mini_player',
+          });
           ref.read(playerProvider.notifier).skipNext();
         }
       },

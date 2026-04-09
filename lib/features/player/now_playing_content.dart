@@ -212,9 +212,17 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
         if (v.abs() < 300) return;
         if (v > 0) {
           HapticFeedback.lightImpact();
+          Aptabase.instance.trackEvent('swipe_to_skip', {
+            'direction': 'previous',
+            'source': 'now_playing',
+          });
           ref.read(playerProvider.notifier).skipPrevious();
         } else {
           HapticFeedback.lightImpact();
+          Aptabase.instance.trackEvent('swipe_to_skip', {
+            'direction': 'next',
+            'source': 'now_playing',
+          });
           ref.read(playerProvider.notifier).skipNext();
         }
       },
@@ -239,11 +247,12 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
               // top spacer(16) + gap(36) + track info(~80) + gap(28) +
               // seek bar(~54) + gap(20) + controls(~64) + bottom spacer(32) ≈ 330px
               const otherHeight = 330.0;
-              final artFromH =
-                  (constraints.maxHeight - otherHeight).clamp(120.0, 320.0);
+              final artFromH = (constraints.maxHeight - otherHeight).clamp(
+                120.0,
+                320.0,
+              );
               // 32px horizontal padding on each side
-              final artFromW =
-                  (constraints.maxWidth - 64).clamp(120.0, 320.0);
+              final artFromW = (constraints.maxWidth - 64).clamp(120.0, 320.0);
               final artSize = artFromH < artFromW ? artFromH : artFromW;
 
               return SingleChildScrollView(
@@ -417,12 +426,8 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
                     center: Alignment.center,
                     radius: 0.8,
                     colors: [
-                      glowColor.withValues(
-                        alpha: 0.25 * _glowAnimation!.value,
-                      ),
-                      glowColor.withValues(
-                        alpha: 0.08 * _glowAnimation!.value,
-                      ),
+                      glowColor.withValues(alpha: 0.25 * _glowAnimation!.value),
+                      glowColor.withValues(alpha: 0.08 * _glowAnimation!.value),
                       Colors.transparent,
                     ],
                   ),
