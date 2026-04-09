@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/features/player/queue_persistence_service.dart';
 import 'package:tayra/features/year_review/listen_history_service.dart';
@@ -324,12 +325,18 @@ class AuthNotifier extends Notifier<AuthState> {
       );
 
       await _saveAuth();
+      try {
+        Aptabase.instance.trackEvent('login_success');
+      } catch (_) {}
       return true;
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
         error: 'Failed to authenticate. Check the code and try again.',
       );
+      try {
+        Aptabase.instance.trackEvent('login_failed');
+      } catch (_) {}
       return false;
     }
   }
@@ -378,6 +385,9 @@ class AuthNotifier extends Notifier<AuthState> {
 
   /// Manual logout triggered by the user. Clears all cached data immediately.
   Future<void> logout() async {
+    try {
+      Aptabase.instance.trackEvent('logout');
+    } catch (_) {}
     await _clearAllUserData();
     await _deleteAuthCredentials();
     state = const AuthState();
@@ -389,6 +399,9 @@ class AuthNotifier extends Notifier<AuthState> {
   /// URL so that re-authenticating to the same server can resume seamlessly
   /// without discarding the cache.
   Future<void> logoutAutomatically() async {
+    try {
+      Aptabase.instance.trackEvent('logout_automatic');
+    } catch (_) {}
     final previousServerUrl = state.serverUrl;
     await _deleteAuthCredentials();
     state = AuthState(pendingServerUrl: previousServerUrl);

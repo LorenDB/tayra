@@ -103,6 +103,12 @@ class SettingsScreen extends ConsumerWidget {
               subtitle: 'Show "For you" tab in Android Auto',
               value: settings.showAndroidAutoRecommendations,
               onChanged: (value) {
+                try {
+                  Aptabase.instance.trackEvent(
+                    'android_auto_recommendations_toggled',
+                    {'enabled': value},
+                  );
+                } catch (_) {}
                 ref
                     .read(settingsProvider.notifier)
                     .setShowAndroidAutoRecommendations(value);
@@ -151,6 +157,9 @@ class SettingsScreen extends ConsumerWidget {
               if (confirmed == true) {
                 await CacheManager.instance.clearAudio();
                 ref.invalidate(cacheStatsProvider);
+                try {
+                  Aptabase.instance.trackEvent('cache_audio_cleared');
+                } catch (_) {}
               }
             },
           ),
@@ -173,6 +182,9 @@ class SettingsScreen extends ConsumerWidget {
               if (confirmed == true) {
                 await CacheManager.instance.clearAll();
                 ref.invalidate(cacheStatsProvider);
+                try {
+                  Aptabase.instance.trackEvent('cache_all_cleared');
+                } catch (_) {}
               }
             },
           ),
@@ -1117,7 +1129,15 @@ class _DonationTile extends StatelessWidget {
                       child: _DonationButton(
                         icon: Icons.volunteer_activism_outlined,
                         label: 'Liberapay',
-                        onTap: () => _openUrl(_liberapayUrl),
+                        onTap: () {
+                          try {
+                            Aptabase.instance.trackEvent(
+                              'donation_link_tapped',
+                              {'platform': 'liberapay'},
+                            );
+                          } catch (_) {}
+                          _openUrl(_liberapayUrl);
+                        },
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -1125,7 +1145,15 @@ class _DonationTile extends StatelessWidget {
                       child: _DonationButton(
                         icon: Icons.payments_outlined,
                         label: 'PayPal',
-                        onTap: () => _openUrl(_paypalUrl),
+                        onTap: () {
+                          try {
+                            Aptabase.instance.trackEvent(
+                              'donation_link_tapped',
+                              {'platform': 'paypal'},
+                            );
+                          } catch (_) {}
+                          _openUrl(_paypalUrl);
+                        },
                       ),
                     ),
                   ],

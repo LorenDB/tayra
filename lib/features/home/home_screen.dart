@@ -1,5 +1,6 @@
 import 'dart:ui' as ui;
 
+import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -620,6 +621,9 @@ class _YearReviewBannerState extends ConsumerState<_YearReviewBanner>
               color: Colors.transparent,
               child: InkWell(
                 onTap: () {
+                  try {
+                    Aptabase.instance.trackEvent('year_review_banner_tapped');
+                  } catch (_) {}
                   final now = DateTime.now();
                   // In January, the "Year in Review" refers to the previous year
                   final year = now.month == 1 ? now.year - 1 : now.year;
@@ -676,13 +680,16 @@ class _YearReviewBannerState extends ConsumerState<_YearReviewBanner>
                       const SizedBox(width: 8),
                       // Dismiss button
                       GestureDetector(
-                        onTap:
-                            () =>
-                                ref
-                                    .read(
-                                      yearReviewBannerVisibleProvider.notifier,
-                                    )
-                                    .dismiss(),
+                        onTap: () {
+                          try {
+                            Aptabase.instance.trackEvent(
+                              'year_review_banner_dismissed',
+                            );
+                          } catch (_) {}
+                          ref
+                              .read(yearReviewBannerVisibleProvider.notifier)
+                              .dismiss();
+                        },
                         child: Container(
                           width: 28,
                           height: 28,

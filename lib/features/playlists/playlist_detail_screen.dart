@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
+import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
@@ -91,6 +92,9 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
       final api = ref.read(cachedFunkwhaleApiProvider);
       // Funkwhale v1.4.0: remove by list position (0-based)
       await api.removeTrackFromPlaylist(playlistId, listIndex);
+      try {
+        Aptabase.instance.trackEvent('playlist_track_removed');
+      } catch (_) {}
       // Invalidate playlist metadata so counts update elsewhere.
       ref.invalidate(playlistsProvider);
     } catch (e) {
@@ -165,6 +169,11 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
 
   void _playAll() {
     if (_tracks.isEmpty) return;
+    try {
+      Aptabase.instance.trackEvent('playlist_play_all', {
+        'track_count': _tracks.length,
+      });
+    } catch (_) {}
     ref
         .read(playerProvider.notifier)
         .playTracks(_tracks, source: 'playlist_detail_play_all');
@@ -172,6 +181,11 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
 
   void _shuffleAll() {
     if (_tracks.isEmpty) return;
+    try {
+      Aptabase.instance.trackEvent('playlist_shuffle_all', {
+        'track_count': _tracks.length,
+      });
+    } catch (_) {}
     final shuffled = List<Track>.from(_tracks)..shuffle();
     ref
         .read(playerProvider.notifier)
@@ -337,6 +351,15 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                                     ref.invalidate(
                                       isManualPlaylistProvider(playlist.id),
                                     );
+                                    try {
+                                      Aptabase.instance.trackEvent(
+                                        'playlist_download_toggled',
+                                        {
+                                          'enabled': !isManual,
+                                          'track_count': _tracks.length,
+                                        },
+                                      );
+                                    } catch (_) {}
 
                                     if (!isManual) {
                                       final queue = ref.read(

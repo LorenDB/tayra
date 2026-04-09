@@ -415,15 +415,14 @@ class CacheManager {
           );
         } catch (_) {}
       }
-      // Telemetry: manual download flag changed
-      try {
-        Aptabase.instance.trackEvent('manual_download_toggled', {
-          'resource_type': type.name,
-          'resource_id_set': resourceId,
-          'enabled': value,
-        });
-      } catch (_) {}
     }
+    // Telemetry: manual download flag changed (fires for both add and remove)
+    try {
+      Aptabase.instance.trackEvent('manual_download_toggled', {
+        'resource_type': type.name,
+        'enabled': value,
+      });
+    } catch (_) {}
   }
 
   /// Check if a resource is manually downloaded
