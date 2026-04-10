@@ -13,12 +13,14 @@ class SettingsState {
   final int cacheSizeLimitMB;
   final bool showAndroidAutoRecommendations;
   final bool useDynamicAlbumAccent;
+  final bool gaplessPlayback;
 
   const SettingsState({
     this.browseMode = BrowseMode.albums,
     this.cacheSizeLimitMB = 500,
     this.showAndroidAutoRecommendations = true,
     this.useDynamicAlbumAccent = true,
+    this.gaplessPlayback = true,
   });
 
   SettingsState copyWith({
@@ -26,6 +28,7 @@ class SettingsState {
     int? cacheSizeLimitMB,
     bool? showAndroidAutoRecommendations,
     bool? useDynamicAlbumAccent,
+    bool? gaplessPlayback,
   }) {
     return SettingsState(
       browseMode: browseMode ?? this.browseMode,
@@ -34,6 +37,7 @@ class SettingsState {
           showAndroidAutoRecommendations ?? this.showAndroidAutoRecommendations,
       useDynamicAlbumAccent:
           useDynamicAlbumAccent ?? this.useDynamicAlbumAccent,
+      gaplessPlayback: gaplessPlayback ?? this.gaplessPlayback,
     );
   }
 }
@@ -49,6 +53,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
   static const _keyCacheSizeLimit = 'cache_max_size_mb';
   static const _keyShowAndroidAutoRecommendations = 'aa_show_recommendations';
   static const _keyUseDynamicAlbumAccent = 'use_dynamic_album_accent';
+  static const _keyGaplessPlayback = 'gapless_playback';
 
   @override
   SettingsState build() {
@@ -69,12 +74,14 @@ class SettingsNotifier extends Notifier<SettingsState> {
     final showRecommendations =
         prefs.getBool(_keyShowAndroidAutoRecommendations) ?? true;
     final useDynamicAccent = prefs.getBool(_keyUseDynamicAlbumAccent) ?? true;
+    final gapless = prefs.getBool(_keyGaplessPlayback) ?? true;
 
     state = state.copyWith(
       browseMode: browseMode,
       cacheSizeLimitMB: cacheSizeMB,
       showAndroidAutoRecommendations: showRecommendations,
       useDynamicAlbumAccent: useDynamicAccent,
+      gaplessPlayback: gapless,
     );
   }
 
@@ -105,11 +112,18 @@ class SettingsNotifier extends Notifier<SettingsState> {
     await prefs.setBool(_keyUseDynamicAlbumAccent, use);
   }
 
+  Future<void> setGaplessPlayback(bool enabled) async {
+    state = state.copyWith(gaplessPlayback: enabled);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyGaplessPlayback, enabled);
+  }
+
   static Future<void> clearSettings() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_keyBrowseMode);
     await prefs.remove(_keyCacheSizeLimit);
     await prefs.remove(_keyShowAndroidAutoRecommendations);
     await prefs.remove(_keyUseDynamicAlbumAccent);
+    await prefs.remove(_keyGaplessPlayback);
   }
 }
