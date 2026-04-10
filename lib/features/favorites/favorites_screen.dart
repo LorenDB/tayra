@@ -389,32 +389,37 @@ class _ShuffleAllButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onPressed,
-        borderRadius: BorderRadius.circular(20),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            gradient: AppTheme.primaryGradient,
-            borderRadius: BorderRadius.circular(20),
+    final enabled = onPressed != null;
+
+    // Primary-looking gradient button for Shuffle All (pill-shaped).
+    final deco =
+        enabled
+            ? BoxDecoration(
+              gradient: AppTheme.primaryGradient,
+              borderRadius: BorderRadius.circular(22),
+            )
+            : BoxDecoration(
+              color: AppTheme.surfaceContainerHigh,
+              borderRadius: BorderRadius.circular(22),
+            );
+
+    return Container(
+      height: 44,
+      decoration: deco,
+      child: ElevatedButton.icon(
+        onPressed: onPressed,
+        icon: const Icon(Icons.shuffle_rounded, size: 20),
+        label: const Text('Shuffle All'),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          foregroundColor: Colors.white,
+          disabledBackgroundColor: Colors.transparent,
+          disabledForegroundColor: Colors.white.withValues(alpha: 0.4),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(22),
           ),
-          child: const Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.shuffle_rounded, color: Colors.white, size: 18),
-              SizedBox(width: 6),
-              Text(
-                'Shuffle All',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
+          textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
         ),
       ),
     );

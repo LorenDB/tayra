@@ -241,6 +241,71 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
 
   Widget _buildContent() {
     final playlist = _playlist!;
+    // Whether this playlist is currently marked as manually downloaded.
+    final isManualAsync = ref.watch(isManualPlaylistProvider(playlist.id));
+    final isManual = isManualAsync.maybeWhen(
+      data: (v) => v,
+      orElse: () => false,
+    );
+
+    // Toggle download state (extracted from the old inline IconButton handler).
+    Future<void> toggleDownload() async {
+      if (_tracks.isEmpty) return;
+      final mgr = ref.read(cacheManagerProvider);
+      try {
+        final current = await ref.read(
+          isManualPlaylistProvider(playlist.id).future,
+        );
+        await mgr.setManualDownloaded(
+          CacheType.playlist,
+          playlist.id,
+          !current,
+        );
+        for (final t in _tracks) {
+          try {
+            await mgr.setManualDownloaded(CacheType.track, t.id, !current);
+            ref.invalidate(isManualTrackProvider(t.id));
+          } catch (_) {}
+        }
+        await mgr.bulkSetFilesProtectedForParent(
+          CacheType.playlist,
+          playlist.id,
+          !current,
+        );
+        ref.invalidate(isManualPlaylistProvider(playlist.id));
+        try {
+          Aptabase.instance.trackEvent('playlist_download_toggled', {
+            'enabled': !current,
+            'track_count': _tracks.length,
+          });
+        } catch (_) {}
+
+        if (!current) {
+          final queue = ref.read(downloadQueueServiceProvider);
+          final trackIds =
+              _tracks
+                  .where((t) => t.listenUrl != null)
+                  .map((t) => t.id)
+                  .toList();
+          unawaited(queue.enqueue(trackIds, ref));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Download queued for "${playlist.name}"')),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Download removed for "${playlist.name}"')),
+          );
+        }
+      } catch (e, st) {
+        debugPrint('Playlist toggle manual failed: $e');
+        debugPrintStack(stackTrace: st);
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Failed to update download flag')),
+          );
+        }
+      }
+    }
 
     return RefreshIndicator(
       color: AppTheme.primary,
@@ -251,7 +316,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
           parent: AlwaysScrollableScrollPhysics(),
         ),
         slivers: [
-          // App bar
+          // App bar with overflow menu (download moved into menu)
           SliverAppBar(
             backgroundColor: AppTheme.background,
             pinned: true,
@@ -270,6 +335,42 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
               ),
               onPressed: () => Navigator.of(context).pop(),
             ),
+            actions: [
+              PopupMenuButton<String>(
+                icon: const Icon(
+                  Icons.more_vert_rounded,
+                  color: AppTheme.onBackground,
+                ),
+                color: AppTheme.surfaceContainer,
+                onSelected: (value) {
+                  if (value == 'download') unawaited(toggleDownload());
+                },
+                itemBuilder:
+                    (_) => [
+                      PopupMenuItem(
+                        value: 'download',
+                        child: Row(
+                          children: [
+                            Icon(
+                              isManual
+                                  ? Icons.download_done_rounded
+                                  : Icons.download_rounded,
+                              size: 20,
+                              color: AppTheme.onBackground,
+                            ),
+                            const SizedBox(width: 12),
+                            Text(
+                              isManual ? 'Remove download' : 'Download',
+                              style: const TextStyle(
+                                color: AppTheme.onBackground,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+              ),
+            ],
           ),
 
           // Header with info and action buttons
@@ -312,107 +413,6 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                         ),
                       ),
                       const SizedBox(width: 12),
-                      // Download toggle for playlist
-                      IconButton(
-                        onPressed:
-                            _tracks.isNotEmpty
-                                ? () async {
-                                  final mgr = ref.read(cacheManagerProvider);
-                                  try {
-                                    final isManual = await ref.read(
-                                      isManualPlaylistProvider(
-                                        playlist.id,
-                                      ).future,
-                                    );
-                                    await mgr.setManualDownloaded(
-                                      CacheType.playlist,
-                                      playlist.id,
-                                      !isManual,
-                                    );
-                                    // Also mark/unmark each track as manual so the
-                                    // per-track UI shows the downloaded accent.
-                                    for (final t in _tracks) {
-                                      try {
-                                        await mgr.setManualDownloaded(
-                                          CacheType.track,
-                                          t.id,
-                                          !isManual,
-                                        );
-                                        ref.invalidate(
-                                          isManualTrackProvider(t.id),
-                                        );
-                                      } catch (_) {}
-                                    }
-                                    await mgr.bulkSetFilesProtectedForParent(
-                                      CacheType.playlist,
-                                      playlist.id,
-                                      !isManual,
-                                    );
-                                    ref.invalidate(
-                                      isManualPlaylistProvider(playlist.id),
-                                    );
-                                    try {
-                                      Aptabase.instance.trackEvent(
-                                        'playlist_download_toggled',
-                                        {
-                                          'enabled': !isManual,
-                                          'track_count': _tracks.length,
-                                        },
-                                      );
-                                    } catch (_) {}
-
-                                    if (!isManual) {
-                                      final queue = ref.read(
-                                        downloadQueueServiceProvider,
-                                      );
-                                      final trackIds =
-                                          _tracks
-                                              .where((t) => t.listenUrl != null)
-                                              .map((t) => t.id)
-                                              .toList();
-                                      unawaited(queue.enqueue(trackIds, ref));
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            'Download queued for "${playlist.name}"',
-                                          ),
-                                        ),
-                                      );
-                                    } else {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            'Download removed for "${playlist.name}"',
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                  } catch (e, st) {
-                                    debugPrint(
-                                      'Playlist toggle manual failed: $e',
-                                    );
-                                    debugPrintStack(stackTrace: st);
-                                    if (context.mounted) {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        const SnackBar(
-                                          content: Text(
-                                            'Failed to update download flag',
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                  }
-                                }
-                                : null,
-                        icon: const Icon(Icons.download_rounded),
-                        color: AppTheme.onBackground,
-                      ),
                     ],
                   ),
                 ],
@@ -518,50 +518,78 @@ class _ActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final enabled = onPressed != null;
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onPressed,
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          height: 44,
-          decoration: BoxDecoration(
-            gradient: isPrimary && enabled ? AppTheme.primaryGradient : null,
+    // Use platform-styled Elevated/Outlined buttons to match the rest of the
+    // app (pill-shaped, 44px height, 22px radius and consistent typography).
+    // Primary: use gradient decoration when enabled, else muted surface.
+    if (isPrimary) {
+      final deco =
+          enabled
+              ? BoxDecoration(
+                gradient: AppTheme.primaryGradient,
+                borderRadius: BorderRadius.circular(22),
+              )
+              : BoxDecoration(
+                color: AppTheme.surfaceContainerHigh,
+                borderRadius: BorderRadius.circular(22),
+              );
+
+      return Container(
+        height: 44,
+        decoration: deco,
+        child: ElevatedButton.icon(
+          onPressed: onPressed,
+          icon: Icon(icon, size: 20),
+          label: Text(label),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+            foregroundColor: Colors.white,
+            disabledBackgroundColor: Colors.transparent,
+            disabledForegroundColor: Colors.white.withValues(alpha: 0.4),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(22),
+            ),
+            textStyle: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return SizedBox(
+      height: 44,
+      child: OutlinedButton.icon(
+        onPressed: onPressed,
+        icon: Icon(
+          icon,
+          size: 20,
+          color:
+              enabled
+                  ? AppTheme.onBackground
+                  : AppTheme.onBackgroundSubtle.withValues(alpha: 0.4),
+        ),
+        label: Text(
+          label,
+          style: TextStyle(
             color:
-                isPrimary
-                    ? (enabled ? null : AppTheme.surfaceContainerHigh)
-                    : AppTheme.surfaceContainerHigh,
-            borderRadius: BorderRadius.circular(12),
-            border:
-                !isPrimary
-                    ? Border.all(color: AppTheme.divider, width: 1)
-                    : null,
+                enabled
+                    ? AppTheme.onBackground
+                    : AppTheme.onBackgroundSubtle.withValues(alpha: 0.4),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                icon,
-                color:
-                    enabled
-                        ? (isPrimary ? Colors.white : AppTheme.onBackground)
-                        : AppTheme.onBackgroundSubtle,
-                size: 20,
-              ),
-              const SizedBox(width: 6),
-              Text(
-                label,
-                style: TextStyle(
-                  color:
-                      enabled
-                          ? (isPrimary ? Colors.white : AppTheme.onBackground)
-                          : AppTheme.onBackgroundSubtle,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
+        ),
+        style: OutlinedButton.styleFrom(
+          side: BorderSide(
+            color:
+                enabled
+                    ? AppTheme.onBackground
+                    : AppTheme.onBackgroundSubtle.withValues(alpha: 0.3),
           ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(22),
+          ),
+          textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
         ),
       ),
     );
