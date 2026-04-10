@@ -301,9 +301,9 @@ class _YearReviewTile extends ConsumerWidget {
   }
 }
 
-// ── About tile (7-tap easter egg) ───────────────────────────────────────
+// ── About tile (long-press easter egg) ───────────────────────────────────────
 
-/// Tapping the About tile 7 times force-shows the Year in Review banner on
+/// Long-pressing the About tile 3 times force-shows the Year in Review banner on
 /// the home screen, regardless of the current date. Useful for testing.
 class _AboutTile extends ConsumerStatefulWidget {
   @override
