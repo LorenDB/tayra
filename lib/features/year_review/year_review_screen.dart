@@ -70,6 +70,11 @@ class _YearReviewScreenState extends ConsumerState<YearReviewScreen>
     super.dispose();
   }
 
+  Future<void> _refresh() async {
+    ref.invalidate(yearReviewProvider(widget.year));
+    await ref.read(yearReviewProvider(widget.year).future);
+  }
+
   @override
   Widget build(BuildContext context) {
     final statsAsync = ref.watch(yearReviewProvider(widget.year));
@@ -82,45 +87,68 @@ class _YearReviewScreenState extends ConsumerState<YearReviewScreen>
               child: CircularProgressIndicator(color: AppTheme.primary),
             ),
         error:
-            (error, stack) => Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Icons.error_outline,
-                    color: AppTheme.error,
-                    size: 48,
-                  ),
-                  const SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Text(
-                      // Surface the actual error message to help debugging.
-                      error.toString(),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: AppTheme.onBackgroundMuted,
-                        fontSize: 14,
-                      ),
+            (error, stack) => RefreshIndicator(
+              color: AppTheme.primary,
+              onRefresh: _refresh,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: SizedBox(
+                  height: MediaQuery.sizeOf(context).height,
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.error_outline,
+                          color: AppTheme.error,
+                          size: 48,
+                        ),
+                        const SizedBox(height: 16),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: Text(
+                            // Surface the actual error message to help debugging.
+                            error.toString(),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: AppTheme.onBackgroundMuted,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        TextButton(
+                          onPressed: _refresh,
+                          child: const Text('Retry'),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  TextButton(
-                    onPressed:
-                        () => ref.invalidate(yearReviewProvider(widget.year)),
-                    child: const Text('Retry'),
-                  ),
-                ],
+                ),
               ),
             ),
         data: (stats) {
           if (stats.isEmpty) {
-            return _EmptyState(year: widget.year);
+            return RefreshIndicator(
+              color: AppTheme.primary,
+              onRefresh: _refresh,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: SizedBox(
+                  height: MediaQuery.sizeOf(context).height,
+                  child: _EmptyState(year: widget.year),
+                ),
+              ),
+            );
           }
-          return _ReviewContent(
-            stats: stats,
-            animController: _animController,
-            magicProgram: _magicProgram,
+          return RefreshIndicator(
+            color: AppTheme.primary,
+            onRefresh: _refresh,
+            child: _ReviewContent(
+              stats: stats,
+              animController: _animController,
+              magicProgram: _magicProgram,
+            ),
           );
         },
       ),
@@ -1000,93 +1028,131 @@ class YearReviewSelectorScreen extends ConsumerWidget {
           children: [
             _AppBarRow(title: 'Year in Review'),
             Expanded(
-              child: yearsAsync.when(
-                loading:
-                    () => const Center(
-                      child: CircularProgressIndicator(color: AppTheme.primary),
-                    ),
-                error:
-                    (error, stack) => Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.error_outline,
-                            color: AppTheme.error,
-                            size: 48,
-                          ),
-                          const SizedBox(height: 16),
-                          const Text(
-                            'Could not load data',
-                            style: TextStyle(
-                              color: AppTheme.onBackgroundMuted,
-                              fontSize: 16,
-                            ),
-                          ),
-                          TextButton(
-                            onPressed:
-                                () => ref.invalidate(availableYearsProvider),
-                            child: const Text('Retry'),
-                          ),
-                        ],
-                      ),
-                    ),
-                data: (years) {
-                  // Always show current year, even if no data yet
-                  final allYears =
-                      {currentYear, ...years}.toList()
-                        ..sort((a, b) => b.compareTo(a));
-
-                  if (allYears.isEmpty) {
-                    return Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(32),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.music_off_rounded,
-                              color: AppTheme.onBackgroundSubtle,
-                              size: 64,
-                            ),
-                            const SizedBox(height: 16),
-                            const Text(
-                              'No listening data yet',
-                              style: TextStyle(
-                                color: AppTheme.onBackgroundMuted,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            const Text(
-                              'Start playing music to build your year in review.',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: AppTheme.onBackgroundSubtle,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }
-
-                  return ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: allYears.length,
-                    itemBuilder: (context, index) {
-                      final year = allYears[index];
-                      final hasData = years.contains(year);
-                      return _YearCard(
-                        year: year,
-                        isCurrent: year == currentYear,
-                        hasData: hasData,
-                      );
-                    },
-                  );
+              child: RefreshIndicator(
+                color: AppTheme.primary,
+                onRefresh: () async {
+                  ref.invalidate(availableYearsProvider);
+                  await ref.read(availableYearsProvider.future);
                 },
+                child: yearsAsync.when(
+                  loading:
+                      () => LayoutBuilder(
+                        builder:
+                            (context, constraints) => SingleChildScrollView(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              child: SizedBox(
+                                height: constraints.maxHeight,
+                                child: const Center(
+                                  child: CircularProgressIndicator(
+                                    color: AppTheme.primary,
+                                  ),
+                                ),
+                              ),
+                            ),
+                      ),
+                  error:
+                      (error, stack) => LayoutBuilder(
+                        builder:
+                            (context, constraints) => SingleChildScrollView(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              child: SizedBox(
+                                height: constraints.maxHeight,
+                                child: Center(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(
+                                        Icons.error_outline,
+                                        color: AppTheme.error,
+                                        size: 48,
+                                      ),
+                                      const SizedBox(height: 16),
+                                      const Text(
+                                        'Could not load data',
+                                        style: TextStyle(
+                                          color: AppTheme.onBackgroundMuted,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      TextButton(
+                                        onPressed:
+                                            () => ref.invalidate(
+                                              availableYearsProvider,
+                                            ),
+                                        child: const Text('Retry'),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                      ),
+                  data: (years) {
+                    // Always show current year, even if no data yet
+                    final allYears =
+                        {currentYear, ...years}.toList()
+                          ..sort((a, b) => b.compareTo(a));
+
+                    if (allYears.isEmpty) {
+                      return LayoutBuilder(
+                        builder:
+                            (context, constraints) => SingleChildScrollView(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              child: SizedBox(
+                                height: constraints.maxHeight,
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(32),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          Icons.music_off_rounded,
+                                          color: AppTheme.onBackgroundSubtle,
+                                          size: 64,
+                                        ),
+                                        const SizedBox(height: 16),
+                                        const Text(
+                                          'No listening data yet',
+                                          style: TextStyle(
+                                            color: AppTheme.onBackgroundMuted,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        const Text(
+                                          'Start playing music to build your year in review.',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: AppTheme.onBackgroundSubtle,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                      );
+                    }
+
+                    return ListView.builder(
+                      padding: const EdgeInsets.all(16),
+                      itemCount: allYears.length,
+                      itemBuilder: (context, index) {
+                        final year = allYears[index];
+                        final hasData = years.contains(year);
+                        return _YearCard(
+                          year: year,
+                          isCurrent: year == currentYear,
+                          hasData: hasData,
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
             ),
           ],

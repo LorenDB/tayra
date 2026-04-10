@@ -5,20 +5,20 @@ import 'package:tayra/features/year_review/listen_history_service.dart';
 // ── Providers ───────────────────────────────────────────────────────────
 
 /// Available years that have listen data.
-final availableYearsProvider = FutureProvider<List<int>>((ref) async {
+final availableYearsProvider = FutureProvider.autoDispose<List<int>>((
+  ref,
+) async {
   return await ListenHistoryService.getAvailableYears();
 });
 
 /// Year-in-review stats for a specific year.
-final yearReviewProvider = FutureProvider.family<YearReviewStats, int>((
-  ref,
-  year,
-) async {
-  return await ListenHistoryService.getYearStats(year);
-});
+final yearReviewProvider = FutureProvider.autoDispose
+    .family<YearReviewStats, int>((ref, year) async {
+      return await ListenHistoryService.getYearStats(year);
+    });
 
 /// Total all-time listen count (used in settings to show data exists).
-final totalListenCountProvider = FutureProvider<int>((ref) async {
+final totalListenCountProvider = FutureProvider.autoDispose<int>((ref) async {
   return await ListenHistoryService.getTotalListenCount();
 });
 
