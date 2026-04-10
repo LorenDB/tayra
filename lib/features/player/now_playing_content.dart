@@ -192,18 +192,42 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
 
     final imageUrl = track.largeCoverUrl ?? track.coverUrl;
 
+    // Use the unconditional provider for the glow so it remains tinted even
+    // when the user disables dynamic accents. Other UI elements will use the
+    // regular provider which respects the accessibility setting.
+    final glowPaletteAsync = ref.watch(
+      paletteColorsProviderUnconditional(
+        encodePaletteKey(imageUrl, track.album?.coverUrl),
+      ),
+    );
     final paletteAsync = ref.watch(
       paletteColorsProvider(encodePaletteKey(imageUrl, track.album?.coverUrl)),
     );
-    final glowColor = paletteAsync.maybeWhen(
+    final accentColor = paletteAsync.maybeWhen(
+      data: (color) => color,
+      orElse: () => AppTheme.primary,
+    );
+    final glowColor = glowPaletteAsync.maybeWhen(
       data: (color) => color,
       orElse: () => AppTheme.primary,
     );
 
     final content =
         widget.layout == NowPlayingLayout.panel
-            ? _buildPanelLayout(track, playerState, glowColor, paletteAsync)
-            : _buildScreenLayout(track, playerState, glowColor, paletteAsync);
+            ? _buildPanelLayout(
+              track,
+              playerState,
+              glowColor,
+              paletteAsync,
+              accentColor,
+            )
+            : _buildScreenLayout(
+              track,
+              playerState,
+              glowColor,
+              paletteAsync,
+              accentColor,
+            );
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -235,6 +259,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
     PlayerState playerState,
     Color glowColor,
     AsyncValue<Color> paletteAsync,
+    Color accentColor,
   ) {
     return Column(
       children: [
@@ -264,11 +289,17 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
                     const SizedBox(height: 36),
                     _buildTrackInfo(track, 22, 16, 13, 9, 4),
                     const SizedBox(height: 28),
-                    _buildSeekBar(playerState, glowColor, 6, 16, paletteAsync),
+                    _buildSeekBar(
+                      playerState,
+                      accentColor,
+                      6,
+                      16,
+                      paletteAsync,
+                    ),
                     const SizedBox(height: 20),
                     _buildTransportControls(
                       playerState,
-                      glowColor,
+                      accentColor,
                       64,
                       36,
                       34,
@@ -290,6 +321,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
     PlayerState playerState,
     Color glowColor,
     AsyncValue<Color> paletteAsync,
+    Color accentColor,
   ) {
     return Container(
       color: AppTheme.surface,
@@ -315,7 +347,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: _buildSeekBar(
                       playerState,
-                      glowColor,
+                      accentColor,
                       5,
                       12,
                       paletteAsync,
@@ -326,7 +358,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
                     padding: const EdgeInsets.only(bottom: 16),
                     child: _buildTransportControls(
                       playerState,
-                      glowColor,
+                      accentColor,
                       48,
                       30,
                       28,
@@ -615,7 +647,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
 
   Widget _buildSeekBar(
     PlayerState playerState,
-    Color glowColor,
+    Color accentColor,
     double thumbRadius,
     double overlayRadius,
     AsyncValue<Color> paletteAsync,
@@ -630,7 +662,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
             : playerState.position;
 
     final gradientSecondColor = AppTheme.gradientSecondColor(
-      glowColor,
+      accentColor,
       paletteAsync,
     );
 
@@ -643,7 +675,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
             thumbColor: Colors.white,
             thumbShape: RoundSliderThumbShape(enabledThumbRadius: thumbRadius),
             trackHeight: 3,
-            overlayColor: glowColor.withValues(alpha: 0.15),
+            overlayColor: accentColor.withValues(alpha: 0.15),
             overlayShape: RoundSliderOverlayShape(overlayRadius: overlayRadius),
           ),
           child: LayoutBuilder(
@@ -670,7 +702,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
                         width: filledWidth,
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
-                            colors: [glowColor, gradientSecondColor],
+                            colors: [accentColor, gradientSecondColor],
                           ),
                           borderRadius: BorderRadius.circular(trackHeight / 2),
                         ),
@@ -719,7 +751,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
 
   Widget _buildTransportControls(
     PlayerState playerState,
-    Color glowColor,
+    Color accentColor,
     double playButtonSize,
     double skipSize,
     double iconSize,
@@ -737,6 +769,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
             isActive: playerState.isShuffled,
             onPressed: () => notifier.toggleShuffle(),
             iconSize: iconSize - 10,
+            accentColor: accentColor,
           ),
           SizedBox(width: spacing),
           _buildSkipControl(
@@ -749,7 +782,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
           SizedBox(width: spacing),
           _buildPlayPauseButton(
             playerState,
-            glowColor,
+            accentColor,
             playButtonSize,
             iconSize + 4,
           ),
@@ -761,7 +794,11 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
             iconSize: skipSize,
           ),
           SizedBox(width: spacing),
-          _buildLoopControl(playerState.loopMode, iconSize: iconSize - 10),
+          _buildLoopControl(
+            playerState.loopMode,
+            accentColor,
+            iconSize: iconSize - 10,
+          ),
         ],
       ),
     );
@@ -769,7 +806,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
 
   Widget _buildPlayPauseButton(
     PlayerState playerState,
-    Color glowColor,
+    Color accentColor,
     double size,
     double iconSize,
   ) {
@@ -777,7 +814,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
       return Container(
         width: size,
         height: size,
-        decoration: BoxDecoration(shape: BoxShape.circle, color: glowColor),
+        decoration: BoxDecoration(shape: BoxShape.circle, color: accentColor),
         child: Center(
           child: SizedBox(
             width: iconSize * 0.44,
@@ -798,10 +835,10 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
         height: size,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: glowColor,
+          color: accentColor,
           boxShadow: [
             BoxShadow(
-              color: glowColor.withValues(alpha: 0.4),
+              color: accentColor.withValues(alpha: 0.4),
               blurRadius: size * 0.25,
               spreadRadius: 1,
               offset: Offset(0, size * 0.0625),
@@ -842,10 +879,11 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
     required bool isActive,
     required VoidCallback onPressed,
     required double iconSize,
+    required Color accentColor,
   }) {
     return IconButton(
       icon: Icon(icon, size: iconSize),
-      color: isActive ? AppTheme.secondary : AppTheme.onBackgroundSubtle,
+      color: isActive ? accentColor : AppTheme.onBackgroundSubtle,
       onPressed: onPressed,
       padding: EdgeInsets.zero,
       constraints: BoxConstraints(
@@ -855,7 +893,11 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
     );
   }
 
-  Widget _buildLoopControl(LoopMode loopMode, {required double iconSize}) {
+  Widget _buildLoopControl(
+    LoopMode loopMode,
+    Color accentColor, {
+    required double iconSize,
+  }) {
     final IconData icon;
     final Color color;
 
@@ -866,11 +908,11 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
         break;
       case LoopMode.all:
         icon = Icons.repeat_rounded;
-        color = AppTheme.secondary;
+        color = accentColor;
         break;
       case LoopMode.one:
         icon = Icons.repeat_one_rounded;
-        color = AppTheme.secondary;
+        color = accentColor;
         break;
     }
 

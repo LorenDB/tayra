@@ -113,6 +113,8 @@ Hand-written in `lib/core/api/models.dart` with `factory fromJson()` constructor
 
 Use `AppTheme.*` constants (defined in `core/theme/app_theme.dart`) — never hardcode colors. AMOLED black background (`0xFF000000`), primary blue (`0xFF0992F2`), teal accent (`0xFF00D4AA`).
 
+Accessibility note: there's a user setting to disable dynamic album accent colors. It's implemented in `lib/features/settings/settings_provider.dart` as `useDynamicAlbumAccent` and exposed in the Settings UI (`lib/features/settings/settings_screen.dart`). Palette generation in `lib/core/theme/palette_provider.dart` respects this flag and returns `AppTheme.primary` when disabled. If we later decide to rework or reintroduce accent color behavior, update these files accordingly.
+
 ## Key Dependencies
 
 | Category | Package |
