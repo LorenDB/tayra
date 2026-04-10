@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/features/settings/settings_provider.dart';
 
 /// Encode/decode helper for the provider family key.
 /// Format: "<imageUrl>|||<cacheKey>". Both parts may be empty.
@@ -31,6 +32,10 @@ final paletteColorsProvider = FutureProvider.family<Color, String?>((
 ) async {
   final imageUrl = _decImageUrl(encodedKey);
   final cacheKey = _decCacheKey(encodedKey);
+  // If the user has disabled dynamic album accents for accessibility, return
+  // the app primary color immediately to avoid palette generation work.
+  final settings = ref.watch(settingsProvider);
+  if (settings.useDynamicAlbumAccent == false) return AppTheme.primary;
   if (imageUrl == null || imageUrl.isEmpty) return AppTheme.primary;
 
   try {
@@ -57,6 +62,35 @@ final paletteColorsProvider = FutureProvider.family<Color, String?>((
     return AppTheme.primary;
   }
 });
+
+/// Like [paletteColorsProvider] but always generates a palette regardless of
+/// the user's accessibility setting. Used for visual elements that should
+/// remain tinted (e.g. the now playing art glow) even when accents are
+/// disabled.
+final paletteColorsProviderUnconditional =
+    FutureProvider.family<Color, String?>((ref, encodedKey) async {
+      final imageUrl = _decImageUrl(encodedKey);
+      final cacheKey = _decCacheKey(encodedKey);
+      if (imageUrl == null || imageUrl.isEmpty) return AppTheme.primary;
+
+      try {
+        final imageProvider = ResizeImage(
+          CachedNetworkImageProvider(imageUrl, cacheKey: cacheKey),
+          width: 100,
+          height: 100,
+          allowUpscaling: false,
+        );
+        final palette = await PaletteGenerator.fromImageProvider(
+          imageProvider,
+          maximumColorCount: 24,
+        );
+
+        final color = _extractBestColor(palette);
+        return color;
+      } catch (_) {
+        return AppTheme.primary;
+      }
+    });
 
 List<PaletteColor> _getCandidateColors(PaletteGenerator palette) {
   return [

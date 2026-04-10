@@ -117,6 +117,27 @@ class SettingsScreen extends ConsumerWidget {
 
           const SizedBox(height: 24),
 
+          // ── Accessibility section ───────────────────────────────────
+          _SectionHeader(title: 'Accessibility'),
+          _SwitchTile(
+            icon: Icons.format_paint_outlined,
+            title: 'Album accent colors',
+            subtitle: 'Use album cover art to tint UI accents',
+            value: settings.useDynamicAlbumAccent,
+            onChanged: (value) {
+              try {
+                Aptabase.instance.trackEvent('dynamic_album_accent_toggled', {
+                  'enabled': value,
+                });
+              } catch (_) {}
+              ref
+                  .read(settingsProvider.notifier)
+                  .setUseDynamicAlbumAccent(value);
+            },
+          ),
+
+          const SizedBox(height: 24),
+
           // ── Year in Review section ────────────────────────────────────
           _SectionHeader(title: 'Year in Review'),
           _YearReviewTile(),
