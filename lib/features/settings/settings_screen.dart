@@ -117,6 +117,20 @@ class SettingsScreen extends ConsumerWidget {
 
           const SizedBox(height: 24),
 
+          // ── Playback section ─────────────────────────────────────────
+          _SectionHeader(title: 'Playback'),
+          _SwitchTile(
+            icon: Icons.music_note_outlined,
+            title: 'Gapless playback',
+            subtitle: 'Eliminate silence between tracks',
+            value: settings.gaplessPlayback,
+            onChanged: (value) {
+              ref.read(settingsProvider.notifier).setGaplessPlayback(value);
+            },
+          ),
+
+          const SizedBox(height: 24),
+
           // ── Accessibility section ───────────────────────────────────
           _SectionHeader(title: 'Accessibility'),
           _SwitchTile(

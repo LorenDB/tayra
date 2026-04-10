@@ -742,6 +742,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// restore.  Set by [_restoreQueue] and cleared once the seek is done.
   Duration? _pendingRestorePosition;
 
+  /// Whether the player currently has a multi-source gapless playlist
+  /// loaded via [AudioPlayer.setAudioSources].
+  bool _gaplessActive = false;
+
   @override
   PlayerState build() {
     _handler = ref.read(audioHandlerProvider);
@@ -830,6 +834,30 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
     _subscriptions.add(
       _handler.audioPlayer.currentIndexStream.listen((index) {
+        // When gapless playback is active and the player auto-advances to a
+        // new track (index changed without a manual skip), update our state.
+        if (_gaplessActive &&
+            index != null &&
+            index != state.currentIndex &&
+            index >= 0 &&
+            index < state.queue.length) {
+          // Record listen for the track we just left.
+          try {
+            _recordCurrentTrackListen();
+          } catch (_) {}
+
+          state = state.copyWith(currentIndex: index);
+
+          final newTrack = state.currentTrack;
+          if (newTrack != null) {
+            _updateMediaItemForTrack(newTrack);
+            // Record server-side listen for new track.
+            _api.recordListening(newTrack.id).catchError((_) {});
+          }
+
+          _saveQueue();
+        }
+
         // Proactively prefetch radio tracks when near end of current track
         _maybePrefetchRadioTrack();
       }),
@@ -880,6 +908,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     } catch (e) {
       // Failed to restore - clear corrupted state
       await QueuePersistenceService.clearQueue();
+      _gaplessActive = false;
       state = const PlayerState();
     }
   }
@@ -921,6 +950,73 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }
 
   CachedFunkwhaleApi get _api => ref.read(cachedFunkwhaleApiProvider);
+
+  bool get _isGaplessEnabled => ref.read(settingsProvider).gaplessPlayback;
+
+  /// Build a single [AudioSource] for a track, preferring cached local files.
+  Future<AudioSource> _audioSourceForTrack(Track track) async {
+    final listenUrl = track.listenUrl;
+    if (listenUrl == null) {
+      throw Exception('Track ${track.id} has no listen URL');
+    }
+
+    final cachedFile = await _audioCache.getCachedAudio(track);
+    if (cachedFile != null) {
+      return AudioSource.uri(cachedFile.uri);
+    }
+
+    final streamUrl = _api.getStreamUrl(listenUrl);
+    return AudioSource.uri(Uri.parse(streamUrl), headers: _api.authHeaders);
+  }
+
+  /// Load all queue tracks into the player as a multi-source playlist
+  /// for gapless playback.  Returns true on success, false on failure
+  /// (caller should fall back to single-track loading).
+  Future<bool> _loadGaplessSource(
+    int startIndex, {
+    Duration? initialPosition,
+  }) async {
+    try {
+      final sources = <AudioSource>[];
+      for (final track in state.queue) {
+        sources.add(await _audioSourceForTrack(track));
+      }
+
+      // Update notification metadata for the starting track.
+      _updateMediaItemForTrack(state.queue[startIndex]);
+
+      await _handler.audioPlayer.setAudioSources(
+        sources,
+        initialIndex: startIndex,
+        initialPosition: initialPosition,
+      );
+
+      // Sync the player's loop mode so it can handle looping natively.
+      _handler.audioPlayer.setLoopMode(state.loopMode);
+
+      _gaplessActive = true;
+      return true;
+    } catch (e) {
+      debugPrint('Failed to build gapless source: $e');
+      _gaplessActive = false;
+      return false;
+    }
+  }
+
+  /// Update the OS media notification for the given track.
+  void _updateMediaItemForTrack(Track track) {
+    _handler.mediaItem.add(
+      MediaItem(
+        id: track.id.toString(),
+        title: track.title,
+        artist: track.artistName,
+        album: track.albumTitle,
+        artUri: track.coverUrl != null ? Uri.tryParse(track.coverUrl!) : null,
+        duration:
+            track.duration != null ? Duration(seconds: track.duration!) : null,
+      ),
+    );
+  }
 
   // Radio session state (when playing a radio stream)
   int? _radioSessionId;
@@ -1216,6 +1312,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     String? source,
   }) async {
     if (tracks.isEmpty) {
+      _gaplessActive = false;
       state = const PlayerState();
       await _handler.audioPlayer.stop();
       await QueuePersistenceService.clearQueue();
@@ -1229,8 +1326,24 @@ class PlayerNotifier extends Notifier<PlayerState> {
       isLoading: true,
     );
 
-    await _loadAndPlay(tracks[startIndex]);
-    _saveQueue(); // Save queue after loading new tracks
+    if (_isGaplessEnabled) {
+      final loaded = await _loadGaplessSource(startIndex);
+      if (loaded) {
+        await _handler.audioPlayer.play();
+        state = state.copyWith(isLoading: false);
+        try {
+          await _api.recordListening(tracks[startIndex].id);
+        } catch (_) {}
+      } else {
+        // Fall back to single-track loading.
+        await _loadAndPlay(tracks[startIndex]);
+      }
+    } else {
+      _gaplessActive = false;
+      await _loadAndPlay(tracks[startIndex]);
+    }
+
+    _saveQueue();
 
     // Pre-cache cover art and audio for queued tracks in the background.
     _preCacheCoverArt(tracks);
@@ -1246,6 +1359,15 @@ class PlayerNotifier extends Notifier<PlayerState> {
   void addToQueue(List<Track> tracks) {
     if (tracks.isEmpty) return;
     state = state.copyWith(queue: [...state.queue, ...tracks]);
+    // Sync gapless source.
+    if (_gaplessActive) {
+      for (final track in tracks) {
+        _audioSourceForTrack(track).then(
+          (source) => _handler.audioPlayer.addAudioSource(source),
+          onError: (_) {},
+        );
+      }
+    }
     _saveQueue();
     Aptabase.instance.trackEvent('add_to_queue', {'count': tracks.length});
   }
@@ -1256,9 +1378,17 @@ class PlayerNotifier extends Notifier<PlayerState> {
       playTracks([track], source: 'play_next');
       return;
     }
+    final insertIndex = state.currentIndex + 1;
     final newQueue = List<Track>.from(state.queue);
-    newQueue.insert(state.currentIndex + 1, track);
+    newQueue.insert(insertIndex, track);
     state = state.copyWith(queue: newQueue);
+    // Sync gapless source.
+    if (_gaplessActive) {
+      _audioSourceForTrack(track).then(
+        (source) => _handler.audioPlayer.insertAudioSource(insertIndex, source),
+        onError: (_) {},
+      );
+    }
     _saveQueue();
     Aptabase.instance.trackEvent('play_next');
   }
@@ -1276,6 +1406,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
       if (newIndex >= newQueue.length) newIndex = newQueue.length - 1;
     }
     state = state.copyWith(queue: newQueue, currentIndex: newIndex);
+    // Sync gapless source.
+    if (_gaplessActive) {
+      _handler.audioPlayer.removeAudioSourceAt(index);
+    }
     _saveQueue();
     Aptabase.instance.trackEvent('remove_from_queue');
   }
@@ -1305,6 +1439,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
     }
 
     state = state.copyWith(queue: newQueue, currentIndex: newCurrentIndex);
+    // Sync gapless source.
+    if (_gaplessActive) {
+      _handler.audioPlayer.moveAudioSource(oldIndex, newIndex);
+    }
     _saveQueue();
     Aptabase.instance.trackEvent('reorder_queue');
   }
@@ -1464,6 +1602,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       } else if (autoPlay && !state.hasNext) {
         // No more tracks - clear the queue to stop infinite loading
         debugPrint('No more playable tracks in queue, clearing player state');
+        _gaplessActive = false;
         state = const PlayerState();
       }
     }
@@ -1498,6 +1637,15 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }
 
   void _onTrackCompleted() {
+    if (_gaplessActive) {
+      // With gapless, the player's native loop mode handles LoopMode.one
+      // and LoopMode.all.  ProcessingState.completed only fires for
+      // LoopMode.off when the last track in the queue finishes.
+      state = state.copyWith(isPlaying: false);
+      _saveQueue();
+      return;
+    }
+
     // Record the completed track using its full duration. This handles the
     // case where _loadAndPlay (and thus _recordCurrentTrackListen) is never
     // called — e.g. the last track in the queue with LoopMode.off. It also
@@ -1557,6 +1705,17 @@ class PlayerNotifier extends Notifier<PlayerState> {
       final track = state.currentTrack;
       if (track != null) {
         state = state.copyWith(isLoading: true);
+        if (_isGaplessEnabled) {
+          final loaded = await _loadGaplessSource(
+            state.currentIndex,
+            initialPosition: seekTo,
+          );
+          if (loaded) {
+            await _handler.audioPlayer.play();
+            state = state.copyWith(isLoading: false);
+            return;
+          }
+        }
         await _loadAndPlay(track, initialPosition: seekTo);
         return;
       }
@@ -1580,9 +1739,38 @@ class PlayerNotifier extends Notifier<PlayerState> {
   Future<void> skipNext() async {
     if (!state.hasNext) return;
     _pendingRestorePosition = null;
-    final newIndex = state.currentIndex + 1;
-    state = state.copyWith(currentIndex: newIndex, isLoading: true);
-    await _loadAndPlay(state.queue[newIndex]);
+
+    if (_gaplessActive) {
+      try {
+        await _recordCurrentTrackListen();
+      } catch (_) {}
+      final newIndex = state.currentIndex + 1;
+      state = state.copyWith(currentIndex: newIndex);
+      _updateMediaItemForTrack(state.queue[newIndex]);
+      await _handler.audioPlayer.seekToNext();
+      try {
+        await _api.recordListening(state.queue[newIndex].id);
+      } catch (_) {}
+    } else if (_isGaplessEnabled) {
+      // Gapless was just turned on — build the full playlist from this track.
+      final newIndex = state.currentIndex + 1;
+      state = state.copyWith(currentIndex: newIndex, isLoading: true);
+      final loaded = await _loadGaplessSource(newIndex);
+      if (loaded) {
+        await _handler.audioPlayer.play();
+        state = state.copyWith(isLoading: false);
+        try {
+          await _api.recordListening(state.queue[newIndex].id);
+        } catch (_) {}
+      } else {
+        await _loadAndPlay(state.queue[newIndex]);
+      }
+    } else {
+      final newIndex = state.currentIndex + 1;
+      state = state.copyWith(currentIndex: newIndex, isLoading: true);
+      await _loadAndPlay(state.queue[newIndex]);
+    }
+
     _saveQueue();
     Aptabase.instance.trackEvent('skip_next');
   }
@@ -1596,10 +1784,26 @@ class PlayerNotifier extends Notifier<PlayerState> {
       await _handler.audioPlayer.seek(Duration.zero);
       return;
     }
-    final newIndex = state.currentIndex - 1;
+
     _pendingRestorePosition = null;
-    state = state.copyWith(currentIndex: newIndex, isLoading: true);
-    await _loadAndPlay(state.queue[newIndex]);
+
+    if (_gaplessActive) {
+      try {
+        await _recordCurrentTrackListen();
+      } catch (_) {}
+      final newIndex = state.currentIndex - 1;
+      state = state.copyWith(currentIndex: newIndex);
+      _updateMediaItemForTrack(state.queue[newIndex]);
+      await _handler.audioPlayer.seekToPrevious();
+      try {
+        await _api.recordListening(state.queue[newIndex].id);
+      } catch (_) {}
+    } else {
+      final newIndex = state.currentIndex - 1;
+      state = state.copyWith(currentIndex: newIndex, isLoading: true);
+      await _loadAndPlay(state.queue[newIndex]);
+    }
+
     _saveQueue();
     Aptabase.instance.trackEvent('skip_previous');
   }
@@ -1642,6 +1846,14 @@ class PlayerNotifier extends Notifier<PlayerState> {
         currentIndex: newIndex >= 0 ? newIndex : 0,
       );
     }
+    // Rebuild gapless source with the new queue order, preserving the
+    // current playback position so the transition is seamless.
+    if (_gaplessActive) {
+      final pos = _handler.audioPlayer.position;
+      _loadGaplessSource(state.currentIndex, initialPosition: pos).then((ok) {
+        if (ok) _handler.audioPlayer.play();
+      });
+    }
     _saveQueue();
     Aptabase.instance.trackEvent('toggle_shuffle', {
       'enabled': state.isShuffled,
@@ -1660,6 +1872,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
         state = state.copyWith(loopMode: LoopMode.off);
         break;
     }
+    // Sync loop mode to the player when gapless is active so that
+    // just_audio handles looping natively within the concatenation.
+    if (_gaplessActive) {
+      _handler.audioPlayer.setLoopMode(state.loopMode);
+    }
     _saveQueue();
     Aptabase.instance.trackEvent('toggle_loop_mode', {
       'mode': state.loopMode.name,
@@ -1670,8 +1887,22 @@ class PlayerNotifier extends Notifier<PlayerState> {
   Future<void> jumpTo(int index) async {
     if (index < 0 || index >= state.queue.length) return;
     _pendingRestorePosition = null;
-    state = state.copyWith(currentIndex: index, isLoading: true);
-    await _loadAndPlay(state.queue[index]);
+
+    if (_gaplessActive) {
+      try {
+        await _recordCurrentTrackListen();
+      } catch (_) {}
+      state = state.copyWith(currentIndex: index);
+      _updateMediaItemForTrack(state.queue[index]);
+      await _handler.audioPlayer.seek(Duration.zero, index: index);
+      try {
+        await _api.recordListening(state.queue[index].id);
+      } catch (_) {}
+    } else {
+      state = state.copyWith(currentIndex: index, isLoading: true);
+      await _loadAndPlay(state.queue[index]);
+    }
+
     _saveQueue();
     Aptabase.instance.trackEvent('jump_to_queue', {'index': index});
   }
