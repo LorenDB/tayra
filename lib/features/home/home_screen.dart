@@ -620,10 +620,19 @@ class _YearReviewBannerState extends ConsumerState<_YearReviewBanner>
             child: Material(
               color: Colors.transparent,
               child: InkWell(
-                onTap: () {
+                onTap: () async {
                   try {
                     Aptabase.instance.trackEvent('year_review_banner_tapped');
                   } catch (_) {}
+
+                  // Mark the banner dismissed for this calendar year so it
+                  // doesn't reappear after the user opens the year review.
+                  try {
+                    await ref
+                        .read(yearReviewBannerVisibleProvider.notifier)
+                        .dismiss();
+                  } catch (_) {}
+
                   final now = DateTime.now();
                   // In January, the "Year in Review" refers to the previous year
                   final year = now.month == 1 ? now.year - 1 : now.year;

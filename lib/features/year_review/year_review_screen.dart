@@ -49,6 +49,15 @@ class _YearReviewScreenState extends ConsumerState<YearReviewScreen>
       duration: const Duration(milliseconds: 1200),
     )..forward();
     _loadShader();
+    // Ensure the Year Review banner is recorded as dismissed when the
+    // user opens the review screen from anywhere. This mirrors the banner
+    // tap behaviour and prevents the banner from reappearing for the
+    // current calendar year after viewing the review.
+    Future.microtask(() async {
+      try {
+        await ref.read(yearReviewBannerVisibleProvider.notifier).dismiss();
+      } catch (_) {}
+    });
   }
 
   Future<void> _loadShader() async {
