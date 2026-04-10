@@ -27,6 +27,17 @@ static void my_application_activate(GApplication* application) {
   // in case the window manager does more exotic layout, e.g. tiling.
   // If running on Wayland assume the header bar will work (may need changing
   // if future cases occur).
+  // Note: we intentionally do NOT call gtk_window_set_default_icon_name here.
+  // On Wayland, taskbar/compositor matching is done via the xdg_toplevel
+  // app_id (set from the GApplication application-id), not the window icon.
+  // Setting a window icon would cause it to appear in the title bar decoration,
+  // which is undesirable.
+
+  // Prefer dark theme to match the app's AMOLED dark UI.
+  // The system theme will still override this if explicitly set.
+  GtkSettings* settings = gtk_settings_get_default();
+  g_object_set(settings, "gtk-application-prefer-dark-theme", TRUE, NULL);
+
   gboolean use_header_bar = TRUE;
 #ifdef GDK_WINDOWING_X11
   GdkScreen* screen = gtk_window_get_screen(window);

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Tayra
+Comment=A modern music player client for Funkwhale servers
+Exec=tayra
+Icon=dev.lorendb.tayra
+Terminal=false
+Type=Application
+Categories=AudioVideo;Audio;Player;Music;
+Keywords=music;funkwhale;audio;player;streaming;
