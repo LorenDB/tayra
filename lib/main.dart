@@ -69,11 +69,12 @@ void main() async {
     JustAudioMediaKit.ensureInitialized();
   }
 
+  // Ensure the listen history table exists before the cache manager starts,
+  // because cache eviction queries listen_history to score tracks.
+  await ListenHistoryService.ensureTable();
+
   // Initialize the cache manager
   await CacheManager.instance.initialize();
-
-  // Ensure the listen history table exists for year-in-review tracking
-  await ListenHistoryService.ensureTable();
 
   // Register MPRIS platform interface for Linux system media controls
   if (Platform.isLinux) {

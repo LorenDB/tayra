@@ -810,11 +810,35 @@ class CacheManager {
     return run;
   }
 
+  // ── Listen-history-aware eviction scoring ───────────────────────────
+  //
+  // Instead of pure LRU, audio eviction uses a composite score that
+  // factors in how often the user listens to each track. The score is:
+  //
+  //   eviction_score = last_accessed
+  //                    + (all_time_plays × _kPlayBonusMs)
+  //                    + (recent_plays   × _kRecentPlayBonusMs)
+  //
+  // Lower score → evicted first. Each all-time play adds 1 day of
+  // "freshness"; each play in the last 90 days adds an extra 7 days.
+  // Protected (manually downloaded) files are always skipped.
+
+  /// Bonus added per all-time play (1 day in milliseconds).
+  static const _kPlayBonusMs = 86400000;
+
+  /// Extra bonus per play in the last 90 days (7 days in milliseconds).
+  static const _kRecentPlayBonusMs = 7 * 86400000;
+
+  /// Cutoff for "recent" plays — 90 days in milliseconds.
+  static const _kRecentWindowMs = 90 * 86400000;
+
   // Actual eviction implementation. Kept separate so the wrapper can
   // serialize calls and handle errors without exposing the internal
   // implementation to callers.
   Future<void> _enforceLimitInternal() async {
     final db = await _db.database;
+    final now = DateTime.now().millisecondsSinceEpoch;
+    final recentCutoff = now - _kRecentWindowMs;
 
     // Check audio file size
     final audioResult = await db.rawQuery(
@@ -823,23 +847,38 @@ class CacheManager {
     );
     var audioSize = audioResult.first['total'] as int;
 
-    // Evict oldest audio files if over limit
+    // Evict audio files scored by listen history + recency.
     while (audioSize > _config.maxAudioSizeBytes) {
-      // Evict oldest audio files if over limit, but skip protected files
-      final oldestAudio = await db.rawQuery(
+      final candidates = await db.rawQuery(
         '''
-        SELECT cache_key, size_bytes FROM cache_files
-        WHERE file_type = ? AND (is_protected IS NULL OR is_protected = 0)
-        ORDER BY last_accessed ASC
+        SELECT
+          cf.cache_key,
+          cf.size_bytes,
+          cf.last_accessed
+            + COALESCE(lh.all_time_plays, 0) * $_kPlayBonusMs
+            + COALESCE(lh.recent_plays, 0)   * $_kRecentPlayBonusMs
+            AS eviction_score
+        FROM cache_files cf
+        LEFT JOIN (
+          SELECT
+            track_id,
+            COUNT(*) AS all_time_plays,
+            SUM(CASE WHEN listened_at >= ? THEN 1 ELSE 0 END) AS recent_plays
+          FROM listen_history
+          GROUP BY track_id
+        ) lh ON lh.track_id = cf.resource_id
+        WHERE cf.file_type = ?
+          AND (cf.is_protected IS NULL OR cf.is_protected = 0)
+        ORDER BY eviction_score ASC
         LIMIT 1
       ''',
-        [FileType.audio.name],
+        [recentCutoff, FileType.audio.name],
       );
 
-      if (oldestAudio.isEmpty) break;
+      if (candidates.isEmpty) break;
 
-      final key = oldestAudio.first['cache_key'] as String;
-      final size = oldestAudio.first['size_bytes'] as int;
+      final key = candidates.first['cache_key'] as String;
+      final size = candidates.first['size_bytes'] as int;
       try {
         await deleteFile(key);
       } catch (e) {
@@ -900,13 +939,12 @@ class CacheManager {
       metadataAndImageSize -= size;
     }
 
-    // Finally, enforce the overall total cache size limit. The above
-    // per-type evictions (audio / metadata+images) should keep each bucket
-    // under its allocated size, but it's possible the combined total still
-    // exceeds the user's configured overall limit (for example when older
-    // rows predate the per-type accounting). Evict the oldest non-protected
-    // entries across both files and metadata until we're under the total
-    // limit or no more candidates are deletable.
+    // Finally, enforce the overall total cache size limit.
+    //
+    // Eviction priority (tracks dropped first, album data preserved):
+    //   1. Non-protected audio files (scored by listen history)
+    //   2. Cover art images (LRU)
+    //   3. Metadata (LRU)
     var totalResult = await db.rawQuery(
       'SELECT COALESCE(SUM(size_bytes), 0) as total FROM cache_files',
     );
@@ -917,39 +955,85 @@ class CacheManager {
     var totalSize = (filesTotal) + (metaResult.first['total'] as int);
 
     while (totalSize > _config.maxTotalSizeBytes) {
-      // Select the single oldest deletable candidate across files and
-      // metadata. Exclude protected files.
-      final oldestCandidates = await db.rawQuery('''
-        SELECT cache_key, size_bytes, last_accessed, kind FROM (
-          SELECT cache_key, size_bytes, last_accessed, 'file' as kind
-            FROM cache_files
-            WHERE (is_protected IS NULL OR is_protected = 0)
-          UNION ALL
-          SELECT cache_key, size_bytes, last_accessed, 'metadata' as kind
-            FROM cache_metadata
-        )
-        ORDER BY last_accessed ASC
+      // Phase 1: try to evict non-protected audio (scored by listen history)
+      final audioCandidate = await db.rawQuery(
+        '''
+        SELECT
+          cf.cache_key,
+          cf.size_bytes,
+          cf.last_accessed
+            + COALESCE(lh.all_time_plays, 0) * $_kPlayBonusMs
+            + COALESCE(lh.recent_plays, 0)   * $_kRecentPlayBonusMs
+            AS eviction_score
+        FROM cache_files cf
+        LEFT JOIN (
+          SELECT
+            track_id,
+            COUNT(*) AS all_time_plays,
+            SUM(CASE WHEN listened_at >= ? THEN 1 ELSE 0 END) AS recent_plays
+          FROM listen_history
+          GROUP BY track_id
+        ) lh ON lh.track_id = cf.resource_id
+        WHERE cf.file_type = ?
+          AND (cf.is_protected IS NULL OR cf.is_protected = 0)
+        ORDER BY eviction_score ASC
         LIMIT 1
-      ''');
+      ''',
+        [recentCutoff, FileType.audio.name],
+      );
 
-      if (oldestCandidates.isEmpty) break;
-
-      final row = oldestCandidates.first;
-      final key = row['cache_key'] as String;
-      final size = row['size_bytes'] as int;
-      final kind = row['kind'] as String;
-
-      try {
-        if (kind == 'file') {
+      if (audioCandidate.isNotEmpty) {
+        final key = audioCandidate.first['cache_key'] as String;
+        final size = audioCandidate.first['size_bytes'] as int;
+        try {
           await deleteFile(key);
-        } else {
-          await deleteMetadata(key);
+        } catch (e) {
+          debugPrint('Cache: failed to evict audio $key: $e');
+          break;
         }
-      } catch (e) {
-        debugPrint('Cache: failed to evict $kind $key: $e');
-        break;
+        totalSize -= size;
+        continue;
       }
 
+      // Phase 2: no more audio — evict cover art (LRU)
+      final imageCandidate = await db.rawQuery('''
+        SELECT cache_key, size_bytes FROM cache_files
+        WHERE file_type = ?
+          AND (is_protected IS NULL OR is_protected = 0)
+        ORDER BY last_accessed ASC
+        LIMIT 1
+      ''', [FileType.coverArt.name]);
+
+      if (imageCandidate.isNotEmpty) {
+        final key = imageCandidate.first['cache_key'] as String;
+        final size = imageCandidate.first['size_bytes'] as int;
+        try {
+          await deleteFile(key);
+        } catch (e) {
+          debugPrint('Cache: failed to evict cover art $key: $e');
+          break;
+        }
+        totalSize -= size;
+        continue;
+      }
+
+      // Phase 3: no more files — evict metadata (LRU)
+      final metaCandidate = await db.query(
+        'cache_metadata',
+        orderBy: 'last_accessed ASC',
+        limit: 1,
+      );
+
+      if (metaCandidate.isEmpty) break;
+
+      final key = metaCandidate.first['cache_key'] as String;
+      final size = metaCandidate.first['size_bytes'] as int;
+      try {
+        await deleteMetadata(key);
+      } catch (e) {
+        debugPrint('Cache: failed to evict metadata $key: $e');
+        break;
+      }
       totalSize -= size;
     }
   }
