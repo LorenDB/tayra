@@ -51,6 +51,11 @@ final navigationObserverProvider = Provider<NavigationObserver>((ref) {
   return NavigationObserver();
 });
 
+/// Navigator key for the main shell route. Exposed so [AppShell] can attach
+/// a [NavigatorPopHandler] that intercepts Android back presses and redirects
+/// non-home tabs to the home tab rather than immediately exiting the app.
+final shellNavigatorKey = GlobalKey<NavigatorState>();
+
 final appRouterProvider = Provider<GoRouter>((ref) {
   final authChangeNotifier = ref.watch(authChangeNotifierProvider);
 
@@ -91,6 +96,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       // Main shell with bottom nav
       ShellRoute(
+        navigatorKey: shellNavigatorKey,
         builder: (context, state, child) => AppShell(child: child),
         routes: [
           GoRoute(

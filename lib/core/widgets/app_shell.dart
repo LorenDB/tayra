@@ -60,16 +60,35 @@ class AppShell extends ConsumerWidget {
         ref.watch(stashedQueuesProvider).asData?.value.length ?? 0;
     final useSideNav = Responsive.useSideNavigation(context);
 
-    if (useSideNav) {
-      return _buildDesktopLayout(
-        context,
-        ref,
-        currentIndex,
-        hasTrack,
-        stashCount,
+    final scaffold =
+        useSideNav
+            ? _buildDesktopLayout(
+              context,
+              ref,
+              currentIndex,
+              hasTrack,
+              stashCount,
+            )
+            : _buildMobileLayout(
+              context,
+              ref,
+              currentIndex,
+              hasTrack,
+              stashCount,
+            );
+
+    // On non-home tabs, block the default back-to-exit behaviour and
+    // navigate to Home instead.  PopScope sits above the Scaffold and
+    // intercepts the system back gesture / button before the navigator
+    // can act on it, regardless of the go_router shell structure.
+    if (currentIndex != 0) {
+      return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) => context.go(_paths[0]),
+        child: scaffold,
       );
     }
-    return _buildMobileLayout(context, ref, currentIndex, hasTrack, stashCount);
+    return scaffold;
   }
 
   // ── Desktop / tablet layout with NavigationRail ───────────────────────
@@ -140,7 +159,8 @@ class AppShell extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (hasTrack) const MiniPlayer(),
-          if (!hasTrack && stashCount > 0) _StashAccessBar(stashCount: stashCount),
+          if (!hasTrack && stashCount > 0)
+            _StashAccessBar(stashCount: stashCount),
           Container(
             decoration: const BoxDecoration(
               color: AppTheme.surfaceContainer,
