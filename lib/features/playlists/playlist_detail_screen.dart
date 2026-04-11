@@ -165,6 +165,75 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
     }
   }
 
+  Future<void> _confirmDeletePlaylist(
+    BuildContext context,
+    Playlist playlist,
+  ) async {
+    if (!context.mounted) return;
+
+    final ok = await showDialog<bool>(
+      context: context,
+      builder:
+          (ctx) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            title: const Text(
+              'Delete playlist',
+              style: TextStyle(
+                color: AppTheme.onBackground,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            content: const Text(
+              'Delete this playlist? This cannot be undone.',
+              style: TextStyle(color: AppTheme.onBackgroundMuted),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(color: AppTheme.onBackgroundMuted),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: const Text(
+                  'Delete',
+                  style: TextStyle(color: AppTheme.error),
+                ),
+              ),
+            ],
+          ),
+    );
+
+    if (ok != true) return;
+    if (!context.mounted) return;
+
+    try {
+      final api = ref.read(cachedFunkwhaleApiProvider);
+      await api.deletePlaylist(playlist.id);
+      // Force refresh the playlists cache so the list doesn't show the deleted
+      // playlist when we return to the playlists screen.
+      try {
+        await api.getPlaylists(scope: 'me', forceRefresh: true);
+      } catch (_) {}
+      try {
+        Aptabase.instance.trackEvent('playlist_deleted');
+      } catch (_) {}
+      ref.invalidate(playlistsProvider);
+
+      if (context.mounted) Navigator.of(context).pop();
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to delete playlist')),
+      );
+    }
+  }
+
   List<Track> get _tracks => _playlistTracks.map((pt) => pt.track).toList();
 
   void _playAll() {
@@ -344,6 +413,8 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                 color: AppTheme.surfaceContainer,
                 onSelected: (value) {
                   if (value == 'download') unawaited(toggleDownload());
+                  if (value == 'delete')
+                    unawaited(_confirmDeletePlaylist(context, playlist));
                 },
                 itemBuilder:
                     (_) => [
@@ -364,6 +435,23 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                               style: const TextStyle(
                                 color: AppTheme.onBackground,
                               ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: 'delete',
+                        child: Row(
+                          children: const [
+                            Icon(
+                              Icons.delete_rounded,
+                              size: 20,
+                              color: AppTheme.error,
+                            ),
+                            SizedBox(width: 12),
+                            Text(
+                              'Delete playlist',
+                              style: TextStyle(color: AppTheme.onBackground),
                             ),
                           ],
                         ),
