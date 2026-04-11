@@ -91,6 +91,10 @@ class CacheConfig {
 class CacheManager {
   final CacheDatabase _db = CacheDatabase.instance;
   CacheConfig _config = const CacheConfig();
+  // Queue used to serialize calls to the eviction routine. Multiple
+  // concurrent writes may call the eviction logic; chaining via this
+  // future ensures only one eviction runs at a time and avoids races.
+  Future<void> _enforceQueue = Future.value();
 
   // Singleton pattern
   CacheManager._();
@@ -106,6 +110,15 @@ class CacheManager {
       await reconcileAudioFiles();
     } catch (e) {
       debugPrint('CacheManager: reconcileAudioFiles failed: $e');
+    }
+    // After reconciling files that may have been left on disk, ensure the
+    // cache size limits are enforced. This handles the case where files
+    // existed on disk (or old DB rows) and the total size now exceeds the
+    // configured limit on startup.
+    try {
+      await _enforceLimit();
+    } catch (e) {
+      debugPrint('CacheManager: _enforceLimit failed during initialize: $e');
     }
   }
 
@@ -165,7 +178,9 @@ class CacheManager {
   }) async {
     final db = await _db.database;
     final jsonStr = jsonEncode(data);
-    final sizeBytes = jsonStr.length;
+    // Use UTF-8 byte length for accurate size accounting (jsonStr.length
+    // returns UTF-16 code units which doesn't reflect actual storage bytes).
+    final sizeBytes = utf8.encode(jsonStr).length;
     final now = DateTime.now().millisecondsSinceEpoch;
     final expiresAt = ttl != null ? now + ttl.inMilliseconds : null;
 
@@ -779,7 +794,26 @@ class CacheManager {
   }
 
   /// Enforce cache size limits using LRU eviction
-  Future<void> _enforceLimit() async {
+  ///
+  /// Wrapper that serializes eviction runs. It chains executions onto
+  /// [_enforceQueue] so concurrent callers are executed sequentially.
+  Future<void> _enforceLimit() {
+    final run = _enforceQueue.then((_) async {
+      try {
+        await _enforceLimitInternal();
+      } catch (e, st) {
+        debugPrint('Cache: _enforceLimitInternal failed: $e $st');
+      }
+    });
+    // Ensure any errors do not break the queue chain.
+    _enforceQueue = run.catchError((_) {});
+    return run;
+  }
+
+  // Actual eviction implementation. Kept separate so the wrapper can
+  // serialize calls and handle errors without exposing the internal
+  // implementation to callers.
+  Future<void> _enforceLimitInternal() async {
     final db = await _db.database;
 
     // Check audio file size
@@ -864,6 +898,59 @@ class CacheManager {
       final size = oldestMetadata.first['size_bytes'] as int;
       await deleteMetadata(key);
       metadataAndImageSize -= size;
+    }
+
+    // Finally, enforce the overall total cache size limit. The above
+    // per-type evictions (audio / metadata+images) should keep each bucket
+    // under its allocated size, but it's possible the combined total still
+    // exceeds the user's configured overall limit (for example when older
+    // rows predate the per-type accounting). Evict the oldest non-protected
+    // entries across both files and metadata until we're under the total
+    // limit or no more candidates are deletable.
+    var totalResult = await db.rawQuery(
+      'SELECT COALESCE(SUM(size_bytes), 0) as total FROM cache_files',
+    );
+    final filesTotal = totalResult.first['total'] as int;
+    final metaResult = await db.rawQuery(
+      'SELECT COALESCE(SUM(size_bytes), 0) as total FROM cache_metadata',
+    );
+    var totalSize = (filesTotal) + (metaResult.first['total'] as int);
+
+    while (totalSize > _config.maxTotalSizeBytes) {
+      // Select the single oldest deletable candidate across files and
+      // metadata. Exclude protected files.
+      final oldestCandidates = await db.rawQuery('''
+        SELECT cache_key, size_bytes, last_accessed, kind FROM (
+          SELECT cache_key, size_bytes, last_accessed, 'file' as kind
+            FROM cache_files
+            WHERE (is_protected IS NULL OR is_protected = 0)
+          UNION ALL
+          SELECT cache_key, size_bytes, last_accessed, 'metadata' as kind
+            FROM cache_metadata
+        )
+        ORDER BY last_accessed ASC
+        LIMIT 1
+      ''');
+
+      if (oldestCandidates.isEmpty) break;
+
+      final row = oldestCandidates.first;
+      final key = row['cache_key'] as String;
+      final size = row['size_bytes'] as int;
+      final kind = row['kind'] as String;
+
+      try {
+        if (kind == 'file') {
+          await deleteFile(key);
+        } else {
+          await deleteMetadata(key);
+        }
+      } catch (e) {
+        debugPrint('Cache: failed to evict $kind $key: $e');
+        break;
+      }
+
+      totalSize -= size;
     }
   }
 }
