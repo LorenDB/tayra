@@ -131,6 +131,7 @@ Accessibility note: there's a user setting to disable dynamic album accent color
 
 - Log only basic, non-identifying usage statistics
 - Do NOT log user-identifying information
+- When adding new features, be sure to consider if you should proactively insert non-PII collecting Aptabase calls
 
 ## Android Notes
 
@@ -138,5 +139,4 @@ Accessibility note: there's a user setting to disable dynamic album accent color
 - Permissions: INTERNET, WAKE_LOCK, FOREGROUND_SERVICE, FOREGROUND_SERVICE_MEDIA_PLAYBACK
 - Network security config allows cleartext HTTP for localhost (dev only)
 - Android Auto browse tree support in `player_provider.dart`
-
-- To target a specific Android device when multiple are connected, add `-s <device-id>` to `adb` commands (find IDs with `adb devices`).
+- Android SQL doesn't necessarily have as many features available as other platforms, so be sure to use Android-compatible SQL statements
