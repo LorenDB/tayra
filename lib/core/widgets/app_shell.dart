@@ -5,6 +5,7 @@ import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/layout/responsive.dart';
 import 'package:tayra/features/player/mini_player.dart';
 import 'package:tayra/features/player/player_provider.dart';
+import 'package:tayra/features/player/queue_screen.dart';
 import 'package:tayra/features/search/search_screen.dart';
 import 'package:tayra/core/widgets/side_panel.dart';
 
@@ -55,12 +56,20 @@ class AppShell extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentIndex = _currentIndex(context);
     final hasTrack = ref.watch(playerProvider).currentTrack != null;
+    final stashCount =
+        ref.watch(stashedQueuesProvider).asData?.value.length ?? 0;
     final useSideNav = Responsive.useSideNavigation(context);
 
     if (useSideNav) {
-      return _buildDesktopLayout(context, ref, currentIndex, hasTrack);
+      return _buildDesktopLayout(
+        context,
+        ref,
+        currentIndex,
+        hasTrack,
+        stashCount,
+      );
     }
-    return _buildMobileLayout(context, ref, currentIndex, hasTrack);
+    return _buildMobileLayout(context, ref, currentIndex, hasTrack, stashCount);
   }
 
   // ── Desktop / tablet layout with NavigationRail ───────────────────────
@@ -70,8 +79,10 @@ class AppShell extends ConsumerWidget {
     WidgetRef ref,
     int currentIndex,
     bool hasTrack,
+    int stashCount,
   ) {
     final isExpanded = Responsive.isExpanded(context);
+    final showPanel = isExpanded && (hasTrack || stashCount > 0);
 
     return Scaffold(
       backgroundColor: AppTheme.background,
@@ -82,7 +93,6 @@ class AppShell extends ConsumerWidget {
             currentIndex: currentIndex,
             extended: isExpanded,
             onDestinationSelected: (i) {
-              // Navigate by path to avoid relying on named routes.
               context.go(_paths[i]);
             },
           ),
@@ -97,8 +107,8 @@ class AppShell extends ConsumerWidget {
           // ── Main content area ──
           Expanded(child: child),
 
-          // ── Now Playing side panel (desktop only, when a track is loaded) ──
-          if (hasTrack && isExpanded) ...[
+          // ── Side panel: now-playing when a track is loaded, or stash inbox ──
+          if (showPanel) ...[
             const VerticalDivider(
               width: 1,
               thickness: 0.5,
@@ -121,6 +131,7 @@ class AppShell extends ConsumerWidget {
     WidgetRef ref,
     int currentIndex,
     bool hasTrack,
+    int stashCount,
   ) {
     return Scaffold(
       backgroundColor: AppTheme.background,
@@ -129,6 +140,7 @@ class AppShell extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (hasTrack) const MiniPlayer(),
+          if (!hasTrack && stashCount > 0) _StashAccessBar(stashCount: stashCount),
           Container(
             decoration: const BoxDecoration(
               color: AppTheme.surfaceContainer,
@@ -182,6 +194,59 @@ class AppShell extends ConsumerWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// ── Stash Access Bar ────────────────────────────────────────────────────
+
+/// Compact bar shown above the bottom nav on mobile when nothing is playing
+/// but there are stashed queues. Tapping it opens the stash sheet.
+class _StashAccessBar extends ConsumerWidget {
+  final int stashCount;
+
+  const _StashAccessBar({required this.stashCount});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Material(
+      color: AppTheme.surfaceContainer,
+      child: InkWell(
+        onTap: () => showStashedQueuesSheet(context, ref),
+        child: Container(
+          height: 48,
+          decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(color: AppTheme.divider, width: 0.5),
+            ),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            children: [
+              const Icon(
+                Icons.inbox_outlined,
+                color: AppTheme.primary,
+                size: 18,
+              ),
+              const SizedBox(width: 12),
+              Text(
+                '$stashCount stashed queue${stashCount == 1 ? '' : 's'}',
+                style: const TextStyle(
+                  color: AppTheme.onBackground,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const Spacer(),
+              const Icon(
+                Icons.chevron_right_rounded,
+                color: AppTheme.onBackgroundSubtle,
+                size: 18,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

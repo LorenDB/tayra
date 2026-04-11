@@ -732,6 +732,12 @@ final playerProvider = NotifierProvider<PlayerNotifier, PlayerState>(
   PlayerNotifier.new,
 );
 
+/// Async provider that exposes the persisted list of stashed queues.
+/// Invalidated whenever a stash is added, restored, or deleted.
+final stashedQueuesProvider = FutureProvider<List<StashedQueue>>((ref) async {
+  return QueuePersistenceService.loadStashes();
+});
+
 class PlayerNotifier extends Notifier<PlayerState> {
   late final FunkwhaleAudioHandler _handler;
   late final AudioCacheService _audioCache;
@@ -1447,6 +1453,60 @@ class PlayerNotifier extends Notifier<PlayerState> {
     }
     _saveQueue();
     Aptabase.instance.trackEvent('reorder_queue');
+  }
+
+  // ── Queue stash ─────────────────────────────────────────────────────────
+
+  /// Snapshot the current queue + playback position, persist it as a stash,
+  /// then clear the active queue so the user can play something else.
+  Future<void> stashQueue() async {
+    if (state.queue.isEmpty) return;
+
+    final stash = StashedQueue(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      queue: List<Track>.from(state.queue),
+      unshuffledQueue: List<Track>.from(state.unshuffledQueue),
+      currentIndex: state.currentIndex,
+      position: state.position,
+      isShuffled: state.isShuffled,
+      loopMode: _loopModeToString(state.loopMode),
+      savedAt: DateTime.now(),
+    );
+
+    await QueuePersistenceService.addStash(stash);
+    ref.invalidate(stashedQueuesProvider);
+    try {
+      Aptabase.instance.trackEvent('queue_stashed', {'track_count': state.queue.length});
+    } catch (_) {}
+
+    // Clear the active queue.
+    await playTracks([], source: 'stash');
+  }
+
+  /// Restore a previously stashed queue by [id], replacing the active queue.
+  Future<void> restoreStash(String id) async {
+    final stashes = await QueuePersistenceService.loadStashes();
+    final stash = stashes.firstWhere((s) => s.id == id, orElse: () => throw StateError('Stash not found'));
+    if (stash.queue.isEmpty) return;
+
+    await QueuePersistenceService.removeStash(id);
+    ref.invalidate(stashedQueuesProvider);
+    try {
+      Aptabase.instance.trackEvent('stash_restored');
+    } catch (_) {}
+
+    // Load the stashed tracks and seek to the saved position.
+    await playTracks(stash.queue, startIndex: stash.currentIndex, source: 'stash_restore');
+
+    if (stash.position.inMilliseconds > 0) {
+      await seekTo(stash.position);
+    }
+  }
+
+  /// Delete a stash by [id] without restoring it.
+  Future<void> deleteStash(String id) async {
+    await QueuePersistenceService.removeStash(id);
+    ref.invalidate(stashedQueuesProvider);
   }
 
   Future<void> _loadAndPlay(Track track, {Duration? initialPosition}) async {

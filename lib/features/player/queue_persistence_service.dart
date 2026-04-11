@@ -2,6 +2,65 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tayra/core/api/models.dart';
 
+// ── Stash ────────────────────────────────────────────────────────────────
+
+/// A snapshot of the queue saved by the user for later restoration.
+class StashedQueue {
+  final String id;
+  final List<Track> queue;
+  final List<Track> unshuffledQueue;
+  final int currentIndex;
+  final Duration position;
+  final bool isShuffled;
+  final String loopMode;
+  final DateTime savedAt;
+
+  const StashedQueue({
+    required this.id,
+    required this.queue,
+    this.unshuffledQueue = const [],
+    required this.currentIndex,
+    required this.position,
+    required this.isShuffled,
+    required this.loopMode,
+    required this.savedAt,
+  });
+
+  Track? get currentTrack =>
+      currentIndex >= 0 && currentIndex < queue.length
+          ? queue[currentIndex]
+          : null;
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'queue': queue.map((t) => t.toJson()).toList(),
+    'unshuffledQueue': unshuffledQueue.map((t) => t.toJson()).toList(),
+    'currentIndex': currentIndex,
+    'positionMs': position.inMilliseconds,
+    'isShuffled': isShuffled,
+    'loopMode': loopMode,
+    'savedAt': savedAt.toIso8601String(),
+  };
+
+  factory StashedQueue.fromJson(Map<String, dynamic> json) {
+    List<Track> parseTracks(dynamic raw) {
+      if (raw is! List) return [];
+      return raw.whereType<Map<String, dynamic>>().map(Track.fromJson).toList();
+    }
+
+    return StashedQueue(
+      id: json['id'] as String,
+      queue: parseTracks(json['queue']),
+      unshuffledQueue: parseTracks(json['unshuffledQueue']),
+      currentIndex: (json['currentIndex'] as int? ?? 0),
+      position: Duration(milliseconds: json['positionMs'] as int? ?? 0),
+      isShuffled: json['isShuffled'] as bool? ?? false,
+      loopMode: json['loopMode'] as String? ?? 'off',
+      savedAt: DateTime.tryParse(json['savedAt'] as String? ?? '') ?? DateTime.now(),
+    );
+  }
+}
+
 /// Service for persisting and restoring the player queue state between app
 /// launches. Stores queue tracks, current index, position, and playback mode.
 class QueuePersistenceService {
@@ -113,6 +172,63 @@ class QueuePersistenceService {
       return null;
     }
   }
+
+  // ── Stash ──────────────────────────────────────────────────────────────
+
+  static const _keyStashes = 'player_stashes';
+  static const _maxStashes = 10;
+
+  /// Load all stashed queues, most-recent first.
+  static Future<List<StashedQueue>> loadStashes() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final raw = prefs.getString(_keyStashes);
+      if (raw == null) return [];
+      final list = jsonDecode(raw) as List<dynamic>;
+      return list
+          .whereType<Map<String, dynamic>>()
+          .map(StashedQueue.fromJson)
+          .toList();
+    } catch (_) {
+      return [];
+    }
+  }
+
+  /// Persist [stashes] to SharedPreferences.
+  static Future<void> _saveStashes(List<StashedQueue> stashes) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+      _keyStashes,
+      jsonEncode(stashes.map((s) => s.toJson()).toList()),
+    );
+  }
+
+  /// Add a new stash, evicting the oldest entry when the limit is exceeded.
+  static Future<List<StashedQueue>> addStash(StashedQueue stash) async {
+    final stashes = await loadStashes();
+    stashes.insert(0, stash);
+    if (stashes.length > _maxStashes) stashes.removeLast();
+    await _saveStashes(stashes);
+    return stashes;
+  }
+
+  /// Remove a stash by [id].
+  static Future<List<StashedQueue>> removeStash(String id) async {
+    final stashes = await loadStashes();
+    stashes.removeWhere((s) => s.id == id);
+    await _saveStashes(stashes);
+    return stashes;
+  }
+
+  /// Clear all stashes.
+  static Future<void> clearStashes() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(_keyStashes);
+    } catch (_) {}
+  }
+
+  // ── Queue ──────────────────────────────────────────────────────────────
 
   /// Clear the saved queue state.
   static Future<void> clearQueue() async {
