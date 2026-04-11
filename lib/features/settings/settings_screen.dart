@@ -11,6 +11,16 @@ import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/features/year_review/listen_history_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+// Format MB values (decimal) used by the slider/settings UI so they always
+// match what the user selected.
+String _formatLimitMB(int mb) {
+  if (mb >= 1000) {
+    final gb = mb / 1000.0;
+    return '${gb.toStringAsFixed(1)} GB';
+  }
+  return '$mb MB';
+}
+
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
@@ -170,9 +180,13 @@ class SettingsScreen extends ConsumerWidget {
           _CacheSizeLimitTile(
             currentLimitMB: settings.cacheSizeLimitMB,
             onChanged: (sizeMB) {
-              ref.read(settingsProvider.notifier).setCacheSizeLimit(sizeMB);
-              // Refresh cache stats
-              ref.invalidate(cacheStatsProvider);
+              // Ensure the preference and cache manager are updated before
+              // refreshing the displayed stats to avoid transient mismatches
+              // between binary/decimal representations.
+              ref
+                  .read(settingsProvider.notifier)
+                  .setCacheSizeLimit(sizeMB)
+                  .then((_) => ref.invalidate(cacheStatsProvider));
             },
           ),
           _ActionTile(
@@ -838,13 +852,14 @@ class _ErrorTile extends StatelessWidget {
   }
 }
 
-class _CacheInfoTile extends StatelessWidget {
+class _CacheInfoTile extends ConsumerWidget {
   final CacheStats stats;
 
   const _CacheInfoTile({required this.stats});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settings = ref.watch(settingsProvider);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -877,7 +892,7 @@ class _CacheInfoTile extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '${stats.totalSizeMB} MB of ${stats.maxTotalSizeMB} MB',
+                      '${stats.totalSizeDisplay} of ${_formatLimitMB(settings.cacheSizeLimitMB)}',
                       style: const TextStyle(
                         color: AppTheme.onBackgroundMuted,
                         fontSize: 12,
@@ -908,21 +923,21 @@ class _CacheInfoTile extends StatelessWidget {
               Expanded(
                 child: _CacheBreakdownItem(
                   label: 'Audio',
-                  size: stats.audioSizeMB,
+                  size: stats.audioSizeDisplay,
                   count: stats.audioCount,
                 ),
               ),
               Expanded(
                 child: _CacheBreakdownItem(
                   label: 'Metadata',
-                  size: stats.metadataSizeMB,
+                  size: stats.metadataSizeDisplay,
                   count: stats.metadataCount,
                 ),
               ),
               Expanded(
                 child: _CacheBreakdownItem(
                   label: 'Images',
-                  size: stats.imageSizeMB,
+                  size: stats.imageSizeDisplay,
                   count: stats.imageCount,
                 ),
               ),
@@ -959,7 +974,7 @@ class _CacheBreakdownItem extends StatelessWidget {
         ),
         const SizedBox(height: 2),
         Text(
-          '$size MB',
+          size,
           style: const TextStyle(
             color: AppTheme.onBackground,
             fontSize: 13,
@@ -1026,7 +1041,7 @@ class _CacheSizeLimitTileState extends State<_CacheSizeLimitTile> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '${widget.currentLimitMB} MB',
+                      _formatLimitDisplay(widget.currentLimitMB),
                       style: const TextStyle(
                         color: AppTheme.primary,
                         fontSize: 12,
@@ -1080,6 +1095,15 @@ class _CacheSizeLimitTileState extends State<_CacheSizeLimitTile> {
         ],
       ),
     );
+  }
+
+  // Format the slider value using decimal units (MB/GB) to match CacheManager
+  String _formatLimitDisplay(int mb) {
+    if (mb >= 1000) {
+      final gb = mb / 1000.0;
+      return '${gb.toStringAsFixed(1)} GB';
+    }
+    return '$mb MB';
   }
 }
 

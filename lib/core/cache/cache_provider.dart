@@ -58,5 +58,6 @@ final cacheStatsProvider = FutureProvider.autoDispose<CacheStats>((ref) async {
 /// Provider for current cache size limit in MB
 final cacheSizeLimitProvider = FutureProvider<int>((ref) async {
   final config = await CacheConfig.load();
-  return config.maxTotalSizeBytes ~/ (1024 * 1024);
+  // Return limit in decimal MB (1 MB = 1,000,000 bytes) to match UI slider
+  return config.maxTotalSizeBytes ~/ 1000000;
 });

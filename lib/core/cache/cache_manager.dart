@@ -34,16 +34,40 @@ class CacheConfig {
   final int maxMetadataSizeBytes;
 
   const CacheConfig({
-    this.maxTotalSizeBytes = 500 * 1024 * 1024, // 500 MB
-    this.maxAudioSizeBytes = 300 * 1024 * 1024, // 300 MB
-    this.maxMetadataSizeBytes = 200 * 1024 * 1024, // 200 MB
+    // Use decimal bytes for alignment with UI slider (1 MB = 1,000,000 bytes)
+    this.maxTotalSizeBytes = 500 * 1000000, // 500 MB
+    this.maxAudioSizeBytes = 300 * 1000000, // 300 MB
+    this.maxMetadataSizeBytes = 200 * 1000000, // 200 MB
   });
 
   /// Load config from SharedPreferences
   static Future<CacheConfig> load() async {
     final prefs = await SharedPreferences.getInstance();
-    final maxSizeMB = prefs.getInt('cache_max_size_mb') ?? 500;
-    final maxTotalBytes = maxSizeMB * 1024 * 1024;
+    // Read stored preference. Older versions mistakenly stored the value in
+    // bytes instead of MB — detect that and normalize to MB.
+    final rawValue = prefs.getInt('cache_max_size_mb');
+    int maxSizeMB;
+    if (rawValue == null) {
+      maxSizeMB = 500;
+    } else if (rawValue > 1000000) {
+      // Looks like bytes were stored. Older versions used base-1024 when
+      // converting MB->bytes (MB * 1024 * 1024). Detect that and recover
+      // the original MB if possible, otherwise fall back to decimal MB.
+      final mbFromBinary = rawValue / (1024 * 1024);
+      final roundedBinary = mbFromBinary.roundToDouble();
+      if ((mbFromBinary - roundedBinary).abs() < 0.01) {
+        // Very close to an integer — assume it was binary MB
+        maxSizeMB = roundedBinary.toInt();
+      } else {
+        // Otherwise treat stored value as decimal bytes
+        maxSizeMB = (rawValue / 1000000).round();
+      }
+    } else {
+      maxSizeMB = rawValue;
+    }
+
+    // Convert MB (decimal) to bytes
+    final maxTotalBytes = maxSizeMB * 1000000;
 
     // Allocate 60% to audio, 40% to metadata/images
     final maxAudioBytes = (maxTotalBytes * 0.6).toInt();
@@ -526,6 +550,29 @@ class CacheManager {
         ) ??
         0;
 
+    // Read preference directly to ensure the UI shows the value the user
+    // selected in the settings slider (stored as MB). Handle legacy stored
+    // values that might be in bytes.
+    final prefs = await SharedPreferences.getInstance();
+    final rawValue = prefs.getInt('cache_max_size_mb');
+    int maxSizeMB;
+    if (rawValue == null) {
+      maxSizeMB = _config.maxTotalSizeBytes ~/ 1000000;
+    } else if (rawValue > 1000000) {
+      // If prefs contains bytes, try to detect binary vs decimal storage.
+      final mbFromBinary = rawValue / (1024 * 1024);
+      final roundedBinary = mbFromBinary.roundToDouble();
+      if ((mbFromBinary - roundedBinary).abs() < 0.01) {
+        maxSizeMB = roundedBinary.toInt();
+      } else {
+        maxSizeMB = (rawValue / 1000000).round();
+      }
+    } else {
+      maxSizeMB = rawValue;
+    }
+
+    final maxTotalBytes = maxSizeMB * 1000000;
+
     return CacheStats(
       metadataSize: metadataSize,
       audioSize: audioSize,
@@ -534,7 +581,8 @@ class CacheManager {
       metadataCount: metadataCount,
       audioCount: audioCount,
       imageCount: imageCount,
-      maxTotalSize: _config.maxTotalSizeBytes,
+      maxTotalSize: maxTotalBytes,
+      maxTotalSizeMB: maxSizeMB,
       maxAudioSize: _config.maxAudioSizeBytes,
       maxMetadataSize: _config.maxMetadataSizeBytes,
     );
@@ -830,6 +878,7 @@ class CacheStats {
   final int audioCount;
   final int imageCount;
   final int maxTotalSize;
+  final int maxTotalSizeMB;
   final int maxAudioSize;
   final int maxMetadataSize;
 
@@ -842,6 +891,7 @@ class CacheStats {
     required this.audioCount,
     required this.imageCount,
     required this.maxTotalSize,
+    required this.maxTotalSizeMB,
     required this.maxAudioSize,
     required this.maxMetadataSize,
   });
@@ -849,11 +899,37 @@ class CacheStats {
   double get usedPercentage =>
       maxTotalSize > 0 ? (totalSize / maxTotalSize) * 100 : 0;
 
-  String get totalSizeMB => (totalSize / (1024 * 1024)).toStringAsFixed(1);
-  String get maxTotalSizeMB =>
-      (maxTotalSize / (1024 * 1024)).toStringAsFixed(0);
-  String get audioSizeMB => (audioSize / (1024 * 1024)).toStringAsFixed(1);
-  String get metadataSizeMB =>
-      (metadataSize / (1024 * 1024)).toStringAsFixed(1);
-  String get imageSizeMB => (imageSize / (1024 * 1024)).toStringAsFixed(1);
+  // Legacy getters (keep for API compatibility) but use decimal MB
+  String get totalSizeMB => (totalSize / 1000000.0).toStringAsFixed(1);
+  // legacy string getter removed; prefer using `maxTotalSizeMB` (int) and
+  // `maxTotalSizeDisplay` for human-readable text.
+  String get audioSizeMB => (audioSize / 1000000.0).toStringAsFixed(1);
+  String get metadataSizeMB => (metadataSize / 1000000.0).toStringAsFixed(1);
+  String get imageSizeMB => (imageSize / 1000000.0).toStringAsFixed(1);
+
+  // Human-friendly display values. Show GB when size is 1 GB or larger.
+  // Use base-10 (SI) units so displayed MB/GB align with the settings slider
+  // which works in decimal MB (e.g. 5000 MB = 5 GB). 1 MB = 1,000,000 bytes.
+  String _formatBytesReadable(int bytes) {
+    final mb = bytes / 1000000.0; // decimal MB
+    if (mb >= 1000.0) {
+      final gb = mb / 1000.0;
+      return '${gb.toStringAsFixed(1)} GB';
+    }
+    return '${mb.toStringAsFixed(1)} MB';
+  }
+
+  String get totalSizeDisplay => _formatBytesReadable(totalSize);
+  // Prefer to display the configured MB value so it matches the slider.
+  String get maxTotalSizeDisplay {
+    final mb = maxTotalSizeMB;
+    if (mb >= 1000) {
+      return '${(mb / 1000.0).toStringAsFixed(1)} GB';
+    }
+    return '$mb MB';
+  }
+
+  String get audioSizeDisplay => _formatBytesReadable(audioSize);
+  String get metadataSizeDisplay => _formatBytesReadable(metadataSize);
+  String get imageSizeDisplay => _formatBytesReadable(imageSize);
 }
