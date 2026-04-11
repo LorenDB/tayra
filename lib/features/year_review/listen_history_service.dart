@@ -432,6 +432,32 @@ class ListenHistoryService {
     }
   }
 
+  /// Return the top track IDs for the given year ordered by play count.
+  /// Useful for creating playlists from a user's most-listened tracks.
+  static Future<List<int>> getTopTrackIdsForYear(
+    int year, {
+    int limit = 25,
+  }) async {
+    final db = await CacheDatabase.instance.database;
+    final startMs = DateTime(year).millisecondsSinceEpoch;
+    final endMs = DateTime(year + 1).millisecondsSinceEpoch;
+
+    final rows = await db.rawQuery(
+      '''
+      SELECT track_id, COUNT(*) as play_count
+      FROM $_tableName
+      WHERE listened_at >= ? AND listened_at < ?
+      GROUP BY track_id
+      ORDER BY play_count DESC
+      LIMIT ?
+    ''',
+      [startMs, endMs, limit],
+    );
+
+    // Convert possible numeric types to int
+    return rows.map<int>((r) => (r['track_id'] as num).toInt()).toList();
+  }
+
   /// Get the total listen count (all time).
   static Future<int> getTotalListenCount() async {
     final db = await CacheDatabase.instance.database;

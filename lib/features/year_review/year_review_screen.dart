@@ -7,6 +7,7 @@ import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/features/year_review/listen_history_provider.dart';
 import 'package:tayra/features/year_review/listen_history_service.dart';
+import 'package:tayra/core/api/cached_api_repository.dart';
 
 // ── Month name helper ───────────────────────────────────────────────────
 
@@ -356,9 +357,160 @@ class _ReviewContent extends StatelessWidget {
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 24)),
 
-          // Top tracks list
+          // Top tracks list — title row includes a subtle Create button
           if (stats.topTracks.length > 1) ...[
-            const SliverToBoxAdapter(child: _SectionTitle(title: 'Top Tracks')),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+                child: Row(
+                  children: [
+                    const Text(
+                      'Top Tracks',
+                      style: TextStyle(
+                        color: AppTheme.onBackground,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const Spacer(),
+                    Consumer(
+                      builder: (context, ref, _) {
+                        final api = ref.read(cachedFunkwhaleApiProvider);
+                        return TextButton.icon(
+                          style: TextButton.styleFrom(
+                            foregroundColor: AppTheme.onBackground,
+                            backgroundColor: AppTheme.surfaceContainer,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          icon: const Icon(
+                            Icons.playlist_add_rounded,
+                            size: 18,
+                          ),
+                          label: const Text('Create Playlist'),
+                          onPressed: () async {
+                            try {
+                              final topIds =
+                                  await ListenHistoryService.getTopTrackIdsForYear(
+                                    stats.year,
+                                    limit: stats.topTracks.length,
+                                  );
+                              try {
+                                Aptabase.instance.trackEvent(
+                                  'year_review_create_playlist_initiated',
+                                  {
+                                    'year': stats.year,
+                                    'top_tracks_count': topIds.length,
+                                  },
+                                );
+                              } catch (_) {}
+
+                              if (topIds.isEmpty) {
+                                try {
+                                  Aptabase.instance.trackEvent(
+                                    'year_review_create_playlist_no_tracks',
+                                    {'year': stats.year},
+                                  );
+                                } catch (_) {}
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('No tracks to add'),
+                                  ),
+                                );
+                                return;
+                              }
+
+                              final nameController = TextEditingController(
+                                text: 'Top tracks ${stats.year}',
+                              );
+                              final name = await showDialog<String?>(
+                                context: context,
+                                builder:
+                                    (ctx) => AlertDialog(
+                                      title: const Text('Create playlist'),
+                                      content: TextField(
+                                        controller: nameController,
+                                        decoration: const InputDecoration(
+                                          labelText: 'Playlist name',
+                                        ),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed:
+                                              () => Navigator.of(ctx).pop(null),
+                                          child: const Text('Cancel'),
+                                        ),
+                                        TextButton(
+                                          onPressed:
+                                              () => Navigator.of(
+                                                ctx,
+                                              ).pop(nameController.text.trim()),
+                                          child: const Text('Create'),
+                                        ),
+                                      ],
+                                    ),
+                              );
+
+                              if (name == null || name.isEmpty) {
+                                try {
+                                  Aptabase.instance.trackEvent(
+                                    'year_review_create_playlist_cancelled',
+                                    {'year': stats.year},
+                                  );
+                                } catch (_) {}
+                                return;
+                              }
+
+                              final playlist = await api.createPlaylist(
+                                name: name,
+                              );
+                              await api.addTracksToPlaylist(
+                                playlist.id,
+                                topIds,
+                              );
+
+                              try {
+                                Aptabase.instance.trackEvent(
+                                  'year_review_create_playlist_created',
+                                  {
+                                    'year': stats.year,
+                                    'playlist_id': playlist.id,
+                                    'track_count': topIds.length,
+                                  },
+                                );
+                              } catch (_) {}
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Playlist created'),
+                                ),
+                              );
+                            } catch (e) {
+                              try {
+                                Aptabase.instance.trackEvent(
+                                  'year_review_create_playlist_failed',
+                                  {'year': stats.year, 'error': e.toString()},
+                                );
+                              } catch (_) {}
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Failed to create playlist'),
+                                ),
+                              );
+                            }
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
             SliverToBoxAdapter(
               child: _RankedList(items: stats.topTracks, type: 'track'),
             ),
