@@ -633,10 +633,7 @@ class _YearReviewBannerState extends ConsumerState<_YearReviewBanner>
                         .dismiss();
                   } catch (_) {}
 
-                  final now = DateTime.now();
-                  // In January, the "Year in Review" refers to the previous year
-                  final year = now.month == 1 ? now.year - 1 : now.year;
-                  context.push('/year-review/$year');
+                  context.push('/year-review/${DateTime.now().year}');
                 },
                 borderRadius: BorderRadius.circular(16),
                 splashColor: Colors.white.withValues(alpha: 0.1),
