@@ -1,5 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tayra/core/api/api_utils.dart';
+import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/features/year_review/listen_history_service.dart';
 
 // ── Providers ───────────────────────────────────────────────────────────
@@ -11,10 +14,73 @@ final availableYearsProvider = FutureProvider.autoDispose<List<int>>((
   return await ListenHistoryService.getAvailableYears();
 });
 
-/// Year-in-review stats for a specific year.
+/// Year-in-review stats for a specific year, enriched with favorites data.
 final yearReviewProvider = FutureProvider.autoDispose
     .family<YearReviewStats, int>((ref, year) async {
-      return await ListenHistoryService.getYearStats(year);
+      // Fetch listen stats and all-favorites in parallel for performance.
+      final api = ref.read(cachedFunkwhaleApiProvider);
+
+      final statsF = ListenHistoryService.getYearStats(year);
+
+      // Fetch all favorite pages. Silently swallow errors so an API outage
+      // doesn't break the whole review screen.
+      late List<Favorite> allFavorites;
+      try {
+        allFavorites = await fetchAllPages<Favorite>(
+          (page) => api.getFavorites(page: page, pageSize: 100),
+        );
+      } catch (e) {
+        debugPrint('yearReviewProvider: could not load favorites: $e');
+        allFavorites = const [];
+      }
+
+      final stats = await statsF;
+
+      // Partition top tracks into loved / unloved by matching against the
+      // full favorites list by title + artist (TopItem only carries strings,
+      // not IDs, so we can't use a Set<int> lookup here).
+      final lovedTopTracks =
+          stats.topTracks.where((t) {
+            return allFavorites.any(
+              (f) =>
+                  f.track.title == t.name &&
+                  (t.subtitle == null || f.track.artistName == t.subtitle),
+            );
+          }).toList();
+
+      final unlovedTopTracks =
+          stats.topTracks.where((t) {
+            return !allFavorites.any(
+              (f) =>
+                  f.track.title == t.name &&
+                  (t.subtitle == null || f.track.artistName == t.subtitle),
+            );
+          }).toList();
+
+      // Tracks favorited specifically this year.
+      final favoritedThisYear = await ListenHistoryService.getFavoritedThisYear(
+        year,
+        allFavorites,
+      );
+
+      return YearReviewStats(
+        year: stats.year,
+        totalListens: stats.totalListens,
+        totalSeconds: stats.totalSeconds,
+        uniqueTracks: stats.uniqueTracks,
+        uniqueArtists: stats.uniqueArtists,
+        uniqueAlbums: stats.uniqueAlbums,
+        topTracks: stats.topTracks,
+        topArtists: stats.topArtists,
+        topAlbums: stats.topAlbums,
+        monthlyBreakdown: stats.monthlyBreakdown,
+        topTrack: stats.topTrack,
+        topArtist: stats.topArtist,
+        topAlbum: stats.topAlbum,
+        favoritedThisYear: favoritedThisYear,
+        lovedTopTracks: lovedTopTracks,
+        unlovedTopTracks: unlovedTopTracks,
+      );
     });
 
 /// Total all-time listen count (used in settings to show data exists).
