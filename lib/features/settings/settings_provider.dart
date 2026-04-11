@@ -70,7 +70,24 @@ class SettingsNotifier extends Notifier<SettingsState> {
       browseMode = BrowseMode.artists;
     }
 
-    final cacheSizeMB = prefs.getInt(_keyCacheSizeLimit) ?? 500;
+    // Normalize stored cache size preference. Older versions may have stored
+    // the value in bytes (decimal or binary). Detect and convert to MB.
+    final rawCache = prefs.getInt(_keyCacheSizeLimit);
+    int cacheSizeMB;
+    if (rawCache == null) {
+      cacheSizeMB = 500;
+    } else if (rawCache > 1000000) {
+      // Looks like bytes were stored. Detect binary (base-1024) vs decimal.
+      final mbFromBinary = rawCache / (1024 * 1024);
+      final roundedBinary = mbFromBinary.roundToDouble();
+      if ((mbFromBinary - roundedBinary).abs() < 0.01) {
+        cacheSizeMB = roundedBinary.toInt();
+      } else {
+        cacheSizeMB = (rawCache / 1000000).round();
+      }
+    } else {
+      cacheSizeMB = rawCache;
+    }
     final showRecommendations =
         prefs.getBool(_keyShowAndroidAutoRecommendations) ?? true;
     final useDynamicAccent = prefs.getBool(_keyUseDynamicAlbumAccent) ?? true;
