@@ -277,10 +277,12 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
 
     try {
       // ── Root categories ───────────────────────────────────────────
-      // When recommendations are disabled, return nothing for the recent root
-      // so Android Auto omits the "For you" tab entirely.
+      // When recommendations are disabled, the recent root returns only the
+      // currently playing item (so the AA playback view still works) rather
+      // than the full browse tree (which would show a "For You" tab).
       if (parentMediaId == _BrowseIds.recentRoot && !showRecommendations) {
-        return [];
+        final current = mediaItem.value;
+        return current != null ? [current] : [];
       }
 
       if (parentMediaId == _BrowseIds.root ||
