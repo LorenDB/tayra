@@ -109,6 +109,26 @@ class MonthlyListens {
   });
 }
 
+/// A track the user favorited, enriched with listen count for the year.
+class FavoritedTrack {
+  final int trackId;
+  final String trackTitle;
+  final String artistName;
+  final String? coverUrl;
+
+  /// How many times this track was played in the year (may be 0 if never
+  /// played in that year despite being a favourite).
+  final int listenCount;
+
+  const FavoritedTrack({
+    required this.trackId,
+    required this.trackTitle,
+    required this.artistName,
+    this.coverUrl,
+    required this.listenCount,
+  });
+}
+
 class YearReviewStats {
   final int year;
   final int totalListens;
@@ -124,6 +144,20 @@ class YearReviewStats {
   final TopItem? topArtist;
   final TopItem? topAlbum;
 
+  /// Tracks the user favourited during this year, sorted by listen count desc.
+  ///
+  /// Empty when the Favourites API is unavailable (e.g. offline) or when the
+  /// user has not favourited anything this year.
+  final List<FavoritedTrack> favoritedThisYear;
+
+  /// The subset of [topTracks] that the user currently has favourited.
+  /// Derived from [topTracks] × current favourite IDs at stats-fetch time.
+  final List<TopItem> lovedTopTracks;
+
+  /// The subset of [topTracks] that the user has NOT favourited — tracks they
+  /// played heavily but never hearted.
+  final List<TopItem> unlovedTopTracks;
+
   const YearReviewStats({
     required this.year,
     required this.totalListens,
@@ -138,6 +172,9 @@ class YearReviewStats {
     this.topTrack,
     this.topArtist,
     this.topAlbum,
+    this.favoritedThisYear = const [],
+    this.lovedTopTracks = const [],
+    this.unlovedTopTracks = const [],
   });
 
   bool get isEmpty => totalListens == 0;
@@ -456,6 +493,73 @@ class ListenHistoryService {
 
     // Convert possible numeric types to int
     return rows.map<int>((r) => (r['track_id'] as num).toInt()).toList();
+  }
+
+  /// Fetch the tracks the user favourited during [year], enriched with their
+  /// listen count for that year.
+  ///
+  /// [allFavorites] is the full list of [Favorite] objects (already fetched
+  /// from the server). We filter by [creationDate] here so that the caller can
+  /// reuse the same list for other purposes without re-fetching.
+  ///
+  /// The returned list is sorted descending by listen count, then by title.
+  static Future<List<FavoritedTrack>> getFavoritedThisYear(
+    int year,
+    List<dynamic /* Favorite */> allFavorites,
+  ) async {
+    // Filter favourites to those created in [year]. We import models.dart so
+    // Favorite is available; the dynamic type lets callers from the provider
+    // layer pass the list without a circular import.
+    // The caller is responsible for passing Favorite objects.
+    final db = await CacheDatabase.instance.database;
+    final startMs = DateTime(year).millisecondsSinceEpoch;
+    final endMs = DateTime(year + 1).millisecondsSinceEpoch;
+
+    // Pre-load listen counts for this year keyed by track_id so we can do a
+    // single DB query rather than one per favourite.
+    final countRows = await db.rawQuery(
+      '''
+      SELECT track_id, COUNT(*) as play_count
+      FROM $_tableName
+      WHERE listened_at >= ? AND listened_at < ?
+      GROUP BY track_id
+    ''',
+      [startMs, endMs],
+    );
+
+    final listenCountByTrackId = <int, int>{
+      for (final row in countRows)
+        (row['track_id'] as num).toInt(): (row['play_count'] as num).toInt(),
+    };
+
+    final result = <FavoritedTrack>[];
+    for (final fav in allFavorites) {
+      // Defensive: only include favourites created this year.
+      final created = fav.creationDate as DateTime?;
+      if (created == null) continue;
+      if (created.year != year) continue;
+
+      final track = fav.track;
+      final trackId = track.id as int;
+      result.add(
+        FavoritedTrack(
+          trackId: trackId,
+          trackTitle: track.title as String,
+          artistName: track.artistName as String,
+          coverUrl: track.coverUrl as String?,
+          listenCount: listenCountByTrackId[trackId] ?? 0,
+        ),
+      );
+    }
+
+    // Sort by listen count desc, then alphabetically as a tiebreaker.
+    result.sort((a, b) {
+      final cmp = b.listenCount.compareTo(a.listenCount);
+      if (cmp != 0) return cmp;
+      return a.trackTitle.compareTo(b.trackTitle);
+    });
+
+    return result;
   }
 
   /// Get the total listen count (all time).

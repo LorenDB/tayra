@@ -357,6 +357,14 @@ class _ReviewContent extends StatelessWidget {
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 24)),
 
+          // Loved vs. Listened contrast section
+          if (stats.favoritedThisYear.isNotEmpty ||
+              stats.lovedTopTracks.isNotEmpty ||
+              stats.unlovedTopTracks.isNotEmpty) ...[
+            SliverToBoxAdapter(child: _LovedVsListenedSection(stats: stats)),
+            const SliverToBoxAdapter(child: SizedBox(height: 24)),
+          ],
+
           // Top tracks list — title row includes a subtle Create button
           if (stats.topTracks.length > 1) ...[
             SliverToBoxAdapter(
@@ -916,6 +924,289 @@ class _SpotlightCard extends StatelessWidget {
       ),
     );
   }
+}
+
+// ── Loved vs. Listened section ──────────────────────────────────────────
+
+/// Contrasts which tracks the user explicitly favourited this year with the
+/// tracks they actually played the most (but perhaps never hearted).
+class _LovedVsListenedSection extends StatelessWidget {
+  final YearReviewStats stats;
+
+  const _LovedVsListenedSection({required this.stats});
+
+  @override
+  Widget build(BuildContext context) {
+    // Decide which "loved" list to surface:
+    //   • Prefer tracks favourited *this specific year* — most relevant.
+    //   • Fall back to currently-favourited tracks from the top-listened list.
+    final lovedItems =
+        stats.favoritedThisYear.isNotEmpty
+            ? stats.favoritedThisYear
+                .take(5)
+                .map(
+                  (f) => _LoveTile(
+                    trackTitle: f.trackTitle,
+                    artistName: f.artistName,
+                    coverUrl: f.coverUrl,
+                    listenCount: f.listenCount,
+                    isFavorited: true,
+                  ),
+                )
+                .toList()
+            : stats.lovedTopTracks
+                .take(5)
+                .map(
+                  (t) => _LoveTile(
+                    trackTitle: t.name,
+                    artistName: t.subtitle ?? '',
+                    coverUrl: t.coverUrl,
+                    listenCount: t.count,
+                    isFavorited: true,
+                  ),
+                )
+                .toList();
+
+    final unlovedItems =
+        stats.unlovedTopTracks
+            .take(5)
+            .map(
+              (t) => _LoveTile(
+                trackTitle: t.name,
+                artistName: t.subtitle ?? '',
+                coverUrl: t.coverUrl,
+                listenCount: t.count,
+                isFavorited: false,
+              ),
+            )
+            .toList();
+
+    // Don't render the section at all if both halves are empty.
+    if (lovedItems.isEmpty && unlovedItems.isEmpty) return const SizedBox();
+
+    final hasLovedLabel =
+        stats.favoritedThisYear.isNotEmpty ? 'Hearted This Year' : 'You Loved';
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Section header
+          const Text(
+            'Loved vs. Listened',
+            style: TextStyle(
+              color: AppTheme.onBackground,
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'What you said you liked vs. what you actually played',
+            style: const TextStyle(
+              color: AppTheme.onBackgroundMuted,
+              fontSize: 13,
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // Two-column layout on wide screens; stacked on narrow.
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final isWide = constraints.maxWidth >= 600;
+
+              if (isWide) {
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (lovedItems.isNotEmpty)
+                      Expanded(
+                        child: _LoveColumn(
+                          label: hasLovedLabel,
+                          icon: Icons.favorite_rounded,
+                          accentColor: const Color(0xFFFF6B9D),
+                          items: lovedItems,
+                        ),
+                      ),
+                    if (lovedItems.isNotEmpty && unlovedItems.isNotEmpty)
+                      const SizedBox(width: 12),
+                    if (unlovedItems.isNotEmpty)
+                      Expanded(
+                        child: _LoveColumn(
+                          label: 'Hidden Gems',
+                          icon: Icons.auto_awesome_rounded,
+                          accentColor: AppTheme.secondary,
+                          items: unlovedItems,
+                        ),
+                      ),
+                  ],
+                );
+              }
+
+              return Column(
+                children: [
+                  if (lovedItems.isNotEmpty)
+                    _LoveColumn(
+                      label: hasLovedLabel,
+                      icon: Icons.favorite_rounded,
+                      accentColor: const Color(0xFFFF6B9D),
+                      items: lovedItems,
+                    ),
+                  if (lovedItems.isNotEmpty && unlovedItems.isNotEmpty)
+                    const SizedBox(height: 12),
+                  if (unlovedItems.isNotEmpty)
+                    _LoveColumn(
+                      label: 'Hidden Gems',
+                      icon: Icons.auto_awesome_rounded,
+                      accentColor: AppTheme.secondary,
+                      items: unlovedItems,
+                    ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LoveColumn extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final Color accentColor;
+  final List<_LoveTile> items;
+
+  const _LoveColumn({
+    required this.label,
+    required this.icon,
+    required this.accentColor,
+    required this.items,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceContainer,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Column header
+          Padding(
+            padding: const EdgeInsets.fromLTRB(14, 14, 14, 10),
+            child: Row(
+              children: [
+                Icon(icon, color: accentColor, size: 16),
+                const SizedBox(width: 6),
+                Text(
+                  label,
+                  style: TextStyle(
+                    color: accentColor,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.3,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Divider(height: 1, thickness: 0.5, color: AppTheme.divider),
+          // Track rows
+          for (int i = 0; i < items.length; i++)
+            _buildRow(items[i], isLast: i == items.length - 1),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRow(_LoveTile tile, {required bool isLast}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        border:
+            isLast
+                ? null
+                : const Border(
+                  bottom: BorderSide(color: AppTheme.divider, width: 0.5),
+                ),
+      ),
+      child: Row(
+        children: [
+          // Cover art
+          CoverArtWidget(
+            imageUrl: tile.coverUrl,
+            size: 36,
+            borderRadius: 6,
+            placeholderIcon: Icons.music_note_rounded,
+          ),
+          const SizedBox(width: 10),
+          // Title + artist
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  tile.trackTitle,
+                  style: const TextStyle(
+                    color: AppTheme.onBackground,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                if (tile.artistName.isNotEmpty) ...[
+                  const SizedBox(height: 1),
+                  Text(
+                    tile.artistName,
+                    style: const TextStyle(
+                      color: AppTheme.onBackgroundMuted,
+                      fontSize: 11,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          // Play count
+          if (tile.listenCount > 0)
+            Text(
+              '${tile.listenCount}×',
+              style: TextStyle(
+                color: accentColor.withValues(alpha: 0.8),
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Simple data holder for a single row in [_LoveColumn].
+class _LoveTile {
+  final String trackTitle;
+  final String artistName;
+  final String? coverUrl;
+  final int listenCount;
+  final bool isFavorited;
+
+  const _LoveTile({
+    required this.trackTitle,
+    required this.artistName,
+    this.coverUrl,
+    required this.listenCount,
+    required this.isFavorited,
+  });
 }
 
 // ── Monthly chart ───────────────────────────────────────────────────────
