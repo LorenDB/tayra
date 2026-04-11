@@ -1026,7 +1026,7 @@ class _CacheSizeLimitTileState extends State<_CacheSizeLimitTile> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '\${widget.currentLimitMB} MB',
+                      '${widget.currentLimitMB} MB',
                       style: const TextStyle(
                         color: AppTheme.primary,
                         fontSize: 12,
