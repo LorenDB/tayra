@@ -106,24 +106,6 @@ class SettingsScreen extends ConsumerWidget {
               ref.read(settingsProvider.notifier).setBrowseMode(mode);
             },
           ),
-          if (defaultTargetPlatform == TargetPlatform.android)
-            _SwitchTile(
-              icon: Icons.directions_car_outlined,
-              title: 'Android Auto recommendations',
-              subtitle: 'Show "For you" tab in Android Auto',
-              value: settings.showAndroidAutoRecommendations,
-              onChanged: (value) {
-                try {
-                  Aptabase.instance.trackEvent(
-                    'android_auto_recommendations_toggled',
-                    {'enabled': value},
-                  );
-                } catch (_) {}
-                ref
-                    .read(settingsProvider.notifier)
-                    .setShowAndroidAutoRecommendations(value);
-              },
-            ),
 
           const SizedBox(height: 24),
 
@@ -141,8 +123,8 @@ class SettingsScreen extends ConsumerWidget {
 
           const SizedBox(height: 24),
 
-          // ── Accessibility section ───────────────────────────────────
-          _SectionHeader(title: 'Accessibility'),
+          // ── Appearance section ────────────────────────────────────────
+          _SectionHeader(title: 'Appearance'),
           _SwitchTile(
             icon: Icons.format_paint_outlined,
             title: 'Album accent colors',
@@ -162,8 +144,26 @@ class SettingsScreen extends ConsumerWidget {
 
           const SizedBox(height: 24),
 
-          // ── Year in Review section ────────────────────────────────────
-          _SectionHeader(title: 'Year in Review'),
+          // ── General section ───────────────────────────────────────────
+          _SectionHeader(title: 'General'),
+          if (defaultTargetPlatform == TargetPlatform.android)
+            _SwitchTile(
+              icon: Icons.directions_car_outlined,
+              title: 'Android Auto recommendations',
+              subtitle: 'Show "For you" tab in Android Auto',
+              value: settings.showAndroidAutoRecommendations,
+              onChanged: (value) {
+                try {
+                  Aptabase.instance.trackEvent(
+                    'android_auto_recommendations_toggled',
+                    {'enabled': value},
+                  );
+                } catch (_) {}
+                ref
+                    .read(settingsProvider.notifier)
+                    .setShowAndroidAutoRecommendations(value);
+              },
+            ),
           _YearReviewTile(),
 
           const SizedBox(height: 24),
