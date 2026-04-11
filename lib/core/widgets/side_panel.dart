@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/player/now_playing_content.dart';
+import 'package:tayra/features/player/player_provider.dart';
 import 'package:tayra/features/player/queue_screen.dart';
 
 class SidePanel extends ConsumerStatefulWidget {
@@ -16,6 +17,24 @@ class _SidePanelState extends ConsumerState<SidePanel> {
 
   @override
   Widget build(BuildContext context) {
+    final hasTrack =
+        ref.watch(playerProvider.select((s) => s.currentTrack != null));
+
+    // Collapse back to the now-playing view when playback stops.
+    ref.listen(playerProvider.select((s) => s.currentTrack), (prev, next) {
+      if (prev != null && next == null && _showQueue) {
+        setState(() => _showQueue = false);
+      }
+    });
+
+    // When nothing is playing, show the stash inbox directly in the panel.
+    if (!hasTrack) {
+      return Container(
+        color: AppTheme.surface,
+        child: _StashInboxPanel(key: const ValueKey('stash_inbox')),
+      );
+    }
+
     return Container(
       color: AppTheme.surface,
       child: AnimatedSwitcher(
@@ -36,17 +55,19 @@ class _SidePanelState extends ConsumerState<SidePanel> {
   }
 }
 
-class _QueuePanel extends StatelessWidget {
+class _QueuePanel extends ConsumerWidget {
   final VoidCallback onBack;
 
   const _QueuePanel({super.key, required this.onBack});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final queue = ref.watch(playerProvider).queue;
+
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(8, 16, 16, 8),
+          padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
           child: Row(
             children: [
               IconButton(
@@ -64,11 +85,117 @@ class _QueuePanel extends StatelessWidget {
                   letterSpacing: 1.2,
                 ),
               ),
+              const Spacer(),
+              // Stash inbox button
+              Consumer(
+                builder: (context, ref, _) {
+                  final count =
+                      ref.watch(stashedQueuesProvider).asData?.value.length ?? 0;
+                  return IconButton(
+                    tooltip: 'Stashed queues',
+                    iconSize: 20,
+                    icon: Badge(
+                      isLabelVisible: count > 0,
+                      label: Text('$count'),
+                      backgroundColor: AppTheme.primary,
+                      child: const Icon(
+                        Icons.inbox_outlined,
+                        color: AppTheme.onBackgroundMuted,
+                      ),
+                    ),
+                    onPressed: () => showStashedQueuesSheet(context, ref),
+                  );
+                },
+              ),
+              // Stash button (only when queue is non-empty)
+              if (queue.isNotEmpty)
+                IconButton(
+                  tooltip: 'Stash queue',
+                  iconSize: 20,
+                  icon: const Icon(
+                    Icons.save_outlined,
+                    color: AppTheme.onBackgroundMuted,
+                  ),
+                  onPressed: () {
+                    ref.read(playerProvider.notifier).stashQueue();
+                  },
+                ),
             ],
           ),
         ),
         Expanded(
           child: QueueScreen(showAppBar: false, miniPlayerOnTap: onBack),
+        ),
+      ],
+    );
+  }
+}
+
+// ── Stash Inbox Panel ────────────────────────────────────────────────────
+
+/// Shown in the side panel when nothing is playing. Displays stashed queues
+/// inline so they remain accessible without needing active playback.
+class _StashInboxPanel extends ConsumerWidget {
+  const _StashInboxPanel({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final stashes = ref.watch(stashedQueuesProvider).asData?.value ?? [];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
+          child: Row(
+            children: [
+              const Icon(
+                Icons.inbox_outlined,
+                color: AppTheme.onBackgroundMuted,
+                size: 18,
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                'STASHED QUEUES',
+                style: TextStyle(
+                  color: AppTheme.onBackgroundMuted,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 1.2,
+                ),
+              ),
+              const Spacer(),
+              if (stashes.isNotEmpty)
+                Text(
+                  '${stashes.length}',
+                  style: const TextStyle(
+                    color: AppTheme.onBackgroundSubtle,
+                    fontSize: 12,
+                  ),
+                ),
+            ],
+          ),
+        ),
+        const Divider(color: AppTheme.divider, height: 1),
+        Expanded(
+          child:
+              stashes.isEmpty
+                  ? const Center(
+                    child: Text(
+                      'No stashed queues',
+                      style: TextStyle(
+                        color: AppTheme.onBackgroundMuted,
+                        fontSize: 14,
+                      ),
+                    ),
+                  )
+                  : ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: stashes.length,
+                    itemBuilder:
+                        (context, index) =>
+                            StashedQueueTile(stash: stashes[index]),
+                  ),
         ),
       ],
     );

@@ -7,6 +7,7 @@ import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
 import 'package:tayra/features/player/player_provider.dart';
+import 'package:tayra/features/player/queue_persistence_service.dart';
 import 'package:tayra/features/player/mini_player.dart';
 
 class QueueScreen extends ConsumerStatefulWidget {
@@ -101,6 +102,34 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
                   ),
                 ),
                 actions: [
+                  Consumer(
+                    builder: (context, ref, _) {
+                      final count =
+                          ref.watch(stashedQueuesProvider).asData?.value.length ?? 0;
+                      return IconButton(
+                        tooltip: 'Stashed queues',
+                        icon: Badge(
+                          isLabelVisible: count > 0,
+                          label: Text('$count'),
+                          backgroundColor: AppTheme.primary,
+                          child: const Icon(
+                            Icons.inbox_outlined,
+                            color: AppTheme.onBackgroundMuted,
+                          ),
+                        ),
+                        onPressed: () => showStashedQueuesSheet(context, ref),
+                      );
+                    },
+                  ),
+                  if (queue.isNotEmpty)
+                    IconButton(
+                      tooltip: 'Stash queue',
+                      icon: const Icon(
+                        Icons.save_outlined,
+                        color: AppTheme.onBackgroundMuted,
+                      ),
+                      onPressed: () => _stashQueue(context, ref),
+                    ),
                   if (queue.isNotEmpty)
                     TextButton(
                       onPressed: () {
@@ -118,10 +147,7 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
                 ],
               )
               : null,
-      body:
-          queue.isEmpty
-              ? _buildEmptyState()
-              : _buildQueueList(context, ref, queue, currentIndex),
+      body: _buildBody(context, ref, queue, currentIndex),
       // Show the mini-player fixed at the bottom of the queue screen so
       // playback controls remain available while viewing/manipulating the
       // queue.
@@ -142,6 +168,33 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
     );
   }
 
+  Future<void> _stashQueue(BuildContext context, WidgetRef ref) async {
+    await ref.read(playerProvider.notifier).stashQueue();
+    // Pop back after stashing — the queue is now empty so there's nothing to
+    // show, and the user can retrieve the stash via the inbox button later.
+    if (context.mounted && context.canPop()) context.pop();
+  }
+
+  Widget _buildBody(
+    BuildContext context,
+    WidgetRef ref,
+    List queue,
+    int currentIndex,
+  ) {
+    if (queue.isEmpty) return _buildEmptyState();
+
+    return CustomScrollView(
+      controller: _scrollController,
+      physics: const BouncingScrollPhysics(
+        parent: AlwaysScrollableScrollPhysics(),
+      ),
+      slivers: [
+        ..._buildQueueSlivers(context, ref, queue, currentIndex),
+        const SliverToBoxAdapter(child: SizedBox(height: 120)),
+      ],
+    );
+  }
+
   Widget _buildEmptyState() {
     return const EmptyState(
       icon: Icons.queue_music_rounded,
@@ -150,19 +203,18 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
     );
   }
 
-  Widget _buildQueueList(
+  List<Widget> _buildQueueSlivers(
     BuildContext context,
     WidgetRef ref,
     List queue,
     int currentIndex,
   ) {
     final playerState = ref.watch(playerProvider);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Now playing header
-        if (currentIndex >= 0 && currentIndex < queue.length)
-          Padding(
+    return [
+      // Now playing header
+      if (currentIndex >= 0 && currentIndex < queue.length)
+        SliverToBoxAdapter(
+          child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 8, 20, 4),
             child: Text(
               'Now Playing',
@@ -174,78 +226,70 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
               ),
             ),
           ),
-
-        // Queue list
-        Expanded(
-          child: ListView.builder(
-            controller: _scrollController,
-            physics: const BouncingScrollPhysics(
-              parent: AlwaysScrollableScrollPhysics(),
-            ),
-            padding: const EdgeInsets.only(bottom: 120),
-            itemCount: queue.length,
-            itemBuilder: (context, index) {
-              final track = queue[index];
-              final isCurrentTrack = index == currentIndex;
-
-              // Section divider between "now playing" and "up next"
-              final showUpNextHeader =
-                  index == currentIndex + 1 && currentIndex >= 0;
-
-              return Column(
-                key: ValueKey('queue_section_$index'),
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (showUpNextHeader)
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 16, 20, 4),
-                      child: Row(
-                        children: [
-                          const Text(
-                            'Up Next',
-                            style: TextStyle(
-                              color: AppTheme.onBackgroundMuted,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 0.5,
-                            ),
-                          ),
-                          const Spacer(),
-                          Text(
-                            '${queue.length - currentIndex - 1} tracks',
-                            style: const TextStyle(
-                              color: AppTheme.onBackgroundSubtle,
-                              fontSize: 11,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  _DraggableQueueItem(
-                    track: track,
-                    index: index,
-                    isCurrentTrack: isCurrentTrack,
-                    isPlaying: playerState.isPlaying,
-                    queueLength: queue.length,
-                    onTap: () {
-                      ref.read(playerProvider.notifier).jumpTo(index);
-                    },
-                    onDismissed: () {
-                      ref.read(playerProvider.notifier).removeFromQueue(index);
-                    },
-                    onReorder: (oldIndex, newIndex) {
-                      ref
-                          .read(playerProvider.notifier)
-                          .reorderQueue(oldIndex, newIndex);
-                    },
-                  ),
-                ],
-              );
-            },
-          ),
         ),
-      ],
-    );
+
+      SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            final track = queue[index];
+            final isCurrentTrack = index == currentIndex;
+            final showUpNextHeader =
+                index == currentIndex + 1 && currentIndex >= 0;
+
+            return Column(
+              key: ValueKey('queue_section_$index'),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (showUpNextHeader)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 4),
+                    child: Row(
+                      children: [
+                        const Text(
+                          'Up Next',
+                          style: TextStyle(
+                            color: AppTheme.onBackgroundMuted,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                        const Spacer(),
+                        Text(
+                          '${queue.length - currentIndex - 1} tracks',
+                          style: const TextStyle(
+                            color: AppTheme.onBackgroundSubtle,
+                            fontSize: 11,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                _DraggableQueueItem(
+                  track: track,
+                  index: index,
+                  isCurrentTrack: isCurrentTrack,
+                  isPlaying: playerState.isPlaying,
+                  queueLength: queue.length,
+                  onTap: () {
+                    ref.read(playerProvider.notifier).jumpTo(index);
+                  },
+                  onDismissed: () {
+                    ref.read(playerProvider.notifier).removeFromQueue(index);
+                  },
+                  onReorder: (oldIndex, newIndex) {
+                    ref
+                        .read(playerProvider.notifier)
+                        .reorderQueue(oldIndex, newIndex);
+                  },
+                ),
+              ],
+            );
+          },
+          childCount: queue.length,
+        ),
+      ),
+    ];
   }
 
   void _showClearConfirmation(BuildContext context, WidgetRef ref) {
@@ -622,6 +666,327 @@ class _DraggableQueueItemState extends State<_DraggableQueueItem> {
           );
         },
       ),
+    );
+  }
+}
+
+// ── Stashed Queues Sheet ─────────────────────────────────────────────────
+
+/// Show a modal bottom sheet listing all stashed queues.
+/// Can be called from both the queue screen and the side panel.
+void showStashedQueuesSheet(BuildContext context, WidgetRef ref) {
+  showModalBottomSheet<void>(
+    context: context,
+    backgroundColor: AppTheme.surfaceContainer,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    isScrollControlled: true,
+    builder: (sheetContext) => _StashedQueuesSheet(parentRef: ref),
+  );
+}
+
+class _StashedQueuesSheet extends ConsumerWidget {
+  final WidgetRef parentRef;
+
+  const _StashedQueuesSheet({required this.parentRef});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final stashesAsync = ref.watch(stashedQueuesProvider);
+    final stashes = stashesAsync.asData?.value ?? [];
+
+    return DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: 0.5,
+      minChildSize: 0.25,
+      maxChildSize: 0.9,
+      builder: (context, scrollController) {
+        return Column(
+          children: [
+            // Handle + header
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 12, 16, 4),
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      'Stashed Queues',
+                      style: TextStyle(
+                        color: AppTheme.onBackground,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  if (stashes.isNotEmpty)
+                    TextButton(
+                      onPressed: () async {
+                        final confirmed = await showDialog<bool>(
+                          context: context,
+                          builder:
+                              (d) => AlertDialog(
+                                backgroundColor: AppTheme.surfaceContainerHigh,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                title: const Text(
+                                  'Clear All Stashes',
+                                  style: TextStyle(
+                                    color: AppTheme.onBackground,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                content: const Text(
+                                  'Delete all stashed queues? This cannot be undone.',
+                                  style: TextStyle(
+                                    color: AppTheme.onBackgroundMuted,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.of(d).pop(false),
+                                    child: const Text(
+                                      'Cancel',
+                                      style: TextStyle(
+                                        color: AppTheme.onBackgroundMuted,
+                                      ),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () => Navigator.of(d).pop(true),
+                                    child: const Text(
+                                      'Clear',
+                                      style: TextStyle(
+                                        color: AppTheme.error,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                        );
+                        if (confirmed == true) {
+                          for (final s in stashes) {
+                            await ref
+                                .read(playerProvider.notifier)
+                                .deleteStash(s.id);
+                          }
+                          if (context.mounted) Navigator.of(context).pop();
+                        }
+                      },
+                      child: const Text(
+                        'Clear all',
+                        style: TextStyle(
+                          color: AppTheme.error,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            const Divider(color: AppTheme.divider, height: 1),
+            // List
+            Expanded(
+              child:
+                  stashes.isEmpty
+                      ? const Center(
+                        child: Text(
+                          'No stashed queues',
+                          style: TextStyle(
+                            color: AppTheme.onBackgroundMuted,
+                            fontSize: 14,
+                          ),
+                        ),
+                      )
+                      : ListView.builder(
+                        controller: scrollController,
+                        itemCount: stashes.length,
+                        itemBuilder:
+                            (context, index) => StashedQueueTile(
+                              stash: stashes[index],
+                              onRestored: () => Navigator.of(context).pop(),
+                            ),
+                      ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+// ── Stashed Queue Tile ───────────────────────────────────────────────────
+
+class StashedQueueTile extends ConsumerWidget {
+  final StashedQueue stash;
+  final VoidCallback? onRestored;
+
+  const StashedQueueTile({super.key, required this.stash, this.onRestored});
+
+  String _formatSavedAt(DateTime savedAt) {
+    final now = DateTime.now();
+    final diff = now.difference(savedAt);
+    if (diff.inSeconds < 60) return 'Just now';
+    if (diff.inMinutes < 60) return '${diff.inMinutes}m ago';
+    if (diff.inHours < 24) return '${diff.inHours}h ago';
+    if (diff.inDays < 7) return '${diff.inDays}d ago';
+    return '${savedAt.day}/${savedAt.month}/${savedAt.year}';
+  }
+
+  String _formatPosition(Duration position) {
+    final m = position.inMinutes.remainder(60).toString().padLeft(2, '0');
+    final s = position.inSeconds.remainder(60).toString().padLeft(2, '0');
+    return position.inHours > 0 ? '${position.inHours}:$m:$s' : '$m:$s';
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final track = stash.currentTrack;
+    final trackCount = stash.queue.length;
+
+    return Dismissible(
+      key: ValueKey('stash_${stash.id}'),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 24),
+        color: AppTheme.error.withValues(alpha: 0.2),
+        child: const Icon(
+          Icons.delete_outline_rounded,
+          color: AppTheme.error,
+          size: 22,
+        ),
+      ),
+      onDismissed: (_) {
+        ref.read(playerProvider.notifier).deleteStash(stash.id);
+      },
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => _confirmRestore(context, ref),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Row(
+              children: [
+                // Cover art of the current track in the stash
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: CoverArtWidget(
+                    imageUrl: track?.coverUrl,
+                    size: 48,
+                    borderRadius: 6,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        track?.title ?? 'Unknown track',
+                        style: const TextStyle(
+                          color: AppTheme.onBackground,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        [
+                          if (track != null) track.artistName,
+                          '$trackCount track${trackCount == 1 ? '' : 's'}',
+                          if (stash.position > Duration.zero)
+                            _formatPosition(stash.position),
+                        ].join(' · '),
+                        style: const TextStyle(
+                          color: AppTheme.onBackgroundMuted,
+                          fontSize: 12,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  _formatSavedAt(stash.savedAt),
+                  style: const TextStyle(
+                    color: AppTheme.onBackgroundSubtle,
+                    fontSize: 11,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _confirmRestore(BuildContext context, WidgetRef ref) {
+    final playerState = ref.read(playerProvider);
+    // If queue is empty, restore directly without a confirmation dialog.
+    if (playerState.queue.isEmpty) {
+      ref.read(playerProvider.notifier).restoreStash(stash.id);
+      onRestored?.call();
+      return;
+    }
+
+    showDialog<void>(
+      context: context,
+      builder:
+          (dialogContext) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            title: const Text(
+              'Restore Stash',
+              style: TextStyle(
+                color: AppTheme.onBackground,
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            content: const Text(
+              'Restoring this stash will replace the current queue. Continue?',
+              style: TextStyle(
+                color: AppTheme.onBackgroundMuted,
+                fontSize: 14,
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(color: AppTheme.onBackgroundMuted),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(dialogContext).pop();
+                  ref.read(playerProvider.notifier).restoreStash(stash.id);
+                  onRestored?.call();
+                },
+                child: const Text(
+                  'Restore',
+                  style: TextStyle(
+                    color: AppTheme.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
     );
   }
 }
