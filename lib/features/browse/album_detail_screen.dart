@@ -296,7 +296,7 @@ class _AlbumHeader extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final topPadding = MediaQuery.of(context).padding.top;
+    final topPadding = MediaQuery.of(context).viewPadding.top;
     const artSize = 240.0;
 
     final isManualAsync = ref.watch(isManualAlbumProvider(album.id));
@@ -714,7 +714,7 @@ class _AlbumDetailShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final topPadding = MediaQuery.of(context).padding.top;
+    final topPadding = MediaQuery.of(context).viewPadding.top;
 
     return SafeArea(
       top: false,

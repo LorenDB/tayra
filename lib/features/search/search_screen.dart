@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/core/cache/cache_provider.dart';
+import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/album_card.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
@@ -189,16 +191,73 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       );
     }
 
-    // Results
+    // Results — apply offline filter when active
+    final offlineFilterActive = ref.watch(offlineFilterActiveProvider);
+    final offlineTrackIds =
+        offlineFilterActive
+            ? ref
+                .watch(offlineTrackIdsProvider)
+                .maybeWhen(data: (ids) => ids, orElse: () => const <int>{})
+            : null;
+    final offlineAlbumIds =
+        offlineFilterActive
+            ? ref
+                .watch(offlineAlbumIdsProvider)
+                .maybeWhen(data: (ids) => ids, orElse: () => const <int>{})
+            : null;
+    final offlineArtistIds =
+        offlineFilterActive
+            ? ref
+                .watch(offlineArtistIdsProvider)
+                .maybeWhen(data: (ids) => ids, orElse: () => const <int>{})
+            : null;
+
+    final artists =
+        offlineArtistIds != null
+            ? _result!.artists
+                .where((a) => offlineArtistIds.contains(a.id))
+                .toList()
+            : _result!.artists;
+    final albums =
+        offlineAlbumIds != null
+            ? _result!.albums
+                .where((a) => offlineAlbumIds.contains(a.id))
+                .toList()
+            : _result!.albums;
+    final tracks =
+        offlineTrackIds != null
+            ? _result!.tracks
+                .where((t) => offlineTrackIds.contains(t.id))
+                .toList()
+            : _result!.tracks;
+
+    final hasAnyResults =
+        artists.isNotEmpty ||
+        albums.isNotEmpty ||
+        tracks.isNotEmpty ||
+        _result!.tags.isNotEmpty;
+
+    if (offlineFilterActive && !hasAnyResults) {
+      return EmptyState(
+        icon: Icons.wifi_off_rounded,
+        title: 'No offline results for "$_lastQuery"',
+        subtitle: 'Download content to search while offline',
+        iconSize: 56,
+        titleFontSize: 15,
+      );
+    }
+
     return ListView(
       physics: const BouncingScrollPhysics(
         parent: AlwaysScrollableScrollPhysics(),
       ),
       padding: const EdgeInsets.only(bottom: 120),
       children: [
-        if (_result!.artists.isNotEmpty) _buildArtistsSection(_result!.artists),
-        if (_result!.albums.isNotEmpty) _buildAlbumsSection(_result!.albums),
-        if (_result!.tracks.isNotEmpty) _buildTracksSection(_result!.tracks),
+        if (offlineFilterActive && _result!.tags.isNotEmpty)
+          const _OfflineSearchNote(),
+        if (artists.isNotEmpty) _buildArtistsSection(artists),
+        if (albums.isNotEmpty) _buildAlbumsSection(albums),
+        if (tracks.isNotEmpty) _buildTracksSection(tracks),
         if (_result!.tags.isNotEmpty) _buildTagsSection(_result!.tags),
       ],
     );
@@ -338,6 +397,35 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         ),
         const SizedBox(height: 16),
       ],
+    );
+  }
+}
+
+// ── Offline search note ─────────────────────────────────────────────────
+
+class _OfflineSearchNote extends StatelessWidget {
+  const _OfflineSearchNote();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.wifi_off_rounded,
+            size: 14,
+            color: AppTheme.onBackgroundMuted,
+          ),
+          const SizedBox(width: 6),
+          const Expanded(
+            child: Text(
+              'Showing offline results only. Tags always search the server.',
+              style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 12),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

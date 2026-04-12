@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/core/cache/cache_provider.dart';
+import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/layout/responsive.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/album_card.dart';
@@ -49,6 +51,38 @@ class _AlbumsScreenState extends ConsumerState<AlbumsScreen>
 
   @override
   Widget build(BuildContext context) {
+    final offlineFilterActive = ref.watch(offlineFilterActiveProvider);
+    if (offlineFilterActive) {
+      final offlineAlbumsAsync = ref.watch(offlineAlbumsProvider);
+
+      return offlineAlbumsAsync.when(
+        loading: () => const ShimmerList(itemCount: 12),
+        error:
+            (error, stack) => CenteredErrorView(
+              title: 'Failed to load offline albums',
+              message: error.toString(),
+              onRetry: () => ref.invalidate(offlineAlbumsProvider),
+            ),
+        data: (albums) {
+          return RefreshIndicator(
+            color: AppTheme.primary,
+            backgroundColor: AppTheme.surfaceContainer,
+            onRefresh: () async {
+              ref.invalidate(offlineAlbumIdsProvider);
+              ref.invalidate(offlineAlbumsProvider);
+            },
+            child: _AlbumGrid(
+              albums: albums,
+              scrollController: scrollController,
+              hasMore: false,
+              isLoadingMore: false,
+              emptyLabel: 'No offline albums found',
+            ),
+          );
+        },
+      );
+    }
+
     final firstPage = ref.watch(albumsPageProvider(1));
 
     return firstPage.when(
@@ -61,15 +95,17 @@ class _AlbumsScreenState extends ConsumerState<AlbumsScreen>
           ),
       data: (response) {
         seedIfEmpty(response);
+        final allAlbums = items.isEmpty ? response.results : items;
+
         return RefreshIndicator(
           color: AppTheme.primary,
           backgroundColor: AppTheme.surfaceContainer,
           onRefresh: refresh,
           child: _AlbumGrid(
-            albums: items.isEmpty ? response.results : items,
+            albums: allAlbums,
             scrollController: scrollController,
             hasMore: items.isEmpty ? response.next != null : hasMore,
-            isLoadingMore: items.isEmpty ? false : isLoadingMore,
+            isLoadingMore: isLoadingMore,
           ),
         );
       },
@@ -84,20 +120,22 @@ class _AlbumGrid extends StatelessWidget {
   final ScrollController scrollController;
   final bool hasMore;
   final bool isLoadingMore;
+  final String emptyLabel;
 
   const _AlbumGrid({
     required this.albums,
     required this.scrollController,
     required this.hasMore,
     required this.isLoadingMore,
+    this.emptyLabel = 'No albums found',
   });
 
   @override
   Widget build(BuildContext context) {
     if (albums.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
-          'No albums found',
+          emptyLabel,
           style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 16),
         ),
       );
