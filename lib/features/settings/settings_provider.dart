@@ -14,6 +14,8 @@ class SettingsState {
   final bool showAndroidAutoRecommendations;
   final bool useDynamicAlbumAccent;
   final bool gaplessPlayback;
+  final bool aiEnabled;
+  final bool aiDownloadPromptShown;
 
   const SettingsState({
     this.browseMode = BrowseMode.albums,
@@ -21,6 +23,8 @@ class SettingsState {
     this.showAndroidAutoRecommendations = true,
     this.useDynamicAlbumAccent = true,
     this.gaplessPlayback = true,
+    this.aiEnabled = true,
+    this.aiDownloadPromptShown = false,
   });
 
   SettingsState copyWith({
@@ -29,6 +33,8 @@ class SettingsState {
     bool? showAndroidAutoRecommendations,
     bool? useDynamicAlbumAccent,
     bool? gaplessPlayback,
+    bool? aiEnabled,
+    bool? aiDownloadPromptShown,
   }) {
     return SettingsState(
       browseMode: browseMode ?? this.browseMode,
@@ -38,6 +44,9 @@ class SettingsState {
       useDynamicAlbumAccent:
           useDynamicAlbumAccent ?? this.useDynamicAlbumAccent,
       gaplessPlayback: gaplessPlayback ?? this.gaplessPlayback,
+      aiEnabled: aiEnabled ?? this.aiEnabled,
+      aiDownloadPromptShown:
+          aiDownloadPromptShown ?? this.aiDownloadPromptShown,
     );
   }
 }
@@ -54,6 +63,8 @@ class SettingsNotifier extends Notifier<SettingsState> {
   static const _keyShowAndroidAutoRecommendations = 'aa_show_recommendations';
   static const _keyUseDynamicAlbumAccent = 'use_dynamic_album_accent';
   static const _keyGaplessPlayback = 'gapless_playback';
+  static const _keyAiEnabled = 'ai_enabled';
+  static const _keyAiDownloadPromptShown = 'ai_download_prompt_shown';
 
   @override
   SettingsState build() {
@@ -92,6 +103,9 @@ class SettingsNotifier extends Notifier<SettingsState> {
         prefs.getBool(_keyShowAndroidAutoRecommendations) ?? true;
     final useDynamicAccent = prefs.getBool(_keyUseDynamicAlbumAccent) ?? true;
     final gapless = prefs.getBool(_keyGaplessPlayback) ?? true;
+    final aiEnabled = prefs.getBool(_keyAiEnabled) ?? true;
+    final aiDownloadPromptShown =
+        prefs.getBool(_keyAiDownloadPromptShown) ?? false;
 
     state = state.copyWith(
       browseMode: browseMode,
@@ -99,6 +113,8 @@ class SettingsNotifier extends Notifier<SettingsState> {
       showAndroidAutoRecommendations: showRecommendations,
       useDynamicAlbumAccent: useDynamicAccent,
       gaplessPlayback: gapless,
+      aiEnabled: aiEnabled,
+      aiDownloadPromptShown: aiDownloadPromptShown,
     );
   }
 
@@ -135,6 +151,18 @@ class SettingsNotifier extends Notifier<SettingsState> {
     await prefs.setBool(_keyGaplessPlayback, enabled);
   }
 
+  Future<void> setAiEnabled(bool enabled) async {
+    state = state.copyWith(aiEnabled: enabled);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyAiEnabled, enabled);
+  }
+
+  Future<void> setAiDownloadPromptShown(bool shown) async {
+    state = state.copyWith(aiDownloadPromptShown: shown);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyAiDownloadPromptShown, shown);
+  }
+
   static Future<void> clearSettings() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_keyBrowseMode);
@@ -142,5 +170,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
     await prefs.remove(_keyShowAndroidAutoRecommendations);
     await prefs.remove(_keyUseDynamicAlbumAccent);
     await prefs.remove(_keyGaplessPlayback);
+    await prefs.remove(_keyAiEnabled);
+    await prefs.remove(_keyAiDownloadPromptShown);
   }
 }

@@ -8,6 +8,7 @@ import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
+import 'package:tayra/features/year_review/ai_summary_provider.dart';
 import 'package:tayra/features/year_review/listen_history_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -168,6 +169,27 @@ class SettingsScreen extends ConsumerWidget {
 
           const SizedBox(height: 24),
 
+          // ── AI section ────────────────────────────────────────────────
+          if (defaultTargetPlatform == TargetPlatform.android) ...[
+            _SectionHeader(title: 'AI'),
+            _SwitchTile(
+              icon: Icons.auto_awesome_rounded,
+              title: 'AI features',
+              subtitle: 'Enable on-device generative AI features',
+              value: settings.aiEnabled,
+              onChanged: (value) {
+                try {
+                  Aptabase.instance.trackEvent('ai_features_toggled', {
+                    'enabled': value,
+                  });
+                } catch (_) {}
+                ref.read(settingsProvider.notifier).setAiEnabled(value);
+              },
+            ),
+            if (settings.aiEnabled) _AiModelStatusTile(),
+            const SizedBox(height: 24),
+          ],
+
           // ── Cache section ─────────────────────────────────────────────
           _SectionHeader(title: 'Cache'),
           cacheStatsAsync.when(
@@ -252,6 +274,126 @@ class SettingsScreen extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+// ── AI model status tile ────────────────────────────────────────────────
+
+class _AiModelStatusTile extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final statusAsync = ref.watch(genaiModelStatusProvider);
+
+    return statusAsync.when(
+      loading:
+          () => const _InfoTile(
+            icon: Icons.memory_rounded,
+            title: 'Gemini Nano',
+            subtitle: 'Checking status…',
+          ),
+      error:
+          (_, __) => const _InfoTile(
+            icon: Icons.memory_rounded,
+            title: 'Gemini Nano',
+            subtitle: 'Status unavailable',
+          ),
+      data: (status) {
+        // status constants mirror GenaiPromptPlugin.kt
+        const statusUnavailable = 0;
+        const statusDownloadable = 1;
+        const statusDownloading = 2;
+        const statusAvailable = 3;
+
+        final String subtitle;
+        switch (status) {
+          case statusAvailable:
+            subtitle = 'Available';
+          case statusDownloading:
+            subtitle = 'Downloading…';
+          case statusDownloadable:
+            subtitle = 'Download required';
+          case statusUnavailable:
+          default:
+            subtitle = 'Not supported on this device';
+        }
+
+        if (status == statusDownloadable) {
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+            decoration: BoxDecoration(
+              color: AppTheme.surfaceContainer,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.memory_rounded,
+                    color: AppTheme.onBackgroundSubtle,
+                    size: 22,
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Gemini Nano',
+                          style: TextStyle(
+                            color: AppTheme.onBackground,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          subtitle,
+                          style: const TextStyle(
+                            color: AppTheme.onBackgroundMuted,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  TextButton.icon(
+                    style: TextButton.styleFrom(
+                      foregroundColor: AppTheme.primary,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 6,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    icon: const Icon(Icons.download_rounded, size: 16),
+                    label: const Text('Download'),
+                    onPressed: () {
+                      // Trigger download via a dummy year — the download
+                      // itself is device-level so year doesn't matter.
+                      // We use year 0 as a sentinel that won't collide with
+                      // any real review year and will be auto-disposed.
+                      ref
+                          .read(aiSummaryProvider(0).notifier)
+                          .downloadAndGenerate();
+                      ref.invalidate(genaiModelStatusProvider);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+
+        return _InfoTile(
+          icon: Icons.memory_rounded,
+          title: 'Gemini Nano',
+          subtitle: subtitle,
+        );
+      },
     );
   }
 }

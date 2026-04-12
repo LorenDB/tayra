@@ -1476,7 +1476,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
     await QueuePersistenceService.addStash(stash);
     ref.invalidate(stashedQueuesProvider);
     try {
-      Aptabase.instance.trackEvent('queue_stashed', {'track_count': state.queue.length});
+      Aptabase.instance.trackEvent('queue_stashed', {
+        'track_count': state.queue.length,
+      });
     } catch (_) {}
 
     // Clear the active queue.
@@ -1486,7 +1488,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// Restore a previously stashed queue by [id], replacing the active queue.
   Future<void> restoreStash(String id) async {
     final stashes = await QueuePersistenceService.loadStashes();
-    final stash = stashes.firstWhere((s) => s.id == id, orElse: () => throw StateError('Stash not found'));
+    final stash = stashes.firstWhere(
+      (s) => s.id == id,
+      orElse: () => throw StateError('Stash not found'),
+    );
     if (stash.queue.isEmpty) return;
 
     await QueuePersistenceService.removeStash(id);
@@ -1496,7 +1501,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
     } catch (_) {}
 
     // Load the stashed tracks and seek to the saved position.
-    await playTracks(stash.queue, startIndex: stash.currentIndex, source: 'stash_restore');
+    await playTracks(
+      stash.queue,
+      startIndex: stash.currentIndex,
+      source: 'stash_restore',
+    );
 
     if (stash.position.inMilliseconds > 0) {
       await seekTo(stash.position);

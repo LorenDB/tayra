@@ -24,7 +24,8 @@ android {
         applicationId = "dev.lorendb.tayra"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        // ML Kit GenAI (Gemini Nano) requires minSdk 26 (Android 8.0).
+        minSdk = 26
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
@@ -41,4 +42,8 @@ android {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    implementation("com.google.mlkit:genai-prompt:1.0.0-beta2")
 }

@@ -996,13 +996,16 @@ class CacheManager {
       }
 
       // Phase 2: no more audio — evict cover art (LRU)
-      final imageCandidate = await db.rawQuery('''
+      final imageCandidate = await db.rawQuery(
+        '''
         SELECT cache_key, size_bytes FROM cache_files
         WHERE file_type = ?
           AND (is_protected IS NULL OR is_protected = 0)
         ORDER BY last_accessed ASC
         LIMIT 1
-      ''', [FileType.coverArt.name]);
+      ''',
+        [FileType.coverArt.name],
+      );
 
       if (imageCandidate.isNotEmpty) {
         final key = imageCandidate.first['cache_key'] as String;

@@ -105,7 +105,12 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
                   Consumer(
                     builder: (context, ref, _) {
                       final count =
-                          ref.watch(stashedQueuesProvider).asData?.value.length ?? 0;
+                          ref
+                              .watch(stashedQueuesProvider)
+                              .asData
+                              ?.value
+                              .length ??
+                          0;
                       return IconButton(
                         tooltip: 'Stashed queues',
                         icon: Badge(
@@ -229,65 +234,62 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
         ),
 
       SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            final track = queue[index];
-            final isCurrentTrack = index == currentIndex;
-            final showUpNextHeader =
-                index == currentIndex + 1 && currentIndex >= 0;
+        delegate: SliverChildBuilderDelegate((context, index) {
+          final track = queue[index];
+          final isCurrentTrack = index == currentIndex;
+          final showUpNextHeader =
+              index == currentIndex + 1 && currentIndex >= 0;
 
-            return Column(
-              key: ValueKey('queue_section_$index'),
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (showUpNextHeader)
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 4),
-                    child: Row(
-                      children: [
-                        const Text(
-                          'Up Next',
-                          style: TextStyle(
-                            color: AppTheme.onBackgroundMuted,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0.5,
-                          ),
+          return Column(
+            key: ValueKey('queue_section_$index'),
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (showUpNextHeader)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 4),
+                  child: Row(
+                    children: [
+                      const Text(
+                        'Up Next',
+                        style: TextStyle(
+                          color: AppTheme.onBackgroundMuted,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0.5,
                         ),
-                        const Spacer(),
-                        Text(
-                          '${queue.length - currentIndex - 1} tracks',
-                          style: const TextStyle(
-                            color: AppTheme.onBackgroundSubtle,
-                            fontSize: 11,
-                          ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        '${queue.length - currentIndex - 1} tracks',
+                        style: const TextStyle(
+                          color: AppTheme.onBackgroundSubtle,
+                          fontSize: 11,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                _DraggableQueueItem(
-                  track: track,
-                  index: index,
-                  isCurrentTrack: isCurrentTrack,
-                  isPlaying: playerState.isPlaying,
-                  queueLength: queue.length,
-                  onTap: () {
-                    ref.read(playerProvider.notifier).jumpTo(index);
-                  },
-                  onDismissed: () {
-                    ref.read(playerProvider.notifier).removeFromQueue(index);
-                  },
-                  onReorder: (oldIndex, newIndex) {
-                    ref
-                        .read(playerProvider.notifier)
-                        .reorderQueue(oldIndex, newIndex);
-                  },
                 ),
-              ],
-            );
-          },
-          childCount: queue.length,
-        ),
+              _DraggableQueueItem(
+                track: track,
+                index: index,
+                isCurrentTrack: isCurrentTrack,
+                isPlaying: playerState.isPlaying,
+                queueLength: queue.length,
+                onTap: () {
+                  ref.read(playerProvider.notifier).jumpTo(index);
+                },
+                onDismissed: () {
+                  ref.read(playerProvider.notifier).removeFromQueue(index);
+                },
+                onReorder: (oldIndex, newIndex) {
+                  ref
+                      .read(playerProvider.notifier)
+                      .reorderQueue(oldIndex, newIndex);
+                },
+              ),
+            ],
+          );
+        }, childCount: queue.length),
       ),
     ];
   }
@@ -958,10 +960,7 @@ class StashedQueueTile extends ConsumerWidget {
             ),
             content: const Text(
               'Restoring this stash will replace the current queue. Continue?',
-              style: TextStyle(
-                color: AppTheme.onBackgroundMuted,
-                fontSize: 14,
-              ),
+              style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 14),
             ),
             actions: [
               TextButton(
