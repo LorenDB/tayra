@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
 import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tayra/core/router/app_router.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
@@ -15,6 +16,7 @@ import 'package:tayra/core/widgets/track_list_tile.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/player/player_provider.dart';
 import 'package:tayra/features/playlists/playlists_screen.dart';
+import 'package:tayra/core/widgets/dialog_utils.dart';
 
 class PlaylistDetailScreen extends ConsumerStatefulWidget {
   final int playlistId;
@@ -45,7 +47,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
   ) async {
     if (!context.mounted) return;
 
-    final ok = await showDialog<bool>(
+    final ok = await showShellDialog<bool>(
       context: context,
       builder:
           (ctx) => AlertDialog(
@@ -117,7 +119,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
     if (_playlistTracks.isEmpty) return;
     if (!context.mounted) return;
 
-    final ok = await showDialog<bool>(
+    final ok = await showShellDialog<bool>(
       context: context,
       builder:
           (ctx) => AlertDialog(
@@ -241,7 +243,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
   ) async {
     if (!context.mounted) return;
 
-    final ok = await showDialog<bool>(
+    final ok = await showShellDialog<bool>(
       context: context,
       builder:
           (ctx) => AlertDialog(
@@ -295,7 +297,15 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
       } catch (_) {}
       ref.invalidate(playlistsProvider);
 
-      if (context.mounted) Navigator.of(context).pop();
+      if (context.mounted) {
+        // Ensure any open popup routes (confirmation dialogs, sheets)
+        // are dismissed before popping the playlist route so they don't
+        // remain visible after navigation.
+        shellNavigatorKey.currentState?.popUntil(
+          (route) => route is! PopupRoute,
+        );
+        Navigator.of(context).pop();
+      }
     } catch (e) {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(

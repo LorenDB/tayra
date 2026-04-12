@@ -2,6 +2,8 @@ import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tayra/core/router/app_router.dart';
+import 'package:tayra/core/widgets/dialog_utils.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
@@ -295,7 +297,7 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
   }
 
   void _showClearConfirmation(BuildContext context, WidgetRef ref) {
-    showDialog(
+    showShellDialog<void>(
       context: context,
       builder:
           (dialogContext) => AlertDialog(
@@ -677,7 +679,7 @@ class _DraggableQueueItemState extends State<_DraggableQueueItem> {
 /// Show a modal bottom sheet listing all stashed queues.
 /// Can be called from both the queue screen and the side panel.
 void showStashedQueuesSheet(BuildContext context, WidgetRef ref) {
-  showModalBottomSheet<void>(
+  showShellModalBottomSheet<void>(
     context: context,
     backgroundColor: AppTheme.surfaceContainer,
     shape: const RoundedRectangleBorder(
@@ -724,7 +726,7 @@ class _StashedQueuesSheet extends ConsumerWidget {
                   if (stashes.isNotEmpty)
                     TextButton(
                       onPressed: () async {
-                        final confirmed = await showDialog<bool>(
+                        final confirmed = await showShellDialog<bool>(
                           context: context,
                           builder:
                               (d) => AlertDialog(
@@ -942,7 +944,7 @@ class StashedQueueTile extends ConsumerWidget {
       return;
     }
 
-    showDialog<void>(
+    showShellDialog<void>(
       context: context,
       builder:
           (dialogContext) => AlertDialog(

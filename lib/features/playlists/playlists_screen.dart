@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tayra/core/router/app_router.dart';
 import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tayra/core/api/api_utils.dart';
@@ -12,6 +13,7 @@ import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/search/search_screen.dart';
 import 'package:tayra/core/layout/responsive.dart';
+import 'package:tayra/core/widgets/dialog_utils.dart';
 
 final playlistsProvider = FutureProvider.autoDispose<List<Playlist>>((
   ref,
@@ -110,7 +112,7 @@ class PlaylistsScreen extends ConsumerWidget {
   }
 
   void _showCreatePlaylistDialog(BuildContext context, WidgetRef ref) {
-    showDialog(
+    showShellDialog(
       context: context,
       builder:
           (dialogContext) => _CreatePlaylistDialog(
@@ -419,10 +421,7 @@ class _CreatePlaylistDialogState extends State<_CreatePlaylistDialog> {
           const SizedBox(height: 16),
           const Text(
             'Visibility',
-            style: TextStyle(
-              color: AppTheme.onBackgroundMuted,
-              fontSize: 12,
-            ),
+            style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 12),
           ),
           const SizedBox(height: 8),
           _PrivacySelector(
