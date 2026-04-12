@@ -28,19 +28,19 @@ class AppShell extends ConsumerWidget {
     ),
     (icon: Icons.radio_outlined, activeIcon: Icons.radio, label: 'Radios'),
     (
-      icon: Icons.favorite_border_rounded,
-      activeIcon: Icons.favorite_rounded,
-      label: 'Favorites',
-    ),
-    (
       icon: Icons.queue_music_rounded,
       activeIcon: Icons.queue_music_rounded,
       label: 'Playlists',
     ),
+    (
+      icon: Icons.favorite_border_rounded,
+      activeIcon: Icons.favorite_rounded,
+      label: 'Favorites',
+    ),
   ];
 
-  static const _paths = ['/', '/browse', '/radios', '/favorites', '/playlists'];
-  static const _names = ['home', 'browse', 'radios', 'favorites', 'playlists'];
+  static const _paths = ['/', '/browse', '/radios', '/playlists', '/favorites'];
+  static const _names = ['home', 'browse', 'radios', 'playlists', 'favorites'];
 
   int _currentIndex(BuildContext context) {
     final location = GoRouterState.of(context).matchedLocation;
