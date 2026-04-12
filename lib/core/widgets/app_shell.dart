@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tayra/core/router/app_router.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/layout/responsive.dart';
 import 'package:tayra/core/widgets/offline_banner.dart';
@@ -83,9 +84,32 @@ class AppShell extends ConsumerWidget {
     // intercepts the system back gesture / button before the navigator
     // can act on it, regardless of the go_router shell structure.
     if (currentIndex != 0) {
+      // Let the nested shell navigator always receive the system back
+      // gesture first (so dialogs / sheets can close).  After the nested
+      // navigator attempts to pop we'll be notified via `didPop` and can
+      // navigate to the Home tab only when nothing was popped.
       return PopScope(
-        canPop: false,
-        onPopInvokedWithResult: (didPop, result) => context.go(_paths[0]),
+        canPop: true,
+        onPopInvokedWithResult: (didPop, result) {
+          if (!didPop) {
+            // Ensure any popup routes attached to either the shell navigator
+            // or the root navigator are dismissed so they don't remain after
+            // we navigate the shell to Home.
+            try {
+              shellNavigatorKey.currentState?.popUntil(
+                (route) => route is! PopupRoute,
+              );
+            } catch (_) {}
+            try {
+              Navigator.of(
+                context,
+                rootNavigator: true,
+              ).popUntil((route) => route is! PopupRoute);
+            } catch (_) {}
+
+            context.go(_paths[0]);
+          }
+        },
         child: scaffold,
       );
     }
@@ -113,6 +137,17 @@ class AppShell extends ConsumerWidget {
             currentIndex: currentIndex,
             extended: isExpanded,
             onDestinationSelected: (i) {
+              // Dismiss popup routes attached to both the shell and root
+              // navigators before changing tabs so they don't remain.
+              final nested = shellNavigatorKey.currentState;
+              if (nested != null)
+                nested.popUntil((route) => route is! PopupRoute);
+              try {
+                Navigator.of(
+                  context,
+                  rootNavigator: true,
+                ).popUntil((route) => route is! PopupRoute);
+              } catch (_) {}
               context.go(_paths[i]);
             },
           ),
@@ -190,7 +225,18 @@ class AppShell extends ConsumerWidget {
                     final isSelected = i == currentIndex;
                     return Expanded(
                       child: InkWell(
-                        onTap: () => context.go(_paths[i]),
+                        onTap: () {
+                          final nested = shellNavigatorKey.currentState;
+                          if (nested != null)
+                            nested.popUntil((route) => route is! PopupRoute);
+                          try {
+                            Navigator.of(
+                              context,
+                              rootNavigator: true,
+                            ).popUntil((route) => route is! PopupRoute);
+                          } catch (_) {}
+                          context.go(_paths[i]);
+                        },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

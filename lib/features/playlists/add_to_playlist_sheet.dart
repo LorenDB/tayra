@@ -5,6 +5,8 @@ import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/playlists/playlists_screen.dart';
+import 'package:tayra/core/router/app_router.dart';
+import 'package:tayra/core/widgets/dialog_utils.dart';
 
 /// Shows a bottom sheet listing user playlists to add one or more tracks to.
 Future<void> showAddToPlaylistSheet(
@@ -12,7 +14,7 @@ Future<void> showAddToPlaylistSheet(
   WidgetRef ref, {
   required List<int> trackIds,
 }) async {
-  await showModalBottomSheet(
+  await showShellModalBottomSheet(
     context: context,
     backgroundColor: Colors.transparent,
     isScrollControlled: true,
@@ -339,7 +341,7 @@ class _AddToPlaylistSheetState extends ConsumerState<_AddToPlaylistSheet> {
   void _showCreateDialog(BuildContext context) {
     final nameController = TextEditingController();
 
-    showDialog(
+    showShellDialog(
       context: context,
       builder: (dialogContext) {
         return AlertDialog(

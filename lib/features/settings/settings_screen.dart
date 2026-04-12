@@ -12,6 +12,7 @@ import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/features/year_review/ai_summary_provider.dart';
 import 'package:tayra/features/year_review/listen_history_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:tayra/core/widgets/dialog_utils.dart';
 
 // Format MB values (decimal) used by the slider/settings UI so they always
 // match what the user selected.
@@ -55,7 +56,7 @@ class SettingsScreen extends ConsumerWidget {
             subtitle: 'Sign out and return to the login screen',
             iconColor: AppTheme.error,
             onTap: () async {
-              final confirmed = await showDialog<bool>(
+              final confirmed = await showShellDialog<bool>(
                 context: context,
                 builder:
                     (context) => AlertDialog(
@@ -152,8 +153,7 @@ class SettingsScreen extends ConsumerWidget {
             _SwitchTile(
               icon: Icons.directions_car_outlined,
               title: 'Android Auto',
-              subtitle:
-                  'Integrate with Android Auto',
+              subtitle: 'Integrate with Android Auto',
               value: settings.androidAutoEnabled,
               onChanged: (value) {
                 try {
@@ -238,7 +238,7 @@ class SettingsScreen extends ConsumerWidget {
             title: 'Clear audio cache',
             subtitle: 'Delete all downloaded audio files',
             onTap: () async {
-              final confirmed = await showDialog<bool>(
+              final confirmed = await showShellDialog<bool>(
                 context: context,
                 builder:
                     (context) => _ConfirmDialog(
@@ -262,7 +262,7 @@ class SettingsScreen extends ConsumerWidget {
             subtitle: 'Delete all cached data',
             iconColor: AppTheme.error,
             onTap: () async {
-              final confirmed = await showDialog<bool>(
+              final confirmed = await showShellDialog<bool>(
                 context: context,
                 builder:
                     (context) => _ConfirmDialog(

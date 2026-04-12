@@ -6,11 +6,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/core/router/app_router.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/features/playlists/playlists_screen.dart';
+import 'package:tayra/core/widgets/dialog_utils.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:tayra/features/year_review/ai_summary_provider.dart';
 
@@ -68,8 +70,11 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
       final results = await Future.wait([
         api.getPlaylist(widget.playlistId),
         fetchAllPages(
-          (page) =>
-              api.getPlaylistTracks(widget.playlistId, page: page, pageSize: 100),
+          (page) => api.getPlaylistTracks(
+            widget.playlistId,
+            page: page,
+            pageSize: 100,
+          ),
         ),
       ]);
 
@@ -125,9 +130,9 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
     } catch (e) {
       if (!mounted) return false;
       setState(() => _isSaving = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to save changes')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Failed to save changes')));
       return false;
     }
   }
@@ -147,9 +152,9 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
       _tracks.insert(index, removed);
       setState(() {});
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to remove track')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Failed to remove track')));
       }
     }
   }
@@ -186,7 +191,7 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
       return;
     }
 
-    final discard = await showDialog<bool>(
+    final discard = await showShellDialog<bool>(
       context: context,
       builder:
           (ctx) => AlertDialog(
@@ -251,9 +256,7 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
           e is MissingPluginException
               ? 'AI not available on this device'
               : 'AI failed to generate name';
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(msg)),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
     }
   }
 
