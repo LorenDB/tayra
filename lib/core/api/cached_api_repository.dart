@@ -475,6 +475,23 @@ class CachedFunkwhaleApi {
     );
   }
 
+  /// Patch a playlist (rename, etc.) and invalidate cached metadata.
+  Future<Playlist> patchPlaylist(int id, Map<String, dynamic> body) async {
+    final res = await _api.patchPlaylist(id, body);
+    // Invalidate cache so UI reflects updated name immediately when re-fetched.
+    await _cache.deleteMetadata('playlist_$id');
+    refetchPlaylistsAfterWrite();
+    return res;
+  }
+
+  // Helper to refresh playlists list cache after a write operation.
+  void refetchPlaylistsAfterWrite() async {
+    try {
+      // Call the cached wrapper with forceRefresh so the cache is refreshed.
+      await getPlaylists(scope: 'me', forceRefresh: true);
+    } catch (_) {}
+  }
+
   Future<PaginatedResponse<PlaylistTrack>> getPlaylistTracks(
     int id, {
     int page = 1,

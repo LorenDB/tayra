@@ -13,6 +13,10 @@ import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/track_list_tile.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/player/player_provider.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
+import 'package:tayra/features/settings/settings_provider.dart';
+import 'package:tayra/features/year_review/ai_summary_provider.dart';
 import 'package:tayra/features/playlists/playlists_screen.dart';
 
 class PlaylistDetailScreen extends ConsumerStatefulWidget {
@@ -35,6 +39,178 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
   void initState() {
     super.initState();
     _loadData();
+  }
+
+  Future<void> _showRenameDialog(
+    BuildContext context,
+    Playlist playlist,
+  ) async {
+    if (!context.mounted) return;
+
+    final settings = ref.read(settingsProvider);
+    final aiEnabled = settings.aiEnabled;
+    final modelStatus =
+        await (defaultTargetPlatform == TargetPlatform.android
+            ? ref.read(genaiModelStatusProvider.future)
+            : Future.value(0));
+    final hasLocalAi =
+        aiEnabled &&
+        defaultTargetPlatform == TargetPlatform.android &&
+        modelStatus == 3;
+
+    final controller = TextEditingController(text: playlist.name);
+    String? error;
+    bool generating = false;
+    // Local flag that can be disabled if the native plugin method is missing
+    // (catch MissingPluginException and hide the button for future attempts).
+    bool available = hasLocalAi;
+
+    await showDialog<void>(
+      context: context,
+      // Use the root navigator so the dialog is attached to the same navigator
+      // GoRouter and many app-level navigations operate on. This helps avoid
+      // dialogs remaining open when the route below is popped.
+      useRootNavigator: true,
+      builder:
+          (ctx) => StatefulBuilder(
+            builder: (ctx, setState) {
+              return AlertDialog(
+                backgroundColor: AppTheme.surfaceContainerHigh,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                title: const Text(
+                  'Rename playlist',
+                  style: TextStyle(color: AppTheme.onBackground),
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: controller,
+                      autofocus: true,
+                      style: const TextStyle(color: AppTheme.onBackground),
+                      decoration: const InputDecoration(
+                        labelText: 'Playlist name',
+                      ),
+                      onSubmitted: (_) async {
+                        Navigator.of(ctx).pop();
+                      },
+                    ),
+                    if (error != null) ...[
+                      const SizedBox(height: 8),
+                      Text(error!, style: TextStyle(color: AppTheme.error)),
+                    ],
+                  ],
+                ),
+                actions: [
+                  if (available)
+                    IconButton(
+                      tooltip: 'Generate name',
+                      color: AppTheme.primary,
+                      icon:
+                          generating
+                              ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                              : const Icon(Icons.auto_awesome_rounded),
+                      onPressed:
+                          generating
+                              ? null
+                              : () async {
+                                setState(() => generating = true);
+                                try {
+                                  // Ask native plugin for a short playlist name using the same
+                                  // genai channel used elsewhere in the app.
+                                  final name = await MethodChannel(
+                                    'dev.lorendb.tayra/genai_prompt',
+                                  ).invokeMethod<String>(
+                                    'generatePlaylistName',
+                                    {
+                                      'playlist_id': playlist.id,
+                                      'current_name': playlist.name,
+                                    },
+                                  );
+                                  if (name != null && name.isNotEmpty) {
+                                    controller.text = name.trim();
+                                  }
+                                } catch (e, st) {
+                                  // Provide better diagnostics for debugging.
+                                  debugPrint('GeneratePlaylistName failed: $e');
+                                  debugPrintStack(stackTrace: st);
+                                  final msg =
+                                      e is MissingPluginException
+                                          ? 'AI not available on this device'
+                                          : 'AI failed to generate name';
+                                  ScaffoldMessenger.of(
+                                    context,
+                                  ).showSnackBar(SnackBar(content: Text(msg)));
+
+                                  // If the plugin method isn't implemented the first time
+                                  // we try it, hide the button for subsequent attempts so
+                                  // users don't repeatedly hit a failing action.
+                                  if (e is MissingPluginException) {
+                                    setState(() => available = false);
+                                  }
+                                }
+                                setState(() => generating = false);
+                              },
+                    ),
+                  TextButton(
+                    onPressed:
+                        generating ? null : () => Navigator.of(ctx).pop(),
+                    child: const Text('Cancel'),
+                  ),
+                  TextButton(
+                    onPressed:
+                        generating
+                            ? null
+                            : () async {
+                              final newName = controller.text.trim();
+                              if (newName.isEmpty) {
+                                setState(() => error = 'Name cannot be empty');
+                                return;
+                              }
+                              Navigator.of(ctx).pop();
+                              try {
+                                final api = ref.read(
+                                  cachedFunkwhaleApiProvider,
+                                );
+                                await api.patchPlaylist(playlist.id, {
+                                  'name': newName,
+                                });
+                                try {
+                                  Aptabase.instance.trackEvent(
+                                    'playlist_renamed',
+                                    {'playlist_id': playlist.id},
+                                  );
+                                } catch (_) {}
+                                // Refresh local data
+                                await _loadData(forceRefresh: true);
+                                ref.invalidate(playlistsProvider);
+                              } catch (e) {
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Failed to rename playlist',
+                                      ),
+                                    ),
+                                  );
+                                }
+                              }
+                            },
+                    child: const Text('Rename'),
+                  ),
+                ],
+              );
+            },
+          ),
+    );
   }
 
   Future<void> _confirmRemoveTrack(
@@ -415,6 +591,8 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                   if (value == 'download') unawaited(toggleDownload());
                   if (value == 'delete')
                     unawaited(_confirmDeletePlaylist(context, playlist));
+                  if (value == 'rename')
+                    unawaited(_showRenameDialog(context, playlist));
                 },
                 itemBuilder:
                     (_) => [
@@ -435,6 +613,23 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                               style: const TextStyle(
                                 color: AppTheme.onBackground,
                               ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: 'rename',
+                        child: Row(
+                          children: const [
+                            Icon(
+                              Icons.edit_rounded,
+                              size: 20,
+                              color: AppTheme.onBackground,
+                            ),
+                            SizedBox(width: 12),
+                            Text(
+                              'Rename playlist',
+                              style: TextStyle(color: AppTheme.onBackground),
                             ),
                           ],
                         ),

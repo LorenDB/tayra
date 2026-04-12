@@ -198,6 +198,15 @@ class FunkwhaleApi {
     return Playlist.fromJson(response.data);
   }
 
+  /// Patch (partial update) a playlist. Used for renaming / updating metadata.
+  Future<Playlist> patchPlaylist(int id, Map<String, dynamic> body) async {
+    final response = await _dio.patch(
+      '$_baseUrl/api/v1/playlists/$id/',
+      data: body,
+    );
+    return Playlist.fromJson(response.data);
+  }
+
   Future<PaginatedResponse<PlaylistTrack>> getPlaylistTracks(
     int id, {
     int page = 1,
