@@ -35,6 +35,7 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
   String _privacyLevel = 'me';
   bool _isSaving = false;
   bool _isDirty = false;
+  bool _isGenerating = false;
 
   @override
   void initState() {
@@ -240,6 +241,8 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
     final playlist = _playlist;
     if (playlist == null) return;
 
+    if (_isGenerating) return;
+    setState(() => _isGenerating = true);
     try {
       final name = await MethodChannel(
         'dev.lorendb.tayra/genai_prompt',
@@ -249,6 +252,11 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
       });
       if (name != null && name.isNotEmpty && mounted) {
         _nameController.text = name.trim();
+      } else if (mounted) {
+        // Provide feedback when AI returns empty
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('AI did not suggest a name')),
+        );
       }
     } catch (e) {
       if (!mounted) return;
@@ -257,6 +265,8 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
               ? 'AI not available on this device'
               : 'AI failed to generate name';
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+    } finally {
+      if (mounted) setState(() => _isGenerating = false);
     }
   }
 
@@ -287,31 +297,38 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
             ),
           ),
           actions: [
-            if (_isDirty)
-              TextButton(
-                onPressed:
-                    _isSaving || _nameController.text.trim().isEmpty
-                        ? null
-                        : _save,
-                child:
-                    _isSaving
-                        ? const SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: AppTheme.primary,
-                          ),
-                        )
-                        : const Text(
-                          'Save',
-                          style: TextStyle(
-                            color: AppTheme.primary,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                          ),
-                        ),
+            TextButton(
+              onPressed: _onPopRequested,
+              child: const Text(
+                'Cancel',
+                style: TextStyle(
+                  color: AppTheme.onBackgroundMuted,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 15,
+                ),
               ),
+            ),
+            TextButton(
+              onPressed: _isSaving ? null : _save,
+              child:
+                  _isSaving
+                      ? const SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: AppTheme.primary,
+                        ),
+                      )
+                      : const Text(
+                        'Save',
+                        style: TextStyle(
+                          color: AppTheme.primary,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                        ),
+                      ),
+            ),
             const SizedBox(width: 4),
           ],
         ),
@@ -349,19 +366,90 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
               ),
               const Spacer(),
               if (_tracks.isNotEmpty)
-                const Row(
+                Row(
                   children: [
-                    Icon(
-                      Icons.drag_handle_rounded,
-                      size: 14,
-                      color: AppTheme.onBackgroundSubtle,
-                    ),
-                    SizedBox(width: 4),
-                    Text(
-                      'Drag to reorder',
-                      style: TextStyle(
-                        color: AppTheme.onBackgroundSubtle,
-                        fontSize: 12,
+                    const SizedBox(width: 4),
+                    // Clear all tracks (moved here)
+                    TextButton.icon(
+                      onPressed: () async {
+                        final ok = await showShellDialog<bool>(
+                          context: context,
+                          builder:
+                              (ctx) => AlertDialog(
+                                backgroundColor: AppTheme.surfaceContainerHigh,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                title: const Text(
+                                  'Clear playlist',
+                                  style: TextStyle(
+                                    color: AppTheme.onBackground,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                content: const Text(
+                                  'Remove all tracks from this playlist? This cannot be undone.',
+                                  style: TextStyle(
+                                    color: AppTheme.onBackgroundMuted,
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed:
+                                        () => Navigator.of(ctx).pop(false),
+                                    child: const Text(
+                                      'Cancel',
+                                      style: TextStyle(
+                                        color: AppTheme.onBackgroundMuted,
+                                      ),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed:
+                                        () => Navigator.of(ctx).pop(true),
+                                    child: const Text(
+                                      'Clear',
+                                      style: TextStyle(color: AppTheme.error),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                        );
+
+                        if (ok != true) return;
+
+                        // Optimistic UI
+                        final backup = List<PlaylistTrack>.from(_tracks);
+                        setState(() => _tracks = []);
+                        try {
+                          final api = ref.read(cachedFunkwhaleApiProvider);
+                          await api.clearPlaylist(widget.playlistId);
+                          try {
+                            Aptabase.instance.trackEvent('playlist_cleared');
+                          } catch (_) {}
+                          ref.invalidate(playlistsProvider);
+                        } catch (e) {
+                          setState(() => _tracks = backup);
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Failed to clear playlist'),
+                              ),
+                            );
+                          }
+                        }
+                      },
+                      icon: const Icon(
+                        Icons.playlist_remove_rounded,
+                        size: 14,
+                        color: AppTheme.onBackground,
+                      ),
+                      label: const Text(
+                        'Clear all tracks',
+                        style: TextStyle(
+                          color: AppTheme.onBackground,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                   ],
@@ -398,6 +486,11 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
               Expanded(
                 child: TextField(
                   controller: _nameController,
+                  onChanged: (_) {
+                    _onNameChanged();
+                    // Force a rebuild to ensure app bar actions update on some devices
+                    if (mounted) setState(() {});
+                  },
                   style: const TextStyle(
                     color: AppTheme.onBackground,
                     fontSize: 15,
@@ -408,12 +501,24 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
               ),
               if (hasLocalAi) ...[
                 const SizedBox(width: 8),
-                IconButton(
-                  tooltip: 'Generate name with AI',
-                  color: AppTheme.primary,
-                  icon: const Icon(Icons.auto_awesome_rounded),
-                  onPressed: _generateName,
-                ),
+                _isGenerating
+                    ? const SizedBox(
+                      width: 36,
+                      height: 36,
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: AppTheme.primary,
+                        ),
+                      ),
+                    )
+                    : IconButton(
+                      tooltip: 'Generate name with AI',
+                      color: AppTheme.primary,
+                      icon: const Icon(Icons.auto_awesome_rounded),
+                      onPressed: _generateName,
+                    ),
               ],
             ],
           ),
@@ -436,6 +541,7 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
               });
             },
           ),
+          const SizedBox(height: 12),
         ],
       ),
     );
@@ -512,19 +618,6 @@ class _EditTrackTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         child: Row(
           children: [
-            // Remove button
-            IconButton(
-              icon: const Icon(
-                Icons.remove_circle_outline_rounded,
-                color: AppTheme.error,
-                size: 22,
-              ),
-              onPressed: onRemove,
-              padding: const EdgeInsets.all(8),
-              constraints: const BoxConstraints(),
-            ),
-            const SizedBox(width: 4),
-
             // Cover art
             CoverArtWidget(
               imageUrl: track.coverUrl,
@@ -565,16 +658,35 @@ class _EditTrackTile extends StatelessWidget {
             ),
 
             // Drag handle
-            ReorderableDragStartListener(
-              index: index,
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                child: Icon(
-                  Icons.drag_handle_rounded,
-                  color: AppTheme.onBackgroundSubtle,
-                  size: 22,
+            Listener(
+              onPointerDown: (_) {
+                // Provide a small haptic feedback when user starts dragging
+                try {
+                  HapticFeedback.lightImpact();
+                } catch (_) {}
+              },
+              child: ReorderableDragStartListener(
+                index: index,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  child: Icon(
+                    Icons.drag_handle_rounded,
+                    color: AppTheme.onBackgroundSubtle,
+                    size: 22,
+                  ),
                 ),
               ),
+            ),
+            // Remove button (right side)
+            IconButton(
+              icon: const Icon(
+                Icons.remove_circle_outline_rounded,
+                color: AppTheme.error,
+                size: 22,
+              ),
+              onPressed: onRemove,
+              padding: const EdgeInsets.all(8),
+              constraints: const BoxConstraints(),
             ),
           ],
         ),

@@ -498,9 +498,6 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                         .push('/playlists/${playlist.id}/edit')
                         .then((_) => _loadData(forceRefresh: true));
                   }
-                  if (value == 'clear') {
-                    unawaited(_confirmClearPlaylist(context, playlist));
-                  }
                   if (value == 'delete') {
                     unawaited(_confirmDeletePlaylist(context, playlist));
                   }
@@ -540,23 +537,6 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                             SizedBox(width: 12),
                             Text(
                               'Edit playlist',
-                              style: TextStyle(color: AppTheme.onBackground),
-                            ),
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: 'clear',
-                        child: Row(
-                          children: const [
-                            Icon(
-                              Icons.playlist_remove_rounded,
-                              size: 20,
-                              color: AppTheme.onBackground,
-                            ),
-                            SizedBox(width: 12),
-                            Text(
-                              'Clear all tracks',
                               style: TextStyle(color: AppTheme.onBackground),
                             ),
                           ],
