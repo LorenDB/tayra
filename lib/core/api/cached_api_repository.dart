@@ -599,6 +599,27 @@ class CachedFunkwhaleApi {
     await _cache.deleteMetadata('playlist_$id');
   }
 
+  /// Remove all tracks from a playlist and invalidate track caches.
+  Future<void> clearPlaylist(int id) async {
+    await _api.clearPlaylist(id);
+    await _cache.deleteMetadata('playlist_$id');
+    // Invalidate common playlist track page caches so next load is empty.
+    await _cache.deleteMetadata('playlist_tracks_${id}_p1_s50');
+    await _cache.deleteMetadata('playlist_tracks_${id}_p1_s100');
+    refetchPlaylistsAfterWrite();
+  }
+
+  /// Move a track in a playlist and invalidate track order caches.
+  Future<void> moveTrackInPlaylist(
+    int playlistId,
+    int index,
+    int newIndex,
+  ) async {
+    await _api.moveTrackInPlaylist(playlistId, index, newIndex);
+    await _cache.deleteMetadata('playlist_tracks_${playlistId}_p1_s50');
+    await _cache.deleteMetadata('playlist_tracks_${playlistId}_p1_s100');
+  }
+
   // ── Pass-through methods ────────────────────────────────────────────
 
   Future<void> recordListening(int trackId) async {

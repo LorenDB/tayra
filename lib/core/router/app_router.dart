@@ -13,6 +13,7 @@ import 'package:tayra/features/settings/settings_screen.dart';
 import 'package:tayra/features/favorites/favorites_screen.dart';
 import 'package:tayra/features/playlists/playlists_screen.dart';
 import 'package:tayra/features/playlists/playlist_detail_screen.dart';
+import 'package:tayra/features/playlists/playlist_edit_screen.dart';
 import 'package:tayra/features/player/now_playing_screen.dart';
 import 'package:tayra/features/player/queue_screen.dart';
 import 'package:tayra/features/year_review/year_review_screen.dart';
@@ -221,6 +222,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   final id = int.parse(state.pathParameters['id']!);
                   return PlaylistDetailScreen(playlistId: id);
                 },
+                routes: [
+                  GoRoute(
+                    path: 'edit',
+                    name: 'playlist_edit',
+                    builder: (context, state) {
+                      final id = int.parse(state.pathParameters['id']!);
+                      return PlaylistEditScreen(playlistId: id);
+                    },
+                  ),
+                ],
               ),
             ],
           ),
