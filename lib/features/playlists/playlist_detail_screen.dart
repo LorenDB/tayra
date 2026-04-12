@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
 import 'package:aptabase_flutter/aptabase_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
@@ -13,10 +14,6 @@ import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/track_list_tile.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/player/player_provider.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/foundation.dart';
-import 'package:tayra/features/settings/settings_provider.dart';
-import 'package:tayra/features/year_review/ai_summary_provider.dart';
 import 'package:tayra/features/playlists/playlists_screen.dart';
 
 class PlaylistDetailScreen extends ConsumerStatefulWidget {
@@ -39,178 +36,6 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
   void initState() {
     super.initState();
     _loadData();
-  }
-
-  Future<void> _showRenameDialog(
-    BuildContext context,
-    Playlist playlist,
-  ) async {
-    if (!context.mounted) return;
-
-    final settings = ref.read(settingsProvider);
-    final aiEnabled = settings.aiEnabled;
-    final modelStatus =
-        await (defaultTargetPlatform == TargetPlatform.android
-            ? ref.read(genaiModelStatusProvider.future)
-            : Future.value(0));
-    final hasLocalAi =
-        aiEnabled &&
-        defaultTargetPlatform == TargetPlatform.android &&
-        modelStatus == 3;
-
-    final controller = TextEditingController(text: playlist.name);
-    String? error;
-    bool generating = false;
-    // Local flag that can be disabled if the native plugin method is missing
-    // (catch MissingPluginException and hide the button for future attempts).
-    bool available = hasLocalAi;
-
-    await showDialog<void>(
-      context: context,
-      // Use the root navigator so the dialog is attached to the same navigator
-      // GoRouter and many app-level navigations operate on. This helps avoid
-      // dialogs remaining open when the route below is popped.
-      useRootNavigator: true,
-      builder:
-          (ctx) => StatefulBuilder(
-            builder: (ctx, setState) {
-              return AlertDialog(
-                backgroundColor: AppTheme.surfaceContainerHigh,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                title: const Text(
-                  'Rename playlist',
-                  style: TextStyle(color: AppTheme.onBackground),
-                ),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextField(
-                      controller: controller,
-                      autofocus: true,
-                      style: const TextStyle(color: AppTheme.onBackground),
-                      decoration: const InputDecoration(
-                        labelText: 'Playlist name',
-                      ),
-                      onSubmitted: (_) async {
-                        Navigator.of(ctx).pop();
-                      },
-                    ),
-                    if (error != null) ...[
-                      const SizedBox(height: 8),
-                      Text(error!, style: TextStyle(color: AppTheme.error)),
-                    ],
-                  ],
-                ),
-                actions: [
-                  if (available)
-                    IconButton(
-                      tooltip: 'Generate name',
-                      color: AppTheme.primary,
-                      icon:
-                          generating
-                              ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              )
-                              : const Icon(Icons.auto_awesome_rounded),
-                      onPressed:
-                          generating
-                              ? null
-                              : () async {
-                                setState(() => generating = true);
-                                try {
-                                  // Ask native plugin for a short playlist name using the same
-                                  // genai channel used elsewhere in the app.
-                                  final name = await MethodChannel(
-                                    'dev.lorendb.tayra/genai_prompt',
-                                  ).invokeMethod<String>(
-                                    'generatePlaylistName',
-                                    {
-                                      'playlist_id': playlist.id,
-                                      'current_name': playlist.name,
-                                    },
-                                  );
-                                  if (name != null && name.isNotEmpty) {
-                                    controller.text = name.trim();
-                                  }
-                                } catch (e, st) {
-                                  // Provide better diagnostics for debugging.
-                                  debugPrint('GeneratePlaylistName failed: $e');
-                                  debugPrintStack(stackTrace: st);
-                                  final msg =
-                                      e is MissingPluginException
-                                          ? 'AI not available on this device'
-                                          : 'AI failed to generate name';
-                                  ScaffoldMessenger.of(
-                                    context,
-                                  ).showSnackBar(SnackBar(content: Text(msg)));
-
-                                  // If the plugin method isn't implemented the first time
-                                  // we try it, hide the button for subsequent attempts so
-                                  // users don't repeatedly hit a failing action.
-                                  if (e is MissingPluginException) {
-                                    setState(() => available = false);
-                                  }
-                                }
-                                setState(() => generating = false);
-                              },
-                    ),
-                  TextButton(
-                    onPressed:
-                        generating ? null : () => Navigator.of(ctx).pop(),
-                    child: const Text('Cancel'),
-                  ),
-                  TextButton(
-                    onPressed:
-                        generating
-                            ? null
-                            : () async {
-                              final newName = controller.text.trim();
-                              if (newName.isEmpty) {
-                                setState(() => error = 'Name cannot be empty');
-                                return;
-                              }
-                              Navigator.of(ctx).pop();
-                              try {
-                                final api = ref.read(
-                                  cachedFunkwhaleApiProvider,
-                                );
-                                await api.patchPlaylist(playlist.id, {
-                                  'name': newName,
-                                });
-                                try {
-                                  Aptabase.instance.trackEvent(
-                                    'playlist_renamed',
-                                    {'playlist_id': playlist.id},
-                                  );
-                                } catch (_) {}
-                                // Refresh local data
-                                await _loadData(forceRefresh: true);
-                                ref.invalidate(playlistsProvider);
-                              } catch (e) {
-                                if (context.mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        'Failed to rename playlist',
-                                      ),
-                                    ),
-                                  );
-                                }
-                              }
-                            },
-                    child: const Text('Rename'),
-                  ),
-                ],
-              );
-            },
-          ),
-    );
   }
 
   Future<void> _confirmRemoveTrack(
@@ -281,6 +106,75 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(const SnackBar(content: Text('Failed to remove track')));
+      }
+    }
+  }
+
+  Future<void> _confirmClearPlaylist(
+    BuildContext context,
+    Playlist playlist,
+  ) async {
+    if (_playlistTracks.isEmpty) return;
+    if (!context.mounted) return;
+
+    final ok = await showDialog<bool>(
+      context: context,
+      builder:
+          (ctx) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            title: const Text(
+              'Clear playlist',
+              style: TextStyle(
+                color: AppTheme.onBackground,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            content: const Text(
+              'Remove all tracks from this playlist? This cannot be undone.',
+              style: TextStyle(color: AppTheme.onBackgroundMuted),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(color: AppTheme.onBackgroundMuted),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: const Text(
+                  'Clear',
+                  style: TextStyle(color: AppTheme.error),
+                ),
+              ),
+            ],
+          ),
+    );
+
+    if (ok != true) return;
+    if (!context.mounted) return;
+
+    // Optimistic UI update.
+    final backup = List<PlaylistTrack>.from(_playlistTracks);
+    setState(() => _playlistTracks = []);
+
+    try {
+      final api = ref.read(cachedFunkwhaleApiProvider);
+      await api.clearPlaylist(playlist.id);
+      ref.invalidate(playlistsProvider);
+      try {
+        Aptabase.instance.trackEvent('playlist_cleared');
+      } catch (_) {}
+    } catch (e) {
+      setState(() => _playlistTracks = backup);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to clear playlist')),
+        );
       }
     }
   }
@@ -589,10 +483,17 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                 color: AppTheme.surfaceContainer,
                 onSelected: (value) {
                   if (value == 'download') unawaited(toggleDownload());
-                  if (value == 'delete')
+                  if (value == 'edit') {
+                    context
+                        .push('/playlists/${playlist.id}/edit')
+                        .then((_) => _loadData(forceRefresh: true));
+                  }
+                  if (value == 'clear') {
+                    unawaited(_confirmClearPlaylist(context, playlist));
+                  }
+                  if (value == 'delete') {
                     unawaited(_confirmDeletePlaylist(context, playlist));
-                  if (value == 'rename')
-                    unawaited(_showRenameDialog(context, playlist));
+                  }
                 },
                 itemBuilder:
                     (_) => [
@@ -618,7 +519,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                         ),
                       ),
                       PopupMenuItem(
-                        value: 'rename',
+                        value: 'edit',
                         child: Row(
                           children: const [
                             Icon(
@@ -628,7 +529,24 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                             ),
                             SizedBox(width: 12),
                             Text(
-                              'Rename playlist',
+                              'Edit playlist',
+                              style: TextStyle(color: AppTheme.onBackground),
+                            ),
+                          ],
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: 'clear',
+                        child: Row(
+                          children: const [
+                            Icon(
+                              Icons.playlist_remove_rounded,
+                              size: 20,
+                              color: AppTheme.onBackground,
+                            ),
+                            SizedBox(width: 12),
+                            Text(
+                              'Clear all tracks',
                               style: TextStyle(color: AppTheme.onBackground),
                             ),
                           ],

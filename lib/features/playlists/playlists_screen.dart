@@ -340,6 +340,7 @@ class _CreatePlaylistDialog extends StatefulWidget {
 
 class _CreatePlaylistDialogState extends State<_CreatePlaylistDialog> {
   final TextEditingController _nameController = TextEditingController();
+  String _privacyLevel = 'me';
   bool _isCreating = false;
   String? _error;
 
@@ -363,7 +364,7 @@ class _CreatePlaylistDialogState extends State<_CreatePlaylistDialog> {
 
     try {
       final api = widget.ref.read(cachedFunkwhaleApiProvider);
-      await api.createPlaylist(name: name);
+      await api.createPlaylist(name: name, privacyLevel: _privacyLevel);
       if (!mounted) return;
       try {
         Aptabase.instance.trackEvent('playlist_created');
@@ -394,6 +395,7 @@ class _CreatePlaylistDialogState extends State<_CreatePlaylistDialog> {
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextField(
             controller: _nameController,
@@ -414,6 +416,19 @@ class _CreatePlaylistDialogState extends State<_CreatePlaylistDialog> {
               style: TextStyle(color: AppTheme.error, fontSize: 13),
             ),
           ],
+          const SizedBox(height: 16),
+          const Text(
+            'Visibility',
+            style: TextStyle(
+              color: AppTheme.onBackgroundMuted,
+              fontSize: 12,
+            ),
+          ),
+          const SizedBox(height: 8),
+          _PrivacySelector(
+            value: _privacyLevel,
+            onChanged: (v) => setState(() => _privacyLevel = v),
+          ),
         ],
       ),
       actions: [
@@ -445,6 +460,86 @@ class _CreatePlaylistDialogState extends State<_CreatePlaylistDialog> {
                   ),
         ),
       ],
+    );
+  }
+}
+
+// ── Privacy Selector ────────────────────────────────────────────────────
+
+class _PrivacySelector extends StatelessWidget {
+  final String value;
+  final ValueChanged<String> onChanged;
+
+  const _PrivacySelector({required this.value, required this.onChanged});
+
+  static const _options = [
+    ('me', Icons.lock_rounded, 'Only me'),
+    ('followers', Icons.group_rounded, 'Followers'),
+    ('instance', Icons.dns_rounded, 'Instance'),
+    ('everyone', Icons.public_rounded, 'Everyone'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children:
+          _options.map((opt) {
+            final (level, icon, label) = opt;
+            final selected = value == level;
+            return GestureDetector(
+              onTap: () => onChanged(level),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 150),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color:
+                      selected
+                          ? AppTheme.primary.withValues(alpha: 0.15)
+                          : AppTheme.surfaceContainer,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color:
+                        selected
+                            ? AppTheme.primary
+                            : AppTheme.onBackgroundSubtle.withValues(
+                              alpha: 0.3,
+                            ),
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      icon,
+                      size: 14,
+                      color:
+                          selected
+                              ? AppTheme.primary
+                              : AppTheme.onBackgroundMuted,
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      label,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight:
+                            selected ? FontWeight.w600 : FontWeight.normal,
+                        color:
+                            selected
+                                ? AppTheme.primary
+                                : AppTheme.onBackgroundMuted,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }).toList(),
     );
   }
 }

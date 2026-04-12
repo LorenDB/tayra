@@ -265,6 +265,23 @@ class FunkwhaleApi {
     await _dio.delete('$_baseUrl/api/v1/playlists/$id/');
   }
 
+  /// Remove all tracks from a playlist.
+  Future<void> clearPlaylist(int id) async {
+    await _dio.delete('$_baseUrl/api/v1/playlists/$id/clear/');
+  }
+
+  /// Move a track within a playlist from [index] to [newIndex] (0-based).
+  Future<void> moveTrackInPlaylist(
+    int playlistId,
+    int index,
+    int newIndex,
+  ) async {
+    await _dio.post(
+      '$_baseUrl/api/v1/playlists/$playlistId/move/',
+      data: {'index': index, 'new_index': newIndex},
+    );
+  }
+
   // ── Listening history ───────────────────────────────────────────────
 
   Future<void> recordListening(int trackId) async {
