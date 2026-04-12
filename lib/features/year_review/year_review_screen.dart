@@ -1003,7 +1003,7 @@ class _LovedVsListenedSection extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'What you said you liked vs. what you actually played',
+            'What you favorited vs. what you played most',
             style: const TextStyle(
               color: AppTheme.onBackgroundMuted,
               fontSize: 13,
