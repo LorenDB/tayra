@@ -56,7 +56,8 @@ class StashedQueue {
       position: Duration(milliseconds: json['positionMs'] as int? ?? 0),
       isShuffled: json['isShuffled'] as bool? ?? false,
       loopMode: json['loopMode'] as String? ?? 'off',
-      savedAt: DateTime.tryParse(json['savedAt'] as String? ?? '') ?? DateTime.now(),
+      savedAt:
+          DateTime.tryParse(json['savedAt'] as String? ?? '') ?? DateTime.now(),
     );
   }
 }

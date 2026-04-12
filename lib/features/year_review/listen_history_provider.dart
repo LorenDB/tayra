@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/features/year_review/listen_history_service.dart';
+import 'package:tayra/features/year_review/ai_summary_provider.dart';
 
 // ── Providers ───────────────────────────────────────────────────────────
 
@@ -130,6 +131,24 @@ class YearReviewBannerNotifier extends Notifier<bool> {
 
     final count = await ListenHistoryService.getTotalListenCount();
     state = count > 0;
+    // If the banner is visible for the current year, pregenerate the AI
+    // summary in the background so it's ready when the user opens the
+    // Year in Review. Also, ensure the previous calendar year's final
+    // summary (if any) is saved permanently after the year ends.
+    if (state) {
+      try {
+        // Pregenerate for the current calendar year.
+        ref
+            .read(aiSummaryProvider(now.year).notifier)
+            .ensureGeneratedForBanner();
+      } catch (_) {}
+    }
+
+    // Ensure final copy for previous year exists if needed.
+    try {
+      final prev = now.year - 1;
+      ref.read(aiSummaryProvider(prev).notifier).ensureFinalSaved();
+    } catch (_) {}
   }
 
   /// Permanently hide the banner for this calendar year.

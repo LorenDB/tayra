@@ -17,8 +17,9 @@ class _SidePanelState extends ConsumerState<SidePanel> {
 
   @override
   Widget build(BuildContext context) {
-    final hasTrack =
-        ref.watch(playerProvider.select((s) => s.currentTrack != null));
+    final hasTrack = ref.watch(
+      playerProvider.select((s) => s.currentTrack != null),
+    );
 
     // Collapse back to the now-playing view when playback stops.
     ref.listen(playerProvider.select((s) => s.currentTrack), (prev, next) {
@@ -90,7 +91,8 @@ class _QueuePanel extends ConsumerWidget {
               Consumer(
                 builder: (context, ref, _) {
                   final count =
-                      ref.watch(stashedQueuesProvider).asData?.value.length ?? 0;
+                      ref.watch(stashedQueuesProvider).asData?.value.length ??
+                      0;
                   return IconButton(
                     tooltip: 'Stashed queues',
                     iconSize: 20,

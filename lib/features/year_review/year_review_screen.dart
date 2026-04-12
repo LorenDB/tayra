@@ -5,9 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
+import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:tayra/features/year_review/listen_history_provider.dart';
 import 'package:tayra/features/year_review/listen_history_service.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/features/year_review/ai_summary_provider.dart';
 
 // ── Month name helper ───────────────────────────────────────────────────
 
@@ -82,6 +84,7 @@ class _YearReviewScreenState extends ConsumerState<YearReviewScreen>
 
   Future<void> _refresh() async {
     ref.invalidate(yearReviewProvider(widget.year));
+    ref.invalidate(aiSummaryProvider(widget.year));
     await ref.read(yearReviewProvider(widget.year).future);
   }
 
@@ -163,6 +166,243 @@ class _YearReviewScreenState extends ConsumerState<YearReviewScreen>
         },
       ),
     );
+  }
+}
+
+// ── AI Summary Section ──────────────────────────────────────────────────
+
+/// Shows an on-device Gemini Nano summary of the year review data.
+///
+/// Renders nothing on unsupported platforms / devices so it never clutters
+/// the UI for users who can't benefit from it.
+class _AiSummarySection extends ConsumerWidget {
+  final int year;
+
+  const _AiSummarySection({required this.year});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final summaryState = ref.watch(aiSummaryProvider(year));
+
+    // Don't render anything on unsupported platforms or devices.
+    if (summaryState is AiSummaryUnsupported ||
+        summaryState is AiSummaryDeviceUnsupported) {
+      return const SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppTheme.surfaceContainer,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: AppTheme.primary.withValues(alpha: 0.25),
+            width: 1,
+          ),
+        ),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.auto_awesome_rounded,
+                  color: AppTheme.primary,
+                  size: 18,
+                ),
+                const SizedBox(width: 8),
+                const Text(
+                  'AI Summary',
+                  style: TextStyle(
+                    color: AppTheme.onBackground,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const Spacer(),
+                Text(
+                  'Gemini Nano',
+                  style: TextStyle(
+                    color: AppTheme.onBackgroundSubtle,
+                    fontSize: 11,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            _AiSummaryBody(year: year, summaryState: summaryState),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AiSummaryBody extends ConsumerWidget {
+  final int year;
+  final AiSummaryState summaryState;
+
+  const _AiSummaryBody({required this.year, required this.summaryState});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (summaryState is AiSummaryDownloadRequired) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Gemini Nano needs to be downloaded to generate an AI summary.',
+            style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 13),
+          ),
+          const SizedBox(height: 10),
+          TextButton.icon(
+            style: TextButton.styleFrom(
+              foregroundColor: AppTheme.primary,
+              padding: EdgeInsets.zero,
+            ),
+            icon: const Icon(Icons.download_rounded, size: 16),
+            label: const Text('Download model'),
+            onPressed: () {
+              ref.read(aiSummaryProvider(year).notifier).downloadAndGenerate();
+            },
+          ),
+        ],
+      );
+    }
+
+    if (summaryState is AiSummaryDownloading) {
+      return Row(
+        children: [
+          SizedBox(
+            width: 14,
+            height: 14,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: AppTheme.primary,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Text(
+            'Downloading Gemini Nano…',
+            style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 13),
+          ),
+        ],
+      );
+    }
+
+    if (summaryState is AiSummaryGenerating) {
+      return Row(
+        children: [
+          SizedBox(
+            width: 14,
+            height: 14,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: AppTheme.primary,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Text(
+            'Generating summary…',
+            style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 13),
+          ),
+        ],
+      );
+    }
+
+    if (summaryState is AiSummaryReady) {
+      return Text(
+        (summaryState as AiSummaryReady).text,
+        style: const TextStyle(
+          color: AppTheme.onBackground,
+          fontSize: 14,
+          height: 1.55,
+        ),
+      );
+    }
+
+    if (summaryState is AiSummaryError) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Could not generate summary.',
+            style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 13),
+          ),
+          const SizedBox(height: 8),
+          TextButton.icon(
+            style: TextButton.styleFrom(
+              foregroundColor: AppTheme.primary,
+              padding: EdgeInsets.zero,
+            ),
+            icon: const Icon(Icons.refresh_rounded, size: 16),
+            label: const Text('Retry'),
+            onPressed: () {
+              ref.read(aiSummaryProvider(year).notifier).retry();
+            },
+          ),
+        ],
+      );
+    }
+
+    return const SizedBox.shrink();
+  }
+}
+
+// ── AI Download Prompt Checker ──────────────────────────────────────────
+
+/// Zero-size widget that shows a one-time SnackBar prompting the user to
+/// download Gemini Nano when the model is downloadable and the prompt has
+/// not been shown before.
+class _AiDownloadPromptChecker extends ConsumerStatefulWidget {
+  final int year;
+
+  const _AiDownloadPromptChecker({required this.year});
+
+  @override
+  ConsumerState<_AiDownloadPromptChecker> createState() =>
+      _AiDownloadPromptCheckerState();
+}
+
+class _AiDownloadPromptCheckerState
+    extends ConsumerState<_AiDownloadPromptChecker> {
+  bool _scheduled = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final summaryState = ref.watch(aiSummaryProvider(widget.year));
+    final settings = ref.watch(settingsProvider);
+
+    if (!_scheduled &&
+        summaryState is AiSummaryDownloadRequired &&
+        settings.aiEnabled &&
+        !settings.aiDownloadPromptShown) {
+      _scheduled = true;
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        // Mark as shown immediately so we never show it again.
+        ref.read(settingsProvider.notifier).setAiDownloadPromptShown(true);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Download Gemini Nano for AI summaries'),
+            duration: const Duration(seconds: 8),
+            action: SnackBarAction(
+              label: 'Download',
+              onPressed: () {
+                ref
+                    .read(aiSummaryProvider(widget.year).notifier)
+                    .downloadAndGenerate();
+              },
+            ),
+          ),
+        );
+      });
+    }
+
+    return const SizedBox.shrink();
   }
 }
 
@@ -274,6 +514,9 @@ class _ReviewContent extends StatelessWidget {
           parent: AlwaysScrollableScrollPhysics(),
         ),
         slivers: [
+          // Zero-size widget that fires the one-time download snackbar prompt.
+          SliverToBoxAdapter(child: _AiDownloadPromptChecker(year: stats.year)),
+
           SliverToBoxAdapter(child: _AppBarRow(title: 'Year in Review')),
           const SliverToBoxAdapter(child: SizedBox(height: 8)),
 
@@ -286,6 +529,25 @@ class _ReviewContent extends StatelessWidget {
             ),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 20)),
+
+          // AI-generated summary (Android Gemini Nano; hidden on unsupported devices)
+          // Placed right after the hero card, before the stats grid.
+          // The trailing spacer is conditional to avoid phantom spacing when
+          // the section renders SizedBox.shrink().
+          SliverToBoxAdapter(child: _AiSummarySection(year: stats.year)),
+          SliverToBoxAdapter(
+            child: Consumer(
+              builder: (context, ref, _) {
+                final s = ref.watch(aiSummaryProvider(stats.year));
+                final visible =
+                    s is! AiSummaryUnsupported &&
+                    s is! AiSummaryDeviceUnsupported;
+                return visible
+                    ? const SizedBox(height: 24)
+                    : const SizedBox.shrink();
+              },
+            ),
+          ),
 
           // Stats grid
           SliverToBoxAdapter(child: _StatsGrid(stats: stats)),
