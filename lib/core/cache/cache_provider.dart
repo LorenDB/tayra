@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tayra/core/api/models.dart';
 import 'package:tayra/core/cache/audio_cache_service.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 
@@ -60,4 +61,36 @@ final cacheSizeLimitProvider = FutureProvider<int>((ref) async {
   final config = await CacheConfig.load();
   // Return limit in decimal MB (1 MB = 1,000,000 bytes) to match UI slider
   return config.maxTotalSizeBytes ~/ 1000000;
+});
+
+// ── Offline availability providers ──────────────────────────────────────
+
+/// All track IDs that are playable offline (cached audio or manually downloaded).
+final offlineTrackIdsProvider = FutureProvider<Set<int>>((ref) async {
+  final mgr = ref.watch(cacheManagerProvider);
+  return await mgr.getOfflineTrackIds();
+});
+
+/// All album IDs that have at least one offline-available track.
+final offlineAlbumIdsProvider = FutureProvider<Set<int>>((ref) async {
+  final mgr = ref.watch(cacheManagerProvider);
+  return await mgr.getOfflineAlbumIds();
+});
+
+/// All cached album metadata available locally.
+final cachedAlbumsProvider = FutureProvider<List<Album>>((ref) async {
+  final mgr = ref.watch(cacheManagerProvider);
+  return await mgr.getCachedAlbums();
+});
+
+/// All cached album metadata that is available offline.
+final offlineAlbumsProvider = FutureProvider<List<Album>>((ref) async {
+  final mgr = ref.watch(cacheManagerProvider);
+  return await mgr.getOfflineAlbums();
+});
+
+/// All artist IDs that are marked as manually downloaded offline.
+final offlineArtistIdsProvider = FutureProvider<Set<int>>((ref) async {
+  final mgr = ref.watch(cacheManagerProvider);
+  return await mgr.getOfflineArtistIds();
 });

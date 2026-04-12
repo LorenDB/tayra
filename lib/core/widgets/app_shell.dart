@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/layout/responsive.dart';
+import 'package:tayra/core/widgets/offline_banner.dart';
 import 'package:tayra/features/player/mini_player.dart';
 import 'package:tayra/features/player/player_provider.dart';
 import 'package:tayra/features/player/queue_screen.dart';
@@ -124,7 +125,14 @@ class AppShell extends ConsumerWidget {
           ),
 
           // ── Main content area ──
-          Expanded(child: child),
+          Expanded(
+            child: SafeArea(
+              bottom: false,
+              child: Column(
+                children: [const OfflineStatusBar(), Expanded(child: child)],
+              ),
+            ),
+          ),
 
           // ── Side panel: now-playing when a track is loaded, or stash inbox ──
           if (showPanel) ...[
@@ -154,7 +162,12 @@ class AppShell extends ConsumerWidget {
   ) {
     return Scaffold(
       backgroundColor: AppTheme.background,
-      body: child,
+      body: SafeArea(
+        bottom: false,
+        child: Column(
+          children: [const OfflineStatusBar(), Expanded(child: child)],
+        ),
+      ),
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

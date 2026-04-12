@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/cache/download_queue_service.dart';
+import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
 import 'package:tayra/core/widgets/error_state.dart';
@@ -138,17 +140,17 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
     ref.read(favoriteTrackIdsProvider.notifier).refresh();
   }
 
-  void _shuffleAll() {
-    if (_favorites.isEmpty) return;
-    final tracks = _favorites.map((f) => f.track).toList();
+  void _shuffleDisplayed(List<Favorite> displayed) {
+    if (displayed.isEmpty) return;
+    final tracks = displayed.map((f) => f.track).toList();
     final shuffled = List<Track>.from(tracks)..shuffle();
     ref
         .read(playerProvider.notifier)
         .playTracks(shuffled, source: 'favorites_shuffle');
   }
 
-  void _playFromIndex(int index) {
-    final tracks = _favorites.map((f) => f.track).toList();
+  void _playDisplayedFromIndex(List<Favorite> displayed, int index) {
+    final tracks = displayed.map((f) => f.track).toList();
     ref
         .read(playerProvider.notifier)
         .playTracks(tracks, startIndex: index, source: 'favorites_from_track');
@@ -189,14 +191,15 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
     }
   }
 
-  String _buildStatsText() {
-    if (_favorites.isEmpty) return '0 tracks';
+  String _buildStatsText([List<Favorite>? favs]) {
+    final list = favs ?? _favorites;
+    if (list.isEmpty) return '0 tracks';
 
-    final count = _favorites.length;
+    final count = list.length;
     int totalDuration = 0;
     bool hasMissingDuration = false;
 
-    for (final fav in _favorites) {
+    for (final fav in list) {
       final d = fav.track.duration;
       if (d != null) {
         totalDuration += d;
@@ -313,6 +316,27 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
       );
     }
 
+    // Apply offline filter if active
+    final offlineFilterActive = ref.read(offlineFilterActiveProvider);
+    final offlineTrackIds =
+        offlineFilterActive
+            ? ref.read(offlineTrackIdsProvider).asData?.value ?? const <int>{}
+            : null;
+    final displayFavorites =
+        offlineTrackIds != null
+            ? _favorites
+                .where((f) => offlineTrackIds.contains(f.track.id))
+                .toList()
+            : _favorites;
+
+    if (displayFavorites.isEmpty && offlineFilterActive) {
+      return const EmptyState(
+        icon: Icons.wifi_off_rounded,
+        title: 'No offline favorites',
+        subtitle: 'Download tracks to listen when offline',
+      );
+    }
+
     // Favorites list
     return RefreshIndicator(
       color: AppTheme.primary,
@@ -331,14 +355,16 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
               child: Row(
                 children: [
                   Text(
-                    _buildStatsText(),
+                    _buildStatsText(displayFavorites),
                     style: const TextStyle(
                       color: AppTheme.onBackgroundMuted,
                       fontSize: 13,
                     ),
                   ),
                   const Spacer(),
-                  _ShuffleAllButton(onPressed: _shuffleAll),
+                  _ShuffleAllButton(
+                    onPressed: () => _shuffleDisplayed(displayFavorites),
+                  ),
                 ],
               ),
             ),
@@ -347,7 +373,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
           // Track list
           SliverList(
             delegate: SliverChildBuilderDelegate((context, index) {
-              if (index >= _favorites.length) {
+              if (index >= displayFavorites.length) {
                 // Loading more indicator
                 return const Padding(
                   padding: EdgeInsets.symmetric(vertical: 16),
@@ -364,12 +390,12 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
                 );
               }
 
-              final favorite = _favorites[index];
+              final favorite = displayFavorites[index];
               return TrackListTile(
                 track: favorite.track,
-                onTap: () => _playFromIndex(index),
+                onTap: () => _playDisplayedFromIndex(displayFavorites, index),
               );
-            }, childCount: _favorites.length + (_isLoadingMore ? 1 : 0)),
+            }, childCount: displayFavorites.length + (_isLoadingMore ? 1 : 0)),
           ),
 
           // Bottom padding for mini player

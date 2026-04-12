@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
+import 'package:tayra/core/api/api_client.dart';
+import 'package:tayra/core/api/models.dart';
 import 'package:tayra/core/cache/cache_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:aptabase_flutter/aptabase_flutter.dart';
@@ -485,6 +487,152 @@ class CacheManager {
       whereArgs: [CacheType.track.name],
     );
     return results.map((r) => r['resource_id'] as int).toList();
+  }
+
+  /// Return all track IDs that have a cached audio file on disk.
+  Future<List<int>> getCachedAudioTrackIds() async {
+    final db = await _db.database;
+    final results = await db.query(
+      'cache_files',
+      columns: ['resource_id'],
+      where: 'file_type = ? AND resource_id IS NOT NULL',
+      whereArgs: [FileType.audio.name],
+    );
+    return results
+        .map((r) => r['resource_id'] as int?)
+        .whereType<int>()
+        .toList();
+  }
+
+  /// Return the set of all track IDs that are available offline:
+  /// either a cached audio file exists on disk, or they are marked as
+  /// manually downloaded.
+  Future<Set<int>> getOfflineTrackIds() async {
+    final audioIds = await getCachedAudioTrackIds();
+    final manualIds = await getManualDownloadedTrackIds();
+    return {...audioIds, ...manualIds};
+  }
+
+  /// Return all album IDs that have at least one offline track.
+  /// This is derived by checking which albums have cached audio files
+  /// linked via resource_parent_id.
+  Future<Set<int>> getOfflineAlbumIds() async {
+    final db = await _db.database;
+    await _ensureCacheFilesColumns();
+    try {
+      final results = await db.rawQuery(
+        '''
+        SELECT DISTINCT resource_parent_id
+        FROM cache_files
+        WHERE file_type = ?
+          AND resource_parent_type = ?
+          AND resource_parent_id IS NOT NULL
+        ''',
+        [FileType.audio.name, CacheType.album.name],
+      );
+      final fromFiles =
+          results
+              .map((r) => r['resource_parent_id'] as int?)
+              .whereType<int>()
+              .toSet();
+
+      // Also include albums that are manually downloaded.
+      final manualAlbums = await db.query(
+        'cache_manual_downloads',
+        columns: ['resource_id'],
+        where: 'resource_type = ?',
+        whereArgs: [CacheType.album.name],
+      );
+      final fromManual =
+          manualAlbums.map((r) => r['resource_id'] as int).toSet();
+
+      return fromFiles.union(fromManual);
+    } catch (e) {
+      debugPrint('getOfflineAlbumIds error: $e');
+      return {};
+    }
+  }
+
+  /// Return cached album metadata assembled from individual album entries and
+  /// cached paginated album-list responses.
+  Future<List<Album>> getCachedAlbums() async {
+    final db = await _db.database;
+    try {
+      final rows = await db.query(
+        'cache_metadata',
+        columns: ['cache_key', 'data'],
+        where: 'cache_type IN (?, ?)',
+        whereArgs: [CacheType.album.name, CacheType.recentAlbums.name],
+        orderBy: 'last_accessed DESC',
+      );
+
+      final albumsById = <int, Album>{};
+
+      for (final row in rows) {
+        final key = row['cache_key'] as String?;
+        final data = row['data'] as String?;
+        if (key == null || data == null) continue;
+
+        try {
+          final parsed = jsonDecode(data);
+          if (parsed is! Map<String, dynamic>) continue;
+
+          if (key.startsWith('album_')) {
+            final album = Album.fromJson(parsed);
+            final existing = albumsById[album.id];
+            if (existing == null || existing.tracks.isEmpty) {
+              albumsById[album.id] = album;
+            }
+            continue;
+          }
+
+          if (key.startsWith('albums_p')) {
+            final response = PaginatedResponse.fromJson(parsed, Album.fromJson);
+            for (final album in response.results) {
+              albumsById.putIfAbsent(album.id, () => album);
+            }
+          }
+        } catch (_) {
+          // Ignore malformed cache rows.
+        }
+      }
+
+      final albums =
+          albumsById.values.toList()..sort(
+            (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()),
+          );
+      return albums;
+    } catch (e) {
+      debugPrint('getCachedAlbums error: $e');
+      return const [];
+    }
+  }
+
+  /// Return all cached albums that are available offline.
+  Future<List<Album>> getOfflineAlbums() async {
+    final offlineIds = await getOfflineAlbumIds();
+    if (offlineIds.isEmpty) return const [];
+
+    final cachedAlbums = await getCachedAlbums();
+    return cachedAlbums
+        .where((album) => offlineIds.contains(album.id))
+        .toList();
+  }
+
+  /// Return all artist IDs that have at least one offline album.
+  /// Derived from albums whose tracks have cached audio.
+  Future<Set<int>> getOfflineArtistIds() async {
+    final db = await _db.database;
+    // Look for artist IDs from manual downloads.
+    final manualArtists = await db.query(
+      'cache_manual_downloads',
+      columns: ['resource_id'],
+      where: 'resource_type = ?',
+      whereArgs: [CacheType.artist.name],
+    );
+    final fromManual =
+        manualArtists.map((r) => r['resource_id'] as int).toSet();
+    return fromManual;
   }
 
   // ── Favorites cache operations ─────────────────────────────────────────

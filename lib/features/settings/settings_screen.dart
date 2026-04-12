@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
+import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
@@ -165,6 +166,26 @@ class SettingsScreen extends ConsumerWidget {
                     .setShowAndroidAutoRecommendations(value);
               },
             ),
+          _SwitchTile(
+            icon: Icons.wifi_off_rounded,
+            title: 'Force offline mode',
+            subtitle: 'Always show only locally cached content',
+            value: settings.forceOfflineMode,
+            onChanged: (value) {
+              try {
+                Aptabase.instance.trackEvent('force_offline_mode_toggled', {
+                  'enabled': value,
+                });
+              } catch (_) {}
+              ref.read(settingsProvider.notifier).setForceOfflineMode(value);
+              // Sync offline state notifier so filter state updates immediately.
+              if (!value) {
+                ref.read(offlineStateProvider.notifier).disableOfflineFilter();
+              } else {
+                ref.read(offlineStateProvider.notifier).enableOfflineFilter();
+              }
+            },
+          ),
           _YearReviewTile(),
 
           const SizedBox(height: 24),

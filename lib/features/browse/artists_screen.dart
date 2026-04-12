@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/core/cache/cache_provider.dart';
+import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/layout/responsive.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
@@ -49,6 +51,8 @@ class _ArtistsScreenState extends ConsumerState<ArtistsScreen>
   @override
   Widget build(BuildContext context) {
     final firstPage = ref.watch(artistsPageProvider(1));
+    final offlineFilterActive = ref.watch(offlineFilterActiveProvider);
+    final offlineArtistIdsAsync = ref.watch(offlineArtistIdsProvider);
 
     return firstPage.when(
       loading: () => const ShimmerList(showCircular: true, itemCount: 12),
@@ -60,15 +64,34 @@ class _ArtistsScreenState extends ConsumerState<ArtistsScreen>
           ),
       data: (response) {
         seedIfEmpty(response);
+        final allArtists = items.isEmpty ? response.results : items;
+
+        // When offline filter is active, show only artists with cached audio.
+        final displayArtists =
+            offlineFilterActive
+                ? offlineArtistIdsAsync.when(
+                  data:
+                      (offlineIds) =>
+                          allArtists
+                              .where((a) => offlineIds.contains(a.id))
+                              .toList(),
+                  loading: () => allArtists,
+                  error: (_, e) => allArtists,
+                )
+                : allArtists;
+
         return RefreshIndicator(
           color: AppTheme.primary,
           backgroundColor: AppTheme.surfaceContainer,
           onRefresh: refresh,
           child: _ArtistGrid(
-            artists: items.isEmpty ? response.results : items,
+            artists: displayArtists,
             scrollController: scrollController,
-            hasMore: items.isEmpty ? response.next != null : hasMore,
-            isLoadingMore: items.isEmpty ? false : isLoadingMore,
+            hasMore:
+                offlineFilterActive
+                    ? false
+                    : (items.isEmpty ? response.next != null : hasMore),
+            isLoadingMore: offlineFilterActive ? false : isLoadingMore,
           ),
         );
       },

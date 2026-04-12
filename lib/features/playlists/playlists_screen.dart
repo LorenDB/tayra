@@ -5,6 +5,7 @@ import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
 import 'package:tayra/core/widgets/error_state.dart';
@@ -28,6 +29,7 @@ class PlaylistsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playlistsAsync = ref.watch(playlistsProvider);
+    final offlineFilterActive = ref.watch(offlineFilterActiveProvider);
 
     return Scaffold(
       backgroundColor: AppTheme.background,
@@ -92,9 +94,13 @@ class PlaylistsScreen extends ConsumerWidget {
                 parent: AlwaysScrollableScrollPhysics(),
               ),
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
-              itemCount: playlists.length,
+              itemCount: playlists.length + (offlineFilterActive ? 1 : 0),
               itemBuilder: (context, index) {
-                return _PlaylistCard(playlist: playlists[index]);
+                if (offlineFilterActive && index == 0) {
+                  return _OfflinePlaylistsNote();
+                }
+                final playlistIndex = offlineFilterActive ? index - 1 : index;
+                return _PlaylistCard(playlist: playlists[playlistIndex]);
               },
             ),
           );
@@ -111,6 +117,39 @@ class PlaylistsScreen extends ConsumerWidget {
             onCreated: () => ref.invalidate(playlistsProvider),
             ref: ref,
           ),
+    );
+  }
+}
+
+// ── Offline note banner ─────────────────────────────────────────────────
+
+class _OfflinePlaylistsNote extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceContainer,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: AppTheme.primary.withValues(alpha: 0.3),
+          width: 1,
+        ),
+      ),
+      child: const Row(
+        children: [
+          Icon(Icons.wifi_off_rounded, color: AppTheme.primary, size: 18),
+          SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              'Offline filter is active. Only downloaded tracks inside '
+              'each playlist will be playable.',
+              style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 12),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

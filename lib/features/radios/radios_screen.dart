@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/core/widgets/error_state.dart';
@@ -88,6 +89,16 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
   }
 
   Widget _buildBody() {
+    // Radios are server-side only — not available offline.
+    final offlineFilterActive = ref.watch(offlineFilterActiveProvider);
+    if (offlineFilterActive) {
+      return const EmptyState(
+        icon: Icons.wifi_off_rounded,
+        title: 'Radios unavailable offline',
+        subtitle: 'Radios require a server connection to stream',
+      );
+    }
+
     if (_isLoading) return const ShimmerList(itemCount: 10);
     if (_error != null)
       return InlineErrorState(message: _error!, onRetry: _loadRadios);

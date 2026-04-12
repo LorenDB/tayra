@@ -179,7 +179,7 @@ class _ArtistHeader extends StatelessWidget {
 
           // ── Back button ──
           Positioned(
-            top: MediaQuery.of(context).padding.top + 8,
+            top: MediaQuery.of(context).viewPadding.top + 8,
             left: 8,
             child: IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -189,7 +189,7 @@ class _ArtistHeader extends StatelessWidget {
 
           // ── Centered artist image ──
           Positioned(
-            top: MediaQuery.of(context).padding.top + 56,
+            top: MediaQuery.of(context).viewPadding.top + 56,
             left: (screenWidth - imageSize) / 2,
             child: CoverArtWidget(
               imageUrl: artist.coverUrl,

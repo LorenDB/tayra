@@ -6,6 +6,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/core/cache/cache_provider.dart';
+import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/layout/responsive.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/album_card.dart';
@@ -316,6 +318,8 @@ class _AlbumCarousel extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final albumsAsync = ref.watch(provider);
+    final offlineFilterActive = ref.watch(offlineFilterActiveProvider);
+    final offlineAlbumIdsAsync = ref.watch(offlineAlbumIdsProvider);
 
     return albumsAsync.when(
       loading: () => const ShimmerGrid(itemCount: 5, itemSize: 150),
@@ -325,7 +329,20 @@ class _AlbumCarousel extends ConsumerWidget {
             onRetry: () => ref.invalidate(provider),
           ),
       data: (albums) {
-        if (albums.isEmpty) {
+        final displayAlbums =
+            offlineFilterActive
+                ? offlineAlbumIdsAsync.when(
+                  data:
+                      (offlineIds) =>
+                          albums
+                              .where((a) => offlineIds.contains(a.id))
+                              .toList(),
+                  loading: () => albums,
+                  error: (_, e) => albums,
+                )
+                : albums;
+
+        if (displayAlbums.isEmpty) {
           return const SizedBox(
             height: 150,
             child: Center(
@@ -343,15 +360,16 @@ class _AlbumCarousel extends ConsumerWidget {
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            itemCount: albums.length,
+            itemCount: displayAlbums.length,
             itemBuilder: (context, index) {
               return Padding(
                 padding: EdgeInsets.only(
-                  right: index < albums.length - 1 ? 14 : 0,
+                  right: index < displayAlbums.length - 1 ? 14 : 0,
                 ),
                 child: AlbumCard(
-                  album: albums[index],
-                  onTap: () => context.push('/album/${albums[index].id}'),
+                  album: displayAlbums[index],
+                  onTap:
+                      () => context.push('/album/${displayAlbums[index].id}'),
                   width: 150,
                 ),
               );
@@ -374,6 +392,8 @@ class _AlbumGridSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final albumsAsync = ref.watch(provider);
+    final offlineFilterActive = ref.watch(offlineFilterActiveProvider);
+    final offlineAlbumIdsAsync = ref.watch(offlineAlbumIdsProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -401,7 +421,20 @@ class _AlbumGridSection extends ConsumerWidget {
                 onRetry: () => ref.invalidate(provider),
               ),
           data: (albums) {
-            if (albums.isEmpty) {
+            final displayAlbums =
+                offlineFilterActive
+                    ? offlineAlbumIdsAsync.when(
+                      data:
+                          (offlineIds) =>
+                              albums
+                                  .where((a) => offlineIds.contains(a.id))
+                                  .toList(),
+                      loading: () => albums,
+                      error: (_, e) => albums,
+                    )
+                    : albums;
+
+            if (displayAlbums.isEmpty) {
               return const SizedBox(
                 height: 150,
                 child: Center(
@@ -454,9 +487,9 @@ class _AlbumGridSection extends ConsumerWidget {
                   mainAxisSpacing: 16,
                   childAspectRatio: 0.72,
                 ),
-                itemCount: albums.length,
+                itemCount: displayAlbums.length,
                 itemBuilder: (context, index) {
-                  final album = albums[index];
+                  final album = displayAlbums[index];
                   return AlbumCard(
                     album: album,
                     onTap: () => context.push('/album/${album.id}'),
@@ -479,6 +512,8 @@ class _TrackListSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tracksAsync = ref.watch(recentTracksProvider);
+    final offlineFilterActive = ref.watch(offlineFilterActiveProvider);
+    final offlineTrackIdsAsync = ref.watch(offlineTrackIdsProvider);
 
     return tracksAsync.when(
       loading:
@@ -493,7 +528,20 @@ class _TrackListSection extends ConsumerWidget {
             ),
           ),
       data: (tracks) {
-        if (tracks.isEmpty) {
+        final displayTracks =
+            offlineFilterActive
+                ? offlineTrackIdsAsync.when(
+                  data:
+                      (offlineIds) =>
+                          tracks
+                              .where((t) => offlineIds.contains(t.id))
+                              .toList(),
+                  loading: () => tracks,
+                  error: (_, e) => tracks,
+                )
+                : tracks;
+
+        if (displayTracks.isEmpty) {
           return const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.all(32),
@@ -509,19 +557,19 @@ class _TrackListSection extends ConsumerWidget {
 
         return SliverList(
           delegate: SliverChildBuilderDelegate((context, index) {
-            final track = tracks[index];
+            final track = displayTracks[index];
             return TrackListTile(
               track: track,
               onTap:
                   () => ref
                       .read(playerProvider.notifier)
                       .playTracks(
-                        tracks,
+                        displayTracks,
                         startIndex: index,
                         source: 'recent_listenings',
                       ),
             );
-          }, childCount: tracks.length),
+          }, childCount: displayTracks.length),
         );
       },
     );
