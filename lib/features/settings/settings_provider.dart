@@ -11,7 +11,7 @@ enum BrowseMode { albums, artists }
 class SettingsState {
   final BrowseMode browseMode;
   final int cacheSizeLimitMB;
-  final bool showAndroidAutoRecommendations;
+  final bool androidAutoEnabled;
   final bool useDynamicAlbumAccent;
   final bool gaplessPlayback;
   final bool aiEnabled;
@@ -21,7 +21,7 @@ class SettingsState {
   const SettingsState({
     this.browseMode = BrowseMode.albums,
     this.cacheSizeLimitMB = 500,
-    this.showAndroidAutoRecommendations = true,
+    this.androidAutoEnabled = true,
     this.useDynamicAlbumAccent = true,
     this.gaplessPlayback = true,
     this.aiEnabled = true,
@@ -32,7 +32,7 @@ class SettingsState {
   SettingsState copyWith({
     BrowseMode? browseMode,
     int? cacheSizeLimitMB,
-    bool? showAndroidAutoRecommendations,
+    bool? androidAutoEnabled,
     bool? useDynamicAlbumAccent,
     bool? gaplessPlayback,
     bool? aiEnabled,
@@ -42,8 +42,7 @@ class SettingsState {
     return SettingsState(
       browseMode: browseMode ?? this.browseMode,
       cacheSizeLimitMB: cacheSizeLimitMB ?? this.cacheSizeLimitMB,
-      showAndroidAutoRecommendations:
-          showAndroidAutoRecommendations ?? this.showAndroidAutoRecommendations,
+      androidAutoEnabled: androidAutoEnabled ?? this.androidAutoEnabled,
       useDynamicAlbumAccent:
           useDynamicAlbumAccent ?? this.useDynamicAlbumAccent,
       gaplessPlayback: gaplessPlayback ?? this.gaplessPlayback,
@@ -64,7 +63,7 @@ final settingsProvider = NotifierProvider<SettingsNotifier, SettingsState>(
 class SettingsNotifier extends Notifier<SettingsState> {
   static const _keyBrowseMode = 'browse_mode';
   static const _keyCacheSizeLimit = 'cache_max_size_mb';
-  static const _keyShowAndroidAutoRecommendations = 'aa_show_recommendations';
+  static const _keyAndroidAutoEnabled = 'aa_android_auto_enabled';
   static const _keyUseDynamicAlbumAccent = 'use_dynamic_album_accent';
   static const _keyGaplessPlayback = 'gapless_playback';
   static const _keyAiEnabled = 'ai_enabled';
@@ -104,8 +103,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
     } else {
       cacheSizeMB = rawCache;
     }
-    final showRecommendations =
-        prefs.getBool(_keyShowAndroidAutoRecommendations) ?? true;
+    final showRecommendations = prefs.getBool(_keyAndroidAutoEnabled) ?? true;
     final useDynamicAccent = prefs.getBool(_keyUseDynamicAlbumAccent) ?? true;
     final gapless = prefs.getBool(_keyGaplessPlayback) ?? true;
     final aiEnabled = prefs.getBool(_keyAiEnabled) ?? true;
@@ -116,7 +114,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
     state = state.copyWith(
       browseMode: browseMode,
       cacheSizeLimitMB: cacheSizeMB,
-      showAndroidAutoRecommendations: showRecommendations,
+      androidAutoEnabled: showRecommendations,
       useDynamicAlbumAccent: useDynamicAccent,
       gaplessPlayback: gapless,
       aiEnabled: aiEnabled,
@@ -140,10 +138,10 @@ class SettingsNotifier extends Notifier<SettingsState> {
     await CacheManager.instance.updateConfig(sizeMB);
   }
 
-  Future<void> setShowAndroidAutoRecommendations(bool show) async {
-    state = state.copyWith(showAndroidAutoRecommendations: show);
+  Future<void> setAndroidAutoEnabled(bool enabled) async {
+    state = state.copyWith(androidAutoEnabled: enabled);
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_keyShowAndroidAutoRecommendations, show);
+    await prefs.setBool(_keyAndroidAutoEnabled, enabled);
   }
 
   Future<void> setUseDynamicAlbumAccent(bool use) async {
@@ -180,7 +178,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_keyBrowseMode);
     await prefs.remove(_keyCacheSizeLimit);
-    await prefs.remove(_keyShowAndroidAutoRecommendations);
+    await prefs.remove(_keyAndroidAutoEnabled);
     await prefs.remove(_keyUseDynamicAlbumAccent);
     await prefs.remove(_keyGaplessPlayback);
     await prefs.remove(_keyAiEnabled);

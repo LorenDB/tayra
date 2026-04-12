@@ -132,10 +132,10 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
   /// Determines what the second category in Android Auto displays.
   BrowseMode browseMode = BrowseMode.albums;
 
-  /// Whether to respond to Android Auto's "For you" recommendations query.
-  /// When false, an empty list is returned for the recent root so that AA
-  /// does not show a recommendations tab.
-  bool showRecommendations = true;
+  /// Whether Android Auto integration is enabled at all. When false the
+  /// browse/search/playback callbacks return empty results / no-ops so the
+  /// system will not be able to interact with the app via Android Auto.
+  bool androidAutoEnabled = true;
 
   /// Callback invoked when a track completes. The PlayerNotifier sets this
   /// to wire up its queue-advance / loop logic.
@@ -276,14 +276,9 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
     if (apiClient == null) return [];
 
     try {
+      if (!androidAutoEnabled) return [];
+
       // ── Root categories ───────────────────────────────────────────
-      // When recommendations are disabled, the recent root returns only the
-      // currently playing item (so the AA playback view still works) rather
-      // than the full browse tree (which would show a "For You" tab).
-      if (parentMediaId == _BrowseIds.recentRoot && !showRecommendations) {
-        final current = mediaItem.value;
-        return current != null ? [current] : [];
-      }
 
       if (parentMediaId == _BrowseIds.root ||
           parentMediaId == _BrowseIds.recentRoot) {
@@ -477,6 +472,7 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
   /// may call this to display details for an item in the browse tree.
   @override
   Future<MediaItem> getMediaItem(String mediaId) async {
+    if (!androidAutoEnabled) return MediaItem(id: mediaId, title: 'Unknown');
     final apiClient = api;
     if (apiClient == null) {
       return MediaItem(id: mediaId, title: 'Loading...');
@@ -514,6 +510,7 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
     String mediaId, [
     Map<String, dynamic>? extras,
   ]) async {
+    if (!androidAutoEnabled) return;
     final apiClient = api;
     if (apiClient == null) return;
 
@@ -596,6 +593,7 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
     String query, [
     Map<String, dynamic>? extras,
   ]) async {
+    if (!androidAutoEnabled) return [];
     final apiClient = api;
     if (apiClient == null || query.trim().isEmpty) return [];
 

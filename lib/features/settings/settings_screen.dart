@@ -151,19 +151,20 @@ class SettingsScreen extends ConsumerWidget {
           if (defaultTargetPlatform == TargetPlatform.android)
             _SwitchTile(
               icon: Icons.directions_car_outlined,
-              title: 'Android Auto recommendations',
-              subtitle: 'Show "For you" tab in Android Auto',
-              value: settings.showAndroidAutoRecommendations,
+              title: 'Android Auto',
+              subtitle:
+                  'Integrate with Android Auto',
+              value: settings.androidAutoEnabled,
               onChanged: (value) {
                 try {
                   Aptabase.instance.trackEvent(
-                    'android_auto_recommendations_toggled',
+                    'android_auto_integration_toggled',
                     {'enabled': value},
                   );
                 } catch (_) {}
                 ref
                     .read(settingsProvider.notifier)
-                    .setShowAndroidAutoRecommendations(value);
+                    .setAndroidAutoEnabled(value);
               },
             ),
           _SwitchTile(
