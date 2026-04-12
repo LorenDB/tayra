@@ -21,7 +21,8 @@ dependencies:
   just_audio: ^0.10.5
   just_audio_media_kit: ^2.0.9
   media_kit_libs_linux: ^1.1.4
-  audio_service: ^0.18.15
+  audio_service:
+    path: packages/audio_service
   audio_service_mpris: ^0.2.0
   audio_session: ^0.2.2
 
