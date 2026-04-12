@@ -33,6 +33,7 @@ class GenaiPromptPlugin(private val context: Context) : MethodChannel.MethodCall
         private const val METHOD_CHECK_STATUS = "checkFeatureStatus"
         private const val METHOD_DOWNLOAD = "downloadFeature"
         private const val METHOD_RUN_INFERENCE = "runInference"
+        private const val METHOD_GENERATE_PLAYLIST_NAME = "generatePlaylistName"
 
         // Mirror of com.google.mlkit.genai.common.FeatureStatus int constants.
         private const val STATUS_UNAVAILABLE = 0
@@ -58,6 +59,15 @@ class GenaiPromptPlugin(private val context: Context) : MethodChannel.MethodCall
                     return
                 }
                 runInference(prompt, result)
+            }
+            METHOD_GENERATE_PLAYLIST_NAME -> {
+                val currentName = call.argument<String>("current_name")
+                // playlist_id is optional here, we don't need it for generation
+                if (currentName == null) {
+                    result.error("INVALID_ARGS", "Missing 'current_name' argument", null)
+                    return
+                }
+                generatePlaylistName(currentName, result)
             }
             else -> result.notImplemented()
         }
@@ -107,6 +117,50 @@ class GenaiPromptPlugin(private val context: Context) : MethodChannel.MethodCall
                 result.success(text)
             } catch (e: Exception) {
                 result.error("INFERENCE_ERROR", "runInference failed: ${e.message}", null)
+            }
+        }
+    }
+
+    private fun generatePlaylistName(currentName: String, result: MethodChannel.Result) {
+        scope.launch {
+            try {
+                // Create a constrained prompt that instructs the model to return
+                // exactly one short playlist name (1-6 words) and nothing else.
+                val prompt = buildString {
+                    append("You are a helpful assistant. Output exactly one short playlist name (1-6 words) and nothing else. ")
+                    append("Do not add commentary, punctuation, quotes, or explanation.\n")
+                    append("Based on: '")
+                    append(currentName)
+                    append("'")
+                }
+
+                val response = modelFutures.generateContent(prompt).get()
+                // Take first candidate and sanitize: prefer the first non-empty line,
+                // strip surrounding quotes and trailing punctuation.
+                val raw = response.candidates.firstOrNull()?.text ?: ""
+                val candidate = raw
+                    .lineSequence()
+                    .map { it.trim() }
+                    .firstOrNull { it.isNotEmpty() }
+                    ?.let {
+                        var s = it
+                        // Remove surrounding quotes
+                        if ((s.startsWith("\"") && s.endsWith("\"")) || (s.startsWith("'") && s.endsWith("'"))) {
+                            s = s.substring(1, s.length - 1)
+                        }
+                        // Remove trailing punctuation that might be accidental
+                        s = s.trim().trimEnd { ch -> ch == '.' || ch == '!' || ch == '?' }
+                        // Collapse multiple spaces
+                        s = s.replace(Regex("\\s+"), " ")
+                        s.trim()
+                    }
+                if (candidate.isNullOrEmpty()) {
+                    result.error("NO_SUGGESTION", "Model returned empty suggestion", null)
+                } else {
+                    result.success(candidate)
+                }
+            } catch (e: Exception) {
+                result.error("GENERATION_ERROR", "generatePlaylistName failed: ${e.message}", null)
             }
         }
     }
