@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -555,6 +557,88 @@ class FunkwhaleApi {
     final response = await _dio.get('$_baseUrl/api/v1/radios/sessions/$id/');
     return RadioSession.fromJson(response.data);
   }
+
+  // ── Libraries ───────────────────────────────────────────────────────
+
+  Future<PaginatedResponse<Library>> getLibraries({
+    int page = 1,
+    int pageSize = 50,
+    String? scope,
+  }) async {
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/libraries/',
+      queryParameters: {
+        'page': page,
+        'page_size': pageSize,
+        if (scope != null) 'scope': scope,
+      },
+    );
+    return PaginatedResponse.fromJson(response.data, Library.fromJson);
+  }
+
+  Future<Library> createLibrary({
+    required String name,
+    String privacyLevel = 'me',
+    String? description,
+  }) async {
+    final response = await _dio.post(
+      '$_baseUrl/api/v1/libraries/',
+      data: {
+        'name': name,
+        'privacy_level': privacyLevel,
+        if (description != null && description.isNotEmpty)
+          'description': description,
+      },
+    );
+    return Library.fromJson(response.data);
+  }
+
+  // ── Uploads ─────────────────────────────────────────────────────────
+
+  Future<UploadForOwner> createUpload({
+    required String libraryUuid,
+    required String filePath,
+    required String fileName,
+    Map<String, dynamic>? importMetadata,
+    void Function(int sent, int total)? onSendProgress,
+  }) async {
+    final formData = FormData.fromMap({
+      'library': libraryUuid,
+      'audio_file': await MultipartFile.fromFile(filePath, filename: fileName),
+      if (importMetadata != null) 'import_metadata': jsonEncode(importMetadata),
+    });
+
+    final response = await _dio.post(
+      '$_baseUrl/api/v1/uploads/',
+      data: formData,
+      onSendProgress: onSendProgress,
+      options: Options(
+        sendTimeout: const Duration(minutes: 30),
+        receiveTimeout: const Duration(minutes: 5),
+        contentType: 'multipart/form-data',
+      ),
+    );
+    return UploadForOwner.fromJson(response.data);
+  }
+
+  /// Fetches the current state of an upload by its import reference.
+  ///
+  /// Uses the list endpoint filtered by import_reference rather than the
+  /// retrieve endpoint (`GET /api/v1/uploads/<uuid>/`), because the retrieve
+  /// endpoint is backed by `playable_by()` which only returns uploads with
+  /// import_status "finished" or "skipped" — it 404s while the upload is
+  /// still pending or errored.
+  Future<UploadForOwner?> getUploadByReference(String importReference) async {
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/uploads/',
+      queryParameters: {'import_reference': importReference, 'page_size': 1},
+    );
+    final results = response.data['results'] as List<dynamic>? ?? [];
+    if (results.isEmpty) return null;
+    return UploadForOwner.fromJson(results.first as Map<String, dynamic>);
+  }
+
+  // ── Radio tracks ────────────────────────────────────────────────────
 
   Future<RadioSessionTrackCreate> getNextRadioTrack(
     int session, {

@@ -18,6 +18,7 @@ import 'package:tayra/features/player/now_playing_screen.dart';
 import 'package:tayra/features/player/queue_screen.dart';
 import 'package:tayra/features/year_review/year_review_screen.dart';
 import 'package:tayra/features/search/search_screen.dart';
+import 'package:tayra/features/upload/upload_screen.dart';
 import 'package:tayra/core/widgets/app_shell.dart';
 
 class NavigationObserver extends NavigatorObserver {
@@ -238,6 +239,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         ],
       ),
       // Full-screen routes (overlay the shell)
+      GoRoute(
+        path: '/upload',
+        name: 'upload',
+        builder: (context, state) => const UploadScreen(),
+      ),
       GoRoute(
         path: '/now-playing',
         name: 'now_playing',
