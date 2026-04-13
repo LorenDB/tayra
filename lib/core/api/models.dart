@@ -802,3 +802,129 @@ class RadioSessionTrackCreate {
     return {'session': session, 'count': count};
   }
 }
+
+// ── Library ─────────────────────────────────────────────────────────────
+
+class Library {
+  final String uuid;
+  final String name;
+  final String? description;
+  final String privacyLevel;
+  final int uploadsCount;
+  final int size;
+  final DateTime? creationDate;
+
+  const Library({
+    required this.uuid,
+    required this.name,
+    this.description,
+    required this.privacyLevel,
+    required this.uploadsCount,
+    required this.size,
+    this.creationDate,
+  });
+
+  factory Library.fromJson(Map<String, dynamic> json) {
+    return Library(
+      uuid: json['uuid'] as String? ?? '',
+      name: json['name'] as String? ?? '',
+      description: json['description'] as String?,
+      privacyLevel: json['privacy_level'] as String? ?? 'me',
+      uploadsCount: json['uploads_count'] as int? ?? 0,
+      size: json['size'] as int? ?? 0,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
+    );
+  }
+
+  String get privacyLevelLabel {
+    switch (privacyLevel) {
+      case 'everyone':
+        return 'Public';
+      case 'instance':
+        return 'Instance';
+      default:
+        return 'Private';
+    }
+  }
+}
+
+// ── UploadForOwner ───────────────────────────────────────────────────────
+
+class UploadForOwner {
+  final String uuid;
+  final String? filename;
+  final DateTime? creationDate;
+  final String? mimetype;
+  final String? library;
+  final String importStatus;
+  final Map<String, dynamic> importDetails;
+  final Map<String, dynamic>? importMetadata;
+  final String? importReference;
+  final int? duration;
+  final int? bitrate;
+  final int? size;
+  final DateTime? importDate;
+
+  const UploadForOwner({
+    required this.uuid,
+    this.filename,
+    this.creationDate,
+    this.mimetype,
+    this.library,
+    required this.importStatus,
+    required this.importDetails,
+    this.importMetadata,
+    this.importReference,
+    this.duration,
+    this.bitrate,
+    this.size,
+    this.importDate,
+  });
+
+  factory UploadForOwner.fromJson(Map<String, dynamic> json) {
+    // duration/bitrate/size come back as JSON integers, but Dart's json decoder
+    // can return num (int or double) depending on the value. Coerce safely.
+    int? asInt(Object? v) =>
+        v == null ? null : (v is int ? v : (v as num).round());
+
+    return UploadForOwner(
+      uuid: json['uuid'] as String? ?? '',
+      filename: json['filename'] as String?,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
+      mimetype: json['mimetype'] as String?,
+      library:
+          json['library'] is Map<String, dynamic>
+              ? (json['library'] as Map<String, dynamic>)['uuid'] as String?
+              : json['library'] as String?,
+      importStatus: json['import_status'] as String? ?? 'pending',
+      importDetails:
+          json['import_details'] is Map<String, dynamic>
+              ? json['import_details'] as Map<String, dynamic>
+              : {},
+      importMetadata:
+          json['import_metadata'] is Map<String, dynamic>
+              ? json['import_metadata'] as Map<String, dynamic>
+              : null,
+      importReference: json['import_reference'] as String?,
+      duration: asInt(json['duration']),
+      bitrate: asInt(json['bitrate']),
+      size: asInt(json['size']),
+      importDate:
+          json['import_date'] != null
+              ? DateTime.tryParse(json['import_date'] as String)
+              : null,
+    );
+  }
+
+  bool get isFinished => importStatus == 'finished';
+  bool get isErrored => importStatus == 'errored';
+  bool get isPending => importStatus == 'pending';
+  bool get isDraft => importStatus == 'draft';
+  bool get isSkipped => importStatus == 'skipped';
+}

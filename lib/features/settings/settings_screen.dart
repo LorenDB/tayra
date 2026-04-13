@@ -98,6 +98,17 @@ class SettingsScreen extends ConsumerWidget {
 
           const SizedBox(height: 24),
 
+          // ── Library section ───────────────────────────────────────────
+          _SectionHeader(title: 'Library'),
+          _ActionTile(
+            icon: Icons.upload_rounded,
+            title: 'Upload music',
+            subtitle: 'Upload audio files to your Funkwhale library',
+            onTap: () => context.push('/upload'),
+          ),
+
+          const SizedBox(height: 24),
+
           // ── Browse section ────────────────────────────────────────────
           _SectionHeader(title: 'Browse'),
           _BrowseModeTile(

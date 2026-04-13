@@ -49,6 +49,9 @@ dependencies:
   # URL launcher (for OAuth)
   url_launcher: ^6.3.1
 
+  # File picking for upload
+  file_picker: ^8.0.0
+
   # Misc
   aptabase_flutter: ^0.4.1
   device_info_plus: ^10.1.2
