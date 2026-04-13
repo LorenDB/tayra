@@ -102,9 +102,17 @@ class CacheManager {
   CacheManager._();
   static final CacheManager instance = CacheManager._();
 
-  /// Initialize the cache manager
+  /// Initialize the cache manager — loads config only.
+  ///
+  /// Call [backgroundInitialize] after the app is visible to perform the
+  /// more expensive reconcile + eviction steps without blocking the splash.
   Future<void> initialize() async {
     _config = await CacheConfig.load();
+  }
+
+  /// Run the expensive startup work in the background after the app is
+  /// visible.  Safe to call after [initialize] has completed.
+  Future<void> backgroundInitialize() async {
     // Reconcile any files left on disk with the DB in case previous runs
     // copied files but failed to insert DB rows (prevents cached files from
     // being invisible to the UI).
