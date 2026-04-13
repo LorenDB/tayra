@@ -116,28 +116,10 @@ class CachedFunkwhaleApi {
     // stale first-page cache entry on failure.
     final baseSuffix = '_s${pageSize}_o${ordering}_a${artist}_sc${scope}_q$q';
     final cacheKey = 'albums_p${page}$baseSuffix';
-    final pageOneKey = 'albums_p1$baseSuffix';
 
-    if (page != 1) {
-      try {
-        return await _api.getAlbums(
-          page: page,
-          pageSize: pageSize,
-          ordering: ordering,
-          artist: artist,
-          scope: scope,
-          q: q,
-        );
-      } catch (_) {
-        final stale = await _cache.getMetadataStale(pageOneKey);
-        if (stale != null) {
-          try {
-            return PaginatedResponse.fromJson(stale, Album.fromJson);
-          } catch (_) {}
-        }
-        rethrow;
-      }
-    }
+    // Allow all pages to be cached via _cachedFetch. This increases offline
+    // availability at the cost of more metadata entries; cache eviction is
+    // handled centrally by CacheManager.
 
     return _cachedFetch(
       cacheKey: cacheKey,
@@ -192,28 +174,9 @@ class CachedFunkwhaleApi {
     final baseSuffix =
         '_s${pageSize}_o${ordering}_h${hasAlbums}_sc${scope}_q$q';
     final cacheKey = 'artists_p${page}$baseSuffix';
-    final pageOneKey = 'artists_p1$baseSuffix';
 
-    if (page != 1) {
-      try {
-        return await _api.getArtists(
-          page: page,
-          pageSize: pageSize,
-          ordering: ordering,
-          hasAlbums: hasAlbums,
-          scope: scope,
-          q: q,
-        );
-      } catch (_) {
-        final stale = await _cache.getMetadataStale(pageOneKey);
-        if (stale != null) {
-          try {
-            return PaginatedResponse.fromJson(stale, Artist.fromJson);
-          } catch (_) {}
-        }
-        rethrow;
-      }
-    }
+    // Cache all pages so offline browsing beyond page 1 is possible. Rely on
+    // CacheManager's eviction policy to bound storage.
 
     return _cachedFetch(
       cacheKey: cacheKey,
@@ -263,29 +226,9 @@ class CachedFunkwhaleApi {
     final baseSuffix =
         '_s${pageSize}_o${ordering}_al${album}_ar${artist}_sc${scope}_q$q';
     final cacheKey = 'tracks_p${page}$baseSuffix';
-    final pageOneKey = 'tracks_p1$baseSuffix';
 
-    if (page != 1) {
-      try {
-        return await _api.getTracks(
-          page: page,
-          pageSize: pageSize,
-          ordering: ordering,
-          album: album,
-          artist: artist,
-          scope: scope,
-          q: q,
-        );
-      } catch (_) {
-        final stale = await _cache.getMetadataStale(pageOneKey);
-        if (stale != null) {
-          try {
-            return PaginatedResponse.fromJson(stale, Track.fromJson);
-          } catch (_) {}
-        }
-        rethrow;
-      }
-    }
+    // Cache all pages so offline browsing beyond page 1 is possible. Rely on
+    // CacheManager's eviction policy to bound storage.
 
     return _cachedFetch(
       cacheKey: cacheKey,
@@ -350,21 +293,9 @@ class CachedFunkwhaleApi {
   }) async {
     final baseSuffix = '_s${pageSize}';
     final cacheKey = 'favorites_p${page}$baseSuffix';
-    final pageOneKey = 'favorites_p1$baseSuffix';
 
-    if (page != 1) {
-      try {
-        return await _api.getFavorites(page: page, pageSize: pageSize);
-      } catch (_) {
-        final stale = await _cache.getMetadataStale(pageOneKey);
-        if (stale != null) {
-          try {
-            return PaginatedResponse.fromJson(stale, Favorite.fromJson);
-          } catch (_) {}
-        }
-        rethrow;
-      }
-    }
+    // Cache all pages so offline browsing beyond page 1 is possible. Rely on
+    // CacheManager's eviction policy to bound storage.
 
     return _cachedFetch(
       cacheKey: cacheKey,
@@ -427,25 +358,9 @@ class CachedFunkwhaleApi {
   }) async {
     final baseSuffix = '_s${pageSize}_sc${scope}';
     final cacheKey = 'playlists_p${page}$baseSuffix';
-    final pageOneKey = 'playlists_p1$baseSuffix';
 
-    if (page != 1) {
-      try {
-        return await _api.getPlaylists(
-          page: page,
-          pageSize: pageSize,
-          scope: scope,
-        );
-      } catch (_) {
-        final stale = await _cache.getMetadataStale(pageOneKey);
-        if (stale != null) {
-          try {
-            return PaginatedResponse.fromJson(stale, Playlist.fromJson);
-          } catch (_) {}
-        }
-        rethrow;
-      }
-    }
+    // Cache all pages so offline browsing beyond page 1 is possible. Rely on
+    // CacheManager's eviction policy to bound storage.
 
     return _cachedFetch(
       cacheKey: cacheKey,
@@ -500,21 +415,9 @@ class CachedFunkwhaleApi {
   }) async {
     final baseSuffix = '_s${pageSize}';
     final cacheKey = 'playlist_tracks_${id}_p${page}$baseSuffix';
-    final pageOneKey = 'playlist_tracks_${id}_p1$baseSuffix';
 
-    if (page != 1) {
-      try {
-        return await _api.getPlaylistTracks(id, page: page, pageSize: pageSize);
-      } catch (_) {
-        final stale = await _cache.getMetadataStale(pageOneKey);
-        if (stale != null) {
-          try {
-            return PaginatedResponse.fromJson(stale, PlaylistTrack.fromJson);
-          } catch (_) {}
-        }
-        rethrow;
-      }
-    }
+    // Cache all pages so offline browsing beyond page 1 is possible. Rely on
+    // CacheManager's eviction policy to bound storage.
 
     return _cachedFetch(
       cacheKey: cacheKey,
@@ -538,25 +441,9 @@ class CachedFunkwhaleApi {
   }) async {
     final baseSuffix = '_s${pageSize}_o${ordering}';
     final cacheKey = 'listenings_p${page}$baseSuffix';
-    final pageOneKey = 'listenings_p1$baseSuffix';
 
-    if (page != 1) {
-      try {
-        return await _api.getListenings(
-          page: page,
-          pageSize: pageSize,
-          ordering: ordering,
-        );
-      } catch (_) {
-        final stale = await _cache.getMetadataStale(pageOneKey);
-        if (stale != null) {
-          try {
-            return PaginatedResponse.fromJson(stale, Listening.fromJson);
-          } catch (_) {}
-        }
-        rethrow;
-      }
-    }
+    // Cache all pages so offline browsing beyond page 1 is possible. Rely on
+    // CacheManager's eviction policy to bound storage.
 
     return _cachedFetch(
       cacheKey: cacheKey,
