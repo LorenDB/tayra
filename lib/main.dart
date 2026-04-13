@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -52,11 +53,14 @@ void main() async {
     }
   }
 
-  await Aptabase.init(
-    "A-SH-1447414969",
-    InitOptions(host: "https://aptabase.lorendb.dev"),
+  // Analytics init is non-blocking — a slow or unreachable host shouldn't
+  // delay startup.
+  unawaited(
+    Aptabase.init(
+      "A-SH-1447414969",
+      InitOptions(host: "https://aptabase.lorendb.dev"),
+    ).then((_) => Aptabase.instance.trackEvent("startup")),
   );
-  Aptabase.instance.trackEvent("startup");
 
   // Initialize sqflite for desktop platforms
   if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
@@ -119,6 +123,12 @@ void main() async {
   runApp(
     UncontrolledProviderScope(container: container, child: const TayraApp()),
   );
+
+  // Reconcile cached files with the DB and enforce size limits in the
+  // background so these O(n-files) operations don't block the splash screen.
+  // ListenHistoryService.ensureTable() has already run above, so the
+  // listen_history table is guaranteed to exist before this touches the DB.
+  unawaited(CacheManager.instance.backgroundInitialize());
 }
 
 class TayraApp extends ConsumerStatefulWidget {
