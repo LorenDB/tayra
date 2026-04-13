@@ -1387,7 +1387,14 @@ class PlayerNotifier extends Notifier<PlayerState> {
       final loaded = await _loadGaplessSource(startIndex);
       if (loaded) {
         await _handler.audioPlayer.play();
-        state = state.copyWith(isLoading: false);
+        // Sync isPlaying immediately from the player rather than waiting for
+        // playingStream to fire asynchronously — avoids a race where the button
+        // briefly shows the wrong icon between play() returning and the stream
+        // event arriving.
+        state = state.copyWith(
+          isLoading: false,
+          isPlaying: _handler.audioPlayer.playing,
+        );
         try {
           await _api.recordListening(tracks[startIndex].id);
         } catch (_) {}
@@ -1761,7 +1768,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // With gapless, the player's native loop mode handles LoopMode.one
       // and LoopMode.all.  ProcessingState.completed only fires for
       // LoopMode.off when the last track in the queue finishes.
-      state = state.copyWith(isPlaying: false);
+      // Do NOT manually write isPlaying here — playingStream has already
+      // emitted false (just_audio fires the playing stream before the
+      // processing state reaches completed), and writing it again would
+      // create a redundant state change that can interleave with a
+      // subsequent play() call on the same event-loop turn.
       _saveQueue();
       return;
     }
@@ -1832,7 +1843,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
           );
           if (loaded) {
             await _handler.audioPlayer.play();
-            state = state.copyWith(isLoading: false);
+            // Sync isPlaying immediately — same race fix as in playTracks().
+            state = state.copyWith(
+              isLoading: false,
+              isPlaying: _handler.audioPlayer.playing,
+            );
             return;
           }
         }
@@ -1846,13 +1861,16 @@ class PlayerNotifier extends Notifier<PlayerState> {
   Future<void> pause() => _handler.pause();
 
   Future<void> togglePlayPause() async {
-    if (state.isPlaying) {
+    // Capture intent before the await so the analytics event reflects what the
+    // user actually tapped rather than the (potentially stale) post-await state.
+    final wasPlaying = state.isPlaying;
+    if (wasPlaying) {
       await pause();
     } else {
       await play();
     }
     Aptabase.instance.trackEvent('toggle_play_pause', {
-      'action': state.isPlaying ? 'pause' : 'play',
+      'action': wasPlaying ? 'pause' : 'play',
     });
   }
 
@@ -1878,7 +1896,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
       final loaded = await _loadGaplessSource(newIndex);
       if (loaded) {
         await _handler.audioPlayer.play();
-        state = state.copyWith(isLoading: false);
+        // Sync isPlaying immediately — same race fix as in playTracks().
+        state = state.copyWith(
+          isLoading: false,
+          isPlaying: _handler.audioPlayer.playing,
+        );
         try {
           await _api.recordListening(state.queue[newIndex].id);
         } catch (_) {}
@@ -1971,7 +1993,14 @@ class PlayerNotifier extends Notifier<PlayerState> {
     if (_gaplessActive) {
       final pos = _handler.audioPlayer.position;
       _loadGaplessSource(state.currentIndex, initialPosition: pos).then((ok) {
-        if (ok) _handler.audioPlayer.play();
+        if (ok) {
+          _handler.audioPlayer.play().then((_) {
+            // Sync isPlaying immediately after play() — the playingStream
+            // event arrives asynchronously and would otherwise leave the UI
+            // showing a stale paused state for one or more frames.
+            state = state.copyWith(isPlaying: _handler.audioPlayer.playing);
+          });
+        }
       });
     }
     _saveQueue();
