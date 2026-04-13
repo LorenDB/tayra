@@ -1277,6 +1277,57 @@ class PlayerNotifier extends Notifier<PlayerState> {
     }
   }
 
+  /// Start an "instance" (built-in) radio such as 'random', 'favorites',
+  /// or 'actor-content'. These radios are client-side presets that ask the
+  /// server to create a session for the given radio_type string. [loadingId]
+  /// is used only for UI loading state (can be a sentinel negative id).
+  Future<void> startInstanceRadio(
+    String radioType,
+    int loadingId, {
+    String? relatedObjectId,
+  }) async {
+    state = state.copyWith(loadingRadioId: loadingId);
+    try {
+      RadioSession session;
+      try {
+        final body = <String, dynamic>{'radio_type': radioType};
+        if (relatedObjectId != null)
+          body['related_object_id'] = relatedObjectId;
+        session = await _api.createRadioSession(body);
+      } on DioException catch (e) {
+        // Retry with related_object_id as string if present (some servers
+        // are picky about typing).
+        try {
+          final body = <String, dynamic>{'radio_type': radioType};
+          if (relatedObjectId != null)
+            body['related_object_id'] = relatedObjectId.toString();
+          session = await _api.createRadioSession(body);
+        } on DioException catch (e2) {
+          debugPrint(
+            'createInstanceRadioSession failed: ${e2.response?.statusCode} ${e2.response?.data}',
+          );
+          rethrow;
+        }
+      }
+
+      _radioSessionId = session.id;
+      _radioId = null;
+
+      // Fetch the first track from the session and start playback.
+      final rawFirst = await _api.postNextRadioTrackRaw(_radioSessionId!);
+      final first = await _parseTrackFromRaw(rawFirst);
+      if (first == null)
+        throw Exception('No track returned for instance radio');
+
+      await playTracks([first], source: 'instance-radio');
+      state = state.copyWith(clearLoadingRadioId: true);
+    } catch (e) {
+      debugPrint('startInstanceRadio failed: $e');
+      // Clear loading state on failure
+      state = state.copyWith(clearLoadingRadioId: true);
+    }
+  }
+
   /// Stop radio background fetcher and clear radio session state. Does not
   /// modify the current queue so the user can keep listening if desired.
   Future<void> stopRadio() async {
