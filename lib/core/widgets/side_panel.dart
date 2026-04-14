@@ -122,6 +122,17 @@ class _QueuePanel extends ConsumerWidget {
                     ref.read(playerProvider.notifier).stashQueue();
                   },
                 ),
+              // Clear queue (only when queue is non-empty)
+              if (queue.isNotEmpty)
+                IconButton(
+                  tooltip: 'Clear queue',
+                  iconSize: 20,
+                  icon: const Icon(
+                    Icons.delete_outline_rounded,
+                    color: AppTheme.error,
+                  ),
+                  onPressed: () => showClearQueueConfirmation(context, ref),
+                ),
             ],
           ),
         ),
