@@ -29,12 +29,12 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
     {
       'type': 'random',
       'name': 'Random',
-      'description': 'A random selection from the server',
+      'description': 'A completely random selection of tracks',
     },
     {
       'type': 'favorites',
       'name': 'Favorites',
-      'description': 'Tracks your account has favorited',
+      'description': 'Tracks you favorited',
     },
     {
       'type': 'less-listened',
