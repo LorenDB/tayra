@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -38,7 +40,7 @@ android {
         create("release") {
             val keyPropsFile = rootProject.file("key.properties")
             if (keyPropsFile.exists()) {
-                val keyProps = java.util.Properties()
+                val keyProps = Properties()
                 keyPropsFile.inputStream().use { keyProps.load(it) }
                 storeFile = file(keyProps.getProperty("storeFile"))
                 storePassword = keyProps.getProperty("storePassword")
