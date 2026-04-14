@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tayra/core/analytics/analytics.dart';
 import 'dart:async';
-import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tayra/core/api/api_utils.dart';
@@ -113,9 +113,8 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
         'privacy_level': _privacyLevel,
       });
       try {
-        Aptabase.instance.trackEvent('playlist_edited', {
-          'playlist_id': widget.playlistId,
-        });
+        // Omit numeric IDs from analytics per policy.
+        Analytics.track('playlist_edited');
       } catch (_) {}
       ref.invalidate(playlistsProvider);
       if (!mounted) return false;
@@ -146,7 +145,7 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
       final api = ref.read(cachedFunkwhaleApiProvider);
       await api.removeTrackFromPlaylist(widget.playlistId, index);
       try {
-        Aptabase.instance.trackEvent('playlist_track_removed');
+        Analytics.track('playlist_track_removed');
       } catch (_) {}
       ref.invalidate(playlistsProvider);
     } catch (e) {
@@ -172,7 +171,7 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
       final api = ref.read(cachedFunkwhaleApiProvider);
       await api.moveTrackInPlaylist(widget.playlistId, oldIndex, newIndex);
       try {
-        Aptabase.instance.trackEvent('playlist_track_reordered');
+        Analytics.track('playlist_track_reordered');
       } catch (_) {}
     } catch (e) {
       _tracks.removeAt(newIndex);
@@ -425,7 +424,7 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
                           final api = ref.read(cachedFunkwhaleApiProvider);
                           await api.clearPlaylist(widget.playlistId);
                           try {
-                            Aptabase.instance.trackEvent('playlist_cleared');
+                            Analytics.track('playlist_cleared');
                           } catch (_) {}
                           ref.invalidate(playlistsProvider);
                         } catch (e) {

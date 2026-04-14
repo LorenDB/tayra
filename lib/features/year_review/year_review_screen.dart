@@ -2,7 +2,6 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
@@ -10,6 +9,7 @@ import 'package:tayra/features/year_review/listen_history_provider.dart';
 import 'package:tayra/features/year_review/listen_history_service.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/features/year_review/ai_summary_provider.dart';
+import 'package:tayra/core/analytics/analytics.dart';
 
 // ── Month name helper ───────────────────────────────────────────────────
 
@@ -671,7 +671,7 @@ class _ReviewContent extends StatelessWidget {
                                     limit: stats.topTracks.length,
                                   );
                               try {
-                                Aptabase.instance.trackEvent(
+                                Analytics.track(
                                   'year_review_create_playlist_initiated',
                                   {
                                     'year': stats.year,
@@ -682,7 +682,7 @@ class _ReviewContent extends StatelessWidget {
 
                               if (topIds.isEmpty) {
                                 try {
-                                  Aptabase.instance.trackEvent(
+                                  Analytics.track(
                                     'year_review_create_playlist_no_tracks',
                                     {'year': stats.year},
                                   );
@@ -728,7 +728,7 @@ class _ReviewContent extends StatelessWidget {
 
                               if (name == null || name.isEmpty) {
                                 try {
-                                  Aptabase.instance.trackEvent(
+                                  Analytics.track(
                                     'year_review_create_playlist_cancelled',
                                     {'year': stats.year},
                                   );
@@ -745,11 +745,11 @@ class _ReviewContent extends StatelessWidget {
                               );
 
                               try {
-                                Aptabase.instance.trackEvent(
+                                // Numeric IDs are omitted from analytics per policy.
+                                Analytics.track(
                                   'year_review_create_playlist_created',
                                   {
                                     'year': stats.year,
-                                    'playlist_id': playlist.id,
                                     'track_count': topIds.length,
                                   },
                                 );
@@ -762,9 +762,13 @@ class _ReviewContent extends StatelessWidget {
                               );
                             } catch (e) {
                               try {
-                                Aptabase.instance.trackEvent(
+                                Analytics.track(
                                   'year_review_create_playlist_failed',
-                                  {'year': stats.year, 'error': e.toString()},
+                                  {
+                                    'year': stats.year,
+                                    'had_error': true,
+                                    'error_type': e.runtimeType.toString(),
+                                  },
                                 );
                               } catch (_) {}
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -1896,7 +1900,7 @@ class _YearCard extends StatelessWidget {
         child: InkWell(
           onTap: () {
             try {
-              Aptabase.instance.trackEvent('year_review_opened', {
+              Analytics.track('year_review_opened', {
                 'year': year,
                 'is_current_year': isCurrent,
                 'has_data': hasData,

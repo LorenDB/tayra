@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:aptabase_flutter/aptabase_flutter.dart';
+import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
@@ -71,7 +71,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       _error = null;
     });
 
-    Aptabase.instance.trackEvent('search', {'query_length': query.length});
+    Analytics.track('search', {'query_length': query.length});
 
     try {
       final api = ref.read(cachedFunkwhaleApiProvider);

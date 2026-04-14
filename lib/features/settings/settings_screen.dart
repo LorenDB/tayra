@@ -1,4 +1,4 @@
-import 'package:aptabase_flutter/aptabase_flutter.dart';
+import 'package:tayra/core/analytics/analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -114,8 +114,8 @@ class SettingsScreen extends ConsumerWidget {
           _BrowseModeTile(
             currentMode: settings.browseMode,
             onChanged: (mode) {
-              Aptabase.instance.trackEvent("default_browse_mode_changed", {
-                "mode": mode,
+              Analytics.track("default_browse_mode_changed", {
+                'mode': mode.toString(),
               });
               ref.read(settingsProvider.notifier).setBrowseMode(mode);
             },
@@ -146,7 +146,7 @@ class SettingsScreen extends ConsumerWidget {
             value: settings.useDynamicAlbumAccent,
             onChanged: (value) {
               try {
-                Aptabase.instance.trackEvent('dynamic_album_accent_toggled', {
+                Analytics.track('dynamic_album_accent_toggled', {
                   'enabled': value,
                 });
               } catch (_) {}
@@ -168,10 +168,9 @@ class SettingsScreen extends ConsumerWidget {
               value: settings.androidAutoEnabled,
               onChanged: (value) {
                 try {
-                  Aptabase.instance.trackEvent(
-                    'android_auto_integration_toggled',
-                    {'enabled': value},
-                  );
+                  Analytics.track('android_auto_integration_toggled', {
+                    'enabled': value,
+                  });
                 } catch (_) {}
                 ref
                     .read(settingsProvider.notifier)
@@ -185,7 +184,7 @@ class SettingsScreen extends ConsumerWidget {
             value: settings.forceOfflineMode,
             onChanged: (value) {
               try {
-                Aptabase.instance.trackEvent('force_offline_mode_toggled', {
+                Analytics.track('force_offline_mode_toggled', {
                   'enabled': value,
                 });
               } catch (_) {}
@@ -212,9 +211,7 @@ class SettingsScreen extends ConsumerWidget {
               value: settings.aiEnabled,
               onChanged: (value) {
                 try {
-                  Aptabase.instance.trackEvent('ai_features_toggled', {
-                    'enabled': value,
-                  });
+                  Analytics.track('ai_features_toggled', {'enabled': value});
                 } catch (_) {}
                 ref.read(settingsProvider.notifier).setAiEnabled(value);
               },
@@ -262,7 +259,7 @@ class SettingsScreen extends ConsumerWidget {
                 await CacheManager.instance.clearAudio();
                 ref.invalidate(cacheStatsProvider);
                 try {
-                  Aptabase.instance.trackEvent('cache_audio_cleared');
+                  Analytics.track('cache_audio_cleared');
                 } catch (_) {}
               }
             },
@@ -287,7 +284,7 @@ class SettingsScreen extends ConsumerWidget {
                 await CacheManager.instance.clearAll();
                 ref.invalidate(cacheStatsProvider);
                 try {
-                  Aptabase.instance.trackEvent('cache_all_cleared');
+                  Analytics.track('cache_all_cleared');
                 } catch (_) {}
               }
             },
@@ -543,7 +540,7 @@ class _AboutTileState extends ConsumerState<_AboutTile> {
     if (_tapCount >= _tapsRequired) {
       _tapCount = 0;
       ref.read(yearReviewBannerVisibleProvider.notifier).forceShow();
-      Aptabase.instance.trackEvent("manual_yearend_banner_triggered");
+      Analytics.track("manual_yearend_banner_triggered");
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Year in Review banner unlocked'),
@@ -1239,7 +1236,7 @@ class _CacheSizeLimitTileState extends State<_CacheSizeLimitTile> {
             onChanged: (value) => widget.onChanged(value.toInt()),
             onChangeEnd: (value) {
               try {
-                Aptabase.instance.trackEvent('cache_size_limit_changed', {
+                Analytics.track('cache_size_limit_changed', {
                   'size_mb': value.toInt(),
                 });
               } catch (_) {}
@@ -1375,10 +1372,9 @@ class _DonationTile extends StatelessWidget {
                         label: 'Liberapay',
                         onTap: () {
                           try {
-                            Aptabase.instance.trackEvent(
-                              'donation_link_tapped',
-                              {'platform': 'liberapay'},
-                            );
+                            Analytics.track('donation_link_tapped', {
+                              'platform': 'liberapay',
+                            });
                           } catch (_) {}
                           _openUrl(_liberapayUrl);
                         },
@@ -1391,10 +1387,9 @@ class _DonationTile extends StatelessWidget {
                         label: 'PayPal',
                         onTap: () {
                           try {
-                            Aptabase.instance.trackEvent(
-                              'donation_link_tapped',
-                              {'platform': 'paypal'},
-                            );
+                            Analytics.track('donation_link_tapped', {
+                              'platform': 'paypal',
+                            });
                           } catch (_) {}
                           _openUrl(_paypalUrl);
                         },

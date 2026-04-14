@@ -1,6 +1,6 @@
 import 'dart:ui' as ui;
 
-import 'package:aptabase_flutter/aptabase_flutter.dart';
+import 'package:tayra/core/analytics/analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -670,7 +670,7 @@ class _YearReviewBannerState extends ConsumerState<_YearReviewBanner>
               child: InkWell(
                 onTap: () async {
                   try {
-                    Aptabase.instance.trackEvent('year_review_banner_tapped');
+                    Analytics.track('year_review_banner_tapped');
                   } catch (_) {}
 
                   // Mark the banner dismissed for this calendar year so it
@@ -736,9 +736,7 @@ class _YearReviewBannerState extends ConsumerState<_YearReviewBanner>
                       GestureDetector(
                         onTap: () {
                           try {
-                            Aptabase.instance.trackEvent(
-                              'year_review_banner_dismissed',
-                            );
+                            Analytics.track('year_review_banner_dismissed');
                           } catch (_) {}
                           ref
                               .read(yearReviewBannerVisibleProvider.notifier)

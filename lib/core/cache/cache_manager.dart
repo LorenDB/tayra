@@ -8,7 +8,7 @@ import 'package:tayra/core/api/api_client.dart';
 import 'package:tayra/core/api/models.dart';
 import 'package:tayra/core/cache/cache_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:aptabase_flutter/aptabase_flutter.dart';
+import 'package:tayra/core/analytics/analytics.dart';
 
 /// Cache types for different kinds of data
 enum CacheType {
@@ -467,7 +467,7 @@ class CacheManager {
     }
     // Telemetry: manual download flag changed (fires for both add and remove)
     try {
-      Aptabase.instance.trackEvent('manual_download_toggled', {
+      Analytics.track('manual_download_toggled', {
         'resource_type': type.name,
         'enabled': value,
       });
