@@ -87,52 +87,12 @@ class _QueuePanel extends ConsumerWidget {
                 ),
               ),
               const Spacer(),
-              // Stash inbox button
-              Consumer(
-                builder: (context, ref, _) {
-                  final count =
-                      ref.watch(stashedQueuesProvider).asData?.value.length ??
-                      0;
-                  return IconButton(
-                    tooltip: 'Stashed queues',
-                    iconSize: 20,
-                    icon: Badge(
-                      isLabelVisible: count > 0,
-                      label: Text('$count'),
-                      backgroundColor: AppTheme.primary,
-                      child: const Icon(
-                        Icons.inbox_outlined,
-                        color: AppTheme.onBackgroundMuted,
-                      ),
-                    ),
-                    onPressed: () => showStashedQueuesSheet(context, ref),
-                  );
-                },
+              // Shared queue action buttons (stashes, stash, clear)
+              QueueActions(
+                // Side panel prefers smaller icons and a simple stash handler
+                iconSize: 20,
+                onStash: () => ref.read(playerProvider.notifier).stashQueue(),
               ),
-              // Stash button (only when queue is non-empty)
-              if (queue.isNotEmpty)
-                IconButton(
-                  tooltip: 'Stash queue',
-                  iconSize: 20,
-                  icon: const Icon(
-                    Icons.save_outlined,
-                    color: AppTheme.onBackgroundMuted,
-                  ),
-                  onPressed: () {
-                    ref.read(playerProvider.notifier).stashQueue();
-                  },
-                ),
-              // Clear queue (only when queue is non-empty)
-              if (queue.isNotEmpty)
-                IconButton(
-                  tooltip: 'Clear queue',
-                  iconSize: 20,
-                  icon: const Icon(
-                    Icons.delete_outline_rounded,
-                    color: AppTheme.error,
-                  ),
-                  onPressed: () => showClearQueueConfirmation(context, ref),
-                ),
             ],
           ),
         ),

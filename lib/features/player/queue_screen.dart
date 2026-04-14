@@ -106,53 +106,11 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
                   ),
                 ),
                 actions: [
-                  Consumer(
-                    builder: (context, ref, _) {
-                      final count =
-                          ref
-                              .watch(stashedQueuesProvider)
-                              .asData
-                              ?.value
-                              .length ??
-                          0;
-                      return IconButton(
-                        tooltip: 'Stashed queues',
-                        icon: Badge(
-                          isLabelVisible: count > 0,
-                          label: Text('$count'),
-                          backgroundColor: AppTheme.primary,
-                          child: const Icon(
-                            Icons.inbox_outlined,
-                            color: AppTheme.onBackgroundMuted,
-                          ),
-                        ),
-                        onPressed: () => showStashedQueuesSheet(context, ref),
-                      );
-                    },
+                  // Use the shared actions widget.
+                  QueueActions(
+                    iconSize: 24,
+                    onStash: () => _stashQueue(context, ref),
                   ),
-                  if (queue.isNotEmpty)
-                    IconButton(
-                      tooltip: 'Stash queue',
-                      icon: const Icon(
-                        Icons.save_outlined,
-                        color: AppTheme.onBackgroundMuted,
-                      ),
-                      onPressed: () => _stashQueue(context, ref),
-                    ),
-                  if (queue.isNotEmpty)
-                    TextButton(
-                      onPressed: () {
-                        _showClearConfirmation(context, ref);
-                      },
-                      child: const Text(
-                        'Clear',
-                        style: TextStyle(
-                          color: AppTheme.error,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
                 ],
               )
               : null,
@@ -345,6 +303,61 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
               ),
             ],
           ),
+    );
+  }
+}
+
+/// Shared action buttons used by both the full-screen QueueScreen app bar and
+/// the compact side panel queue header. Extracted to avoid duplication.
+class QueueActions extends ConsumerWidget {
+  final double iconSize;
+  final VoidCallback? onStash;
+  const QueueActions({super.key, this.iconSize = 24, this.onStash});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final count = ref.watch(stashedQueuesProvider).asData?.value.length ?? 0;
+    final queue = ref.watch(playerProvider).queue;
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        IconButton(
+          tooltip: 'Stashed queues',
+          iconSize: iconSize,
+          icon: Badge(
+            isLabelVisible: count > 0,
+            label: Text('$count'),
+            backgroundColor: AppTheme.primary,
+            child: const Icon(
+              Icons.inbox_outlined,
+              color: AppTheme.onBackgroundMuted,
+            ),
+          ),
+          onPressed: () => showStashedQueuesSheet(context, ref),
+        ),
+        if (queue.isNotEmpty)
+          IconButton(
+            tooltip: 'Stash queue',
+            iconSize: iconSize,
+            icon: const Icon(
+              Icons.save_outlined,
+              color: AppTheme.onBackgroundMuted,
+            ),
+            onPressed:
+                onStash ?? () => ref.read(playerProvider.notifier).stashQueue(),
+          ),
+        if (queue.isNotEmpty)
+          IconButton(
+            tooltip: 'Clear queue',
+            iconSize: iconSize,
+            icon: const Icon(
+              Icons.delete_outline_rounded,
+              color: AppTheme.error,
+            ),
+            onPressed: () => showClearQueueConfirmation(context, ref),
+          ),
+      ],
     );
   }
 }
