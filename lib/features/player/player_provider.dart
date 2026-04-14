@@ -1983,6 +1983,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }
 
   void toggleShuffle() {
+    final wasPlaying = state.isPlaying;
+
     if (!state.isShuffled) {
       // Turning shuffle ON: save the original order, then shuffle
       final current = state.currentTrack;
@@ -2016,14 +2018,21 @@ class PlayerNotifier extends Notifier<PlayerState> {
     // current playback position so the transition is seamless.
     if (_gaplessActive) {
       final pos = _handler.audioPlayer.position;
-      _loadGaplessSource(state.currentIndex, initialPosition: pos).then((ok) {
+      _loadGaplessSource(state.currentIndex, initialPosition: pos).then((
+        ok,
+      ) async {
         if (ok) {
-          _handler.audioPlayer.play().then((_) {
-            // Sync isPlaying immediately after play() — the playingStream
-            // event arrives asynchronously and would otherwise leave the UI
-            // showing a stale paused state for one or more frames.
+          // Only start playback if the player was playing prior to the
+          // shuffle toggle. Toggling shuffle when paused should not resume
+          // playback.
+          if (wasPlaying) {
+            await _handler.audioPlayer.play();
             state = state.copyWith(isPlaying: _handler.audioPlayer.playing);
-          });
+          } else {
+            // Ensure our internal isPlaying reflects the player's current
+            // state (should remain paused).
+            state = state.copyWith(isPlaying: _handler.audioPlayer.playing);
+          }
         }
       });
     }
