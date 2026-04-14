@@ -16,6 +16,7 @@ class SettingsState {
   final bool gaplessPlayback;
   final bool aiEnabled;
   final bool aiDownloadPromptShown;
+  final bool analyticsEnabled;
   final bool forceOfflineMode;
 
   const SettingsState({
@@ -26,6 +27,7 @@ class SettingsState {
     this.gaplessPlayback = true,
     this.aiEnabled = true,
     this.aiDownloadPromptShown = false,
+    this.analyticsEnabled = true,
     this.forceOfflineMode = false,
   });
 
@@ -37,6 +39,7 @@ class SettingsState {
     bool? gaplessPlayback,
     bool? aiEnabled,
     bool? aiDownloadPromptShown,
+    bool? analyticsEnabled,
     bool? forceOfflineMode,
   }) {
     return SettingsState(
@@ -49,6 +52,7 @@ class SettingsState {
       aiEnabled: aiEnabled ?? this.aiEnabled,
       aiDownloadPromptShown:
           aiDownloadPromptShown ?? this.aiDownloadPromptShown,
+      analyticsEnabled: analyticsEnabled ?? this.analyticsEnabled,
       forceOfflineMode: forceOfflineMode ?? this.forceOfflineMode,
     );
   }
@@ -68,6 +72,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
   static const _keyGaplessPlayback = 'gapless_playback';
   static const _keyAiEnabled = 'ai_enabled';
   static const _keyAiDownloadPromptShown = 'ai_download_prompt_shown';
+  static const _keyAnalyticsEnabled = 'analytics_enabled';
   static const _keyForceOfflineMode = 'force_offline_mode';
 
   @override
@@ -109,6 +114,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
     final aiEnabled = prefs.getBool(_keyAiEnabled) ?? true;
     final aiDownloadPromptShown =
         prefs.getBool(_keyAiDownloadPromptShown) ?? false;
+    final analyticsEnabled = prefs.getBool(_keyAnalyticsEnabled) ?? true;
     final forceOfflineMode = prefs.getBool(_keyForceOfflineMode) ?? false;
 
     state = state.copyWith(
@@ -119,6 +125,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
       gaplessPlayback: gapless,
       aiEnabled: aiEnabled,
       aiDownloadPromptShown: aiDownloadPromptShown,
+      analyticsEnabled: analyticsEnabled,
       forceOfflineMode: forceOfflineMode,
     );
   }
@@ -168,6 +175,12 @@ class SettingsNotifier extends Notifier<SettingsState> {
     await prefs.setBool(_keyAiDownloadPromptShown, shown);
   }
 
+  Future<void> setAnalyticsEnabled(bool enabled) async {
+    state = state.copyWith(analyticsEnabled: enabled);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyAnalyticsEnabled, enabled);
+  }
+
   Future<void> setForceOfflineMode(bool enabled) async {
     state = state.copyWith(forceOfflineMode: enabled);
     final prefs = await SharedPreferences.getInstance();
@@ -183,6 +196,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
     await prefs.remove(_keyGaplessPlayback);
     await prefs.remove(_keyAiEnabled);
     await prefs.remove(_keyAiDownloadPromptShown);
+    await prefs.remove(_keyAnalyticsEnabled);
     await prefs.remove(_keyForceOfflineMode);
   }
 }

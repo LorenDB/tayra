@@ -178,6 +178,33 @@ class SettingsScreen extends ConsumerWidget {
               },
             ),
           _SwitchTile(
+            icon: Icons.analytics_outlined,
+            title: 'Analytics',
+            subtitle: 'Allow anonymous usage analytics',
+            value: settings.analyticsEnabled,
+            onChanged: (value) async {
+              // Persist setting and apply immediately.
+              try {
+                // If disabling, set Analytics to disabled first to avoid sending
+                // an event about the change. If enabling, persist then enable.
+                if (!value) {
+                  await ref
+                      .read(settingsProvider.notifier)
+                      .setAnalyticsEnabled(false);
+                  await Analytics.setEnabled(false);
+                } else {
+                  await ref
+                      .read(settingsProvider.notifier)
+                      .setAnalyticsEnabled(true);
+                  await Analytics.setEnabled(true);
+                  try {
+                    Analytics.track('analytics_enabled');
+                  } catch (_) {}
+                }
+              } catch (_) {}
+            },
+          ),
+          _SwitchTile(
             icon: Icons.wifi_off_rounded,
             title: 'Force offline mode',
             subtitle: 'Always show only locally cached content',
