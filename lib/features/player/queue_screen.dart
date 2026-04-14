@@ -10,6 +10,8 @@ import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
 import 'package:tayra/features/player/player_provider.dart';
 import 'package:tayra/features/player/queue_persistence_service.dart';
+import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/features/playlists/playlists_screen.dart';
 import 'package:tayra/features/player/mini_player.dart';
 
 class QueueScreen extends ConsumerStatefulWidget {
@@ -894,7 +896,9 @@ class StashedQueueTile extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        track?.title ?? 'Unknown track',
+                        stash.name != null && stash.name!.isNotEmpty
+                            ? stash.name!
+                            : (track?.title ?? 'Unknown track'),
                         style: const TextStyle(
                           color: AppTheme.onBackground,
                           fontSize: 14,
@@ -904,12 +908,11 @@ class StashedQueueTile extends ConsumerWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 2),
+                      // Subtitle: "N tracks · savedAt" (replaces artist line)
                       Text(
                         [
-                          if (track != null) track.artistName,
                           '$trackCount track${trackCount == 1 ? '' : 's'}',
-                          if (stash.position > Duration.zero)
-                            _formatPosition(stash.position),
+                          _formatSavedAt(stash.savedAt),
                         ].join(' · '),
                         style: const TextStyle(
                           color: AppTheme.onBackgroundMuted,
@@ -922,11 +925,69 @@ class StashedQueueTile extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  _formatSavedAt(stash.savedAt),
-                  style: const TextStyle(
-                    color: AppTheme.onBackgroundSubtle,
-                    fontSize: 11,
+                // Action menu for stash (rename / save as playlist / delete)
+                PopupMenuButton<String>(
+                  tooltip: 'Actions',
+                  color: AppTheme.surfaceContainerHigh,
+                  onSelected: (value) async {
+                    switch (value) {
+                      case 'rename':
+                        _showRenameDialog(context, ref);
+                        break;
+                      case 'save_playlist':
+                        await _convertToPlaylist(context, ref);
+                        break;
+                      case 'delete':
+                        await _confirmDelete(context, ref);
+                        break;
+                    }
+                  },
+                  itemBuilder:
+                      (c) => [
+                        PopupMenuItem(
+                          value: 'rename',
+                          child: Row(
+                            children: const [
+                              Icon(Icons.edit_rounded, size: 18),
+                              SizedBox(width: 12),
+                              Text('Rename'),
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: 'save_playlist',
+                          child: Row(
+                            children: const [
+                              Icon(Icons.queue_music_rounded, size: 18),
+                              SizedBox(width: 12),
+                              Text('Save as playlist'),
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: 'delete',
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.delete_outline_rounded,
+                                size: 18,
+                                color: AppTheme.error,
+                              ),
+                              const SizedBox(width: 12),
+                              Text(
+                                'Delete',
+                                style: const TextStyle(color: AppTheme.error),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Icon(
+                      Icons.more_vert_rounded,
+                      color: AppTheme.onBackgroundSubtle,
+                    ),
                   ),
                 ),
               ],
@@ -935,6 +996,195 @@ class StashedQueueTile extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  void _showRenameDialog(BuildContext context, WidgetRef ref) {
+    final controller = TextEditingController(text: stash.name ?? '');
+    showShellDialog(
+      context: context,
+      builder:
+          (d) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            title: const Text(
+              'Rename Stash',
+              style: TextStyle(
+                color: AppTheme.onBackground,
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            content: TextField(
+              controller: controller,
+              autofocus: true,
+              style: const TextStyle(color: AppTheme.onBackground),
+              decoration: const InputDecoration(
+                hintText: 'Name',
+                filled: true,
+                fillColor: AppTheme.surfaceContainer,
+              ),
+              onSubmitted: (_) async {
+                Navigator.of(d).pop();
+                await QueuePersistenceService.renameStash(
+                  stash.id,
+                  controller.text.trim().isEmpty
+                      ? null
+                      : controller.text.trim(),
+                );
+                ref.invalidate(stashedQueuesProvider);
+              },
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(d).pop(),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(color: AppTheme.onBackgroundMuted),
+                ),
+              ),
+              TextButton(
+                onPressed: () async {
+                  Navigator.of(d).pop();
+                  await QueuePersistenceService.renameStash(
+                    stash.id,
+                    controller.text.trim().isEmpty
+                        ? null
+                        : controller.text.trim(),
+                  );
+                  ref.invalidate(stashedQueuesProvider);
+                },
+                child: const Text(
+                  'Save',
+                  style: TextStyle(
+                    color: AppTheme.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+    );
+  }
+
+  Future<void> _confirmDelete(BuildContext context, WidgetRef ref) async {
+    final confirmed = await showShellDialog<bool>(
+      context: context,
+      builder:
+          (d) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            title: const Text(
+              'Delete Stash',
+              style: TextStyle(
+                color: AppTheme.onBackground,
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            content: const Text(
+              'Delete this stashed queue? This cannot be undone.',
+              style: TextStyle(color: AppTheme.onBackgroundMuted),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(d).pop(false),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(color: AppTheme.onBackgroundMuted),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(d).pop(true),
+                child: const Text(
+                  'Delete',
+                  style: TextStyle(
+                    color: AppTheme.error,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+    );
+    if (confirmed == true) {
+      await ref.read(playerProvider.notifier).deleteStash(stash.id);
+    }
+  }
+
+  Future<void> _convertToPlaylist(BuildContext context, WidgetRef ref) async {
+    final nameController = TextEditingController(text: stash.name ?? '');
+    final name = await showShellDialog<String?>(
+      context: context,
+      builder:
+          (d) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            title: const Text(
+              'Create Playlist',
+              style: TextStyle(
+                color: AppTheme.onBackground,
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            content: TextField(
+              controller: nameController,
+              autofocus: true,
+              decoration: const InputDecoration(
+                hintText: 'Playlist name',
+                filled: true,
+                fillColor: AppTheme.surfaceContainer,
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(d).pop(null),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(color: AppTheme.onBackgroundMuted),
+                ),
+              ),
+              TextButton(
+                onPressed:
+                    () => Navigator.of(d).pop(nameController.text.trim()),
+                child: const Text(
+                  'Create & Add',
+                  style: TextStyle(
+                    color: AppTheme.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+    );
+
+    if (name == null) return;
+
+    final playlistName = name.trim();
+    if (playlistName.isEmpty) return;
+
+    final api = ref.read(cachedFunkwhaleApiProvider);
+    try {
+      final playlist = await api.createPlaylist(name: playlistName);
+      final trackIds = stash.queue.map((t) => t.id).whereType<int>().toList();
+      if (trackIds.isNotEmpty)
+        await api.addTracksToPlaylist(playlist.id, trackIds);
+      ref.invalidate(playlistsProvider);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Created "${playlist.name}"')));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to create playlist')),
+      );
+    }
   }
 
   void _confirmRestore(BuildContext context, WidgetRef ref) {
