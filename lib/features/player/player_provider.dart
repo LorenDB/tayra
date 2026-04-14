@@ -1420,6 +1420,38 @@ class PlayerNotifier extends Notifier<PlayerState> {
     Analytics.track('add_to_queue', {'count': tracks.length});
   }
 
+  /// Insert tracks immediately after the current track so they play next.
+  /// If the queue is empty, this replaces the queue and starts playback.
+  void insertTracksNext(List<Track> tracks) {
+    if (tracks.isEmpty) return;
+
+    // If nothing is playing, replace the queue and start playback.
+    if (state.queue.isEmpty || state.currentIndex < 0) {
+      // Play the given tracks immediately (start at 0).
+      playTracks(tracks, source: 'insert_next');
+      return;
+    }
+
+    final insertIndex = state.currentIndex + 1;
+    final newQueue = List<Track>.from(state.queue);
+    newQueue.insertAll(insertIndex, tracks);
+    state = state.copyWith(queue: newQueue);
+
+    // Sync gapless source by inserting audio sources at the correct indices.
+    if (_gaplessActive) {
+      var idx = insertIndex;
+      for (final track in tracks) {
+        _audioSourceForTrack(track).then(
+          (source) => _handler.audioPlayer.insertAudioSource(idx++, source),
+          onError: (_) {},
+        );
+      }
+    }
+
+    _saveQueue();
+    Analytics.track('insert_next', {'count': tracks.length});
+  }
+
   /// Insert a track to play next.
   void playNext(Track track) {
     if (state.queue.isEmpty) {

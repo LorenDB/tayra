@@ -490,6 +490,49 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                 color: AppTheme.surfaceContainer,
                 onSelected: (value) {
                   if (value == 'download') unawaited(toggleDownload());
+                  if (value == 'play_next') {
+                    // Insert whole playlist to play next
+                    final playable =
+                        _tracks.where((t) => t.listenUrl != null).toList();
+                    if (playable.isNotEmpty) {
+                      ref
+                          .read(playerProvider.notifier)
+                          .insertTracksNext(playable);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Inserted ${playable.length} tracks to play next',
+                          ),
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('No playable tracks to add'),
+                        ),
+                      );
+                    }
+                  }
+                  if (value == 'add_queue') {
+                    final playable =
+                        _tracks.where((t) => t.listenUrl != null).toList();
+                    if (playable.isNotEmpty) {
+                      ref.read(playerProvider.notifier).addToQueue(playable);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Added ${playable.length} tracks to queue',
+                          ),
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('No playable tracks to add'),
+                        ),
+                      );
+                    }
+                  }
                   if (value == 'edit') {
                     context
                         .push('/playlists/${playlist.id}/edit')
@@ -501,6 +544,40 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                 },
                 itemBuilder:
                     (_) => [
+                      PopupMenuItem(
+                        value: 'play_next',
+                        child: Row(
+                          children: const [
+                            Icon(
+                              Icons.queue_play_next,
+                              size: 20,
+                              color: AppTheme.onBackground,
+                            ),
+                            SizedBox(width: 12),
+                            Text(
+                              'Play next',
+                              style: TextStyle(color: AppTheme.onBackground),
+                            ),
+                          ],
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: 'add_queue',
+                        child: Row(
+                          children: const [
+                            Icon(
+                              Icons.playlist_add,
+                              size: 20,
+                              color: AppTheme.onBackground,
+                            ),
+                            SizedBox(width: 12),
+                            Text(
+                              'Add to queue',
+                              style: TextStyle(color: AppTheme.onBackground),
+                            ),
+                          ],
+                        ),
+                      ),
                       PopupMenuItem(
                         value: 'download',
                         child: Row(
