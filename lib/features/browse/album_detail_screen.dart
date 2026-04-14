@@ -388,6 +388,65 @@ class _AlbumHeader extends ConsumerWidget {
       }
     }
 
+    Future<void> addAlbumToQueue() async {
+      try {
+        final tracks = await ref.read(_albumTracksProvider(album.id).future);
+        final playable = tracks.where((t) => t.listenUrl != null).toList();
+        if (playable.isEmpty) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('No playable tracks to add')),
+            );
+          }
+          return;
+        }
+        // Add tracks to the end of the current queue
+        ref.read(playerProvider.notifier).addToQueue(playable);
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Added ${playable.length} tracks to queue')),
+          );
+        }
+      } catch (e) {
+        debugPrint('Failed to add album to queue: $e');
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Failed to add album to queue')),
+          );
+        }
+      }
+    }
+
+    Future<void> playAlbumNext() async {
+      try {
+        final tracks = await ref.read(_albumTracksProvider(album.id).future);
+        final playable = tracks.where((t) => t.listenUrl != null).toList();
+        if (playable.isEmpty) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('No playable tracks to add')),
+            );
+          }
+          return;
+        }
+        ref.read(playerProvider.notifier).insertTracksNext(playable);
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Inserted ${playable.length} tracks to play next'),
+            ),
+          );
+        }
+      } catch (e) {
+        debugPrint('Failed to insert album to play next: $e');
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Failed to add album to play next')),
+          );
+        }
+      }
+    }
+
     return Stack(
       children: [
         // ── Gradient glow background ──
@@ -415,6 +474,8 @@ class _AlbumHeader extends ConsumerWidget {
             color: AppTheme.surfaceContainer,
             onSelected: (value) {
               if (value == 'download') toggleDownload();
+              if (value == 'play_next') playAlbumNext();
+              if (value == 'add_queue') addAlbumToQueue();
               if (value == 'add_playlist') addAlbumToPlaylist();
             },
             itemBuilder:
@@ -450,6 +511,40 @@ class _AlbumHeader extends ConsumerWidget {
                         SizedBox(width: 12),
                         Text(
                           'Add to playlist',
+                          style: TextStyle(color: AppTheme.onBackground),
+                        ),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: 'play_next',
+                    child: Row(
+                      children: const [
+                        Icon(
+                          Icons.queue_play_next,
+                          size: 20,
+                          color: AppTheme.onBackground,
+                        ),
+                        SizedBox(width: 12),
+                        Text(
+                          'Play next',
+                          style: TextStyle(color: AppTheme.onBackground),
+                        ),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: 'add_queue',
+                    child: Row(
+                      children: const [
+                        Icon(
+                          Icons.queue_music_rounded,
+                          size: 20,
+                          color: AppTheme.onBackground,
+                        ),
+                        SizedBox(width: 12),
+                        Text(
+                          'Add to queue',
                           style: TextStyle(color: AppTheme.onBackground),
                         ),
                       ],
