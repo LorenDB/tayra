@@ -1065,6 +1065,16 @@ class StashedQueueTile extends ConsumerWidget {
 
   void _showRenameDialog(BuildContext context, WidgetRef ref) {
     final controller = TextEditingController(text: stash.name ?? '');
+    // Ensure the text is selected when the dialog opens so users can replace
+    // the stash name quickly. Use a post-frame callback to run after layout.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      try {
+        controller.selection = TextSelection(
+          baseOffset: 0,
+          extentOffset: controller.text.length,
+        );
+      } catch (_) {}
+    });
     showShellDialog(
       context: context,
       builder:
@@ -1182,6 +1192,15 @@ class StashedQueueTile extends ConsumerWidget {
 
   Future<void> _convertToPlaylist(BuildContext context, WidgetRef ref) async {
     final nameController = TextEditingController(text: stash.name ?? '');
+    // Preselect the suggested playlist name when the dialog opens.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      try {
+        nameController.selection = TextSelection(
+          baseOffset: 0,
+          extentOffset: nameController.text.length,
+        );
+      } catch (_) {}
+    });
     final name = await showShellDialog<String?>(
       context: context,
       builder:
