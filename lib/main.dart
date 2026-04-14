@@ -54,13 +54,11 @@ void main() async {
     }
   }
 
-  // Analytics init is non-blocking — a slow or unreachable host shouldn't
-  // delay startup.
+  // Load persisted analytics preference and initialise analytics if enabled.
+  // This avoids initialising Aptabase when the user has opted out.
+  await Analytics.loadEnabledFromPrefs();
   unawaited(
-    Aptabase.init(
-      "A-SH-1447414969",
-      InitOptions(host: "https://aptabase.lorendb.dev"),
-    ).then((_) => Analytics.track("startup")),
+    Analytics.initializeIfEnabled().then((_) => Analytics.track("startup")),
   );
 
   // Initialize sqflite for desktop platforms
