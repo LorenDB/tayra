@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
-import 'package:aptabase_flutter/aptabase_flutter.dart';
+import 'package:tayra/core/analytics/analytics.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tayra/core/router/app_router.dart';
 import 'package:tayra/core/api/api_utils.dart';
@@ -96,7 +96,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
       // Funkwhale v1.4.0: remove by list position (0-based)
       await api.removeTrackFromPlaylist(playlistId, listIndex);
       try {
-        Aptabase.instance.trackEvent('playlist_track_removed');
+        Analytics.track('playlist_track_removed');
       } catch (_) {}
       // Invalidate playlist metadata so counts update elsewhere.
       ref.invalidate(playlistsProvider);
@@ -169,7 +169,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
       await api.clearPlaylist(playlist.id);
       ref.invalidate(playlistsProvider);
       try {
-        Aptabase.instance.trackEvent('playlist_cleared');
+        Analytics.track('playlist_cleared');
       } catch (_) {}
     } catch (e) {
       setState(() => _playlistTracks = backup);
@@ -293,7 +293,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
         await api.getPlaylists(scope: 'me', forceRefresh: true);
       } catch (_) {}
       try {
-        Aptabase.instance.trackEvent('playlist_deleted');
+        Analytics.track('playlist_deleted');
       } catch (_) {}
       ref.invalidate(playlistsProvider);
 
@@ -319,9 +319,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
   void _playAll() {
     if (_tracks.isEmpty) return;
     try {
-      Aptabase.instance.trackEvent('playlist_play_all', {
-        'track_count': _tracks.length,
-      });
+      Analytics.track('playlist_play_all', {'track_count': _tracks.length});
     } catch (_) {}
     ref
         .read(playerProvider.notifier)
@@ -331,9 +329,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
   void _shuffleAll() {
     if (_tracks.isEmpty) return;
     try {
-      Aptabase.instance.trackEvent('playlist_shuffle_all', {
-        'track_count': _tracks.length,
-      });
+      Analytics.track('playlist_shuffle_all', {'track_count': _tracks.length});
     } catch (_) {}
     final shuffled = List<Track>.from(_tracks)..shuffle();
     ref
@@ -423,7 +419,8 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
         );
         ref.invalidate(isManualPlaylistProvider(playlist.id));
         try {
-          Aptabase.instance.trackEvent('playlist_download_toggled', {
+          // Omit playlist ID; keep counts and booleans only.
+          Analytics.track('playlist_download_toggled', {
             'enabled': !current,
             'track_count': _tracks.length,
           });

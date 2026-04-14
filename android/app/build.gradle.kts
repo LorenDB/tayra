@@ -31,11 +31,34 @@ android {
         versionName = flutter.versionName
     }
 
+    // Signing configuration for release builds. This expects a key.properties
+    // file at the project root with storeFile, storePassword, keyAlias, keyPassword.
+    signingConfigs {
+        // Use the existing debug signing config as-is for local debug builds.
+        create("release") {
+            val keyPropsFile = rootProject.file("key.properties")
+            if (keyPropsFile.exists()) {
+                val keyProps = java.util.Properties()
+                keyPropsFile.inputStream().use { keyProps.load(it) }
+                storeFile = file(keyProps.getProperty("storeFile"))
+                storePassword = keyProps.getProperty("storePassword")
+                keyAlias = keyProps.getProperty("keyAlias")
+                keyPassword = keyProps.getProperty("keyPassword")
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            // Use the release signing config if provided; otherwise fall back to debug
+            // to preserve the current developer workflow. Do NOT commit key.properties.
+            signingConfig = try {
+                signingConfigs.getByName("release")
+            } catch (e: Exception) {
+                signingConfigs.getByName("debug")
+            }
+            // Ensure release builds are not debuggable
+            isDebuggable = false
         }
     }
 }

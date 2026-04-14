@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:aptabase_flutter/aptabase_flutter.dart';
+import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
 import 'package:tayra/features/auth/presentation/login_screen.dart';
 import 'package:tayra/features/home/home_screen.dart';
@@ -44,7 +44,9 @@ class NavigationObserver extends NavigatorObserver {
 
   void _logScreenView(String? routeName) {
     if (routeName != null && routeName.isNotEmpty) {
-      Aptabase.instance.trackEvent('screen_view', {'screen': routeName});
+      // Route names are developer-controlled and safe; pass through wrapper
+      // to enforce sanitisation rules consistently.
+      Analytics.track('screen_view', {'screen': routeName});
     }
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'package:aptabase_flutter/aptabase_flutter.dart';
+import 'package:tayra/core/analytics/analytics.dart';
+import 'package:tayra/core/analytics/analytics.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -122,7 +123,9 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
 
   Future<void> _toggleGridEasterEgg({ImageProvider? imageProvider}) async {
     if (!_showGridEasterEgg) {
-      Aptabase.instance.trackEvent('disco_easter_egg_triggered');
+      try {
+        Analytics.track('disco_easter_egg_triggered');
+      } catch (_) {}
       if (_gridShader == null) await _loadGridShader();
 
       if (imageProvider != null) {
@@ -236,17 +239,21 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
         if (v.abs() < 300) return;
         if (v > 0) {
           HapticFeedback.lightImpact();
-          Aptabase.instance.trackEvent('swipe_to_skip', {
-            'direction': 'previous',
-            'source': 'now_playing',
-          });
+          try {
+            Analytics.track('swipe_to_skip', {
+              'direction': 'previous',
+              'source': 'now_playing',
+            });
+          } catch (_) {}
           ref.read(playerProvider.notifier).skipPrevious();
         } else {
           HapticFeedback.lightImpact();
-          Aptabase.instance.trackEvent('swipe_to_skip', {
-            'direction': 'next',
-            'source': 'now_playing',
-          });
+          try {
+            Analytics.track('swipe_to_skip', {
+              'direction': 'next',
+              'source': 'now_playing',
+            });
+          } catch (_) {}
           ref.read(playerProvider.notifier).skipNext();
         }
       },

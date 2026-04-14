@@ -3,7 +3,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:aptabase_flutter/aptabase_flutter.dart';
+import 'package:tayra/core/analytics/analytics.dart';
 import 'package:dio/dio.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
@@ -1145,11 +1145,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
   Future<void> startRadio(int radioId) async {
     state = state.copyWith(loadingRadioId: radioId);
     try {
-      try {
-        Aptabase.instance.trackEvent('radio_start_requested', {
-          'radio_id': radioId,
-        });
-      } catch (_) {}
+      Analytics.track('radio_start_requested', {'radio_id': radioId});
       // related_object_id must be sent as an integer. Sending it as a
       // string caused a server 500 on some Funkwhale instances.
       RadioSession session;
@@ -1190,12 +1186,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
       _radioSessionId = session.id;
       _radioId = radioId;
-      try {
-        Aptabase.instance.trackEvent('radio_session_created', {
-          'radio_id': radioId,
-          'used_session': true,
-        });
-      } catch (_) {}
+      Analytics.track('radio_session_created', {
+        'radio_id': radioId,
+        'used_session': true,
+      });
 
       // Fetch the first track (raw) and try to parse it.
       final rawFirst = await _api.postNextRadioTrackRaw(_radioSessionId!);
@@ -1211,12 +1205,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // Play the initial track (this replaces the current queue).
       await playTracks([first], source: 'radio');
       state = state.copyWith(clearLoadingRadioId: true);
-      try {
-        Aptabase.instance.trackEvent('radio_started', {
-          'radio_id': radioId,
-          'source': 'session',
-        });
-      } catch (_) {}
+      Analytics.track('radio_started', {
+        'radio_id': radioId,
+        'source': 'session',
+      });
 
       // A second track will automatically be preloaded by the subscription that
       // watches the current index of the queue
@@ -1236,12 +1228,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
         await playTracks([first], source: 'radio-fallback');
         state = state.copyWith(clearLoadingRadioId: true);
-        try {
-          Aptabase.instance.trackEvent('radio_started', {
-            'radio_id': radioId,
-            'source': 'fallback',
-          });
-        } catch (_) {}
+        Analytics.track('radio_started', {
+          'radio_id': radioId,
+          'source': 'fallback',
+        });
 
         // Prefetch only one upcoming track using the sample endpoint.
         try {
@@ -1262,11 +1252,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
               if (t != null) addToQueue([t]);
             }
           } catch (_) {
-            try {
-              Aptabase.instance.trackEvent('radio_fetch_error', {
-                'radio_id': radioId,
-              });
-            } catch (_) {}
+            Analytics.track('radio_fetch_error', {'radio_id': radioId});
             // ignore repeated failures
           }
         });
@@ -1336,9 +1322,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     _radioSessionId = null;
     _radioId = null;
     _isPrefetchingRadioTrack = false;
-    try {
-      Aptabase.instance.trackEvent('radio_stopped');
-    } catch (_) {}
+    Analytics.track('radio_stopped');
   }
 
   Future<void> _maybePrefetchRadioTrack() async {
@@ -1412,7 +1396,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     // Pre-cache cover art and audio for queued tracks in the background.
     _preCacheCoverArt(tracks);
     _preCacheAudio(tracks, startIndex);
-    Aptabase.instance.trackEvent('play_tracks', {
+    Analytics.track('play_tracks', {
       'count': tracks.length,
       'start_index': startIndex,
       'source': source ?? 'unknown',
@@ -1433,7 +1417,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       }
     }
     _saveQueue();
-    Aptabase.instance.trackEvent('add_to_queue', {'count': tracks.length});
+    Analytics.track('add_to_queue', {'count': tracks.length});
   }
 
   /// Insert a track to play next.
@@ -1454,7 +1438,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       );
     }
     _saveQueue();
-    Aptabase.instance.trackEvent('play_next');
+    Analytics.track('play_next');
   }
 
   /// Remove track at index from the queue.
@@ -1475,7 +1459,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       _handler.audioPlayer.removeAudioSourceAt(index);
     }
     _saveQueue();
-    Aptabase.instance.trackEvent('remove_from_queue');
+    Analytics.track('remove_from_queue');
   }
 
   /// Reorder tracks in the queue.
@@ -1508,7 +1492,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       _handler.audioPlayer.moveAudioSource(oldIndex, newIndex);
     }
     _saveQueue();
-    Aptabase.instance.trackEvent('reorder_queue');
+    Analytics.track('reorder_queue');
   }
 
   // ── Queue stash ─────────────────────────────────────────────────────────
@@ -1531,11 +1515,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
     await QueuePersistenceService.addStash(stash);
     ref.invalidate(stashedQueuesProvider);
-    try {
-      Aptabase.instance.trackEvent('queue_stashed', {
-        'track_count': state.queue.length,
-      });
-    } catch (_) {}
+    Analytics.track('queue_stashed', {'track_count': state.queue.length});
 
     // Clear the active queue.
     await playTracks([], source: 'stash');
@@ -1552,9 +1532,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
     await QueuePersistenceService.removeStash(id);
     ref.invalidate(stashedQueuesProvider);
-    try {
-      Aptabase.instance.trackEvent('stash_restored');
-    } catch (_) {}
+    Analytics.track('stash_restored');
 
     // Load the stashed tracks and seek to the saved position.
     await playTracks(
@@ -1869,7 +1847,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     } else {
       await play();
     }
-    Aptabase.instance.trackEvent('toggle_play_pause', {
+    Analytics.track('toggle_play_pause', {
       'action': wasPlaying ? 'pause' : 'play',
     });
   }
@@ -1914,7 +1892,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     }
 
     _saveQueue();
-    Aptabase.instance.trackEvent('skip_next');
+    Analytics.track('skip_next');
   }
 
   Future<void> skipPrevious() async {
@@ -1947,15 +1925,13 @@ class PlayerNotifier extends Notifier<PlayerState> {
     }
 
     _saveQueue();
-    Aptabase.instance.trackEvent('skip_previous');
+    Analytics.track('skip_previous');
   }
 
   Future<void> seekTo(Duration position) async {
     await _handler.seek(position);
     _saveQueue(); // Save position
-    Aptabase.instance.trackEvent('seek', {
-      'position_seconds': position.inSeconds,
-    });
+    Analytics.track('seek', {'position_seconds': position.inSeconds});
   }
 
   void toggleShuffle() {
@@ -2004,9 +1980,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       });
     }
     _saveQueue();
-    Aptabase.instance.trackEvent('toggle_shuffle', {
-      'enabled': state.isShuffled,
-    });
+    Analytics.track('toggle_shuffle', {'enabled': state.isShuffled});
   }
 
   void toggleLoopMode() {
@@ -2027,9 +2001,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       _handler.audioPlayer.setLoopMode(state.loopMode);
     }
     _saveQueue();
-    Aptabase.instance.trackEvent('toggle_loop_mode', {
-      'mode': state.loopMode.name,
-    });
+    Analytics.track('toggle_loop_mode', {'mode': state.loopMode.name});
   }
 
   /// Jump to a specific index in the queue.
@@ -2053,6 +2025,6 @@ class PlayerNotifier extends Notifier<PlayerState> {
     }
 
     _saveQueue();
-    Aptabase.instance.trackEvent('jump_to_queue', {'index': index});
+    Analytics.track('jump_to_queue', {'index': index});
   }
 }

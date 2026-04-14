@@ -14,6 +14,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 import 'package:audio_service_mpris/audio_service_mpris.dart';
 import 'package:aptabase_flutter/aptabase_flutter.dart';
+import 'package:tayra/core/analytics/analytics.dart';
 // Optional: set a minimum window size on desktop platforms to avoid
 // rendering issues at very small sizes.
 import 'package:window_size/window_size.dart' as window_size;
@@ -59,7 +60,7 @@ void main() async {
     Aptabase.init(
       "A-SH-1447414969",
       InitOptions(host: "https://aptabase.lorendb.dev"),
-    ).then((_) => Aptabase.instance.trackEvent("startup")),
+    ).then((_) => Analytics.track("startup")),
   );
 
   // Initialize sqflite for desktop platforms
@@ -155,7 +156,7 @@ class _TayraAppState extends ConsumerState<TayraApp>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.detached) {
-      Aptabase.instance.trackEvent('app_close');
+      Analytics.track('app_close');
     }
   }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:aptabase_flutter/aptabase_flutter.dart';
+import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/theme/app_theme.dart';
@@ -313,7 +313,7 @@ class _AddToPlaylistSheetState extends ConsumerState<_AddToPlaylistSheet> {
       ref.invalidate(playlistsProvider);
 
       try {
-        Aptabase.instance.trackEvent('tracks_added_to_playlist', {
+        Analytics.track('tracks_added_to_playlist', {
           'track_count': widget.trackIds.length,
         });
       } catch (_) {}
@@ -414,7 +414,7 @@ class _AddToPlaylistSheetState extends ConsumerState<_AddToPlaylistSheet> {
       ref.invalidate(playlistsProvider);
 
       try {
-        Aptabase.instance.trackEvent('playlist_created_and_tracks_added', {
+        Analytics.track('playlist_created_and_tracks_added', {
           'track_count': widget.trackIds.length,
         });
       } catch (_) {}

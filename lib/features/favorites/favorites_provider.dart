@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:aptabase_flutter/aptabase_flutter.dart';
+import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 
 // ── Favorites state provider ────────────────────────────────────────────
@@ -46,7 +46,7 @@ class FavoriteTrackIdsNotifier extends Notifier<Set<int>> {
         await _api.addFavorite(trackId);
       }
       try {
-        Aptabase.instance.trackEvent('favorite_toggled', {'added': !isFav});
+        Analytics.track('favorite_toggled', {'added': !isFav});
       } catch (_) {}
     } catch (_) {
       // Revert on error and rethrow so callers can surface an error

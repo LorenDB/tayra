@@ -1,4 +1,4 @@
-import 'package:aptabase_flutter/aptabase_flutter.dart';
+import 'package:tayra/core/analytics/analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -81,7 +81,7 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
     if (defaultTargetPlatform != TargetPlatform.android) {
       debugPrint('AiSummary: platform unsupported: $defaultTargetPlatform');
       try {
-        Aptabase.instance.trackEvent('year_review_ai_platform_unsupported', {
+        Analytics.track('year_review_ai_platform_unsupported', {
           'platform': defaultTargetPlatform.toString(),
           'year': _year,
         });
@@ -103,7 +103,7 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
       final status = statusRaw ?? _statusUnavailable;
       debugPrint('AiSummary: feature status for year=$_year -> $status');
       try {
-        Aptabase.instance.trackEvent('year_review_ai_feature_status', {
+        Analytics.track('year_review_ai_feature_status', {
           'year': _year,
           'status': status,
         });
@@ -131,9 +131,10 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
     } catch (e) {
       debugPrint('AiSummary: error checking feature status: $e');
       try {
-        Aptabase.instance.trackEvent('year_review_ai_feature_check_failed', {
+        Analytics.track('year_review_ai_feature_check_failed', {
           'year': _year,
-          'error': e.toString(),
+          'had_error': true,
+          'error_type': e.runtimeType.toString(),
         });
       } catch (_) {}
       state = const AiSummaryDeviceUnsupported();
@@ -144,9 +145,7 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
   Future<void> downloadAndGenerate() async {
     debugPrint('AiSummary: download requested for year=$_year');
     try {
-      Aptabase.instance.trackEvent('year_review_ai_download_requested', {
-        'year': _year,
-      });
+      Analytics.track('year_review_ai_download_requested', {'year': _year});
     } catch (_) {}
 
     state = const AiSummaryDownloading();
@@ -155,21 +154,20 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
       await _channel.invokeMethod<void>('downloadFeature');
       debugPrint('AiSummary: download completed for year=$_year');
       try {
-        Aptabase.instance.trackEvent('year_review_ai_download_completed', {
-          'year': _year,
-        });
+        Analytics.track('year_review_ai_download_completed', {'year': _year});
       } catch (_) {}
       state = const AiSummaryGenerating();
       await _generate();
     } catch (e) {
       debugPrint('AiSummary: download failed: $e');
       try {
-        Aptabase.instance.trackEvent('year_review_ai_download_failed', {
+        Analytics.track('year_review_ai_download_failed', {
           'year': _year,
-          'error': e.toString(),
+          'had_error': true,
+          'error_type': e.runtimeType.toString(),
         });
       } catch (_) {}
-      state = AiSummaryError('Download failed: ${e.toString()}');
+      state = const AiSummaryError('Download failed');
     }
   }
 
@@ -208,7 +206,7 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
             );
             state = AiSummaryReady(cached.trim());
             try {
-              Aptabase.instance.trackEvent('year_review_ai_summary_cached', {
+              Analytics.track('year_review_ai_summary_cached', {
                 'year': _year,
                 'cached_length': cached.length,
               });
@@ -224,7 +222,7 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
         'prompt length=${promptText.length}',
       );
       try {
-        Aptabase.instance.trackEvent('year_review_ai_inference_started', {
+        Analytics.track('year_review_ai_inference_started', {
           'year': _year,
           'prompt_length': promptText.length,
         });
@@ -240,7 +238,7 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
         'response length=${text.length}',
       );
       try {
-        Aptabase.instance.trackEvent('year_review_ai_summary_generated', {
+        Analytics.track('year_review_ai_summary_generated', {
           'year': _year,
           'response_length': text.length,
         });
@@ -259,7 +257,7 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
         if (now.year > _year) {
           await prefs.setString('ai_summary_${_year}_final', trimmed);
           try {
-            Aptabase.instance.trackEvent('year_review_ai_summary_final_saved', {
+            Analytics.track('year_review_ai_summary_final_saved', {
               'year': _year,
               'length': trimmed.length,
             });
@@ -273,12 +271,13 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
     } catch (e) {
       debugPrint('AiSummary: inference failed for year=$_year: $e');
       try {
-        Aptabase.instance.trackEvent('year_review_ai_inference_failed', {
+        Analytics.track('year_review_ai_inference_failed', {
           'year': _year,
-          'error': e.toString(),
+          'had_error': true,
+          'error_type': e.runtimeType.toString(),
         });
       } catch (_) {}
-      state = AiSummaryError(e.toString());
+      state = AiSummaryError('Inference failed');
     }
   }
 
@@ -326,10 +325,10 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
       if (draft != null && draft.isNotEmpty) {
         await prefs.setString(finalKey, draft);
         try {
-          Aptabase.instance.trackEvent(
-            'year_review_ai_summary_final_saved_auto',
-            {'year': _year, 'length': draft.length},
-          );
+          Analytics.track('year_review_ai_summary_final_saved_auto', {
+            'year': _year,
+            'length': draft.length,
+          });
         } catch (_) {}
       }
     } catch (e) {

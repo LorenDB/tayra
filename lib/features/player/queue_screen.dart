@@ -1,4 +1,4 @@
-import 'package:aptabase_flutter/aptabase_flutter.dart';
+import 'package:tayra/core/analytics/analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -327,7 +327,9 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
               ),
               TextButton(
                 onPressed: () {
-                  Aptabase.instance.trackEvent('queue_cleared');
+                  try {
+                    Analytics.track('queue_cleared');
+                  } catch (_) {}
                   ref.read(playerProvider.notifier).playTracks([]);
                   Navigator.of(dialogContext).pop();
                 },

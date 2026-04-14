@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/cache/cache_database.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
-import 'package:aptabase_flutter/aptabase_flutter.dart';
+import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 
 /// Per-item download states mirroring the SQLite `status` column.
@@ -100,9 +100,7 @@ class DownloadQueueService {
     await _emitState();
     // Telemetry: user or system enqueued downloads
     try {
-      Aptabase.instance.trackEvent('download_enqueued', {
-        'count': trackIds.length,
-      });
+      Analytics.track('download_enqueued', {'count': trackIds.length});
     } catch (_) {}
     _processQueue(reader);
   }
@@ -118,7 +116,8 @@ class DownloadQueueService {
     );
     await _emitState();
     try {
-      Aptabase.instance.trackEvent('download_removed', {'track_id': trackId});
+      // Omit numeric track_id per policy
+      Analytics.track('download_removed');
     } catch (_) {}
   }
 
@@ -131,7 +130,7 @@ class DownloadQueueService {
     }, where: "status = 'failed'");
     await _emitState();
     try {
-      Aptabase.instance.trackEvent('download_retry_requested');
+      Analytics.track('download_retry_requested');
     } catch (_) {}
     _processQueue(reader);
   }
@@ -200,9 +199,8 @@ class DownloadQueueService {
               final track = await api.getTrack(item.trackId);
               if (track.listenUrl != null) {
                 try {
-                  Aptabase.instance.trackEvent('download_started', {
-                    'track_id': item.trackId,
-                  });
+                  // Omit numeric track_id per policy
+                  Analytics.track('download_started');
                 } catch (_) {}
                 await audioSvc.cacheAudio(
                   track,
@@ -220,9 +218,8 @@ class DownloadQueueService {
                 whereArgs: [item.id],
               );
               try {
-                Aptabase.instance.trackEvent('download_completed', {
-                  'track_id': item.trackId,
-                });
+                // Omit numeric track_id per policy
+                Analytics.track('download_completed');
               } catch (_) {}
               try {
                 ref.invalidate(isAudioCachedProvider(item.trackId));
@@ -234,14 +231,18 @@ class DownloadQueueService {
               debugPrintStack(stackTrace: st);
               await db.update(
                 'download_queue',
-                {'status': 'failed', 'error': e.toString()},
+                {'status': 'failed', 'error': e.runtimeType.toString()},
                 where: 'id = ?',
                 whereArgs: [item.id],
               );
               try {
-                Aptabase.instance.trackEvent('download_failed', {
-                  'track_id': item.trackId,
+                // Use analytics wrapper to avoid sending raw error strings.
+                // Keep only a lightweight indicator that an error occurred.
+                // Numeric IDs may be acceptable here; if not, consider
+                // removing or hashing them in the future.
+                Analytics.track('download_failed', {
                   'had_error': true,
+                  'error_type': e.runtimeType.toString(),
                 });
               } catch (_) {}
             }
