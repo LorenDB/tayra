@@ -17,6 +17,7 @@ import 'package:tayra/features/playlists/playlist_edit_screen.dart';
 import 'package:tayra/features/player/now_playing_screen.dart';
 import 'package:tayra/features/player/queue_screen.dart';
 import 'package:tayra/features/year_review/year_review_screen.dart';
+import 'package:tayra/features/year_review/year_review_settings_screen.dart';
 import 'package:tayra/features/search/search_screen.dart';
 import 'package:tayra/features/upload/upload_screen.dart';
 import 'package:tayra/core/widgets/app_shell.dart';
@@ -245,6 +246,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/upload',
         name: 'upload',
         builder: (context, state) => const UploadScreen(),
+      ),
+      GoRoute(
+        path: '/year-review-settings',
+        name: 'year_review_settings',
+        builder: (context, state) => const YearReviewSettingsScreen(),
       ),
       GoRoute(
         path: '/now-playing',

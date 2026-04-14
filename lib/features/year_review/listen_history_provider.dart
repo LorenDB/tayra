@@ -5,6 +5,7 @@ import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/features/year_review/listen_history_service.dart';
 import 'package:tayra/features/year_review/ai_summary_provider.dart';
+import 'package:tayra/features/settings/settings_provider.dart';
 
 // ── Providers ───────────────────────────────────────────────────────────
 
@@ -122,6 +123,15 @@ class YearReviewBannerNotifier extends Notifier<bool> {
       return;
     }
 
+    // Don't prompt at year end when the user has disabled year-end prompts
+    try {
+      final showPrompts = ref.read(settingsProvider).showYearEndPrompts;
+      if (!showPrompts) {
+        state = false;
+        return;
+      }
+    } catch (_) {}
+
     final prefs = await SharedPreferences.getInstance();
     final dismissedYear = prefs.getInt(_keyBannerDismissedYear);
     if (dismissedYear == now.year && !forceVisible) {
@@ -160,6 +170,15 @@ class YearReviewBannerNotifier extends Notifier<bool> {
 
   /// Force the banner visible regardless of date (for testing).
   Future<void> forceShow() async {
+    // Respect the user's preference to disable year-end prompts.
+    try {
+      final showPrompts = ref.read(settingsProvider).showYearEndPrompts;
+      if (!showPrompts) {
+        state = false;
+        return;
+      }
+    } catch (_) {}
+
     final count = await ListenHistoryService.getTotalListenCount();
     state = count > 0;
   }
