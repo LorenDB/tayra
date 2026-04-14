@@ -748,6 +748,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// restore.  Set by [_restoreQueue] and cleared once the seek is done.
   Duration? _pendingRestorePosition;
 
+  /// If the active queue was restored from a stash, keep that stash's name
+  /// here so re-stashing the same active queue preserves the name.
+  String? _activeStashName;
+
   /// Whether the player currently has a multi-source gapless playlist
   /// loaded via [AudioPlayer.setAudioSources].
   bool _gaplessActive = false;
@@ -1357,10 +1361,17 @@ class PlayerNotifier extends Notifier<PlayerState> {
       state = const PlayerState();
       await _handler.audioPlayer.stop();
       await QueuePersistenceService.clearQueue();
+      // Clearing the active queue means it's no longer the restored stash.
+      _activeStashName = null;
       return;
     }
 
     _pendingRestorePosition = null;
+    // If this play request is not a stash restore, the active stash name
+    // should not be preserved (we only keep it when restoring a stash).
+    if (source != 'stash_restore') {
+      _activeStashName = null;
+    }
     state = state.copyWith(
       queue: tracks,
       currentIndex: startIndex,
@@ -1536,7 +1547,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
     final stash = StashedQueue(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
+      // Preserve the active stash name (if any) so re-stashing keeps it.
       queue: List<Track>.from(state.queue),
+      name: _activeStashName,
       unshuffledQueue: List<Track>.from(state.unshuffledQueue),
       currentIndex: state.currentIndex,
       position: state.position,
@@ -1561,6 +1574,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
       orElse: () => throw StateError('Stash not found'),
     );
     if (stash.queue.isEmpty) return;
+
+    // Remember the stash name on the active queue so re-stashing preserves it.
+    _activeStashName = stash.name;
 
     await QueuePersistenceService.removeStash(id);
     ref.invalidate(stashedQueuesProvider);
