@@ -340,6 +340,16 @@ class _AddToPlaylistSheetState extends ConsumerState<_AddToPlaylistSheet> {
 
   void _showCreateDialog(BuildContext context) {
     final nameController = TextEditingController();
+    // Preselect when the dialog is shown so the user can immediately type
+    // a new playlist name.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      try {
+        nameController.selection = TextSelection(
+          baseOffset: 0,
+          extentOffset: nameController.text.length,
+        );
+      } catch (_) {}
+    });
 
     showShellDialog(
       context: context,

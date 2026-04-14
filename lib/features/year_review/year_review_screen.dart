@@ -698,6 +698,16 @@ class _ReviewContent extends StatelessWidget {
                               final nameController = TextEditingController(
                                 text: 'Top tracks ${stats.year}',
                               );
+                              // Select all text when the dialog appears so users can
+                              // quickly replace the suggested name.
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                try {
+                                  nameController.selection = TextSelection(
+                                    baseOffset: 0,
+                                    extentOffset: nameController.text.length,
+                                  );
+                                } catch (_) {}
+                              });
                               final name = await showDialog<String?>(
                                 context: context,
                                 builder:
