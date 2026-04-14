@@ -42,7 +42,7 @@ class _SidePanelState extends ConsumerState<SidePanel> {
         duration: const Duration(milliseconds: 200),
         child:
             _showQueue
-                ? _QueuePanel(
+                ? QueueScreen(
                   key: const ValueKey('queue'),
                   onBack: () => setState(() => _showQueue = false),
                 )
@@ -52,54 +52,6 @@ class _SidePanelState extends ConsumerState<SidePanel> {
                   onQueuePressed: () => setState(() => _showQueue = true),
                 ),
       ),
-    );
-  }
-}
-
-class _QueuePanel extends ConsumerWidget {
-  final VoidCallback onBack;
-
-  const _QueuePanel({super.key, required this.onBack});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final queue = ref.watch(playerProvider).queue;
-
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
-          child: Row(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.arrow_back_rounded, size: 24),
-                color: AppTheme.onBackgroundMuted,
-                onPressed: onBack,
-                tooltip: 'Back',
-              ),
-              const Text(
-                'QUEUE',
-                style: TextStyle(
-                  color: AppTheme.onBackgroundMuted,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 1.2,
-                ),
-              ),
-              const Spacer(),
-              // Shared queue action buttons (stashes, stash, clear)
-              QueueActions(
-                // Side panel prefers smaller icons and a simple stash handler
-                iconSize: 20,
-                onStash: () => ref.read(playerProvider.notifier).stashQueue(),
-              ),
-            ],
-          ),
-        ),
-        Expanded(
-          child: QueueScreen(showAppBar: false, miniPlayerOnTap: onBack),
-        ),
-      ],
     );
   }
 }

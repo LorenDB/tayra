@@ -16,7 +16,12 @@ import 'package:tayra/features/player/mini_player.dart';
 
 class QueueScreen extends ConsumerStatefulWidget {
   final ScrollController? scrollController;
-  final bool showAppBar;
+
+  /// When non-null the screen renders in "panel" mode: no Scaffold AppBar,
+  /// instead a compact header with a back arrow and small-caps "QUEUE" label.
+  /// The callback is invoked when the user taps the back arrow or stashes the
+  /// queue (which leaves nothing to show).
+  final VoidCallback? onBack;
 
   /// Called when the user taps the mini-player at the bottom of the queue.
   /// If null, the mini-player navigates to the full-screen now-playing route.
@@ -25,7 +30,7 @@ class QueueScreen extends ConsumerStatefulWidget {
   const QueueScreen({
     super.key,
     this.scrollController,
-    this.showAppBar = true,
+    this.onBack,
     this.miniPlayerOnTap,
   });
 
@@ -84,54 +89,97 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
       _scrollToCurrentTrack(currentIndex, queue.length);
     }
 
+    final isPanelMode = widget.onBack != null;
+
+    final body = _buildBody(context, ref, queue, currentIndex);
+
+    final miniPlayer =
+        playerState.currentTrack != null
+            ? SafeArea(
+              top: false,
+              child: MiniPlayer(
+                onTap:
+                    widget.miniPlayerOnTap ??
+                    () =>
+                        context.canPop()
+                            ? context.pop()
+                            : context.push('/now-playing'),
+              ),
+            )
+            : null;
+
+    // ── Panel mode (sidebar) ────────────────────────────────────────────
+    // Render a compact header instead of a Scaffold AppBar so the widget
+    // can live inside the side panel Column without nesting Scaffolds.
+    if (isPanelMode) {
+      return Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
+            child: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.arrow_back_rounded, size: 24),
+                  color: AppTheme.onBackgroundMuted,
+                  onPressed: widget.onBack,
+                  tooltip: 'Back',
+                ),
+                const Text(
+                  'QUEUE',
+                  style: TextStyle(
+                    color: AppTheme.onBackgroundMuted,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+                const Spacer(),
+                _QueueActions(
+                  iconSize: 20,
+                  onStash: () {
+                    ref.read(playerProvider.notifier).stashQueue();
+                    // Nothing left to show after stashing — go back.
+                    widget.onBack?.call();
+                  },
+                ),
+              ],
+            ),
+          ),
+          Expanded(child: body),
+          if (miniPlayer != null) miniPlayer,
+        ],
+      );
+    }
+
+    // ── Full-screen mode ────────────────────────────────────────────────
     return Scaffold(
       backgroundColor: AppTheme.background,
-      appBar:
-          widget.showAppBar
-              ? AppBar(
-                backgroundColor: AppTheme.background,
-                leading: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_rounded,
-                    color: AppTheme.onBackground,
-                  ),
-                  onPressed: () => context.pop(),
-                ),
-                title: const Text(
-                  'Queue',
-                  style: TextStyle(
-                    color: AppTheme.onBackground,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                actions: [
-                  // Use the shared actions widget.
-                  QueueActions(
-                    iconSize: 24,
-                    onStash: () => _stashQueue(context, ref),
-                  ),
-                ],
-              )
-              : null,
-      body: _buildBody(context, ref, queue, currentIndex),
+      appBar: AppBar(
+        backgroundColor: AppTheme.background,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_rounded,
+            color: AppTheme.onBackground,
+          ),
+          onPressed: () => context.pop(),
+        ),
+        title: const Text(
+          'Queue',
+          style: TextStyle(
+            color: AppTheme.onBackground,
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        actions: [
+          _QueueActions(iconSize: 24, onStash: () => _stashQueue(context, ref)),
+        ],
+      ),
+      body: body,
       // Show the mini-player fixed at the bottom of the queue screen so
       // playback controls remain available while viewing/manipulating the
       // queue.
-      bottomNavigationBar:
-          playerState.currentTrack != null
-              ? SafeArea(
-                top: false,
-                child: MiniPlayer(
-                  onTap:
-                      widget.miniPlayerOnTap ??
-                      () =>
-                          context.canPop()
-                              ? context.pop()
-                              : context.push('/now-playing'),
-                ),
-              )
-              : null,
+      bottomNavigationBar: miniPlayer,
     );
   }
 
@@ -255,64 +303,16 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
       ),
     ];
   }
-
-  void _showClearConfirmation(BuildContext context, WidgetRef ref) {
-    showShellDialog<void>(
-      context: context,
-      builder:
-          (dialogContext) => AlertDialog(
-            backgroundColor: AppTheme.surfaceContainerHigh,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            title: const Text(
-              'Clear Queue',
-              style: TextStyle(
-                color: AppTheme.onBackground,
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            content: const Text(
-              'Remove all tracks from the queue? This will stop playback.',
-              style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 14),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(dialogContext).pop(),
-                child: const Text(
-                  'Cancel',
-                  style: TextStyle(color: AppTheme.onBackgroundMuted),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  try {
-                    Analytics.track('queue_cleared');
-                  } catch (_) {}
-                  ref.read(playerProvider.notifier).playTracks([]);
-                  Navigator.of(dialogContext).pop();
-                },
-                child: const Text(
-                  'Clear',
-                  style: TextStyle(
-                    color: AppTheme.error,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ],
-          ),
-    );
-  }
 }
 
-/// Shared action buttons used by both the full-screen QueueScreen app bar and
-/// the compact side panel queue header. Extracted to avoid duplication.
-class QueueActions extends ConsumerWidget {
+// ── Queue Action Buttons ─────────────────────────────────────────────────
+
+/// Stash-inbox / stash / clear buttons, shared by both the full-screen app bar
+/// and the panel-mode compact header inside QueueScreen.
+class _QueueActions extends ConsumerWidget {
   final double iconSize;
   final VoidCallback? onStash;
-  const QueueActions({super.key, this.iconSize = 24, this.onStash});
+  const _QueueActions({super.key, this.iconSize = 24, this.onStash});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
