@@ -7,6 +7,7 @@ import 'package:tayra/core/api/models.dart';
 /// A snapshot of the queue saved by the user for later restoration.
 class StashedQueue {
   final String id;
+  final String? name;
   final List<Track> queue;
   final List<Track> unshuffledQueue;
   final int currentIndex;
@@ -17,6 +18,7 @@ class StashedQueue {
 
   const StashedQueue({
     required this.id,
+    this.name,
     required this.queue,
     this.unshuffledQueue = const [],
     required this.currentIndex,
@@ -33,6 +35,7 @@ class StashedQueue {
 
   Map<String, dynamic> toJson() => {
     'id': id,
+    'name': name,
     'queue': queue.map((t) => t.toJson()).toList(),
     'unshuffledQueue': unshuffledQueue.map((t) => t.toJson()).toList(),
     'currentIndex': currentIndex,
@@ -50,6 +53,7 @@ class StashedQueue {
 
     return StashedQueue(
       id: json['id'] as String,
+      name: json['name'] as String?,
       queue: parseTracks(json['queue']),
       unshuffledQueue: parseTracks(json['unshuffledQueue']),
       currentIndex: (json['currentIndex'] as int? ?? 0),
@@ -217,6 +221,28 @@ class QueuePersistenceService {
   static Future<List<StashedQueue>> removeStash(String id) async {
     final stashes = await loadStashes();
     stashes.removeWhere((s) => s.id == id);
+    await _saveStashes(stashes);
+    return stashes;
+  }
+
+  /// Rename a stash. Returns the updated list.
+  static Future<List<StashedQueue>> renameStash(String id, String? name) async {
+    final stashes = await loadStashes();
+    final idx = stashes.indexWhere((s) => s.id == id);
+    if (idx == -1) return stashes;
+    final old = stashes[idx];
+    final updated = StashedQueue(
+      id: old.id,
+      name: name,
+      queue: old.queue,
+      unshuffledQueue: old.unshuffledQueue,
+      currentIndex: old.currentIndex,
+      position: old.position,
+      isShuffled: old.isShuffled,
+      loopMode: old.loopMode,
+      savedAt: old.savedAt,
+    );
+    stashes[idx] = updated;
     await _saveStashes(stashes);
     return stashes;
   }
