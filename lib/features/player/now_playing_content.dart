@@ -777,6 +777,9 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
             onPressed: () => notifier.toggleShuffle(),
             iconSize: iconSize - 10,
             accentColor: accentColor,
+            // Use the app's secondary (green/teal) color for the shuffle
+            // button when active instead of the dynamic accent color.
+            activeColor: AppTheme.secondary,
           ),
           SizedBox(width: spacing),
           _buildSkipControl(
@@ -887,10 +890,12 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
     required VoidCallback onPressed,
     required double iconSize,
     required Color accentColor,
+    Color? activeColor,
   }) {
+    final effectiveActiveColor = activeColor ?? accentColor;
     return IconButton(
       icon: Icon(icon, size: iconSize),
-      color: isActive ? accentColor : AppTheme.onBackgroundSubtle,
+      color: isActive ? effectiveActiveColor : AppTheme.onBackgroundSubtle,
       onPressed: onPressed,
       padding: EdgeInsets.zero,
       constraints: BoxConstraints(
