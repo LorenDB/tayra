@@ -893,14 +893,48 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
     Color? activeColor,
   }) {
     final effectiveActiveColor = activeColor ?? accentColor;
-    return IconButton(
-      icon: Icon(icon, size: iconSize),
-      color: isActive ? effectiveActiveColor : AppTheme.onBackgroundSubtle,
-      onPressed: onPressed,
-      padding: EdgeInsets.zero,
-      constraints: BoxConstraints(
-        minWidth: iconSize + 8,
-        minHeight: iconSize + 8,
+    // Render the button with a small indicator dot visually overlaid near
+    // the bottom. Use a fixed-size box so the control row height remains
+    // unchanged when the dot toggles.
+    final boxSize = iconSize + 8;
+    return SizedBox(
+      width: boxSize,
+      height: boxSize,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Center(
+            child: IconButton(
+              icon: Icon(icon, size: iconSize),
+              color:
+                  isActive ? effectiveActiveColor : AppTheme.onBackgroundSubtle,
+              onPressed: onPressed,
+              padding: EdgeInsets.zero,
+              constraints: BoxConstraints(
+                minWidth: boxSize,
+                minHeight: boxSize,
+              ),
+            ),
+          ),
+          // Small indicator dot positioned just below the icon center so it
+          // appears close to the button without changing layout.
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 160),
+                width: 5,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: isActive ? effectiveActiveColor : Colors.transparent,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -931,14 +965,44 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
         break;
     }
 
-    return IconButton(
-      icon: Icon(icon, size: iconSize),
-      color: color,
-      onPressed: () => ref.read(playerProvider.notifier).toggleLoopMode(),
-      padding: EdgeInsets.zero,
-      constraints: BoxConstraints(
-        minWidth: iconSize + 8,
-        minHeight: iconSize + 8,
+    final isActive = loopMode != LoopMode.off;
+    final boxSize = iconSize + 8;
+    return SizedBox(
+      width: boxSize,
+      height: boxSize,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Center(
+            child: IconButton(
+              icon: Icon(icon, size: iconSize),
+              color: color,
+              onPressed:
+                  () => ref.read(playerProvider.notifier).toggleLoopMode(),
+              padding: EdgeInsets.zero,
+              constraints: BoxConstraints(
+                minWidth: boxSize,
+                minHeight: boxSize,
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 160),
+                width: 5,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: isActive ? color : Colors.transparent,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
