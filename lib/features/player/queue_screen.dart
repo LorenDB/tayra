@@ -349,6 +349,58 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
   }
 }
 
+/// Show the clear-queue confirmation dialog. Public so other UI (eg. side
+/// panel) can invoke it without duplicating logic.
+void showClearQueueConfirmation(BuildContext context, WidgetRef ref) {
+  showShellDialog<void>(
+    context: context,
+    builder:
+        (dialogContext) => AlertDialog(
+          backgroundColor: AppTheme.surfaceContainerHigh,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: const Text(
+            'Clear Queue',
+            style: TextStyle(
+              color: AppTheme.onBackground,
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          content: const Text(
+            'Remove all tracks from the queue? This will stop playback.',
+            style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 14),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: AppTheme.onBackgroundMuted),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                try {
+                  Analytics.track('queue_cleared');
+                } catch (_) {}
+                ref.read(playerProvider.notifier).playTracks([]);
+                Navigator.of(dialogContext).pop();
+              },
+              child: const Text(
+                'Clear',
+                style: TextStyle(
+                  color: AppTheme.error,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+  );
+}
+
 // ── Queue Track Row ─────────────────────────────────────────────────────
 
 class _QueueTrackRow extends StatelessWidget {
