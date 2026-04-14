@@ -920,11 +920,14 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
         break;
       case LoopMode.all:
         icon = Icons.repeat_rounded;
-        color = accentColor;
+        // Use the app primary color for the repeat button instead of the
+        // dynamic album-art accent color.
+        color = AppTheme.primary;
         break;
       case LoopMode.one:
         icon = Icons.repeat_one_rounded;
-        color = accentColor;
+        // Use the app primary color for the repeat-one button as well.
+        color = AppTheme.primary;
         break;
     }
 
