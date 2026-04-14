@@ -157,6 +157,12 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 24),
           _SectionHeader(title: 'Year in Review'),
           _YearReviewTile(),
+          _ActionTile(
+            icon: Icons.settings_rounded,
+            title: 'Year in Review settings',
+            subtitle: 'Control year-end prompts and related options',
+            onTap: () => context.push('/year-review-settings'),
+          ),
           const SizedBox(height: 24),
 
           // ── AI section ────────────────────────────────────────────────
