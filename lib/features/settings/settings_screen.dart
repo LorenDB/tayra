@@ -107,10 +107,7 @@ class SettingsScreen extends ConsumerWidget {
             onTap: () => context.push('/upload'),
           ),
 
-          const SizedBox(height: 24),
-
-          // ── Browse section ────────────────────────────────────────────
-          _SectionHeader(title: 'Browse'),
+          // Default browse view moved under Library
           _BrowseModeTile(
             currentMode: settings.browseMode,
             onChanged: (mode) {
@@ -156,76 +153,10 @@ class SettingsScreen extends ConsumerWidget {
             },
           ),
 
+          // Year Review — own section
           const SizedBox(height: 24),
-
-          // ── General section ───────────────────────────────────────────
-          _SectionHeader(title: 'General'),
-          if (defaultTargetPlatform == TargetPlatform.android)
-            _SwitchTile(
-              icon: Icons.directions_car_outlined,
-              title: 'Android Auto',
-              subtitle: 'Integrate with Android Auto',
-              value: settings.androidAutoEnabled,
-              onChanged: (value) {
-                try {
-                  Analytics.track('android_auto_integration_toggled', {
-                    'enabled': value,
-                  });
-                } catch (_) {}
-                ref
-                    .read(settingsProvider.notifier)
-                    .setAndroidAutoEnabled(value);
-              },
-            ),
-          _SwitchTile(
-            icon: Icons.analytics_outlined,
-            title: 'Analytics',
-            subtitle: 'Allow anonymous usage analytics',
-            value: settings.analyticsEnabled,
-            onChanged: (value) async {
-              // Persist setting and apply immediately.
-              try {
-                // If disabling, set Analytics to disabled first to avoid sending
-                // an event about the change. If enabling, persist then enable.
-                if (!value) {
-                  await ref
-                      .read(settingsProvider.notifier)
-                      .setAnalyticsEnabled(false);
-                  await Analytics.setEnabled(false);
-                } else {
-                  await ref
-                      .read(settingsProvider.notifier)
-                      .setAnalyticsEnabled(true);
-                  await Analytics.setEnabled(true);
-                  try {
-                    Analytics.track('analytics_enabled');
-                  } catch (_) {}
-                }
-              } catch (_) {}
-            },
-          ),
-          _SwitchTile(
-            icon: Icons.wifi_off_rounded,
-            title: 'Force offline mode',
-            subtitle: 'Always show only locally cached content',
-            value: settings.forceOfflineMode,
-            onChanged: (value) {
-              try {
-                Analytics.track('force_offline_mode_toggled', {
-                  'enabled': value,
-                });
-              } catch (_) {}
-              ref.read(settingsProvider.notifier).setForceOfflineMode(value);
-              // Sync offline state notifier so filter state updates immediately.
-              if (!value) {
-                ref.read(offlineStateProvider.notifier).disableOfflineFilter();
-              } else {
-                ref.read(offlineStateProvider.notifier).enableOfflineFilter();
-              }
-            },
-          ),
+          _SectionHeader(title: 'Year in Review'),
           _YearReviewTile(),
-
           const SizedBox(height: 24),
 
           // ── AI section ────────────────────────────────────────────────
@@ -322,6 +253,34 @@ class SettingsScreen extends ConsumerWidget {
           // ── About section ─────────────────────────────────────────────
           _SectionHeader(title: 'About'),
           _AboutTile(),
+          // Analytics moved here from General
+          _SwitchTile(
+            icon: Icons.analytics_outlined,
+            title: 'Analytics',
+            subtitle: 'Allow anonymous usage analytics',
+            value: settings.analyticsEnabled,
+            onChanged: (value) async {
+              // Persist setting and apply immediately.
+              try {
+                // If disabling, set Analytics to disabled first to avoid sending
+                // an event about the change. If enabling, persist then enable.
+                if (!value) {
+                  await ref
+                      .read(settingsProvider.notifier)
+                      .setAnalyticsEnabled(false);
+                  await Analytics.setEnabled(false);
+                } else {
+                  await ref
+                      .read(settingsProvider.notifier)
+                      .setAnalyticsEnabled(true);
+                  await Analytics.setEnabled(true);
+                  try {
+                    Analytics.track('analytics_enabled');
+                  } catch (_) {}
+                }
+              } catch (_) {}
+            },
+          ),
           _DonationTile(),
           _ActionTile(
             icon: Icons.balance_outlined,
