@@ -748,6 +748,13 @@ class PlayerNotifier extends Notifier<PlayerState> {
   // local listen records when multiple events fire during a track transition.
   final Map<int, int> _lastRecordedAtMs = {};
 
+  // Map of trackId -> playback position (seconds) where the current listening
+  // session started.  Set whenever playback begins or resumes, cleared after
+  // each listen is recorded.  Used to compute only the delta seconds for each
+  // session so that resuming a paused track doesn't re-count previously
+  // recorded listening time.
+  final Map<int, int> _sessionStartSeconds = {};
+
   /// Position to seek to the first time play() is called after a queue
   /// restore.  Set by [_restoreQueue] and cleared once the seek is done.
   Duration? _pendingRestorePosition;
@@ -835,6 +842,14 @@ class PlayerNotifier extends Notifier<PlayerState> {
           try {
             _recordCurrentTrackListen();
           } catch (_) {}
+        } else {
+          // Mark where this listening session starts so _recordCurrentTrackListen
+          // can record only the delta, preventing resumed playback from
+          // re-counting seconds that were already recorded on a prior pause.
+          final current = state.currentTrack;
+          if (current != null) {
+            _sessionStartSeconds[current.id] = state.position.inSeconds;
+          }
         }
       }),
     );
@@ -1384,6 +1399,24 @@ class PlayerNotifier extends Notifier<PlayerState> {
     int startIndex = 0,
     String? source,
   }) async {
+    // Record a partial listen for the currently-playing track before any state
+    // mutation.  Without this, two paths silently drop the listen:
+    //
+    //   1. Non-empty replacement — state.queue and state.currentIndex are
+    //      updated below before _loadAndPlay calls _recordCurrentTrackListen,
+    //      so state.currentTrack already equals the *new* first track by the
+    //      time the same-track guard fires, and the record is swallowed.
+    //
+    //   2. Empty-list clear (e.g. stashQueue) — state is wiped to
+    //      PlayerState() before the playingStream pause listener can fire,
+    //      so state.currentTrack is null and the record is skipped.
+    //
+    // The 5-second debounce in _recordCurrentTrackListen prevents a
+    // double-record when the caller was already triggered by a recent pause.
+    try {
+      await _recordCurrentTrackListen();
+    } catch (_) {}
+
     if (tracks.isEmpty) {
       _gaplessActive = false;
       state = const PlayerState();
@@ -1650,9 +1683,13 @@ class PlayerNotifier extends Notifier<PlayerState> {
     // load or reload), don't record a listen for it now.
     if (nextTrack != null && current.id == nextTrack.id) return;
 
-    // Use the UI-updated position which tracks the player's position stream.
-    final listenedSeconds = state.position.inSeconds;
-    if (listenedSeconds <= 0) return; // nothing to record
+    // Compute the delta since the session started so that resuming a paused
+    // track doesn't re-count seconds already recorded in a prior session.
+    // Fall back to 0 if the session start was never set (e.g. gapless
+    // auto-advance on the first track — treat as starting from position 0).
+    final sessionStart = _sessionStartSeconds[current.id] ?? 0;
+    final listenedSeconds = state.position.inSeconds - sessionStart;
+    if (listenedSeconds <= 0) return; // nothing new to record
 
     // Debounce duplicate records for the same track within a short window.
     final nowMs = DateTime.now().millisecondsSinceEpoch;
@@ -1664,6 +1701,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
         listenedSeconds: listenedSeconds,
       );
       _lastRecordedAtMs[current.id] = nowMs;
+      // Clear the session start — the next play/resume will set a fresh one.
+      _sessionStartSeconds.remove(current.id);
     } catch (_) {
       // Non-critical — swallow failures
     }
@@ -1831,27 +1870,37 @@ class PlayerNotifier extends Notifier<PlayerState> {
       return;
     }
 
-    // Record the completed track using its full duration. This handles the
-    // case where _loadAndPlay (and thus _recordCurrentTrackListen) is never
-    // called — e.g. the last track in the queue with LoopMode.off. It also
-    // ensures the debounce window from a recent pause does not cause the
-    // natural completion to be missed. The debounce timestamp is cleared so
-    // the _recordCurrentTrackListen call inside _loadAndPlay (for the next
-    // track) can still fire normally.
+    // Record the completed track's final listening segment. We use
+    // state.duration as the end-of-track position because state.position may
+    // have already been reset to zero by just_audio before this callback fires.
+    //
+    // just_audio emits playingStream=false before ProcessingState.completed, so
+    // _recordCurrentTrackListen() may have already handled this via the pause
+    // listener. The debounce prevents a double-record in that case; we do NOT
+    // clear it here.  If playingStream did not fire (implementation-dependent),
+    // the debounce will not be set and we'll record here instead.
+    //
+    // The session-delta logic ensures that if the user paused and resumed
+    // before completing, only the final segment is counted here.
     final completedTrack = state.currentTrack;
     if (completedTrack != null) {
-      final durationSeconds =
-          state.duration.inSeconds > 0
-              ? state.duration.inSeconds
-              : completedTrack.duration;
-      // Clear debounce so this forced record always goes through.
-      _lastRecordedAtMs.remove(completedTrack.id);
-      ListenHistoryService.recordListen(
-        completedTrack,
-        listenedSeconds: durationSeconds,
-      );
-      _lastRecordedAtMs[completedTrack.id] =
-          DateTime.now().millisecondsSinceEpoch;
+      final nowMs = DateTime.now().millisecondsSinceEpoch;
+      final lastMs = _lastRecordedAtMs[completedTrack.id];
+      if (lastMs == null || nowMs - lastMs >= 5000) {
+        final endSeconds =
+            state.duration.inSeconds > 0
+                ? state.duration.inSeconds
+                : completedTrack.duration ?? 0;
+        final sessionStart = _sessionStartSeconds.remove(completedTrack.id) ?? 0;
+        final listenedSeconds = endSeconds - sessionStart;
+        if (listenedSeconds > 0) {
+          ListenHistoryService.recordListen(
+            completedTrack,
+            listenedSeconds: listenedSeconds,
+          );
+          _lastRecordedAtMs[completedTrack.id] = nowMs;
+        }
+      }
     }
 
     switch (state.loopMode) {
@@ -1945,6 +1994,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
       } catch (_) {}
     } else if (_isGaplessEnabled) {
       // Gapless was just turned on — build the full playlist from this track.
+      // Record the current track's listen before updating state, mirroring the
+      // gapless-active branch above.
+      try {
+        await _recordCurrentTrackListen();
+      } catch (_) {}
       final newIndex = state.currentIndex + 1;
       state = state.copyWith(currentIndex: newIndex, isLoading: true);
       final loaded = await _loadGaplessSource(newIndex);
@@ -1962,6 +2016,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
         await _loadAndPlay(state.queue[newIndex]);
       }
     } else {
+      try {
+        await _recordCurrentTrackListen();
+      } catch (_) {}
       final newIndex = state.currentIndex + 1;
       state = state.copyWith(currentIndex: newIndex, isLoading: true);
       await _loadAndPlay(state.queue[newIndex]);
@@ -1995,6 +2052,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
         await _api.recordListening(state.queue[newIndex].id);
       } catch (_) {}
     } else {
+      try {
+        await _recordCurrentTrackListen();
+      } catch (_) {}
       final newIndex = state.currentIndex - 1;
       state = state.copyWith(currentIndex: newIndex, isLoading: true);
       await _loadAndPlay(state.queue[newIndex]);
@@ -2105,6 +2165,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
         await _api.recordListening(state.queue[index].id);
       } catch (_) {}
     } else {
+      try {
+        await _recordCurrentTrackListen();
+      } catch (_) {}
       state = state.copyWith(currentIndex: index, isLoading: true);
       await _loadAndPlay(state.queue[index]);
     }
