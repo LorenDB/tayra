@@ -71,4 +71,13 @@ flutter {
 
 dependencies {
     implementation("com.google.mlkit:genai-prompt:1.0.0-beta2")
+    implementation("com.google.android.gms:play-services-wearable:18.2.0")
+    // MediaBrowserCompat / MediaControllerCompat / MediaMetadataCompat / PlaybackStateCompat
+    implementation("androidx.media:media:1.7.0")
+    // Palette extraction for album art accent colors sent to Wear OS
+    implementation("androidx.palette:palette-ktx:1.0.0")
+    // Coroutines for async palette extraction in the bridge service
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
+    // Coil for loading album art bitmaps in the bridge service
+    implementation("io.coil-kt:coil:2.7.0")
 }
