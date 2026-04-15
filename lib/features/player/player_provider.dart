@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:tayra/core/analytics/analytics.dart';
@@ -9,6 +12,7 @@ import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/cache/audio_cache_service.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
+import 'package:tayra/features/favorites/favorites_provider.dart';
 import 'package:tayra/features/player/queue_persistence_service.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:tayra/features/year_review/listen_history_service.dart';
@@ -781,7 +785,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       await playTracks(tracks, startIndex: startIndex);
     };
 
-    // Wire up OS skip buttons to our queue logic.
+    // Wire up OS skip buttons and Wear OS commands to our queue logic.
     _handler.onCustomAction = (name, extras) {
       switch (name) {
         case 'skipNext':
@@ -789,6 +793,30 @@ class PlayerNotifier extends Notifier<PlayerState> {
           break;
         case 'skipPrevious':
           skipPrevious();
+          break;
+        case 'startPlaylist':
+          _handleWearStartPlaylist(extras);
+          break;
+        case 'startPlaylistShuffled':
+          _handleWearStartPlaylistShuffled(extras);
+          break;
+        case 'startRadio':
+          _handleWearStartRadio(extras);
+          break;
+        case 'startRadioShuffled':
+          _handleWearStartRadioShuffled(extras);
+          break;
+        case 'startInstanceRadio':
+          _handleWearStartInstanceRadio(extras);
+          break;
+        case 'startInstanceRadioShuffled':
+          _handleWearStartInstanceRadioShuffled(extras);
+          break;
+        case 'requestBrowseData':
+          _handleWearRequestBrowseData();
+          break;
+        case 'toggleFavorite':
+          _handleWearToggleFavorite();
           break;
       }
     };
@@ -2083,5 +2111,172 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
     _saveQueue();
     Analytics.track('jump_to_queue', {'index': index});
+  }
+
+  // ── Wear OS custom action handlers ──────────────────────────────────
+
+  /// MethodChannel for pushing browse data to the native Android side,
+  /// which forwards it to the watch via the Wearable Data Layer.
+  static const _wearBrowseChannel = MethodChannel(
+    'dev.lorendb.tayra/wear_browse',
+  );
+
+  /// Handle "startPlaylist" custom action from the watch.
+  void _handleWearStartPlaylist(Map<String, dynamic> extras) {
+    final playlistId = extras['playlistId'] as int?;
+    if (playlistId == null) return;
+    _wearStartPlaylist(playlistId);
+  }
+
+  /// Handle "startPlaylistShuffled" custom action from the watch.
+  void _handleWearStartPlaylistShuffled(Map<String, dynamic> extras) {
+    final playlistId = extras['playlistId'] as int?;
+    if (playlistId == null) return;
+    _wearStartPlaylist(playlistId, shuffled: true);
+  }
+
+  Future<void> _wearStartPlaylist(
+    int playlistId, {
+    bool shuffled = false,
+  }) async {
+    try {
+      // Fetch all tracks for the playlist, paginating through all pages.
+      final allTracks = <Track>[];
+      int page = 1;
+      while (true) {
+        final response = await _api.getPlaylistTracks(
+          playlistId,
+          page: page,
+          pageSize: 50,
+        );
+        allTracks.addAll(response.results.map((pt) => pt.track));
+        if (response.next == null) break;
+        page++;
+      }
+      if (allTracks.isEmpty) return;
+      if (shuffled) allTracks.shuffle();
+      await playTracks(allTracks, source: 'wear-playlist');
+      Analytics.track('wear_start_playlist', {
+        'playlist_id': playlistId,
+        'shuffled': shuffled,
+      });
+    } catch (e) {
+      debugPrint('Wear startPlaylist failed: $e');
+    }
+  }
+
+  /// Handle "startRadio" custom action from the watch.
+  void _handleWearStartRadio(Map<String, dynamic> extras) {
+    final radioId = extras['radioId'] as int?;
+    if (radioId == null) return;
+    startRadio(radioId);
+    Analytics.track('wear_start_radio', {'radio_id': radioId});
+  }
+
+  /// Handle "startRadioShuffled" custom action from the watch.
+  /// Radios are session-based and server-side, so shuffle has no additional
+  /// effect; we simply start the radio normally.
+  void _handleWearStartRadioShuffled(Map<String, dynamic> extras) {
+    final radioId = extras['radioId'] as int?;
+    if (radioId == null) return;
+    startRadio(radioId);
+    Analytics.track('wear_start_radio', {
+      'radio_id': radioId,
+      'shuffled': true,
+    });
+  }
+
+  /// Handle "startInstanceRadio" custom action from the watch.
+  void _handleWearStartInstanceRadio(Map<String, dynamic> extras) {
+    final radioType = extras['radioType'] as String?;
+    if (radioType == null) return;
+    // Map radio type string back to the sentinel loading IDs used by
+    // startInstanceRadio for UI loading state.
+    const typeToLoadingId = {
+      'actor-content': -100,
+      'random': -101,
+      'favorites': -102,
+      'less-listened': -103,
+    };
+    final loadingId = typeToLoadingId[radioType] ?? -100;
+    startInstanceRadio(radioType, loadingId);
+    Analytics.track('wear_start_instance_radio', {'radio_type': radioType});
+  }
+
+  /// Handle "startInstanceRadioShuffled" custom action from the watch.
+  /// Instance radios are server-generated streams; shuffle has no additional
+  /// effect, so we start the radio normally.
+  void _handleWearStartInstanceRadioShuffled(Map<String, dynamic> extras) {
+    final radioType = extras['radioType'] as String?;
+    if (radioType == null) return;
+    const typeToLoadingId = {
+      'actor-content': -100,
+      'random': -101,
+      'favorites': -102,
+      'less-listened': -103,
+    };
+    final loadingId = typeToLoadingId[radioType] ?? -100;
+    startInstanceRadio(radioType, loadingId);
+    Analytics.track('wear_start_instance_radio', {
+      'radio_type': radioType,
+      'shuffled': true,
+    });
+  }
+
+  /// Handle "requestBrowseData" custom action from the watch.
+  /// Fetches playlists and radios from the API, serialises them to JSON,
+  /// and pushes them to the native side via MethodChannel so the bridge
+  /// can forward them to the watch over the Wearable Data Layer.
+  void _handleWearRequestBrowseData() {
+    if (!Platform.isAndroid) return;
+    _pushBrowseDataToWatch();
+  }
+
+  Future<void> _pushBrowseDataToWatch() async {
+    try {
+      // Fetch user playlists
+      final playlistResponse = await _api.getPlaylists(scope: 'me');
+      final playlistsJson = jsonEncode(
+        playlistResponse.results
+            .map(
+              (p) => {'id': p.id, 'name': p.name, 'tracksCount': p.tracksCount},
+            )
+            .toList(),
+      );
+
+      // Fetch user radios
+      final radiosResponse = await _api.getRadios(scope: 'me');
+      final radiosJson = jsonEncode(
+        radiosResponse.results
+            .map(
+              (r) => {
+                'id': r.id,
+                'name': r.name,
+                'description': r.description ?? '',
+              },
+            )
+            .toList(),
+      );
+
+      await _wearBrowseChannel.invokeMethod('pushBrowseData', {
+        'playlists': playlistsJson,
+        'radios': radiosJson,
+      });
+    } catch (e) {
+      debugPrint('Wear requestBrowseData failed: $e');
+    }
+  }
+
+  /// Handle "toggleFavorite" custom action from the watch.
+  /// Toggles the favorite state of the currently playing track.
+  void _handleWearToggleFavorite() {
+    final track = state.currentTrack;
+    if (track == null) return;
+    try {
+      ref.read(favoriteTrackIdsProvider.notifier).toggle(track.id);
+      Analytics.track('wear_toggle_favorite', {'track_id': track.id});
+    } catch (e) {
+      debugPrint('Wear toggleFavorite failed: $e');
+    }
   }
 }
