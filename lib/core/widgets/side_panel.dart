@@ -12,8 +12,10 @@ class SidePanel extends ConsumerStatefulWidget {
   ConsumerState<SidePanel> createState() => _SidePanelState();
 }
 
+enum _PanelView { nowPlaying, queue, stashes }
+
 class _SidePanelState extends ConsumerState<SidePanel> {
-  bool _showQueue = false;
+  _PanelView _view = _PanelView.nowPlaying;
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +25,8 @@ class _SidePanelState extends ConsumerState<SidePanel> {
 
     // Collapse back to the now-playing view when playback stops.
     ref.listen(playerProvider.select((s) => s.currentTrack), (prev, next) {
-      if (prev != null && next == null && _showQueue) {
-        setState(() => _showQueue = false);
+      if (prev != null && next == null && _view != _PanelView.nowPlaying) {
+        setState(() => _view = _PanelView.nowPlaying);
       }
     });
 
@@ -36,21 +38,28 @@ class _SidePanelState extends ConsumerState<SidePanel> {
       );
     }
 
+    final Widget child = switch (_view) {
+      _PanelView.stashes => _StashInboxPanel(
+        key: const ValueKey('stash_inbox_panel'),
+        onBack: () => setState(() => _view = _PanelView.queue),
+      ),
+      _PanelView.queue => QueueScreen(
+        key: const ValueKey('queue'),
+        onBack: () => setState(() => _view = _PanelView.nowPlaying),
+        onOpenInbox: () => setState(() => _view = _PanelView.stashes),
+      ),
+      _PanelView.nowPlaying => NowPlayingContent(
+        key: const ValueKey('player'),
+        layout: NowPlayingLayout.panel,
+        onQueuePressed: () => setState(() => _view = _PanelView.queue),
+      ),
+    };
+
     return Container(
       color: AppTheme.surface,
       child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 200),
-        child:
-            _showQueue
-                ? QueueScreen(
-                  key: const ValueKey('queue'),
-                  onBack: () => setState(() => _showQueue = false),
-                )
-                : NowPlayingContent(
-                  key: const ValueKey('player'),
-                  layout: NowPlayingLayout.panel,
-                  onQueuePressed: () => setState(() => _showQueue = true),
-                ),
+        child: child,
       ),
     );
   }
@@ -58,10 +67,14 @@ class _SidePanelState extends ConsumerState<SidePanel> {
 
 // ── Stash Inbox Panel ────────────────────────────────────────────────────
 
-/// Shown in the side panel when nothing is playing. Displays stashed queues
-/// inline so they remain accessible without needing active playback.
+/// Shown in the side panel for stashed queues. When [onBack] is provided
+/// (playback is active and the user navigated here from the queue), a back
+/// arrow is shown so the user can return to the queue subpage. When [onBack]
+/// is null (nothing is playing), only the label is shown.
 class _StashInboxPanel extends ConsumerWidget {
-  const _StashInboxPanel({super.key});
+  final VoidCallback? onBack;
+
+  const _StashInboxPanel({super.key, this.onBack});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -71,15 +84,18 @@ class _StashInboxPanel extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
+          padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
           child: Row(
             children: [
-              const Icon(
-                Icons.inbox_outlined,
-                color: AppTheme.onBackgroundMuted,
-                size: 18,
-              ),
-              const SizedBox(width: 8),
+              if (onBack != null)
+                IconButton(
+                  icon: const Icon(Icons.arrow_back_rounded, size: 24),
+                  color: AppTheme.onBackgroundMuted,
+                  onPressed: onBack,
+                  tooltip: 'Back',
+                )
+              else
+                const SizedBox(width: 12),
               const Text(
                 'STASHED QUEUES',
                 style: TextStyle(
@@ -91,11 +107,14 @@ class _StashInboxPanel extends ConsumerWidget {
               ),
               const Spacer(),
               if (stashes.isNotEmpty)
-                Text(
-                  '${stashes.length}',
-                  style: const TextStyle(
-                    color: AppTheme.onBackgroundSubtle,
-                    fontSize: 12,
+                Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: Text(
+                    '${stashes.length}',
+                    style: const TextStyle(
+                      color: AppTheme.onBackgroundSubtle,
+                      fontSize: 12,
+                    ),
                   ),
                 ),
             ],
