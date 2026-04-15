@@ -1,7 +1,11 @@
 package dev.lorendb.tayra.wear
 
 import android.app.Application
-import android.net.Uri
+import android.content.Context
+import android.content.SharedPreferences
+import android.os.SystemClock
+import android.util.Log
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,6 +14,7 @@ import com.google.android.gms.wearable.DataEvent
 import com.google.android.gms.wearable.DataEventBuffer
 import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.Wearable
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,10 +22,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 
 // ── State data classes ──────────────────────────────────────────────────
 
+@Immutable
 data class WearPlayerState(
     val title: String = "",
     val artist: String = "",
@@ -32,18 +39,21 @@ data class WearPlayerState(
     val accentColor: Color = Color(0xFF0992F2),
 )
 
+@Immutable
 data class BrowsePlaylist(
     val id: Int,
     val name: String,
     val tracksCount: Int,
 )
 
+@Immutable
 data class BrowseRadio(
     val id: Int,
     val name: String,
     val description: String,
 )
 
+@Immutable
 data class WearBrowseState(
     val playlists: List<BrowsePlaylist> = emptyList(),
     val radios: List<BrowseRadio> = emptyList(),
@@ -83,6 +93,18 @@ private val instanceRadioTypes = mapOf(
     -103 to "less-listened",
 )
 
+// removed debug TAG
+
+private data class BrowsePayload(
+    val playlistsJson: String,
+    val radiosJson: String,
+)
+
+private data class ParsedBrowseData(
+    val playlists: List<BrowsePlaylist>,
+    val radios: List<BrowseRadio>,
+)
+
 // ── ViewModel ───────────────────────────────────────────────────────────
 
 class PlayerViewModel(application: Application) : AndroidViewModel(application),
@@ -103,11 +125,15 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application),
     private val dataClient = Wearable.getDataClient(application)
     private val messageClient = Wearable.getMessageClient(application)
     private val nodeClient = Wearable.getNodeClient(application)
+    private val appContext = application.applicationContext
+    private var hasStartedBrowseLoad = false
+
+    // Cached connected node id. Populated on first successful sendMessage and cleared on
+    // failure so that the next call re-discovers the node automatically.
+    private var cachedNodeId: String? = null
 
     init {
         dataClient.addListener(this)
-        loadCurrentState()
-        loadBrowseData()
     }
 
     override fun onCleared() {
@@ -126,7 +152,23 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application),
                         applyState(DataMapItem.fromDataItem(event.dataItem).dataMap.toWearState())
                     }
                     PATH_BROWSE_DATA -> {
-                        applyBrowseData(DataMapItem.fromDataItem(event.dataItem).dataMap)
+                        val dataMap = DataMapItem.fromDataItem(event.dataItem).dataMap
+                        val payload = BrowsePayload(
+                            playlistsJson = dataMap.getString("playlists") ?: "[]",
+                            radiosJson = dataMap.getString("radios") ?: "[]",
+                        )
+                        viewModelScope.launch {
+                            val started = SystemClock.elapsedRealtime()
+                            persistBrowseData(payload)
+                            val parsed = parseBrowseData(payload)
+                            if (parsed != null) {
+                                applyParsedBrowseData(parsed)
+                                // removed debug logging
+                            } else {
+                                _browseState.value = _browseState.value.copy(isLoading = false)
+                                // removed debug logging
+                            }
+                        }
                     }
                 }
             }
@@ -174,6 +216,12 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application),
         sendMessage(PATH_REQUEST_BROWSE, ByteArray(0))
     }
 
+    fun loadBrowseDataIfNeeded() {
+        if (hasStartedBrowseLoad) return
+        hasStartedBrowseLoad = true
+        loadBrowseData()
+    }
+
     // ── Private helpers ─────────────────────────────────────────────────
 
     /**
@@ -182,7 +230,7 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application),
      */
     private fun applyState(newState: WearPlayerState) {
         basePositionMs = newState.positionMs
-        baseTimeMs = System.currentTimeMillis()
+        baseTimeMs = SystemClock.elapsedRealtime()
         _playerState.value = newState
         if (newState.isPlaying) startTick() else stopTick()
     }
@@ -197,7 +245,7 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application),
         tickJob = viewModelScope.launch {
             while (true) {
                 delay(1_000)
-                val elapsed = System.currentTimeMillis() - baseTimeMs
+                val elapsed = SystemClock.elapsedRealtime() - baseTimeMs
                 val capped = (basePositionMs + elapsed)
                     .coerceAtMost(_playerState.value.durationMs.coerceAtLeast(0L))
                 _playerState.value = _playerState.value.copy(positionMs = capped)
@@ -210,55 +258,58 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application),
         tickJob = null
     }
 
-    /** Read the current DataItem on startup so we don't show a blank screen. */
-    private fun loadCurrentState() {
-        viewModelScope.launch {
-            try {
-                val items = dataClient.getDataItems(
-                    Uri.parse("wear://*$PATH_PLAYER_STATE")
-                ).await()
-                for (i in 0 until items.count) {
-                    if (items[i].uri.path == PATH_PLAYER_STATE) {
-                        applyState(DataMapItem.fromDataItem(items[i]).dataMap.toWearState())
-                        break
-                    }
-                }
-                items.release()
-            } catch (_: Exception) {
-                // No cached state available; will update when phone pushes
-            }
-        }
-    }
-
-    /** Read cached browse data on startup. */
+    /** Read cached browse data from local storage on startup. */
     private fun loadBrowseData() {
         viewModelScope.launch {
-            try {
-                val items = dataClient.getDataItems(
-                    Uri.parse("wear://*$PATH_BROWSE_DATA")
-                ).await()
-                for (i in 0 until items.count) {
-                    if (items[i].uri.path == PATH_BROWSE_DATA) {
-                        applyBrowseData(DataMapItem.fromDataItem(items[i]).dataMap)
-                        break
-                    }
+            val started = SystemClock.elapsedRealtime()
+            val cachedPayload = readCachedBrowseData()
+
+            if (cachedPayload == null) {
+                // removed debug logging
+                requestBrowseData()
+            } else {
+                val parsed = parseBrowseData(cachedPayload)
+                if (parsed != null) {
+                    applyParsedBrowseData(parsed)
+                    // removed debug logging
+                } else {
+                    // removed debug logging
+                    requestBrowseData()
                 }
-                items.release()
-            } catch (_: Exception) {
-                // No cached browse data; request from phone
             }
-            // Always request fresh browse data from the phone
-            requestBrowseData()
         }
     }
 
-    private fun applyBrowseData(dataMap: com.google.android.gms.wearable.DataMap) {
-        try {
-            val playlistsJson = dataMap.getString("playlists") ?: "[]"
-            val radiosJson = dataMap.getString("radios") ?: "[]"
+    private suspend fun readCachedBrowseData(): BrowsePayload? = withContext(Dispatchers.IO) {
+        val prefs = getPrefs()
+        val playlistsJson = prefs.getString(KEY_PLAYLISTS_JSON, null)
+        val radiosJson = prefs.getString(KEY_RADIOS_JSON, null)
+        if (playlistsJson == null && radiosJson == null) {
+            null
+        } else {
+            BrowsePayload(
+                playlistsJson = playlistsJson ?: "[]",
+                radiosJson = radiosJson ?: "[]",
+            )
+        }
+    }
 
+    private suspend fun persistBrowseData(payload: BrowsePayload) = withContext(Dispatchers.IO) {
+        val prefs = getPrefs()
+        prefs.edit()
+            .putString(KEY_PLAYLISTS_JSON, payload.playlistsJson)
+            .putString(KEY_RADIOS_JSON, payload.radiosJson)
+            .apply()
+    }
+
+    private fun getPrefs(): SharedPreferences {
+        return appContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    }
+
+    private suspend fun parseBrowseData(payload: BrowsePayload): ParsedBrowseData? = withContext(Dispatchers.Default) {
+        try {
             val playlists = mutableListOf<BrowsePlaylist>()
-            val playlistsArray = JSONArray(playlistsJson)
+            val playlistsArray = JSONArray(payload.playlistsJson)
             for (i in 0 until playlistsArray.length()) {
                 val obj = playlistsArray.getJSONObject(i)
                 playlists.add(
@@ -271,7 +322,7 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application),
             }
 
             val radios = mutableListOf<BrowseRadio>()
-            val radiosArray = JSONArray(radiosJson)
+            val radiosArray = JSONArray(payload.radiosJson)
             for (i in 0 until radiosArray.length()) {
                 val obj = radiosArray.getJSONObject(i)
                 radios.add(
@@ -283,27 +334,43 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application),
                 )
             }
 
-            _browseState.value = _browseState.value.copy(
-                playlists = playlists,
-                radios = radios,
-                isLoading = false,
-            )
-        } catch (e: Exception) {
-            _browseState.value = _browseState.value.copy(isLoading = false)
+            ParsedBrowseData(playlists = playlists, radios = radios)
+        } catch (_: Exception) {
+            null
         }
+    }
+
+    private fun applyParsedBrowseData(parsed: ParsedBrowseData) {
+        _browseState.value = _browseState.value.copy(
+            playlists = parsed.playlists,
+            radios = parsed.radios,
+            isLoading = false,
+        )
     }
 
     private fun sendMessage(path: String, data: ByteArray) {
         viewModelScope.launch {
             try {
-                val nodes = nodeClient.connectedNodes.await()
-                for (node in nodes) {
-                    messageClient.sendMessage(node.id, path, data).await()
-                }
+                // Use the cached node id to avoid a Bluetooth round-trip on every tap.
+                // If the cache is empty (first send or after a failure) do a real lookup
+                // and populate the cache for subsequent calls.
+                val nodeId = cachedNodeId ?: run {
+                    val nodes = nodeClient.connectedNodes.await()
+                    nodes.firstOrNull()?.id.also { cachedNodeId = it }
+                } ?: return@launch // no connected node
+                messageClient.sendMessage(nodeId, path, data).await()
             } catch (_: Exception) {
-                // Watch not connected or phone app not running
+                // Connection lost or phone app not running; clear cache so the next
+                // call performs a fresh node discovery.
+                cachedNodeId = null
             }
         }
+    }
+
+    companion object {
+        private const val PREFS_NAME = "wear_cache"
+        private const val KEY_PLAYLISTS_JSON = "browse_playlists_json"
+        private const val KEY_RADIOS_JSON = "browse_radios_json"
     }
 }
 

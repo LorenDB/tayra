@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -7,6 +9,8 @@ plugins {
 android {
     namespace = "dev.lorendb.tayra.wear"
     compileSdk = 35
+
+    val releaseKeyPropsFile = rootProject.file("key.properties")
 
     defaultConfig {
         // Must match the phone app's applicationId so the Wearable Data Layer pairs them.
@@ -30,9 +34,33 @@ android {
         jvmTarget = "11"
     }
 
+    signingConfigs {
+        if (releaseKeyPropsFile.exists()) {
+            create("release") {
+                val keyProps = Properties()
+                releaseKeyPropsFile.inputStream().use { keyProps.load(it) }
+                storeFile = file(keyProps.getProperty("storeFile"))
+                storePassword = keyProps.getProperty("storePassword")
+                keyAlias = keyProps.getProperty("keyAlias")
+                keyPassword = keyProps.getProperty("keyPassword")
+            }
+        }
+    }
+
     buildTypes {
         release {
-            isMinifyEnabled = false
+            signingConfig = if (releaseKeyPropsFile.exists()) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
+            isDebuggable = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 }

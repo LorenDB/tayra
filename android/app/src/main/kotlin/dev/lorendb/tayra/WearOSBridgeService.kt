@@ -44,6 +44,10 @@ class WearOSBridgeService : WearableListenerService() {
     private var lastArtUrl: String? = null
     private var lastAccentColor: Int = Color.parseColor("#0992F2") // AppTheme.primary default
 
+    // Single ImageLoader for the lifetime of the service so Coil's memory/disk cache is
+    // reused across track changes instead of being discarded and rebuilt every song.
+    private val imageLoader by lazy { ImageLoader(this) }
+
     private val connectionCallback = object : MediaBrowserCompat.ConnectionCallback() {
         override fun onConnected() {
             val token = mediaBrowser?.sessionToken ?: return
@@ -247,13 +251,12 @@ class WearOSBridgeService : WearableListenerService() {
     private fun extractAccentColor(artUrl: String) {
         serviceScope.launch {
             try {
-                val loader = ImageLoader(this@WearOSBridgeService)
                 val request = ImageRequest.Builder(this@WearOSBridgeService)
                     .data(artUrl)
                     .size(100, 100)
                     .allowHardware(false) // Palette needs software bitmap
                     .build()
-                val result = loader.execute(request)
+                val result = imageLoader.execute(request)
                 if (result is SuccessResult) {
                     val bitmap = result.drawable.toBitmap()
                     val palette = Palette.from(bitmap).maximumColorCount(24).generate()

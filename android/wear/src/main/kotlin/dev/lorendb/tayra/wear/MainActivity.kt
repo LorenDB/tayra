@@ -2,10 +2,15 @@ package dev.lorendb.tayra.wear
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.withFrameNanos
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
@@ -17,10 +22,28 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // removed debug logging (WearPerf)
         setContent {
-            val playerState by viewModel.playerState.collectAsStateWithLifecycle()
             val browseState by viewModel.browseState.collectAsStateWithLifecycle()
             val navController = rememberSwipeDismissableNavController()
+            val hasLoadedBrowse = remember { mutableStateOf(false) }
+
+            // Keep the navigation host subscribed only to browse state. Player state updates
+            // every second while playback advances, and collecting it here causes the entire
+            // nav tree to recompose even when the player screen is not visible.
+            val onStartPlaylist = remember(navController) {
+                { id: Int, label: String ->
+                    navController.navigate("playAction/playlist/$id/${Uri.encode(label)}")
+                }
+            }
+            val onStartRadio = remember(navController) {
+                { id: Int, label: String ->
+                    navController.navigate("playAction/radio/$id/${Uri.encode(label)}")
+                }
+            }
+            val onNavigateToPlayer = remember(navController) {
+                { navController.navigate("player") }
+            }
 
             // Browse is always the root screen. Tapping a playlist or radio navigates
             // to the play-action submenu. The player is reached after confirming
@@ -30,20 +53,21 @@ class MainActivity : ComponentActivity() {
                 startDestination = "browse",
             ) {
                 composable("browse") {
+                    LaunchedEffect(Unit) {
+                        if (!hasLoadedBrowse.value) {
+                            hasLoadedBrowse.value = true
+                            // Defer browse loading until after the first frame so initial
+                            // screen composition can finish before any cache/network work.
+                            withFrameNanos { }
+                            viewModel.loadBrowseDataIfNeeded()
+                        }
+                    }
                     BrowseScreen(
                         state = browseState,
-                        onStartPlaylist = { id, label ->
-                            navController.navigate(
-                                "playAction/playlist/$id/${Uri.encode(label)}"
-                            )
-                        },
-                        onStartRadio = { id, label ->
-                            navController.navigate(
-                                "playAction/radio/$id/${Uri.encode(label)}"
-                            )
-                        },
+                        onStartPlaylist = onStartPlaylist,
+                        onStartRadio = onStartRadio,
                         onRefresh = { viewModel.requestBrowseData() },
-                        onNavigateToPlayer = { navController.navigate("player") },
+                        onNavigateToPlayer = onNavigateToPlayer,
                     )
                 }
 
@@ -72,6 +96,10 @@ class MainActivity : ComponentActivity() {
                 }
 
                 composable("player") {
+                    LaunchedEffect(Unit) {
+                        viewModel.requestState()
+                    }
+                    val playerState by viewModel.playerState.collectAsStateWithLifecycle()
                     PlayerScreen(
                         state = playerState,
                         onPlayPause = { viewModel.sendPlayPause() },
@@ -84,9 +112,5 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        // Request a fresh state push from the phone whenever the watch app comes to foreground
-        viewModel.requestState()
-    }
+    // no companion debug TAG
 }
