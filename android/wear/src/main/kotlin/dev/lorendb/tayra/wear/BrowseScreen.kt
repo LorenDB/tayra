@@ -10,11 +10,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
 import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
 import androidx.compose.material.icons.filled.Radio
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Shuffle
@@ -22,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -64,7 +64,6 @@ fun BrowseScreen(
         positionIndicator = { PositionIndicator(scalingLazyListState = listState) },
     ) {
         if (state.isLoading && state.playlists.isEmpty() && state.radios.isEmpty()) {
-            // Full-screen loading
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -83,7 +82,6 @@ fun BrowseScreen(
                     .fillMaxSize()
                     .background(Background),
             ) {
-                // Header
                 item {
                     Text(
                         text = "Browse",
@@ -96,7 +94,6 @@ fun BrowseScreen(
                     )
                 }
 
-                // Now Playing shortcut
                 item {
                     Chip(
                         onClick = onNavigateToPlayer,
@@ -123,18 +120,8 @@ fun BrowseScreen(
                     )
                 }
 
-                // ── Instance Radios ─────────────────────────────────────
-
                 item {
-                    Text(
-                        text = "Quick Start",
-                        style = MaterialTheme.typography.caption1,
-                        color = SectionHeader,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp, bottom = 2.dp),
-                        textAlign = TextAlign.Center,
-                    )
+                    SectionHeader(text = "Quick Start")
                 }
 
                 items(state.instanceRadios.size) { index ->
@@ -147,19 +134,9 @@ fun BrowseScreen(
                     )
                 }
 
-                // ── Playlists ───────────────────────────────────────────
-
                 if (state.playlists.isNotEmpty()) {
                     item {
-                        Text(
-                            text = "Playlists",
-                            style = MaterialTheme.typography.caption1,
-                            color = SectionHeader,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 8.dp, bottom = 2.dp),
-                            textAlign = TextAlign.Center,
-                        )
+                        SectionHeader(text = "Playlists")
                     }
 
                     items(state.playlists.size) { index ->
@@ -173,19 +150,9 @@ fun BrowseScreen(
                     }
                 }
 
-                // ── User Radios ─────────────────────────────────────────
-
                 if (state.radios.isNotEmpty()) {
                     item {
-                        Text(
-                            text = "Radios",
-                            style = MaterialTheme.typography.caption1,
-                            color = SectionHeader,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 8.dp, bottom = 2.dp),
-                            textAlign = TextAlign.Center,
-                        )
+                        SectionHeader(text = "Radios")
                     }
 
                     items(state.radios.size) { index ->
@@ -199,7 +166,6 @@ fun BrowseScreen(
                     }
                 }
 
-                // Refresh button at the bottom
                 item {
                     Spacer(modifier = Modifier.height(4.dp))
                     Row(
@@ -226,10 +192,23 @@ fun BrowseScreen(
 }
 
 @Composable
+private fun SectionHeader(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.caption1,
+        color = SectionHeader,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp, bottom = 2.dp),
+        textAlign = TextAlign.Center,
+    )
+}
+
+@Composable
 private fun BrowseChip(
     label: String,
     secondaryLabel: String?,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: ImageVector,
     onClick: () -> Unit,
 ) {
     Chip(
@@ -297,7 +276,6 @@ fun PlayActionScreen(
                 .fillMaxSize()
                 .background(Background),
         ) {
-            // Title showing which item was selected
             item {
                 Text(
                     text = label,
@@ -312,7 +290,6 @@ fun PlayActionScreen(
                 )
             }
 
-            // Play chip
             item {
                 Chip(
                     onClick = onPlay,
@@ -338,7 +315,6 @@ fun PlayActionScreen(
                 )
             }
 
-            // Shuffle chip (optional for radios)
             if (showShuffle && onShuffle != null) {
                 item {
                     Chip(
