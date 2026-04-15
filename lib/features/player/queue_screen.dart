@@ -9,6 +9,7 @@ import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
 import 'package:tayra/features/player/player_provider.dart';
+
 import 'package:tayra/features/player/queue_persistence_service.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/features/playlists/playlists_screen.dart';
@@ -27,11 +28,17 @@ class QueueScreen extends ConsumerStatefulWidget {
   /// If null, the mini-player navigates to the full-screen now-playing route.
   final VoidCallback? miniPlayerOnTap;
 
+  /// Called when the user taps the stashed-queues inbox button in panel mode.
+  /// When provided, the parent handles navigation (e.g. SidePanel subpages).
+  /// When null, the queue screen handles it inline (full-screen mode fallback).
+  final VoidCallback? onOpenInbox;
+
   const QueueScreen({
     super.key,
     this.scrollController,
     this.onBack,
     this.miniPlayerOnTap,
+    this.onOpenInbox,
   });
 
   @override
@@ -42,6 +49,7 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
   late ScrollController _scrollController;
   bool _hasScrolled = false;
   bool _ownsController = false;
+  bool _showInlineStashes = false;
 
   @override
   void initState() {
@@ -91,7 +99,10 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
 
     final isPanelMode = widget.onBack != null;
 
-    final body = _buildBody(context, ref, queue, currentIndex);
+    final body =
+        _showInlineStashes
+            ? const _StashedQueuesInline()
+            : _buildBody(context, ref, queue, currentIndex);
 
     final miniPlayer =
         playerState.currentTrack != null
@@ -141,6 +152,9 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
                     // Nothing left to show after stashing — go back.
                     widget.onBack?.call();
                   },
+                  onOpenInbox:
+                      widget.onOpenInbox ??
+                      () => setState(() => _showInlineStashes = true),
                 ),
               ],
             ),
@@ -154,27 +168,53 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
     // ── Full-screen mode ────────────────────────────────────────────────
     return Scaffold(
       backgroundColor: AppTheme.background,
-      appBar: AppBar(
-        backgroundColor: AppTheme.background,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_rounded,
-            color: AppTheme.onBackground,
-          ),
-          onPressed: () => context.pop(),
-        ),
-        title: const Text(
-          'Queue',
-          style: TextStyle(
-            color: AppTheme.onBackground,
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        actions: [
-          _QueueActions(iconSize: 24, onStash: () => _stashQueue(context, ref)),
-        ],
-      ),
+      appBar:
+          _showInlineStashes
+              ? AppBar(
+                backgroundColor: AppTheme.background,
+                leading: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_rounded,
+                    color: AppTheme.onBackground,
+                  ),
+                  onPressed:
+                      () => setState(() => _showInlineStashes = false),
+                ),
+                title: const Text(
+                  'Stashed Queues',
+                  style: TextStyle(
+                    color: AppTheme.onBackground,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              )
+              : AppBar(
+                backgroundColor: AppTheme.background,
+                leading: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_rounded,
+                    color: AppTheme.onBackground,
+                  ),
+                  onPressed: () => context.pop(),
+                ),
+                title: const Text(
+                  'Queue',
+                  style: TextStyle(
+                    color: AppTheme.onBackground,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                actions: [
+                  _QueueActions(
+                    iconSize: 24,
+                    onStash: () => _stashQueue(context, ref),
+                    onOpenInbox:
+                        () => setState(() => _showInlineStashes = true),
+                  ),
+                ],
+              ),
       body: body,
       // Show the mini-player fixed at the bottom of the queue screen so
       // playback controls remain available while viewing/manipulating the
@@ -312,7 +352,13 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
 class _QueueActions extends ConsumerWidget {
   final double iconSize;
   final VoidCallback? onStash;
-  const _QueueActions({super.key, this.iconSize = 24, this.onStash});
+  final VoidCallback? onOpenInbox;
+  const _QueueActions({
+    super.key,
+    this.iconSize = 24,
+    this.onStash,
+    this.onOpenInbox,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -334,7 +380,15 @@ class _QueueActions extends ConsumerWidget {
               color: AppTheme.onBackgroundMuted,
             ),
           ),
-          onPressed: () => showStashedQueuesSheet(context, ref),
+          onPressed: () {
+            // If a parent provided an inline-open handler (QueueScreen), use it;
+            // otherwise fall back to the modal bottom sheet used elsewhere.
+            if (onOpenInbox != null) {
+              onOpenInbox!.call();
+            } else {
+              showStashedQueuesSheet(context, ref);
+            }
+          },
         ),
         if (queue.isNotEmpty)
           IconButton(
@@ -893,6 +947,37 @@ class _StashedQueuesSheet extends ConsumerWidget {
   }
 }
 
+/// Inline variant of the stashed-queues UI that renders inside the Queue
+/// screen body (full-screen/mobile mode). The AppBar is handled by the parent
+/// Scaffold so this widget only contains the list content.
+class _StashedQueuesInline extends ConsumerWidget {
+  const _StashedQueuesInline();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final stashes = ref.watch(stashedQueuesProvider).asData?.value ?? [];
+
+    if (stashes.isEmpty) {
+      return const Center(
+        child: Text(
+          'No stashed queues',
+          style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 14),
+        ),
+      );
+    }
+
+    return ListView.builder(
+      physics: const BouncingScrollPhysics(
+        parent: AlwaysScrollableScrollPhysics(),
+      ),
+      itemCount: stashes.length,
+      itemBuilder: (context, index) => StashedQueueTile(
+        stash: stashes[index],
+      ),
+    );
+  }
+}
+
 // ── Stashed Queue Tile ───────────────────────────────────────────────────
 
 class StashedQueueTile extends ConsumerWidget {
@@ -1312,6 +1397,9 @@ class StashedQueueTile extends ConsumerWidget {
                 onPressed: () {
                   Navigator.of(dialogContext).pop();
                   ref.read(playerProvider.notifier).restoreStash(stash.id);
+                  // Ensure any inline UI is closed by calling the provided
+                  // onRestored callback (parent will hide inline UI). Do not
+                  // manipulate global providers here.
                   onRestored?.call();
                 },
                 child: const Text(
