@@ -77,6 +77,32 @@ class ListenRecord {
       listenedAt: DateTime.now(),
     );
   }
+
+  ListenRecord copyWith({
+    int? id,
+    int? trackId,
+    String? trackTitle,
+    int? artistId,
+    String? artistName,
+    int? albumId,
+    String? albumTitle,
+    String? coverUrl,
+    int? durationSeconds,
+    DateTime? listenedAt,
+  }) {
+    return ListenRecord(
+      id: id ?? this.id,
+      trackId: trackId ?? this.trackId,
+      trackTitle: trackTitle ?? this.trackTitle,
+      artistId: artistId ?? this.artistId,
+      artistName: artistName ?? this.artistName,
+      albumId: albumId ?? this.albumId,
+      albumTitle: albumTitle ?? this.albumTitle,
+      coverUrl: coverUrl ?? this.coverUrl,
+      durationSeconds: durationSeconds ?? this.durationSeconds,
+      listenedAt: listenedAt ?? this.listenedAt,
+    );
+  }
 }
 
 // ── Year in review stats models ─────────────────────────────────────────
@@ -239,15 +265,35 @@ class ListenHistoryService {
   /// If omitted the track's full duration (if available) will be stored.
   static Future<void> recordListen(Track track, {int? listenedSeconds}) async {
     try {
-      final db = await CacheDatabase.instance.database;
-      final record = ListenRecord.fromTrack(
-        track,
-        listenedSeconds: listenedSeconds,
-      );
-      await db.insert(_tableName, record.toMap());
+      await insertListen(track, listenedSeconds: listenedSeconds);
     } catch (_) {
       // Non-critical — silently fail
     }
+  }
+
+  /// Insert a listen row and return its database id.
+  static Future<int> insertListen(
+    Track track, {
+    int? listenedSeconds,
+    DateTime? listenedAt,
+  }) async {
+    final db = await CacheDatabase.instance.database;
+    final record = ListenRecord.fromTrack(
+      track,
+      listenedSeconds: listenedSeconds,
+    ).copyWith(listenedAt: listenedAt ?? DateTime.now());
+    return db.insert(_tableName, record.toMap());
+  }
+
+  /// Update the listened duration for an existing row.
+  static Future<void> updateListenDuration(int id, int listenedSeconds) async {
+    final db = await CacheDatabase.instance.database;
+    await db.update(
+      _tableName,
+      {'duration_seconds': listenedSeconds},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 
   /// Get all available years that have listen data.
