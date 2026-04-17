@@ -127,12 +127,30 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
             ? SafeArea(
               top: false,
               child: MiniPlayer(
+                // Priority: explicit prop -> panel onBack (switch panel view)
+                // -> close inline stashes -> pop nav if possible -> push now-playing
                 onTap:
                     widget.miniPlayerOnTap ??
-                    () =>
-                        context.canPop()
-                            ? context.pop()
-                            : context.push('/now-playing'),
+                    () {
+                      if (widget.onBack != null) {
+                        // Panel mode: ask parent to switch back to now-playing view.
+                        widget.onBack!.call();
+                        return;
+                      }
+
+                      if (_showInlineStashes) {
+                        // If the inline stashes view is open, close it instead of
+                        // navigating so the user returns to the queue/now-playing UI.
+                        setState(() => _showInlineStashes = false);
+                        return;
+                      }
+
+                      if (context.canPop()) {
+                        context.pop();
+                      } else {
+                        context.push('/now-playing');
+                      }
+                    },
               ),
             )
             : null;
@@ -200,8 +218,7 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
                       Icons.arrow_back_rounded,
                       color: AppTheme.onBackground,
                     ),
-                    onPressed:
-                        () => setState(() => _showInlineStashes = false),
+                    onPressed: () => setState(() => _showInlineStashes = false),
                   ),
                   title: const Text(
                     'Stashed Queues',
@@ -995,9 +1012,7 @@ class _StashedQueuesInline extends ConsumerWidget {
         parent: AlwaysScrollableScrollPhysics(),
       ),
       itemCount: stashes.length,
-      itemBuilder: (context, index) => StashedQueueTile(
-        stash: stashes[index],
-      ),
+      itemBuilder: (context, index) => StashedQueueTile(stash: stashes[index]),
     );
   }
 }
