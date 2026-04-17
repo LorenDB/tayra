@@ -89,6 +89,21 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Auto-navigate away when playback stops (e.g. after clearing the queue)
+    // so the user is never stranded on an empty queue screen with no escape.
+    ref.listen(playerProvider, (previous, next) {
+      if (previous?.currentTrack != null && next.currentTrack == null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          if (widget.onBack != null) {
+            widget.onBack!();
+          } else if (context.canPop()) {
+            context.pop();
+          }
+        });
+      }
+    });
+
     final playerState = ref.watch(playerProvider);
     final queue = playerState.queue;
     final currentIndex = playerState.currentIndex;
