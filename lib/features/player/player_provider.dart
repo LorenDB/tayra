@@ -1890,11 +1890,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // With gapless, the player's native loop mode handles LoopMode.one
       // and LoopMode.all.  ProcessingState.completed only fires for
       // LoopMode.off when the last track in the queue finishes.
-      // Do NOT manually write isPlaying here — playingStream has already
-      // emitted false (just_audio fires the playing stream before the
-      // processing state reaches completed), and writing it again would
-      // create a redundant state change that can interleave with a
-      // subsequent play() call on the same event-loop turn.
+      // just_audio's `playing` flag is an intent flag and stays true when
+      // audio ends naturally on a ConcatenatingAudioSource, so playingStream
+      // does not emit false automatically — we must set isPlaying ourselves.
+      state = state.copyWith(isPlaying: false);
       _saveQueue();
       return;
     }
