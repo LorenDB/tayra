@@ -114,10 +114,13 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
 
     final isPanelMode = widget.onBack != null;
 
-    final body =
-        _showInlineStashes
-            ? const _StashedQueuesInline()
-            : _buildBody(context, ref, queue, currentIndex);
+    final body = IndexedStack(
+      index: _showInlineStashes ? 1 : 0,
+      children: [
+        _buildBody(context, ref, queue, currentIndex),
+        const _StashedQueuesInline(),
+      ],
+    );
 
     final miniPlayer =
         playerState.currentTrack != null
@@ -181,60 +184,66 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
     }
 
     // ── Full-screen mode ────────────────────────────────────────────────
-    return Scaffold(
-      backgroundColor: AppTheme.background,
-      appBar:
-          _showInlineStashes
-              ? AppBar(
-                backgroundColor: AppTheme.background,
-                leading: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_rounded,
-                    color: AppTheme.onBackground,
+    return PopScope(
+      canPop: !_showInlineStashes,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) setState(() => _showInlineStashes = false);
+      },
+      child: Scaffold(
+        backgroundColor: AppTheme.background,
+        appBar:
+            _showInlineStashes
+                ? AppBar(
+                  backgroundColor: AppTheme.background,
+                  leading: IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back_rounded,
+                      color: AppTheme.onBackground,
+                    ),
+                    onPressed:
+                        () => setState(() => _showInlineStashes = false),
                   ),
-                  onPressed:
-                      () => setState(() => _showInlineStashes = false),
+                  title: const Text(
+                    'Stashed Queues',
+                    style: TextStyle(
+                      color: AppTheme.onBackground,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                )
+                : AppBar(
+                  backgroundColor: AppTheme.background,
+                  leading: IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back_rounded,
+                      color: AppTheme.onBackground,
+                    ),
+                    onPressed: () => context.pop(),
+                  ),
+                  title: const Text(
+                    'Queue',
+                    style: TextStyle(
+                      color: AppTheme.onBackground,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  actions: [
+                    _QueueActions(
+                      iconSize: 24,
+                      onStash: () => _stashQueue(context, ref),
+                      onOpenInbox:
+                          () => setState(() => _showInlineStashes = true),
+                    ),
+                  ],
                 ),
-                title: const Text(
-                  'Stashed Queues',
-                  style: TextStyle(
-                    color: AppTheme.onBackground,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              )
-              : AppBar(
-                backgroundColor: AppTheme.background,
-                leading: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_rounded,
-                    color: AppTheme.onBackground,
-                  ),
-                  onPressed: () => context.pop(),
-                ),
-                title: const Text(
-                  'Queue',
-                  style: TextStyle(
-                    color: AppTheme.onBackground,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                actions: [
-                  _QueueActions(
-                    iconSize: 24,
-                    onStash: () => _stashQueue(context, ref),
-                    onOpenInbox:
-                        () => setState(() => _showInlineStashes = true),
-                  ),
-                ],
-              ),
-      body: body,
-      // Show the mini-player fixed at the bottom of the queue screen so
-      // playback controls remain available while viewing/manipulating the
-      // queue.
-      bottomNavigationBar: miniPlayer,
+        body: body,
+        // Show the mini-player fixed at the bottom of the queue screen so
+        // playback controls remain available while viewing/manipulating the
+        // queue.
+        bottomNavigationBar: miniPlayer,
+      ),
     );
   }
 
