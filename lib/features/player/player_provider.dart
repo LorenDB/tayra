@@ -865,6 +865,15 @@ class PlayerNotifier extends Notifier<PlayerState> {
     // Listen to position.
     _subscriptions.add(
       _handler.audioPlayer.positionStream.listen((position) async {
+        // When the queue has ended (not playing, at index 0, position already
+        // reset) ignore any trailing position events from the completed player
+        // so they don't overwrite the reset back to Duration.zero.
+        if (!state.isPlaying &&
+            state.currentIndex == 0 &&
+            state.position == Duration.zero &&
+            position > Duration.zero) {
+          return;
+        }
         state = state.copyWith(position: position);
         // Save position periodically (every 2 seconds) to persistence
         if (position.inSeconds % 2 == 0 && position.inSeconds > 0) {
@@ -1563,7 +1572,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
         } catch (_) {}
       } else {
         // Fall back to single-track loading.
-        await _loadAndPlay(tracks[startIndex], initialPosition: initialPosition);
+        await _loadAndPlay(
+          tracks[startIndex],
+          initialPosition: initialPosition,
+        );
       }
     } else {
       _gaplessActive = false;
@@ -1973,7 +1985,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // just_audio's `playing` flag is an intent flag and stays true when
       // audio ends naturally on a ConcatenatingAudioSource, so playingStream
       // does not emit false automatically — we must set isPlaying ourselves.
-      state = state.copyWith(isPlaying: false);
+      // Wrap back to track 0; the seek is deferred to play() so that we
+      // don't accidentally resume playback (seeking while playing=true
+      // on a ConcatenatingAudioSource restarts immediately).
+      state = state.copyWith(isPlaying: false, currentIndex: 0);
       _saveQueue();
       return;
     }
@@ -2009,7 +2024,16 @@ class PlayerNotifier extends Notifier<PlayerState> {
         if (state.hasNext) {
           skipNext();
         } else {
-          state = state.copyWith(isPlaying: false);
+          // Wrap back to track 0 so the play button resumes from the beginning.
+          state = state.copyWith(
+            isPlaying: false,
+            currentIndex: 0,
+            position: Duration.zero,
+          );
+          // Don't touch the audio player here — play() already handles
+          // ProcessingState.completed correctly (reloads or seeks as needed).
+          // The completed player emits no new position events, so position: zero
+          // in state above is stable and will hold until the user presses play.
           _saveQueue(); // Save final state when queue ends
         }
         break;
@@ -2046,6 +2070,30 @@ class PlayerNotifier extends Notifier<PlayerState> {
         return;
       }
     }
+    // If the audio source is in ProcessingState.completed (queue ended with
+    // LoopMode.off), _handler.play() is a no-op. Resume from track 0 instead.
+    if (_handler.audioPlayer.processingState == ProcessingState.completed) {
+      final track = state.currentTrack;
+      if (track != null) {
+        if (_gaplessActive) {
+          // For gapless, seeking on the ConcatenatingAudioSource to index 0
+          // resets the completed state; since just_audio's playing intent is
+          // still true the seek will resume playback automatically.
+          await _handler.audioPlayer.seek(
+            Duration.zero,
+            index: state.currentIndex,
+          );
+          state = state.copyWith(isPlaying: _handler.audioPlayer.playing);
+          _updateMediaItemForTrack(track);
+          unawaited(_activateListenForTrack(track));
+        } else {
+          state = state.copyWith(isLoading: true);
+          await _loadAndPlay(track);
+        }
+        return;
+      }
+    }
+
     await _handler.play();
   }
 
