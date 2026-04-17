@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
+import 'package:tayra/core/router/app_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:tayra/core/analytics/analytics.dart';
@@ -767,6 +769,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// too long without transitioning to ready.  Restarted on every buffering
   /// event; cancelled when the player reaches a non-buffering state.
   Timer? _bufferingWatchdog;
+  /// Count of consecutive automatic load failures (for telemetry).
+  /// We no longer auto-skip on failure; instead we show a SnackBar and
+  /// pause playback. The counter remains to surface analytics if desired.
+  int _consecutiveLoadFailures = 0;
 
   @override
   PlayerState build() {
@@ -918,12 +924,23 @@ class PlayerNotifier extends Notifier<PlayerState> {
                 );
                 _handler.audioPlayer.stop().catchError((_) {});
                 state = state.copyWith(isLoading: false);
-                if (state.hasNext) {
-                  skipNext();
+                // Do NOT auto-skip when a track stays stuck in loading/buffering.
+                // Instead inform the user and pause playback so they can act.
+                _consecutiveLoadFailures++;
+                final ctx = shellNavigatorKey.currentContext;
+                if (ctx != null) {
+                  final title = state.currentTrack?.title ?? 'track';
+                  ScaffoldMessenger.of(ctx).showSnackBar(
+                    SnackBar(
+                      content: Text('Unable to load "${title}". Playback paused.'),
+                    ),
+                  );
                 } else {
-                  _gaplessActive = false;
-                  state = const PlayerState();
+                  debugPrint('PlayerNotifier: no navigation context to show SnackBar');
                 }
+                // Ensure player is stopped and internal flags reflect paused state.
+                _gaplessActive = false;
+                state = state.copyWith(isLoading: false, isPlaying: false);
               }
             });
           } else {
@@ -1917,26 +1934,37 @@ class PlayerNotifier extends Notifier<PlayerState> {
         );
       } catch (_) {}
 
+      // Successfully loaded — reset consecutive failure counter.
       state = state.copyWith(isLoading: false);
+      _consecutiveLoadFailures = 0;
     } catch (e, st) {
       debugPrint(
         'PlayerNotifier._loadTrack: failed to load track ${track.id}: $e\n$st',
       );
       state = state.copyWith(isLoading: false);
 
-      // If this was supposed to auto-play and we have more tracks, skip to next
-      if (autoPlay && state.hasNext) {
-        // Wait a moment to avoid rapid-fire failures
-        await Future.delayed(const Duration(milliseconds: 500));
-        skipNext();
-      } else if (autoPlay && !state.hasNext) {
-        // No more tracks - clear the queue to stop infinite loading
-        debugPrint(
-          'PlayerNotifier._loadTrack: no more playable tracks in queue, clearing player state',
+      // Do NOT auto-skip. Show a SnackBar and pause playback so the user can
+      // manually intervene (remove track, retry, etc.). Keep a failure count
+      // for telemetry.
+      _consecutiveLoadFailures++;
+      final ctx = shellNavigatorKey.currentContext;
+      if (ctx != null) {
+        final title = track.title;
+        ScaffoldMessenger.of(ctx).showSnackBar(
+          SnackBar(
+            content: Text('Unable to load "${title}". Playback paused.'),
+          ),
         );
-        _gaplessActive = false;
-        state = const PlayerState();
+      } else {
+        debugPrint('PlayerNotifier._loadTrack: no navigation context to show SnackBar');
       }
+
+      // Stop playback and ensure UI reflects the paused state.
+      try {
+        await _handler.audioPlayer.stop();
+      } catch (_) {}
+      _gaplessActive = false;
+      state = state.copyWith(isPlaying: false);
     }
   }
 
