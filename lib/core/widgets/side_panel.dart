@@ -137,8 +137,15 @@ class _StashInboxPanel extends ConsumerWidget {
                     physics: const BouncingScrollPhysics(),
                     itemCount: stashes.length,
                     itemBuilder:
-                        (context, index) =>
-                            StashedQueueTile(stash: stashes[index]),
+                        (context, index) => StashedQueueTile(
+                          stash: stashes[index],
+                          onRestored: () {
+                            // If a parent provided an onBack handler, invoke it so
+                            // the panel returns to the queue view after restoring
+                            // a stash.
+                            if (onBack != null) onBack!();
+                          },
+                        ),
                   ),
         ),
       ],

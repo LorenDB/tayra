@@ -118,7 +118,13 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
       index: _showInlineStashes ? 1 : 0,
       children: [
         _buildBody(context, ref, queue, currentIndex),
-        const _StashedQueuesInline(),
+        _StashedQueuesInline(
+          onRestored: () {
+            // Close the inline stashes view when a stash is restored so the
+            // user is returned to the main queue / now-playing UI.
+            if (mounted) setState(() => _showInlineStashes = false);
+          },
+        ),
       ],
     );
 
@@ -992,7 +998,8 @@ class _StashedQueuesSheet extends ConsumerWidget {
 /// screen body (full-screen/mobile mode). The AppBar is handled by the parent
 /// Scaffold so this widget only contains the list content.
 class _StashedQueuesInline extends ConsumerWidget {
-  const _StashedQueuesInline();
+  final VoidCallback? onRestored;
+  const _StashedQueuesInline({this.onRestored});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -1012,7 +1019,9 @@ class _StashedQueuesInline extends ConsumerWidget {
         parent: AlwaysScrollableScrollPhysics(),
       ),
       itemCount: stashes.length,
-      itemBuilder: (context, index) => StashedQueueTile(stash: stashes[index]),
+      itemBuilder:
+          (context, index) =>
+              StashedQueueTile(stash: stashes[index], onRestored: onRestored),
     );
   }
 }
