@@ -147,8 +147,13 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
 
   FunkwhaleAudioHandler() {
     // Forward playback state to the OS media session.
+    // handleError prevents a mid-stream PlayerException (e.g. network drop
+    // while buffering) from closing the pipe and killing the OS notification.
     _player.playbackEventStream
         .map(_transformPlaybackEvent)
+        .handleError((Object e) {
+          debugPrint('FunkwhaleAudioHandler: playbackEventStream error: $e');
+        })
         .pipe(playbackState);
 
     // Forward duration changes.
@@ -758,6 +763,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// loaded via [AudioPlayer.setAudioSources].
   bool _gaplessActive = false;
 
+  /// Watchdog timer that fires if the player stays in loading/buffering for
+  /// too long without transitioning to ready.  Restarted on every buffering
+  /// event; cancelled when the player reaches a non-buffering state.
+  Timer? _bufferingWatchdog;
+
   @override
   PlayerState build() {
     _handler = ref.read(audioHandlerProvider);
@@ -772,6 +782,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
       for (final sub in _subscriptions) {
         sub.cancel();
       }
+      _bufferingWatchdog?.cancel();
+      _bufferingWatchdog = null;
     });
     return const PlayerState();
   }
@@ -875,13 +887,48 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
     // Listen to player state for loading.
     _subscriptions.add(
-      _handler.audioPlayer.playerStateStream.listen((playerState) {
-        state = state.copyWith(
-          isLoading:
-              playerState.processingState == ProcessingState.loading ||
-              playerState.processingState == ProcessingState.buffering,
-        );
-      }),
+      _handler.audioPlayer.playerStateStream.listen(
+        (playerState) {
+          final ps = playerState.processingState;
+          debugPrint(
+            'PlayerNotifier: processingState=$ps, playing=${playerState.playing}',
+          );
+
+          final isLoading =
+              ps == ProcessingState.loading || ps == ProcessingState.buffering;
+          state = state.copyWith(isLoading: isLoading);
+
+          if (isLoading) {
+            // Start / reset the watchdog: if still loading after 30 s, skip.
+            _bufferingWatchdog?.cancel();
+            _bufferingWatchdog = Timer(const Duration(seconds: 30), () {
+              if (state.isLoading) {
+                debugPrint(
+                  'PlayerNotifier: track load timed out after 30 s '
+                  '(processingState=$ps). Attempting recovery.',
+                );
+                _handler.audioPlayer.stop().catchError((_) {});
+                state = state.copyWith(isLoading: false);
+                if (state.hasNext) {
+                  skipNext();
+                } else {
+                  _gaplessActive = false;
+                  state = const PlayerState();
+                }
+              }
+            });
+          } else {
+            _bufferingWatchdog?.cancel();
+            _bufferingWatchdog = null;
+          }
+        },
+        onError: (Object e) {
+          debugPrint('PlayerNotifier: playerStateStream error: $e');
+          _bufferingWatchdog?.cancel();
+          _bufferingWatchdog = null;
+          state = state.copyWith(isLoading: false);
+        },
+      ),
     );
 
     _subscriptions.add(
@@ -1730,15 +1777,13 @@ class PlayerNotifier extends Notifier<PlayerState> {
       final listenUrl = track.listenUrl;
       if (listenUrl == null) {
         debugPrint(
-          'Track ${track.id} "${track.title}" has no listen URL. Uploads: ${track.uploads.length}',
+          'PlayerNotifier._loadTrack: track ${track.id} "${track.title}" has no listen URL '
+          '(uploads: ${track.uploads.length})',
         );
         throw Exception('Track has no listen URL');
       }
 
       final streamUrl = _api.getStreamUrl(listenUrl);
-      debugPrint(
-        'Loading track ${track.id}: listenUrl=$listenUrl, streamUrl=$streamUrl',
-      );
       final headers = _api.authHeaders;
 
       // Build the MediaItem for the notification.
@@ -1752,45 +1797,70 @@ class PlayerNotifier extends Notifier<PlayerState> {
             track.duration != null ? Duration(seconds: track.duration!) : null,
       );
 
+      _handler.mediaItem.add(mediaItem);
+
       // Check audio cache first — play from local file if available.
       final cachedFile = await _audioCache.getCachedAudio(track);
+      // Whether we ultimately streamed from server (so we know to kick off
+      // background caching after playback starts).
+      bool streamedFromServer = false;
+
       if (cachedFile != null) {
-        _handler.mediaItem.add(mediaItem);
+        // Try both URI forms for the cached file; fall back to streaming on
+        // failure.  This handles edge cases where the URI scheme doesn't match
+        // what the platform audio player accepts.
+        bool loadedFromCache = false;
         try {
+          debugPrint(
+            'PlayerNotifier._loadTrack: track ${track.id} — trying cached URI ${cachedFile.uri}',
+          );
           await _handler.audioPlayer.setAudioSource(
             AudioSource.uri(cachedFile.uri),
             initialPosition: initialPosition,
           );
-        } catch (_) {
+          loadedFromCache = true;
+        } catch (e1) {
+          debugPrint(
+            'PlayerNotifier._loadTrack: cached URI failed ($e1), trying file path ${cachedFile.path}',
+          );
           try {
             await _handler.audioPlayer.setAudioSource(
               AudioSource.uri(Uri.file(cachedFile.path)),
               initialPosition: initialPosition,
             );
-          } catch (_) {
-            // Stream from server as a final fallback
-            _handler.mediaItem.add(mediaItem);
-            await _handler.audioPlayer.setAudioSource(
-              AudioSource.uri(
-                Uri.parse(streamUrl),
-                headers: headers,
-                tag: mediaItem.title,
-              ),
-              initialPosition: initialPosition,
+            loadedFromCache = true;
+          } catch (e2) {
+            debugPrint(
+              'PlayerNotifier._loadTrack: cached file path also failed ($e2), '
+              'falling back to server stream for track ${track.id}',
             );
-            if (autoPlay) {
-              await _handler.audioPlayer.play();
-            }
-            return;
           }
         }
 
-        if (autoPlay) {
-          await _handler.audioPlayer.play();
+        if (!loadedFromCache) {
+          // Both cached attempts failed — stream from server.
+          debugPrint(
+            'PlayerNotifier._loadTrack: streaming track ${track.id} from server: $streamUrl',
+          );
+          await _handler.audioPlayer.setAudioSource(
+            AudioSource.uri(
+              Uri.parse(streamUrl),
+              headers: headers,
+              tag: mediaItem.title,
+            ),
+            initialPosition: initialPosition,
+          );
+          streamedFromServer = true;
+        } else {
+          debugPrint(
+            'PlayerNotifier._loadTrack: loaded track ${track.id} from cache',
+          );
         }
       } else {
-        // Stream from server.
-        _handler.mediaItem.add(mediaItem);
+        // Not cached — stream from server.
+        debugPrint(
+          'PlayerNotifier._loadTrack: streaming track ${track.id} from server: $streamUrl',
+        );
         await _handler.audioPlayer.setAudioSource(
           AudioSource.uri(
             Uri.parse(streamUrl),
@@ -1799,11 +1869,15 @@ class PlayerNotifier extends Notifier<PlayerState> {
           ),
           initialPosition: initialPosition,
         );
-        if (autoPlay) {
-          await _handler.audioPlayer.play();
-        }
+        streamedFromServer = true;
+      }
 
-        // Cache the audio file in the background for next time.
+      if (autoPlay) {
+        await _handler.audioPlayer.play();
+      }
+
+      // Background-cache the audio file if we streamed it (fire-and-forget).
+      if (streamedFromServer) {
         _audioCache.cacheAudio(track, streamUrl, headers);
       }
 
@@ -1830,8 +1904,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
       } catch (_) {}
 
       state = state.copyWith(isLoading: false);
-    } catch (e) {
-      debugPrint('Failed to load track: $e');
+    } catch (e, st) {
+      debugPrint(
+        'PlayerNotifier._loadTrack: failed to load track ${track.id}: $e\n$st',
+      );
       state = state.copyWith(isLoading: false);
 
       // If this was supposed to auto-play and we have more tracks, skip to next
@@ -1841,7 +1917,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
         skipNext();
       } else if (autoPlay && !state.hasNext) {
         // No more tracks - clear the queue to stop infinite loading
-        debugPrint('No more playable tracks in queue, clearing player state');
+        debugPrint(
+          'PlayerNotifier._loadTrack: no more playable tracks in queue, clearing player state',
+        );
         _gaplessActive = false;
         state = const PlayerState();
       }
