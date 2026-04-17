@@ -1,22 +1,17 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tayra/core/router/app_router.dart';
 
-/// Helpers to present dialogs/sheets attached to the app shell's nested
-/// navigator so PopScope and nested back handling work consistently.
+/// Helpers to present dialogs/sheets above all routes (including full-screen
+/// routes like /queue and /now-playing that live outside the ShellRoute).
+/// Using useRootNavigator: true ensures the overlay is always on top of the
+/// entire navigator stack regardless of which navigator the caller belongs to.
 Future<T?> showShellDialog<T>({
   required BuildContext context,
   required WidgetBuilder builder,
   bool barrierDismissible = true,
 }) {
-  final ctx = shellNavigatorKey.currentContext ?? context;
-  if (kDebugMode)
-    debugPrint(
-      'showShellDialog attached to ${ctx == context ? 'local' : 'shell'} context',
-    );
   return showDialog<T>(
-    context: ctx,
-    useRootNavigator: false,
+    context: context,
+    useRootNavigator: true,
     barrierDismissible: barrierDismissible,
     builder: builder,
   );
@@ -29,13 +24,9 @@ Future<T?> showShellModalBottomSheet<T>({
   bool isScrollControlled = false,
   ShapeBorder? shape,
 }) {
-  final ctx = shellNavigatorKey.currentContext ?? context;
-  if (kDebugMode)
-    debugPrint(
-      'showShellModalBottomSheet attached to ${ctx == context ? 'local' : 'shell'} context',
-    );
   return showModalBottomSheet<T>(
-    context: ctx,
+    context: context,
+    useRootNavigator: true,
     backgroundColor: backgroundColor,
     isScrollControlled: isScrollControlled,
     shape: shape,
