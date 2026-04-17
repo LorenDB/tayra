@@ -181,8 +181,18 @@ class AppShell extends ConsumerWidget {
         ],
       ),
 
-      // Show mini-player at bottom on medium (tablet) sizes
-      bottomNavigationBar: hasTrack && !isExpanded ? const MiniPlayer() : null,
+      // Show mini-player or stash bar at bottom on medium (tablet) sizes
+      bottomNavigationBar:
+          !isExpanded && (hasTrack || stashCount > 0)
+              ? Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (hasTrack) const MiniPlayer(),
+                  if (!hasTrack && stashCount > 0)
+                    _StashAccessBar(stashCount: stashCount),
+                ],
+              )
+              : null,
     );
   }
 
