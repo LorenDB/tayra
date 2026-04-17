@@ -1516,6 +1516,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     List<Track> tracks, {
     int startIndex = 0,
     String? source,
+    Duration? initialPosition,
   }) async {
     await _finalizeCurrentListen();
 
@@ -1542,7 +1543,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
     );
 
     if (_isGaplessEnabled) {
-      final loaded = await _loadGaplessSource(startIndex);
+      final loaded = await _loadGaplessSource(
+        startIndex,
+        initialPosition: initialPosition,
+      );
       if (loaded) {
         await _handler.audioPlayer.play();
         // Sync isPlaying immediately from the player rather than waiting for
@@ -1559,11 +1563,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
         } catch (_) {}
       } else {
         // Fall back to single-track loading.
-        await _loadAndPlay(tracks[startIndex]);
+        await _loadAndPlay(tracks[startIndex], initialPosition: initialPosition);
       }
     } else {
       _gaplessActive = false;
-      await _loadAndPlay(tracks[startIndex]);
+      await _loadAndPlay(tracks[startIndex], initialPosition: initialPosition);
     }
 
     _saveQueue();
@@ -1716,7 +1720,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       name: _activeStashName,
       unshuffledQueue: List<Track>.from(state.unshuffledQueue),
       currentIndex: state.currentIndex,
-      position: state.position,
+      position: _handler.audioPlayer.position,
       isShuffled: state.isShuffled,
       loopMode: _loopModeToString(state.loopMode),
       savedAt: DateTime.now(),
@@ -1746,16 +1750,14 @@ class PlayerNotifier extends Notifier<PlayerState> {
     ref.invalidate(stashedQueuesProvider);
     Analytics.track('stash_restored');
 
-    // Load the stashed tracks and seek to the saved position.
+    // Load the stashed tracks, starting at the saved position.
     await playTracks(
       stash.queue,
       startIndex: stash.currentIndex,
       source: 'stash_restore',
+      initialPosition:
+          stash.position.inMilliseconds > 0 ? stash.position : null,
     );
-
-    if (stash.position.inMilliseconds > 0) {
-      await seekTo(stash.position);
-    }
   }
 
   /// Delete a stash by [id] without restoring it.
