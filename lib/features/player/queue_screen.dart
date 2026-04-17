@@ -1397,8 +1397,14 @@ class StashedQueueTile extends ConsumerWidget {
 
   void _confirmRestore(BuildContext context, WidgetRef ref) {
     final playerState = ref.read(playerProvider);
-    // If queue is empty, restore directly without a confirmation dialog.
-    if (playerState.queue.isEmpty) {
+    // If queue is empty, or the current queue has finished (not playing,
+    // at index 0 and position zero), restore directly without prompting.
+    final bool isFinished =
+        playerState.queue.isNotEmpty &&
+        playerState.currentIndex == 0 &&
+        playerState.position == Duration.zero &&
+        !playerState.isPlaying;
+    if (playerState.queue.isEmpty || isFinished) {
       ref.read(playerProvider.notifier).restoreStash(stash.id);
       onRestored?.call();
       return;
