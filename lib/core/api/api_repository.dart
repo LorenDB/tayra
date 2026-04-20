@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+// 'foundation.dart' is unused here; keeping the import list minimal.
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/api/api_client.dart';
 import 'package:tayra/core/api/models.dart';
