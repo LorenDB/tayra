@@ -721,7 +721,7 @@ Future<FunkwhaleAudioHandler> initAudioHandler() async {
       androidNotificationChannelId: 'dev.lorendb.tayra.player',
       androidNotificationChannelName: 'Tayra Playback',
       androidNotificationOngoing: false,
-      androidStopForegroundOnPause: true,
+      androidStopForegroundOnPause: false,
       androidNotificationIcon: 'mipmap/ic_launcher',
       androidBrowsableRootExtras: {
         AndroidContentStyle.supportedKey: true,
@@ -790,6 +790,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
       }
       _bufferingWatchdog?.cancel();
       _bufferingWatchdog = null;
+      _radioFetchTimer?.cancel();
+      _radioFetchTimer = null;
     });
     return const PlayerState();
   }
@@ -922,7 +924,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
                   'PlayerNotifier: track load timed out after 30 s '
                   '(processingState=$ps). Attempting recovery.',
                 );
-                _handler.audioPlayer.stop().catchError((_) {});
+                _handler.audioPlayer.pause().catchError((_) {});
                 state = state.copyWith(isLoading: false);
                 // Do NOT auto-skip when a track stays stuck in loading/buffering.
                 // Instead inform the user and pause playback so they can act.
