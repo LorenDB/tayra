@@ -160,6 +160,11 @@ class CachedFunkwhaleApi {
     );
   }
 
+  Future<void> createAlbumMutation(int id, Map<String, dynamic> payload) async {
+    await _api.createAlbumMutation(id, payload);
+    await _cache.deleteMetadata('album_$id');
+  }
+
   // ── Artists ─────────────────────────────────────────────────────────
 
   Future<PaginatedResponse<Artist>> getArtists({

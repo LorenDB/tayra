@@ -473,6 +473,7 @@ class _AlbumHeader extends ConsumerWidget {
             icon: const Icon(Icons.more_vert, color: Colors.white),
             color: AppTheme.surfaceContainer,
             onSelected: (value) {
+              if (value == 'edit') context.push('${GoRouterState.of(context).uri}/edit');
               if (value == 'download') toggleDownload();
               if (value == 'play_next') playAlbumNext();
               if (value == 'add_queue') addAlbumToQueue();
@@ -480,6 +481,23 @@ class _AlbumHeader extends ConsumerWidget {
             },
             itemBuilder:
                 (_) => [
+                  const PopupMenuItem(
+                    value: 'edit',
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.edit_rounded,
+                          size: 20,
+                          color: AppTheme.onBackground,
+                        ),
+                        SizedBox(width: 12),
+                        Text(
+                          'Edit album',
+                          style: TextStyle(color: AppTheme.onBackground),
+                        ),
+                      ],
+                    ),
+                  ),
                   PopupMenuItem(
                     value: 'download',
                     child: Row(
