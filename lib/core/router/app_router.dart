@@ -9,6 +9,7 @@ import 'package:tayra/features/browse/browse_screen.dart';
 import 'package:tayra/features/radios/radios_screen.dart';
 import 'package:tayra/features/browse/artist_detail_screen.dart';
 import 'package:tayra/features/browse/album_detail_screen.dart';
+import 'package:tayra/features/browse/album_edit_screen.dart';
 import 'package:tayra/features/settings/settings_screen.dart';
 import 'package:tayra/features/favorites/favorites_screen.dart';
 import 'package:tayra/features/playlists/playlists_screen.dart';
@@ -117,6 +118,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   final id = int.parse(state.pathParameters['id']!);
                   return AlbumDetailScreen(albumId: id);
                 },
+                routes: [
+                  GoRoute(
+                    path: 'edit',
+                    name: 'album_edit',
+                    builder: (context, state) {
+                      final id = int.parse(state.pathParameters['id']!);
+                      return AlbumEditScreen(albumId: id);
+                    },
+                  ),
+                ],
               ),
               GoRoute(
                 path: 'artist/:id',
@@ -170,6 +181,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   final id = int.parse(state.pathParameters['id']!);
                   return AlbumDetailScreen(albumId: id);
                 },
+                routes: [
+                  GoRoute(
+                    path: 'edit',
+                    name: 'browse_album_edit',
+                    builder: (context, state) {
+                      final id = int.parse(state.pathParameters['id']!);
+                      return AlbumEditScreen(albumId: id);
+                    },
+                  ),
+                ],
               ),
             ],
           ),
@@ -194,6 +215,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   final id = int.parse(state.pathParameters['id']!);
                   return AlbumDetailScreen(albumId: id);
                 },
+                routes: [
+                  GoRoute(
+                    path: 'edit',
+                    name: 'search_album_edit',
+                    builder: (context, state) {
+                      final id = int.parse(state.pathParameters['id']!);
+                      return AlbumEditScreen(albumId: id);
+                    },
+                  ),
+                ],
               ),
               GoRoute(
                 path: 'artist/:id',

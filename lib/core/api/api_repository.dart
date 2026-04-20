@@ -62,6 +62,10 @@ class FunkwhaleApi {
     return Album.fromJson(response.data);
   }
 
+  Future<void> createAlbumMutation(int id, Map<String, dynamic> payload) async {
+    await _dio.post('$_baseUrl/api/v1/albums/$id/mutations/', data: payload);
+  }
+
   // ── Artists ─────────────────────────────────────────────────────────
 
   Future<PaginatedResponse<Artist>> getArtists({

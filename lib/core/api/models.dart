@@ -177,6 +177,7 @@ class Album {
   final List<String> tags;
   final DateTime? creationDate;
   final List<Track> tracks;
+  final String? mbid;
 
   const Album({
     required this.id,
@@ -190,6 +191,7 @@ class Album {
     this.tags = const [],
     this.creationDate,
     this.tracks = const [],
+    this.mbid,
   });
 
   factory Album.fromJson(Map<String, dynamic> json) {
@@ -232,6 +234,7 @@ class Album {
               ?.map((e) => Track.fromJson(_toMap(e)))
               .toList() ??
           const [],
+      mbid: json['mbid'] as String?,
     );
   }
 
@@ -248,6 +251,7 @@ class Album {
       'tags': tags,
       'creation_date': creationDate?.toIso8601String(),
       'tracks': tracks.map((t) => t.toJson()).toList(),
+      'mbid': mbid,
     };
   }
 
