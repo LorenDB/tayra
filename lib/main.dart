@@ -13,7 +13,6 @@ import 'package:tayra/features/year_review/listen_history_service.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 import 'package:audio_service_mpris/audio_service_mpris.dart';
-import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:tayra/core/analytics/analytics.dart';
 // Optional: set a minimum window size on desktop platforms to avoid
 // rendering issues at very small sizes.

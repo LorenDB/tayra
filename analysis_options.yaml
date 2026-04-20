@@ -24,5 +24,19 @@ linter:
     # avoid_print: false  # Uncomment to disable the `avoid_print` rule
     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
 
+# Exclude example code under packages (third-party examples) from analysis to
+# avoid spurious errors coming from their missing dev deps or platform-only
+# imports. Keep this minimal to not hide real issues in our `lib/`.
+analyzer:
+  exclude:
+    - "packages/**/example/**"
+    - "packages/**/test/**"
+    - "**/build/**"
+    - ".dart_tool/**"
+    - "**/flatpak/**"
+    - "**/windows/**"
+    - "**/macos/**"
+    - "**/linux/**"
+
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
