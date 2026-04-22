@@ -189,8 +189,19 @@ class _AlbumDetailBody extends ConsumerWidget {
                     (sum, track) => sum + (track.duration ?? 0),
                   ),
                 ),
-            loading: () => _AlbumInfo(album: album),
-            error: (_, _) => _AlbumInfo(album: album),
+            // Always pass the computed accent/text colors so the UI (for
+            // example the artist name) can tint immediately while tracks are
+            // still loading or if track loading failed.
+            loading: () => _AlbumInfo(
+              album: album,
+              dominantColor: dominantColor,
+              textColor: textColor,
+            ),
+            error: (_, _) => _AlbumInfo(
+              album: album,
+              dominantColor: dominantColor,
+              textColor: textColor,
+            ),
           ),
         ),
 

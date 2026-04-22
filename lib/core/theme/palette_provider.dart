@@ -93,14 +93,29 @@ final paletteColorsProviderUnconditional =
     });
 
 List<PaletteColor> _getCandidateColors(PaletteGenerator palette) {
+  // lightVibrantColor and lightMutedColor are excluded: on dark UIs they tend
+  // to be washed-out and are rarely better than the vibrant/muted variants.
   return [
     palette.vibrantColor,
-    palette.lightVibrantColor,
     palette.darkVibrantColor,
     palette.mutedColor,
-    palette.lightMutedColor,
     palette.dominantColor,
   ].whereType<PaletteColor>().toList();
+}
+
+/// Returns a perceptual chroma proxy for [color] in the range [0, 1].
+///
+/// This is not true CAM16/HCT chroma — it's an HSL approximation that weights
+/// saturation down near the lightness extremes (near-black and near-white),
+/// where high saturation produces colors that look muddy or pastel rather than
+/// vivid. The result correlates well with perceived colorfulness for the purpose
+/// of accent color selection.
+double _chromaProxy(Color color) {
+  final hsl = HSLColor.fromColor(color);
+  // A lightness of 0.5 is maximally vivid; 0.0 and 1.0 are black/white.
+  // (1 - |lightness - 0.5| * 2) maps 0.5 → 1.0 and 0.0/1.0 → 0.0.
+  final lightnessFactor = (1 - (hsl.lightness - 0.5).abs() * 2).clamp(0.0, 1.0);
+  return hsl.saturation * lightnessFactor;
 }
 
 Color _extractBestColor(PaletteGenerator palette) {
@@ -108,28 +123,37 @@ Color _extractBestColor(PaletteGenerator palette) {
 
   if (candidates.isEmpty) return AppTheme.primary;
 
-  candidates.sort((a, b) => b.population.compareTo(a.population));
+  // Sort by perceptual chroma (vividness) rather than pixel population.
+  // Population-first ordering causes muted backgrounds to be preferred over
+  // vivid accent colors, which is the opposite of what we want.
+  candidates.sort((a, b) => _chromaProxy(b.color).compareTo(_chromaProxy(a.color)));
 
   for (final candidate in candidates) {
+    final hsl = HSLColor.fromColor(candidate.color);
+    // Hard-reject low-saturation colors. Attempting to rescue a desaturated
+    // color by bumping its saturation produces artificial muddy tones (e.g.
+    // the grayish-red fallback this logic was introduced to fix).
+    if (hsl.saturation < 0.3) continue;
+
     final adjusted = _ensureContrast(candidate.color, minimumContrast: 2.5);
-    if (adjusted != null) {
-      return adjusted;
-    }
+    if (adjusted != null) return adjusted;
   }
 
+  // No candidate survived the saturation gate and contrast check — fall back
+  // to the app primary rather than returning a mangled rescue color.
   return AppTheme.primary;
 }
 
 Color? _ensureContrast(Color color, {double minimumContrast = 2.5}) {
-  const double minSaturation = 0.25;
   const double lightnessStep = 0.02;
   final double maxLightnessForWhiteContrast = 1.05 / minimumContrast - 0.05;
 
   var hsl = HSLColor.fromColor(color);
 
-  if (hsl.saturation < minSaturation) {
-    hsl = hsl.withSaturation(minSaturation);
-  }
+  // Do NOT force a minimum saturation here. Artificially boosting the
+  // saturation of a low-chroma color changes its perceived identity and
+  // produces the muddy rescue colors we are trying to avoid. Low-saturation
+  // candidates are now rejected upstream in _extractBestColor instead.
 
   if (hsl.lightness > maxLightnessForWhiteContrast) {
     hsl = hsl.withLightness(maxLightnessForWhiteContrast);
