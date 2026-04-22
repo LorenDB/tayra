@@ -1596,6 +1596,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }) async {
     await _finalizeCurrentListen();
 
+    const radioSources = {'radio', 'radio-fallback', 'instance-radio'};
+    if (source == null || !radioSources.contains(source)) {
+      await stopRadio();
+    }
+
     if (tracks.isEmpty) {
       _gaplessActive = false;
       state = const PlayerState();
