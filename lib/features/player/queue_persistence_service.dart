@@ -75,6 +75,7 @@ class QueuePersistenceService {
   static const _keyPosition = 'player_position';
   static const _keyIsShuffled = 'player_is_shuffled';
   static const _keyLoopMode = 'player_loop_mode';
+  static const _keyDuration = 'player_duration';
   static const _keyListenSession = 'player_listen_session';
 
   /// Save the current queue state to SharedPreferences.
@@ -83,6 +84,7 @@ class QueuePersistenceService {
     required List<Track> unshuffledQueue,
     required int currentIndex,
     required Duration position,
+    required Duration? duration,
     required bool isShuffled,
     required String loopMode,
   }) async {
@@ -104,6 +106,11 @@ class QueuePersistenceService {
       // Save playback state
       await prefs.setInt(_keyCurrentIndex, currentIndex);
       await prefs.setInt(_keyPosition, position.inMilliseconds);
+      if (duration != null) {
+        await prefs.setInt(_keyDuration, duration.inMilliseconds);
+      } else {
+        await prefs.remove(_keyDuration);
+      }
       await prefs.setBool(_keyIsShuffled, isShuffled);
       await prefs.setString(_keyLoopMode, loopMode);
     } catch (e) {
@@ -162,6 +169,7 @@ class QueuePersistenceService {
       // Restore playback state
       final currentIndex = prefs.getInt(_keyCurrentIndex) ?? 0;
       final positionMs = prefs.getInt(_keyPosition) ?? 0;
+      final durationMs = prefs.getInt(_keyDuration);
       final isShuffled = prefs.getBool(_keyIsShuffled) ?? false;
       final loopModeStr = prefs.getString(_keyLoopMode) ?? 'off';
 
@@ -186,6 +194,8 @@ class QueuePersistenceService {
         unshuffledQueue: unshuffledQueue,
         currentIndex: currentIndex.clamp(0, queue.length - 1),
         position: Duration(milliseconds: positionMs),
+        duration:
+            durationMs != null ? Duration(milliseconds: durationMs) : null,
         isShuffled: isShuffled,
         loopMode: loopModeStr,
         listenSession: listenSession,
@@ -314,6 +324,7 @@ class QueuePersistenceService {
       await prefs.remove(_keyUnshuffledQueue);
       await prefs.remove(_keyCurrentIndex);
       await prefs.remove(_keyPosition);
+      await prefs.remove(_keyDuration);
       await prefs.remove(_keyIsShuffled);
       await prefs.remove(_keyLoopMode);
       await prefs.remove(_keyListenSession);
@@ -345,6 +356,7 @@ class QueueState {
   final List<Track> unshuffledQueue;
   final int currentIndex;
   final Duration position;
+  final Duration? duration;
   final bool isShuffled;
   final String loopMode;
   final PersistedListenSession? listenSession;
@@ -354,6 +366,7 @@ class QueueState {
     this.unshuffledQueue = const [],
     required this.currentIndex,
     required this.position,
+    this.duration,
     required this.isShuffled,
     required this.loopMode,
     this.listenSession,

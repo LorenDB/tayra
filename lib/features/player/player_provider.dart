@@ -773,6 +773,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// too long without transitioning to ready.  Restarted on every buffering
   /// event; cancelled when the player reaches a non-buffering state.
   Timer? _bufferingWatchdog;
+
   /// Count of consecutive automatic load failures (for telemetry).
   /// We no longer auto-skip on failure; instead we show a SnackBar and
   /// pause playback. The counter remains to surface analytics if desired.
@@ -886,6 +887,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
     // Listen to position.
     _subscriptions.add(
       _handler.audioPlayer.positionStream.listen((position) async {
+        // When no audio source has been loaded yet (e.g. after a queue restore
+        // on startup) the idle player emits zero positions. Ignore them so
+        // they don't overwrite the restored position in the UI.
+        if (_pendingRestorePosition != null) {
+          return;
+        }
         // When the queue has ended (not playing, at index 0, position already
         // reset) ignore any trailing position events from the completed player
         // so they don't overwrite the reset back to Duration.zero.
@@ -947,11 +954,15 @@ class PlayerNotifier extends Notifier<PlayerState> {
                   final title = state.currentTrack?.title ?? 'track';
                   ScaffoldMessenger.of(ctx).showSnackBar(
                     SnackBar(
-                      content: Text('Unable to load "${title}". Playback paused.'),
+                      content: Text(
+                        'Unable to load "${title}". Playback paused.',
+                      ),
                     ),
                   );
                 } else {
-                  debugPrint('PlayerNotifier: no navigation context to show SnackBar');
+                  debugPrint(
+                    'PlayerNotifier: no navigation context to show SnackBar',
+                  );
                 }
                 // Ensure player is stopped and internal flags reflect paused state.
                 _gaplessActive = false;
@@ -1064,6 +1075,17 @@ class PlayerNotifier extends Notifier<PlayerState> {
         savedState.queue.length - 1,
       );
 
+      // Derive duration from the saved state or from the track metadata.
+      final currentTrack =
+          validIndex >= 0 && validIndex < savedState.queue.length
+              ? savedState.queue[validIndex]
+              : null;
+      final trackDuration =
+          savedState.duration ??
+          (currentTrack?.duration != null
+              ? Duration(seconds: currentTrack!.duration!)
+              : null);
+
       // Restore queue and playback state
       state = state.copyWith(
         queue: savedState.queue,
@@ -1071,6 +1093,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
         currentIndex: validIndex,
         isShuffled: savedState.isShuffled,
         loopMode: _parseLoopMode(savedState.loopMode),
+        position: savedState.position,
+        duration: trackDuration ?? Duration.zero,
       );
 
       // Restore the saved playback position so it can be seeked to once the
@@ -1083,11 +1107,6 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // that play() knows it must call _loadAndPlay first.
       _pendingRestorePosition = savedState.position;
       _pendingRestoreListenSession = savedState.listenSession;
-      if (savedState.position.inSeconds > 0) {
-        // Reflect the position in the UI immediately so the scrubber shows
-        // where the user left off before they press play.
-        state = state.copyWith(position: savedState.position);
-      }
     } catch (e) {
       // Failed to restore - clear corrupted state
       await QueuePersistenceService.clearQueue();
@@ -1105,6 +1124,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       unshuffledQueue: state.unshuffledQueue,
       currentIndex: state.currentIndex,
       position: state.position,
+      duration: state.duration,
       isShuffled: state.isShuffled,
       loopMode: _loopModeToString(state.loopMode),
     );
@@ -1211,6 +1231,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
         initialIndex: startIndex,
         initialPosition: initialPosition,
       );
+
+      // Explicitly seek so the positionStream reliably reports the correct
+      // position before play() is called (see comment in _loadTrack).
+      if (initialPosition != null) {
+        await _handler.audioPlayer.seek(initialPosition);
+      }
 
       // Sync the player's loop mode so it can handle looping natively.
       _handler.audioPlayer.setLoopMode(state.loopMode);
@@ -1928,6 +1954,13 @@ class PlayerNotifier extends Notifier<PlayerState> {
       }
 
       if (autoPlay) {
+        // Explicitly seek after the source is loaded so the positionStream
+        // reliably reports the correct position.  setAudioSource's
+        // initialPosition does not always synchronously update the reported
+        // position before play() is called, which causes a brief jump to zero.
+        if (initialPosition != null) {
+          await _handler.audioPlayer.seek(initialPosition);
+        }
         await _handler.audioPlayer.play();
       }
 
@@ -1980,7 +2013,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
           ),
         );
       } else {
-        debugPrint('PlayerNotifier._loadTrack: no navigation context to show SnackBar');
+        debugPrint(
+          'PlayerNotifier._loadTrack: no navigation context to show SnackBar',
+        );
       }
 
       // Stop playback and ensure UI reflects the paused state.
@@ -2094,11 +2129,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
   Future<void> play() async {
     // If the queue was just restored from storage, no audio source has been
-    // loaded yet.  Load and play the current track, then seek to where the
-    // user left off.
+    // loaded yet.  Load the current track, seek to where the user left off,
+    // then play.
     if (_pendingRestorePosition != null) {
       final seekTo = _pendingRestorePosition!;
-      _pendingRestorePosition = null;
       final track = state.currentTrack;
       if (track != null) {
         state = state.copyWith(isLoading: true);
@@ -2108,17 +2142,47 @@ class PlayerNotifier extends Notifier<PlayerState> {
             initialPosition: seekTo,
           );
           if (loaded) {
+            // Explicitly seek so the positionStream reports the right value.
+            await _handler.audioPlayer.seek(seekTo);
+            // Wait for the positionStream to confirm the seeked position
+            // before dropping the guard, so no stale zero can overwrite it.
+            await _handler.audioPlayer.positionStream.firstWhere(
+              (p) => p >= seekTo,
+            );
+            _pendingRestorePosition = null;
             await _handler.audioPlayer.play();
             // Sync isPlaying immediately — same race fix as in playTracks().
             state = state.copyWith(
               isLoading: false,
               isPlaying: _handler.audioPlayer.playing,
+              position: seekTo,
             );
             await _activateListenForTrack(track, position: seekTo);
             return;
           }
         }
-        await _loadAndPlay(track, initialPosition: seekTo);
+        // Load without autoPlay so we can seek explicitly first.
+        await _loadTrack(track, autoPlay: false, initialPosition: seekTo);
+        // Source is loaded — explicitly seek to the restore position.
+        await _handler.audioPlayer.seek(seekTo);
+        // Wait for the positionStream to confirm the seeked position.
+        await _handler.audioPlayer.positionStream.firstWhere(
+          (p) => p >= seekTo,
+        );
+        // Guard is no longer needed — the positionStream just confirmed
+        // the correct position.
+        _pendingRestorePosition = null;
+        // Start playback.
+        await _handler.audioPlayer.play();
+        state = state.copyWith(
+          isLoading: false,
+          isPlaying: _handler.audioPlayer.playing,
+          position: seekTo,
+        );
+        unawaited(_activateListenForTrack(track, position: seekTo));
+        try {
+          await _api.recordListening(track.id);
+        } catch (_) {}
         return;
       }
     }
