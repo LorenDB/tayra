@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:tayra/core/api/models.dart';
+import 'package:tayra/features/player/queue_persistence_service.dart';
 import 'package:tayra/features/year_review/listen_history_service.dart';
 
 typedef InsertListenRecord =
@@ -12,12 +13,21 @@ typedef InsertListenRecord =
 
 typedef UpdateListenRecord = Future<void> Function(int id, int listenedSeconds);
 
+typedef SessionPersistedCallback =
+    void Function(
+      int trackId,
+      int recordId,
+      int persistedSeconds,
+      DateTime listenedAt,
+    );
+
 /// Tracks one local listen row per actual track activation.
 class PlaybackListenTracker {
   PlaybackListenTracker({
     this.persistIntervalSeconds = 2,
     InsertListenRecord? insertListenRecord,
     UpdateListenRecord? updateListenRecord,
+    this.onSessionPersisted,
   }) : _insertListenRecord =
            insertListenRecord ?? ListenHistoryService.insertListen,
        _updateListenRecord =
@@ -26,6 +36,7 @@ class PlaybackListenTracker {
   final int persistIntervalSeconds;
   final InsertListenRecord _insertListenRecord;
   final UpdateListenRecord _updateListenRecord;
+  final SessionPersistedCallback? onSessionPersisted;
 
   _TrackedListenSession? _session;
   Future<void> _tail = Future.value();
@@ -37,6 +48,7 @@ class PlaybackListenTracker {
     Duration position = Duration.zero,
     DateTime? listenedAt,
     bool isPlaying = false,
+    PersistedListenSession? resume,
   }) {
     return _serialize(() async {
       final previousSession = _session;
@@ -44,12 +56,20 @@ class PlaybackListenTracker {
         await _persist(previousSession, force: true);
       }
 
-      _session = _TrackedListenSession(
+      final session = _TrackedListenSession(
         track: track,
-        listenedAt: listenedAt ?? DateTime.now(),
+        listenedAt: listenedAt ?? resume?.listenedAt ?? DateTime.now(),
         lastPosition: position,
         isPlaying: isPlaying,
       );
+
+      if (resume != null && resume.trackId == track.id) {
+        session.recordId = resume.recordId;
+        session.persistedSeconds = resume.persistedSeconds;
+        session.listenedMilliseconds = resume.persistedSeconds * 1000;
+      }
+
+      _session = session;
     });
   }
 
@@ -147,6 +167,12 @@ class PlaybackListenTracker {
         listenedAt: session.listenedAt,
       );
       session.persistedSeconds = listenedSeconds;
+      onSessionPersisted?.call(
+        session.track.id,
+        session.recordId!,
+        listenedSeconds,
+        session.listenedAt,
+      );
       return;
     }
 
@@ -161,6 +187,12 @@ class PlaybackListenTracker {
 
     await _updateListenRecord(session.recordId!, listenedSeconds);
     session.persistedSeconds = listenedSeconds;
+    onSessionPersisted?.call(
+      session.track.id,
+      session.recordId!,
+      listenedSeconds,
+      session.listenedAt,
+    );
   }
 
   Future<void> _serialize(Future<void> Function() operation) {
