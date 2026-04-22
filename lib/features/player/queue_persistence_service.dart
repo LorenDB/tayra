@@ -75,6 +75,7 @@ class QueuePersistenceService {
   static const _keyPosition = 'player_position';
   static const _keyIsShuffled = 'player_is_shuffled';
   static const _keyLoopMode = 'player_loop_mode';
+  static const _keyListenSession = 'player_listen_session';
 
   /// Save the current queue state to SharedPreferences.
   static Future<void> saveQueue({
@@ -164,6 +165,22 @@ class QueuePersistenceService {
       final isShuffled = prefs.getBool(_keyIsShuffled) ?? false;
       final loopModeStr = prefs.getString(_keyLoopMode) ?? 'off';
 
+      PersistedListenSession? listenSession;
+      final listenSessionJson = prefs.getString(_keyListenSession);
+      if (listenSessionJson != null) {
+        try {
+          final map = jsonDecode(listenSessionJson) as Map<String, dynamic>;
+          listenSession = PersistedListenSession(
+            trackId: map['trackId'] as int,
+            recordId: map['recordId'] as int,
+            persistedSeconds: map['persistedSeconds'] as int,
+            listenedAt: DateTime.fromMillisecondsSinceEpoch(
+              map['listenedAt'] as int,
+            ),
+          );
+        } catch (_) {}
+      }
+
       return QueueState(
         queue: queue,
         unshuffledQueue: unshuffledQueue,
@@ -171,6 +188,7 @@ class QueuePersistenceService {
         position: Duration(milliseconds: positionMs),
         isShuffled: isShuffled,
         loopMode: loopModeStr,
+        listenSession: listenSession,
       );
     } catch (e) {
       // Silently fail - corrupted data or other issue
@@ -257,6 +275,37 @@ class QueuePersistenceService {
 
   // ── Queue ──────────────────────────────────────────────────────────────
 
+  /// Persist the current in-progress listen session so it can be resumed
+  /// after an app restart. Called whenever the tracker writes to the DB.
+  static Future<void> saveListenSession({
+    required int trackId,
+    required int recordId,
+    required int persistedSeconds,
+    required DateTime listenedAt,
+  }) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(
+        _keyListenSession,
+        jsonEncode({
+          'trackId': trackId,
+          'recordId': recordId,
+          'persistedSeconds': persistedSeconds,
+          'listenedAt': listenedAt.millisecondsSinceEpoch,
+        }),
+      );
+    } catch (_) {}
+  }
+
+  /// Remove the persisted listen session (e.g. after it has been consumed on
+  /// restore, or when the queue is cleared).
+  static Future<void> clearListenSession() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(_keyListenSession);
+    } catch (_) {}
+  }
+
   /// Clear the saved queue state.
   static Future<void> clearQueue() async {
     try {
@@ -267,10 +316,27 @@ class QueuePersistenceService {
       await prefs.remove(_keyPosition);
       await prefs.remove(_keyIsShuffled);
       await prefs.remove(_keyLoopMode);
+      await prefs.remove(_keyListenSession);
     } catch (e) {
       // Silently fail
     }
   }
+}
+
+/// Serializable snapshot of an in-progress listen session, saved alongside
+/// the queue so it can be resumed after an app restart.
+class PersistedListenSession {
+  final int trackId;
+  final int recordId;
+  final int persistedSeconds;
+  final DateTime listenedAt;
+
+  const PersistedListenSession({
+    required this.trackId,
+    required this.recordId,
+    required this.persistedSeconds,
+    required this.listenedAt,
+  });
 }
 
 /// Restored queue state.
@@ -281,6 +347,7 @@ class QueueState {
   final Duration position;
   final bool isShuffled;
   final String loopMode;
+  final PersistedListenSession? listenSession;
 
   const QueueState({
     required this.queue,
@@ -289,5 +356,6 @@ class QueueState {
     required this.position,
     required this.isShuffled,
     required this.loopMode,
+    this.listenSession,
   });
 }

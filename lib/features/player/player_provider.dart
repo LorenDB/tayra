@@ -757,6 +757,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// restore.  Set by [_restoreQueue] and cleared once the seek is done.
   Duration? _pendingRestorePosition;
 
+  /// Listen session to resume after a queue restore. Consumed by the first
+  /// [_activateListenForTrack] call that matches the session's track ID.
+  PersistedListenSession? _pendingRestoreListenSession;
+
   /// If the active queue was restored from a stash, keep that stash's name
   /// here so re-stashing the same active queue preserves the name.
   String? _activeStashName;
@@ -778,7 +782,16 @@ class PlayerNotifier extends Notifier<PlayerState> {
   PlayerState build() {
     _handler = ref.read(audioHandlerProvider);
     _audioCache = ref.read(audioCacheServiceProvider);
-    _listenTracker = PlaybackListenTracker();
+    _listenTracker = PlaybackListenTracker(
+      onSessionPersisted: (trackId, recordId, persistedSeconds, listenedAt) {
+        QueuePersistenceService.saveListenSession(
+          trackId: trackId,
+          recordId: recordId,
+          persistedSeconds: persistedSeconds,
+          listenedAt: listenedAt,
+        );
+      },
+    );
     _init();
     Future.microtask(() => _restoreQueue());
     ref.onDispose(() {
@@ -1015,6 +1028,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
             );
           } catch (_) {}
 
+          _pendingRestoreListenSession = null;
+
           if (nextIndex != null &&
               nextIndex >= 0 &&
               nextIndex < state.queue.length) {
@@ -1067,6 +1082,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // source has not been loaded yet.  We always set it (even to zero) so
       // that play() knows it must call _loadAndPlay first.
       _pendingRestorePosition = savedState.position;
+      _pendingRestoreListenSession = savedState.listenSession;
       if (savedState.position.inSeconds > 0) {
         // Reflect the position in the UI immediately so the scrubber shows
         // where the user left off before they press play.
@@ -1118,10 +1134,16 @@ class PlayerNotifier extends Notifier<PlayerState> {
     bool? isPlaying,
   }) async {
     try {
+      final resume =
+          _pendingRestoreListenSession?.trackId == track.id
+              ? _pendingRestoreListenSession
+              : null;
+      _pendingRestoreListenSession = null;
       await _listenTracker.activate(
         track,
         position: position,
         isPlaying: isPlaying ?? _handler.audioPlayer.playing,
+        resume: resume,
       );
     } catch (_) {}
   }
