@@ -19,6 +19,7 @@ import 'package:tayra/features/player/now_playing_screen.dart';
 import 'package:tayra/features/player/queue_screen.dart';
 import 'package:tayra/features/year_review/year_review_screen.dart';
 import 'package:tayra/features/year_review/year_review_settings_screen.dart';
+import 'package:tayra/features/settings/ai_provider_settings_screen.dart';
 import 'package:tayra/features/search/search_screen.dart';
 import 'package:tayra/features/upload/upload_screen.dart';
 import 'package:tayra/core/widgets/app_shell.dart';
@@ -282,6 +283,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/year-review-settings',
         name: 'year_review_settings',
         builder: (context, state) => const YearReviewSettingsScreen(),
+      ),
+      GoRoute(
+        path: '/ai-provider-settings',
+        name: 'ai_provider_settings',
+        builder: (context, state) => const AiProviderSettingsScreen(),
       ),
       GoRoute(
         path: '/now-playing',

@@ -1,22 +1,12 @@
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tayra/core/ai/ai_client.dart';
+import 'package:tayra/core/ai/gemini_nano_client.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tayra/features/year_review/listen_history_provider.dart';
 import 'package:tayra/features/year_review/listen_history_service.dart';
-
-// ── Channel constants ─────────────────────────────────────────────────────
-
-const _channel = MethodChannel('dev.lorendb.tayra/genai_prompt');
-
-/// Feature status values returned by the native plugin.
-/// Must stay in sync with GenaiPromptPlugin.kt.
-const _statusUnavailable = 0;
-const _statusDownloadable = 1;
-const _statusDownloading = 2;
-const _statusAvailable = 3;
 
 // ── State ────────────────────────────────────────────────────────────────
 
@@ -25,22 +15,22 @@ abstract class AiSummaryState {
   const AiSummaryState();
 }
 
-/// The current platform doesn't support on-device AI (e.g. iOS / desktop).
+/// The current platform / configuration doesn't support AI (disabled or no provider configured).
 class AiSummaryUnsupported extends AiSummaryState {
   const AiSummaryUnsupported();
 }
 
-/// Gemini Nano is not available on this specific Android device.
+/// The AI provider is not available on this specific device (e.g. Gemini Nano on unsupported hardware).
 class AiSummaryDeviceUnsupported extends AiSummaryState {
   const AiSummaryDeviceUnsupported();
 }
 
-/// The model needs to be downloaded before inference can run.
+/// The model needs to be downloaded before inference can run (Gemini Nano only).
 class AiSummaryDownloadRequired extends AiSummaryState {
   const AiSummaryDownloadRequired();
 }
 
-/// The model is currently being downloaded.
+/// The model is currently being downloaded (Gemini Nano only).
 class AiSummaryDownloading extends AiSummaryState {
   const AiSummaryDownloading();
 }
@@ -71,26 +61,11 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
 
   @override
   AiSummaryState build() {
-    // Kick off async initialisation; return the initial state synchronously.
     Future.microtask(_init);
     return const AiSummaryUnsupported();
   }
 
   Future<void> _init() async {
-    // ML Kit GenAI is Android-only.
-    if (defaultTargetPlatform != TargetPlatform.android) {
-      debugPrint('AiSummary: platform unsupported: $defaultTargetPlatform');
-      try {
-        Analytics.track('year_review_ai_platform_unsupported', {
-          'platform': defaultTargetPlatform.toString(),
-          'year': _year,
-        });
-      } catch (_) {}
-      state = const AiSummaryUnsupported();
-      return;
-    }
-
-    // Respect the global AI toggle.
     final settings = ref.read(settingsProvider);
     if (!settings.aiEnabled) {
       debugPrint('AiSummary: AI disabled by user setting');
@@ -98,38 +73,41 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
       return;
     }
 
+    final client = ref.read(aiClientProvider);
+
     try {
-      final statusRaw = await _channel.invokeMethod<int>('checkFeatureStatus');
-      final status = statusRaw ?? _statusUnavailable;
-      debugPrint('AiSummary: feature status for year=$_year -> $status');
+      final availability = await client.checkAvailability();
+      debugPrint(
+        'AiSummary: availability for year=$_year -> $availability',
+      );
       try {
         Analytics.track('year_review_ai_feature_status', {
           'year': _year,
-          'status': status,
+          'status': availability.name,
+          'provider': settings.aiProviderType.name,
         });
       } catch (_) {}
 
-      switch (status) {
-        case _statusAvailable:
-          debugPrint('AiSummary: feature available, starting generation');
+      switch (availability) {
+        case AiAvailability.available:
+          debugPrint('AiSummary: provider available, starting generation');
           state = const AiSummaryGenerating();
           await _generate();
-
-        case _statusDownloadable:
-          debugPrint('AiSummary: feature downloadable (model required)');
+        case AiAvailability.downloadRequired:
+          debugPrint('AiSummary: model download required');
           state = const AiSummaryDownloadRequired();
-
-        case _statusDownloading:
-          debugPrint('AiSummary: feature is currently downloading');
+        case AiAvailability.downloading:
+          debugPrint('AiSummary: model is currently downloading');
           state = const AiSummaryDownloading();
-
-        case _statusUnavailable:
-        default:
-          debugPrint('AiSummary: feature unavailable on this device');
+        case AiAvailability.notConfigured:
+          debugPrint('AiSummary: provider not configured');
+          state = const AiSummaryUnsupported();
+        case AiAvailability.deviceUnsupported:
+          debugPrint('AiSummary: provider unavailable on this device');
           state = const AiSummaryDeviceUnsupported();
       }
     } catch (e) {
-      debugPrint('AiSummary: error checking feature status: $e');
+      debugPrint('AiSummary: error checking availability: $e');
       try {
         Analytics.track('year_review_ai_feature_check_failed', {
           'year': _year,
@@ -151,7 +129,8 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
     state = const AiSummaryDownloading();
 
     try {
-      await _channel.invokeMethod<void>('downloadFeature');
+      final client = ref.read(aiClientProvider);
+      await client.download();
       debugPrint('AiSummary: download completed for year=$_year');
       try {
         Analytics.track('year_review_ai_download_completed', {'year': _year});
@@ -178,7 +157,6 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
   }
 
   Future<void> _generate() async {
-    // Read the stats synchronously from the already-loaded yearReviewProvider.
     final statsAsync = ref.read(yearReviewProvider(_year));
     final stats = statsAsync.value;
     if (stats == null) {
@@ -228,11 +206,9 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
         });
       } catch (_) {}
 
-      final response = await _channel.invokeMethod<String>('runInference', {
-        'prompt': promptText,
-      });
+      final client = ref.read(aiClientProvider);
+      final text = await client.runInference(promptText);
 
-      final text = response ?? '';
       debugPrint(
         'AiSummary: inference completed for year=$_year; '
         'response length=${text.length}',
@@ -252,7 +228,7 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
         await prefs.setString('ai_summary_${_year}_text', trimmed);
         // If the calendar has moved past the reviewed year, also store a
         // permanent final copy so it won't be invalidated by later prompt
-        // changes. This makes the year-end summary permanent.
+        // changes.
         final now = DateTime.now();
         if (now.year > _year) {
           await prefs.setString('ai_summary_${_year}_final', trimmed);
@@ -277,29 +253,24 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
           'error_type': e.runtimeType.toString(),
         });
       } catch (_) {}
-      state = AiSummaryError('Inference failed');
+      state = AiSummaryError('Inference failed: ${e.runtimeType}');
     }
   }
 
-  /// Pregenerate the summary for use by the Year-in-Review banner. If the
-  /// model needs downloading, this will attempt a download first. This runs
-  /// silently in the background and caches results when available.
+  /// Pregenerate the summary for use by the Year-in-Review banner.
+  /// Runs silently in the background and caches results when available.
   Future<void> ensureGeneratedForBanner() async {
-    // Platform check already handled at call sites, but double-check.
-    if (defaultTargetPlatform != TargetPlatform.android) return;
+    final settings = ref.read(settingsProvider);
+    if (!settings.aiEnabled) return;
 
     try {
-      final statusRaw = await _channel.invokeMethod<int>('checkFeatureStatus');
-      final status = statusRaw ?? _statusUnavailable;
-      switch (status) {
-        case _statusAvailable:
+      final client = ref.read(aiClientProvider);
+      final availability = await client.checkAvailability();
+      switch (availability) {
+        case AiAvailability.available:
           await _generate();
-          break;
-        case _statusDownloadable:
+        case AiAvailability.downloadRequired:
           await downloadAndGenerate();
-          break;
-        case _statusDownloading:
-        case _statusUnavailable:
         default:
           break;
       }
@@ -309,12 +280,10 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
   }
 
   /// Ensure a final, immutable summary copy exists for the reviewed year.
-  /// If a final copy is not present but a cached draft is, copy it to
-  /// the final key. Safe to call repeatedly.
   Future<void> ensureFinalSaved() async {
     try {
       final now = DateTime.now();
-      if (now.year <= _year) return; // Only after the year is over.
+      if (now.year <= _year) return;
 
       final prefs = await SharedPreferences.getInstance();
       final finalKey = 'ai_summary_${_year}_final';
@@ -407,30 +376,14 @@ String _buildPrompt(YearReviewStats stats) {
 
 // ── Standalone model status provider ─────────────────────────────────────
 
-/// Returns the raw Gemini Nano feature status int for use by the settings
-/// screen, independently of any year-specific summary.
-///
-/// Only meaningful on Android; returns [_statusUnavailable] on other platforms.
+/// Returns the raw Gemini Nano feature status int for the settings screen.
+/// Only meaningful when Gemini Nano is the selected provider.
 final genaiModelStatusProvider = FutureProvider<int>((ref) async {
-  if (defaultTargetPlatform != TargetPlatform.android) {
-    return _statusUnavailable;
-  }
-  try {
-    final status = await _channel.invokeMethod<int>('checkFeatureStatus');
-    return status ?? _statusUnavailable;
-  } catch (_) {
-    return _statusUnavailable;
-  }
+  return checkGeminiNanoStatus();
 });
 
 // ── Provider ──────────────────────────────────────────────────────────────
 
-/// Provides the AI summary state for a given review year.
-///
-/// Keyed by [int] year so it naturally re-creates when the user navigates
-/// to a different year's review. When the year's stats are refreshed via
-/// pull-to-refresh, call [ref.invalidate] on this provider to regenerate
-/// the summary.
 final aiSummaryProvider = NotifierProvider.autoDispose
     .family<AiSummaryNotifier, AiSummaryState, int>(
       (year) => AiSummaryNotifier(year),
