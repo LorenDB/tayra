@@ -171,10 +171,24 @@ class _YearReviewScreenState extends ConsumerState<YearReviewScreen>
 
 // ── AI Summary Section ──────────────────────────────────────────────────
 
-/// Shows an on-device Gemini Nano summary of the year review data.
+String _aiProviderLabel(SettingsState settings) {
+  switch (settings.aiProviderType) {
+    case AiProviderType.geminiNano:
+      return 'Gemini Nano';
+    case AiProviderType.groq:
+      return 'Groq';
+    case AiProviderType.openRouter:
+      return 'OpenRouter';
+    case AiProviderType.custom:
+      return settings.customModelName.isNotEmpty
+          ? settings.customModelName
+          : 'Custom';
+  }
+}
+
+/// Shows an AI-generated summary of the year review data.
 ///
-/// Renders nothing on unsupported platforms / devices so it never clutters
-/// the UI for users who can't benefit from it.
+/// Renders nothing when AI is unsupported or not configured.
 class _AiSummarySection extends ConsumerWidget {
   final int year;
 
@@ -189,6 +203,8 @@ class _AiSummarySection extends ConsumerWidget {
         summaryState is AiSummaryDeviceUnsupported) {
       return const SizedBox.shrink();
     }
+
+    final settings = ref.watch(settingsProvider);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -222,11 +238,15 @@ class _AiSummarySection extends ConsumerWidget {
                   ),
                 ),
                 const Spacer(),
-                Text(
-                  'Gemini Nano',
-                  style: TextStyle(
-                    color: AppTheme.onBackgroundSubtle,
-                    fontSize: 11,
+                Flexible(
+                  child: Text(
+                    _aiProviderLabel(settings),
+                    style: const TextStyle(
+                      color: AppTheme.onBackgroundSubtle,
+                      fontSize: 11,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
@@ -253,7 +273,7 @@ class _AiSummaryBody extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Gemini Nano needs to be downloaded to generate an AI summary.',
+            'The AI model needs to be downloaded to generate a summary.',
             style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 13),
           ),
           const SizedBox(height: 10),
@@ -285,7 +305,7 @@ class _AiSummaryBody extends ConsumerWidget {
           ),
           const SizedBox(width: 10),
           Text(
-            'Downloading Gemini Nano…',
+            'Downloading AI model…',
             style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 13),
           ),
         ],
@@ -354,8 +374,8 @@ class _AiSummaryBody extends ConsumerWidget {
 // ── AI Download Prompt Checker ──────────────────────────────────────────
 
 /// Zero-size widget that shows a one-time SnackBar prompting the user to
-/// download Gemini Nano when the model is downloadable and the prompt has
-/// not been shown before.
+/// download the AI model when it is downloadable and the prompt has not been
+/// shown before.
 class _AiDownloadPromptChecker extends ConsumerStatefulWidget {
   final int year;
 
@@ -387,7 +407,7 @@ class _AiDownloadPromptCheckerState
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Download Gemini Nano for AI summaries'),
+            content: const Text('Download AI model for summaries'),
             duration: const Duration(seconds: 8),
             action: SnackBarAction(
               label: 'Download',
@@ -530,7 +550,7 @@ class _ReviewContent extends StatelessWidget {
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 20)),
 
-          // AI-generated summary (Android Gemini Nano; hidden on unsupported devices)
+          // AI-generated summary (hidden when AI is unsupported or not configured)
           // Placed right after the hero card, before the stats grid.
           // The trailing spacer is conditional to avoid phantom spacing when
           // the section renders SizedBox.shrink().

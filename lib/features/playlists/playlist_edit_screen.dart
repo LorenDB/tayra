@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/analytics/analytics.dart';
 import 'dart:async';
-import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+import 'package:tayra/core/ai/ai_client.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/router/app_router.dart';
@@ -243,27 +244,23 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
     if (_isGenerating) return;
     setState(() => _isGenerating = true);
     try {
-      final name = await MethodChannel(
-        'dev.lorendb.tayra/genai_prompt',
-      ).invokeMethod<String>('generatePlaylistName', {
-        'playlist_id': playlist.id,
-        'current_name': playlist.name,
-      });
-      if (name != null && name.isNotEmpty && mounted) {
-        _nameController.text = name.trim();
+      final client = ref.read(aiClientProvider);
+      final name = await client.generatePlaylistName(
+        playlist.name,
+        playlistId: playlist.id,
+      );
+      if (name.isNotEmpty && mounted) {
+        _nameController.text = name;
       } else if (mounted) {
-        // Provide feedback when AI returns empty
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('AI did not suggest a name')),
         );
       }
     } catch (e) {
       if (!mounted) return;
-      final msg =
-          e is MissingPluginException
-              ? 'AI not available on this device'
-              : 'AI failed to generate name';
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('AI failed to generate name')),
+      );
     } finally {
       if (mounted) setState(() => _isGenerating = false);
     }
@@ -465,14 +462,17 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
 
   Widget _buildMetadataSection() {
     final settings = ref.watch(settingsProvider);
-    final modelStatusAsync =
-        defaultTargetPlatform == TargetPlatform.android
-            ? ref.watch(genaiModelStatusProvider)
-            : const AsyncValue.data(0);
-    final hasLocalAi =
-        settings.aiEnabled &&
-        defaultTargetPlatform == TargetPlatform.android &&
-        (modelStatusAsync.asData?.value ?? 0) == 3;
+    // For Gemini Nano, check model status; for cloud providers, check config.
+    final modelStatusAsync = ref.watch(genaiModelStatusProvider);
+    final bool hasAi;
+    if (!settings.aiEnabled) {
+      hasAi = false;
+    } else if (settings.aiProviderType == AiProviderType.geminiNano) {
+      hasAi = defaultTargetPlatform == TargetPlatform.android &&
+          (modelStatusAsync.asData?.value ?? 0) == 3;
+    } else {
+      hasAi = settings.isAiProviderConfigured;
+    }
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
@@ -498,7 +498,7 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
                   textCapitalization: TextCapitalization.sentences,
                 ),
               ),
-              if (hasLocalAi) ...[
+              if (hasAi) ...[
                 const SizedBox(width: 8),
                 _isGenerating
                     ? const SizedBox(
