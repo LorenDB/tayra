@@ -640,8 +640,11 @@ class _ReviewContent extends StatelessWidget {
           const SliverToBoxAdapter(child: SizedBox(height: 24)),
 
           // Loved vs. Listened contrast section
-          if (stats.favoritedThisYear.isNotEmpty ||
-              stats.lovedTopTracks.isNotEmpty ||
+          // Only render this section when all three lists are present. The
+          // section is a true contrast only when the user has favorited tracks
+          // this year and we have both loved and unloved top-track lists.
+          if (stats.favoritedThisYear.isNotEmpty &&
+              stats.lovedTopTracks.isNotEmpty &&
               stats.unlovedTopTracks.isNotEmpty) ...[
             SliverToBoxAdapter(child: _LovedVsListenedSection(stats: stats)),
             const SliverToBoxAdapter(child: SizedBox(height: 24)),
@@ -1224,8 +1227,8 @@ class _SpotlightCard extends StatelessWidget {
 
 // ── Loved vs. Listened section ──────────────────────────────────────────
 
-/// Contrasts which tracks the user explicitly favourited this year with the
-/// tracks they actually played the most (but perhaps never hearted).
+/// Contrasts which tracks the user explicitly favorited this year with the
+/// tracks they actually played the most (but perhaps never favorited).
 class _LovedVsListenedSection extends StatelessWidget {
   final YearReviewStats stats;
 
@@ -1280,8 +1283,18 @@ class _LovedVsListenedSection extends StatelessWidget {
     // Don't render the section at all if both halves are empty.
     if (lovedItems.isEmpty && unlovedItems.isEmpty) return const SizedBox();
 
-    final hasLovedLabel =
-        stats.favoritedThisYear.isNotEmpty ? 'Hearted This Year' : 'You Loved';
+    // When the user did not favorite any tracks during the requested year
+    // we show alternate wording so the UI doesn't read like a contrast ("vs")
+    // when only a single column is rendered.
+    final noFavoritedThisYear = stats.favoritedThisYear.isEmpty;
+    final sectionTitle = noFavoritedThisYear ? 'Most Played' : 'Loved vs. Listened';
+    final sectionSubtitle = noFavoritedThisYear
+        ? 'Your most-played tracks'
+        : 'What you favorited vs. what you played most';
+
+    final hasLovedLabel = stats.favoritedThisYear.isNotEmpty
+        ? 'Favorited This Year'
+        : 'Most Played';
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -1289,9 +1302,9 @@ class _LovedVsListenedSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Section header
-          const Text(
-            'Loved vs. Listened',
-            style: TextStyle(
+          Text(
+            sectionTitle,
+            style: const TextStyle(
               color: AppTheme.onBackground,
               fontSize: 18,
               fontWeight: FontWeight.w700,
@@ -1299,7 +1312,7 @@ class _LovedVsListenedSection extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'What you favorited vs. what you played most',
+            sectionSubtitle,
             style: const TextStyle(
               color: AppTheme.onBackgroundMuted,
               fontSize: 13,
