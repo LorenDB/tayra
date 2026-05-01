@@ -388,6 +388,36 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
           );
         }, childCount: queue.length),
       ),
+      if (queue.isNotEmpty)
+        SliverToBoxAdapter(
+          child: DragTarget<int>(
+            onWillAcceptWithDetails: (_) => true,
+            onAcceptWithDetails: (details) {
+              ref
+                  .read(playerProvider.notifier)
+                  .reorderQueue(details.data, queue.length);
+            },
+            builder: (context, candidateData, rejectedData) {
+              final isTarget = candidateData.isNotEmpty;
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 150),
+                height: isTarget ? 32 : 8,
+                decoration: BoxDecoration(
+                  color:
+                      isTarget
+                          ? AppTheme.primary.withValues(alpha: 0.1)
+                          : Colors.transparent,
+                  border:
+                      isTarget
+                          ? const Border(
+                            top: BorderSide(color: AppTheme.primary, width: 2),
+                          )
+                          : null,
+                ),
+              );
+            },
+          ),
+        ),
     ];
   }
 }
@@ -753,17 +783,41 @@ class _DraggableQueueItemState extends State<_DraggableQueueItem> {
   @override
   Widget build(BuildContext context) {
     if (widget.isCurrentTrack) {
-      return Dismissible(
-        key: ValueKey('queue_${widget.index}_${widget.track.id}'),
-        direction: DismissDirection.none,
-        child: _QueueTrackRow(
-          track: widget.track,
-          index: widget.index,
-          isCurrentTrack: true,
-          onTap: widget.onTap,
-          isPlaying: widget.isPlaying,
-          showDragHandle: false,
-        ),
+      return DragTarget<int>(
+        onWillAcceptWithDetails: (details) => details.data != widget.index,
+        onAcceptWithDetails: (details) {
+          widget.onReorder(details.data, widget.index);
+        },
+        builder: (context, candidateData, rejectedData) {
+          final isTarget = candidateData.isNotEmpty;
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            decoration: BoxDecoration(
+              color:
+                  isTarget
+                      ? AppTheme.primary.withValues(alpha: 0.1)
+                      : Colors.transparent,
+              border:
+                  isTarget
+                      ? const Border(
+                        top: BorderSide(color: AppTheme.primary, width: 2),
+                      )
+                      : null,
+            ),
+            child: Dismissible(
+              key: ValueKey('queue_${widget.index}_${widget.track.id}'),
+              direction: DismissDirection.none,
+              child: _QueueTrackRow(
+                track: widget.track,
+                index: widget.index,
+                isCurrentTrack: true,
+                onTap: widget.onTap,
+                isPlaying: widget.isPlaying,
+                showDragHandle: false,
+              ),
+            ),
+          );
+        },
       );
     }
 
@@ -812,6 +866,12 @@ class _DraggableQueueItemState extends State<_DraggableQueueItem> {
                   isTarget
                       ? AppTheme.primary.withValues(alpha: 0.1)
                       : Colors.transparent,
+              border:
+                  isTarget
+                      ? const Border(
+                        top: BorderSide(color: AppTheme.primary, width: 2),
+                      )
+                      : null,
             ),
             child: Dismissible(
               key: ValueKey('queue_${widget.index}_${widget.track.id}'),
