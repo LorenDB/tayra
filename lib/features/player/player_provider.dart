@@ -143,6 +143,11 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
   /// system will not be able to interact with the app via Android Auto.
   bool androidAutoEnabled = true;
 
+  /// Queue boundary flags — updated by PlayerNotifier so the OS media
+  /// session doesn't advertise skip buttons that would be no-ops.
+  bool hasNext = false;
+  bool hasPrevious = false;
+
   /// Callback invoked when a track completes. The PlayerNotifier sets this
   /// to wire up its queue-advance / loop logic.
   void Function()? onTrackCompleted;
@@ -177,18 +182,19 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
   AudioPlayer get audioPlayer => _player;
 
   PlaybackState _transformPlaybackEvent(PlaybackEvent event) {
+    final controls = [
+      if (hasPrevious) MediaControl.skipToPrevious,
+      if (_player.playing) MediaControl.pause else MediaControl.play,
+      if (hasNext) MediaControl.skipToNext,
+    ];
     return PlaybackState(
-      controls: [
-        MediaControl.skipToPrevious,
-        if (_player.playing) MediaControl.pause else MediaControl.play,
-        MediaControl.skipToNext,
-      ],
+      controls: controls,
       systemActions: const {
         MediaAction.seek,
         MediaAction.seekForward,
         MediaAction.seekBackward,
       },
-      androidCompactActionIndices: const [0, 1, 2],
+      androidCompactActionIndices: List.generate(controls.length, (i) => i),
       processingState: _mapProcessingState(_player.processingState),
       playing: _player.playing,
       updatePosition: _player.position,
@@ -811,6 +817,13 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }
 
   AudioPlayer get audioPlayer => _handler.audioPlayer;
+
+  @override
+  set state(PlayerState value) {
+    super.state = value;
+    _handler.hasNext = value.hasNext;
+    _handler.hasPrevious = value.hasPrevious;
+  }
 
   void _init() {
     // Note: API and browse mode are injected in main.dart before runApp,
