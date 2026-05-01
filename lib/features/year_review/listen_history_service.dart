@@ -155,6 +155,28 @@ class FavoritedTrack {
   });
 }
 
+// ── Intermediate album row for sorting ────────────────────────────────────
+
+class _AlbumRow {
+  final int albumId;
+  final String title;
+  final String? artistName;
+  final String? coverUrl;
+  final int uniqueTracks;
+  final int engagementScore;
+  final int? totalSeconds;
+
+  const _AlbumRow({
+    required this.albumId,
+    required this.title,
+    this.artistName,
+    this.coverUrl,
+    required this.uniqueTracks,
+    required this.engagementScore,
+    this.totalSeconds,
+  });
+}
+
 class YearReviewStats {
   final int year;
   final int totalListens;
@@ -181,7 +203,7 @@ class YearReviewStats {
   final List<TopItem> lovedTopTracks;
 
   /// The subset of [topTracks] that the user has NOT favourited — tracks they
-  /// played heavily but never hearted.
+  /// played heavily but never favorited.
   final List<TopItem> unlovedTopTracks;
 
   const YearReviewStats({
@@ -308,8 +330,33 @@ class ListenHistoryService {
     return results.map((row) => row['year'] as int).toList();
   }
 
+  /// Return distinct album IDs that have listens for the given year.
+  static Future<List<int>> getDistinctAlbumIdsForYear(int year) async {
+    final db = await CacheDatabase.instance.database;
+    final startMs = DateTime(year).millisecondsSinceEpoch;
+    final endMs = DateTime(year + 1).millisecondsSinceEpoch;
+    final rows = await db.rawQuery(
+      '''
+      SELECT DISTINCT album_id FROM $_tableName
+      WHERE listened_at >= ? AND listened_at < ? AND album_id IS NOT NULL
+    ''',
+      [startMs, endMs],
+    );
+    return rows
+        .map((r) => (r['album_id'] as num).toInt())
+        .where((id) => id > 0)
+        .toList();
+  }
+
   /// Compute year-in-review statistics for the given year.
-  static Future<YearReviewStats> getYearStats(int year) async {
+  ///
+  /// [albumTrackCounts] maps album_id → total track count (from the API).
+  /// When provided, top albums are sorted by `unique_tracks / albumTrackCounts[album_id]`
+  /// (completion ratio). Falls back to engagement-score sort when null.
+  static Future<YearReviewStats> getYearStats(
+    int year, {
+    Map<int, int>? albumTrackCounts,
+  }) async {
     // Wrap the whole function in a try/catch so errors surface to logs
     // and we can see the exact exception when the UI shows the generic
     // "Could not load review data" message.
@@ -413,13 +460,12 @@ class ListenHistoryService {
               )
               .toList();
 
-      // Top albums (by engagement score: rewards both variety and repeats)
-      // Formula: SUM(play_count + 1) for each unique track
-      // - More unique tracks = more terms in the sum
-      // - More plays per track = higher contribution
+      // Top albums — sorted by completion ratio: unique_tracks / album_track_count.
+      // When [albumTrackCounts] is not available, falls back to engagement score.
       final topAlbumsResult = await db.rawQuery(
         '''
       SELECT
+        album_id,
         album_title,
         artist_name,
         cover_url,
@@ -441,24 +487,57 @@ class ListenHistoryService {
         AND album_title != ''
       GROUP BY album_id
       ORDER BY engagement_score DESC
-      LIMIT 10
+      LIMIT 50
     ''',
         [startMs, endMs, startMs, endMs],
       );
 
-      final topAlbums =
-          topAlbumsResult
-              .map(
-                (row) => TopItem(
-                  name: row['album_title'] as String,
-                  subtitle: row['artist_name'] as String?,
-                  coverUrl: row['cover_url'] as String?,
-                  // engagement_score may be returned as int/double/null
-                  count: _toDouble(row['engagement_score']).round(),
-                  totalSeconds: _toNullableInt(row['total_seconds']),
-                ),
-              )
-              .toList();
+      // Build intermediate album data rows for sorting.
+      final albumRows = topAlbumsResult
+          .map((row) => _AlbumRow(
+                albumId: _toInt(row['album_id']),
+                title: row['album_title'] as String,
+                artistName: row['artist_name'] as String?,
+                coverUrl: row['cover_url'] as String?,
+                uniqueTracks: _toInt(row['unique_tracks']),
+                engagementScore: _toDouble(row['engagement_score']).round(),
+                totalSeconds: _toNullableInt(row['total_seconds']),
+              ))
+          .toList();
+
+      // Sort by completion ratio when track counts are available.
+      if (albumTrackCounts != null && albumTrackCounts.isNotEmpty) {
+        albumRows.sort((a, b) {
+          final aTotal = albumTrackCounts[a.albumId] ?? 0;
+          final bTotal = albumTrackCounts[b.albumId] ?? 0;
+          final aRatio = aTotal > 0 ? a.uniqueTracks / aTotal : 0.0;
+          final bRatio = bTotal > 0 ? b.uniqueTracks / bTotal : 0.0;
+          // Sort descending by ratio, then by unique tracks as tiebreaker.
+          final cmp = bRatio.compareTo(aRatio);
+          if (cmp != 0) return cmp;
+          return b.uniqueTracks.compareTo(a.uniqueTracks);
+        });
+      } else {
+        albumRows.sort(
+          (a, b) => b.engagementScore.compareTo(a.engagementScore),
+        );
+      }
+
+      final topAlbums = albumRows
+          .take(10)
+          .map(
+            (row) => TopItem(
+              name: row.title,
+              subtitle: row.artistName,
+              coverUrl: row.coverUrl,
+              count:
+                  albumTrackCounts != null
+                      ? row.uniqueTracks
+                      : row.engagementScore,
+              totalSeconds: row.totalSeconds,
+            ),
+          )
+          .toList();
 
       // Monthly breakdown
       final monthlyResult = await db.rawQuery(
