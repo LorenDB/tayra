@@ -1760,7 +1760,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// Reorder tracks in the queue.
   void reorderQueue(int oldIndex, int newIndex) {
     if (oldIndex < 0 || oldIndex >= state.queue.length) return;
-    if (newIndex < 0 || newIndex >= state.queue.length) return;
+    if (newIndex < 0 || newIndex > state.queue.length) return;
 
     final newQueue = List<Track>.from(state.queue);
     final track = newQueue.removeAt(oldIndex);
