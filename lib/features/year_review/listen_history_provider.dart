@@ -19,13 +19,11 @@ final availableYearsProvider = FutureProvider.autoDispose<List<int>>((
 /// Year-in-review stats for a specific year, enriched with favorites data.
 final yearReviewProvider = FutureProvider.autoDispose
     .family<YearReviewStats, int>((ref, year) async {
-      // Fetch listen stats and all-favorites in parallel for performance.
       final api = ref.read(cachedFunkwhaleApiProvider);
 
-      final statsF = ListenHistoryService.getYearStats(year);
+      // Fetch album IDs (local DB) and favorites (network) in parallel.
+      final albumIdsF = ListenHistoryService.getDistinctAlbumIdsForYear(year);
 
-      // Fetch all favorite pages. Silently swallow errors so an API outage
-      // doesn't break the whole review screen.
       late List<Favorite> allFavorites;
       try {
         allFavorites = await fetchAllPages<Favorite>(
@@ -36,7 +34,29 @@ final yearReviewProvider = FutureProvider.autoDispose
         allFavorites = const [];
       }
 
-      final stats = await statsF;
+      // Build album track counts map from the API for ratio-based sort.
+      final albumIds = await albumIdsF;
+      Map<int, int> albumTrackCounts = {};
+      if (albumIds.isNotEmpty) {
+        try {
+          final response = await api.getAlbums(page: 1, pageSize: 500);
+          for (final album in response.results) {
+            if (album.tracksCount > 0) {
+              albumTrackCounts[album.id] = album.tracksCount;
+            }
+          }
+        } catch (e) {
+          debugPrint(
+            'yearReviewProvider: could not load album track counts: $e',
+          );
+        }
+      }
+
+      // Compute stats (local DB, fast) with ratio-based album sort.
+      final stats = await ListenHistoryService.getYearStats(
+        year,
+        albumTrackCounts: albumTrackCounts,
+      );
 
       // Partition top tracks into loved / unloved by matching against the
       // full favorites list by title + artist (TopItem only carries strings,
