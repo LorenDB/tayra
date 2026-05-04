@@ -242,6 +242,17 @@ class CacheManager {
     await db.delete('cache_metadata', where: 'cache_key = ?', whereArgs: [key]);
   }
 
+  /// Delete all metadata entries whose key matches a SQL LIKE pattern.
+  /// Use `%` as the wildcard, e.g. `'tracks_%_al42_%'`.
+  Future<void> deleteMetadataLike(String likePattern) async {
+    final db = await _db.database;
+    await db.delete(
+      'cache_metadata',
+      where: 'cache_key LIKE ?',
+      whereArgs: [likePattern],
+    );
+  }
+
   // ── File cache operations ──────────────────────────────────────────────
 
   /// Get file path from cache
@@ -801,6 +812,35 @@ class CacheManager {
       where: 'file_type = ?',
       whereArgs: [FileType.audio.name],
     );
+  }
+
+  /// Delete all on-disk audio files for [trackId], regardless of whether a
+  /// DB entry exists. Complements [deleteFile] which only removes files that
+  /// have a corresponding `cache_files` row.
+  Future<void> deleteAudioFilesOnDisk(int trackId) async {
+    try {
+      final audioDir = await _getCacheDir(FileType.audio);
+      final prefix = 'audio_$trackId.';
+      final entities = audioDir.listSync();
+      for (final entity in entities) {
+        if (entity is File && p.basename(entity.path).startsWith(prefix)) {
+          try {
+            await entity.delete();
+          } catch (e) {
+            debugPrint('deleteAudioFilesOnDisk: failed to delete ${entity.path}: $e');
+          }
+        }
+      }
+      // Also remove any lingering DB rows for this key prefix
+      final db = await _db.database;
+      await db.delete(
+        'cache_files',
+        where: "cache_key LIKE ? AND file_type = ?",
+        whereArgs: ['audio_$trackId%', FileType.audio.name],
+      );
+    } catch (e) {
+      debugPrint('deleteAudioFilesOnDisk failed: $e');
+    }
   }
 
   /// Check if an audio file for [trackId] exists on disk.

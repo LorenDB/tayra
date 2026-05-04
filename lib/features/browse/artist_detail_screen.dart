@@ -10,6 +10,8 @@ import 'package:tayra/core/widgets/dot_separator.dart';
 import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/core/widgets/tag_chip_list.dart';
+import 'package:tayra/core/cache/cache_manager.dart';
+import 'package:tayra/features/settings/settings_provider.dart';
 
 // ── Provider ────────────────────────────────────────────────────────────
 
@@ -131,16 +133,20 @@ class _ArtistDetailBody extends StatelessWidget {
 
 // ── Hero header with blurred background ─────────────────────────────────
 
-class _ArtistHeader extends StatelessWidget {
+class _ArtistHeader extends ConsumerWidget {
   final Artist artist;
 
   const _ArtistHeader({required this.artist});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final screenWidth = MediaQuery.of(context).size.width;
     const headerHeight = 340.0;
     const imageSize = 160.0;
+    final topPadding = MediaQuery.of(context).viewPadding.top;
+    final showPurge = ref.watch(
+      settingsProvider.select((s) => s.effectiveShowPurgeCacheOption),
+    );
 
     return SizedBox(
       height: headerHeight,
@@ -179,7 +185,7 @@ class _ArtistHeader extends StatelessWidget {
 
           // ── Back button ──
           Positioned(
-            top: MediaQuery.of(context).viewPadding.top + 8,
+            top: topPadding + 8,
             left: 8,
             child: IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -187,9 +193,61 @@ class _ArtistHeader extends StatelessWidget {
             ),
           ),
 
+          // ── Menu (top-right, shown only when developer purge option is enabled) ──
+          if (showPurge)
+            Positioned(
+              top: topPadding + 8,
+              right: 8,
+              child: PopupMenuButton<String>(
+                icon: const Icon(Icons.more_vert, color: Colors.white),
+                color: AppTheme.surfaceContainer,
+                onSelected: (value) async {
+                  if (value == 'purge_cache') {
+                    try {
+                      await CacheManager.instance.deleteMetadata(
+                        'artist_${artist.id}',
+                      );
+                      ref.invalidate(_artistDetailProvider(artist.id));
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Cache purged for "${artist.name}" — refetching',
+                            ),
+                          ),
+                        );
+                      }
+                    } catch (e) {
+                      debugPrint('Purge cache failed: $e');
+                    }
+                  }
+                },
+                itemBuilder:
+                    (_) => const [
+                      PopupMenuItem(
+                        value: 'purge_cache',
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.delete_forever_rounded,
+                              size: 20,
+                              color: AppTheme.error,
+                            ),
+                            SizedBox(width: 12),
+                            Text(
+                              'Purge and refetch',
+                              style: TextStyle(color: AppTheme.error),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+              ),
+            ),
+
           // ── Centered artist image ──
           Positioned(
-            top: MediaQuery.of(context).viewPadding.top + 56,
+            top: topPadding + 56,
             left: (screenWidth - imageSize) / 2,
             child: CoverArtWidget(
               imageUrl: artist.coverUrl,
