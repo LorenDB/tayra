@@ -111,7 +111,7 @@ class HomeScreen extends ConsumerWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(child: _GreetingHeader()),
+                      Expanded(child: _GreetingHeader(horizontalPadding: 0)),
                       const SizedBox(width: 24),
                       Expanded(child: _YearReviewBannerPadded(isWide: isWide)),
                     ],
@@ -191,13 +191,17 @@ class HomeScreen extends ConsumerWidget {
 // ── Greeting Header ─────────────────────────────────────────────────────
 
 class _GreetingHeader extends ConsumerWidget {
+  const _GreetingHeader({this.horizontalPadding = 20});
+
+  final double horizontalPadding;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final greeting = _getGreeting();
 
     return Container(
       decoration: BoxDecoration(gradient: AppTheme.subtleFade),
-      padding: const EdgeInsets.fromLTRB(20, 20, 16, 16),
+      padding: EdgeInsets.fromLTRB(horizontalPadding, 20, horizontalPadding, 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
