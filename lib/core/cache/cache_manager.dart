@@ -19,6 +19,7 @@ enum CacheType {
   recentAlbums,
   recentArtists,
   searchResults,
+  tags,
 }
 
 /// File types for cached files

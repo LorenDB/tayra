@@ -97,6 +97,17 @@ mixin PaginatedGridMixin<T, W extends ConsumerStatefulWidget>
     }
   }
 
+  /// Reset pagination state without fetching. Call when filters change so the
+  /// next build re-seeds from the newly-invalidated provider.
+  void resetPagination() {
+    setState(() {
+      items.clear();
+      _currentPage = 1;
+      hasMore = true;
+      isLoadingMore = false;
+    });
+  }
+
   /// Pull-to-refresh: re-fetch the first page and reset state.
   Future<void> refresh() async {
     try {

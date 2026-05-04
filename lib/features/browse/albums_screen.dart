@@ -12,12 +12,130 @@ import 'package:tayra/core/widgets/loading_indicator.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/browse/paginated_grid_mixin.dart';
 
+// ── Filter state ─────────────────────────────────────────────────────────
+
+enum AlbumSortMode {
+  titleAsc,
+  titleDesc,
+  releaseDateNewest,
+  releaseDateOldest,
+  dateAddedNewest,
+  dateAddedOldest,
+}
+
+extension AlbumSortModeX on AlbumSortMode {
+  String get label {
+    switch (this) {
+      case AlbumSortMode.titleAsc:
+        return 'Title (A–Z)';
+      case AlbumSortMode.titleDesc:
+        return 'Title (Z–A)';
+      case AlbumSortMode.releaseDateNewest:
+        return 'Release date (newest)';
+      case AlbumSortMode.releaseDateOldest:
+        return 'Release date (oldest)';
+      case AlbumSortMode.dateAddedNewest:
+        return 'Date added (newest)';
+      case AlbumSortMode.dateAddedOldest:
+        return 'Date added (oldest)';
+    }
+  }
+
+  String get apiOrdering {
+    switch (this) {
+      case AlbumSortMode.titleAsc:
+        return 'title';
+      case AlbumSortMode.titleDesc:
+        return '-title';
+      case AlbumSortMode.releaseDateNewest:
+        return '-release_date';
+      case AlbumSortMode.releaseDateOldest:
+        return 'release_date';
+      case AlbumSortMode.dateAddedNewest:
+        return '-creation_date';
+      case AlbumSortMode.dateAddedOldest:
+        return 'creation_date';
+    }
+  }
+}
+
+class AlbumsFilter {
+  final AlbumSortMode sortMode;
+  final List<String> tags;
+
+  const AlbumsFilter({
+    this.sortMode = AlbumSortMode.titleAsc,
+    this.tags = const [],
+  });
+
+  bool get isActive =>
+      sortMode != AlbumSortMode.titleAsc || tags.isNotEmpty;
+
+  AlbumsFilter copyWith({AlbumSortMode? sortMode, List<String>? tags}) {
+    return AlbumsFilter(
+      sortMode: sortMode ?? this.sortMode,
+      tags: tags ?? this.tags,
+    );
+  }
+}
+
+class AlbumsFilterNotifier extends Notifier<AlbumsFilter> {
+  @override
+  AlbumsFilter build() => const AlbumsFilter();
+
+  void setSortMode(AlbumSortMode sortMode) =>
+      state = state.copyWith(sortMode: sortMode);
+  void setTags(List<String> tags) => state = state.copyWith(tags: tags);
+  void reset() => state = const AlbumsFilter();
+}
+
+final albumsFilterProvider =
+    NotifierProvider<AlbumsFilterNotifier, AlbumsFilter>(
+  AlbumsFilterNotifier.new,
+);
+
 // ── Providers ───────────────────────────────────────────────────────────
 
 final albumsPageProvider = FutureProvider.family<PaginatedResponse<Album>, int>(
-  (ref, page) {
+  (ref, page) async {
     final api = ref.watch(cachedFunkwhaleApiProvider);
-    return api.getAlbums(page: page, pageSize: 30, ordering: 'title');
+    final filter = ref.watch(albumsFilterProvider);
+
+    if (filter.tags.length <= 1) {
+      return api.getAlbums(
+        page: page,
+        pageSize: 30,
+        ordering: filter.sortMode.apiOrdering,
+        tag: filter.tags.isEmpty ? null : filter.tags,
+      );
+    }
+
+    // OR semantics: one request per tag in parallel, then deduplicate by id.
+    final responses = await Future.wait(
+      filter.tags.map(
+        (tag) => api.getAlbums(
+          page: page,
+          pageSize: 30,
+          ordering: filter.sortMode.apiOrdering,
+          tag: [tag],
+        ),
+      ),
+    );
+
+    final seen = <int>{};
+    final merged = <Album>[];
+    for (final response in responses) {
+      for (final album in response.results) {
+        if (seen.add(album.id)) merged.add(album);
+      }
+    }
+
+    return PaginatedResponse(
+      count: merged.length,
+      next: responses.any((r) => r.next != null) ? 'or' : null,
+      previous: null,
+      results: merged,
+    );
   },
 );
 
@@ -40,17 +158,24 @@ class _AlbumsScreenState extends ConsumerState<AlbumsScreen>
   void invalidatePage(int page) => ref.invalidate(albumsPageProvider(page));
 
   @override
-  Future<void> forceRefreshPage(int page) => ref
-      .read(cachedFunkwhaleApiProvider)
-      .getAlbums(
-        page: page,
-        pageSize: 30,
-        ordering: 'title',
-        forceRefresh: true,
-      );
+  Future<void> forceRefreshPage(int page) {
+    final filter = ref.read(albumsFilterProvider);
+    return ref
+        .read(cachedFunkwhaleApiProvider)
+        .getAlbums(
+          page: page,
+          pageSize: 30,
+          ordering: filter.sortMode.apiOrdering,
+          tag: filter.tags.isEmpty ? null : filter.tags,
+          forceRefresh: true,
+        );
+  }
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(albumsFilterProvider, (prev, next) {
+      resetPagination();
+    });
     final offlineFilterActive = ref.watch(offlineFilterActiveProvider);
     if (offlineFilterActive) {
       final offlineAlbumsAsync = ref.watch(offlineAlbumsProvider);

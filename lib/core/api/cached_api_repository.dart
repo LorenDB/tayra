@@ -108,18 +108,12 @@ class CachedFunkwhaleApi {
     int? artist,
     String? scope,
     String? q,
+    List<String>? tag,
     bool forceRefresh = false,
   }) async {
-    // Avoid caching arbitrary pagination pages (can bloat DB with many
-    // near-duplicate pages). Only use the cache for the first page. For
-    // subsequent pages, attempt a direct network fetch and fall back to a
-    // stale first-page cache entry on failure.
-    final baseSuffix = '_s${pageSize}_o${ordering}_a${artist}_sc${scope}_q$q';
+    final tagSuffix = (tag != null && tag.isNotEmpty) ? '_t${tag.join(',')}' : '';
+    final baseSuffix = '_s${pageSize}_o${ordering}_a${artist}_sc${scope}_q$q$tagSuffix';
     final cacheKey = 'albums_p${page}$baseSuffix';
-
-    // Allow all pages to be cached via _cachedFetch. This increases offline
-    // availability at the cost of more metadata entries; cache eviction is
-    // handled centrally by CacheManager.
 
     return _cachedFetch(
       cacheKey: cacheKey,
@@ -134,6 +128,7 @@ class CachedFunkwhaleApi {
             artist: artist,
             scope: scope,
             q: q,
+            tag: tag,
           ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
@@ -266,6 +261,27 @@ class CachedFunkwhaleApi {
       ttl: const Duration(hours: 24),
       forceRefresh: forceRefresh,
       coverUrls: (t) => [t.coverUrl],
+    );
+  }
+
+  // ── Tags ────────────────────────────────────────────────────────────
+
+  Future<PaginatedResponse<Tag>> getTags({
+    int page = 1,
+    int pageSize = 100,
+    String ordering = 'name',
+    String? q,
+    bool forceRefresh = false,
+  }) async {
+    final cacheKey = 'tags_p${page}_s${pageSize}_o${ordering}_q$q';
+    return _cachedFetch(
+      cacheKey: cacheKey,
+      cacheType: CacheType.tags,
+      fromJson: (j) => PaginatedResponse.fromJson(j, Tag.fromJson),
+      toJson: (r) => _paginatedResponseToJson(r, _tagToJson),
+      fetch: () => _api.getTags(page: page, pageSize: pageSize, ordering: ordering, q: q),
+      ttl: const Duration(hours: 6),
+      forceRefresh: forceRefresh,
     );
   }
 
@@ -610,6 +626,13 @@ class CachedFunkwhaleApi {
       'description': radio.description,
       'config': radio.config,
       'user': radio.user,
+    };
+  }
+
+  Map<String, dynamic> _tagToJson(Tag tag) {
+    return {
+      'name': tag.name,
+      'creation_date': tag.creationDate?.toIso8601String(),
     };
   }
 
