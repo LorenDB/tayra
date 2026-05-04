@@ -39,6 +39,7 @@ class SettingsState {
   final bool showYearEndPrompts;
   final bool analyticsEnabled;
   final bool forceOfflineMode;
+  final bool developerModeUnlocked;
   final AiProviderType aiProviderType;
   final String groqApiKey;
   final String groqModel;
@@ -59,6 +60,7 @@ class SettingsState {
     this.showYearEndPrompts = true,
     this.analyticsEnabled = true,
     this.forceOfflineMode = false,
+    this.developerModeUnlocked = false,
     this.aiProviderType = AiProviderType.geminiNano,
     this.groqApiKey = '',
     this.groqModel = 'llama-3.1-8b-instant',
@@ -94,6 +96,7 @@ class SettingsState {
     bool? showYearEndPrompts,
     bool? analyticsEnabled,
     bool? forceOfflineMode,
+    bool? developerModeUnlocked,
     AiProviderType? aiProviderType,
     String? groqApiKey,
     String? groqModel,
@@ -116,6 +119,7 @@ class SettingsState {
       showYearEndPrompts: showYearEndPrompts ?? this.showYearEndPrompts,
       analyticsEnabled: analyticsEnabled ?? this.analyticsEnabled,
       forceOfflineMode: forceOfflineMode ?? this.forceOfflineMode,
+      developerModeUnlocked: developerModeUnlocked ?? this.developerModeUnlocked,
       aiProviderType: aiProviderType ?? this.aiProviderType,
       groqApiKey: groqApiKey ?? this.groqApiKey,
       groqModel: groqModel ?? this.groqModel,
@@ -145,6 +149,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
   static const _keyShowYearEndPrompts = 'show_year_end_prompts';
   static const _keyAnalyticsEnabled = 'analytics_enabled';
   static const _keyForceOfflineMode = 'force_offline_mode';
+  static const _keyDeveloperModeUnlocked = 'developer_mode_unlocked';
   static const _keyAiProviderType = 'ai_provider_type';
   static const _keyGroqApiKey = 'groq_api_key';
   static const _keyGroqModel = 'groq_model';
@@ -207,6 +212,8 @@ class SettingsNotifier extends Notifier<SettingsState> {
     final showYearEndPrompts = prefs.getBool(_keyShowYearEndPrompts) ?? true;
     final analyticsEnabled = prefs.getBool(_keyAnalyticsEnabled) ?? true;
     final forceOfflineMode = prefs.getBool(_keyForceOfflineMode) ?? false;
+    final developerModeUnlocked =
+        prefs.getBool(_keyDeveloperModeUnlocked) ?? false;
 
     final providerTypeStr = prefs.getString(_keyAiProviderType);
     AiProviderType aiProviderType = _defaultAiProviderType;
@@ -240,6 +247,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
       showYearEndPrompts: showYearEndPrompts,
       analyticsEnabled: analyticsEnabled,
       forceOfflineMode: forceOfflineMode,
+      developerModeUnlocked: developerModeUnlocked,
       aiProviderType: aiProviderType,
       groqApiKey: groqApiKey,
       groqModel: groqModel,
@@ -314,6 +322,12 @@ class SettingsNotifier extends Notifier<SettingsState> {
     await prefs.setBool(_keyForceOfflineMode, enabled);
   }
 
+  Future<void> setDeveloperModeUnlocked(bool unlocked) async {
+    state = state.copyWith(developerModeUnlocked: unlocked);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyDeveloperModeUnlocked, unlocked);
+  }
+
   Future<void> setAiProviderType(AiProviderType type) async {
     state = state.copyWith(aiProviderType: type);
     final prefs = await SharedPreferences.getInstance();
@@ -374,6 +388,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
     await prefs.remove(_keyShowYearEndPrompts);
     await prefs.remove(_keyAnalyticsEnabled);
     await prefs.remove(_keyForceOfflineMode);
+    await prefs.remove(_keyDeveloperModeUnlocked);
     await prefs.remove(_keyAiProviderType);
     await prefs.remove(_keyGroqApiKey);
     await prefs.remove(_keyGroqModel);
