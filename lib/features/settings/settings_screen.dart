@@ -299,6 +299,16 @@ class SettingsScreen extends ConsumerWidget {
             subtitle: 'View open-source licenses',
             onTap: () => {showLicensePage(context: context)},
           ),
+          if (settings.developerModeUnlocked) ...[
+            const SizedBox(height: 24),
+            _SectionHeader(title: 'Developer'),
+            _ActionTile(
+              icon: Icons.code_rounded,
+              title: 'Developer settings',
+              subtitle: 'Tools for testing and development',
+              onTap: () => context.push('/developer-settings'),
+            ),
+          ],
         ],
       ),
     );
@@ -470,8 +480,7 @@ class _YearReviewTile extends ConsumerWidget {
 
 // ── About tile (long-press easter egg) ───────────────────────────────────────
 
-/// Long-pressing the About tile 3 times force-shows the Year in Review banner on
-/// the home screen, regardless of the current date. Useful for testing.
+/// Long-pressing the About tile 3 times unlocks Developer mode.
 class _AboutTile extends ConsumerStatefulWidget {
   @override
   ConsumerState<_AboutTile> createState() => _AboutTileState();
@@ -482,14 +491,16 @@ class _AboutTileState extends ConsumerState<_AboutTile> {
   static const int _tapsRequired = 3;
 
   void _onLongPress() {
+    final alreadyUnlocked =
+        ref.read(settingsProvider).developerModeUnlocked;
+    if (alreadyUnlocked) return;
     setState(() => _tapCount++);
     if (_tapCount >= _tapsRequired) {
       _tapCount = 0;
-      ref.read(yearReviewBannerVisibleProvider.notifier).forceShow();
-      Analytics.track("manual_yearend_banner_triggered");
+      ref.read(settingsProvider.notifier).setDeveloperModeUnlocked(true);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Year in Review banner unlocked'),
+          content: Text('Developer mode enabled'),
           duration: Duration(seconds: 2),
         ),
       );
