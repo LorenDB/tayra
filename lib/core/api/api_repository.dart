@@ -41,6 +41,7 @@ class FunkwhaleApi {
     int? artist,
     String? scope,
     String? q,
+    List<String>? tag,
   }) async {
     final response = await _dio.get(
       '$_baseUrl/api/v1/albums/',
@@ -52,6 +53,7 @@ class FunkwhaleApi {
         if (artist != null) 'artist': artist,
         if (scope != null) 'scope': scope,
         if (q != null) 'q': q,
+        if (tag != null && tag.isNotEmpty) 'tag': tag,
       },
     );
     return PaginatedResponse.fromJson(response.data, Album.fromJson);
@@ -130,6 +132,26 @@ class FunkwhaleApi {
       queryParameters: {'include': 'uploads'},
     );
     return Track.fromJson(response.data);
+  }
+
+  // ── Tags ────────────────────────────────────────────────────────────
+
+  Future<PaginatedResponse<Tag>> getTags({
+    int page = 1,
+    int pageSize = 100,
+    String ordering = 'name',
+    String? q,
+  }) async {
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/tags/',
+      queryParameters: {
+        'page': page,
+        'page_size': pageSize,
+        'ordering': ordering,
+        if (q != null && q.isNotEmpty) 'q': q,
+      },
+    );
+    return PaginatedResponse.fromJson(response.data, Tag.fromJson);
   }
 
   // ── Search ──────────────────────────────────────────────────────────
