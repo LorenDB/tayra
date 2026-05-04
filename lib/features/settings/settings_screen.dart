@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,6 +31,8 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
     final authState = ref.watch(authStateProvider);
+    final _dntEnv = Platform.environment['DO_NOT_TRACK']?.trim().toLowerCase();
+    final showAnalyticsToggle = !(_dntEnv == '1' || _dntEnv == 'true');
     final cacheStatsAsync = ref.watch(cacheStatsProvider);
 
     return Scaffold(
@@ -257,33 +261,37 @@ class SettingsScreen extends ConsumerWidget {
           _SectionHeader(title: 'About'),
           _AboutTile(),
           // Analytics moved here from General
-          _SwitchTile(
-            icon: Icons.analytics_outlined,
-            title: 'Analytics',
-            subtitle: 'Allow anonymous usage analytics',
-            value: settings.analyticsEnabled,
-            onChanged: (value) async {
-              // Persist setting and apply immediately.
-              try {
-                // If disabling, set Analytics to disabled first to avoid sending
-                // an event about the change. If enabling, persist then enable.
-                if (!value) {
-                  await ref
-                      .read(settingsProvider.notifier)
-                      .setAnalyticsEnabled(false);
-                  await Analytics.setEnabled(false);
-                } else {
-                  await ref
-                      .read(settingsProvider.notifier)
-                      .setAnalyticsEnabled(true);
-                  await Analytics.setEnabled(true);
-                  try {
-                    Analytics.track('analytics_enabled');
-                  } catch (_) {}
-                }
-              } catch (_) {}
-            },
-          ),
+           // Hide the analytics toggle entirely when DO_NOT_TRACK=1 is set in
+           // the environment. This prevents the setting from appearing in
+           // environments that require telemetry to be disabled.
+           if (showAnalyticsToggle)
+             _SwitchTile(
+               icon: Icons.analytics_outlined,
+               title: 'Analytics',
+               subtitle: 'Allow anonymous usage analytics',
+               value: settings.analyticsEnabled,
+               onChanged: (value) async {
+                 // Persist setting and apply immediately.
+                 try {
+                   // If disabling, set Analytics to disabled first to avoid sending
+                   // an event about the change. If enabling, persist then enable.
+                   if (!value) {
+                     await ref
+                         .read(settingsProvider.notifier)
+                         .setAnalyticsEnabled(false);
+                     await Analytics.setEnabled(false);
+                   } else {
+                     await ref
+                         .read(settingsProvider.notifier)
+                         .setAnalyticsEnabled(true);
+                     await Analytics.setEnabled(true);
+                     try {
+                       Analytics.track('analytics_enabled');
+                     } catch (_) {}
+                   }
+                 } catch (_) {}
+               },
+             ),
           _DonationTile(),
           _ActionTile(
             icon: Icons.balance_outlined,
