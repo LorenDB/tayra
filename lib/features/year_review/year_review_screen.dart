@@ -1649,6 +1649,8 @@ class _RankedList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final maxCount = items.fold<int>(1, (m, t) => t.count > m ? t.count : m);
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
@@ -1664,6 +1666,7 @@ class _RankedList extends StatelessWidget {
               item: items[i],
               placeholderIcon: _placeholderIcon,
               isLast: i == items.length - 1,
+              maxCount: maxCount,
             ),
         ],
       ),
@@ -1676,98 +1679,130 @@ class _RankedItem extends StatelessWidget {
   final TopItem item;
   final IconData placeholderIcon;
   final bool isLast;
+  final int maxCount;
 
   const _RankedItem({
     required this.rank,
     required this.item,
     required this.placeholderIcon,
     required this.isLast,
+    required this.maxCount,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        border:
-            isLast
-                ? null
-                : const Border(
-                  bottom: BorderSide(color: AppTheme.divider, width: 0.5),
+    final fillFraction =
+        maxCount > 0 ? (item.count / maxCount).clamp(0.0, 1.0) : 0.0;
+
+    return Stack(
+      children: [
+        // Subtle background fill bar showing relative play count
+        Positioned.fill(
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: FractionallySizedBox(
+              widthFactor: fillFraction,
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [
+                      AppTheme.primary.withValues(alpha: 0.10),
+                      Colors.transparent,
+                    ],
+                  ),
                 ),
-      ),
-      child: Row(
-        children: [
-          // Rank number
-          SizedBox(
-            width: 28,
-            child: Text(
-              '$rank',
-              style: TextStyle(
-                color:
-                    rank <= 3 ? AppTheme.primary : AppTheme.onBackgroundSubtle,
-                fontSize: rank <= 3 ? 18 : 16,
-                fontWeight: rank <= 3 ? FontWeight.w800 : FontWeight.w600,
               ),
             ),
           ),
-          const SizedBox(width: 8),
-          // Cover art
-          CoverArtWidget(
-            imageUrl: item.coverUrl,
-            size: 44,
-            borderRadius: 8,
-            placeholderIcon: placeholderIcon,
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            border:
+                isLast
+                    ? null
+                    : const Border(
+                      bottom: BorderSide(color: AppTheme.divider, width: 0.5),
+                    ),
           ),
-          const SizedBox(width: 12),
-          // Info
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item.name,
+          child: Row(
+            children: [
+              // Rank number
+              SizedBox(
+                width: 28,
+                child: Text(
+                  '$rank',
+                  style: TextStyle(
+                    color:
+                        rank <= 3
+                            ? AppTheme.primary
+                            : AppTheme.onBackgroundSubtle,
+                    fontSize: rank <= 3 ? 18 : 16,
+                    fontWeight: rank <= 3 ? FontWeight.w800 : FontWeight.w600,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              // Cover art
+              CoverArtWidget(
+                imageUrl: item.coverUrl,
+                size: 44,
+                borderRadius: 8,
+                placeholderIcon: placeholderIcon,
+              ),
+              const SizedBox(width: 12),
+              // Info
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.name,
+                      style: const TextStyle(
+                        color: AppTheme.onBackground,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    if (item.subtitle != null) ...[
+                      const SizedBox(height: 1),
+                      Text(
+                        item.subtitle!,
+                        style: const TextStyle(
+                          color: AppTheme.onBackgroundMuted,
+                          fontSize: 12,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              // Play count badge
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppTheme.surfaceContainerHigh,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  '${item.count}',
                   style: const TextStyle(
-                    color: AppTheme.onBackground,
-                    fontSize: 14,
+                    color: AppTheme.onBackgroundMuted,
+                    fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
-                if (item.subtitle != null) ...[
-                  const SizedBox(height: 1),
-                  Text(
-                    item.subtitle!,
-                    style: const TextStyle(
-                      color: AppTheme.onBackgroundMuted,
-                      fontSize: 12,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ],
-            ),
-          ),
-          // Play count badge
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: AppTheme.surfaceContainerHigh,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Text(
-              '${item.count}',
-              style: const TextStyle(
-                color: AppTheme.onBackgroundMuted,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
