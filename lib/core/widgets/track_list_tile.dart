@@ -13,6 +13,7 @@ import 'package:tayra/core/api/models.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
+import 'package:tayra/features/settings/settings_provider.dart';
 
 /// A row widget for a single track in a list.
 class TrackListTile extends ConsumerWidget {
@@ -210,6 +211,9 @@ class _TrackMenuButton extends ConsumerWidget {
     final albumAvailable = track.album != null;
     final artistAvailable = track.artist != null;
     final isManualAsync = ref.watch(isManualTrackProvider(track.id));
+    final showPurge = ref.watch(
+      settingsProvider.select((s) => s.effectiveShowPurgeCacheOption),
+    );
 
     return PopupMenuButton<String>(
       enabled: enabled,
@@ -346,6 +350,35 @@ class _TrackMenuButton extends ConsumerWidget {
                       }
                     }
                     break;
+                  case 'purge_cache':
+                    try {
+                      final mgr = CacheManager.instance;
+                      // Delete individual track metadata
+                      await mgr.deleteMetadata('track_${track.id}');
+                      // Delete cached audio file (DB entry + disk, including orphans)
+                      await mgr.deleteAudioFilesOnDisk(track.id);
+                      // Delete all paginated track-list pages that include this album
+                      if (track.album != null) {
+                        await mgr.deleteMetadataLike(
+                          'tracks_p%_al${track.album!.id}_%',
+                        );
+                      }
+                      // Invalidate per-track cache state providers
+                      ref.invalidate(isAudioCachedProvider(track.id));
+                      ref.invalidate(isManualTrackProvider(track.id));
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Cache purged for "${track.title}" — pull to refresh',
+                            ),
+                          ),
+                        );
+                      }
+                    } catch (e) {
+                      debugPrint('Purge cache failed: $e');
+                    }
+                    break;
                 }
               }
               : null,
@@ -459,6 +492,24 @@ class _TrackMenuButton extends ConsumerWidget {
                     ),
                     const SizedBox(width: 12),
                     const Text('Remove from playlist'),
+                  ],
+                ),
+              ),
+            if (showPurge)
+              const PopupMenuItem(
+                value: 'purge_cache',
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.delete_forever_rounded,
+                      size: 20,
+                      color: AppTheme.error,
+                    ),
+                    SizedBox(width: 12),
+                    Text(
+                      'Purge and refetch',
+                      style: TextStyle(color: AppTheme.error),
+                    ),
                   ],
                 ),
               ),

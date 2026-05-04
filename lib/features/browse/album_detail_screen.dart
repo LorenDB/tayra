@@ -17,6 +17,7 @@ import 'package:tayra/core/widgets/track_list_tile.dart';
 import 'package:tayra/core/cache/download_queue_service.dart';
 import 'package:tayra/features/player/player_provider.dart';
 import 'package:tayra/features/playlists/add_to_playlist_sheet.dart';
+import 'package:tayra/features/settings/settings_provider.dart';
 
 // ── Providers ───────────────────────────────────────────────────────────
 
@@ -315,6 +316,9 @@ class _AlbumHeader extends ConsumerWidget {
       data: (v) => v,
       orElse: () => false,
     );
+    final showPurge = ref.watch(
+      settingsProvider.select((s) => s.effectiveShowPurgeCacheOption),
+    );
 
     Future<void> toggleDownload() async {
       // Ensure we have the full list of tracks (wait for paging to finish
@@ -483,12 +487,34 @@ class _AlbumHeader extends ConsumerWidget {
           child: PopupMenuButton<String>(
             icon: const Icon(Icons.more_vert, color: Colors.white),
             color: AppTheme.surfaceContainer,
-            onSelected: (value) {
+            onSelected: (value) async {
               if (value == 'edit') context.push('${GoRouterState.of(context).uri}/edit');
               if (value == 'download') toggleDownload();
               if (value == 'play_next') playAlbumNext();
               if (value == 'add_queue') addAlbumToQueue();
               if (value == 'add_playlist') addAlbumToPlaylist();
+              if (value == 'purge_cache') {
+                try {
+                  final mgr = CacheManager.instance;
+                  // Delete album metadata
+                  await mgr.deleteMetadata('album_${album.id}');
+                  // Delete all paginated track-list pages for this album
+                  await mgr.deleteMetadataLike(
+                    'tracks_p%_al${album.id}_%',
+                  );
+                  ref.invalidate(_albumDetailProvider(album.id));
+                  ref.read(_albumTracksProvider(album.id).notifier).reload();
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Cache purged for "${album.title}" — refetching'),
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  debugPrint('Purge cache failed: $e');
+                }
+              }
             },
             itemBuilder:
                 (_) => [
@@ -579,6 +605,24 @@ class _AlbumHeader extends ConsumerWidget {
                       ],
                     ),
                   ),
+                  if (showPurge)
+                    const PopupMenuItem(
+                      value: 'purge_cache',
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.delete_forever_rounded,
+                            size: 20,
+                            color: AppTheme.error,
+                          ),
+                          SizedBox(width: 12),
+                          Text(
+                            'Purge and refetch',
+                            style: TextStyle(color: AppTheme.error),
+                          ),
+                        ],
+                      ),
+                    ),
                 ],
           ),
         ),

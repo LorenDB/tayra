@@ -40,6 +40,7 @@ class SettingsState {
   final bool analyticsEnabled;
   final bool forceOfflineMode;
   final bool developerModeUnlocked;
+  final bool showPurgeCacheOption;
   final AiProviderType aiProviderType;
   final String groqApiKey;
   final String groqModel;
@@ -61,6 +62,7 @@ class SettingsState {
     this.analyticsEnabled = true,
     this.forceOfflineMode = false,
     this.developerModeUnlocked = false,
+    this.showPurgeCacheOption = false,
     this.aiProviderType = AiProviderType.geminiNano,
     this.groqApiKey = '',
     this.groqModel = 'llama-3.1-8b-instant',
@@ -70,6 +72,12 @@ class SettingsState {
     this.customEndpointApiKey = '',
     this.customModelName = 'gpt-4o-mini',
   });
+
+  // Dev-mode settings are only active when developer mode is unlocked.
+  // This acts as a master override so disabling dev mode immediately silences
+  // all dev-only UI without needing to reset each individual setting.
+  bool get effectiveShowPurgeCacheOption =>
+      developerModeUnlocked && showPurgeCacheOption;
 
   bool get isAiProviderConfigured {
     if (!aiEnabled) return false;
@@ -97,6 +105,7 @@ class SettingsState {
     bool? analyticsEnabled,
     bool? forceOfflineMode,
     bool? developerModeUnlocked,
+    bool? showPurgeCacheOption,
     AiProviderType? aiProviderType,
     String? groqApiKey,
     String? groqModel,
@@ -120,6 +129,7 @@ class SettingsState {
       analyticsEnabled: analyticsEnabled ?? this.analyticsEnabled,
       forceOfflineMode: forceOfflineMode ?? this.forceOfflineMode,
       developerModeUnlocked: developerModeUnlocked ?? this.developerModeUnlocked,
+      showPurgeCacheOption: showPurgeCacheOption ?? this.showPurgeCacheOption,
       aiProviderType: aiProviderType ?? this.aiProviderType,
       groqApiKey: groqApiKey ?? this.groqApiKey,
       groqModel: groqModel ?? this.groqModel,
@@ -150,6 +160,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
   static const _keyAnalyticsEnabled = 'analytics_enabled';
   static const _keyForceOfflineMode = 'force_offline_mode';
   static const _keyDeveloperModeUnlocked = 'developer_mode_unlocked';
+  static const _keyShowPurgeCacheOption = 'show_purge_cache_option';
   static const _keyAiProviderType = 'ai_provider_type';
   static const _keyGroqApiKey = 'groq_api_key';
   static const _keyGroqModel = 'groq_model';
@@ -214,6 +225,8 @@ class SettingsNotifier extends Notifier<SettingsState> {
     final forceOfflineMode = prefs.getBool(_keyForceOfflineMode) ?? false;
     final developerModeUnlocked =
         prefs.getBool(_keyDeveloperModeUnlocked) ?? false;
+    final showPurgeCacheOption =
+        prefs.getBool(_keyShowPurgeCacheOption) ?? false;
 
     final providerTypeStr = prefs.getString(_keyAiProviderType);
     AiProviderType aiProviderType = _defaultAiProviderType;
@@ -248,6 +261,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
       analyticsEnabled: analyticsEnabled,
       forceOfflineMode: forceOfflineMode,
       developerModeUnlocked: developerModeUnlocked,
+      showPurgeCacheOption: showPurgeCacheOption,
       aiProviderType: aiProviderType,
       groqApiKey: groqApiKey,
       groqModel: groqModel,
@@ -328,6 +342,22 @@ class SettingsNotifier extends Notifier<SettingsState> {
     await prefs.setBool(_keyDeveloperModeUnlocked, unlocked);
   }
 
+  Future<void> disableDeveloperMode() async {
+    state = state.copyWith(
+      developerModeUnlocked: false,
+      showPurgeCacheOption: false,
+    );
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyDeveloperModeUnlocked, false);
+    await prefs.setBool(_keyShowPurgeCacheOption, false);
+  }
+
+  Future<void> setShowPurgeCacheOption(bool show) async {
+    state = state.copyWith(showPurgeCacheOption: show);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyShowPurgeCacheOption, show);
+  }
+
   Future<void> setAiProviderType(AiProviderType type) async {
     state = state.copyWith(aiProviderType: type);
     final prefs = await SharedPreferences.getInstance();
@@ -389,6 +419,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
     await prefs.remove(_keyAnalyticsEnabled);
     await prefs.remove(_keyForceOfflineMode);
     await prefs.remove(_keyDeveloperModeUnlocked);
+    await prefs.remove(_keyShowPurgeCacheOption);
     await prefs.remove(_keyAiProviderType);
     await prefs.remove(_keyGroqApiKey);
     await prefs.remove(_keyGroqModel);
