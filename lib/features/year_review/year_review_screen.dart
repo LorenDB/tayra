@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/theme/palette_provider.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:tayra/features/year_review/listen_history_provider.dart';
@@ -32,8 +33,13 @@ const _monthNames = [
 
 class YearReviewScreen extends ConsumerStatefulWidget {
   final int year;
+  final bool startInStory;
 
-  const YearReviewScreen({super.key, required this.year});
+  const YearReviewScreen({
+    super.key,
+    required this.year,
+    this.startInStory = false,
+  });
 
   @override
   ConsumerState<YearReviewScreen> createState() => _YearReviewScreenState();
@@ -161,6 +167,7 @@ class _YearReviewScreenState extends ConsumerState<YearReviewScreen>
               stats: stats,
               animController: _animController,
               magicProgram: _magicProgram,
+              startInStory: widget.startInStory,
             ),
           );
         },
@@ -513,341 +520,1897 @@ class _AppBarRow extends StatelessWidget {
   }
 }
 
-// ── Review content ──────────────────────────────────────────────────────
+// ── Review content (Story + Details tabs) ───────────────────────────────
 
-class _ReviewContent extends StatelessWidget {
+class _ReviewContent extends StatefulWidget {
   final YearReviewStats stats;
   final AnimationController animController;
   final ui.FragmentProgram? magicProgram;
+  final bool startInStory;
 
   const _ReviewContent({
     required this.stats,
     required this.animController,
     this.magicProgram,
+    this.startInStory = false,
+  });
+
+  @override
+  State<_ReviewContent> createState() => _ReviewContentState();
+}
+
+class _ReviewContentState extends State<_ReviewContent>
+    with SingleTickerProviderStateMixin {
+  late PageController _pageController;
+  int _currentPage = 0;
+  late bool _isStoryMode;
+
+  late final AnimationController _cardAnimController;
+
+  @override
+  void initState() {
+    super.initState();
+    _isStoryMode = widget.startInStory;
+    _pageController = PageController();
+    _cardAnimController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+    if (_isStoryMode) {
+      _cardAnimController.forward();
+    }
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    _cardAnimController.dispose();
+    super.dispose();
+  }
+
+  void _onPageChanged(int page) {
+    setState(() => _currentPage = page);
+    _cardAnimController.reset();
+    _cardAnimController.forward();
+  }
+
+  void _switchToDetails() {
+    setState(() => _isStoryMode = false);
+  }
+
+  void _switchToStory() {
+    setState(() {
+      _isStoryMode = true;
+      _currentPage = 0;
+    });
+    _pageController.dispose();
+    _pageController = PageController(initialPage: 0);
+    _cardAnimController.reset();
+    _cardAnimController.forward();
+  }
+
+  // ── Build story card pages ───────────────────────────────────────
+
+  List<Widget> _buildStoryPages() {
+    final s = widget.stats;
+    final pages = <Widget>[
+      _StoryWelcomeCard(
+        year: s.year,
+        magicProgram: widget.magicProgram,
+      ),
+      _StoryStatsCard(
+        label: 'Total Listens',
+        value: s.totalListens,
+        subtitle: 'times you pressed play',
+        icon: Icons.play_circle_filled_rounded,
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFF6C63FF), Color(0xFF00D4AA)],
+        ),
+      ),
+      _StoryTimeCard(stats: s),
+      _StoryDiscoveryCard(stats: s),
+      if (s.topTrack != null)
+        _StorySpotlightCard(
+          item: s.topTrack!,
+          label: 'Your #1 Track',
+          icon: Icons.music_note_rounded,
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF6C63FF), Color(0xFF3B35CC)],
+          ),
+        ),
+      if (s.topArtist != null)
+        _StorySpotlightCard(
+          item: s.topArtist!,
+          label: 'Your #1 Artist',
+          icon: Icons.person_rounded,
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF00D4AA), Color(0xFF009977)],
+          ),
+        ),
+      if (s.topAlbum != null)
+        _StorySpotlightCard(
+          item: s.topAlbum!,
+          label: 'Your #1 Album',
+          icon: Icons.album_rounded,
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFFFF6B6B), Color(0xFFCC3535)],
+          ),
+          isAlbum: true,
+        ),
+      _StoryPeakMonthCard(stats: s),
+      _StoryFunStatsCard(stats: s),
+      _StoryEndCard(year: s.year, onViewAll: _switchToDetails),
+    ];
+    return pages;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final pages = _buildStoryPages();
+
+    return SafeArea(
+      child: Column(
+        children: [
+          // Tab toggle + close button row
+          _StoryTabRow(
+            isStoryMode: _isStoryMode,
+            onStoryTap: _switchToStory,
+            onDetailsTap: _switchToDetails,
+            onBack: () => Navigator.of(context).pop(),
+          ),
+          const SizedBox(height: 4),
+
+          if (_isStoryMode) ...[
+            // Zero-size widget that fires the one-time download snackbar prompt.
+            _AiDownloadPromptChecker(year: widget.stats.year),
+
+            // Story PageView
+            Expanded(
+              child: PageView.builder(
+                controller: _pageController,
+                itemCount: pages.length,
+                onPageChanged: _onPageChanged,
+                itemBuilder: (context, index) {
+                  return AnimatedBuilder(
+                    animation: _cardAnimController,
+                    builder: (context, child) {
+                      return Opacity(
+                        opacity: _cardAnimController.value,
+                        child: Transform.scale(
+                          scale: 0.92 +
+                              (0.08 * _cardAnimController.value),
+                          child: LayoutBuilder(
+                            builder: (context, constraints) {
+                              return SingleChildScrollView(
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    minHeight: constraints.maxHeight,
+                                  ),
+                                  child: pages[index],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+
+            // Bottom bar: progress dots + navigation buttons
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+              child: Row(
+                children: [
+                  if (_currentPage > 0)
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton.icon(
+                          onPressed: () {
+                            _pageController.previousPage(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeOut,
+                            );
+                          },
+                          icon: const Icon(Icons.arrow_back_rounded, size: 16),
+                          label: const Text('Back'),
+                          style: TextButton.styleFrom(
+                            foregroundColor: AppTheme.onBackgroundMuted,
+                          ),
+                        ),
+                      ),
+                    )
+                  else
+                    const Expanded(child: SizedBox()),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: _StoryProgress(
+                      currentPage: _currentPage,
+                      pageCount: pages.length,
+                    ),
+                  ),
+                  if (_currentPage < pages.length - 1)
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton.icon(
+                          onPressed: () {
+                            _pageController.nextPage(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeOut,
+                            );
+                          },
+                          icon: const Icon(Icons.arrow_forward_rounded, size: 16),
+                          label: const Text('Next'),
+                          style: TextButton.styleFrom(
+                            foregroundColor: AppTheme.primary,
+                          ),
+                        ),
+                      ),
+                    )
+                  else
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: _switchToDetails,
+                          child: const Text('All Stats'),
+                          style: TextButton.styleFrom(
+                            foregroundColor: AppTheme.primary,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ] else ...[
+            // Details view — the existing scrollable list
+            Expanded(
+              child: _DetailsView(
+                stats: widget.stats,
+                animController: widget.animController,
+                magicProgram: widget.magicProgram,
+                onSwitchToStory: _switchToStory,
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+// ── Story tab row ─────────────────────────────────────────────────────
+
+class _StoryTabRow extends StatelessWidget {
+  final bool isStoryMode;
+  final VoidCallback onStoryTap;
+  final VoidCallback onDetailsTap;
+  final VoidCallback onBack;
+
+  const _StoryTabRow({
+    required this.isStoryMode,
+    required this.onStoryTap,
+    required this.onDetailsTap,
+    required this.onBack,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: CustomScrollView(
-        physics: const BouncingScrollPhysics(
-          parent: AlwaysScrollableScrollPhysics(),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 8, 16, 0),
+      child: Row(
+        children: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back_rounded),
+            color: AppTheme.onBackground,
+            onPressed: onBack,
+          ),
+          const SizedBox(width: 8),
+          // Tab toggle pills
+          Container(
+            decoration: BoxDecoration(
+              color: AppTheme.surfaceContainer,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: const EdgeInsets.all(3),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GestureDetector(
+                  onTap: onStoryTap,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isStoryMode
+                          ? AppTheme.primary
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.auto_awesome_rounded,
+                          size: 14,
+                          color: isStoryMode
+                              ? Colors.white
+                              : AppTheme.onBackgroundMuted,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          'Story',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: isStoryMode
+                                ? Colors.white
+                                : AppTheme.onBackgroundMuted,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: onDetailsTap,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: !isStoryMode
+                          ? AppTheme.primary
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.list_alt_rounded,
+                          size: 14,
+                          color: !isStoryMode
+                              ? Colors.white
+                              : AppTheme.onBackgroundMuted,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          'Details',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: !isStoryMode
+                                ? Colors.white
+                                : AppTheme.onBackgroundMuted,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Spacer(),
+          Text(
+            'Year in Review',
+            style: TextStyle(
+              color: AppTheme.onBackground.withValues(alpha: 0.5),
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Story progress dots ──────────────────────────────────────────────
+
+class _StoryProgress extends StatelessWidget {
+  final int currentPage;
+  final int pageCount;
+
+  const _StoryProgress({required this.currentPage, required this.pageCount});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 4,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(pageCount, (i) {
+          final isActive = i == currentPage;
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 250),
+            margin: const EdgeInsets.symmetric(horizontal: 2),
+            width: isActive ? 20 : 6,
+            height: 4,
+            decoration: BoxDecoration(
+              color: isActive ? AppTheme.primary : AppTheme.surfaceContainerHigh,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+}
+
+// ── Story: Welcome card ──────────────────────────────────────────────
+
+class _StoryWelcomeCard extends StatefulWidget {
+  final int year;
+  final ui.FragmentProgram? magicProgram;
+
+  const _StoryWelcomeCard({required this.year, this.magicProgram});
+
+  @override
+  State<_StoryWelcomeCard> createState() => _StoryWelcomeCardState();
+}
+
+class _StoryWelcomeCardState extends State<_StoryWelcomeCard>
+    with TickerProviderStateMixin {
+  late final AnimationController _ctrl;
+  late final Animation<double> _fadeSlide;
+  late final Ticker _shaderTicker;
+  double _shaderElapsed = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    )..forward();
+    _fadeSlide = Tween<double>(begin: 30, end: 0).animate(
+      CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic),
+    );
+    _shaderTicker = createTicker((elapsed) {
+      setState(() {
+        _shaderElapsed = elapsed.inMicroseconds / 1e6;
+      });
+    });
+    _checkShaderTicker();
+  }
+
+  @override
+  void didUpdateWidget(_StoryWelcomeCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _checkShaderTicker();
+  }
+
+  void _checkShaderTicker() {
+    if (widget.magicProgram != null && !_shaderTicker.isActive) {
+      _shaderTicker.start();
+    } else if (widget.magicProgram == null && _shaderTicker.isActive) {
+      _shaderTicker.stop();
+    }
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    _shaderTicker.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
+
+    final inner = AnimatedBuilder(
+      animation: _fadeSlide,
+      builder: (context, child) {
+        return Padding(
+          padding: const EdgeInsets.all(40),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Transform.translate(
+                offset: Offset(0, _fadeSlide.value * 0.5),
+                child: const Icon(
+                  Icons.auto_awesome_rounded,
+                  color: AppTheme.primary,
+                  size: 56,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Transform.translate(
+                offset: Offset(0, _fadeSlide.value),
+                child: Text(
+                  '${widget.year}',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 56,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -2,
+                    height: 1,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Transform.translate(
+                offset: Offset(0, _fadeSlide.value * 1.2),
+                child: Text(
+                  'Year in Review',
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.8),
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 32),
+              Transform.translate(
+                offset: Offset(0, _fadeSlide.value * 1.5),
+                child: Text(
+                  'Relive your musical journey.\nTap through to discover your stats.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: AppTheme.onBackgroundMuted,
+                    fontSize: 14,
+                    height: 1.5,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    Widget card = ClipRRect(
+      borderRadius: BorderRadius.circular(24),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF1A1540), Color(0xFF0D2A2A)],
+          ),
+          border: Border.all(
+            color: AppTheme.primary.withValues(alpha: 0.3),
+          ),
         ),
-        slivers: [
-          // Zero-size widget that fires the one-time download snackbar prompt.
-          SliverToBoxAdapter(child: _AiDownloadPromptChecker(year: stats.year)),
+        child: inner,
+      ),
+    );
 
-          SliverToBoxAdapter(child: _AppBarRow(title: 'Year in Review')),
-          const SliverToBoxAdapter(child: SizedBox(height: 8)),
+    if (widget.magicProgram != null) {
+      card = ShaderMask(
+        shaderCallback: (bounds) {
+          final shader = widget.magicProgram!.fragmentShader();
+          shader.setFloat(0, _shaderElapsed);
+          shader.setFloat(1, bounds.width * devicePixelRatio);
+          shader.setFloat(2, bounds.height * devicePixelRatio);
+          return shader;
+        },
+        blendMode: BlendMode.plus,
+        child: card,
+      );
+    }
 
-          // Hero card with year + total stats
-          SliverToBoxAdapter(
-            child: _HeroCard(
-              stats: stats,
-              animController: animController,
-              magicProgram: magicProgram,
-            ),
-          ),
-          const SliverToBoxAdapter(child: SizedBox(height: 20)),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      child: card,
+    );
+  }
+}
 
-          // AI-generated summary (hidden when AI is unsupported or not configured)
-          // Placed right after the hero card, before the stats grid.
-          // The trailing spacer is conditional to avoid phantom spacing when
-          // the section renders SizedBox.shrink().
-          SliverToBoxAdapter(child: _AiSummarySection(year: stats.year)),
-          SliverToBoxAdapter(
-            child: Consumer(
-              builder: (context, ref, _) {
-                final s = ref.watch(aiSummaryProvider(stats.year));
-                final visible =
-                    s is! AiSummaryUnsupported &&
-                    s is! AiSummaryDeviceUnsupported;
-                return visible
-                    ? const SizedBox(height: 24)
-                    : const SizedBox.shrink();
-              },
-            ),
-          ),
+// ── Story: Total listens card ────────────────────────────────────────
 
-          // Stats grid
-          SliverToBoxAdapter(child: _StatsGrid(stats: stats)),
-          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+class _StoryStatsCard extends StatefulWidget {
+  final String label;
+  final int value;
+  final String subtitle;
+  final IconData icon;
+  final LinearGradient gradient;
 
-          // Top track spotlight
-          if (stats.topTrack != null) ...[
-            const SliverToBoxAdapter(
-              child: _SectionTitle(title: 'Your #1 Track'),
-            ),
-            SliverToBoxAdapter(
-              child: _SpotlightCard(
-                item: stats.topTrack!,
-                icon: Icons.music_note_rounded,
-                gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Color(0xFF6C63FF), Color(0xFF3B35CC)],
-                ),
-              ),
-            ),
-            const SliverToBoxAdapter(child: SizedBox(height: 20)),
-          ],
+  const _StoryStatsCard({
+    required this.label,
+    required this.value,
+    required this.subtitle,
+    required this.icon,
+    required this.gradient,
+  });
 
-          // Top artist spotlight
-          if (stats.topArtist != null) ...[
-            const SliverToBoxAdapter(
-              child: _SectionTitle(title: 'Your #1 Artist'),
-            ),
-            SliverToBoxAdapter(
-              child: _SpotlightCard(
-                item: stats.topArtist!,
-                icon: Icons.person_rounded,
-                gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Color(0xFF00D4AA), Color(0xFF009977)],
-                ),
-              ),
-            ),
-            const SliverToBoxAdapter(child: SizedBox(height: 20)),
-          ],
+  @override
+  State<_StoryStatsCard> createState() => _StoryStatsCardState();
+}
 
-          // Top album spotlight
-          if (stats.topAlbum != null) ...[
-            const SliverToBoxAdapter(
-              child: _SectionTitle(title: 'Your #1 Album'),
-            ),
-            SliverToBoxAdapter(
-              child: _SpotlightCard(
-                item: stats.topAlbum!,
-                icon: Icons.album_rounded,
-                gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Color(0xFFFF6B6B), Color(0xFFCC3535)],
-                ),
-              ),
-            ),
-            const SliverToBoxAdapter(child: SizedBox(height: 24)),
-          ],
+class _StoryStatsCardState extends State<_StoryStatsCard>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+  late final Animation<double> _countAnim;
+  late final Animation<double> _fade;
 
-          // Monthly chart
-          const SliverToBoxAdapter(
-            child: _SectionTitle(title: 'Month by Month'),
-          ),
-          SliverToBoxAdapter(
-            child: _MonthlyChart(monthly: stats.monthlyBreakdown),
-          ),
-          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    )..forward();
+    _countAnim = Tween<double>(begin: 0, end: widget.value.toDouble()).animate(
+      CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic),
+    );
+    _fade = CurvedAnimation(parent: _ctrl, curve: const Interval(0.4, 1.0));
+  }
 
-          // Loved vs. Listened contrast section
-          // Only render this section when all three lists are present. The
-          // section is a true contrast only when the user has favorited tracks
-          // this year and we have both loved and unloved top-track lists.
-          if (stats.favoritedThisYear.isNotEmpty &&
-              stats.lovedTopTracks.isNotEmpty &&
-              stats.unlovedTopTracks.isNotEmpty) ...[
-            SliverToBoxAdapter(child: _LovedVsListenedSection(stats: stats)),
-            const SliverToBoxAdapter(child: SizedBox(height: 24)),
-          ],
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
 
-          // Top tracks list — title row includes a subtle Create button
-          if (stats.topTracks.length > 1) ...[
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
-                child: Row(
-                  children: [
-                    const Text(
-                      'Top Tracks',
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          gradient: widget.gradient,
+        ),
+        child: AnimatedBuilder(
+          animation: _ctrl,
+          builder: (context, _) {
+            return Padding(
+              padding: const EdgeInsets.all(40),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(widget.icon, color: Colors.white70, size: 44),
+                  const SizedBox(height: 24),
+                  Text(
+                    _countAnim.value.toInt().toString(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 64,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -2,
+                      height: 1,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    widget.label,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Opacity(
+                    opacity: _fade.value,
+                    child: Text(
+                      widget.subtitle,
                       style: TextStyle(
-                        color: AppTheme.onBackground,
+                        color: Colors.white.withValues(alpha: 0.7),
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+// ── Story: Listening time card ───────────────────────────────────────
+
+class _StoryTimeCard extends StatefulWidget {
+  final YearReviewStats stats;
+  const _StoryTimeCard({required this.stats});
+
+  @override
+  State<_StoryTimeCard> createState() => _StoryTimeCardState();
+}
+
+class _StoryTimeCardState extends State<_StoryTimeCard>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = widget.stats;
+    final hours = s.totalSeconds ~/ 3600;
+    final minutes = (s.totalSeconds % 3600) ~/ 60;
+    final days = (hours / 24).toStringAsFixed(1);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF1A1540), Color(0xFF2D1B69)],
+          ),
+        ),
+        child: AnimatedBuilder(
+          animation: _ctrl,
+          builder: (context, _) {
+            return Padding(
+              padding: const EdgeInsets.all(40),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Opacity(
+                    opacity: (_ctrl.value * 3).clamp(0.0, 1.0),
+                    child: const Icon(
+                      Icons.headphones_rounded,
+                      color: AppTheme.secondary,
+                      size: 48,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Opacity(
+                    opacity: ((_ctrl.value - 0.15) * 3).clamp(0.0, 1.0),
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        style: const TextStyle(
+                          color: Colors.white,
+                          height: 1.2,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: hours > 0 ? '$hours' : '$minutes',
+                            style: const TextStyle(
+                              fontSize: 56,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: -2,
+                            ),
+                          ),
+                          TextSpan(
+                            text: hours > 0 ? ' hr' : ' min',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white.withValues(alpha: 0.7),
+                            ),
+                          ),
+                          if (hours > 0) ...[
+                            const TextSpan(text: ' '),
+                            TextSpan(
+                              text: '$minutes',
+                              style: const TextStyle(
+                                fontSize: 56,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: -2,
+                              ),
+                            ),
+                            TextSpan(
+                              text: ' min',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white.withValues(alpha: 0.7),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Opacity(
+                    opacity: ((_ctrl.value - 0.3) * 3).clamp(0.0, 1.0),
+                    child: Text(
+                      'of listening',
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.7),
                         fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Opacity(
+                    opacity: ((_ctrl.value - 0.5) * 3).clamp(0.0, 1.0),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Text(
+                        "That's about $days days!",
+                        style: TextStyle(
+                          color: AppTheme.secondary,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+// ── Story: Discovery card ────────────────────────────────────────────
+
+class _StoryDiscoveryCard extends StatefulWidget {
+  final YearReviewStats stats;
+  const _StoryDiscoveryCard({required this.stats});
+
+  @override
+  State<_StoryDiscoveryCard> createState() => _StoryDiscoveryCardState();
+}
+
+class _StoryDiscoveryCardState extends State<_StoryDiscoveryCard>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = widget.stats;
+    final items = [
+      (Icons.music_note_rounded, '${s.uniqueTracks}', 'Tracks'),
+      (Icons.person_rounded, '${s.uniqueArtists}', 'Artists'),
+      (Icons.album_rounded, '${s.uniqueAlbums}', 'Albums'),
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF0D2A2A), Color(0xFF1A1540)],
+          ),
+        ),
+        child: FadeTransition(
+          opacity: CurvedAnimation(
+            parent: _ctrl,
+            curve: const Interval(0.0, 0.6),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.explore_rounded,
+                  color: AppTheme.secondary,
+                  size: 40,
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'You discovered',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 32),
+                for (int i = 0; i < items.length; i++)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: Row(
+                      children: [
+                        Icon(
+                          items[i].$1,
+                          color: AppTheme.primary,
+                          size: 28,
+                        ),
+                        const SizedBox(width: 16),
+                        Text(
+                          items[i].$2,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 36,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: -1,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          items[i].$3,
+                          style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.6),
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ── Story: Spotlight card (#1 track/artist/album) ────────────────────
+
+class _StorySpotlightCard extends ConsumerStatefulWidget {
+  final TopItem item;
+  final String label;
+  final IconData icon;
+  final LinearGradient gradient;
+  final bool isAlbum;
+
+  const _StorySpotlightCard({
+    required this.item,
+    required this.label,
+    required this.icon,
+    required this.gradient,
+    this.isAlbum = false,
+  });
+
+  @override
+  ConsumerState<_StorySpotlightCard> createState() => _StorySpotlightCardState();
+}
+
+class _StorySpotlightCardState extends ConsumerState<_StorySpotlightCard>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final paletteAsync = ref.watch(
+      paletteColorsProvider(
+        encodePaletteKey(widget.item.coverUrl, null),
+      ),
+    );
+    final accentColor = paletteAsync.maybeWhen(
+      data: (color) => color,
+      orElse: () => AppTheme.primary,
+    );
+
+    String? playThroughText;
+    if (widget.isAlbum &&
+        widget.item.totalListens != null &&
+        widget.item.albumTrackCount != null &&
+        widget.item.albumTrackCount! > 0) {
+      final playThroughs =
+          widget.item.totalListens! / widget.item.albumTrackCount!;
+      playThroughText = 'Played through ${playThroughs.toStringAsFixed(1)}×';
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          color: accentColor.withValues(alpha: 0.18),
+          border: Border.all(
+            color: accentColor.withValues(alpha: 0.35),
+            width: 1.5,
+          ),
+        ),
+        child: SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
+          child: AnimatedBuilder(
+            animation: _ctrl,
+            builder: (context, _) {
+              return Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Opacity(
+                      opacity: (_ctrl.value * 2).clamp(0.0, 1.0),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 5,
+                        ),
+                        decoration: BoxDecoration(
+                          color: accentColor.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          widget.label,
+                          style: TextStyle(
+                            color: accentColor,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Opacity(
+                      opacity: ((_ctrl.value - 0.15) * 2).clamp(0.0, 1.0),
+                      child: CoverArtWidget(
+                        imageUrl: widget.item.coverUrl,
+                        size: 120,
+                        borderRadius: 18,
+                        placeholderIcon: widget.icon,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Opacity(
+                      opacity: ((_ctrl.value - 0.3) * 2).clamp(0.0, 1.0),
+                      child: Text(
+                        widget.item.name,
+                        style: TextStyle(
+                          color: accentColor,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    if (widget.item.subtitle != null) ...[
+                      const SizedBox(height: 4),
+                      Opacity(
+                        opacity: ((_ctrl.value - 0.4) * 2).clamp(0.0, 1.0),
+                        child: Text(
+                          widget.item.subtitle!,
+                          style: TextStyle(
+                            color: AppTheme.onBackgroundMuted,
+                            fontSize: 15,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 14),
+                    Opacity(
+                      opacity: ((_ctrl.value - 0.55) * 2).clamp(0.0, 1.0),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 18,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: accentColor.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        child: Text(
+                          '${widget.item.count} ${widget.item.count == 1 ? 'play' : 'plays'}',
+                          style: TextStyle(
+                            color: accentColor,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                    if (playThroughText != null) ...[
+                      const SizedBox(height: 10),
+                      Opacity(
+                        opacity: ((_ctrl.value - 0.65) * 2).clamp(0.0, 1.0),
+                        child: Text(
+                          playThroughText,
+                          style: TextStyle(
+                            color: accentColor.withValues(alpha: 0.8),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ── Story: Peak month card ───────────────────────────────────────────
+
+class _StoryPeakMonthCard extends StatefulWidget {
+  final YearReviewStats stats;
+  const _StoryPeakMonthCard({required this.stats});
+
+  @override
+  State<_StoryPeakMonthCard> createState() => _StoryPeakMonthCardState();
+}
+
+class _StoryPeakMonthCardState extends State<_StoryPeakMonthCard>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = widget.stats;
+    final peakMonth = s.peakMonth;
+    const fullMonths = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December',
+    ];
+    final monthName = peakMonth > 0 && peakMonth <= 12
+        ? fullMonths[peakMonth - 1]
+        : 'Unknown';
+    final peakData = peakMonth > 0
+        ? s.monthlyBreakdown.firstWhere(
+            (m) => m.month == peakMonth,
+            orElse: () => MonthlyListens(
+              month: peakMonth,
+              count: 0,
+              totalSeconds: 0,
+            ),
+          )
+        : null;
+
+    final medianIndex = s.monthlyBreakdown
+        .map((m) => m.count)
+        .toList()
+      ..sort();
+    final median = medianIndex.isNotEmpty
+        ? medianIndex[medianIndex.length ~/ 2]
+        : 1;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF2D1B69), Color(0xFF6C63FF)],
+          ),
+        ),
+        child: AnimatedBuilder(
+          animation: _ctrl,
+          builder: (context, _) {
+            return Padding(
+              padding: const EdgeInsets.all(32),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Opacity(
+                    opacity: (_ctrl.value * 2).clamp(0.0, 1.0),
+                    child: const Icon(
+                      Icons.calendar_month_rounded,
+                      color: Colors.white70,
+                      size: 44,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Opacity(
+                    opacity: ((_ctrl.value - 0.1) * 2).clamp(0.0, 1.0),
+                    child: const Text(
+                      'Your peak month',
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Opacity(
+                    opacity: ((_ctrl.value - 0.2) * 2).clamp(0.0, 1.0),
+                    child: Text(
+                      monthName,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 42,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: -1,
+                      ),
+                    ),
+                  ),
+                  if (peakData != null) ...[
+                    const SizedBox(height: 16),
+                    Opacity(
+                      opacity: ((_ctrl.value - 0.4) * 2).clamp(0.0, 1.0),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Text(
+                          '${peakData.count} listens',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                  if (median > 0) ...[
+                    const SizedBox(height: 20),
+                    Opacity(
+                      opacity: ((_ctrl.value - 0.6) * 2).clamp(0.0, 1.0),
+                      child: Text(
+                        'Avg ~$median listens/month',
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.6),
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+// ── Story: Fun stats card ────────────────────────────────────────────
+
+class _StoryFunStatsCard extends StatefulWidget {
+  final YearReviewStats stats;
+  const _StoryFunStatsCard({required this.stats});
+
+  @override
+  State<_StoryFunStatsCard> createState() => _StoryFunStatsCardState();
+}
+
+class _StoryFunStatsCardState extends State<_StoryFunStatsCard>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = widget.stats;
+    final perDay = s.totalListens > 0
+        ? (s.totalListens / 365).toStringAsFixed(1)
+        : '0';
+    final perDayMins = s.totalListens > 0
+        ? ((s.totalSeconds / s.totalListens)).toStringAsFixed(0)
+        : '0';
+    final topGenre = s.topArtist?.name ?? 'unknown sounds';
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF0D2A2A), Color(0xFF1A3A3A)],
+          ),
+        ),
+        child: AnimatedBuilder(
+          animation: _ctrl,
+          builder: (context, _) {
+            return Padding(
+              padding: const EdgeInsets.all(32),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Opacity(
+                    opacity: (_ctrl.value * 2).clamp(0.0, 1.0),
+                    child: const Icon(
+                      Icons.insights_rounded,
+                      color: AppTheme.primary,
+                      size: 40,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Opacity(
+                    opacity: ((_ctrl.value - 0.1) * 2).clamp(0.0, 1.0),
+                    child: const Text(
+                      'Your Listening Vibe',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    const Spacer(),
-                    Consumer(
-                      builder: (context, ref, _) {
-                        final api = ref.read(cachedFunkwhaleApiProvider);
-                        return TextButton.icon(
-                          style: TextButton.styleFrom(
-                            foregroundColor: AppTheme.onBackground,
-                            backgroundColor: AppTheme.surfaceContainer,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 8,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          icon: const Icon(
-                            Icons.playlist_add_rounded,
-                            size: 18,
-                          ),
-                          label: const Text('Create Playlist'),
-                          onPressed: () async {
-                            try {
-                              final topIds =
-                                  await ListenHistoryService.getTopTrackIdsForYear(
-                                    stats.year,
-                                    limit: stats.topTracks.length,
-                                  );
-                              try {
-                                Analytics.track(
-                                  'year_review_create_playlist_initiated',
-                                  {
-                                    'year': stats.year,
-                                    'top_tracks_count': topIds.length,
-                                  },
-                                );
-                              } catch (_) {}
+                  ),
+                  const SizedBox(height: 24),
+                  _funRow(
+                    delay: 0.25,
+                    icon: Icons.speed_rounded,
+                    text: '$perDay listens per day',
+                    anim: _ctrl,
+                  ),
+                  const SizedBox(height: 16),
+                  _funRow(
+                    delay: 0.4,
+                    icon: Icons.timer_rounded,
+                    text: '~$perDayMins sec avg per track',
+                    anim: _ctrl,
+                  ),
+                  const SizedBox(height: 16),
+                  _funRow(
+                    delay: 0.55,
+                    icon: Icons.favorite_rounded,
+                    text: 'Favorited ${s.favoritedThisYear.length} tracks',
+                    anim: _ctrl,
+                  ),
+                  const SizedBox(height: 16),
+                  _funRow(
+                    delay: 0.7,
+                    icon: Icons.star_rounded,
+                    text: 'Top sound: $topGenre',
+                    anim: _ctrl,
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
 
-                              if (topIds.isEmpty) {
-                                try {
-                                  Analytics.track(
-                                    'year_review_create_playlist_no_tracks',
-                                    {'year': stats.year},
-                                  );
-                                } catch (_) {}
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('No tracks to add'),
-                                  ),
-                                );
-                                return;
-                              }
-
-                              final nameController = TextEditingController(
-                                text: 'Top tracks ${stats.year}',
-                              );
-                              // Select all text when the dialog appears so users can
-                              // quickly replace the suggested name.
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                try {
-                                  nameController.selection = TextSelection(
-                                    baseOffset: 0,
-                                    extentOffset: nameController.text.length,
-                                  );
-                                } catch (_) {}
-                              });
-                              final name = await showDialog<String?>(
-                                context: context,
-                                builder:
-                                    (ctx) => AlertDialog(
-                                      title: const Text('Create playlist'),
-                                      content: TextField(
-                                        controller: nameController,
-                                        decoration: const InputDecoration(
-                                          labelText: 'Playlist name',
-                                        ),
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed:
-                                              () => Navigator.of(ctx).pop(null),
-                                          child: const Text('Cancel'),
-                                        ),
-                                        TextButton(
-                                          onPressed:
-                                              () => Navigator.of(
-                                                ctx,
-                                              ).pop(nameController.text.trim()),
-                                          child: const Text('Create'),
-                                        ),
-                                      ],
-                                    ),
-                              );
-
-                              if (name == null || name.isEmpty) {
-                                try {
-                                  Analytics.track(
-                                    'year_review_create_playlist_cancelled',
-                                    {'year': stats.year},
-                                  );
-                                } catch (_) {}
-                                return;
-                              }
-
-                              final playlist = await api.createPlaylist(
-                                name: name,
-                              );
-                              await api.addTracksToPlaylist(
-                                playlist.id,
-                                topIds,
-                              );
-
-                              try {
-                                // Numeric IDs are omitted from analytics per policy.
-                                Analytics.track(
-                                  'year_review_create_playlist_created',
-                                  {
-                                    'year': stats.year,
-                                    'track_count': topIds.length,
-                                  },
-                                );
-                              } catch (_) {}
-
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Playlist created'),
-                                ),
-                              );
-                            } catch (e) {
-                              try {
-                                Analytics.track(
-                                  'year_review_create_playlist_failed',
-                                  {
-                                    'year': stats.year,
-                                    'had_error': true,
-                                    'error_type': e.runtimeType.toString(),
-                                  },
-                                );
-                              } catch (_) {}
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Failed to create playlist'),
-                                ),
-                              );
-                            }
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
+  Widget _funRow({
+    required double delay,
+    required IconData icon,
+    required String text,
+    required Animation<double> anim,
+  }) {
+    return Opacity(
+      opacity: ((anim.value - delay) * 3).clamp(0.0, 1.0),
+      child: Row(
+        children: [
+          Icon(icon, color: AppTheme.primary, size: 22),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                color: Colors.white.withValues(alpha: 0.85),
+                fontSize: 15,
               ),
             ),
-            SliverToBoxAdapter(
-              child: _RankedList(items: stats.topTracks, type: 'track'),
-            ),
-            const SliverToBoxAdapter(child: SizedBox(height: 24)),
-          ],
-
-          // Top artists list
-          if (stats.topArtists.length > 1) ...[
-            const SliverToBoxAdapter(
-              child: _SectionTitle(title: 'Top Artists'),
-            ),
-            SliverToBoxAdapter(
-              child: _RankedList(items: stats.topArtists, type: 'artist'),
-            ),
-            const SliverToBoxAdapter(child: SizedBox(height: 24)),
-          ],
-
-          // Top albums list
-          if (stats.topAlbums.length > 1) ...[
-            const SliverToBoxAdapter(child: _SectionTitle(title: 'Top Albums')),
-            SliverToBoxAdapter(
-              child: _RankedList(items: stats.topAlbums, type: 'album'),
-            ),
-            const SliverToBoxAdapter(child: SizedBox(height: 24)),
-          ],
-
-          // Bottom padding
-          const SliverToBoxAdapter(child: SizedBox(height: 40)),
+          ),
         ],
       ),
+    );
+  }
+}
+
+// ── Story: End card ──────────────────────────────────────────────────
+
+class _StoryEndCard extends StatefulWidget {
+  final int year;
+  final VoidCallback onViewAll;
+
+  const _StoryEndCard({required this.year, required this.onViewAll});
+
+  @override
+  State<_StoryEndCard> createState() => _StoryEndCardState();
+}
+
+class _StoryEndCardState extends State<_StoryEndCard>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          gradient: AppTheme.primaryGradient,
+        ),
+        child: AnimatedBuilder(
+          animation: _ctrl,
+          builder: (context, _) {
+            return Padding(
+              padding: const EdgeInsets.all(40),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Opacity(
+                    opacity: (_ctrl.value * 2).clamp(0.0, 1.0),
+                    child: const Icon(
+                      Icons.celebration_rounded,
+                      color: Colors.white,
+                      size: 56,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Opacity(
+                    opacity: ((_ctrl.value - 0.15) * 2).clamp(0.0, 1.0),
+                    child: const Text(
+                      "Here's to more\nmusic in the future!",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 26,
+                        fontWeight: FontWeight.w700,
+                        height: 1.3,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 36),
+                  Opacity(
+                    opacity: ((_ctrl.value - 0.4) * 2).clamp(0.0, 1.0),
+                    child: ElevatedButton.icon(
+                      onPressed: widget.onViewAll,
+                      icon: const Icon(Icons.list_alt_rounded, size: 20),
+                      label: const Text('View All Stats'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: AppTheme.primary,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 32,
+                          vertical: 16,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        textStyle: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+// ── Details view (scrollable list) ───────────────────────────────────
+
+class _DetailsView extends StatelessWidget {
+  final YearReviewStats stats;
+  final AnimationController animController;
+  final ui.FragmentProgram? magicProgram;
+  final VoidCallback onSwitchToStory;
+
+  const _DetailsView({
+    required this.stats,
+    required this.animController,
+    this.magicProgram,
+    required this.onSwitchToStory,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomScrollView(
+      physics: const BouncingScrollPhysics(
+        parent: AlwaysScrollableScrollPhysics(),
+      ),
+      slivers: [
+        SliverToBoxAdapter(child: _AiDownloadPromptChecker(year: stats.year)),
+
+        const SliverToBoxAdapter(child: SizedBox(height: 8)),
+
+        // Hero card with year + total stats
+        SliverToBoxAdapter(
+          child: _HeroCard(
+            stats: stats,
+            animController: animController,
+            magicProgram: magicProgram,
+          ),
+        ),
+        const SliverToBoxAdapter(child: SizedBox(height: 20)),
+
+        SliverToBoxAdapter(child: _AiSummarySection(year: stats.year)),
+        SliverToBoxAdapter(
+          child: Consumer(
+            builder: (context, ref, _) {
+              final s = ref.watch(aiSummaryProvider(stats.year));
+              final visible =
+                  s is! AiSummaryUnsupported &&
+                  s is! AiSummaryDeviceUnsupported;
+              return visible
+                  ? const SizedBox(height: 24)
+                  : const SizedBox.shrink();
+            },
+          ),
+        ),
+
+        // Stats grid
+        SliverToBoxAdapter(child: _StatsGrid(stats: stats)),
+        const SliverToBoxAdapter(child: SizedBox(height: 24)),
+
+        if (stats.topTrack != null) ...[
+          const SliverToBoxAdapter(
+            child: _SectionTitle(title: 'Your #1 Track'),
+          ),
+          SliverToBoxAdapter(
+            child: _SpotlightCard(
+              item: stats.topTrack!,
+              icon: Icons.music_note_rounded,
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFF6C63FF), Color(0xFF3B35CC)],
+              ),
+            ),
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 20)),
+        ],
+
+        if (stats.topArtist != null) ...[
+          const SliverToBoxAdapter(
+            child: _SectionTitle(title: 'Your #1 Artist'),
+          ),
+          SliverToBoxAdapter(
+            child: _SpotlightCard(
+              item: stats.topArtist!,
+              icon: Icons.person_rounded,
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFF00D4AA), Color(0xFF009977)],
+              ),
+            ),
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 20)),
+        ],
+
+        if (stats.topAlbum != null) ...[
+          const SliverToBoxAdapter(
+            child: _SectionTitle(title: 'Your #1 Album'),
+          ),
+          SliverToBoxAdapter(
+            child: _SpotlightCard(
+              item: stats.topAlbum!,
+              icon: Icons.album_rounded,
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFFFF6B6B), Color(0xFFCC3535)],
+              ),
+            ),
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+        ],
+
+        const SliverToBoxAdapter(
+          child: _SectionTitle(title: 'Month by Month'),
+        ),
+        SliverToBoxAdapter(
+          child: _MonthlyChart(monthly: stats.monthlyBreakdown),
+        ),
+        const SliverToBoxAdapter(child: SizedBox(height: 24)),
+
+        if (stats.favoritedThisYear.isNotEmpty &&
+            stats.lovedTopTracks.isNotEmpty &&
+            stats.unlovedTopTracks.isNotEmpty) ...[
+          SliverToBoxAdapter(child: _LovedVsListenedSection(stats: stats)),
+          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+        ],
+
+        if (stats.topTracks.length > 1) ...[
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+              child: Row(
+                children: [
+                  const Text(
+                    'Top Tracks',
+                    style: TextStyle(
+                      color: AppTheme.onBackground,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const Spacer(),
+                  Consumer(
+                    builder: (context, ref, _) {
+                      final api = ref.read(cachedFunkwhaleApiProvider);
+                      return TextButton.icon(
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppTheme.onBackground,
+                          backgroundColor: AppTheme.surfaceContainer,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        icon: const Icon(
+                          Icons.playlist_add_rounded,
+                          size: 18,
+                        ),
+                        label: const Text('Create Playlist'),
+                        onPressed: () async {
+                          try {
+                            final topIds =
+                                await ListenHistoryService.getTopTrackIdsForYear(
+                                  stats.year,
+                                  limit: stats.topTracks.length,
+                                );
+                            try {
+                              Analytics.track(
+                                'year_review_create_playlist_initiated',
+                                {
+                                  'year': stats.year,
+                                  'top_tracks_count': topIds.length,
+                                },
+                              );
+                            } catch (_) {}
+
+                            if (topIds.isEmpty) {
+                              try {
+                                Analytics.track(
+                                  'year_review_create_playlist_no_tracks',
+                                  {'year': stats.year},
+                                );
+                              } catch (_) {}
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('No tracks to add'),
+                                ),
+                              );
+                              return;
+                            }
+
+                            final nameController = TextEditingController(
+                              text: 'Top tracks ${stats.year}',
+                            );
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              try {
+                                nameController.selection = TextSelection(
+                                  baseOffset: 0,
+                                  extentOffset: nameController.text.length,
+                                );
+                              } catch (_) {}
+                            });
+                            final name = await showDialog<String?>(
+                              context: context,
+                              builder:
+                                  (ctx) => AlertDialog(
+                                    title: const Text('Create playlist'),
+                                    content: TextField(
+                                      controller: nameController,
+                                      decoration: const InputDecoration(
+                                        labelText: 'Playlist name',
+                                      ),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed:
+                                            () => Navigator.of(ctx).pop(null),
+                                        child: const Text('Cancel'),
+                                      ),
+                                      TextButton(
+                                        onPressed:
+                                            () => Navigator.of(
+                                              ctx,
+                                            ).pop(nameController.text.trim()),
+                                        child: const Text('Create'),
+                                      ),
+                                    ],
+                                  ),
+                            );
+
+                            if (name == null || name.isEmpty) {
+                              try {
+                                Analytics.track(
+                                  'year_review_create_playlist_cancelled',
+                                  {'year': stats.year},
+                                );
+                              } catch (_) {}
+                              return;
+                            }
+
+                            final playlist = await api.createPlaylist(
+                              name: name,
+                            );
+                            await api.addTracksToPlaylist(
+                              playlist.id,
+                              topIds,
+                            );
+
+                            try {
+                              Analytics.track(
+                                'year_review_create_playlist_created',
+                                {
+                                  'year': stats.year,
+                                  'track_count': topIds.length,
+                                },
+                              );
+                            } catch (_) {}
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Playlist created'),
+                              ),
+                            );
+                          } catch (e) {
+                            try {
+                              Analytics.track(
+                                'year_review_create_playlist_failed',
+                                {
+                                  'year': stats.year,
+                                  'had_error': true,
+                                  'error_type': e.runtimeType.toString(),
+                                },
+                              );
+                            } catch (_) {}
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Failed to create playlist'),
+                              ),
+                            );
+                          }
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: _RankedList(items: stats.topTracks, type: 'track'),
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+        ],
+
+        if (stats.topArtists.length > 1) ...[
+          const SliverToBoxAdapter(
+            child: _SectionTitle(title: 'Top Artists'),
+          ),
+          SliverToBoxAdapter(
+            child: _RankedList(items: stats.topArtists, type: 'artist'),
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+        ],
+
+        if (stats.topAlbums.length > 1) ...[
+          const SliverToBoxAdapter(child: _SectionTitle(title: 'Top Albums')),
+          SliverToBoxAdapter(
+            child: _RankedList(items: stats.topAlbums, type: 'album'),
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+        ],
+
+        const SliverToBoxAdapter(child: SizedBox(height: 40)),
+      ],
     );
   }
 }
@@ -985,8 +2548,8 @@ class _HeroCardState extends State<_HeroCard>
           final shader = widget.magicProgram!.fragmentShader();
           // Pass physical pixels to match FlutterFragCoord()
           shader.setFloat(0, _elapsedSeconds);
-          shader.setFloat(1, bounds.width * devicePixelRatio * 0.85);
-          shader.setFloat(2, bounds.height * devicePixelRatio * 0.92);
+          shader.setFloat(1, bounds.width * devicePixelRatio);
+          shader.setFloat(2, bounds.height * devicePixelRatio);
           return shader;
         },
         blendMode: BlendMode.plus,

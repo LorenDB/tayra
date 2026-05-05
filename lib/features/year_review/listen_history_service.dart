@@ -114,12 +114,22 @@ class TopItem {
   final int count;
   final int? totalSeconds;
 
+  /// Total listen rows (COUNT(*)), populated for album results to compute
+  /// play-through counts. Null for tracks and artists.
+  final int? totalListens;
+
+  /// The number of tracks on this album (from the API), populated for album
+  /// results. Null for tracks and artists.
+  final int? albumTrackCount;
+
   const TopItem({
     required this.name,
     this.subtitle,
     this.coverUrl,
     required this.count,
     this.totalSeconds,
+    this.totalListens,
+    this.albumTrackCount,
   });
 }
 
@@ -165,6 +175,7 @@ class _AlbumRow {
   final int uniqueTracks;
   final int engagementScore;
   final int? totalSeconds;
+  final int totalListens;
 
   const _AlbumRow({
     required this.albumId,
@@ -174,6 +185,7 @@ class _AlbumRow {
     required this.uniqueTracks,
     required this.engagementScore,
     this.totalSeconds,
+    required this.totalListens,
   });
 }
 
@@ -372,7 +384,6 @@ class ListenHistoryService {
       int _toInt(dynamic v) => (v as num?)?.toInt() ?? 0;
       int? _toNullableInt(dynamic v) => v == null ? null : (v as num).toInt();
       double _toDouble(dynamic v) => (v as num?)?.toDouble() ?? 0.0;
-      String? _toString(dynamic v) => v as String?;
 
       // Total listens & time
       final totalsResult = await db.rawQuery(
@@ -502,6 +513,7 @@ class ListenHistoryService {
                 uniqueTracks: _toInt(row['unique_tracks']),
                 engagementScore: _toDouble(row['engagement_score']).round(),
                 totalSeconds: _toNullableInt(row['total_seconds']),
+                totalListens: _toInt(row['total_plays']),
               ))
           .toList();
 
@@ -535,6 +547,11 @@ class ListenHistoryService {
                       ? row.uniqueTracks
                       : row.engagementScore,
               totalSeconds: row.totalSeconds,
+              totalListens: row.totalListens,
+              albumTrackCount:
+                  albumTrackCounts != null
+                      ? albumTrackCounts[row.albumId]
+                      : null,
             ),
           )
           .toList();

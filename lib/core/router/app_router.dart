@@ -154,7 +154,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     name: 'year_review_detail',
                     builder: (context, state) {
                       final year = int.parse(state.pathParameters['year']!);
-                      return YearReviewScreen(year: year);
+                      final extra = state.extra;
+                      final startInStory =
+                          extra is Map ? extra['startInStory'] == true : false;
+                      return YearReviewScreen(
+                        year: year,
+                        startInStory: startInStory,
+                      );
                     },
                   ),
                 ],
