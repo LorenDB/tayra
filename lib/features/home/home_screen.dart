@@ -685,7 +685,11 @@ class _YearReviewBannerState extends ConsumerState<_YearReviewBanner>
                         .dismiss();
                   } catch (_) {}
 
-                  context.push('/year-review/${DateTime.now().year}');
+                  context.pushNamed(
+                    'year_review_detail',
+                    pathParameters: {'year': '${DateTime.now().year}'},
+                    extra: {'startInStory': true},
+                  );
                 },
                 borderRadius: BorderRadius.circular(16),
                 splashColor: Colors.white.withValues(alpha: 0.1),
