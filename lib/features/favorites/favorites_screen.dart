@@ -60,7 +60,9 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
 
   Future<void> _loadFavorites({bool forceRefresh = false}) async {
     setState(() {
-      _isLoading = true;
+      // Only show full-screen shimmer on initial load; pull-to-refresh keeps
+      // the existing list visible under the RefreshIndicator spinner.
+      if (!forceRefresh || _favorites.isEmpty) _isLoading = true;
       _error = null;
     });
 

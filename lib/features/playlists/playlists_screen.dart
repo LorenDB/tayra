@@ -14,9 +14,7 @@ import 'package:tayra/features/search/search_screen.dart';
 import 'package:tayra/core/layout/responsive.dart';
 import 'package:tayra/core/widgets/dialog_utils.dart';
 
-final playlistsProvider = FutureProvider.autoDispose<List<Playlist>>((
-  ref,
-) async {
+final playlistsProvider = FutureProvider<List<Playlist>>((ref) async {
   final api = ref.watch(cachedFunkwhaleApiProvider);
   final response = await api.getPlaylists(scope: 'me');
   return response.results;

@@ -9,9 +9,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tayra/core/api/api_repository.dart';
+import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/api/audio_tagger.dart';
-import 'package:tayra/core/api/models.dart';
 
 // ── MusicBrainz models ───────────────────────────────────────────────────
 
@@ -290,7 +289,7 @@ class UploadNotifier extends Notifier<UploadState> {
   Future<void> loadLibraries() async {
     state = state.copyWith(loadingLibraries: true, libraryError: null);
     try {
-      final result = await _api.getLibraries(scope: 'me');
+      final result = await ref.read(cachedFunkwhaleApiProvider).getLibraries(scope: 'me');
       final selected =
           result.results.isNotEmpty
               ? result.results.first.uuid
@@ -876,6 +875,10 @@ class UploadNotifier extends Notifier<UploadState> {
         state = state.copyWith(
           uploadStatus: UploadStatus.finished,
           importStatus: status,
+        );
+        // Invalidate browse caches so newly uploaded tracks appear immediately.
+        unawaited(
+          ref.read(cachedFunkwhaleApiProvider).invalidateTrackAndAlbumCaches(),
         );
 
       case 'errored':

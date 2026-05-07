@@ -48,16 +48,23 @@ class _PodcastsScreenState extends ConsumerState<PodcastsScreen> {
     }
   }
 
-  Future<void> _loadChannels() async {
+  Future<void> _loadChannels({bool forceRefresh = false}) async {
     setState(() {
-      _isLoading = true;
+      // Only show full-screen shimmer on initial load; keep existing list
+      // visible when refreshing so offline stale data isn't hidden.
+      if (!forceRefresh || _channels.isEmpty) {
+        _isLoading = true;
+        _channels = [];
+        _nextPage = null;
+      }
       _error = null;
-      _channels = [];
-      _nextPage = null;
     });
     try {
       final api = ref.read(cached_api.cachedFunkwhaleApiProvider);
-      final response = await api.getChannels(pageSize: 50);
+      final response = await api.getChannels(
+        pageSize: 50,
+        forceRefresh: forceRefresh,
+      );
       if (!mounted) return;
       setState(() {
         _channels = response.results;
@@ -67,7 +74,7 @@ class _PodcastsScreenState extends ConsumerState<PodcastsScreen> {
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _error = 'Failed to load podcasts: $e';
+        if (_channels.isEmpty) _error = 'Failed to load podcasts: $e';
         _isLoading = false;
       });
     }
@@ -91,6 +98,9 @@ class _PodcastsScreenState extends ConsumerState<PodcastsScreen> {
     } catch (_) {
       if (!mounted) return;
       setState(() => _isLoadingMore = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to load more podcasts')),
+      );
     }
   }
 
@@ -136,7 +146,7 @@ class _PodcastsScreenState extends ConsumerState<PodcastsScreen> {
     }
 
     return RefreshIndicator(
-      onRefresh: _loadChannels,
+      onRefresh: () => _loadChannels(forceRefresh: true),
       color: AppTheme.primary,
       backgroundColor: AppTheme.surfaceContainer,
       child: ListView.builder(
