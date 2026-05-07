@@ -98,13 +98,13 @@ void main() async {
   // the UI hasn't been opened yet.
   audioHandler.api = container.read(cachedFunkwhaleApiProvider);
   audioHandler.browseMode = container.read(settingsProvider).browseMode;
-  audioHandler.androidAutoEnabled =
-      container.read(settingsProvider).androidAutoEnabled;
+  audioHandler.androidAutoExposeRecentMedia =
+      container.read(settingsProvider).androidAutoExposeRecentMedia;
 
   // Listen for settings changes to update browse mode and recommendations dynamically.
   container.listen<SettingsState>(settingsProvider, (previous, next) {
     audioHandler.browseMode = next.browseMode;
-    audioHandler.androidAutoEnabled = next.androidAutoEnabled;
+    audioHandler.androidAutoExposeRecentMedia = next.androidAutoExposeRecentMedia;
   });
 
   // Eagerly initialize the PlayerNotifier to wire up the onPlayTracks callback.

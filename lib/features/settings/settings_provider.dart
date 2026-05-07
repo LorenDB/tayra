@@ -36,7 +36,7 @@ class SettingsState {
   final BrowseMode browseMode;
   final Set<int> mobilePinnedTabIndices;
   final int cacheSizeLimitMB;
-  final bool androidAutoEnabled;
+  final bool androidAutoExposeRecentMedia;
   final bool useDynamicAlbumAccent;
   final bool gaplessPlayback;
   final bool aiEnabled;
@@ -60,7 +60,7 @@ class SettingsState {
     this.browseMode = BrowseMode.albums,
     this.mobilePinnedTabIndices = const {2, 3, 5, 6},
     this.cacheSizeLimitMB = 500,
-    this.androidAutoEnabled = true,
+    this.androidAutoExposeRecentMedia = true,
     this.useDynamicAlbumAccent = true,
     this.gaplessPlayback = true,
     this.aiEnabled = true,
@@ -105,7 +105,7 @@ class SettingsState {
     BrowseMode? browseMode,
     Set<int>? mobilePinnedTabIndices,
     int? cacheSizeLimitMB,
-    bool? androidAutoEnabled,
+    bool? androidAutoExposeRecentMedia,
     bool? useDynamicAlbumAccent,
     bool? gaplessPlayback,
     bool? aiEnabled,
@@ -130,7 +130,7 @@ class SettingsState {
       mobilePinnedTabIndices:
           mobilePinnedTabIndices ?? this.mobilePinnedTabIndices,
       cacheSizeLimitMB: cacheSizeLimitMB ?? this.cacheSizeLimitMB,
-      androidAutoEnabled: androidAutoEnabled ?? this.androidAutoEnabled,
+      androidAutoExposeRecentMedia: androidAutoExposeRecentMedia ?? this.androidAutoExposeRecentMedia,
       useDynamicAlbumAccent:
           useDynamicAlbumAccent ?? this.useDynamicAlbumAccent,
       gaplessPlayback: gaplessPlayback ?? this.gaplessPlayback,
@@ -165,7 +165,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
   static const _keyBrowseMode = 'browse_mode';
   static const _keyMobilePinnedTabIndices = 'mobile_pinned_tab_indices';
   static const _keyCacheSizeLimit = 'cache_max_size_mb';
-  static const _keyAndroidAutoEnabled = 'aa_android_auto_enabled';
+  static const _keyAndroidAutoExposeRecentMedia = 'aa_expose_recent_media';
   static const _keyUseDynamicAlbumAccent = 'use_dynamic_album_accent';
   static const _keyGaplessPlayback = 'gapless_playback';
   static const _keyAiEnabled = 'ai_enabled';
@@ -241,7 +241,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
     } else {
       cacheSizeMB = rawCache;
     }
-    final showRecommendations = prefs.getBool(_keyAndroidAutoEnabled) ?? true;
+    final exposeRecentMedia = prefs.getBool(_keyAndroidAutoExposeRecentMedia) ?? true;
     final useDynamicAccent = prefs.getBool(_keyUseDynamicAlbumAccent) ?? true;
     final gapless = prefs.getBool(_keyGaplessPlayback) ?? true;
     final aiEnabled = prefs.getBool(_keyAiEnabled) ?? _defaultAiEnabled;
@@ -289,7 +289,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
       browseMode: browseMode,
       mobilePinnedTabIndices: mobilePinnedTabIndices,
       cacheSizeLimitMB: cacheSizeMB,
-      androidAutoEnabled: showRecommendations,
+      androidAutoExposeRecentMedia: exposeRecentMedia,
       useDynamicAlbumAccent: useDynamicAccent,
       gaplessPlayback: gapless,
       aiEnabled: aiEnabled,
@@ -332,10 +332,10 @@ class SettingsNotifier extends Notifier<SettingsState> {
     await CacheManager.instance.updateConfig(sizeMB);
   }
 
-  Future<void> setAndroidAutoEnabled(bool enabled) async {
-    state = state.copyWith(androidAutoEnabled: enabled);
+  Future<void> setAndroidAutoExposeRecentMedia(bool enabled) async {
+    state = state.copyWith(androidAutoExposeRecentMedia: enabled);
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_keyAndroidAutoEnabled, enabled);
+    await prefs.setBool(_keyAndroidAutoExposeRecentMedia, enabled);
   }
 
   Future<void> setUseDynamicAlbumAccent(bool use) async {
@@ -461,7 +461,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
     await prefs.remove(_keyBrowseMode);
     await prefs.remove(_keyMobilePinnedTabIndices);
     await prefs.remove(_keyCacheSizeLimit);
-    await prefs.remove(_keyAndroidAutoEnabled);
+    await prefs.remove(_keyAndroidAutoExposeRecentMedia);
     await prefs.remove(_keyUseDynamicAlbumAccent);
     await prefs.remove(_keyGaplessPlayback);
     await prefs.remove(_keyAiEnabled);

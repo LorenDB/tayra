@@ -122,6 +122,18 @@ class SettingsScreen extends ConsumerWidget {
               ref.read(settingsProvider.notifier).setGaplessPlayback(value);
             },
           ),
+          if (Platform.isAndroid)
+            _SwitchTile(
+              icon: Icons.directions_car_outlined,
+              title: 'Android Auto recent media',
+              subtitle: 'Show recent albums on the Android Auto home screen',
+              value: settings.androidAutoExposeRecentMedia,
+              onChanged: (value) {
+                ref
+                    .read(settingsProvider.notifier)
+                    .setAndroidAutoExposeRecentMedia(value);
+              },
+            ),
 
           const SizedBox(height: 24),
 
