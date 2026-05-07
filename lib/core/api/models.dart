@@ -613,6 +613,110 @@ class Tag {
   }
 }
 
+// ── Podcast Channel ─────────────────────────────────────────────────────
+
+class ChannelArtist {
+  final int id;
+  final String name;
+  final String? contentCategory;
+  final Cover? cover;
+  final String? descriptionText;
+  final int? tracksCount;
+  final List<String> tags;
+
+  const ChannelArtist({
+    required this.id,
+    required this.name,
+    this.contentCategory,
+    this.cover,
+    this.descriptionText,
+    this.tracksCount,
+    this.tags = const [],
+  });
+
+  factory ChannelArtist.fromJson(Map<String, dynamic> json) {
+    Cover? parseCover(dynamic v) {
+      if (v is Map<String, dynamic>) return Cover.fromJson(v);
+      return null;
+    }
+
+    String? parseDescription(dynamic v) {
+      if (v is Map<String, dynamic>) return v['text'] as String?;
+      if (v is String) return v;
+      return null;
+    }
+
+    return ChannelArtist(
+      id: json['id'] as int? ?? 0,
+      name: json['name'] as String? ?? '',
+      contentCategory: json['content_category'] as String?,
+      cover: parseCover(json['cover']),
+      descriptionText: parseDescription(json['description']),
+      tracksCount: json['tracks_count'] as int?,
+      tags:
+          (json['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ??
+          const [],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'name': name,
+    'content_category': contentCategory,
+    'cover': cover?.toJson(),
+    'tracks_count': tracksCount,
+    'tags': tags,
+  };
+
+  String? get coverUrl => cover?.urls.best;
+}
+
+class Channel {
+  final String uuid;
+  final ChannelArtist artist;
+  final String? rssUrl;
+  final String? url;
+  final int? downloadsCount;
+  final DateTime? creationDate;
+
+  const Channel({
+    required this.uuid,
+    required this.artist,
+    this.rssUrl,
+    this.url,
+    this.downloadsCount,
+    this.creationDate,
+  });
+
+  factory Channel.fromJson(Map<String, dynamic> json) {
+    return Channel(
+      uuid: json['uuid'] as String? ?? '',
+      artist: ChannelArtist.fromJson(_toMap(json['artist'])),
+      rssUrl: json['rss_url'] as String?,
+      url: json['url'] as String?,
+      downloadsCount: json['downloads_count'] as int?,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'uuid': uuid,
+    'artist': artist.toJson(),
+    'rss_url': rssUrl,
+    'url': url,
+    'downloads_count': downloadsCount,
+    'creation_date': creationDate?.toIso8601String(),
+  };
+
+  String get name => artist.name;
+  String? get description => artist.descriptionText;
+  String? get coverUrl => artist.coverUrl;
+  bool get isPodcast => artist.contentCategory == 'podcast';
+}
+
 // ── Radios / Filters ───────────────────────────────────────────────────
 
 class Filter {

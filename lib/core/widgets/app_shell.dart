@@ -28,6 +28,11 @@ class AppShell extends ConsumerWidget {
     ),
     (icon: Icons.radio_outlined, activeIcon: Icons.radio, label: 'Radios'),
     (
+      icon: Icons.podcasts_rounded,
+      activeIcon: Icons.podcasts_rounded,
+      label: 'Podcasts',
+    ),
+    (
       icon: Icons.queue_music_rounded,
       activeIcon: Icons.queue_music_rounded,
       label: 'Playlists',
@@ -39,8 +44,22 @@ class AppShell extends ConsumerWidget {
     ),
   ];
 
-  static const _paths = ['/', '/browse', '/radios', '/playlists', '/favorites'];
-  static const _names = ['home', 'browse', 'radios', 'playlists', 'favorites'];
+  static const _paths = [
+    '/',
+    '/browse',
+    '/radios',
+    '/podcasts',
+    '/playlists',
+    '/favorites',
+  ];
+  static const _names = [
+    'home',
+    'browse',
+    'radios',
+    'podcasts',
+    'playlists',
+    'favorites',
+  ];
 
   int _currentIndex(BuildContext context) {
     final location = GoRouterState.of(context).matchedLocation;
