@@ -10,7 +10,9 @@ import 'package:tayra/core/widgets/dot_separator.dart';
 import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/core/widgets/tag_chip_list.dart';
+import 'package:tayra/core/widgets/track_list_tile.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
+import 'package:tayra/features/player/player_provider.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 
 // ── Provider ────────────────────────────────────────────────────────────
@@ -22,6 +24,27 @@ final _artistDetailProvider = FutureProvider.family<Artist, int>((
   ref.keepAlive();
   final api = ref.watch(cachedFunkwhaleApiProvider);
   return api.getArtist(artistId);
+});
+
+final _artistTracksProvider = FutureProvider.family<List<Track>, int>((
+  ref,
+  artistId,
+) async {
+  ref.keepAlive();
+  final api = ref.watch(cachedFunkwhaleApiProvider);
+  final allTracks = <Track>[];
+  int page = 1;
+  while (true) {
+    final response = await api.getTracks(
+      artist: artistId,
+      pageSize: 100,
+      page: page,
+    );
+    allTracks.addAll(response.results);
+    if (response.next == null) break;
+    page++;
+  }
+  return allTracks;
 });
 
 // ── Screen ──────────────────────────────────────────────────────────────
@@ -66,13 +89,21 @@ class ArtistDetailScreen extends ConsumerWidget {
 
 // ── Detail body ─────────────────────────────────────────────────────────
 
-class _ArtistDetailBody extends StatelessWidget {
+class _ArtistDetailBody extends ConsumerWidget {
   final Artist artist;
 
   const _ArtistDetailBody({required this.artist});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tracksAsync = ref.watch(_artistTracksProvider(artist.id));
+    final albumIds = artist.albums.map((a) => a.id).toSet();
+
+    final appearsOnTracks = tracksAsync.whenData(
+      (tracks) =>
+          tracks.where((t) => t.album == null || !albumIds.contains(t.album!.id)).toList(),
+    );
+
     return CustomScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: [
@@ -108,7 +139,7 @@ class _ArtistDetailBody extends StatelessWidget {
           ),
 
         // ── Empty state ──
-        if (artist.albums.isEmpty)
+        if (artist.albums.isEmpty && appearsOnTracks.value?.isEmpty != false)
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.all(32),
@@ -121,6 +152,42 @@ class _ArtistDetailBody extends StatelessWidget {
                   ),
                 ),
               ),
+            ),
+          ),
+
+        // ── Appears On header ──
+        if (appearsOnTracks.value?.isNotEmpty == true)
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(16, 24, 16, 12),
+              child: Text(
+                'Appears On',
+                style: TextStyle(
+                  color: AppTheme.onBackground,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ),
+
+        // ── Appears On tracks ──
+        if (appearsOnTracks.value?.isNotEmpty == true)
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final tracks = appearsOnTracks.value!;
+                return TrackListTile(
+                  track: tracks[index],
+                  onTap: () {
+                    ref.read(playerProvider.notifier).playTracks(
+                      tracks,
+                      startIndex: index,
+                    );
+                  },
+                );
+              },
+              childCount: appearsOnTracks.value!.length,
             ),
           ),
 
