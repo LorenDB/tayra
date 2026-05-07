@@ -442,6 +442,16 @@ class _QueueActions extends ConsumerWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
+        if (queue.isNotEmpty)
+          IconButton(
+            tooltip: 'Save as playlist',
+            iconSize: iconSize,
+            icon: const Icon(
+              Icons.playlist_add_rounded,
+              color: AppTheme.onBackgroundMuted,
+            ),
+            onPressed: () => _saveQueueAsPlaylist(context, ref, queue),
+          ),
         IconButton(
           tooltip: 'Stashed queues',
           iconSize: iconSize,
@@ -487,6 +497,90 @@ class _QueueActions extends ConsumerWidget {
           ),
       ],
     );
+  }
+}
+
+Future<void> _saveQueueAsPlaylist(
+  BuildContext context,
+  WidgetRef ref,
+  List queue,
+) async {
+  final nameController = TextEditingController();
+  final name = await showShellDialog<String?>(
+    context: context,
+    builder:
+        (d) => AlertDialog(
+          backgroundColor: AppTheme.surfaceContainerHigh,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: const Text(
+            'Save Queue as Playlist',
+            style: TextStyle(
+              color: AppTheme.onBackground,
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          content: TextField(
+            controller: nameController,
+            autofocus: true,
+            style: const TextStyle(color: AppTheme.onBackground),
+            decoration: const InputDecoration(
+              hintText: 'Playlist name',
+              filled: true,
+              fillColor: AppTheme.surfaceContainer,
+            ),
+            onSubmitted: (_) => Navigator.of(d).pop(nameController.text.trim()),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(d).pop(null),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: AppTheme.onBackgroundMuted),
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(d).pop(nameController.text.trim()),
+              child: const Text(
+                'Create',
+                style: TextStyle(
+                  color: AppTheme.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+  );
+
+  if (name == null || name.isEmpty) return;
+
+  final api = ref.read(cachedFunkwhaleApiProvider);
+  try {
+    final playlist = await api.createPlaylist(name: name);
+    final trackIds = queue.map((t) => t.id).whereType<int>().toList();
+    if (trackIds.isNotEmpty) {
+      await api.addTracksToPlaylist(playlist.id, trackIds);
+    }
+    ref.invalidate(playlistsProvider);
+    try {
+      Analytics.track('queue_saved_as_playlist', {
+        'track_count': trackIds.length,
+      });
+    } catch (_) {}
+    if (context.mounted) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Created "${playlist.name}"')));
+    }
+  } catch (e) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to create playlist')),
+      );
+    }
   }
 }
 

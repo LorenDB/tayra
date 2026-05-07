@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/theme/app_theme.dart';
@@ -112,6 +113,11 @@ class _ArtistDetailBody extends ConsumerWidget {
 
         // ── Info section ──
         SliverToBoxAdapter(child: _ArtistInfo(artist: artist)),
+
+        // ── Action buttons ──
+        SliverToBoxAdapter(
+          child: _ArtistActionButtons(artist: artist, tracksAsync: tracksAsync),
+        ),
 
         // ── Albums header ──
         if (artist.albums.isNotEmpty)
@@ -408,6 +414,104 @@ class _ArtistInfo extends StatelessWidget {
             const SizedBox(height: 12),
             TagChipList(tags: artist.tags),
           ],
+        ],
+      ),
+    );
+  }
+}
+
+// ── Play All / Artist Radio buttons ─────────────────────────────────────
+
+class _ArtistActionButtons extends ConsumerWidget {
+  final Artist artist;
+  final AsyncValue<List<Track>> tracksAsync;
+
+  const _ArtistActionButtons({required this.artist, required this.tracksAsync});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tracks = tracksAsync.asData?.value ?? [];
+    final loadingRadioId = ref.watch(
+      playerProvider.select((s) => s.loadingRadioId),
+    );
+    final isLoadingRadio = loadingRadioId == -(artist.id);
+
+    void playAll() {
+      if (tracks.isEmpty) return;
+      ref.read(playerProvider.notifier).playTracks(
+        tracks,
+        source: 'artist_detail_play_all',
+      );
+      Analytics.track('artist_play_all', {'artist_id': artist.id});
+    }
+
+    void startArtistRadio() {
+      ref.read(playerProvider.notifier).startInstanceRadio(
+        'artist',
+        -(artist.id),
+        relatedObjectId: artist.id.toString(),
+      );
+      Analytics.track('artist_radio_start', {'artist_id': artist.id});
+    }
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 4),
+      child: Row(
+        children: [
+          Expanded(
+            child: SizedBox(
+              height: 44,
+              child: ElevatedButton.icon(
+                onPressed: tracks.isNotEmpty ? playAll : null,
+                icon: const Icon(Icons.play_arrow_rounded, size: 22),
+                label: const Text('Play All'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.primary,
+                  foregroundColor: Colors.white,
+                  disabledBackgroundColor: AppTheme.primary.withValues(
+                    alpha: 0.3,
+                  ),
+                  disabledForegroundColor: Colors.white.withValues(alpha: 0.4),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(22),
+                  ),
+                  textStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: SizedBox(
+              height: 44,
+              child: OutlinedButton.icon(
+                onPressed: isLoadingRadio ? null : startArtistRadio,
+                icon:
+                    isLoadingRadio
+                        ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                        : const Icon(Icons.radio_rounded, size: 20),
+                label: const Text('Artist Radio'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppTheme.onBackground,
+                  side: const BorderSide(color: AppTheme.divider),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(22),
+                  ),
+                  textStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

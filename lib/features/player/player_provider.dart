@@ -296,7 +296,8 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
     if (apiClient == null) return [];
 
     try {
-      if (parentMediaId == _BrowseIds.recentRoot && !androidAutoExposeRecentMedia) {
+      if (parentMediaId == _BrowseIds.recentRoot &&
+          !androidAutoExposeRecentMedia) {
         return [];
       }
 
@@ -1020,7 +1021,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
         if (ctx != null && ctx.mounted) {
           final title = state.currentTrack?.title ?? 'track';
           ScaffoldMessenger.of(ctx).showSnackBar(
-            SnackBar(content: Text('Unable to play "$title". Playback paused.')),
+            SnackBar(
+              content: Text('Unable to play "$title". Playback paused.'),
+            ),
           );
         }
       }),
@@ -1489,13 +1492,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // Play the initial track (this replaces the current queue).
       await playTracks([first], source: 'radio');
       state = state.copyWith(clearLoadingRadioId: true);
+      _startRadioFetchTimer();
       Analytics.track('radio_started', {
         'radio_id': radioId,
         'source': 'session',
       });
-
-      // A second track will automatically be preloaded by the subscription that
-      // watches the current index of the queue
     } catch (e) {
       // If session creation fails (500 on some servers) fall back to a
       // session-less strategy: repeatedly call the radio sample endpoint
@@ -1515,29 +1516,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
           'source': 'fallback',
         });
 
-        // Prefetch only one upcoming track using the sample endpoint.
-        try {
-          final t = await _api.getRadioTrack(radioId);
-          addToQueue([t]);
-        } catch (_) {}
-
-        // Periodic fetcher to keep queue populated.
-        _radioFetchTimer?.cancel();
-        _radioFetchTimer = Timer.periodic(const Duration(seconds: 4), (
-          _,
-        ) async {
-          try {
-            // Keep exactly one track ahead of the currently playing track.
-            final ahead = state.queue.length - state.currentIndex - 1;
-            if (ahead < 1) {
-              final t = await _api.getRadioTrack(radioId);
-              addToQueue([t]);
-            }
-          } catch (_) {
-            Analytics.track('radio_fetch_error', {'radio_id': radioId});
-            // ignore repeated failures
-          }
-        });
+        // Start the periodic radio fetch timer (also prefetches one track).
+        _startRadioFetchTimer();
         return;
       } catch (fallbackErr) {
         state = state.copyWith(clearLoadingRadioId: true);
@@ -1593,6 +1573,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
       await playTracks([first], source: 'instance-radio');
       state = state.copyWith(clearLoadingRadioId: true);
+      _startRadioFetchTimer();
     } catch (e) {
       debugPrint('startInstanceRadio failed: $e');
       // Clear loading state on failure
@@ -1630,6 +1611,53 @@ class PlayerNotifier extends Notifier<PlayerState> {
     } catch (_) {}
 
     _isPrefetchingRadioTrack = false;
+  }
+
+  /// Periodic timer that keeps the radio queue populated and handles
+  /// resuming playback when the gapless source runs dry before a fetch
+  /// completes.
+  void _startRadioFetchTimer() {
+    _radioFetchTimer?.cancel();
+    _radioFetchTimer = Timer.periodic(const Duration(seconds: 4), (_) async {
+      if (_isPrefetchingRadioTrack) return;
+      try {
+        // Keep at least one track ahead of the currently playing track.
+        final ahead = state.queue.length - state.currentIndex - 1;
+        if (ahead < 1) {
+          _isPrefetchingRadioTrack = true;
+          if (_radioSessionId != null) {
+            final raw = await _api.postNextRadioTrackRaw(_radioSessionId!);
+            final t = await _parseTrackFromRaw(raw);
+            if (t != null) addToQueue([t]);
+          } else if (_radioId != null) {
+            final t = await _api.getRadioTrack(_radioId!);
+            addToQueue([t]);
+          }
+          _isPrefetchingRadioTrack = false;
+        }
+
+        // If playback stalled (gapless source ran dry before we could
+        // append the next track), rebuild and resume.
+        if (!state.isPlaying && state.hasNext && _gaplessActive) {
+          final nextIndex = state.currentIndex + 1;
+          state = state.copyWith(currentIndex: nextIndex, isLoading: true);
+          final loaded = await _loadGaplessSource(nextIndex);
+          if (loaded) {
+            await _handler.audioPlayer.play();
+            state = state.copyWith(
+              isLoading: false,
+              isPlaying: _handler.audioPlayer.playing,
+            );
+            final track = state.queue[nextIndex];
+            await _activateListenForTrack(track);
+            try {
+              await _api.recordListening(track.id);
+            } catch (_) {}
+            _saveQueue();
+          }
+        }
+      } catch (_) {}
+    });
   }
 
   /// Play a list of tracks starting at the given index.
@@ -2119,6 +2147,38 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // just_audio's `playing` flag is an intent flag and stays true when
       // audio ends naturally on a ConcatenatingAudioSource, so playingStream
       // does not emit false automatically — we must set isPlaying ourselves.
+
+      // In radio mode the gapless source may have run dry before the next
+      // track was fetched and appended.  If the queue has already grown,
+      // rebuild the source and resume; otherwise pause and let the periodic
+      // radio timer fetch the next track.
+      if (_radioSessionId != null || _radioId != null) {
+        if (state.hasNext) {
+          final nextIndex = state.currentIndex + 1;
+          state = state.copyWith(currentIndex: nextIndex, isLoading: true);
+          unawaited(
+            _loadGaplessSource(nextIndex).then((loaded) {
+              if (!loaded) {
+                state = state.copyWith(isLoading: false, isPlaying: false);
+                return;
+              }
+              _handler.audioPlayer.play();
+              state = state.copyWith(
+                isLoading: false,
+                isPlaying: _handler.audioPlayer.playing,
+              );
+              final track = state.queue[nextIndex];
+              _activateListenForTrack(track);
+              _api.recordListening(track.id).catchError((_) {});
+              _saveQueue();
+            }),
+          );
+          return;
+        }
+        state = state.copyWith(isPlaying: false);
+        return;
+      }
+
       // Wrap back to track 0; the seek is deferred to play() so that we
       // don't accidentally resume playback (seeking while playing=true
       // on a ConcatenatingAudioSource restarts immediately).
@@ -2156,6 +2216,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
       case LoopMode.off:
         if (state.hasNext) {
           skipNext();
+        } else if (_radioSessionId != null || _radioId != null) {
+          // Radio mode with no next track yet — pause and let the timer
+          // fetch more.  Don't reset currentIndex so the timer can resume
+          // from the right position.
+          state = state.copyWith(isPlaying: false, position: Duration.zero);
         } else {
           // Wrap back to track 0 so the play button resumes from the beginning.
           state = state.copyWith(
@@ -2322,7 +2387,24 @@ class PlayerNotifier extends Notifier<PlayerState> {
       final newIndex = state.currentIndex + 1;
       state = state.copyWith(currentIndex: newIndex);
       _updateMediaItemForTrack(state.queue[newIndex]);
-      await _handler.audioPlayer.seekToNext();
+      try {
+        await _handler.audioPlayer.seekToNext();
+      } catch (_) {
+        // The gapless source may not yet have the next child (e.g. radio
+        // tracks are added asynchronously).  Rebuild from the queue.
+        state = state.copyWith(isLoading: true);
+        final loaded = await _loadGaplessSource(newIndex);
+        if (loaded) {
+          await _handler.audioPlayer.play();
+          state = state.copyWith(
+            isLoading: false,
+            isPlaying: _handler.audioPlayer.playing,
+          );
+        } else {
+          state = state.copyWith(isLoading: false);
+          return;
+        }
+      }
       await _activateListenForTrack(state.queue[newIndex]);
       try {
         await _api.recordListening(state.queue[newIndex].id);
