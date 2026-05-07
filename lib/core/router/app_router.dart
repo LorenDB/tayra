@@ -7,6 +7,9 @@ import 'package:tayra/features/auth/presentation/login_screen.dart';
 import 'package:tayra/features/home/home_screen.dart';
 import 'package:tayra/features/browse/browse_screen.dart';
 import 'package:tayra/features/radios/radios_screen.dart';
+import 'package:tayra/core/api/models.dart' as models;
+import 'package:tayra/features/podcasts/podcasts_screen.dart';
+import 'package:tayra/features/podcasts/podcast_detail_screen.dart';
 import 'package:tayra/features/browse/artist_detail_screen.dart';
 import 'package:tayra/features/browse/album_detail_screen.dart';
 import 'package:tayra/features/browse/album_edit_screen.dart';
@@ -208,6 +211,28 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             pageBuilder:
                 (context, state) =>
                     const NoTransitionPage(child: RadiosScreen()),
+          ),
+          GoRoute(
+            path: '/podcasts',
+            name: 'podcasts',
+            pageBuilder:
+                (context, state) =>
+                    const NoTransitionPage(child: PodcastsScreen()),
+            routes: [
+              GoRoute(
+                path: ':uuid',
+                name: 'podcast_detail',
+                builder: (context, state) {
+                  final uuid = state.pathParameters['uuid']!;
+                  final extra = state.extra;
+                  final channel = extra is models.Channel ? extra : null;
+                  return PodcastDetailScreen(
+                    channelUuid: uuid,
+                    channel: channel,
+                  );
+                },
+              ),
+            ],
           ),
           GoRoute(
             path: '/search',

@@ -111,8 +111,10 @@ class CachedFunkwhaleApi {
     List<String>? tag,
     bool forceRefresh = false,
   }) async {
-    final tagSuffix = (tag != null && tag.isNotEmpty) ? '_t${tag.join(',')}' : '';
-    final baseSuffix = '_s${pageSize}_o${ordering}_a${artist}_sc${scope}_q$q$tagSuffix';
+    final tagSuffix =
+        (tag != null && tag.isNotEmpty) ? '_t${tag.join(',')}' : '';
+    final baseSuffix =
+        '_s${pageSize}_o${ordering}_a${artist}_sc${scope}_q$q$tagSuffix';
     final cacheKey = 'albums_p${page}$baseSuffix';
 
     return _cachedFetch(
@@ -279,7 +281,13 @@ class CachedFunkwhaleApi {
       cacheType: CacheType.tags,
       fromJson: (j) => PaginatedResponse.fromJson(j, Tag.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _tagToJson),
-      fetch: () => _api.getTags(page: page, pageSize: pageSize, ordering: ordering, q: q),
+      fetch:
+          () => _api.getTags(
+            page: page,
+            pageSize: pageSize,
+            ordering: ordering,
+            q: q,
+          ),
       ttl: const Duration(hours: 6),
       forceRefresh: forceRefresh,
     );
@@ -537,6 +545,42 @@ class CachedFunkwhaleApi {
   String getStreamUrl(String listenUrl) => _api.getStreamUrl(listenUrl);
 
   Map<String, String> get authHeaders => _api.authHeaders;
+
+  // ── Channels / Podcasts (pass-through) ──────────────────────────────
+
+  Future<PaginatedResponse<Channel>> getChannels({
+    int page = 1,
+    int pageSize = 50,
+    String ordering = '-creation_date',
+    String? q,
+    bool? subscribed,
+  }) async {
+    return _api.getChannels(
+      page: page,
+      pageSize: pageSize,
+      ordering: ordering,
+      q: q,
+      subscribed: subscribed,
+    );
+  }
+
+  Future<Channel> getChannel(String uuid) async {
+    return _api.getChannel(uuid);
+  }
+
+  Future<PaginatedResponse<Track>> getChannelTracks({
+    required String channelUuid,
+    int page = 1,
+    int pageSize = 50,
+    String ordering = '-creation_date',
+  }) async {
+    return _api.getChannelTracks(
+      channelUuid: channelUuid,
+      page: page,
+      pageSize: pageSize,
+      ordering: ordering,
+    );
+  }
 
   // ── Radios (pass-through) ─────────────────────────────────────────
 

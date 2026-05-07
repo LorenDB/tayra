@@ -345,6 +345,55 @@ class FunkwhaleApi {
     return {};
   }
 
+  // ── Channels (Podcasts) ─────────────────────────────────────────────
+
+  Future<PaginatedResponse<Channel>> getChannels({
+    int page = 1,
+    int pageSize = 50,
+    String ordering = '-creation_date',
+    String? q,
+    bool? subscribed,
+  }) async {
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/channels/',
+      queryParameters: {
+        'page': page,
+        'page_size': pageSize,
+        'ordering': ordering,
+        'content_category': 'podcast',
+        if (q != null) 'q': q,
+        if (subscribed != null) 'subscribed': subscribed,
+      },
+    );
+    return PaginatedResponse.fromJson(response.data, Channel.fromJson);
+  }
+
+  Future<Channel> getChannel(String uuid) async {
+    final response = await _dio.get('$_baseUrl/api/v1/channels/$uuid/');
+    return Channel.fromJson(response.data);
+  }
+
+  Future<PaginatedResponse<Track>> getChannelTracks({
+    required String channelUuid,
+    int page = 1,
+    int pageSize = 50,
+    String ordering = '-creation_date',
+  }) async {
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/tracks/',
+      queryParameters: {
+        'page': page,
+        'page_size': pageSize,
+        'ordering': ordering,
+        'channel': channelUuid,
+        'include_channels': true,
+        'playable': true,
+        'include': 'uploads',
+      },
+    );
+    return PaginatedResponse.fromJson(response.data, Track.fromJson);
+  }
+
   // ── Radios ─────────────────────────────────────────────────────────
 
   Future<PaginatedResponse<Radio>> getRadios({
