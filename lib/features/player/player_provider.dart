@@ -8,6 +8,7 @@ import 'package:tayra/core/router/app_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:tayra/core/analytics/analytics.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
@@ -58,6 +59,7 @@ class PlayerState {
   final LoopMode loopMode;
   final bool isLoading;
   final int? loadingRadioId;
+  final double playbackSpeed;
 
   const PlayerState({
     this.queue = const [],
@@ -70,6 +72,7 @@ class PlayerState {
     this.loopMode = LoopMode.off,
     this.isLoading = false,
     this.loadingRadioId,
+    this.playbackSpeed = 1.0,
   });
 
   Track? get currentTrack =>
@@ -97,6 +100,7 @@ class PlayerState {
     bool? isLoading,
     int? loadingRadioId,
     bool clearLoadingRadioId = false,
+    double? playbackSpeed,
   }) {
     return PlayerState(
       queue: queue ?? this.queue,
@@ -110,6 +114,7 @@ class PlayerState {
       isLoading: isLoading ?? this.isLoading,
       loadingRadioId:
           clearLoadingRadioId ? null : (loadingRadioId ?? this.loadingRadioId),
+      playbackSpeed: playbackSpeed ?? this.playbackSpeed,
     );
   }
 }
@@ -801,6 +806,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     );
     _init();
     Future.microtask(() => _restoreQueue());
+    Future.microtask(() => _loadPlaybackSpeed());
     ref.onDispose(() {
       unawaited(
         _listenTracker.dispose(position: _handler.audioPlayer.position),
@@ -2465,6 +2471,27 @@ class PlayerNotifier extends Notifier<PlayerState> {
     }
     _saveQueue();
     Analytics.track('toggle_loop_mode', {'mode': state.loopMode.name});
+  }
+
+  static const _keyPlaybackSpeed = 'playback_speed';
+
+  static const List<double> speedPresets = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
+
+  Future<void> setPlaybackSpeed(double speed) async {
+    await _handler.audioPlayer.setSpeed(speed);
+    state = state.copyWith(playbackSpeed: speed);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble(_keyPlaybackSpeed, speed);
+    Analytics.track('set_playback_speed', {'speed': speed});
+  }
+
+  Future<void> _loadPlaybackSpeed() async {
+    final prefs = await SharedPreferences.getInstance();
+    final saved = prefs.getDouble(_keyPlaybackSpeed) ?? 1.0;
+    if (saved != 1.0) {
+      await _handler.audioPlayer.setSpeed(saved);
+      state = state.copyWith(playbackSpeed: saved);
+    }
   }
 
   /// Jump to a specific index in the queue.

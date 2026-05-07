@@ -333,7 +333,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
       color: AppTheme.surface,
       child: Column(
         children: [
-          _buildPanelHeader(),
+          _buildPanelHeader(track, playerState),
           Flexible(
             child: SingleChildScrollView(
               child: Column(
@@ -381,6 +381,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
   }
 
   Widget _buildScreenTopBar(Track track) {
+    final playerState = ref.watch(playerProvider);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: Row(
@@ -403,6 +404,8 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
+              if (track.isPodcast)
+                _SpeedButton(speed: playerState.playbackSpeed),
               FavoriteButton(trackId: track.id, size: 28),
               IconButton(
                 icon: const Icon(Icons.queue_music_rounded, size: 26),
@@ -417,7 +420,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
     );
   }
 
-  Widget _buildPanelHeader() {
+  Widget _buildPanelHeader(Track track, PlayerState playerState) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 8, 8),
       child: Row(
@@ -432,6 +435,8 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
             ),
           ),
           const Spacer(),
+          if (track.isPodcast)
+            _SpeedButton(speed: playerState.playbackSpeed),
           IconButton(
             icon: const Icon(Icons.queue_music_rounded, size: 22),
             color: AppTheme.onBackgroundMuted,
@@ -1002,6 +1007,50 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// ── Speed button ─────────────────────────────────────────────────────────
+
+class _SpeedButton extends ConsumerWidget {
+  final double speed;
+
+  const _SpeedButton({required this.speed});
+
+  String _label(double s) {
+    if (s == 1.0) return '1×';
+    final text = s.toString();
+    // Remove trailing zero: "1.50" → "1.5"
+    return '${text.endsWith('0') ? text.substring(0, text.length - 1) : text}×';
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final presets = PlayerNotifier.speedPresets;
+    final isActive = speed != 1.0;
+
+    return Tooltip(
+      message: 'Playback speed',
+      child: InkWell(
+        borderRadius: BorderRadius.circular(6),
+        onTap: () {
+          final idx = presets.indexOf(speed);
+          final next = presets[(idx + 1) % presets.length];
+          ref.read(playerProvider.notifier).setPlaybackSpeed(next);
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+          child: Text(
+            _label(speed),
+            style: TextStyle(
+              color: isActive ? AppTheme.primary : AppTheme.onBackgroundMuted,
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
       ),
     );
   }

@@ -369,6 +369,8 @@ class Track {
 
   /// Duration in seconds from the first upload, if available.
   int? get duration => uploads.isNotEmpty ? uploads.first.duration : null;
+
+  bool get isPodcast => artist?.contentCategory == 'podcast';
 }
 
 // ── Upload ──────────────────────────────────────────────────────────────
