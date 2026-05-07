@@ -185,7 +185,7 @@ class FunkwhaleApi {
   Future<Set<int>> getAllFavoriteTrackIds() async {
     final response = await _dio.get('$_baseUrl/api/v1/favorites/tracks/all/');
     final results = response.data['results'] as List<dynamic>? ?? [];
-    return results.map((e) => e['track'] as int).toSet();
+    return results.map((e) => (e['track'] as num).toInt()).toSet();
   }
 
   Future<void> addFavorite(int trackId) async {
@@ -272,21 +272,16 @@ class FunkwhaleApi {
   /// PlaylistRequest for this body, but the actual implementation uses index.
   Future<void> removeTrackFromPlaylist(int playlistId, int index) async {
     final url = '$_baseUrl/api/v1/playlists/$playlistId/remove/';
-
-    try {
-      // Ensure we send JSON content-type (matches the official client/curl)
-      // and do not throw on non-2xx status codes (match Fuel/.awaitByteArrayResponseResult)
-      final response = await _dio.post(
-        url,
-        data: {'index': index},
-        options: Options(
-          contentType: Headers.jsonContentType,
-          validateStatus: (_) => true,
-        ),
-      );
-    } on DioException catch (err) {
-      rethrow;
-    }
+    // Send JSON content-type; validateStatus avoids Dio throwing on non-2xx
+    // since the Funkwhale implementation may return 204 or other codes.
+    await _dio.post(
+      url,
+      data: {'index': index},
+      options: Options(
+        contentType: Headers.jsonContentType,
+        validateStatus: (_) => true,
+      ),
+    );
   }
 
   Future<void> deletePlaylist(int id) async {
@@ -482,8 +477,7 @@ class FunkwhaleApi {
       if (first is int) return getTrack(first);
     }
 
-    // Fallback: try to parse as track map and hope for the best
-    return Track.fromJson(data as Map<String, dynamic>);
+    throw StateError('Unexpected radio track response: ${data.runtimeType}');
   }
 
   Future<Filter> getRadioFilters() async {

@@ -5,7 +5,6 @@ import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/playlists/playlists_screen.dart';
-import 'package:tayra/core/router/app_router.dart';
 import 'package:tayra/core/widgets/dialog_utils.dart';
 
 /// Shows a bottom sheet listing user playlists to add one or more tracks to.

@@ -13,7 +13,7 @@ import 'package:path/path.dart';
 /// - cache_favorites: Stores favorite track IDs
 class CacheDatabase {
   static const _databaseName = 'funkwhale_cache.db';
-  static const _databaseVersion = 3;
+  static const _databaseVersion = 4;
 
   // Singleton pattern
   CacheDatabase._();
@@ -92,8 +92,9 @@ class CacheDatabase {
     await db.execute('''
       CREATE TABLE cache_manual_downloads (
         resource_type TEXT NOT NULL,
-        resource_id INTEGER PRIMARY KEY,
-        added_at INTEGER NOT NULL
+        resource_id INTEGER NOT NULL,
+        added_at INTEGER NOT NULL,
+        PRIMARY KEY (resource_type, resource_id)
       )
     ''');
 
@@ -127,12 +128,13 @@ class CacheDatabase {
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
-      // Add manual downloads table
+      // Add manual downloads table (will be corrected in the v4 migration below)
       await db.execute('''
         CREATE TABLE IF NOT EXISTS cache_manual_downloads (
           resource_type TEXT NOT NULL,
-          resource_id INTEGER PRIMARY KEY,
-          added_at INTEGER NOT NULL
+          resource_id INTEGER NOT NULL,
+          added_at INTEGER NOT NULL,
+          PRIMARY KEY (resource_type, resource_id)
         )
       ''');
       // Add new columns to cache_files for older databases so that
@@ -169,6 +171,31 @@ class CacheDatabase {
       await db.execute(
         "UPDATE download_queue SET status = 'queued', error = NULL WHERE status = 'downloading'",
       );
+    }
+    if (oldVersion < 4) {
+      // Recreate cache_manual_downloads with a composite primary key so that
+      // albums and playlists with the same numeric id can both be stored.
+      // The old schema had resource_id as the sole PK, which meant an album
+      // and a playlist with the same id could not both be stored.
+      // Existing rows are preserved via a temp table rename.
+      await db.execute(
+        'ALTER TABLE cache_manual_downloads RENAME TO cache_manual_downloads_old',
+      );
+      await db.execute('''
+        CREATE TABLE cache_manual_downloads (
+          resource_type TEXT NOT NULL,
+          resource_id INTEGER NOT NULL,
+          added_at INTEGER NOT NULL,
+          PRIMARY KEY (resource_type, resource_id)
+        )
+      ''');
+      // Copy rows, ignoring duplicates that arose from the old bad schema.
+      await db.execute('''
+        INSERT OR IGNORE INTO cache_manual_downloads
+        SELECT resource_type, resource_id, added_at
+        FROM cache_manual_downloads_old
+      ''');
+      await db.execute('DROP TABLE cache_manual_downloads_old');
     }
   }
 

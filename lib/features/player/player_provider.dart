@@ -1516,7 +1516,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
         });
         return;
       } catch (fallbackErr) {
-        // Fallback failed silently.
+        state = state.copyWith(clearLoadingRadioId: true);
+        debugPrint('startRadio fallback also failed: $fallbackErr');
       }
     }
   }
@@ -1721,8 +1722,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
     if (_gaplessActive) {
       var idx = insertIndex;
       for (final track in tracks) {
+        final capturedIdx = idx++;
         _audioSourceForTrack(track).then(
-          (source) => _handler.audioPlayer.insertAudioSource(idx++, source),
+          (source) => _handler.audioPlayer.insertAudioSource(capturedIdx, source),
           onError: (_) {},
         );
       }
@@ -2123,9 +2125,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
         if (state.hasNext) {
           skipNext();
         } else {
-          final newIndex = 0;
-          state = state.copyWith(currentIndex: newIndex);
-          _loadAndPlay(state.queue[newIndex]);
+          state = state.copyWith(currentIndex: 0);
+          _loadAndPlay(state.queue[0]);
           _saveQueue(); // Save state after looping back to start
         }
         break;
@@ -2168,9 +2169,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
             await _handler.audioPlayer.seek(seekTo);
             // Wait for the positionStream to confirm the seeked position
             // before dropping the guard, so no stale zero can overwrite it.
-            await _handler.audioPlayer.positionStream.firstWhere(
-              (p) => p >= seekTo,
-            );
+            await _handler.audioPlayer.positionStream
+                .firstWhere((p) => p >= seekTo)
+                .timeout(const Duration(seconds: 5), onTimeout: () => seekTo);
             _pendingRestorePosition = null;
             await _handler.audioPlayer.play();
             // Sync isPlaying immediately — same race fix as in playTracks().
@@ -2188,9 +2189,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
         // Source is loaded — explicitly seek to the restore position.
         await _handler.audioPlayer.seek(seekTo);
         // Wait for the positionStream to confirm the seeked position.
-        await _handler.audioPlayer.positionStream.firstWhere(
-          (p) => p >= seekTo,
-        );
+        await _handler.audioPlayer.positionStream
+            .firstWhere((p) => p >= seekTo)
+            .timeout(const Duration(seconds: 5), onTimeout: () => seekTo);
         // Guard is no longer needed — the positionStream just confirmed
         // the correct position.
         _pendingRestorePosition = null;

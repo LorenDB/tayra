@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:tayra/core/ai/ai_client.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
-import 'package:tayra/core/router/app_router.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';

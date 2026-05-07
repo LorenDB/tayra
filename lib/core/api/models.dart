@@ -38,13 +38,13 @@ class CoverUrls {
   final String? original;
   final String? mediumSquareCrop;
   final String? smallSquareCrop;
-  final String? largSquareCrop;
+  final String? largeSquareCrop;
 
   const CoverUrls({
     this.original,
     this.mediumSquareCrop,
     this.smallSquareCrop,
-    this.largSquareCrop,
+    this.largeSquareCrop,
   });
 
   factory CoverUrls.fromJson(Map<String, dynamic> json) {
@@ -52,7 +52,7 @@ class CoverUrls {
       original: json['original'] as String?,
       mediumSquareCrop: json['medium_square_crop'] as String?,
       smallSquareCrop: json['small_square_crop'] as String?,
-      largSquareCrop: json['large_square_crop'] as String?,
+      largeSquareCrop: json['large_square_crop'] as String?,
     );
   }
 
@@ -61,13 +61,13 @@ class CoverUrls {
       'original': original,
       'medium_square_crop': mediumSquareCrop,
       'small_square_crop': smallSquareCrop,
-      'large_square_crop': largSquareCrop,
+      'large_square_crop': largeSquareCrop,
     };
   }
 
   /// Returns the best available URL, preferring medium crop.
-  String? get best => mediumSquareCrop ?? largSquareCrop ?? original;
-  String? get large => largSquareCrop ?? original ?? mediumSquareCrop;
+  String? get best => mediumSquareCrop ?? largeSquareCrop ?? original;
+  String? get large => largeSquareCrop ?? original ?? mediumSquareCrop;
 }
 
 class Cover {
@@ -440,7 +440,7 @@ class Listening {
   factory Listening.fromJson(Map<String, dynamic> json) {
     return Listening(
       id: json['id'] as int,
-      track: Track.fromJson(json['track'] as Map<String, dynamic>),
+      track: Track.fromJson(_toMap(json['track'])),
       created:
           json['created'] != null
               ? DateTime.tryParse(json['created'] as String)
@@ -519,7 +519,7 @@ class PlaylistTrack {
 
   factory PlaylistTrack.fromJson(Map<String, dynamic> json) {
     return PlaylistTrack(
-      track: Track.fromJson(json['track'] as Map<String, dynamic>),
+      track: Track.fromJson(_toMap(json['track'])),
       index: json['index'] as int?,
       creationDate:
           json['creation_date'] != null
@@ -541,7 +541,7 @@ class Favorite {
   factory Favorite.fromJson(Map<String, dynamic> json) {
     return Favorite(
       id: json['id'] as int,
-      track: Track.fromJson(json['track'] as Map<String, dynamic>),
+      track: Track.fromJson(_toMap(json['track'])),
       creationDate:
           json['creation_date'] != null
               ? DateTime.tryParse(json['creation_date'] as String)
