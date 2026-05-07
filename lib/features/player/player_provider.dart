@@ -999,6 +999,27 @@ class PlayerNotifier extends Notifier<PlayerState> {
       ),
     );
 
+    // Listen for PlayerException errors from just_audio (e.g. HTTP errors,
+    // mid-stream network drops). These are separate from processingState
+    // changes so the buffering watchdog never sees them.
+    _subscriptions.add(
+      _handler.audioPlayer.errorStream.listen((error) {
+        debugPrint('PlayerNotifier: audioPlayer error: $error');
+        _bufferingWatchdog?.cancel();
+        _bufferingWatchdog = null;
+        _gaplessActive = false;
+        _handler.audioPlayer.pause().catchError((_) {});
+        state = state.copyWith(isLoading: false, isPlaying: false);
+        final ctx = shellNavigatorKey.currentContext;
+        if (ctx != null && ctx.mounted) {
+          final title = state.currentTrack?.title ?? 'track';
+          ScaffoldMessenger.of(ctx).showSnackBar(
+            SnackBar(content: Text('Unable to play "$title". Playback paused.')),
+          );
+        }
+      }),
+    );
+
     _subscriptions.add(
       _handler.audioPlayer.currentIndexStream.listen((index) {
         // When gapless playback is active and the player auto-advances to a
