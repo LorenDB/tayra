@@ -90,8 +90,8 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
   Widget build(BuildContext context) {
     // Auto-navigate away when playback stops (e.g. after clearing the queue)
     // so the user is never stranded on an empty queue screen with no escape.
-    ref.listen(playerProvider, (previous, next) {
-      if (previous?.currentTrack != null && next.currentTrack == null) {
+    ref.listen(playerProvider.select((s) => s.currentTrack), (previous, next) {
+      if (previous != null && next == null) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (!mounted) return;
           if (widget.onBack != null) {
@@ -103,9 +103,12 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
       }
     });
 
-    final playerState = ref.watch(playerProvider);
-    final queue = playerState.queue;
-    final currentIndex = playerState.currentIndex;
+    final (queue, currentIndex) = ref.watch(
+      playerProvider.select((s) => (s.queue, s.currentIndex)),
+    );
+    final hasCurrentTrack = ref.watch(
+      playerProvider.select((s) => s.currentTrack != null),
+    );
 
     if (!_hasScrolled && queue.isNotEmpty) {
       _scrollToCurrentTrack(currentIndex, queue.length);
@@ -128,7 +131,7 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
     );
 
     final miniPlayer =
-        playerState.currentTrack != null
+        hasCurrentTrack
             ? SafeArea(
               top: false,
               child: MiniPlayer(
@@ -310,7 +313,7 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
     List queue,
     int currentIndex,
   ) {
-    final playerState = ref.watch(playerProvider);
+    final isPlaying = ref.watch(playerProvider.select((s) => s.isPlaying));
     return [
       // Now playing header
       if (currentIndex >= 0 && currentIndex < queue.length)
@@ -369,7 +372,7 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
                 track: track,
                 index: index,
                 isCurrentTrack: isCurrentTrack,
-                isPlaying: playerState.isPlaying,
+                isPlaying: isPlaying,
                 queueLength: queue.length,
                 onTap: () {
                   ref.read(playerProvider.notifier).jumpTo(index);
@@ -429,17 +432,12 @@ class _QueueActions extends ConsumerWidget {
   final double iconSize;
   final VoidCallback? onStash;
   final VoidCallback? onOpenInbox;
-  const _QueueActions({
-    super.key,
-    this.iconSize = 24,
-    this.onStash,
-    this.onOpenInbox,
-  });
+  const _QueueActions({this.iconSize = 24, this.onStash, this.onOpenInbox});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final count = ref.watch(stashedQueuesProvider).asData?.value.length ?? 0;
-    final queue = ref.watch(playerProvider).queue;
+    final queue = ref.watch(playerProvider.select((s) => s.queue));
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -1103,12 +1101,6 @@ class StashedQueueTile extends ConsumerWidget {
     return '${savedAt.day}/${savedAt.month}/${savedAt.year}';
   }
 
-  String _formatPosition(Duration position) {
-    final m = position.inMinutes.remainder(60).toString().padLeft(2, '0');
-    final s = position.inSeconds.remainder(60).toString().padLeft(2, '0');
-    return position.inHours > 0 ? '${position.inHours}:$m:$s' : '$m:$s';
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final track = stash.currentTrack;
@@ -1450,13 +1442,16 @@ class StashedQueueTile extends ConsumerWidget {
     try {
       final playlist = await api.createPlaylist(name: playlistName);
       final trackIds = stash.queue.map((t) => t.id).whereType<int>().toList();
-      if (trackIds.isNotEmpty)
+      if (trackIds.isNotEmpty) {
         await api.addTracksToPlaylist(playlist.id, trackIds);
+      }
       ref.invalidate(playlistsProvider);
+      if (!context.mounted) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Created "${playlist.name}"')));
     } catch (e) {
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Failed to create playlist')),
       );

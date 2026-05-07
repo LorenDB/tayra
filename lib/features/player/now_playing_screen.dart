@@ -32,8 +32,8 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen> {
   Widget build(BuildContext context) {
     // Auto-pop when playback is stopped (e.g. after stashing the queue) so the
     // user is never left on a "nothing playing" screen with no escape.
-    ref.listen(playerProvider, (previous, next) {
-      if (previous?.currentTrack != null && next.currentTrack == null) {
+    ref.listen(playerProvider.select((s) => s.currentTrack), (previous, next) {
+      if (previous != null && next == null) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted && context.canPop()) context.pop();
         });

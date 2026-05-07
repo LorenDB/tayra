@@ -44,6 +44,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
 
   @override
   void dispose() {
+    _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
   }
@@ -409,9 +410,9 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
 // ── Shuffle All Button ──────────────────────────────────────────────────
 
 class _ShuffleAllButton extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
-  const _ShuffleAllButton({required this.onPressed});
+  const _ShuffleAllButton({this.onPressed});
 
   @override
   Widget build(BuildContext context) {

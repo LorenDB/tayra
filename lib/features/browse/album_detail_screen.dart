@@ -392,6 +392,7 @@ class _AlbumHeader extends ConsumerWidget {
           }
           return;
         }
+        if (!context.mounted) return;
         showAddToPlaylistSheet(context, ref, trackIds: trackIds);
       } catch (e) {
         debugPrint('Failed to open add-to-playlist sheet: $e');

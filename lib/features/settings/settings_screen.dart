@@ -30,8 +30,8 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
     final authState = ref.watch(authStateProvider);
-    final _dntEnv = Platform.environment['DO_NOT_TRACK']?.trim().toLowerCase();
-    final showAnalyticsToggle = !(_dntEnv == '1' || _dntEnv == 'true');
+    final dntEnv = Platform.environment['DO_NOT_TRACK']?.trim().toLowerCase();
+    final showAnalyticsToggle = !(dntEnv == '1' || dntEnv == 'true');
     final cacheStatsAsync = ref.watch(cacheStatsProvider);
 
     return Scaffold(
@@ -523,10 +523,10 @@ class _AboutTileState extends ConsumerState<_AboutTile> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             child: Row(
               children: [
-                Container(
+                const SizedBox(
                   width: 36,
                   height: 36,
-                  child: const Icon(
+                  child: Icon(
                     Icons.info_outline_rounded,
                     color: AppTheme.onBackgroundSubtle,
                     size: 20,
@@ -1298,10 +1298,10 @@ class _DonationTile extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(
+          const SizedBox(
             width: 36,
             height: 36,
-            child: const Icon(
+            child: Icon(
               Icons.volunteer_activism_rounded,
               color: AppTheme.onBackgroundSubtle,
               size: 20,

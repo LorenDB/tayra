@@ -636,7 +636,11 @@ class _YearReviewBannerState extends ConsumerState<_YearReviewBanner>
   @override
   Widget build(BuildContext context) {
     final visible = ref.watch(yearReviewBannerVisibleProvider);
-    if (!visible) return const SizedBox.shrink();
+    if (!visible) {
+      if (_ticker.isActive) _ticker.stop();
+      return const SizedBox.shrink();
+    }
+    if (_shader != null && !_ticker.isActive) _ticker.start();
 
     return Padding(
       padding: EdgeInsets.fromLTRB(
@@ -685,6 +689,7 @@ class _YearReviewBannerState extends ConsumerState<_YearReviewBanner>
                         .dismiss();
                   } catch (_) {}
 
+                  if (!context.mounted) return;
                   context.pushNamed(
                     'year_review_detail',
                     pathParameters: {'year': '${DateTime.now().year}'},

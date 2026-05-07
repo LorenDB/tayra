@@ -36,6 +36,9 @@ class _AlbumEditScreenState extends ConsumerState<AlbumEditScreen> {
   void initState() {
     super.initState();
     _tags = [];
+    _titleController.addListener(_onFieldChanged);
+    _releaseDateController.addListener(_onFieldChanged);
+    _mbidController.addListener(_onFieldChanged);
     _loadData();
   }
 
@@ -67,9 +70,6 @@ class _AlbumEditScreenState extends ConsumerState<AlbumEditScreen> {
         _isDirty = false;
         _isLoading = false;
       });
-      _titleController.addListener(_onFieldChanged);
-      _releaseDateController.addListener(_onFieldChanged);
-      _mbidController.addListener(_onFieldChanged);
     } catch (e) {
       if (!mounted) return;
       setState(() {

@@ -13,25 +13,6 @@ Map<String, dynamic> _toMap(dynamic v) {
   return <String, dynamic>{};
 }
 
-Map<String, dynamic>? _toMapOrNull(dynamic v) {
-  if (v is Map<String, dynamic>) return v;
-  if (v is int) return {'id': v};
-  if (v is String && int.tryParse(v) != null) return {'id': int.parse(v)};
-  if (v is List && v.isNotEmpty && v.first is Map<String, dynamic>)
-    return v.first as Map<String, dynamic>;
-  return null;
-}
-
-List<Map<String, dynamic>> _toListOfMaps(dynamic v) {
-  if (v is List) {
-    return v.map<Map<String, dynamic>>((e) {
-      if (e is Map<String, dynamic>) return e;
-      return <String, dynamic>{};
-    }).toList();
-  }
-  return <Map<String, dynamic>>[];
-}
-
 // ── Cover / Attachment ──────────────────────────────────────────────────
 
 class CoverUrls {
@@ -857,10 +838,11 @@ class RadioSession {
 
     int? custom;
     final c = json['custom_radio'];
-    if (c is int)
+    if (c is int) {
       custom = c;
-    else if (c is bool)
+    } else if (c is bool) {
       custom = c ? 1 : 0;
+    }
 
     Map<String, dynamic>? cfg;
     final cfgRaw = json['config'];
