@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:tayra/core/router/app_router.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/layout/responsive.dart';
+import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:tayra/core/widgets/offline_banner.dart';
 import 'package:tayra/features/player/mini_player.dart';
 import 'package:tayra/features/player/player_provider.dart';
@@ -19,12 +20,17 @@ class AppShell extends ConsumerWidget {
 
   const AppShell({super.key, required this.child});
 
-  static const _tabs = [
+  static const tabs = [
     (icon: Icons.home_rounded, activeIcon: Icons.home_rounded, label: 'Home'),
+    (
+      icon: Icons.people_outline_rounded,
+      activeIcon: Icons.people_rounded,
+      label: 'Artists',
+    ),
     (
       icon: Icons.library_music_outlined,
       activeIcon: Icons.library_music,
-      label: 'Browse',
+      label: 'Albums',
     ),
     (icon: Icons.radio_outlined, activeIcon: Icons.radio, label: 'Radios'),
     (
@@ -44,20 +50,20 @@ class AppShell extends ConsumerWidget {
     ),
   ];
 
-  static const _paths = [
+  static const paths = [
     '/',
+    '/artists',
     '/browse',
     '/radios',
     '/podcasts',
     '/playlists',
     '/favorites',
   ];
+
   int _currentIndex(BuildContext context) {
     final location = GoRouterState.of(context).matchedLocation;
-    // Check non-root tabs first so that paths like `/album/123` are treated
-    // as belonging to the Home tab (index 0).
-    for (var i = 1; i < _paths.length; i++) {
-      if (location == _paths[i] || location.startsWith('${_paths[i]}/')) {
+    for (var i = 1; i < paths.length; i++) {
+      if (location == paths[i] || location.startsWith('${paths[i]}/')) {
         return i;
       }
     }
@@ -73,6 +79,9 @@ class AppShell extends ConsumerWidget {
     final stashCount =
         ref.watch(stashedQueuesProvider).asData?.value.length ?? 0;
     final useSideNav = Responsive.useSideNavigation(context);
+    final pinnedIndices = ref.watch(
+      settingsProvider.select((s) => s.mobilePinnedTabIndices),
+    );
 
     final scaffold =
         useSideNav
@@ -89,6 +98,7 @@ class AppShell extends ConsumerWidget {
               currentIndex,
               hasTrack,
               stashCount,
+              pinnedIndices,
             );
 
     // On non-home tabs, block the default back-to-exit behaviour and
@@ -119,7 +129,7 @@ class AppShell extends ConsumerWidget {
               ).popUntil((route) => route is! PopupRoute);
             } catch (_) {}
 
-            context.go(_paths[0]);
+            context.go(paths[0]);
           }
         },
         child: scaffold,
@@ -161,7 +171,7 @@ class AppShell extends ConsumerWidget {
                   rootNavigator: true,
                 ).popUntil((route) => route is! PopupRoute);
               } catch (_) {}
-              context.go(_paths[i]);
+              context.go(paths[i]);
             },
           ),
 
@@ -217,7 +227,12 @@ class AppShell extends ConsumerWidget {
     int currentIndex,
     bool hasTrack,
     int stashCount,
+    Set<int> pinnedIndices,
   ) {
+    final primaryIndices = [
+      0,
+      ...pinnedIndices.where((i) => i >= 1 && i < tabs.length).toList()..sort(),
+    ];
     return Scaffold(
       backgroundColor: AppTheme.background,
       body: SafeArea(
@@ -244,14 +259,16 @@ class AppShell extends ConsumerWidget {
               child: SizedBox(
                 height: 56,
                 child: Row(
-                  children: List.generate(_tabs.length, (i) {
+                  children: primaryIndices.map((i) {
                     final isSelected = i == currentIndex;
                     return Expanded(
                       child: InkWell(
                         onTap: () {
                           final nested = shellNavigatorKey.currentState;
                           if (nested != null) {
-                            nested.popUntil((route) => route is! PopupRoute);
+                            nested.popUntil(
+                              (route) => route is! PopupRoute,
+                            );
                           }
                           try {
                             Navigator.of(
@@ -259,13 +276,13 @@ class AppShell extends ConsumerWidget {
                               rootNavigator: true,
                             ).popUntil((route) => route is! PopupRoute);
                           } catch (_) {}
-                          context.go(_paths[i]);
+                          context.go(paths[i]);
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              isSelected ? _tabs[i].activeIcon : _tabs[i].icon,
+                              isSelected ? tabs[i].activeIcon : tabs[i].icon,
                               color:
                                   isSelected
                                       ? AppTheme.primary
@@ -274,7 +291,7 @@ class AppShell extends ConsumerWidget {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              _tabs[i].label,
+                              tabs[i].label,
                               style: TextStyle(
                                 color:
                                     isSelected
@@ -291,7 +308,7 @@ class AppShell extends ConsumerWidget {
                         ),
                       ),
                     );
-                  }),
+                  }).toList(),
                 ),
               ),
             ),
@@ -386,8 +403,8 @@ class _DesktopNavRail extends StatelessWidget {
                 physics: const ClampingScrollPhysics(),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: List.generate(AppShell._tabs.length, (i) {
-                    final tab = AppShell._tabs[i];
+                  children: List.generate(AppShell.tabs.length, (i) {
+                    final tab = AppShell.tabs[i];
                     final isSelected = i == currentIndex;
                     final indicatorColor = AppTheme.primary.withValues(
                       alpha: 0.15,

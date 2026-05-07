@@ -12,6 +12,7 @@ import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/features/year_review/listen_history_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:tayra/core/widgets/dialog_utils.dart';
+import 'package:tayra/core/widgets/app_shell.dart';
 
 // Format MB values (decimal) used by the slider/settings UI so they always
 // match what the user selected.
@@ -108,17 +109,6 @@ class SettingsScreen extends ConsumerWidget {
             onTap: () => context.push('/upload'),
           ),
 
-          // Default browse view moved under Library
-          _BrowseModeTile(
-            currentMode: settings.browseMode,
-            onChanged: (mode) {
-              Analytics.track("default_browse_mode_changed", {
-                'mode': mode.toString(),
-              });
-              ref.read(settingsProvider.notifier).setBrowseMode(mode);
-            },
-          ),
-
           const SizedBox(height: 24),
 
           // ── Playback section ─────────────────────────────────────────
@@ -153,6 +143,11 @@ class SettingsScreen extends ConsumerWidget {
                   .setUseDynamicAlbumAccent(value);
             },
           ),
+
+          // ── Navigation section ────────────────────────────────────────
+          const SizedBox(height: 24),
+          _SectionHeader(title: 'Navigation'),
+          _NavBarSettingsTile(pinnedIndices: settings.mobilePinnedTabIndices),
 
           // Year Review — own section
           const SizedBox(height: 24),
@@ -788,126 +783,192 @@ class _SwitchTile extends StatelessWidget {
   }
 }
 
-// ── Browse mode tile ────────────────────────────────────────────────────
+// ── Nav bar settings tile ───────────────────────────────────────────────
 
-class _BrowseModeTile extends StatelessWidget {
-  final BrowseMode currentMode;
-  final ValueChanged<BrowseMode> onChanged;
+class _NavBarSettingsTile extends ConsumerWidget {
+  final Set<int> pinnedIndices;
 
-  const _BrowseModeTile({required this.currentMode, required this.onChanged});
+  const _NavBarSettingsTile({required this.pinnedIndices});
+
+  // Non-home tab indices (1–6 in AppShell.tabs).
+  static const _configurableIndices = [1, 2, 3, 4, 5, 6];
+
+  String get _subtitle {
+    final names = _configurableIndices
+        .where((i) => pinnedIndices.contains(i))
+        .map((i) => AppShell.tabs[i].label)
+        .toList();
+    return names.isEmpty ? 'None' : names.join(', ');
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return InkWell(
+      onTap: () => _showSheet(context, ref),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: AppTheme.surfaceContainer,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            const Icon(
+              Icons.tune_rounded,
+              color: AppTheme.onBackgroundSubtle,
+              size: 22,
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Navigation bar items',
+                    style: TextStyle(
+                      color: AppTheme.onBackground,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    _subtitle,
+                    style: const TextStyle(
+                      color: AppTheme.onBackgroundMuted,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(
+              Icons.chevron_right_rounded,
+              color: AppTheme.onBackgroundSubtle,
+              size: 20,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showSheet(BuildContext context, WidgetRef ref) {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: AppTheme.surfaceContainer,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) => _NavBarSheet(
+        initialPinned: pinnedIndices,
+        onChanged: (updated) =>
+            ref.read(settingsProvider.notifier).setMobilePinnedTabIndices(updated),
+      ),
+    );
+  }
+}
+
+class _NavBarSheet extends StatefulWidget {
+  final Set<int> initialPinned;
+  final ValueChanged<Set<int>> onChanged;
+
+  const _NavBarSheet({required this.initialPinned, required this.onChanged});
+
+  @override
+  State<_NavBarSheet> createState() => _NavBarSheetState();
+}
+
+class _NavBarSheetState extends State<_NavBarSheet> {
+  late Set<int> _pinned;
+
+  static const _configurableIndices = [1, 2, 3, 4, 5, 6];
+  static const _maxPinned = 4;
+
+  @override
+  void initState() {
+    super.initState();
+    _pinned = Set.from(widget.initialPinned);
+  }
+
+  void _toggle(int index, bool value) {
+    if (value && _pinned.length >= _maxPinned) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Unpin another item first'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+    setState(() {
+      if (value) {
+        _pinned.add(index);
+      } else {
+        _pinned.remove(index);
+      }
+    });
+    widget.onChanged(Set.from(_pinned));
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      decoration: BoxDecoration(
-        color: AppTheme.surfaceContainer,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
+    return SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Icon(
-            Icons.library_music_outlined,
-            color: AppTheme.onBackgroundSubtle,
-            size: 22,
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Default browse view',
-                  style: TextStyle(
-                    color: AppTheme.onBackground,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                const Text(
-                  'Choose what the Browse tab shows',
-                  style: TextStyle(
-                    color: AppTheme.onBackgroundMuted,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
+          const SizedBox(height: 12),
+          Center(
+            child: Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppTheme.onBackgroundMuted.withValues(alpha: 0.4),
+                borderRadius: BorderRadius.circular(2),
+              ),
             ),
           ),
-          _ModeToggle(currentMode: currentMode, onChanged: onChanged),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(20, 16, 20, 4),
+            child: Text(
+              'Navigation bar items',
+              style: TextStyle(
+                color: AppTheme.onBackground,
+                fontSize: 17,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 12),
+            child: Text(
+              'Choose up to 4 items to pin to the nav bar. Unpinned items appear on the home screen.',
+              style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 13),
+            ),
+          ),
+          const Divider(height: 1, color: AppTheme.divider),
+          ..._configurableIndices.map((i) {
+            final tab = AppShell.tabs[i];
+            final isPinned = _pinned.contains(i);
+            return SwitchListTile(
+              secondary: Icon(tab.icon, color: AppTheme.onBackgroundSubtle),
+              title: Text(
+                tab.label,
+                style: const TextStyle(
+                  color: AppTheme.onBackground,
+                  fontSize: 15,
+                ),
+              ),
+              value: isPinned,
+              onChanged: (v) => _toggle(i, v),
+              activeColor: AppTheme.primary,
+            );
+          }),
+          const SizedBox(height: 8),
         ],
-      ),
-    );
-  }
-}
-
-// ── Segmented toggle for browse mode ────────────────────────────────────
-
-class _ModeToggle extends StatelessWidget {
-  final BrowseMode currentMode;
-  final ValueChanged<BrowseMode> onChanged;
-
-  const _ModeToggle({required this.currentMode, required this.onChanged});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppTheme.surfaceContainerHigh,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      padding: const EdgeInsets.all(2),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _ToggleChip(
-            label: 'Albums',
-            isSelected: currentMode == BrowseMode.albums,
-            onTap: () => onChanged(BrowseMode.albums),
-          ),
-          _ToggleChip(
-            label: 'Artists',
-            isSelected: currentMode == BrowseMode.artists,
-            onTap: () => onChanged(BrowseMode.artists),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ToggleChip extends StatelessWidget {
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _ToggleChip({
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(
-          color: isSelected ? AppTheme.primary : Colors.transparent,
-          borderRadius: BorderRadius.circular(6),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: isSelected ? Colors.white : AppTheme.onBackgroundMuted,
-            fontSize: 12,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-          ),
-        ),
       ),
     );
   }

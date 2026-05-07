@@ -171,6 +171,23 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             ],
           ),
           GoRoute(
+            path: '/artists',
+            name: 'artists',
+            pageBuilder:
+                (context, state) =>
+                    const NoTransitionPage(child: ArtistsTabScreen()),
+            routes: [
+              GoRoute(
+                path: 'artist/:id',
+                name: 'artists_artist_detail',
+                builder: (context, state) {
+                  final id = int.parse(state.pathParameters['id']!);
+                  return ArtistDetailScreen(artistId: id);
+                },
+              ),
+            ],
+          ),
+          GoRoute(
             path: '/browse',
             name: 'browse',
             pageBuilder:

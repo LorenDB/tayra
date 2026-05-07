@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/dialog_utils.dart';
-import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:tayra/features/browse/albums_screen.dart';
 import 'package:tayra/features/browse/artists_screen.dart';
 import 'package:tayra/features/search/search_screen.dart';
@@ -17,27 +16,22 @@ final albumTagsProvider = FutureProvider<List<String>>((ref) async {
   return response.results.map((t) => t.name).toList();
 });
 
-// ── Screen ───────────────────────────────────────────────────────────────
+// ── Albums tab screen ─────────────────────────────────────────────────────
 
-/// Browse tab wrapper that switches between Albums and Artists views
-/// based on the user's setting in [settingsProvider].
 class BrowseScreen extends ConsumerWidget {
   const BrowseScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final browseMode = ref.watch(settingsProvider).browseMode;
-    final isAlbums = browseMode == BrowseMode.albums;
     final filter = ref.watch(albumsFilterProvider);
 
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
-        title: Text(isAlbums ? 'Albums' : 'Artists'),
+        title: const Text('Albums'),
         backgroundColor: AppTheme.background,
         actions: [
-          if (isAlbums)
-            _FilterButton(isActive: filter.isActive),
+          _FilterButton(isActive: filter.isActive),
           if (!Responsive.useSideNavigation(context))
             IconButton(
               icon: const Icon(Icons.search_rounded),
@@ -45,7 +39,32 @@ class BrowseScreen extends ConsumerWidget {
             ),
         ],
       ),
-      body: isAlbums ? const AlbumsScreen() : const ArtistsScreen(),
+      body: const AlbumsScreen(),
+    );
+  }
+}
+
+// ── Artists tab screen ────────────────────────────────────────────────────
+
+class ArtistsTabScreen extends StatelessWidget {
+  const ArtistsTabScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppTheme.background,
+      appBar: AppBar(
+        title: const Text('Artists'),
+        backgroundColor: AppTheme.background,
+        actions: [
+          if (!Responsive.useSideNavigation(context))
+            IconButton(
+              icon: const Icon(Icons.search_rounded),
+              onPressed: () => SearchScreen.show(context),
+            ),
+        ],
+      ),
+      body: const ArtistsScreen(),
     );
   }
 }
