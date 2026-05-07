@@ -41,16 +41,16 @@ class _PodcastDetailScreenState extends ConsumerState<PodcastDetailScreen> {
     _loadEpisodes();
   }
 
-  Future<void> _loadEpisodes() async {
+  Future<void> _loadEpisodes({bool forceRefresh = false}) async {
     setState(() {
-      _isLoading = true;
+      if (!forceRefresh || _episodes.isEmpty) _isLoading = true;
       _error = null;
     });
     try {
       final api = ref.read(cached_api.cachedFunkwhaleApiProvider);
 
       final futures = <Future>[
-        _fetchAllEpisodes(api),
+        _fetchAllEpisodes(api, forceRefresh: forceRefresh),
         if (_channel == null) api.getChannel(widget.channelUuid),
       ];
       final results = await Future.wait(futures);
@@ -66,20 +66,22 @@ class _PodcastDetailScreenState extends ConsumerState<PodcastDetailScreen> {
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _error = 'Failed to load episodes: $e';
+        if (_episodes.isEmpty) _error = 'Failed to load episodes: $e';
         _isLoading = false;
       });
     }
   }
 
   Future<List<models.Track>> _fetchAllEpisodes(
-    cached_api.CachedFunkwhaleApi api,
-  ) {
+    cached_api.CachedFunkwhaleApi api, {
+    bool forceRefresh = false,
+  }) {
     return fetchAllPages(
       (page) => api.getChannelTracks(
         channelUuid: widget.channelUuid,
         page: page,
         pageSize: 100,
+        forceRefresh: forceRefresh,
       ),
     );
   }
@@ -119,7 +121,11 @@ class _PodcastDetailScreenState extends ConsumerState<PodcastDetailScreen> {
     final channel = _channel;
     return Scaffold(
       backgroundColor: AppTheme.background,
-      body: CustomScrollView(
+      body: RefreshIndicator(
+        onRefresh: () => _loadEpisodes(forceRefresh: true),
+        color: AppTheme.primary,
+        backgroundColor: AppTheme.surfaceContainer,
+        child: CustomScrollView(
         slivers: [
           _buildAppBar(channel),
           if (!_isLoading && _episodes.isNotEmpty)
@@ -150,6 +156,7 @@ class _PodcastDetailScreenState extends ConsumerState<PodcastDetailScreen> {
               ),
             ),
         ],
+        ),
       ),
     );
   }

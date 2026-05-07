@@ -20,6 +20,9 @@ enum CacheType {
   recentArtists,
   searchResults,
   tags,
+  radio,
+  channel,
+  library,
 }
 
 /// File types for cached files

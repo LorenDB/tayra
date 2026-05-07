@@ -371,11 +371,15 @@ class CachedFunkwhaleApi {
   Future<void> addFavorite(int trackId) async {
     await _api.addFavorite(trackId);
     await _cache.addFavorite(trackId);
+    // Invalidate paginated favorites list so the next getFavorites() call
+    // fetches fresh data rather than serving a page that's missing this track.
+    await _cache.deleteMetadataLike('favorites_p%');
   }
 
   Future<void> removeFavorite(int trackId) async {
     await _api.removeFavorite(trackId);
     await _cache.removeFavorite(trackId);
+    await _cache.deleteMetadataLike('favorites_p%');
   }
 
   // ── Playlists ───────────────────────────────────────────────────────
@@ -498,22 +502,30 @@ class CachedFunkwhaleApi {
     required String name,
     String privacyLevel = 'me',
   }) async {
-    return await _api.createPlaylist(name: name, privacyLevel: privacyLevel);
+    final result = await _api.createPlaylist(
+      name: name,
+      privacyLevel: privacyLevel,
+    );
+    unawaited(refetchPlaylistsAfterWrite());
+    return result;
   }
 
   Future<void> addTracksToPlaylist(int playlistId, List<int> trackIds) async {
     await _api.addTracksToPlaylist(playlistId, trackIds);
     await _cache.deleteMetadata('playlist_$playlistId');
+    unawaited(refetchPlaylistsAfterWrite());
   }
 
   Future<void> removeTrackFromPlaylist(int playlistId, int index) async {
     await _api.removeTrackFromPlaylist(playlistId, index);
     await _cache.deleteMetadata('playlist_$playlistId');
+    unawaited(refetchPlaylistsAfterWrite());
   }
 
   Future<void> deletePlaylist(int id) async {
     await _api.deletePlaylist(id);
     await _cache.deleteMetadata('playlist_$id');
+    unawaited(refetchPlaylistsAfterWrite());
   }
 
   /// Remove all tracks from a playlist and invalidate track caches.
@@ -537,6 +549,13 @@ class CachedFunkwhaleApi {
     await _cache.deleteMetadata('playlist_tracks_${playlistId}_p1_s100');
   }
 
+  /// Invalidate all cached track and album list pages. Call this after a
+  /// successful upload so browse screens show the newly imported content.
+  Future<void> invalidateTrackAndAlbumCaches() async {
+    await _cache.deleteMetadataLike('tracks_p%');
+    await _cache.deleteMetadataLike('albums_p%');
+  }
+
   // ── Pass-through methods ────────────────────────────────────────────
 
   Future<void> recordListening(int trackId) async {
@@ -547,7 +566,7 @@ class CachedFunkwhaleApi {
 
   Map<String, String> get authHeaders => _api.authHeaders;
 
-  // ── Channels / Podcasts (pass-through) ──────────────────────────────
+  // ── Channels / Podcasts ──────────────────────────────────────────────
 
   Future<PaginatedResponse<Channel>> getChannels({
     int page = 1,
@@ -555,18 +574,41 @@ class CachedFunkwhaleApi {
     String ordering = '-creation_date',
     String? q,
     bool? subscribed,
+    bool forceRefresh = false,
   }) async {
-    return _api.getChannels(
-      page: page,
-      pageSize: pageSize,
-      ordering: ordering,
-      q: q,
-      subscribed: subscribed,
+    final cacheKey =
+        'channels_p${page}_s${pageSize}_o${ordering}_q${q}_sub$subscribed';
+    return _cachedFetch(
+      cacheKey: cacheKey,
+      cacheType: CacheType.channel,
+      fromJson: (j) => PaginatedResponse.fromJson(j, Channel.fromJson),
+      toJson: (r) => _paginatedResponseToJson(r, _channelToJson),
+      fetch:
+          () => _api.getChannels(
+            page: page,
+            pageSize: pageSize,
+            ordering: ordering,
+            q: q,
+            subscribed: subscribed,
+          ),
+      ttl: const Duration(hours: 1),
+      forceRefresh: forceRefresh,
+      coverUrls:
+          (r) => r.results.map((c) => c.artist.coverUrl).toList(),
     );
   }
 
-  Future<Channel> getChannel(String uuid) async {
-    return _api.getChannel(uuid);
+  Future<Channel> getChannel(String uuid, {bool forceRefresh = false}) async {
+    return _cachedFetch(
+      cacheKey: 'channel_$uuid',
+      cacheType: CacheType.channel,
+      fromJson: Channel.fromJson,
+      toJson: _channelToJson,
+      fetch: () => _api.getChannel(uuid),
+      ttl: const Duration(hours: 1),
+      forceRefresh: forceRefresh,
+      coverUrls: (c) => [c.artist.coverUrl],
+    );
   }
 
   Future<PaginatedResponse<Track>> getChannelTracks({
@@ -574,16 +616,29 @@ class CachedFunkwhaleApi {
     int page = 1,
     int pageSize = 50,
     String ordering = '-creation_date',
+    bool forceRefresh = false,
   }) async {
-    return _api.getChannelTracks(
-      channelUuid: channelUuid,
-      page: page,
-      pageSize: pageSize,
-      ordering: ordering,
+    final cacheKey =
+        'channel_tracks_${channelUuid}_p${page}_s${pageSize}_o$ordering';
+    return _cachedFetch(
+      cacheKey: cacheKey,
+      cacheType: CacheType.track,
+      fromJson: (j) => PaginatedResponse.fromJson(j, Track.fromJson),
+      toJson: (r) => _paginatedResponseToJson(r, _trackToJson),
+      fetch:
+          () => _api.getChannelTracks(
+            channelUuid: channelUuid,
+            page: page,
+            pageSize: pageSize,
+            ordering: ordering,
+          ),
+      ttl: const Duration(hours: 1),
+      forceRefresh: forceRefresh,
+      coverUrls: (r) => r.results.map((t) => t.coverUrl).toList(),
     );
   }
 
-  // ── Radios (pass-through) ─────────────────────────────────────────
+  // ── Radios ────────────────────────────────────────────────────────────
 
   Future<PaginatedResponse<Radio>> getRadios({
     int page = 1,
@@ -592,14 +647,26 @@ class CachedFunkwhaleApi {
     String? q,
     String? scope,
     String? name,
+    bool forceRefresh = false,
   }) async {
-    return _api.getRadios(
-      page: page,
-      pageSize: pageSize,
-      ordering: ordering,
-      q: q,
-      scope: scope,
-      name: name,
+    final cacheKey =
+        'radios_p${page}_s${pageSize}_o${ordering}_q${q}_sc${scope}_n$name';
+    return _cachedFetch(
+      cacheKey: cacheKey,
+      cacheType: CacheType.radio,
+      fromJson: (j) => PaginatedResponse.fromJson(j, Radio.fromJson),
+      toJson: (r) => _paginatedResponseToJson(r, _radioToJson),
+      fetch:
+          () => _api.getRadios(
+            page: page,
+            pageSize: pageSize,
+            ordering: ordering,
+            q: q,
+            scope: scope,
+            name: name,
+          ),
+      ttl: const Duration(hours: 1),
+      forceRefresh: forceRefresh,
     );
   }
 
@@ -620,6 +687,26 @@ class CachedFunkwhaleApi {
 
   Future<dynamic> postNextRadioTrackRaw(int session, {int? count}) async {
     return _api.postNextRadioTrackRaw(session, count: count);
+  }
+
+  // ── Libraries ─────────────────────────────────────────────────────────
+
+  Future<PaginatedResponse<Library>> getLibraries({
+    int page = 1,
+    int pageSize = 50,
+    String? scope,
+    bool forceRefresh = false,
+  }) async {
+    final cacheKey = 'libraries_p${page}_s${pageSize}_sc$scope';
+    return _cachedFetch(
+      cacheKey: cacheKey,
+      cacheType: CacheType.library,
+      fromJson: (j) => PaginatedResponse.fromJson(j, Library.fromJson),
+      toJson: (r) => _paginatedResponseToJson(r, _libraryToJson),
+      fetch: () => _api.getLibraries(page: page, pageSize: pageSize, scope: scope),
+      ttl: const Duration(hours: 6),
+      forceRefresh: forceRefresh,
+    );
   }
 
   // ── Serialization helpers ───────────────────────────────────────────
@@ -778,6 +865,22 @@ class CachedFunkwhaleApi {
       'albums': result.albums.map(_albumToJson).toList(),
       'artists': result.artists.map(_artistToJson).toList(),
       'tracks': result.tracks.map(_trackToJson).toList(),
+    };
+  }
+
+  Map<String, dynamic> _radioToJson(Radio radio) => radio.toJson();
+
+  Map<String, dynamic> _channelToJson(Channel channel) => channel.toJson();
+
+  Map<String, dynamic> _libraryToJson(Library lib) {
+    return {
+      'uuid': lib.uuid,
+      'name': lib.name,
+      'description': lib.description,
+      'privacy_level': lib.privacyLevel,
+      'uploads_count': lib.uploadsCount,
+      'size': lib.size,
+      'creation_date': lib.creationDate?.toIso8601String(),
     };
   }
 }

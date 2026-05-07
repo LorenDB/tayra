@@ -58,15 +58,21 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
     super.dispose();
   }
 
-  Future<void> _loadRadios() async {
+  Future<void> _loadRadios({bool forceRefresh = false}) async {
     setState(() {
-      _isLoading = true;
+      if (!forceRefresh || (_userRadios.isEmpty && _builtinRadios.isEmpty)) {
+        _isLoading = true;
+      }
       _error = null;
     });
 
     try {
       final api = ref.read(cached_api.cachedFunkwhaleApiProvider);
-      final response = await api.getRadios(page: 1, pageSize: 50);
+      final response = await api.getRadios(
+        page: 1,
+        pageSize: 50,
+        forceRefresh: forceRefresh,
+      );
       if (!mounted) return;
       setState(() {
         _userRadios
@@ -79,13 +85,13 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
       });
     } catch (e, st) {
       if (!mounted) return;
-      // Surface the error message to help debugging (will show in UI).
       final msg = e is Exception ? e.toString() : 'Unknown error';
       setState(() {
-        _error = 'Failed to load radios: $msg';
+        if (_userRadios.isEmpty && _builtinRadios.isEmpty) {
+          _error = 'Failed to load radios: $msg';
+        }
         _isLoading = false;
       });
-      // Also print to console for developer visibility
       // ignore: avoid_print
       print('Radios load failed: $e\n$st');
     }
@@ -316,6 +322,11 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
       }
     }
 
-    return ListView(controller: _scrollController, children: children);
+    return RefreshIndicator(
+      onRefresh: () => _loadRadios(forceRefresh: true),
+      color: AppTheme.primary,
+      backgroundColor: AppTheme.surfaceContainer,
+      child: ListView(controller: _scrollController, children: children),
+    );
   }
 }
