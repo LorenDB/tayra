@@ -152,8 +152,16 @@ class _TayraAppState extends ConsumerState<TayraApp>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.detached) {
-      Analytics.track('app_close');
+    switch (state) {
+      case AppLifecycleState.paused:
+      case AppLifecycleState.inactive:
+        ref.read(playerProvider.notifier).onAppPaused();
+      case AppLifecycleState.resumed:
+        ref.read(playerProvider.notifier).onAppResumed();
+      case AppLifecycleState.detached:
+        Analytics.track('app_close');
+      case AppLifecycleState.hidden:
+        break;
     }
   }
 

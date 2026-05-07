@@ -780,6 +780,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// event; cancelled when the player reaches a non-buffering state.
   Timer? _bufferingWatchdog;
 
+  /// Timestamp recorded when the app enters the background (paused lifecycle
+  /// state). Used by [onAppResumed] to detect stale audio sources.
+  DateTime? _appPausedAt;
+
   /// Count of consecutive automatic load failures (for telemetry).
   /// We no longer auto-skip on failure; instead we show a SnackBar and
   /// pause playback. The counter remains to surface analytics if desired.
@@ -2232,6 +2236,44 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }
 
   Future<void> pause() => _handler.pause();
+
+  /// Called when the app enters the background (paused/inactive lifecycle).
+  void onAppPaused() {
+    _appPausedAt = DateTime.now();
+  }
+
+  /// Called when the app returns to the foreground (resumed lifecycle).
+  ///
+  /// If the audio player is stuck in loading/buffering after a meaningful
+  /// background period (≥ 3 s), the underlying network connection is likely
+  /// stale.  We cancel the watchdog and reload the current track so the user
+  /// doesn't have to wait for the 30-second timeout or restart the app.
+  Future<void> onAppResumed() async {
+    final pausedAt = _appPausedAt;
+    _appPausedAt = null;
+    if (pausedAt == null) return;
+
+    final backgroundDuration = DateTime.now().difference(pausedAt);
+    final ps = _handler.audioPlayer.processingState;
+    final stuckLoading =
+        state.isLoading ||
+        ps == ProcessingState.loading ||
+        ps == ProcessingState.buffering;
+
+    if (backgroundDuration.inSeconds >= 3 && stuckLoading) {
+      debugPrint(
+        'PlayerNotifier.onAppResumed: stuck loading after '
+        '${backgroundDuration.inSeconds}s in background — reloading track',
+      );
+      final track = state.currentTrack;
+      if (track != null) {
+        _bufferingWatchdog?.cancel();
+        _bufferingWatchdog = null;
+        final position = _handler.audioPlayer.position;
+        await _loadAndPlay(track, initialPosition: position);
+      }
+    }
+  }
 
   Future<void> togglePlayPause() async {
     // Capture intent before the await so the analytics event reflects what the
