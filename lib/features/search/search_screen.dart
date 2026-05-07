@@ -20,7 +20,9 @@ class SearchScreen extends ConsumerStatefulWidget {
   static Future<void> show(BuildContext context) {
     // Navigate to a full-screen search route so search appears as a page
     // (works consistently on mobile and desktop).
-    return Future<void>.microtask(() => context.push('/search'));
+    return Future<void>.microtask(() {
+      if (context.mounted) context.push('/search');
+    });
   }
 
   @override

@@ -80,23 +80,31 @@ class DownloadQueueService {
 
   /// Add one or many track IDs to the queue.
   Future<void> enqueue(List<int> trackIds, dynamic reader) async {
+    if (trackIds.isEmpty) return;
     final db = await _db.database;
     final now = DateTime.now().millisecondsSinceEpoch;
-    for (final id in trackIds) {
-      // Skip if this track is already queued or downloading (idempotent).
-      final existing = await db.query(
-        'download_queue',
-        where: "track_id = ? AND status IN ('queued', 'downloading')",
-        whereArgs: [id],
-      );
-      if (existing.isNotEmpty) continue;
-      await db.insert('download_queue', {
-        'track_id': id,
-        'status': 'queued',
-        'added_at': now,
-        'error': null,
-      });
-    }
+
+    // Batch-check which IDs are already queued or downloading.
+    final placeholders = trackIds.map((_) => '?').join(',');
+    final existing = await db.rawQuery(
+      "SELECT track_id FROM download_queue WHERE track_id IN ($placeholders)"
+      " AND status IN ('queued', 'downloading')",
+      trackIds,
+    );
+    final existingIds =
+        existing.map((r) => r['track_id'] as int).toSet();
+
+    await db.transaction((txn) async {
+      for (final id in trackIds) {
+        if (existingIds.contains(id)) continue;
+        await txn.insert('download_queue', {
+          'track_id': id,
+          'status': 'queued',
+          'added_at': now,
+          'error': null,
+        });
+      }
+    });
     await _emitState();
     // Telemetry: user or system enqueued downloads
     try {

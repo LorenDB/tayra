@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:audio_service/audio_service.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:tayra/core/router/app_router.dart';
@@ -784,10 +783,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// state). Used by [onAppResumed] to detect stale audio sources.
   DateTime? _appPausedAt;
 
-  /// Count of consecutive automatic load failures (for telemetry).
-  /// We no longer auto-skip on failure; instead we show a SnackBar and
-  /// pause playback. The counter remains to surface analytics if desired.
-  int _consecutiveLoadFailures = 0;
+  /// Last position (in whole seconds) at which the queue was saved.
+  /// Prevents multiple saves within the same 2-second window.
+  int _lastSavedPositionSeconds = -1;
 
   @override
   PlayerState build() {
@@ -920,8 +918,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
           return;
         }
         state = state.copyWith(position: position);
-        // Save position periodically (every 2 seconds) to persistence
-        if (position.inSeconds % 2 == 0 && position.inSeconds > 0) {
+        // Save position periodically (every 2 seconds) to persistence.
+        // Guard with _lastSavedPositionSeconds so rapid position events
+        // at the same second boundary don't trigger multiple redundant writes.
+        final secs = position.inSeconds;
+        if (secs % 2 == 0 && secs > 0 && secs != _lastSavedPositionSeconds) {
+          _lastSavedPositionSeconds = secs;
           _saveQueue();
         }
         try {
@@ -965,14 +967,13 @@ class PlayerNotifier extends Notifier<PlayerState> {
                 state = state.copyWith(isLoading: false);
                 // Do NOT auto-skip when a track stays stuck in loading/buffering.
                 // Instead inform the user and pause playback so they can act.
-                _consecutiveLoadFailures++;
                 final ctx = shellNavigatorKey.currentContext;
                 if (ctx != null) {
                   final title = state.currentTrack?.title ?? 'track';
                   ScaffoldMessenger.of(ctx).showSnackBar(
                     SnackBar(
                       content: Text(
-                        'Unable to load "${title}". Playback paused.',
+                        'Unable to load "$title". Playback paused.',
                       ),
                     ),
                   );
@@ -1479,8 +1480,6 @@ class PlayerNotifier extends Notifier<PlayerState> {
       try {
         // First attempt to get one track via the sample endpoint.
         final first = await _api.getRadioTrack(radioId);
-        if (first == null) throw Exception('No radio sample track');
-
         _radioSessionId = null;
         _radioId = radioId;
 
@@ -1494,7 +1493,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
         // Prefetch only one upcoming track using the sample endpoint.
         try {
           final t = await _api.getRadioTrack(radioId);
-          if (t != null) addToQueue([t]);
+          addToQueue([t]);
         } catch (_) {}
 
         // Periodic fetcher to keep queue populated.
@@ -1507,7 +1506,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
             final ahead = state.queue.length - state.currentIndex - 1;
             if (ahead < 1) {
               final t = await _api.getRadioTrack(radioId);
-              if (t != null) addToQueue([t]);
+              addToQueue([t]);
             }
           } catch (_) {
             Analytics.track('radio_fetch_error', {'radio_id': radioId});
@@ -1536,16 +1535,18 @@ class PlayerNotifier extends Notifier<PlayerState> {
       RadioSession session;
       try {
         final body = <String, dynamic>{'radio_type': radioType};
-        if (relatedObjectId != null)
+        if (relatedObjectId != null) {
           body['related_object_id'] = relatedObjectId;
+        }
         session = await _api.createRadioSession(body);
-      } on DioException catch (e) {
+      } on DioException catch (_) {
         // Retry with related_object_id as string if present (some servers
         // are picky about typing).
         try {
           final body = <String, dynamic>{'radio_type': radioType};
-          if (relatedObjectId != null)
+          if (relatedObjectId != null) {
             body['related_object_id'] = relatedObjectId.toString();
+          }
           session = await _api.createRadioSession(body);
         } on DioException catch (e2) {
           debugPrint(
@@ -1561,8 +1562,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // Fetch the first track from the session and start playback.
       final rawFirst = await _api.postNextRadioTrackRaw(_radioSessionId!);
       final first = await _parseTrackFromRaw(rawFirst);
-      if (first == null)
+      if (first == null) {
         throw Exception('No track returned for instance radio');
+      }
 
       await playTracks([first], source: 'instance-radio');
       state = state.copyWith(clearLoadingRadioId: true);
@@ -1598,7 +1600,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
         if (t != null) addToQueue([t]);
       } else if (_radioId != null) {
         final t = await _api.getRadioTrack(_radioId!);
-        if (t != null) addToQueue([t]);
+        addToQueue([t]);
       }
     } catch (_) {}
 
@@ -1724,7 +1726,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
       for (final track in tracks) {
         final capturedIdx = idx++;
         _audioSourceForTrack(track).then(
-          (source) => _handler.audioPlayer.insertAudioSource(capturedIdx, source),
+          (source) =>
+              _handler.audioPlayer.insertAudioSource(capturedIdx, source),
           onError: (_) {},
         );
       }
@@ -2015,9 +2018,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
         );
       } catch (_) {}
 
-      // Successfully loaded — reset consecutive failure counter.
+      // Successfully loaded.
       state = state.copyWith(isLoading: false);
-      _consecutiveLoadFailures = 0;
     } catch (e, st) {
       debugPrint(
         'PlayerNotifier._loadTrack: failed to load track ${track.id}: $e\n$st',
@@ -2025,16 +2027,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
       state = state.copyWith(isLoading: false);
 
       // Do NOT auto-skip. Show a SnackBar and pause playback so the user can
-      // manually intervene (remove track, retry, etc.). Keep a failure count
-      // for telemetry.
-      _consecutiveLoadFailures++;
+      // manually intervene (remove track, retry, etc.).
       final ctx = shellNavigatorKey.currentContext;
-      if (ctx != null) {
+      if (ctx != null && ctx.mounted) {
         final title = track.title;
         ScaffoldMessenger.of(ctx).showSnackBar(
-          SnackBar(
-            content: Text('Unable to load "${title}". Playback paused.'),
-          ),
+          SnackBar(content: Text('Unable to load "$title". Playback paused.')),
         );
       } else {
         debugPrint(

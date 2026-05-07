@@ -257,8 +257,9 @@ class _EpisodeTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playerState = ref.watch(playerProvider);
-    final isCurrentTrack = playerState.currentTrack?.id == episode.id;
+    final isCurrentTrack = ref.watch(
+      playerProvider.select((s) => s.currentTrack?.id == episode.id),
+    );
 
     final dateStr =
         episode.creationDate != null

@@ -36,7 +36,7 @@ void main() async {
       current
           .then((info) {
             final frame = info.frame;
-            if (frame != null && frame.width < maxWidth) {
+            if (frame.width < maxWidth) {
               window_size.setWindowFrame(
                 Rect.fromLTWH(
                   frame.left,

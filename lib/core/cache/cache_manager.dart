@@ -946,17 +946,22 @@ class CacheManager {
     final db = await _db.database;
     final audioDir = await _getCacheDir(FileType.audio);
     final files = audioDir.listSync().whereType<File>();
+
+    // Load all known audio cache keys in one query to avoid N DB round-trips.
+    final existingRows = await db.query(
+      'cache_files',
+      columns: ['cache_key'],
+      where: 'file_type = ?',
+      whereArgs: [FileType.audio.name],
+    );
+    final existingKeys = existingRows.map((r) => r['cache_key'] as String).toSet();
+
     for (final file in files) {
       final name = p.basename(file.path);
       // Expect filenames like 'audio_<id>.<ext>'
       if (!name.startsWith('audio_')) continue;
       final key = p.basenameWithoutExtension(name); // audio_<id>
-      final exists = await db.query(
-        'cache_files',
-        where: 'cache_key = ?',
-        whereArgs: [key],
-      );
-      if (exists.isNotEmpty) continue;
+      if (existingKeys.contains(key)) continue;
 
       // Try to extract an integer resource_id from the key
       int? resourceId;

@@ -18,8 +18,14 @@ class MiniPlayer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playerState = ref.watch(playerProvider);
-    final track = playerState.currentTrack;
+    // Select only the fields that affect the static parts of the mini-player
+    // (track identity, playback state). Progress is handled by a child widget
+    // so position ticks don't rebuild the whole bar.
+    final (track, isPlaying, isLoading) = ref.watch(
+      playerProvider.select(
+        (s) => (s.currentTrack, s.isPlaying, s.isLoading),
+      ),
+    );
 
     if (track == null) return const SizedBox.shrink();
 
@@ -76,33 +82,11 @@ class MiniPlayer extends ConsumerWidget {
         ),
         child: Column(
           children: [
-            // Gradient progress bar
-            LayoutBuilder(
-              builder: (context, constraints) {
-                const barHeight = 2.0;
-                final filledWidth =
-                    constraints.maxWidth * playerState.progress.clamp(0.0, 1.0);
-                return SizedBox(
-                  height: barHeight,
-                  width: constraints.maxWidth,
-                  child: Stack(
-                    children: [
-                      // Inactive track background
-                      Container(height: barHeight, color: Colors.transparent),
-                      // Gradient filled portion
-                      Container(
-                        height: barHeight,
-                        width: filledWidth,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [accentColor, gradientSecondColor],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
+            // Progress bar in its own widget — updates 5x/sec without
+            // rebuilding the track-info and controls below.
+            _MiniPlayerProgressBar(
+              accentColor: accentColor,
+              gradientSecondColor: gradientSecondColor,
             ),
             Expanded(
               child: Padding(
@@ -182,7 +166,7 @@ class MiniPlayer extends ConsumerWidget {
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(minWidth: 36),
                     ),
-                    playerState.isLoading
+                    isLoading
                         ? const SizedBox(
                           width: 36,
                           height: 36,
@@ -196,7 +180,7 @@ class MiniPlayer extends ConsumerWidget {
                         )
                         : IconButton(
                           icon: Icon(
-                            playerState.isPlaying
+                            isPlaying
                                 ? Icons.pause_rounded
                                 : Icons.play_arrow_rounded,
                             size: 32,
@@ -225,6 +209,51 @@ class MiniPlayer extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+// ── Progress bar ────────────────────────────────────────────────────────────
+
+class _MiniPlayerProgressBar extends ConsumerWidget {
+  final Color accentColor;
+  final Color gradientSecondColor;
+
+  const _MiniPlayerProgressBar({
+    required this.accentColor,
+    required this.gradientSecondColor,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final progress = ref.watch(
+      playerProvider.select((s) => s.progress),
+    );
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const barHeight = 2.0;
+        final filledWidth =
+            constraints.maxWidth * progress.clamp(0.0, 1.0);
+        return SizedBox(
+          height: barHeight,
+          width: constraints.maxWidth,
+          child: Stack(
+            children: [
+              Container(height: barHeight, color: Colors.transparent),
+              Container(
+                height: barHeight,
+                width: filledWidth,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [accentColor, gradientSecondColor],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

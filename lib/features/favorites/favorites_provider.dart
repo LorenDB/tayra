@@ -72,7 +72,9 @@ class FavoriteButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isFav = ref.watch(favoriteTrackIdsProvider).contains(trackId);
+    final isFav = ref.watch(
+      favoriteTrackIdsProvider.select((ids) => ids.contains(trackId)),
+    );
 
     return IconButton(
       icon: Icon(

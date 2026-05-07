@@ -128,20 +128,22 @@ class QueuePersistenceService {
       final queueJsonString = prefs.getString(_keyQueue);
       if (queueJsonString == null) return null;
 
-      // Deserialize tracks
+      // Deserialize tracks — skip malformed entries rather than failing the
+      // whole restore.
+      Track? parseTrack(dynamic json) {
+        try {
+          if (json is Map<String, dynamic>) return Track.fromJson(json);
+          if (json is String) {
+            final parsed = jsonDecode(json);
+            if (parsed is Map<String, dynamic>) return Track.fromJson(parsed);
+          }
+        } catch (_) {}
+        return null;
+      }
+
       final queueJson = jsonDecode(queueJsonString) as List<dynamic>;
       final queue =
-          queueJson.map((json) {
-            if (json is Map<String, dynamic>) return Track.fromJson(json);
-            if (json is String) {
-              try {
-                final parsed = jsonDecode(json);
-                if (parsed is Map<String, dynamic>)
-                  return Track.fromJson(parsed);
-              } catch (_) {}
-            }
-            return Track.fromJson({});
-          }).toList();
+          queueJson.map(parseTrack).whereType<Track>().toList();
 
       if (queue.isEmpty) return null;
 
@@ -152,18 +154,7 @@ class QueuePersistenceService {
         final unshuffledJson =
             jsonDecode(unshuffledJsonString) as List<dynamic>;
         unshuffledQueue =
-            unshuffledJson.map((json) {
-              if (json is Map<String, dynamic>) return Track.fromJson(json);
-              if (json is String) {
-                try {
-                  final parsed = jsonDecode(json);
-                  if (parsed is Map<String, dynamic>) {
-                    return Track.fromJson(parsed);
-                  }
-                } catch (_) {}
-              }
-              return Track.fromJson({});
-            }).toList();
+            unshuffledJson.map(parseTrack).whereType<Track>().toList();
       }
 
       // Restore playback state

@@ -52,15 +52,6 @@ class AppShell extends ConsumerWidget {
     '/playlists',
     '/favorites',
   ];
-  static const _names = [
-    'home',
-    'browse',
-    'radios',
-    'podcasts',
-    'playlists',
-    'favorites',
-  ];
-
   int _currentIndex(BuildContext context) {
     final location = GoRouterState.of(context).matchedLocation;
     // Check non-root tabs first so that paths like `/album/123` are treated
@@ -76,7 +67,9 @@ class AppShell extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentIndex = _currentIndex(context);
-    final hasTrack = ref.watch(playerProvider).currentTrack != null;
+    final hasTrack = ref.watch(
+      playerProvider.select((s) => s.currentTrack != null),
+    );
     final stashCount =
         ref.watch(stashedQueuesProvider).asData?.value.length ?? 0;
     final useSideNav = Responsive.useSideNavigation(context);
@@ -159,8 +152,9 @@ class AppShell extends ConsumerWidget {
               // Dismiss popup routes attached to both the shell and root
               // navigators before changing tabs so they don't remain.
               final nested = shellNavigatorKey.currentState;
-              if (nested != null)
+              if (nested != null) {
                 nested.popUntil((route) => route is! PopupRoute);
+              }
               try {
                 Navigator.of(
                   context,
@@ -256,8 +250,9 @@ class AppShell extends ConsumerWidget {
                       child: InkWell(
                         onTap: () {
                           final nested = shellNavigatorKey.currentState;
-                          if (nested != null)
+                          if (nested != null) {
                             nested.popUntil((route) => route is! PopupRoute);
+                          }
                           try {
                             Navigator.of(
                               context,

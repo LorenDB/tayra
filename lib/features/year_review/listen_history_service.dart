@@ -381,9 +381,9 @@ class ListenHistoryService {
 
       // Helper converters for SQLite result values (sqflite may return
       // ints or doubles for numeric columns, and values can be null).
-      int _toInt(dynamic v) => (v as num?)?.toInt() ?? 0;
-      int? _toNullableInt(dynamic v) => v == null ? null : (v as num).toInt();
-      double _toDouble(dynamic v) => (v as num?)?.toDouble() ?? 0.0;
+      int toInt(dynamic v) => (v as num?)?.toInt() ?? 0;
+      int? toNullableInt(dynamic v) => v == null ? null : (v as num).toInt();
+      double toDouble(dynamic v) => (v as num?)?.toDouble() ?? 0.0;
 
       // Total listens & time
       final totalsResult = await db.rawQuery(
@@ -401,11 +401,11 @@ class ListenHistoryService {
       );
 
       final totals = totalsResult.first;
-      final totalListens = _toInt(totals['total_listens']);
-      final totalSeconds = _toInt(totals['total_seconds']);
-      final uniqueTracks = _toInt(totals['unique_tracks']);
-      final uniqueArtists = _toInt(totals['unique_artists']);
-      final uniqueAlbums = _toInt(totals['unique_albums']);
+      final totalListens = toInt(totals['total_listens']);
+      final totalSeconds = toInt(totals['total_seconds']);
+      final uniqueTracks = toInt(totals['unique_tracks']);
+      final uniqueArtists = toInt(totals['unique_artists']);
+      final uniqueAlbums = toInt(totals['unique_albums']);
 
       // Top tracks (by play count)
       final topTracksResult = await db.rawQuery(
@@ -432,8 +432,8 @@ class ListenHistoryService {
                   name: row['track_title'] as String,
                   subtitle: row['artist_name'] as String?,
                   coverUrl: row['cover_url'] as String?,
-                  count: _toInt(row['play_count']),
-                  totalSeconds: _toNullableInt(row['total_seconds']),
+                  count: toInt(row['play_count']),
+                  totalSeconds: toNullableInt(row['total_seconds']),
                 ),
               )
               .toList();
@@ -465,8 +465,8 @@ class ListenHistoryService {
                 (row) => TopItem(
                   name: row['artist_name'] as String,
                   coverUrl: row['cover_url'] as String?,
-                  count: _toInt(row['play_count']),
-                  totalSeconds: _toNullableInt(row['total_seconds']),
+                  count: toInt(row['play_count']),
+                  totalSeconds: toNullableInt(row['total_seconds']),
                 ),
               )
               .toList();
@@ -506,14 +506,14 @@ class ListenHistoryService {
       // Build intermediate album data rows for sorting.
       final albumRows = topAlbumsResult
           .map((row) => _AlbumRow(
-                albumId: _toInt(row['album_id']),
+                albumId: toInt(row['album_id']),
                 title: row['album_title'] as String,
                 artistName: row['artist_name'] as String?,
                 coverUrl: row['cover_url'] as String?,
-                uniqueTracks: _toInt(row['unique_tracks']),
-                engagementScore: _toDouble(row['engagement_score']).round(),
-                totalSeconds: _toNullableInt(row['total_seconds']),
-                totalListens: _toInt(row['total_plays']),
+                uniqueTracks: toInt(row['unique_tracks']),
+                engagementScore: toDouble(row['engagement_score']).round(),
+                totalSeconds: toNullableInt(row['total_seconds']),
+                totalListens: toInt(row['total_plays']),
               ))
           .toList();
 
@@ -574,11 +574,11 @@ class ListenHistoryService {
       // Fill in all 12 months (even months with zero listens)
       final monthMap = <int, MonthlyListens>{};
       for (final row in monthlyResult) {
-        final month = _toInt(row['month']);
+        final month = toInt(row['month']);
         monthMap[month] = MonthlyListens(
           month: month,
-          count: _toInt(row['listen_count']),
-          totalSeconds: _toInt(row['total_seconds']),
+          count: toInt(row['listen_count']),
+          totalSeconds: toInt(row['total_seconds']),
         );
       }
       final monthlyBreakdown = List.generate(12, (i) {

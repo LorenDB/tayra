@@ -112,75 +112,6 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
     }
   }
 
-  Future<void> _confirmClearPlaylist(
-    BuildContext context,
-    Playlist playlist,
-  ) async {
-    if (_playlistTracks.isEmpty) return;
-    if (!context.mounted) return;
-
-    final ok = await showShellDialog<bool>(
-      context: context,
-      builder:
-          (ctx) => AlertDialog(
-            backgroundColor: AppTheme.surfaceContainerHigh,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            title: const Text(
-              'Clear playlist',
-              style: TextStyle(
-                color: AppTheme.onBackground,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            content: const Text(
-              'Remove all tracks from this playlist? This cannot be undone.',
-              style: TextStyle(color: AppTheme.onBackgroundMuted),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(false),
-                child: const Text(
-                  'Cancel',
-                  style: TextStyle(color: AppTheme.onBackgroundMuted),
-                ),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(true),
-                child: const Text(
-                  'Clear',
-                  style: TextStyle(color: AppTheme.error),
-                ),
-              ),
-            ],
-          ),
-    );
-
-    if (ok != true) return;
-    if (!context.mounted) return;
-
-    // Optimistic UI update.
-    final backup = List<PlaylistTrack>.from(_playlistTracks);
-    setState(() => _playlistTracks = []);
-
-    try {
-      final api = ref.read(cachedFunkwhaleApiProvider);
-      await api.clearPlaylist(playlist.id);
-      ref.invalidate(playlistsProvider);
-      try {
-        Analytics.track('playlist_cleared');
-      } catch (_) {}
-    } catch (e) {
-      setState(() => _playlistTracks = backup);
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to clear playlist')),
-        );
-      }
-    }
-  }
-
   Future<void> _loadData({bool forceRefresh = false}) async {
     // Only show the full loading skeleton on first load (no data yet).
     if (_playlist == null) {
@@ -426,6 +357,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
           });
         } catch (_) {}
 
+        if (!mounted) return;
         if (!current) {
           final queue = ref.read(downloadQueueServiceProvider);
           final trackIds =

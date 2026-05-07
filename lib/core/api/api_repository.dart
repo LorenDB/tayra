@@ -268,7 +268,7 @@ class FunkwhaleApi {
   /// Remove a track from a playlist by its playlist position index.
   ///
   /// Funkwhale v1.4.0 removes by index: POST /api/v1/playlists/{id}/remove/
-  /// with body {"index": <int>}. The schema.yml incorrectly references
+  /// with body `{"index": int}`. The schema.yml incorrectly references
   /// PlaylistRequest for this body, but the actual implementation uses index.
   Future<void> removeTrackFromPlaylist(int playlistId, int index) async {
     final url = '$_baseUrl/api/v1/playlists/$playlistId/remove/';
@@ -498,8 +498,9 @@ class FunkwhaleApi {
         final t = data['track'];
         if (t is Map<String, dynamic>) return Track.fromJson(t);
         if (t is int) return getTrack(t);
-        if (t is String && int.tryParse(t) != null)
+        if (t is String && int.tryParse(t) != null) {
           return getTrack(int.parse(t));
+        }
       }
       if (data.containsKey('results') &&
           data['results'] is List &&
@@ -512,14 +513,16 @@ class FunkwhaleApi {
       if (data.containsKey('id') && data.keys.length == 1) {
         final idVal = data['id'];
         if (idVal is int) return getTrack(idVal);
-        if (idVal is String && int.tryParse(idVal) != null)
+        if (idVal is String && int.tryParse(idVal) != null) {
           return getTrack(int.parse(idVal));
+        }
       }
     }
 
     if (data is int) return getTrack(data);
-    if (data is String && int.tryParse(data) != null)
+    if (data is String && int.tryParse(data) != null) {
       return getTrack(int.parse(data));
+    }
     if (data is List && data.isNotEmpty) {
       final first = data.first;
       if (first is Map<String, dynamic>) return Track.fromJson(first);
@@ -548,7 +551,7 @@ class FunkwhaleApi {
   }
 
   Future<RadioSession> createRadioSession(Map<String, dynamic> body) async {
-    dynamic _fromResponse(dynamic data) {
+    dynamic fromResponse(dynamic data) {
       if (data is Map<String, dynamic>) return RadioSession.fromJson(data);
       if (data is int) return RadioSession(id: data);
       if (data is String) {
@@ -570,15 +573,11 @@ class FunkwhaleApi {
       if (setCookie != null && setCookie.isNotEmpty) {
         _lastRadioSessionCookie = setCookie.join(';');
       }
-      return _fromResponse(response.data);
-    } on DioException catch (e) {
+      return fromResponse(response.data);
+    } on DioException catch (_) {
       // Some Funkwhale instances are picky about the request encoding.
-      // Log diagnostics and retry as form-encoded (matches schema alternatives).
-      // The caller should already surface the exception, but a retry here
-      // improves compatibility with servers that expect x-www-form-urlencoded.
-      // Primary attempt failed; continue with compatibility retries silently.
-
-      // Retry as form-encoded
+      // Retry as form-encoded for compatibility with servers that expect
+      // x-www-form-urlencoded.
       try {
         final opts = Options(contentType: Headers.formUrlEncodedContentType);
         final response = await _dio.post(
@@ -590,7 +589,7 @@ class FunkwhaleApi {
         if (setCookie != null && setCookie.isNotEmpty) {
           _lastRadioSessionCookie = setCookie.join(';');
         }
-        return _fromResponse(response.data);
+        return fromResponse(response.data);
       } on DioException catch (e2) {
         // Mask authorization header when printing
         final headers = Map.of(e2.requestOptions.headers);
@@ -610,11 +609,12 @@ class FunkwhaleApi {
           if (setCookie != null && setCookie.isNotEmpty) {
             _lastRadioSessionCookie = setCookie.join(';');
           }
-          return _fromResponse(response.data);
+          return fromResponse(response.data);
         } on DioException catch (e3) {
           final headers3 = Map.of(e3.requestOptions.headers);
-          if (headers3.containsKey('Authorization'))
+          if (headers3.containsKey('Authorization')) {
             headers3['Authorization'] = 'REDACTED';
+          }
           // Minimal-body attempt also failed; rethrow so caller can handle.
           rethrow;
         }
@@ -714,8 +714,9 @@ class FunkwhaleApi {
     int? count,
   }) async {
     final headers = <String, dynamic>{};
-    if (_lastRadioSessionCookie != null)
+    if (_lastRadioSessionCookie != null) {
       headers['cookie'] = _lastRadioSessionCookie;
+    }
     final response = await _dio.post(
       '$_baseUrl/api/v1/radios/tracks/',
       data: {'session': session, if (count != null) 'count': count},
@@ -730,8 +731,9 @@ class FunkwhaleApi {
   /// response here.
   Future<dynamic> postNextRadioTrackRaw(int session, {int? count}) async {
     final headers = <String, dynamic>{};
-    if (_lastRadioSessionCookie != null)
+    if (_lastRadioSessionCookie != null) {
       headers['cookie'] = _lastRadioSessionCookie;
+    }
     final response = await _dio.post(
       '$_baseUrl/api/v1/radios/tracks/',
       data: {'session': session, if (count != null) 'count': count},

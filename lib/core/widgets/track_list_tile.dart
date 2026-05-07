@@ -9,7 +9,6 @@ import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/favorites/favorites_provider.dart';
 import 'package:tayra/features/player/player_provider.dart';
 import 'package:tayra/features/playlists/add_to_playlist_sheet.dart';
-import 'package:tayra/core/api/models.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
@@ -45,8 +44,9 @@ class TrackListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playerState = ref.watch(playerProvider);
-    final isCurrentTrack = playerState.currentTrack?.id == track.id;
+    final isCurrentTrack = ref.watch(
+      playerProvider.select((s) => s.currentTrack?.id == track.id),
+    );
 
     final isCachedAsync = ref.watch(isAudioCachedProvider(track.id));
     final isManualAsync = ref.watch(isManualTrackProvider(track.id));
@@ -173,7 +173,7 @@ class TrackListTile extends ConsumerWidget {
                           );
                         },
                         loading: () => const SizedBox.shrink(),
-                        error: (_, __) => const SizedBox.shrink(),
+                        error: (_, _) => const SizedBox.shrink(),
                       ),
                       const SizedBox(width: 8),
                       trailing ?? FavoriteButton(trackId: track.id, size: 20),
@@ -268,6 +268,7 @@ class _TrackMenuButton extends ConsumerWidget {
                       final wasCached = await ref.read(
                         isAudioCachedProvider(track.id).future,
                       );
+                      if (!context.mounted) return;
                       if (!wasCached && !isManual) {
                         final api = ref.read(cachedFunkwhaleApiProvider);
                         if (track.listenUrl != null) {
@@ -277,10 +278,11 @@ class _TrackMenuButton extends ConsumerWidget {
                           unawaited(
                             audioSvc.cacheAudio(track, streamUrl, headers).then(
                               (file) {
-                                if (file != null)
+                                if (file != null) {
                                   ref.invalidate(
                                     isAudioCachedProvider(track.id),
                                   );
+                                }
                               },
                             ),
                           );

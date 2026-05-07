@@ -765,10 +765,10 @@ class _ReviewContentState extends State<_ReviewContent>
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: _switchToDetails,
-                          child: const Text('All Stats'),
                           style: TextButton.styleFrom(
                             foregroundColor: AppTheme.primary,
                           ),
+                          child: const Text('All Stats'),
                         ),
                       ),
                     ),
@@ -2273,6 +2273,7 @@ class _DetailsView extends StatelessWidget {
                               );
                             } catch (_) {}
 
+                            if (!context.mounted) return;
                             if (topIds.isEmpty) {
                               try {
                                 Analytics.track(
@@ -2355,6 +2356,7 @@ class _DetailsView extends StatelessWidget {
                               );
                             } catch (_) {}
 
+                            if (!context.mounted) return;
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text('Playlist created'),
@@ -2371,6 +2373,7 @@ class _DetailsView extends StatelessWidget {
                                 },
                               );
                             } catch (_) {}
+                            if (!context.mounted) return;
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text('Failed to create playlist'),

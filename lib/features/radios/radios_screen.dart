@@ -142,8 +142,9 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
     }
 
     if (_isLoading) return const ShimmerList(itemCount: 10);
-    if (_error != null)
+    if (_error != null) {
       return InlineErrorState(message: _error!, onRetry: _loadRadios);
+    }
     if (_userRadios.isEmpty && _builtinRadios.isEmpty) {
       return const EmptyState(
         icon: Icons.radio,
@@ -153,6 +154,9 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
       );
     }
 
+    final loadingRadioId = ref.watch(
+      playerProvider.select((s) => s.loadingRadioId),
+    );
     final children = <Widget>[];
 
     // Instance radios (client-side static options + server-provided built-ins)
@@ -174,8 +178,7 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
       for (var i = 0; i < _instanceRadios.length; i++) {
         final item = _instanceRadios[i];
         final sentinelId = -100 - i; // unique negative id for loading state
-        final isLoadingRadio =
-            ref.watch(playerProvider).loadingRadioId == sentinelId;
+        final isLoadingRadio = loadingRadioId == sentinelId;
         children.add(
           ListTile(
             title: Text(
@@ -217,8 +220,7 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
 
       // Server-provided built-in radios (those without a user)
       for (final radio in _builtinRadios) {
-        final isLoadingRadio =
-            ref.watch(playerProvider).loadingRadioId == radio.id;
+        final isLoadingRadio = loadingRadioId == radio.id;
         children.add(
           ListTile(
             title: Text(
@@ -274,8 +276,7 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
       );
 
       for (final radio in _userRadios) {
-        final playerState = ref.watch(playerProvider);
-        final isLoadingRadio = playerState.loadingRadioId == radio.id;
+        final isLoadingRadio = loadingRadioId == radio.id;
         children.add(
           ListTile(
             title: Text(

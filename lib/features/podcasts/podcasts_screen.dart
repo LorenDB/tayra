@@ -36,6 +36,7 @@ class _PodcastsScreenState extends ConsumerState<PodcastsScreen> {
 
   @override
   void dispose() {
+    _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
   }

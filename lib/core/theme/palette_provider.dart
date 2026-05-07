@@ -7,7 +7,7 @@ import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 
 /// Encode/decode helper for the provider family key.
-/// Format: "<imageUrl>|||<cacheKey>". Both parts may be empty.
+/// Format: `"<imageUrl>|||<cacheKey>"`. Both parts may be empty.
 String encodePaletteKey(String? imageUrl, String? cacheKey) {
   final u = imageUrl ?? '';
   final k = cacheKey ?? '';
@@ -126,7 +126,9 @@ Color _extractBestColor(PaletteGenerator palette) {
   // Sort by perceptual chroma (vividness) rather than pixel population.
   // Population-first ordering causes muted backgrounds to be preferred over
   // vivid accent colors, which is the opposite of what we want.
-  candidates.sort((a, b) => _chromaProxy(b.color).compareTo(_chromaProxy(a.color)));
+  candidates.sort(
+    (a, b) => _chromaProxy(b.color).compareTo(_chromaProxy(a.color)),
+  );
 
   for (final candidate in candidates) {
     final hsl = HSLColor.fromColor(candidate.color);

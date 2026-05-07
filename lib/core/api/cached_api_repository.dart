@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/api/api_client.dart';
@@ -115,7 +116,7 @@ class CachedFunkwhaleApi {
         (tag != null && tag.isNotEmpty) ? '_t${tag.join(',')}' : '';
     final baseSuffix =
         '_s${pageSize}_o${ordering}_a${artist}_sc${scope}_q$q$tagSuffix';
-    final cacheKey = 'albums_p${page}$baseSuffix';
+    final cacheKey = 'albums_p$page$baseSuffix';
 
     return _cachedFetch(
       cacheKey: cacheKey,
@@ -175,7 +176,7 @@ class CachedFunkwhaleApi {
   }) async {
     final baseSuffix =
         '_s${pageSize}_o${ordering}_h${hasAlbums}_sc${scope}_q$q';
-    final cacheKey = 'artists_p${page}$baseSuffix';
+    final cacheKey = 'artists_p$page$baseSuffix';
 
     // Cache all pages so offline browsing beyond page 1 is possible. Rely on
     // CacheManager's eviction policy to bound storage.
@@ -227,7 +228,7 @@ class CachedFunkwhaleApi {
   }) async {
     final baseSuffix =
         '_s${pageSize}_o${ordering}_al${album}_ar${artist}_sc${scope}_q$q';
-    final cacheKey = 'tracks_p${page}$baseSuffix';
+    final cacheKey = 'tracks_p$page$baseSuffix';
 
     // Cache all pages so offline browsing beyond page 1 is possible. Rely on
     // CacheManager's eviction policy to bound storage.
@@ -320,8 +321,8 @@ class CachedFunkwhaleApi {
     int pageSize = 20,
     bool forceRefresh = false,
   }) async {
-    final baseSuffix = '_s${pageSize}';
-    final cacheKey = 'favorites_p${page}$baseSuffix';
+    final baseSuffix = '_s$pageSize';
+    final cacheKey = 'favorites_p$page$baseSuffix';
 
     // Cache all pages so offline browsing beyond page 1 is possible. Rely on
     // CacheManager's eviction policy to bound storage.
@@ -385,8 +386,8 @@ class CachedFunkwhaleApi {
     String? scope,
     bool forceRefresh = false,
   }) async {
-    final baseSuffix = '_s${pageSize}_sc${scope}';
-    final cacheKey = 'playlists_p${page}$baseSuffix';
+    final baseSuffix = '_s${pageSize}_sc$scope';
+    final cacheKey = 'playlists_p$page$baseSuffix';
 
     // Cache all pages so offline browsing beyond page 1 is possible. Rely on
     // CacheManager's eviction policy to bound storage.
@@ -424,12 +425,12 @@ class CachedFunkwhaleApi {
     final res = await _api.patchPlaylist(id, body);
     // Invalidate cache so UI reflects updated name immediately when re-fetched.
     await _cache.deleteMetadata('playlist_$id');
-    refetchPlaylistsAfterWrite();
+    unawaited(refetchPlaylistsAfterWrite());
     return res;
   }
 
   // Helper to refresh playlists list cache after a write operation.
-  void refetchPlaylistsAfterWrite() async {
+  Future<void> refetchPlaylistsAfterWrite() async {
     try {
       // Call the cached wrapper with forceRefresh so the cache is refreshed.
       await getPlaylists(scope: 'me', forceRefresh: true);
@@ -442,8 +443,8 @@ class CachedFunkwhaleApi {
     int pageSize = 50,
     bool forceRefresh = false,
   }) async {
-    final baseSuffix = '_s${pageSize}';
-    final cacheKey = 'playlist_tracks_${id}_p${page}$baseSuffix';
+    final baseSuffix = '_s$pageSize';
+    final cacheKey = 'playlist_tracks_${id}_p$page$baseSuffix';
 
     // Cache all pages so offline browsing beyond page 1 is possible. Rely on
     // CacheManager's eviction policy to bound storage.
@@ -468,8 +469,8 @@ class CachedFunkwhaleApi {
     String ordering = '-created',
     bool forceRefresh = false,
   }) async {
-    final baseSuffix = '_s${pageSize}_o${ordering}';
-    final cacheKey = 'listenings_p${page}$baseSuffix';
+    final baseSuffix = '_s${pageSize}_o$ordering';
+    final cacheKey = 'listenings_p$page$baseSuffix';
 
     // Cache all pages so offline browsing beyond page 1 is possible. Rely on
     // CacheManager's eviction policy to bound storage.
@@ -522,7 +523,7 @@ class CachedFunkwhaleApi {
     // Invalidate common playlist track page caches so next load is empty.
     await _cache.deleteMetadata('playlist_tracks_${id}_p1_s50');
     await _cache.deleteMetadata('playlist_tracks_${id}_p1_s100');
-    refetchPlaylistsAfterWrite();
+    unawaited(refetchPlaylistsAfterWrite());
   }
 
   /// Move a track in a playlist and invalidate track order caches.
@@ -658,18 +659,6 @@ class CachedFunkwhaleApi {
       'tags': album.tags,
       'creation_date': album.creationDate?.toIso8601String(),
       'tracks': album.tracks.map(_trackToJson).toList(),
-    };
-  }
-
-  Map<String, dynamic> _radioToJson(Radio radio) {
-    return {
-      'id': radio.id,
-      'is_public': radio.isPublic,
-      'name': radio.name,
-      'creation_date': radio.creationDate?.toIso8601String(),
-      'description': radio.description,
-      'config': radio.config,
-      'user': radio.user,
     };
   }
 
