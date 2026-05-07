@@ -7,6 +7,10 @@ import 'package:tayra/core/cache/cache_manager.dart';
 
 enum BrowseMode { albums, artists }
 
+// ── Multi-disc display mode enum ─────────────────────────────────────────
+
+enum MultiDiscDisplayMode { discSections, continuousNumbers }
+
 // ── AI provider type enum ───────────────────────────────────────────────
 
 enum AiProviderType { geminiNano, groq, openRouter, custom }
@@ -50,6 +54,7 @@ class SettingsState {
   final String customEndpointUrl;
   final String customEndpointApiKey;
   final String customModelName;
+  final MultiDiscDisplayMode multiDiscDisplayMode;
 
   const SettingsState({
     this.browseMode = BrowseMode.albums,
@@ -73,6 +78,7 @@ class SettingsState {
     this.customEndpointUrl = '',
     this.customEndpointApiKey = '',
     this.customModelName = 'gpt-4o-mini',
+    this.multiDiscDisplayMode = MultiDiscDisplayMode.discSections,
   });
 
   // Dev-mode settings are only active when developer mode is unlocked.
@@ -117,6 +123,7 @@ class SettingsState {
     String? customEndpointUrl,
     String? customEndpointApiKey,
     String? customModelName,
+    MultiDiscDisplayMode? multiDiscDisplayMode,
   }) {
     return SettingsState(
       browseMode: browseMode ?? this.browseMode,
@@ -143,6 +150,7 @@ class SettingsState {
       customEndpointUrl: customEndpointUrl ?? this.customEndpointUrl,
       customEndpointApiKey: customEndpointApiKey ?? this.customEndpointApiKey,
       customModelName: customModelName ?? this.customModelName,
+      multiDiscDisplayMode: multiDiscDisplayMode ?? this.multiDiscDisplayMode,
     );
   }
 }
@@ -175,6 +183,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
   static const _keyCustomEndpointUrl = 'custom_endpoint_url';
   static const _keyCustomEndpointApiKey = 'custom_endpoint_api_key';
   static const _keyCustomModelName = 'custom_model_name';
+  static const _keyMultiDiscDisplayMode = 'multi_disc_display_mode';
 
   // On non-Android platforms, AI defaults to off and Groq is the default provider.
   static bool get _defaultAiEnabled =>
@@ -267,6 +276,15 @@ class SettingsNotifier extends Notifier<SettingsState> {
     final customModelName =
         prefs.getString(_keyCustomModelName) ?? 'gpt-4o-mini';
 
+    final multiDiscModeStr = prefs.getString(_keyMultiDiscDisplayMode);
+    MultiDiscDisplayMode multiDiscDisplayMode = MultiDiscDisplayMode.discSections;
+    if (multiDiscModeStr != null) {
+      multiDiscDisplayMode = MultiDiscDisplayMode.values.firstWhere(
+        (e) => e.name == multiDiscModeStr,
+        orElse: () => MultiDiscDisplayMode.discSections,
+      );
+    }
+
     state = state.copyWith(
       browseMode: browseMode,
       mobilePinnedTabIndices: mobilePinnedTabIndices,
@@ -289,6 +307,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
       customEndpointUrl: customEndpointUrl,
       customEndpointApiKey: customEndpointApiKey,
       customModelName: customModelName,
+      multiDiscDisplayMode: multiDiscDisplayMode,
     );
   }
 
@@ -431,6 +450,12 @@ class SettingsNotifier extends Notifier<SettingsState> {
     await prefs.setString(_keyCustomModelName, model);
   }
 
+  Future<void> setMultiDiscDisplayMode(MultiDiscDisplayMode mode) async {
+    state = state.copyWith(multiDiscDisplayMode: mode);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keyMultiDiscDisplayMode, mode.name);
+  }
+
   static Future<void> clearSettings() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_keyBrowseMode);
@@ -454,5 +479,6 @@ class SettingsNotifier extends Notifier<SettingsState> {
     await prefs.remove(_keyCustomEndpointUrl);
     await prefs.remove(_keyCustomEndpointApiKey);
     await prefs.remove(_keyCustomModelName);
+    await prefs.remove(_keyMultiDiscDisplayMode);
   }
 }

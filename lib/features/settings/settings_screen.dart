@@ -143,6 +143,22 @@ class SettingsScreen extends ConsumerWidget {
                   .setUseDynamicAlbumAccent(value);
             },
           ),
+          _SwitchTile(
+            icon: Icons.album_outlined,
+            title: 'Continuous disc numbering',
+            subtitle:
+                'Number tracks across all discs in one unbroken sequence; '
+                'otherwise disc labels are shown between sections',
+            value: settings.multiDiscDisplayMode ==
+                MultiDiscDisplayMode.continuousNumbers,
+            onChanged: (value) {
+              ref.read(settingsProvider.notifier).setMultiDiscDisplayMode(
+                value
+                    ? MultiDiscDisplayMode.continuousNumbers
+                    : MultiDiscDisplayMode.discSections,
+              );
+            },
+          ),
 
           // ── Navigation section ────────────────────────────────────────
           const SizedBox(height: 24),

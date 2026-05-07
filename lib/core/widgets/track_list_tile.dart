@@ -21,6 +21,10 @@ class TrackListTile extends ConsumerWidget {
   final Future<void> Function()? onRemoveFromPlaylist;
   final bool showAlbumArt;
   final bool showTrackNumber;
+
+  /// When set, overrides [track.position] for display purposes (e.g. for
+  /// continuous numbering across multiple discs).
+  final int? overridePosition;
   final Widget? trailing;
   final Color? dominantColor;
 
@@ -36,6 +40,7 @@ class TrackListTile extends ConsumerWidget {
     this.onTap,
     this.showAlbumArt = true,
     this.showTrackNumber = false,
+    this.overridePosition,
     this.trailing,
     this.onRemoveFromPlaylist,
     this.dominantColor,
@@ -78,7 +83,7 @@ class TrackListTile extends ConsumerWidget {
                   SizedBox(
                     width: 32,
                     child: Text(
-                      '${track.position ?? ''}',
+                      '${overridePosition ?? track.position ?? ''}',
                       style: TextStyle(
                         color:
                             isCurrentTrack
