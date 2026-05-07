@@ -70,6 +70,53 @@ final _albumTracksProvider =
       (int albumId) => _AlbumTracksNotifier(albumId),
     );
 
+// ── Multi-disc list entry types ──────────────────────────────────────────
+
+sealed class _TrackListEntry {}
+
+class _TrackEntry extends _TrackListEntry {
+  final Track track;
+  final int trackIndex;
+  final int? displayPosition;
+  _TrackEntry(this.track, this.trackIndex, {this.displayPosition});
+}
+
+class _DiscHeaderEntry extends _TrackListEntry {
+  final int discNumber;
+  _DiscHeaderEntry(this.discNumber);
+}
+
+List<_TrackListEntry> _buildDisplayEntries(
+  List<Track> tracks,
+  MultiDiscDisplayMode mode,
+) {
+  final hasMultipleDiscs = tracks.any((t) => (t.discNumber ?? 1) > 1);
+
+  if (!hasMultipleDiscs) {
+    return [for (int i = 0; i < tracks.length; i++) _TrackEntry(tracks[i], i)];
+  }
+
+  if (mode == MultiDiscDisplayMode.continuousNumbers) {
+    return [
+      for (int i = 0; i < tracks.length; i++)
+        _TrackEntry(tracks[i], i, displayPosition: i + 1),
+    ];
+  }
+
+  // Disc sections mode: insert a header row before each new disc.
+  final items = <_TrackListEntry>[];
+  int? currentDisc;
+  for (int i = 0; i < tracks.length; i++) {
+    final disc = tracks[i].discNumber ?? 1;
+    if (disc != currentDisc) {
+      items.add(_DiscHeaderEntry(disc));
+      currentDisc = disc;
+    }
+    items.add(_TrackEntry(tracks[i], i));
+  }
+  return items;
+}
+
 // ── Screen ──────────────────────────────────────────────────────────────
 
 class AlbumDetailScreen extends ConsumerWidget {
@@ -165,6 +212,10 @@ class _AlbumDetailBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final multiDiscMode = ref.watch(
+      settingsProvider.select((s) => s.multiDiscDisplayMode),
+    );
+
     return CustomScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: [
@@ -262,11 +313,18 @@ class _AlbumDetailBody extends ConsumerWidget {
               );
             }
 
+            final entries = _buildDisplayEntries(tracks, multiDiscMode);
+
             return SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
-                final track = tracks[index];
+                final entry = entries[index];
+                if (entry is _DiscHeaderEntry) {
+                  return _DiscHeader(discNumber: entry.discNumber);
+                }
+                final trackEntry = entry as _TrackEntry;
                 return TrackListTile(
-                  track: track,
+                  track: trackEntry.track,
+                  overridePosition: trackEntry.displayPosition,
                   showTrackNumber: true,
                   showAlbumArt: false,
                   dominantColor: dominantColor,
@@ -276,12 +334,12 @@ class _AlbumDetailBody extends ConsumerWidget {
                         .read(playerProvider.notifier)
                         .playTracks(
                           tracks,
-                          startIndex: index,
+                          startIndex: trackEntry.trackIndex,
                           source: 'album_detail_from_track',
                         );
                   },
                 );
-              }, childCount: tracks.length),
+              }, childCount: entries.length),
             );
           },
         ),
@@ -868,6 +926,40 @@ class _ActionButtons extends ConsumerWidget {
                   ),
                 ),
               ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Disc section header ──────────────────────────────────────────────────
+
+class _DiscHeader extends StatelessWidget {
+  final int discNumber;
+
+  const _DiscHeader({required this.discNumber});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 4),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.album_outlined,
+            size: 14,
+            color: AppTheme.onBackgroundSubtle,
+          ),
+          const SizedBox(width: 6),
+          Text(
+            'Disc $discNumber',
+            style: const TextStyle(
+              color: AppTheme.onBackgroundSubtle,
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0.5,
             ),
           ),
         ],
