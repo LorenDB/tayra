@@ -137,10 +137,9 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
   /// Determines what the second category in Android Auto displays.
   BrowseMode browseMode = BrowseMode.albums;
 
-  /// Whether Android Auto integration is enabled at all. When false the
-  /// browse/search/playback callbacks return empty results / no-ops so the
-  /// system will not be able to interact with the app via Android Auto.
-  bool androidAutoEnabled = true;
+  /// Whether to expose recent media on the Android Auto home screen.
+  /// When false, the recentRoot browse node returns empty results.
+  bool androidAutoExposeRecentMedia = true;
 
   /// Queue boundary flags — updated by PlayerNotifier so the OS media
   /// session doesn't advertise skip buttons that would be no-ops.
@@ -292,7 +291,9 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
     if (apiClient == null) return [];
 
     try {
-      if (!androidAutoEnabled) return [];
+      if (parentMediaId == _BrowseIds.recentRoot && !androidAutoExposeRecentMedia) {
+        return [];
+      }
 
       // ── Root categories ───────────────────────────────────────────
 
@@ -488,7 +489,6 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
   /// may call this to display details for an item in the browse tree.
   @override
   Future<MediaItem> getMediaItem(String mediaId) async {
-    if (!androidAutoEnabled) return MediaItem(id: mediaId, title: 'Unknown');
     final apiClient = api;
     if (apiClient == null) {
       return MediaItem(id: mediaId, title: 'Loading...');
@@ -526,7 +526,6 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
     String mediaId, [
     Map<String, dynamic>? extras,
   ]) async {
-    if (!androidAutoEnabled) return;
     final apiClient = api;
     if (apiClient == null) return;
 
@@ -609,7 +608,6 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
     String query, [
     Map<String, dynamic>? extras,
   ]) async {
-    if (!androidAutoEnabled) return [];
     final apiClient = api;
     if (apiClient == null || query.trim().isEmpty) return [];
 
