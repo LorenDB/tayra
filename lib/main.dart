@@ -71,20 +71,21 @@ void main() async {
     JustAudioMediaKit.ensureInitialized();
   }
 
-  // Ensure the listen history table exists before the cache manager starts,
-  // because cache eviction queries listen_history to score tracks.
-  await ListenHistoryService.ensureTable();
-
-  // Initialize the cache manager
-  await CacheManager.instance.initialize();
-
   // Register MPRIS platform interface for Linux system media controls
   if (Platform.isLinux) {
     AudioServiceMpris.registerWith();
   }
 
-  // Initialize the audio handler before starting the app
-  final audioHandler = await initAudioHandler();
+  // Run independent startup operations concurrently.
+  // - ensureTable creates the listen_history table (needed before backgroundInitialize)
+  // - CacheManager.initialize only reads SharedPreferences (no DB dependency)
+  // - initAudioHandler initializes the audio system (no DB/prefs dependency)
+  late final FunkwhaleAudioHandler audioHandler;
+  await Future.wait([
+    ListenHistoryService.ensureTable(),
+    CacheManager.instance.initialize(),
+    initAudioHandler().then((h) => audioHandler = h),
+  ]);
 
   // Create a provider container to access providers before runApp.
   // This allows us to inject the API client into the audio handler
@@ -111,16 +112,19 @@ void main() async {
   // This ensures Android Auto can start playback even when launched in the background.
   container.read(playerProvider);
 
-  // Initialize and resume any persisted download queue using the main
-  // provider container so the service can read providers it needs.
-  try {
-    final queueSvc = container.read(downloadQueueServiceProvider);
-    await queueSvc.init(container);
-  } catch (_) {}
-
   runApp(
     UncontrolledProviderScope(container: container, child: const TayraApp()),
   );
+
+  // Initialize the download queue after the UI is visible. It is not needed
+  // until the user interacts with downloads, so deferring it avoids blocking
+  // the splash screen on DB queries.
+  unawaited(Future(() async {
+    try {
+      final queueSvc = container.read(downloadQueueServiceProvider);
+      await queueSvc.init(container);
+    } catch (_) {}
+  }));
 
   // Reconcile cached files with the DB and enforce size limits in the
   // background so these O(n-files) operations don't block the splash screen.
