@@ -141,7 +141,9 @@ class Artist {
     };
   }
 
-  String? get coverUrl => cover?.urls.best;
+  String? get coverUrl =>
+      cover?.urls.best ??
+      (albums.isNotEmpty ? albums.first.coverUrl : null);
 }
 
 // ── Album ───────────────────────────────────────────────────────────────
