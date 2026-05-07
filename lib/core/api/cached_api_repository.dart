@@ -699,7 +699,7 @@ class CachedFunkwhaleApi {
         'original': cover.urls.original,
         'medium_square_crop': cover.urls.mediumSquareCrop,
         'small_square_crop': cover.urls.smallSquareCrop,
-        'large_square_crop': cover.urls.largSquareCrop,
+        'large_square_crop': cover.urls.largeSquareCrop,
       },
     };
   }

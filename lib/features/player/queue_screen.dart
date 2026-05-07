@@ -2,7 +2,6 @@ import 'package:tayra/core/analytics/analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tayra/core/router/app_router.dart';
 import 'package:tayra/core/widgets/dialog_utils.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
