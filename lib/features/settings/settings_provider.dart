@@ -30,6 +30,7 @@ extension AiProviderTypeX on AiProviderType {
 
 class SettingsState {
   final BrowseMode browseMode;
+  final Set<int> mobilePinnedTabIndices;
   final int cacheSizeLimitMB;
   final bool androidAutoEnabled;
   final bool useDynamicAlbumAccent;
@@ -52,6 +53,7 @@ class SettingsState {
 
   const SettingsState({
     this.browseMode = BrowseMode.albums,
+    this.mobilePinnedTabIndices = const {2, 3, 5, 6},
     this.cacheSizeLimitMB = 500,
     this.androidAutoEnabled = true,
     this.useDynamicAlbumAccent = true,
@@ -95,6 +97,7 @@ class SettingsState {
 
   SettingsState copyWith({
     BrowseMode? browseMode,
+    Set<int>? mobilePinnedTabIndices,
     int? cacheSizeLimitMB,
     bool? androidAutoEnabled,
     bool? useDynamicAlbumAccent,
@@ -117,6 +120,8 @@ class SettingsState {
   }) {
     return SettingsState(
       browseMode: browseMode ?? this.browseMode,
+      mobilePinnedTabIndices:
+          mobilePinnedTabIndices ?? this.mobilePinnedTabIndices,
       cacheSizeLimitMB: cacheSizeLimitMB ?? this.cacheSizeLimitMB,
       androidAutoEnabled: androidAutoEnabled ?? this.androidAutoEnabled,
       useDynamicAlbumAccent:
@@ -150,6 +155,7 @@ final settingsProvider = NotifierProvider<SettingsNotifier, SettingsState>(
 
 class SettingsNotifier extends Notifier<SettingsState> {
   static const _keyBrowseMode = 'browse_mode';
+  static const _keyMobilePinnedTabIndices = 'mobile_pinned_tab_indices';
   static const _keyCacheSizeLimit = 'cache_max_size_mb';
   static const _keyAndroidAutoEnabled = 'aa_android_auto_enabled';
   static const _keyUseDynamicAlbumAccent = 'use_dynamic_album_accent';
@@ -194,6 +200,18 @@ class SettingsNotifier extends Notifier<SettingsState> {
     BrowseMode browseMode = BrowseMode.albums;
     if (modeStr == 'artists') {
       browseMode = BrowseMode.artists;
+    }
+
+    final pinnedStr = prefs.getString(_keyMobilePinnedTabIndices);
+    Set<int> mobilePinnedTabIndices = const {2, 3, 5, 6};
+    if (pinnedStr != null && pinnedStr.isNotEmpty) {
+      final parsed = pinnedStr
+          .split(',')
+          .map((s) => int.tryParse(s.trim()))
+          .whereType<int>()
+          .where((i) => i >= 1 && i <= 6)
+          .toSet();
+      if (parsed.isNotEmpty) mobilePinnedTabIndices = parsed;
     }
 
     // Normalize stored cache size preference. Older versions may have stored
@@ -251,6 +269,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
 
     state = state.copyWith(
       browseMode: browseMode,
+      mobilePinnedTabIndices: mobilePinnedTabIndices,
       cacheSizeLimitMB: cacheSizeMB,
       androidAutoEnabled: showRecommendations,
       useDynamicAlbumAccent: useDynamicAccent,
@@ -271,6 +290,12 @@ class SettingsNotifier extends Notifier<SettingsState> {
       customEndpointApiKey: customEndpointApiKey,
       customModelName: customModelName,
     );
+  }
+
+  Future<void> setMobilePinnedTabIndices(Set<int> indices) async {
+    state = state.copyWith(mobilePinnedTabIndices: indices);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keyMobilePinnedTabIndices, indices.join(','));
   }
 
   Future<void> setBrowseMode(BrowseMode mode) async {
@@ -409,6 +434,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
   static Future<void> clearSettings() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_keyBrowseMode);
+    await prefs.remove(_keyMobilePinnedTabIndices);
     await prefs.remove(_keyCacheSizeLimit);
     await prefs.remove(_keyAndroidAutoEnabled);
     await prefs.remove(_keyUseDynamicAlbumAccent);

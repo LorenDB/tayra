@@ -14,8 +14,10 @@ import 'package:tayra/core/widgets/album_card.dart';
 import 'package:tayra/core/widgets/track_list_tile.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/player/player_provider.dart';
+import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:tayra/features/year_review/listen_history_provider.dart';
 import 'package:tayra/features/search/search_screen.dart';
+import 'package:tayra/core/widgets/app_shell.dart';
 
 // ── Data providers ──────────────────────────────────────────────────────
 
@@ -170,6 +172,9 @@ class HomeScreen extends ConsumerWidget {
                 child: _AlbumCarousel(provider: randomAlbumsProvider),
               ),
             ],
+
+            // Overflow nav destinations (mobile only, when tabs are unpinned)
+            if (!isWide) const SliverToBoxAdapter(child: _OverflowNavSection()),
 
             // Recently Played Tracks vertical list
             const SliverToBoxAdapter(child: SizedBox(height: 28)),
@@ -836,6 +841,97 @@ class _RipplePainter extends CustomPainter {
   @override
   bool shouldRepaint(_RipplePainter old) =>
       old.time != time || old.shader != shader;
+}
+
+// ── Overflow Nav Section ────────────────────────────────────────────────
+
+/// Shows nav destinations that aren't pinned to the mobile nav bar.
+/// Hidden on desktop (side rail shows all destinations).
+class _OverflowNavSection extends ConsumerWidget {
+  const _OverflowNavSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pinnedIndices = ref.watch(
+      settingsProvider.select((s) => s.mobilePinnedTabIndices),
+    );
+
+    // All non-home tab indices (1–6) that aren't pinned.
+    final overflowIndices = List.generate(AppShell.tabs.length - 1, (i) => i + 1)
+        .where((i) => !pinnedIndices.contains(i))
+        .toList();
+
+    if (overflowIndices.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.fromLTRB(20, 28, 20, 12),
+          child: Text(
+            'Explore more',
+            style: TextStyle(
+              color: AppTheme.onBackground,
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            children: [
+              for (int pos = 0; pos < overflowIndices.length; pos++) ...[
+                if (pos > 0) const SizedBox(width: 12),
+                Expanded(
+                  child: _OverflowNavTile(tabIndex: overflowIndices[pos]),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _OverflowNavTile extends StatelessWidget {
+  final int tabIndex;
+
+  const _OverflowNavTile({required this.tabIndex});
+
+  @override
+  Widget build(BuildContext context) {
+    final tab = AppShell.tabs[tabIndex];
+    final path = AppShell.paths[tabIndex];
+
+    return Material(
+      color: AppTheme.surfaceContainer,
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () => context.go(path),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(tab.icon, color: AppTheme.onBackgroundSubtle, size: 24),
+              const SizedBox(height: 6),
+              Text(
+                tab.label,
+                style: const TextStyle(
+                  color: AppTheme.onBackgroundMuted,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 // ── Error Card with Retry ───────────────────────────────────────────────
