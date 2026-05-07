@@ -110,6 +110,51 @@ final totalListenCountProvider = FutureProvider.autoDispose<int>((ref) async {
   return await ListenHistoryService.getTotalListenCount();
 });
 
+/// Listening stats for the past 7 days (used on the home screen).
+final weeklyStatsProvider = FutureProvider.autoDispose<WeeklyStats>((ref) async {
+  return ListenHistoryService.getWeekStats();
+});
+
+// ── Saturday stats visibility ────────────────────────────────────────────
+
+const _keySaturdayStatsLastShown = 'saturday_stats_last_shown';
+
+/// Whether the weekly stats section should be shown.
+///
+/// Returns true only on Saturdays when the stats haven't yet been shown
+/// during the current calendar day.
+final saturdayStatsVisibleProvider =
+    NotifierProvider<SaturdayStatsNotifier, bool>(SaturdayStatsNotifier.new);
+
+class SaturdayStatsNotifier extends Notifier<bool> {
+  @override
+  bool build() {
+    Future.microtask(_evaluate);
+    return false;
+  }
+
+  Future<void> _evaluate() async {
+    final now = DateTime.now();
+    if (now.weekday != DateTime.saturday) {
+      state = false;
+      return;
+    }
+    final prefs = await SharedPreferences.getInstance();
+    final lastShown = prefs.getString(_keySaturdayStatsLastShown);
+    state = lastShown != _todayKey(now);
+  }
+
+  /// Call once the stats section has actually been rendered to the user.
+  Future<void> markShown() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keySaturdayStatsLastShown, _todayKey(DateTime.now()));
+    state = false;
+  }
+
+  String _todayKey(DateTime d) =>
+      '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+}
+
 // ── Year-in-review banner ────────────────────────────────────────────────
 
 /// The SharedPreferences key used to record which year's banner was dismissed.

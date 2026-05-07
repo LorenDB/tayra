@@ -165,6 +165,35 @@ class FavoritedTrack {
   });
 }
 
+// ── Weekly stats model ──────────────────────────────────────────────────
+
+class WeeklyStats {
+  final int playCount;
+  final int totalSeconds;
+  final String? topArtistName;
+  final int topArtistPlays;
+  final String? topTrackTitle;
+  final String? topTrackArtist;
+
+  const WeeklyStats({
+    required this.playCount,
+    required this.totalSeconds,
+    this.topArtistName,
+    required this.topArtistPlays,
+    this.topTrackTitle,
+    this.topTrackArtist,
+  });
+
+  bool get hasData => playCount > 0;
+
+  String get formattedTime {
+    final hours = totalSeconds ~/ 3600;
+    final minutes = (totalSeconds % 3600) ~/ 60;
+    if (hours > 0) return '${hours}h ${minutes}m';
+    return '${minutes}m';
+  }
+}
+
 // ── Intermediate album row for sorting ────────────────────────────────────
 
 class _AlbumRow {
@@ -702,6 +731,78 @@ class ListenHistoryService {
     });
 
     return result;
+  }
+
+  /// Get listening stats for the past 7 days.
+  static Future<WeeklyStats> getWeekStats() async {
+    try {
+      final db = await CacheDatabase.instance.database;
+      final now = DateTime.now();
+      final startMs = now.subtract(const Duration(days: 7)).millisecondsSinceEpoch;
+      final endMs = now.millisecondsSinceEpoch;
+
+      final totalsResult = await db.rawQuery(
+        '''
+        SELECT COUNT(*) as play_count,
+               COALESCE(SUM(duration_seconds), 0) as total_seconds
+        FROM $_tableName
+        WHERE listened_at >= ? AND listened_at < ?
+        ''',
+        [startMs, endMs],
+      );
+
+      final topArtistResult = await db.rawQuery(
+        '''
+        SELECT artist_name, COUNT(*) as play_count
+        FROM $_tableName
+        WHERE listened_at >= ? AND listened_at < ?
+        GROUP BY artist_name
+        ORDER BY play_count DESC
+        LIMIT 1
+        ''',
+        [startMs, endMs],
+      );
+
+      final topTrackResult = await db.rawQuery(
+        '''
+        SELECT track_title, artist_name, COUNT(*) as play_count
+        FROM $_tableName
+        WHERE listened_at >= ? AND listened_at < ?
+        GROUP BY track_id
+        ORDER BY play_count DESC
+        LIMIT 1
+        ''',
+        [startMs, endMs],
+      );
+
+      final totals = totalsResult.first;
+      return WeeklyStats(
+        playCount: (totals['play_count'] as num).toInt(),
+        totalSeconds: (totals['total_seconds'] as num).toInt(),
+        topArtistName:
+            topArtistResult.isNotEmpty
+                ? topArtistResult.first['artist_name'] as String?
+                : null,
+        topArtistPlays:
+            topArtistResult.isNotEmpty
+                ? (topArtistResult.first['play_count'] as num).toInt()
+                : 0,
+        topTrackTitle:
+            topTrackResult.isNotEmpty
+                ? topTrackResult.first['track_title'] as String?
+                : null,
+        topTrackArtist:
+            topTrackResult.isNotEmpty
+                ? topTrackResult.first['artist_name'] as String?
+                : null,
+      );
+    } catch (_) {
+      return const WeeklyStats(
+        playCount: 0,
+        totalSeconds: 0,
+        topArtistPlays: 0,
+      );
+    }
   }
 
   /// Get the total listen count (all time).
