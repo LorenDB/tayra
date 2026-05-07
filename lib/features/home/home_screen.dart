@@ -16,6 +16,7 @@ import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/player/player_provider.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:tayra/features/year_review/listen_history_provider.dart';
+import 'package:tayra/features/year_review/listen_history_service.dart' show WeeklyStats;
 import 'package:tayra/features/search/search_screen.dart';
 import 'package:tayra/core/widgets/app_shell.dart';
 
@@ -126,6 +127,9 @@ class HomeScreen extends ConsumerWidget {
             // Year in Review seasonal banner (Dec 15–31 or when force-shown)
             // Mobile only - desktop shows it in the header row above
             if (!isWide) const SliverToBoxAdapter(child: _YearReviewBanner()),
+
+            // Weekly listening stats
+            const SliverToBoxAdapter(child: _WeeklyStatsSection()),
 
             // ── Desktop: album grids side by side ──
             if (isWide) ...[
@@ -929,6 +933,215 @@ class _OverflowNavTile extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+// ── Weekly Stats Section ────────────────────────────────────────────────
+
+class _WeeklyStatsSection extends ConsumerStatefulWidget {
+  const _WeeklyStatsSection();
+
+  @override
+  ConsumerState<_WeeklyStatsSection> createState() => _WeeklyStatsSectionState();
+}
+
+class _WeeklyStatsSectionState extends ConsumerState<_WeeklyStatsSection> {
+  bool _markedShown = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final visible = ref.watch(saturdayStatsVisibleProvider);
+    if (!visible) return const SizedBox.shrink();
+
+    final statsAsync = ref.watch(weeklyStatsProvider);
+
+    return statsAsync.when(
+      loading: () => const SizedBox.shrink(),
+      error: (e, s) => const SizedBox.shrink(),
+      data: (stats) {
+        if (!stats.hasData) return const SizedBox.shrink();
+
+        if (!_markedShown) {
+          _markedShown = true;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            ref.read(saturdayStatsVisibleProvider.notifier).markShown();
+          });
+        }
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'This Week',
+                style: TextStyle(
+                  color: AppTheme.onBackground,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: _StatChip(
+                      icon: Icons.headphones_rounded,
+                      value: '${stats.playCount}',
+                      label: stats.playCount == 1 ? 'play' : 'plays',
+                      accentColor: AppTheme.primary,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: _StatChip(
+                      icon: Icons.timer_rounded,
+                      value: stats.formattedTime,
+                      label: 'listened',
+                      accentColor: AppTheme.secondary,
+                    ),
+                  ),
+                  if (stats.topArtistName != null) ...[
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: _StatChip(
+                        icon: Icons.person_rounded,
+                        value: stats.topArtistName!,
+                        label: 'top artist',
+                        accentColor: const Color(0xFFFF9A3C),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+              if (stats.topTrackTitle != null) ...[
+                const SizedBox(height: 10),
+                _TopTrackRow(stats: stats),
+              ],
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _StatChip extends StatelessWidget {
+  final IconData icon;
+  final String value;
+  final String label;
+  final Color accentColor;
+
+  const _StatChip({
+    required this.icon,
+    required this.value,
+    required this.label,
+    required this.accentColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceContainer,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: accentColor.withValues(alpha: 0.15),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: accentColor, size: 18),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              color: AppTheme.onBackground,
+              fontSize: 15,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            style: const TextStyle(
+              color: AppTheme.onBackgroundSubtle,
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TopTrackRow extends StatelessWidget {
+  const _TopTrackRow({required this.stats});
+
+  final WeeklyStats stats;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceContainer,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.music_note_rounded,
+            color: AppTheme.onBackgroundSubtle,
+            size: 16,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  stats.topTrackTitle!,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: AppTheme.onBackground,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                if (stats.topTrackArtist != null) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    stats.topTrackArtist!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: AppTheme.onBackgroundSubtle,
+                      fontSize: 11,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          const Text(
+            'top track',
+            style: TextStyle(
+              color: AppTheme.onBackgroundSubtle,
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
       ),
     );
   }
