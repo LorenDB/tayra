@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:audio_service/audio_service.dart';
+import 'package:audio_session/audio_session.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:tayra/core/router/app_router.dart';
@@ -787,6 +788,13 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// state). Used by [onAppResumed] to detect stale audio sources.
   DateTime? _appPausedAt;
 
+  /// Whether playback was active when an audio interruption (e.g. phone call)
+  /// began. Used to decide whether to auto-resume when the interruption ends.
+  bool _wasPlayingBeforeInterruption = false;
+
+  /// Whether an audio interruption is currently in progress.
+  bool _interrupted = false;
+
   /// Last position (in whole seconds) at which the queue was saved.
   /// Prevents multiple saves within the same 2-second window.
   int _lastSavedPositionSeconds = -1;
@@ -1101,6 +1109,46 @@ class PlayerNotifier extends Notifier<PlayerState> {
         }
       }),
     );
+
+    // ── Audio session & interruption handling ─────────────────────────
+    // just_audio manages AudioSession.configure/setActive internally.
+    // We only listen for interruption / becomingNoisy events here.
+    Future.microtask(() async {
+      try {
+        final session = await AudioSession.instance;
+
+        _subscriptions.add(
+          session.interruptionEventStream.listen((event) {
+            if (event.begin) {
+              _wasPlayingBeforeInterruption = state.isPlaying;
+              _interrupted = true;
+              pause();
+            } else {
+              _interrupted = false;
+              switch (event.type) {
+                case AudioInterruptionType.pause:
+                case AudioInterruptionType.duck:
+                  if (_wasPlayingBeforeInterruption) {
+                    play();
+                  }
+                  break;
+                case AudioInterruptionType.unknown:
+                  break;
+              }
+              _wasPlayingBeforeInterruption = false;
+            }
+          }),
+        );
+
+        _subscriptions.add(
+          session.becomingNoisyEventStream.listen((_) {
+            pause();
+          }),
+        );
+      } catch (e) {
+        debugPrint('PlayerNotifier: AudioSession init error: $e');
+      }
+    });
 
     // Sync initial playback state to avoid missing the first play event
     // due to a race between stream subscription and playback starting.
@@ -2239,6 +2287,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }
 
   Future<void> play() async {
+    if (_interrupted) return;
+
     // If the queue was just restored from storage, no audio source has been
     // loaded yet.  Load the current track, seek to where the user left off,
     // then play.
