@@ -2388,6 +2388,15 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// stale.  We cancel the watchdog and reload the current track so the user
   /// doesn't have to wait for the 30-second timeout or restart the app.
   Future<void> onAppResumed() async {
+    // Clear any lingering interruption flag. Android's audio-focus system can
+    // fire an interruptionEvent.begin while the app is backgrounded (treating
+    // it as an audio interruption), which sets _interrupted = true. If that
+    // "interruption" never resolves with an end event (e.g. the app sat in the
+    // background long enough for the event to be missed), play() would silently
+    // refuse every tap.  The user returning to the app is a reliable signal
+    // that any previous interruption is over.
+    _interrupted = false;
+
     final pausedAt = _appPausedAt;
     _appPausedAt = null;
     if (pausedAt == null) return;
