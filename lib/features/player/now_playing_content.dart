@@ -10,6 +10,8 @@ import 'dart:ui' as ui;
 import 'package:flutter/scheduler.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/models.dart';
+import 'package:tayra/core/easter_eggs/super_sonic_aura.dart';
+import 'package:tayra/core/easter_eggs/super_sonic_ids.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/theme/palette_provider.dart';
 import 'package:tayra/features/player/player_provider.dart';
@@ -451,6 +453,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
   Widget _buildScreenAlbumArt(Track track, Color glowColor, double outerSize) {
     final imageUrl = track.largeCoverUrl ?? track.coverUrl;
     final artSize = outerSize * (280.0 / 320.0);
+    final superSonicActive = isSuperSonicMusic(track.mbid);
 
     return AnimatedBuilder(
       animation: _glowAnimation!,
@@ -461,42 +464,50 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
           child: Stack(
             alignment: Alignment.center,
             children: [
-              Container(
-                width: outerSize,
-                height: outerSize,
-                decoration: BoxDecoration(
-                  gradient: RadialGradient(
-                    center: Alignment.center,
-                    radius: 0.8,
-                    colors: [
-                      glowColor.withValues(alpha: 0.25 * _glowAnimation!.value),
-                      glowColor.withValues(alpha: 0.08 * _glowAnimation!.value),
-                      Colors.transparent,
-                    ],
+              if (!superSonicActive)
+                Container(
+                  width: outerSize,
+                  height: outerSize,
+                  decoration: BoxDecoration(
+                    gradient: RadialGradient(
+                      center: Alignment.center,
+                      radius: 0.8,
+                      colors: [
+                        glowColor.withValues(alpha: 0.25 * _glowAnimation!.value),
+                        glowColor.withValues(alpha: 0.08 * _glowAnimation!.value),
+                        Colors.transparent,
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                width: artSize,
-                height: artSize,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: glowColor.withValues(alpha: 0.3),
-                      blurRadius: 40,
-                      spreadRadius: 2,
-                    ),
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.5),
-                      blurRadius: 30,
-                      spreadRadius: 5,
-                      offset: const Offset(0, 10),
-                    ),
-                  ],
+              SuperSonicAura(
+                active: superSonicActive,
+                glowPadding: superSonicActive ? 10 : 0,
+                artRadius: 16,
+                child: Container(
+                  width: artSize,
+                  height: artSize,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: superSonicActive
+                            ? const Color(0xFFFFD700).withValues(alpha: 0.45)
+                            : glowColor.withValues(alpha: 0.3),
+                        blurRadius: 40,
+                        spreadRadius: 2,
+                      ),
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.5),
+                        blurRadius: 30,
+                        spreadRadius: 5,
+                        offset: const Offset(0, 10),
+                      ),
+                    ],
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: _buildAlbumArtImage(imageUrl, artSize),
                 ),
-                clipBehavior: Clip.antiAlias,
-                child: _buildAlbumArtImage(imageUrl, artSize),
               ),
             ],
           ),
@@ -507,28 +518,36 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
 
   Widget _buildPanelAlbumArt(Track track, Color glowColor) {
     final imageUrl = track.largeCoverUrl ?? track.coverUrl;
+    final superSonicActive = isSuperSonicMusic(track.mbid);
 
     return AspectRatio(
       aspectRatio: 1,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: glowColor.withValues(alpha: 0.25),
-              blurRadius: 30,
-              spreadRadius: 2,
-            ),
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.4),
-              blurRadius: 20,
-              spreadRadius: 2,
-              offset: const Offset(0, 8),
-            ),
-          ],
+      child: SuperSonicAura(
+        active: superSonicActive,
+        glowPadding: superSonicActive ? 10 : 0,
+        artRadius: 12,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: superSonicActive
+                    ? const Color(0xFFFFD700).withValues(alpha: 0.4)
+                    : glowColor.withValues(alpha: 0.25),
+                blurRadius: 30,
+                spreadRadius: 2,
+              ),
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.4),
+                blurRadius: 20,
+                spreadRadius: 2,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: _buildAlbumArtImage(imageUrl, null),
         ),
-        clipBehavior: Clip.antiAlias,
-        child: _buildAlbumArtImage(imageUrl, null),
       ),
     );
   }

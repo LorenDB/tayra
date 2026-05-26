@@ -273,6 +273,7 @@ class Track {
   final List<String> tags;
   final List<Upload> uploads;
   final DateTime? creationDate;
+  final String? mbid;
 
   const Track({
     required this.id,
@@ -287,6 +288,7 @@ class Track {
     this.tags = const [],
     this.uploads = const [],
     this.creationDate,
+    this.mbid,
   });
 
   factory Track.fromJson(Map<String, dynamic> json) {
@@ -339,6 +341,7 @@ class Track {
           json['creation_date'] != null
               ? DateTime.tryParse(json['creation_date'] as String)
               : null,
+      mbid: json['mbid'] as String?,
     );
   }
 
@@ -356,6 +359,7 @@ class Track {
       'tags': tags,
       'uploads': uploads.map((u) => u.toJson()).toList(),
       'creation_date': creationDate?.toIso8601String(),
+      'mbid': mbid,
     };
   }
 

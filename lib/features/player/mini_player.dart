@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tayra/core/easter_eggs/super_sonic_aura.dart';
+import 'package:tayra/core/easter_eggs/super_sonic_ids.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/theme/palette_provider.dart';
 import 'package:tayra/features/player/player_provider.dart';
@@ -41,6 +43,7 @@ class MiniPlayer extends ConsumerWidget {
       accentColor,
       paletteAsync,
     );
+    final superSonicActive = isSuperSonicMusic(track.mbid);
 
     return GestureDetector(
       onTap: () => onTap != null ? onTap!() : context.push('/now-playing'),
@@ -94,37 +97,43 @@ class MiniPlayer extends ConsumerWidget {
                 child: Row(
                   children: [
                     // Album art
-                    Container(
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        color: AppTheme.surfaceContainerHigh,
+                    SuperSonicAura(
+                      active: superSonicActive,
+                      glowPadding: superSonicActive ? 5 : 0,
+                      artRadius: 6,
+                      canvasOverflow: 18,
+                      child: Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          color: AppTheme.surfaceContainerHigh,
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        child:
+                            track.coverUrl != null
+                                ? CachedNetworkImage(
+                                  imageUrl: track.coverUrl!,
+                                  fit: BoxFit.cover,
+                                  placeholder:
+                                      (context, url) => const Icon(
+                                        Icons.album,
+                                        color: AppTheme.onBackgroundSubtle,
+                                        size: 24,
+                                      ),
+                                  errorWidget:
+                                      (context, url, error) => const Icon(
+                                        Icons.album,
+                                        color: AppTheme.onBackgroundSubtle,
+                                        size: 24,
+                                      ),
+                                )
+                                : const Icon(
+                                  Icons.album,
+                                  color: AppTheme.onBackgroundSubtle,
+                                  size: 24,
+                                ),
                       ),
-                      clipBehavior: Clip.antiAlias,
-                      child:
-                          track.coverUrl != null
-                              ? CachedNetworkImage(
-                                imageUrl: track.coverUrl!,
-                                fit: BoxFit.cover,
-                                placeholder:
-                                    (context, url) => const Icon(
-                                      Icons.album,
-                                      color: AppTheme.onBackgroundSubtle,
-                                      size: 24,
-                                    ),
-                                errorWidget:
-                                    (context, url, error) => const Icon(
-                                      Icons.album,
-                                      color: AppTheme.onBackgroundSubtle,
-                                      size: 24,
-                                    ),
-                              )
-                              : const Icon(
-                                Icons.album,
-                                color: AppTheme.onBackgroundSubtle,
-                                size: 24,
-                              ),
                     ),
                     const SizedBox(width: 12),
                     // Track info
