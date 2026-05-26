@@ -1124,11 +1124,15 @@ class PlayerNotifier extends Notifier<PlayerState> {
               _interrupted = true;
               pause();
             } else {
+              // Only auto-resume if _interrupted is still true, meaning the
+              // user hasn't manually resumed playback during the interruption
+              // (play() clears _interrupted when the user explicitly acts).
+              final shouldAutoResume = _interrupted;
               _interrupted = false;
               switch (event.type) {
                 case AudioInterruptionType.pause:
                 case AudioInterruptionType.duck:
-                  if (_wasPlayingBeforeInterruption) {
+                  if (shouldAutoResume && _wasPlayingBeforeInterruption) {
                     play();
                   }
                   break;
@@ -2287,7 +2291,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }
 
   Future<void> play() async {
-    if (_interrupted) return;
+    // User-initiated play always clears any interruption state — the user
+    // explicitly wants to resume, so we must not block them.
+    _interrupted = false;
 
     // If the queue was just restored from storage, no audio source has been
     // loaded yet.  Load the current track, seek to where the user left off,
