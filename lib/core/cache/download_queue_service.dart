@@ -66,6 +66,11 @@ class DownloadQueueService {
 
   DownloadQueueService(this._db);
 
+  /// Release resources. Called when the provider is disposed.
+  void dispose() {
+    _stateController.close();
+  }
+
   // ── Public API ───────────────────────────────────────────────────────────
 
   /// Load persisted queue and start processing.
@@ -205,17 +210,33 @@ class DownloadQueueService {
 
             try {
               final track = await api.getTrack(item.trackId);
-              if (track.listenUrl != null) {
-                try {
-                  // Omit numeric track_id per policy
-                  Analytics.track('download_started');
-                } catch (_) {}
-                await audioSvc.cacheAudio(
-                  track,
-                  api.getStreamUrl(track.listenUrl!),
-                  api.authHeaders,
+              if (track.listenUrl == null) {
+                // Track has no stream URL — cannot download. Mark as failed so
+                // the user sees a clear status rather than a phantom "completed".
+                await db.update(
+                  'download_queue',
+                  {'status': 'failed', 'error': 'no_stream_url'},
+                  where: 'id = ?',
+                  whereArgs: [item.id],
                 );
+                try {
+                  Analytics.track('download_failed', {
+                    'had_error': true,
+                    'error_type': 'no_stream_url',
+                  });
+                } catch (_) {}
+                await _emitState();
+                continue;
               }
+              try {
+                // Omit numeric track_id per policy
+                Analytics.track('download_started');
+              } catch (_) {}
+              await audioSvc.cacheAudio(
+                track,
+                api.getStreamUrl(track.listenUrl!),
+                api.authHeaders,
+              );
 
               // Mark completed and invalidate the cached provider so the UI
               // updates immediately.
@@ -268,7 +289,9 @@ class DownloadQueueService {
 
 /// Riverpod provider for the download queue service (singleton)
 final downloadQueueServiceProvider = Provider<DownloadQueueService>((ref) {
-  return DownloadQueueService(CacheDatabase.instance);
+  final svc = DownloadQueueService(CacheDatabase.instance);
+  ref.onDispose(svc.dispose);
+  return svc;
 });
 
 // Alias kept for backwards-compat with existing call sites.

@@ -60,6 +60,10 @@ class AuthState {
   /// re-authenticate (as opposed to having deliberately logged out).
   bool get wasAutoLoggedOut => pendingServerUrl != null;
 
+  // Sentinel used by copyWith so that passing error: null explicitly clears
+  // the error, while omitting the parameter preserves the current error.
+  static const _kNoError = Object();
+
   AuthState copyWith({
     String? serverUrl,
     String? accessToken,
@@ -68,7 +72,7 @@ class AuthState {
     String? clientSecret,
     bool? isLoading,
     bool? isCheckingAuth,
-    String? error,
+    Object? error = _kNoError,
     String? pendingServerUrl,
     bool clearPendingServerUrl = false,
   }) {
@@ -80,7 +84,7 @@ class AuthState {
       clientSecret: clientSecret ?? this.clientSecret,
       isLoading: isLoading ?? this.isLoading,
       isCheckingAuth: isCheckingAuth ?? this.isCheckingAuth,
-      error: error,
+      error: identical(error, _kNoError) ? this.error : error as String?,
       pendingServerUrl:
           clearPendingServerUrl
               ? null
@@ -276,10 +280,12 @@ class AuthNotifier extends Notifier<AuthState> {
     }
   }
 
-  /// Returns the authorization URL for the user to visit.
-  String getAuthorizationUrl() {
-    final serverUrl = state.serverUrl!;
-    final clientId = state.clientId!;
+  /// Returns the authorization URL for the user to visit, or null if
+  /// [registerApp] has not completed yet (serverUrl / clientId not set).
+  String? getAuthorizationUrl() {
+    final serverUrl = state.serverUrl;
+    final clientId = state.clientId;
+    if (serverUrl == null || clientId == null) return null;
     return '$serverUrl/authorize?'
         'response_type=code'
         '&client_id=$clientId'

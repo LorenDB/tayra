@@ -247,6 +247,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   void _openAuthUrl() async {
     final url = ref.read(authStateProvider.notifier).getAuthorizationUrl();
+    if (url == null) return;
     final uri = Uri.parse(url);
     await launchUrl(uri, mode: LaunchMode.externalApplication);
   }

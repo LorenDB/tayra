@@ -74,6 +74,7 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
+      if (!_scrollController.hasClients) return;
       final itemHeight = 64.0;
       final offset = currentIndex * itemHeight;
       final maxScroll = _scrollController.position.maxScrollExtent;
@@ -554,6 +555,7 @@ Future<void> _saveQueueAsPlaylist(
           ],
         ),
   );
+  nameController.dispose();
 
   if (name == null || name.isEmpty) return;
 
@@ -1418,7 +1420,7 @@ class StashedQueueTile extends ConsumerWidget {
               ),
             ],
           ),
-    );
+    ).whenComplete(controller.dispose);
   }
 
   Future<void> _confirmDelete(BuildContext context, WidgetRef ref) async {
@@ -1526,6 +1528,7 @@ class StashedQueueTile extends ConsumerWidget {
             ],
           ),
     );
+    nameController.dispose();
 
     if (name == null) return;
 

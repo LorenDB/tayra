@@ -174,6 +174,7 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
         Analytics.track('playlist_track_reordered');
       } catch (_) {}
     } catch (e) {
+      if (!mounted) return;
       _tracks.removeAt(newIndex);
       _tracks.insert(oldIndex, moved);
       setState(() {});
@@ -424,6 +425,7 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
                           } catch (_) {}
                           ref.invalidate(playlistsProvider);
                         } catch (e) {
+                          if (!mounted) return;
                           setState(() => _tracks = backup);
                           if (mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(

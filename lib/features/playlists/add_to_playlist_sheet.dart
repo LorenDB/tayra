@@ -399,7 +399,7 @@ class _AddToPlaylistSheetState extends ConsumerState<_AddToPlaylistSheet> {
           ],
         );
       },
-    );
+    ).whenComplete(nameController.dispose);
   }
 
   Future<void> _createAndAdd(

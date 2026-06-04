@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -27,6 +28,11 @@ class AudioCacheService {
   final Set<int> _inProgressAudio = {};
 
   AudioCacheService(this._cache);
+
+  /// Release resources. Call when the service is no longer needed.
+  void dispose() {
+    _dio.close(force: true);
+  }
 
   /// Get cached audio file for a track, or null if not cached
   Future<File?> getCachedAudio(Track track) async {
@@ -238,8 +244,8 @@ class AudioCacheService {
     for (final track in tracksToCache) {
       if (track.listenUrl != null) {
         final streamUrl = getStreamUrl(track.listenUrl!);
-        // Fire and forget - don't await
-        cacheAudio(track, streamUrl, authHeaders);
+        // Fire and forget — don't await
+        unawaited(cacheAudio(track, streamUrl, authHeaders));
       }
     }
   }
