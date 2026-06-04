@@ -419,11 +419,17 @@ class CachedFunkwhaleApi {
     );
   }
 
-  /// Patch a playlist (rename, etc.) and invalidate cached metadata.
+  /// Patch a playlist (rename, etc.) and update cached metadata in-place.
   Future<Playlist> patchPlaylist(int id, Map<String, dynamic> body) async {
     final res = await _api.patchPlaylist(id, body);
-    // Invalidate cache so UI reflects updated name immediately when re-fetched.
-    await _cache.deleteMetadata('playlist_$id');
+    // Directly cache the API response so the UI sees the new name/covers
+    // immediately on the next read without a network round trip.
+    await _cache.putMetadata(
+      'playlist_$id',
+      CacheType.playlist,
+      _playlistToJson(res),
+      ttl: const Duration(hours: 1),
+    );
     unawaited(refetchPlaylistsAfterWrite());
     return res;
   }
@@ -491,6 +497,45 @@ class CachedFunkwhaleApi {
     );
   }
 
+  /// Update the cached Playlist metadata in-place after a successful mutation
+  /// so the next read from cache shows the fresh data immediately.
+  Future<void> _updatePlaylistCache({
+    required int playlistId,
+    int? tracksCountDelta,
+    int? tracksCount,
+    int? duration,
+  }) async {
+    try {
+      final cacheKey = 'playlist_$playlistId';
+      final cached = await _cache.getMetadataStale(cacheKey);
+      if (cached == null) return;
+      final playlist = Playlist.fromJson(cached);
+      final newCount = tracksCount ??
+          (tracksCountDelta != null
+              ? playlist.tracksCount + tracksCountDelta
+              : playlist.tracksCount);
+      final updated = Playlist(
+        id: playlist.id,
+        name: playlist.name,
+        tracksCount: newCount < 0 ? 0 : newCount,
+        duration: duration ?? playlist.duration,
+        isPlayable: playlist.isPlayable,
+        albumCovers: playlist.albumCovers,
+        privacyLevel: playlist.privacyLevel,
+        creationDate: playlist.creationDate,
+        modificationDate: DateTime.now(),
+      );
+      await _cache.putMetadata(
+        cacheKey,
+        CacheType.playlist,
+        _playlistToJson(updated),
+        ttl: const Duration(hours: 1),
+      );
+    } catch (_) {
+      // Best-effort — a cache miss is harmless; next read fetches from network.
+    }
+  }
+
   // ── Write operations (pass-through, invalidate cache) ───────────────
 
   Future<Playlist> createPlaylist({
@@ -507,13 +552,27 @@ class CachedFunkwhaleApi {
 
   Future<void> addTracksToPlaylist(int playlistId, List<int> trackIds) async {
     await _api.addTracksToPlaylist(playlistId, trackIds);
-    await _cache.deleteMetadata('playlist_$playlistId');
+    // Increment cached track count so the list/detail screens show the new
+    // count immediately without a network round trip.
+    await _updatePlaylistCache(
+      playlistId: playlistId,
+      tracksCountDelta: trackIds.length,
+    );
+    // Invalidate all track page caches for this playlist.
+    await _cache.deleteMetadataLike('playlist_tracks_${playlistId}_p%');
     unawaited(refetchPlaylistsAfterWrite());
   }
 
   Future<void> removeTrackFromPlaylist(int playlistId, int index) async {
     await _api.removeTrackFromPlaylist(playlistId, index);
-    await _cache.deleteMetadata('playlist_$playlistId');
+    // Decrement cached track count so the list/detail screens show the
+    // updated count immediately.
+    await _updatePlaylistCache(
+      playlistId: playlistId,
+      tracksCountDelta: -1,
+    );
+    // Invalidate all track page caches for this playlist.
+    await _cache.deleteMetadataLike('playlist_tracks_${playlistId}_p%');
     unawaited(refetchPlaylistsAfterWrite());
   }
 
@@ -526,10 +585,15 @@ class CachedFunkwhaleApi {
   /// Remove all tracks from a playlist and invalidate track caches.
   Future<void> clearPlaylist(int id) async {
     await _api.clearPlaylist(id);
-    await _cache.deleteMetadata('playlist_$id');
-    // Invalidate common playlist track page caches so next load is empty.
-    await _cache.deleteMetadata('playlist_tracks_${id}_p1_s50');
-    await _cache.deleteMetadata('playlist_tracks_${id}_p1_s100');
+    // Reset cached track count and duration to zero so the list/detail screens
+    // show the empty state immediately.
+    await _updatePlaylistCache(
+      playlistId: id,
+      tracksCount: 0,
+      duration: 0,
+    );
+    // Invalidate all track page caches for this playlist.
+    await _cache.deleteMetadataLike('playlist_tracks_${id}_p%');
     unawaited(refetchPlaylistsAfterWrite());
   }
 
@@ -540,8 +604,10 @@ class CachedFunkwhaleApi {
     int newIndex,
   ) async {
     await _api.moveTrackInPlaylist(playlistId, index, newIndex);
-    await _cache.deleteMetadata('playlist_tracks_${playlistId}_p1_s50');
-    await _cache.deleteMetadata('playlist_tracks_${playlistId}_p1_s100');
+    // Invalidate all track page caches for this playlist.
+    await _cache.deleteMetadataLike('playlist_tracks_${playlistId}_p%');
+    // Refresh the playlist list cache so modification_date updates.
+    unawaited(refetchPlaylistsAfterWrite());
   }
 
   /// Invalidate all cached track and album list pages. Call this after a
@@ -826,6 +892,8 @@ class CachedFunkwhaleApi {
       'privacy_level': playlist.privacyLevel,
       'tracks_count': playlist.tracksCount,
       'duration': playlist.duration,
+      'is_playable': playlist.isPlayable,
+      'album_covers': playlist.albumCovers,
       'creation_date': playlist.creationDate?.toIso8601String(),
       'modification_date': playlist.modificationDate?.toIso8601String(),
     };
