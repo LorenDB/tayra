@@ -368,7 +368,7 @@ class ListenHistoryService {
       FROM $_tableName
       ORDER BY year DESC
     ''');
-    return results.map((row) => row['year'] as int).toList();
+    return results.map((row) => (row['year'] as num).toInt()).toList();
   }
 
   /// Return distinct album IDs that have listens for the given year.
@@ -811,7 +811,7 @@ class ListenHistoryService {
     final result = await db.rawQuery(
       'SELECT COUNT(*) as count FROM $_tableName',
     );
-    return result.first['count'] as int;
+    return (result.first['count'] as num).toInt();
   }
 
   /// Clear all listen history data.

@@ -33,6 +33,9 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
   List<PlaylistTrack> _playlistTracks = [];
   bool _isLoading = true;
   String? _error;
+  // Guard against concurrent track removals, which would cause list-index
+  // drift between the local list and the server's ordering.
+  bool _isRemovingTrack = false;
 
   @override
   void initState() {
@@ -45,6 +48,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
     int playlistId,
     int listIndex,
   ) async {
+    if (_isRemovingTrack) return;
     if (!context.mounted) return;
 
     final ok = await showShellDialog<bool>(
@@ -90,7 +94,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
 
     // Optimistic UI update: remove locally then call API.
     final removed = _playlistTracks.removeAt(listIndex);
-    setState(() {});
+    setState(() { _isRemovingTrack = true; });
     try {
       final api = ref.read(cachedFunkwhaleApiProvider);
       // Funkwhale v1.4.0: remove by list position (0-based)
@@ -103,12 +107,13 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
     } catch (e) {
       // Revert on error
       _playlistTracks.insert(listIndex, removed);
-      setState(() {});
       if (context.mounted) {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(const SnackBar(content: Text('Failed to remove track')));
       }
+    } finally {
+      if (mounted) setState(() { _isRemovingTrack = false; });
     }
   }
 

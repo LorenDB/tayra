@@ -244,6 +244,7 @@ class SettingsScreen extends ConsumerWidget {
               );
               if (confirmed == true) {
                 await CacheManager.instance.clearAudio();
+                if (!context.mounted) return;
                 ref.invalidate(cacheStatsProvider);
                 try {
                   Analytics.track('cache_audio_cleared');
@@ -269,6 +270,7 @@ class SettingsScreen extends ConsumerWidget {
               );
               if (confirmed == true) {
                 await CacheManager.instance.clearAll();
+                if (!context.mounted) return;
                 ref.invalidate(cacheStatsProvider);
                 try {
                   Analytics.track('cache_all_cleared');

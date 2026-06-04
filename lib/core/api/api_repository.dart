@@ -590,12 +590,7 @@ class FunkwhaleApi {
           _lastRadioSessionCookie = setCookie.join(';');
         }
         return fromResponse(response.data);
-      } on DioException catch (e2) {
-        // Mask authorization header when printing
-        final headers = Map.of(e2.requestOptions.headers);
-        if (headers.containsKey('Authorization')) {
-          headers['Authorization'] = 'REDACTED';
-        }
+      } on DioException catch (_) {
         // Form-encoded retry failed; proceed to minimal-body retry silently.
 
         // As a last attempt try a minimal body (only radio_type) which some
@@ -610,11 +605,7 @@ class FunkwhaleApi {
             _lastRadioSessionCookie = setCookie.join(';');
           }
           return fromResponse(response.data);
-        } on DioException catch (e3) {
-          final headers3 = Map.of(e3.requestOptions.headers);
-          if (headers3.containsKey('Authorization')) {
-            headers3['Authorization'] = 'REDACTED';
-          }
+        } on DioException catch (_) {
           // Minimal-body attempt also failed; rethrow so caller can handle.
           rethrow;
         }

@@ -454,9 +454,20 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
     final imageUrl = track.largeCoverUrl ?? track.coverUrl;
     final artSize = outerSize * (280.0 / 320.0);
     final superSonicActive = isSuperSonicMusic(track.mbid);
+    final glowAnim = _glowAnimation;
+    if (glowAnim == null) {
+      // Animation not yet initialised — render art without glow.
+      return _buildStaticAlbumArt(
+        track,
+        imageUrl,
+        artSize,
+        outerSize,
+        superSonicActive,
+      );
+    }
 
     return AnimatedBuilder(
-      animation: _glowAnimation!,
+      animation: glowAnim,
       builder: (context, child) {
         return SizedBox(
           width: outerSize,
@@ -472,9 +483,9 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
                     gradient: RadialGradient(
                       center: Alignment.center,
                       radius: 0.8,
-                      colors: [
-                        glowColor.withValues(alpha: 0.25 * _glowAnimation!.value),
-                        glowColor.withValues(alpha: 0.08 * _glowAnimation!.value),
+                       colors: [
+                        glowColor.withValues(alpha: 0.25 * glowAnim.value),
+                        glowColor.withValues(alpha: 0.08 * glowAnim.value),
                         Colors.transparent,
                       ],
                     ),
@@ -513,6 +524,45 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
           ),
         );
       },
+    );
+  }
+
+  /// Renders album art without the glow animation (used as a fallback when
+  /// [_glowAnimation] has not yet been initialised).
+  Widget _buildStaticAlbumArt(
+    Track track,
+    String? imageUrl,
+    double artSize,
+    double outerSize,
+    bool superSonicActive,
+  ) {
+    return SizedBox(
+      width: outerSize,
+      height: outerSize,
+      child: Center(
+        child: SuperSonicAura(
+          active: superSonicActive,
+          glowPadding: superSonicActive ? 10 : 0,
+          artRadius: 16,
+          child: Container(
+            width: artSize,
+            height: artSize,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.5),
+                  blurRadius: 30,
+                  spreadRadius: 5,
+                  offset: const Offset(0, 10),
+                ),
+              ],
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: _buildAlbumArtImage(imageUrl, artSize),
+          ),
+        ),
+      ),
     );
   }
 

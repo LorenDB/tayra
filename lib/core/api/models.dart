@@ -106,12 +106,12 @@ class Artist {
     }
 
     return Artist(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       name: json['name'] as String? ?? 'Unknown Artist',
       mbid: json['mbid'] as String?,
       contentCategory: json['content_category'] as String?,
       cover: parseCover(json['cover']) ?? parseCover(json['attachment_cover']),
-      tracksCount: json['tracks_count'] as int? ?? 0,
+      tracksCount: (json['tracks_count'] as num?)?.toInt() ?? 0,
       albums:
           (json['albums'] as List<dynamic>?)
               ?.map((e) => Album.fromJson(_toMap(e)))
@@ -197,13 +197,13 @@ class Album {
     }
 
     return Album(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       title: json['title'] as String? ?? 'Unknown Album',
       artist: parseArtist(json['artist']),
       cover: parseCover(json['cover']),
       releaseDate: json['release_date'] as String?,
-      tracksCount: json['tracks_count'] as int? ?? 0,
-      duration: json['duration'] as int?,
+      tracksCount: (json['tracks_count'] as num?)?.toInt() ?? 0,
+      duration: (json['duration'] as num?)?.toInt(),
       isPlayable: json['is_playable'] as bool? ?? true,
       tags:
           (json['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ??
@@ -320,13 +320,13 @@ class Track {
     }
 
     return Track(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       title: json['title'] as String? ?? 'Unknown Track',
       artist: parseArtist(json['artist']),
       album: parseAlbum(json['album']),
       listenUrl: json['listen_url'] as String?,
-      position: json['position'] as int?,
-      discNumber: json['disc_number'] as int?,
+      position: (json['position'] as num?)?.toInt(),
+      discNumber: (json['disc_number'] as num?)?.toInt(),
       cover: parseCover(json['cover']),
       isPlayable: json['is_playable'] as bool? ?? true,
       tags:
@@ -399,9 +399,9 @@ class Upload {
   factory Upload.fromJson(Map<String, dynamic> json) {
     return Upload(
       uuid: json['uuid'] as String? ?? '',
-      duration: json['duration'] as int?,
-      bitrate: json['bitrate'] as int?,
-      size: json['size'] as int?,
+      duration: (json['duration'] as num?)?.toInt(),
+      bitrate: (json['bitrate'] as num?)?.toInt(),
+      size: (json['size'] as num?)?.toInt(),
       mimetype: json['mimetype'] as String?,
       listenUrl: json['listen_url'] as String?,
     );
@@ -428,7 +428,7 @@ class Listening {
   const Listening({required this.id, required this.track, this.created});
   factory Listening.fromJson(Map<String, dynamic> json) {
     return Listening(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       track: Track.fromJson(_toMap(json['track'])),
       created:
           json['created'] != null
@@ -465,10 +465,10 @@ class Playlist {
 
   factory Playlist.fromJson(Map<String, dynamic> json) {
     return Playlist(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       name: json['name'] as String? ?? 'Untitled',
-      tracksCount: json['tracks_count'] as int? ?? 0,
-      duration: json['duration'] as int?,
+      tracksCount: (json['tracks_count'] as num?)?.toInt() ?? 0,
+      duration: (json['duration'] as num?)?.toInt(),
       isPlayable: json['is_playable'] as bool? ?? true,
       albumCovers:
           (json['album_covers'] as List<dynamic>?)
@@ -509,7 +509,7 @@ class PlaylistTrack {
   factory PlaylistTrack.fromJson(Map<String, dynamic> json) {
     return PlaylistTrack(
       track: Track.fromJson(_toMap(json['track'])),
-      index: json['index'] as int?,
+      index: (json['index'] as num?)?.toInt(),
       creationDate:
           json['creation_date'] != null
               ? DateTime.tryParse(json['creation_date'] as String)
@@ -529,7 +529,7 @@ class Favorite {
 
   factory Favorite.fromJson(Map<String, dynamic> json) {
     return Favorite(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       track: Track.fromJson(_toMap(json['track'])),
       creationDate:
           json['creation_date'] != null
@@ -641,7 +641,7 @@ class ChannelArtist {
       contentCategory: json['content_category'] as String?,
       cover: parseCover(json['cover']),
       descriptionText: parseDescription(json['description']),
-      tracksCount: json['tracks_count'] as int?,
+      tracksCount: (json['tracks_count'] as num?)?.toInt(),
       tags:
           (json['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ??
           const [],
@@ -683,7 +683,7 @@ class Channel {
       artist: ChannelArtist.fromJson(_toMap(json['artist'])),
       rssUrl: json['rss_url'] as String?,
       url: json['url'] as String?,
-      downloadsCount: json['downloads_count'] as int?,
+      downloadsCount: (json['downloads_count'] as num?)?.toInt(),
       creationDate:
           json['creation_date'] != null
               ? DateTime.tryParse(json['creation_date'] as String)
@@ -781,7 +781,7 @@ class Radio {
     }
 
     return Radio(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       isPublic: json['is_public'] as bool?,
       name: json['name'] as String? ?? '',
       creationDate:
@@ -857,7 +857,7 @@ class RadioSession {
     if (cfgRaw is Map<String, dynamic>) cfg = cfgRaw;
 
     return RadioSession(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       radioType: json['radio_type'] as String?,
       relatedObjectId: related,
       user: userId,
@@ -891,8 +891,8 @@ class RadioSessionTrackCreate {
 
   factory RadioSessionTrackCreate.fromJson(Map<String, dynamic> json) {
     return RadioSessionTrackCreate(
-      session: json['session'] as int,
-      count: json['count'] as int?,
+      session: (json['session'] as num).toInt(),
+      count: (json['count'] as num?)?.toInt(),
     );
   }
 
@@ -928,8 +928,8 @@ class Library {
       name: json['name'] as String? ?? '',
       description: json['description'] as String?,
       privacyLevel: json['privacy_level'] as String? ?? 'me',
-      uploadsCount: json['uploads_count'] as int? ?? 0,
-      size: json['size'] as int? ?? 0,
+      uploadsCount: (json['uploads_count'] as num?)?.toInt() ?? 0,
+      size: (json['size'] as num?)?.toInt() ?? 0,
       creationDate:
           json['creation_date'] != null
               ? DateTime.tryParse(json['creation_date'] as String)

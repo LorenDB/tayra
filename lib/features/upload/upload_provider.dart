@@ -247,6 +247,9 @@ class UploadNotifier extends Notifier<UploadState> {
   Timer? _pollingTimer;
   int _pollAttempts = 0;
   int _consecutivePollErrors = 0;
+  /// Incremented on every reset/new upload so in-flight _pollOnce calls can
+  /// detect they belong to a stale session and discard their results.
+  int _pollGeneration = 0;
 
   /// Temporary tagged file to clean up after upload.
   File? _tempTaggedFile;
@@ -974,22 +977,29 @@ class UploadNotifier extends Notifier<UploadState> {
       return;
     }
     _pollingTimer?.cancel();
+    _pollAttempts = 0;
+    _consecutivePollErrors = 0;
+    _pollGeneration++;
+    final generation = _pollGeneration;
     developer.log(
       'Starting REST polling for importReference=$importReference '
       '(max $_maxPollAttempts attempts, every ${_pollInterval.inSeconds}s)',
       name: 'tayra.upload',
     );
     _pollingTimer = Timer.periodic(_pollInterval, (_) async {
-      await _pollOnce(importReference);
+      await _pollOnce(importReference, generation);
     });
   }
 
-  Future<void> _pollOnce(String importReference) async {
+  Future<void> _pollOnce(String importReference, int generation) async {
+    // If reset() was called while this poll was in-flight, discard results.
+    if (generation != _pollGeneration) return;
     _pollAttempts++;
 
     // Hard timeout: give up after _maxPollAttempts.
     if (_pollAttempts > _maxPollAttempts) {
       _pollingTimer?.cancel();
+      if (generation != _pollGeneration) return;
       final elapsed = _pollInterval.inSeconds * _maxPollAttempts;
       developer.log(
         'Import polling timed out after $elapsed s '
@@ -1029,6 +1039,7 @@ class UploadNotifier extends Notifier<UploadState> {
         name: 'tayra.upload',
       );
 
+      if (generation != _pollGeneration) return;
       _handleImportStatus(upload.importStatus, upload.importDetails);
     } catch (e, st) {
       _consecutivePollErrors++;
@@ -1041,6 +1052,7 @@ class UploadNotifier extends Notifier<UploadState> {
 
       if (_consecutivePollErrors >= _maxConsecutivePollErrors) {
         _pollingTimer?.cancel();
+        if (generation != _pollGeneration) return;
         developer.log(
           'Stopping polling after $_maxConsecutivePollErrors consecutive errors',
           name: 'tayra.upload',
@@ -1059,6 +1071,7 @@ class UploadNotifier extends Notifier<UploadState> {
 
   void reset() {
     _pollingTimer?.cancel();
+    _pollGeneration++;
     _pollAttempts = 0;
     _consecutivePollErrors = 0;
     _cleanupTempFile();

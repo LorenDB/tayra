@@ -973,6 +973,7 @@ class _StoryWelcomeCardState extends State<_StoryWelcomeCard>
   late final Animation<double> _fadeSlide;
   late final Ticker _shaderTicker;
   double _shaderElapsed = 0.0;
+  ui.FragmentShader? _shader;
 
   @override
   void initState() {
@@ -1000,6 +1001,7 @@ class _StoryWelcomeCardState extends State<_StoryWelcomeCard>
 
   void _checkShaderTicker() {
     if (widget.magicProgram != null && !_shaderTicker.isActive) {
+      _shader ??= widget.magicProgram!.fragmentShader();
       _shaderTicker.start();
     } else if (widget.magicProgram == null && _shaderTicker.isActive) {
       _shaderTicker.stop();
@@ -1010,6 +1012,7 @@ class _StoryWelcomeCardState extends State<_StoryWelcomeCard>
   void dispose() {
     _ctrl.dispose();
     _shaderTicker.dispose();
+    _shader?.dispose();
     super.dispose();
   }
 
@@ -1097,14 +1100,13 @@ class _StoryWelcomeCardState extends State<_StoryWelcomeCard>
       ),
     );
 
-    if (widget.magicProgram != null) {
+    if (widget.magicProgram != null && _shader != null) {
       card = ShaderMask(
         shaderCallback: (bounds) {
-          final shader = widget.magicProgram!.fragmentShader();
-          shader.setFloat(0, _shaderElapsed);
-          shader.setFloat(1, bounds.width * devicePixelRatio);
-          shader.setFloat(2, bounds.height * devicePixelRatio);
-          return shader;
+          _shader!.setFloat(0, _shaderElapsed);
+          _shader!.setFloat(1, bounds.width * devicePixelRatio);
+          _shader!.setFloat(2, bounds.height * devicePixelRatio);
+          return _shader!;
         },
         blendMode: BlendMode.plus,
         child: card,
@@ -2439,6 +2441,7 @@ class _HeroCardState extends State<_HeroCard>
     with SingleTickerProviderStateMixin {
   late final Ticker _ticker;
   double _elapsedSeconds = 0.0;
+  ui.FragmentShader? _shader;
 
   @override
   void initState() {
@@ -2459,6 +2462,7 @@ class _HeroCardState extends State<_HeroCard>
 
   void _checkTicker() {
     if (widget.magicProgram != null && !_ticker.isActive) {
+      _shader ??= widget.magicProgram!.fragmentShader();
       _ticker.start();
     } else if (widget.magicProgram == null && _ticker.isActive) {
       _ticker.stop();
@@ -2468,6 +2472,7 @@ class _HeroCardState extends State<_HeroCard>
   @override
   void dispose() {
     _ticker.dispose();
+    _shader?.dispose();
     super.dispose();
   }
 
@@ -2545,15 +2550,14 @@ class _HeroCardState extends State<_HeroCard>
       ),
     );
 
-    if (widget.magicProgram != null) {
+    if (widget.magicProgram != null && _shader != null) {
       card = ShaderMask(
         shaderCallback: (bounds) {
-          final shader = widget.magicProgram!.fragmentShader();
           // Pass physical pixels to match FlutterFragCoord()
-          shader.setFloat(0, _elapsedSeconds);
-          shader.setFloat(1, bounds.width * devicePixelRatio);
-          shader.setFloat(2, bounds.height * devicePixelRatio);
-          return shader;
+          _shader!.setFloat(0, _elapsedSeconds);
+          _shader!.setFloat(1, bounds.width * devicePixelRatio);
+          _shader!.setFloat(2, bounds.height * devicePixelRatio);
+          return _shader!;
         },
         blendMode: BlendMode.plus,
         child: card,

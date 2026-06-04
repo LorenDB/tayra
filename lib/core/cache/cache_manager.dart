@@ -180,7 +180,9 @@ class CacheManager {
       final parsed = jsonDecode(jsonStr);
       if (parsed is Map<String, dynamic>) return parsed;
     } catch (_) {}
-    return <String, dynamic>{};
+    // Return null on parse failure so callers do not treat corrupt data as a
+    // cache hit.
+    return null;
   }
 
   /// Put metadata into cache
@@ -237,7 +239,7 @@ class CacheManager {
       final parsed = jsonDecode(jsonStr);
       if (parsed is Map<String, dynamic>) return parsed;
     } catch (_) {}
-    return <String, dynamic>{};
+    return null;
   }
 
   /// Delete metadata from cache
@@ -468,8 +470,9 @@ class CacheManager {
           await db.execute('''
             CREATE TABLE IF NOT EXISTS cache_manual_downloads (
               resource_type TEXT NOT NULL,
-              resource_id INTEGER PRIMARY KEY,
-              added_at INTEGER NOT NULL
+              resource_id INTEGER NOT NULL,
+              added_at INTEGER NOT NULL,
+              PRIMARY KEY (resource_type, resource_id)
             )
           ''');
           await db.delete(
@@ -686,6 +689,24 @@ class CacheManager {
     );
   }
 
+  /// Atomically replace the entire favorites set with [ids].
+  ///
+  /// Runs inside a single transaction so concurrent reads never observe a
+  /// partially-cleared state (unlike removing all then re-inserting).
+  Future<void> setFavorites(Set<int> ids) async {
+    final db = await _db.database;
+    final now = DateTime.now().millisecondsSinceEpoch;
+    await db.transaction((txn) async {
+      await txn.delete('cache_favorites');
+      for (final id in ids) {
+        await txn.insert('cache_favorites', {
+          'track_id': id,
+          'added_at': now,
+        }, conflictAlgorithm: ConflictAlgorithm.replace);
+      }
+    });
+  }
+
   // ── Cache statistics and management ────────────────────────────────────
 
   /// Get current cache size statistics
@@ -696,20 +717,20 @@ class CacheManager {
     final metadataResult = await db.rawQuery(
       'SELECT COALESCE(SUM(size_bytes), 0) as total FROM cache_metadata',
     );
-    final metadataSize = metadataResult.first['total'] as int;
+    final metadataSize = (metadataResult.first['total'] as num).toInt();
 
     // Get file sizes by type
     final audioResult = await db.rawQuery(
       'SELECT COALESCE(SUM(size_bytes), 0) as total FROM cache_files WHERE file_type = ?',
       [FileType.audio.name],
     );
-    final audioSize = audioResult.first['total'] as int;
+    final audioSize = (audioResult.first['total'] as num).toInt();
 
     final imageResult = await db.rawQuery(
       'SELECT COALESCE(SUM(size_bytes), 0) as total FROM cache_files WHERE file_type = ?',
       [FileType.coverArt.name],
     );
-    final imageSize = imageResult.first['total'] as int;
+    final imageSize = (imageResult.first['total'] as num).toInt();
 
     // Get counts
     final metadataCount =
@@ -791,6 +812,7 @@ class CacheManager {
     // Clear all tables
     await db.delete('cache_metadata');
     await db.delete('cache_files');
+    await db.delete('cache_manual_downloads');
     // Keep favorites - they're not large and users expect them to persist
   }
 
@@ -1050,7 +1072,7 @@ class CacheManager {
       'SELECT COALESCE(SUM(size_bytes), 0) as total FROM cache_files WHERE file_type = ?',
       [FileType.audio.name],
     );
-    var audioSize = audioResult.first['total'] as int;
+    var audioSize = (audioResult.first['total'] as num).toInt();
 
     // Evict audio files scored by listen history + recency.
     while (audioSize > _config.maxAudioSizeBytes) {
@@ -1097,13 +1119,13 @@ class CacheManager {
     final metadataResult = await db.rawQuery(
       'SELECT COALESCE(SUM(size_bytes), 0) as total FROM cache_metadata',
     );
-    var metadataSize = metadataResult.first['total'] as int;
+    var metadataSize = (metadataResult.first['total'] as num).toInt();
 
     final imageResult = await db.rawQuery(
       'SELECT COALESCE(SUM(size_bytes), 0) as total FROM cache_files WHERE file_type = ?',
       [FileType.coverArt.name],
     );
-    var imageSize = imageResult.first['total'] as int;
+    var imageSize = (imageResult.first['total'] as num).toInt();
     var metadataAndImageSize = metadataSize + imageSize;
 
     // Evict oldest images first (prefer keeping metadata for offline browsing)
@@ -1153,11 +1175,11 @@ class CacheManager {
     var totalResult = await db.rawQuery(
       'SELECT COALESCE(SUM(size_bytes), 0) as total FROM cache_files',
     );
-    final filesTotal = totalResult.first['total'] as int;
+    final filesTotal = (totalResult.first['total'] as num).toInt();
     final metaResult = await db.rawQuery(
       'SELECT COALESCE(SUM(size_bytes), 0) as total FROM cache_metadata',
     );
-    var totalSize = (filesTotal) + (metaResult.first['total'] as int);
+    var totalSize = filesTotal + (metaResult.first['total'] as num).toInt();
 
     while (totalSize > _config.maxTotalSizeBytes) {
       // Phase 1: try to evict non-protected audio (scored by listen history)

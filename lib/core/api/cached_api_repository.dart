@@ -350,14 +350,9 @@ class CachedFunkwhaleApi {
   Future<Set<int>> getAllFavoriteTrackIds() async {
     try {
       final ids = await _api.getAllFavoriteTrackIds();
-      // Update cache – clear and rebuild
-      final currentIds = await _cache.getFavorites();
-      for (final id in currentIds) {
-        await _cache.removeFavorite(id);
-      }
-      for (final id in ids) {
-        await _cache.addFavorite(id);
-      }
+      // Atomically replace cached favorites in a single transaction so
+      // concurrent reads never see a partially-cleared set.
+      await _cache.setFavorites(ids);
       return ids;
     } catch (_) {
       // Offline fallback – return whatever we have cached

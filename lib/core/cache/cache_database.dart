@@ -20,11 +20,18 @@ class CacheDatabase {
   static final CacheDatabase instance = CacheDatabase._();
 
   static Database? _database;
+  // Cached init future prevents concurrent callers from opening the database
+  // twice before the first _initDatabase() call completes.
+  static Future<Database>? _initFuture;
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDatabase();
-    return _database!;
+    _initFuture ??= _initDatabase().then((db) {
+      _database = db;
+      _initFuture = null;
+      return db;
+    });
+    return _initFuture!;
   }
 
   Future<String> _getDatabasePath() async {
@@ -204,6 +211,7 @@ class CacheDatabase {
     final db = await database;
     await db.close();
     _database = null;
+    _initFuture = null;
   }
 
   /// Delete the entire database (for testing or complete cache clear)
@@ -212,5 +220,6 @@ class CacheDatabase {
     final path = join(dbPath, _databaseName);
     await databaseFactory.deleteDatabase(path);
     _database = null;
+    _initFuture = null;
   }
 }

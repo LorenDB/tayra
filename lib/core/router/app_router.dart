@@ -120,7 +120,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 path: 'album/:id',
                 name: 'album_detail',
                 builder: (context, state) {
-                  final id = int.parse(state.pathParameters['id']!);
+                  final id = int.tryParse(
+                    state.pathParameters['id'] ?? '',
+                  );
+                  if (id == null) return const HomeScreen();
                   return AlbumDetailScreen(albumId: id);
                 },
                 routes: [
@@ -128,7 +131,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     path: 'edit',
                     name: 'album_edit',
                     builder: (context, state) {
-                      final id = int.parse(state.pathParameters['id']!);
+                      final id = int.tryParse(
+                        state.pathParameters['id'] ?? '',
+                      );
+                      if (id == null) return const HomeScreen();
                       return AlbumEditScreen(albumId: id);
                     },
                   ),
@@ -138,7 +144,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 path: 'artist/:id',
                 name: 'artist_detail',
                 builder: (context, state) {
-                  final id = int.parse(state.pathParameters['id']!);
+                  final id = int.tryParse(
+                    state.pathParameters['id'] ?? '',
+                  );
+                  if (id == null) return const HomeScreen();
                   return ArtistDetailScreen(artistId: id);
                 },
               ),
@@ -156,7 +165,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     path: ':year',
                     name: 'year_review_detail',
                     builder: (context, state) {
-                      final year = int.parse(state.pathParameters['year']!);
+                      final year = int.tryParse(
+                        state.pathParameters['year'] ?? '',
+                      );
+                      if (year == null) return const HomeScreen();
                       final extra = state.extra;
                       final startInStory =
                           extra is Map ? extra['startInStory'] == true : false;
@@ -181,7 +193,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 path: 'artist/:id',
                 name: 'artists_artist_detail',
                 builder: (context, state) {
-                  final id = int.parse(state.pathParameters['id']!);
+                  final id = int.tryParse(
+                    state.pathParameters['id'] ?? '',
+                  );
+                  if (id == null) return const ArtistsTabScreen();
                   return ArtistDetailScreen(artistId: id);
                 },
               ),
@@ -198,7 +213,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 path: 'artist/:id',
                 name: 'browse_artist_detail',
                 builder: (context, state) {
-                  final id = int.parse(state.pathParameters['id']!);
+                  final id = int.tryParse(
+                    state.pathParameters['id'] ?? '',
+                  );
+                  if (id == null) return const BrowseScreen();
                   return ArtistDetailScreen(artistId: id);
                 },
               ),
@@ -206,7 +224,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 path: 'album/:id',
                 name: 'browse_album_detail',
                 builder: (context, state) {
-                  final id = int.parse(state.pathParameters['id']!);
+                  final id = int.tryParse(
+                    state.pathParameters['id'] ?? '',
+                  );
+                  if (id == null) return const BrowseScreen();
                   return AlbumDetailScreen(albumId: id);
                 },
                 routes: [
@@ -214,7 +235,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     path: 'edit',
                     name: 'browse_album_edit',
                     builder: (context, state) {
-                      final id = int.parse(state.pathParameters['id']!);
+                      final id = int.tryParse(
+                        state.pathParameters['id'] ?? '',
+                      );
+                      if (id == null) return const BrowseScreen();
                       return AlbumEditScreen(albumId: id);
                     },
                   ),
@@ -262,7 +286,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 path: 'album/:id',
                 name: 'search_album_detail',
                 builder: (context, state) {
-                  final id = int.parse(state.pathParameters['id']!);
+                  final id = int.tryParse(
+                    state.pathParameters['id'] ?? '',
+                  );
+                  if (id == null) return const SearchScreen();
                   return AlbumDetailScreen(albumId: id);
                 },
                 routes: [
@@ -270,7 +297,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     path: 'edit',
                     name: 'search_album_edit',
                     builder: (context, state) {
-                      final id = int.parse(state.pathParameters['id']!);
+                      final id = int.tryParse(
+                        state.pathParameters['id'] ?? '',
+                      );
+                      if (id == null) return const SearchScreen();
                       return AlbumEditScreen(albumId: id);
                     },
                   ),
@@ -280,7 +310,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 path: 'artist/:id',
                 name: 'search_artist_detail',
                 builder: (context, state) {
-                  final id = int.parse(state.pathParameters['id']!);
+                  final id = int.tryParse(
+                    state.pathParameters['id'] ?? '',
+                  );
+                  if (id == null) return const SearchScreen();
                   return ArtistDetailScreen(artistId: id);
                 },
               ),
@@ -304,7 +337,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 path: ':id',
                 name: 'playlist_detail',
                 builder: (context, state) {
-                  final id = int.parse(state.pathParameters['id']!);
+                  final id = int.tryParse(
+                    state.pathParameters['id'] ?? '',
+                  );
+                  if (id == null) return const PlaylistsScreen();
                   return PlaylistDetailScreen(playlistId: id);
                 },
                 routes: [
@@ -312,7 +348,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     path: 'edit',
                     name: 'playlist_edit',
                     builder: (context, state) {
-                      final id = int.parse(state.pathParameters['id']!);
+                      final id = int.tryParse(
+                        state.pathParameters['id'] ?? '',
+                      );
+                      if (id == null) return const PlaylistsScreen();
                       return PlaylistEditScreen(playlistId: id);
                     },
                   ),

@@ -1660,9 +1660,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
         final t = await _api.getRadioTrack(_radioId!);
         addToQueue([t]);
       }
-    } catch (_) {}
-
-    _isPrefetchingRadioTrack = false;
+    } catch (_) {
+    } finally {
+      _isPrefetchingRadioTrack = false;
+    }
   }
 
   /// Periodic timer that keeps the radio queue populated and handles
@@ -1677,15 +1678,18 @@ class PlayerNotifier extends Notifier<PlayerState> {
         final ahead = state.queue.length - state.currentIndex - 1;
         if (ahead < 1) {
           _isPrefetchingRadioTrack = true;
-          if (_radioSessionId != null) {
-            final raw = await _api.postNextRadioTrackRaw(_radioSessionId!);
-            final t = await _parseTrackFromRaw(raw);
-            if (t != null) addToQueue([t]);
-          } else if (_radioId != null) {
-            final t = await _api.getRadioTrack(_radioId!);
-            addToQueue([t]);
+          try {
+            if (_radioSessionId != null) {
+              final raw = await _api.postNextRadioTrackRaw(_radioSessionId!);
+              final t = await _parseTrackFromRaw(raw);
+              if (t != null) addToQueue([t]);
+            } else if (_radioId != null) {
+              final t = await _api.getRadioTrack(_radioId!);
+              addToQueue([t]);
+            }
+          } finally {
+            _isPrefetchingRadioTrack = false;
           }
-          _isPrefetchingRadioTrack = false;
         }
 
         // If playback stalled (gapless source ran dry before we could
@@ -1866,19 +1870,36 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// Remove track at index from the queue.
   void removeFromQueue(int index) {
     if (index < 0 || index >= state.queue.length) return;
+    final wasCurrentTrack = index == state.currentIndex;
     final newQueue = List<Track>.from(state.queue);
     newQueue.removeAt(index);
 
     var newIndex = state.currentIndex;
     if (index < state.currentIndex) {
       newIndex--;
-    } else if (index == state.currentIndex) {
+    } else if (wasCurrentTrack) {
       if (newIndex >= newQueue.length) newIndex = newQueue.length - 1;
     }
     state = state.copyWith(queue: newQueue, currentIndex: newIndex);
     // Sync gapless source.
     if (_gaplessActive) {
       _handler.audioPlayer.removeAudioSourceAt(index);
+    }
+    // If the removed track was the one currently playing, start playing the
+    // new current track (or stop if the queue became empty).
+    if (wasCurrentTrack) {
+      if (newQueue.isEmpty) {
+        _handler.audioPlayer.stop();
+        state = state.copyWith(isPlaying: false, isLoading: false);
+      } else if (_gaplessActive) {
+        unawaited(
+          _handler.audioPlayer.seek(Duration.zero, index: newIndex).then((_) {
+            return _handler.audioPlayer.play();
+          }),
+        );
+      } else {
+        unawaited(_loadAndPlay(newQueue[newIndex]));
+      }
     }
     _saveQueue();
     Analytics.track('remove_from_queue');
@@ -1888,6 +1909,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
   void reorderQueue(int oldIndex, int newIndex) {
     if (oldIndex < 0 || oldIndex >= state.queue.length) return;
     if (newIndex < 0 || newIndex > state.queue.length) return;
+
+    // Save the original newIndex before adjustment for the audio player call.
+    // just_audio's moveAudioSource uses the same remove-then-insert semantics
+    // as a plain Dart list, so it expects the pre-adjustment destination index
+    // (i.e. the index in the original list, not the post-removal list).
+    final audioPlayerNewIndex = newIndex;
 
     final newQueue = List<Track>.from(state.queue);
     final track = newQueue.removeAt(oldIndex);
@@ -1909,9 +1936,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
     }
 
     state = state.copyWith(queue: newQueue, currentIndex: newCurrentIndex);
-    // Sync gapless source.
+    // Sync gapless source using the pre-adjustment index so just_audio's
+    // internal remove-then-insert lands on the same position as our list.
     if (_gaplessActive) {
-      _handler.audioPlayer.moveAudioSource(oldIndex, newIndex);
+      _handler.audioPlayer.moveAudioSource(oldIndex, audioPlayerNewIndex);
     }
     _saveQueue();
     Analytics.track('reorder_queue');
