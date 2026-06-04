@@ -3130,12 +3130,15 @@ class _MonthlyChart extends StatelessWidget {
                         if (isTop)
                           Padding(
                             padding: const EdgeInsets.only(bottom: 4),
-                            child: Text(
-                              '${data.count}',
-                              style: const TextStyle(
-                                color: AppTheme.primary,
-                                fontSize: 10,
-                                fontWeight: FontWeight.w700,
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                '${data.count}',
+                                style: const TextStyle(
+                                  color: AppTheme.primary,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                             ),
                           ),
