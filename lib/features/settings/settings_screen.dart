@@ -111,6 +111,20 @@ class SettingsScreen extends ConsumerWidget {
 
           const SizedBox(height: 24),
 
+          // ── Network section ──────────────────────────────────────────
+          _SectionHeader(title: 'Network'),
+          _SwitchTile(
+            icon: Icons.cloud_off_rounded,
+            title: 'Force offline mode',
+            subtitle: 'Only show cached content; disable network access',
+            value: settings.forceOfflineMode,
+            onChanged: (value) {
+              ref.read(settingsProvider.notifier).setForceOfflineMode(value);
+            },
+          ),
+
+          const SizedBox(height: 24),
+
           // ── Playback section ─────────────────────────────────────────
           _SectionHeader(title: 'Playback'),
           _SwitchTile(
@@ -161,14 +175,17 @@ class SettingsScreen extends ConsumerWidget {
             subtitle:
                 'Number tracks across all discs in one unbroken sequence; '
                 'otherwise disc labels are shown between sections',
-            value: settings.multiDiscDisplayMode ==
+            value:
+                settings.multiDiscDisplayMode ==
                 MultiDiscDisplayMode.continuousNumbers,
             onChanged: (value) {
-              ref.read(settingsProvider.notifier).setMultiDiscDisplayMode(
-                value
-                    ? MultiDiscDisplayMode.continuousNumbers
-                    : MultiDiscDisplayMode.discSections,
-              );
+              ref
+                  .read(settingsProvider.notifier)
+                  .setMultiDiscDisplayMode(
+                    value
+                        ? MultiDiscDisplayMode.continuousNumbers
+                        : MultiDiscDisplayMode.discSections,
+                  );
             },
           ),
 
@@ -285,37 +302,37 @@ class SettingsScreen extends ConsumerWidget {
           _SectionHeader(title: 'About'),
           _AboutTile(),
           // Analytics moved here from General
-           // Hide the analytics toggle entirely when DO_NOT_TRACK=1 is set in
-           // the environment. This prevents the setting from appearing in
-           // environments that require telemetry to be disabled.
-           if (showAnalyticsToggle)
-             _SwitchTile(
-               icon: Icons.analytics_outlined,
-               title: 'Analytics',
-               subtitle: 'Allow anonymous usage analytics',
-               value: settings.analyticsEnabled,
-               onChanged: (value) async {
-                 // Persist setting and apply immediately.
-                 try {
-                   // If disabling, set Analytics to disabled first to avoid sending
-                   // an event about the change. If enabling, persist then enable.
-                   if (!value) {
-                     await ref
-                         .read(settingsProvider.notifier)
-                         .setAnalyticsEnabled(false);
-                     await Analytics.setEnabled(false);
-                   } else {
-                     await ref
-                         .read(settingsProvider.notifier)
-                         .setAnalyticsEnabled(true);
-                     await Analytics.setEnabled(true);
-                     try {
-                       Analytics.track('analytics_enabled');
-                     } catch (_) {}
-                   }
-                 } catch (_) {}
-               },
-             ),
+          // Hide the analytics toggle entirely when DO_NOT_TRACK=1 is set in
+          // the environment. This prevents the setting from appearing in
+          // environments that require telemetry to be disabled.
+          if (showAnalyticsToggle)
+            _SwitchTile(
+              icon: Icons.analytics_outlined,
+              title: 'Analytics',
+              subtitle: 'Allow anonymous usage analytics',
+              value: settings.analyticsEnabled,
+              onChanged: (value) async {
+                // Persist setting and apply immediately.
+                try {
+                  // If disabling, set Analytics to disabled first to avoid sending
+                  // an event about the change. If enabling, persist then enable.
+                  if (!value) {
+                    await ref
+                        .read(settingsProvider.notifier)
+                        .setAnalyticsEnabled(false);
+                    await Analytics.setEnabled(false);
+                  } else {
+                    await ref
+                        .read(settingsProvider.notifier)
+                        .setAnalyticsEnabled(true);
+                    await Analytics.setEnabled(true);
+                    try {
+                      Analytics.track('analytics_enabled');
+                    } catch (_) {}
+                  }
+                } catch (_) {}
+              },
+            ),
           _DonationTile(),
           _ActionTile(
             icon: Icons.balance_outlined,
@@ -515,8 +532,7 @@ class _AboutTileState extends ConsumerState<_AboutTile> {
   static const int _tapsRequired = 3;
 
   void _onLongPress() {
-    final alreadyUnlocked =
-        ref.read(settingsProvider).developerModeUnlocked;
+    final alreadyUnlocked = ref.read(settingsProvider).developerModeUnlocked;
     if (alreadyUnlocked) return;
     setState(() => _tapCount++);
     if (_tapCount >= _tapsRequired) {
@@ -824,10 +840,11 @@ class _NavBarSettingsTile extends ConsumerWidget {
   static const _configurableIndices = [1, 2, 3, 4, 5, 6];
 
   String get _subtitle {
-    final names = _configurableIndices
-        .where((i) => pinnedIndices.contains(i))
-        .map((i) => AppShell.tabs[i].label)
-        .toList();
+    final names =
+        _configurableIndices
+            .where((i) => pinnedIndices.contains(i))
+            .map((i) => AppShell.tabs[i].label)
+            .toList();
     return names.isEmpty ? 'None' : names.join(', ');
   }
 
@@ -892,11 +909,14 @@ class _NavBarSettingsTile extends ConsumerWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (_) => _NavBarSheet(
-        initialPinned: pinnedIndices,
-        onChanged: (updated) =>
-            ref.read(settingsProvider.notifier).setMobilePinnedTabIndices(updated),
-      ),
+      builder:
+          (_) => _NavBarSheet(
+            initialPinned: pinnedIndices,
+            onChanged:
+                (updated) => ref
+                    .read(settingsProvider.notifier)
+                    .setMobilePinnedTabIndices(updated),
+          ),
     );
   }
 }
