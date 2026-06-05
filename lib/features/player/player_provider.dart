@@ -238,11 +238,19 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
 
   // ── Standard media controls (called from OS) ──────────────────────────
 
+  /// Callback invoked when the user explicitly pauses via external media
+  /// controls (e.g. earbud button, notification). The PlayerNotifier sets
+  /// this to prevent spurious interruption events from auto-resuming.
+  void Function()? onUserPaused;
+
   @override
   Future<void> play() => _player.play();
 
   @override
-  Future<void> pause() => _player.pause();
+  Future<void> pause() {
+    onUserPaused?.call();
+    return _player.pause();
+  }
 
   @override
   Future<void> stop() async {
@@ -795,6 +803,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// Whether an audio interruption is currently in progress.
   bool _interrupted = false;
 
+  /// Whether the user explicitly paused playback (via UI or external media
+  /// controls). Prevents spurious interruption events and radio-timer
+  /// recovery from auto-resuming after the user's intentional pause.
+  bool _userPaused = false;
+
   /// Last position (in whole seconds) at which the queue was saved.
   /// Prevents multiple saves within the same 2-second window.
   int _lastSavedPositionSeconds = -1;
@@ -887,6 +900,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
     // Wire up track completion.
     _handler.onTrackCompleted = _onTrackCompleted;
+
+    // Prevent spurious interruption events from auto-resuming after the user
+    // explicitly pauses via external media controls (earbuds, notification).
+    _handler.onUserPaused = () {
+      _userPaused = true;
+    };
 
     // Listen to playback state.
     _subscriptions.add(
@@ -1120,15 +1139,18 @@ class PlayerNotifier extends Notifier<PlayerState> {
         _subscriptions.add(
           session.interruptionEventStream.listen((event) {
             if (event.begin) {
-              _wasPlayingBeforeInterruption = state.isPlaying;
+              _wasPlayingBeforeInterruption =
+                  state.isPlaying && !_userPaused;
               _interrupted = true;
-              pause();
+              _userPaused = false;
+              _handler.audioPlayer.pause();
             } else {
               // Only auto-resume if _interrupted is still true, meaning the
               // user hasn't manually resumed playback during the interruption
               // (play() clears _interrupted when the user explicitly acts).
-              final shouldAutoResume = _interrupted;
+              final shouldAutoResume = _interrupted && !_userPaused;
               _interrupted = false;
+              _userPaused = false;
               switch (event.type) {
                 case AudioInterruptionType.pause:
                 case AudioInterruptionType.duck:
@@ -1693,8 +1715,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
         }
 
         // If playback stalled (gapless source ran dry before we could
-        // append the next track), rebuild and resume.
-        if (!state.isPlaying && state.hasNext && _gaplessActive) {
+        // append the next track), rebuild and resume.  Don't auto-resume
+        // when the user explicitly paused playback.
+        if (!state.isPlaying &&
+            state.hasNext &&
+            _gaplessActive &&
+            !_userPaused) {
           final nextIndex = state.currentIndex + 1;
           state = state.copyWith(currentIndex: nextIndex, isLoading: true);
           final loaded = await _loadGaplessSource(nextIndex);
@@ -1723,6 +1749,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     String? source,
     Duration? initialPosition,
   }) async {
+    _userPaused = false;
     await _finalizeCurrentListen();
 
     const radioSources = {'radio', 'radio-fallback', 'instance-radio'};
@@ -2319,9 +2346,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }
 
   Future<void> play() async {
-    // User-initiated play always clears any interruption state — the user
-    // explicitly wants to resume, so we must not block them.
+    // User-initiated play always clears interruption / paused state.
     _interrupted = false;
+    _userPaused = false;
 
     // If the queue was just restored from storage, no audio source has been
     // loaded yet.  Load the current track, seek to where the user left off,
@@ -2408,7 +2435,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
     await _handler.play();
   }
 
-  Future<void> pause() => _handler.pause();
+  Future<void> pause() {
+    _userPaused = true;
+    return _handler.pause();
+  }
 
   /// Called when the app enters the background (paused/inactive lifecycle).
   void onAppPaused() {
@@ -2473,6 +2503,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
   Future<void> skipNext() async {
     if (!state.hasNext) return;
+    _userPaused = false;
     _pendingRestorePosition = null;
     await _finalizeCurrentListen();
 
@@ -2541,6 +2572,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       return;
     }
 
+    _userPaused = false;
     _pendingRestorePosition = null;
     await _finalizeCurrentListen();
 
