@@ -5,7 +5,6 @@ import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/playlists/playlists_screen.dart';
-import 'package:tayra/core/widgets/dialog_utils.dart';
 
 /// Shows a bottom sheet listing user playlists to add one or more tracks to.
 Future<void> showAddToPlaylistSheet(
@@ -13,7 +12,7 @@ Future<void> showAddToPlaylistSheet(
   WidgetRef ref, {
   required List<int> trackIds,
 }) async {
-  await showShellModalBottomSheet(
+  await showModalBottomSheet(
     context: context,
     backgroundColor: Colors.transparent,
     isScrollControlled: true,
@@ -321,11 +320,6 @@ class _AddToPlaylistSheetState extends ConsumerState<_AddToPlaylistSheet> {
         _addingToPlaylistId = null;
         _successMessage = 'Added to "${playlist.name}"';
       });
-
-      // Auto-dismiss after showing success briefly.
-      Future.delayed(const Duration(milliseconds: 1200), () {
-        if (mounted) Navigator.of(context).pop();
-      });
     } catch (e) {
       if (!mounted) return;
       setState(() {
@@ -350,7 +344,7 @@ class _AddToPlaylistSheetState extends ConsumerState<_AddToPlaylistSheet> {
       } catch (_) {}
     });
 
-    showShellDialog(
+    showDialog<bool>(
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
@@ -431,10 +425,6 @@ class _AddToPlaylistSheetState extends ConsumerState<_AddToPlaylistSheet> {
       setState(() {
         _isCreating = false;
         _successMessage = 'Created "${playlist.name}" and added tracks';
-      });
-
-      Future.delayed(const Duration(milliseconds: 1200), () {
-        if (mounted) Navigator.of(context).pop();
       });
     } catch (e) {
       if (!mounted) return;
