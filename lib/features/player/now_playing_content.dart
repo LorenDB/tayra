@@ -437,8 +437,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
             ),
           ),
           const Spacer(),
-          if (track.isPodcast)
-            _SpeedButton(speed: playerState.playbackSpeed),
+          if (track.isPodcast) _SpeedButton(speed: playerState.playbackSpeed),
           IconButton(
             icon: const Icon(Icons.queue_music_rounded, size: 22),
             color: AppTheme.onBackgroundMuted,
@@ -483,7 +482,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
                     gradient: RadialGradient(
                       center: Alignment.center,
                       radius: 0.8,
-                       colors: [
+                      colors: [
                         glowColor.withValues(alpha: 0.25 * glowAnim.value),
                         glowColor.withValues(alpha: 0.08 * glowAnim.value),
                         Colors.transparent,
@@ -502,9 +501,12 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: superSonicActive
-                            ? const Color(0xFFFFD700).withValues(alpha: 0.45)
-                            : glowColor.withValues(alpha: 0.3),
+                        color:
+                            superSonicActive
+                                ? const Color(
+                                  0xFFFFD700,
+                                ).withValues(alpha: 0.45)
+                                : glowColor.withValues(alpha: 0.3),
                         blurRadius: 40,
                         spreadRadius: 2,
                       ),
@@ -581,9 +583,10 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: superSonicActive
-                    ? const Color(0xFFFFD700).withValues(alpha: 0.4)
-                    : glowColor.withValues(alpha: 0.25),
+                color:
+                    superSonicActive
+                        ? const Color(0xFFFFD700).withValues(alpha: 0.4)
+                        : glowColor.withValues(alpha: 0.25),
                 blurRadius: 30,
                 spreadRadius: 2,
               ),

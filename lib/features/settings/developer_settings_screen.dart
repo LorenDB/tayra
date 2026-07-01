@@ -27,7 +27,8 @@ class DeveloperSettingsScreen extends ConsumerWidget {
           _DevActionTile(
             icon: Icons.no_accounts_rounded,
             title: 'Disable developer mode',
-            subtitle: 'Turn off developer mode and reset all developer settings',
+            subtitle:
+                'Turn off developer mode and reset all developer settings',
             iconColor: AppTheme.error,
             onTap: () async {
               await ref.read(settingsProvider.notifier).disableDeveloperMode();
@@ -41,10 +42,13 @@ class DeveloperSettingsScreen extends ConsumerWidget {
           _DevSwitchTile(
             icon: Icons.delete_sweep_rounded,
             title: 'Show purge cache option in menus',
-            subtitle: 'Adds a "Purge and refetch" entry to album, track, and artist menus',
+            subtitle:
+                'Adds a "Purge and refetch" entry to album, track, and artist menus',
             value: settings.showPurgeCacheOption,
             onChanged: (value) {
-              ref.read(settingsProvider.notifier).setShowPurgeCacheOption(value);
+              ref
+                  .read(settingsProvider.notifier)
+                  .setShowPurgeCacheOption(value);
             },
           ),
 
@@ -126,7 +130,11 @@ class _DevActionTile extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             child: Row(
               children: [
-                Icon(icon, color: iconColor ?? AppTheme.onBackgroundSubtle, size: 22),
+                Icon(
+                  icon,
+                  color: iconColor ?? AppTheme.onBackgroundSubtle,
+                  size: 22,
+                ),
                 const SizedBox(width: 14),
                 Expanded(
                   child: Column(

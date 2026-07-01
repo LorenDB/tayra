@@ -853,7 +853,9 @@ class CacheManager {
           try {
             await entity.delete();
           } catch (e) {
-            debugPrint('deleteAudioFilesOnDisk: failed to delete ${entity.path}: $e');
+            debugPrint(
+              'deleteAudioFilesOnDisk: failed to delete ${entity.path}: $e',
+            );
           }
         }
       }
@@ -979,7 +981,8 @@ class CacheManager {
       where: 'file_type = ?',
       whereArgs: [FileType.audio.name],
     );
-    final existingKeys = existingRows.map((r) => r['cache_key'] as String).toSet();
+    final existingKeys =
+        existingRows.map((r) => r['cache_key'] as String).toSet();
 
     for (final file in files) {
       final name = p.basename(file.path);

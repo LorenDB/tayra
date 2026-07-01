@@ -247,6 +247,7 @@ class UploadNotifier extends Notifier<UploadState> {
   Timer? _pollingTimer;
   int _pollAttempts = 0;
   int _consecutivePollErrors = 0;
+
   /// Incremented on every reset/new upload so in-flight _pollOnce calls can
   /// detect they belong to a stale session and discard their results.
   int _pollGeneration = 0;
@@ -292,7 +293,9 @@ class UploadNotifier extends Notifier<UploadState> {
   Future<void> loadLibraries() async {
     state = state.copyWith(loadingLibraries: true, libraryError: null);
     try {
-      final result = await ref.read(cachedFunkwhaleApiProvider).getLibraries(scope: 'me');
+      final result = await ref
+          .read(cachedFunkwhaleApiProvider)
+          .getLibraries(scope: 'me');
       final selected =
           result.results.isNotEmpty
               ? result.results.first.uuid

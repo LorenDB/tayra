@@ -63,7 +63,8 @@ class GeminiNanoClient implements AiClient {
 /// Returns the raw Gemini Nano feature status int for the settings screen.
 /// Only meaningful on Android; returns [_statusUnavailable] on other platforms.
 Future<int> checkGeminiNanoStatus() async {
-  if (defaultTargetPlatform != TargetPlatform.android) return _statusUnavailable;
+  if (defaultTargetPlatform != TargetPlatform.android)
+    return _statusUnavailable;
   try {
     return await _channel.invokeMethod<int>('checkFeatureStatus') ??
         _statusUnavailable;

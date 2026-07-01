@@ -147,10 +147,6 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
   /// Determines what the second category in Android Auto displays.
   BrowseMode browseMode = BrowseMode.albums;
 
-  /// Whether to expose recent media on the Android Auto home screen.
-  /// When false, the recentRoot browse node returns empty results.
-  bool androidAutoExposeRecentMedia = true;
-
   /// Queue boundary flags — updated by PlayerNotifier so the OS media
   /// session doesn't advertise skip buttons that would be no-ops.
   bool hasNext = false;
@@ -309,11 +305,6 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
     if (apiClient == null) return [];
 
     try {
-      if (parentMediaId == _BrowseIds.recentRoot &&
-          !androidAutoExposeRecentMedia) {
-        return [];
-      }
-
       // ── Root categories ───────────────────────────────────────────
 
       if (parentMediaId == _BrowseIds.root ||

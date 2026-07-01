@@ -24,9 +24,7 @@ class MiniPlayer extends ConsumerWidget {
     // (track identity, playback state). Progress is handled by a child widget
     // so position ticks don't rebuild the whole bar.
     final (track, isPlaying, isLoading) = ref.watch(
-      playerProvider.select(
-        (s) => (s.currentTrack, s.isPlaying, s.isLoading),
-      ),
+      playerProvider.select((s) => (s.currentTrack, s.isPlaying, s.isLoading)),
     );
 
     if (track == null) return const SizedBox.shrink();
@@ -235,15 +233,12 @@ class _MiniPlayerProgressBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final progress = ref.watch(
-      playerProvider.select((s) => s.progress),
-    );
+    final progress = ref.watch(playerProvider.select((s) => s.progress));
 
     return LayoutBuilder(
       builder: (context, constraints) {
         const barHeight = 2.0;
-        final filledWidth =
-            constraints.maxWidth * progress.clamp(0.0, 1.0);
+        final filledWidth = constraints.maxWidth * progress.clamp(0.0, 1.0);
         return SizedBox(
           height: barHeight,
           width: constraints.maxWidth,

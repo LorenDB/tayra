@@ -145,8 +145,7 @@ class QueuePersistenceService {
       }
 
       final queueJson = jsonDecode(queueJsonString) as List<dynamic>;
-      final queue =
-          queueJson.map(parseTrack).whereType<Track>().toList();
+      final queue = queueJson.map(parseTrack).whereType<Track>().toList();
 
       if (queue.isEmpty) return null;
 

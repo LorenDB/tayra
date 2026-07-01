@@ -29,9 +29,10 @@ Future<List<AiModel>> _fetchGroqModels(String apiKey) async {
   );
   final response = await dio.get('models');
   final data = response.data['data'] as List<dynamic>;
-  final models = data
-      .map((m) => AiModel(id: m['id'] as String, name: m['id'] as String))
-      .toList();
+  final models =
+      data
+          .map((m) => AiModel(id: m['id'] as String, name: m['id'] as String))
+          .toList();
   models.sort((a, b) => a.id.compareTo(b.id));
   return models;
 }
@@ -46,30 +47,26 @@ Future<List<AiModel>> _fetchOpenRouterModels() async {
   );
   final response = await dio.get('models');
   final data = response.data['data'] as List<dynamic>;
-  final models = data
-      .map(
-        (m) => AiModel(
-          id: m['id'] as String,
-          name: (m['name'] as String?) ?? (m['id'] as String),
-          description: m['description'] as String?,
-        ),
-      )
-      .toList();
+  final models =
+      data
+          .map(
+            (m) => AiModel(
+              id: m['id'] as String,
+              name: (m['name'] as String?) ?? (m['id'] as String),
+              description: m['description'] as String?,
+            ),
+          )
+          .toList();
   models.sort((a, b) => a.name.compareTo(b.name));
   return models;
 }
 
-Future<List<AiModel>> _fetchCustomModels(
-  String baseUrl,
-  String apiKey,
-) async {
+Future<List<AiModel>> _fetchCustomModels(String baseUrl, String apiKey) async {
   final normalised = baseUrl.endsWith('/') ? baseUrl : '$baseUrl/';
   final dio = Dio(
     BaseOptions(
       baseUrl: normalised,
-      headers: {
-        if (apiKey.isNotEmpty) 'Authorization': 'Bearer $apiKey',
-      },
+      headers: {if (apiKey.isNotEmpty) 'Authorization': 'Bearer $apiKey'},
       connectTimeout: const Duration(seconds: 15),
       receiveTimeout: const Duration(seconds: 15),
     ),
@@ -78,12 +75,11 @@ Future<List<AiModel>> _fetchCustomModels(
   final raw = response.data;
   final List<dynamic> data =
       raw is Map ? (raw['data'] as List<dynamic>? ?? []) : raw as List<dynamic>;
-  final models = data
-      .map((m) {
+  final models =
+      data.map((m) {
         final id = m['id'] as String? ?? m.toString();
         return AiModel(id: id, name: id);
-      })
-      .toList();
+      }).toList();
   models.sort((a, b) => a.id.compareTo(b.id));
   return models;
 }
@@ -127,9 +123,10 @@ class _AiProviderSettingsScreenState
     _customKeyCtrl = TextEditingController(text: settings.customEndpointApiKey)
       ..addListener(_saveCustomKey);
     _customModelCtrl = TextEditingController(
-      text: settings.customModelName.isNotEmpty
-          ? settings.customModelName
-          : 'gpt-4o-mini',
+      text:
+          settings.customModelName.isNotEmpty
+              ? settings.customModelName
+              : 'gpt-4o-mini',
     )..addListener(_saveCustomModel);
   }
 
@@ -153,8 +150,9 @@ class _AiProviderSettingsScreenState
     super.dispose();
   }
 
-  void _saveGroqKey() =>
-      ref.read(settingsProvider.notifier).setGroqApiKey(_groqKeyCtrl.text.trim());
+  void _saveGroqKey() => ref
+      .read(settingsProvider.notifier)
+      .setGroqApiKey(_groqKeyCtrl.text.trim());
 
   void _saveOpenRouterKey() => ref
       .read(settingsProvider.notifier)
@@ -187,14 +185,14 @@ class _AiProviderSettingsScreenState
       await _showModelPicker(
         models: models,
         currentModelId: settings.groqModel,
-        onSelected: (m) =>
-            ref.read(settingsProvider.notifier).setGroqModel(m.id),
+        onSelected:
+            (m) => ref.read(settingsProvider.notifier).setGroqModel(m.id),
       );
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Could not load Groq models: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Could not load Groq models: $e')));
     } finally {
       if (mounted) setState(() => _groqModelsLoading = false);
     }
@@ -209,8 +207,8 @@ class _AiProviderSettingsScreenState
       await _showModelPicker(
         models: models,
         currentModelId: settings.openRouterModel,
-        onSelected: (m) =>
-            ref.read(settingsProvider.notifier).setOpenRouterModel(m.id),
+        onSelected:
+            (m) => ref.read(settingsProvider.notifier).setOpenRouterModel(m.id),
         searchable: true,
       );
     } catch (e) {
@@ -231,8 +229,7 @@ class _AiProviderSettingsScreenState
 
     setState(() => _customModelsLoading = true);
     try {
-      final models =
-          await _fetchCustomModels(url, _customKeyCtrl.text.trim());
+      final models = await _fetchCustomModels(url, _customKeyCtrl.text.trim());
       if (!mounted) return;
       final settings = ref.read(settingsProvider);
       await _showModelPicker(
@@ -267,15 +264,16 @@ class _AiProviderSettingsScreenState
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      builder: (ctx) => _ModelPickerSheet(
-        models: models,
-        currentModelId: currentModelId,
-        searchable: searchable,
-        onSelected: (m) {
-          Navigator.pop(ctx);
-          onSelected(m);
-        },
-      ),
+      builder:
+          (ctx) => _ModelPickerSheet(
+            models: models,
+            currentModelId: currentModelId,
+            searchable: searchable,
+            onSelected: (m) {
+              Navigator.pop(ctx);
+              onSelected(m);
+            },
+          ),
     );
   }
 
@@ -301,12 +299,14 @@ class _AiProviderSettingsScreenState
           if (defaultTargetPlatform == TargetPlatform.android)
             _ProviderTile(
               title: 'Gemini Nano',
-              subtitle: 'On-device inference — private, free, no internet needed',
+              subtitle:
+                  'On-device inference — private, free, no internet needed',
               icon: Icons.memory_rounded,
               selected: selected == AiProviderType.geminiNano,
-              onTap: () => ref
-                  .read(settingsProvider.notifier)
-                  .setAiProviderType(AiProviderType.geminiNano),
+              onTap:
+                  () => ref
+                      .read(settingsProvider.notifier)
+                      .setAiProviderType(AiProviderType.geminiNano),
               child: _GeminiNanoStatus(),
             ),
 
@@ -316,36 +316,40 @@ class _AiProviderSettingsScreenState
             subtitle: 'Fast cloud inference — free tier available',
             icon: Icons.bolt_rounded,
             selected: selected == AiProviderType.groq,
-            onTap: () => ref
-                .read(settingsProvider.notifier)
-                .setAiProviderType(AiProviderType.groq),
-            child: selected == AiProviderType.groq
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _ApiKeyField(
-                        label: 'Groq API key',
-                        hint: 'gsk_...',
-                        controller: _groqKeyCtrl,
-                        obscured: _groqKeyObscured,
-                        onToggleObscure: () =>
-                            setState(() => _groqKeyObscured = !_groqKeyObscured),
-                        onSubmitted: (_) => _saveGroqKey(),
-                        onEditingComplete: _saveGroqKey,
-                        helpText: 'Get a free API key at console.groq.com',
-                      ),
-                      if (_groqKeyCtrl.text.isNotEmpty) ...[
-                        const SizedBox(height: 10),
-                        _ModelSelectorRow(
-                          label: 'Model',
-                          currentValue: settings.groqModel,
-                          loading: _groqModelsLoading,
-                          onTap: _openGroqModelPicker,
+            onTap:
+                () => ref
+                    .read(settingsProvider.notifier)
+                    .setAiProviderType(AiProviderType.groq),
+            child:
+                selected == AiProviderType.groq
+                    ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _ApiKeyField(
+                          label: 'Groq API key',
+                          hint: 'gsk_...',
+                          controller: _groqKeyCtrl,
+                          obscured: _groqKeyObscured,
+                          onToggleObscure:
+                              () => setState(
+                                () => _groqKeyObscured = !_groqKeyObscured,
+                              ),
+                          onSubmitted: (_) => _saveGroqKey(),
+                          onEditingComplete: _saveGroqKey,
+                          helpText: 'Get a free API key at console.groq.com',
                         ),
+                        if (_groqKeyCtrl.text.isNotEmpty) ...[
+                          const SizedBox(height: 10),
+                          _ModelSelectorRow(
+                            label: 'Model',
+                            currentValue: settings.groqModel,
+                            loading: _groqModelsLoading,
+                            onTap: _openGroqModelPicker,
+                          ),
+                        ],
                       ],
-                    ],
-                  )
-                : null,
+                    )
+                    : null,
           ),
 
           // ── OpenRouter ─────────────────────────────────────────────────
@@ -354,37 +358,40 @@ class _AiProviderSettingsScreenState
             subtitle: 'Access hundreds of AI models via one API',
             icon: Icons.route_rounded,
             selected: selected == AiProviderType.openRouter,
-            onTap: () => ref
-                .read(settingsProvider.notifier)
-                .setAiProviderType(AiProviderType.openRouter),
-            child: selected == AiProviderType.openRouter
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _ApiKeyField(
-                        label: 'OpenRouter API key',
-                        hint: 'sk-or-...',
-                        controller: _openRouterKeyCtrl,
-                        obscured: _openRouterKeyObscured,
-                        onToggleObscure: () => setState(
-                          () =>
-                              _openRouterKeyObscured =
-                                  !_openRouterKeyObscured,
+            onTap:
+                () => ref
+                    .read(settingsProvider.notifier)
+                    .setAiProviderType(AiProviderType.openRouter),
+            child:
+                selected == AiProviderType.openRouter
+                    ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _ApiKeyField(
+                          label: 'OpenRouter API key',
+                          hint: 'sk-or-...',
+                          controller: _openRouterKeyCtrl,
+                          obscured: _openRouterKeyObscured,
+                          onToggleObscure:
+                              () => setState(
+                                () =>
+                                    _openRouterKeyObscured =
+                                        !_openRouterKeyObscured,
+                              ),
+                          onSubmitted: (_) => _saveOpenRouterKey(),
+                          onEditingComplete: _saveOpenRouterKey,
+                          helpText: 'Get a free API key at openrouter.ai',
                         ),
-                        onSubmitted: (_) => _saveOpenRouterKey(),
-                        onEditingComplete: _saveOpenRouterKey,
-                        helpText: 'Get a free API key at openrouter.ai',
-                      ),
-                      const SizedBox(height: 10),
-                      _ModelSelectorRow(
-                        label: 'Model',
-                        currentValue: settings.openRouterModel,
-                        loading: _openRouterModelsLoading,
-                        onTap: _openOpenRouterModelPicker,
-                      ),
-                    ],
-                  )
-                : null,
+                        const SizedBox(height: 10),
+                        _ModelSelectorRow(
+                          label: 'Model',
+                          currentValue: settings.openRouterModel,
+                          loading: _openRouterModelsLoading,
+                          onTap: _openOpenRouterModelPicker,
+                        ),
+                      ],
+                    )
+                    : null,
           ),
 
           // ── Custom endpoint ─────────────────────────────────────────────
@@ -393,70 +400,77 @@ class _AiProviderSettingsScreenState
             subtitle: 'Any OpenAI-compatible API (e.g. Ollama, LM Studio)',
             icon: Icons.dns_outlined,
             selected: selected == AiProviderType.custom,
-            onTap: () => ref
-                .read(settingsProvider.notifier)
-                .setAiProviderType(AiProviderType.custom),
-            child: selected == AiProviderType.custom
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _PlainTextField(
-                        label: 'Base URL',
-                        hint: 'http://localhost:11434/v1',
-                        controller: _customUrlCtrl,
-                        onSubmitted: (_) => _saveCustomUrl(),
-                        onEditingComplete: _saveCustomUrl,
-                        keyboardType: TextInputType.url,
-                      ),
-                      const SizedBox(height: 10),
-                      _ObscurableField(
-                        label: 'API key (optional)',
-                        hint: 'Leave blank if not required',
-                        controller: _customKeyCtrl,
-                        obscured: _customKeyObscured,
-                        onToggleObscure: () =>
-                            setState(() => _customKeyObscured = !_customKeyObscured),
-                        onSubmitted: (_) => _saveCustomKey(),
-                        onEditingComplete: _saveCustomKey,
-                      ),
-                      const SizedBox(height: 10),
-                      _PlainTextField(
-                        label: 'Model name',
-                        hint: 'gpt-4o-mini',
-                        controller: _customModelCtrl,
-                        onSubmitted: (_) => _saveCustomModel(),
-                        onEditingComplete: _saveCustomModel,
-                      ),
-                      if (_customUrlCtrl.text.isNotEmpty) ...[
-                        const SizedBox(height: 8),
-                        TextButton.icon(
-                          style: TextButton.styleFrom(
-                            foregroundColor: AppTheme.primary,
-                            padding: EdgeInsets.zero,
-                            minimumSize: Size.zero,
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          ),
-                          icon: _customModelsLoading
-                              ? const SizedBox(
-                                  width: 14,
-                                  height: 14,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 1.5,
-                                    color: AppTheme.primary,
-                                  ),
-                                )
-                              : const Icon(Icons.list_rounded, size: 16),
-                          label: const Text(
-                            'Load available models',
-                            style: TextStyle(fontSize: 12),
-                          ),
-                          onPressed:
-                              _customModelsLoading ? null : _openCustomModelPicker,
+            onTap:
+                () => ref
+                    .read(settingsProvider.notifier)
+                    .setAiProviderType(AiProviderType.custom),
+            child:
+                selected == AiProviderType.custom
+                    ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _PlainTextField(
+                          label: 'Base URL',
+                          hint: 'http://localhost:11434/v1',
+                          controller: _customUrlCtrl,
+                          onSubmitted: (_) => _saveCustomUrl(),
+                          onEditingComplete: _saveCustomUrl,
+                          keyboardType: TextInputType.url,
                         ),
+                        const SizedBox(height: 10),
+                        _ObscurableField(
+                          label: 'API key (optional)',
+                          hint: 'Leave blank if not required',
+                          controller: _customKeyCtrl,
+                          obscured: _customKeyObscured,
+                          onToggleObscure:
+                              () => setState(
+                                () => _customKeyObscured = !_customKeyObscured,
+                              ),
+                          onSubmitted: (_) => _saveCustomKey(),
+                          onEditingComplete: _saveCustomKey,
+                        ),
+                        const SizedBox(height: 10),
+                        _PlainTextField(
+                          label: 'Model name',
+                          hint: 'gpt-4o-mini',
+                          controller: _customModelCtrl,
+                          onSubmitted: (_) => _saveCustomModel(),
+                          onEditingComplete: _saveCustomModel,
+                        ),
+                        if (_customUrlCtrl.text.isNotEmpty) ...[
+                          const SizedBox(height: 8),
+                          TextButton.icon(
+                            style: TextButton.styleFrom(
+                              foregroundColor: AppTheme.primary,
+                              padding: EdgeInsets.zero,
+                              minimumSize: Size.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                            icon:
+                                _customModelsLoading
+                                    ? const SizedBox(
+                                      width: 14,
+                                      height: 14,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 1.5,
+                                        color: AppTheme.primary,
+                                      ),
+                                    )
+                                    : const Icon(Icons.list_rounded, size: 16),
+                            label: const Text(
+                              'Load available models',
+                              style: TextStyle(fontSize: 12),
+                            ),
+                            onPressed:
+                                _customModelsLoading
+                                    ? null
+                                    : _openCustomModelPicker,
+                          ),
+                        ],
                       ],
-                    ],
-                  )
-                : null,
+                    )
+                    : null,
           ),
         ],
       ),
@@ -490,9 +504,10 @@ class _ProviderTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppTheme.surfaceContainer,
         borderRadius: BorderRadius.circular(12),
-        border: selected
-            ? Border.all(color: AppTheme.primary.withAlpha(120), width: 1.5)
-            : null,
+        border:
+            selected
+                ? Border.all(color: AppTheme.primary.withAlpha(120), width: 1.5)
+                : null,
       ),
       child: Material(
         color: Colors.transparent,
@@ -509,9 +524,10 @@ class _ProviderTile extends StatelessWidget {
                   children: [
                     Icon(
                       icon,
-                      color: selected
-                          ? AppTheme.primary
-                          : AppTheme.onBackgroundSubtle,
+                      color:
+                          selected
+                              ? AppTheme.primary
+                              : AppTheme.onBackgroundSubtle,
                       size: 22,
                     ),
                     const SizedBox(width: 14),
@@ -522,9 +538,10 @@ class _ProviderTile extends StatelessWidget {
                           Text(
                             title,
                             style: TextStyle(
-                              color: selected
-                                  ? AppTheme.primary
-                                  : AppTheme.onBackground,
+                              color:
+                                  selected
+                                      ? AppTheme.primary
+                                      : AppTheme.onBackground,
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                             ),
@@ -550,7 +567,10 @@ class _ProviderTile extends StatelessWidget {
                 ),
                 if (child != null) ...[
                   const SizedBox(height: 12),
-                  const Divider(color: AppTheme.surfaceContainerHigh, height: 1),
+                  const Divider(
+                    color: AppTheme.surfaceContainerHigh,
+                    height: 1,
+                  ),
                   const SizedBox(height: 12),
                   child!,
                 ],
@@ -571,15 +591,17 @@ class _GeminiNanoStatus extends ConsumerWidget {
     final statusAsync = ref.watch(genaiModelStatusProvider);
 
     return statusAsync.when(
-      loading: () => const _StatusRow(
-        icon: Icons.hourglass_empty_rounded,
-        label: 'Checking status…',
-      ),
-      error: (err, stack) => const _StatusRow(
-        icon: Icons.error_outline,
-        label: 'Status unavailable',
-        color: AppTheme.error,
-      ),
+      loading:
+          () => const _StatusRow(
+            icon: Icons.hourglass_empty_rounded,
+            label: 'Checking status…',
+          ),
+      error:
+          (err, stack) => const _StatusRow(
+            icon: Icons.error_outline,
+            label: 'Status unavailable',
+            color: AppTheme.error,
+          ),
       data: (status) {
         const statusAvailable = 3;
         const statusDownloading = 2;
@@ -658,9 +680,7 @@ class _StatusRow extends StatelessWidget {
       children: [
         Icon(icon, size: 16, color: c),
         const SizedBox(width: 6),
-        Expanded(
-          child: Text(label, style: TextStyle(color: c, fontSize: 12)),
-        ),
+        Expanded(child: Text(label, style: TextStyle(color: c, fontSize: 12))),
       ],
     );
   }
@@ -719,16 +739,17 @@ class _ModelSelectorRow extends StatelessWidget {
             ),
           ),
           onPressed: loading ? null : onTap,
-          child: loading
-              ? const SizedBox(
-                  width: 14,
-                  height: 14,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 1.5,
-                    color: AppTheme.primary,
-                  ),
-                )
-              : const Text('Select', style: TextStyle(fontSize: 12)),
+          child:
+              loading
+                  ? const SizedBox(
+                    width: 14,
+                    height: 14,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 1.5,
+                      color: AppTheme.primary,
+                    ),
+                  )
+                  : const Text('Select', style: TextStyle(fontSize: 12)),
         ),
       ],
     );
@@ -825,9 +846,7 @@ class _ObscurableField extends StatelessWidget {
         ),
         suffixIcon: IconButton(
           icon: Icon(
-            obscured
-                ? Icons.visibility_rounded
-                : Icons.visibility_off_rounded,
+            obscured ? Icons.visibility_rounded : Icons.visibility_off_rounded,
             color: AppTheme.onBackgroundSubtle,
             size: 18,
           ),
@@ -846,7 +865,10 @@ class _ObscurableField extends StatelessWidget {
           borderSide: const BorderSide(color: AppTheme.primary),
         ),
         isDense: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 10,
+        ),
       ),
       onSubmitted: onSubmitted,
       onEditingComplete: onEditingComplete,
@@ -901,7 +923,10 @@ class _PlainTextField extends StatelessWidget {
           borderSide: const BorderSide(color: AppTheme.primary),
         ),
         isDense: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 10,
+        ),
       ),
       onSubmitted: onSubmitted,
       onEditingComplete: onEditingComplete,
@@ -950,15 +975,16 @@ class _ModelPickerSheetState extends State<_ModelPickerSheet> {
   void _filter() {
     final q = _searchCtrl.text.toLowerCase();
     setState(() {
-      _filtered = q.isEmpty
-          ? widget.models
-          : widget.models
-              .where(
-                (m) =>
-                    m.id.toLowerCase().contains(q) ||
-                    m.name.toLowerCase().contains(q),
-              )
-              .toList();
+      _filtered =
+          q.isEmpty
+              ? widget.models
+              : widget.models
+                  .where(
+                    (m) =>
+                        m.id.toLowerCase().contains(q) ||
+                        m.name.toLowerCase().contains(q),
+                  )
+                  .toList();
     });
   }
 
@@ -1026,16 +1052,17 @@ class _ModelPickerSheetState extends State<_ModelPickerSheet> {
                     color: AppTheme.onBackgroundSubtle,
                     size: 20,
                   ),
-                  suffixIcon: _searchCtrl.text.isNotEmpty
-                      ? IconButton(
-                          icon: const Icon(
-                            Icons.clear_rounded,
-                            color: AppTheme.onBackgroundSubtle,
-                            size: 18,
-                          ),
-                          onPressed: () => _searchCtrl.clear(),
-                        )
-                      : null,
+                  suffixIcon:
+                      _searchCtrl.text.isNotEmpty
+                          ? IconButton(
+                            icon: const Icon(
+                              Icons.clear_rounded,
+                              color: AppTheme.onBackgroundSubtle,
+                              size: 18,
+                            ),
+                            onPressed: () => _searchCtrl.clear(),
+                          )
+                          : null,
                   filled: true,
                   fillColor: AppTheme.surfaceContainerHigh,
                   border: OutlineInputBorder(
@@ -1053,71 +1080,75 @@ class _ModelPickerSheetState extends State<_ModelPickerSheet> {
           const Divider(color: AppTheme.surfaceContainerHigh, height: 1),
           // Model list
           Expanded(
-            child: _filtered.isEmpty
-                ? const Center(
-                    child: Text(
-                      'No models match your search',
-                      style: TextStyle(
-                        color: AppTheme.onBackgroundMuted,
-                        fontSize: 14,
+            child:
+                _filtered.isEmpty
+                    ? const Center(
+                      child: Text(
+                        'No models match your search',
+                        style: TextStyle(
+                          color: AppTheme.onBackgroundMuted,
+                          fontSize: 14,
+                        ),
                       ),
-                    ),
-                  )
-                : ListView.builder(
-                    itemCount: _filtered.length,
-                    itemBuilder: (ctx, i) {
-                      final model = _filtered[i];
-                      final isSelected = model.id == widget.currentModelId;
-                      return InkWell(
-                        onTap: () => widget.onSelected(model),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 12,
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      model.name,
-                                      style: TextStyle(
-                                        color: isSelected
-                                            ? AppTheme.primary
-                                            : AppTheme.onBackground,
-                                        fontSize: 13,
-                                        fontWeight: isSelected
-                                            ? FontWeight.w600
-                                            : FontWeight.w400,
-                                      ),
-                                    ),
-                                    if (model.name != model.id) ...[
-                                      const SizedBox(height: 2),
+                    )
+                    : ListView.builder(
+                      itemCount: _filtered.length,
+                      itemBuilder: (ctx, i) {
+                        final model = _filtered[i];
+                        final isSelected = model.id == widget.currentModelId;
+                        return InkWell(
+                          onTap: () => widget.onSelected(model),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 12,
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
                                       Text(
-                                        model.id,
-                                        style: const TextStyle(
-                                          color: AppTheme.onBackgroundSubtle,
-                                          fontSize: 11,
+                                        model.name,
+                                        style: TextStyle(
+                                          color:
+                                              isSelected
+                                                  ? AppTheme.primary
+                                                  : AppTheme.onBackground,
+                                          fontSize: 13,
+                                          fontWeight:
+                                              isSelected
+                                                  ? FontWeight.w600
+                                                  : FontWeight.w400,
                                         ),
                                       ),
+                                      if (model.name != model.id) ...[
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          model.id,
+                                          style: const TextStyle(
+                                            color: AppTheme.onBackgroundSubtle,
+                                            fontSize: 11,
+                                          ),
+                                        ),
+                                      ],
                                     ],
-                                  ],
+                                  ),
                                 ),
-                              ),
-                              if (isSelected)
-                                const Icon(
-                                  Icons.check_rounded,
-                                  color: AppTheme.primary,
-                                  size: 18,
-                                ),
-                            ],
+                                if (isSelected)
+                                  const Icon(
+                                    Icons.check_rounded,
+                                    color: AppTheme.primary,
+                                    size: 18,
+                                  ),
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
+                        );
+                      },
+                    ),
           ),
         ],
       ),

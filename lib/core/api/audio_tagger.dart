@@ -87,8 +87,7 @@ Uint8List _tagMp3(Uint8List original, AudioMetadata meta) {
     }
   }
 
-  final audioData =
-      Uint8List.sublistView(original, audioStart, audioEnd);
+  final audioData = Uint8List.sublistView(original, audioStart, audioEnd);
 
   // Build new ID3v2.4 tag.
   final frames = BytesBuilder(copy: false);
@@ -222,8 +221,11 @@ Uint8List _tagFlac(Uint8List original, AudioMetadata meta) {
         (original[offset + 1] << 16) |
         (original[offset + 2] << 8) |
         original[offset + 3];
-    final blockData =
-        Uint8List.sublistView(original, offset + 4, offset + 4 + blockLen);
+    final blockData = Uint8List.sublistView(
+      original,
+      offset + 4,
+      offset + 4 + blockLen,
+    );
     existingBlocks.add(_FlacBlock(blockType, blockData));
     offset += 4 + blockLen;
   }
@@ -263,11 +265,7 @@ Uint8List _tagFlac(Uint8List original, AudioMetadata meta) {
     final headerByte = (isLast ? 0x80 : 0x00) | (block.type & 0x7F);
     result.addByte(headerByte);
     final len = block.data.length;
-    result.add([
-      (len >> 16) & 0xFF,
-      (len >> 8) & 0xFF,
-      len & 0xFF,
-    ]);
+    result.add([(len >> 16) & 0xFF, (len >> 8) & 0xFF, len & 0xFF]);
     result.add(block.data);
   }
 
@@ -378,10 +376,7 @@ Uint8List? _tagOgg(Uint8List original, AudioMetadata meta, _OggCodec codec) {
   }
 
   if (commentPageIndex < 0) {
-    developer.log(
-      'OGG: comment header not found',
-      name: 'tayra.tagger',
-    );
+    developer.log('OGG: comment header not found', name: 'tayra.tagger');
     return null;
   }
 
@@ -507,16 +502,18 @@ List<_OggPage> _parseOggPages(Uint8List data) {
     // Last packet is complete if the last lacing value is not 255.
     final lastComplete = numSegments == 0 || segTable.last != 255;
 
-    pages.add(_OggPage(
-      rawBytes: rawBytes,
-      headerType: headerType,
-      granulePosition: granule,
-      serial: serial,
-      pageSeqNo: pageSeqNo,
-      payload: payload,
-      segmentTable: segTable.toList(),
-      lastPacketComplete: lastComplete,
-    ));
+    pages.add(
+      _OggPage(
+        rawBytes: rawBytes,
+        headerType: headerType,
+        granulePosition: granule,
+        serial: serial,
+        pageSeqNo: pageSeqNo,
+        payload: payload,
+        segmentTable: segTable.toList(),
+        lastPacketComplete: lastComplete,
+      ),
+    );
 
     offset += headerLen + payloadLen;
   }

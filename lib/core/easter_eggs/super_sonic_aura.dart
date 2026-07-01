@@ -123,10 +123,7 @@ class _SuperSonicAuraState extends State<SuperSonicAura>
           clipBehavior: Clip.none,
           children: [
             // Drives layout size — padded child.
-            Padding(
-              padding: EdgeInsets.all(pad),
-              child: widget.child,
-            ),
+            Padding(padding: EdgeInsets.all(pad), child: widget.child),
             // Paint layer inflated outward; does not contribute to layout.
             Positioned(
               left: -overflow,
@@ -210,11 +207,12 @@ class _Spark {
     outward = (outward + dt * 0.06).clamp(0.0, 1.0);
     sinePhase += sineFreq * dt;
 
-    opacity = progress < 0.12
-        ? progress / 0.12
-        : progress > 0.70
-        ? (1.0 - progress) / 0.30
-        : 1.0;
+    opacity =
+        progress < 0.12
+            ? progress / 0.12
+            : progress > 0.70
+            ? (1.0 - progress) / 0.30
+            : 1.0;
     opacity *= 0.75;
 
     if (progress >= 1.0) {
@@ -236,21 +234,25 @@ class _Spark {
     switch (edge) {
       case 0:
         final x = artRect.left + edgeT * artRect.width + wiggle;
-        final y = artRect.bottom + outward * pad * 0.5
-            - progress * (artRect.height + pad * 1.4);
+        final y =
+            artRect.bottom +
+            outward * pad * 0.5 -
+            progress * (artRect.height + pad * 1.4);
         return Offset(x, y);
       case 1:
-        final y = artRect.bottom
-            - edgeT * artRect.height
-            - progress * artRect.height * 0.6
-            + wiggle;
+        final y =
+            artRect.bottom -
+            edgeT * artRect.height -
+            progress * artRect.height * 0.6 +
+            wiggle;
         final x = artRect.left - outward * pad * 0.9;
         return Offset(x, y);
       case 2:
-        final y = artRect.bottom
-            - edgeT * artRect.height
-            - progress * artRect.height * 0.6
-            + wiggle;
+        final y =
+            artRect.bottom -
+            edgeT * artRect.height -
+            progress * artRect.height * 0.6 +
+            wiggle;
         final x = artRect.right + outward * pad * 0.9;
         return Offset(x, y);
       default:
@@ -325,7 +327,8 @@ class _Tendril {
     wobblePhase2 += wobbleSpeed2 * dt;
     opacityPhase += opacitySpeed * dt;
     // Flicker more aggressively than before.
-    opacity = (0.15 + 0.20 * math.sin(opacityPhase) +
+    opacity = (0.15 +
+            0.20 * math.sin(opacityPhase) +
             0.08 * math.sin(opacityPhase * 2.3))
         .clamp(0.0, 1.0);
   }
@@ -340,9 +343,9 @@ class _Tendril {
     final a1 = angle + length;
 
     Offset pt(double a, double extraR) => Offset(
-          cx + (rx + extraR) * math.cos(a),
-          cy + (ry + extraR) * math.sin(a),
-        );
+      cx + (rx + extraR) * math.cos(a),
+      cy + (ry + extraR) * math.sin(a),
+    );
 
     final p0 = pt(a0, 0);
     final p3 = pt(a1, 0);
@@ -354,9 +357,10 @@ class _Tendril {
     final cp1 = pt(a0 + length * 0.30, w1);
     final cp2 = pt(a0 + length * 0.70, w2);
 
-    final path = Path()
-      ..moveTo(p0.dx, p0.dy)
-      ..cubicTo(cp1.dx, cp1.dy, cp2.dx, cp2.dy, p3.dx, p3.dy);
+    final path =
+        Path()
+          ..moveTo(p0.dx, p0.dy)
+          ..cubicTo(cp1.dx, cp1.dy, cp2.dx, cp2.dy, p3.dx, p3.dy);
 
     paint
       ..color = const Color(0xFFFFE033).withValues(alpha: opacity)
@@ -390,14 +394,20 @@ class _AuraPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final pad = glowPadding;
     final artRect = Rect.fromLTWH(
-      pad, pad, size.width - pad * 2, size.height - pad * 2,
+      pad,
+      pad,
+      size.width - pad * 2,
+      size.height - pad * 2,
     );
 
     // ── Clip: cut out the art so we never paint over the child ───────────────
-    final artCutout = Path()
-      ..addRect(const Rect.fromLTWH(-4096, -4096, 8192, 8192))
-      ..addRRect(RRect.fromRectAndRadius(artRect, Radius.circular(artRadius)))
-      ..fillType = PathFillType.evenOdd;
+    final artCutout =
+        Path()
+          ..addRect(const Rect.fromLTWH(-4096, -4096, 8192, 8192))
+          ..addRRect(
+            RRect.fromRectAndRadius(artRect, Radius.circular(artRadius)),
+          )
+          ..fillType = PathFillType.evenOdd;
     canvas.save();
     canvas.clipPath(artCutout);
 
@@ -406,7 +416,10 @@ class _AuraPainter extends CustomPainter {
     // The large blur radius spreads it into a smooth halo with no visible rings.
     final glowAlpha = 0.55 + pulse * 0.30;
     canvas.drawRRect(
-      RRect.fromRectAndRadius(artRect.inflate(2.0), Radius.circular(artRadius + 2)),
+      RRect.fromRectAndRadius(
+        artRect.inflate(2.0),
+        Radius.circular(artRadius + 2),
+      ),
       Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = pad * 2.4
@@ -415,7 +428,10 @@ class _AuraPainter extends CustomPainter {
     );
     // Brighter, tighter inner bloom layered on top for a hot-edge feel.
     canvas.drawRRect(
-      RRect.fromRectAndRadius(artRect.inflate(1.0), Radius.circular(artRadius + 1)),
+      RRect.fromRectAndRadius(
+        artRect.inflate(1.0),
+        Radius.circular(artRadius + 1),
+      ),
       Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = pad * 0.9
@@ -424,7 +440,10 @@ class _AuraPainter extends CustomPainter {
     );
     // Crisp bright rim right at the art edge.
     canvas.drawRRect(
-      RRect.fromRectAndRadius(artRect.inflate(0.5), Radius.circular(artRadius + 1)),
+      RRect.fromRectAndRadius(
+        artRect.inflate(0.5),
+        Radius.circular(artRadius + 1),
+      ),
       Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1.5 + pulse * 1.0
@@ -433,10 +452,11 @@ class _AuraPainter extends CustomPainter {
     );
 
     // ── Tendrils ─────────────────────────────────────────────────────────────
-    final tendrilPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
+    final tendrilPaint =
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeCap = StrokeCap.round
+          ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
     for (final t in tendrils) {
       t.draw(canvas, artRect, pad, tendrilPaint);
     }
@@ -448,8 +468,11 @@ class _AuraPainter extends CustomPainter {
       if (artRect.contains(offset)) continue;
       final alpha = s.opacity.clamp(0.0, 1.0);
       if (alpha <= 0.01) continue;
-      final color =
-          Color.lerp(_amber, _paleGold, s.edgeT)!.withValues(alpha: alpha);
+      final color = Color.lerp(
+        _amber,
+        _paleGold,
+        s.edgeT,
+      )!.withValues(alpha: alpha);
       sparkPaint
         ..color = color
         ..maskFilter = MaskFilter.blur(BlurStyle.normal, s.radius * 0.8);

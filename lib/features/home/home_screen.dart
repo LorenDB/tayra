@@ -16,7 +16,8 @@ import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/player/player_provider.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:tayra/features/year_review/listen_history_provider.dart';
-import 'package:tayra/features/year_review/listen_history_service.dart' show WeeklyStats;
+import 'package:tayra/features/year_review/listen_history_service.dart'
+    show WeeklyStats;
 import 'package:tayra/features/search/search_screen.dart';
 import 'package:tayra/core/widgets/app_shell.dart';
 
@@ -210,7 +211,12 @@ class _GreetingHeader extends ConsumerWidget {
 
     return Container(
       decoration: BoxDecoration(gradient: AppTheme.subtleFade),
-      padding: EdgeInsets.fromLTRB(horizontalPadding, 20, horizontalPadding, 16),
+      padding: EdgeInsets.fromLTRB(
+        horizontalPadding,
+        20,
+        horizontalPadding,
+        16,
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -861,9 +867,11 @@ class _OverflowNavSection extends ConsumerWidget {
     );
 
     // All non-home tab indices (1–6) that aren't pinned.
-    final overflowIndices = List.generate(AppShell.tabs.length - 1, (i) => i + 1)
-        .where((i) => !pinnedIndices.contains(i))
-        .toList();
+    final overflowIndices =
+        List.generate(
+          AppShell.tabs.length - 1,
+          (i) => i + 1,
+        ).where((i) => !pinnedIndices.contains(i)).toList();
 
     if (overflowIndices.isEmpty) return const SizedBox.shrink();
 
@@ -944,7 +952,8 @@ class _WeeklyStatsSection extends ConsumerStatefulWidget {
   const _WeeklyStatsSection();
 
   @override
-  ConsumerState<_WeeklyStatsSection> createState() => _WeeklyStatsSectionState();
+  ConsumerState<_WeeklyStatsSection> createState() =>
+      _WeeklyStatsSectionState();
 }
 
 class _WeeklyStatsSectionState extends ConsumerState<_WeeklyStatsSection> {
