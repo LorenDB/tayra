@@ -105,7 +105,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: 'login',
         builder: (context, state) => const LoginScreen(),
       ),
-      // Main shell with bottom nav
+      // Main shell with bottom nav.  All tab routes are nested under the
+      // home route ("/") so that navigating to a tab (via context.go) pushes
+      // the tab page on top of home rather than replacing it.  This keeps the
+      // home page mounted in the stack, preserving its state, and lets the
+      // system back button pop naturally back to home instead of exiting.
       ShellRoute(
         navigatorKey: shellNavigatorKey,
         builder: (context, state, child) => AppShell(child: child),
@@ -120,9 +124,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 path: 'album/:id',
                 name: 'album_detail',
                 builder: (context, state) {
-                  final id = int.tryParse(
-                    state.pathParameters['id'] ?? '',
-                  );
+                  final id = int.tryParse(state.pathParameters['id'] ?? '');
                   if (id == null) return const HomeScreen();
                   return AlbumDetailScreen(albumId: id);
                 },
@@ -131,9 +133,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     path: 'edit',
                     name: 'album_edit',
                     builder: (context, state) {
-                      final id = int.tryParse(
-                        state.pathParameters['id'] ?? '',
-                      );
+                      final id = int.tryParse(state.pathParameters['id'] ?? '');
                       if (id == null) return const HomeScreen();
                       return AlbumEditScreen(albumId: id);
                     },
@@ -144,9 +144,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 path: 'artist/:id',
                 name: 'artist_detail',
                 builder: (context, state) {
-                  final id = int.tryParse(
-                    state.pathParameters['id'] ?? '',
-                  );
+                  final id = int.tryParse(state.pathParameters['id'] ?? '');
                   if (id == null) return const HomeScreen();
                   return ArtistDetailScreen(artistId: id);
                 },
@@ -180,180 +178,169 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   ),
                 ],
               ),
-            ],
-          ),
-          GoRoute(
-            path: '/artists',
-            name: 'artists',
-            pageBuilder:
-                (context, state) =>
-                    const NoTransitionPage(child: ArtistsTabScreen()),
-            routes: [
+              // ── Tab routes ──
               GoRoute(
-                path: 'artist/:id',
-                name: 'artists_artist_detail',
-                builder: (context, state) {
-                  final id = int.tryParse(
-                    state.pathParameters['id'] ?? '',
-                  );
-                  if (id == null) return const ArtistsTabScreen();
-                  return ArtistDetailScreen(artistId: id);
-                },
-              ),
-            ],
-          ),
-          GoRoute(
-            path: '/browse',
-            name: 'browse',
-            pageBuilder:
-                (context, state) =>
-                    const NoTransitionPage(child: BrowseScreen()),
-            routes: [
-              GoRoute(
-                path: 'artist/:id',
-                name: 'browse_artist_detail',
-                builder: (context, state) {
-                  final id = int.tryParse(
-                    state.pathParameters['id'] ?? '',
-                  );
-                  if (id == null) return const BrowseScreen();
-                  return ArtistDetailScreen(artistId: id);
-                },
-              ),
-              GoRoute(
-                path: 'album/:id',
-                name: 'browse_album_detail',
-                builder: (context, state) {
-                  final id = int.tryParse(
-                    state.pathParameters['id'] ?? '',
-                  );
-                  if (id == null) return const BrowseScreen();
-                  return AlbumDetailScreen(albumId: id);
-                },
+                path: 'artists',
+                name: 'artists',
+                pageBuilder:
+                    (context, state) =>
+                        const NoTransitionPage(child: ArtistsTabScreen()),
                 routes: [
                   GoRoute(
-                    path: 'edit',
-                    name: 'browse_album_edit',
+                    path: 'artist/:id',
+                    name: 'artists_artist_detail',
                     builder: (context, state) {
-                      final id = int.tryParse(
-                        state.pathParameters['id'] ?? '',
-                      );
+                      final id = int.tryParse(state.pathParameters['id'] ?? '');
+                      if (id == null) return const ArtistsTabScreen();
+                      return ArtistDetailScreen(artistId: id);
+                    },
+                  ),
+                ],
+              ),
+              GoRoute(
+                path: 'browse',
+                name: 'browse',
+                pageBuilder:
+                    (context, state) =>
+                        const NoTransitionPage(child: BrowseScreen()),
+                routes: [
+                  GoRoute(
+                    path: 'artist/:id',
+                    name: 'browse_artist_detail',
+                    builder: (context, state) {
+                      final id = int.tryParse(state.pathParameters['id'] ?? '');
                       if (id == null) return const BrowseScreen();
-                      return AlbumEditScreen(albumId: id);
+                      return ArtistDetailScreen(artistId: id);
+                    },
+                  ),
+                  GoRoute(
+                    path: 'album/:id',
+                    name: 'browse_album_detail',
+                    builder: (context, state) {
+                      final id = int.tryParse(state.pathParameters['id'] ?? '');
+                      if (id == null) return const BrowseScreen();
+                      return AlbumDetailScreen(albumId: id);
+                    },
+                    routes: [
+                      GoRoute(
+                        path: 'edit',
+                        name: 'browse_album_edit',
+                        builder: (context, state) {
+                          final id = int.tryParse(
+                            state.pathParameters['id'] ?? '',
+                          );
+                          if (id == null) return const BrowseScreen();
+                          return AlbumEditScreen(albumId: id);
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              GoRoute(
+                path: 'radios',
+                name: 'radios',
+                pageBuilder:
+                    (context, state) =>
+                        const NoTransitionPage(child: RadiosScreen()),
+              ),
+              GoRoute(
+                path: 'podcasts',
+                name: 'podcasts',
+                pageBuilder:
+                    (context, state) =>
+                        const NoTransitionPage(child: PodcastsScreen()),
+                routes: [
+                  GoRoute(
+                    path: ':uuid',
+                    name: 'podcast_detail',
+                    builder: (context, state) {
+                      final uuid = state.pathParameters['uuid']!;
+                      final extra = state.extra;
+                      final channel = extra is models.Channel ? extra : null;
+                      return PodcastDetailScreen(
+                        channelUuid: uuid,
+                        channel: channel,
+                      );
                     },
                   ),
                 ],
               ),
-            ],
-          ),
-          GoRoute(
-            path: '/radios',
-            name: 'radios',
-            pageBuilder:
-                (context, state) =>
-                    const NoTransitionPage(child: RadiosScreen()),
-          ),
-          GoRoute(
-            path: '/podcasts',
-            name: 'podcasts',
-            pageBuilder:
-                (context, state) =>
-                    const NoTransitionPage(child: PodcastsScreen()),
-            routes: [
               GoRoute(
-                path: ':uuid',
-                name: 'podcast_detail',
-                builder: (context, state) {
-                  final uuid = state.pathParameters['uuid']!;
-                  final extra = state.extra;
-                  final channel = extra is models.Channel ? extra : null;
-                  return PodcastDetailScreen(
-                    channelUuid: uuid,
-                    channel: channel,
-                  );
-                },
-              ),
-            ],
-          ),
-          GoRoute(
-            path: '/search',
-            name: 'search',
-            pageBuilder:
-                (context, state) =>
-                    const NoTransitionPage(child: SearchScreen()),
-            routes: [
-              GoRoute(
-                path: 'album/:id',
-                name: 'search_album_detail',
-                builder: (context, state) {
-                  final id = int.tryParse(
-                    state.pathParameters['id'] ?? '',
-                  );
-                  if (id == null) return const SearchScreen();
-                  return AlbumDetailScreen(albumId: id);
-                },
+                path: 'search',
+                name: 'search',
+                pageBuilder:
+                    (context, state) =>
+                        const NoTransitionPage(child: SearchScreen()),
                 routes: [
                   GoRoute(
-                    path: 'edit',
-                    name: 'search_album_edit',
+                    path: 'album/:id',
+                    name: 'search_album_detail',
                     builder: (context, state) {
-                      final id = int.tryParse(
-                        state.pathParameters['id'] ?? '',
-                      );
+                      final id = int.tryParse(state.pathParameters['id'] ?? '');
                       if (id == null) return const SearchScreen();
-                      return AlbumEditScreen(albumId: id);
+                      return AlbumDetailScreen(albumId: id);
+                    },
+                    routes: [
+                      GoRoute(
+                        path: 'edit',
+                        name: 'search_album_edit',
+                        builder: (context, state) {
+                          final id = int.tryParse(
+                            state.pathParameters['id'] ?? '',
+                          );
+                          if (id == null) return const SearchScreen();
+                          return AlbumEditScreen(albumId: id);
+                        },
+                      ),
+                    ],
+                  ),
+                  GoRoute(
+                    path: 'artist/:id',
+                    name: 'search_artist_detail',
+                    builder: (context, state) {
+                      final id = int.tryParse(state.pathParameters['id'] ?? '');
+                      if (id == null) return const SearchScreen();
+                      return ArtistDetailScreen(artistId: id);
                     },
                   ),
                 ],
               ),
               GoRoute(
-                path: 'artist/:id',
-                name: 'search_artist_detail',
-                builder: (context, state) {
-                  final id = int.tryParse(
-                    state.pathParameters['id'] ?? '',
-                  );
-                  if (id == null) return const SearchScreen();
-                  return ArtistDetailScreen(artistId: id);
-                },
+                path: 'favorites',
+                name: 'favorites',
+                pageBuilder:
+                    (context, state) =>
+                        const NoTransitionPage(child: FavoritesScreen()),
               ),
-            ],
-          ),
-          GoRoute(
-            path: '/favorites',
-            name: 'favorites',
-            pageBuilder:
-                (context, state) =>
-                    const NoTransitionPage(child: FavoritesScreen()),
-          ),
-          GoRoute(
-            path: '/playlists',
-            name: 'playlists',
-            pageBuilder:
-                (context, state) =>
-                    const NoTransitionPage(child: PlaylistsScreen()),
-            routes: [
               GoRoute(
-                path: ':id',
-                name: 'playlist_detail',
-                builder: (context, state) {
-                  final id = int.tryParse(
-                    state.pathParameters['id'] ?? '',
-                  );
-                  if (id == null) return const PlaylistsScreen();
-                  return PlaylistDetailScreen(playlistId: id);
-                },
+                path: 'playlists',
+                name: 'playlists',
+                pageBuilder:
+                    (context, state) =>
+                        const NoTransitionPage(child: PlaylistsScreen()),
                 routes: [
                   GoRoute(
-                    path: 'edit',
-                    name: 'playlist_edit',
+                    path: ':id',
+                    name: 'playlist_detail',
                     builder: (context, state) {
-                      final id = int.tryParse(
-                        state.pathParameters['id'] ?? '',
-                      );
+                      final id = int.tryParse(state.pathParameters['id'] ?? '');
                       if (id == null) return const PlaylistsScreen();
-                      return PlaylistEditScreen(playlistId: id);
+                      return PlaylistDetailScreen(playlistId: id);
                     },
+                    routes: [
+                      GoRoute(
+                        path: 'edit',
+                        name: 'playlist_edit',
+                        builder: (context, state) {
+                          final id = int.tryParse(
+                            state.pathParameters['id'] ?? '',
+                          );
+                          if (id == null) return const PlaylistsScreen();
+                          return PlaylistEditScreen(playlistId: id);
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),

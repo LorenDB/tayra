@@ -86,61 +86,29 @@ class AppShell extends ConsumerWidget {
       settingsProvider.select((s) => s.mobilePinnedTabIndices),
     );
 
-    final scaffold =
-        useSideNav
-            ? _buildDesktopLayout(
-              context,
-              ref,
-              currentIndex,
-              hasTrack,
-              queueCompleted,
-              stashCount,
-            )
-            : _buildMobileLayout(
-              context,
-              ref,
-              currentIndex,
-              hasTrack,
-              queueCompleted,
-              stashCount,
-              pinnedIndices,
-            );
-
-    // On non-home tabs, block the default back-to-exit behaviour and
-    // navigate to Home instead.  PopScope sits above the Scaffold and
-    // intercepts the system back gesture / button before the navigator
-    // can act on it, regardless of the go_router shell structure.
-    if (currentIndex != 0) {
-      // Let the nested shell navigator always receive the system back
-      // gesture first (so dialogs / sheets can close).  After the nested
-      // navigator attempts to pop we'll be notified via `didPop` and can
-      // navigate to the Home tab only when nothing was popped.
-      return PopScope(
-        canPop: true,
-        onPopInvokedWithResult: (didPop, result) {
-          if (!didPop) {
-            // Ensure any popup routes attached to either the shell navigator
-            // or the root navigator are dismissed so they don't remain after
-            // we navigate the shell to Home.
-            try {
-              shellNavigatorKey.currentState?.popUntil(
-                (route) => route is! PopupRoute,
-              );
-            } catch (_) {}
-            try {
-              Navigator.of(
-                context,
-                rootNavigator: true,
-              ).popUntil((route) => route is! PopupRoute);
-            } catch (_) {}
-
-            context.go(paths[0]);
-          }
-        },
-        child: scaffold,
+    // All tab routes are nested under "/" (home) so navigating to a tab via
+    // context.go pushes the tab page on top of home rather than replacing it.
+    // The system back button pops naturally back to home (with its state
+    // preserved), so no PopScope redirect logic is needed.
+    if (useSideNav) {
+      return _buildDesktopLayout(
+        context,
+        ref,
+        currentIndex,
+        hasTrack,
+        queueCompleted,
+        stashCount,
       );
     }
-    return scaffold;
+    return _buildMobileLayout(
+      context,
+      ref,
+      currentIndex,
+      hasTrack,
+      queueCompleted,
+      stashCount,
+      pinnedIndices,
+    );
   }
 
   // ── Desktop / tablet layout with NavigationRail ───────────────────────
@@ -266,56 +234,59 @@ class AppShell extends ConsumerWidget {
               child: SizedBox(
                 height: 56,
                 child: Row(
-                  children: primaryIndices.map((i) {
-                    final isSelected = i == currentIndex;
-                    return Expanded(
-                      child: InkWell(
-                        onTap: () {
-                          final nested = shellNavigatorKey.currentState;
-                          if (nested != null) {
-                            nested.popUntil(
-                              (route) => route is! PopupRoute,
-                            );
-                          }
-                          try {
-                            Navigator.of(
-                              context,
-                              rootNavigator: true,
-                            ).popUntil((route) => route is! PopupRoute);
-                          } catch (_) {}
-                          context.go(paths[i]);
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              isSelected ? tabs[i].activeIcon : tabs[i].icon,
-                              color:
+                  children:
+                      primaryIndices.map((i) {
+                        final isSelected = i == currentIndex;
+                        return Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              final nested = shellNavigatorKey.currentState;
+                              if (nested != null) {
+                                nested.popUntil(
+                                  (route) => route is! PopupRoute,
+                                );
+                              }
+                              try {
+                                Navigator.of(
+                                  context,
+                                  rootNavigator: true,
+                                ).popUntil((route) => route is! PopupRoute);
+                              } catch (_) {}
+                              context.go(paths[i]);
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
                                   isSelected
-                                      ? AppTheme.primary
-                                      : AppTheme.onBackgroundSubtle,
-                              size: 22,
+                                      ? tabs[i].activeIcon
+                                      : tabs[i].icon,
+                                  color:
+                                      isSelected
+                                          ? AppTheme.primary
+                                          : AppTheme.onBackgroundSubtle,
+                                  size: 22,
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  tabs[i].label,
+                                  style: TextStyle(
+                                    color:
+                                        isSelected
+                                            ? AppTheme.primary
+                                            : AppTheme.onBackgroundSubtle,
+                                    fontSize: 10,
+                                    fontWeight:
+                                        isSelected
+                                            ? FontWeight.w600
+                                            : FontWeight.w400,
+                                  ),
+                                ),
+                              ],
                             ),
-                            const SizedBox(height: 2),
-                            Text(
-                              tabs[i].label,
-                              style: TextStyle(
-                                color:
-                                    isSelected
-                                        ? AppTheme.primary
-                                        : AppTheme.onBackgroundSubtle,
-                                fontSize: 10,
-                                fontWeight:
-                                    isSelected
-                                        ? FontWeight.w600
-                                        : FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }).toList(),
+                          ),
+                        );
+                      }).toList(),
                 ),
               ),
             ),
