@@ -812,6 +812,13 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// recovery from auto-resuming after the user's intentional pause.
   bool _userPaused = false;
 
+  /// Whether the loaded audio source is in a broken state (e.g. a mid-stream
+  /// network drop or a failed load). The next call to [play] will reload the
+  /// current track from its position instead of trying to resume the stale
+  /// source, which would be a no-op and leave the user unable to recover
+  /// without restarting the app.
+  bool _needsReload = false;
+
   /// Last position (in whole seconds) at which the queue was saved.
   /// Prevents multiple saves within the same 2-second window.
   int _lastSavedPositionSeconds = -1;
@@ -1009,7 +1016,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
                   ScaffoldMessenger.of(ctx).showSnackBar(
                     SnackBar(
                       content: Text(
-                        'Unable to load "$title". Playback paused.',
+                        'Unable to load "$title". Tap play to retry.',
                       ),
                     ),
                   );
@@ -1020,6 +1027,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
                 }
                 // Ensure player is stopped and internal flags reflect paused state.
                 _gaplessActive = false;
+                // Source is likely stale; reload on next play().
+                _needsReload = true;
                 state = state.copyWith(isLoading: false, isPlaying: false);
               }
             });
@@ -1046,6 +1055,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
         _bufferingWatchdog?.cancel();
         _bufferingWatchdog = null;
         _gaplessActive = false;
+        // Mark the source as broken so the next play() reloads it from the
+        // current position instead of no-op'ing on the stale source.
+        _needsReload = true;
         _handler.audioPlayer.pause().catchError((_) {});
         state = state.copyWith(isLoading: false, isPlaying: false);
         final ctx = shellNavigatorKey.currentContext;
@@ -1053,7 +1065,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
           final title = state.currentTrack?.title ?? 'track';
           ScaffoldMessenger.of(ctx).showSnackBar(
             SnackBar(
-              content: Text('Unable to play "$title". Playback paused.'),
+              content: Text('Unable to play "$title". Tap play to retry.'),
             ),
           );
         }
@@ -1342,6 +1354,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     int startIndex, {
     Duration? initialPosition,
   }) async {
+    _needsReload = false;
     try {
       final sources = <AudioSource>[];
       for (final track in state.queue) {
@@ -1371,6 +1384,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
     } catch (e) {
       debugPrint('Failed to build gapless source: $e');
       _gaplessActive = false;
+      // Source failed to load; reload on next play() attempt.
+      _needsReload = true;
       return false;
     }
   }
@@ -2136,6 +2151,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     required bool autoPlay,
     Duration? initialPosition,
   }) async {
+    _needsReload = false;
     try {
       final listenUrl = track.listenUrl;
       if (listenUrl == null) {
@@ -2300,6 +2316,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
         await _handler.audioPlayer.stop();
       } catch (_) {}
       _gaplessActive = false;
+      // Source failed to load (e.g. no network); reload on next play().
+      _needsReload = true;
       state = state.copyWith(isPlaying: false);
     }
   }
@@ -2533,6 +2551,22 @@ class PlayerNotifier extends Notifier<PlayerState> {
         }
         return;
       }
+    }
+
+    // If the previously loaded source broke (e.g. a mid-stream network drop
+    // or a failed load), resuming via _handler.play() would be a no-op on the
+    // stale source. Reload the current track from its position so the user
+    // can recover without restarting the app.
+    if (_needsReload) {
+      final track = state.currentTrack;
+      if (track != null) {
+        _needsReload = false;
+        state = state.copyWith(isLoading: true);
+        final position = _handler.audioPlayer.position;
+        await _loadAndPlay(track, initialPosition: position);
+        return;
+      }
+      _needsReload = false;
     }
 
     await _handler.play();
