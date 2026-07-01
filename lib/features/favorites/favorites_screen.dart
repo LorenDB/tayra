@@ -146,10 +146,9 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
   void _shuffleDisplayed(List<Favorite> displayed) {
     if (displayed.isEmpty) return;
     final tracks = displayed.map((f) => f.track).toList();
-    final shuffled = List<Track>.from(tracks)..shuffle();
     ref
         .read(playerProvider.notifier)
-        .playTracks(shuffled, source: 'favorites_shuffle');
+        .playTracks(tracks, source: 'favorites_shuffle', shuffle: true);
   }
 
   void _playDisplayedFromIndex(List<Favorite> displayed, int index) {

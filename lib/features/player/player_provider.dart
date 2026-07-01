@@ -1143,8 +1143,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
         _subscriptions.add(
           session.interruptionEventStream.listen((event) {
             if (event.begin) {
-              _wasPlayingBeforeInterruption =
-                  state.isPlaying && !_userPaused;
+              _wasPlayingBeforeInterruption = state.isPlaying && !_userPaused;
               _interrupted = true;
               _userPaused = false;
               _handler.audioPlayer.pause();
@@ -1749,11 +1748,19 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }
 
   /// Play a list of tracks starting at the given index.
+  ///
+  /// When [shuffle] is true, [tracks] is treated as the canonical
+  /// (unshuffled) order: it is stored as the base queue
+  /// ([PlayerState.unshuffledQueue]) and a shuffled view is derived for
+  /// active playback. This keeps a single source of truth (the unshuffled
+  /// list) so that toggling shuffle off later restores the original order
+  /// rather than some stale previous queue.
   Future<void> playTracks(
     List<Track> tracks, {
     int startIndex = 0,
     String? source,
     Duration? initialPosition,
+    bool shuffle = false,
   }) async {
     _userPaused = false;
     await _finalizeCurrentListen();
@@ -1783,15 +1790,54 @@ class PlayerNotifier extends Notifier<PlayerState> {
     if (source != 'stash_restore') {
       _activeStashName = null;
     }
+
+    // Build the active queue and shuffle state. When shuffle is requested,
+    // [tracks] is the base (unshuffled) order; we derive a shuffled view for
+    // playback while keeping the base as the source of truth. When not
+    // shuffling, reset the shuffle state entirely so stale state from a
+    // previous session never leaks into a fresh queue.
+    final Track startTrack;
+    final int newCurrentIndex;
+    final List<Track> newQueue;
+    final List<Track> newUnshuffledQueue;
+    final bool newIsShuffled;
+    if (shuffle) {
+      final base = List<Track>.from(tracks);
+      newUnshuffledQueue = base;
+      newIsShuffled = true;
+      if (startIndex > 0 && startIndex < tracks.length) {
+        // Keep the requested start track at the front of the shuffled view
+        // so playback begins from it, then shuffle the remainder.
+        startTrack = tracks[startIndex];
+        final rest = List<Track>.from(tracks)..removeAt(startIndex);
+        rest.shuffle();
+        newQueue = [startTrack, ...rest];
+      } else {
+        // Fully random order (matches the previous "Shuffle All" behaviour
+        // where the first track was also randomised).
+        newQueue = List<Track>.from(tracks)..shuffle();
+        startTrack = newQueue.first;
+      }
+      newCurrentIndex = 0;
+    } else {
+      newQueue = List<Track>.from(tracks);
+      newUnshuffledQueue = const [];
+      newIsShuffled = false;
+      newCurrentIndex = startIndex;
+      startTrack = tracks[startIndex];
+    }
+
     state = state.copyWith(
-      queue: tracks,
-      currentIndex: startIndex,
+      queue: newQueue,
+      unshuffledQueue: newUnshuffledQueue,
+      isShuffled: newIsShuffled,
+      currentIndex: newCurrentIndex,
       isLoading: true,
     );
 
     if (_isGaplessEnabled) {
       final loaded = await _loadGaplessSource(
-        startIndex,
+        newCurrentIndex,
         initialPosition: initialPosition,
       );
       if (loaded) {
@@ -1804,31 +1850,29 @@ class PlayerNotifier extends Notifier<PlayerState> {
           isLoading: false,
           isPlaying: _handler.audioPlayer.playing,
         );
-        await _activateListenForTrack(tracks[startIndex]);
+        await _activateListenForTrack(startTrack);
         try {
-          await _api.recordListening(tracks[startIndex].id);
+          await _api.recordListening(startTrack.id);
         } catch (_) {}
       } else {
         // Fall back to single-track loading.
-        await _loadAndPlay(
-          tracks[startIndex],
-          initialPosition: initialPosition,
-        );
+        await _loadAndPlay(startTrack, initialPosition: initialPosition);
       }
     } else {
       _gaplessActive = false;
-      await _loadAndPlay(tracks[startIndex], initialPosition: initialPosition);
+      await _loadAndPlay(startTrack, initialPosition: initialPosition);
     }
 
     _saveQueue();
 
     // Pre-cache cover art and audio for queued tracks in the background.
-    _preCacheCoverArt(tracks);
-    _preCacheAudio(tracks, startIndex);
+    _preCacheCoverArt(newQueue);
+    _preCacheAudio(newQueue, newCurrentIndex);
     Analytics.track('play_tracks', {
-      'count': tracks.length,
-      'start_index': startIndex,
+      'count': newQueue.length,
+      'start_index': newCurrentIndex,
       'source': source ?? 'unknown',
+      'shuffled': shuffle,
     });
   }
 
@@ -1836,6 +1880,13 @@ class PlayerNotifier extends Notifier<PlayerState> {
   void addToQueue(List<Track> tracks) {
     if (tracks.isEmpty) return;
     state = state.copyWith(queue: [...state.queue, ...tracks]);
+    // When shuffled, keep the base (unshuffled) queue in sync by appending
+    // the same tracks so the source of truth contains every active track.
+    if (state.isShuffled) {
+      state = state.copyWith(
+        unshuffledQueue: [...state.unshuffledQueue, ...tracks],
+      );
+    }
     // Sync gapless source.
     if (_gaplessActive) {
       for (final track in tracks) {
@@ -1879,6 +1930,17 @@ class PlayerNotifier extends Notifier<PlayerState> {
       }
     }
 
+    // When shuffled, also reflect the insertion in the base (unshuffled)
+    // queue so the source of truth stays consistent. Insert after the
+    // current track's position in the base order.
+    if (state.isShuffled) {
+      final base = List<Track>.from(state.unshuffledQueue);
+      final currentId = state.queue[state.currentIndex].id;
+      final basePos = base.indexWhere((t) => t.id == currentId);
+      base.insertAll(basePos >= 0 ? basePos + 1 : base.length, tracks);
+      state = state.copyWith(unshuffledQueue: base);
+    }
+
     _saveQueue();
     Analytics.track('insert_next', {'count': tracks.length});
   }
@@ -1900,6 +1962,15 @@ class PlayerNotifier extends Notifier<PlayerState> {
         onError: (_) {},
       );
     }
+    // When shuffled, keep the base queue in sync by inserting after the
+    // current track's position in the base order.
+    if (state.isShuffled) {
+      final base = List<Track>.from(state.unshuffledQueue);
+      final currentId = state.queue[state.currentIndex].id;
+      final basePos = base.indexWhere((t) => t.id == currentId);
+      base.insert(basePos >= 0 ? basePos + 1 : base.length, track);
+      state = state.copyWith(unshuffledQueue: base);
+    }
     _saveQueue();
     Analytics.track('play_next');
   }
@@ -1908,6 +1979,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
   void removeFromQueue(int index) {
     if (index < 0 || index >= state.queue.length) return;
     final wasCurrentTrack = index == state.currentIndex;
+    final removedTrack = state.queue[index];
     final newQueue = List<Track>.from(state.queue);
     newQueue.removeAt(index);
 
@@ -1917,7 +1989,20 @@ class PlayerNotifier extends Notifier<PlayerState> {
     } else if (wasCurrentTrack) {
       if (newIndex >= newQueue.length) newIndex = newQueue.length - 1;
     }
-    state = state.copyWith(queue: newQueue, currentIndex: newIndex);
+
+    // When shuffled, remove the same track from the base queue so the
+    // source of truth stays consistent with the active view.
+    List<Track> newUnshuffled = state.unshuffledQueue;
+    if (state.isShuffled && newUnshuffled.isNotEmpty) {
+      newUnshuffled = List<Track>.from(newUnshuffled);
+      newUnshuffled.removeWhere((t) => t.id == removedTrack.id);
+    }
+
+    state = state.copyWith(
+      queue: newQueue,
+      unshuffledQueue: newUnshuffled,
+      currentIndex: newIndex,
+    );
     // Sync gapless source.
     if (_gaplessActive) {
       _handler.audioPlayer.removeAudioSourceAt(index);
@@ -2789,8 +2874,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
         page++;
       }
       if (allTracks.isEmpty) return;
-      if (shuffled) allTracks.shuffle();
-      await playTracks(allTracks, source: 'wear-playlist');
+      await playTracks(allTracks, source: 'wear-playlist', shuffle: shuffled);
       Analytics.track('wear_start_playlist', {
         'playlist_id': playlistId,
         'shuffled': shuffled,
