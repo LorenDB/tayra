@@ -921,6 +921,13 @@ class PlayerNotifier extends Notifier<PlayerState> {
     // Listen to playback state.
     _subscriptions.add(
       _handler.audioPlayer.playingStream.listen((isPlaying) async {
+        // In gapless mode the player's playing flag stays true after the
+        // queue completes (it's an intent flag on ConcatenatingAudioSource).
+        // Guard against the playingStream overwriting isPlaying back to true
+        // after _onTrackCompleted has set it to false.
+        if (isPlaying && state.queueCompleted) {
+          return;
+        }
         state = state.copyWith(isPlaying: isPlaying);
         if (!isPlaying) {
           // Save position when paused
@@ -1233,6 +1240,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
         queueCompleted: savedState.isCompleted,
       );
 
+      // When the queue completed at save time, the persisted position is the
+      // end of the last track — not a valid resume point. Reset to zero so
+      // playback starts from the beginning of track 0 on restore.
+      final restorePosition =
+          savedState.isCompleted ? Duration.zero : savedState.position;
+
       // Restore the saved playback position so it can be seeked to once the
       // user taps play.  We intentionally do NOT call setAudioSource here
       // because just_audio will buffer a network stream indefinitely when
@@ -1241,7 +1254,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // _pendingRestorePosition being non-null is the signal that the audio
       // source has not been loaded yet.  We always set it (even to zero) so
       // that play() knows it must call _loadAndPlay first.
-      _pendingRestorePosition = savedState.position;
+      _pendingRestorePosition = restorePosition;
       _pendingRestoreListenSession = savedState.listenSession;
     } catch (e) {
       // Failed to restore - clear corrupted state
@@ -2402,9 +2415,13 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // Wrap back to track 0; the seek is deferred to play() so that we
       // don't accidentally resume playback (seeking while playing=true
       // on a ConcatenatingAudioSource restarts immediately).
+      // Reset position to zero so it isn't persisted as the end-of-track
+      // position, which would cause a seek to an arbitrary offset when
+      // the queue is later restored from storage.
       state = state.copyWith(
         isPlaying: false,
         currentIndex: 0,
+        position: Duration.zero,
         queueCompleted: true,
       );
       _saveQueue();
