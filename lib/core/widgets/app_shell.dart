@@ -76,6 +76,9 @@ class AppShell extends ConsumerWidget {
     final hasTrack = ref.watch(
       playerProvider.select((s) => s.currentTrack != null),
     );
+    final queueCompleted = ref.watch(
+      playerProvider.select((s) => s.queueCompleted),
+    );
     final stashCount =
         ref.watch(stashedQueuesProvider).asData?.value.length ?? 0;
     final useSideNav = Responsive.useSideNavigation(context);
@@ -90,6 +93,7 @@ class AppShell extends ConsumerWidget {
               ref,
               currentIndex,
               hasTrack,
+              queueCompleted,
               stashCount,
             )
             : _buildMobileLayout(
@@ -97,6 +101,7 @@ class AppShell extends ConsumerWidget {
               ref,
               currentIndex,
               hasTrack,
+              queueCompleted,
               stashCount,
               pinnedIndices,
             );
@@ -145,6 +150,7 @@ class AppShell extends ConsumerWidget {
     WidgetRef ref,
     int currentIndex,
     bool hasTrack,
+    bool queueCompleted,
     int stashCount,
   ) {
     final isExpanded = Responsive.isExpanded(context);
@@ -210,9 +216,9 @@ class AppShell extends ConsumerWidget {
               ? Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (hasTrack) const MiniPlayer(),
-                  if (!hasTrack && stashCount > 0)
+                  if ((!hasTrack || queueCompleted) && stashCount > 0)
                     _StashAccessBar(stashCount: stashCount),
+                  if (hasTrack) const MiniPlayer(),
                 ],
               )
               : null,
@@ -226,6 +232,7 @@ class AppShell extends ConsumerWidget {
     WidgetRef ref,
     int currentIndex,
     bool hasTrack,
+    bool queueCompleted,
     int stashCount,
     Set<int> pinnedIndices,
   ) {
@@ -244,9 +251,9 @@ class AppShell extends ConsumerWidget {
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (hasTrack) const MiniPlayer(),
-          if (!hasTrack && stashCount > 0)
+          if ((!hasTrack || queueCompleted) && stashCount > 0)
             _StashAccessBar(stashCount: stashCount),
+          if (hasTrack) const MiniPlayer(),
           Container(
             decoration: const BoxDecoration(
               color: AppTheme.surfaceContainer,

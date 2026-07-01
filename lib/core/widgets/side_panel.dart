@@ -22,6 +22,11 @@ class _SidePanelState extends ConsumerState<SidePanel> {
     final hasTrack = ref.watch(
       playerProvider.select((s) => s.currentTrack != null),
     );
+    final queueCompleted = ref.watch(
+      playerProvider.select((s) => s.queueCompleted),
+    );
+    final stashCount =
+        ref.watch(stashedQueuesProvider).asData?.value.length ?? 0;
 
     // Collapse back to the now-playing view when playback stops.
     ref.listen(playerProvider.select((s) => s.currentTrack), (prev, next) {
@@ -55,11 +60,74 @@ class _SidePanelState extends ConsumerState<SidePanel> {
       ),
     };
 
+    final showStashBar = queueCompleted && stashCount > 0;
+
     return Container(
       color: AppTheme.surface,
-      child: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 200),
-        child: child,
+      child: Column(
+        children: [
+          Expanded(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: child,
+            ),
+          ),
+          if (showStashBar)
+            _SidePanelStashBar(stashCount: stashCount),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Side Panel Stash Bar ─────────────────────────────────────────────────
+
+/// Compact stash prompt shown at the bottom of the side panel when the
+/// queue has finished playing and stashed queues are available.
+class _SidePanelStashBar extends ConsumerWidget {
+  final int stashCount;
+
+  const _SidePanelStashBar({required this.stashCount});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Material(
+      color: AppTheme.surfaceContainer,
+      child: InkWell(
+        onTap: () => showStashedQueuesSheet(context, ref),
+        child: Container(
+          height: 40,
+          decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(color: AppTheme.divider, width: 0.5),
+            ),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+          child: Row(
+            children: [
+              const Icon(
+                Icons.inbox_outlined,
+                color: AppTheme.primary,
+                size: 16,
+              ),
+              const SizedBox(width: 10),
+              Text(
+                '$stashCount stashed queue${stashCount == 1 ? '' : 's'}',
+                style: const TextStyle(
+                  color: AppTheme.onBackground,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const Spacer(),
+              const Icon(
+                Icons.chevron_right_rounded,
+                color: AppTheme.onBackgroundSubtle,
+                size: 16,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

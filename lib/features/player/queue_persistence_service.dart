@@ -77,6 +77,7 @@ class QueuePersistenceService {
   static const _keyLoopMode = 'player_loop_mode';
   static const _keyDuration = 'player_duration';
   static const _keyListenSession = 'player_listen_session';
+  static const _keyQueueCompleted = 'player_queue_completed';
 
   /// Save the current queue state to SharedPreferences.
   static Future<void> saveQueue({
@@ -87,6 +88,7 @@ class QueuePersistenceService {
     required Duration? duration,
     required bool isShuffled,
     required String loopMode,
+    bool isCompleted = false,
   }) async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -113,6 +115,7 @@ class QueuePersistenceService {
       }
       await prefs.setBool(_keyIsShuffled, isShuffled);
       await prefs.setString(_keyLoopMode, loopMode);
+      await prefs.setBool(_keyQueueCompleted, isCompleted);
     } catch (e) {
       // Silently fail - non-critical feature
     }
@@ -180,6 +183,8 @@ class QueuePersistenceService {
         } catch (_) {}
       }
 
+      final isCompleted = prefs.getBool(_keyQueueCompleted) ?? false;
+
       return QueueState(
         queue: queue,
         unshuffledQueue: unshuffledQueue,
@@ -190,6 +195,7 @@ class QueuePersistenceService {
         isShuffled: isShuffled,
         loopMode: loopModeStr,
         listenSession: listenSession,
+        isCompleted: isCompleted,
       );
     } catch (e) {
       // Silently fail - corrupted data or other issue
@@ -351,6 +357,7 @@ class QueueState {
   final bool isShuffled;
   final String loopMode;
   final PersistedListenSession? listenSession;
+  final bool isCompleted;
 
   const QueueState({
     required this.queue,
@@ -361,5 +368,6 @@ class QueueState {
     required this.isShuffled,
     required this.loopMode,
     this.listenSession,
+    this.isCompleted = false,
   });
 }

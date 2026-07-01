@@ -61,6 +61,7 @@ class PlayerState {
   final bool isLoading;
   final int? loadingRadioId;
   final double playbackSpeed;
+  final bool queueCompleted;
 
   const PlayerState({
     this.queue = const [],
@@ -74,6 +75,7 @@ class PlayerState {
     this.isLoading = false,
     this.loadingRadioId,
     this.playbackSpeed = 1.0,
+    this.queueCompleted = false,
   });
 
   Track? get currentTrack =>
@@ -102,6 +104,7 @@ class PlayerState {
     int? loadingRadioId,
     bool clearLoadingRadioId = false,
     double? playbackSpeed,
+    bool? queueCompleted,
   }) {
     return PlayerState(
       queue: queue ?? this.queue,
@@ -116,6 +119,7 @@ class PlayerState {
       loadingRadioId:
           clearLoadingRadioId ? null : (loadingRadioId ?? this.loadingRadioId),
       playbackSpeed: playbackSpeed ?? this.playbackSpeed,
+      queueCompleted: queueCompleted ?? this.queueCompleted,
     );
   }
 }
@@ -1215,6 +1219,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
         loopMode: _parseLoopMode(savedState.loopMode),
         position: savedState.position,
         duration: trackDuration ?? Duration.zero,
+        queueCompleted: savedState.isCompleted,
       );
 
       // Restore the saved playback position so it can be seeked to once the
@@ -1247,6 +1252,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       duration: state.duration,
       isShuffled: state.isShuffled,
       loopMode: _loopModeToString(state.loopMode),
+      isCompleted: state.queueCompleted,
     );
   }
 
@@ -1765,6 +1771,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // Clearing the active queue means it's no longer the restored stash.
       _activeStashName = null;
       return;
+    }
+
+    if (state.queueCompleted) {
+      state = state.copyWith(queueCompleted: false);
     }
 
     _pendingRestorePosition = null;
@@ -2289,7 +2299,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // Wrap back to track 0; the seek is deferred to play() so that we
       // don't accidentally resume playback (seeking while playing=true
       // on a ConcatenatingAudioSource restarts immediately).
-      state = state.copyWith(isPlaying: false, currentIndex: 0);
+      state = state.copyWith(
+        isPlaying: false,
+        currentIndex: 0,
+        queueCompleted: true,
+      );
       _saveQueue();
       return;
     }
@@ -2334,6 +2348,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
             isPlaying: false,
             currentIndex: 0,
             position: Duration.zero,
+            queueCompleted: true,
           );
           // Don't touch the audio player here — play() already handles
           // ProcessingState.completed correctly (reloads or seeks as needed).
@@ -2349,6 +2364,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
     // User-initiated play always clears interruption / paused state.
     _interrupted = false;
     _userPaused = false;
+    if (state.queueCompleted) {
+      state = state.copyWith(queueCompleted: false);
+    }
 
     // If the queue was just restored from storage, no audio source has been
     // loaded yet.  Load the current track, seek to where the user left off,
@@ -2505,6 +2523,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
     if (!state.hasNext) return;
     _userPaused = false;
     _pendingRestorePosition = null;
+    if (state.queueCompleted) {
+      state = state.copyWith(queueCompleted: false);
+    }
     await _finalizeCurrentListen();
 
     if (_gaplessActive) {
@@ -2574,6 +2595,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
     _userPaused = false;
     _pendingRestorePosition = null;
+    if (state.queueCompleted) {
+      state = state.copyWith(queueCompleted: false);
+    }
     await _finalizeCurrentListen();
 
     if (_gaplessActive) {
