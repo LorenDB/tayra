@@ -244,16 +244,18 @@ class _AlbumDetailBody extends ConsumerWidget {
             // Always pass the computed accent/text colors so the UI (for
             // example the artist name) can tint immediately while tracks are
             // still loading or if track loading failed.
-            loading: () => _AlbumInfo(
-              album: album,
-              dominantColor: dominantColor,
-              textColor: textColor,
-            ),
-            error: (_, _) => _AlbumInfo(
-              album: album,
-              dominantColor: dominantColor,
-              textColor: textColor,
-            ),
+            loading:
+                () => _AlbumInfo(
+                  album: album,
+                  dominantColor: dominantColor,
+                  textColor: textColor,
+                ),
+            error:
+                (_, _) => _AlbumInfo(
+                  album: album,
+                  dominantColor: dominantColor,
+                  textColor: textColor,
+                ),
           ),
         ),
 
@@ -547,7 +549,8 @@ class _AlbumHeader extends ConsumerWidget {
             icon: const Icon(Icons.more_vert, color: Colors.white),
             color: AppTheme.surfaceContainer,
             onSelected: (value) async {
-              if (value == 'edit') context.push('${GoRouterState.of(context).uri}/edit');
+              if (value == 'edit')
+                context.push('${GoRouterState.of(context).uri}/edit');
               if (value == 'download') toggleDownload();
               if (value == 'play_next') playAlbumNext();
               if (value == 'add_queue') addAlbumToQueue();
@@ -558,15 +561,15 @@ class _AlbumHeader extends ConsumerWidget {
                   // Delete album metadata
                   await mgr.deleteMetadata('album_${album.id}');
                   // Delete all paginated track-list pages for this album
-                  await mgr.deleteMetadataLike(
-                    'tracks_p%_al${album.id}_%',
-                  );
+                  await mgr.deleteMetadataLike('tracks_p%_al${album.id}_%');
                   ref.invalidate(_albumDetailProvider(album.id));
                   ref.read(_albumTracksProvider(album.id).notifier).reload();
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Cache purged for "${album.title}" — refetching'),
+                        content: Text(
+                          'Cache purged for "${album.title}" — refetching',
+                        ),
                       ),
                     );
                   }
@@ -856,10 +859,9 @@ class _ActionButtons extends ConsumerWidget {
 
     void shuffleAll() {
       if (tracks.isEmpty) return;
-      final shuffled = List<Track>.from(tracks)..shuffle();
       ref
           .read(playerProvider.notifier)
-          .playTracks(shuffled, source: 'album_detail_shuffle');
+          .playTracks(tracks, source: 'album_detail_shuffle', shuffle: true);
     }
 
     // Use simple, non-gradient buttons: primary is an ElevatedButton, secondary

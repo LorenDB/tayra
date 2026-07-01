@@ -94,7 +94,9 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
 
     // Optimistic UI update: remove locally then call API.
     final removed = _playlistTracks.removeAt(listIndex);
-    setState(() { _isRemovingTrack = true; });
+    setState(() {
+      _isRemovingTrack = true;
+    });
     try {
       final api = ref.read(cachedFunkwhaleApiProvider);
       // Funkwhale v1.4.0: remove by list position (0-based)
@@ -113,7 +115,10 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
         ).showSnackBar(const SnackBar(content: Text('Failed to remove track')));
       }
     } finally {
-      if (mounted) setState(() { _isRemovingTrack = false; });
+      if (mounted)
+        setState(() {
+          _isRemovingTrack = false;
+        });
     }
   }
 
@@ -267,10 +272,9 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
     try {
       Analytics.track('playlist_shuffle_all', {'track_count': _tracks.length});
     } catch (_) {}
-    final shuffled = List<Track>.from(_tracks)..shuffle();
     ref
         .read(playerProvider.notifier)
-        .playTracks(shuffled, source: 'playlist_detail_shuffle');
+        .playTracks(_tracks, source: 'playlist_detail_shuffle', shuffle: true);
   }
 
   void _playFromIndex(int index) {

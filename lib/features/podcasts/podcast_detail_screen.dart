@@ -90,8 +90,9 @@ class _PodcastDetailScreenState extends ConsumerState<PodcastDetailScreen> {
     if (_episodes.isEmpty || _isShuffling) return;
     setState(() => _isShuffling = true);
     try {
-      final shuffled = List<models.Track>.from(_episodes)..shuffle();
-      await ref.read(playerProvider.notifier).playTracks(shuffled);
+      await ref
+          .read(playerProvider.notifier)
+          .playTracks(_episodes, shuffle: true);
       Analytics.track('podcast_shuffle_all', {
         'episode_count': _episodes.length,
       });
@@ -126,36 +127,39 @@ class _PodcastDetailScreenState extends ConsumerState<PodcastDetailScreen> {
         color: AppTheme.primary,
         backgroundColor: AppTheme.surfaceContainer,
         child: CustomScrollView(
-        slivers: [
-          _buildAppBar(channel),
-          if (!_isLoading && _episodes.isNotEmpty)
-            SliverToBoxAdapter(child: _buildActions()),
-          if (_isLoading)
-            const SliverFillRemaining(child: ShimmerList(itemCount: 8))
-          else if (_error != null)
-            SliverFillRemaining(
-              child: InlineErrorState(message: _error!, onRetry: _loadEpisodes),
-            )
-          else if (_episodes.isEmpty)
-            const SliverFillRemaining(
-              child: Center(
-                child: Text(
-                  'No episodes yet',
-                  style: TextStyle(color: AppTheme.onBackgroundMuted),
+          slivers: [
+            _buildAppBar(channel),
+            if (!_isLoading && _episodes.isNotEmpty)
+              SliverToBoxAdapter(child: _buildActions()),
+            if (_isLoading)
+              const SliverFillRemaining(child: ShimmerList(itemCount: 8))
+            else if (_error != null)
+              SliverFillRemaining(
+                child: InlineErrorState(
+                  message: _error!,
+                  onRetry: _loadEpisodes,
+                ),
+              )
+            else if (_episodes.isEmpty)
+              const SliverFillRemaining(
+                child: Center(
+                  child: Text(
+                    'No episodes yet',
+                    style: TextStyle(color: AppTheme.onBackgroundMuted),
+                  ),
+                ),
+              )
+            else
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, i) => _EpisodeTile(
+                    episode: _episodes[i],
+                    onTap: () => _playEpisode(i),
+                  ),
+                  childCount: _episodes.length,
                 ),
               ),
-            )
-          else
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, i) => _EpisodeTile(
-                  episode: _episodes[i],
-                  onTap: () => _playEpisode(i),
-                ),
-                childCount: _episodes.length,
-              ),
-            ),
-        ],
+          ],
         ),
       ),
     );
