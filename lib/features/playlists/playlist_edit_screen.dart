@@ -469,7 +469,8 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
     if (!settings.aiEnabled) {
       hasAi = false;
     } else if (settings.aiProviderType == AiProviderType.geminiNano) {
-      hasAi = defaultTargetPlatform == TargetPlatform.android &&
+      hasAi =
+          defaultTargetPlatform == TargetPlatform.android &&
           (modelStatusAsync.asData?.value ?? 0) == 3;
     } else {
       hasAi = settings.isAiProviderConfigured;

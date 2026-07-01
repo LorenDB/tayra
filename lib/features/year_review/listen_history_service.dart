@@ -533,18 +533,21 @@ class ListenHistoryService {
       );
 
       // Build intermediate album data rows for sorting.
-      final albumRows = topAlbumsResult
-          .map((row) => _AlbumRow(
-                albumId: toInt(row['album_id']),
-                title: row['album_title'] as String,
-                artistName: row['artist_name'] as String?,
-                coverUrl: row['cover_url'] as String?,
-                uniqueTracks: toInt(row['unique_tracks']),
-                engagementScore: toDouble(row['engagement_score']).round(),
-                totalSeconds: toNullableInt(row['total_seconds']),
-                totalListens: toInt(row['total_plays']),
-              ))
-          .toList();
+      final albumRows =
+          topAlbumsResult
+              .map(
+                (row) => _AlbumRow(
+                  albumId: toInt(row['album_id']),
+                  title: row['album_title'] as String,
+                  artistName: row['artist_name'] as String?,
+                  coverUrl: row['cover_url'] as String?,
+                  uniqueTracks: toInt(row['unique_tracks']),
+                  engagementScore: toDouble(row['engagement_score']).round(),
+                  totalSeconds: toNullableInt(row['total_seconds']),
+                  totalListens: toInt(row['total_plays']),
+                ),
+              )
+              .toList();
 
       // Sort by completion ratio when track counts are available.
       if (albumTrackCounts != null && albumTrackCounts.isNotEmpty) {
@@ -564,26 +567,27 @@ class ListenHistoryService {
         );
       }
 
-      final topAlbums = albumRows
-          .take(10)
-          .map(
-            (row) => TopItem(
-              name: row.title,
-              subtitle: row.artistName,
-              coverUrl: row.coverUrl,
-              count:
-                  albumTrackCounts != null
-                      ? row.uniqueTracks
-                      : row.engagementScore,
-              totalSeconds: row.totalSeconds,
-              totalListens: row.totalListens,
-              albumTrackCount:
-                  albumTrackCounts != null
-                      ? albumTrackCounts[row.albumId]
-                      : null,
-            ),
-          )
-          .toList();
+      final topAlbums =
+          albumRows
+              .take(10)
+              .map(
+                (row) => TopItem(
+                  name: row.title,
+                  subtitle: row.artistName,
+                  coverUrl: row.coverUrl,
+                  count:
+                      albumTrackCounts != null
+                          ? row.uniqueTracks
+                          : row.engagementScore,
+                  totalSeconds: row.totalSeconds,
+                  totalListens: row.totalListens,
+                  albumTrackCount:
+                      albumTrackCounts != null
+                          ? albumTrackCounts[row.albumId]
+                          : null,
+                ),
+              )
+              .toList();
 
       // Monthly breakdown
       final monthlyResult = await db.rawQuery(
@@ -738,7 +742,8 @@ class ListenHistoryService {
     try {
       final db = await CacheDatabase.instance.database;
       final now = DateTime.now();
-      final startMs = now.subtract(const Duration(days: 7)).millisecondsSinceEpoch;
+      final startMs =
+          now.subtract(const Duration(days: 7)).millisecondsSinceEpoch;
       final endMs = now.millisecondsSinceEpoch;
 
       final totalsResult = await db.rawQuery(

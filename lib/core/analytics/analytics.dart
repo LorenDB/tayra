@@ -29,7 +29,13 @@ class Analytics {
       if (env != null) {
         final v = env.trim().toLowerCase();
         final disabled = v == '1' || v == 'true';
-        _enabled = !disabled ? (await SharedPreferences.getInstance()).getBool(_prefsKeyAnalyticsEnabled) ?? true : false;
+        _enabled =
+            !disabled
+                ? (await SharedPreferences.getInstance()).getBool(
+                      _prefsKeyAnalyticsEnabled,
+                    ) ??
+                    true
+                : false;
         return;
       }
     } catch (_) {
@@ -53,7 +59,10 @@ class Analytics {
     // but respect the env override.
     try {
       final env = Platform.environment['DO_NOT_TRACK'];
-      final dntSet = env != null && (env.trim().toLowerCase() == '1' || env.trim().toLowerCase() == 'true');
+      final dntSet =
+          env != null &&
+          (env.trim().toLowerCase() == '1' ||
+              env.trim().toLowerCase() == 'true');
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool(_prefsKeyAnalyticsEnabled, enabled);
       if (dntSet) {

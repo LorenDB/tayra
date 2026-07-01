@@ -95,10 +95,11 @@ class _FilterButton extends ConsumerWidget {
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
-      builder: (_) => UncontrolledProviderScope(
-        container: ProviderScope.containerOf(context),
-        child: const _AlbumFilterSheet(),
-      ),
+      builder:
+          (_) => UncontrolledProviderScope(
+            container: ProviderScope.containerOf(context),
+            child: const _AlbumFilterSheet(),
+          ),
     );
   }
 }
@@ -217,28 +218,32 @@ class _AlbumFilterSheetState extends ConsumerState<_AlbumFilterSheet> {
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: AlbumSortMode.values.map((mode) {
-                      final selected = _sortMode == mode;
-                      return ChoiceChip(
-                        label: Text(mode.label),
-                        selected: selected,
-                        onSelected: (_) => setState(() => _sortMode = mode),
-                        selectedColor: AppTheme.primary.withValues(alpha: 0.2),
-                        side: BorderSide(
-                          color: selected
-                              ? AppTheme.primary
-                              : AppTheme.onBackgroundMuted
-                                  .withValues(alpha: 0.3),
-                        ),
-                        labelStyle: TextStyle(
-                          color: selected ? AppTheme.primary : null,
-                          fontWeight:
-                              selected ? FontWeight.w600 : null,
-                        ),
-                        backgroundColor: Colors.transparent,
-                        showCheckmark: false,
-                      );
-                    }).toList(),
+                    children:
+                        AlbumSortMode.values.map((mode) {
+                          final selected = _sortMode == mode;
+                          return ChoiceChip(
+                            label: Text(mode.label),
+                            selected: selected,
+                            onSelected: (_) => setState(() => _sortMode = mode),
+                            selectedColor: AppTheme.primary.withValues(
+                              alpha: 0.2,
+                            ),
+                            side: BorderSide(
+                              color:
+                                  selected
+                                      ? AppTheme.primary
+                                      : AppTheme.onBackgroundMuted.withValues(
+                                        alpha: 0.3,
+                                      ),
+                            ),
+                            labelStyle: TextStyle(
+                              color: selected ? AppTheme.primary : null,
+                              fontWeight: selected ? FontWeight.w600 : null,
+                            ),
+                            backgroundColor: Colors.transparent,
+                            showCheckmark: false,
+                          );
+                        }).toList(),
                   ),
                   const SizedBox(height: 24),
                   // ── Tags section ───────────────────────────────────
@@ -252,29 +257,32 @@ class _AlbumFilterSheetState extends ConsumerState<_AlbumFilterSheet> {
                   ),
                   const SizedBox(height: 12),
                   tagsAsync.when(
-                    loading: () => const Center(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                        child: CircularProgressIndicator(
-                          color: AppTheme.primary,
-                          strokeWidth: 2,
+                    loading:
+                        () => const Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            child: CircularProgressIndicator(
+                              color: AppTheme.primary,
+                              strokeWidth: 2,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    error: (e, _) => Text(
-                      'Could not load tags',
-                      style: TextStyle(color: AppTheme.onBackgroundMuted),
-                    ),
+                    error:
+                        (e, _) => Text(
+                          'Could not load tags',
+                          style: TextStyle(color: AppTheme.onBackgroundMuted),
+                        ),
                     data: (tags) {
-                      final filtered = _tagSearch.isEmpty
-                          ? tags
-                          : tags
-                              .where(
-                                (t) => t.toLowerCase().contains(
+                      final filtered =
+                          _tagSearch.isEmpty
+                              ? tags
+                              : tags
+                                  .where(
+                                    (t) => t.toLowerCase().contains(
                                       _tagSearch.toLowerCase(),
                                     ),
-                              )
-                              .toList();
+                                  )
+                                  .toList();
 
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -300,21 +308,19 @@ class _AlbumFilterSheetState extends ConsumerState<_AlbumFilterSheet> {
                                     borderRadius: BorderRadius.circular(8),
                                     borderSide: BorderSide.none,
                                   ),
-                                  contentPadding:
-                                      const EdgeInsets.symmetric(
+                                  contentPadding: const EdgeInsets.symmetric(
                                     horizontal: 12,
                                     vertical: 10,
                                   ),
                                   isDense: true,
                                 ),
-                                onChanged: (v) =>
-                                    setState(() => _tagSearch = v),
+                                onChanged:
+                                    (v) => setState(() => _tagSearch = v),
                               ),
                             ),
                           if (filtered.isEmpty)
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8),
+                              padding: const EdgeInsets.symmetric(vertical: 8),
                               child: Text(
                                 'No tags found',
                                 style: TextStyle(
@@ -326,30 +332,34 @@ class _AlbumFilterSheetState extends ConsumerState<_AlbumFilterSheet> {
                             Wrap(
                               spacing: 8,
                               runSpacing: 8,
-                              children: filtered.map((tag) {
-                                final selected = _selectedTags.contains(tag);
-                                return FilterChip(
-                                  label: Text(tag),
-                                  selected: selected,
-                                  onSelected: (_) => _toggleTag(tag),
-                                  selectedColor:
-                                      AppTheme.primary.withValues(alpha: 0.2),
-                                  checkmarkColor: AppTheme.primary,
-                                  side: BorderSide(
-                                    color: selected
-                                        ? AppTheme.primary
-                                        : AppTheme.onBackgroundMuted
-                                            .withValues(alpha: 0.3),
-                                  ),
-                                  labelStyle: TextStyle(
-                                    color: selected ? AppTheme.primary : null,
-                                    fontWeight: selected
-                                        ? FontWeight.w600
-                                        : null,
-                                  ),
-                                  backgroundColor: Colors.transparent,
-                                );
-                              }).toList(),
+                              children:
+                                  filtered.map((tag) {
+                                    final selected = _selectedTags.contains(
+                                      tag,
+                                    );
+                                    return FilterChip(
+                                      label: Text(tag),
+                                      selected: selected,
+                                      onSelected: (_) => _toggleTag(tag),
+                                      selectedColor: AppTheme.primary
+                                          .withValues(alpha: 0.2),
+                                      checkmarkColor: AppTheme.primary,
+                                      side: BorderSide(
+                                        color:
+                                            selected
+                                                ? AppTheme.primary
+                                                : AppTheme.onBackgroundMuted
+                                                    .withValues(alpha: 0.3),
+                                      ),
+                                      labelStyle: TextStyle(
+                                        color:
+                                            selected ? AppTheme.primary : null,
+                                        fontWeight:
+                                            selected ? FontWeight.w600 : null,
+                                      ),
+                                      backgroundColor: Colors.transparent,
+                                    );
+                                  }).toList(),
                             ),
                         ],
                       );

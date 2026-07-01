@@ -68,8 +68,7 @@ class AlbumsFilter {
     this.tags = const [],
   });
 
-  bool get isActive =>
-      sortMode != AlbumSortMode.titleAsc || tags.isNotEmpty;
+  bool get isActive => sortMode != AlbumSortMode.titleAsc || tags.isNotEmpty;
 
   AlbumsFilter copyWith({AlbumSortMode? sortMode, List<String>? tags}) {
     return AlbumsFilter(
@@ -91,8 +90,8 @@ class AlbumsFilterNotifier extends Notifier<AlbumsFilter> {
 
 final albumsFilterProvider =
     NotifierProvider<AlbumsFilterNotifier, AlbumsFilter>(
-  AlbumsFilterNotifier.new,
-);
+      AlbumsFilterNotifier.new,
+    );
 
 // ── Providers ───────────────────────────────────────────────────────────
 

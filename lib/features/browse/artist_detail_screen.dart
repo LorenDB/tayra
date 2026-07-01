@@ -102,7 +102,9 @@ class _ArtistDetailBody extends ConsumerWidget {
 
     final appearsOnTracks = tracksAsync.whenData(
       (tracks) =>
-          tracks.where((t) => t.album == null || !albumIds.contains(t.album!.id)).toList(),
+          tracks
+              .where((t) => t.album == null || !albumIds.contains(t.album!.id))
+              .toList(),
     );
 
     return CustomScrollView(
@@ -180,21 +182,17 @@ class _ArtistDetailBody extends ConsumerWidget {
         // ── Appears On tracks ──
         if (appearsOnTracks.value?.isNotEmpty == true)
           SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final tracks = appearsOnTracks.value!;
-                return TrackListTile(
-                  track: tracks[index],
-                  onTap: () {
-                    ref.read(playerProvider.notifier).playTracks(
-                      tracks,
-                      startIndex: index,
-                    );
-                  },
-                );
-              },
-              childCount: appearsOnTracks.value!.length,
-            ),
+            delegate: SliverChildBuilderDelegate((context, index) {
+              final tracks = appearsOnTracks.value!;
+              return TrackListTile(
+                track: tracks[index],
+                onTap: () {
+                  ref
+                      .read(playerProvider.notifier)
+                      .playTracks(tracks, startIndex: index);
+                },
+              );
+            }, childCount: appearsOnTracks.value!.length),
           ),
 
         // ── Bottom spacing ──
@@ -438,19 +436,20 @@ class _ArtistActionButtons extends ConsumerWidget {
 
     void playAll() {
       if (tracks.isEmpty) return;
-      ref.read(playerProvider.notifier).playTracks(
-        tracks,
-        source: 'artist_detail_play_all',
-      );
+      ref
+          .read(playerProvider.notifier)
+          .playTracks(tracks, source: 'artist_detail_play_all');
       Analytics.track('artist_play_all', {'artist_id': artist.id});
     }
 
     void startArtistRadio() {
-      ref.read(playerProvider.notifier).startInstanceRadio(
-        'artist',
-        -(artist.id),
-        relatedObjectId: artist.id.toString(),
-      );
+      ref
+          .read(playerProvider.notifier)
+          .startInstanceRadio(
+            'artist',
+            -(artist.id),
+            relatedObjectId: artist.id.toString(),
+          );
       Analytics.track('artist_radio_start', {'artist_id': artist.id});
     }
 

@@ -96,8 +96,7 @@ class DownloadQueueService {
       " AND status IN ('queued', 'downloading')",
       trackIds,
     );
-    final existingIds =
-        existing.map((r) => r['track_id'] as int).toSet();
+    final existingIds = existing.map((r) => r['track_id'] as int).toSet();
 
     await db.transaction((txn) async {
       for (final id in trackIds) {

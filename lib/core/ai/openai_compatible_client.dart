@@ -43,16 +43,18 @@ class OpenAiCompatibleClient implements AiClient {
   @override
   Future<String> runInference(String prompt) async {
     final dio = _buildDio();
-    final response = await dio.post('chat/completions', data: {
-      'model': model,
-      'messages': [
-        {'role': 'user', 'content': prompt},
-      ],
-      'max_tokens': 512,
-    });
+    final response = await dio.post(
+      'chat/completions',
+      data: {
+        'model': model,
+        'messages': [
+          {'role': 'user', 'content': prompt},
+        ],
+        'max_tokens': 512,
+      },
+    );
     final choices = response.data['choices'] as List<dynamic>;
-    final content =
-        choices.first['message']['content'] as String? ?? '';
+    final content = choices.first['message']['content'] as String? ?? '';
     return content.trim();
   }
 

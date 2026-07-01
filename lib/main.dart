@@ -99,13 +99,10 @@ void main() async {
   // the UI hasn't been opened yet.
   audioHandler.api = container.read(cachedFunkwhaleApiProvider);
   audioHandler.browseMode = container.read(settingsProvider).browseMode;
-  audioHandler.androidAutoExposeRecentMedia =
-      container.read(settingsProvider).androidAutoExposeRecentMedia;
 
-  // Listen for settings changes to update browse mode and recommendations dynamically.
+  // Listen for settings changes to update browse mode dynamically.
   container.listen<SettingsState>(settingsProvider, (previous, next) {
     audioHandler.browseMode = next.browseMode;
-    audioHandler.androidAutoExposeRecentMedia = next.androidAutoExposeRecentMedia;
   });
 
   // Eagerly initialize the PlayerNotifier to wire up the onPlayTracks callback.
@@ -119,12 +116,14 @@ void main() async {
   // Initialize the download queue after the UI is visible. It is not needed
   // until the user interacts with downloads, so deferring it avoids blocking
   // the splash screen on DB queries.
-  unawaited(Future(() async {
-    try {
-      final queueSvc = container.read(downloadQueueServiceProvider);
-      await queueSvc.init(container);
-    } catch (_) {}
-  }));
+  unawaited(
+    Future(() async {
+      try {
+        final queueSvc = container.read(downloadQueueServiceProvider);
+        await queueSvc.init(container);
+      } catch (_) {}
+    }),
+  );
 
   // Reconcile cached files with the DB and enforce size limits in the
   // background so these O(n-files) operations don't block the splash screen.

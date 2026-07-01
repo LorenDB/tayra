@@ -72,8 +72,7 @@ class _SidePanelState extends ConsumerState<SidePanel> {
               child: child,
             ),
           ),
-          if (showStashBar)
-            _SidePanelStashBar(stashCount: stashCount),
+          if (showStashBar) _SidePanelStashBar(stashCount: stashCount),
         ],
       ),
     );

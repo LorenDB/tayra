@@ -36,7 +36,6 @@ class SettingsState {
   final BrowseMode browseMode;
   final Set<int> mobilePinnedTabIndices;
   final int cacheSizeLimitMB;
-  final bool androidAutoExposeRecentMedia;
   final bool useDynamicAlbumAccent;
   final bool gaplessPlayback;
   final bool aiEnabled;
@@ -60,7 +59,6 @@ class SettingsState {
     this.browseMode = BrowseMode.albums,
     this.mobilePinnedTabIndices = const {2, 3, 5, 6},
     this.cacheSizeLimitMB = 500,
-    this.androidAutoExposeRecentMedia = true,
     this.useDynamicAlbumAccent = true,
     this.gaplessPlayback = true,
     this.aiEnabled = true,
@@ -105,7 +103,6 @@ class SettingsState {
     BrowseMode? browseMode,
     Set<int>? mobilePinnedTabIndices,
     int? cacheSizeLimitMB,
-    bool? androidAutoExposeRecentMedia,
     bool? useDynamicAlbumAccent,
     bool? gaplessPlayback,
     bool? aiEnabled,
@@ -130,7 +127,6 @@ class SettingsState {
       mobilePinnedTabIndices:
           mobilePinnedTabIndices ?? this.mobilePinnedTabIndices,
       cacheSizeLimitMB: cacheSizeLimitMB ?? this.cacheSizeLimitMB,
-      androidAutoExposeRecentMedia: androidAutoExposeRecentMedia ?? this.androidAutoExposeRecentMedia,
       useDynamicAlbumAccent:
           useDynamicAlbumAccent ?? this.useDynamicAlbumAccent,
       gaplessPlayback: gaplessPlayback ?? this.gaplessPlayback,
@@ -140,7 +136,8 @@ class SettingsState {
       showYearEndPrompts: showYearEndPrompts ?? this.showYearEndPrompts,
       analyticsEnabled: analyticsEnabled ?? this.analyticsEnabled,
       forceOfflineMode: forceOfflineMode ?? this.forceOfflineMode,
-      developerModeUnlocked: developerModeUnlocked ?? this.developerModeUnlocked,
+      developerModeUnlocked:
+          developerModeUnlocked ?? this.developerModeUnlocked,
       showPurgeCacheOption: showPurgeCacheOption ?? this.showPurgeCacheOption,
       aiProviderType: aiProviderType ?? this.aiProviderType,
       groqApiKey: groqApiKey ?? this.groqApiKey,
@@ -165,7 +162,6 @@ class SettingsNotifier extends Notifier<SettingsState> {
   static const _keyBrowseMode = 'browse_mode';
   static const _keyMobilePinnedTabIndices = 'mobile_pinned_tab_indices';
   static const _keyCacheSizeLimit = 'cache_max_size_mb';
-  static const _keyAndroidAutoExposeRecentMedia = 'aa_expose_recent_media';
   static const _keyUseDynamicAlbumAccent = 'use_dynamic_album_accent';
   static const _keyGaplessPlayback = 'gapless_playback';
   static const _keyAiEnabled = 'ai_enabled';
@@ -214,12 +210,13 @@ class SettingsNotifier extends Notifier<SettingsState> {
     final pinnedStr = prefs.getString(_keyMobilePinnedTabIndices);
     Set<int> mobilePinnedTabIndices = const {2, 3, 5, 6};
     if (pinnedStr != null && pinnedStr.isNotEmpty) {
-      final parsed = pinnedStr
-          .split(',')
-          .map((s) => int.tryParse(s.trim()))
-          .whereType<int>()
-          .where((i) => i >= 1 && i <= 6)
-          .toSet();
+      final parsed =
+          pinnedStr
+              .split(',')
+              .map((s) => int.tryParse(s.trim()))
+              .whereType<int>()
+              .where((i) => i >= 1 && i <= 6)
+              .toSet();
       if (parsed.isNotEmpty) mobilePinnedTabIndices = parsed;
     }
 
@@ -241,7 +238,6 @@ class SettingsNotifier extends Notifier<SettingsState> {
     } else {
       cacheSizeMB = rawCache;
     }
-    final exposeRecentMedia = prefs.getBool(_keyAndroidAutoExposeRecentMedia) ?? true;
     final useDynamicAccent = prefs.getBool(_keyUseDynamicAlbumAccent) ?? true;
     final gapless = prefs.getBool(_keyGaplessPlayback) ?? true;
     final aiEnabled = prefs.getBool(_keyAiEnabled) ?? _defaultAiEnabled;
@@ -265,10 +261,10 @@ class SettingsNotifier extends Notifier<SettingsState> {
     }
 
     final groqApiKey = prefs.getString(_keyGroqApiKey) ?? '';
-    final groqModel =
-        prefs.getString(_keyGroqModel) ?? 'llama-3.1-8b-instant';
+    final groqModel = prefs.getString(_keyGroqModel) ?? 'llama-3.1-8b-instant';
     final openRouterApiKey = prefs.getString(_keyOpenRouterApiKey) ?? '';
-    final openRouterModel = prefs.getString(_keyOpenRouterModel) ??
+    final openRouterModel =
+        prefs.getString(_keyOpenRouterModel) ??
         'meta-llama/llama-3.1-8b-instruct:free';
     final customEndpointUrl = prefs.getString(_keyCustomEndpointUrl) ?? '';
     final customEndpointApiKey =
@@ -277,7 +273,8 @@ class SettingsNotifier extends Notifier<SettingsState> {
         prefs.getString(_keyCustomModelName) ?? 'gpt-4o-mini';
 
     final multiDiscModeStr = prefs.getString(_keyMultiDiscDisplayMode);
-    MultiDiscDisplayMode multiDiscDisplayMode = MultiDiscDisplayMode.discSections;
+    MultiDiscDisplayMode multiDiscDisplayMode =
+        MultiDiscDisplayMode.discSections;
     if (multiDiscModeStr != null) {
       multiDiscDisplayMode = MultiDiscDisplayMode.values.firstWhere(
         (e) => e.name == multiDiscModeStr,
@@ -289,7 +286,6 @@ class SettingsNotifier extends Notifier<SettingsState> {
       browseMode: browseMode,
       mobilePinnedTabIndices: mobilePinnedTabIndices,
       cacheSizeLimitMB: cacheSizeMB,
-      androidAutoExposeRecentMedia: exposeRecentMedia,
       useDynamicAlbumAccent: useDynamicAccent,
       gaplessPlayback: gapless,
       aiEnabled: aiEnabled,
@@ -330,12 +326,6 @@ class SettingsNotifier extends Notifier<SettingsState> {
 
     // Update cache manager configuration
     await CacheManager.instance.updateConfig(sizeMB);
-  }
-
-  Future<void> setAndroidAutoExposeRecentMedia(bool enabled) async {
-    state = state.copyWith(androidAutoExposeRecentMedia: enabled);
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_keyAndroidAutoExposeRecentMedia, enabled);
   }
 
   Future<void> setUseDynamicAlbumAccent(bool use) async {
@@ -461,7 +451,6 @@ class SettingsNotifier extends Notifier<SettingsState> {
     await prefs.remove(_keyBrowseMode);
     await prefs.remove(_keyMobilePinnedTabIndices);
     await prefs.remove(_keyCacheSizeLimit);
-    await prefs.remove(_keyAndroidAutoExposeRecentMedia);
     await prefs.remove(_keyUseDynamicAlbumAccent);
     await prefs.remove(_keyGaplessPlayback);
     await prefs.remove(_keyAiEnabled);

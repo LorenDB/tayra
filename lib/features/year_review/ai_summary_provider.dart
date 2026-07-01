@@ -77,9 +77,7 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
 
     try {
       final availability = await client.checkAvailability();
-      debugPrint(
-        'AiSummary: availability for year=$_year -> $availability',
-      );
+      debugPrint('AiSummary: availability for year=$_year -> $availability');
       try {
         Analytics.track('year_review_ai_feature_status', {
           'year': _year,

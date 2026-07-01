@@ -594,10 +594,7 @@ class _ReviewContentState extends State<_ReviewContent>
   List<Widget> _buildStoryPages() {
     final s = widget.stats;
     final pages = <Widget>[
-      _StoryWelcomeCard(
-        year: s.year,
-        magicProgram: widget.magicProgram,
-      ),
+      _StoryWelcomeCard(year: s.year, magicProgram: widget.magicProgram),
       _StoryStatsCard(
         label: 'Total Listens',
         value: s.totalListens,
@@ -685,8 +682,7 @@ class _ReviewContentState extends State<_ReviewContent>
                       return Opacity(
                         opacity: _cardAnimController.value,
                         child: Transform.scale(
-                          scale: 0.92 +
-                              (0.08 * _cardAnimController.value),
+                          scale: 0.92 + (0.08 * _cardAnimController.value),
                           child: LayoutBuilder(
                             builder: (context, constraints) {
                               return SingleChildScrollView(
@@ -751,7 +747,10 @@ class _ReviewContentState extends State<_ReviewContent>
                               curve: Curves.easeOut,
                             );
                           },
-                          icon: const Icon(Icons.arrow_forward_rounded, size: 16),
+                          icon: const Icon(
+                            Icons.arrow_forward_rounded,
+                            size: 16,
+                          ),
                           label: const Text('Next'),
                           style: TextButton.styleFrom(
                             foregroundColor: AppTheme.primary,
@@ -837,9 +836,8 @@ class _StoryTabRow extends StatelessWidget {
                       vertical: 8,
                     ),
                     decoration: BoxDecoration(
-                      color: isStoryMode
-                          ? AppTheme.primary
-                          : Colors.transparent,
+                      color:
+                          isStoryMode ? AppTheme.primary : Colors.transparent,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Row(
@@ -848,9 +846,10 @@ class _StoryTabRow extends StatelessWidget {
                         Icon(
                           Icons.auto_awesome_rounded,
                           size: 14,
-                          color: isStoryMode
-                              ? Colors.white
-                              : AppTheme.onBackgroundMuted,
+                          color:
+                              isStoryMode
+                                  ? Colors.white
+                                  : AppTheme.onBackgroundMuted,
                         ),
                         const SizedBox(width: 4),
                         Text(
@@ -858,9 +857,10 @@ class _StoryTabRow extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
-                            color: isStoryMode
-                                ? Colors.white
-                                : AppTheme.onBackgroundMuted,
+                            color:
+                                isStoryMode
+                                    ? Colors.white
+                                    : AppTheme.onBackgroundMuted,
                           ),
                         ),
                       ],
@@ -875,9 +875,8 @@ class _StoryTabRow extends StatelessWidget {
                       vertical: 8,
                     ),
                     decoration: BoxDecoration(
-                      color: !isStoryMode
-                          ? AppTheme.primary
-                          : Colors.transparent,
+                      color:
+                          !isStoryMode ? AppTheme.primary : Colors.transparent,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Row(
@@ -886,9 +885,10 @@ class _StoryTabRow extends StatelessWidget {
                         Icon(
                           Icons.list_alt_rounded,
                           size: 14,
-                          color: !isStoryMode
-                              ? Colors.white
-                              : AppTheme.onBackgroundMuted,
+                          color:
+                              !isStoryMode
+                                  ? Colors.white
+                                  : AppTheme.onBackgroundMuted,
                         ),
                         const SizedBox(width: 4),
                         Text(
@@ -896,9 +896,10 @@ class _StoryTabRow extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
-                            color: !isStoryMode
-                                ? Colors.white
-                                : AppTheme.onBackgroundMuted,
+                            color:
+                                !isStoryMode
+                                    ? Colors.white
+                                    : AppTheme.onBackgroundMuted,
                           ),
                         ),
                       ],
@@ -945,7 +946,8 @@ class _StoryProgress extends StatelessWidget {
             width: isActive ? 20 : 6,
             height: 4,
             decoration: BoxDecoration(
-              color: isActive ? AppTheme.primary : AppTheme.surfaceContainerHigh,
+              color:
+                  isActive ? AppTheme.primary : AppTheme.surfaceContainerHigh,
               borderRadius: BorderRadius.circular(2),
             ),
           );
@@ -982,9 +984,10 @@ class _StoryWelcomeCardState extends State<_StoryWelcomeCard>
       vsync: this,
       duration: const Duration(milliseconds: 800),
     )..forward();
-    _fadeSlide = Tween<double>(begin: 30, end: 0).animate(
-      CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic),
-    );
+    _fadeSlide = Tween<double>(
+      begin: 30,
+      end: 0,
+    ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic));
     _shaderTicker = createTicker((elapsed) {
       setState(() {
         _shaderElapsed = elapsed.inMicroseconds / 1e6;
@@ -1092,9 +1095,7 @@ class _StoryWelcomeCardState extends State<_StoryWelcomeCard>
             end: Alignment.bottomRight,
             colors: [Color(0xFF1A1540), Color(0xFF0D2A2A)],
           ),
-          border: Border.all(
-            color: AppTheme.primary.withValues(alpha: 0.3),
-          ),
+          border: Border.all(color: AppTheme.primary.withValues(alpha: 0.3)),
         ),
         child: inner,
       ),
@@ -1154,9 +1155,10 @@ class _StoryStatsCardState extends State<_StoryStatsCard>
       vsync: this,
       duration: const Duration(milliseconds: 1200),
     )..forward();
-    _countAnim = Tween<double>(begin: 0, end: widget.value.toDouble()).animate(
-      CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic),
-    );
+    _countAnim = Tween<double>(
+      begin: 0,
+      end: widget.value.toDouble(),
+    ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic));
     _fade = CurvedAnimation(parent: _ctrl, curve: const Interval(0.4, 1.0));
   }
 
@@ -1463,11 +1465,7 @@ class _StoryDiscoveryCardState extends State<_StoryDiscoveryCard>
                     padding: const EdgeInsets.only(bottom: 20),
                     child: Row(
                       children: [
-                        Icon(
-                          items[i].$1,
-                          color: AppTheme.primary,
-                          size: 28,
-                        ),
+                        Icon(items[i].$1, color: AppTheme.primary, size: 28),
                         const SizedBox(width: 16),
                         Text(
                           items[i].$2,
@@ -1517,7 +1515,8 @@ class _StorySpotlightCard extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<_StorySpotlightCard> createState() => _StorySpotlightCardState();
+  ConsumerState<_StorySpotlightCard> createState() =>
+      _StorySpotlightCardState();
 }
 
 class _StorySpotlightCardState extends ConsumerState<_StorySpotlightCard>
@@ -1542,9 +1541,7 @@ class _StorySpotlightCardState extends ConsumerState<_StorySpotlightCard>
   @override
   Widget build(BuildContext context) {
     final paletteAsync = ref.watch(
-      paletteColorsProvider(
-        encodePaletteKey(widget.item.coverUrl, null),
-      ),
+      paletteColorsProvider(encodePaletteKey(widget.item.coverUrl, null)),
     );
     final accentColor = paletteAsync.maybeWhen(
       data: (color) => color,
@@ -1725,30 +1722,39 @@ class _StoryPeakMonthCardState extends State<_StoryPeakMonthCard>
     final s = widget.stats;
     final peakMonth = s.peakMonth;
     const fullMonths = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December',
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
     ];
-    final monthName = peakMonth > 0 && peakMonth <= 12
-        ? fullMonths[peakMonth - 1]
-        : 'Unknown';
-    final peakData = peakMonth > 0
-        ? s.monthlyBreakdown.firstWhere(
-            (m) => m.month == peakMonth,
-            orElse: () => MonthlyListens(
-              month: peakMonth,
-              count: 0,
-              totalSeconds: 0,
-            ),
-          )
-        : null;
+    final monthName =
+        peakMonth > 0 && peakMonth <= 12
+            ? fullMonths[peakMonth - 1]
+            : 'Unknown';
+    final peakData =
+        peakMonth > 0
+            ? s.monthlyBreakdown.firstWhere(
+              (m) => m.month == peakMonth,
+              orElse:
+                  () => MonthlyListens(
+                    month: peakMonth,
+                    count: 0,
+                    totalSeconds: 0,
+                  ),
+            )
+            : null;
 
-    final medianIndex = s.monthlyBreakdown
-        .map((m) => m.count)
-        .toList()
-      ..sort();
-    final median = medianIndex.isNotEmpty
-        ? medianIndex[medianIndex.length ~/ 2]
-        : 1;
+    final medianIndex = s.monthlyBreakdown.map((m) => m.count).toList()..sort();
+    final median =
+        medianIndex.isNotEmpty ? medianIndex[medianIndex.length ~/ 2] : 1;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
@@ -1882,12 +1888,12 @@ class _StoryFunStatsCardState extends State<_StoryFunStatsCard>
   @override
   Widget build(BuildContext context) {
     final s = widget.stats;
-    final perDay = s.totalListens > 0
-        ? (s.totalListens / 365).toStringAsFixed(1)
-        : '0';
-    final perDayMins = s.totalListens > 0
-        ? ((s.totalSeconds / s.totalListens)).toStringAsFixed(0)
-        : '0';
+    final perDay =
+        s.totalListens > 0 ? (s.totalListens / 365).toStringAsFixed(1) : '0';
+    final perDayMins =
+        s.totalListens > 0
+            ? ((s.totalSeconds / s.totalListens)).toStringAsFixed(0)
+            : '0';
     final topGenre = s.topArtist?.name ?? 'unknown sounds';
 
     return Padding(
@@ -2208,9 +2214,7 @@ class _DetailsView extends StatelessWidget {
           const SliverToBoxAdapter(child: SizedBox(height: 24)),
         ],
 
-        const SliverToBoxAdapter(
-          child: _SectionTitle(title: 'Month by Month'),
-        ),
+        const SliverToBoxAdapter(child: _SectionTitle(title: 'Month by Month')),
         SliverToBoxAdapter(
           child: _MonthlyChart(monthly: stats.monthlyBreakdown),
         ),
@@ -2253,10 +2257,7 @@ class _DetailsView extends StatelessWidget {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        icon: const Icon(
-                          Icons.playlist_add_rounded,
-                          size: 18,
-                        ),
+                        icon: const Icon(Icons.playlist_add_rounded, size: 18),
                         label: const Text('Create Playlist'),
                         onPressed: () async {
                           try {
@@ -2343,10 +2344,7 @@ class _DetailsView extends StatelessWidget {
                             final playlist = await api.createPlaylist(
                               name: name,
                             );
-                            await api.addTracksToPlaylist(
-                              playlist.id,
-                              topIds,
-                            );
+                            await api.addTracksToPlaylist(playlist.id, topIds);
 
                             try {
                               Analytics.track(
@@ -2360,9 +2358,7 @@ class _DetailsView extends StatelessWidget {
 
                             if (!context.mounted) return;
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Playlist created'),
-                              ),
+                              const SnackBar(content: Text('Playlist created')),
                             );
                           } catch (e) {
                             try {
@@ -2397,9 +2393,7 @@ class _DetailsView extends StatelessWidget {
         ],
 
         if (stats.topArtists.length > 1) ...[
-          const SliverToBoxAdapter(
-            child: _SectionTitle(title: 'Top Artists'),
-          ),
+          const SliverToBoxAdapter(child: _SectionTitle(title: 'Top Artists')),
           SliverToBoxAdapter(
             child: _RankedList(items: stats.topArtists, type: 'artist'),
           ),
@@ -2857,14 +2851,17 @@ class _LovedVsListenedSection extends StatelessWidget {
     // we show alternate wording so the UI doesn't read like a contrast ("vs")
     // when only a single column is rendered.
     final noFavoritedThisYear = stats.favoritedThisYear.isEmpty;
-    final sectionTitle = noFavoritedThisYear ? 'Most Played' : 'Loved vs. Listened';
-    final sectionSubtitle = noFavoritedThisYear
-        ? 'Your most-played tracks'
-        : 'What you favorited vs. what you played most';
+    final sectionTitle =
+        noFavoritedThisYear ? 'Most Played' : 'Loved vs. Listened';
+    final sectionSubtitle =
+        noFavoritedThisYear
+            ? 'Your most-played tracks'
+            : 'What you favorited vs. what you played most';
 
-    final hasLovedLabel = stats.favoritedThisYear.isNotEmpty
-        ? 'Favorited This Year'
-        : 'Most Played';
+    final hasLovedLabel =
+        stats.favoritedThisYear.isNotEmpty
+            ? 'Favorited This Year'
+            : 'Most Played';
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),

@@ -111,7 +111,9 @@ final totalListenCountProvider = FutureProvider.autoDispose<int>((ref) async {
 });
 
 /// Listening stats for the past 7 days (used on the home screen).
-final weeklyStatsProvider = FutureProvider.autoDispose<WeeklyStats>((ref) async {
+final weeklyStatsProvider = FutureProvider.autoDispose<WeeklyStats>((
+  ref,
+) async {
   return ListenHistoryService.getWeekStats();
 });
 
@@ -147,7 +149,10 @@ class SaturdayStatsNotifier extends Notifier<bool> {
   /// Call once the stats section has actually been rendered to the user.
   Future<void> markShown() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_keySaturdayStatsLastShown, _todayKey(DateTime.now()));
+    await prefs.setString(
+      _keySaturdayStatsLastShown,
+      _todayKey(DateTime.now()),
+    );
     state = false;
   }
 

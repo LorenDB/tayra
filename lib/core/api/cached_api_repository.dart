@@ -510,7 +510,8 @@ class CachedFunkwhaleApi {
       final cached = await _cache.getMetadataStale(cacheKey);
       if (cached == null) return;
       final playlist = Playlist.fromJson(cached);
-      final newCount = tracksCount ??
+      final newCount =
+          tracksCount ??
           (tracksCountDelta != null
               ? playlist.tracksCount + tracksCountDelta
               : playlist.tracksCount);
@@ -567,10 +568,7 @@ class CachedFunkwhaleApi {
     await _api.removeTrackFromPlaylist(playlistId, index);
     // Decrement cached track count so the list/detail screens show the
     // updated count immediately.
-    await _updatePlaylistCache(
-      playlistId: playlistId,
-      tracksCountDelta: -1,
-    );
+    await _updatePlaylistCache(playlistId: playlistId, tracksCountDelta: -1);
     // Invalidate all track page caches for this playlist.
     await _cache.deleteMetadataLike('playlist_tracks_${playlistId}_p%');
     unawaited(refetchPlaylistsAfterWrite());
@@ -587,11 +585,7 @@ class CachedFunkwhaleApi {
     await _api.clearPlaylist(id);
     // Reset cached track count and duration to zero so the list/detail screens
     // show the empty state immediately.
-    await _updatePlaylistCache(
-      playlistId: id,
-      tracksCount: 0,
-      duration: 0,
-    );
+    await _updatePlaylistCache(playlistId: id, tracksCount: 0, duration: 0);
     // Invalidate all track page caches for this playlist.
     await _cache.deleteMetadataLike('playlist_tracks_${id}_p%');
     unawaited(refetchPlaylistsAfterWrite());
@@ -654,8 +648,7 @@ class CachedFunkwhaleApi {
           ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
-      coverUrls:
-          (r) => r.results.map((c) => c.artist.coverUrl).toList(),
+      coverUrls: (r) => r.results.map((c) => c.artist.coverUrl).toList(),
     );
   }
 
@@ -764,7 +757,8 @@ class CachedFunkwhaleApi {
       cacheType: CacheType.library,
       fromJson: (j) => PaginatedResponse.fromJson(j, Library.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _libraryToJson),
-      fetch: () => _api.getLibraries(page: page, pageSize: pageSize, scope: scope),
+      fetch:
+          () => _api.getLibraries(page: page, pageSize: pageSize, scope: scope),
       ttl: const Duration(hours: 6),
       forceRefresh: forceRefresh,
     );
