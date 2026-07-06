@@ -1741,7 +1741,15 @@ class PlayerNotifier extends Notifier<PlayerState> {
         // If playback stalled (gapless source ran dry before we could
         // append the next track), rebuild and resume.  Don't auto-resume
         // when the user explicitly paused playback.
-        if (!state.isPlaying &&
+        //
+        // We gate on processingState == completed rather than just
+        // !state.isPlaying so that a pause, an audio interruption, or a
+        // brief playingStream flicker from a playback-device change on
+        // Android (which can transiently report isPlaying=false while the
+        // source stays in the ready state) doesn't spuriously resume the
+        // radio.  Only a genuinely-exhausted gapless source ends up in the
+        // completed state.
+        if (_handler.audioPlayer.processingState == ProcessingState.completed &&
             state.hasNext &&
             _gaplessActive &&
             !_userPaused) {
