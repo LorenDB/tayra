@@ -353,7 +353,7 @@ class UploadNotifier extends Notifier<UploadState> {
       // ignore and allow file picker to fallback to its default
     }
 
-    final result = await FilePicker.platform.pickFiles(
+    final result = await FilePicker.pickFiles(
       type: FileType.custom,
       initialDirectory: initialDirectory,
       allowedExtensions: [
