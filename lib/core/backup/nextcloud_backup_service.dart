@@ -540,6 +540,7 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
     bool includeSettings = true,
     bool includeHistory = true,
     String? settingsFile,
+    bool reuseDeviceUuid = false,
   }) async {
     final cur = state;
     if (cur.serverUrl == null ||
@@ -578,7 +579,11 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
           filename: chosenSettingsFile,
         );
         if (content != null) {
-          ok = await NextcloudBackupService.restoreSettings(content) && ok;
+          ok = await NextcloudBackupService.restoreSettings(
+                content,
+                reuseDeviceUuid: reuseDeviceUuid,
+              ) &&
+              ok;
         }
       }
       if (includeHistory) {
@@ -886,9 +891,16 @@ class NextcloudBackupService {
   }
 
   /// Restore settings from a backup JSON.
+  ///
+  /// If [reuseDeviceUuid] is true, the backed-up device UUID is restored so
+  /// this device retains its old identity (useful when recovering a wiped
+  /// install on the same physical device).  When false (default), the
+  /// current device's UUID is preserved so each device keeps a unique
+  /// identifier.
   static Future<bool> restoreSettings(
     String jsonStr, {
     bool merge = true,
+    bool reuseDeviceUuid = false,
   }) async {
     try {
       final data = jsonDecode(jsonStr) as Map<String, dynamic>;
@@ -897,11 +909,14 @@ class NextcloudBackupService {
       final prefs = await SharedPreferences.getInstance();
       for (final entry in settings.entries) {
         final k = entry.key;
-        // Avoid restoring auth tokens or nc tokens (those are live per device)
         if (k.contains('token') ||
             k.contains('password') ||
-            k == 'server_url' /* separate */ )
+            k == 'server_url') {
           continue;
+        }
+        if (!reuseDeviceUuid && k == _deviceUuidKey) {
+          continue;
+        }
         final v = entry.value;
         if (v is String) {
           await prefs.setString(k, v);
@@ -913,7 +928,6 @@ class NextcloudBackupService {
           await prefs.setDouble(k, v);
         }
       }
-      // Server info not restored to active auth; user does relogin explicitly.
       return true;
     } catch (e) {
       debugPrint('restoreSettings: $e');
