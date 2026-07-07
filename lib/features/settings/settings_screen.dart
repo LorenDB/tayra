@@ -10,9 +10,11 @@ import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/features/year_review/listen_history_provider.dart';
+import 'package:tayra/features/year_review/listen_history_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:tayra/core/widgets/dialog_utils.dart';
 import 'package:tayra/core/widgets/app_shell.dart';
+import 'package:tayra/core/backup/nextcloud_backup_service.dart';
 
 // Format MB values (decimal) used by the slider/settings UI so they always
 // match what the user selected.
@@ -194,6 +196,11 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 24),
 
+          // ── Backup section ────────────────────────────────────────────
+          _SectionHeader(title: 'Backup & Sync'),
+          _NextcloudBackupTile(),
+          const SizedBox(height: 24),
+
           // ── AI section ────────────────────────────────────────────────
           _SectionHeader(title: 'AI'),
           _SwitchTile(
@@ -269,14 +276,17 @@ class SettingsScreen extends ConsumerWidget {
                     (context) => _ConfirmDialog(
                       title: 'Clear all cache?',
                       message:
-                          'All cached data including album info, cover art, and audio files will be deleted.',
+                          'All cached data including album info, cover art, audio files, and listening history from other devices will be deleted.\n\nYour local listening history will be kept.',
                       confirmColor: AppTheme.error,
                     ),
               );
               if (confirmed == true) {
                 await CacheManager.instance.clearAll();
+                await ListenHistoryService.clearRemote();
                 if (!context.mounted) return;
                 ref.invalidate(cacheStatsProvider);
+                ref.invalidate(availableYearsProvider);
+                ref.invalidate(totalListenCountProvider);
                 try {
                   Analytics.track('cache_all_cleared');
                 } catch (_) {}
@@ -503,6 +513,469 @@ class _YearReviewTile extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+// ── Nextcloud Backup tile + connect dialog / status ────────────────────────
+
+class _NextcloudBackupTile extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final nc = ref.watch(nextcloudBackupProvider);
+
+    String subtitle;
+    if (nc.isConnected && nc.serverUrl != null) {
+      final s = Uri.tryParse(nc.serverUrl!)?.host ?? nc.serverUrl!;
+      subtitle = 'Connected to $s as ${nc.username ?? "?"}';
+    } else {
+      subtitle = 'Back up settings and listening history via Nextcloud';
+    }
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceContainer,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => _showBackupSheet(context, ref),
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Row(
+              children: [
+                Icon(
+                  nc.isConnected
+                      ? Icons.cloud_done_outlined
+                      : Icons.cloud_upload_outlined,
+                  color: AppTheme.onBackgroundSubtle,
+                  size: 22,
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Nextcloud Backup',
+                        style: const TextStyle(
+                          color: AppTheme.onBackground,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle,
+                        style: const TextStyle(
+                          color: AppTheme.onBackgroundMuted,
+                          fontSize: 12,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                if (nc.isLoading)
+                  const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                else
+                  const Icon(
+                    Icons.chevron_right_rounded,
+                    color: AppTheme.onBackgroundSubtle,
+                    size: 20,
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showBackupSheet(BuildContext context, WidgetRef ref) {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: AppTheme.surfaceContainer,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) => const _BackupSheet(),
+    );
+  }
+}
+
+class _BackupSheet extends ConsumerWidget {
+  const _BackupSheet();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final nc = ref.watch(nextcloudBackupProvider);
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppTheme.onBackgroundMuted.withValues(alpha: 0.4),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Nextcloud Backup',
+              style: TextStyle(
+                color: AppTheme.onBackground,
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 4),
+            const Text(
+              'Securely back up your settings and listening history (excludes audio caches). Listening buckets per year for each device/server.',
+              style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 12),
+            ),
+            const SizedBox(height: 16),
+            if (!nc.isConnected) ...[
+              ElevatedButton.icon(
+                onPressed:
+                    nc.isLoading ? null : () => _startConnect(context, ref),
+                icon: const Icon(Icons.link),
+                label: const Text('Connect Nextcloud (SSO)'),
+              ),
+              if (nc.error != null) ...[
+                const SizedBox(height: 8),
+                Text(
+                  nc.error!,
+                  style: const TextStyle(color: AppTheme.error, fontSize: 12),
+                ),
+              ],
+            ] else ...[
+              Text(
+                'Connected: ${nc.serverUrl} (${nc.username})',
+                style: const TextStyle(
+                  color: AppTheme.onBackgroundMuted,
+                  fontSize: 12,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed:
+                          nc.isLoading
+                              ? null
+                              : () async {
+                                final ok = await ref
+                                    .read(nextcloudBackupProvider.notifier)
+                                    .backupNow(force: true);
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        ok
+                                            ? 'Backup complete'
+                                            : 'Backup failed',
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                      icon: const Icon(Icons.backup),
+                      label: const Text('Backup now'),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed:
+                          nc.isLoading
+                              ? null
+                              : () => _restoreWithPicker(context, ref),
+                      icon: const Icon(Icons.restore),
+                      label: const Text('Restore'),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              OutlinedButton.icon(
+                onPressed:
+                    nc.isLoading
+                        ? null
+                        : () async {
+                          final count = await ref
+                              .read(nextcloudBackupProvider.notifier)
+                              .syncNow();
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  count > 0
+                                      ? 'Synced $count new listening records'
+                                      : 'No new listening records',
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                icon: const Icon(Icons.sync),
+                label: const Text('Sync now'),
+              ),
+              const SizedBox(height: 8),
+              SwitchListTile(
+                title: const Text(
+                  'Automatic backup',
+                  style: TextStyle(color: AppTheme.onBackground),
+                ),
+                subtitle: const Text(
+                  'Backup after listening data or settings changes (approximate)',
+                  style: TextStyle(
+                    color: AppTheme.onBackgroundMuted,
+                    fontSize: 11,
+                  ),
+                ),
+                value: nc.autoBackupEnabled,
+                onChanged:
+                    (v) => ref
+                        .read(nextcloudBackupProvider.notifier)
+                        .setAutoBackupEnabled(v),
+              ),
+              const SizedBox(height: 8),
+              TextButton(
+                onPressed:
+                    nc.isLoading
+                        ? null
+                        : () async {
+                          await ref
+                              .read(nextcloudBackupProvider.notifier)
+                              .disconnect();
+                          if (context.mounted) Navigator.of(context).pop();
+                        },
+                style: TextButton.styleFrom(foregroundColor: AppTheme.error),
+                child: const Text('Disconnect Nextcloud'),
+              ),
+            ],
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Close'),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+  }
+
+  Future<void> _restoreWithPicker(BuildContext context, WidgetRef ref) async {
+    final notifier = ref.read(nextcloudBackupProvider.notifier);
+    final settingsFiles = await notifier.listSettingsFiles();
+
+    if (!context.mounted) return;
+
+    if (settingsFiles.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No settings backups found for this server.'),
+        ),
+      );
+      return;
+    }
+
+    if (settingsFiles.length == 1) {
+      _doRestore(context, ref, settingsFiles.first.filename);
+      return;
+    }
+
+    final chosen = await showShellDialog<String>(
+      context: context,
+      builder:
+          (ctx) => SimpleDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            title: const Text('Restore from device'),
+            children: [
+              for (final entry in settingsFiles)
+                SimpleDialogOption(
+                  onPressed: () => Navigator.pop(ctx, entry.filename),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.phone_android_rounded, size: 20),
+                      const SizedBox(width: 12),
+                      Flexible(
+                        child: Text(
+                          entry.deviceLabel,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              const Divider(),
+              SimpleDialogOption(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('Cancel'),
+              ),
+            ],
+          ),
+    );
+
+    if (chosen != null && context.mounted) {
+      _doRestore(context, ref, chosen);
+    }
+  }
+
+  Future<void> _doRestore(
+    BuildContext context,
+    WidgetRef ref,
+    String settingsFile,
+  ) async {
+    final ok = await ref
+        .read(nextcloudBackupProvider.notifier)
+        .restoreFromFiles(settingsFile: settingsFile);
+    if (!context.mounted) return;
+
+    if (ok) {
+      await showShellDialog<void>(
+        context: context,
+        builder:
+            (ctx) => AlertDialog(
+              backgroundColor: AppTheme.surfaceContainerHigh,
+              icon: const Icon(Icons.check_circle_rounded, color: AppTheme.primary, size: 40),
+              title: const Text('Settings Restored'),
+              content: const Text(
+                'Your settings and listening history have been restored.\n\n'
+                'A restart is recommended for all changes to take effect.',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                    Navigator.of(context).pop(); // close the backup sheet too
+                  },
+                  child: const Text('Later'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    try {
+                      exit(0);
+                    } catch (_) {
+                      Navigator.pop(ctx);
+                    }
+                  },
+                  child: const Text('Restart Now'),
+                ),
+              ],
+            ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Restore failed or was incomplete.')),
+      );
+    }
+  }
+
+  Future<void> _startConnect(BuildContext context, WidgetRef ref) async {
+    final ctrl = TextEditingController();
+    final server = await showShellDialog<String>(
+      context: context,
+      builder:
+          (ctx) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            title: const Text('Connect Nextcloud'),
+            content: TextField(
+              controller: ctrl,
+              decoration: const InputDecoration(
+                hintText: 'https://your.nextcloud',
+              ),
+              autofocus: true,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, ctrl.text.trim()),
+                child: const Text('Connect'),
+              ),
+            ],
+          ),
+    );
+    if (server == null || server.isEmpty || !context.mounted) return;
+
+    final url = await ref
+        .read(nextcloudBackupProvider.notifier)
+        .startLoginFlow(server);
+    if (url == null) return;
+    await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+
+    // Show second dialog: "Finish login in browser then tap done"
+    final finished = await showShellDialog<bool>(
+      context: context,
+      builder:
+          (ctx) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            title: const Text('Complete login in browser'),
+            content: const Text(
+              'After signing in and authorizing in your browser (Nextcloud), tap Done here. We will securely retrieve an app password.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, true),
+                child: const Text('Done'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, false),
+                child: const Text('Cancel'),
+              ),
+            ],
+          ),
+    );
+
+    if (finished == true && context.mounted) {
+      final success =
+          await ref.read(nextcloudBackupProvider.notifier).pollForAppPassword();
+      if (context.mounted) {
+        if (!success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Could not finish Nextcloud login')),
+          );
+        }
+        Navigator.of(context).pop(); // close sheet
+        // reopen sheet to refresh
+        Future.delayed(const Duration(milliseconds: 200), () {
+          if (context.mounted) _showBackupSheetAgain(context, ref);
+        });
+      }
+    }
+  }
+
+  void _showBackupSheetAgain(BuildContext ctx, WidgetRef r) {
+    showModalBottomSheet<void>(
+      context: ctx,
+      backgroundColor: AppTheme.surfaceContainer,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) => const _BackupSheet(),
     );
   }
 }
