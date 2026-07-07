@@ -3397,15 +3397,22 @@ class _LoveTile {
 
 // ── Monthly chart ───────────────────────────────────────────────────────
 
-class _MonthlyChart extends StatelessWidget {
+class _MonthlyChart extends StatefulWidget {
   final List<MonthlyListens> monthly;
 
   const _MonthlyChart({required this.monthly});
 
   @override
+  State<_MonthlyChart> createState() => _MonthlyChartState();
+}
+
+class _MonthlyChartState extends State<_MonthlyChart> {
+  int? _highlightedIndex;
+
+  @override
   Widget build(BuildContext context) {
     // Find max for scaling
-    final maxCount = monthly.fold<int>(
+    final maxCount = widget.monthly.fold<int>(
       1,
       (max, m) => m.count > max ? m.count : max,
     );
@@ -3425,60 +3432,77 @@ class _MonthlyChart extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: List.generate(12, (i) {
-                final data = monthly[i];
+                final data = widget.monthly[i];
                 final fraction = data.count / maxCount;
                 final isTop = data.count == maxCount && data.count > 0;
+                final isHighlighted = _highlightedIndex == i || isTop;
                 return Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 2),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        if (isTop)
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 4),
-                            child: FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Text(
-                                '${data.count}',
-                                style: const TextStyle(
-                                  color: AppTheme.primary,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w700,
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _highlightedIndex =
+                              _highlightedIndex == i ? null : i;
+                        });
+                      },
+                      child: MouseRegion(
+                        onEnter: (_) => setState(() => _highlightedIndex = i),
+                        onExit: (_) => setState(() => _highlightedIndex = null),
+                        cursor: SystemMouseCursors.click,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            if (isHighlighted)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 4),
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    '${data.count}',
+                                    style: TextStyle(
+                                      color:
+                                          isTop
+                                              ? AppTheme.primary
+                                              : AppTheme.onBackgroundMuted,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            Flexible(
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 600),
+                                curve: Curves.easeOutCubic,
+                                width: double.infinity,
+                                height:
+                                    data.count > 0
+                                        ? (fraction * 100).clamp(4.0, 100.0)
+                                        : 4.0,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(3),
+                                  gradient:
+                                      data.count > 0
+                                          ? LinearGradient(
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                            colors: [
+                                              AppTheme.primary,
+                                              AppTheme.secondary,
+                                            ],
+                                          )
+                                          : null,
+                                  color:
+                                      data.count == 0
+                                          ? AppTheme.surfaceContainerHigh
+                                          : null,
                                 ),
                               ),
                             ),
-                          ),
-                        Flexible(
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 600),
-                            curve: Curves.easeOutCubic,
-                            width: double.infinity,
-                            height:
-                                data.count > 0
-                                    ? (fraction * 100).clamp(4.0, 100.0)
-                                    : 4.0,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(3),
-                              gradient:
-                                  data.count > 0
-                                      ? LinearGradient(
-                                        begin: Alignment.bottomCenter,
-                                        end: Alignment.topCenter,
-                                        colors: [
-                                          AppTheme.primary,
-                                          AppTheme.secondary,
-                                        ],
-                                      )
-                                      : null,
-                              color:
-                                  data.count == 0
-                                      ? AppTheme.surfaceContainerHigh
-                                      : null,
-                            ),
-                          ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 );
