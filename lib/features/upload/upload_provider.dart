@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/api/audio_tagger.dart';
 
@@ -742,6 +743,11 @@ class UploadNotifier extends Notifier<UploadState> {
       uploadError: null,
     );
 
+    Analytics.track('upload_started', {
+      'use_musicbrainz': state.useMusicBrainz,
+      'has_mbid': state.mbRecordingId.isNotEmpty,
+    });
+
     try {
       // ── Resolve MusicBrainz recording ──────────────────────────────────
       MbRecording? recording;
@@ -854,6 +860,7 @@ class UploadNotifier extends Notifier<UploadState> {
       );
 
       _startPolling(upload.importReference);
+      Analytics.track('upload_completed');
     } catch (e, st) {
       _cleanupTempFile();
       developer.log(
@@ -866,6 +873,7 @@ class UploadNotifier extends Notifier<UploadState> {
         uploadStatus: UploadStatus.idle,
         uploadError: 'Upload failed: ${_errorMessage(e)}',
       );
+      Analytics.track('upload_failed', {'had_error': true});
     }
   }
 
@@ -882,6 +890,7 @@ class UploadNotifier extends Notifier<UploadState> {
           uploadStatus: UploadStatus.finished,
           importStatus: status,
         );
+        Analytics.track('upload_import_finished');
         // Invalidate browse caches so newly uploaded tracks appear immediately.
         unawaited(
           ref.read(cachedFunkwhaleApiProvider).invalidateTrackAndAlbumCaches(),
@@ -899,6 +908,7 @@ class UploadNotifier extends Notifier<UploadState> {
           importStatus: status,
           importErrorDetail: errorMsg,
         );
+        Analytics.track('upload_import_errored', {'had_error': true});
 
       case 'skipped':
         _pollingTimer?.cancel();
@@ -912,6 +922,7 @@ class UploadNotifier extends Notifier<UploadState> {
           importStatus: status,
           importErrorDetail: 'Import was skipped by the server: $reason',
         );
+        Analytics.track('upload_import_errored', {'had_error': true, 'skipped': true});
 
       default:
         // Still pending/draft — update the displayed status.

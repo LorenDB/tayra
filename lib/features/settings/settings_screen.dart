@@ -601,6 +601,7 @@ class _NextcloudBackupTile extends ConsumerWidget {
   }
 
   void _showBackupSheet(BuildContext context, WidgetRef ref) {
+    Analytics.track('nextcloud_backup_sheet_opened');
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: AppTheme.surfaceContainer,
