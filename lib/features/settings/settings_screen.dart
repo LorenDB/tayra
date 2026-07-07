@@ -847,9 +847,42 @@ class _BackupSheet extends ConsumerWidget {
     WidgetRef ref,
     String settingsFile,
   ) async {
+    final reuseDeviceUuid = await showShellDialog<bool>(
+      context: context,
+      builder:
+          (ctx) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            title: const Text('Restore Settings'),
+            content: const Text(
+              'Are you restoring to the same device?\n\n'
+              'Select "Same Device" if you are recovering after a wipe or '
+              'reinstall on this device. Select "Different Device" if you '
+              'are syncing your settings to another device.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, false),
+                child: const Text('Different Device'),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.pop(ctx, true),
+                child: const Text('Same Device'),
+              ),
+            ],
+          ),
+    );
+    if (reuseDeviceUuid == null || !context.mounted) return;
+
     final ok = await ref
         .read(nextcloudBackupProvider.notifier)
-        .restoreFromFiles(settingsFile: settingsFile);
+        .restoreFromFiles(
+          settingsFile: settingsFile,
+          reuseDeviceUuid: reuseDeviceUuid,
+        );
     if (!context.mounted) return;
 
     if (ok) {
