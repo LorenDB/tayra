@@ -53,8 +53,20 @@ class TrackListTile extends ConsumerWidget {
       playerProvider.select((s) => s.currentTrack?.id == track.id),
     );
 
-    final isCachedAsync = ref.watch(isAudioCachedProvider(track.id));
-    final isManualAsync = ref.watch(isManualTrackProvider(track.id));
+    // Select only the resolved boolean so the tile rebuilds when the cached
+    // state actually flips, not on every AsyncValue lifecycle transition
+    // (loading → data). Without this, every tile that scrolls into view
+    // rebuilds twice as its async cache lookups resolve, causing scroll jank.
+    final isCached = ref.watch(
+      isAudioCachedProvider(track.id).select(
+        (a) => a.maybeWhen(data: (v) => v, orElse: () => false),
+      ),
+    );
+    final isManual = ref.watch(
+      isManualTrackProvider(track.id).select(
+        (a) => a.maybeWhen(data: (v) => v, orElse: () => false),
+      ),
+    );
     // When the offline content filter is active, tracks that are not present
     // in the offline track ID set should be considered unplayable. We apply
     // a disabled visual treatment and prevent the tap handler in that case.
@@ -161,25 +173,17 @@ class TrackListTile extends ConsumerWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       // Cached indicator
-                      isCachedAsync.when(
-                        data: (isCached) {
-                          if (!isCached) return const SizedBox.shrink();
-                          // If manually downloaded, color with accent; otherwise muted
-                          final isManual = isManualAsync.asData?.value ?? false;
-                          return Icon(
-                            Icons.download_done,
-                            size: 18,
-                            color:
-                                isManual
-                                    ? (textColor ??
-                                        dominantColor ??
-                                        AppTheme.primary)
-                                    : AppTheme.onBackgroundSubtle,
-                          );
-                        },
-                        loading: () => const SizedBox.shrink(),
-                        error: (_, _) => const SizedBox.shrink(),
-                      ),
+                      if (isCached)
+                        Icon(
+                          Icons.download_done,
+                          size: 18,
+                          color:
+                              isManual
+                                  ? (textColor ??
+                                      dominantColor ??
+                                      AppTheme.primary)
+                                  : AppTheme.onBackgroundSubtle,
+                        ),
                       const SizedBox(width: 8),
                       trailing ?? FavoriteButton(trackId: track.id, size: 20),
                     ],

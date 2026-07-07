@@ -577,16 +577,18 @@ class _TrackListSection extends ConsumerWidget {
         return SliverList(
           delegate: SliverChildBuilderDelegate((context, index) {
             final track = displayTracks[index];
-            return TrackListTile(
-              track: track,
-              onTap:
-                  () => ref
-                      .read(playerProvider.notifier)
-                      .playTracks(
-                        displayTracks,
-                        startIndex: index,
-                        source: 'recent_listenings',
-                      ),
+            return RepaintBoundary(
+              child: TrackListTile(
+                track: track,
+                onTap:
+                    () => ref
+                        .read(playerProvider.notifier)
+                        .playTracks(
+                          displayTracks,
+                          startIndex: index,
+                          source: 'recent_listenings',
+                        ),
+              ),
             );
           }, childCount: displayTracks.length),
         );
