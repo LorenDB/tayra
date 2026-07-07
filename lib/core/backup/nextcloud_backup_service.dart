@@ -9,11 +9,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/auth/auth_provider.dart'
     show secureStorageProvider, authStateProvider;
 import 'package:tayra/features/year_review/listen_history_service.dart';
 import 'package:tayra/features/year_review/listen_history_provider.dart';
-// import for queue? omit for now as secondary; include settings covers prefs including queue stash
 
 // ── Device / server naming ───────────────────────────────────────────────
 
@@ -226,11 +226,13 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
     state = state.copyWith(autoBackupEnabled: enabled);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_keyNcAuto, enabled);
+    Analytics.track('nextcloud_auto_backup_toggled', {'enabled': enabled});
   }
 
   /// Initiate Nextcloud Login Flow v2. Returns the login URL for browser.
   Future<String?> startLoginFlow(String ncServer) async {
     state = state.copyWith(isLoading: true, error: null, clearAuth: true);
+    Analytics.track('nextcloud_connect_started');
     String url = ncServer.trim();
     if (!url.startsWith('http')) url = 'https://$url';
     if (url.endsWith('/')) url = url.substring(0, url.length - 1);
@@ -311,6 +313,7 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
             final server = state.serverUrl;
             if (uname != null && pw != null && server != null) {
               await _persist(server, uname, pw);
+              Analytics.track('nextcloud_connected');
               state = NextcloudState(
                 serverUrl: server,
                 username: uname,
@@ -359,6 +362,7 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
     }
     _pendingPollEndpoint = null;
     _pendingPollToken = null;
+    Analytics.track('nextcloud_disconnected');
     state = NextcloudState(autoBackupEnabled: state.autoBackupEnabled);
   }
 
@@ -395,6 +399,7 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
               await _persist(srv, uname, pw);
               _pendingPollEndpoint = null;
               _pendingPollToken = null;
+              Analytics.track('nextcloud_connected');
               state = NextcloudState(
                 serverUrl: srv,
                 username: uname,
@@ -429,6 +434,8 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
     if (!force && !cur.autoBackupEnabled) return false;
     final authS = ref.read(authStateProvider).serverUrl;
     state = state.copyWith(isLoading: true);
+    final trigger = force ? 'manual' : 'auto';
+    Analytics.track('nextcloud_backup_requested', {'trigger': trigger});
     try {
       final ok = await NextcloudBackupService.performBackup(
         ncServer: cur.serverUrl!,
@@ -437,13 +444,17 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
         funkServerUrl: authS,
       );
       if (ok) {
+        Analytics.track('nextcloud_backup_succeeded');
         // Pull in remote-device history after a successful upload so the
         // year-review always has fresh cross-device data.
         unawaited(syncNow().then((_) {}).catchError((_) {}));
+      } else {
+        Analytics.track('nextcloud_backup_failed');
       }
       state = state.copyWith(isLoading: false);
       return ok;
     } catch (_) {
+      Analytics.track('nextcloud_backup_failed');
       state = state.copyWith(isLoading: false);
       return false;
     }
@@ -548,6 +559,11 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
         cur.appPassword == null)
       return false;
     state = state.copyWith(isLoading: true);
+    Analytics.track('nextcloud_restore_requested', {
+      'include_settings': includeSettings,
+      'include_history': includeHistory,
+      'reuse_device_uuid': reuseDeviceUuid,
+    });
     try {
       final files = await listRemoteBackups();
       bool ok = true;
@@ -606,8 +622,12 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
         ref.invalidate(availableYearsProvider);
         ref.invalidate(totalListenCountProvider);
       } catch (_) {}
+      Analytics.track(
+        ok ? 'nextcloud_restore_succeeded' : 'nextcloud_restore_failed',
+      );
       return ok;
     } catch (e) {
+      Analytics.track('nextcloud_restore_failed');
       state = state.copyWith(isLoading: false);
       return false;
     }
@@ -625,12 +645,14 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
     final auth = ref.read(authStateProvider);
     final funkHost = auth.serverUrl ?? '';
     if (funkHost.isEmpty) return 0;
-    return NextcloudBackupService.syncRemoteHistory(
+    final count = await NextcloudBackupService.syncRemoteHistory(
       ncServer: cur.serverUrl!,
       ncUser: cur.username!,
       ncAppPassword: cur.appPassword!,
       funkServerHost: funkHost,
     );
+    Analytics.track('nextcloud_sync_completed', {'record_count': count});
+    return count;
   }
 }
 
