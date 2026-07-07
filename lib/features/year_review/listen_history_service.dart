@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tayra/core/cache/cache_database.dart';
 import 'package:tayra/core/api/models.dart';
 
@@ -16,6 +19,7 @@ class ListenRecord {
   final String? coverUrl;
   final int? durationSeconds;
   final DateTime listenedAt;
+  final String? sourceDevice;
 
   const ListenRecord({
     this.id,
@@ -28,6 +32,7 @@ class ListenRecord {
     this.coverUrl,
     this.durationSeconds,
     required this.listenedAt,
+    this.sourceDevice,
   });
 
   Map<String, dynamic> toMap() {
@@ -41,6 +46,7 @@ class ListenRecord {
       'cover_url': coverUrl,
       'duration_seconds': durationSeconds,
       'listened_at': listenedAt.millisecondsSinceEpoch,
+      if (sourceDevice != null) 'source_device': sourceDevice,
     };
   }
 
@@ -58,6 +64,7 @@ class ListenRecord {
       listenedAt: DateTime.fromMillisecondsSinceEpoch(
         map['listened_at'] as int,
       ),
+      sourceDevice: map['source_device'] as String?,
     );
   }
 
@@ -75,6 +82,7 @@ class ListenRecord {
       coverUrl: track.coverUrl,
       durationSeconds: listenedSeconds ?? track.duration,
       listenedAt: DateTime.now(),
+      sourceDevice: 'local',
     );
   }
 
@@ -89,6 +97,7 @@ class ListenRecord {
     String? coverUrl,
     int? durationSeconds,
     DateTime? listenedAt,
+    String? sourceDevice,
   }) {
     return ListenRecord(
       id: id ?? this.id,
@@ -101,7 +110,21 @@ class ListenRecord {
       coverUrl: coverUrl ?? this.coverUrl,
       durationSeconds: durationSeconds ?? this.durationSeconds,
       listenedAt: listenedAt ?? this.listenedAt,
+      sourceDevice: sourceDevice ?? this.sourceDevice,
     );
+  }
+
+  /// Map for safe backup/restore JSON export (no id, no source_device).
+  Map<String, dynamic> toMapForBackup() =>
+      toMap()
+        ..remove('id')
+        ..remove('source_device');
+
+  factory ListenRecord.fromBackupMap(Map<String, dynamic> map) {
+    return ListenRecord.fromMap({
+      ...map,
+      if (!map.containsKey('id')) 'id': null,
+    });
   }
 }
 
@@ -247,6 +270,9 @@ class YearReviewStats {
   /// played heavily but never favorited.
   final List<TopItem> unlovedTopTracks;
 
+  /// Per-device listen breakdown for this year.
+  final List<DeviceStat> deviceStats;
+
   const YearReviewStats({
     required this.year,
     required this.totalListens,
@@ -264,6 +290,7 @@ class YearReviewStats {
     this.favoritedThisYear = const [],
     this.lovedTopTracks = const [],
     this.unlovedTopTracks = const [],
+    this.deviceStats = const [],
   });
 
   bool get isEmpty => totalListens == 0;
@@ -287,12 +314,112 @@ class YearReviewStats {
   }
 }
 
+// ── Device stats model ──────────────────────────────────────────────────
+
+class DeviceStat {
+  final String deviceId;
+  final int listenCount;
+  final int totalSeconds;
+
+  const DeviceStat({
+    required this.deviceId,
+    required this.listenCount,
+    required this.totalSeconds,
+  });
+
+  String get displayName =>
+      ListenHistoryService.resolveDeviceDisplayName(deviceId);
+
+  double percentageOf(int total) => total > 0 ? listenCount / total : 0.0;
+}
+
 // ── Listen history service ──────────────────────────────────────────────
 
 /// Service that manages local listen history storage and computes
 /// year-in-review statistics. Data is stored in the app's SQLite database.
 class ListenHistoryService {
   static const _tableName = 'listen_history';
+
+  // ── Device display-name cache ──────────────────────────────────────────
+  //
+  // Remote backups carry a human-readable device name (see
+  // NextcloudBackupService.getDeviceDisplayName) alongside the sanitized
+  // device id used in filenames / source_device.  We persist a deviceId →
+  // display-name map in SharedPreferences so the year-review screen can
+  // render "Samsung SM-S908U" instead of guessing from "samsung_sm_s908u".
+  static const _deviceNamesKey = 'tayra_device_display_names';
+  static Map<String, String> _deviceDisplayNames = {};
+  static bool _deviceNamesLoaded = false;
+
+  static Future<void> _loadDeviceDisplayNames() async {
+    if (_deviceNamesLoaded) return;
+    _deviceNamesLoaded = true;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final raw = prefs.getString(_deviceNamesKey);
+      if (raw != null) {
+        final decoded = jsonDecode(raw);
+        if (decoded is Map) {
+          _deviceDisplayNames = decoded.map(
+            (k, v) => MapEntry(k.toString(), v.toString()),
+          );
+        }
+      }
+    } catch (_) {}
+  }
+
+  /// Ensure the device display-name cache is populated.  Call before reading
+  /// [DeviceStat.displayName] so remote device names captured from backups
+  /// are available without a fallback to the sanitized-id heuristic.
+  static Future<void> loadDeviceDisplayNames() => _loadDeviceDisplayNames();
+
+  /// Synchronously resolve a device id to a display name, using the cached
+  /// remote-device-name map when available and falling back to a
+  /// best-effort rendering of the sanitized id.  Call
+  /// [loadDeviceDisplayNames] first to warm the cache.
+  static String resolveDeviceDisplayName(String deviceId) {
+    if (deviceId.isEmpty || deviceId == 'local') return 'This Device';
+    final stored = _deviceDisplayNames[deviceId];
+    if (stored != null && stored.isNotEmpty) return stored;
+    return _formatDeviceId(deviceId);
+  }
+
+  /// Returns the cached display name for a remote device id, or `null` if
+  /// no name has been recorded yet (so the caller can decide whether to
+  /// fetch it from a backup).  `'local'` and empty ids resolve to
+  /// `'This Device'`.
+  static String? getCachedDeviceDisplayName(String deviceId) {
+    if (deviceId.isEmpty || deviceId == 'local') return 'This Device';
+    return _deviceDisplayNames[deviceId];
+  }
+
+  /// Record the human-readable name for a remote device id, persisted across
+  /// launches.  Called when ingesting remote listening-history backups.
+  static Future<void> setDeviceDisplayName(String deviceId, String name) async {
+    if (deviceId.isEmpty || name.isEmpty || deviceId == 'local') return;
+    await _loadDeviceDisplayNames();
+    if (_deviceDisplayNames[deviceId] == name) return;
+    _deviceDisplayNames[deviceId] = name;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_deviceNamesKey, jsonEncode(_deviceDisplayNames));
+    } catch (_) {}
+  }
+
+  /// Best-effort rendering of a sanitized device id when no display name was
+  /// captured from a backup.  Words that look like model numbers (contain a
+  /// digit) are upper-cased so "samsung_sm_s908u" → "Samsung SM S908U".
+  static String _formatDeviceId(String deviceId) {
+    return deviceId
+        .replaceAll('_', ' ')
+        .split(' ')
+        .map((w) {
+          if (w.isEmpty) return '';
+          if (RegExp(r'\d').hasMatch(w)) return w.toUpperCase();
+          return '${w[0].toUpperCase()}${w.substring(1).toLowerCase()}';
+        })
+        .join(' ');
+  }
 
   /// Ensure the listen_history table exists. Called during app init.
   static Future<void> ensureTable() async {
@@ -308,9 +435,24 @@ class ListenHistoryService {
         album_title TEXT NOT NULL,
         cover_url TEXT,
         duration_seconds INTEGER,
-        listened_at INTEGER NOT NULL
+        listened_at INTEGER NOT NULL,
+        source_device TEXT
       )
     ''');
+    // Migrate: add source_device column for existing tables
+    try {
+      await db.execute('ALTER TABLE $_tableName ADD COLUMN source_device TEXT');
+    } catch (_) {
+      // Column already exists — ignore
+    }
+    // Any NULL source_device rows are this device's own listens from before
+    // the column existed (or ingested by an older build that didn't tag
+    // remote records). Tag them as 'local' so a later remote-history sync
+    // can never claim them for another device via the dedup backfill.
+    await db.execute(
+      "UPDATE $_tableName SET source_device = 'local' "
+      'WHERE source_device IS NULL',
+    );
     // Index for year-based queries
     await db.execute('''
       CREATE INDEX IF NOT EXISTS idx_listen_history_listened_at
@@ -823,5 +965,284 @@ class ListenHistoryService {
   static Future<void> clearAll() async {
     final db = await CacheDatabase.instance.database;
     await db.delete(_tableName);
+  }
+
+  /// Clear only remote-device listen history (synced from Nextcloud).
+  ///
+  /// Local listens — those tagged `source_device = 'local'` (this device's
+  /// own recordings, plus records restored by the rectifier from this
+  /// device's own cloud backup) — are preserved.  Every other
+  /// `source_device` value (a remote device's UUID, or a legacy sanitized
+  /// deviceId from pre-UUID backups) is deleted.
+  static Future<int> clearRemote() async {
+    final db = await CacheDatabase.instance.database;
+    return db.delete(
+      _tableName,
+      where: 'source_device IS NOT NULL AND source_device != ?',
+      whereArgs: ['local'],
+    );
+  }
+
+  /// Compute YearReviewStats purely from a provided list of ListenRecords (e.g. merged across devices).
+  /// This does not hit the DB; used for combining with / replacing local queries in cross-device.
+  static YearReviewStats computeStatsFromRecords(
+    int year,
+    List<ListenRecord> records,
+  ) {
+    // Filter exactly to year (defensive even if caller already filtered)
+    final start = DateTime(year).millisecondsSinceEpoch;
+    final end = DateTime(year + 1).millisecondsSinceEpoch;
+    final filtered =
+        records.where((r) {
+          final ms = r.listenedAt.millisecondsSinceEpoch;
+          return ms >= start && ms < end;
+        }).toList();
+
+    final totalListens = filtered.length;
+    final totalSeconds = filtered.fold<int>(
+      0,
+      (s, r) => s + (r.durationSeconds ?? 0),
+    );
+    final uniqueTracks = filtered.map((r) => r.trackId).toSet().length;
+    final uniqueArtists = filtered.map((r) => r.artistName).toSet().length;
+    final uniqueAlbums =
+        filtered
+            .where((r) => r.albumId != null)
+            .map((r) => r.albumTitle)
+            .toSet()
+            .length;
+
+    // top tracks
+    final Map<int, List<ListenRecord>> byTrack = {};
+    for (final r in filtered) {
+      byTrack.putIfAbsent(r.trackId, () => []).add(r);
+    }
+    final topTracks =
+        byTrack.entries.map((e) {
+            final recs = e.value;
+            final first = recs.first;
+            return TopItem(
+              name: first.trackTitle,
+              subtitle: first.artistName,
+              coverUrl: first.coverUrl,
+              count: recs.length,
+              totalSeconds: recs.fold<int>(
+                0,
+                (s, x) => s + (x.durationSeconds ?? 0),
+              ),
+            );
+          }).toList()
+          ..sort((a, b) => b.count.compareTo(a.count));
+
+    // top artists
+    final Map<String, List<ListenRecord>> byArtist = {};
+    for (final r in filtered) {
+      byArtist.putIfAbsent(r.artistName, () => []).add(r);
+    }
+    final topArtists =
+        byArtist.entries.map((e) {
+            final recs = e.value;
+            return TopItem(
+              name: e.key,
+              coverUrl:
+                  recs
+                      .firstWhere(
+                        (x) => x.coverUrl != null,
+                        orElse: () => recs.first,
+                      )
+                      .coverUrl,
+              count: recs.length,
+              totalSeconds: recs.fold<int>(
+                0,
+                (s, x) => s + (x.durationSeconds ?? 0),
+              ),
+            );
+          }).toList()
+          ..sort((a, b) => b.count.compareTo(a.count));
+
+    // albums similar, simplified without extra album count data
+    final Map<int?, List<ListenRecord>> byAlbum = {};
+    for (final r in filtered) {
+      byAlbum.putIfAbsent(r.albumId, () => []).add(r);
+    }
+    final albumItems =
+        byAlbum.entries.where((e) => e.key != null).map((e) {
+            final recs = e.value;
+            final first = recs.first;
+            final ut = recs.map((r) => r.trackId).toSet().length;
+            return TopItem(
+              name: first.albumTitle,
+              subtitle: first.artistName,
+              coverUrl: first.coverUrl,
+              count:
+                  ut, // use unique tracks as score proxy when no trackcount ratio
+              totalSeconds: recs.fold<int>(
+                0,
+                (s, x) => s + (x.durationSeconds ?? 0),
+              ),
+              totalListens: recs.length,
+            );
+          }).toList()
+          ..sort(
+            (a, b) => (b.totalListens ?? 0).compareTo(a.totalListens ?? 0),
+          );
+
+    // monthly
+    final monthMap = <int, List<ListenRecord>>{};
+    for (final r in filtered) {
+      monthMap.putIfAbsent(r.listenedAt.month, () => []).add(r);
+    }
+    final monthlyBreakdown = List.generate(12, (i) {
+      final m = i + 1;
+      final recs = monthMap[m] ?? [];
+      final sec = recs.fold(0, (s, x) => s + (x.durationSeconds ?? 0));
+      return MonthlyListens(month: m, count: recs.length, totalSeconds: sec);
+    });
+
+    // Per-device breakdown
+    final deviceMap = <String, List<ListenRecord>>{};
+    for (final r in filtered) {
+      final key = r.sourceDevice ?? 'local';
+      deviceMap.putIfAbsent(key, () => []).add(r);
+    }
+    final deviceStats =
+        deviceMap.entries
+            .map(
+              (e) => DeviceStat(
+                deviceId: e.key,
+                listenCount: e.value.length,
+                totalSeconds: e.value.fold(
+                  0,
+                  (s, x) => s + (x.durationSeconds ?? 0),
+                ),
+              ),
+            )
+            .toList()
+          ..sort((a, b) => b.listenCount.compareTo(a.listenCount));
+
+    return YearReviewStats(
+      year: year,
+      totalListens: totalListens,
+      totalSeconds: totalSeconds,
+      uniqueTracks: uniqueTracks,
+      uniqueArtists: uniqueArtists,
+      uniqueAlbums: uniqueAlbums,
+      topTracks: topTracks.take(10).toList(),
+      topArtists: topArtists.take(10).toList(),
+      topAlbums: albumItems.take(10).toList(),
+      monthlyBreakdown: monthlyBreakdown,
+      topTrack: topTracks.isNotEmpty ? topTracks.first : null,
+      topArtist: topArtists.isNotEmpty ? topArtists.first : null,
+      topAlbum: albumItems.isNotEmpty ? albumItems.first : null,
+      deviceStats: deviceStats,
+    );
+  }
+
+  /// Fetch all listen records for a given calendar year.
+  /// Used by backup export.
+  static Future<List<ListenRecord>> getListensForYear(int year) async {
+    final db = await CacheDatabase.instance.database;
+    final startMs = DateTime(year).millisecondsSinceEpoch;
+    final endMs = DateTime(year + 1).millisecondsSinceEpoch;
+    final rows = await db.query(
+      _tableName,
+      where: 'listened_at >= ? AND listened_at < ?',
+      whereArgs: [startMs, endMs],
+      orderBy: 'listened_at ASC',
+    );
+    return rows.map(ListenRecord.fromMap).toList();
+  }
+
+  /// Return per-device listen stats for a given year, ordered by count desc.
+  static Future<List<DeviceStat>> getDeviceStats(int year) async {
+    await _loadDeviceDisplayNames();
+    final db = await CacheDatabase.instance.database;
+    final startMs = DateTime(year).millisecondsSinceEpoch;
+    final endMs = DateTime(year + 1).millisecondsSinceEpoch;
+    final rows = await db.rawQuery(
+      '''
+      SELECT
+        COALESCE(source_device, 'local') as device_id,
+        COUNT(*) as listen_count,
+        COALESCE(SUM(duration_seconds), 0) as total_seconds
+      FROM $_tableName
+      WHERE listened_at >= ? AND listened_at < ?
+      GROUP BY device_id
+      ORDER BY listen_count DESC
+    ''',
+      [startMs, endMs],
+    );
+    return rows
+        .map(
+          (r) => DeviceStat(
+            deviceId: r['device_id'] as String,
+            listenCount: (r['listen_count'] as num).toInt(),
+            totalSeconds: (r['total_seconds'] as num).toInt(),
+          ),
+        )
+        .toList();
+  }
+
+  /// Insert a ListenRecord by map (for restore from backup). Ignores id.
+  static Future<void> insertRawListen(ListenRecord record) async {
+    final db = await CacheDatabase.instance.database;
+    final map = record.toMap();
+    map.remove('id');
+    // Restoring from a backup file is always a current-device operation:
+    // the user picked a backup to merge into this device's local history.
+    // Tag as 'local' so cache-clear preserves it and the year-review groups
+    // it under "This Device".
+    map['source_device'] = 'local';
+    await db.insert(_tableName, map);
+  }
+
+  /// Bulk-insert external (remote device) listen records, skipping
+  /// duplicates that already exist locally.  Dedup key is (track_id,
+  /// listened_at) — two listens on the same track at the same second are
+  /// treated as the same event.  [sourceDevice] tags every inserted row
+  /// so the per-device breakdown can be shown in the year review.
+  static Future<int> insertRemoteRecords(
+    List<ListenRecord> records, {
+    String sourceDevice = 'remote',
+  }) async {
+    if (records.isEmpty) return 0;
+    final db = await CacheDatabase.instance.database;
+    int inserted = 0;
+    final batch = db.batch();
+    for (final rec in records) {
+      // Dedup: skip inserting a remote listen that already exists locally
+      // (same track + timestamp).  We intentionally do NOT backfill
+      // source_device on pre-existing NULL rows here — doing so would
+      // mis-attribute this device's own local listens to whichever remote
+      // device happens to share a track+timestamp.  Local NULL rows are
+      // tagged 'local' at migration time (see ensureTable).
+      batch.execute(
+        'INSERT INTO $_tableName '
+        '(track_id, track_title, artist_id, artist_name, album_id, album_title, cover_url, duration_seconds, listened_at, source_device) '
+        'SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, ? '
+        'WHERE NOT EXISTS ('
+        '  SELECT 1 FROM $_tableName WHERE track_id = ? AND listened_at = ?'
+        ')',
+        [
+          rec.trackId,
+          rec.trackTitle,
+          rec.artistId,
+          rec.artistName,
+          rec.albumId,
+          rec.albumTitle,
+          rec.coverUrl,
+          rec.durationSeconds,
+          rec.listenedAt.millisecondsSinceEpoch,
+          sourceDevice,
+          rec.trackId,
+          rec.listenedAt.millisecondsSinceEpoch,
+        ],
+      );
+    }
+    final results = await batch.commit(noResult: false);
+    for (final r in results) {
+      if (r is int) inserted += r;
+    }
+    return inserted;
   }
 }

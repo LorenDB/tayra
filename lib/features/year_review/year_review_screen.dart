@@ -643,6 +643,7 @@ class _ReviewContentState extends State<_ReviewContent>
           isAlbum: true,
         ),
       _StoryPeakMonthCard(stats: s),
+      if (s.deviceStats.length > 1) _StoryDeviceStatsCard(stats: s),
       _StoryFunStatsCard(stats: s),
       _StoryEndCard(year: s.year, onViewAll: _switchToDetails),
     ];
@@ -2160,6 +2161,14 @@ class _DetailsView extends StatelessWidget {
         SliverToBoxAdapter(child: _StatsGrid(stats: stats)),
         const SliverToBoxAdapter(child: SizedBox(height: 24)),
 
+        if (stats.deviceStats.length > 1) ...[
+          const SliverToBoxAdapter(
+            child: _SectionTitle(title: 'Your Devices'),
+          ),
+          SliverToBoxAdapter(child: _DeviceStatsCard(stats: stats)),
+          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+        ],
+
         if (stats.topTrack != null) ...[
           const SliverToBoxAdapter(
             child: _SectionTitle(title: 'Your #1 Track'),
@@ -2783,6 +2792,307 @@ class _SpotlightCard extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+// ── Device stats card (details view) ────────────────────────────────────
+
+class _DeviceStatsCard extends StatelessWidget {
+  final YearReviewStats stats;
+
+  const _DeviceStatsCard({required this.stats});
+
+  @override
+  Widget build(BuildContext context) {
+    final total = stats.totalListens;
+    if (total == 0) return const SizedBox.shrink();
+
+    final devices = stats.deviceStats;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: AppTheme.surfaceContainer,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (int i = 0; i < devices.length; i++)
+              Padding(
+                padding: EdgeInsets.only(
+                  bottom: i < devices.length - 1 ? 14 : 0,
+                ),
+                child: _DeviceRow(
+                  device: devices[i],
+                  total: total,
+                  rank: i + 1,
+                  showSeconds: devices.every((d) => d.totalSeconds > 0),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _DeviceRow extends StatelessWidget {
+  final DeviceStat device;
+  final int total;
+  final int rank;
+  final bool showSeconds;
+
+  const _DeviceRow({
+    required this.device,
+    required this.total,
+    required this.rank,
+    required this.showSeconds,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final pct = device.percentageOf(total);
+    final pctStr = '${(pct * 100).toStringAsFixed(0)}%';
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              '$rank.',
+              style: const TextStyle(
+                color: AppTheme.onBackgroundMuted,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                device.displayName,
+                style: const TextStyle(
+                  color: AppTheme.onBackground,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            Text(
+              '${device.listenCount} plays',
+              style: const TextStyle(
+                color: AppTheme.onBackgroundMuted,
+                fontSize: 13,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 6),
+        Row(
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: LinearProgressIndicator(
+                  value: pct,
+                  minHeight: 6,
+                  backgroundColor: AppTheme.onBackground.withValues(
+                    alpha: 0.08,
+                  ),
+                  color:
+                      rank == 1
+                          ? AppTheme.primary
+                          : AppTheme.onBackgroundMuted,
+                ),
+              ),
+            ),
+            const SizedBox(width: 10),
+            SizedBox(
+              width: 40,
+              child: Text(
+                pctStr,
+                textAlign: TextAlign.right,
+                style: const TextStyle(
+                  color: AppTheme.onBackgroundMuted,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+        if (showSeconds && device.totalSeconds > 0) ...[
+          const SizedBox(height: 4),
+          Text(
+            _formatSeconds(device.totalSeconds),
+            style: const TextStyle(
+              color: AppTheme.onBackgroundSubtle,
+              fontSize: 11,
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  static String _formatSeconds(int seconds) {
+    final h = seconds ~/ 3600;
+    final m = (seconds % 3600) ~/ 60;
+    if (h > 0) return '${h}h ${m}m';
+    return '${m}m';
+  }
+}
+
+// ── Device stats story card ──────────────────────────────────────────────
+
+class _StoryDeviceStatsCard extends StatefulWidget {
+  final YearReviewStats stats;
+  const _StoryDeviceStatsCard({required this.stats});
+
+  @override
+  State<_StoryDeviceStatsCard> createState() => _StoryDeviceStatsCardState();
+}
+
+class _StoryDeviceStatsCardState extends State<_StoryDeviceStatsCard>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final total = widget.stats.totalListens;
+    final devices = widget.stats.deviceStats;
+    if (total == 0 || devices.length < 2) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF1A1540), Color(0xFF0D2A2A)],
+          ),
+        ),
+        child: AnimatedBuilder(
+          animation: _ctrl,
+          builder: (context, _) {
+            return Padding(
+              padding: const EdgeInsets.all(32),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Opacity(
+                    opacity: (_ctrl.value * 2).clamp(0.0, 1.0),
+                    child: const Icon(
+                      Icons.devices_rounded,
+                      color: AppTheme.secondary,
+                      size: 40,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Opacity(
+                    opacity: ((_ctrl.value - 0.1) * 2).clamp(0.0, 1.0),
+                    child: const Text(
+                      'Across Your Devices',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Opacity(
+                    opacity: ((_ctrl.value - 0.2) * 2).clamp(0.0, 1.0),
+                    child: Text(
+                      '${devices.length} devices contributed',
+                      style: const TextStyle(
+                        color: AppTheme.onBackgroundSubtle,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 28),
+                  for (int i = 0; i < devices.length; i++)
+                    Opacity(
+                      opacity:
+                          ((_ctrl.value - 0.3 - i * 0.1) * 2).clamp(0.0, 1.0),
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 14),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  devices[i].displayName,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Text(
+                                  '${(devices[i].percentageOf(total) * 100).toStringAsFixed(0)}%',
+                                  style: const TextStyle(
+                                    color: AppTheme.secondary,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(3),
+                              child: LinearProgressIndicator(
+                                value: devices[i].percentageOf(total),
+                                minHeight: 6,
+                                backgroundColor: Colors.white.withValues(
+                                  alpha: 0.1,
+                                ),
+                                color:
+                                    i == 0
+                                        ? AppTheme.primary
+                                        : AppTheme.secondary.withValues(
+                                          alpha: 0.7,
+                                        ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );

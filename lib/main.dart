@@ -10,6 +10,7 @@ import 'package:tayra/core/cache/download_queue_service.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:tayra/features/year_review/listen_history_service.dart';
+import 'package:tayra/core/backup/nextcloud_backup_service.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 import 'package:audio_service_mpris/audio_service_mpris.dart';
@@ -130,6 +131,39 @@ void main() async {
   // ListenHistoryService.ensureTable() has already run above, so the
   // listen_history table is guaranteed to exist before this touches the DB.
   unawaited(CacheManager.instance.backgroundInitialize());
+
+  // Kick off an optional non-blocking periodic-ish backup and history
+  // sync on startup for Nextcloud (if configured). The sync pulls remote
+  // device listen history into the local DB so the year-review page opens
+  // instantly without a network round-trip.
+  void runPeriodicSync() async {
+    try {
+      final nc = container.read(nextcloudBackupProvider);
+      if (nc.isConnected) {
+        container
+            .read(nextcloudBackupProvider.notifier)
+            .syncNow()
+            .catchError((_) => 0);
+      }
+    } catch (_) {}
+    // Schedule the next run
+    Timer(const Duration(minutes: 10), runPeriodicSync);
+  }
+
+  unawaited(
+    Future.delayed(const Duration(seconds: 8), () async {
+      try {
+        final nc = container.read(nextcloudBackupProvider);
+        if (nc.isConnected && nc.autoBackupEnabled) {
+          container
+              .read(nextcloudBackupProvider.notifier)
+              .backupNow()
+              .catchError((_) => false);
+        }
+      } catch (_) {}
+      runPeriodicSync();
+    }),
+  );
 }
 
 class TayraApp extends ConsumerStatefulWidget {
