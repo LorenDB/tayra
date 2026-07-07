@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
@@ -70,6 +74,42 @@ class DeveloperSettingsScreen extends ConsumerWidget {
               );
             },
           ),
+
+          // ── File Locations section (desktop only) ────────────────────
+          if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) ...[
+            const SizedBox(height: 8),
+            _SectionHeader(title: 'File Locations'),
+            _DevActionTile(
+              icon: Icons.folder_open_rounded,
+              title: 'Open cache directory',
+              subtitle: 'Open the audio and image cache folder',
+              onTap: () async {
+                try {
+                  Analytics.track('dev_open_cache_dir');
+                } catch (_) {}
+                final dir = await getApplicationCacheDirectory();
+                await launchUrl(
+                  Uri.directory(dir.path),
+                  mode: LaunchMode.platformDefault,
+                );
+              },
+            ),
+            _DevActionTile(
+              icon: Icons.folder_open_rounded,
+              title: 'Open app data directory',
+              subtitle: 'Open the settings and database folder',
+              onTap: () async {
+                try {
+                  Analytics.track('dev_open_data_dir');
+                } catch (_) {}
+                final dir = await getApplicationSupportDirectory();
+                await launchUrl(
+                  Uri.directory(dir.path),
+                  mode: LaunchMode.platformDefault,
+                );
+              },
+            ),
+          ],
         ],
       ),
     );
