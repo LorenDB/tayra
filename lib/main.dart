@@ -1,24 +1,27 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tayra/core/router/app_router.dart';
-import 'package:tayra/core/theme/app_theme.dart';
-import 'package:tayra/features/player/player_provider.dart';
-import 'package:tayra/core/cache/cache_manager.dart';
-import 'package:tayra/core/cache/download_queue_service.dart';
-import 'package:tayra/core/api/cached_api_repository.dart';
-import 'package:tayra/features/settings/settings_provider.dart';
-import 'package:tayra/features/year_review/listen_history_service.dart';
-import 'package:tayra/core/backup/nextcloud_backup_service.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:just_audio_media_kit/just_audio_media_kit.dart';
+import 'dart:math' as math;
+
 import 'package:audio_service_mpris/audio_service_mpris.dart';
-import 'package:tayra/core/analytics/analytics.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:just_audio_media_kit/just_audio_media_kit.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 // Optional: set a minimum window size on desktop platforms to avoid
 // rendering issues at very small sizes.
 import 'package:window_size/window_size.dart' as window_size;
-import 'dart:math' as math;
+
+import 'package:tayra/core/analytics/analytics.dart';
+import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/core/backup/nextcloud_backup_service.dart';
+import 'package:tayra/core/cache/cache_manager.dart';
+import 'package:tayra/core/cache/download_queue_service.dart';
+import 'package:tayra/core/router/app_router.dart';
+import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/features/player/player_provider.dart';
+import 'package:tayra/features/settings/settings_provider.dart';
+import 'package:tayra/features/year_review/listen_history_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -175,6 +178,11 @@ class TayraApp extends ConsumerStatefulWidget {
 
 class _TayraAppState extends ConsumerState<TayraApp>
     with WidgetsBindingObserver {
+  /// Last [NavigationNotification.canHandlePop] seen by
+  /// [_onNavigationNotification]. Used on resume so PopScope-blocked root
+  /// routes still re-register the Android back callback correctly.
+  bool _frameworkHandlesBack = false;
+
   @override
   void initState() {
     super.initState();
@@ -195,11 +203,52 @@ class _TayraAppState extends ConsumerState<TayraApp>
         ref.read(playerProvider.notifier).onAppPaused();
       case AppLifecycleState.resumed:
         ref.read(playerProvider.notifier).onAppResumed();
+        _resyncAndroidBackHandling();
       case AppLifecycleState.detached:
         Analytics.track('app_close');
       case AppLifecycleState.hidden:
         break;
     }
+  }
+
+  /// Re-attach Android's [OnBackInvokedCallback] after returning from the
+  /// background.
+  ///
+  /// After the app sits in the background for a while, system back can stop
+  /// popping routes and instead minimize the activity, even though in-app
+  /// back buttons (which call [Navigator.pop] / [GoRouter.pop] directly)
+  /// still work. Navigating to a new page "fixes" it because that triggers a
+  /// fresh [SystemNavigator.setFrameworkHandlesBack] false→true edge, which
+  /// is the only path [FlutterActivity] uses to re-register the native
+  /// callback.
+  ///
+  /// Force that same edge on resume whenever the stack (or a PopScope) still
+  /// wants to handle back.
+  void _resyncAndroidBackHandling() {
+    if (!Platform.isAndroid) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final canPop = ref.read(appRouterProvider).canPop();
+      final handlesBack = canPop || _frameworkHandlesBack;
+      // Always clear first so a subsequent true forces native re-registration
+      // even if FlutterActivity thought the callback was already attached.
+      SystemNavigator.setFrameworkHandlesBack(false);
+      if (handlesBack) {
+        SystemNavigator.setFrameworkHandlesBack(true);
+      }
+      _frameworkHandlesBack = handlesBack;
+    });
+  }
+
+  bool _onNavigationNotification(NavigationNotification notification) {
+    final lifecycle = WidgetsBinding.instance.lifecycleState;
+    // Match WidgetsApp's default handler: skip while detached/not ready.
+    if (lifecycle == null || lifecycle == AppLifecycleState.detached) {
+      return true;
+    }
+    _frameworkHandlesBack = notification.canHandlePop;
+    SystemNavigator.setFrameworkHandlesBack(notification.canHandlePop);
+    return true;
   }
 
   @override
@@ -211,6 +260,7 @@ class _TayraAppState extends ConsumerState<TayraApp>
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkTheme,
       routerConfig: router,
+      onNavigationNotification: _onNavigationNotification,
     );
   }
 }
