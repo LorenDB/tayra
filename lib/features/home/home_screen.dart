@@ -370,8 +370,7 @@ class _AlbumCarousel extends ConsumerWidget {
                   child: AlbumCard(
                     album: displayAlbums[index],
                     onTap:
-                        () =>
-                            context.push('/album/${displayAlbums[index].id}'),
+                        () => context.push('/album/${displayAlbums[index].id}'),
                     width: cardWidth,
                     // Shadows are costly while scrolling carousels.
                     showShadow: false,
@@ -503,7 +502,12 @@ class _AlbumGridSection extends ConsumerWidget {
                   cells.add(const Expanded(child: SizedBox.shrink()));
                 }
               }
-              rows.add(Row(crossAxisAlignment: CrossAxisAlignment.start, children: cells));
+              rows.add(
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: cells,
+                ),
+              );
               if (r < rowCount - 1) {
                 rows.add(const SizedBox(height: 16));
               }
@@ -704,9 +708,7 @@ class _YearReviewBannerState extends ConsumerState<_YearReviewBanner>
                 color: Colors.transparent,
                 child: InkWell(
                   onTap: () async {
-                    try {
-                      Analytics.track('year_review_banner_tapped');
-                    } catch (_) {}
+                    Analytics.track('year_review_banner_tapped');
 
                     try {
                       await ref
@@ -772,9 +774,7 @@ class _YearReviewBannerState extends ConsumerState<_YearReviewBanner>
                         const SizedBox(width: 8),
                         GestureDetector(
                           onTap: () {
-                            try {
-                              Analytics.track('year_review_banner_dismissed');
-                            } catch (_) {}
+                            Analytics.track('year_review_banner_dismissed');
                             ref
                                 .read(yearReviewBannerVisibleProvider.notifier)
                                 .dismiss();

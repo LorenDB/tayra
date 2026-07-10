@@ -6,6 +6,7 @@ import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
+import 'package:tayra/core/cache/manual_download_actions.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/theme/palette_provider.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
@@ -16,8 +17,8 @@ import 'package:tayra/core/widgets/popup_menu_row.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/core/widgets/tag_chip_list.dart';
 import 'package:tayra/core/widgets/track_list_tile.dart';
-import 'package:tayra/core/cache/download_queue_service.dart';
 import 'package:tayra/features/player/player_provider.dart';
+import 'package:tayra/features/player/queue_actions.dart';
 import 'package:tayra/features/playlists/add_to_playlist_sheet.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 
@@ -428,55 +429,30 @@ class _AlbumHeader extends ConsumerWidget {
       // Ensure we have the full list of tracks (wait for paging to finish
       // if necessary) so downloads are queued for every track.
       final tracks = await ref.read(_albumTracksProvider(album.id).future);
-      final mgr = ref.read(cacheManagerProvider);
       try {
         final current = ref.read(isManualAlbumProvider(album.id));
-        await mgr.setManualDownloaded(CacheType.album, album.id, !current);
-        // Also mark/unmark each track at the track level so the UI shows
-        // per-track downloaded indicators and protection is applied per-file.
-        final albumTracks = await ref.read(
-          _albumTracksProvider(album.id).future,
-        );
-        final trackIds = albumTracks.map((t) => t.id).toList();
-        for (final t in albumTracks) {
-          try {
-            await mgr.setManualDownloaded(CacheType.track, t.id, !current);
-          } catch (_) {}
-        }
-        if (!current) {
-          ref.read(manualAlbumIdsProvider.notifier).add(album.id);
-          ref.read(manualTrackIdsProvider.notifier).addAll(trackIds);
-        } else {
-          ref.read(manualAlbumIdsProvider.notifier).remove(album.id);
-          ref.read(manualTrackIdsProvider.notifier).removeAll(trackIds);
-        }
-        await mgr.bulkSetFilesProtectedForParent(
-          CacheType.album,
-          album.id,
-          !current,
-        );
-
-        if (!current) {
-          // Enabling: queue background downloads, invalidating cache indicator
-          // per-track as each download completes so the UI updates live.
-          final queue = ref.read(downloadQueueServiceProvider);
-          final trackIds =
+        final enabled = await toggleCollectionManualDownload(
+          ref: ref,
+          parentType: CacheType.album,
+          parentId: album.id,
+          trackIds: tracks.map((t) => t.id).toList(),
+          enqueueTrackIds:
               tracks
                   .where((t) => t.listenUrl != null)
                   .map((t) => t.id)
-                  .toList();
-          unawaited(queue.enqueue(trackIds, ref));
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Download queued for "${album.title}"')),
-            );
-          }
-        } else {
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Download removed for "${album.title}"')),
-            );
-          }
+                  .toList(),
+          currentlyManual: current,
+        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                enabled
+                    ? 'Download queued for "${album.title}"'
+                    : 'Download removed for "${album.title}"',
+              ),
+            ),
+          );
         }
       } catch (e, st) {
         debugPrint('Album toggle manual failed: $e');
@@ -517,21 +493,11 @@ class _AlbumHeader extends ConsumerWidget {
     Future<void> addAlbumToQueue() async {
       try {
         final tracks = await ref.read(_albumTracksProvider(album.id).future);
-        final playable = tracks.where((t) => t.listenUrl != null).toList();
-        if (playable.isEmpty) {
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('No playable tracks to add')),
-            );
-          }
-          return;
-        }
-        // Add tracks to the end of the current queue
-        ref.read(playerProvider.notifier).addToQueue(playable);
+        final message = addTracksToQueue(ref, tracks);
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Added ${playable.length} tracks to queue')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(message)));
         }
       } catch (e) {
         debugPrint('Failed to add album to queue: $e');
@@ -546,22 +512,11 @@ class _AlbumHeader extends ConsumerWidget {
     Future<void> playAlbumNext() async {
       try {
         final tracks = await ref.read(_albumTracksProvider(album.id).future);
-        final playable = tracks.where((t) => t.listenUrl != null).toList();
-        if (playable.isEmpty) {
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('No playable tracks to add')),
-            );
-          }
-          return;
-        }
-        ref.read(playerProvider.notifier).insertTracksNext(playable);
+        final message = insertTracksToPlayNext(ref, tracks);
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Inserted ${playable.length} tracks to play next'),
-            ),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(message)));
         }
       } catch (e) {
         debugPrint('Failed to insert album to play next: $e');

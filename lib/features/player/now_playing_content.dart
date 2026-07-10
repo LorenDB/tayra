@@ -124,9 +124,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
 
   Future<void> _toggleGridEasterEgg({ImageProvider? imageProvider}) async {
     if (!_showGridEasterEgg) {
-      try {
-        Analytics.track('disco_easter_egg_triggered');
-      } catch (_) {}
+      Analytics.track('disco_easter_egg_triggered');
       if (_gridShader == null) await _loadGridShader();
 
       if (imageProvider != null) {
@@ -240,21 +238,17 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
         if (v.abs() < 300) return;
         if (v > 0) {
           HapticFeedback.lightImpact();
-          try {
-            Analytics.track('swipe_to_skip', {
-              'direction': 'previous',
-              'source': 'now_playing',
-            });
-          } catch (_) {}
+          Analytics.track('swipe_to_skip', {
+            'direction': 'previous',
+            'source': 'now_playing',
+          });
           ref.read(playerProvider.notifier).skipPrevious();
         } else {
           HapticFeedback.lightImpact();
-          try {
-            Analytics.track('swipe_to_skip', {
-              'direction': 'next',
-              'source': 'now_playing',
-            });
-          } catch (_) {}
+          Analytics.track('swipe_to_skip', {
+            'direction': 'next',
+            'source': 'now_playing',
+          });
           ref.read(playerProvider.notifier).skipNext();
         }
       },

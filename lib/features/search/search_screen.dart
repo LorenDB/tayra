@@ -496,5 +496,3 @@ class _ArtistChip extends StatelessWidget {
 }
 
 // ── Section Header ───────────────────────────────────────────────────────
-
-

@@ -331,18 +331,14 @@ class AuthNotifier extends Notifier<AuthState> {
       );
 
       await _saveAuth();
-      try {
-        Analytics.track('login_success');
-      } catch (_) {}
+      Analytics.track('login_success');
       return true;
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
         error: 'Failed to authenticate. Check the code and try again.',
       );
-      try {
-        Analytics.track('login_failed');
-      } catch (_) {}
+      Analytics.track('login_failed');
       return false;
     }
   }
@@ -391,9 +387,7 @@ class AuthNotifier extends Notifier<AuthState> {
 
   /// Manual logout triggered by the user. Clears all cached data immediately.
   Future<void> logout() async {
-    try {
-      Analytics.track('logout');
-    } catch (_) {}
+    Analytics.track('logout');
     await _clearAllUserData();
     await _deleteAuthCredentials();
     state = const AuthState();
@@ -405,9 +399,7 @@ class AuthNotifier extends Notifier<AuthState> {
   /// URL so that re-authenticating to the same server can resume seamlessly
   /// without discarding the cache.
   Future<void> logoutAutomatically() async {
-    try {
-      Analytics.track('logout_automatic');
-    } catch (_) {}
+    Analytics.track('logout_automatic');
     final previousServerUrl = state.serverUrl;
     await _deleteAuthCredentials();
     state = AuthState(pendingServerUrl: previousServerUrl);

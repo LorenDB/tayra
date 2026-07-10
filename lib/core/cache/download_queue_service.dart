@@ -111,9 +111,7 @@ class DownloadQueueService {
     });
     await _emitState();
     // Telemetry: user or system enqueued downloads
-    try {
-      Analytics.track('download_enqueued', {'count': trackIds.length});
-    } catch (_) {}
+    Analytics.track('download_enqueued', {'count': trackIds.length});
     _processQueue(reader);
   }
 
@@ -127,10 +125,8 @@ class DownloadQueueService {
       whereArgs: [trackId],
     );
     await _emitState();
-    try {
-      // Omit numeric track_id per policy
-      Analytics.track('download_removed');
-    } catch (_) {}
+    // Omit numeric track_id per policy
+    Analytics.track('download_removed');
   }
 
   /// Retry all failed items.
@@ -141,9 +137,7 @@ class DownloadQueueService {
       'error': null,
     }, where: "status = 'failed'");
     await _emitState();
-    try {
-      Analytics.track('download_retry_requested');
-    } catch (_) {}
+    Analytics.track('download_retry_requested');
     _processQueue(reader);
   }
 
@@ -218,19 +212,15 @@ class DownloadQueueService {
                   where: 'id = ?',
                   whereArgs: [item.id],
                 );
-                try {
-                  Analytics.track('download_failed', {
-                    'had_error': true,
-                    'error_type': 'no_stream_url',
-                  });
-                } catch (_) {}
+                Analytics.track('download_failed', {
+                  'had_error': true,
+                  'error_type': 'no_stream_url',
+                });
                 await _emitState();
                 continue;
               }
-              try {
-                // Omit numeric track_id per policy
-                Analytics.track('download_started');
-              } catch (_) {}
+              // Omit numeric track_id per policy
+              Analytics.track('download_started');
               await audioSvc.cacheAudio(
                 track,
                 api.getStreamUrl(track.listenUrl!),
@@ -245,10 +235,8 @@ class DownloadQueueService {
                 where: 'id = ?',
                 whereArgs: [item.id],
               );
-              try {
-                // Omit numeric track_id per policy
-                Analytics.track('download_completed');
-              } catch (_) {}
+              // Omit numeric track_id per policy
+              Analytics.track('download_completed');
               try {
                 ref
                     .read(cachedAudioTrackIdsProvider.notifier)
@@ -265,16 +253,14 @@ class DownloadQueueService {
                 where: 'id = ?',
                 whereArgs: [item.id],
               );
-              try {
-                // Use analytics wrapper to avoid sending raw error strings.
-                // Keep only a lightweight indicator that an error occurred.
-                // Numeric IDs may be acceptable here; if not, consider
-                // removing or hashing them in the future.
-                Analytics.track('download_failed', {
-                  'had_error': true,
-                  'error_type': e.runtimeType.toString(),
-                });
-              } catch (_) {}
+              // Use analytics wrapper to avoid sending raw error strings.
+              // Keep only a lightweight indicator that an error occurred.
+              // Numeric IDs may be acceptable here; if not, consider
+              // removing or hashing them in the future.
+              Analytics.track('download_failed', {
+                'had_error': true,
+                'error_type': e.runtimeType.toString(),
+              });
             }
             await _emitState();
           }

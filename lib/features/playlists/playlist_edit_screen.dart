@@ -112,10 +112,8 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
         'name': name,
         'privacy_level': _privacyLevel,
       });
-      try {
-        // Omit numeric IDs from analytics per policy.
-        Analytics.track('playlist_edited');
-      } catch (_) {}
+      // Omit numeric IDs from analytics per policy.
+      Analytics.track('playlist_edited');
       ref.invalidate(playlistsProvider);
       if (!mounted) return false;
       setState(() {
@@ -144,9 +142,7 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
     try {
       final api = ref.read(cachedFunkwhaleApiProvider);
       await api.removeTrackFromPlaylist(widget.playlistId, index);
-      try {
-        Analytics.track('playlist_track_removed');
-      } catch (_) {}
+      Analytics.track('playlist_track_removed');
       ref.invalidate(playlistsProvider);
     } catch (e) {
       _tracks.insert(index, removed);
@@ -170,9 +166,7 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
     try {
       final api = ref.read(cachedFunkwhaleApiProvider);
       await api.moveTrackInPlaylist(widget.playlistId, oldIndex, newIndex);
-      try {
-        Analytics.track('playlist_track_reordered');
-      } catch (_) {}
+      Analytics.track('playlist_track_reordered');
     } catch (e) {
       if (!mounted) return;
       _tracks.removeAt(newIndex);
@@ -420,9 +414,7 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
                         try {
                           final api = ref.read(cachedFunkwhaleApiProvider);
                           await api.clearPlaylist(widget.playlistId);
-                          try {
-                            Analytics.track('playlist_cleared');
-                          } catch (_) {}
+                          Analytics.track('playlist_cleared');
                           ref.invalidate(playlistsProvider);
                         } catch (e) {
                           if (!mounted) return;

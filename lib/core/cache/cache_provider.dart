@@ -13,12 +13,55 @@ final audioCacheServiceProvider = Provider<AudioCacheService>((ref) {
   return AudioCacheService(CacheManager.instance);
 });
 
-// ── Bulk track ID sets ──────────────────────────────────────────────────
+// ── Shared int-id set notifier ──────────────────────────────────────────
 //
 // List tiles used to fire per-row FutureProviders that each listed the audio
 // cache directory and/or hit SQLite. That blocked the UI isolate during scroll.
 // These notifiers load once and support incremental add/remove so download
 // indicators stay live without re-scanning disk for every visible row.
+
+/// Base class for in-memory `Set<int>` membership notifiers (cached audio,
+/// manual track/album/playlist downloads).
+abstract class IntIdSetNotifier extends Notifier<Set<int>> {
+  @override
+  Set<int> build() {
+    Future.microtask(refresh);
+    return const {};
+  }
+
+  /// Load membership IDs from the cache DB (or other source).
+  Future<Iterable<int>> loadIds();
+
+  Future<void> refresh() async {
+    try {
+      state = (await loadIds()).toSet();
+    } catch (_) {}
+  }
+
+  void add(int id) {
+    if (state.contains(id)) return;
+    state = {...state, id};
+  }
+
+  void remove(int id) {
+    if (!state.contains(id)) return;
+    state = {...state}..remove(id);
+  }
+
+  void addAll(Iterable<int> ids) {
+    final next = {...state, ...ids};
+    if (next.length == state.length && next.containsAll(state)) return;
+    state = next;
+  }
+
+  void removeAll(Iterable<int> ids) {
+    final next = {...state}..removeAll(ids);
+    if (next.length == state.length) return;
+    state = next;
+  }
+}
+
+// ── Bulk track ID sets ──────────────────────────────────────────────────
 
 /// All track IDs that have a cached audio file (from the cache DB).
 final cachedAudioTrackIdsProvider =
@@ -26,41 +69,10 @@ final cachedAudioTrackIdsProvider =
       CachedAudioTrackIdsNotifier.new,
     );
 
-class CachedAudioTrackIdsNotifier extends Notifier<Set<int>> {
+class CachedAudioTrackIdsNotifier extends IntIdSetNotifier {
   @override
-  Set<int> build() {
-    Future.microtask(refresh);
-    return const {};
-  }
-
-  Future<void> refresh() async {
-    try {
-      final ids = await ref.read(cacheManagerProvider).getCachedAudioTrackIds();
-      state = ids.toSet();
-    } catch (_) {}
-  }
-
-  void add(int trackId) {
-    if (state.contains(trackId)) return;
-    state = {...state, trackId};
-  }
-
-  void remove(int trackId) {
-    if (!state.contains(trackId)) return;
-    state = {...state}..remove(trackId);
-  }
-
-  void addAll(Iterable<int> trackIds) {
-    final next = {...state, ...trackIds};
-    if (next.length == state.length && next.containsAll(state)) return;
-    state = next;
-  }
-
-  void removeAll(Iterable<int> trackIds) {
-    final next = {...state}..removeAll(trackIds);
-    if (next.length == state.length) return;
-    state = next;
-  }
+  Future<Iterable<int>> loadIds() =>
+      ref.read(cacheManagerProvider).getCachedAudioTrackIds();
 }
 
 /// All track IDs marked as manually downloaded by the user.
@@ -69,42 +81,10 @@ final manualTrackIdsProvider =
       ManualTrackIdsNotifier.new,
     );
 
-class ManualTrackIdsNotifier extends Notifier<Set<int>> {
+class ManualTrackIdsNotifier extends IntIdSetNotifier {
   @override
-  Set<int> build() {
-    Future.microtask(refresh);
-    return const {};
-  }
-
-  Future<void> refresh() async {
-    try {
-      final ids =
-          await ref.read(cacheManagerProvider).getManualDownloadedTrackIds();
-      state = ids.toSet();
-    } catch (_) {}
-  }
-
-  void add(int trackId) {
-    if (state.contains(trackId)) return;
-    state = {...state, trackId};
-  }
-
-  void remove(int trackId) {
-    if (!state.contains(trackId)) return;
-    state = {...state}..remove(trackId);
-  }
-
-  void addAll(Iterable<int> trackIds) {
-    final next = {...state, ...trackIds};
-    if (next.length == state.length && next.containsAll(state)) return;
-    state = next;
-  }
-
-  void removeAll(Iterable<int> trackIds) {
-    final next = {...state}..removeAll(trackIds);
-    if (next.length == state.length) return;
-    state = next;
-  }
+  Future<Iterable<int>> loadIds() =>
+      ref.read(cacheManagerProvider).getManualDownloadedTrackIds();
 }
 
 /// Whether a track has cached audio. Backed by [cachedAudioTrackIdsProvider]
@@ -134,31 +114,10 @@ final manualAlbumIdsProvider =
       ManualAlbumIdsNotifier.new,
     );
 
-class ManualAlbumIdsNotifier extends Notifier<Set<int>> {
+class ManualAlbumIdsNotifier extends IntIdSetNotifier {
   @override
-  Set<int> build() {
-    Future.microtask(refresh);
-    return const {};
-  }
-
-  Future<void> refresh() async {
-    try {
-      final ids = await ref
-          .read(cacheManagerProvider)
-          .getManualDownloadedIds(CacheType.album);
-      state = ids.toSet();
-    } catch (_) {}
-  }
-
-  void add(int albumId) {
-    if (state.contains(albumId)) return;
-    state = {...state, albumId};
-  }
-
-  void remove(int albumId) {
-    if (!state.contains(albumId)) return;
-    state = {...state}..remove(albumId);
-  }
+  Future<Iterable<int>> loadIds() =>
+      ref.read(cacheManagerProvider).getManualDownloadedIds(CacheType.album);
 }
 
 /// All playlist IDs marked as manually downloaded.
@@ -167,31 +126,10 @@ final manualPlaylistIdsProvider =
       ManualPlaylistIdsNotifier.new,
     );
 
-class ManualPlaylistIdsNotifier extends Notifier<Set<int>> {
+class ManualPlaylistIdsNotifier extends IntIdSetNotifier {
   @override
-  Set<int> build() {
-    Future.microtask(refresh);
-    return const {};
-  }
-
-  Future<void> refresh() async {
-    try {
-      final ids = await ref
-          .read(cacheManagerProvider)
-          .getManualDownloadedIds(CacheType.playlist);
-      state = ids.toSet();
-    } catch (_) {}
-  }
-
-  void add(int playlistId) {
-    if (state.contains(playlistId)) return;
-    state = {...state, playlistId};
-  }
-
-  void remove(int playlistId) {
-    if (!state.contains(playlistId)) return;
-    state = {...state}..remove(playlistId);
-  }
+  Future<Iterable<int>> loadIds() =>
+      ref.read(cacheManagerProvider).getManualDownloadedIds(CacheType.playlist);
 }
 
 /// Whether an album is marked as manually downloaded (in-memory set).

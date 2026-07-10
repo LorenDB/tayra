@@ -980,8 +980,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
         final now = DateTime.now();
         final shouldPublishUi =
             _lastPositionUiPublish == null ||
-            now.difference(_lastPositionUiPublish!) >=
-                _positionUiMinInterval ||
+            now.difference(_lastPositionUiPublish!) >= _positionUiMinInterval ||
             // Always publish near zero so "reset" states feel instant.
             position.inMilliseconds < 50 ||
             (position - state.position).inMilliseconds.abs() > 1500;
@@ -998,9 +997,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
           unawaited(_saveQueueProgress());
         }
         // Do not await — keep the position stream non-blocking for scroll/UI.
-        unawaited(
-          _listenTracker.updatePosition(position).catchError((_) {}),
-        );
+        unawaited(_listenTracker.updatePosition(position).catchError((_) {}));
       }),
     );
 

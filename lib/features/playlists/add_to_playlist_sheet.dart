@@ -310,11 +310,9 @@ class _AddToPlaylistSheetState extends ConsumerState<_AddToPlaylistSheet> {
       // Invalidate playlists to refresh track counts.
       ref.invalidate(playlistsProvider);
 
-      try {
-        Analytics.track('tracks_added_to_playlist', {
-          'track_count': widget.trackIds.length,
-        });
-      } catch (_) {}
+      Analytics.track('tracks_added_to_playlist', {
+        'track_count': widget.trackIds.length,
+      });
 
       setState(() {
         _addingToPlaylistId = null;
@@ -416,11 +414,9 @@ class _AddToPlaylistSheetState extends ConsumerState<_AddToPlaylistSheet> {
 
       ref.invalidate(playlistsProvider);
 
-      try {
-        Analytics.track('playlist_created_and_tracks_added', {
-          'track_count': widget.trackIds.length,
-        });
-      } catch (_) {}
+      Analytics.track('playlist_created_and_tracks_added', {
+        'track_count': widget.trackIds.length,
+      });
 
       setState(() {
         _isCreating = false;

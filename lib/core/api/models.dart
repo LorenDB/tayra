@@ -399,10 +399,7 @@ class Track {
           'title': album!.title,
           'cover': album!.cover?.toJson(),
           if (album!.artist != null)
-            'artist': {
-              'id': album!.artist!.id,
-              'name': album!.artist!.name,
-            },
+            'artist': {'id': album!.artist!.id, 'name': album!.artist!.name},
         },
       // Duration lives on the first upload; keep only that field set.
       if (uploads.isNotEmpty)

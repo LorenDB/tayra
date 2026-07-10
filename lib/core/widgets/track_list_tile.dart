@@ -178,10 +178,7 @@ class TrackListTile extends ConsumerWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // Defer cache membership watches until after first paint.
-                    _DeferredCacheIndicator(
-                      trackId: track.id,
-                      accent: accent,
-                    ),
+                    _DeferredCacheIndicator(trackId: track.id, accent: accent),
                     const SizedBox(width: 8),
                     trailing ??
                         FavoriteButton(
@@ -301,17 +298,11 @@ class _TrackMenuButton extends ConsumerWidget {
       items: [
         const PopupMenuItem(
           value: 'play_next',
-          child: PopupMenuRow(
-            icon: Icons.queue_play_next,
-            label: 'Play next',
-          ),
+          child: PopupMenuRow(icon: Icons.queue_play_next, label: 'Play next'),
         ),
         const PopupMenuItem(
           value: 'add_queue',
-          child: PopupMenuRow(
-            icon: Icons.playlist_add,
-            label: 'Add to queue',
-          ),
+          child: PopupMenuRow(icon: Icons.playlist_add, label: 'Add to queue'),
         ),
         const PopupMenuItem(
           value: 'add_playlist',
@@ -430,9 +421,7 @@ class _TrackMenuButton extends ConsumerWidget {
                 }),
               );
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Download queued for "${track.title}"'),
-                ),
+                SnackBar(content: Text('Download queued for "${track.title}"')),
               );
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -493,9 +482,7 @@ class _TrackMenuButton extends ConsumerWidget {
           await mgr.deleteMetadata('track_${track.id}');
           await mgr.deleteAudioFilesOnDisk(track.id);
           if (track.album != null) {
-            await mgr.deleteMetadataLike(
-              'tracks_p%_al${track.album!.id}_%',
-            );
+            await mgr.deleteMetadataLike('tracks_p%_al${track.album!.id}_%');
           }
           ref.read(cachedAudioTrackIdsProvider.notifier).remove(track.id);
           ref.read(manualTrackIdsProvider.notifier).remove(track.id);
@@ -536,5 +523,3 @@ class _TrackMenuButton extends ConsumerWidget {
     );
   }
 }
-
-

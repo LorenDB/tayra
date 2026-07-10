@@ -2271,24 +2271,20 @@ class _DetailsView extends StatelessWidget {
                                   stats.year,
                                   limit: stats.topTracks.length,
                                 );
-                            try {
-                              Analytics.track(
-                                'year_review_create_playlist_initiated',
-                                {
-                                  'year': stats.year,
-                                  'top_tracks_count': topIds.length,
-                                },
-                              );
-                            } catch (_) {}
+                            Analytics.track(
+                              'year_review_create_playlist_initiated',
+                              {
+                                'year': stats.year,
+                                'top_tracks_count': topIds.length,
+                              },
+                            );
 
                             if (!context.mounted) return;
                             if (topIds.isEmpty) {
-                              try {
-                                Analytics.track(
-                                  'year_review_create_playlist_no_tracks',
-                                  {'year': stats.year},
-                                );
-                              } catch (_) {}
+                              Analytics.track(
+                                'year_review_create_playlist_no_tracks',
+                                {'year': stats.year},
+                              );
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('No tracks to add'),
@@ -2337,12 +2333,10 @@ class _DetailsView extends StatelessWidget {
                             );
 
                             if (name == null || name.isEmpty) {
-                              try {
-                                Analytics.track(
-                                  'year_review_create_playlist_cancelled',
-                                  {'year': stats.year},
-                                );
-                              } catch (_) {}
+                              Analytics.track(
+                                'year_review_create_playlist_cancelled',
+                                {'year': stats.year},
+                              );
                               return;
                             }
 
@@ -2351,31 +2345,27 @@ class _DetailsView extends StatelessWidget {
                             );
                             await api.addTracksToPlaylist(playlist.id, topIds);
 
-                            try {
-                              Analytics.track(
-                                'year_review_create_playlist_created',
-                                {
-                                  'year': stats.year,
-                                  'track_count': topIds.length,
-                                },
-                              );
-                            } catch (_) {}
+                            Analytics.track(
+                              'year_review_create_playlist_created',
+                              {
+                                'year': stats.year,
+                                'track_count': topIds.length,
+                              },
+                            );
 
                             if (!context.mounted) return;
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Playlist created')),
                             );
                           } catch (e) {
-                            try {
-                              Analytics.track(
-                                'year_review_create_playlist_failed',
-                                {
-                                  'year': stats.year,
-                                  'had_error': true,
-                                  'error_type': e.runtimeType.toString(),
-                                },
-                              );
-                            } catch (_) {}
+                            Analytics.track(
+                              'year_review_create_playlist_failed',
+                              {
+                                'year': stats.year,
+                                'had_error': true,
+                                'error_type': e.runtimeType.toString(),
+                              },
+                            );
                             if (!context.mounted) return;
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
@@ -3444,8 +3434,7 @@ class _MonthlyChartState extends State<_MonthlyChart> {
                           });
                         },
                         child: MouseRegion(
-                          onEnter:
-                              (_) => setState(() => _highlightedIndex = i),
+                          onEnter: (_) => setState(() => _highlightedIndex = i),
                           onExit:
                               (_) => setState(() => _highlightedIndex = null),
                           cursor: SystemMouseCursors.click,
@@ -3880,13 +3869,11 @@ class _YearCard extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
-            try {
-              Analytics.track('year_review_opened', {
-                'year': year,
-                'is_current_year': isCurrent,
-                'has_data': hasData,
-              });
-            } catch (_) {}
+            Analytics.track('year_review_opened', {
+              'year': year,
+              'is_current_year': isCurrent,
+              'has_data': hasData,
+            });
             Navigator.of(context).push(
               MaterialPageRoute(builder: (_) => YearReviewScreen(year: year)),
             );
