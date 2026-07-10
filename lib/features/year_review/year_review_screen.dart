@@ -3208,7 +3208,7 @@ class _LovedVsListenedSection extends StatelessWidget {
                         child: _LoveColumn(
                           label: hasLovedLabel,
                           icon: Icons.favorite_rounded,
-                          accentColor: const Color(0xFFFF6B9D),
+                          accentColor: AppTheme.favorite,
                           items: lovedItems,
                         ),
                       ),
@@ -3233,7 +3233,7 @@ class _LovedVsListenedSection extends StatelessWidget {
                     _LoveColumn(
                       label: hasLovedLabel,
                       icon: Icons.favorite_rounded,
-                      accentColor: const Color(0xFFFF6B9D),
+                      accentColor: AppTheme.favorite,
                       items: lovedItems,
                     ),
                   if (lovedItems.isNotEmpty && unlovedItems.isNotEmpty)

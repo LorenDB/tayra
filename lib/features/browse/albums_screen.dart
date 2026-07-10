@@ -7,6 +7,7 @@ import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/layout/responsive.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/album_card.dart';
+import 'package:tayra/core/widgets/empty_state.dart';
 import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/loading_indicator.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
@@ -257,11 +258,10 @@ class _AlbumGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (albums.isEmpty) {
-      return Center(
-        child: Text(
-          emptyLabel,
-          style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 16),
-        ),
+      return EmptyState(
+        icon: Icons.album_rounded,
+        title: emptyLabel,
+        subtitle: 'Pull down to refresh',
       );
     }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/core/theme/app_theme.dart';
 
 // ── Favorites state provider ────────────────────────────────────────────
 
@@ -112,7 +113,7 @@ class FavoriteButton extends ConsumerWidget {
         height: size + 8,
         child: Icon(
           isFav ? Icons.favorite : Icons.favorite_border,
-          color: isFav ? const Color(0xFFFF6B9D) : Colors.white54,
+          color: isFav ? AppTheme.favorite : AppTheme.onBackgroundMuted,
           size: size,
         ),
       ),

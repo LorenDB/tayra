@@ -13,6 +13,7 @@ import 'package:tayra/features/year_review/listen_history_provider.dart';
 import 'package:tayra/features/year_review/listen_history_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:tayra/core/widgets/dialog_utils.dart';
+import 'package:tayra/core/widgets/settings_tiles.dart';
 import 'package:tayra/core/widgets/app_shell.dart';
 import 'package:tayra/core/backup/nextcloud_backup_service.dart';
 
@@ -47,20 +48,20 @@ class SettingsScreen extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(vertical: 8),
         children: [
           // ── Account section ───────────────────────────────────────────
-          _SectionHeader(title: 'Account'),
+          SettingsSectionHeader(title: 'Account'),
           if (authState.serverUrl != null)
-            _InfoTile(
+            SettingsInfoTile(
               icon: Icons.dns_outlined,
               title: 'Server',
               subtitle: authState.serverUrl!,
             ),
-          _ActionTile(
+          SettingsActionTile(
             icon: Icons.manage_accounts_outlined,
             title: 'Account settings',
             subtitle: 'Profile, visibility, email, and password',
             onTap: () => context.push('/account-settings'),
           ),
-          _ActionTile(
+          SettingsActionTile(
             icon: Icons.logout_rounded,
             title: 'Log out',
             subtitle: 'Sign out and return to the login screen',
@@ -109,8 +110,8 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 24),
 
           // ── Library section ───────────────────────────────────────────
-          _SectionHeader(title: 'Library'),
-          _ActionTile(
+          SettingsSectionHeader(title: 'Library'),
+          SettingsActionTile(
             icon: Icons.upload_rounded,
             title: 'Upload music',
             subtitle: 'Upload audio files to your Funkwhale library',
@@ -120,8 +121,8 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 24),
 
           // ── Network section ──────────────────────────────────────────
-          _SectionHeader(title: 'Network'),
-          _SwitchTile(
+          SettingsSectionHeader(title: 'Network'),
+          SettingsSwitchTile(
             icon: Icons.cloud_off_rounded,
             title: 'Force offline mode',
             subtitle: 'Only show cached content; disable network access',
@@ -134,8 +135,8 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 24),
 
           // ── Playback section ─────────────────────────────────────────
-          _SectionHeader(title: 'Playback'),
-          _SwitchTile(
+          SettingsSectionHeader(title: 'Playback'),
+          SettingsSwitchTile(
             icon: Icons.music_note_outlined,
             title: 'Gapless playback',
             subtitle: 'Eliminate silence between tracks',
@@ -148,8 +149,8 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 24),
 
           // ── Appearance section ────────────────────────────────────────
-          _SectionHeader(title: 'Appearance'),
-          _SwitchTile(
+          SettingsSectionHeader(title: 'Appearance'),
+          SettingsSwitchTile(
             icon: Icons.format_paint_outlined,
             title: 'Album accent colors',
             subtitle: 'Use album cover art to tint UI accents',
@@ -165,7 +166,7 @@ class SettingsScreen extends ConsumerWidget {
                   .setUseDynamicAlbumAccent(value);
             },
           ),
-          _SwitchTile(
+          SettingsSwitchTile(
             icon: Icons.album_outlined,
             title: 'Continuous disc numbering',
             subtitle:
@@ -187,14 +188,14 @@ class SettingsScreen extends ConsumerWidget {
 
           // ── Navigation section ────────────────────────────────────────
           const SizedBox(height: 24),
-          _SectionHeader(title: 'Navigation'),
+          SettingsSectionHeader(title: 'Navigation'),
           _NavBarSettingsTile(pinnedIndices: settings.mobilePinnedTabIndices),
 
           // Year Review — own section
           const SizedBox(height: 24),
-          _SectionHeader(title: 'Year in Review'),
+          SettingsSectionHeader(title: 'Year in Review'),
           _YearReviewTile(),
-          _ActionTile(
+          SettingsActionTile(
             icon: Icons.settings_rounded,
             title: 'Year in Review settings',
             subtitle: 'Control year-end prompts and related options',
@@ -203,13 +204,13 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 24),
 
           // ── Backup section ────────────────────────────────────────────
-          _SectionHeader(title: 'Backup & Sync'),
+          SettingsSectionHeader(title: 'Backup & Sync'),
           _NextcloudBackupTile(),
           const SizedBox(height: 24),
 
           // ── AI section ────────────────────────────────────────────────
-          _SectionHeader(title: 'AI'),
-          _SwitchTile(
+          SettingsSectionHeader(title: 'AI'),
+          SettingsSwitchTile(
             icon: Icons.auto_awesome_rounded,
             title: 'AI features',
             subtitle: 'Enable AI-powered features',
@@ -226,7 +227,7 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 24),
 
           // ── Cache section ─────────────────────────────────────────────
-          _SectionHeader(title: 'Cache'),
+          SettingsSectionHeader(title: 'Cache'),
           cacheStatsAsync.when(
             loading: () => const _LoadingTile(),
             error:
@@ -246,7 +247,7 @@ class SettingsScreen extends ConsumerWidget {
                   .then((_) => ref.invalidate(cacheStatsProvider));
             },
           ),
-          _ActionTile(
+          SettingsActionTile(
             icon: Icons.delete_sweep_rounded,
             title: 'Clear audio cache',
             subtitle: 'Delete all downloaded audio files',
@@ -270,7 +271,7 @@ class SettingsScreen extends ConsumerWidget {
               }
             },
           ),
-          _ActionTile(
+          SettingsActionTile(
             icon: Icons.delete_outline_rounded,
             title: 'Clear all cache',
             subtitle: 'Delete all cached data',
@@ -303,14 +304,14 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 24),
 
           // ── About section ─────────────────────────────────────────────
-          _SectionHeader(title: 'About'),
+          SettingsSectionHeader(title: 'About'),
           _AboutTile(),
           // Analytics moved here from General
           // Hide the analytics toggle entirely when DO_NOT_TRACK=1 is set in
           // the environment. This prevents the setting from appearing in
           // environments that require telemetry to be disabled.
           if (showAnalyticsToggle)
-            _SwitchTile(
+            SettingsSwitchTile(
               icon: Icons.analytics_outlined,
               title: 'Analytics',
               subtitle: 'Allow anonymous usage analytics',
@@ -338,7 +339,7 @@ class SettingsScreen extends ConsumerWidget {
               },
             ),
           _DonationTile(),
-          _ActionTile(
+          SettingsActionTile(
             icon: Icons.balance_outlined,
             title: 'Licenses',
             subtitle: 'View open-source licenses',
@@ -346,8 +347,8 @@ class SettingsScreen extends ConsumerWidget {
           ),
           if (settings.developerModeUnlocked) ...[
             const SizedBox(height: 24),
-            _SectionHeader(title: 'Developer'),
-            _ActionTile(
+            SettingsSectionHeader(title: 'Developer'),
+            SettingsActionTile(
               icon: Icons.code_rounded,
               title: 'Developer settings',
               subtitle: 'Tools for testing and development',
@@ -1114,231 +1115,6 @@ class _AboutTileState extends ConsumerState<_AboutTile> {
     );
   }
 }
-
-// ── Section header ──────────────────────────────────────────────────────
-
-class _SectionHeader extends StatelessWidget {
-  final String title;
-
-  const _SectionHeader({required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-      child: Text(
-        title.toUpperCase(),
-        style: const TextStyle(
-          color: AppTheme.primary,
-          fontSize: 12,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 1.0,
-        ),
-      ),
-    );
-  }
-}
-
-// ── Info tile (non-interactive) ─────────────────────────────────────────
-
-class _InfoTile extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-
-  const _InfoTile({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      decoration: BoxDecoration(
-        color: AppTheme.surfaceContainer,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, color: AppTheme.onBackgroundSubtle, size: 22),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: AppTheme.onBackground,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    color: AppTheme.onBackgroundMuted,
-                    fontSize: 12,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ── Action tile (tappable) ──────────────────────────────────────────────
-
-class _ActionTile extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final Color? iconColor;
-  final VoidCallback onTap;
-
-  const _ActionTile({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    this.iconColor,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-      decoration: BoxDecoration(
-        color: AppTheme.surfaceContainer,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            child: Row(
-              children: [
-                Icon(
-                  icon,
-                  color: iconColor ?? AppTheme.onBackgroundSubtle,
-                  size: 22,
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: const TextStyle(
-                          color: AppTheme.onBackground,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        subtitle,
-                        style: const TextStyle(
-                          color: AppTheme.onBackgroundMuted,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const Icon(
-                  Icons.chevron_right_rounded,
-                  color: AppTheme.onBackgroundSubtle,
-                  size: 20,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// ── Switch tile ─────────────────────────────────────────────────────────
-
-class _SwitchTile extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final bool value;
-  final ValueChanged<bool> onChanged;
-
-  const _SwitchTile({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.value,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      decoration: BoxDecoration(
-        color: AppTheme.surfaceContainer,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, color: AppTheme.onBackgroundSubtle, size: 22),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: AppTheme.onBackground,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    color: AppTheme.onBackgroundMuted,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Switch(
-            value: value,
-            onChanged: onChanged,
-            activeThumbColor: AppTheme.primary,
-            activeTrackColor: AppTheme.primary.withAlpha(100),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ── Nav bar settings tile ───────────────────────────────────────────────
 
 class _NavBarSettingsTile extends ConsumerWidget {
   final Set<int> pinnedIndices;

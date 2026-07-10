@@ -9,6 +9,7 @@ import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
 import 'package:tayra/core/widgets/error_state.dart';
+import 'package:tayra/core/widgets/loading_indicator.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 
 class PodcastsScreen extends ConsumerStatefulWidget {
@@ -110,14 +111,7 @@ class _PodcastsScreenState extends ConsumerState<PodcastsScreen> {
       backgroundColor: AppTheme.background,
       appBar: AppBar(
         backgroundColor: AppTheme.background,
-        title: const Text(
-          'Podcasts',
-          style: TextStyle(
-            color: AppTheme.onBackground,
-            fontSize: 22,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
+        title: const Text('Podcasts'),
       ),
       body: _buildBody(),
     );
@@ -156,19 +150,7 @@ class _PodcastsScreenState extends ConsumerState<PodcastsScreen> {
         itemCount: _channels.length + (_isLoadingMore ? 1 : 0),
         itemBuilder: (context, i) {
           if (i == _channels.length) {
-            return const Padding(
-              padding: EdgeInsets.all(16),
-              child: Center(
-                child: SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: AppTheme.primary,
-                  ),
-                ),
-              ),
-            );
+            return const PaginatedLoadingIndicator();
           }
           return _ChannelTile(channel: _channels[i]);
         },

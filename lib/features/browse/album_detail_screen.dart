@@ -11,6 +11,7 @@ import 'package:tayra/core/theme/palette_provider.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/core/widgets/dot_separator.dart';
 import 'package:tayra/core/widgets/error_state.dart';
+import 'package:tayra/core/widgets/pill_action_button.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/core/widgets/tag_chip_list.dart';
 import 'package:tayra/core/widgets/track_list_tile.dart';
@@ -912,70 +913,26 @@ class _ActionButtons extends ConsumerWidget {
           .playTracks(tracks, source: 'album_detail_shuffle', shuffle: true);
     }
 
-    // Use simple, non-gradient buttons: primary is an ElevatedButton, secondary
-    // is an OutlinedButton. This matches the requested simple icon button
-    // layout (no gradient styles).
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       child: Row(
         children: [
-          // ── Play All ──
           Expanded(
-            child: SizedBox(
-              height: 44,
-              child: ElevatedButton.icon(
-                onPressed: tracks.isNotEmpty ? playAll : null,
-                icon: const Icon(Icons.play_arrow_rounded, size: 22),
-                label: const Text('Play All'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: dominantColor,
-                  foregroundColor: Colors.white,
-                  disabledBackgroundColor: dominantColor.withValues(alpha: 0.3),
-                  disabledForegroundColor: Colors.white.withValues(alpha: 0.4),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(22),
-                  ),
-                  textStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
+            child: PillActionButton(
+              icon: Icons.play_arrow_rounded,
+              label: 'Play All',
+              onPressed: tracks.isNotEmpty ? playAll : null,
+              color: dominantColor,
             ),
           ),
           const SizedBox(width: 12),
-          // ── Shuffle ──
           Expanded(
-            child: SizedBox(
-              height: 44,
-              child: OutlinedButton.icon(
-                onPressed: tracks.isNotEmpty ? shuffleAll : null,
-                icon: const Icon(Icons.shuffle_rounded, size: 20),
-                label: const Text('Shuffle'),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor:
-                      tracks.isNotEmpty
-                          ? textColor
-                          : AppTheme.onBackgroundSubtle.withValues(alpha: 0.4),
-                  disabledForegroundColor: AppTheme.onBackgroundSubtle
-                      .withValues(alpha: 0.4),
-                  side: BorderSide(
-                    color:
-                        tracks.isNotEmpty
-                            ? textColor
-                            : AppTheme.onBackgroundSubtle.withValues(
-                              alpha: 0.3,
-                            ),
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(22),
-                  ),
-                  textStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
+            child: PillActionButton(
+              icon: Icons.shuffle_rounded,
+              label: 'Shuffle',
+              onPressed: tracks.isNotEmpty ? shuffleAll : null,
+              isPrimary: false,
+              outlineColor: tracks.isNotEmpty ? textColor : null,
             ),
           ),
         ],

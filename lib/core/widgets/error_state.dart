@@ -68,7 +68,11 @@ class CenteredErrorView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.error_outline, color: AppTheme.error, size: 48),
+            const Icon(
+              Icons.error_outline_rounded,
+              color: AppTheme.error,
+              size: 48,
+            ),
             const SizedBox(height: 16),
             Text(
               title,
@@ -92,7 +96,7 @@ class CenteredErrorView extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton.icon(
               onPressed: onRetry,
-              icon: const Icon(Icons.refresh, size: 18),
+              icon: const Icon(Icons.refresh_rounded, size: 18),
               label: const Text('Retry'),
             ),
           ],
@@ -140,7 +144,7 @@ class DetailPageErrorBody extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Icon(
-                      Icons.error_outline,
+                      Icons.error_outline_rounded,
                       color: AppTheme.error,
                       size: 48,
                     ),
@@ -167,7 +171,7 @@ class DetailPageErrorBody extends StatelessWidget {
                     const SizedBox(height: 20),
                     ElevatedButton.icon(
                       onPressed: onRetry,
-                      icon: const Icon(Icons.refresh, size: 18),
+                      icon: const Icon(Icons.refresh_rounded, size: 18),
                       label: const Text('Retry'),
                     ),
                   ],
