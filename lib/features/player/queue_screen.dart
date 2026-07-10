@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -432,50 +430,41 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
           );
         }, childCount: queue.length),
       ),
-      // End-of-queue drop zone: at least 160px after the last track, and grow
-      // to fill any leftover viewport so blank space below a short queue is
-      // still a valid "append to end" target.
+      // Compact end-of-queue drop zone. Expands while a drag is hovering so
+      // "append to end" stays easy without leaving a huge blank tail.
       if (queue.isNotEmpty)
-        SliverLayoutBuilder(
-          builder: (context, constraints) {
-            final height = math.max(160.0, constraints.remainingPaintExtent);
-            return SliverToBoxAdapter(
-              child: DragTarget<int>(
-                onWillAcceptWithDetails: (details) {
-                  final from = details.data;
-                  return from >= 0 && from < queue.length;
-                },
-                onAcceptWithDetails: (details) {
-                  ref
-                      .read(playerProvider.notifier)
-                      .reorderQueue(details.data, queue.length);
-                },
-                builder: (context, candidateData, rejectedData) {
-                  final isTarget = candidateData.isNotEmpty;
-                  return AnimatedContainer(
-                    duration: const Duration(milliseconds: 150),
-                    width: double.infinity,
-                    height: height,
-                    decoration: BoxDecoration(
-                      color:
-                          isTarget
-                              ? AppTheme.primary.withValues(alpha: 0.1)
-                              : Colors.transparent,
-                      border:
-                          isTarget
-                              ? const Border(
-                                top: BorderSide(
-                                  color: AppTheme.primary,
-                                  width: 2,
-                                ),
-                              )
-                              : null,
-                    ),
-                  );
-                },
-              ),
-            );
-          },
+        SliverToBoxAdapter(
+          child: DragTarget<int>(
+            onWillAcceptWithDetails: (details) {
+              final from = details.data;
+              return from >= 0 && from < queue.length;
+            },
+            onAcceptWithDetails: (details) {
+              ref
+                  .read(playerProvider.notifier)
+                  .reorderQueue(details.data, queue.length);
+            },
+            builder: (context, candidateData, rejectedData) {
+              final isTarget = candidateData.isNotEmpty;
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 150),
+                width: double.infinity,
+                height: isTarget ? 48 : 24,
+                decoration: BoxDecoration(
+                  color:
+                      isTarget
+                          ? AppTheme.primary.withValues(alpha: 0.1)
+                          : Colors.transparent,
+                  border:
+                      isTarget
+                          ? const Border(
+                            top: BorderSide(color: AppTheme.primary, width: 2),
+                          )
+                          : null,
+                ),
+              );
+            },
+          ),
         ),
     ];
   }
