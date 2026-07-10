@@ -798,6 +798,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// Whether an audio interruption is currently in progress.
   bool _interrupted = false;
 
+  /// When true, ignore [AudioPlayer.currentIndexStream] updates. Set around
+  /// queue reorders so a transient player index doesn't get treated as a
+  /// track change (which would desync UI / re-record listens mid-song).
+  bool _ignorePlayerIndexUpdates = false;
+
   /// Whether the user explicitly paused playback (via UI or external media
   /// controls). Prevents spurious interruption events and radio-timer
   /// recovery from auto-resuming after the user's intentional pause.
@@ -1072,6 +1077,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
     _subscriptions.add(
       _handler.audioPlayer.currentIndexStream.listen((index) {
+        // Skip while reordering — moveAudioSource can emit intermediate
+        // indices that would otherwise look like a track change.
+        if (_ignorePlayerIndexUpdates) return;
+
         // When gapless playback is active and the player auto-advances to a
         // new track (index changed without a manual skip), update our state.
         if (_gaplessActive &&
@@ -2055,40 +2064,74 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }
 
   /// Reorder tracks in the queue.
+  ///
+  /// [newIndex] uses insert-before semantics on the list *before* removal
+  /// (same as [ReorderableListView]): `0` = front, `queue.length` = end.
+  /// Moving the currently playing track only reshuffles the playlist; playback
+  /// continues without a seek/restart.
   void reorderQueue(int oldIndex, int newIndex) {
     if (oldIndex < 0 || oldIndex >= state.queue.length) return;
     if (newIndex < 0 || newIndex > state.queue.length) return;
 
-    // Save the original newIndex before adjustment for the audio player call.
-    // just_audio's moveAudioSource uses the same remove-then-insert semantics
-    // as a plain Dart list, so it expects the pre-adjustment destination index
-    // (i.e. the index in the original list, not the post-removal list).
-    final audioPlayerNewIndex = newIndex;
+    // Convert insert-before index to the post-removal insert index used by
+    // both Dart list.insert and just_audio's moveAudioSource (which does
+    // `children.insert(newIndex, children.removeAt(oldIndex))`).
+    // Passing queue.length (end drop) without this adjustment throws / desyncs
+    // the native playlist because the valid range after removal is 0..length-1.
+    var insertIndex = newIndex;
+    if (oldIndex < newIndex) {
+      insertIndex -= 1;
+    }
+    if (insertIndex == oldIndex) return; // no-op (e.g. last item → end)
 
     final newQueue = List<Track>.from(state.queue);
     final track = newQueue.removeAt(oldIndex);
-
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
-    newQueue.insert(newIndex, track);
+    newQueue.insert(insertIndex, track);
 
     var newCurrentIndex = state.currentIndex;
     if (oldIndex == state.currentIndex) {
-      newCurrentIndex = newIndex;
+      // Currently-playing track moved — follow it so playback identity is kept.
+      newCurrentIndex = insertIndex;
     } else if (oldIndex < state.currentIndex &&
-        newIndex >= state.currentIndex) {
+        insertIndex >= state.currentIndex) {
       newCurrentIndex--;
     } else if (oldIndex > state.currentIndex &&
-        newIndex <= state.currentIndex) {
+        insertIndex <= state.currentIndex) {
       newCurrentIndex++;
     }
 
+    // Suppress player index stream while the playlist reshuffles so a
+    // transient native index can't be misread as "skipped to next track".
+    _ignorePlayerIndexUpdates = true;
     state = state.copyWith(queue: newQueue, currentIndex: newCurrentIndex);
-    // Sync gapless source using the pre-adjustment index so just_audio's
-    // internal remove-then-insert lands on the same position as our list.
+
     if (_gaplessActive) {
-      _handler.audioPlayer.moveAudioSource(oldIndex, audioPlayerNewIndex);
+      unawaited(() async {
+        try {
+          // Reshuffles the playlist only — does not seek or restart the
+          // currently playing item when that item is the one being moved.
+          await _handler.audioPlayer.moveAudioSource(oldIndex, insertIndex);
+        } catch (e, st) {
+          debugPrint('reorderQueue moveAudioSource failed: $e');
+          debugPrintStack(stackTrace: st);
+        } finally {
+          _ignorePlayerIndexUpdates = false;
+          // Reconcile if the player settled on a different index for the
+          // same playing track (should match, but be defensive).
+          final playerIndex = _handler.audioPlayer.currentIndex;
+          final current = state.currentTrack;
+          if (playerIndex != null &&
+              playerIndex != state.currentIndex &&
+              playerIndex >= 0 &&
+              playerIndex < state.queue.length &&
+              current != null &&
+              state.queue[playerIndex].id == current.id) {
+            state = state.copyWith(currentIndex: playerIndex);
+          }
+        }
+      }());
+    } else {
+      _ignorePlayerIndexUpdates = false;
     }
     _saveQueue();
     Analytics.track('reorder_queue');
