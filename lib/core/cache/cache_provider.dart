@@ -192,8 +192,15 @@ final offlineAlbumsProvider = FutureProvider<List<Album>>((ref) async {
   return await mgr.getOfflineAlbums();
 });
 
-/// All artist IDs that are marked as manually downloaded offline.
+/// All artist IDs available offline (manual downloads + artists of offline
+/// albums/tracks).
 final offlineArtistIdsProvider = FutureProvider<Set<int>>((ref) async {
   final mgr = ref.watch(cacheManagerProvider);
   return await mgr.getOfflineArtistIds();
+});
+
+/// All offline-available artists assembled from local cache metadata.
+final offlineArtistsProvider = FutureProvider<List<Artist>>((ref) async {
+  final mgr = ref.watch(cacheManagerProvider);
+  return await mgr.getOfflineArtists();
 });

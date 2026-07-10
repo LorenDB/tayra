@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 
 // ── Favorites state provider ────────────────────────────────────────────
@@ -14,6 +17,13 @@ final favoriteTrackIdsProvider =
 class FavoriteTrackIdsNotifier extends Notifier<Set<int>> {
   @override
   Set<int> build() {
+    // When connectivity returns, flush any favorite mutations queued offline.
+    ref.listen<OfflineState>(offlineStateProvider, (previous, next) {
+      final wasOffline = previous?.isOffline ?? false;
+      if (wasOffline && !next.isOffline) {
+        unawaited(_syncPending());
+      }
+    });
     Future.microtask(() => _load());
     return {};
   }
@@ -25,9 +35,24 @@ class FavoriteTrackIdsNotifier extends Notifier<Set<int>> {
       // Seed with cached IDs immediately so heart icons appear while loading
       final cached = await _api.getCachedFavoriteTrackIds();
       if (cached.isNotEmpty) state = cached;
-      // Then overwrite with fresh data from the network
+      // Then overwrite with fresh data from the network (or keep cache offline)
       final ids = await _api.getAllFavoriteTrackIds();
       state = ids;
+      // Best-effort: flush any ops that were pending before this session.
+      if (!_api.isOffline) {
+        unawaited(_syncPending());
+      }
+    } catch (_) {}
+  }
+
+  Future<void> _syncPending() async {
+    try {
+      final synced = await _api.syncPendingFavorites();
+      if (synced > 0) {
+        // Refresh local set from cache (already updated during sync).
+        final cached = await _api.getCachedFavoriteTrackIds();
+        state = cached;
+      }
     } catch (_) {}
   }
 
@@ -46,9 +71,11 @@ class FavoriteTrackIdsNotifier extends Notifier<Set<int>> {
       } else {
         await _api.addFavorite(trackId);
       }
+      // Offline / network-failure paths queue the mutation and do not throw,
+      // so the optimistic state is kept and synced later.
       Analytics.track('favorite_toggled', {'added': !isFav});
     } catch (_) {
-      // Revert on error and rethrow so callers can surface an error
+      // Hard failure (e.g. 4xx) — revert and surface the error.
       if (isFav) {
         state = Set<int>.from(state)..add(trackId);
       } else {

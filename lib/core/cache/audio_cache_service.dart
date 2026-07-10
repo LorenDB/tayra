@@ -173,10 +173,28 @@ class AudioCacheService {
     await _cache.deleteFile(key);
   }
 
-  /// Get cached cover art file, or null if not cached
+  /// In-memory path cache so list tiles do not re-hit SQLite for the same URL
+  /// during a scroll session. Values are absolute paths, or `null` for a known
+  /// miss (so we do not keep probing).
+  final Map<String, String?> _coverPathMemory = {};
+
+  /// Get cached cover art file, or null if not cached.
+  ///
+  /// Results are memoized in-process for the lifetime of this service so
+  /// dense grids (e.g. offline albums) do not re-query SQLite per rebuild.
   Future<File?> getCachedCoverArt(String coverUrl) async {
-    final key = _getCoverKey(coverUrl);
-    return await _cache.getFile(key);
+    if (coverUrl.isEmpty) return null;
+    if (_coverPathMemory.containsKey(coverUrl)) {
+      final path = _coverPathMemory[coverUrl];
+      if (path == null) return null;
+      final file = File(path);
+      if (await file.exists()) return file;
+      _coverPathMemory.remove(coverUrl);
+    }
+    final key = coverCacheKey(coverUrl);
+    final file = await _cache.getFile(key);
+    _coverPathMemory[coverUrl] = file?.path;
+    return file;
   }
 
   /// Download and cache cover art
@@ -212,7 +230,7 @@ class AudioCacheService {
         await _dio.download(coverUrl, tempPath);
 
         // Cache the file
-        final key = _getCoverKey(coverUrl);
+        final key = coverCacheKey(coverUrl);
         await _cache.putFile(key, FileType.coverArt, tempFile);
 
         // Clean up temp file
@@ -221,7 +239,9 @@ class AudioCacheService {
         }
 
         // Return the cached file
-        return await _cache.getFile(key);
+        final cached = await _cache.getFile(key);
+        rememberCoverPath(coverUrl, cached?.path);
+        return cached;
       } finally {
         _releaseCoverSlot();
         _inProgressCovers.remove(coverUrl);
@@ -237,9 +257,14 @@ class AudioCacheService {
 
   /// Check if cover art is cached
   Future<bool> isCoverArtCached(String coverUrl) async {
-    final key = _getCoverKey(coverUrl);
-    final file = await _cache.getFile(key);
+    final file = await getCachedCoverArt(coverUrl);
     return file != null;
+  }
+
+  /// Invalidate the in-memory cover path entry after a successful download
+  /// so subsequent [getCachedCoverArt] calls see the new file.
+  void rememberCoverPath(String coverUrl, String? path) {
+    _coverPathMemory[coverUrl] = path;
   }
 
   /// Derive a file extension for an audio track's temp download file.
@@ -275,7 +300,7 @@ class AudioCacheService {
   /// may include query parameters to request resized variants.  Use the
   /// full path _and_ query string when present so different thumbnail
   /// sizes get separate cache keys instead of colliding.
-  String _getCoverKey(String url) {
+  String coverCacheKey(String url) {
     final uri = Uri.parse(url);
     final pathAndQuery = uri.path + (uri.hasQuery ? '?${uri.query}' : '');
     return 'cover_${pathAndQuery.hashCode.toRadixString(16)}';

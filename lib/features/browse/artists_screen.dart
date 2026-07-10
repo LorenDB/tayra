@@ -52,9 +52,40 @@ class _ArtistsScreenState extends ConsumerState<ArtistsScreen>
 
   @override
   Widget build(BuildContext context) {
-    final firstPage = ref.watch(artistsPageProvider(1));
     final offlineFilterActive = ref.watch(offlineFilterActiveProvider);
-    final offlineArtistIdsAsync = ref.watch(offlineArtistIdsProvider);
+
+    // Dedicated offline path: assemble artists from local cache (manual
+    // downloads + artists of offline albums/tracks) without depending on
+    // a previously fetched artists list page.
+    if (offlineFilterActive) {
+      final offlineArtistsAsync = ref.watch(offlineArtistsProvider);
+      return offlineArtistsAsync.when(
+        loading: () => const ShimmerList(showCircular: true, itemCount: 12),
+        error:
+            (error, stack) => CenteredErrorView(
+              title: 'Failed to load offline artists',
+              message: error.toString(),
+              onRetry: () => ref.invalidate(offlineArtistsProvider),
+            ),
+        data: (artists) {
+          return AppRefreshIndicator(
+            onRefresh: () async {
+              ref.invalidate(offlineArtistIdsProvider);
+              ref.invalidate(offlineArtistsProvider);
+            },
+            child: _ArtistGrid(
+              artists: artists,
+              scrollController: scrollController,
+              hasMore: false,
+              isLoadingMore: false,
+              offlineMode: true,
+            ),
+          );
+        },
+      );
+    }
+
+    final firstPage = ref.watch(artistsPageProvider(1));
 
     return firstPage.when(
       loading: () => const ShimmerList(showCircular: true, itemCount: 12),
@@ -68,30 +99,13 @@ class _ArtistsScreenState extends ConsumerState<ArtistsScreen>
         seedIfEmpty(response);
         final allArtists = items.isEmpty ? response.results : items;
 
-        // When offline filter is active, show only artists with cached audio.
-        final displayArtists =
-            offlineFilterActive
-                ? offlineArtistIdsAsync.when(
-                  data:
-                      (offlineIds) =>
-                          allArtists
-                              .where((a) => offlineIds.contains(a.id))
-                              .toList(),
-                  loading: () => allArtists,
-                  error: (_, e) => allArtists,
-                )
-                : allArtists;
-
         return AppRefreshIndicator(
           onRefresh: refresh,
           child: _ArtistGrid(
-            artists: displayArtists,
+            artists: allArtists,
             scrollController: scrollController,
-            hasMore:
-                offlineFilterActive
-                    ? false
-                    : (items.isEmpty ? response.next != null : hasMore),
-            isLoadingMore: offlineFilterActive ? false : isLoadingMore,
+            hasMore: items.isEmpty ? response.next != null : hasMore,
+            isLoadingMore: isLoadingMore,
           ),
         );
       },
@@ -106,21 +120,26 @@ class _ArtistGrid extends StatelessWidget {
   final ScrollController scrollController;
   final bool hasMore;
   final bool isLoadingMore;
+  final bool offlineMode;
 
   const _ArtistGrid({
     required this.artists,
     required this.scrollController,
     required this.hasMore,
     required this.isLoadingMore,
+    this.offlineMode = false,
   });
 
   @override
   Widget build(BuildContext context) {
     if (artists.isEmpty) {
-      return const EmptyState(
+      return EmptyState(
         icon: Icons.people_rounded,
-        title: 'No artists found',
-        subtitle: 'Pull down to refresh',
+        title: offlineMode ? 'No offline artists' : 'No artists found',
+        subtitle:
+            offlineMode
+                ? 'Download albums or tracks to browse artists offline'
+                : 'Pull down to refresh',
       );
     }
 

@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
+import 'package:tayra/core/cache/pending_favorite_ops.dart';
 import 'package:tayra/features/player/queue_persistence_service.dart';
 import 'package:tayra/features/year_review/listen_history_service.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
@@ -423,6 +424,7 @@ class AuthNotifier extends Notifier<AuthState> {
 
   Future<void> _clearAllUserData() async {
     await CacheManager.instance.clearAll();
+    await PendingFavoriteOps.clear();
     await QueuePersistenceService.clearQueue();
     await ListenHistoryService.clearAll();
     await SettingsNotifier.clearSettings();

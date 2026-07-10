@@ -871,20 +871,111 @@ class CacheManager {
     }
   }
 
-  /// Return all artist IDs that have at least one offline album.
-  /// Derived from albums whose tracks have cached audio.
+  /// Return all artist IDs available offline:
+  ///  - manually downloaded artists
+  ///  - artists of offline albums (from cached album/track metadata)
+  ///  - artists of offline tracks (from cached track metadata)
   Future<Set<int>> getOfflineArtistIds() async {
+    final artists = await getOfflineArtists();
+    return artists.map((a) => a.id).toSet();
+  }
+
+  /// Return [Artist] entries available offline, assembled from manual
+  /// downloads plus artist data embedded in offline album/track metadata.
+  Future<List<Artist>> getOfflineArtists() async {
     final db = await _db.database;
-    // Look for artist IDs from manual downloads.
-    final manualArtists = await db.query(
-      'cache_manual_downloads',
-      columns: ['resource_id'],
-      where: 'resource_type = ?',
-      whereArgs: [CacheType.artist.name],
-    );
-    final fromManual =
-        manualArtists.map((r) => r['resource_id'] as int).toSet();
-    return fromManual;
+    final byId = <int, Artist>{};
+
+    void consider(Artist? artist) {
+      if (artist == null) return;
+      final existing = byId[artist.id];
+      if (existing == null) {
+        byId[artist.id] = artist;
+        return;
+      }
+      // Prefer the richer record (has cover / albums / track counts).
+      final preferNew =
+          (existing.cover == null && artist.cover != null) ||
+          (existing.albums.isEmpty && artist.albums.isNotEmpty) ||
+          (existing.tracksCount == 0 && artist.tracksCount > 0);
+      if (preferNew) byId[artist.id] = artist;
+    }
+
+    // 1) Explicit manual artist downloads + full artist_* metadata rows.
+    try {
+      final manualArtists = await db.query(
+        'cache_manual_downloads',
+        columns: ['resource_id'],
+        where: 'resource_type = ?',
+        whereArgs: [CacheType.artist.name],
+      );
+      for (final row in manualArtists) {
+        final id = row['resource_id'] as int?;
+        if (id == null) continue;
+        final meta = await getMetadataStale('artist_$id');
+        if (meta != null) {
+          try {
+            consider(Artist.fromJson(meta));
+          } catch (_) {
+            byId.putIfAbsent(id, () => Artist(id: id, name: 'Artist $id'));
+          }
+        } else {
+          byId.putIfAbsent(id, () => Artist(id: id, name: 'Artist $id'));
+        }
+      }
+    } catch (e) {
+      debugPrint('getOfflineArtists manual lookup failed: $e');
+    }
+
+    // 2) Artists embedded on offline albums.
+    try {
+      final offlineAlbums = await getOfflineAlbums();
+      for (final album in offlineAlbums) {
+        consider(album.artist);
+        // Also try full album metadata which may carry a richer artist object.
+        final meta = await getMetadataStale('album_${album.id}');
+        if (meta != null) {
+          try {
+            consider(Album.fromJson(meta).artist);
+          } catch (_) {}
+        }
+      }
+    } catch (e) {
+      debugPrint('getOfflineArtists album derivation failed: $e');
+    }
+
+    // 3) Artists embedded on offline tracks (cached audio or manual).
+    try {
+      final trackIds = await getOfflineTrackIds();
+      for (final trackId in trackIds) {
+        final meta = await getMetadataStale('track_$trackId');
+        if (meta == null) continue;
+        try {
+          consider(Track.fromJson(meta).artist);
+        } catch (_) {}
+      }
+    } catch (e) {
+      debugPrint('getOfflineArtists track derivation failed: $e');
+    }
+
+    // 4) Full artist_* cache rows whose id we already discovered, to upgrade
+    // stubs with cover art / counts when available.
+    for (final id in byId.keys.toList()) {
+      if (byId[id]?.cover != null && (byId[id]?.tracksCount ?? 0) > 0) {
+        continue;
+      }
+      final meta = await getMetadataStale('artist_$id');
+      if (meta == null) continue;
+      try {
+        consider(Artist.fromJson(meta));
+      } catch (_) {}
+    }
+
+    final artists =
+        byId.values.toList()..sort(
+          (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),
+        );
+    return artists;
   }
 
   // ── Favorites cache operations ─────────────────────────────────────────
