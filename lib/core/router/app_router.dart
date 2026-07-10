@@ -14,6 +14,7 @@ import 'package:tayra/features/browse/artist_detail_screen.dart';
 import 'package:tayra/features/browse/album_detail_screen.dart';
 import 'package:tayra/features/browse/album_edit_screen.dart';
 import 'package:tayra/features/settings/settings_screen.dart';
+import 'package:tayra/features/settings/account_settings_screen.dart';
 import 'package:tayra/features/favorites/favorites_screen.dart';
 import 'package:tayra/features/playlists/playlists_screen.dart';
 import 'package:tayra/features/playlists/playlist_detail_screen.dart';
@@ -358,6 +359,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/year-review-settings',
         name: 'year_review_settings',
         builder: (context, state) => const YearReviewSettingsScreen(),
+      ),
+      GoRoute(
+        path: '/account-settings',
+        name: 'account_settings',
+        builder: (context, state) => const AccountSettingsScreen(),
       ),
       GoRoute(
         path: '/ai-provider-settings',

@@ -732,4 +732,76 @@ class FunkwhaleApi {
     );
     return response.data;
   }
+
+  // ── Account / current user ──────────────────────────────────────────
+
+  /// GET `/api/v1/users/me/` — current authenticated user profile.
+  Future<MeUser> getMe() async {
+    final response = await _dio.get('$_baseUrl/api/v1/users/me/');
+    return MeUser.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  /// PATCH `/api/v1/users/{username}/` — update profile fields.
+  ///
+  /// Writable fields per [UserWriteSerializer]: name, privacy_level, summary,
+  /// avatar (attachment UUID), support-message display dates.
+  Future<MeUser> updateUserProfile(
+    String username, {
+    String? name,
+    PrivacyLevel? privacyLevel,
+    String? summaryText,
+  }) async {
+    final body = <String, dynamic>{};
+    if (name != null) body['name'] = name;
+    if (privacyLevel != null) body['privacy_level'] = privacyLevel.apiValue;
+    if (summaryText != null) {
+      body['summary'] =
+          summaryText.trim().isEmpty
+              ? null
+              : {'text': summaryText, 'content_type': 'text/plain'};
+    }
+
+    final response = await _dio.patch(
+      '$_baseUrl/api/v1/users/$username/',
+      data: body,
+    );
+    // UserWrite response is a subset; re-fetch full me profile for consistency.
+    if (response.data is Map<String, dynamic>) {
+      final partial = response.data as Map<String, dynamic>;
+      // Prefer a fresh me fetch so username/email stay available.
+      try {
+        return await getMe();
+      } catch (_) {
+        return MeUser.fromJson(partial);
+      }
+    }
+    return getMe();
+  }
+
+  /// POST `/api/v1/auth/password/change/` — change password.
+  Future<void> changePassword({
+    required String oldPassword,
+    required String newPassword1,
+    required String newPassword2,
+  }) async {
+    await _dio.post(
+      '$_baseUrl/api/v1/auth/password/change/',
+      data: {
+        'old_password': oldPassword,
+        'new_password1': newPassword1,
+        'new_password2': newPassword2,
+      },
+    );
+  }
+
+  /// POST `/api/v1/users/change-email/` — request email change (sends confirmation).
+  Future<void> changeEmail({
+    required String email,
+    required String password,
+  }) async {
+    await _dio.post(
+      '$_baseUrl/api/v1/users/change-email/',
+      data: {'email': email, 'password': password},
+    );
+  }
 }

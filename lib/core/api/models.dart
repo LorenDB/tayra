@@ -1025,3 +1025,171 @@ class UploadForOwner {
   bool get isDraft => importStatus == 'draft';
   bool get isSkipped => importStatus == 'skipped';
 }
+
+// ── Authenticated user (GET /api/v1/users/me/) ──────────────────────────
+
+/// Privacy level for activity visibility on Funkwhale.
+///
+/// * `me` — Only me
+/// * `followers` — Me and my followers
+/// * `instance` — Everyone on my instance, and my followers
+/// * `everyone` — Everyone, including people on other instances
+enum PrivacyLevel {
+  me,
+  followers,
+  instance,
+  everyone;
+
+  static PrivacyLevel fromString(String? value) {
+    switch (value) {
+      case 'followers':
+        return PrivacyLevel.followers;
+      case 'instance':
+        return PrivacyLevel.instance;
+      case 'everyone':
+        return PrivacyLevel.everyone;
+      default:
+        return PrivacyLevel.me;
+    }
+  }
+
+  String get apiValue {
+    switch (this) {
+      case PrivacyLevel.me:
+        return 'me';
+      case PrivacyLevel.followers:
+        return 'followers';
+      case PrivacyLevel.instance:
+        return 'instance';
+      case PrivacyLevel.everyone:
+        return 'everyone';
+    }
+  }
+
+  String get label {
+    switch (this) {
+      case PrivacyLevel.me:
+        return 'Only me';
+      case PrivacyLevel.followers:
+        return 'Me and my followers';
+      case PrivacyLevel.instance:
+        return 'Everyone on my instance';
+      case PrivacyLevel.everyone:
+        return 'Everyone';
+    }
+  }
+
+  String get description {
+    switch (this) {
+      case PrivacyLevel.me:
+        return 'Only you can see your activity';
+      case PrivacyLevel.followers:
+        return 'You and your followers can see your activity';
+      case PrivacyLevel.instance:
+        return 'Everyone on your instance, and your followers';
+      case PrivacyLevel.everyone:
+        return 'Everyone, including people on other instances';
+    }
+  }
+}
+
+/// Current authenticated user as returned by `/api/v1/users/me/`.
+///
+/// The OpenAPI schema lists only [UserWrite] fields for this endpoint, but the
+/// real Funkwhale `MeSerializer` also includes identity fields used here.
+class MeUser {
+  final int id;
+  final String username;
+  final String? fullUsername;
+  final String name;
+  final String? email;
+  final PrivacyLevel privacyLevel;
+  final Cover? avatar;
+  final String? summaryText;
+  final DateTime? dateJoined;
+  final bool isStaff;
+  final bool isSuperuser;
+
+  const MeUser({
+    required this.id,
+    required this.username,
+    this.fullUsername,
+    this.name = '',
+    this.email,
+    this.privacyLevel = PrivacyLevel.me,
+    this.avatar,
+    this.summaryText,
+    this.dateJoined,
+    this.isStaff = false,
+    this.isSuperuser = false,
+  });
+
+  factory MeUser.fromJson(Map<String, dynamic> json) {
+    Cover? avatar;
+    final avatarData = json['avatar'];
+    if (avatarData is Map<String, dynamic>) {
+      // Attachment shape: { uuid, urls: { ... } } — same as Cover
+      try {
+        avatar = Cover.fromJson(avatarData);
+      } catch (_) {
+        avatar = null;
+      }
+    }
+
+    String? summaryText;
+    final summary = json['summary'];
+    if (summary is Map<String, dynamic>) {
+      summaryText = summary['text'] as String?;
+    } else if (summary is String) {
+      summaryText = summary;
+    }
+
+    return MeUser(
+      id: (json['id'] as num?)?.toInt() ?? (json['pk'] as num?)?.toInt() ?? 0,
+      username: json['username'] as String? ?? '',
+      fullUsername: json['full_username'] as String?,
+      name: json['name'] as String? ?? '',
+      email: json['email'] as String?,
+      privacyLevel: PrivacyLevel.fromString(json['privacy_level'] as String?),
+      avatar: avatar,
+      summaryText: summaryText,
+      dateJoined:
+          json['date_joined'] != null
+              ? DateTime.tryParse(json['date_joined'] as String)
+              : null,
+      isStaff: json['is_staff'] as bool? ?? false,
+      isSuperuser: json['is_superuser'] as bool? ?? false,
+    );
+  }
+
+  MeUser copyWith({
+    int? id,
+    String? username,
+    String? fullUsername,
+    String? name,
+    String? email,
+    PrivacyLevel? privacyLevel,
+    Cover? avatar,
+    String? summaryText,
+    DateTime? dateJoined,
+    bool? isStaff,
+    bool? isSuperuser,
+  }) {
+    return MeUser(
+      id: id ?? this.id,
+      username: username ?? this.username,
+      fullUsername: fullUsername ?? this.fullUsername,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      privacyLevel: privacyLevel ?? this.privacyLevel,
+      avatar: avatar ?? this.avatar,
+      summaryText: summaryText ?? this.summaryText,
+      dateJoined: dateJoined ?? this.dateJoined,
+      isStaff: isStaff ?? this.isStaff,
+      isSuperuser: isSuperuser ?? this.isSuperuser,
+    );
+  }
+
+  /// Display name falling back to username when empty.
+  String get displayName => name.trim().isEmpty ? username : name;
+}
