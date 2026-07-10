@@ -321,9 +321,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
     // Apply offline filter if active
     final offlineFilterActive = ref.watch(offlineFilterActiveProvider);
     final offlineTrackIds =
-        offlineFilterActive
-            ? ref.watch(offlineTrackIdsProvider).asData?.value ?? const <int>{}
-            : null;
+        offlineFilterActive ? ref.watch(offlineTrackIdsProvider) : null;
     final displayFavorites =
         offlineTrackIds != null
             ? _favorites

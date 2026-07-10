@@ -53,42 +53,54 @@ class TrackListTile extends ConsumerWidget {
       playerProvider.select((s) => s.currentTrack?.id == track.id),
     );
 
-    // Select only the resolved boolean so the tile rebuilds when the cached
-    // state actually flips, not on every AsyncValue lifecycle transition
-    // (loading → data). Without this, every tile that scrolls into view
-    // rebuilds twice as its async cache lookups resolve, causing scroll jank.
+    // Membership selects on bulk in-memory sets — no per-row disk/DB I/O.
+    // Only this tile rebuilds when *its* membership bit flips.
     final isCached = ref.watch(
-      isAudioCachedProvider(track.id).select(
-        (a) => a.maybeWhen(data: (v) => v, orElse: () => false),
-      ),
+      cachedAudioTrackIdsProvider.select((ids) => ids.contains(track.id)),
     );
     final isManual = ref.watch(
-      isManualTrackProvider(track.id).select(
-        (a) => a.maybeWhen(data: (v) => v, orElse: () => false),
-      ),
+      manualTrackIdsProvider.select((ids) => ids.contains(track.id)),
     );
+
     // When the offline content filter is active, tracks that are not present
     // in the offline track ID set should be considered unplayable. We apply
     // a disabled visual treatment and prevent the tap handler in that case.
     final offlineFilterActive = ref.watch(offlineFilterActiveProvider);
-    final offlineTrackIds =
-        offlineFilterActive
-            ? ref
-                .watch(offlineTrackIdsProvider)
-                .maybeWhen(data: (ids) => ids, orElse: () => const <int>{})
-            : null;
     final isPlayable =
-        offlineTrackIds == null || offlineTrackIds.contains(track.id);
+        !offlineFilterActive ||
+        ref.watch(
+          offlineTrackIdsProvider.select((ids) => ids.contains(track.id)),
+        );
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: isPlayable ? onTap : null,
-        borderRadius: BorderRadius.circular(8),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Opacity(
-            opacity: isPlayable ? 1.0 : 0.5,
+    final accent = textColor ?? dominantColor ?? AppTheme.primary;
+    final titleColor =
+        isCurrentTrack
+            ? accent
+            : (isPlayable
+                ? AppTheme.onBackground
+                : AppTheme.onBackground.withValues(alpha: 0.5));
+    final subtitleColor =
+        isCurrentTrack
+            ? accent.withValues(alpha: 0.8)
+            : (isPlayable
+                ? AppTheme.onBackgroundMuted
+                : AppTheme.onBackgroundMuted.withValues(alpha: 0.5));
+    final numberColor =
+        isCurrentTrack
+            ? accent
+            : (isPlayable
+                ? AppTheme.onBackgroundSubtle
+                : AppTheme.onBackgroundSubtle.withValues(alpha: 0.5));
+
+    // Isolate each row's paint from neighbors / scrolling header glow.
+    return RepaintBoundary(
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: isPlayable ? onTap : null,
+          borderRadius: BorderRadius.circular(8),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
               children: [
                 if (showTrackNumber && !showAlbumArt)
@@ -97,10 +109,7 @@ class TrackListTile extends ConsumerWidget {
                     child: Text(
                       '${overridePosition ?? track.position ?? ''}',
                       style: TextStyle(
-                        color:
-                            isCurrentTrack
-                                ? textColor ?? dominantColor ?? AppTheme.primary
-                                : AppTheme.onBackgroundSubtle,
+                        color: numberColor,
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                       ),
@@ -124,12 +133,7 @@ class TrackListTile extends ConsumerWidget {
                       Text(
                         track.title,
                         style: TextStyle(
-                          color:
-                              isCurrentTrack
-                                  ? textColor ??
-                                      dominantColor ??
-                                      AppTheme.primary
-                                  : AppTheme.onBackground,
+                          color: titleColor,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                         ),
@@ -139,16 +143,7 @@ class TrackListTile extends ConsumerWidget {
                       const SizedBox(height: 2),
                       Text(
                         track.artistName,
-                        style: TextStyle(
-                          color:
-                              isCurrentTrack
-                                  ? (textColor ??
-                                          dominantColor ??
-                                          AppTheme.primary)
-                                      .withValues(alpha: 0.8)
-                                  : AppTheme.onBackgroundMuted,
-                          fontSize: 12,
-                        ),
+                        style: TextStyle(color: subtitleColor, fontSize: 12),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -160,29 +155,29 @@ class TrackListTile extends ConsumerWidget {
                     padding: const EdgeInsets.only(left: 8),
                     child: Text(
                       formatTrackDuration(track.duration!),
-                      style: const TextStyle(
-                        color: AppTheme.onBackgroundSubtle,
+                      style: TextStyle(
+                        color:
+                            isPlayable
+                                ? AppTheme.onBackgroundSubtle
+                                : AppTheme.onBackgroundSubtle.withValues(
+                                  alpha: 0.5,
+                                ),
                         fontSize: 12,
                       ),
                     ),
                   ),
-                // Show cached/manual-downloaded indicator, then favorite button
+                // Cached/manual-downloaded indicator, then favorite button
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Cached indicator
                       if (isCached)
                         Icon(
                           Icons.download_done,
                           size: 18,
                           color:
-                              isManual
-                                  ? (textColor ??
-                                      dominantColor ??
-                                      AppTheme.primary)
-                                  : AppTheme.onBackgroundSubtle,
+                              isManual ? accent : AppTheme.onBackgroundSubtle,
                         ),
                       const SizedBox(width: 8),
                       trailing ?? FavoriteButton(trackId: track.id, size: 20),
@@ -219,7 +214,9 @@ class _TrackMenuButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final albumAvailable = track.album != null;
     final artistAvailable = track.artist != null;
-    final isManualAsync = ref.watch(isManualTrackProvider(track.id));
+    final isManual = ref.watch(
+      manualTrackIdsProvider.select((ids) => ids.contains(track.id)),
+    );
     final showPurge = ref.watch(
       settingsProvider.select((s) => s.effectiveShowPurgeCacheOption),
     );
@@ -260,7 +257,6 @@ class _TrackMenuButton extends ConsumerWidget {
                   case 'toggle_manual':
                     try {
                       final mgr = ref.read(cacheManagerProvider);
-                      final isManual = isManualAsync.asData?.value ?? false;
                       await mgr.setManualDownloaded(
                         CacheType.track,
                         track.id,
@@ -270,13 +266,19 @@ class _TrackMenuButton extends ConsumerWidget {
                       // the LRU eviction skips manually downloaded files.
                       final key = 'audio_${track.id}';
                       unawaited(mgr.setFileProtected(key, !isManual));
-                      // Refresh manual flag provider
-                      ref.invalidate(isManualTrackProvider(track.id));
+                      final manualNotifier = ref.read(
+                        manualTrackIdsProvider.notifier,
+                      );
+                      if (!isManual) {
+                        manualNotifier.add(track.id);
+                      } else {
+                        manualNotifier.remove(track.id);
+                      }
                       // If the track wasn't cached and the user just enabled
                       // manual download, queue a background download.
-                      final wasCached = await ref.read(
-                        isAudioCachedProvider(track.id).future,
-                      );
+                      final wasCached = ref
+                          .read(cachedAudioTrackIdsProvider)
+                          .contains(track.id);
                       if (!context.mounted) return;
                       if (!wasCached && !isManual) {
                         final api = ref.read(cachedFunkwhaleApiProvider);
@@ -288,9 +290,11 @@ class _TrackMenuButton extends ConsumerWidget {
                             audioSvc.cacheAudio(track, streamUrl, headers).then(
                               (file) {
                                 if (file != null) {
-                                  ref.invalidate(
-                                    isAudioCachedProvider(track.id),
-                                  );
+                                  ref
+                                      .read(
+                                        cachedAudioTrackIdsProvider.notifier,
+                                      )
+                                      .add(track.id);
                                 }
                               },
                             ),
@@ -374,9 +378,12 @@ class _TrackMenuButton extends ConsumerWidget {
                           'tracks_p%_al${track.album!.id}_%',
                         );
                       }
-                      // Invalidate per-track cache state providers
-                      ref.invalidate(isAudioCachedProvider(track.id));
-                      ref.invalidate(isManualTrackProvider(track.id));
+                      ref
+                          .read(cachedAudioTrackIdsProvider.notifier)
+                          .remove(track.id);
+                      ref
+                          .read(manualTrackIdsProvider.notifier)
+                          .remove(track.id);
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -447,11 +454,7 @@ class _TrackMenuButton extends ConsumerWidget {
                     color: AppTheme.onBackground,
                   ),
                   const SizedBox(width: 12),
-                  Text(
-                    isManualAsync.asData?.value == true
-                        ? 'Remove download'
-                        : 'Download',
-                  ),
+                  Text(isManual ? 'Remove download' : 'Download'),
                 ],
               ),
             ),

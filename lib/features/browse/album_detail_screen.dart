@@ -393,11 +393,16 @@ class _AlbumHeader extends ConsumerWidget {
         final albumTracks = await ref.read(
           _albumTracksProvider(album.id).future,
         );
+        final trackIds = albumTracks.map((t) => t.id).toList();
         for (final t in albumTracks) {
           try {
             await mgr.setManualDownloaded(CacheType.track, t.id, !current);
-            ref.invalidate(isManualTrackProvider(t.id));
           } catch (_) {}
+        }
+        if (!current) {
+          ref.read(manualTrackIdsProvider.notifier).addAll(trackIds);
+        } else {
+          ref.read(manualTrackIdsProvider.notifier).removeAll(trackIds);
         }
         await mgr.bulkSetFilesProtectedForParent(
           CacheType.album,

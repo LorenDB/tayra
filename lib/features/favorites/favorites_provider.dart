@@ -76,26 +76,34 @@ class FavoriteButton extends ConsumerWidget {
       favoriteTrackIdsProvider.select((ids) => ids.contains(trackId)),
     );
 
-    return IconButton(
-      icon: Icon(
-        isFav ? Icons.favorite : Icons.favorite_border,
-        color: isFav ? const Color(0xFFFF6B9D) : Colors.white54,
-        size: size,
-      ),
-      onPressed: () async {
-        try {
-          await ref.read(favoriteTrackIdsProvider.notifier).toggle(trackId);
-        } catch (e) {
-          // Show user-facing error and let the notifier already reverted state
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Failed to update favorite')),
-            );
+    // Lightweight tap target (not IconButton) so list rows avoid ButtonStyle
+    // machinery. Material is transparent so splash works outside list tiles too.
+    return Material(
+      type: MaterialType.transparency,
+      child: InkWell(
+        customBorder: const CircleBorder(),
+        onTap: () async {
+          try {
+            await ref.read(favoriteTrackIdsProvider.notifier).toggle(trackId);
+          } catch (e) {
+            // Show user-facing error; the notifier already reverted state
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Failed to update favorite')),
+              );
+            }
           }
-        }
-      },
-      padding: EdgeInsets.zero,
-      constraints: BoxConstraints(minWidth: size + 8, minHeight: size + 8),
+        },
+        child: SizedBox(
+          width: size + 8,
+          height: size + 8,
+          child: Icon(
+            isFav ? Icons.favorite : Icons.favorite_border,
+            color: isFav ? const Color(0xFFFF6B9D) : Colors.white54,
+            size: size,
+          ),
+        ),
+      ),
     );
   }
 }

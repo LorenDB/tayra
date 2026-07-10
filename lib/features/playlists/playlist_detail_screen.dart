@@ -346,11 +346,16 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
           playlist.id,
           !current,
         );
+        final trackIds = _tracks.map((t) => t.id).toList();
         for (final t in _tracks) {
           try {
             await mgr.setManualDownloaded(CacheType.track, t.id, !current);
-            ref.invalidate(isManualTrackProvider(t.id));
           } catch (_) {}
+        }
+        if (!current) {
+          ref.read(manualTrackIdsProvider.notifier).addAll(trackIds);
+        } else {
+          ref.read(manualTrackIdsProvider.notifier).removeAll(trackIds);
         }
         await mgr.bulkSetFilesProtectedForParent(
           CacheType.playlist,
