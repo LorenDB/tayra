@@ -124,6 +124,13 @@ class PlayerState {
   }
 }
 
+/// Current track id only. List rows should watch this instead of selecting on
+/// [playerProvider] so position/duration ticks do not re-run selectors for
+/// every visible [TrackListTile].
+final currentPlayingTrackIdProvider = Provider<int?>((ref) {
+  return ref.watch(playerProvider.select((s) => s.currentTrack?.id));
+});
+
 // ── Audio handler (runs as foreground service) ──────────────────────────
 
 /// A singleton audio handler that bridges just_audio with the OS media
@@ -947,7 +954,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
     // Listen to position.
     _subscriptions.add(
-      _handler.audioPlayer.positionStream.listen((position) async {
+      _handler.audioPlayer.positionStream.listen((position) {
         // When no audio source has been loaded yet (e.g. after a queue restore
         // on startup) the idle player emits zero positions. Ignore them so
         // they don't overwrite the restored position in the UI.
@@ -964,17 +971,17 @@ class PlayerNotifier extends Notifier<PlayerState> {
           return;
         }
         state = state.copyWith(position: position);
-        // Save position periodically (every 2 seconds) to persistence.
-        // Guard with _lastSavedPositionSeconds so rapid position events
-        // at the same second boundary don't trigger multiple redundant writes.
+        // Save position/index only (not the full track list) every 2 seconds.
+        // Full queue serialization is reserved for structural changes.
         final secs = position.inSeconds;
         if (secs % 2 == 0 && secs > 0 && secs != _lastSavedPositionSeconds) {
           _lastSavedPositionSeconds = secs;
-          _saveQueue();
+          unawaited(_saveQueueProgress());
         }
-        try {
-          await _listenTracker.updatePosition(position);
-        } catch (_) {}
+        // Do not await — keep the position stream non-blocking for scroll/UI.
+        unawaited(
+          _listenTracker.updatePosition(position).catchError((_) {}),
+        );
       }),
     );
 
@@ -1265,6 +1272,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }
 
   /// Save the current queue state to persistent storage.
+  ///
+  /// Call on structural changes (play new list, reorder, shuffle, etc.).
+  /// For periodic position updates use [_saveQueueProgress] instead.
   Future<void> _saveQueue() async {
     if (state.queue.isEmpty) return;
 
@@ -1276,6 +1286,19 @@ class PlayerNotifier extends Notifier<PlayerState> {
       duration: state.duration,
       isShuffled: state.isShuffled,
       loopMode: _loopModeToString(state.loopMode),
+      isCompleted: state.queueCompleted,
+    );
+  }
+
+  /// Persist only playback cursor fields — avoids re-encoding the full queue
+  /// on every 2s position tick (major main-isolate hitch with long queues).
+  Future<void> _saveQueueProgress() async {
+    if (state.queue.isEmpty) return;
+
+    await QueuePersistenceService.savePlaybackProgress(
+      currentIndex: state.currentIndex,
+      position: state.position,
+      duration: state.duration,
       isCompleted: state.queueCompleted,
     );
   }

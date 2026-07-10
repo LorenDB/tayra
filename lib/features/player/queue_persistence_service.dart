@@ -79,6 +79,31 @@ class QueuePersistenceService {
   static const _keyListenSession = 'player_listen_session';
   static const _keyQueueCompleted = 'player_queue_completed';
 
+  /// Save only the playback cursor (index/position/duration/completed).
+  ///
+  /// Used on the 2-second progress timer so long queues are not fully
+  /// re-serialized while the user is scrolling other screens.
+  static Future<void> savePlaybackProgress({
+    required int currentIndex,
+    required Duration position,
+    required Duration? duration,
+    bool isCompleted = false,
+  }) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt(_keyCurrentIndex, currentIndex);
+      await prefs.setInt(_keyPosition, position.inMilliseconds);
+      if (duration != null) {
+        await prefs.setInt(_keyDuration, duration.inMilliseconds);
+      } else {
+        await prefs.remove(_keyDuration);
+      }
+      await prefs.setBool(_keyQueueCompleted, isCompleted);
+    } catch (_) {
+      // Silently fail - non-critical feature
+    }
+  }
+
   /// Save the current queue state to SharedPreferences.
   static Future<void> saveQueue({
     required List<Track> queue,
@@ -93,13 +118,15 @@ class QueuePersistenceService {
     try {
       final prefs = await SharedPreferences.getInstance();
 
-      // Serialize tracks to JSON
-      final queueJson = queue.map((track) => track.toJson()).toList();
+      // Slim track payloads — full API Track.toJson() embeds nested albums
+      // with track lists and is far too heavy for periodic persistence.
+      final queueJson =
+          queue.map((track) => track.toPersistenceJson()).toList();
       await prefs.setString(_keyQueue, jsonEncode(queueJson));
 
       if (unshuffledQueue.isNotEmpty) {
         final unshuffledJson =
-            unshuffledQueue.map((track) => track.toJson()).toList();
+            unshuffledQueue.map((track) => track.toPersistenceJson()).toList();
         await prefs.setString(_keyUnshuffledQueue, jsonEncode(unshuffledJson));
       } else {
         await prefs.remove(_keyUnshuffledQueue);

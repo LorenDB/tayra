@@ -334,22 +334,30 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const _SectionHeader(label: 'Tracks', bottomPadding: 8),
-        ...tracks.asMap().entries.map((entry) {
-          final index = entry.key;
-          final track = entry.value;
-          return TrackListTile(
-            track: track,
-            onTap: () {
-              ref
-                  .read(playerProvider.notifier)
-                  .playTracks(
-                    tracks,
-                    startIndex: index,
-                    source: 'search_results_from_track',
-                  );
+        SizedBox(
+          height: tracks.length * kTrackListTileExtent,
+          child: ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            itemExtent: kTrackListTileExtent,
+            itemCount: tracks.length,
+            itemBuilder: (context, index) {
+              final track = tracks[index];
+              return TrackListTile(
+                track: track,
+                onTap: () {
+                  ref
+                      .read(playerProvider.notifier)
+                      .playTracks(
+                        tracks,
+                        startIndex: index,
+                        source: 'search_results_from_track',
+                      );
+                },
+              );
             },
-          );
-        }),
+          ),
+        ),
       ],
     );
   }

@@ -77,7 +77,7 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       if (!_scrollController.hasClients) return;
-      final itemHeight = 64.0;
+      final itemHeight = kQueueTrackRowExtent;
       final offset = currentIndex * itemHeight;
       final maxScroll = _scrollController.position.maxScrollExtent;
       _scrollController.animateTo(
@@ -315,7 +315,33 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
     List<Track> queue,
     int currentIndex,
   ) {
-    final isPlaying = ref.watch(playerProvider.select((s) => s.isPlaying));
+    // Do NOT watch isPlaying here — that rebuilt every row on play/pause.
+    // The current-track row watches it locally via _PlayingIndicator.
+    final hasCurrent =
+        currentIndex >= 0 && currentIndex < queue.length;
+    final upNextStart = hasCurrent ? currentIndex + 1 : 0;
+    final hasUpNext = upNextStart < queue.length;
+
+    Widget queueRow(int index) {
+      final track = queue[index];
+      return _DraggableQueueItem(
+        key: ValueKey('queue_row_${track.id}_$index'),
+        track: track,
+        index: index,
+        isCurrentTrack: index == currentIndex,
+        queueLength: queue.length,
+        onTap: () {
+          ref.read(playerProvider.notifier).jumpTo(index);
+        },
+        onDismissed: () {
+          ref.read(playerProvider.notifier).removeFromQueue(index);
+        },
+        onReorder: (oldIndex, newIndex) {
+          ref.read(playerProvider.notifier).reorderQueue(oldIndex, newIndex);
+        },
+      );
+    }
+
     return [
       // Start-of-queue drop zone (includes the "Now Playing" header when the
       // current track is first). Dropping here inserts at index 0 so tracks
@@ -332,8 +358,7 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
             },
             builder: (context, candidateData, rejectedData) {
               final isTarget = candidateData.isNotEmpty;
-              final showNowPlayingHeader =
-                  currentIndex >= 0 && currentIndex < queue.length;
+              final showNowPlayingHeader = hasCurrent;
               return AnimatedContainer(
                 duration: const Duration(milliseconds: 150),
                 width: double.infinity,
@@ -372,64 +397,62 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
           ),
         ),
 
-      SliverList(
-        delegate: SliverChildBuilderDelegate((context, index) {
-          final track = queue[index];
-          final isCurrentTrack = index == currentIndex;
-          final showUpNextHeader =
-              index == currentIndex + 1 && currentIndex >= 0;
+      // Tracks through the current one (or full queue when no current index).
+      if (hasCurrent)
+        SliverFixedExtentList(
+          itemExtent: kQueueTrackRowExtent,
+          delegate: SliverChildBuilderDelegate(
+            (context, i) => queueRow(i),
+            childCount: currentIndex + 1,
+          ),
+        )
+      else
+        SliverFixedExtentList(
+          itemExtent: kQueueTrackRowExtent,
+          delegate: SliverChildBuilderDelegate(
+            (context, i) => queueRow(i),
+            childCount: queue.length,
+          ),
+        ),
 
-          return Column(
-            key: ValueKey('queue_section_$index'),
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (showUpNextHeader)
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 4),
-                  child: Row(
-                    children: [
-                      const Text(
-                        'Up Next',
-                        style: TextStyle(
-                          color: AppTheme.onBackgroundMuted,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                      const Spacer(),
-                      Text(
-                        '${queue.length - currentIndex - 1} tracks',
-                        style: const TextStyle(
-                          color: AppTheme.onBackgroundSubtle,
-                          fontSize: 11,
-                        ),
-                      ),
-                    ],
+      // "Up Next" between current track and the remainder.
+      if (hasCurrent && hasUpNext)
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 4),
+            child: Row(
+              children: [
+                const Text(
+                  'Up Next',
+                  style: TextStyle(
+                    color: AppTheme.onBackgroundMuted,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.5,
                   ),
                 ),
-              _DraggableQueueItem(
-                track: track,
-                index: index,
-                isCurrentTrack: isCurrentTrack,
-                isPlaying: isPlaying,
-                queueLength: queue.length,
-                onTap: () {
-                  ref.read(playerProvider.notifier).jumpTo(index);
-                },
-                onDismissed: () {
-                  ref.read(playerProvider.notifier).removeFromQueue(index);
-                },
-                onReorder: (oldIndex, newIndex) {
-                  ref
-                      .read(playerProvider.notifier)
-                      .reorderQueue(oldIndex, newIndex);
-                },
-              ),
-            ],
-          );
-        }, childCount: queue.length),
-      ),
+                const Spacer(),
+                Text(
+                  '${queue.length - currentIndex - 1} tracks',
+                  style: const TextStyle(
+                    color: AppTheme.onBackgroundSubtle,
+                    fontSize: 11,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+      if (hasCurrent && hasUpNext)
+        SliverFixedExtentList(
+          itemExtent: kQueueTrackRowExtent,
+          delegate: SliverChildBuilderDelegate(
+            (context, i) => queueRow(upNextStart + i),
+            childCount: queue.length - upNextStart,
+          ),
+        ),
+
       // Compact end-of-queue drop zone. Expands while a drag is hovering so
       // "append to end" stays easy without leaving a huge blank tail.
       if (queue.isNotEmpty)
@@ -469,6 +492,10 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
     ];
   }
 }
+
+/// Fixed height for a queue row (cover + vertical padding). Used with
+/// [SliverFixedExtentList] and scroll-to-current math.
+const double kQueueTrackRowExtent = 64.0;
 
 // ── Queue Action Buttons ─────────────────────────────────────────────────
 
@@ -691,7 +718,6 @@ class _QueueTrackRow extends StatelessWidget {
   final Track track;
   final int index;
   final bool isCurrentTrack;
-  final bool isPlaying;
 
   /// When true, right padding is tightened because a drag handle sits beside
   /// this row as a sibling widget.
@@ -701,7 +727,6 @@ class _QueueTrackRow extends StatelessWidget {
     required this.track,
     required this.index,
     required this.isCurrentTrack,
-    this.isPlaying = false,
     this.compactTrailing = false,
   });
 
@@ -711,12 +736,13 @@ class _QueueTrackRow extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(16, 10, compactTrailing ? 4 : 16, 10),
       child: Row(
         children: [
-          // Playing indicator or track number
+          // Playing indicator or track number. Indicator watches isPlaying
+          // locally so the whole queue list does not rebuild on play/pause.
           SizedBox(
             width: 32,
             child:
                 isCurrentTrack
-                    ? _PlayingIndicator(isPlaying: isPlaying)
+                    ? const _PlayingIndicator()
                     : Text(
                       '${index + 1}',
                       style: const TextStyle(
@@ -728,8 +754,13 @@ class _QueueTrackRow extends StatelessWidget {
                     ),
           ),
           const SizedBox(width: 12),
-          // Cover art
-          CoverArtWidget(imageUrl: track.coverUrl, size: 44, borderRadius: 6),
+          // Cover art — thumb crop + decode-at-display-size.
+          CoverArtWidget(
+            imageUrl: track.thumbCoverUrl,
+            cacheKey: track.thumbCoverUrl,
+            size: 44,
+            borderRadius: 6,
+          ),
           const SizedBox(width: 12),
           // Track info
           Expanded(
@@ -919,18 +950,19 @@ Future<void> _showQueueTrackMenu({
 
 // ── Playing Indicator (animated bars) ───────────────────────────────────
 
-class _PlayingIndicator extends StatefulWidget {
-  final bool isPlaying;
-
-  const _PlayingIndicator({required this.isPlaying});
+/// Watches [playerProvider.isPlaying] itself so only this tiny widget rebuilds
+/// on play/pause — not every queue row.
+class _PlayingIndicator extends ConsumerStatefulWidget {
+  const _PlayingIndicator();
 
   @override
-  State<_PlayingIndicator> createState() => _PlayingIndicatorState();
+  ConsumerState<_PlayingIndicator> createState() => _PlayingIndicatorState();
 }
 
-class _PlayingIndicatorState extends State<_PlayingIndicator>
+class _PlayingIndicatorState extends ConsumerState<_PlayingIndicator>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  bool _wasPlaying = false;
 
   @override
   void initState() {
@@ -939,25 +971,7 @@ class _PlayingIndicatorState extends State<_PlayingIndicator>
       vsync: this,
       duration: const Duration(milliseconds: 800),
     );
-    if (widget.isPlaying) {
-      _controller.repeat(reverse: true);
-    } else {
-      // Set a neutral value so the static bars look balanced
-      _controller.value = 0.5;
-    }
-  }
-
-  @override
-  void didUpdateWidget(covariant _PlayingIndicator oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.isPlaying != widget.isPlaying) {
-      if (widget.isPlaying) {
-        _controller.repeat(reverse: true);
-      } else {
-        _controller.stop();
-        _controller.value = 0.5;
-      }
-    }
+    _controller.value = 0.5;
   }
 
   @override
@@ -966,8 +980,26 @@ class _PlayingIndicatorState extends State<_PlayingIndicator>
     super.dispose();
   }
 
+  void _applyPlaying(bool isPlaying) {
+    if (isPlaying == _wasPlaying) return;
+    _wasPlaying = isPlaying;
+    if (isPlaying) {
+      _controller.repeat(reverse: true);
+    } else {
+      _controller.stop();
+      _controller.value = 0.5;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isPlaying = ref.watch(playerProvider.select((s) => s.isPlaying));
+    // Schedule controller changes after this frame to avoid side-effects
+    // during build.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _applyPlaying(isPlaying);
+    });
+
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
@@ -1002,17 +1034,16 @@ class _DraggableQueueItem extends ConsumerStatefulWidget {
   final Track track;
   final int index;
   final bool isCurrentTrack;
-  final bool isPlaying;
   final int queueLength;
   final VoidCallback onTap;
   final VoidCallback onDismissed;
   final void Function(int oldIndex, int newIndex) onReorder;
 
   const _DraggableQueueItem({
+    super.key,
     required this.track,
     required this.index,
     required this.isCurrentTrack,
-    required this.isPlaying,
     required this.queueLength,
     required this.onTap,
     required this.onDismissed,
@@ -1131,7 +1162,6 @@ class _DraggableQueueItemState extends ConsumerState<_DraggableQueueItem> {
           track: widget.track,
           index: widget.index,
           isCurrentTrack: widget.isCurrentTrack,
-          isPlaying: widget.isPlaying,
           compactTrailing: true,
         );
 
@@ -1150,9 +1180,11 @@ class _DraggableQueueItemState extends ConsumerState<_DraggableQueueItem> {
               onLongPress: () => _onOpenMenu(null),
               onSecondaryTapDown:
                   (details) => _onOpenMenu(details.globalPosition),
-              child: IntrinsicHeight(
+              // Fixed-height row: no IntrinsicHeight (expensive during scroll).
+              child: SizedBox(
+                height: kQueueTrackRowExtent,
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [Expanded(child: row), _buildDragHandle()],
                 ),
               ),

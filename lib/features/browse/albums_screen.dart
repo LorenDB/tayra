@@ -282,9 +282,13 @@ class _AlbumGrid extends StatelessWidget {
         if (index >= albums.length) {
           return const PaginatedLoadingIndicator();
         }
-        return AlbumCard(
-          album: albums[index],
-          onTap: () => context.push('/browse/album/${albums[index].id}'),
+        return RepaintBoundary(
+          child: AlbumCard(
+            album: albums[index],
+            onTap: () => context.push('/browse/album/${albums[index].id}'),
+            // Drop shadows during grid scroll — major composite cost.
+            showShadow: false,
+          ),
         );
       },
     );
