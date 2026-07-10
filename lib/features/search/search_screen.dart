@@ -196,11 +196,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     // Results — apply offline filter when active
     final offlineFilterActive = ref.watch(offlineFilterActiveProvider);
     final offlineTrackIds =
-        offlineFilterActive
-            ? ref
-                .watch(offlineTrackIdsProvider)
-                .maybeWhen(data: (ids) => ids, orElse: () => const <int>{})
-            : null;
+        offlineFilterActive ? ref.watch(offlineTrackIdsProvider) : null;
     final offlineAlbumIds =
         offlineFilterActive
             ? ref

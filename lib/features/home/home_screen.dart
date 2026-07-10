@@ -532,7 +532,8 @@ class _TrackListSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final tracksAsync = ref.watch(recentTracksProvider);
     final offlineFilterActive = ref.watch(offlineFilterActiveProvider);
-    final offlineTrackIdsAsync = ref.watch(offlineTrackIdsProvider);
+    final offlineTrackIds =
+        offlineFilterActive ? ref.watch(offlineTrackIdsProvider) : null;
 
     return tracksAsync.when(
       loading:
@@ -548,16 +549,8 @@ class _TrackListSection extends ConsumerWidget {
           ),
       data: (tracks) {
         final displayTracks =
-            offlineFilterActive
-                ? offlineTrackIdsAsync.when(
-                  data:
-                      (offlineIds) =>
-                          tracks
-                              .where((t) => offlineIds.contains(t.id))
-                              .toList(),
-                  loading: () => tracks,
-                  error: (_, e) => tracks,
-                )
+            offlineTrackIds != null
+                ? tracks.where((t) => offlineTrackIds.contains(t.id)).toList()
                 : tracks;
 
         if (displayTracks.isEmpty) {

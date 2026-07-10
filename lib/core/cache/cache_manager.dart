@@ -873,19 +873,42 @@ class CacheManager {
 
   /// Check if an audio file for [trackId] exists on disk.
   ///
-  /// This is the primary source-of-truth check — it scans the audio cache
-  /// directory for any file whose name matches `audio_<trackId>.<ext>`.
-  /// Checking the filesystem directly prevents DB/disk divergence (e.g. a
-  /// file that exists but has no DB row will still be reported as cached).
+  /// Prefers an O(1) DB path lookup + [File.exists], then probes common
+  /// extensions. Avoids [Directory.listSync] so hot paths (e.g. list tiles)
+  /// never walk the entire cache directory on the UI isolate.
   Future<bool> audioFileExistsOnDisk(int trackId) async {
     try {
+      final key = 'audio_$trackId';
+      final db = await _db.database;
+      final results = await db.query(
+        'cache_files',
+        columns: ['file_path'],
+        where: 'cache_key = ?',
+        whereArgs: [key],
+        limit: 1,
+      );
+      if (results.isNotEmpty) {
+        final filePath = results.first['file_path'] as String;
+        if (await File(filePath).exists()) return true;
+      }
+
+      // Orphan-file fallback: probe known extensions without listing the dir.
+      // putFile stores as `audio_<id><ext>` under the audio cache directory.
       final audioDir = await _getCacheDir(FileType.audio);
-      final prefix = 'audio_$trackId.';
-      final entities = audioDir.listSync();
-      for (final entity in entities) {
-        if (entity is File) {
-          final name = p.basename(entity.path);
-          if (name.startsWith(prefix)) return true;
+      const extensions = <String>[
+        '.mp3',
+        '.ogg',
+        '.opus',
+        '.m4a',
+        '.flac',
+        '.aac',
+        '.wav',
+        '.wma',
+        '.webm',
+      ];
+      for (final ext in extensions) {
+        if (await File(p.join(audioDir.path, '$key$ext')).exists()) {
+          return true;
         }
       }
       return false;

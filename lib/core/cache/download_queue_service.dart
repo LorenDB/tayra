@@ -250,7 +250,9 @@ class DownloadQueueService {
                 Analytics.track('download_completed');
               } catch (_) {}
               try {
-                ref.invalidate(isAudioCachedProvider(item.trackId));
+                ref
+                    .read(cachedAudioTrackIdsProvider.notifier)
+                    .add(item.trackId);
               } catch (_) {}
             } catch (e, st) {
               debugPrint(

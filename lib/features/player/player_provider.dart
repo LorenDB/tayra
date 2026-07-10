@@ -2319,7 +2319,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
       // Background-cache the audio file if we streamed it (fire-and-forget).
       if (streamedFromServer) {
-        _audioCache.cacheAudio(track, streamUrl, headers);
+        unawaited(_cacheAudioAndNotify(track, streamUrl, headers));
       }
 
       // Cache cover art in the background (fire-and-forget).
@@ -2400,8 +2400,21 @@ class PlayerNotifier extends Notifier<PlayerState> {
       final listenUrl = track.listenUrl;
       if (listenUrl != null) {
         final streamUrl = _api.getStreamUrl(listenUrl);
-        _audioCache.cacheAudio(track, streamUrl, headers);
+        unawaited(_cacheAudioAndNotify(track, streamUrl, headers));
       }
+    }
+  }
+
+  /// Cache audio and update the bulk cached-ID set so list indicators refresh
+  /// without a per-row disk scan.
+  Future<void> _cacheAudioAndNotify(
+    Track track,
+    String streamUrl,
+    Map<String, String> headers,
+  ) async {
+    final file = await _audioCache.cacheAudio(track, streamUrl, headers);
+    if (file != null) {
+      ref.read(cachedAudioTrackIdsProvider.notifier).add(track.id);
     }
   }
 
