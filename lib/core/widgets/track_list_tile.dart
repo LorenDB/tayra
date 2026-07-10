@@ -21,7 +21,10 @@ import 'package:tayra/features/settings/settings_provider.dart';
 const double kTrackListTileExtent = 64.0;
 
 /// Fixed height for [TrackListTile] without album art (track-number rows).
-const double kTrackListTileExtentCompact = 52.0;
+///
+/// Vertical padding (8×2) plus title/subtitle column (~39 with theme line
+/// heights) is 55; use 56 so [SliverFixedExtentList] has a 1px cushion.
+const double kTrackListTileExtentCompact = 56.0;
 
 /// A row widget for a single track in a list.
 class TrackListTile extends ConsumerWidget {
