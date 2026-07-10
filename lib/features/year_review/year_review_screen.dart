@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/widgets/app_refresh_indicator.dart';
 import 'package:tayra/core/theme/palette_provider.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
@@ -106,8 +107,7 @@ class _YearReviewScreenState extends ConsumerState<YearReviewScreen>
               child: CircularProgressIndicator(color: AppTheme.primary),
             ),
         error:
-            (error, stack) => RefreshIndicator(
-              color: AppTheme.primary,
+            (error, stack) => AppRefreshIndicator(
               onRefresh: _refresh,
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
@@ -148,8 +148,7 @@ class _YearReviewScreenState extends ConsumerState<YearReviewScreen>
             ),
         data: (stats) {
           if (stats.isEmpty) {
-            return RefreshIndicator(
-              color: AppTheme.primary,
+            return AppRefreshIndicator(
               onRefresh: _refresh,
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
@@ -160,8 +159,7 @@ class _YearReviewScreenState extends ConsumerState<YearReviewScreen>
               ),
             );
           }
-          return RefreshIndicator(
-            color: AppTheme.primary,
+          return AppRefreshIndicator(
             onRefresh: _refresh,
             child: _ReviewContent(
               stats: stats,
@@ -3730,8 +3728,7 @@ class YearReviewSelectorScreen extends ConsumerWidget {
           children: [
             _AppBarRow(title: 'Year in Review'),
             Expanded(
-              child: RefreshIndicator(
-                color: AppTheme.primary,
+              child: AppRefreshIndicator(
                 onRefresh: () async {
                   ref.invalidate(availableYearsProvider);
                   await ref.read(availableYearsProvider.future);

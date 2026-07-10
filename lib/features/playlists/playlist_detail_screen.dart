@@ -10,9 +10,11 @@ import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/core/cache/download_queue_service.dart';
 import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/widgets/app_refresh_indicator.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
 import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/pill_action_button.dart';
+import 'package:tayra/core/widgets/popup_menu_row.dart';
 import 'package:tayra/core/widgets/track_list_tile.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/player/player_provider.dart';
@@ -433,9 +435,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
       }
     }
 
-    return RefreshIndicator(
-      color: AppTheme.primary,
-      backgroundColor: AppTheme.surfaceContainer,
+    return AppRefreshIndicator(
       onRefresh: () => _loadData(forceRefresh: true),
       child: CustomScrollView(
         physics: const BouncingScrollPhysics(
@@ -524,93 +524,43 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                 },
                 itemBuilder:
                     (_) => [
-                      PopupMenuItem(
+                      const PopupMenuItem(
                         value: 'play_next',
-                        child: Row(
-                          children: const [
-                            Icon(
-                              Icons.queue_play_next,
-                              size: 20,
-                              color: AppTheme.onBackground,
-                            ),
-                            SizedBox(width: 12),
-                            Text(
-                              'Play next',
-                              style: TextStyle(color: AppTheme.onBackground),
-                            ),
-                          ],
+                        child: PopupMenuRow(
+                          icon: Icons.queue_play_next,
+                          label: 'Play next',
                         ),
                       ),
-                      PopupMenuItem(
+                      const PopupMenuItem(
                         value: 'add_queue',
-                        child: Row(
-                          children: const [
-                            Icon(
-                              Icons.playlist_add,
-                              size: 20,
-                              color: AppTheme.onBackground,
-                            ),
-                            SizedBox(width: 12),
-                            Text(
-                              'Add to queue',
-                              style: TextStyle(color: AppTheme.onBackground),
-                            ),
-                          ],
+                        child: PopupMenuRow(
+                          icon: Icons.playlist_add,
+                          label: 'Add to queue',
                         ),
                       ),
                       PopupMenuItem(
                         value: 'download',
-                        child: Row(
-                          children: [
-                            Icon(
+                        child: PopupMenuRow(
+                          icon:
                               isManual
                                   ? Icons.download_done_rounded
                                   : Icons.download_rounded,
-                              size: 20,
-                              color: AppTheme.onBackground,
-                            ),
-                            const SizedBox(width: 12),
-                            Text(
-                              isManual ? 'Remove download' : 'Download',
-                              style: const TextStyle(
-                                color: AppTheme.onBackground,
-                              ),
-                            ),
-                          ],
+                          label: isManual ? 'Remove download' : 'Download',
                         ),
                       ),
-                      PopupMenuItem(
+                      const PopupMenuItem(
                         value: 'edit',
-                        child: Row(
-                          children: const [
-                            Icon(
-                              Icons.edit_rounded,
-                              size: 20,
-                              color: AppTheme.onBackground,
-                            ),
-                            SizedBox(width: 12),
-                            Text(
-                              'Edit playlist',
-                              style: TextStyle(color: AppTheme.onBackground),
-                            ),
-                          ],
+                        child: PopupMenuRow(
+                          icon: Icons.edit_rounded,
+                          label: 'Edit playlist',
                         ),
                       ),
-                      PopupMenuItem(
+                      const PopupMenuItem(
                         value: 'delete',
-                        child: Row(
-                          children: const [
-                            Icon(
-                              Icons.delete_rounded,
-                              size: 20,
-                              color: AppTheme.error,
-                            ),
-                            SizedBox(width: 12),
-                            Text(
-                              'Delete playlist',
-                              style: TextStyle(color: AppTheme.onBackground),
-                            ),
-                          ],
+                        child: PopupMenuRow(
+                          icon: Icons.delete_rounded,
+                          label: 'Delete playlist',
+                          destructive: true,
                         ),
                       ),
                     ],

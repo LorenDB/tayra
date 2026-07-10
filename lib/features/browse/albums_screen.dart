@@ -5,7 +5,7 @@ import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/layout/responsive.dart';
-import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/widgets/app_refresh_indicator.dart';
 import 'package:tayra/core/widgets/album_card.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
 import 'package:tayra/core/widgets/error_state.dart';
@@ -189,9 +189,7 @@ class _AlbumsScreenState extends ConsumerState<AlbumsScreen>
               onRetry: () => ref.invalidate(offlineAlbumsProvider),
             ),
         data: (albums) {
-          return RefreshIndicator(
-            color: AppTheme.primary,
-            backgroundColor: AppTheme.surfaceContainer,
+          return AppRefreshIndicator(
             onRefresh: () async {
               ref.invalidate(offlineAlbumIdsProvider);
               ref.invalidate(offlineAlbumsProvider);
@@ -222,9 +220,7 @@ class _AlbumsScreenState extends ConsumerState<AlbumsScreen>
         seedIfEmpty(response);
         final allAlbums = items.isEmpty ? response.results : items;
 
-        return RefreshIndicator(
-          color: AppTheme.primary,
-          backgroundColor: AppTheme.surfaceContainer,
+        return AppRefreshIndicator(
           onRefresh: refresh,
           child: _AlbumGrid(
             albums: allAlbums,

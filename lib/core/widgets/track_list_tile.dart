@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
+import 'package:tayra/core/widgets/popup_menu_row.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/favorites/favorites_provider.dart';
 import 'package:tayra/features/player/player_provider.dart';
@@ -300,22 +301,28 @@ class _TrackMenuButton extends ConsumerWidget {
       items: [
         const PopupMenuItem(
           value: 'play_next',
-          child: _MenuRow(icon: Icons.queue_play_next, label: 'Play next'),
+          child: PopupMenuRow(
+            icon: Icons.queue_play_next,
+            label: 'Play next',
+          ),
         ),
         const PopupMenuItem(
           value: 'add_queue',
-          child: _MenuRow(icon: Icons.playlist_add, label: 'Add to queue'),
+          child: PopupMenuRow(
+            icon: Icons.playlist_add,
+            label: 'Add to queue',
+          ),
         ),
         const PopupMenuItem(
           value: 'add_playlist',
-          child: _MenuRow(
+          child: PopupMenuRow(
             icon: Icons.playlist_add_rounded,
             label: 'Add to playlist',
           ),
         ),
         PopupMenuItem(
           value: 'toggle_manual',
-          child: _MenuRow(
+          child: PopupMenuRow(
             icon: Icons.download_rounded,
             label: isManual ? 'Remove download' : 'Download',
           ),
@@ -323,7 +330,7 @@ class _TrackMenuButton extends ConsumerWidget {
         PopupMenuItem(
           value: 'go_to_album',
           enabled: albumAvailable,
-          child: _MenuRow(
+          child: PopupMenuRow(
             icon: Icons.album,
             label: 'Go to album',
             muted: !albumAvailable,
@@ -332,7 +339,7 @@ class _TrackMenuButton extends ConsumerWidget {
         PopupMenuItem(
           value: 'go_to_artist',
           enabled: artistAvailable,
-          child: _MenuRow(
+          child: PopupMenuRow(
             icon: Icons.person,
             label: 'Go to artist',
             muted: !artistAvailable,
@@ -341,7 +348,7 @@ class _TrackMenuButton extends ConsumerWidget {
         if (onRemoveFromPlaylist != null)
           const PopupMenuItem(
             value: 'remove_from_playlist',
-            child: _MenuRow(
+            child: PopupMenuRow(
               icon: Icons.remove_circle_outline,
               label: 'Remove from playlist',
               destructive: true,
@@ -350,7 +357,7 @@ class _TrackMenuButton extends ConsumerWidget {
         if (showPurge)
           const PopupMenuItem(
             value: 'purge_cache',
-            child: _MenuRow(
+            child: PopupMenuRow(
               icon: Icons.delete_forever_rounded,
               label: 'Purge and refetch',
               destructive: true,
@@ -530,33 +537,4 @@ class _TrackMenuButton extends ConsumerWidget {
   }
 }
 
-class _MenuRow extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool muted;
-  final bool destructive;
 
-  const _MenuRow({
-    required this.icon,
-    required this.label,
-    this.muted = false,
-    this.destructive = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final color =
-        destructive
-            ? AppTheme.error
-            : muted
-            ? AppTheme.onBackgroundMuted
-            : AppTheme.onBackground;
-    return Row(
-      children: [
-        Icon(icon, size: 20, color: color),
-        const SizedBox(width: 12),
-        Text(label, style: TextStyle(color: color)),
-      ],
-    );
-  }
-}

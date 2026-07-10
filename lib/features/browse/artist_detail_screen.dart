@@ -6,10 +6,12 @@ import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/widgets/app_refresh_indicator.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/core/widgets/dot_separator.dart';
 import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/pill_action_button.dart';
+import 'package:tayra/core/widgets/popup_menu_row.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/core/widgets/tag_chip_list.dart';
 import 'package:tayra/core/widgets/track_list_tile.dart';
@@ -71,9 +73,7 @@ class ArtistDetailScreen extends ConsumerWidget {
               onRetry: () => ref.invalidate(_artistDetailProvider(artistId)),
             ),
         data:
-            (artist) => RefreshIndicator(
-              color: AppTheme.primary,
-              backgroundColor: AppTheme.surfaceContainer,
+            (artist) => AppRefreshIndicator(
               onRefresh: () async {
                 final api = ref.read(cachedFunkwhaleApiProvider);
                 try {
@@ -299,19 +299,10 @@ class _ArtistHeader extends ConsumerWidget {
                     (_) => const [
                       PopupMenuItem(
                         value: 'purge_cache',
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.delete_forever_rounded,
-                              size: 20,
-                              color: AppTheme.error,
-                            ),
-                            SizedBox(width: 12),
-                            Text(
-                              'Purge and refetch',
-                              style: TextStyle(color: AppTheme.error),
-                            ),
-                          ],
+                        child: PopupMenuRow(
+                          icon: Icons.delete_forever_rounded,
+                          label: 'Purge and refetch',
+                          destructive: true,
                         ),
                       ),
                     ],

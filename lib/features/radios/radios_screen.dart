@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/widgets/app_refresh_indicator.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
@@ -183,10 +184,8 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
       }
     }
 
-    return RefreshIndicator(
+    return AppRefreshIndicator(
       onRefresh: () => _loadRadios(forceRefresh: true),
-      color: AppTheme.primary,
-      backgroundColor: AppTheme.surfaceContainer,
       child: ListView.builder(
         controller: _scrollController,
         itemCount: items.length,

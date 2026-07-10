@@ -7,6 +7,7 @@ import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart' as cached_api;
 import 'package:tayra/core/api/models.dart' as models;
 import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/widgets/app_refresh_indicator.dart';
 import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/pill_action_button.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
@@ -123,10 +124,8 @@ class _PodcastDetailScreenState extends ConsumerState<PodcastDetailScreen> {
     final channel = _channel;
     return Scaffold(
       backgroundColor: AppTheme.background,
-      body: RefreshIndicator(
+      body: AppRefreshIndicator(
         onRefresh: () => _loadEpisodes(forceRefresh: true),
-        color: AppTheme.primary,
-        backgroundColor: AppTheme.surfaceContainer,
         child: CustomScrollView(
           slivers: [
             _buildAppBar(channel),
