@@ -8,6 +8,7 @@ import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/album_card.dart';
+import 'package:tayra/core/widgets/content_section_header.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
 import 'package:tayra/core/widgets/error_state.dart';
@@ -267,7 +268,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const _SectionHeader(label: 'Artists', topPadding: 16),
+        const ContentSectionHeader(
+          title: 'Artists',
+          fontSize: 18,
+          padding: EdgeInsets.fromLTRB(20, 16, 20, 12),
+        ),
         SizedBox(
           height: 100,
           child: ListView.builder(
@@ -299,7 +304,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const _SectionHeader(label: 'Albums'),
+        const ContentSectionHeader(
+          title: 'Albums',
+          fontSize: 18,
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 12),
+        ),
         SizedBox(
           height: 200,
           child: ListView.builder(
@@ -333,7 +342,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const _SectionHeader(label: 'Tracks', bottomPadding: 8),
+        const ContentSectionHeader(
+          title: 'Tracks',
+          fontSize: 18,
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 8),
+        ),
         SizedBox(
           height: tracks.length * kTrackListTileExtent,
           child: ListView.builder(
@@ -368,7 +381,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const _SectionHeader(label: 'Tags'),
+        const ContentSectionHeader(
+          title: 'Tags',
+          fontSize: 18,
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 12),
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Wrap(
@@ -480,33 +497,4 @@ class _ArtistChip extends StatelessWidget {
 
 // ── Section Header ───────────────────────────────────────────────────────
 
-class _SectionHeader extends StatelessWidget {
-  final String label;
 
-  /// Top padding. Artists use 16; all other sections use 20 (default).
-  final double topPadding;
-
-  /// Bottom padding. Tracks use 8; all other sections use 12 (default).
-  final double bottomPadding;
-
-  const _SectionHeader({
-    required this.label,
-    this.topPadding = 20,
-    this.bottomPadding = 12,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(20, topPadding, 20, bottomPadding),
-      child: Text(
-        label,
-        style: const TextStyle(
-          color: AppTheme.onBackground,
-          fontSize: 18,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-    );
-  }
-}

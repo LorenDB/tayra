@@ -10,7 +10,9 @@ import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/layout/responsive.dart';
 import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/widgets/app_refresh_indicator.dart';
 import 'package:tayra/core/widgets/album_card.dart';
+import 'package:tayra/core/widgets/content_section_header.dart';
 import 'package:tayra/core/widgets/track_list_tile.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/player/player_provider.dart';
@@ -60,9 +62,7 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppTheme.background,
-      body: RefreshIndicator(
-        color: AppTheme.primary,
-        backgroundColor: AppTheme.surfaceContainer,
+      body: AppRefreshIndicator(
         onRefresh: () async {
           // Perform a network refresh via the cached API with forceRefresh=true
           // so the cache is updated from the network (pull-to-refresh should
@@ -162,7 +162,7 @@ class HomeScreen extends ConsumerWidget {
               // ── Mobile: horizontal carousels ──
               const SliverToBoxAdapter(child: SizedBox(height: 8)),
               const SliverToBoxAdapter(
-                child: _SectionHeader(title: 'Recently Added'),
+                child: ContentSectionHeader(title: 'Recently Added'),
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 12)),
               SliverToBoxAdapter(
@@ -170,7 +170,7 @@ class HomeScreen extends ConsumerWidget {
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 28)),
               const SliverToBoxAdapter(
-                child: _SectionHeader(title: 'Random Picks'),
+                child: ContentSectionHeader(title: 'Random Picks'),
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 12)),
               SliverToBoxAdapter(
@@ -184,7 +184,7 @@ class HomeScreen extends ConsumerWidget {
             // Recently Played Tracks vertical list
             const SliverToBoxAdapter(child: SizedBox(height: 28)),
             const SliverToBoxAdapter(
-              child: _SectionHeader(title: 'Recently Played Tracks'),
+              child: ContentSectionHeader(title: 'Recently Played Tracks'),
             ),
             const SliverToBoxAdapter(child: SizedBox(height: 8)),
             const _TrackListSection(),
@@ -305,27 +305,6 @@ class _GreetingHeader extends ConsumerWidget {
 }
 
 // ── Section Header ──────────────────────────────────────────────────────
-
-class _SectionHeader extends StatelessWidget {
-  final String title;
-
-  const _SectionHeader({required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Text(
-        title,
-        style: const TextStyle(
-          color: AppTheme.onBackground,
-          fontSize: 20,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-    );
-  }
-}
 
 // ── Album Carousel (horizontal scroll) ──────────────────────────────────
 

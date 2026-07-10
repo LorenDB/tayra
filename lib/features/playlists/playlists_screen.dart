@@ -7,6 +7,7 @@ import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/widgets/app_refresh_indicator.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
 import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
@@ -68,9 +69,7 @@ class PlaylistsScreen extends ConsumerWidget {
             );
           }
 
-          return RefreshIndicator(
-            color: AppTheme.primary,
-            backgroundColor: AppTheme.surfaceContainer,
+          return AppRefreshIndicator(
             onRefresh: () async {
               final api = ref.read(cachedFunkwhaleApiProvider);
               try {

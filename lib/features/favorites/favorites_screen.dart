@@ -10,10 +10,12 @@ import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/cache/download_queue_service.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/widgets/app_refresh_indicator.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
 import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/loading_indicator.dart';
 import 'package:tayra/core/widgets/pill_action_button.dart';
+import 'package:tayra/core/widgets/popup_menu_row.dart';
 import 'package:tayra/core/widgets/track_list_tile.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/player/player_provider.dart';
@@ -291,15 +293,9 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
                 (_) => [
                   const PopupMenuItem(
                     value: 'download_all',
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.download_rounded,
-                          color: AppTheme.onBackground,
-                        ),
-                        SizedBox(width: 12),
-                        Text('Download all'),
-                      ],
+                    child: PopupMenuRow(
+                      icon: Icons.download_rounded,
+                      label: 'Download all',
                     ),
                   ),
                 ],
@@ -348,9 +344,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
     }
 
     // Favorites list
-    return RefreshIndicator(
-      color: AppTheme.primary,
-      backgroundColor: AppTheme.surfaceContainer,
+    return AppRefreshIndicator(
       onRefresh: _onRefresh,
       child: CustomScrollView(
         controller: _scrollController,

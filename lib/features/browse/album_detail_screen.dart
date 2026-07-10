@@ -12,6 +12,7 @@ import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/core/widgets/dot_separator.dart';
 import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/pill_action_button.dart';
+import 'package:tayra/core/widgets/popup_menu_row.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/core/widgets/tag_chip_list.dart';
 import 'package:tayra/core/widgets/track_list_tile.dart';
@@ -631,107 +632,49 @@ class _AlbumHeader extends ConsumerWidget {
                 (_) => [
                   const PopupMenuItem(
                     value: 'edit',
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.edit_rounded,
-                          size: 20,
-                          color: AppTheme.onBackground,
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          'Edit album',
-                          style: TextStyle(color: AppTheme.onBackground),
-                        ),
-                      ],
+                    child: PopupMenuRow(
+                      icon: Icons.edit_rounded,
+                      label: 'Edit album',
                     ),
                   ),
                   PopupMenuItem(
                     value: 'download',
-                    child: Row(
-                      children: [
-                        Icon(
+                    child: PopupMenuRow(
+                      icon:
                           isManual
                               ? Icons.download_done_rounded
                               : Icons.download_rounded,
-                          size: 20,
-                          color: AppTheme.onBackground,
-                        ),
-                        const SizedBox(width: 12),
-                        Text(
-                          isManual ? 'Remove download' : 'Download',
-                          style: const TextStyle(color: AppTheme.onBackground),
-                        ),
-                      ],
+                      label: isManual ? 'Remove download' : 'Download',
                     ),
                   ),
-                  PopupMenuItem(
+                  const PopupMenuItem(
                     value: 'add_playlist',
-                    child: Row(
-                      children: const [
-                        Icon(
-                          Icons.playlist_add_rounded,
-                          size: 20,
-                          color: AppTheme.onBackground,
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          'Add to playlist',
-                          style: TextStyle(color: AppTheme.onBackground),
-                        ),
-                      ],
+                    child: PopupMenuRow(
+                      icon: Icons.playlist_add_rounded,
+                      label: 'Add to playlist',
                     ),
                   ),
-                  PopupMenuItem(
+                  const PopupMenuItem(
                     value: 'play_next',
-                    child: Row(
-                      children: const [
-                        Icon(
-                          Icons.queue_play_next,
-                          size: 20,
-                          color: AppTheme.onBackground,
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          'Play next',
-                          style: TextStyle(color: AppTheme.onBackground),
-                        ),
-                      ],
+                    child: PopupMenuRow(
+                      icon: Icons.queue_play_next,
+                      label: 'Play next',
                     ),
                   ),
-                  PopupMenuItem(
+                  const PopupMenuItem(
                     value: 'add_queue',
-                    child: Row(
-                      children: const [
-                        Icon(
-                          Icons.queue_music_rounded,
-                          size: 20,
-                          color: AppTheme.onBackground,
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          'Add to queue',
-                          style: TextStyle(color: AppTheme.onBackground),
-                        ),
-                      ],
+                    child: PopupMenuRow(
+                      icon: Icons.queue_music_rounded,
+                      label: 'Add to queue',
                     ),
                   ),
                   if (showPurge)
                     const PopupMenuItem(
                       value: 'purge_cache',
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.delete_forever_rounded,
-                            size: 20,
-                            color: AppTheme.error,
-                          ),
-                          SizedBox(width: 12),
-                          Text(
-                            'Purge and refetch',
-                            style: TextStyle(color: AppTheme.error),
-                          ),
-                        ],
+                      child: PopupMenuRow(
+                        icon: Icons.delete_forever_rounded,
+                        label: 'Purge and refetch',
+                        destructive: true,
                       ),
                     ),
                 ],

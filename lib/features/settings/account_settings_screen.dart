@@ -5,6 +5,7 @@ import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/api_repository.dart';
 import 'package:tayra/core/api/models.dart';
 import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/widgets/app_refresh_indicator.dart';
 import 'package:tayra/core/widgets/settings_tiles.dart';
 import 'package:tayra/core/widgets/dialog_utils.dart';
 
@@ -37,9 +38,8 @@ class AccountSettingsScreen extends ConsumerWidget {
               onRetry: () => ref.invalidate(meUserProvider),
             ),
         data:
-            (user) => RefreshIndicator(
+            (user) => AppRefreshIndicator(
               onRefresh: () async => ref.invalidate(meUserProvider),
-              color: AppTheme.primary,
               child: ListView(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 children: [

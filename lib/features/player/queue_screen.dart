@@ -8,6 +8,7 @@ import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
+import 'package:tayra/core/widgets/popup_menu_row.dart';
 import 'package:tayra/features/player/player_provider.dart';
 
 import 'package:tayra/features/player/queue_persistence_service.dart';
@@ -859,68 +860,34 @@ Future<void> _showQueueTrackMenu({
       PopupMenuItem(
         value: 'go_to_album',
         enabled: albumAvailable,
-        child: Row(
-          children: [
-            Icon(
-              Icons.album,
-              size: 20,
-              color:
-                  albumAvailable
-                      ? AppTheme.onBackground
-                      : AppTheme.onBackgroundMuted,
-            ),
-            const SizedBox(width: 12),
-            const Text('Go to album'),
-          ],
+        child: PopupMenuRow(
+          icon: Icons.album,
+          label: 'Go to album',
+          muted: !albumAvailable,
         ),
       ),
       PopupMenuItem(
         value: 'go_to_artist',
         enabled: artistAvailable,
-        child: Row(
-          children: [
-            Icon(
-              Icons.person,
-              size: 20,
-              color:
-                  artistAvailable
-                      ? AppTheme.onBackground
-                      : AppTheme.onBackgroundMuted,
-            ),
-            const SizedBox(width: 12),
-            const Text('Go to artist'),
-          ],
+        child: PopupMenuRow(
+          icon: Icons.person,
+          label: 'Go to artist',
+          muted: !artistAvailable,
         ),
       ),
-      PopupMenuItem(
+      const PopupMenuItem(
         value: 'add_playlist',
-        child: Row(
-          children: [
-            Icon(
-              Icons.playlist_add_rounded,
-              size: 20,
-              color: AppTheme.onBackground,
-            ),
-            const SizedBox(width: 12),
-            const Text('Add to playlist'),
-          ],
+        child: PopupMenuRow(
+          icon: Icons.playlist_add_rounded,
+          label: 'Add to playlist',
         ),
       ),
-      PopupMenuItem(
+      const PopupMenuItem(
         value: 'remove_from_queue',
-        child: Row(
-          children: [
-            Icon(
-              Icons.playlist_remove_rounded,
-              size: 20,
-              color: AppTheme.error,
-            ),
-            const SizedBox(width: 12),
-            const Text(
-              'Remove from queue',
-              style: TextStyle(color: AppTheme.error),
-            ),
-          ],
+        child: PopupMenuRow(
+          icon: Icons.playlist_remove_rounded,
+          label: 'Remove from queue',
+          destructive: true,
         ),
       ),
     ],
@@ -1511,41 +1478,26 @@ class StashedQueueTile extends ConsumerWidget {
                   },
                   itemBuilder:
                       (c) => [
-                        PopupMenuItem(
+                        const PopupMenuItem(
                           value: 'rename',
-                          child: Row(
-                            children: const [
-                              Icon(Icons.edit_rounded, size: 18),
-                              SizedBox(width: 12),
-                              Text('Rename'),
-                            ],
+                          child: PopupMenuRow(
+                            icon: Icons.edit_rounded,
+                            label: 'Rename',
                           ),
                         ),
-                        PopupMenuItem(
+                        const PopupMenuItem(
                           value: 'save_playlist',
-                          child: Row(
-                            children: const [
-                              Icon(Icons.queue_music_rounded, size: 18),
-                              SizedBox(width: 12),
-                              Text('Save as playlist'),
-                            ],
+                          child: PopupMenuRow(
+                            icon: Icons.queue_music_rounded,
+                            label: 'Save as playlist',
                           ),
                         ),
-                        PopupMenuItem(
+                        const PopupMenuItem(
                           value: 'delete',
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.delete_outline_rounded,
-                                size: 18,
-                                color: AppTheme.error,
-                              ),
-                              const SizedBox(width: 12),
-                              Text(
-                                'Delete',
-                                style: const TextStyle(color: AppTheme.error),
-                              ),
-                            ],
+                          child: PopupMenuRow(
+                            icon: Icons.delete_outline_rounded,
+                            label: 'Delete',
+                            destructive: true,
                           ),
                         ),
                       ],

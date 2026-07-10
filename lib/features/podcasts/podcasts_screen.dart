@@ -7,6 +7,7 @@ import 'package:tayra/core/api/cached_api_repository.dart' as cached_api;
 import 'package:tayra/core/api/models.dart' as models;
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/widgets/app_refresh_indicator.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
 import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/loading_indicator.dart';
@@ -139,10 +140,8 @@ class _PodcastsScreenState extends ConsumerState<PodcastsScreen> {
       );
     }
 
-    return RefreshIndicator(
+    return AppRefreshIndicator(
       onRefresh: () => _loadChannels(forceRefresh: true),
-      color: AppTheme.primary,
-      backgroundColor: AppTheme.surfaceContainer,
       child: ListView.builder(
         controller: _scrollController,
         // Fixed extent for channel rows (48px art + optional 2-line subtitle).
