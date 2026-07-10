@@ -2162,9 +2162,7 @@ class _DetailsView extends StatelessWidget {
         const SliverToBoxAdapter(child: SizedBox(height: 24)),
 
         if (stats.deviceStats.length > 1) ...[
-          const SliverToBoxAdapter(
-            child: _SectionTitle(title: 'Your Devices'),
-          ),
+          const SliverToBoxAdapter(child: _SectionTitle(title: 'Your Devices')),
           SliverToBoxAdapter(child: _DeviceStatsCard(stats: stats)),
           const SliverToBoxAdapter(child: SizedBox(height: 24)),
         ],
@@ -2907,9 +2905,7 @@ class _DeviceRow extends StatelessWidget {
                     alpha: 0.08,
                   ),
                   color:
-                      rank == 1
-                          ? AppTheme.primary
-                          : AppTheme.onBackgroundMuted,
+                      rank == 1 ? AppTheme.primary : AppTheme.onBackgroundMuted,
                 ),
               ),
             ),
@@ -3039,16 +3035,17 @@ class _StoryDeviceStatsCardState extends State<_StoryDeviceStatsCard>
                   const SizedBox(height: 28),
                   for (int i = 0; i < devices.length; i++)
                     Opacity(
-                      opacity:
-                          ((_ctrl.value - 0.3 - i * 0.1) * 2).clamp(0.0, 1.0),
+                      opacity: ((_ctrl.value - 0.3 - i * 0.1) * 2).clamp(
+                        0.0,
+                        1.0,
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 14),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
                                   devices[i].displayName,
@@ -3442,8 +3439,7 @@ class _MonthlyChartState extends State<_MonthlyChart> {
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
-                          _highlightedIndex =
-                              _highlightedIndex == i ? null : i;
+                          _highlightedIndex = _highlightedIndex == i ? null : i;
                         });
                       },
                       child: MouseRegion(

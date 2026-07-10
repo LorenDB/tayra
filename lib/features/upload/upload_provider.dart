@@ -922,7 +922,10 @@ class UploadNotifier extends Notifier<UploadState> {
           importStatus: status,
           importErrorDetail: 'Import was skipped by the server: $reason',
         );
-        Analytics.track('upload_import_errored', {'had_error': true, 'skipped': true});
+        Analytics.track('upload_import_errored', {
+          'had_error': true,
+          'skipped': true,
+        });
 
       default:
         // Still pending/draft — update the displayed status.
