@@ -498,32 +498,46 @@ class _AlbumGridSection extends ConsumerWidget {
                     .floor();
             final columns = rawColumns.clamp(1, 5);
 
+            // Manual row layout instead of shrinkWrap GridView (which lays
+            // out all children eagerly inside the outer CustomScrollView).
+            final rowCount = (displayAlbums.length / columns).ceil();
+            final rows = <Widget>[];
+            for (var r = 0; r < rowCount; r++) {
+              final cells = <Widget>[];
+              for (var c = 0; c < columns; c++) {
+                final index = r * columns + c;
+                if (c > 0) cells.add(const SizedBox(width: spacing));
+                if (index < displayAlbums.length) {
+                  final album = displayAlbums[index];
+                  cells.add(
+                    Expanded(
+                      child: RepaintBoundary(
+                        child: AlbumCard(
+                          album: album,
+                          onTap: () => context.push('/album/${album.id}'),
+                          showShadow: false,
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  cells.add(const Expanded(child: SizedBox.shrink()));
+                }
+              }
+              rows.add(Row(crossAxisAlignment: CrossAxisAlignment.start, children: cells));
+              if (r < rowCount - 1) {
+                rows.add(const SizedBox(height: 16));
+              }
+            }
+
             return ConstrainedBox(
               constraints: BoxConstraints(
                 minWidth: 0,
                 maxWidth: sectionAvailable,
               ),
-              child: GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.zero,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: columns,
-                  crossAxisSpacing: spacing,
-                  mainAxisSpacing: 16,
-                  childAspectRatio: 0.72,
-                ),
-                itemCount: displayAlbums.length,
-                itemBuilder: (context, index) {
-                  final album = displayAlbums[index];
-                  return RepaintBoundary(
-                    child: AlbumCard(
-                      album: album,
-                      onTap: () => context.push('/album/${album.id}'),
-                      showShadow: false,
-                    ),
-                  );
-                },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: rows,
               ),
             );
           },

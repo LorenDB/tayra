@@ -67,14 +67,6 @@ class TrackListTile extends ConsumerWidget {
     // every visible list row.
     final isCurrentTrack = ref.watch(currentPlayingTrackIdProvider) == track.id;
 
-    // Membership selects on bulk in-memory sets — no per-row disk/DB I/O.
-    final isCached = ref.watch(
-      cachedAudioTrackIdsProvider.select((ids) => ids.contains(track.id)),
-    );
-    final isManual = ref.watch(
-      manualTrackIdsProvider.select((ids) => ids.contains(track.id)),
-    );
-
     // Offline filter: short-circuit avoids the second watch when inactive.
     final offlineFilterActive = ref.watch(offlineFilterActiveProvider);
     final isPlayable =
@@ -181,20 +173,10 @@ class TrackListTile extends ConsumerWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Fixed-width slot so rows don't jump when icon appears.
-                    SizedBox(
-                      width: 18,
-                      child:
-                          isCached
-                              ? Icon(
-                                Icons.download_done,
-                                size: 18,
-                                color:
-                                    isManual
-                                        ? accent
-                                        : AppTheme.onBackgroundSubtle,
-                              )
-                              : null,
+                    // Defer cache membership watches until after first paint.
+                    _DeferredCacheIndicator(
+                      trackId: track.id,
+                      accent: accent,
                     ),
                     const SizedBox(width: 8),
                     trailing ??
@@ -215,6 +197,55 @@ class TrackListTile extends ConsumerWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Shows the download-done icon only after the first frame, so initial list
+/// layout/scroll doesn't pay N× membership selects during mount.
+class _DeferredCacheIndicator extends ConsumerStatefulWidget {
+  final int trackId;
+  final Color accent;
+
+  const _DeferredCacheIndicator({required this.trackId, required this.accent});
+
+  @override
+  ConsumerState<_DeferredCacheIndicator> createState() =>
+      _DeferredCacheIndicatorState();
+}
+
+class _DeferredCacheIndicatorState
+    extends ConsumerState<_DeferredCacheIndicator> {
+  bool _ready = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) setState(() => _ready = true);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Fixed-width slot so rows don't jump when the icon appears.
+    if (!_ready) return const SizedBox(width: 18);
+
+    final isCached = ref.watch(
+      cachedAudioTrackIdsProvider.select((ids) => ids.contains(widget.trackId)),
+    );
+    if (!isCached) return const SizedBox(width: 18);
+
+    final isManual = ref.watch(
+      manualTrackIdsProvider.select((ids) => ids.contains(widget.trackId)),
+    );
+    return SizedBox(
+      width: 18,
+      child: Icon(
+        Icons.download_done,
+        size: 18,
+        color: isManual ? widget.accent : AppTheme.onBackgroundSubtle,
       ),
     );
   }

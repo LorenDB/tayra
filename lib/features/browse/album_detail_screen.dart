@@ -31,37 +31,68 @@ final _albumDetailProvider = FutureProvider.family<Album, int>((ref, albumId) {
 // render the first batch immediately without waiting for all pages.
 class _AlbumTracksNotifier extends AsyncNotifier<List<Track>> {
   final int albumId;
+  int _generation = 0;
 
   _AlbumTracksNotifier(this.albumId);
 
   @override
   Future<List<Track>> build() async {
     ref.keepAlive();
-    return _fetchAllPages();
+    return _fetchIncremental();
   }
 
   Future<void> reload() async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(_fetchAllPages);
+    state = await AsyncValue.guard(_fetchIncremental);
   }
 
-  Future<List<Track>> _fetchAllPages() async {
+  Future<List<Track>> _fetchIncremental() async {
+    final gen = ++_generation;
     final api = ref.read(cachedFunkwhaleApiProvider);
-    final allTracks = <Track>[];
-    int page = 1;
-    while (true) {
-      final response = await api.getTracks(
-        album: albumId,
-        ordering: 'position',
-        pageSize: 100,
-        page: page,
-      );
-      allTracks.addAll(response.results);
-      if (response.next == null) break;
-      page++;
-    }
+    final first = await api.getTracks(
+      album: albumId,
+      ordering: 'position',
+      pageSize: 100,
+      page: 1,
+    );
+    final allTracks = List<Track>.from(first.results);
     sortTracksByDiscAndPosition(allTracks);
-    return List<Track>.unmodifiable(allTracks);
+    final firstPage = List<Track>.unmodifiable(allTracks);
+
+    // Background-append remaining pages without blocking first paint.
+    if (first.next != null) {
+      unawaited(_fetchRemainingPages(api, gen, allTracks, startPage: 2));
+    }
+    return firstPage;
+  }
+
+  Future<void> _fetchRemainingPages(
+    CachedFunkwhaleApi api,
+    int gen,
+    List<Track> allTracks, {
+    required int startPage,
+  }) async {
+    try {
+      var page = startPage;
+      while (true) {
+        if (gen != _generation) return;
+        final response = await api.getTracks(
+          album: albumId,
+          ordering: 'position',
+          pageSize: 100,
+          page: page,
+        );
+        if (gen != _generation) return;
+        allTracks.addAll(response.results);
+        sortTracksByDiscAndPosition(allTracks);
+        state = AsyncData(List<Track>.unmodifiable(allTracks));
+        if (response.next == null) break;
+        page++;
+      }
+    } catch (e, st) {
+      // Keep whatever pages we already showed.
+      debugPrint('Album tracks remaining pages failed: $e\n$st');
+    }
   }
 }
 

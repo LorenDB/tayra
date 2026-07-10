@@ -35,6 +35,13 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
   int _currentPage = 1;
   String? _error;
 
+  // Cached offline-filtered view so scrolling doesn't re-filter every build.
+  List<Favorite> _displayCache = const [];
+  bool? _displayOfflineActive;
+  Set<int>? _displayOfflineIds;
+  int _favoritesEpoch = 0;
+  int _displayEpoch = -1;
+
   @override
   void initState() {
     super.initState();
@@ -47,6 +54,33 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
+  }
+
+  void _invalidateDisplayCache() {
+    _favoritesEpoch++;
+  }
+
+  List<Favorite> _displayFavorites({
+    required bool offlineFilterActive,
+    Set<int>? offlineTrackIds,
+  }) {
+    if (_displayEpoch == _favoritesEpoch &&
+        _displayOfflineActive == offlineFilterActive &&
+        identical(_displayOfflineIds, offlineTrackIds)) {
+      return _displayCache;
+    }
+    _displayEpoch = _favoritesEpoch;
+    _displayOfflineActive = offlineFilterActive;
+    _displayOfflineIds = offlineTrackIds;
+    if (!offlineFilterActive || offlineTrackIds == null) {
+      _displayCache = _favorites;
+    } else {
+      _displayCache =
+          _favorites
+              .where((f) => offlineTrackIds.contains(f.track.id))
+              .toList(growable: false);
+    }
+    return _displayCache;
   }
 
   void _onScroll() {
@@ -80,30 +114,12 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
         _currentPage = 1;
         _hasMore = response.next != null;
         _isLoading = false;
+        _invalidateDisplayCache();
       });
-      // If the global favorite IDs provider contains IDs that are not present
-      // in the fetched first page (this can happen when favorites are added
-      // from other screens while this screen was not visible), perform a
-      // forced refresh to ensure the first page reflects recent additions.
-      final providerIds = ref.read(favoriteTrackIdsProvider);
-      final loadedIds = _favorites.map((f) => f.track.id).toSet();
-      final missing = providerIds.difference(loadedIds);
-      if (missing.isNotEmpty) {
-        try {
-          final fresh = await api.getFavorites(page: 1, forceRefresh: true);
-          if (!mounted) return;
-          setState(() {
-            _favorites
-              ..clear()
-              ..addAll(fresh.results);
-            _currentPage = 1;
-            _hasMore = fresh.next != null;
-            _isLoading = false;
-          });
-        } catch (_) {
-          // Ignore forced refresh failures — we already have a usable list.
-        }
-      }
+      // Do NOT force-refresh when global favorite IDs aren't all on page 1 —
+      // that is normal for multi-page libraries and caused a second fetch
+      // plus scroll jumps ("bounce") at the end of the first page. New
+      // favorites added elsewhere are handled by the provider listener below.
     } catch (e) {
       if (!mounted) return;
       setState(() {
@@ -128,6 +144,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
         _currentPage = nextPage;
         _hasMore = response.next != null;
         _isLoadingMore = false;
+        _invalidateDisplayCache();
       });
     } catch (e) {
       if (!mounted) return;
@@ -238,12 +255,12 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
       if (removed.isNotEmpty) {
         setState(() {
           _favorites.removeWhere((f) => removed.contains(f.track.id));
+          _invalidateDisplayCache();
         });
       }
 
-      // If favorites were added elsewhere, force-refresh the paginated
-      // favorites list from the network so the local cached page picks up
-      // the new items.
+      // New favorites from other screens: refresh once (not the old
+      // "missing from page 1" double-fetch path).
       if (added.isNotEmpty) {
         _loadFavorites(forceRefresh: true);
       }
@@ -318,16 +335,14 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
       );
     }
 
-    // Apply offline filter if active
+    // Apply offline filter if active (cached until inputs change).
     final offlineFilterActive = ref.watch(offlineFilterActiveProvider);
     final offlineTrackIds =
         offlineFilterActive ? ref.watch(offlineTrackIdsProvider) : null;
-    final displayFavorites =
-        offlineTrackIds != null
-            ? _favorites
-                .where((f) => offlineTrackIds.contains(f.track.id))
-                .toList()
-            : _favorites;
+    final displayFavorites = _displayFavorites(
+      offlineFilterActive: offlineFilterActive,
+      offlineTrackIds: offlineTrackIds,
+    );
 
     if (displayFavorites.isEmpty && offlineFilterActive) {
       return const EmptyState(

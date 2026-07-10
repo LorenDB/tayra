@@ -826,6 +826,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// Prevents multiple saves within the same 2-second window.
   int _lastSavedPositionSeconds = -1;
 
+  /// Last time we published a position update into [PlayerState] for UI.
+  DateTime? _lastPositionUiPublish;
+  static const Duration _positionUiMinInterval = Duration(milliseconds: 200);
+
   @override
   PlayerState build() {
     _handler = ref.read(audioHandlerProvider);
@@ -952,7 +956,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
       }),
     );
 
-    // Listen to position.
+    // Listen to position. Throttle Riverpod UI updates (~5 Hz) so list
+    // scrolling elsewhere isn't contending with 20–60 Hz state copies.
+    // Persistence + listen tracking still use the true position cadence.
     _subscriptions.add(
       _handler.audioPlayer.positionStream.listen((position) {
         // When no audio source has been loaded yet (e.g. after a queue restore
@@ -970,7 +976,20 @@ class PlayerNotifier extends Notifier<PlayerState> {
             position > Duration.zero) {
           return;
         }
-        state = state.copyWith(position: position);
+
+        final now = DateTime.now();
+        final shouldPublishUi =
+            _lastPositionUiPublish == null ||
+            now.difference(_lastPositionUiPublish!) >=
+                _positionUiMinInterval ||
+            // Always publish near zero so "reset" states feel instant.
+            position.inMilliseconds < 50 ||
+            (position - state.position).inMilliseconds.abs() > 1500;
+        if (shouldPublishUi) {
+          _lastPositionUiPublish = now;
+          state = state.copyWith(position: position);
+        }
+
         // Save position/index only (not the full track list) every 2 seconds.
         // Full queue serialization is reserved for structural changes.
         final secs = position.inSeconds;

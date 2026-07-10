@@ -151,6 +151,8 @@ class _PodcastsScreenState extends ConsumerState<PodcastsScreen> {
       backgroundColor: AppTheme.surfaceContainer,
       child: ListView.builder(
         controller: _scrollController,
+        // Fixed extent for channel rows (48px art + optional 2-line subtitle).
+        itemExtent: 88,
         itemCount: _channels.length + (_isLoadingMore ? 1 : 0),
         itemBuilder: (context, i) {
           if (i == _channels.length) {

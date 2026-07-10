@@ -134,21 +134,21 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
     try {
       final api = ref.read(cachedFunkwhaleApiProvider);
 
-      // Fetch playlist metadata and all track pages in parallel.
+      // Metadata + first track page first so the UI paints quickly; remaining
+      // track pages append in the background.
       final results = await Future.wait([
         api.getPlaylist(widget.playlistId, forceRefresh: forceRefresh),
-        fetchAllPages(
-          (page) => api.getPlaylistTracks(
-            widget.playlistId,
-            page: page,
-            pageSize: 100,
-            forceRefresh: forceRefresh,
-          ),
+        api.getPlaylistTracks(
+          widget.playlistId,
+          page: 1,
+          pageSize: 100,
+          forceRefresh: forceRefresh,
         ),
       ]);
 
       final playlist = results[0] as Playlist;
-      final allTracks = results[1] as List<PlaylistTrack>;
+      final firstPage = results[1] as PaginatedResponse<PlaylistTrack>;
+      final allTracks = List<PlaylistTrack>.from(firstPage.results);
 
       if (!mounted) return;
 
@@ -158,6 +158,17 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
         _isLoading = false;
         _error = null;
       });
+
+      if (firstPage.next != null) {
+        unawaited(
+          _loadRemainingTrackPages(
+            api,
+            startPage: 2,
+            forceRefresh: forceRefresh,
+            seed: allTracks,
+          ),
+        );
+      }
     } catch (e) {
       if (!mounted) return;
       // If we already have data loaded (e.g. pull-to-refresh failed), keep
@@ -175,6 +186,33 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
           _isLoading = false;
         });
       }
+    }
+  }
+
+  Future<void> _loadRemainingTrackPages(
+    CachedFunkwhaleApi api, {
+    required int startPage,
+    required bool forceRefresh,
+    required List<PlaylistTrack> seed,
+  }) async {
+    try {
+      final accumulated = List<PlaylistTrack>.from(seed);
+      var page = startPage;
+      while (true) {
+        final response = await api.getPlaylistTracks(
+          widget.playlistId,
+          page: page,
+          pageSize: 100,
+          forceRefresh: forceRefresh,
+        );
+        if (!mounted) return;
+        accumulated.addAll(response.results);
+        setState(() => _playlistTracks = List<PlaylistTrack>.from(accumulated));
+        if (response.next == null) break;
+        page++;
+      }
+    } catch (e) {
+      debugPrint('Playlist remaining pages failed: $e');
     }
   }
 

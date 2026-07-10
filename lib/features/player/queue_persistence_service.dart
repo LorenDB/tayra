@@ -36,8 +36,10 @@ class StashedQueue {
   Map<String, dynamic> toJson() => {
     'id': id,
     'name': name,
-    'queue': queue.map((t) => t.toJson()).toList(),
-    'unshuffledQueue': unshuffledQueue.map((t) => t.toJson()).toList(),
+    // Slim track payloads — same as live queue persistence.
+    'queue': queue.map((t) => t.toPersistenceJson()).toList(),
+    'unshuffledQueue':
+        unshuffledQueue.map((t) => t.toPersistenceJson()).toList(),
     'currentIndex': currentIndex,
     'positionMs': position.inMilliseconds,
     'isShuffled': isShuffled,
