@@ -55,6 +55,12 @@ class SettingsScreen extends ConsumerWidget {
               subtitle: authState.serverUrl!,
             ),
           _ActionTile(
+            icon: Icons.manage_accounts_outlined,
+            title: 'Account settings',
+            subtitle: 'Profile, visibility, email, and password',
+            onTap: () => context.push('/account-settings'),
+          ),
+          _ActionTile(
             icon: Icons.logout_rounded,
             title: 'Log out',
             subtitle: 'Sign out and return to the login screen',
