@@ -163,162 +163,30 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
     final loadingRadioId = ref.watch(
       playerProvider.select((s) => s.loadingRadioId),
     );
-    final children = <Widget>[];
 
-    // Instance radios (client-side static options + server-provided built-ins)
+    // Flatten sections into a single model list for ListView.builder.
+    final items = <_RadioListItem>[];
     if (_instanceRadios.isNotEmpty || _builtinRadios.isNotEmpty) {
-      children.add(
-        const Padding(
-          padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: Text(
-            'Instance radios',
-            style: TextStyle(
-              color: AppTheme.onBackgroundMuted,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-      );
-
-      // Static instance radios first (client-side presets)
+      items.add(const _RadioListHeader('Instance radios'));
       for (var i = 0; i < _instanceRadios.length; i++) {
         final item = _instanceRadios[i];
-        final sentinelId = -100 - i; // unique negative id for loading state
-        final isLoadingRadio = loadingRadioId == sentinelId;
-        children.add(
-          ListTile(
-            title: Text(
-              item['name']!,
-              style: const TextStyle(color: AppTheme.onBackground),
-            ),
-            subtitle:
-                item['description'] != null
-                    ? Text(
-                      item['description']!,
-                      style: const TextStyle(color: AppTheme.onBackgroundMuted),
-                    )
-                    : null,
-            leading: const Icon(
-              Icons.radio_outlined,
-              color: AppTheme.onBackgroundSubtle,
-            ),
-            trailing:
-                isLoadingRadio
-                    ? const SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: AppTheme.primary,
-                      ),
-                    )
-                    : IconButton(
-                      icon: const Icon(
-                        Icons.play_arrow_rounded,
-                        color: AppTheme.primary,
-                      ),
-                      onPressed:
-                          () => _playInstanceRadio(item['type']!, sentinelId),
-                    ),
+        items.add(
+          _RadioListInstance(
+            name: item['name']!,
+            description: item['description'],
+            type: item['type']!,
+            sentinelId: -100 - i,
           ),
         );
       }
-
-      // Server-provided built-in radios (those without a user)
       for (final radio in _builtinRadios) {
-        final isLoadingRadio = loadingRadioId == radio.id;
-        children.add(
-          ListTile(
-            title: Text(
-              radio.name,
-              style: const TextStyle(color: AppTheme.onBackground),
-            ),
-            subtitle:
-                radio.description != null
-                    ? Text(
-                      radio.description!,
-                      style: const TextStyle(color: AppTheme.onBackgroundMuted),
-                    )
-                    : null,
-            leading: const Icon(
-              Icons.radio_outlined,
-              color: AppTheme.onBackgroundSubtle,
-            ),
-            trailing:
-                isLoadingRadio
-                    ? const SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: AppTheme.primary,
-                      ),
-                    )
-                    : IconButton(
-                      icon: const Icon(
-                        Icons.play_arrow_rounded,
-                        color: AppTheme.primary,
-                      ),
-                      onPressed: () => _playRadio(radio),
-                    ),
-          ),
-        );
+        items.add(_RadioListServer(radio));
       }
     }
-
-    // User-defined radios (separate section below)
     if (_userRadios.isNotEmpty) {
-      children.add(
-        const Padding(
-          padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: Text(
-            'Your radios',
-            style: TextStyle(
-              color: AppTheme.onBackgroundMuted,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-      );
-
+      items.add(const _RadioListHeader('Your radios'));
       for (final radio in _userRadios) {
-        final isLoadingRadio = loadingRadioId == radio.id;
-        children.add(
-          ListTile(
-            title: Text(
-              radio.name,
-              style: const TextStyle(color: AppTheme.onBackground),
-            ),
-            subtitle:
-                radio.description != null
-                    ? Text(
-                      radio.description!,
-                      style: const TextStyle(color: AppTheme.onBackgroundMuted),
-                    )
-                    : null,
-            leading: const Icon(
-              Icons.radio_outlined,
-              color: AppTheme.onBackgroundSubtle,
-            ),
-            trailing:
-                isLoadingRadio
-                    ? const SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: AppTheme.primary,
-                      ),
-                    )
-                    : IconButton(
-                      icon: const Icon(
-                        Icons.play_arrow_rounded,
-                        color: AppTheme.primary,
-                      ),
-                      onPressed: () => _playRadio(radio),
-                    ),
-          ),
-        );
+        items.add(_RadioListServer(radio));
       }
     }
 
@@ -326,7 +194,109 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
       onRefresh: () => _loadRadios(forceRefresh: true),
       color: AppTheme.primary,
       backgroundColor: AppTheme.surfaceContainer,
-      child: ListView(controller: _scrollController, children: children),
+      child: ListView.builder(
+        controller: _scrollController,
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          final item = items[index];
+          return switch (item) {
+            _RadioListHeader(:final title) => Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+              child: Text(
+                title,
+                style: const TextStyle(
+                  color: AppTheme.onBackgroundMuted,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            _RadioListInstance(
+              :final name,
+              :final description,
+              :final type,
+              :final sentinelId,
+            ) =>
+              _radioTile(
+                title: name,
+                subtitle: description,
+                isLoading: loadingRadioId == sentinelId,
+                onPlay: () => _playInstanceRadio(type, sentinelId),
+              ),
+            _RadioListServer(:final radio) => _radioTile(
+              title: radio.name,
+              subtitle: radio.description,
+              isLoading: loadingRadioId == radio.id,
+              onPlay: () => _playRadio(radio),
+            ),
+          };
+        },
+      ),
     );
   }
+
+  Widget _radioTile({
+    required String title,
+    required String? subtitle,
+    required bool isLoading,
+    required VoidCallback onPlay,
+  }) {
+    return ListTile(
+      title: Text(title, style: const TextStyle(color: AppTheme.onBackground)),
+      subtitle:
+          subtitle != null
+              ? Text(
+                subtitle,
+                style: const TextStyle(color: AppTheme.onBackgroundMuted),
+              )
+              : null,
+      leading: const Icon(
+        Icons.radio_outlined,
+        color: AppTheme.onBackgroundSubtle,
+      ),
+      trailing:
+          isLoading
+              ? const SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: AppTheme.primary,
+                ),
+              )
+              : IconButton(
+                icon: const Icon(
+                  Icons.play_arrow_rounded,
+                  color: AppTheme.primary,
+                ),
+                onPressed: onPlay,
+              ),
+    );
+  }
+}
+
+sealed class _RadioListItem {
+  const _RadioListItem();
+}
+
+class _RadioListHeader extends _RadioListItem {
+  final String title;
+  const _RadioListHeader(this.title);
+}
+
+class _RadioListInstance extends _RadioListItem {
+  final String name;
+  final String? description;
+  final String type;
+  final int sentinelId;
+  const _RadioListInstance({
+    required this.name,
+    required this.description,
+    required this.type,
+    required this.sentinelId,
+  });
+}
+
+class _RadioListServer extends _RadioListItem {
+  final models.Radio radio;
+  const _RadioListServer(this.radio);
 }

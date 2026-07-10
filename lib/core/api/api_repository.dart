@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 // 'foundation.dart' is unused here; keeping the import list minimal.
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/api/api_client.dart';
+import 'package:tayra/core/api/json_isolate.dart';
 import 'package:tayra/core/api/models.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
 
@@ -56,7 +57,7 @@ class FunkwhaleApi {
         if (tag != null && tag.isNotEmpty) 'tag': tag,
       },
     );
-    return PaginatedResponse.fromJson(response.data, Album.fromJson);
+    return parseAlbumsPage(response.data);
   }
 
   Future<Album> getAlbum(int id) async {
@@ -90,7 +91,7 @@ class FunkwhaleApi {
         if (q != null) 'q': q,
       },
     );
-    return PaginatedResponse.fromJson(response.data, Artist.fromJson);
+    return parseArtistsPage(response.data);
   }
 
   Future<Artist> getArtist(int id) async {
@@ -123,7 +124,7 @@ class FunkwhaleApi {
         if (q != null) 'q': q,
       },
     );
-    return PaginatedResponse.fromJson(response.data, Track.fromJson);
+    return parseTracksPage(response.data);
   }
 
   Future<Track> getTrack(int id) async {
@@ -178,7 +179,7 @@ class FunkwhaleApi {
         'ordering': '-creation_date',
       },
     );
-    return PaginatedResponse.fromJson(response.data, Favorite.fromJson);
+    return parseFavoritesPage(response.data);
   }
 
   /// Returns a set of all favorited track IDs (optimized endpoint).
@@ -244,7 +245,7 @@ class FunkwhaleApi {
       '$_baseUrl/api/v1/playlists/$id/tracks/',
       queryParameters: {'page': page, 'page_size': pageSize},
     );
-    return PaginatedResponse.fromJson(response.data, PlaylistTrack.fromJson);
+    return parsePlaylistTracksPage(response.data);
   }
 
   Future<Playlist> createPlaylist({

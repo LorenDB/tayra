@@ -135,7 +135,7 @@ class CachedFunkwhaleApi {
           ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
-      coverUrls: (r) => r.results.map((a) => a.coverUrl).toList(),
+      // List pages: rely on CachedNetworkImage; don't fan out cover downloads.
     );
   }
 
@@ -197,7 +197,6 @@ class CachedFunkwhaleApi {
           ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
-      coverUrls: (r) => r.results.map((a) => a.coverUrl).toList(),
     );
   }
 
@@ -250,7 +249,6 @@ class CachedFunkwhaleApi {
           ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
-      coverUrls: (r) => r.results.map((t) => t.coverUrl).toList(),
     );
   }
 
@@ -335,7 +333,6 @@ class CachedFunkwhaleApi {
       fetch: () => _api.getFavorites(page: page, pageSize: pageSize),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
-      coverUrls: (r) => r.results.map((f) => f.track.coverUrl).toList(),
     );
   }
 
@@ -462,7 +459,6 @@ class CachedFunkwhaleApi {
       fetch: () => _api.getPlaylistTracks(id, page: page, pageSize: pageSize),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
-      coverUrls: (r) => r.results.map((pt) => pt.track.coverUrl).toList(),
     );
   }
 
@@ -493,7 +489,6 @@ class CachedFunkwhaleApi {
           ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
-      coverUrls: (r) => r.results.map((l) => l.track.coverUrl).toList(),
     );
   }
 
@@ -648,7 +643,6 @@ class CachedFunkwhaleApi {
           ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
-      coverUrls: (r) => r.results.map((c) => c.artist.coverUrl).toList(),
     );
   }
 
@@ -688,7 +682,6 @@ class CachedFunkwhaleApi {
           ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
-      coverUrls: (r) => r.results.map((t) => t.coverUrl).toList(),
     );
   }
 

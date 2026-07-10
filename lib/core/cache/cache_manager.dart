@@ -369,6 +369,10 @@ class CacheManager {
     CacheType? resourceParentType,
     int? resourceParentId,
     bool isProtected = false,
+    /// When caching album audio, pass slim album fields for the offline index.
+    String? albumTitle,
+    String? albumArtistName,
+    String? albumCoverUrl,
   }) async {
     final db = await _db.database;
     final cacheDir = await _getCacheDir(type);
@@ -414,7 +418,62 @@ class CacheManager {
       rethrow;
     }
 
+    // Maintain denormalized offline album index when audio is linked to an album.
+    if (type == FileType.audio &&
+        resourceParentType == CacheType.album &&
+        resourceParentId != null) {
+      try {
+        await upsertOfflineAlbumIndex(
+          albumId: resourceParentId,
+          title: albumTitle ?? 'Album $resourceParentId',
+          artistName: albumArtistName,
+          coverUrl: albumCoverUrl,
+        );
+      } catch (e) {
+        debugPrint('CacheManager: offline album index upsert failed: $e');
+      }
+    }
+
     await _enforceLimit();
+  }
+
+  /// Upsert a slim row used by offline album browsing.
+  Future<void> upsertOfflineAlbumIndex({
+    required int albumId,
+    required String title,
+    String? artistName,
+    String? coverUrl,
+  }) async {
+    final db = await _db.database;
+    await db.insert('offline_album_index', {
+      'album_id': albumId,
+      'title': title,
+      'artist_name': artistName,
+      'cover_url': coverUrl,
+      'updated_at': DateTime.now().millisecondsSinceEpoch,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  /// Drop the offline index row if no cached audio remains for [albumId].
+  Future<void> maybeRemoveOfflineAlbumIndex(int albumId) async {
+    final db = await _db.database;
+    final remaining = await db.rawQuery(
+      '''
+      SELECT 1 FROM cache_files
+      WHERE file_type = ?
+        AND resource_parent_type = ?
+        AND resource_parent_id = ?
+      LIMIT 1
+      ''',
+      [FileType.audio.name, CacheType.album.name, albumId],
+    );
+    if (remaining.isEmpty) {
+      await db.delete(
+        'offline_album_index',
+        where: 'album_id = ?',
+        whereArgs: [albumId],
+      );
+    }
   }
 
   /// Delete file from cache
@@ -422,20 +481,28 @@ class CacheManager {
     final db = await _db.database;
     final results = await db.query(
       'cache_files',
-      columns: ['file_path'],
+      columns: ['file_path', 'resource_parent_type', 'resource_parent_id'],
       where: 'cache_key = ?',
       whereArgs: [key],
     );
 
+    int? parentAlbumId;
     if (results.isNotEmpty) {
-      final filePath = results.first['file_path'] as String;
+      final row = results.first;
+      final filePath = row['file_path'] as String;
       final file = File(filePath);
       if (await file.exists()) {
         await file.delete();
       }
+      if (row['resource_parent_type'] == CacheType.album.name) {
+        parentAlbumId = row['resource_parent_id'] as int?;
+      }
     }
 
     await db.delete('cache_files', where: 'cache_key = ?', whereArgs: [key]);
+    if (parentAlbumId != null) {
+      await maybeRemoveOfflineAlbumIndex(parentAlbumId);
+    }
   }
 
   /// Mark cache file protected/unprotected by cache key.
@@ -709,9 +776,8 @@ class CacheManager {
 
   /// Return all cached albums that are available offline.
   ///
-  /// Preferential path: only parse `album_<id>` rows for offline IDs, then
-  /// fill gaps from paginated list pages. Avoids decoding every album cache
-  /// blob when only a small offline set is needed.
+  /// Prefers the denormalized [offline_album_index] table (O(offline set)).
+  /// Falls back to metadata parsing only for IDs missing from the index.
   Future<List<Album>> getOfflineAlbums() async {
     final offlineIds = await getOfflineAlbumIds();
     if (offlineIds.isEmpty) return const [];
@@ -720,8 +786,38 @@ class CacheManager {
     final albumsById = <int, Album>{};
 
     try {
-      // 1) Direct album detail keys for offline IDs only.
-      for (final id in offlineIds) {
+      // 1) Denormalized index — cheap and complete for newly cached audio.
+      final indexRows = await db.query(
+        'offline_album_index',
+        orderBy: 'title COLLATE NOCASE ASC',
+      );
+      for (final row in indexRows) {
+        final id = row['album_id'] as int?;
+        if (id == null || !offlineIds.contains(id)) continue;
+        final title = row['title'] as String? ?? 'Album $id';
+        final artistName = row['artist_name'] as String?;
+        final coverUrl = row['cover_url'] as String?;
+        albumsById[id] = Album(
+          id: id,
+          title: title,
+          artist:
+              artistName != null
+                  ? Artist(id: 0, name: artistName)
+                  : null,
+          cover:
+              coverUrl != null
+                  ? Cover(
+                    uuid: '',
+                    urls: CoverUrls(original: coverUrl, mediumSquareCrop: coverUrl),
+                  )
+                  : null,
+          isPlayable: true,
+        );
+      }
+
+      // 2) Fill gaps from album detail metadata.
+      final missing = offlineIds.difference(albumsById.keys.toSet());
+      for (final id in [...missing]) {
         final rows = await db.query(
           'cache_metadata',
           columns: ['data'],
@@ -735,39 +831,23 @@ class CacheManager {
         try {
           final parsed = await _decodeMetadataJson(data);
           if (parsed != null) {
-            albumsById[id] = Album.fromJson(parsed);
+            final album = Album.fromJson(parsed);
+            albumsById[id] = album;
+            missing.remove(id);
+            // Backfill index for next time.
+            unawaited(
+              upsertOfflineAlbumIndex(
+                albumId: album.id,
+                title: album.title,
+                artistName: album.artist?.name,
+                coverUrl: album.coverUrl,
+              ),
+            );
           }
         } catch (_) {}
       }
 
-      // 2) Fill remaining IDs from paginated album-list cache pages.
-      final missing = offlineIds.difference(albumsById.keys.toSet());
-      if (missing.isNotEmpty) {
-        final rows = await db.query(
-          'cache_metadata',
-          columns: ['data'],
-          where: 'cache_type = ?',
-          whereArgs: [CacheType.recentAlbums.name],
-          orderBy: 'last_accessed DESC',
-        );
-        for (final row in rows) {
-          if (missing.isEmpty) break;
-          final data = row['data'] as String?;
-          if (data == null) continue;
-          try {
-            final parsed = await _decodeMetadataJson(data);
-            if (parsed == null) continue;
-            final response = PaginatedResponse.fromJson(parsed, Album.fromJson);
-            for (final album in response.results) {
-              if (missing.remove(album.id)) {
-                albumsById.putIfAbsent(album.id, () => album);
-              }
-            }
-          } catch (_) {}
-        }
-      }
-
-      // 3) Last resort: stub albums so offline IDs still appear in the grid.
+      // 3) Last resort stubs.
       for (final id in offlineIds) {
         albumsById.putIfAbsent(
           id,
@@ -991,6 +1071,26 @@ class CacheManager {
   /// have a corresponding `cache_files` row.
   Future<void> deleteAudioFilesOnDisk(int trackId) async {
     try {
+      final db = await _db.database;
+      // Capture album parent before deleting rows so the offline index stays
+      // accurate when the last track for an album is purged.
+      final parentRows = await db.query(
+        'cache_files',
+        columns: ['resource_parent_id'],
+        where:
+            "cache_key LIKE ? AND file_type = ? AND resource_parent_type = ?",
+        whereArgs: [
+          'audio_$trackId%',
+          FileType.audio.name,
+          CacheType.album.name,
+        ],
+        limit: 1,
+      );
+      final parentAlbumId =
+          parentRows.isNotEmpty
+              ? parentRows.first['resource_parent_id'] as int?
+              : null;
+
       final audioDir = await _getCacheDir(FileType.audio);
       final prefix = 'audio_$trackId.';
       final entities = audioDir.listSync();
@@ -1006,12 +1106,14 @@ class CacheManager {
         }
       }
       // Also remove any lingering DB rows for this key prefix
-      final db = await _db.database;
       await db.delete(
         'cache_files',
         where: "cache_key LIKE ? AND file_type = ?",
         whereArgs: ['audio_$trackId%', FileType.audio.name],
       );
+      if (parentAlbumId != null) {
+        await maybeRemoveOfflineAlbumIndex(parentAlbumId);
+      }
     } catch (e) {
       debugPrint('deleteAudioFilesOnDisk failed: $e');
     }

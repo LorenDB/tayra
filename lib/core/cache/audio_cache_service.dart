@@ -127,6 +127,9 @@ class AudioCacheService {
         resourceParentType: track.album != null ? CacheType.album : null,
         resourceParentId: track.album?.id,
         isProtected: isProtected,
+        albumTitle: track.album?.title,
+        albumArtistName: track.album?.artist?.name ?? track.artistName,
+        albumCoverUrl: track.album?.coverUrl ?? track.coverUrl,
       );
 
       // Clean up temp file

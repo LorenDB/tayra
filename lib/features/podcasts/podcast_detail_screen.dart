@@ -150,13 +150,15 @@ class _PodcastDetailScreenState extends ConsumerState<PodcastDetailScreen> {
                 ),
               )
             else
-              SliverList(
+              SliverFixedExtentList(
+                itemExtent: 80,
                 delegate: SliverChildBuilderDelegate(
                   (context, i) => _EpisodeTile(
                     episode: _episodes[i],
                     onTap: () => _playEpisode(i),
                   ),
                   childCount: _episodes.length,
+                  addAutomaticKeepAlives: false,
                 ),
               ),
           ],
@@ -268,9 +270,8 @@ class _EpisodeTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isCurrentTrack = ref.watch(
-      playerProvider.select((s) => s.currentTrack?.id == episode.id),
-    );
+    final isCurrentTrack =
+        ref.watch(currentPlayingTrackIdProvider) == episode.id;
 
     final dateStr =
         episode.creationDate != null

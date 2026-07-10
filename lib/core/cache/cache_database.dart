@@ -13,7 +13,7 @@ import 'package:path/path.dart';
 /// - cache_favorites: Stores favorite track IDs
 class CacheDatabase {
   static const _databaseName = 'funkwhale_cache.db';
-  static const _databaseVersion = 4;
+  static const _databaseVersion = 5;
 
   // Singleton pattern
   CacheDatabase._();
@@ -117,6 +117,17 @@ class CacheDatabase {
       )
     ''');
 
+    // Slim offline album index — avoids re-parsing full album JSON blobs.
+    await db.execute('''
+      CREATE TABLE offline_album_index (
+        album_id INTEGER PRIMARY KEY,
+        title TEXT NOT NULL,
+        artist_name TEXT,
+        cover_url TEXT,
+        updated_at INTEGER NOT NULL
+      )
+    ''');
+
     // Indexes for efficient querying
     await db.execute(
       'CREATE INDEX idx_metadata_type ON cache_metadata(cache_type)',
@@ -203,6 +214,17 @@ class CacheDatabase {
         FROM cache_manual_downloads_old
       ''');
       await db.execute('DROP TABLE cache_manual_downloads_old');
+    }
+    if (oldVersion < 5) {
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS offline_album_index (
+          album_id INTEGER PRIMARY KEY,
+          title TEXT NOT NULL,
+          artist_name TEXT,
+          cover_url TEXT,
+          updated_at INTEGER NOT NULL
+        )
+      ''');
     }
   }
 
