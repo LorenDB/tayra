@@ -2804,7 +2804,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }
 
   void toggleShuffle() {
-    final wasPlaying = state.isPlaying;
+    if (state.queue.isEmpty) return;
+
+    final oldQueue = List<Track>.from(state.queue);
 
     if (!state.isShuffled) {
       // Turning shuffle ON: save the original order, then shuffle
@@ -2815,7 +2817,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       if (current != null) newQueue.insert(0, current);
       state = state.copyWith(
         isShuffled: true,
-        unshuffledQueue: List<Track>.from(state.queue),
+        unshuffledQueue: List<Track>.from(oldQueue),
         queue: newQueue,
         currentIndex: 0,
       );
@@ -2835,30 +2837,114 @@ class PlayerNotifier extends Notifier<PlayerState> {
         currentIndex: newIndex >= 0 ? newIndex : 0,
       );
     }
-    // Rebuild gapless source with the new queue order, preserving the
-    // current playback position so the transition is seamless.
+
+    // Reorder the gapless playlist in place via moveAudioSource so the
+    // currently playing item is not reloaded (avoids stutter / seek-back).
+    // Full setAudioSources rebuild was the previous approach and interrupted
+    // playback even when initialPosition was preserved.
     if (_gaplessActive) {
-      final pos = _handler.audioPlayer.position;
-      _loadGaplessSource(state.currentIndex, initialPosition: pos).then((
-        ok,
-      ) async {
-        if (ok) {
-          // Only start playback if the player was playing prior to the
-          // shuffle toggle. Toggling shuffle when paused should not resume
-          // playback.
-          if (wasPlaying) {
-            await _handler.audioPlayer.play();
-            state = state.copyWith(isPlaying: _handler.audioPlayer.playing);
-          } else {
-            // Ensure our internal isPlaying reflects the player's current
-            // state (should remain paused).
-            state = state.copyWith(isPlaying: _handler.audioPlayer.playing);
-          }
-        }
-      });
+      unawaited(_reorderGaplessPlaylist(oldQueue, state.queue));
     }
+
     _saveQueue();
     Analytics.track('toggle_shuffle', {'enabled': state.isShuffled});
+  }
+
+  /// Reorder the player's gapless sources from [oldQueue] order to
+  /// [newQueue] order without reloading the currently playing item.
+  ///
+  /// Uses successive [AudioPlayer.moveAudioSource] calls (same primitive as
+  /// [reorderQueue]). Falls back to a full [_loadGaplessSource] rebuild only
+  /// if the queues cannot be matched (length mismatch or missing track).
+  Future<void> _reorderGaplessPlaylist(
+    List<Track> oldQueue,
+    List<Track> newQueue,
+  ) async {
+    if (oldQueue.length != newQueue.length || oldQueue.isEmpty) {
+      await _reloadGaplessPreservingPlayback();
+      return;
+    }
+
+    // Map each new-queue slot to the index it currently occupies in the
+    // player (oldQueue order). Prefer identity so duplicate track IDs keep
+    // the correct source instance.
+    final used = List<bool>.filled(oldQueue.length, false);
+    final desiredOldIndices = <int>[];
+    for (final track in newQueue) {
+      var found = -1;
+      for (var i = 0; i < oldQueue.length; i++) {
+        if (!used[i] && identical(oldQueue[i], track)) {
+          found = i;
+          break;
+        }
+      }
+      if (found < 0) {
+        for (var i = 0; i < oldQueue.length; i++) {
+          if (!used[i] && oldQueue[i].id == track.id) {
+            found = i;
+            break;
+          }
+        }
+      }
+      if (found < 0) {
+        await _reloadGaplessPreservingPlayback();
+        return;
+      }
+      used[found] = true;
+      desiredOldIndices.add(found);
+    }
+
+    // Suppress index stream while the playlist reshuffles so intermediate
+    // native indices are not treated as track changes.
+    _ignorePlayerIndexUpdates = true;
+    try {
+      // arrangement[i] = original (oldQueue) index currently at player slot i
+      final arrangement = List<int>.generate(oldQueue.length, (i) => i);
+      for (var target = 0; target < desiredOldIndices.length; target++) {
+        final want = desiredOldIndices[target];
+        if (arrangement[target] == want) continue;
+        final from = arrangement.indexOf(want);
+        await _handler.audioPlayer.moveAudioSource(from, target);
+        final item = arrangement.removeAt(from);
+        arrangement.insert(target, item);
+      }
+
+      // Reconcile app currentIndex with the player if needed (should match
+      // the playing track's new slot after the moves).
+      final playerIndex = _handler.audioPlayer.currentIndex;
+      final current = state.currentTrack;
+      if (playerIndex != null &&
+          playerIndex != state.currentIndex &&
+          playerIndex >= 0 &&
+          playerIndex < state.queue.length &&
+          current != null &&
+          state.queue[playerIndex].id == current.id) {
+        state = state.copyWith(currentIndex: playerIndex);
+      }
+    } catch (e, st) {
+      debugPrint('reorderGaplessPlaylist failed: $e');
+      debugPrintStack(stackTrace: st);
+      // Last resort: full rebuild so queue and player stay consistent.
+      await _reloadGaplessPreservingPlayback();
+    } finally {
+      _ignorePlayerIndexUpdates = false;
+    }
+  }
+
+  /// Full gapless reload that preserves position and play/pause state.
+  /// Used only as a fallback when in-place reordering is not possible.
+  Future<void> _reloadGaplessPreservingPlayback() async {
+    final wasPlaying = state.isPlaying;
+    final pos = _handler.audioPlayer.position;
+    final ok = await _loadGaplessSource(
+      state.currentIndex,
+      initialPosition: pos,
+    );
+    if (!ok) return;
+    if (wasPlaying) {
+      await _handler.audioPlayer.play();
+    }
+    state = state.copyWith(isPlaying: _handler.audioPlayer.playing);
   }
 
   void toggleLoopMode() {
