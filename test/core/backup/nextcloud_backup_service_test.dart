@@ -54,7 +54,9 @@ void main() {
     });
 
     test('regenerates when stored value is malformed', () async {
-      SharedPreferences.setMockInitialValues({'tayra_device_uuid': 'not-a-uuid'});
+      SharedPreferences.setMockInitialValues({
+        'tayra_device_uuid': 'not-a-uuid',
+      });
 
       final uuid = await getDeviceUuid();
 

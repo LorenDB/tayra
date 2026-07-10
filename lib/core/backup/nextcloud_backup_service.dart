@@ -595,7 +595,8 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
           filename: chosenSettingsFile,
         );
         if (content != null) {
-          ok = await NextcloudBackupService.restoreSettings(
+          ok =
+              await NextcloudBackupService.restoreSettings(
                 content,
                 reuseDeviceUuid: reuseDeviceUuid,
               ) &&
