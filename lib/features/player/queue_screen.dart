@@ -318,8 +318,7 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
   ) {
     // Do NOT watch isPlaying here — that rebuilt every row on play/pause.
     // The current-track row watches it locally via _PlayingIndicator.
-    final hasCurrent =
-        currentIndex >= 0 && currentIndex < queue.length;
+    final hasCurrent = currentIndex >= 0 && currentIndex < queue.length;
     final upNextStart = hasCurrent ? currentIndex + 1 : 0;
     final hasUpNext = upNextStart < queue.length;
 
@@ -640,11 +639,9 @@ Future<void> _saveQueueAsPlaylist(
       await api.addTracksToPlaylist(playlist.id, trackIds);
     }
     ref.invalidate(playlistsProvider);
-    try {
-      Analytics.track('queue_saved_as_playlist', {
-        'track_count': trackIds.length,
-      });
-    } catch (_) {}
+    Analytics.track('queue_saved_as_playlist', {
+      'track_count': trackIds.length,
+    });
     if (context.mounted) {
       ScaffoldMessenger.of(
         context,
@@ -692,9 +689,7 @@ void showClearQueueConfirmation(BuildContext context, WidgetRef ref) {
             ),
             TextButton(
               onPressed: () {
-                try {
-                  Analytics.track('queue_cleared');
-                } catch (_) {}
+                Analytics.track('queue_cleared');
                 ref.read(playerProvider.notifier).playTracks([]);
                 Navigator.of(dialogContext).pop();
               },

@@ -566,9 +566,7 @@ class AccountSettingsScreen extends ConsumerWidget {
     try {
       await action();
       if (analyticsEvent != null) {
-        try {
-          Analytics.track(analyticsEvent);
-        } catch (_) {}
+        Analytics.track(analyticsEvent);
       }
       if (refreshMe) {
         ref.invalidate(meUserProvider);

@@ -46,9 +46,7 @@ class FavoriteTrackIdsNotifier extends Notifier<Set<int>> {
       } else {
         await _api.addFavorite(trackId);
       }
-      try {
-        Analytics.track('favorite_toggled', {'added': !isFav});
-      } catch (_) {}
+      Analytics.track('favorite_toggled', {'added': !isFav});
     } catch (_) {
       // Revert on error and rethrow so callers can surface an error
       if (isFav) {

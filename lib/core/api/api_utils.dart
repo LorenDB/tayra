@@ -58,6 +58,19 @@ String formatTotalDuration(int totalSeconds) {
 /// Returns `'N track'` or `'N tracks'` depending on [n].
 String pluralizeTrack(int n) => '$n ${n == 1 ? 'track' : 'tracks'}';
 
+// ── Size formatting ──────────────────────────────────────────────────────
+
+/// Formats a decimal megabyte quantity for settings/cache UI.
+///
+/// Uses SI-style units where 1000 MB = 1.0 GB so slider values match labels
+/// (e.g. cache size limit).
+String formatDecimalMegabytes(int mb) {
+  if (mb >= 1000) {
+    return '${(mb / 1000.0).toStringAsFixed(1)} GB';
+  }
+  return '$mb MB';
+}
+
 // ── Track sorting ────────────────────────────────────────────────────────
 
 /// Sorts [tracks] in-place by disc number then track position.

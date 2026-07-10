@@ -8,7 +8,7 @@ import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
-import 'package:tayra/core/cache/download_queue_service.dart';
+import 'package:tayra/core/cache/manual_download_actions.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/app_refresh_indicator.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
@@ -18,6 +18,7 @@ import 'package:tayra/core/widgets/popup_menu_row.dart';
 import 'package:tayra/core/widgets/track_list_tile.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/player/player_provider.dart';
+import 'package:tayra/features/player/queue_actions.dart';
 import 'package:tayra/features/playlists/playlists_screen.dart';
 import 'package:tayra/core/widgets/dialog_utils.dart';
 
@@ -104,9 +105,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
       final api = ref.read(cachedFunkwhaleApiProvider);
       // Funkwhale v1.4.0: remove by list position (0-based)
       await api.removeTrackFromPlaylist(playlistId, listIndex);
-      try {
-        Analytics.track('playlist_track_removed');
-      } catch (_) {}
+      Analytics.track('playlist_track_removed');
       // Invalidate playlist metadata so counts update elsewhere.
       ref.invalidate(playlistsProvider);
     } catch (e) {
@@ -274,9 +273,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
       try {
         await api.getPlaylists(scope: 'me', forceRefresh: true);
       } catch (_) {}
-      try {
-        Analytics.track('playlist_deleted');
-      } catch (_) {}
+      Analytics.track('playlist_deleted');
       ref.invalidate(playlistsProvider);
 
       if (context.mounted) {
@@ -300,9 +297,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
 
   void _playAll() {
     if (_tracks.isEmpty) return;
-    try {
-      Analytics.track('playlist_play_all', {'track_count': _tracks.length});
-    } catch (_) {}
+    Analytics.track('playlist_play_all', {'track_count': _tracks.length});
     ref
         .read(playerProvider.notifier)
         .playTracks(_tracks, source: 'playlist_detail_play_all');
@@ -310,9 +305,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
 
   void _shuffleAll() {
     if (_tracks.isEmpty) return;
-    try {
-      Analytics.track('playlist_shuffle_all', {'track_count': _tracks.length});
-    } catch (_) {}
+    Analytics.track('playlist_shuffle_all', {'track_count': _tracks.length});
     ref
         .read(playerProvider.notifier)
         .playTracks(_tracks, source: 'playlist_detail_shuffle', shuffle: true);
@@ -373,57 +366,36 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
     // Toggle download state (extracted from the old inline IconButton handler).
     Future<void> toggleDownload() async {
       if (_tracks.isEmpty) return;
-      final mgr = ref.read(cacheManagerProvider);
       try {
         final current = ref.read(isManualPlaylistProvider(playlist.id));
-        await mgr.setManualDownloaded(
-          CacheType.playlist,
-          playlist.id,
-          !current,
-        );
-        final trackIds = _tracks.map((t) => t.id).toList();
-        for (final t in _tracks) {
-          try {
-            await mgr.setManualDownloaded(CacheType.track, t.id, !current);
-          } catch (_) {}
-        }
-        if (!current) {
-          ref.read(manualPlaylistIdsProvider.notifier).add(playlist.id);
-          ref.read(manualTrackIdsProvider.notifier).addAll(trackIds);
-        } else {
-          ref.read(manualPlaylistIdsProvider.notifier).remove(playlist.id);
-          ref.read(manualTrackIdsProvider.notifier).removeAll(trackIds);
-        }
-        await mgr.bulkSetFilesProtectedForParent(
-          CacheType.playlist,
-          playlist.id,
-          !current,
-        );
-        try {
-          // Omit playlist ID; keep counts and booleans only.
-          Analytics.track('playlist_download_toggled', {
-            'enabled': !current,
-            'track_count': _tracks.length,
-          });
-        } catch (_) {}
-
-        if (!mounted) return;
-        if (!current) {
-          final queue = ref.read(downloadQueueServiceProvider);
-          final trackIds =
+        final enabled = await toggleCollectionManualDownload(
+          ref: ref,
+          parentType: CacheType.playlist,
+          parentId: playlist.id,
+          trackIds: _tracks.map((t) => t.id).toList(),
+          enqueueTrackIds:
               _tracks
                   .where((t) => t.listenUrl != null)
                   .map((t) => t.id)
-                  .toList();
-          unawaited(queue.enqueue(trackIds, ref));
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Download queued for "${playlist.name}"')),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Download removed for "${playlist.name}"')),
-          );
-        }
+                  .toList(),
+          currentlyManual: current,
+        );
+        // Omit playlist ID; keep counts and booleans only.
+        Analytics.track('playlist_download_toggled', {
+          'enabled': enabled,
+          'track_count': _tracks.length,
+        });
+
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              enabled
+                  ? 'Download queued for "${playlist.name}"'
+                  : 'Download removed for "${playlist.name}"',
+            ),
+          ),
+        );
       } catch (e, st) {
         debugPrint('Playlist toggle manual failed: $e');
         debugPrintStack(stackTrace: st);
@@ -471,47 +443,16 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                 onSelected: (value) {
                   if (value == 'download') unawaited(toggleDownload());
                   if (value == 'play_next') {
-                    // Insert whole playlist to play next
-                    final playable =
-                        _tracks.where((t) => t.listenUrl != null).toList();
-                    if (playable.isNotEmpty) {
-                      ref
-                          .read(playerProvider.notifier)
-                          .insertTracksNext(playable);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            'Inserted ${playable.length} tracks to play next',
-                          ),
-                        ),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('No playable tracks to add'),
-                        ),
-                      );
-                    }
+                    final message = insertTracksToPlayNext(ref, _tracks);
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text(message)));
                   }
                   if (value == 'add_queue') {
-                    final playable =
-                        _tracks.where((t) => t.listenUrl != null).toList();
-                    if (playable.isNotEmpty) {
-                      ref.read(playerProvider.notifier).addToQueue(playable);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            'Added ${playable.length} tracks to queue',
-                          ),
-                        ),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('No playable tracks to add'),
-                        ),
-                      );
-                    }
+                    final message = addTracksToQueue(ref, _tracks);
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text(message)));
                   }
                   if (value == 'edit') {
                     context

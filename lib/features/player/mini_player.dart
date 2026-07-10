@@ -57,21 +57,17 @@ class MiniPlayer extends ConsumerWidget {
         if (v.abs() < 300) return;
         if (v > 0) {
           HapticFeedback.lightImpact();
-          try {
-            Analytics.track('swipe_to_skip', {
-              'direction': 'previous',
-              'source': 'mini_player',
-            });
-          } catch (_) {}
+          Analytics.track('swipe_to_skip', {
+            'direction': 'previous',
+            'source': 'mini_player',
+          });
           ref.read(playerProvider.notifier).skipPrevious();
         } else {
           HapticFeedback.lightImpact();
-          try {
-            Analytics.track('swipe_to_skip', {
-              'direction': 'next',
-              'source': 'mini_player',
-            });
-          } catch (_) {}
+          Analytics.track('swipe_to_skip', {
+            'direction': 'next',
+            'source': 'mini_player',
+          });
           ref.read(playerProvider.notifier).skipNext();
         }
       },

@@ -79,10 +79,9 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
     if (!offlineFilterActive || offlineTrackIds == null) {
       _displayCache = _favorites;
     } else {
-      _displayCache =
-          _favorites
-              .where((f) => offlineTrackIds.contains(f.track.id))
-              .toList(growable: false);
+      _displayCache = _favorites
+          .where((f) => offlineTrackIds.contains(f.track.id))
+          .toList(growable: false);
     }
     return _displayCache;
   }
@@ -201,9 +200,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
 
     if (trackIds.isEmpty) return;
 
-    try {
-      Analytics.track('favorites_download_all', {'count': trackIds.length});
-    } catch (_) {}
+    Analytics.track('favorites_download_all', {'count': trackIds.length});
     final queue = ref.read(downloadQueueServiceProvider);
     unawaited(queue.enqueue(trackIds.toList(), ref));
 
@@ -384,8 +381,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
                   track: favorite.track,
                   // Always favorited on this screen — skip N provider watches.
                   isFavoriteOverride: true,
-                  onTap:
-                      () => _playDisplayedFromIndex(displayFavorites, index),
+                  onTap: () => _playDisplayedFromIndex(displayFavorites, index),
                 );
               },
               childCount: displayFavorites.length,

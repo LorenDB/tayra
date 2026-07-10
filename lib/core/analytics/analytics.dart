@@ -123,6 +123,9 @@ class Analytics {
   /// Public entrypoint for tracking events. Wraps Aptabase and ensures
   /// we don't send raw strings that may contain PII. Values are restricted
   /// to simple types: null, bool, num, or short Strings for whitelisted keys.
+  ///
+  /// Never throws: sanitisation and Aptabase failures are swallowed here so
+  /// call sites must not wrap [track] in try/catch.
   static void track(String name, [Map<String, dynamic>? props]) {
     if (!_enabled) return;
     try {
@@ -169,7 +172,7 @@ class Analytics {
       }
       Aptabase.instance.trackEvent(name, safe);
     } catch (_) {
-      // Swallow any analytics failures.
+      // Swallow any analytics failures so callers stay free of try/catch.
     }
   }
 }

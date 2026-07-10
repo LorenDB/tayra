@@ -48,8 +48,10 @@ class AudioCacheService {
   }
 
   void _releaseCoverSlot() {
-    _activeCoverDownloads =
-        (_activeCoverDownloads - 1).clamp(0, _maxConcurrentCoverDownloads);
+    _activeCoverDownloads = (_activeCoverDownloads - 1).clamp(
+      0,
+      _maxConcurrentCoverDownloads,
+    );
     if (_coverWaiters.isNotEmpty) {
       final next = _coverWaiters.removeAt(0);
       if (!next.isCompleted) next.complete();

@@ -78,13 +78,11 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
     try {
       final availability = await client.checkAvailability();
       debugPrint('AiSummary: availability for year=$_year -> $availability');
-      try {
-        Analytics.track('year_review_ai_feature_status', {
-          'year': _year,
-          'status': availability.name,
-          'provider': settings.aiProviderType.name,
-        });
-      } catch (_) {}
+      Analytics.track('year_review_ai_feature_status', {
+        'year': _year,
+        'status': availability.name,
+        'provider': settings.aiProviderType.name,
+      });
 
       switch (availability) {
         case AiAvailability.available:
@@ -106,13 +104,11 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
       }
     } catch (e) {
       debugPrint('AiSummary: error checking availability: $e');
-      try {
-        Analytics.track('year_review_ai_feature_check_failed', {
-          'year': _year,
-          'had_error': true,
-          'error_type': e.runtimeType.toString(),
-        });
-      } catch (_) {}
+      Analytics.track('year_review_ai_feature_check_failed', {
+        'year': _year,
+        'had_error': true,
+        'error_type': e.runtimeType.toString(),
+      });
       state = const AiSummaryDeviceUnsupported();
     }
   }
@@ -120,9 +116,7 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
   /// Trigger model download, then generate the summary once ready.
   Future<void> downloadAndGenerate() async {
     debugPrint('AiSummary: download requested for year=$_year');
-    try {
-      Analytics.track('year_review_ai_download_requested', {'year': _year});
-    } catch (_) {}
+    Analytics.track('year_review_ai_download_requested', {'year': _year});
 
     state = const AiSummaryDownloading();
 
@@ -130,20 +124,16 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
       final client = ref.read(aiClientProvider);
       await client.download();
       debugPrint('AiSummary: download completed for year=$_year');
-      try {
-        Analytics.track('year_review_ai_download_completed', {'year': _year});
-      } catch (_) {}
+      Analytics.track('year_review_ai_download_completed', {'year': _year});
       state = const AiSummaryGenerating();
       await _generate();
     } catch (e) {
       debugPrint('AiSummary: download failed: $e');
-      try {
-        Analytics.track('year_review_ai_download_failed', {
-          'year': _year,
-          'had_error': true,
-          'error_type': e.runtimeType.toString(),
-        });
-      } catch (_) {}
+      Analytics.track('year_review_ai_download_failed', {
+        'year': _year,
+        'had_error': true,
+        'error_type': e.runtimeType.toString(),
+      });
       state = const AiSummaryError('Download failed');
     }
   }
@@ -181,12 +171,10 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
               'AiSummary: using cached summary for year=$_year; prompt unchanged',
             );
             state = AiSummaryReady(cached.trim());
-            try {
-              Analytics.track('year_review_ai_summary_cached', {
-                'year': _year,
-                'cached_length': cached.length,
-              });
-            } catch (_) {}
+            Analytics.track('year_review_ai_summary_cached', {
+              'year': _year,
+              'cached_length': cached.length,
+            });
             return;
           }
         }
@@ -197,12 +185,10 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
         'AiSummary: starting inference for year=$_year; '
         'prompt length=${promptText.length}',
       );
-      try {
-        Analytics.track('year_review_ai_inference_started', {
-          'year': _year,
-          'prompt_length': promptText.length,
-        });
-      } catch (_) {}
+      Analytics.track('year_review_ai_inference_started', {
+        'year': _year,
+        'prompt_length': promptText.length,
+      });
 
       final client = ref.read(aiClientProvider);
       final text = await client.runInference(promptText);
@@ -211,12 +197,10 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
         'AiSummary: inference completed for year=$_year; '
         'response length=${text.length}',
       );
-      try {
-        Analytics.track('year_review_ai_summary_generated', {
-          'year': _year,
-          'response_length': text.length,
-        });
-      } catch (_) {}
+      Analytics.track('year_review_ai_summary_generated', {
+        'year': _year,
+        'response_length': text.length,
+      });
 
       final trimmed = text.trim();
       // Persist successful summary + prompt for future caching.
@@ -230,12 +214,10 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
         final now = DateTime.now();
         if (now.year > _year) {
           await prefs.setString('ai_summary_${_year}_final', trimmed);
-          try {
-            Analytics.track('year_review_ai_summary_final_saved', {
-              'year': _year,
-              'length': trimmed.length,
-            });
-          } catch (_) {}
+          Analytics.track('year_review_ai_summary_final_saved', {
+            'year': _year,
+            'length': trimmed.length,
+          });
         }
       } catch (e) {
         debugPrint('AiSummary: failed to write cache: $e');
@@ -244,13 +226,11 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
       state = AiSummaryReady(trimmed);
     } catch (e) {
       debugPrint('AiSummary: inference failed for year=$_year: $e');
-      try {
-        Analytics.track('year_review_ai_inference_failed', {
-          'year': _year,
-          'had_error': true,
-          'error_type': e.runtimeType.toString(),
-        });
-      } catch (_) {}
+      Analytics.track('year_review_ai_inference_failed', {
+        'year': _year,
+        'had_error': true,
+        'error_type': e.runtimeType.toString(),
+      });
       state = AiSummaryError('Inference failed: ${e.runtimeType}');
     }
   }
@@ -291,12 +271,10 @@ class AiSummaryNotifier extends Notifier<AiSummaryState> {
       final draft = prefs.getString(draftKey);
       if (draft != null && draft.isNotEmpty) {
         await prefs.setString(finalKey, draft);
-        try {
-          Analytics.track('year_review_ai_summary_final_saved_auto', {
-            'year': _year,
-            'length': draft.length,
-          });
-        } catch (_) {}
+        Analytics.track('year_review_ai_summary_final_saved_auto', {
+          'year': _year,
+          'length': draft.length,
+        });
       }
     } catch (e) {
       debugPrint('AiSummary: ensureFinalSaved failed: $e');

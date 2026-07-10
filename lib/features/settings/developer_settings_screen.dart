@@ -85,9 +85,7 @@ class DeveloperSettingsScreen extends ConsumerWidget {
               title: 'Open cache directory',
               subtitle: 'Open the audio and image cache folder',
               onTap: () async {
-                try {
-                  Analytics.track('dev_open_cache_dir');
-                } catch (_) {}
+                Analytics.track('dev_open_cache_dir');
                 final dir = await getApplicationCacheDirectory();
                 await launchUrl(
                   Uri.directory(dir.path),
@@ -100,9 +98,7 @@ class DeveloperSettingsScreen extends ConsumerWidget {
               title: 'Open app data directory',
               subtitle: 'Open the settings and database folder',
               onTap: () async {
-                try {
-                  Analytics.track('dev_open_data_dir');
-                } catch (_) {}
+                Analytics.track('dev_open_data_dir');
                 final dir = await getApplicationSupportDirectory();
                 await launchUrl(
                   Uri.directory(dir.path),

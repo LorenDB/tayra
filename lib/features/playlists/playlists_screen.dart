@@ -357,9 +357,7 @@ class _CreatePlaylistDialogState extends State<_CreatePlaylistDialog> {
       final api = widget.ref.read(cachedFunkwhaleApiProvider);
       await api.createPlaylist(name: name, privacyLevel: _privacyLevel);
       if (!mounted) return;
-      try {
-        Analytics.track('playlist_created');
-      } catch (_) {}
+      Analytics.track('playlist_created');
       widget.onCreated();
       Navigator.of(context).pop();
     } catch (e) {

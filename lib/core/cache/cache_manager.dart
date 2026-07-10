@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 import 'package:tayra/core/api/api_client.dart';
+import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/models.dart';
 import 'package:tayra/core/cache/cache_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -369,6 +370,7 @@ class CacheManager {
     CacheType? resourceParentType,
     int? resourceParentId,
     bool isProtected = false,
+
     /// When caching album audio, pass slim album fields for the offline index.
     String? albumTitle,
     String? albumArtistName,
@@ -619,12 +621,10 @@ class CacheManager {
       }
     }
     // Telemetry: manual download flag changed (fires for both add and remove)
-    try {
-      Analytics.track('manual_download_toggled', {
-        'resource_type': type.name,
-        'enabled': value,
-      });
-    } catch (_) {}
+    Analytics.track('manual_download_toggled', {
+      'resource_type': type.name,
+      'enabled': value,
+    });
   }
 
   /// Check if a resource is manually downloaded
@@ -800,15 +800,15 @@ class CacheManager {
         albumsById[id] = Album(
           id: id,
           title: title,
-          artist:
-              artistName != null
-                  ? Artist(id: 0, name: artistName)
-                  : null,
+          artist: artistName != null ? Artist(id: 0, name: artistName) : null,
           cover:
               coverUrl != null
                   ? Cover(
                     uuid: '',
-                    urls: CoverUrls(original: coverUrl, mediumSquareCrop: coverUrl),
+                    urls: CoverUrls(
+                      original: coverUrl,
+                      mediumSquareCrop: coverUrl,
+                    ),
                   )
                   : null,
           isPlayable: true,
@@ -1596,13 +1596,7 @@ class CacheStats {
 
   String get totalSizeDisplay => _formatBytesReadable(totalSize);
   // Prefer to display the configured MB value so it matches the slider.
-  String get maxTotalSizeDisplay {
-    final mb = maxTotalSizeMB;
-    if (mb >= 1000) {
-      return '${(mb / 1000.0).toStringAsFixed(1)} GB';
-    }
-    return '$mb MB';
-  }
+  String get maxTotalSizeDisplay => formatDecimalMegabytes(maxTotalSizeMB);
 
   String get audioSizeDisplay => _formatBytesReadable(audioSize);
   String get metadataSizeDisplay => _formatBytesReadable(metadataSize);

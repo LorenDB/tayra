@@ -4,6 +4,7 @@ import 'package:tayra/core/analytics/analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
@@ -16,16 +17,6 @@ import 'package:tayra/core/widgets/dialog_utils.dart';
 import 'package:tayra/core/widgets/settings_tiles.dart';
 import 'package:tayra/core/widgets/app_shell.dart';
 import 'package:tayra/core/backup/nextcloud_backup_service.dart';
-
-// Format MB values (decimal) used by the slider/settings UI so they always
-// match what the user selected.
-String _formatLimitMB(int mb) {
-  if (mb >= 1000) {
-    final gb = mb / 1000.0;
-    return '${gb.toStringAsFixed(1)} GB';
-  }
-  return '$mb MB';
-}
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -156,11 +147,9 @@ class SettingsScreen extends ConsumerWidget {
             subtitle: 'Use album cover art to tint UI accents',
             value: settings.useDynamicAlbumAccent,
             onChanged: (value) {
-              try {
-                Analytics.track('dynamic_album_accent_toggled', {
-                  'enabled': value,
-                });
-              } catch (_) {}
+              Analytics.track('dynamic_album_accent_toggled', {
+                'enabled': value,
+              });
               ref
                   .read(settingsProvider.notifier)
                   .setUseDynamicAlbumAccent(value);
@@ -216,9 +205,7 @@ class SettingsScreen extends ConsumerWidget {
             subtitle: 'Enable AI-powered features',
             value: settings.aiEnabled,
             onChanged: (value) {
-              try {
-                Analytics.track('ai_features_toggled', {'enabled': value});
-              } catch (_) {}
+              Analytics.track('ai_features_toggled', {'enabled': value});
               ref.read(settingsProvider.notifier).setAiEnabled(value);
             },
           ),
@@ -265,9 +252,7 @@ class SettingsScreen extends ConsumerWidget {
                 await CacheManager.instance.clearAudio();
                 if (!context.mounted) return;
                 ref.invalidate(cacheStatsProvider);
-                try {
-                  Analytics.track('cache_audio_cleared');
-                } catch (_) {}
+                Analytics.track('cache_audio_cleared');
               }
             },
           ),
@@ -294,9 +279,7 @@ class SettingsScreen extends ConsumerWidget {
                 ref.invalidate(cacheStatsProvider);
                 ref.invalidate(availableYearsProvider);
                 ref.invalidate(totalListenCountProvider);
-                try {
-                  Analytics.track('cache_all_cleared');
-                } catch (_) {}
+                Analytics.track('cache_all_cleared');
               }
             },
           ),
@@ -331,9 +314,7 @@ class SettingsScreen extends ConsumerWidget {
                         .read(settingsProvider.notifier)
                         .setAnalyticsEnabled(true);
                     await Analytics.setEnabled(true);
-                    try {
-                      Analytics.track('analytics_enabled');
-                    } catch (_) {}
+                    Analytics.track('analytics_enabled');
                   }
                 } catch (_) {}
               },
@@ -1416,7 +1397,7 @@ class _CacheInfoTile extends ConsumerWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '${stats.totalSizeDisplay} of ${_formatLimitMB(settings.cacheSizeLimitMB)}',
+                      '${stats.totalSizeDisplay} of ${formatDecimalMegabytes(settings.cacheSizeLimitMB)}',
                       style: const TextStyle(
                         color: AppTheme.onBackgroundMuted,
                         fontSize: 12,
@@ -1565,7 +1546,7 @@ class _CacheSizeLimitTileState extends State<_CacheSizeLimitTile> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      _formatLimitDisplay(widget.currentLimitMB),
+                      formatDecimalMegabytes(widget.currentLimitMB),
                       style: const TextStyle(
                         color: AppTheme.primary,
                         fontSize: 12,
@@ -1587,11 +1568,9 @@ class _CacheSizeLimitTileState extends State<_CacheSizeLimitTile> {
             inactiveColor: AppTheme.surfaceContainerHigh,
             onChanged: (value) => widget.onChanged(value.toInt()),
             onChangeEnd: (value) {
-              try {
-                Analytics.track('cache_size_limit_changed', {
-                  'size_mb': value.toInt(),
-                });
-              } catch (_) {}
+              Analytics.track('cache_size_limit_changed', {
+                'size_mb': value.toInt(),
+              });
             },
           ),
           Padding(
@@ -1619,15 +1598,6 @@ class _CacheSizeLimitTileState extends State<_CacheSizeLimitTile> {
         ],
       ),
     );
-  }
-
-  // Format the slider value using decimal units (MB/GB) to match CacheManager
-  String _formatLimitDisplay(int mb) {
-    if (mb >= 1000) {
-      final gb = mb / 1000.0;
-      return '${gb.toStringAsFixed(1)} GB';
-    }
-    return '$mb MB';
   }
 }
 
@@ -1723,11 +1693,9 @@ class _DonationTile extends StatelessWidget {
                         icon: Icons.volunteer_activism_outlined,
                         label: 'Liberapay',
                         onTap: () {
-                          try {
-                            Analytics.track('donation_link_tapped', {
-                              'platform': 'liberapay',
-                            });
-                          } catch (_) {}
+                          Analytics.track('donation_link_tapped', {
+                            'platform': 'liberapay',
+                          });
                           _openUrl(_liberapayUrl);
                         },
                       ),
@@ -1738,11 +1706,9 @@ class _DonationTile extends StatelessWidget {
                         icon: Icons.payments_outlined,
                         label: 'PayPal',
                         onTap: () {
-                          try {
-                            Analytics.track('donation_link_tapped', {
-                              'platform': 'paypal',
-                            });
-                          } catch (_) {}
+                          Analytics.track('donation_link_tapped', {
+                            'platform': 'paypal',
+                          });
                           _openUrl(_paypalUrl);
                         },
                       ),

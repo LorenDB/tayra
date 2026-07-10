@@ -191,9 +191,7 @@ class _AlbumEditScreenState extends ConsumerState<AlbumEditScreen> {
     try {
       final api = ref.read(cachedFunkwhaleApiProvider);
       await api.createAlbumMutation(widget.albumId, payload);
-      try {
-        Analytics.track('album_edited');
-      } catch (_) {}
+      Analytics.track('album_edited');
       if (!mounted) return false;
       setState(() {
         _isDirty = false;

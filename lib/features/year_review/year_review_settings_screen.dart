@@ -24,8 +24,7 @@ class YearReviewSettingsScreen extends ConsumerWidget {
           SettingsSwitchTile(
             icon: Icons.event,
             title: 'Show year-end prompts',
-            subtitle:
-                'Show the Year in Review banner and prompts at year end',
+            subtitle: 'Show the Year in Review banner and prompts at year end',
             value: settings.showYearEndPrompts,
             onChanged:
                 (v) => ref
