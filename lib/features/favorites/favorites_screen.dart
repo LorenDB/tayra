@@ -370,33 +370,42 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
             ),
           ),
 
-          // Track list
-          SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
-              if (index >= displayFavorites.length) {
-                // Loading more indicator
-                return const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: Center(
-                    child: SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: AppTheme.primary,
-                      ),
+          // Track list — fixed extent so scroll layout skips child measurement.
+          SliverFixedExtentList(
+            itemExtent: kTrackListTileExtent,
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final favorite = displayFavorites[index];
+                return TrackListTile(
+                  track: favorite.track,
+                  // Always favorited on this screen — skip N provider watches.
+                  isFavoriteOverride: true,
+                  onTap:
+                      () => _playDisplayedFromIndex(displayFavorites, index),
+                );
+              },
+              childCount: displayFavorites.length,
+              // Don't keep off-screen rows alive (saves element/state cost).
+              addAutomaticKeepAlives: false,
+            ),
+          ),
+
+          if (_isLoadingMore)
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Center(
+                  child: SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: AppTheme.primary,
                     ),
                   ),
-                );
-              }
-
-              final favorite = displayFavorites[index];
-              return TrackListTile(
-                track: favorite.track,
-                onTap: () => _playDisplayedFromIndex(displayFavorites, index),
-              );
-            }, childCount: displayFavorites.length + (_isLoadingMore ? 1 : 0)),
-          ),
+                ),
+              ),
+            ),
 
           // Bottom padding for mini player
           const SliverToBoxAdapter(child: SizedBox(height: 120)),

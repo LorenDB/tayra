@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 
 /// Reusable cover art widget with rounded corners and placeholder.
+///
+/// Decodes images at approximately [size] × device pixel ratio so list/grid
+/// scroll does not pay full-resolution decode cost for tiny tiles.
 class CoverArtWidget extends StatelessWidget {
   final String? imageUrl;
   final double size;
@@ -27,6 +30,11 @@ class CoverArtWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dpr = MediaQuery.devicePixelRatioOf(context);
+    // Cap decode dimension so very large cards still avoid multi-megapixel
+    // bitmaps; 3× is enough for sharp art on high-DPI screens.
+    final decodePx = (size * dpr).round().clamp(32, 512);
+
     return Container(
       width: size,
       height: size,
@@ -39,13 +47,18 @@ class CoverArtWidget extends StatelessWidget {
       child:
           imageUrl != null && imageUrl!.isNotEmpty
               ? Image(
-                image: CachedNetworkImageProvider(
-                  imageUrl!,
-                  cacheKey: cacheKey,
+                image: ResizeImage(
+                  CachedNetworkImageProvider(imageUrl!, cacheKey: cacheKey),
+                  width: decodePx,
+                  height: decodePx,
+                  allowUpscaling: false,
+                  policy: ResizeImagePolicy.fit,
                 ),
                 fit: BoxFit.cover,
                 width: size,
                 height: size,
+                gaplessPlayback: true,
+                filterQuality: FilterQuality.low,
                 // Show placeholder until the first image frame is available.
                 frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
                   if (frame == null && !wasSynchronouslyLoaded) {

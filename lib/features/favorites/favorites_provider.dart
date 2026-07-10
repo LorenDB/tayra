@@ -68,40 +68,52 @@ class FavoriteButton extends ConsumerWidget {
   final int trackId;
   final double size;
 
-  const FavoriteButton({super.key, required this.trackId, this.size = 24});
+  /// When non-null, skips watching [favoriteTrackIdsProvider] and uses this
+  /// value. Favorites screen passes `true` so every row does not register a
+  /// provider listener (huge win for long lists).
+  final bool? isFavoriteOverride;
+
+  const FavoriteButton({
+    super.key,
+    required this.trackId,
+    this.size = 24,
+    this.isFavoriteOverride,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isFav = ref.watch(
-      favoriteTrackIdsProvider.select((ids) => ids.contains(trackId)),
-    );
+    final bool isFav;
+    final override = isFavoriteOverride;
+    if (override != null) {
+      isFav = override;
+    } else {
+      isFav = ref.watch(
+        favoriteTrackIdsProvider.select((ids) => ids.contains(trackId)),
+      );
+    }
 
-    // Lightweight tap target (not IconButton) so list rows avoid ButtonStyle
-    // machinery. Material is transparent so splash works outside list tiles too.
-    return Material(
-      type: MaterialType.transparency,
-      child: InkWell(
-        customBorder: const CircleBorder(),
-        onTap: () async {
-          try {
-            await ref.read(favoriteTrackIdsProvider.notifier).toggle(trackId);
-          } catch (e) {
-            // Show user-facing error; the notifier already reverted state
-            if (context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Failed to update favorite')),
-              );
-            }
+    // GestureDetector (not Material/InkWell): splash machinery per list row
+    // was a measurable scroll cost on Favorites.
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () async {
+        try {
+          await ref.read(favoriteTrackIdsProvider.notifier).toggle(trackId);
+        } catch (e) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Failed to update favorite')),
+            );
           }
-        },
-        child: SizedBox(
-          width: size + 8,
-          height: size + 8,
-          child: Icon(
-            isFav ? Icons.favorite : Icons.favorite_border,
-            color: isFav ? const Color(0xFFFF6B9D) : Colors.white54,
-            size: size,
-          ),
+        }
+      },
+      child: SizedBox(
+        width: size + 8,
+        height: size + 8,
+        child: Icon(
+          isFav ? Icons.favorite : Icons.favorite_border,
+          color: isFav ? const Color(0xFFFF6B9D) : Colors.white54,
+          size: size,
         ),
       ),
     );

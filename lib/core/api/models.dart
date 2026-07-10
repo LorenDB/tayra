@@ -49,6 +49,10 @@ class CoverUrls {
   /// Returns the best available URL, preferring medium crop.
   String? get best => mediumSquareCrop ?? largeSquareCrop ?? original;
   String? get large => largeSquareCrop ?? original ?? mediumSquareCrop;
+
+  /// Smallest useful crop for list/grid thumbnails (decode-cheap).
+  String? get thumb =>
+      smallSquareCrop ?? mediumSquareCrop ?? largeSquareCrop ?? original;
 }
 
 class Cover {
@@ -143,6 +147,11 @@ class Artist {
 
   String? get coverUrl =>
       cover?.urls.best ?? (albums.isNotEmpty ? albums.first.coverUrl : null);
+
+  /// Thumbnail-sized cover for dense lists/grids.
+  String? get thumbCoverUrl =>
+      cover?.urls.thumb ??
+      (albums.isNotEmpty ? albums.first.thumbCoverUrl : null);
 }
 
 // ── Album ───────────────────────────────────────────────────────────────
@@ -239,6 +248,9 @@ class Album {
 
   String? get coverUrl => cover?.urls.best;
   String? get largeCoverUrl => cover?.urls.large;
+
+  /// Thumbnail-sized cover for dense lists/grids.
+  String? get thumbCoverUrl => cover?.urls.thumb;
 
   String get releaseYear {
     if (releaseDate == null) return '';
@@ -362,10 +374,57 @@ class Track {
     };
   }
 
+  /// Compact JSON for queue persistence — omits tags and nested album tracks
+  /// so long queues can be serialized without multi-MB SharedPreferences writes.
+  Map<String, dynamic> toPersistenceJson() {
+    return {
+      'id': id,
+      'title': title,
+      'listen_url': listenUrl,
+      'position': position,
+      'disc_number': discNumber,
+      'is_playable': isPlayable,
+      'mbid': mbid,
+      'cover': cover?.toJson(),
+      if (artist != null)
+        'artist': {
+          'id': artist!.id,
+          'name': artist!.name,
+          'content_category': artist!.contentCategory,
+          'cover': artist!.cover?.toJson(),
+        },
+      if (album != null)
+        'album': {
+          'id': album!.id,
+          'title': album!.title,
+          'cover': album!.cover?.toJson(),
+          if (album!.artist != null)
+            'artist': {
+              'id': album!.artist!.id,
+              'name': album!.artist!.name,
+            },
+        },
+      // Duration lives on the first upload; keep only that field set.
+      if (uploads.isNotEmpty)
+        'uploads': [
+          {
+            'uuid': uploads.first.uuid,
+            'duration': uploads.first.duration,
+            'mimetype': uploads.first.mimetype,
+            'listen_url': uploads.first.listenUrl,
+          },
+        ],
+    };
+  }
+
   /// Best cover URL: track cover → album cover
   String? get coverUrl => cover?.urls.best ?? album?.cover?.urls.best;
 
   String? get largeCoverUrl => cover?.urls.large ?? album?.cover?.urls.large;
+
+  /// Thumbnail-sized cover for dense track lists.
+  String? get thumbCoverUrl =>
+      cover?.urls.thumb ?? album?.cover?.urls.thumb ?? coverUrl;
 
   String get artistName => artist?.name ?? 'Unknown Artist';
   String get albumTitle => album?.title ?? '';

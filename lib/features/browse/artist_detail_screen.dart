@@ -181,7 +181,8 @@ class _ArtistDetailBody extends ConsumerWidget {
 
         // ── Appears On tracks ──
         if (appearsOnTracks.value?.isNotEmpty == true)
-          SliverList(
+          SliverFixedExtentList(
+            itemExtent: kTrackListTileExtent,
             delegate: SliverChildBuilderDelegate((context, index) {
               final tracks = appearsOnTracks.value!;
               return TrackListTile(

@@ -14,6 +14,15 @@ import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 
+/// Fixed height for [TrackListTile] with album art (padding + 48px art).
+///
+/// Used with [SliverFixedExtentList] / `itemExtent` so scrolling lists avoid
+/// measuring every child during layout.
+const double kTrackListTileExtent = 64.0;
+
+/// Fixed height for [TrackListTile] without album art (track-number rows).
+const double kTrackListTileExtentCompact = 52.0;
+
 /// A row widget for a single track in a list.
 class TrackListTile extends ConsumerWidget {
   final Track track;
@@ -34,6 +43,10 @@ class TrackListTile extends ConsumerWidget {
   /// [dominantColor] should also pass this.
   final Color? textColor;
 
+  /// When non-null, passed to [FavoriteButton.isFavoriteOverride] so rows can
+  /// skip per-id favorite membership watches (e.g. Favorites screen).
+  final bool? isFavoriteOverride;
+
   const TrackListTile({
     super.key,
     required this.track,
@@ -45,16 +58,16 @@ class TrackListTile extends ConsumerWidget {
     this.onRemoveFromPlaylist,
     this.dominantColor,
     this.textColor,
+    this.isFavoriteOverride,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isCurrentTrack = ref.watch(
-      playerProvider.select((s) => s.currentTrack?.id == track.id),
-    );
+    // Watch a narrow provider so position ticks do not re-run a select on
+    // every visible list row.
+    final isCurrentTrack = ref.watch(currentPlayingTrackIdProvider) == track.id;
 
     // Membership selects on bulk in-memory sets — no per-row disk/DB I/O.
-    // Only this tile rebuilds when *its* membership bit flips.
     final isCached = ref.watch(
       cachedAudioTrackIdsProvider.select((ids) => ids.contains(track.id)),
     );
@@ -62,9 +75,7 @@ class TrackListTile extends ConsumerWidget {
       manualTrackIdsProvider.select((ids) => ids.contains(track.id)),
     );
 
-    // When the offline content filter is active, tracks that are not present
-    // in the offline track ID set should be considered unplayable. We apply
-    // a disabled visual treatment and prevent the tap handler in that case.
+    // Offline filter: short-circuit avoids the second watch when inactive.
     final offlineFilterActive = ref.watch(offlineFilterActiveProvider);
     final isPlayable =
         !offlineFilterActive ||
@@ -92,106 +103,116 @@ class TrackListTile extends ConsumerWidget {
                 ? AppTheme.onBackgroundSubtle
                 : AppTheme.onBackgroundSubtle.withValues(alpha: 0.5));
 
-    // Isolate each row's paint from neighbors / scrolling header glow.
+    // GestureDetector instead of Material/InkWell: splash ink + Material
+    // layers per row were a major Favorites scroll cost.
     return RepaintBoundary(
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: isPlayable ? onTap : null,
-          borderRadius: BorderRadius.circular(8),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              children: [
-                if (showTrackNumber && !showAlbumArt)
-                  SizedBox(
-                    width: 32,
-                    child: Text(
-                      '${overridePosition ?? track.position ?? ''}',
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: isPlayable ? onTap : null,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Row(
+            children: [
+              if (showTrackNumber && !showAlbumArt)
+                SizedBox(
+                  width: 32,
+                  child: Text(
+                    '${overridePosition ?? track.position ?? ''}',
+                    style: TextStyle(
+                      color: numberColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              if (showAlbumArt) ...[
+                CoverArtWidget(
+                  imageUrl: track.thumbCoverUrl,
+                  cacheKey: track.album?.thumbCoverUrl ?? track.thumbCoverUrl,
+                  size: 48,
+                  borderRadius: 6,
+                ),
+                const SizedBox(width: 12),
+              ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      track.title,
                       style: TextStyle(
-                        color: numberColor,
+                        color: titleColor,
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                       ),
-                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                if (showAlbumArt) ...[
-                  CoverArtWidget(
-                    imageUrl: track.coverUrl,
-                    cacheKey: track.album?.coverUrl ?? track.coverUrl,
-                    size: 48,
-                    borderRadius: 6,
-                  ),
-                  const SizedBox(width: 12),
-                ],
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        track.title,
-                        style: TextStyle(
-                          color: titleColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        track.artistName,
-                        style: TextStyle(color: subtitleColor, fontSize: 12),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
+                    const SizedBox(height: 2),
+                    Text(
+                      track.artistName,
+                      style: TextStyle(color: subtitleColor, fontSize: 12),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
-                if (track.duration != null)
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: Text(
-                      formatTrackDuration(track.duration!),
-                      style: TextStyle(
-                        color:
-                            isPlayable
-                                ? AppTheme.onBackgroundSubtle
-                                : AppTheme.onBackgroundSubtle.withValues(
-                                  alpha: 0.5,
-                                ),
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                // Cached/manual-downloaded indicator, then favorite button
+              ),
+              if (track.duration != null)
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (isCached)
-                        Icon(
-                          Icons.download_done,
-                          size: 18,
-                          color:
-                              isManual ? accent : AppTheme.onBackgroundSubtle,
-                        ),
-                      const SizedBox(width: 8),
-                      trailing ?? FavoriteButton(trackId: track.id, size: 20),
-                    ],
+                  child: Text(
+                    formatTrackDuration(track.duration!),
+                    style: TextStyle(
+                      color:
+                          isPlayable
+                              ? AppTheme.onBackgroundSubtle
+                              : AppTheme.onBackgroundSubtle.withValues(
+                                alpha: 0.5,
+                              ),
+                      fontSize: 12,
+                    ),
                   ),
                 ),
-                const SizedBox(width: 4),
-                _TrackMenuButton(
-                  track: track,
-                  onRemoveFromPlaylist: onRemoveFromPlaylist,
-                  enabled: isPlayable,
+              Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Fixed-width slot so rows don't jump when icon appears.
+                    SizedBox(
+                      width: 18,
+                      child:
+                          isCached
+                              ? Icon(
+                                Icons.download_done,
+                                size: 18,
+                                color:
+                                    isManual
+                                        ? accent
+                                        : AppTheme.onBackgroundSubtle,
+                              )
+                              : null,
+                    ),
+                    const SizedBox(width: 8),
+                    trailing ??
+                        FavoriteButton(
+                          trackId: track.id,
+                          size: 20,
+                          isFavoriteOverride: isFavoriteOverride,
+                        ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(width: 4),
+              _TrackMenuButton(
+                track: track,
+                onRemoveFromPlaylist: onRemoveFromPlaylist,
+                enabled: isPlayable,
+              ),
+            ],
           ),
         ),
       ),
@@ -199,6 +220,8 @@ class TrackListTile extends ConsumerWidget {
   }
 }
 
+/// Lightweight overflow menu — no [PopupMenuButton] element per row.
+/// State (manual download, purge setting) is read only when the menu opens.
 class _TrackMenuButton extends ConsumerWidget {
   final Track track;
   final Future<void> Function()? onRemoveFromPlaylist;
@@ -210,324 +233,296 @@ class _TrackMenuButton extends ConsumerWidget {
     this.enabled = true,
   });
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final albumAvailable = track.album != null;
-    final artistAvailable = track.artist != null;
-    final isManual = ref.watch(
-      manualTrackIdsProvider.select((ids) => ids.contains(track.id)),
-    );
-    final showPurge = ref.watch(
-      settingsProvider.select((s) => s.effectiveShowPurgeCacheOption),
+  Future<void> _openMenu(BuildContext context, WidgetRef ref) async {
+    if (!enabled) return;
+
+    final box = context.findRenderObject() as RenderBox?;
+    final overlay =
+        Overlay.of(context).context.findRenderObject() as RenderBox?;
+    if (box == null || overlay == null) return;
+
+    final position = RelativeRect.fromRect(
+      Rect.fromPoints(
+        box.localToGlobal(Offset(box.size.width, 0), ancestor: overlay),
+        box.localToGlobal(box.size.bottomRight(Offset.zero), ancestor: overlay),
+      ),
+      Offset.zero & overlay.size,
     );
 
-    return PopupMenuButton<String>(
-      enabled: enabled,
-      icon: const Icon(
-        Icons.more_vert,
-        size: 18,
-        color: AppTheme.onBackgroundSubtle,
-      ),
-      padding: EdgeInsets.zero,
-      constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
+    final isManual = ref.read(
+      manualTrackIdsProvider.select((ids) => ids.contains(track.id)),
+    );
+    final showPurge = ref.read(
+      settingsProvider.select((s) => s.effectiveShowPurgeCacheOption),
+    );
+    final albumAvailable = track.album != null;
+    final artistAvailable = track.artist != null;
+
+    final value = await showMenu<String>(
+      context: context,
+      position: position,
       color: AppTheme.surfaceContainerHighest,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      onSelected:
-          enabled
-              ? (value) async {
-                final player = ref.read(playerProvider.notifier);
-                switch (value) {
-                  case 'play_next':
-                    player.playNext(track);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Playing "${track.title}" next')),
-                    );
-                    break;
-                  case 'add_queue':
-                    player.addToQueue([track]);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Added "${track.title}" to queue'),
-                      ),
-                    );
-                    break;
-                  case 'add_playlist':
-                    showAddToPlaylistSheet(context, ref, trackIds: [track.id]);
-                    break;
-                  case 'toggle_manual':
-                    try {
-                      final mgr = ref.read(cacheManagerProvider);
-                      await mgr.setManualDownloaded(
-                        CacheType.track,
-                        track.id,
-                        !isManual,
-                      );
-                      // Ensure the cached file is marked protected/unprotected so
-                      // the LRU eviction skips manually downloaded files.
-                      final key = 'audio_${track.id}';
-                      unawaited(mgr.setFileProtected(key, !isManual));
-                      final manualNotifier = ref.read(
-                        manualTrackIdsProvider.notifier,
-                      );
-                      if (!isManual) {
-                        manualNotifier.add(track.id);
-                      } else {
-                        manualNotifier.remove(track.id);
-                      }
-                      // If the track wasn't cached and the user just enabled
-                      // manual download, queue a background download.
-                      final wasCached = ref
-                          .read(cachedAudioTrackIdsProvider)
-                          .contains(track.id);
-                      if (!context.mounted) return;
-                      if (!wasCached && !isManual) {
-                        final api = ref.read(cachedFunkwhaleApiProvider);
-                        if (track.listenUrl != null) {
-                          final streamUrl = api.getStreamUrl(track.listenUrl!);
-                          final headers = api.authHeaders;
-                          final audioSvc = ref.read(audioCacheServiceProvider);
-                          unawaited(
-                            audioSvc.cacheAudio(track, streamUrl, headers).then(
-                              (file) {
-                                if (file != null) {
-                                  ref
-                                      .read(
-                                        cachedAudioTrackIdsProvider.notifier,
-                                      )
-                                      .add(track.id);
-                                }
-                              },
-                            ),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'Download queued for "${track.title}"',
-                              ),
-                            ),
-                          );
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'Download added for "${track.title}"',
-                              ),
-                            ),
-                          );
-                        }
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              !isManual
-                                  ? 'Download added for "${track.title}"'
-                                  : 'Download removed for "${track.title}"',
-                            ),
-                          ),
-                        );
-                      }
-                    } catch (e, st) {
-                      debugPrint('Track toggle manual failed: $e');
-                      debugPrintStack(stackTrace: st);
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Failed to update download flag'),
-                          ),
-                        );
-                      }
-                    }
-                    break;
-                  case 'go_to_album':
-                    if (albumAvailable) {
-                      context.push('/album/${track.album!.id}');
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Album not available')),
-                      );
-                    }
-                    break;
-                  case 'go_to_artist':
-                    if (artistAvailable) {
-                      context.push('/artist/${track.artist!.id}');
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Artist not available')),
-                      );
-                    }
-                    break;
-                  case 'remove_from_playlist':
-                    if (onRemoveFromPlaylist != null) {
-                      try {
-                        await onRemoveFromPlaylist!();
-                      } catch (e) {
-                        debugPrint('Remove from playlist action failed: $e');
-                      }
-                    }
-                    break;
-                  case 'purge_cache':
-                    try {
-                      final mgr = CacheManager.instance;
-                      // Delete individual track metadata
-                      await mgr.deleteMetadata('track_${track.id}');
-                      // Delete cached audio file (DB entry + disk, including orphans)
-                      await mgr.deleteAudioFilesOnDisk(track.id);
-                      // Delete all paginated track-list pages that include this album
-                      if (track.album != null) {
-                        await mgr.deleteMetadataLike(
-                          'tracks_p%_al${track.album!.id}_%',
-                        );
-                      }
-                      ref
-                          .read(cachedAudioTrackIdsProvider.notifier)
-                          .remove(track.id);
-                      ref
-                          .read(manualTrackIdsProvider.notifier)
-                          .remove(track.id);
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'Cache purged for "${track.title}" — pull to refresh',
-                            ),
-                          ),
-                        );
-                      }
-                    } catch (e) {
-                      debugPrint('Purge cache failed: $e');
-                    }
-                    break;
-                }
-              }
-              : null,
-      itemBuilder:
-          (context) => [
-            PopupMenuItem(
-              value: 'play_next',
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.queue_play_next,
-                    size: 20,
-                    color: AppTheme.onBackground,
-                  ),
-                  const SizedBox(width: 12),
-                  const Text('Play next'),
-                ],
-              ),
+      items: [
+        const PopupMenuItem(
+          value: 'play_next',
+          child: _MenuRow(icon: Icons.queue_play_next, label: 'Play next'),
+        ),
+        const PopupMenuItem(
+          value: 'add_queue',
+          child: _MenuRow(icon: Icons.playlist_add, label: 'Add to queue'),
+        ),
+        const PopupMenuItem(
+          value: 'add_playlist',
+          child: _MenuRow(
+            icon: Icons.playlist_add_rounded,
+            label: 'Add to playlist',
+          ),
+        ),
+        PopupMenuItem(
+          value: 'toggle_manual',
+          child: _MenuRow(
+            icon: Icons.download_rounded,
+            label: isManual ? 'Remove download' : 'Download',
+          ),
+        ),
+        PopupMenuItem(
+          value: 'go_to_album',
+          enabled: albumAvailable,
+          child: _MenuRow(
+            icon: Icons.album,
+            label: 'Go to album',
+            muted: !albumAvailable,
+          ),
+        ),
+        PopupMenuItem(
+          value: 'go_to_artist',
+          enabled: artistAvailable,
+          child: _MenuRow(
+            icon: Icons.person,
+            label: 'Go to artist',
+            muted: !artistAvailable,
+          ),
+        ),
+        if (onRemoveFromPlaylist != null)
+          const PopupMenuItem(
+            value: 'remove_from_playlist',
+            child: _MenuRow(
+              icon: Icons.remove_circle_outline,
+              label: 'Remove from playlist',
+              destructive: true,
             ),
-            PopupMenuItem(
-              value: 'add_queue',
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.playlist_add,
-                    size: 20,
-                    color: AppTheme.onBackground,
-                  ),
-                  const SizedBox(width: 12),
-                  const Text('Add to queue'),
-                ],
-              ),
+          ),
+        if (showPurge)
+          const PopupMenuItem(
+            value: 'purge_cache',
+            child: _MenuRow(
+              icon: Icons.delete_forever_rounded,
+              label: 'Purge and refetch',
+              destructive: true,
             ),
-            PopupMenuItem(
-              value: 'add_playlist',
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.playlist_add_rounded,
-                    size: 20,
-                    color: AppTheme.onBackground,
-                  ),
-                  const SizedBox(width: 12),
-                  const Text('Add to playlist'),
-                ],
-              ),
-            ),
-            PopupMenuItem(
-              value: 'toggle_manual',
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.download_rounded,
-                    size: 20,
-                    color: AppTheme.onBackground,
-                  ),
-                  const SizedBox(width: 12),
-                  Text(isManual ? 'Remove download' : 'Download'),
-                ],
-              ),
-            ),
-            PopupMenuItem(
-              value: 'go_to_album',
-              enabled: albumAvailable,
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.album,
-                    size: 20,
-                    color:
-                        albumAvailable
-                            ? AppTheme.onBackground
-                            : AppTheme.onBackgroundMuted,
-                  ),
-                  const SizedBox(width: 12),
-                  const Text('Go to album'),
-                ],
-              ),
-            ),
-            PopupMenuItem(
-              value: 'go_to_artist',
-              enabled: artistAvailable,
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.person,
-                    size: 20,
-                    color:
-                        artistAvailable
-                            ? AppTheme.onBackground
-                            : AppTheme.onBackgroundMuted,
-                  ),
-                  const SizedBox(width: 12),
-                  const Text('Go to artist'),
-                ],
-              ),
-            ),
-            if (onRemoveFromPlaylist != null)
-              PopupMenuItem(
-                value: 'remove_from_playlist',
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.remove_circle_outline,
-                      size: 20,
-                      color: AppTheme.error,
-                    ),
-                    const SizedBox(width: 12),
-                    const Text('Remove from playlist'),
-                  ],
+          ),
+      ],
+    );
+
+    if (value == null || !context.mounted) return;
+    await _handleMenuAction(
+      context: context,
+      ref: ref,
+      value: value,
+      isManual: isManual,
+    );
+  }
+
+  Future<void> _handleMenuAction({
+    required BuildContext context,
+    required WidgetRef ref,
+    required String value,
+    required bool isManual,
+  }) async {
+    final player = ref.read(playerProvider.notifier);
+    switch (value) {
+      case 'play_next':
+        player.playNext(track);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Playing "${track.title}" next')),
+        );
+        break;
+      case 'add_queue':
+        player.addToQueue([track]);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Added "${track.title}" to queue')),
+        );
+        break;
+      case 'add_playlist':
+        showAddToPlaylistSheet(context, ref, trackIds: [track.id]);
+        break;
+      case 'toggle_manual':
+        try {
+          final mgr = ref.read(cacheManagerProvider);
+          await mgr.setManualDownloaded(CacheType.track, track.id, !isManual);
+          final key = 'audio_${track.id}';
+          unawaited(mgr.setFileProtected(key, !isManual));
+          final manualNotifier = ref.read(manualTrackIdsProvider.notifier);
+          if (!isManual) {
+            manualNotifier.add(track.id);
+          } else {
+            manualNotifier.remove(track.id);
+          }
+          final wasCached = ref
+              .read(cachedAudioTrackIdsProvider)
+              .contains(track.id);
+          if (!context.mounted) return;
+          if (!wasCached && !isManual) {
+            final api = ref.read(cachedFunkwhaleApiProvider);
+            if (track.listenUrl != null) {
+              final streamUrl = api.getStreamUrl(track.listenUrl!);
+              final headers = api.authHeaders;
+              final audioSvc = ref.read(audioCacheServiceProvider);
+              unawaited(
+                audioSvc.cacheAudio(track, streamUrl, headers).then((file) {
+                  if (file != null) {
+                    ref
+                        .read(cachedAudioTrackIdsProvider.notifier)
+                        .add(track.id);
+                  }
+                }),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Download queued for "${track.title}"'),
+                ),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Download added for "${track.title}"')),
+              );
+            }
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  !isManual
+                      ? 'Download added for "${track.title}"'
+                      : 'Download removed for "${track.title}"',
                 ),
               ),
-            if (showPurge)
-              const PopupMenuItem(
-                value: 'purge_cache',
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.delete_forever_rounded,
-                      size: 20,
-                      color: AppTheme.error,
-                    ),
-                    SizedBox(width: 12),
-                    Text(
-                      'Purge and refetch',
-                      style: TextStyle(color: AppTheme.error),
-                    ),
-                  ],
+            );
+          }
+        } catch (e, st) {
+          debugPrint('Track toggle manual failed: $e');
+          debugPrintStack(stackTrace: st);
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Failed to update download flag')),
+            );
+          }
+        }
+        break;
+      case 'go_to_album':
+        if (track.album != null) {
+          context.push('/album/${track.album!.id}');
+        } else {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Album not available')));
+        }
+        break;
+      case 'go_to_artist':
+        if (track.artist != null) {
+          context.push('/artist/${track.artist!.id}');
+        } else {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Artist not available')));
+        }
+        break;
+      case 'remove_from_playlist':
+        if (onRemoveFromPlaylist != null) {
+          try {
+            await onRemoveFromPlaylist!();
+          } catch (e) {
+            debugPrint('Remove from playlist action failed: $e');
+          }
+        }
+        break;
+      case 'purge_cache':
+        try {
+          final mgr = CacheManager.instance;
+          await mgr.deleteMetadata('track_${track.id}');
+          await mgr.deleteAudioFilesOnDisk(track.id);
+          if (track.album != null) {
+            await mgr.deleteMetadataLike(
+              'tracks_p%_al${track.album!.id}_%',
+            );
+          }
+          ref.read(cachedAudioTrackIdsProvider.notifier).remove(track.id);
+          ref.read(manualTrackIdsProvider.notifier).remove(track.id);
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Cache purged for "${track.title}" — pull to refresh',
                 ),
               ),
-          ],
+            );
+          }
+        } catch (e) {
+          debugPrint('Purge cache failed: $e');
+        }
+        break;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // No provider watches here — keeps the menu icon out of rebuild storms.
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: enabled ? () => _openMenu(context, ref) : null,
+      child: SizedBox(
+        width: 28,
+        height: 28,
+        child: Icon(
+          Icons.more_vert,
+          size: 18,
+          color:
+              enabled
+                  ? AppTheme.onBackgroundSubtle
+                  : AppTheme.onBackgroundSubtle.withValues(alpha: 0.4),
+        ),
+      ),
+    );
+  }
+}
+
+class _MenuRow extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final bool muted;
+  final bool destructive;
+
+  const _MenuRow({
+    required this.icon,
+    required this.label,
+    this.muted = false,
+    this.destructive = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final color =
+        destructive
+            ? AppTheme.error
+            : muted
+            ? AppTheme.onBackgroundMuted
+            : AppTheme.onBackground;
+    return Row(
+      children: [
+        Icon(icon, size: 20, color: color),
+        const SizedBox(width: 12),
+        Text(label, style: TextStyle(color: color)),
+      ],
     );
   }
 }

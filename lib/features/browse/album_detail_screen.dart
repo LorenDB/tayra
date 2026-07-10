@@ -316,6 +316,38 @@ class _AlbumDetailBody extends ConsumerWidget {
             }
 
             final entries = _buildDisplayEntries(tracks, multiDiscMode);
+            final hasDiscHeaders = entries.any((e) => e is _DiscHeaderEntry);
+
+            Widget trackTile(_TrackEntry trackEntry) {
+              return TrackListTile(
+                track: trackEntry.track,
+                overridePosition: trackEntry.displayPosition,
+                showTrackNumber: true,
+                showAlbumArt: false,
+                dominantColor: dominantColor,
+                textColor: textColor,
+                onTap: () {
+                  ref
+                      .read(playerProvider.notifier)
+                      .playTracks(
+                        tracks,
+                        startIndex: trackEntry.trackIndex,
+                        source: 'album_detail_from_track',
+                      );
+                },
+              );
+            }
+
+            // Fixed extent when every row is a uniform track tile (no disc
+            // headers). Multi-disc layouts keep a variable-height list.
+            if (!hasDiscHeaders) {
+              return SliverFixedExtentList(
+                itemExtent: kTrackListTileExtentCompact,
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  return trackTile(entries[index] as _TrackEntry);
+                }, childCount: entries.length),
+              );
+            }
 
             return SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
@@ -323,24 +355,7 @@ class _AlbumDetailBody extends ConsumerWidget {
                 if (entry is _DiscHeaderEntry) {
                   return _DiscHeader(discNumber: entry.discNumber);
                 }
-                final trackEntry = entry as _TrackEntry;
-                return TrackListTile(
-                  track: trackEntry.track,
-                  overridePosition: trackEntry.displayPosition,
-                  showTrackNumber: true,
-                  showAlbumArt: false,
-                  dominantColor: dominantColor,
-                  textColor: textColor,
-                  onTap: () {
-                    ref
-                        .read(playerProvider.notifier)
-                        .playTracks(
-                          tracks,
-                          startIndex: trackEntry.trackIndex,
-                          source: 'album_detail_from_track',
-                        );
-                  },
-                );
+                return trackTile(entry as _TrackEntry);
               }, childCount: entries.length),
             );
           },
@@ -371,11 +386,7 @@ class _AlbumHeader extends ConsumerWidget {
     final topPadding = MediaQuery.of(context).viewPadding.top;
     const artSize = 240.0;
 
-    final isManualAsync = ref.watch(isManualAlbumProvider(album.id));
-    final isManual = isManualAsync.maybeWhen(
-      data: (v) => v,
-      orElse: () => false,
-    );
+    final isManual = ref.watch(isManualAlbumProvider(album.id));
     final showPurge = ref.watch(
       settingsProvider.select((s) => s.effectiveShowPurgeCacheOption),
     );
@@ -386,7 +397,7 @@ class _AlbumHeader extends ConsumerWidget {
       final tracks = await ref.read(_albumTracksProvider(album.id).future);
       final mgr = ref.read(cacheManagerProvider);
       try {
-        final current = await ref.read(isManualAlbumProvider(album.id).future);
+        final current = ref.read(isManualAlbumProvider(album.id));
         await mgr.setManualDownloaded(CacheType.album, album.id, !current);
         // Also mark/unmark each track at the track level so the UI shows
         // per-track downloaded indicators and protection is applied per-file.
@@ -400,8 +411,10 @@ class _AlbumHeader extends ConsumerWidget {
           } catch (_) {}
         }
         if (!current) {
+          ref.read(manualAlbumIdsProvider.notifier).add(album.id);
           ref.read(manualTrackIdsProvider.notifier).addAll(trackIds);
         } else {
+          ref.read(manualAlbumIdsProvider.notifier).remove(album.id);
           ref.read(manualTrackIdsProvider.notifier).removeAll(trackIds);
         }
         await mgr.bulkSetFilesProtectedForParent(
@@ -409,7 +422,6 @@ class _AlbumHeader extends ConsumerWidget {
           album.id,
           !current,
         );
-        ref.invalidate(isManualAlbumProvider(album.id));
 
         if (!current) {
           // Enabling: queue background downloads, invalidating cache indicator

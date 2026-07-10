@@ -327,20 +327,14 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
   Widget _buildContent() {
     final playlist = _playlist!;
     // Whether this playlist is currently marked as manually downloaded.
-    final isManualAsync = ref.watch(isManualPlaylistProvider(playlist.id));
-    final isManual = isManualAsync.maybeWhen(
-      data: (v) => v,
-      orElse: () => false,
-    );
+    final isManual = ref.watch(isManualPlaylistProvider(playlist.id));
 
     // Toggle download state (extracted from the old inline IconButton handler).
     Future<void> toggleDownload() async {
       if (_tracks.isEmpty) return;
       final mgr = ref.read(cacheManagerProvider);
       try {
-        final current = await ref.read(
-          isManualPlaylistProvider(playlist.id).future,
-        );
+        final current = ref.read(isManualPlaylistProvider(playlist.id));
         await mgr.setManualDownloaded(
           CacheType.playlist,
           playlist.id,
@@ -353,8 +347,10 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
           } catch (_) {}
         }
         if (!current) {
+          ref.read(manualPlaylistIdsProvider.notifier).add(playlist.id);
           ref.read(manualTrackIdsProvider.notifier).addAll(trackIds);
         } else {
+          ref.read(manualPlaylistIdsProvider.notifier).remove(playlist.id);
           ref.read(manualTrackIdsProvider.notifier).removeAll(trackIds);
         }
         await mgr.bulkSetFilesProtectedForParent(
@@ -362,7 +358,6 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
           playlist.id,
           !current,
         );
-        ref.invalidate(isManualPlaylistProvider(playlist.id));
         try {
           // Omit playlist ID; keep counts and booleans only.
           Analytics.track('playlist_download_toggled', {
@@ -654,9 +649,10 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
               ),
             ),
 
-          // Track list
+          // Track list — fixed extent for cheaper scroll layout.
           if (_playlistTracks.isNotEmpty)
-            SliverList(
+            SliverFixedExtentList(
+              itemExtent: kTrackListTileExtent,
               delegate: SliverChildBuilderDelegate((context, index) {
                 final playlistTrack = _playlistTracks[index];
                 return TrackListTile(

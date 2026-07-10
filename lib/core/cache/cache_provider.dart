@@ -123,21 +123,89 @@ final isManualTrackProvider = Provider.family<bool, int>((ref, trackId) {
   );
 });
 
-// Providers for other resource types (album, playlist)
-final isManualAlbumProvider = FutureProvider.family<bool, int>((
-  ref,
-  albumId,
-) async {
-  final mgr = ref.watch(cacheManagerProvider);
-  return await mgr.isManualDownloaded(CacheType.album, albumId);
+// ── Bulk album / playlist manual-download sets ──────────────────────────
+//
+// Same pattern as tracks: load once into memory so detail headers and grids
+// never issue a per-id SQLite query during build/scroll.
+
+/// All album IDs marked as manually downloaded.
+final manualAlbumIdsProvider =
+    NotifierProvider<ManualAlbumIdsNotifier, Set<int>>(
+      ManualAlbumIdsNotifier.new,
+    );
+
+class ManualAlbumIdsNotifier extends Notifier<Set<int>> {
+  @override
+  Set<int> build() {
+    Future.microtask(refresh);
+    return const {};
+  }
+
+  Future<void> refresh() async {
+    try {
+      final ids = await ref
+          .read(cacheManagerProvider)
+          .getManualDownloadedIds(CacheType.album);
+      state = ids.toSet();
+    } catch (_) {}
+  }
+
+  void add(int albumId) {
+    if (state.contains(albumId)) return;
+    state = {...state, albumId};
+  }
+
+  void remove(int albumId) {
+    if (!state.contains(albumId)) return;
+    state = {...state}..remove(albumId);
+  }
+}
+
+/// All playlist IDs marked as manually downloaded.
+final manualPlaylistIdsProvider =
+    NotifierProvider<ManualPlaylistIdsNotifier, Set<int>>(
+      ManualPlaylistIdsNotifier.new,
+    );
+
+class ManualPlaylistIdsNotifier extends Notifier<Set<int>> {
+  @override
+  Set<int> build() {
+    Future.microtask(refresh);
+    return const {};
+  }
+
+  Future<void> refresh() async {
+    try {
+      final ids = await ref
+          .read(cacheManagerProvider)
+          .getManualDownloadedIds(CacheType.playlist);
+      state = ids.toSet();
+    } catch (_) {}
+  }
+
+  void add(int playlistId) {
+    if (state.contains(playlistId)) return;
+    state = {...state, playlistId};
+  }
+
+  void remove(int playlistId) {
+    if (!state.contains(playlistId)) return;
+    state = {...state}..remove(playlistId);
+  }
+}
+
+/// Whether an album is marked as manually downloaded (in-memory set).
+final isManualAlbumProvider = Provider.family<bool, int>((ref, albumId) {
+  return ref.watch(
+    manualAlbumIdsProvider.select((ids) => ids.contains(albumId)),
+  );
 });
 
-final isManualPlaylistProvider = FutureProvider.family<bool, int>((
-  ref,
-  playlistId,
-) async {
-  final mgr = ref.watch(cacheManagerProvider);
-  return await mgr.isManualDownloaded(CacheType.playlist, playlistId);
+/// Whether a playlist is marked as manually downloaded (in-memory set).
+final isManualPlaylistProvider = Provider.family<bool, int>((ref, playlistId) {
+  return ref.watch(
+    manualPlaylistIdsProvider.select((ids) => ids.contains(playlistId)),
+  );
 });
 
 /// Provider for cache statistics (autoDispose so it refreshes each time the

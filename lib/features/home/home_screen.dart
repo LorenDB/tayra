@@ -373,23 +373,30 @@ class _AlbumCarousel extends ConsumerWidget {
           );
         }
 
+        // itemExtent = card width + gap so the viewport can skip measure.
+        const cardWidth = 150.0;
+        const gap = 14.0;
         return SizedBox(
           height: 210,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.symmetric(horizontal: 20),
+            itemExtent: cardWidth + gap,
             itemCount: displayAlbums.length,
             itemBuilder: (context, index) {
               return Padding(
-                padding: EdgeInsets.only(
-                  right: index < displayAlbums.length - 1 ? 14 : 0,
-                ),
-                child: AlbumCard(
-                  album: displayAlbums[index],
-                  onTap:
-                      () => context.push('/album/${displayAlbums[index].id}'),
-                  width: 150,
+                padding: const EdgeInsets.only(right: gap),
+                child: RepaintBoundary(
+                  child: AlbumCard(
+                    album: displayAlbums[index],
+                    onTap:
+                        () =>
+                            context.push('/album/${displayAlbums[index].id}'),
+                    width: cardWidth,
+                    // Shadows are costly while scrolling carousels.
+                    showShadow: false,
+                  ),
                 ),
               );
             },
@@ -509,9 +516,12 @@ class _AlbumGridSection extends ConsumerWidget {
                 itemCount: displayAlbums.length,
                 itemBuilder: (context, index) {
                   final album = displayAlbums[index];
-                  return AlbumCard(
-                    album: album,
-                    onTap: () => context.push('/album/${album.id}'),
+                  return RepaintBoundary(
+                    child: AlbumCard(
+                      album: album,
+                      onTap: () => context.push('/album/${album.id}'),
+                      showShadow: false,
+                    ),
                   );
                 },
               ),
@@ -567,7 +577,8 @@ class _TrackListSection extends ConsumerWidget {
           );
         }
 
-        return SliverList(
+        return SliverFixedExtentList(
+          itemExtent: kTrackListTileExtent,
           delegate: SliverChildBuilderDelegate((context, index) {
             final track = displayTracks[index];
             return RepaintBoundary(
@@ -605,7 +616,9 @@ class _YearReviewBannerState extends ConsumerState<_YearReviewBanner>
     with SingleTickerProviderStateMixin {
   ui.FragmentShader? _shader;
   late final Ticker _ticker;
-  double _elapsedSeconds = 0.0;
+  // Drive the shader without setState — a full rebuild every frame was the
+  // main source of home-page scroll hitch near the top of the screen.
+  final ValueNotifier<double> _elapsedSeconds = ValueNotifier(0.0);
 
   // Darkened gradient colours for better contrast against white text
   static const _colorA = Color(0xFF4C45B2); // darkened purple (was 0xFF6C63FF)
@@ -615,9 +628,7 @@ class _YearReviewBannerState extends ConsumerState<_YearReviewBanner>
   void initState() {
     super.initState();
     _ticker = createTicker((elapsed) {
-      setState(() {
-        _elapsedSeconds = elapsed.inMicroseconds / 1e6;
-      });
+      _elapsedSeconds.value = elapsed.inMicroseconds / 1e6;
     });
     _loadShader();
   }
@@ -639,6 +650,7 @@ class _YearReviewBannerState extends ConsumerState<_YearReviewBanner>
   @override
   void dispose() {
     _ticker.dispose();
+    _elapsedSeconds.dispose();
     _shader?.dispose();
     super.dispose();
   }
@@ -652,6 +664,10 @@ class _YearReviewBannerState extends ConsumerState<_YearReviewBanner>
     }
     if (_shader != null && !_ticker.isActive) _ticker.start();
 
+    final shader = _shader;
+
+    // RepaintBoundary keeps the continuous shader paint off the home
+    // CustomScrollView's layer so scrolling albums/tracks isn't dirtied.
     return Padding(
       padding: EdgeInsets.fromLTRB(
         widget.horizontalPadding,
@@ -659,131 +675,137 @@ class _YearReviewBannerState extends ConsumerState<_YearReviewBanner>
         widget.horizontalPadding,
         4,
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: CustomPaint(
-          painter:
-              _shader != null
-                  ? _RipplePainter(
-                    shader: _shader!,
-                    time: _elapsedSeconds,
-                    colorA: _colorA,
-                    colorB: _colorB,
-                  )
-                  : null,
-          // Fallback background when shader isn't ready yet
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              gradient:
-                  _shader != null
-                      ? null
-                      : LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [_colorA, _colorB], // use darkened colors
-                      ),
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () async {
-                  try {
-                    Analytics.track('year_review_banner_tapped');
-                  } catch (_) {}
-
-                  // Mark the banner dismissed for this calendar year so it
-                  // doesn't reappear after the user opens the year review.
-                  try {
-                    await ref
-                        .read(yearReviewBannerVisibleProvider.notifier)
-                        .dismiss();
-                  } catch (_) {}
-
-                  if (!context.mounted) return;
-                  context.pushNamed(
-                    'year_review_detail',
-                    pathParameters: {'year': '${DateTime.now().year}'},
-                    extra: {'startInStory': true},
-                  );
-                },
-                borderRadius: BorderRadius.circular(16),
-                splashColor: Colors.white.withValues(alpha: 0.1),
-                highlightColor: Colors.white.withValues(alpha: 0.05),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 18,
-                    vertical: 16,
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 44,
-                        height: 44,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.auto_awesome_rounded,
-                          color: Colors.white,
-                          size: 22,
-                        ),
-                      ),
-                      const SizedBox(width: 14),
-                      const Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Your Year in Review is ready',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
+      child: RepaintBoundary(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: Stack(
+            children: [
+              // Animated backdrop only — content row below is static.
+              Positioned.fill(
+                child:
+                    shader != null
+                        ? ListenableBuilder(
+                          listenable: _elapsedSeconds,
+                          builder: (context, _) {
+                            return CustomPaint(
+                              painter: _RipplePainter(
+                                shader: shader,
+                                time: _elapsedSeconds.value,
+                                colorA: _colorA,
+                                colorB: _colorB,
                               ),
-                            ),
-                            SizedBox(height: 2),
-                            Text(
-                              'See your top tracks, artists & more',
-                              style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      // Dismiss button
-                      GestureDetector(
-                        onTap: () {
-                          try {
-                            Analytics.track('year_review_banner_dismissed');
-                          } catch (_) {}
-                          ref
-                              .read(yearReviewBannerVisibleProvider.notifier)
-                              .dismiss();
-                        },
-                        child: Container(
-                          width: 28,
-                          height: 28,
+                            );
+                          },
+                        )
+                        : const DecoratedBox(
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.15),
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [_colorA, _colorB],
+                            ),
+                          ),
+                        ),
+              ),
+              Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () async {
+                    try {
+                      Analytics.track('year_review_banner_tapped');
+                    } catch (_) {}
+
+                    try {
+                      await ref
+                          .read(yearReviewBannerVisibleProvider.notifier)
+                          .dismiss();
+                    } catch (_) {}
+
+                    if (!context.mounted) return;
+                    context.pushNamed(
+                      'year_review_detail',
+                      pathParameters: {'year': '${DateTime.now().year}'},
+                      extra: {'startInStory': true},
+                    );
+                  },
+                  borderRadius: BorderRadius.circular(16),
+                  splashColor: Colors.white.withValues(alpha: 0.1),
+                  highlightColor: Colors.white.withValues(alpha: 0.05),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 16,
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 44,
+                          height: 44,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.2),
                             shape: BoxShape.circle,
                           ),
                           child: const Icon(
-                            Icons.close_rounded,
+                            Icons.auto_awesome_rounded,
                             color: Colors.white,
-                            size: 16,
+                            size: 22,
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 14),
+                        const Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Your Year in Review is ready',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              SizedBox(height: 2),
+                              Text(
+                                'See your top tracks, artists & more',
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        GestureDetector(
+                          onTap: () {
+                            try {
+                              Analytics.track('year_review_banner_dismissed');
+                            } catch (_) {}
+                            ref
+                                .read(yearReviewBannerVisibleProvider.notifier)
+                                .dismiss();
+                          },
+                          child: Container(
+                            width: 28,
+                            height: 28,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.15),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.close_rounded,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
         ),
       ),

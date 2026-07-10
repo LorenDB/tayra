@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
@@ -9,6 +10,22 @@ import 'package:tayra/core/api/models.dart';
 import 'package:tayra/core/cache/cache_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tayra/core/analytics/analytics.dart';
+
+/// Isolate entry for decoding large metadata JSON off the UI thread.
+Map<String, dynamic>? _decodeJsonMapIsolate(String jsonStr) {
+  try {
+    final parsed = jsonDecode(jsonStr);
+    if (parsed is Map<String, dynamic>) return parsed;
+    if (parsed is Map) return Map<String, dynamic>.from(parsed);
+  } catch (_) {}
+  return null;
+}
+
+/// Isolate entry for encoding large metadata maps off the UI thread.
+String _encodeJsonMapIsolate(Map<String, dynamic> data) => jsonEncode(data);
+
+/// Payloads larger than this are json-decoded/encoded via [compute].
+const int _kLargeJsonThresholdBytes = 48 * 1024;
 
 /// Cache types for different kinds of data
 enum CacheType {
@@ -102,6 +119,13 @@ class CacheManager {
   // future ensures only one eviction runs at a time and avoids races.
   Future<void> _enforceQueue = Future.value();
 
+  /// Pending LRU touch timestamps keyed by cache_key. Flushed in batches so
+  /// every metadata *read* does not immediately issue a SQLite write (which
+  /// contended with scrolling UI work).
+  final Map<String, int> _pendingLastAccessed = {};
+  Timer? _lastAccessedFlushTimer;
+  static const Duration _lastAccessedFlushInterval = Duration(seconds: 5);
+
   // Singleton pattern
   CacheManager._();
   static final CacheManager instance = CacheManager._();
@@ -145,6 +169,66 @@ class CacheManager {
 
   // ── Metadata cache operations ──────────────────────────────────────────
 
+  void _scheduleLastAccessedTouch(String key) {
+    _pendingLastAccessed[key] = DateTime.now().millisecondsSinceEpoch;
+    _lastAccessedFlushTimer ??= Timer(
+      _lastAccessedFlushInterval,
+      () => unawaited(_flushLastAccessed()),
+    );
+  }
+
+  /// Flush batched LRU timestamps. Safe to call multiple times.
+  Future<void> _flushLastAccessed() async {
+    _lastAccessedFlushTimer?.cancel();
+    _lastAccessedFlushTimer = null;
+    if (_pendingLastAccessed.isEmpty) return;
+
+    final batch = Map<String, int>.from(_pendingLastAccessed);
+    _pendingLastAccessed.clear();
+
+    try {
+      final db = await _db.database;
+      final batchOp = db.batch();
+      for (final entry in batch.entries) {
+        batchOp.update(
+          'cache_metadata',
+          {'last_accessed': entry.value},
+          where: 'cache_key = ?',
+          whereArgs: [entry.key],
+        );
+      }
+      await batchOp.commit(noResult: true);
+    } catch (e) {
+      debugPrint('CacheManager: flush last_accessed failed: $e');
+      // Re-queue failed touches so they are not lost forever.
+      batch.forEach((k, v) => _pendingLastAccessed.putIfAbsent(k, () => v));
+    }
+  }
+
+  Future<Map<String, dynamic>?> _decodeMetadataJson(String jsonStr) async {
+    if (jsonStr.length < _kLargeJsonThresholdBytes) {
+      return _decodeJsonMapIsolate(jsonStr);
+    }
+    return compute(_decodeJsonMapIsolate, jsonStr);
+  }
+
+  Future<String> _encodeMetadataJson(Map<String, dynamic> data) async {
+    // Prefer isolate for paginated payloads and albums that embed tracks.
+    final results = data['results'];
+    final tracks = data['tracks'];
+    final isLarge =
+        (results is List && results.length >= 10) ||
+        (tracks is List && tracks.length >= 20);
+    if (!isLarge) {
+      return jsonEncode(data);
+    }
+    try {
+      return await compute(_encodeJsonMapIsolate, data);
+    } catch (_) {
+      return jsonEncode(data);
+    }
+  }
+
   /// Get metadata from cache
   Future<Map<String, dynamic>?> getMetadata(String key) async {
     final db = await _db.database;
@@ -167,22 +251,14 @@ class CacheManager {
       return null;
     }
 
-    // Update last accessed time
-    await db.update(
-      'cache_metadata',
-      {'last_accessed': DateTime.now().millisecondsSinceEpoch},
-      where: 'cache_key = ?',
-      whereArgs: [key],
-    );
+    // Debounced LRU touch — do not write on every read.
+    _scheduleLastAccessedTouch(key);
 
     final jsonStr = row['data'] as String;
-    try {
-      final parsed = jsonDecode(jsonStr);
-      if (parsed is Map<String, dynamic>) return parsed;
-    } catch (_) {}
+    final parsed = await _decodeMetadataJson(jsonStr);
     // Return null on parse failure so callers do not treat corrupt data as a
     // cache hit.
-    return null;
+    return parsed;
   }
 
   /// Put metadata into cache
@@ -193,12 +269,15 @@ class CacheManager {
     Duration? ttl,
   }) async {
     final db = await _db.database;
-    final jsonStr = jsonEncode(data);
+    final jsonStr = await _encodeMetadataJson(data);
     // Use UTF-8 byte length for accurate size accounting (jsonStr.length
     // returns UTF-16 code units which doesn't reflect actual storage bytes).
     final sizeBytes = utf8.encode(jsonStr).length;
     final now = DateTime.now().millisecondsSinceEpoch;
     final expiresAt = ttl != null ? now + ttl.inMilliseconds : null;
+
+    // A write is itself an access — drop any pending touch for this key.
+    _pendingLastAccessed.remove(key);
 
     await db.insert('cache_metadata', {
       'cache_key': key,
@@ -225,21 +304,10 @@ class CacheManager {
     if (results.isEmpty) return null;
 
     final row = results.first;
-
-    // Update last accessed time
-    await db.update(
-      'cache_metadata',
-      {'last_accessed': DateTime.now().millisecondsSinceEpoch},
-      where: 'cache_key = ?',
-      whereArgs: [key],
-    );
+    _scheduleLastAccessedTouch(key);
 
     final jsonStr = row['data'] as String;
-    try {
-      final parsed = jsonDecode(jsonStr);
-      if (parsed is Map<String, dynamic>) return parsed;
-    } catch (_) {}
-    return null;
+    return _decodeMetadataJson(jsonStr);
   }
 
   /// Delete metadata from cache
@@ -505,12 +573,17 @@ class CacheManager {
 
   /// Return all track IDs that have been marked as manually downloaded.
   Future<List<int>> getManualDownloadedTrackIds() async {
+    return getManualDownloadedIds(CacheType.track);
+  }
+
+  /// Return all resource IDs of [type] marked as manually downloaded.
+  Future<List<int>> getManualDownloadedIds(CacheType type) async {
     final db = await _db.database;
     final results = await db.query(
       'cache_manual_downloads',
       columns: ['resource_id'],
       where: 'resource_type = ?',
-      whereArgs: [CacheType.track.name],
+      whereArgs: [type.name],
     );
     return results.map((r) => r['resource_id'] as int).toList();
   }
@@ -600,8 +673,8 @@ class CacheManager {
         if (key == null || data == null) continue;
 
         try {
-          final parsed = jsonDecode(data);
-          if (parsed is! Map<String, dynamic>) continue;
+          final parsed = await _decodeMetadataJson(data);
+          if (parsed == null) continue;
 
           if (key.startsWith('album_')) {
             final album = Album.fromJson(parsed);
@@ -635,14 +708,87 @@ class CacheManager {
   }
 
   /// Return all cached albums that are available offline.
+  ///
+  /// Preferential path: only parse `album_<id>` rows for offline IDs, then
+  /// fill gaps from paginated list pages. Avoids decoding every album cache
+  /// blob when only a small offline set is needed.
   Future<List<Album>> getOfflineAlbums() async {
     final offlineIds = await getOfflineAlbumIds();
     if (offlineIds.isEmpty) return const [];
 
-    final cachedAlbums = await getCachedAlbums();
-    return cachedAlbums
-        .where((album) => offlineIds.contains(album.id))
-        .toList();
+    final db = await _db.database;
+    final albumsById = <int, Album>{};
+
+    try {
+      // 1) Direct album detail keys for offline IDs only.
+      for (final id in offlineIds) {
+        final rows = await db.query(
+          'cache_metadata',
+          columns: ['data'],
+          where: 'cache_key = ?',
+          whereArgs: ['album_$id'],
+          limit: 1,
+        );
+        if (rows.isEmpty) continue;
+        final data = rows.first['data'] as String?;
+        if (data == null) continue;
+        try {
+          final parsed = await _decodeMetadataJson(data);
+          if (parsed != null) {
+            albumsById[id] = Album.fromJson(parsed);
+          }
+        } catch (_) {}
+      }
+
+      // 2) Fill remaining IDs from paginated album-list cache pages.
+      final missing = offlineIds.difference(albumsById.keys.toSet());
+      if (missing.isNotEmpty) {
+        final rows = await db.query(
+          'cache_metadata',
+          columns: ['data'],
+          where: 'cache_type = ?',
+          whereArgs: [CacheType.recentAlbums.name],
+          orderBy: 'last_accessed DESC',
+        );
+        for (final row in rows) {
+          if (missing.isEmpty) break;
+          final data = row['data'] as String?;
+          if (data == null) continue;
+          try {
+            final parsed = await _decodeMetadataJson(data);
+            if (parsed == null) continue;
+            final response = PaginatedResponse.fromJson(parsed, Album.fromJson);
+            for (final album in response.results) {
+              if (missing.remove(album.id)) {
+                albumsById.putIfAbsent(album.id, () => album);
+              }
+            }
+          } catch (_) {}
+        }
+      }
+
+      // 3) Last resort: stub albums so offline IDs still appear in the grid.
+      for (final id in offlineIds) {
+        albumsById.putIfAbsent(
+          id,
+          () => Album(
+            id: id,
+            title: 'Album $id',
+            tracksCount: 0,
+            isPlayable: true,
+          ),
+        );
+      }
+
+      final albums =
+          albumsById.values.toList()..sort(
+            (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()),
+          );
+      return albums;
+    } catch (e) {
+      debugPrint('getOfflineAlbums error: $e');
+      return const [];
+    }
   }
 
   /// Return all artist IDs that have at least one offline album.

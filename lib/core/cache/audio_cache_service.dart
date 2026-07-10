@@ -4,8 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/core/api/models.dart';
+import 'package:tayra/core/cache/cache_manager.dart';
 
 /// Service for caching audio files and cover art
 class AudioCacheService {
@@ -27,7 +27,34 @@ class AudioCacheService {
   /// downloads of the same audio file (e.g. if the user skips back quickly).
   final Set<int> _inProgressAudio = {};
 
+  /// Cap concurrent cover downloads so list/page fetches cannot flood the
+  /// network and disk while the user is scrolling.
+  static const int _maxConcurrentCoverDownloads = 3;
+  int _activeCoverDownloads = 0;
+  final List<Completer<void>> _coverWaiters = [];
+  final Set<String> _inProgressCovers = {};
+
   AudioCacheService(this._cache);
+
+  Future<void> _acquireCoverSlot() async {
+    if (_activeCoverDownloads < _maxConcurrentCoverDownloads) {
+      _activeCoverDownloads++;
+      return;
+    }
+    final waiter = Completer<void>();
+    _coverWaiters.add(waiter);
+    await waiter.future;
+    _activeCoverDownloads++;
+  }
+
+  void _releaseCoverSlot() {
+    _activeCoverDownloads =
+        (_activeCoverDownloads - 1).clamp(0, _maxConcurrentCoverDownloads);
+    if (_coverWaiters.isNotEmpty) {
+      final next = _coverWaiters.removeAt(0);
+      if (!next.isCompleted) next.complete();
+    }
+  }
 
   /// Release resources. Call when the service is no longer needed.
   void dispose() {
@@ -149,36 +176,53 @@ class AudioCacheService {
 
   /// Download and cache cover art
   Future<File?> cacheCoverArt(String coverUrl) async {
+    // Deduplicate concurrent requests for the same URL.
+    if (_inProgressCovers.contains(coverUrl)) {
+      return getCachedCoverArt(coverUrl);
+    }
+
     try {
-      // Check if already cached
+      // Check if already cached (cheap) before taking a concurrency slot.
       final existing = await getCachedCoverArt(coverUrl);
       if (existing != null) return existing;
 
-      // Create temp file to download to
-      final tempDir = await getTemporaryDirectory();
-      final extension =
-          p.extension(coverUrl).split('?').first; // Remove query params
-      final tempPath = p.join(
-        tempDir.path,
-        'download_cover_${DateTime.now().millisecondsSinceEpoch}$extension',
-      );
-      final tempFile = File(tempPath);
+      _inProgressCovers.add(coverUrl);
+      await _acquireCoverSlot();
+      try {
+        // Re-check after waiting for a slot — another download may have won.
+        final existingAfterWait = await getCachedCoverArt(coverUrl);
+        if (existingAfterWait != null) return existingAfterWait;
 
-      // Download the file
-      await _dio.download(coverUrl, tempPath);
+        // Create temp file to download to
+        final tempDir = await getTemporaryDirectory();
+        final extension =
+            p.extension(coverUrl).split('?').first; // Remove query params
+        final tempPath = p.join(
+          tempDir.path,
+          'download_cover_${DateTime.now().millisecondsSinceEpoch}$extension',
+        );
+        final tempFile = File(tempPath);
 
-      // Cache the file
-      final key = _getCoverKey(coverUrl);
-      await _cache.putFile(key, FileType.coverArt, tempFile);
+        // Download the file
+        await _dio.download(coverUrl, tempPath);
 
-      // Clean up temp file
-      if (await tempFile.exists()) {
-        await tempFile.delete();
+        // Cache the file
+        final key = _getCoverKey(coverUrl);
+        await _cache.putFile(key, FileType.coverArt, tempFile);
+
+        // Clean up temp file
+        if (await tempFile.exists()) {
+          await tempFile.delete();
+        }
+
+        // Return the cached file
+        return await _cache.getFile(key);
+      } finally {
+        _releaseCoverSlot();
+        _inProgressCovers.remove(coverUrl);
       }
-
-      // Return the cached file
-      return await _cache.getFile(key);
     } catch (e) {
+      _inProgressCovers.remove(coverUrl);
       debugPrint(
         'AudioCacheService: failed to cache cover art for $coverUrl: $e',
       );
