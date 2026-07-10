@@ -81,7 +81,7 @@ Use decorative comment dividers for logical grouping:
 ### Formatting
 - Lint rules: `package:flutter_lints/flutter.yaml` (see `analysis_options.yaml`)
 - Use `const` constructors wherever possible
-- Use `dart format` before committing
+- Use `dart format .` in project root before committing
 
 ## State Management (Riverpod)
 
@@ -131,7 +131,7 @@ Accessibility note: there's a user setting to disable dynamic album accent color
 
 - Log only basic, non-identifying usage statistics
 - Do NOT log user-identifying information
-- When adding new features, be sure to consider if you should proactively insert non-PII collecting Aptabase calls
+- When adding new features, be sure to consider if you should proactively insert non-PII collecting Aptabase calls if they could be useful to help developers understand which features are being used
 
 ## Android Notes
 
