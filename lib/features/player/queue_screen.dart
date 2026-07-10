@@ -702,7 +702,10 @@ class _QueueTrackRow extends StatelessWidget {
   final bool isCurrentTrack;
   final bool isPlaying;
   final VoidCallback onTap;
-  final VoidCallback? onLongPress;
+
+  /// Opens the track context menu. [globalPosition] is set for right-click so
+  /// the menu anchors at the pointer; null for long-press (anchors to row center).
+  final void Function(Offset? globalPosition)? onOpenMenu;
   final bool isDragging;
 
   /// When true, right padding is tightened because a drag handle sits beside
@@ -715,7 +718,7 @@ class _QueueTrackRow extends StatelessWidget {
     required this.isCurrentTrack,
     this.isPlaying = false,
     required this.onTap,
-    this.onLongPress,
+    this.onOpenMenu,
     this.isDragging = false,
     this.compactTrailing = false,
   });
@@ -733,7 +736,12 @@ class _QueueTrackRow extends StatelessWidget {
         duration: const Duration(milliseconds: 150),
         child: InkWell(
           onTap: onTap,
-          onLongPress: onLongPress,
+          // Long-press (touch) and right-click (mouse) both open the context menu.
+          onLongPress: onOpenMenu != null ? () => onOpenMenu!(null) : null,
+          onSecondaryTapDown:
+              onOpenMenu != null
+                  ? (details) => onOpenMenu!(details.globalPosition)
+                  : null,
           child: Padding(
             padding: EdgeInsets.fromLTRB(16, 10, compactTrailing ? 4 : 16, 10),
             child: Row(
@@ -825,17 +833,30 @@ Future<void> _showQueueTrackMenu({
   required WidgetRef ref,
   required Track track,
   required int index,
+  Offset? globalPosition,
 }) async {
   final box = context.findRenderObject() as RenderBox?;
   final overlay = Overlay.of(context).context.findRenderObject() as RenderBox?;
   if (box == null || overlay == null) return;
 
-  final topLeft = box.localToGlobal(Offset.zero, ancestor: overlay);
-  final center = topLeft + box.size.center(Offset.zero);
-  final position = RelativeRect.fromRect(
-    Rect.fromCenter(center: center, width: 1, height: 1),
-    Offset.zero & overlay.size,
-  );
+  // Prefer the pointer position (right-click); fall back to row center (long-press).
+  final RelativeRect position;
+  if (globalPosition != null) {
+    final local = globalPosition;
+    position = RelativeRect.fromLTRB(
+      local.dx,
+      local.dy,
+      overlay.size.width - local.dx,
+      overlay.size.height - local.dy,
+    );
+  } else {
+    final topLeft = box.localToGlobal(Offset.zero, ancestor: overlay);
+    final center = topLeft + box.size.center(Offset.zero);
+    position = RelativeRect.fromRect(
+      Rect.fromCenter(center: center, width: 1, height: 1),
+      Offset.zero & overlay.size,
+    );
+  }
 
   final albumAvailable = track.album != null;
   final artistAvailable = track.artist != null;
@@ -1048,12 +1069,13 @@ class _DraggableQueueItem extends ConsumerStatefulWidget {
 class _DraggableQueueItemState extends ConsumerState<_DraggableQueueItem> {
   bool _isDragging = false;
 
-  void _onLongPress() {
+  void _onOpenMenu(Offset? globalPosition) {
     _showQueueTrackMenu(
       context: context,
       ref: ref,
       track: widget.track,
       index: widget.index,
+      globalPosition: globalPosition,
     );
   }
 
@@ -1154,7 +1176,7 @@ class _DraggableQueueItemState extends ConsumerState<_DraggableQueueItem> {
           index: widget.index,
           isCurrentTrack: widget.isCurrentTrack,
           onTap: widget.onTap,
-          onLongPress: _onLongPress,
+          onOpenMenu: _onOpenMenu,
           isPlaying: widget.isPlaying,
           isDragging: _isDragging,
           // Drag handle sits beside every row (including now-playing) so the
