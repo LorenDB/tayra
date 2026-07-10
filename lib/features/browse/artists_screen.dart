@@ -7,6 +7,7 @@ import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/layout/responsive.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
+import 'package:tayra/core/widgets/empty_state.dart';
 import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/loading_indicator.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
@@ -117,11 +118,10 @@ class _ArtistGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (artists.isEmpty) {
-      return const Center(
-        child: Text(
-          'No artists found',
-          style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 16),
-        ),
+      return const EmptyState(
+        icon: Icons.people_rounded,
+        title: 'No artists found',
+        subtitle: 'Pull down to refresh',
       );
     }
 

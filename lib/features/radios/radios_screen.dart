@@ -123,14 +123,7 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
       backgroundColor: AppTheme.background,
       appBar: AppBar(
         backgroundColor: AppTheme.background,
-        title: const Text(
-          'Radios',
-          style: TextStyle(
-            color: AppTheme.onBackground,
-            fontSize: 22,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
+        title: const Text('Radios'),
       ),
       body: _buildBody(),
     );

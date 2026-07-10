@@ -5,6 +5,7 @@ import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/api_repository.dart';
 import 'package:tayra/core/api/models.dart';
 import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/widgets/settings_tiles.dart';
 import 'package:tayra/core/widgets/dialog_utils.dart';
 
 // ── Providers ───────────────────────────────────────────────────────────
@@ -43,8 +44,8 @@ class AccountSettingsScreen extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 children: [
                   // ── Identity ──────────────────────────────────────────
-                  _SectionHeader(title: 'Profile'),
-                  _InfoTile(
+                  SettingsSectionHeader(title: 'Profile'),
+                  SettingsInfoTile(
                     icon: Icons.person_outline_rounded,
                     title: 'Username',
                     subtitle:
@@ -53,12 +54,12 @@ class AccountSettingsScreen extends ConsumerWidget {
                             : user.username,
                   ),
                   if (user.email != null && user.email!.isNotEmpty)
-                    _InfoTile(
+                    SettingsInfoTile(
                       icon: Icons.email_outlined,
                       title: 'Email',
                       subtitle: user.email!,
                     ),
-                  _ActionTile(
+                  SettingsActionTile(
                     icon: Icons.badge_outlined,
                     title: 'Display name',
                     subtitle:
@@ -67,13 +68,13 @@ class AccountSettingsScreen extends ConsumerWidget {
                             : user.name,
                     onTap: () => _editDisplayName(context, ref, user),
                   ),
-                  _ActionTile(
+                  SettingsActionTile(
                     icon: Icons.visibility_outlined,
                     title: 'Activity visibility',
                     subtitle: user.privacyLevel.label,
                     onTap: () => _editPrivacyLevel(context, ref, user),
                   ),
-                  _ActionTile(
+                  SettingsActionTile(
                     icon: Icons.notes_outlined,
                     title: 'Bio',
                     subtitle:
@@ -87,14 +88,14 @@ class AccountSettingsScreen extends ConsumerWidget {
                   const SizedBox(height: 24),
 
                   // ── Security ──────────────────────────────────────────
-                  _SectionHeader(title: 'Security'),
-                  _ActionTile(
+                  SettingsSectionHeader(title: 'Security'),
+                  SettingsActionTile(
                     icon: Icons.lock_outline_rounded,
                     title: 'Change password',
                     subtitle: 'Update the password for this account',
                     onTap: () => _changePassword(context, ref),
                   ),
-                  _ActionTile(
+                  SettingsActionTile(
                     icon: Icons.alternate_email_rounded,
                     title: 'Change email',
                     subtitle: 'Update the email address for this account',
@@ -619,156 +620,6 @@ String _friendlyError(Object error) {
     }
   }
   return 'Something went wrong. Please try again.';
-}
-
-// ── Shared tiles (match SettingsScreen style) ───────────────────────────
-
-class _SectionHeader extends StatelessWidget {
-  final String title;
-
-  const _SectionHeader({required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-      child: Text(
-        title.toUpperCase(),
-        style: const TextStyle(
-          color: AppTheme.primary,
-          fontSize: 12,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 1.0,
-        ),
-      ),
-    );
-  }
-}
-
-class _InfoTile extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-
-  const _InfoTile({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      decoration: BoxDecoration(
-        color: AppTheme.surfaceContainer,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, color: AppTheme.onBackgroundSubtle, size: 22),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: AppTheme.onBackground,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    color: AppTheme.onBackgroundMuted,
-                    fontSize: 12,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ActionTile extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final VoidCallback onTap;
-
-  const _ActionTile({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-      decoration: BoxDecoration(
-        color: AppTheme.surfaceContainer,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            child: Row(
-              children: [
-                Icon(icon, color: AppTheme.onBackgroundSubtle, size: 22),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: const TextStyle(
-                          color: AppTheme.onBackground,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        subtitle,
-                        style: const TextStyle(
-                          color: AppTheme.onBackgroundMuted,
-                          fontSize: 12,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-                const Icon(
-                  Icons.chevron_right_rounded,
-                  color: AppTheme.onBackgroundSubtle,
-                  size: 20,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 class _ErrorBody extends StatelessWidget {

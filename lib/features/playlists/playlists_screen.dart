@@ -34,14 +34,7 @@ class PlaylistsScreen extends ConsumerWidget {
       backgroundColor: AppTheme.background,
       appBar: AppBar(
         backgroundColor: AppTheme.background,
-        title: const Text(
-          'Playlists',
-          style: TextStyle(
-            color: AppTheme.onBackground,
-            fontSize: 22,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
+        title: const Text('Playlists'),
         actions: [
           if (!Responsive.useSideNavigation(context))
             IconButton(

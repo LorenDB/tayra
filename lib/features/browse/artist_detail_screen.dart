@@ -9,6 +9,7 @@ import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/core/widgets/dot_separator.dart';
 import 'package:tayra/core/widgets/error_state.dart';
+import 'package:tayra/core/widgets/pill_action_button.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/core/widgets/tag_chip_list.dart';
 import 'package:tayra/core/widgets/track_list_tile.dart';
@@ -459,57 +460,28 @@ class _ArtistActionButtons extends ConsumerWidget {
       child: Row(
         children: [
           Expanded(
-            child: SizedBox(
-              height: 44,
-              child: ElevatedButton.icon(
-                onPressed: tracks.isNotEmpty ? playAll : null,
-                icon: const Icon(Icons.play_arrow_rounded, size: 22),
-                label: const Text('Play All'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.primary,
-                  foregroundColor: Colors.white,
-                  disabledBackgroundColor: AppTheme.primary.withValues(
-                    alpha: 0.3,
-                  ),
-                  disabledForegroundColor: Colors.white.withValues(alpha: 0.4),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(22),
-                  ),
-                  textStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
+            child: PillActionButton(
+              icon: Icons.play_arrow_rounded,
+              label: 'Play All',
+              onPressed: tracks.isNotEmpty ? playAll : null,
             ),
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: SizedBox(
-              height: 44,
-              child: OutlinedButton.icon(
-                onPressed: isLoadingRadio ? null : startArtistRadio,
-                icon:
-                    isLoadingRadio
-                        ? const SizedBox(
-                          width: 18,
-                          height: 18,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                        : const Icon(Icons.radio_rounded, size: 20),
-                label: const Text('Artist Radio'),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: AppTheme.onBackground,
-                  side: const BorderSide(color: AppTheme.divider),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(22),
-                  ),
-                  textStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
+            child: PillActionButton(
+              icon: Icons.radio_rounded,
+              label: 'Artist Radio',
+              onPressed: isLoadingRadio ? null : startArtistRadio,
+              isPrimary: false,
+              borderColor: AppTheme.divider,
+              iconWidget:
+                  isLoadingRadio
+                      ? const SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                      : null,
             ),
           ),
         ],

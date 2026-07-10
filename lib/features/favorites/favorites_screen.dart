@@ -12,6 +12,8 @@ import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
 import 'package:tayra/core/widgets/error_state.dart';
+import 'package:tayra/core/widgets/loading_indicator.dart';
+import 'package:tayra/core/widgets/pill_action_button.dart';
 import 'package:tayra/core/widgets/track_list_tile.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/player/player_provider.dart';
@@ -269,14 +271,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
       backgroundColor: AppTheme.background,
       appBar: AppBar(
         backgroundColor: AppTheme.background,
-        title: const Text(
-          'Favorites',
-          style: TextStyle(
-            color: AppTheme.onBackground,
-            fontSize: 22,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
+        title: const Text('Favorites'),
         actions: [
           if (!Responsive.useSideNavigation(context))
             IconButton(
@@ -406,21 +401,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
           ),
 
           if (_isLoadingMore)
-            const SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: Center(
-                  child: SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: AppTheme.primary,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            const SliverToBoxAdapter(child: PaginatedLoadingIndicator()),
 
           // Bottom padding for mini player
           const SliverToBoxAdapter(child: SizedBox(height: 120)),
@@ -439,39 +420,12 @@ class _ShuffleAllButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final enabled = onPressed != null;
-
-    // Primary-looking gradient button for Shuffle All (pill-shaped).
-    final deco =
-        enabled
-            ? BoxDecoration(
-              gradient: AppTheme.primaryGradient,
-              borderRadius: BorderRadius.circular(22),
-            )
-            : BoxDecoration(
-              color: AppTheme.surfaceContainerHigh,
-              borderRadius: BorderRadius.circular(22),
-            );
-
-    return Container(
-      height: 44,
-      decoration: deco,
-      child: ElevatedButton.icon(
-        onPressed: onPressed,
-        icon: const Icon(Icons.shuffle_rounded, size: 20),
-        label: const Text('Shuffle All'),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-          foregroundColor: Colors.white,
-          disabledBackgroundColor: Colors.transparent,
-          disabledForegroundColor: Colors.white.withValues(alpha: 0.4),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(22),
-          ),
-          textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-        ),
-      ),
+    return PillActionButton(
+      icon: Icons.shuffle_rounded,
+      label: 'Shuffle All',
+      onPressed: onPressed,
+      useGradient: true,
+      iconSize: 20,
     );
   }
 }

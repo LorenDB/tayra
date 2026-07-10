@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/widgets/settings_tiles.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:tayra/features/year_review/ai_summary_provider.dart';
 
@@ -293,7 +294,7 @@ class _AiProviderSettingsScreenState
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 8),
         children: [
-          _SectionHeader(title: 'Provider'),
+          SettingsSectionHeader(title: 'Provider'),
 
           // ── Gemini Nano (Android only) ──────────────────────────────────
           if (defaultTargetPlatform == TargetPlatform.android)
@@ -1151,30 +1152,6 @@ class _ModelPickerSheetState extends State<_ModelPickerSheet> {
                     ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-// ── Section header ────────────────────────────────────────────────────────
-
-class _SectionHeader extends StatelessWidget {
-  final String title;
-
-  const _SectionHeader({required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-      child: Text(
-        title.toUpperCase(),
-        style: const TextStyle(
-          color: AppTheme.primary,
-          fontSize: 12,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 1.0,
-        ),
       ),
     );
   }

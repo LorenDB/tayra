@@ -12,6 +12,7 @@ import 'package:tayra/core/cache/download_queue_service.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
 import 'package:tayra/core/widgets/error_state.dart';
+import 'package:tayra/core/widgets/pill_action_button.dart';
 import 'package:tayra/core/widgets/track_list_tile.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/player/player_provider.dart';
@@ -761,82 +762,13 @@ class _ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final enabled = onPressed != null;
-
-    // Use platform-styled Elevated/Outlined buttons to match the rest of the
-    // app (pill-shaped, 44px height, 22px radius and consistent typography).
-    // Primary: use gradient decoration when enabled, else muted surface.
-    if (isPrimary) {
-      final deco =
-          enabled
-              ? BoxDecoration(
-                gradient: AppTheme.primaryGradient,
-                borderRadius: BorderRadius.circular(22),
-              )
-              : BoxDecoration(
-                color: AppTheme.surfaceContainerHigh,
-                borderRadius: BorderRadius.circular(22),
-              );
-
-      return Container(
-        height: 44,
-        decoration: deco,
-        child: ElevatedButton.icon(
-          onPressed: onPressed,
-          icon: Icon(icon, size: 20),
-          label: Text(label),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.transparent,
-            shadowColor: Colors.transparent,
-            foregroundColor: Colors.white,
-            disabledBackgroundColor: Colors.transparent,
-            disabledForegroundColor: Colors.white.withValues(alpha: 0.4),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(22),
-            ),
-            textStyle: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-      );
-    }
-
-    return SizedBox(
-      height: 44,
-      child: OutlinedButton.icon(
-        onPressed: onPressed,
-        icon: Icon(
-          icon,
-          size: 20,
-          color:
-              enabled
-                  ? AppTheme.onBackground
-                  : AppTheme.onBackgroundSubtle.withValues(alpha: 0.4),
-        ),
-        label: Text(
-          label,
-          style: TextStyle(
-            color:
-                enabled
-                    ? AppTheme.onBackground
-                    : AppTheme.onBackgroundSubtle.withValues(alpha: 0.4),
-          ),
-        ),
-        style: OutlinedButton.styleFrom(
-          side: BorderSide(
-            color:
-                enabled
-                    ? AppTheme.onBackground
-                    : AppTheme.onBackgroundSubtle.withValues(alpha: 0.3),
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(22),
-          ),
-          textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-        ),
-      ),
+    return PillActionButton(
+      icon: icon,
+      label: label,
+      onPressed: onPressed,
+      isPrimary: isPrimary,
+      // Primary Play All keeps the gradient fill used before pill unification.
+      useGradient: isPrimary,
     );
   }
 }

@@ -8,6 +8,7 @@ import 'package:tayra/core/api/cached_api_repository.dart' as cached_api;
 import 'package:tayra/core/api/models.dart' as models;
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/error_state.dart';
+import 'package:tayra/core/widgets/pill_action_button.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/player/player_provider.dart';
 
@@ -196,55 +197,53 @@ class _PodcastDetailScreenState extends ConsumerState<PodcastDetailScreen> {
 
   Widget _buildActions() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-      child: Row(
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FilledButton.icon(
-            onPressed: _isPlayingAll ? null : _playAll,
-            style: FilledButton.styleFrom(
-              backgroundColor: AppTheme.primary,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            ),
-            icon:
-                _isPlayingAll
-                    ? const SizedBox(
-                      width: 16,
-                      height: 16,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: Colors.white,
-                      ),
-                    )
-                    : const Icon(Icons.play_arrow_rounded, size: 20),
-            label: const Text('Play All'),
+          Row(
+            children: [
+              Expanded(
+                child: PillActionButton(
+                  icon: Icons.play_arrow_rounded,
+                  label: 'Play All',
+                  onPressed: _isPlayingAll ? null : _playAll,
+                  iconWidget:
+                      _isPlayingAll
+                          ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
+                          : null,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: PillActionButton(
+                  icon: Icons.shuffle_rounded,
+                  label: 'Shuffle',
+                  onPressed: _isShuffling ? null : _shuffleAll,
+                  isPrimary: false,
+                  iconWidget:
+                      _isShuffling
+                          ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: AppTheme.primary,
+                            ),
+                          )
+                          : null,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 10),
-          FilledButton.icon(
-            onPressed: _isShuffling ? null : _shuffleAll,
-            style: FilledButton.styleFrom(
-              backgroundColor: AppTheme.surfaceContainer,
-              foregroundColor: AppTheme.onBackground,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            ),
-            icon:
-                _isShuffling
-                    ? const SizedBox(
-                      width: 16,
-                      height: 16,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: AppTheme.primary,
-                      ),
-                    )
-                    : const Icon(
-                      Icons.shuffle_rounded,
-                      size: 18,
-                      color: AppTheme.primary,
-                    ),
-            label: const Text('Shuffle'),
-          ),
-          const Spacer(),
+          const SizedBox(height: 10),
           Text(
             '${_episodes.length} episode${_episodes.length == 1 ? '' : 's'}',
             style: const TextStyle(

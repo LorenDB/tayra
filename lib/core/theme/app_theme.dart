@@ -15,6 +15,7 @@ class AppTheme {
   static const Color primaryLight = Color.fromARGB(255, 108, 213, 255);
   static const Color secondary = Color(0xFF00D4AA); // Teal accent
   static const Color error = Color(0xFFFF6B6B);
+  static const Color favorite = Color(0xFFFF6B9D); // Heart / favorites accent
   static const Color onBackground = Color(0xFFFFFFFF);
   static const Color onBackgroundMuted = Color(0xFFB3B3B3);
   static const Color onBackgroundSubtle = Color(0xFF666666);
