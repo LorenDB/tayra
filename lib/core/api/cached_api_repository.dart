@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/api/api_client.dart';
@@ -7,6 +8,8 @@ import 'package:tayra/core/api/models.dart';
 import 'package:tayra/core/cache/audio_cache_service.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
+import 'package:tayra/core/cache/pending_favorite_ops.dart';
+import 'package:tayra/core/connectivity/connectivity_provider.dart';
 
 // Re-export types so consumers only need to import cached_api_repository.dart
 export 'package:tayra/core/api/api_repository.dart'
@@ -14,19 +17,41 @@ export 'package:tayra/core/api/api_repository.dart'
 export 'package:tayra/core/api/api_client.dart' show PaginatedResponse;
 export 'package:tayra/core/api/models.dart';
 
+/// Thrown when a metadata key is not available in the local cache while offline.
+class OfflineCacheMissException implements Exception {
+  final String cacheKey;
+
+  OfflineCacheMissException(this.cacheKey);
+
+  @override
+  String toString() => 'Not available offline';
+}
+
 /// Cached API repository that wraps FunkwhaleApi with caching layer.
 ///
 /// Strategy for reads:
-///  1. If a non-expired cache entry exists, return it immediately.
-///  2. Otherwise try the network.  On success, update the cache and return.
-///  3. If the network fails, serve *stale* (expired) cache data if available,
-///     so the user can still browse offline.
+///  1. If offline (or force-offline), serve any cached entry immediately
+///     (ignoring TTL) and never dial the network.
+///  2. If online and a non-expired cache entry exists, return it immediately.
+///  3. Otherwise try the network. On success, update the cache and return.
+///  4. If the network fails, serve *stale* (expired) cache data if available.
 class CachedFunkwhaleApi {
   final FunkwhaleApi _api;
   final CacheManager _cache;
   final AudioCacheService _audioCache;
 
-  CachedFunkwhaleApi(this._api, this._cache, this._audioCache);
+  /// Returns true when the app should not hit the network (no connectivity or
+  /// forced offline mode). Injected so unit tests can override it.
+  final bool Function() _isOffline;
+
+  CachedFunkwhaleApi(
+    this._api,
+    this._cache,
+    this._audioCache, {
+    bool Function()? isOffline,
+  }) : _isOffline = isOffline ?? (() => false);
+
+  bool get isOffline => _isOffline();
 
   // ── Generic cache-or-fetch helpers ──────────────────────────────────
 
@@ -35,9 +60,13 @@ class CachedFunkwhaleApi {
   /// hit the network.
   Future<T?> _tryCache<T>(
     String cacheKey,
-    T Function(Map<String, dynamic>) fromJson,
-  ) async {
-    final cached = await _cache.getMetadata(cacheKey);
+    T Function(Map<String, dynamic>) fromJson, {
+    bool allowStale = false,
+  }) async {
+    final cached =
+        allowStale
+            ? await _cache.getMetadataStale(cacheKey)
+            : await _cache.getMetadata(cacheKey);
     if (cached == null) return null;
     try {
       return fromJson(cached);
@@ -46,10 +75,7 @@ class CachedFunkwhaleApi {
     }
   }
 
-  /// Generic cache-or-fetch pattern used by every read method:
-  ///  1. Return a fresh cache hit immediately (unless [forceRefresh]).
-  ///  2. On cache miss, call [fetch] and write the result to the cache.
-  ///  3. On network failure, fall back to a stale cache entry if available.
+  /// Generic cache-or-fetch pattern used by every read method.
   Future<T> _cachedFetch<T>({
     required String cacheKey,
     required CacheType cacheType,
@@ -60,6 +86,15 @@ class CachedFunkwhaleApi {
     bool forceRefresh = false,
     List<String?> Function(T)? coverUrls,
   }) async {
+    // Offline / force-offline: never dial the network. Serve any cached
+    // entry (fresh or expired) immediately so cold boot doesn't wait on
+    // connectTimeout.
+    if (_isOffline()) {
+      final offlineHit = await _tryCache(cacheKey, fromJson, allowStale: true);
+      if (offlineHit != null) return offlineHit;
+      throw OfflineCacheMissException(cacheKey);
+    }
+
     if (!forceRefresh) {
       final hit = await _tryCache(cacheKey, fromJson);
       if (hit != null) return hit;
@@ -345,6 +380,9 @@ class CachedFunkwhaleApi {
   }
 
   Future<Set<int>> getAllFavoriteTrackIds() async {
+    if (_isOffline()) {
+      return await _cache.getFavorites();
+    }
     try {
       final ids = await _api.getAllFavoriteTrackIds();
       // Atomically replace cached favorites in a single transaction so
@@ -361,17 +399,99 @@ class CachedFunkwhaleApi {
   }
 
   Future<void> addFavorite(int trackId) async {
-    await _api.addFavorite(trackId);
-    await _cache.addFavorite(trackId);
-    // Invalidate paginated favorites list so the next getFavorites() call
-    // fetches fresh data rather than serving a page that's missing this track.
-    await _cache.deleteMetadataLike('favorites_p%');
+    if (_isOffline()) {
+      await _applyFavoriteLocally(trackId, add: true);
+      await PendingFavoriteOps.enqueue(trackId: trackId, add: true);
+      return;
+    }
+    try {
+      await _api.addFavorite(trackId);
+      await _applyFavoriteLocally(trackId, add: true);
+      // Drop any stale pending op for this track after a successful write.
+      await PendingFavoriteOps.remove(trackId);
+    } on DioException catch (e) {
+      if (_isNetworkFailure(e)) {
+        await _applyFavoriteLocally(trackId, add: true);
+        await PendingFavoriteOps.enqueue(trackId: trackId, add: true);
+        return;
+      }
+      rethrow;
+    }
   }
 
   Future<void> removeFavorite(int trackId) async {
-    await _api.removeFavorite(trackId);
-    await _cache.removeFavorite(trackId);
+    if (_isOffline()) {
+      await _applyFavoriteLocally(trackId, add: false);
+      await PendingFavoriteOps.enqueue(trackId: trackId, add: false);
+      return;
+    }
+    try {
+      await _api.removeFavorite(trackId);
+      await _applyFavoriteLocally(trackId, add: false);
+      await PendingFavoriteOps.remove(trackId);
+    } on DioException catch (e) {
+      if (_isNetworkFailure(e)) {
+        await _applyFavoriteLocally(trackId, add: false);
+        await PendingFavoriteOps.enqueue(trackId: trackId, add: false);
+        return;
+      }
+      rethrow;
+    }
+  }
+
+  Future<void> _applyFavoriteLocally(int trackId, {required bool add}) async {
+    if (add) {
+      await _cache.addFavorite(trackId);
+    } else {
+      await _cache.removeFavorite(trackId);
+    }
+    // Invalidate paginated favorites list so the next getFavorites() call
+    // does not serve a page that is out of date with the local set.
     await _cache.deleteMetadataLike('favorites_p%');
+  }
+
+  static bool _isNetworkFailure(DioException e) {
+    return e.type == DioExceptionType.connectionTimeout ||
+        e.type == DioExceptionType.sendTimeout ||
+        e.type == DioExceptionType.receiveTimeout ||
+        e.type == DioExceptionType.connectionError ||
+        e.type == DioExceptionType.unknown;
+  }
+
+  /// Flush any favorite mutations that were queued while offline.
+  ///
+  /// Returns the number of ops successfully synced. Stops on the first
+  /// hard failure so remaining ops are retried later.
+  Future<int> syncPendingFavorites() async {
+    if (_isOffline()) return 0;
+    final ops = await PendingFavoriteOps.loadAll();
+    if (ops.isEmpty) return 0;
+
+    var synced = 0;
+    for (final op in ops) {
+      try {
+        if (op.add) {
+          await _api.addFavorite(op.trackId);
+          await _cache.addFavorite(op.trackId);
+        } else {
+          await _api.removeFavorite(op.trackId);
+          await _cache.removeFavorite(op.trackId);
+        }
+        await PendingFavoriteOps.remove(op.trackId);
+        synced++;
+      } catch (e) {
+        debugPrint(
+          'CachedFunkwhaleApi: pending favorite sync failed for '
+          '${op.trackId}: $e',
+        );
+        // Keep the op for a later attempt.
+        break;
+      }
+    }
+    if (synced > 0) {
+      await _cache.deleteMetadataLike('favorites_p%');
+    }
+    return synced;
   }
 
   // ── Playlists ───────────────────────────────────────────────────────
@@ -941,5 +1061,15 @@ final cachedFunkwhaleApiProvider = Provider<CachedFunkwhaleApi>((ref) {
   final api = ref.watch(funkwhaleApiProvider);
   final cache = CacheManager.instance;
   final audioCache = ref.watch(audioCacheServiceProvider);
-  return CachedFunkwhaleApi(api, cache, audioCache);
+  return CachedFunkwhaleApi(
+    api,
+    cache,
+    audioCache,
+    isOffline: () {
+      // Prefer the combined offline signal (no interface + force offline).
+      // Use read (not watch) so the API instance is not rebuilt on every
+      // connectivity flap — the getter is evaluated per request.
+      return ref.read(offlineStateProvider).isOffline;
+    },
+  );
 });

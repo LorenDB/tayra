@@ -15,6 +15,7 @@ import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/cache/audio_cache_service.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
+import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/features/favorites/favorites_provider.dart';
 import 'package:tayra/features/player/playback_listen_tracker.dart';
 import 'package:tayra/features/player/queue_persistence_service.dart';
@@ -1383,6 +1384,41 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
   bool get _isGaplessEnabled => ref.read(settingsProvider).gaplessPlayback;
 
+  /// True when the app should not rely on network streaming.
+  bool get _isOffline => ref.read(offlineStateProvider).isOffline;
+
+  /// Whether [track] can be started without the network (local audio file).
+  bool _isTrackCached(Track track) {
+    return ref.read(offlineTrackIdsProvider).contains(track.id);
+  }
+
+  /// Find the next (or previous) playable index in [queue].
+  ///
+  /// Online: any index is considered playable (may stream).
+  /// Offline: only tracks with local audio. Returns null if none found
+  /// in the given direction before leaving the list bounds.
+  int? _findPlayableIndex(List<Track> queue, int from, {int step = 1}) {
+    if (queue.isEmpty) return null;
+    if (!_isOffline) {
+      return (from >= 0 && from < queue.length) ? from : null;
+    }
+    final offlineIds = ref.read(offlineTrackIdsProvider);
+    if (offlineIds.isEmpty) return null;
+    for (var i = from; i >= 0 && i < queue.length; i += step) {
+      if (offlineIds.contains(queue[i].id)) return i;
+    }
+    return null;
+  }
+
+  void _showOfflineUnavailableSnack(String? title) {
+    final ctx = shellNavigatorKey.currentContext;
+    if (ctx == null || !ctx.mounted) return;
+    final label = (title != null && title.isNotEmpty) ? '"$title"' : 'track';
+    ScaffoldMessenger.of(
+      ctx,
+    ).showSnackBar(SnackBar(content: Text('$label is not available offline')));
+  }
+
   /// Build a single [AudioSource] for a track, preferring cached local files.
   Future<AudioSource> _audioSourceForTrack(Track track) async {
     final listenUrl = track.listenUrl;
@@ -1393,6 +1429,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
     final cachedFile = await _audioCache.getCachedAudio(track);
     if (cachedFile != null) {
       return AudioSource.uri(cachedFile.uri);
+    }
+
+    if (_isOffline) {
+      throw Exception('Track ${track.id} not available offline');
     }
 
     final streamUrl = _api.getStreamUrl(listenUrl);
@@ -1407,6 +1447,14 @@ class PlayerNotifier extends Notifier<PlayerState> {
     Duration? initialPosition,
   }) async {
     _needsReload = false;
+
+    // Offline: gapless would mix stream URLs for uncached tracks and stall.
+    // Force the single-track path which skips uncached items.
+    if (_isOffline) {
+      _gaplessActive = false;
+      return false;
+    }
+
     try {
       final sources = <AudioSource>[];
       for (final track in state.queue) {
@@ -1902,17 +1950,49 @@ class PlayerNotifier extends Notifier<PlayerState> {
       startTrack = tracks[startIndex];
     }
 
+    // Offline: start on the first track that has local audio at or after
+    // the requested index (then wrap-search from 0). Keep the full queue so
+    // the UI still shows everything the user selected.
+    var effectiveIndex = newCurrentIndex;
+    var effectiveStart = startTrack;
+    if (_isOffline) {
+      final playable =
+          _findPlayableIndex(newQueue, newCurrentIndex) ??
+          _findPlayableIndex(newQueue, 0);
+      if (playable == null) {
+        state = state.copyWith(
+          queue: newQueue,
+          unshuffledQueue: newUnshuffledQueue,
+          isShuffled: newIsShuffled,
+          currentIndex: newCurrentIndex,
+          isLoading: false,
+          isPlaying: false,
+        );
+        _gaplessActive = false;
+        _showOfflineUnavailableSnack(startTrack.title);
+        _saveQueue();
+        return;
+      }
+      if (playable != newCurrentIndex) {
+        effectiveIndex = playable;
+        effectiveStart = newQueue[playable];
+        if (!_isTrackCached(startTrack)) {
+          _showOfflineUnavailableSnack(startTrack.title);
+        }
+      }
+    }
+
     state = state.copyWith(
       queue: newQueue,
       unshuffledQueue: newUnshuffledQueue,
       isShuffled: newIsShuffled,
-      currentIndex: newCurrentIndex,
+      currentIndex: effectiveIndex,
       isLoading: true,
     );
 
-    if (_isGaplessEnabled) {
+    if (_isGaplessEnabled && !_isOffline) {
       final loaded = await _loadGaplessSource(
-        newCurrentIndex,
+        effectiveIndex,
         initialPosition: initialPosition,
       );
       if (loaded) {
@@ -1925,17 +2005,17 @@ class PlayerNotifier extends Notifier<PlayerState> {
           isLoading: false,
           isPlaying: _handler.audioPlayer.playing,
         );
-        await _activateListenForTrack(startTrack);
+        await _activateListenForTrack(effectiveStart);
         try {
-          await _api.recordListening(startTrack.id);
+          await _api.recordListening(effectiveStart.id);
         } catch (_) {}
       } else {
         // Fall back to single-track loading.
-        await _loadAndPlay(startTrack, initialPosition: initialPosition);
+        await _loadAndPlay(effectiveStart, initialPosition: initialPosition);
       }
     } else {
       _gaplessActive = false;
-      await _loadAndPlay(startTrack, initialPosition: initialPosition);
+      await _loadAndPlay(effectiveStart, initialPosition: initialPosition);
     }
 
     _saveQueue();
@@ -2311,6 +2391,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
         }
 
         if (!loadedFromCache) {
+          if (_isOffline) {
+            throw Exception('Cached audio unreadable offline for ${track.id}');
+          }
           // Both cached attempts failed — stream from server.
           debugPrint(
             'PlayerNotifier._loadTrack: streaming track ${track.id} from server: $streamUrl',
@@ -2329,6 +2412,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
             'PlayerNotifier._loadTrack: loaded track ${track.id} from cache',
           );
         }
+      } else if (_isOffline) {
+        // Not cached and offline — do not attempt a network stream.
+        throw Exception('Track ${track.id} not available offline');
       } else {
         // Not cached — stream from server.
         debugPrint(
@@ -2391,13 +2477,31 @@ class PlayerNotifier extends Notifier<PlayerState> {
       );
       state = state.copyWith(isLoading: false);
 
-      // Do NOT auto-skip. Show a SnackBar and pause playback so the user can
-      // manually intervene (remove track, retry, etc.).
+      // Offline: skip forward to the next locally available track instead of
+      // stalling the queue on a stream-only item.
+      if (_isOffline && autoPlay && state.queue.isNotEmpty) {
+        final next = _findPlayableIndex(state.queue, state.currentIndex + 1);
+        if (next != null) {
+          _showOfflineUnavailableSnack(track.title);
+          state = state.copyWith(currentIndex: next, isLoading: true);
+          await _loadAndPlay(state.queue[next]);
+          return;
+        }
+      }
+
+      // Do NOT auto-skip online. Show a SnackBar and pause playback so the
+      // user can manually intervene (remove track, retry, etc.).
       final ctx = shellNavigatorKey.currentContext;
       if (ctx != null && ctx.mounted) {
         final title = track.title;
         ScaffoldMessenger.of(ctx).showSnackBar(
-          SnackBar(content: Text('Unable to load "$title". Playback paused.')),
+          SnackBar(
+            content: Text(
+              _isOffline
+                  ? '"$title" is not available offline'
+                  : 'Unable to load "$title". Playback paused.',
+            ),
+          ),
         );
       } else {
         debugPrint(
@@ -2431,6 +2535,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// Downloads are sequential to avoid saturating the connection while the
   /// current track is still streaming.
   void _preCacheAudio(List<Track> tracks, int startIndex) {
+    if (_isOffline) return;
     final headers = _api.authHeaders;
     // Cache the tracks *after* startIndex (the current track is already being
     // cached / played inside _loadTrack).
@@ -2750,7 +2855,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }
 
   Future<void> skipNext() async {
-    if (!state.hasNext) return;
+    if (!state.hasNext && !(_isOffline && state.queue.isNotEmpty)) return;
     _userPaused = false;
     _pendingRestorePosition = null;
     if (state.queueCompleted) {
@@ -2758,8 +2863,25 @@ class PlayerNotifier extends Notifier<PlayerState> {
     }
     await _finalizeCurrentListen();
 
+    // Offline: jump to the next track that has local audio.
+    if (_isOffline) {
+      final newIndex = _findPlayableIndex(state.queue, state.currentIndex + 1);
+      if (newIndex == null) {
+        state = state.copyWith(isPlaying: false, queueCompleted: true);
+        _saveQueue();
+        return;
+      }
+      _gaplessActive = false;
+      state = state.copyWith(currentIndex: newIndex, isLoading: true);
+      await _loadAndPlay(state.queue[newIndex]);
+      _saveQueue();
+      Analytics.track('skip_next');
+      return;
+    }
+
     if (_gaplessActive) {
       final newIndex = state.currentIndex + 1;
+      if (newIndex >= state.queue.length) return;
       state = state.copyWith(currentIndex: newIndex);
       _updateMediaItemForTrack(state.queue[newIndex]);
       try {
@@ -2787,6 +2909,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     } else if (_isGaplessEnabled) {
       // Gapless was just turned on — build the full playlist from this track.
       final newIndex = state.currentIndex + 1;
+      if (newIndex >= state.queue.length) return;
       state = state.copyWith(currentIndex: newIndex, isLoading: true);
       final loaded = await _loadGaplessSource(newIndex);
       if (loaded) {
@@ -2805,6 +2928,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       }
     } else {
       final newIndex = state.currentIndex + 1;
+      if (newIndex >= state.queue.length) return;
       state = state.copyWith(currentIndex: newIndex, isLoading: true);
       await _loadAndPlay(state.queue[newIndex]);
     }
@@ -2818,7 +2942,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       await _handler.audioPlayer.seek(Duration.zero);
       return;
     }
-    if (!state.hasPrevious) {
+    if (!state.hasPrevious && !(_isOffline && state.queue.isNotEmpty)) {
       await _handler.audioPlayer.seek(Duration.zero);
       return;
     }
@@ -2829,6 +2953,25 @@ class PlayerNotifier extends Notifier<PlayerState> {
       state = state.copyWith(queueCompleted: false);
     }
     await _finalizeCurrentListen();
+
+    // Offline: jump to the previous track that has local audio.
+    if (_isOffline) {
+      final newIndex = _findPlayableIndex(
+        state.queue,
+        state.currentIndex - 1,
+        step: -1,
+      );
+      if (newIndex == null) {
+        await _handler.audioPlayer.seek(Duration.zero);
+        return;
+      }
+      _gaplessActive = false;
+      state = state.copyWith(currentIndex: newIndex, isLoading: true);
+      await _loadAndPlay(state.queue[newIndex]);
+      _saveQueue();
+      Analytics.track('skip_previous');
+      return;
+    }
 
     if (_gaplessActive) {
       final newIndex = state.currentIndex - 1;
