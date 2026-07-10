@@ -696,17 +696,13 @@ void showClearQueueConfirmation(BuildContext context, WidgetRef ref) {
 
 // ── Queue Track Row ─────────────────────────────────────────────────────
 
+/// Visual content for a queue row (no Material/InkWell — the parent paints
+/// hover/press ink across content + drag handle as one surface).
 class _QueueTrackRow extends StatelessWidget {
   final Track track;
   final int index;
   final bool isCurrentTrack;
   final bool isPlaying;
-  final VoidCallback onTap;
-
-  /// Opens the track context menu. [globalPosition] is set for right-click so
-  /// the menu anchors at the pointer; null for long-press (anchors to row center).
-  final void Function(Offset? globalPosition)? onOpenMenu;
-  final bool isDragging;
 
   /// When true, right padding is tightened because a drag handle sits beside
   /// this row as a sibling widget.
@@ -717,110 +713,83 @@ class _QueueTrackRow extends StatelessWidget {
     required this.index,
     required this.isCurrentTrack,
     this.isPlaying = false,
-    required this.onTap,
-    this.onOpenMenu,
-    this.isDragging = false,
     this.compactTrailing = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Content only (no drag handle). The handle is composed by the parent so
-    // it can sit outside Dismissible / InkWell gesture arenas.
-    // Current-track fill is applied by the parent around content + handle so
-    // the highlight spans the full row.
-    return Material(
-      color: Colors.transparent,
-      child: AnimatedOpacity(
-        opacity: isDragging ? 0.35 : 1.0,
-        duration: const Duration(milliseconds: 150),
-        child: InkWell(
-          onTap: onTap,
-          // Long-press (touch) and right-click (mouse) both open the context menu.
-          onLongPress: onOpenMenu != null ? () => onOpenMenu!(null) : null,
-          onSecondaryTapDown:
-              onOpenMenu != null
-                  ? (details) => onOpenMenu!(details.globalPosition)
-                  : null,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(16, 10, compactTrailing ? 4 : 16, 10),
-            child: Row(
-              children: [
-                // Playing indicator or track number
-                SizedBox(
-                  width: 32,
-                  child:
-                      isCurrentTrack
-                          ? _PlayingIndicator(isPlaying: isPlaying)
-                          : Text(
-                            '${index + 1}',
-                            style: const TextStyle(
-                              color: AppTheme.onBackgroundSubtle,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                ),
-                const SizedBox(width: 12),
-                // Cover art
-                CoverArtWidget(
-                  imageUrl: track.coverUrl,
-                  size: 44,
-                  borderRadius: 6,
-                ),
-                const SizedBox(width: 12),
-                // Track info
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        track.title,
-                        style: TextStyle(
-                          color:
-                              isCurrentTrack
-                                  ? AppTheme.primary
-                                  : AppTheme.onBackground,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        track.artistName,
-                        style: TextStyle(
-                          color:
-                              isCurrentTrack
-                                  ? AppTheme.primaryLight
-                                  : AppTheme.onBackgroundMuted,
-                          fontSize: 12,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-                // Duration
-                if (track.duration != null)
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: Text(
-                      formatTrackDuration(track.duration!),
+    return Padding(
+      padding: EdgeInsets.fromLTRB(16, 10, compactTrailing ? 4 : 16, 10),
+      child: Row(
+        children: [
+          // Playing indicator or track number
+          SizedBox(
+            width: 32,
+            child:
+                isCurrentTrack
+                    ? _PlayingIndicator(isPlaying: isPlaying)
+                    : Text(
+                      '${index + 1}',
                       style: const TextStyle(
                         color: AppTheme.onBackgroundSubtle,
-                        fontSize: 12,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
                       ),
+                      textAlign: TextAlign.center,
                     ),
+          ),
+          const SizedBox(width: 12),
+          // Cover art
+          CoverArtWidget(imageUrl: track.coverUrl, size: 44, borderRadius: 6),
+          const SizedBox(width: 12),
+          // Track info
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  track.title,
+                  style: TextStyle(
+                    color:
+                        isCurrentTrack
+                            ? AppTheme.primary
+                            : AppTheme.onBackground,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  track.artistName,
+                  style: TextStyle(
+                    color:
+                        isCurrentTrack
+                            ? AppTheme.primaryLight
+                            : AppTheme.onBackgroundMuted,
+                    fontSize: 12,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ],
             ),
           ),
-        ),
+          // Duration
+          if (track.duration != null)
+            Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Text(
+                formatTrackDuration(track.duration!),
+                style: const TextStyle(
+                  color: AppTheme.onBackgroundSubtle,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -1160,10 +1129,8 @@ class _DraggableQueueItemState extends ConsumerState<_DraggableQueueItem> {
 
   @override
   Widget build(BuildContext context) {
-    // Drag is scoped to the handle only so a long-press on the rest of the
-    // row can open the context menu without starting a reorder. The handle
-    // is a sibling of Dismissible (not a descendant) so swipe-to-remove and
-    // reorder never share a gesture recognizer.
+    // One Material + InkWell spans content + drag handle so hover/press ink
+    // is not clipped at the grip. Drag stays scoped to the handle widget.
     return DragTarget<int>(
       onWillAcceptWithDetails: (details) => details.data != widget.index,
       onAcceptWithDetails: (details) {
@@ -1175,21 +1142,39 @@ class _DraggableQueueItemState extends ConsumerState<_DraggableQueueItem> {
           track: widget.track,
           index: widget.index,
           isCurrentTrack: widget.isCurrentTrack,
-          onTap: widget.onTap,
-          onOpenMenu: _onOpenMenu,
           isPlaying: widget.isPlaying,
-          isDragging: _isDragging,
-          // Drag handle sits beside every row (including now-playing) so the
-          // currently playing track can be reordered without interrupting
-          // playback.
           compactTrailing: true,
         );
 
-        // Now-playing stays non-dismissible (removing it would skip playback),
-        // but it still gets a drag handle so it can be moved in the queue.
-        final content =
+        final inkRow = Material(
+          color:
+              widget.isCurrentTrack
+                  ? AppTheme.primary.withValues(alpha: 0.08)
+                  : Colors.transparent,
+          child: AnimatedOpacity(
+            opacity: _isDragging ? 0.35 : 1.0,
+            duration: const Duration(milliseconds: 150),
+            child: InkWell(
+              onTap: widget.onTap,
+              // Long-press (touch) and right-click (mouse) both open the menu.
+              // The handle's LongPressDraggable wins over long-press on the grip.
+              onLongPress: () => _onOpenMenu(null),
+              onSecondaryTapDown:
+                  (details) => _onOpenMenu(details.globalPosition),
+              child: IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [Expanded(child: row), _buildDragHandle()],
+                ),
+              ),
+            ),
+          ),
+        );
+
+        // Now-playing stays non-dismissible (removing it would skip playback).
+        final body =
             widget.isCurrentTrack
-                ? row
+                ? inkRow
                 : Dismissible(
                   key: ValueKey('queue_${widget.index}_${widget.track.id}'),
                   direction: DismissDirection.endToStart,
@@ -1204,25 +1189,10 @@ class _DraggableQueueItemState extends ConsumerState<_DraggableQueueItem> {
                     ),
                   ),
                   onDismissed: (_) => widget.onDismissed(),
-                  child: row,
+                  child: inkRow,
                 );
 
-        // Paint the now-playing fill behind content + handle so the highlight
-        // isn't cut off at the drag grip.
-        final rowWithHandle = Material(
-          color:
-              widget.isCurrentTrack
-                  ? AppTheme.primary.withValues(alpha: 0.08)
-                  : Colors.transparent,
-          child: IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [Expanded(child: content), _buildDragHandle()],
-            ),
-          ),
-        );
-
-        return _buildDropHighlight(isTarget: isTarget, child: rowWithHandle);
+        return _buildDropHighlight(isTarget: isTarget, child: body);
       },
     );
   }
