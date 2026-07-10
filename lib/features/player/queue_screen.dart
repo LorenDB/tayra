@@ -1,5 +1,8 @@
+import 'dart:math' as math;
+
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tayra/core/widgets/dialog_utils.dart';
@@ -11,6 +14,7 @@ import 'package:tayra/features/player/player_provider.dart';
 
 import 'package:tayra/features/player/queue_persistence_service.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/features/playlists/add_to_playlist_sheet.dart';
 import 'package:tayra/features/playlists/playlists_screen.dart';
 import 'package:tayra/features/player/mini_player.dart';
 
@@ -283,7 +287,7 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
   Widget _buildBody(
     BuildContext context,
     WidgetRef ref,
-    List queue,
+    List<Track> queue,
     int currentIndex,
   ) {
     if (queue.isEmpty) return _buildEmptyState();
@@ -293,10 +297,9 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
       physics: const BouncingScrollPhysics(
         parent: AlwaysScrollableScrollPhysics(),
       ),
-      slivers: [
-        ..._buildQueueSlivers(context, ref, queue, currentIndex),
-        const SliverToBoxAdapter(child: SizedBox(height: 120)),
-      ],
+      // Bottom padding / end-of-queue drop zone is built inside the queue
+      // slivers so the entire trailing region accepts drops.
+      slivers: _buildQueueSlivers(context, ref, queue, currentIndex),
     );
   }
 
@@ -311,25 +314,63 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
   List<Widget> _buildQueueSlivers(
     BuildContext context,
     WidgetRef ref,
-    List queue,
+    List<Track> queue,
     int currentIndex,
   ) {
     final isPlaying = ref.watch(playerProvider.select((s) => s.isPlaying));
     return [
-      // Now playing header
-      if (currentIndex >= 0 && currentIndex < queue.length)
+      // Start-of-queue drop zone (includes the "Now Playing" header when the
+      // current track is first). Dropping here inserts at index 0 so tracks
+      // can be moved to the front without needing a precise hit on row 0.
+      if (queue.isNotEmpty)
         SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 8, 20, 4),
-            child: Text(
-              'Now Playing',
-              style: TextStyle(
-                color: AppTheme.primary,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 0.5,
-              ),
-            ),
+          child: DragTarget<int>(
+            onWillAcceptWithDetails: (details) {
+              final from = details.data;
+              return from > 0 && from < queue.length;
+            },
+            onAcceptWithDetails: (details) {
+              ref.read(playerProvider.notifier).reorderQueue(details.data, 0);
+            },
+            builder: (context, candidateData, rejectedData) {
+              final isTarget = candidateData.isNotEmpty;
+              final showNowPlayingHeader =
+                  currentIndex >= 0 && currentIndex < queue.length;
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 150),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color:
+                      isTarget
+                          ? AppTheme.primary.withValues(alpha: 0.1)
+                          : Colors.transparent,
+                  border:
+                      isTarget
+                          ? const Border(
+                            bottom: BorderSide(
+                              color: AppTheme.primary,
+                              width: 2,
+                            ),
+                          )
+                          : null,
+                ),
+                child:
+                    showNowPlayingHeader
+                        ? const Padding(
+                          padding: EdgeInsets.fromLTRB(20, 8, 20, 4),
+                          child: Text(
+                            'Now Playing',
+                            style: TextStyle(
+                              color: AppTheme.primary,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        )
+                        : SizedBox(height: isTarget ? 40 : 16),
+              );
+            },
           ),
         ),
 
@@ -391,35 +432,50 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
           );
         }, childCount: queue.length),
       ),
+      // End-of-queue drop zone: at least 160px after the last track, and grow
+      // to fill any leftover viewport so blank space below a short queue is
+      // still a valid "append to end" target.
       if (queue.isNotEmpty)
-        SliverToBoxAdapter(
-          child: DragTarget<int>(
-            onWillAcceptWithDetails: (_) => true,
-            onAcceptWithDetails: (details) {
-              ref
-                  .read(playerProvider.notifier)
-                  .reorderQueue(details.data, queue.length);
-            },
-            builder: (context, candidateData, rejectedData) {
-              final isTarget = candidateData.isNotEmpty;
-              return AnimatedContainer(
-                duration: const Duration(milliseconds: 150),
-                height: isTarget ? 32 : 8,
-                decoration: BoxDecoration(
-                  color:
-                      isTarget
-                          ? AppTheme.primary.withValues(alpha: 0.1)
-                          : Colors.transparent,
-                  border:
-                      isTarget
-                          ? const Border(
-                            top: BorderSide(color: AppTheme.primary, width: 2),
-                          )
-                          : null,
-                ),
-              );
-            },
-          ),
+        SliverLayoutBuilder(
+          builder: (context, constraints) {
+            final height = math.max(160.0, constraints.remainingPaintExtent);
+            return SliverToBoxAdapter(
+              child: DragTarget<int>(
+                onWillAcceptWithDetails: (details) {
+                  final from = details.data;
+                  return from >= 0 && from < queue.length;
+                },
+                onAcceptWithDetails: (details) {
+                  ref
+                      .read(playerProvider.notifier)
+                      .reorderQueue(details.data, queue.length);
+                },
+                builder: (context, candidateData, rejectedData) {
+                  final isTarget = candidateData.isNotEmpty;
+                  return AnimatedContainer(
+                    duration: const Duration(milliseconds: 150),
+                    width: double.infinity,
+                    height: height,
+                    decoration: BoxDecoration(
+                      color:
+                          isTarget
+                              ? AppTheme.primary.withValues(alpha: 0.1)
+                              : Colors.transparent,
+                      border:
+                          isTarget
+                              ? const Border(
+                                top: BorderSide(
+                                  color: AppTheme.primary,
+                                  width: 2,
+                                ),
+                              )
+                              : null,
+                    ),
+                  );
+                },
+              ),
+            );
+          },
         ),
     ];
   }
@@ -641,13 +697,17 @@ void showClearQueueConfirmation(BuildContext context, WidgetRef ref) {
 // ── Queue Track Row ─────────────────────────────────────────────────────
 
 class _QueueTrackRow extends StatelessWidget {
-  final dynamic track;
+  final Track track;
   final int index;
   final bool isCurrentTrack;
   final bool isPlaying;
   final VoidCallback onTap;
-  final bool showDragHandle;
+  final VoidCallback? onLongPress;
   final bool isDragging;
+
+  /// When true, right padding is tightened because a drag handle sits beside
+  /// this row as a sibling widget.
+  final bool compactTrailing;
 
   const _QueueTrackRow({
     required this.track,
@@ -655,112 +715,226 @@ class _QueueTrackRow extends StatelessWidget {
     required this.isCurrentTrack,
     this.isPlaying = false,
     required this.onTap,
-    this.showDragHandle = false,
+    this.onLongPress,
     this.isDragging = false,
+    this.compactTrailing = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    // Content only (no drag handle). The handle is composed by the parent so
+    // it can sit outside Dismissible / InkWell gesture arenas.
+    // Current-track fill is applied by the parent around content + handle so
+    // the highlight spans the full row.
     return Material(
-      color:
-          isCurrentTrack
-              ? AppTheme.primary.withValues(alpha: 0.08)
-              : Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          child: Row(
-            children: [
-              // Playing indicator or track number
-              SizedBox(
-                width: 32,
-                child:
-                    isCurrentTrack
-                        ? _PlayingIndicator(isPlaying: isPlaying)
-                        : Text(
-                          '${index + 1}',
-                          style: const TextStyle(
-                            color: AppTheme.onBackgroundSubtle,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
+      color: Colors.transparent,
+      child: AnimatedOpacity(
+        opacity: isDragging ? 0.35 : 1.0,
+        duration: const Duration(milliseconds: 150),
+        child: InkWell(
+          onTap: onTap,
+          onLongPress: onLongPress,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(16, 10, compactTrailing ? 4 : 16, 10),
+            child: Row(
+              children: [
+                // Playing indicator or track number
+                SizedBox(
+                  width: 32,
+                  child:
+                      isCurrentTrack
+                          ? _PlayingIndicator(isPlaying: isPlaying)
+                          : Text(
+                            '${index + 1}',
+                            style: const TextStyle(
+                              color: AppTheme.onBackgroundSubtle,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          textAlign: TextAlign.center,
+                ),
+                const SizedBox(width: 12),
+                // Cover art
+                CoverArtWidget(
+                  imageUrl: track.coverUrl,
+                  size: 44,
+                  borderRadius: 6,
+                ),
+                const SizedBox(width: 12),
+                // Track info
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        track.title,
+                        style: TextStyle(
+                          color:
+                              isCurrentTrack
+                                  ? AppTheme.primary
+                                  : AppTheme.onBackground,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
                         ),
-              ),
-              const SizedBox(width: 12),
-              // Cover art
-              CoverArtWidget(
-                imageUrl: track.coverUrl,
-                size: 44,
-                borderRadius: 6,
-              ),
-              const SizedBox(width: 12),
-              // Track info
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      track.title,
-                      style: TextStyle(
-                        color:
-                            isCurrentTrack
-                                ? AppTheme.primary
-                                : AppTheme.onBackground,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      track.artistName,
-                      style: TextStyle(
-                        color:
-                            isCurrentTrack
-                                ? AppTheme.primaryLight
-                                : AppTheme.onBackgroundMuted,
+                      const SizedBox(height: 2),
+                      Text(
+                        track.artistName,
+                        style: TextStyle(
+                          color:
+                              isCurrentTrack
+                                  ? AppTheme.primaryLight
+                                  : AppTheme.onBackgroundMuted,
+                          fontSize: 12,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                // Duration
+                if (track.duration != null)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: Text(
+                      formatTrackDuration(track.duration!),
+                      style: const TextStyle(
+                        color: AppTheme.onBackgroundSubtle,
                         fontSize: 12,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-              // Duration
-              if (track.duration != null)
-                Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Text(
-                    formatTrackDuration(track.duration!),
-                    style: const TextStyle(
-                      color: AppTheme.onBackgroundSubtle,
-                      fontSize: 12,
                     ),
                   ),
-                ),
-              if (showDragHandle)
-                AnimatedOpacity(
-                  opacity: isDragging ? 0.5 : 1.0,
-                  duration: const Duration(milliseconds: 150),
-                  child: const Padding(
-                    padding: EdgeInsets.only(left: 8),
-                    child: Icon(
-                      Icons.drag_handle_rounded,
-                      color: AppTheme.onBackgroundSubtle,
-                      size: 18,
-                    ),
-                  ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+}
+
+// ── Queue item context menu ─────────────────────────────────────────────
+
+Future<void> _showQueueTrackMenu({
+  required BuildContext context,
+  required WidgetRef ref,
+  required Track track,
+  required int index,
+}) async {
+  final box = context.findRenderObject() as RenderBox?;
+  final overlay = Overlay.of(context).context.findRenderObject() as RenderBox?;
+  if (box == null || overlay == null) return;
+
+  final topLeft = box.localToGlobal(Offset.zero, ancestor: overlay);
+  final center = topLeft + box.size.center(Offset.zero);
+  final position = RelativeRect.fromRect(
+    Rect.fromCenter(center: center, width: 1, height: 1),
+    Offset.zero & overlay.size,
+  );
+
+  final albumAvailable = track.album != null;
+  final artistAvailable = track.artist != null;
+
+  final value = await showMenu<String>(
+    context: context,
+    position: position,
+    color: AppTheme.surfaceContainerHighest,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    items: [
+      PopupMenuItem(
+        value: 'go_to_album',
+        enabled: albumAvailable,
+        child: Row(
+          children: [
+            Icon(
+              Icons.album,
+              size: 20,
+              color:
+                  albumAvailable
+                      ? AppTheme.onBackground
+                      : AppTheme.onBackgroundMuted,
+            ),
+            const SizedBox(width: 12),
+            const Text('Go to album'),
+          ],
+        ),
+      ),
+      PopupMenuItem(
+        value: 'go_to_artist',
+        enabled: artistAvailable,
+        child: Row(
+          children: [
+            Icon(
+              Icons.person,
+              size: 20,
+              color:
+                  artistAvailable
+                      ? AppTheme.onBackground
+                      : AppTheme.onBackgroundMuted,
+            ),
+            const SizedBox(width: 12),
+            const Text('Go to artist'),
+          ],
+        ),
+      ),
+      PopupMenuItem(
+        value: 'add_playlist',
+        child: Row(
+          children: [
+            Icon(
+              Icons.playlist_add_rounded,
+              size: 20,
+              color: AppTheme.onBackground,
+            ),
+            const SizedBox(width: 12),
+            const Text('Add to playlist'),
+          ],
+        ),
+      ),
+      PopupMenuItem(
+        value: 'remove_from_queue',
+        child: Row(
+          children: [
+            Icon(
+              Icons.playlist_remove_rounded,
+              size: 20,
+              color: AppTheme.error,
+            ),
+            const SizedBox(width: 12),
+            const Text(
+              'Remove from queue',
+              style: TextStyle(color: AppTheme.error),
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
+
+  if (value == null || !context.mounted) return;
+
+  switch (value) {
+    case 'go_to_album':
+      if (albumAvailable) {
+        context.push('/album/${track.album!.id}');
+      }
+      break;
+    case 'go_to_artist':
+      if (artistAvailable) {
+        context.push('/artist/${track.artist!.id}');
+      }
+      break;
+    case 'add_playlist':
+      showAddToPlaylistSheet(context, ref, trackIds: [track.id]);
+      break;
+    case 'remove_from_queue':
+      ref.read(playerProvider.notifier).removeFromQueue(index);
+      break;
   }
 }
 
@@ -845,8 +1019,8 @@ class _PlayingIndicatorState extends State<_PlayingIndicator>
   }
 }
 
-class _DraggableQueueItem extends StatefulWidget {
-  final dynamic track;
+class _DraggableQueueItem extends ConsumerStatefulWidget {
+  final Track track;
   final int index;
   final bool isCurrentTrack;
   final bool isPlaying;
@@ -867,132 +1041,167 @@ class _DraggableQueueItem extends StatefulWidget {
   });
 
   @override
-  State<_DraggableQueueItem> createState() => _DraggableQueueItemState();
+  ConsumerState<_DraggableQueueItem> createState() =>
+      _DraggableQueueItemState();
 }
 
-class _DraggableQueueItemState extends State<_DraggableQueueItem> {
+class _DraggableQueueItemState extends ConsumerState<_DraggableQueueItem> {
   bool _isDragging = false;
 
-  @override
-  Widget build(BuildContext context) {
-    if (widget.isCurrentTrack) {
-      return DragTarget<int>(
-        onWillAcceptWithDetails: (details) => details.data != widget.index,
-        onAcceptWithDetails: (details) {
-          widget.onReorder(details.data, widget.index);
-        },
-        builder: (context, candidateData, rejectedData) {
-          final isTarget = candidateData.isNotEmpty;
-          return AnimatedContainer(
-            duration: const Duration(milliseconds: 150),
-            decoration: BoxDecoration(
-              color:
-                  isTarget
-                      ? AppTheme.primary.withValues(alpha: 0.1)
-                      : Colors.transparent,
-              border:
-                  isTarget
-                      ? const Border(
-                        top: BorderSide(color: AppTheme.primary, width: 2),
-                      )
-                      : null,
-            ),
-            child: Dismissible(
-              key: ValueKey('queue_${widget.index}_${widget.track.id}'),
-              direction: DismissDirection.none,
-              child: _QueueTrackRow(
-                track: widget.track,
-                index: widget.index,
-                isCurrentTrack: true,
-                onTap: widget.onTap,
-                isPlaying: widget.isPlaying,
-                showDragHandle: false,
-              ),
-            ),
-          );
-        },
-      );
-    }
+  void _onLongPress() {
+    _showQueueTrackMenu(
+      context: context,
+      ref: ref,
+      track: widget.track,
+      index: widget.index,
+    );
+  }
 
+  static const double _dragFeedbackSize = 72;
+
+  Widget _buildDragHandle() {
+    // LongPressDraggable (not immediate Draggable) is required inside a
+    // scroll view: an immediate multi-drag loses the gesture arena to the
+    // CustomScrollView's vertical drag recognizer.
     return LongPressDraggable<int>(
       data: widget.index,
-      delay: const Duration(milliseconds: 200),
+      delay: const Duration(milliseconds: 150),
+      hapticFeedbackOnStart: true,
+      // Anchor so the square tile is centered under the pointer rather than
+      // offset from the handle's top-left (which would clip a full-width row).
+      dragAnchorStrategy: (draggable, context, position) {
+        return const Offset(_dragFeedbackSize / 2, _dragFeedbackSize / 2);
+      },
       onDragStarted: () {
+        try {
+          HapticFeedback.lightImpact();
+        } catch (_) {}
         setState(() => _isDragging = true);
       },
       onDragEnd: (_) {
-        setState(() => _isDragging = false);
+        if (mounted) setState(() => _isDragging = false);
       },
       feedback: Material(
-        elevation: 8,
-        borderRadius: BorderRadius.circular(8),
-        child: Container(
-          width: MediaQuery.of(context).size.width - 32,
-          decoration: BoxDecoration(
-            color: AppTheme.surfaceContainerHigh,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: _QueueTrackRow(
-            track: widget.track,
-            index: widget.index,
-            isCurrentTrack: false,
-            onTap: () {},
-            showDragHandle: false,
+        elevation: 10,
+        shadowColor: Colors.black54,
+        borderRadius: BorderRadius.circular(10),
+        clipBehavior: Clip.antiAlias,
+        child: CoverArtWidget(
+          imageUrl: widget.track.coverUrl,
+          size: _dragFeedbackSize,
+          borderRadius: 10,
+        ),
+      ),
+      // Keep a same-size placeholder so the row layout doesn't jump while
+      // the elevated feedback follows the finger.
+      childWhenDragging: const SizedBox(
+        width: 44,
+        child: Center(
+          child: Icon(
+            Icons.drag_handle_rounded,
+            color: AppTheme.onBackgroundSubtle,
+            size: 20,
           ),
         ),
       ),
-      childWhenDragging: Container(
-        color: AppTheme.surfaceContainerHigh.withValues(alpha: 0.5),
-        height: 64,
+      child: const SizedBox(
+        width: 44,
+        child: Center(
+          child: Icon(
+            Icons.drag_handle_rounded,
+            color: AppTheme.onBackgroundSubtle,
+            size: 20,
+          ),
+        ),
       ),
-      child: DragTarget<int>(
-        onWillAcceptWithDetails: (details) => details.data != widget.index,
-        onAcceptWithDetails: (details) {
-          widget.onReorder(details.data, widget.index);
-        },
-        builder: (context, candidateData, rejectedData) {
-          final isTarget = candidateData.isNotEmpty;
-          return AnimatedContainer(
-            duration: const Duration(milliseconds: 150),
-            decoration: BoxDecoration(
-              color:
-                  isTarget
-                      ? AppTheme.primary.withValues(alpha: 0.1)
-                      : Colors.transparent,
-              border:
-                  isTarget
-                      ? const Border(
-                        top: BorderSide(color: AppTheme.primary, width: 2),
-                      )
-                      : null,
-            ),
-            child: Dismissible(
-              key: ValueKey('queue_${widget.index}_${widget.track.id}'),
-              direction: DismissDirection.endToStart,
-              background: Container(
-                alignment: Alignment.centerRight,
-                padding: const EdgeInsets.only(right: 24),
-                color: AppTheme.error.withValues(alpha: 0.2),
-                child: const Icon(
-                  Icons.delete_outline_rounded,
-                  color: AppTheme.error,
-                  size: 22,
-                ),
-              ),
-              onDismissed: (_) => widget.onDismissed(),
-              child: _QueueTrackRow(
-                track: widget.track,
-                index: widget.index,
-                isCurrentTrack: false,
-                onTap: widget.onTap,
-                isPlaying: widget.isPlaying,
-                showDragHandle: true,
-                isDragging: _isDragging,
-              ),
-            ),
-          );
-        },
+    );
+  }
+
+  Widget _buildDropHighlight({required bool isTarget, required Widget child}) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 150),
+      decoration: BoxDecoration(
+        color:
+            isTarget
+                ? AppTheme.primary.withValues(alpha: 0.1)
+                : Colors.transparent,
+        border:
+            isTarget
+                ? const Border(
+                  top: BorderSide(color: AppTheme.primary, width: 2),
+                )
+                : null,
       ),
+      child: child,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Drag is scoped to the handle only so a long-press on the rest of the
+    // row can open the context menu without starting a reorder. The handle
+    // is a sibling of Dismissible (not a descendant) so swipe-to-remove and
+    // reorder never share a gesture recognizer.
+    return DragTarget<int>(
+      onWillAcceptWithDetails: (details) => details.data != widget.index,
+      onAcceptWithDetails: (details) {
+        widget.onReorder(details.data, widget.index);
+      },
+      builder: (context, candidateData, rejectedData) {
+        final isTarget = candidateData.isNotEmpty;
+        final row = _QueueTrackRow(
+          track: widget.track,
+          index: widget.index,
+          isCurrentTrack: widget.isCurrentTrack,
+          onTap: widget.onTap,
+          onLongPress: _onLongPress,
+          isPlaying: widget.isPlaying,
+          isDragging: _isDragging,
+          // Drag handle sits beside every row (including now-playing) so the
+          // currently playing track can be reordered without interrupting
+          // playback.
+          compactTrailing: true,
+        );
+
+        // Now-playing stays non-dismissible (removing it would skip playback),
+        // but it still gets a drag handle so it can be moved in the queue.
+        final content =
+            widget.isCurrentTrack
+                ? row
+                : Dismissible(
+                  key: ValueKey('queue_${widget.index}_${widget.track.id}'),
+                  direction: DismissDirection.endToStart,
+                  background: Container(
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.only(right: 24),
+                    color: AppTheme.error.withValues(alpha: 0.2),
+                    child: const Icon(
+                      Icons.delete_outline_rounded,
+                      color: AppTheme.error,
+                      size: 22,
+                    ),
+                  ),
+                  onDismissed: (_) => widget.onDismissed(),
+                  child: row,
+                );
+
+        // Paint the now-playing fill behind content + handle so the highlight
+        // isn't cut off at the drag grip.
+        final rowWithHandle = Material(
+          color:
+              widget.isCurrentTrack
+                  ? AppTheme.primary.withValues(alpha: 0.08)
+                  : Colors.transparent,
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [Expanded(child: content), _buildDragHandle()],
+            ),
+          ),
+        );
+
+        return _buildDropHighlight(isTarget: isTarget, child: rowWithHandle);
+      },
     );
   }
 }
