@@ -117,7 +117,8 @@ class _TrackEntry extends _TrackListEntry {
 
 class _DiscHeaderEntry extends _TrackListEntry {
   final int discNumber;
-  _DiscHeaderEntry(this.discNumber);
+  final int? totalDurationSeconds;
+  _DiscHeaderEntry(this.discNumber, {this.totalDurationSeconds});
 }
 
 List<_TrackListEntry> _buildDisplayEntries(
@@ -139,11 +140,24 @@ List<_TrackListEntry> _buildDisplayEntries(
 
   // Disc sections mode: insert a header row before each new disc.
   final items = <_TrackListEntry>[];
+
+  final discDurations = <int, int>{};
+  for (final t in tracks) {
+    final d = t.discNumber ?? 1;
+    final dur = t.duration;
+    if (dur != null) {
+      discDurations[d] = (discDurations[d] ?? 0) + dur;
+    }
+  }
+
   int? currentDisc;
   for (int i = 0; i < tracks.length; i++) {
     final disc = tracks[i].discNumber ?? 1;
     if (disc != currentDisc) {
-      items.add(_DiscHeaderEntry(disc));
+      items.add(_DiscHeaderEntry(
+        disc,
+        totalDurationSeconds: discDurations[disc],
+      ));
       currentDisc = disc;
     }
     items.add(_TrackEntry(tracks[i], i));
@@ -387,7 +401,10 @@ class _AlbumDetailBody extends ConsumerWidget {
               delegate: SliverChildBuilderDelegate((context, index) {
                 final entry = entries[index];
                 if (entry is _DiscHeaderEntry) {
-                  return _DiscHeader(discNumber: entry.discNumber);
+                  return _DiscHeader(
+                    discNumber: entry.discNumber,
+                    totalDurationSeconds: entry.totalDurationSeconds,
+                  );
                 }
                 return trackTile(entry as _TrackEntry);
               }, childCount: entries.length),
@@ -843,8 +860,9 @@ class _ActionButtons extends ConsumerWidget {
 
 class _DiscHeader extends StatelessWidget {
   final int discNumber;
+  final int? totalDurationSeconds;
 
-  const _DiscHeader({required this.discNumber});
+  const _DiscHeader({required this.discNumber, this.totalDurationSeconds});
 
   @override
   Widget build(BuildContext context) {
@@ -867,6 +885,17 @@ class _DiscHeader extends StatelessWidget {
               letterSpacing: 0.5,
             ),
           ),
+          if (totalDurationSeconds != null) ...[
+            const DotSeparator(),
+            Text(
+              formatTotalDuration(totalDurationSeconds!),
+              style: const TextStyle(
+                color: AppTheme.onBackgroundSubtle,
+                fontSize: 11,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
         ],
       ),
     );
