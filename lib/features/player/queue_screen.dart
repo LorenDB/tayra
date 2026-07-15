@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -330,6 +332,7 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
         index: index,
         isCurrentTrack: index == currentIndex,
         queueLength: queue.length,
+        scrollController: _scrollController,
         onTap: () {
           ref.read(playerProvider.notifier).jumpTo(index);
         },
@@ -1000,6 +1003,7 @@ class _DraggableQueueItem extends ConsumerStatefulWidget {
   final VoidCallback onTap;
   final VoidCallback onDismissed;
   final void Function(int oldIndex, int newIndex) onReorder;
+  final ScrollController scrollController;
 
   const _DraggableQueueItem({
     super.key,
@@ -1010,6 +1014,7 @@ class _DraggableQueueItem extends ConsumerStatefulWidget {
     required this.onTap,
     required this.onDismissed,
     required this.onReorder,
+    required this.scrollController,
   });
 
   @override
@@ -1019,6 +1024,65 @@ class _DraggableQueueItem extends ConsumerStatefulWidget {
 
 class _DraggableQueueItemState extends ConsumerState<_DraggableQueueItem> {
   bool _isDragging = false;
+  Timer? _autoScrollTimer;
+
+  static const double _autoScrollThreshold = 80.0;
+  static const double _autoScrollMaxSpeed = 300.0;
+
+  void _handleDragUpdate(DragUpdateDetails details) {
+    final scrollableState = Scrollable.of(context);
+    final renderBox =
+        scrollableState.context.findRenderObject() as RenderBox?;
+    if (renderBox == null) return;
+
+    final localPos = renderBox.globalToLocal(details.globalPosition);
+    final viewportHeight = renderBox.size.height;
+
+    double? scrollDistance;
+    if (localPos.dy < _autoScrollThreshold) {
+      final t = 1.0 - (localPos.dy / _autoScrollThreshold);
+      scrollDistance = -_autoScrollMaxSpeed * t;
+    } else if (localPos.dy > viewportHeight - _autoScrollThreshold) {
+      final t =
+          1.0 -
+          ((viewportHeight - localPos.dy) / _autoScrollThreshold);
+      scrollDistance = _autoScrollMaxSpeed * t;
+    }
+
+    if (scrollDistance != null && scrollDistance.abs() > 1.0) {
+      _startAutoScroll(scrollDistance);
+    } else {
+      _stopAutoScroll();
+    }
+  }
+
+  void _startAutoScroll(double distancePerSecond) {
+    _stopAutoScroll();
+    const frameDuration = Duration(milliseconds: 16);
+    _autoScrollTimer = Timer.periodic(frameDuration, (_) {
+      final sc = widget.scrollController;
+      if (!sc.hasClients) return;
+      final delta = distancePerSecond * frameDuration.inMicroseconds /
+          1000000.0;
+      final newOffset = (sc.offset + delta).clamp(
+        0.0,
+        sc.position.maxScrollExtent,
+      );
+      if ((newOffset - sc.offset).abs() < 0.5) return;
+      sc.jumpTo(newOffset);
+    });
+  }
+
+  void _stopAutoScroll() {
+    _autoScrollTimer?.cancel();
+    _autoScrollTimer = null;
+  }
+
+  @override
+  void dispose() {
+    _stopAutoScroll();
+    super.dispose();
+  }
 
   void _onOpenMenu(Offset? globalPosition) {
     _showQueueTrackMenu(
@@ -1051,7 +1115,13 @@ class _DraggableQueueItemState extends ConsumerState<_DraggableQueueItem> {
         } catch (_) {}
         setState(() => _isDragging = true);
       },
+      onDragUpdate: _handleDragUpdate,
       onDragEnd: (_) {
+        _stopAutoScroll();
+        if (mounted) setState(() => _isDragging = false);
+      },
+      onDraggableCanceled: (_, _) {
+        _stopAutoScroll();
         if (mounted) setState(() => _isDragging = false);
       },
       feedback: Material(
