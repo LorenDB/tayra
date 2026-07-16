@@ -69,6 +69,10 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   Future<void> _performSearch(String query) async {
     if (query.isEmpty) return;
 
+    // Record the query before the await so Retry works after a failure, and
+    // so late responses from an older query can be discarded.
+    _lastQuery = query;
+
     setState(() {
       _isLoading = true;
       _error = null;
@@ -80,13 +84,15 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       final api = ref.read(cachedFunkwhaleApiProvider);
       final result = await api.search(query);
       if (!mounted) return;
+      // Discard stale results if the user typed a newer query meanwhile.
+      if (query != _lastQuery) return;
       setState(() {
         _result = result;
         _isLoading = false;
-        _lastQuery = query;
       });
     } catch (e) {
       if (!mounted) return;
+      if (query != _lastQuery) return;
       setState(() {
         _error = 'Search failed. Please try again.';
         _isLoading = false;

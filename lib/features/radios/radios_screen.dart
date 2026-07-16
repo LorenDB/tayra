@@ -93,8 +93,7 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
         }
         _isLoading = false;
       });
-      // ignore: avoid_print
-      print('Radios load failed: $e\n$st');
+      debugPrint('Radios load failed: $e\n$st');
     }
   }
 
@@ -145,20 +144,14 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
     if (_error != null) {
       return InlineErrorState(message: _error!, onRetry: _loadRadios);
     }
-    if (_userRadios.isEmpty && _builtinRadios.isEmpty) {
-      return const EmptyState(
-        icon: Icons.radio,
-        title: 'No radios found',
-        subtitle:
-            'Create one on your Funkwhale instance or try a different server',
-      );
-    }
 
     final loadingRadioId = ref.watch(
       playerProvider.select((s) => s.loadingRadioId),
     );
 
     // Flatten sections into a single model list for ListView.builder.
+    // Instance radios are client-defined and always available online — do not
+    // gate them behind an empty API response.
     final items = <_RadioListItem>[];
     if (_instanceRadios.isNotEmpty || _builtinRadios.isNotEmpty) {
       items.add(const _RadioListHeader('Instance radios'));
@@ -182,6 +175,17 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
       for (final radio in _userRadios) {
         items.add(_RadioListServer(radio));
       }
+    }
+
+    // Only truly empty when we have nothing at all (should not happen online
+    // while instance radios exist, but keep a safe empty state).
+    if (items.isEmpty) {
+      return const EmptyState(
+        icon: Icons.radio,
+        title: 'No radios found',
+        subtitle:
+            'Create one on your Funkwhale instance or try a different server',
+      );
     }
 
     return AppRefreshIndicator(

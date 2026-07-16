@@ -84,16 +84,23 @@ mixin PaginatedGridMixin<T, W extends ConsumerStatefulWidget>
     setState(() => isLoadingMore = true);
 
     final nextPage = _currentPage + 1;
-    final result = await fetchPage(nextPage);
+    try {
+      final result = await fetchPage(nextPage);
 
-    if (mounted) {
-      setState(() {
-        items.addAll(result.results);
-        _currentPage = nextPage;
-        hasMore = result.next != null;
-        isLoadingMore = false;
-      });
-      _loadMoreIfNeeded();
+      if (mounted) {
+        setState(() {
+          items.addAll(result.results);
+          _currentPage = nextPage;
+          hasMore = result.next != null;
+          isLoadingMore = false;
+        });
+        _loadMoreIfNeeded();
+      }
+    } catch (_) {
+      // Reset the gate so a later scroll (or pull-to-refresh) can retry.
+      if (mounted) {
+        setState(() => isLoadingMore = false);
+      }
     }
   }
 

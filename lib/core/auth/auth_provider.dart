@@ -423,7 +423,9 @@ class AuthNotifier extends Notifier<AuthState> {
   }
 
   Future<void> _clearAllUserData() async {
-    await CacheManager.instance.clearAll();
+    // Wipe files + favorites + download queue so the next account cannot
+    // inherit hearts, offline stubs, or pending downloads from this user.
+    await CacheManager.instance.clearAll(clearUserData: true);
     await PendingFavoriteOps.clear();
     await QueuePersistenceService.clearQueue();
     await ListenHistoryService.clearAll();

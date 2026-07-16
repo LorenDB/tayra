@@ -181,7 +181,9 @@ class _ArtistCard extends StatelessWidget {
         final imageSize = constraints.maxWidth;
 
         return GestureDetector(
-          onTap: () => context.push('/browse/artist/${artist.id}'),
+          // Stay on the Artists tab route so the shell keeps Artists highlighted
+          // (pushing /browse/... switches the bottom-nav selection to Albums).
+          onTap: () => context.push('/artists/artist/${artist.id}'),
           child: Column(
             children: [
               CoverArtWidget(
