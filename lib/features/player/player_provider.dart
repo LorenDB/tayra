@@ -19,6 +19,8 @@ import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/features/favorites/favorites_provider.dart';
 import 'package:tayra/features/player/playback_listen_tracker.dart';
 import 'package:tayra/features/player/queue_persistence_service.dart';
+import 'package:tayra/features/podcasts/podcast_progress_service.dart';
+import 'package:tayra/core/cache/cache_database.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 
 // ── Android Auto browse tree constants ──────────────────────────────────
@@ -844,6 +846,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// event; cancelled when the player reaches a non-buffering state.
   Timer? _bufferingWatchdog;
 
+  /// Throttle podcast progress writes (aligned with 2s queue progress).
+  int _lastPodcastProgressSeconds = -1;
+
+  late final PodcastProgressService _podcastProgress;
+
   /// Timestamp recorded when the app enters the background (paused lifecycle
   /// state). Used by [onAppResumed] to detect stale audio sources.
   DateTime? _appPausedAt;
@@ -914,6 +921,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
   PlayerState build() {
     _handler = ref.read(audioHandlerProvider);
     _audioCache = ref.read(audioCacheServiceProvider);
+    _podcastProgress = PodcastProgressService(CacheDatabase.instance);
     _listenTracker = PlaybackListenTracker(
       onSessionPersisted: (trackId, recordId, persistedSeconds, listenedAt) {
         QueuePersistenceService.saveListenSession(
@@ -1075,6 +1083,29 @@ class PlayerNotifier extends Notifier<PlayerState> {
         if (secs % 2 == 0 && secs > 0 && secs != _lastSavedPositionSeconds) {
           _lastSavedPositionSeconds = secs;
           unawaited(_saveQueueProgress(position: position));
+        }
+        // Podcast resume progress (same 2s cadence).
+        final track = state.currentTrack;
+        if (track != null &&
+            track.isPodcast &&
+            secs > 0 &&
+            secs != _lastPodcastProgressSeconds &&
+            secs % 2 == 0) {
+          _lastPodcastProgressSeconds = secs;
+          unawaited(
+            _podcastProgress
+                .upsertPosition(
+                  trackId: track.id,
+                  positionMs: position.inMilliseconds,
+                  durationMs:
+                      state.duration.inMilliseconds > 0
+                          ? state.duration.inMilliseconds
+                          : (track.duration != null
+                              ? track.duration! * 1000
+                              : null),
+                )
+                .catchError((_) {}),
+          );
         }
         // Do not await — keep the position stream non-blocking for scroll/UI.
         unawaited(_listenTracker.updatePosition(position).catchError((_) {}));
@@ -2755,8 +2786,22 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }
 
   void _handleTrackCompleted() {
+    final completedTrack = state.currentTrack;
+    if (completedTrack != null && completedTrack.isPodcast) {
+      unawaited(
+        _podcastProgress
+            .markPlayed(
+              trackId: completedTrack.id,
+              durationMs:
+                  completedTrack.duration != null
+                      ? completedTrack.duration! * 1000
+                      : state.duration.inMilliseconds,
+            )
+            .catchError((_) {}),
+      );
+    }
+
     if (_gaplessActive) {
-      final completedTrack = state.currentTrack;
       if (completedTrack != null) {
         final endPosition =
             state.duration.inSeconds > 0
@@ -2821,7 +2866,6 @@ class PlayerNotifier extends Notifier<PlayerState> {
       return;
     }
 
-    final completedTrack = state.currentTrack;
     if (completedTrack != null) {
       final endPosition =
           state.duration.inSeconds > 0
@@ -3272,6 +3316,16 @@ class PlayerNotifier extends Notifier<PlayerState> {
     await _handler.seek(position);
     _saveQueue(); // Save position
     Analytics.track('seek', {'position_seconds': position.inSeconds});
+  }
+
+  /// Relative seek (used for podcast −15s / +30s controls).
+  Future<void> seekBy(Duration delta) async {
+    final current = _handler.audioPlayer.position;
+    final total = state.duration;
+    var target = current + delta;
+    if (target.isNegative) target = Duration.zero;
+    if (total > Duration.zero && target > total) target = total;
+    await seekTo(target);
   }
 
   void toggleShuffle() {

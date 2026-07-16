@@ -4,6 +4,33 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 
+// ── Download network policy ──────────────────────────────────────────────
+
+/// Whether [results] permit background downloads.
+///
+/// When [wifiOnly] is true, only wifi / ethernet / vpn are allowed (mobile
+/// data is blocked). VPN is treated as allowed for home-lab setups.
+bool connectivityAllowsDownloads(
+  List<ConnectivityResult> results, {
+  required bool wifiOnly,
+}) {
+  if (!wifiOnly) {
+    return results.any(
+      (r) =>
+          r == ConnectivityResult.wifi ||
+          r == ConnectivityResult.mobile ||
+          r == ConnectivityResult.ethernet ||
+          r == ConnectivityResult.vpn,
+    );
+  }
+  return results.any(
+    (r) =>
+        r == ConnectivityResult.wifi ||
+        r == ConnectivityResult.ethernet ||
+        r == ConnectivityResult.vpn,
+  );
+}
+
 // ── Raw connectivity stream ──────────────────────────────────────────────
 
 /// Tracks the current list of connectivity results from the OS.

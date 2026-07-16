@@ -417,6 +417,40 @@ class FunkwhaleApi {
     return PaginatedResponse.fromJson(response.data, Track.fromJson);
   }
 
+  /// Subscribe to an existing channel (podcast).
+  Future<Channel> subscribeChannel(String uuid) async {
+    final response = await _dio.post(
+      '$_baseUrl/api/v1/channels/$uuid/subscribe/',
+      data: const <String, dynamic>{},
+    );
+    if (response.data is Map<String, dynamic>) {
+      return Channel.fromJson(response.data as Map<String, dynamic>);
+    }
+    return getChannel(uuid);
+  }
+
+  /// Unsubscribe from a channel.
+  Future<void> unsubscribeChannel(String uuid) async {
+    try {
+      await _dio.delete('$_baseUrl/api/v1/channels/$uuid/unsubscribe/');
+    } catch (_) {
+      // Some Funkwhale versions only accept POST unsubscribe.
+      await _dio.post(
+        '$_baseUrl/api/v1/channels/$uuid/unsubscribe/',
+        data: const <String, dynamic>{},
+      );
+    }
+  }
+
+  /// Subscribe to a podcast by RSS feed URL.
+  Future<Channel> subscribeChannelRss(String rssUrl) async {
+    final response = await _dio.post(
+      '$_baseUrl/api/v1/channels/rss-subscribe/',
+      data: {'rss_url': rssUrl},
+    );
+    return Channel.fromJson(response.data as Map<String, dynamic>);
+  }
+
   // ── Radios ─────────────────────────────────────────────────────────
 
   Future<PaginatedResponse<Radio>> getRadios({

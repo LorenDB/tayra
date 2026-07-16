@@ -258,10 +258,20 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     builder: (context, state) {
                       final uuid = state.pathParameters['uuid']!;
                       final extra = state.extra;
-                      final channel = extra is models.Channel ? extra : null;
+                      models.Channel? channel;
+                      bool? initiallySubscribed;
+                      if (extra is models.Channel) {
+                        channel = extra;
+                      } else if (extra is Map) {
+                        final c = extra['channel'];
+                        if (c is models.Channel) channel = c;
+                        final s = extra['subscribed'];
+                        if (s is bool) initiallySubscribed = s;
+                      }
                       return PodcastDetailScreen(
                         channelUuid: uuid,
                         channel: channel,
+                        initiallySubscribed: initiallySubscribed,
                       );
                     },
                   ),

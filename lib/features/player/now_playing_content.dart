@@ -835,22 +835,31 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
     double spacing,
   ) {
     final notifier = ref.read(playerProvider.notifier);
+    final isPodcast = playerState.currentTrack?.isPodcast == true;
 
     return FittedBox(
       fit: BoxFit.scaleDown,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _buildSecondaryControl(
-            icon: Icons.shuffle_rounded,
-            isActive: playerState.isShuffled,
-            onPressed: () => notifier.toggleShuffle(),
-            iconSize: iconSize - 10,
-            accentColor: accentColor,
-            // Use the app's secondary (green/teal) color for the shuffle
-            // button when active instead of the dynamic accent color.
-            activeColor: AppTheme.secondary,
-          ),
+          if (isPodcast)
+            _buildSkipControl(
+              icon: Icons.replay_10_rounded,
+              enabled: true,
+              onPressed: () => notifier.seekBy(const Duration(seconds: -15)),
+              iconSize: skipSize - 4,
+            )
+          else
+            _buildSecondaryControl(
+              icon: Icons.shuffle_rounded,
+              isActive: playerState.isShuffled,
+              onPressed: () => notifier.toggleShuffle(),
+              iconSize: iconSize - 10,
+              accentColor: accentColor,
+              // Use the app's secondary (green/teal) color for the shuffle
+              // button when active instead of the dynamic accent color.
+              activeColor: AppTheme.secondary,
+            ),
           SizedBox(width: spacing),
           _buildSkipControl(
             icon: Icons.skip_previous_rounded,
@@ -874,11 +883,19 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
             iconSize: skipSize,
           ),
           SizedBox(width: spacing),
-          _buildLoopControl(
-            playerState.loopMode,
-            accentColor,
-            iconSize: iconSize - 10,
-          ),
+          if (isPodcast)
+            _buildSkipControl(
+              icon: Icons.forward_30_rounded,
+              enabled: true,
+              onPressed: () => notifier.seekBy(const Duration(seconds: 30)),
+              iconSize: skipSize - 4,
+            )
+          else
+            _buildLoopControl(
+              playerState.loopMode,
+              accentColor,
+              iconSize: iconSize - 10,
+            ),
         ],
       ),
     );

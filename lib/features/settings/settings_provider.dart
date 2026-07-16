@@ -54,6 +54,10 @@ class SettingsState {
   final String customEndpointApiKey;
   final String customModelName;
   final MultiDiscDisplayMode multiDiscDisplayMode;
+  final bool autoDownloadFavorites;
+  final bool downloadWifiOnly;
+  final bool autoDownloadPodcastEpisodes;
+  final int autoDownloadPodcastEpisodeCount;
 
   const SettingsState({
     this.browseMode = BrowseMode.albums,
@@ -77,6 +81,10 @@ class SettingsState {
     this.customEndpointApiKey = '',
     this.customModelName = 'gpt-4o-mini',
     this.multiDiscDisplayMode = MultiDiscDisplayMode.discSections,
+    this.autoDownloadFavorites = false,
+    this.downloadWifiOnly = true,
+    this.autoDownloadPodcastEpisodes = false,
+    this.autoDownloadPodcastEpisodeCount = 3,
   });
 
   // Dev-mode settings are only active when developer mode is unlocked.
@@ -121,6 +129,10 @@ class SettingsState {
     String? customEndpointApiKey,
     String? customModelName,
     MultiDiscDisplayMode? multiDiscDisplayMode,
+    bool? autoDownloadFavorites,
+    bool? downloadWifiOnly,
+    bool? autoDownloadPodcastEpisodes,
+    int? autoDownloadPodcastEpisodeCount,
   }) {
     return SettingsState(
       browseMode: browseMode ?? this.browseMode,
@@ -148,6 +160,14 @@ class SettingsState {
       customEndpointApiKey: customEndpointApiKey ?? this.customEndpointApiKey,
       customModelName: customModelName ?? this.customModelName,
       multiDiscDisplayMode: multiDiscDisplayMode ?? this.multiDiscDisplayMode,
+      autoDownloadFavorites:
+          autoDownloadFavorites ?? this.autoDownloadFavorites,
+      downloadWifiOnly: downloadWifiOnly ?? this.downloadWifiOnly,
+      autoDownloadPodcastEpisodes:
+          autoDownloadPodcastEpisodes ?? this.autoDownloadPodcastEpisodes,
+      autoDownloadPodcastEpisodeCount:
+          autoDownloadPodcastEpisodeCount ??
+          this.autoDownloadPodcastEpisodeCount,
     );
   }
 }
@@ -180,6 +200,12 @@ class SettingsNotifier extends Notifier<SettingsState> {
   static const _keyCustomEndpointApiKey = 'custom_endpoint_api_key';
   static const _keyCustomModelName = 'custom_model_name';
   static const _keyMultiDiscDisplayMode = 'multi_disc_display_mode';
+  static const _keyAutoDownloadFavorites = 'auto_download_favorites';
+  static const _keyDownloadWifiOnly = 'download_wifi_only';
+  static const _keyAutoDownloadPodcastEpisodes =
+      'auto_download_podcast_episodes';
+  static const _keyAutoDownloadPodcastEpisodeCount =
+      'auto_download_podcast_episode_count';
 
   // On non-Android platforms, AI defaults to off and Groq is the default provider.
   static bool get _defaultAiEnabled =>
@@ -282,6 +308,18 @@ class SettingsNotifier extends Notifier<SettingsState> {
       );
     }
 
+    final autoDownloadFavorites =
+        prefs.getBool(_keyAutoDownloadFavorites) ?? false;
+    final downloadWifiOnly = prefs.getBool(_keyDownloadWifiOnly) ?? true;
+    final autoDownloadPodcastEpisodes =
+        prefs.getBool(_keyAutoDownloadPodcastEpisodes) ?? false;
+    final rawPodcastCount = prefs.getInt(_keyAutoDownloadPodcastEpisodeCount);
+    final autoDownloadPodcastEpisodeCount =
+        (rawPodcastCount != null &&
+                const {1, 3, 5, 10}.contains(rawPodcastCount))
+            ? rawPodcastCount
+            : 3;
+
     state = state.copyWith(
       browseMode: browseMode,
       mobilePinnedTabIndices: mobilePinnedTabIndices,
@@ -304,6 +342,10 @@ class SettingsNotifier extends Notifier<SettingsState> {
       customEndpointApiKey: customEndpointApiKey,
       customModelName: customModelName,
       multiDiscDisplayMode: multiDiscDisplayMode,
+      autoDownloadFavorites: autoDownloadFavorites,
+      downloadWifiOnly: downloadWifiOnly,
+      autoDownloadPodcastEpisodes: autoDownloadPodcastEpisodes,
+      autoDownloadPodcastEpisodeCount: autoDownloadPodcastEpisodeCount,
     );
   }
 
@@ -446,6 +488,31 @@ class SettingsNotifier extends Notifier<SettingsState> {
     await prefs.setString(_keyMultiDiscDisplayMode, mode.name);
   }
 
+  Future<void> setAutoDownloadFavorites(bool enabled) async {
+    state = state.copyWith(autoDownloadFavorites: enabled);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyAutoDownloadFavorites, enabled);
+  }
+
+  Future<void> setDownloadWifiOnly(bool enabled) async {
+    state = state.copyWith(downloadWifiOnly: enabled);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyDownloadWifiOnly, enabled);
+  }
+
+  Future<void> setAutoDownloadPodcastEpisodes(bool enabled) async {
+    state = state.copyWith(autoDownloadPodcastEpisodes: enabled);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyAutoDownloadPodcastEpisodes, enabled);
+  }
+
+  Future<void> setAutoDownloadPodcastEpisodeCount(int count) async {
+    final safe = const {1, 3, 5, 10}.contains(count) ? count : 3;
+    state = state.copyWith(autoDownloadPodcastEpisodeCount: safe);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_keyAutoDownloadPodcastEpisodeCount, safe);
+  }
+
   static Future<void> clearSettings() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_keyBrowseMode);
@@ -469,5 +536,9 @@ class SettingsNotifier extends Notifier<SettingsState> {
     await prefs.remove(_keyCustomEndpointApiKey);
     await prefs.remove(_keyCustomModelName);
     await prefs.remove(_keyMultiDiscDisplayMode);
+    await prefs.remove(_keyAutoDownloadFavorites);
+    await prefs.remove(_keyDownloadWifiOnly);
+    await prefs.remove(_keyAutoDownloadPodcastEpisodes);
+    await prefs.remove(_keyAutoDownloadPodcastEpisodeCount);
   }
 }
