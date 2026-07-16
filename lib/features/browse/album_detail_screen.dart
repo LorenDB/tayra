@@ -154,10 +154,9 @@ List<_TrackListEntry> _buildDisplayEntries(
   for (int i = 0; i < tracks.length; i++) {
     final disc = tracks[i].discNumber ?? 1;
     if (disc != currentDisc) {
-      items.add(_DiscHeaderEntry(
-        disc,
-        totalDurationSeconds: discDurations[disc],
-      ));
+      items.add(
+        _DiscHeaderEntry(disc, totalDurationSeconds: discDurations[disc]),
+      );
       currentDisc = disc;
     }
     items.add(_TrackEntry(tracks[i], i));
@@ -571,8 +570,9 @@ class _AlbumHeader extends ConsumerWidget {
             icon: const Icon(Icons.more_vert, color: Colors.white),
             color: AppTheme.surfaceContainer,
             onSelected: (value) async {
-              if (value == 'edit')
+              if (value == 'edit') {
                 context.push('${GoRouterState.of(context).uri}/edit');
+              }
               if (value == 'download') toggleDownload();
               if (value == 'play_next') playAlbumNext();
               if (value == 'add_queue') addAlbumToQueue();

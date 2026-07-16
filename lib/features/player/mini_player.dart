@@ -23,11 +23,28 @@ class MiniPlayer extends ConsumerWidget {
     // Select only the fields that affect the static parts of the mini-player
     // (track identity, playback state). Progress is handled by a child widget
     // so position ticks don't rebuild the whole bar.
-    final (track, isPlaying, isLoading) = ref.watch(
-      playerProvider.select((s) => (s.currentTrack, s.isPlaying, s.isLoading)),
+    final (
+      track,
+      isPlaying,
+      isLoading,
+      hasNext,
+      hasPrevious,
+      positionSecs,
+    ) = ref.watch(
+      playerProvider.select(
+        (s) => (
+          s.currentTrack,
+          s.isPlaying,
+          s.isLoading,
+          s.hasNext,
+          s.hasPrevious,
+          s.position.inSeconds,
+        ),
+      ),
     );
 
     if (track == null) return const SizedBox.shrink();
+    final canSkipPrevious = hasPrevious || positionSecs > 3;
 
     final imageUrl = track.coverUrl;
     final paletteAsync = ref.watch(
@@ -56,6 +73,7 @@ class MiniPlayer extends ConsumerWidget {
         // Require a reasonably quick swipe to avoid accidental skips.
         if (v.abs() < 300) return;
         if (v > 0) {
+          if (!canSkipPrevious) return;
           HapticFeedback.lightImpact();
           Analytics.track('swipe_to_skip', {
             'direction': 'previous',
@@ -63,6 +81,7 @@ class MiniPlayer extends ConsumerWidget {
           });
           ref.read(playerProvider.notifier).skipPrevious();
         } else {
+          if (!hasNext) return;
           HapticFeedback.lightImpact();
           Analytics.track('swipe_to_skip', {
             'direction': 'next',
@@ -162,24 +181,32 @@ class MiniPlayer extends ConsumerWidget {
                     // Controls
                     IconButton(
                       icon: const Icon(Icons.skip_previous_rounded, size: 28),
-                      color: AppTheme.onBackground,
+                      color:
+                          canSkipPrevious
+                              ? AppTheme.onBackground
+                              : AppTheme.onBackgroundSubtle,
+                      tooltip: 'Previous',
                       onPressed:
-                          () =>
-                              ref.read(playerProvider.notifier).skipPrevious(),
+                          canSkipPrevious
+                              ? () =>
+                                  ref
+                                      .read(playerProvider.notifier)
+                                      .skipPrevious()
+                              : null,
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(minWidth: 36),
                     ),
                     isLoading
-                        ? const SizedBox(
-                          width: 36,
-                          height: 36,
-                          child: Padding(
-                            padding: EdgeInsets.all(8),
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: AppTheme.primary,
-                            ),
-                          ),
+                        ? IconButton(
+                          // Keep a pause/stop affordance while loading so the
+                          // user is not stuck waiting for the 30s watchdog.
+                          icon: const Icon(Icons.pause_rounded, size: 32),
+                          color: AppTheme.onBackground,
+                          tooltip: 'Pause',
+                          onPressed:
+                              () => ref.read(playerProvider.notifier).pause(),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(minWidth: 36),
                         )
                         : IconButton(
                           icon: Icon(
@@ -189,6 +216,7 @@ class MiniPlayer extends ConsumerWidget {
                             size: 32,
                           ),
                           color: AppTheme.onBackground,
+                          tooltip: isPlaying ? 'Pause' : 'Play',
                           onPressed:
                               () =>
                                   ref
@@ -199,9 +227,16 @@ class MiniPlayer extends ConsumerWidget {
                         ),
                     IconButton(
                       icon: const Icon(Icons.skip_next_rounded, size: 28),
-                      color: AppTheme.onBackground,
+                      color:
+                          hasNext
+                              ? AppTheme.onBackground
+                              : AppTheme.onBackgroundSubtle,
+                      tooltip: 'Next',
                       onPressed:
-                          () => ref.read(playerProvider.notifier).skipNext(),
+                          hasNext
+                              ? () =>
+                                  ref.read(playerProvider.notifier).skipNext()
+                              : null,
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(minWidth: 36),
                     ),

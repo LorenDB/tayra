@@ -161,6 +161,9 @@ class AuthNotifier extends Notifier<AuthState> {
   /// concurrent callers share this future instead of launching a second one.
   Future<bool>? _refreshFuture;
 
+  /// In-flight automatic logout (multiple concurrent 401s share one).
+  Future<void>? _autoLogoutFuture;
+
   @override
   AuthState build() {
     Future.microtask(() => _loadSavedAuth());
@@ -399,11 +402,24 @@ class AuthNotifier extends Notifier<AuthState> {
   /// Unlike [logout], this preserves all cached data and remembers the server
   /// URL so that re-authenticating to the same server can resume seamlessly
   /// without discarding the cache.
-  Future<void> logoutAutomatically() async {
+  ///
+  /// Concurrent callers share a single in-flight future so a burst of 401s
+  /// does not thrash credential storage.
+  Future<void> logoutAutomatically() {
+    _autoLogoutFuture ??= _doLogoutAutomatically().whenComplete(() {
+      _autoLogoutFuture = null;
+    });
+    return _autoLogoutFuture!;
+  }
+
+  Future<void> _doLogoutAutomatically() async {
     Analytics.track('logout_automatic');
     final previousServerUrl = state.serverUrl;
     await _deleteAuthCredentials();
-    state = AuthState(pendingServerUrl: previousServerUrl);
+    state = AuthState(
+      pendingServerUrl: previousServerUrl,
+      error: 'Your session expired. Please sign in again.',
+    );
   }
 
   Future<void> _deleteAuthCredentials() async {

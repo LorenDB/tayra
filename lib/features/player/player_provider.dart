@@ -44,6 +44,8 @@ class _BrowseIds {
 
   // Composite IDs for tracks within a context
   static const albumTrackPrefix = 'album_track_';
+
+  /// Playlist tracks encode both playlist and track: `playlist_track_{pid}_{tid}`.
   static const playlistTrackPrefix = 'playlist_track_';
   static const favoriteTrackPrefix = 'fav_track_';
 }
@@ -429,8 +431,10 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
 
       // ── Favorites (list of tracks) ────────────────────────────────
       if (parentMediaId == _BrowseIds.favorites) {
-        final response = await apiClient.getFavorites(pageSize: 50);
-        return response.results
+        final allFavorites = await fetchAllPages(
+          (page) => apiClient.getFavorites(page: page, pageSize: 50),
+        );
+        return allFavorites
             .map(
               (fav) => _trackToMediaItem(
                 fav.track,
@@ -498,12 +502,7 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
           (a, b) => (a.index ?? 0).compareTo(b.index ?? 0),
         );
         return allPlaylistTracks
-            .map(
-              (pt) => _trackToMediaItem(
-                pt.track,
-                idPrefix: _BrowseIds.playlistTrackPrefix,
-              ),
-            )
+            .map((pt) => _playlistTrackToMediaItem(playlistId, pt.track))
             .toList();
       }
     } catch (_) {
@@ -566,8 +565,10 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
         );
         if (trackId == null) return;
         // Load entire favorites list and find the tapped track's position.
-        final response = await apiClient.getFavorites(pageSize: 50);
-        final tracks = response.results.map((f) => f.track).toList();
+        final allFavorites = await fetchAllPages(
+          (page) => apiClient.getFavorites(page: page, pageSize: 50),
+        );
+        final tracks = allFavorites.map((f) => f.track).toList();
         final index = tracks.indexWhere((t) => t.id == trackId);
         await onPlayTracks?.call(tracks, startIndex: index >= 0 ? index : 0);
         return;
@@ -603,16 +604,24 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
       }
 
       // ── Single track tap from a playlist ──────────────────────────
+      // Media IDs are `playlist_track_{playlistId}_{trackId}`.
       if (mediaId.startsWith(_BrowseIds.playlistTrackPrefix)) {
-        final trackId = int.tryParse(
-          mediaId.substring(_BrowseIds.playlistTrackPrefix.length),
+        final parsed = _parsePlaylistTrackId(mediaId);
+        if (parsed == null) return;
+        final (playlistId, trackId) = parsed;
+        final allPlaylistTracks = await fetchAllPages(
+          (page) => apiClient.getPlaylistTracks(
+            playlistId,
+            page: page,
+            pageSize: 100,
+          ),
         );
-        if (trackId == null) return;
-        // We don't know the playlist ID from the track prefix, so just
-        // play the single track. A more sophisticated approach would
-        // encode the playlist ID in the media ID.
-        final track = await apiClient.getTrack(trackId);
-        await onPlayTracks?.call([track]);
+        allPlaylistTracks.sort(
+          (a, b) => (a.index ?? 0).compareTo(b.index ?? 0),
+        );
+        final tracks = allPlaylistTracks.map((pt) => pt.track).toList();
+        final index = tracks.indexWhere((t) => t.id == trackId);
+        await onPlayTracks?.call(tracks, startIndex: index >= 0 ? index : 0);
         return;
       }
 
@@ -720,11 +729,40 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
     );
   }
 
+  /// Playlist track media ID that embeds playlist id so Auto can resume
+  /// the full playlist when a single track is tapped.
+  MediaItem _playlistTrackToMediaItem(int playlistId, Track track) {
+    return MediaItem(
+      id: '${_BrowseIds.playlistTrackPrefix}${playlistId}_${track.id}',
+      title: track.title,
+      artist: track.artistName,
+      album: track.albumTitle,
+      artUri: track.coverUrl != null ? Uri.tryParse(track.coverUrl!) : null,
+      duration:
+          track.duration != null ? Duration(seconds: track.duration!) : null,
+      playable: true,
+    );
+  }
+
+  /// Parse `playlist_track_{playlistId}_{trackId}` → (playlistId, trackId).
+  (int, int)? _parsePlaylistTrackId(String mediaId) {
+    if (!mediaId.startsWith(_BrowseIds.playlistTrackPrefix)) return null;
+    final rest = mediaId.substring(_BrowseIds.playlistTrackPrefix.length);
+    final sep = rest.indexOf('_');
+    if (sep <= 0 || sep >= rest.length - 1) return null;
+    final playlistId = int.tryParse(rest.substring(0, sep));
+    final trackId = int.tryParse(rest.substring(sep + 1));
+    if (playlistId == null || trackId == null) return null;
+    return (playlistId, trackId);
+  }
+
   /// Extract the numeric track ID from any track-prefixed media ID.
   int? _extractTrackId(String mediaId) {
+    final playlistParsed = _parsePlaylistTrackId(mediaId);
+    if (playlistParsed != null) return playlistParsed.$2;
+
     for (final prefix in [
       _BrowseIds.albumTrackPrefix,
-      _BrowseIds.playlistTrackPrefix,
       _BrowseIds.favoriteTrackPrefix,
       _BrowseIds.trackPrefix,
     ]) {

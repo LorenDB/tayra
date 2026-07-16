@@ -429,8 +429,9 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
     if (!cur.isConnected ||
         cur.serverUrl == null ||
         cur.username == null ||
-        cur.appPassword == null)
+        cur.appPassword == null) {
       return false;
+    }
     if (!force && !cur.autoBackupEnabled) return false;
     final authS = ref.read(authStateProvider).serverUrl;
     state = state.copyWith(isLoading: true);
@@ -465,8 +466,9 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
     final cur = state;
     if (cur.serverUrl == null ||
         cur.username == null ||
-        cur.appPassword == null)
+        cur.appPassword == null) {
       return [];
+    }
     return NextcloudBackupService.listBackupFiles(
       server: cur.serverUrl!,
       username: cur.username!,
@@ -488,8 +490,9 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
     final cur = state;
     if (cur.serverUrl == null ||
         cur.username == null ||
-        cur.appPassword == null)
+        cur.appPassword == null) {
       return [];
+    }
     final auth = ref.read(authStateProvider);
     final srvH =
         auth.serverUrl != null
@@ -556,8 +559,9 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
     final cur = state;
     if (cur.serverUrl == null ||
         cur.username == null ||
-        cur.appPassword == null)
+        cur.appPassword == null) {
       return false;
+    }
     state = state.copyWith(isLoading: true);
     Analytics.track('nextcloud_restore_requested', {
       'include_settings': includeSettings,
@@ -641,8 +645,9 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
     if (!cur.isConnected ||
         cur.serverUrl == null ||
         cur.username == null ||
-        cur.appPassword == null)
+        cur.appPassword == null) {
       return 0;
+    }
     final auth = ref.read(authStateProvider);
     final funkHost = auth.serverUrl ?? '';
     if (funkHost.isEmpty) return 0;

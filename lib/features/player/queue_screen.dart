@@ -1031,8 +1031,7 @@ class _DraggableQueueItemState extends ConsumerState<_DraggableQueueItem> {
 
   void _handleDragUpdate(DragUpdateDetails details) {
     final scrollableState = Scrollable.of(context);
-    final renderBox =
-        scrollableState.context.findRenderObject() as RenderBox?;
+    final renderBox = scrollableState.context.findRenderObject() as RenderBox?;
     if (renderBox == null) return;
 
     final localPos = renderBox.globalToLocal(details.globalPosition);
@@ -1043,9 +1042,7 @@ class _DraggableQueueItemState extends ConsumerState<_DraggableQueueItem> {
       final t = 1.0 - (localPos.dy / _autoScrollThreshold);
       scrollDistance = -_autoScrollMaxSpeed * t;
     } else if (localPos.dy > viewportHeight - _autoScrollThreshold) {
-      final t =
-          1.0 -
-          ((viewportHeight - localPos.dy) / _autoScrollThreshold);
+      final t = 1.0 - ((viewportHeight - localPos.dy) / _autoScrollThreshold);
       scrollDistance = _autoScrollMaxSpeed * t;
     }
 
@@ -1062,8 +1059,8 @@ class _DraggableQueueItemState extends ConsumerState<_DraggableQueueItem> {
     _autoScrollTimer = Timer.periodic(frameDuration, (_) {
       final sc = widget.scrollController;
       if (!sc.hasClients) return;
-      final delta = distancePerSecond * frameDuration.inMicroseconds /
-          1000000.0;
+      final delta =
+          distancePerSecond * frameDuration.inMicroseconds / 1000000.0;
       final newOffset = (sc.offset + delta).clamp(
         0.0,
         sc.position.maxScrollExtent,
@@ -1796,14 +1793,10 @@ class StashedQueueTile extends ConsumerWidget {
 
   void _confirmRestore(BuildContext context, WidgetRef ref) {
     final playerState = ref.read(playerProvider);
-    // If queue is empty, or the current queue has finished (not playing,
-    // at index 0 and position zero), restore directly without prompting.
-    final bool isFinished =
-        playerState.queue.isNotEmpty &&
-        playerState.currentIndex == 0 &&
-        playerState.position == Duration.zero &&
-        !playerState.isPlaying;
-    if (playerState.queue.isEmpty || isFinished) {
+    // Only skip the confirm dialog when there is nothing meaningful to
+    // replace — empty queue, or a queue that has fully completed. Do not
+    // treat "paused at the start of track 1" as finished.
+    if (playerState.queue.isEmpty || playerState.queueCompleted) {
       ref.read(playerProvider.notifier).restoreStash(stash.id);
       onRestored?.call();
       return;
