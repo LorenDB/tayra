@@ -186,7 +186,18 @@ class FunkwhaleApi {
   Future<Set<int>> getAllFavoriteTrackIds() async {
     final response = await _dio.get('$_baseUrl/api/v1/favorites/tracks/all/');
     final results = response.data['results'] as List<dynamic>? ?? [];
-    return results.map((e) => (e['track'] as num).toInt()).toSet();
+    final ids = <int>{};
+    for (final e in results) {
+      if (e is! Map) continue;
+      final track = e['track'];
+      if (track is num) {
+        ids.add(track.toInt());
+      } else if (track is Map && track['id'] is num) {
+        // Some instances embed a track object instead of a bare id.
+        ids.add((track['id'] as num).toInt());
+      }
+    }
+    return ids;
   }
 
   Future<void> addFavorite(int trackId) async {

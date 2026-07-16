@@ -238,51 +238,56 @@ class AppShell extends ConsumerWidget {
                       primaryIndices.map((i) {
                         final isSelected = i == currentIndex;
                         return Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              final nested = shellNavigatorKey.currentState;
-                              if (nested != null) {
-                                nested.popUntil(
-                                  (route) => route is! PopupRoute,
-                                );
-                              }
-                              try {
-                                Navigator.of(
-                                  context,
-                                  rootNavigator: true,
-                                ).popUntil((route) => route is! PopupRoute);
-                              } catch (_) {}
-                              context.go(paths[i]);
-                            },
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  isSelected
-                                      ? tabs[i].activeIcon
-                                      : tabs[i].icon,
-                                  color:
-                                      isSelected
-                                          ? AppTheme.primary
-                                          : AppTheme.onBackgroundSubtle,
-                                  size: 22,
-                                ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  tabs[i].label,
-                                  style: TextStyle(
+                          child: Semantics(
+                            button: true,
+                            selected: isSelected,
+                            label: tabs[i].label,
+                            child: InkWell(
+                              onTap: () {
+                                final nested = shellNavigatorKey.currentState;
+                                if (nested != null) {
+                                  nested.popUntil(
+                                    (route) => route is! PopupRoute,
+                                  );
+                                }
+                                try {
+                                  Navigator.of(
+                                    context,
+                                    rootNavigator: true,
+                                  ).popUntil((route) => route is! PopupRoute);
+                                } catch (_) {}
+                                context.go(paths[i]);
+                              },
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    isSelected
+                                        ? tabs[i].activeIcon
+                                        : tabs[i].icon,
                                     color:
                                         isSelected
                                             ? AppTheme.primary
                                             : AppTheme.onBackgroundSubtle,
-                                    fontSize: 10,
-                                    fontWeight:
-                                        isSelected
-                                            ? FontWeight.w600
-                                            : FontWeight.w400,
+                                    size: 22,
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    tabs[i].label,
+                                    style: TextStyle(
+                                      color:
+                                          isSelected
+                                              ? AppTheme.primary
+                                              : AppTheme.onBackgroundSubtle,
+                                      fontSize: 10,
+                                      fontWeight:
+                                          isSelected
+                                              ? FontWeight.w600
+                                              : FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         );

@@ -56,7 +56,13 @@ class AuthInterceptor extends Interceptor {
           handler.resolve(response);
           return;
         } catch (e) {
-          handler.next(err);
+          // Surface the retry failure (not the original 401) so callers and
+          // analytics see the real error after a successful token rotation.
+          if (e is DioException) {
+            handler.next(e);
+          } else {
+            handler.next(err);
+          }
           return;
         }
       } else {

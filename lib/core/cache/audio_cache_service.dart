@@ -23,16 +23,19 @@ class AudioCacheService {
     ),
   );
 
-  /// Track IDs currently being downloaded to prevent duplicate concurrent
-  /// downloads of the same audio file (e.g. if the user skips back quickly).
-  final Set<int> _inProgressAudio = {};
+  /// In-flight audio downloads by track id. Concurrent callers share the same
+  /// future instead of returning null and treating a race as failure.
+  final Map<int, Future<File?>> _audioFutures = {};
 
   /// Cap concurrent cover downloads so list/page fetches cannot flood the
   /// network and disk while the user is scrolling.
   static const int _maxConcurrentCoverDownloads = 3;
   int _activeCoverDownloads = 0;
   final List<Completer<void>> _coverWaiters = [];
-  final Set<String> _inProgressCovers = {};
+
+  /// In-flight cover downloads by URL so concurrent list cells await the same
+  /// download rather than missing art until a later rebuild.
+  final Map<String, Future<File?>> _coverFutures = {};
 
   AudioCacheService(this._cache);
 
@@ -69,20 +72,40 @@ class AudioCacheService {
     return await _cache.getFile(key);
   }
 
-  /// Download and cache an audio file for a track
+  /// Download and cache an audio file for a track.
+  ///
+  /// Concurrent callers for the same track share one in-flight future.
   Future<File?> cacheAudio(
     Track track,
     String streamUrl,
     Map<String, String> authHeaders, {
     void Function(int, int)? onProgress,
+  }) {
+    final existingFuture = _audioFutures[track.id];
+    if (existingFuture != null) return existingFuture;
+
+    final future = _cacheAudioImpl(
+      track,
+      streamUrl,
+      authHeaders,
+      onProgress: onProgress,
+    );
+    _audioFutures[track.id] = future;
+    future.whenComplete(() {
+      if (identical(_audioFutures[track.id], future)) {
+        _audioFutures.remove(track.id);
+      }
+    });
+    return future;
+  }
+
+  Future<File?> _cacheAudioImpl(
+    Track track,
+    String streamUrl,
+    Map<String, String> authHeaders, {
+    void Function(int, int)? onProgress,
   }) async {
-    // Bail out if a download for this track is already in progress.
-    if (_inProgressAudio.contains(track.id)) return null;
-
-    // Mark as in-progress immediately (before any await) to prevent a second
-    // concurrent call from slipping past the guard above.
-    _inProgressAudio.add(track.id);
-
+    File? tempFile;
     try {
       // Check if already cached
       final existing = await getCachedAudio(track);
@@ -95,7 +118,7 @@ class AudioCacheService {
         tempDir.path,
         'download_audio_${track.id}_${DateTime.now().millisecondsSinceEpoch}$ext',
       );
-      final tempFile = File(tempPath);
+      tempFile = File(tempPath);
 
       // Download the file
       await _dio.download(
@@ -134,11 +157,6 @@ class AudioCacheService {
         albumCoverUrl: track.album?.coverUrl ?? track.coverUrl,
       );
 
-      // Clean up temp file
-      if (await tempFile.exists()) {
-        await tempFile.delete();
-      }
-
       // Return the cached file
       return await _cache.getFile(key);
     } catch (e) {
@@ -147,7 +165,12 @@ class AudioCacheService {
       );
       return null;
     } finally {
-      _inProgressAudio.remove(track.id);
+      // Always remove the temp download (success path copies into the cache).
+      try {
+        if (tempFile != null && await tempFile.exists()) {
+          await tempFile.delete();
+        }
+      } catch (_) {}
     }
   }
 
@@ -197,19 +220,31 @@ class AudioCacheService {
     return file;
   }
 
-  /// Download and cache cover art
-  Future<File?> cacheCoverArt(String coverUrl) async {
-    // Deduplicate concurrent requests for the same URL.
-    if (_inProgressCovers.contains(coverUrl)) {
-      return getCachedCoverArt(coverUrl);
-    }
+  /// Download and cache cover art.
+  ///
+  /// Concurrent callers for the same URL share one in-flight future.
+  Future<File?> cacheCoverArt(String coverUrl) {
+    if (coverUrl.isEmpty) return Future.value(null);
+    final existingFuture = _coverFutures[coverUrl];
+    if (existingFuture != null) return existingFuture;
 
+    final future = _cacheCoverArtImpl(coverUrl);
+    _coverFutures[coverUrl] = future;
+    future.whenComplete(() {
+      if (identical(_coverFutures[coverUrl], future)) {
+        _coverFutures.remove(coverUrl);
+      }
+    });
+    return future;
+  }
+
+  Future<File?> _cacheCoverArtImpl(String coverUrl) async {
+    File? tempFile;
     try {
       // Check if already cached (cheap) before taking a concurrency slot.
       final existing = await getCachedCoverArt(coverUrl);
       if (existing != null) return existing;
 
-      _inProgressCovers.add(coverUrl);
       await _acquireCoverSlot();
       try {
         // Re-check after waiting for a slot — another download may have won.
@@ -224,7 +259,7 @@ class AudioCacheService {
           tempDir.path,
           'download_cover_${DateTime.now().millisecondsSinceEpoch}$extension',
         );
-        final tempFile = File(tempPath);
+        tempFile = File(tempPath);
 
         // Download the file
         await _dio.download(coverUrl, tempPath);
@@ -233,25 +268,24 @@ class AudioCacheService {
         final key = coverCacheKey(coverUrl);
         await _cache.putFile(key, FileType.coverArt, tempFile);
 
-        // Clean up temp file
-        if (await tempFile.exists()) {
-          await tempFile.delete();
-        }
-
         // Return the cached file
         final cached = await _cache.getFile(key);
         rememberCoverPath(coverUrl, cached?.path);
         return cached;
       } finally {
         _releaseCoverSlot();
-        _inProgressCovers.remove(coverUrl);
       }
     } catch (e) {
-      _inProgressCovers.remove(coverUrl);
       debugPrint(
         'AudioCacheService: failed to cache cover art for $coverUrl: $e',
       );
       return null;
+    } finally {
+      try {
+        if (tempFile != null && await tempFile.exists()) {
+          await tempFile.delete();
+        }
+      } catch (_) {}
     }
   }
 

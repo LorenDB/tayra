@@ -242,6 +242,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (authState.clientId != null && authState.error == null) {
       Analytics.track('login_server_connected');
       setState(() => _step = 1);
+      // Auto-open the authorization page; keep the manual button as fallback.
+      _openAuthUrl();
     }
   }
 

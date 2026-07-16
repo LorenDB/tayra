@@ -246,11 +246,11 @@ class DownloadQueueService {
                 continue;
               }
 
-              // Mark completed and invalidate the cached provider so the UI
-              // updates immediately.
-              await db.update(
+              // Drop the row rather than keeping completed forever (table
+              // would grow unbounded). Cached-audio indicators use the
+              // cache DB / disk, not this queue.
+              await db.delete(
                 'download_queue',
-                {'status': 'completed'},
                 where: 'id = ?',
                 whereArgs: [item.id],
               );

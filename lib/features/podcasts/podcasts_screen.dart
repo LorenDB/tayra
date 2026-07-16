@@ -50,6 +50,18 @@ class _PodcastsScreenState extends ConsumerState<PodcastsScreen> {
     }
   }
 
+  /// Fill the viewport when the first page does not scroll (large screens).
+  void _loadMoreIfNeeded() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _isLoadingMore || _nextPage == null) return;
+      if (!_scrollController.hasClients) return;
+      final pos = _scrollController.position;
+      if (pos.maxScrollExtent - pos.pixels <= 200) {
+        _loadMore();
+      }
+    });
+  }
+
   Future<void> _loadChannels({bool forceRefresh = false}) async {
     setState(() {
       // Only show full-screen shimmer on initial load; keep existing list
@@ -73,6 +85,7 @@ class _PodcastsScreenState extends ConsumerState<PodcastsScreen> {
         _nextPage = response.next;
         _isLoading = false;
       });
+      _loadMoreIfNeeded();
     } catch (e) {
       if (!mounted) return;
       setState(() {
@@ -97,6 +110,7 @@ class _PodcastsScreenState extends ConsumerState<PodcastsScreen> {
         _nextPage = response.next;
         _isLoadingMore = false;
       });
+      _loadMoreIfNeeded();
     } catch (_) {
       if (!mounted) return;
       setState(() => _isLoadingMore = false);

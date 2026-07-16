@@ -95,6 +95,20 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
     }
   }
 
+  /// When the first page fits entirely on screen (no overflow), the scroll
+  /// listener never fires — proactively load until we fill or exhaust pages.
+  /// Also used when offline filter yields a short visible list.
+  void _loadMoreIfNeeded() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _isLoadingMore || !_hasMore) return;
+      if (!_scrollController.hasClients) return;
+      final pos = _scrollController.position;
+      if (pos.maxScrollExtent - pos.pixels <= 300) {
+        _loadMore();
+      }
+    });
+  }
+
   Future<void> _loadFavorites({bool forceRefresh = false}) async {
     setState(() {
       // Only show full-screen shimmer on initial load; pull-to-refresh keeps
@@ -119,6 +133,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
         _isLoading = false;
         _invalidateDisplayCache();
       });
+      _loadMoreIfNeeded();
       // Do NOT force-refresh when global favorite IDs aren't all on page 1 —
       // that is normal for multi-page libraries and caused a second fetch
       // plus scroll jumps ("bounce") at the end of the first page. New
@@ -149,6 +164,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
         _isLoadingMore = false;
         _invalidateDisplayCache();
       });
+      _loadMoreIfNeeded();
     } catch (e) {
       if (!mounted) return;
       setState(() => _isLoadingMore = false);
