@@ -41,6 +41,10 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
   // drift between the local list and the server's ordering.
   bool _isRemovingTrack = false;
 
+  /// Bumped on each [_loadData] so background page appends from an older
+  /// load cannot interleave with a newer refresh.
+  int _loadGeneration = 0;
+
   @override
   void initState() {
     super.initState();
@@ -117,14 +121,16 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
         ).showSnackBar(const SnackBar(content: Text('Failed to remove track')));
       }
     } finally {
-      if (mounted)
+      if (mounted) {
         setState(() {
           _isRemovingTrack = false;
         });
+      }
     }
   }
 
   Future<void> _loadData({bool forceRefresh = false}) async {
+    final generation = ++_loadGeneration;
     // Only show the full loading skeleton on first load (no data yet).
     if (_playlist == null) {
       setState(() {
@@ -148,11 +154,11 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
         ),
       ]);
 
+      if (!mounted || generation != _loadGeneration) return;
+
       final playlist = results[0] as Playlist;
       final firstPage = results[1] as PaginatedResponse<PlaylistTrack>;
       final allTracks = List<PlaylistTrack>.from(firstPage.results);
-
-      if (!mounted) return;
 
       setState(() {
         _playlist = playlist;
@@ -168,11 +174,12 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
             startPage: 2,
             forceRefresh: forceRefresh,
             seed: allTracks,
+            generation: generation,
           ),
         );
       }
     } catch (e) {
-      if (!mounted) return;
+      if (!mounted || generation != _loadGeneration) return;
       // If we already have data loaded (e.g. pull-to-refresh failed), keep
       // showing it rather than replacing the screen with an error state.
       if (_playlist != null) {
@@ -196,18 +203,20 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
     required int startPage,
     required bool forceRefresh,
     required List<PlaylistTrack> seed,
+    required int generation,
   }) async {
     try {
       final accumulated = List<PlaylistTrack>.from(seed);
       var page = startPage;
       while (true) {
+        if (!mounted || generation != _loadGeneration) return;
         final response = await api.getPlaylistTracks(
           widget.playlistId,
           page: page,
           pageSize: 100,
           forceRefresh: forceRefresh,
         );
-        if (!mounted) return;
+        if (!mounted || generation != _loadGeneration) return;
         accumulated.addAll(response.results);
         setState(() => _playlistTracks = List<PlaylistTrack>.from(accumulated));
         if (response.next == null) break;

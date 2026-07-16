@@ -954,9 +954,10 @@ class _BackupSheet extends ConsumerWidget {
     final url = await ref
         .read(nextcloudBackupProvider.notifier)
         .startLoginFlow(server);
-    if (url == null) return;
+    if (url == null || !context.mounted) return;
     await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
 
+    if (!context.mounted) return;
     // Show second dialog: "Finish login in browser then tap done"
     final finished = await showShellDialog<bool>(
       context: context,
@@ -1280,7 +1281,7 @@ class _NavBarSheetState extends State<_NavBarSheet> {
               ),
               value: isPinned,
               onChanged: (v) => _toggle(i, v),
-              activeColor: AppTheme.primary,
+              activeThumbColor: AppTheme.primary,
             );
           }),
           const SizedBox(height: 8),
