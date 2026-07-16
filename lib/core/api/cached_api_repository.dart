@@ -823,6 +823,32 @@ class CachedFunkwhaleApi {
     );
   }
 
+  Future<Channel> subscribeChannel(String uuid) async {
+    final channel = await _api.subscribeChannel(uuid);
+    await _cache.putMetadata(
+      'channel_$uuid',
+      CacheType.channel,
+      _channelToJson(channel),
+      ttl: const Duration(hours: 1),
+    );
+    return channel;
+  }
+
+  Future<void> unsubscribeChannel(String uuid) async {
+    await _api.unsubscribeChannel(uuid);
+  }
+
+  Future<Channel> subscribeChannelRss(String rssUrl) async {
+    final channel = await _api.subscribeChannelRss(rssUrl);
+    await _cache.putMetadata(
+      'channel_${channel.uuid}',
+      CacheType.channel,
+      _channelToJson(channel),
+      ttl: const Duration(hours: 1),
+    );
+    return channel;
+  }
+
   // ── Radios ────────────────────────────────────────────────────────────
 
   Future<PaginatedResponse<Radio>> getRadios({

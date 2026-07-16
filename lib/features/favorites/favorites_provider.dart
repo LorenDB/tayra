@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/core/cache/auto_offline_coordinator.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/features/settings/settings_provider.dart';
 
 // ── Favorites state provider ────────────────────────────────────────────
 
@@ -22,6 +24,17 @@ class FavoriteTrackIdsNotifier extends Notifier<Set<int>> {
       final wasOffline = previous?.isOffline ?? false;
       if (wasOffline && !next.isOffline) {
         unawaited(_syncPending());
+      }
+    });
+    // When auto-download favorites is turned on, reconcile the full set.
+    ref.listen<bool>(settingsProvider.select((s) => s.autoDownloadFavorites), (
+      previous,
+      next,
+    ) {
+      if (next && previous != true && state.isNotEmpty) {
+        unawaited(
+          ref.read(autoOfflineCoordinatorProvider).reconcileFavorites(state),
+        );
       }
     });
     Future.microtask(() => _load());
@@ -42,6 +55,10 @@ class FavoriteTrackIdsNotifier extends Notifier<Set<int>> {
       if (!_api.isOffline) {
         unawaited(_syncPending());
       }
+      // Keep offline pack in sync when auto-download favorites is enabled.
+      unawaited(
+        ref.read(autoOfflineCoordinatorProvider).reconcileFavorites(ids),
+      );
     } catch (_) {}
   }
 
@@ -70,6 +87,9 @@ class FavoriteTrackIdsNotifier extends Notifier<Set<int>> {
         await _api.removeFavorite(trackId);
       } else {
         await _api.addFavorite(trackId);
+        unawaited(
+          ref.read(autoOfflineCoordinatorProvider).onFavoriteAdded(trackId),
+        );
       }
       // Offline / network-failure paths queue the mutation and do not throw,
       // so the optimistic state is kept and synced later.

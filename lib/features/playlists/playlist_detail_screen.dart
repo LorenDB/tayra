@@ -8,6 +8,7 @@ import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
+import 'package:tayra/core/cache/auto_offline_coordinator.dart';
 import 'package:tayra/core/cache/manual_download_actions.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/app_refresh_indicator.dart';
@@ -167,6 +168,18 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
         _error = null;
       });
 
+      // Keep offline pack current when this playlist is marked for download.
+      final isManual = ref.read(isManualPlaylistProvider(widget.playlistId));
+      if (isManual) {
+        unawaited(
+          ref
+              .read(autoOfflineCoordinatorProvider)
+              .syncManualPlaylistTracks(
+                allTracks.map((pt) => pt.track.id).toList(),
+              ),
+        );
+      }
+
       if (firstPage.next != null) {
         unawaited(
           _loadRemainingTrackPages(
@@ -221,6 +234,16 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
         setState(() => _playlistTracks = List<PlaylistTrack>.from(accumulated));
         if (response.next == null) break;
         page++;
+      }
+      final isManual = ref.read(isManualPlaylistProvider(widget.playlistId));
+      if (isManual) {
+        unawaited(
+          ref
+              .read(autoOfflineCoordinatorProvider)
+              .syncManualPlaylistTracks(
+                accumulated.map((pt) => pt.track.id).toList(),
+              ),
+        );
       }
     } catch (e) {
       debugPrint('Playlist remaining pages failed: $e');

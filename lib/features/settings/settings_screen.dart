@@ -213,6 +213,58 @@ class SettingsScreen extends ConsumerWidget {
             _AiProviderTile(currentProvider: settings.aiProviderType),
           const SizedBox(height: 24),
 
+          // ── Downloads section ─────────────────────────────────────────
+          SettingsSectionHeader(title: 'Downloads'),
+          SettingsSwitchTile(
+            icon: Icons.favorite_rounded,
+            title: 'Auto-download favorites',
+            subtitle: 'Keep favorited tracks available offline',
+            value: settings.autoDownloadFavorites,
+            onChanged: (value) {
+              Analytics.track('auto_download_favorites_toggled', {
+                'enabled': value,
+              });
+              ref
+                  .read(settingsProvider.notifier)
+                  .setAutoDownloadFavorites(value);
+            },
+          ),
+          SettingsSwitchTile(
+            icon: Icons.wifi_rounded,
+            title: 'Download on Wi‑Fi only',
+            subtitle: 'Pause the download queue on mobile data',
+            value: settings.downloadWifiOnly,
+            onChanged: (value) {
+              Analytics.track('download_wifi_only_toggled', {'enabled': value});
+              ref.read(settingsProvider.notifier).setDownloadWifiOnly(value);
+            },
+          ),
+          SettingsSwitchTile(
+            icon: Icons.podcasts_rounded,
+            title: 'Auto-download podcast episodes',
+            subtitle: 'Download the latest episodes of subscribed shows',
+            value: settings.autoDownloadPodcastEpisodes,
+            onChanged: (value) {
+              Analytics.track('auto_download_podcasts_toggled', {
+                'enabled': value,
+              });
+              ref
+                  .read(settingsProvider.notifier)
+                  .setAutoDownloadPodcastEpisodes(value);
+            },
+          ),
+          if (settings.autoDownloadPodcastEpisodes)
+            _PodcastEpisodeCountTile(
+              current: settings.autoDownloadPodcastEpisodeCount,
+              onChanged: (count) {
+                ref
+                    .read(settingsProvider.notifier)
+                    .setAutoDownloadPodcastEpisodeCount(count);
+              },
+            ),
+
+          const SizedBox(height: 24),
+
           // ── Cache section ─────────────────────────────────────────────
           SettingsSectionHeader(title: 'Cache'),
           cacheStatsAsync.when(
@@ -1495,6 +1547,73 @@ class _CacheBreakdownItem extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _PodcastEpisodeCountTile extends StatelessWidget {
+  final int current;
+  final ValueChanged<int> onChanged;
+
+  const _PodcastEpisodeCountTile({
+    required this.current,
+    required this.onChanged,
+  });
+
+  static const _options = [1, 3, 5, 10];
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsActionTile(
+      icon: Icons.numbers_rounded,
+      title: 'Episodes per show',
+      subtitle:
+          'Download the latest $current episode${current == 1 ? '' : 's'}',
+      onTap: () async {
+        final selected = await showShellDialog<int>(
+          context: context,
+          builder:
+              (ctx) => SimpleDialog(
+                backgroundColor: AppTheme.surfaceContainerHigh,
+                title: const Text(
+                  'Episodes per show',
+                  style: TextStyle(color: AppTheme.onBackground),
+                ),
+                children: [
+                  for (final n in _options)
+                    SimpleDialogOption(
+                      onPressed: () => Navigator.of(ctx).pop(n),
+                      child: Row(
+                        children: [
+                          Icon(
+                            n == current
+                                ? Icons.radio_button_checked_rounded
+                                : Icons.radio_button_off_rounded,
+                            color:
+                                n == current
+                                    ? AppTheme.primary
+                                    : AppTheme.onBackgroundMuted,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            n == 1 ? '1 episode' : '$n episodes',
+                            style: TextStyle(
+                              color: AppTheme.onBackground,
+                              fontWeight:
+                                  n == current
+                                      ? FontWeight.w600
+                                      : FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
+        );
+        if (selected != null) onChanged(selected);
+      },
     );
   }
 }

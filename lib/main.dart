@@ -15,8 +15,10 @@ import 'package:window_size/window_size.dart' as window_size;
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/backup/nextcloud_backup_service.dart';
+import 'package:tayra/core/cache/auto_offline_coordinator.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/core/cache/download_queue_service.dart';
+import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/router/app_router.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/player/player_provider.dart';
@@ -125,6 +127,45 @@ void main() async {
       try {
         final queueSvc = container.read(downloadQueueServiceProvider);
         await queueSvc.init(container);
+      } catch (_) {}
+    }),
+  );
+
+  // Resume the download queue when connectivity becomes allowed again
+  // (e.g. Wi‑Fi returns while downloadWifiOnly is on).
+  container.listen(connectivityResultProvider, (previous, next) {
+    next.whenData((_) {
+      try {
+        container.read(autoOfflineCoordinatorProvider).maybeResumeDownloads();
+      } catch (_) {}
+    });
+  });
+  container.listen(settingsProvider, (previous, next) {
+    if (previous?.downloadWifiOnly == true && !next.downloadWifiOnly) {
+      try {
+        container.read(autoOfflineCoordinatorProvider).maybeResumeDownloads();
+      } catch (_) {}
+    }
+    if (previous?.autoDownloadPodcastEpisodes != true &&
+        next.autoDownloadPodcastEpisodes) {
+      unawaited(
+        container
+            .read(autoOfflineCoordinatorProvider)
+            .reconcileSubscribedPodcasts(),
+      );
+    }
+  });
+
+  // Best-effort: auto-download latest episodes for subscribed shows.
+  unawaited(
+    Future.delayed(const Duration(seconds: 12), () {
+      try {
+        final settings = container.read(settingsProvider);
+        if (settings.autoDownloadPodcastEpisodes) {
+          container
+              .read(autoOfflineCoordinatorProvider)
+              .reconcileSubscribedPodcasts();
+        }
       } catch (_) {}
     }),
   );

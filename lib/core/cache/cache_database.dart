@@ -13,7 +13,7 @@ import 'package:path/path.dart';
 /// - cache_favorites: Stores favorite track IDs
 class CacheDatabase {
   static const _databaseName = 'funkwhale_cache.db';
-  static const _databaseVersion = 5;
+  static const _databaseVersion = 6;
 
   // Singleton pattern
   CacheDatabase._();
@@ -128,6 +128,22 @@ class CacheDatabase {
       )
     ''');
 
+    // Per-episode podcast resume / played state (local only).
+    await db.execute('''
+      CREATE TABLE podcast_episode_progress (
+        track_id INTEGER PRIMARY KEY,
+        channel_uuid TEXT,
+        position_ms INTEGER NOT NULL DEFAULT 0,
+        duration_ms INTEGER,
+        completed INTEGER NOT NULL DEFAULT 0,
+        updated_at INTEGER NOT NULL
+      )
+    ''');
+    await db.execute(
+      'CREATE INDEX idx_podcast_progress_channel '
+      'ON podcast_episode_progress(channel_uuid)',
+    );
+
     // Indexes for efficient querying
     await db.execute(
       'CREATE INDEX idx_metadata_type ON cache_metadata(cache_type)',
@@ -225,6 +241,22 @@ class CacheDatabase {
           updated_at INTEGER NOT NULL
         )
       ''');
+    }
+    if (oldVersion < 6) {
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS podcast_episode_progress (
+          track_id INTEGER PRIMARY KEY,
+          channel_uuid TEXT,
+          position_ms INTEGER NOT NULL DEFAULT 0,
+          duration_ms INTEGER,
+          completed INTEGER NOT NULL DEFAULT 0,
+          updated_at INTEGER NOT NULL
+        )
+      ''');
+      await db.execute(
+        'CREATE INDEX IF NOT EXISTS idx_podcast_progress_channel '
+        'ON podcast_episode_progress(channel_uuid)',
+      );
     }
   }
 

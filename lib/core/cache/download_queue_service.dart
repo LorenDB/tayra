@@ -5,6 +5,8 @@ import 'package:tayra/core/cache/cache_database.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/core/connectivity/connectivity_provider.dart';
+import 'package:tayra/features/settings/settings_provider.dart';
 
 /// Per-item download states mirroring the SQLite `status` column.
 enum DownloadStatus { queued, downloading, completed, failed }
@@ -141,6 +143,11 @@ class DownloadQueueService {
     _processQueue(reader);
   }
 
+  /// Resume processing if the worker is idle (e.g. after Wi‑Fi returns).
+  void processIfIdle(dynamic reader) {
+    _processQueue(reader);
+  }
+
   /// Return the current queue snapshot.
   Future<List<DownloadQueueItem>> snapshot() async {
     final db = await _db.database;
@@ -170,6 +177,24 @@ class DownloadQueueService {
     } catch (_) {}
   }
 
+  /// Whether current connectivity allows downloading under settings.
+  bool _downloadsAllowed(dynamic ref) {
+    try {
+      final wifiOnly = ref.read(settingsProvider).downloadWifiOnly as bool;
+      final connectivity = ref.read(connectivityResultProvider);
+      return connectivity.when(
+        data:
+            (results) =>
+                connectivityAllowsDownloads(results, wifiOnly: wifiOnly),
+        loading: () => true,
+        error: (_, _) => true,
+      );
+    } catch (_) {
+      // Settings/connectivity not ready — allow and let individual downloads fail.
+      return true;
+    }
+  }
+
   void _processQueue(dynamic ref) {
     if (_running) return;
     _running = true;
@@ -179,6 +204,15 @@ class DownloadQueueService {
         final audioSvc = ref.read(audioCacheServiceProvider);
         try {
           while (true) {
+            // Pause the whole worker when Wi‑Fi-only blocks mobile data.
+            // Items stay queued and processIfIdle resumes later.
+            if (!_downloadsAllowed(ref)) {
+              debugPrint(
+                'DownloadQueue: paused (Wi‑Fi-only / no allowed network)',
+              );
+              break;
+            }
+
             final db = await _db.database;
 
             // Fetch next queued item
