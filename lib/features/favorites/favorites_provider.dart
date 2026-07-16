@@ -120,26 +120,30 @@ class FavoriteButton extends ConsumerWidget {
 
     // GestureDetector (not Material/InkWell): splash machinery per list row
     // was a measurable scroll cost on Favorites.
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () async {
-        try {
-          await ref.read(favoriteTrackIdsProvider.notifier).toggle(trackId);
-        } catch (e) {
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Failed to update favorite')),
-            );
+    return Semantics(
+      button: true,
+      label: isFav ? 'Remove from favorites' : 'Add to favorites',
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () async {
+          try {
+            await ref.read(favoriteTrackIdsProvider.notifier).toggle(trackId);
+          } catch (e) {
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Failed to update favorite')),
+              );
+            }
           }
-        }
-      },
-      child: SizedBox(
-        width: size + 8,
-        height: size + 8,
-        child: Icon(
-          isFav ? Icons.favorite : Icons.favorite_border,
-          color: isFav ? AppTheme.favorite : AppTheme.onBackgroundMuted,
-          size: size,
+        },
+        child: SizedBox(
+          width: size + 8,
+          height: size + 8,
+          child: Icon(
+            isFav ? Icons.favorite : Icons.favorite_border,
+            color: isFav ? AppTheme.favorite : AppTheme.onBackgroundMuted,
+            size: size,
+          ),
         ),
       ),
     );

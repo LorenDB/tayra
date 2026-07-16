@@ -80,7 +80,13 @@ class ArtistDetailScreen extends ConsumerWidget {
                   await api.getArtist(artistId, forceRefresh: true);
                 } catch (_) {}
                 ref.invalidate(_artistDetailProvider(artistId));
-                await ref.read(_artistDetailProvider(artistId).future);
+                // Tracks are a separate provider — invalidate so Appears On /
+                // track lists don't stay stale after pull-to-refresh.
+                ref.invalidate(_artistTracksProvider(artistId));
+                await Future.wait([
+                  ref.read(_artistDetailProvider(artistId).future),
+                  ref.read(_artistTracksProvider(artistId).future),
+                ]);
               },
               child: _ArtistDetailBody(artist: artist),
             ),

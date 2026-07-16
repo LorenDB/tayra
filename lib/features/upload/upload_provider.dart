@@ -353,7 +353,7 @@ class UploadNotifier extends Notifier<UploadState> {
       // ignore and allow file picker to fallback to its default
     }
 
-    final result = await FilePicker.pickFiles(
+    final file = await FilePicker.pickFile(
       type: FileType.custom,
       initialDirectory: initialDirectory,
       allowedExtensions: [
@@ -372,11 +372,9 @@ class UploadNotifier extends Notifier<UploadState> {
         'mka',
         'oga',
       ],
-      allowMultiple: false,
     );
-    if (result == null || result.files.isEmpty) return;
+    if (file == null) return;
 
-    final file = result.files.first;
     state = state.copyWith(
       filePath: file.path,
       fileName: file.name,
