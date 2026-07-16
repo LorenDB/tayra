@@ -1112,8 +1112,13 @@ class CacheManager {
     );
   }
 
-  /// Clear all cache
-  Future<void> clearAll() async {
+  /// Clear all cache files and metadata.
+  ///
+  /// By default keeps [cache_favorites] so a user-initiated "clear cache"
+  /// does not wipe heart state. Pass [clearUserData] on logout / account
+  /// switch so favorites, download queue, and offline album index are wiped
+  /// and cannot leak to the next account.
+  Future<void> clearAll({bool clearUserData = false}) async {
     final db = await _db.database;
 
     // Delete all files
@@ -1126,11 +1131,16 @@ class CacheManager {
       }
     }
 
-    // Clear all tables
+    // Clear cache tables
     await db.delete('cache_metadata');
     await db.delete('cache_files');
     await db.delete('cache_manual_downloads');
-    // Keep favorites - they're not large and users expect them to persist
+
+    if (clearUserData) {
+      await db.delete('cache_favorites');
+      await db.delete('download_queue');
+      await db.delete('offline_album_index');
+    }
   }
 
   /// Clear only audio files

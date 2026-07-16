@@ -880,6 +880,33 @@ class NextcloudBackupService {
     return allOk;
   }
 
+  /// Prefs keys (or substrings) that must never leave the device in a backup.
+  /// Desktop stores OAuth tokens in SharedPreferences; Android uses secure
+  /// storage for tokens but still has Nextcloud app password / related keys
+  /// in prefs.
+  static bool _isSensitiveSettingsKey(String key) {
+    final k = key.toLowerCase();
+    if (k.contains('token')) return true;
+    if (k.contains('password')) return true;
+    if (k.contains('secret')) return true;
+    if (k == 'server_url' ||
+        k == 'access_token' ||
+        k == 'refresh_token' ||
+        k == 'client_id' ||
+        k == 'client_secret') {
+      return true;
+    }
+    // Nextcloud login material
+    if (k.startsWith('nc_') &&
+        (k.contains('password') ||
+            k.contains('token') ||
+            k.contains('secret') ||
+            k.contains('login'))) {
+      return true;
+    }
+    return false;
+  }
+
   static Future<Map<String, dynamic>> _exportSettingsAndServerInfo(
     String? funkServerUrl,
     String serverHostSanitized,
@@ -889,6 +916,7 @@ class NextcloudBackupService {
     final prefs = await SharedPreferences.getInstance();
     final allPrefs = <String, dynamic>{};
     for (final k in prefs.getKeys()) {
+      if (_isSensitiveSettingsKey(k)) continue;
       final v = prefs.get(k);
       allPrefs[k] = v;
     }
@@ -932,9 +960,9 @@ class NextcloudBackupService {
       final prefs = await SharedPreferences.getInstance();
       for (final entry in settings.entries) {
         final k = entry.key;
-        if (k.contains('token') ||
-            k.contains('password') ||
-            k == 'server_url') {
+        // Mirror export denylist so older backups that included secrets are
+        // still stripped on restore.
+        if (_isSensitiveSettingsKey(k)) {
           continue;
         }
         if (!reuseDeviceUuid && k == _deviceUuidKey) {

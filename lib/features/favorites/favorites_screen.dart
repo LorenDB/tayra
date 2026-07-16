@@ -171,6 +171,50 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
         .playTracks(tracks, source: 'favorites_shuffle', shuffle: true);
   }
 
+  /// Shuffle the full favorites library, not just the pages already loaded.
+  Future<void> _shuffleAll(List<Favorite> displayed) async {
+    final offlineFilterActive = ref.read(offlineFilterActiveProvider);
+    // Offline filter is client-side over loaded pages only — keep that path.
+    if (offlineFilterActive || (!_hasMore && displayed.isNotEmpty)) {
+      _shuffleDisplayed(displayed);
+      return;
+    }
+
+    try {
+      final api = ref.read(cachedFunkwhaleApiProvider);
+      final all = await fetchAllPages(
+        (page) => api.getFavorites(page: page, pageSize: 50),
+      );
+      if (!mounted) return;
+      if (all.isEmpty) {
+        _shuffleDisplayed(displayed);
+        return;
+      }
+      // Keep the local list in sync so subsequent plays see the full set.
+      setState(() {
+        _favorites
+          ..clear()
+          ..addAll(all);
+        _currentPage = 1;
+        _hasMore = false;
+        _invalidateDisplayCache();
+      });
+      final tracks = all.map((f) => f.track).toList();
+      ref
+          .read(playerProvider.notifier)
+          .playTracks(tracks, source: 'favorites_shuffle', shuffle: true);
+    } catch (_) {
+      if (!mounted) return;
+      // Fall back to whatever is already on screen.
+      _shuffleDisplayed(displayed);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Could not load all favorites; shuffled loaded tracks'),
+        ),
+      );
+    }
+  }
+
   void _playDisplayedFromIndex(List<Favorite> displayed, int index) {
     final tracks = displayed.map((f) => f.track).toList();
     ref
@@ -364,7 +408,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
                   ),
                   const Spacer(),
                   _ShuffleAllButton(
-                    onPressed: () => _shuffleDisplayed(displayFavorites),
+                    onPressed: () => _shuffleAll(displayFavorites),
                   ),
                 ],
               ),

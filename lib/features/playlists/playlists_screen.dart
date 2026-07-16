@@ -17,8 +17,11 @@ import 'package:tayra/core/widgets/dialog_utils.dart';
 
 final playlistsProvider = FutureProvider<List<Playlist>>((ref) async {
   final api = ref.watch(cachedFunkwhaleApiProvider);
-  final response = await api.getPlaylists(scope: 'me');
-  return response.results;
+  // Fetch every page — users with >20 playlists must see the full list
+  // (also used by add-to-playlist).
+  return fetchAllPages(
+    (page) => api.getPlaylists(page: page, pageSize: 50, scope: 'me'),
+  );
 });
 
 // ── Playlists Screen ────────────────────────────────────────────────────

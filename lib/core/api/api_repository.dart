@@ -273,16 +273,27 @@ class FunkwhaleApi {
   /// PlaylistRequest for this body, but the actual implementation uses index.
   Future<void> removeTrackFromPlaylist(int playlistId, int index) async {
     final url = '$_baseUrl/api/v1/playlists/$playlistId/remove/';
-    // Send JSON content-type; validateStatus avoids Dio throwing on non-2xx
-    // since the Funkwhale implementation may return 204 or other codes.
-    await _dio.post(
+    // Accept 2xx (including 204 No Content). Non-2xx must throw so optimistic
+    // UI callers can revert.
+    final response = await _dio.post(
       url,
       data: {'index': index},
       options: Options(
         contentType: Headers.jsonContentType,
-        validateStatus: (_) => true,
+        validateStatus:
+            (status) => status != null && status >= 200 && status < 300,
       ),
     );
+    // Defensive: if validateStatus is ever relaxed, still fail closed.
+    final code = response.statusCode ?? 0;
+    if (code < 200 || code >= 300) {
+      throw DioException(
+        requestOptions: response.requestOptions,
+        response: response,
+        type: DioExceptionType.badResponse,
+        message: 'Failed to remove track from playlist (HTTP $code)',
+      );
+    }
   }
 
   Future<void> deletePlaylist(int id) async {

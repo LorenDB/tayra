@@ -10,6 +10,9 @@ library;
 // helpers normalize common cases to reduce `as Map` cast failures.
 Map<String, dynamic> _toMap(dynamic v) {
   if (v is Map<String, dynamic>) return v;
+  // Some JSON decoders / transformers yield Map with non-String keys or a
+  // plain Map; coerce rather than silently dropping nested objects.
+  if (v is Map) return Map<String, dynamic>.from(v);
   return <String, dynamic>{};
 }
 

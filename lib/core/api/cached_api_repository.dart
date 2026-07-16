@@ -373,7 +373,7 @@ class CachedFunkwhaleApi {
 
   Future<Set<int>> getCachedFavoriteTrackIds() async {
     try {
-      return await _cache.getFavorites();
+      return await _mergePendingIntoFavorites(await _cache.getFavorites());
     } catch (_) {
       return {};
     }
@@ -381,21 +381,39 @@ class CachedFunkwhaleApi {
 
   Future<Set<int>> getAllFavoriteTrackIds() async {
     if (_isOffline()) {
-      return await _cache.getFavorites();
+      return await _mergePendingIntoFavorites(await _cache.getFavorites());
     }
     try {
       final ids = await _api.getAllFavoriteTrackIds();
+      // Merge offline/pending mutations so a refresh cannot wipe hearts the
+      // user toggled while offline before syncPendingFavorites runs.
+      final merged = await _mergePendingIntoFavorites(ids);
       // Atomically replace cached favorites in a single transaction so
       // concurrent reads never see a partially-cleared set.
-      await _cache.setFavorites(ids);
-      return ids;
+      await _cache.setFavorites(merged);
+      return merged;
     } catch (_) {
-      // Offline fallback – return whatever we have cached
+      // Offline fallback – return whatever we have cached (+ pending)
       try {
-        return await _cache.getFavorites();
+        return await _mergePendingIntoFavorites(await _cache.getFavorites());
       } catch (_) {}
       rethrow;
     }
+  }
+
+  /// Apply [PendingFavoriteOps] on top of a favorite ID set.
+  Future<Set<int>> _mergePendingIntoFavorites(Set<int> base) async {
+    final pending = await PendingFavoriteOps.loadAll();
+    if (pending.isEmpty) return base;
+    final merged = Set<int>.from(base);
+    for (final op in pending) {
+      if (op.add) {
+        merged.add(op.trackId);
+      } else {
+        merged.remove(op.trackId);
+      }
+    }
+    return merged;
   }
 
   Future<void> addFavorite(int trackId) async {

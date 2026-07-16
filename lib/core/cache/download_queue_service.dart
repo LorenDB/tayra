@@ -221,11 +221,30 @@ class DownloadQueueService {
               }
               // Omit numeric track_id per policy
               Analytics.track('download_started');
-              await audioSvc.cacheAudio(
+              final file = await audioSvc.cacheAudio(
                 track,
                 api.getStreamUrl(track.listenUrl!),
                 api.authHeaders,
               );
+              // cacheAudio returns null on failure (and swallows errors). Also
+              // treat "already on disk" as success in case another concurrent
+              // download finished while we waited.
+              final succeeded =
+                  file != null || await audioSvc.isAudioCached(item.trackId);
+              if (!succeeded) {
+                await db.update(
+                  'download_queue',
+                  {'status': 'failed', 'error': 'download_failed'},
+                  where: 'id = ?',
+                  whereArgs: [item.id],
+                );
+                Analytics.track('download_failed', {
+                  'had_error': true,
+                  'error_type': 'null_result',
+                });
+                await _emitState();
+                continue;
+              }
 
               // Mark completed and invalidate the cached provider so the UI
               // updates immediately.

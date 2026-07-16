@@ -995,7 +995,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
         final secs = position.inSeconds;
         if (secs % 2 == 0 && secs > 0 && secs != _lastSavedPositionSeconds) {
           _lastSavedPositionSeconds = secs;
-          unawaited(_saveQueueProgress());
+          unawaited(_saveQueueProgress(position: position));
         }
         // Do not await — keep the position stream non-blocking for scroll/UI.
         unawaited(_listenTracker.updatePosition(position).catchError((_) {}));
@@ -1309,12 +1309,15 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
   /// Persist only playback cursor fields — avoids re-encoding the full queue
   /// on every 2s position tick (major main-isolate hitch with long queues).
-  Future<void> _saveQueueProgress() async {
+  ///
+  /// Pass [position] from the live position stream; UI state may lag due to
+  /// publish throttling and would under-report progress on kill/resume.
+  Future<void> _saveQueueProgress({Duration? position}) async {
     if (state.queue.isEmpty) return;
 
     await QueuePersistenceService.savePlaybackProgress(
       currentIndex: state.currentIndex,
-      position: state.position,
+      position: position ?? state.position,
       duration: state.duration,
       isCompleted: state.queueCompleted,
     );
@@ -1903,6 +1906,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
       return;
     }
 
+    final safeStartIndex = startIndex.clamp(0, tracks.length - 1);
+
     if (state.queueCompleted) {
       state = state.copyWith(queueCompleted: false);
     }
@@ -1928,11 +1933,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
       final base = List<Track>.from(tracks);
       newUnshuffledQueue = base;
       newIsShuffled = true;
-      if (startIndex > 0 && startIndex < tracks.length) {
+      if (safeStartIndex > 0 && safeStartIndex < tracks.length) {
         // Keep the requested start track at the front of the shuffled view
         // so playback begins from it, then shuffle the remainder.
-        startTrack = tracks[startIndex];
-        final rest = List<Track>.from(tracks)..removeAt(startIndex);
+        startTrack = tracks[safeStartIndex];
+        final rest = List<Track>.from(tracks)..removeAt(safeStartIndex);
         rest.shuffle();
         newQueue = [startTrack, ...rest];
       } else {
@@ -1946,8 +1951,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
       newQueue = List<Track>.from(tracks);
       newUnshuffledQueue = const [];
       newIsShuffled = false;
-      newCurrentIndex = startIndex;
-      startTrack = tracks[startIndex];
+      newCurrentIndex = safeStartIndex;
+      startTrack = tracks[safeStartIndex];
     }
 
     // Offline: start on the first track that has local audio at or after
@@ -2145,12 +2150,21 @@ class PlayerNotifier extends Notifier<PlayerState> {
       if (newIndex >= newQueue.length) newIndex = newQueue.length - 1;
     }
 
-    // When shuffled, remove the same track from the base queue so the
-    // source of truth stays consistent with the active view.
+    // When shuffled, remove one matching entry from the base queue so the
+    // source of truth stays consistent. Prefer identity, then first id match
+    // — never strip every duplicate of the same id.
     List<Track> newUnshuffled = state.unshuffledQueue;
     if (state.isShuffled && newUnshuffled.isNotEmpty) {
       newUnshuffled = List<Track>.from(newUnshuffled);
-      newUnshuffled.removeWhere((t) => t.id == removedTrack.id);
+      final byIdentity = newUnshuffled.indexWhere(
+        (t) => identical(t, removedTrack),
+      );
+      if (byIdentity >= 0) {
+        newUnshuffled.removeAt(byIdentity);
+      } else {
+        final byId = newUnshuffled.indexWhere((t) => t.id == removedTrack.id);
+        if (byId >= 0) newUnshuffled.removeAt(byId);
+      }
     }
 
     state = state.copyWith(
@@ -2263,6 +2277,17 @@ class PlayerNotifier extends Notifier<PlayerState> {
   Future<void> stashQueue() async {
     if (state.queue.isEmpty) return;
 
+    // After a cold restore the audio source is not loaded yet, so the player
+    // position is typically zero while UI / pending restore hold the real
+    // resume point. Prefer those over a stale player position.
+    final Duration stashPosition;
+    if (_pendingRestorePosition != null) {
+      stashPosition = state.position;
+    } else {
+      final playerPos = _handler.audioPlayer.position;
+      stashPosition = playerPos > Duration.zero ? playerPos : state.position;
+    }
+
     final stash = StashedQueue(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       // Preserve the active stash name (if any) so re-stashing keeps it.
@@ -2270,7 +2295,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       name: _activeStashName,
       unshuffledQueue: List<Track>.from(state.unshuffledQueue),
       currentIndex: state.currentIndex,
-      position: _handler.audioPlayer.position,
+      position: stashPosition,
       isShuffled: state.isShuffled,
       loopMode: _loopModeToString(state.loopMode),
       savedAt: DateTime.now(),
@@ -2300,14 +2325,34 @@ class PlayerNotifier extends Notifier<PlayerState> {
     ref.invalidate(stashedQueuesProvider);
     Analytics.track('stash_restored');
 
-    // Load the stashed tracks, starting at the saved position.
+    final safeIndex = stash.currentIndex.clamp(0, stash.queue.length - 1);
+
+    // Load the stashed tracks without re-shuffling — stash.queue is already
+    // the playback order that was saved.
     await playTracks(
       stash.queue,
-      startIndex: stash.currentIndex,
+      startIndex: safeIndex,
       source: 'stash_restore',
       initialPosition:
           stash.position.inMilliseconds > 0 ? stash.position : null,
     );
+
+    // playTracks resets shuffle/loop; re-apply the stashed metadata so
+    // unshuffle and loop controls behave correctly.
+    final restoredLoop = _parseLoopMode(stash.loopMode);
+    if (stash.isShuffled && stash.unshuffledQueue.isNotEmpty) {
+      state = state.copyWith(
+        isShuffled: true,
+        unshuffledQueue: List<Track>.from(stash.unshuffledQueue),
+        loopMode: restoredLoop,
+      );
+    } else {
+      state = state.copyWith(loopMode: restoredLoop);
+    }
+    _handler.audioPlayer.setLoopMode(
+      _gaplessActive ? state.loopMode : LoopMode.off,
+    );
+    _saveQueue();
   }
 
   /// Delete a stash by [id] without restoring it.
@@ -2468,6 +2513,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
           position: initialPosition ?? Duration.zero,
         );
       } catch (_) {}
+
+      // Single-source path: app handles loop modes; clear any stuck native
+      // loop left over from a previous gapless session.
+      if (!_gaplessActive) {
+        unawaited(_handler.audioPlayer.setLoopMode(LoopMode.off));
+      }
 
       // Successfully loaded.
       state = state.copyWith(isLoading: false);
@@ -3017,14 +3068,18 @@ class PlayerNotifier extends Notifier<PlayerState> {
         currentIndex: 0,
       );
     } else {
-      // Turning shuffle OFF: restore the original order, keeping current track
+      // Turning shuffle OFF: restore the original order, keeping current track.
+      // Match by track id — after persistence restore, queue and unshuffled
+      // lists are different instances so identity indexOf would fail.
       final current = state.currentTrack;
       final restored =
           state.unshuffledQueue.isNotEmpty
               ? List<Track>.from(state.unshuffledQueue)
               : List<Track>.from(state.queue);
       final newIndex =
-          current != null ? restored.indexOf(current) : state.currentIndex;
+          current != null
+              ? restored.indexWhere((t) => t.id == current.id)
+              : state.currentIndex;
       state = state.copyWith(
         isShuffled: false,
         unshuffledQueue: [],
@@ -3154,11 +3209,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
         state = state.copyWith(loopMode: LoopMode.off);
         break;
     }
-    // Sync loop mode to the player when gapless is active so that
-    // just_audio handles looping natively within the concatenation.
-    if (_gaplessActive) {
-      _handler.audioPlayer.setLoopMode(state.loopMode);
-    }
+    // Gapless: just_audio handles looping natively in the concatenation.
+    // Single-source: app handles loop in _onTrackCompleted — keep the native
+    // player on LoopMode.off so a previous gapless mode cannot stick.
+    _handler.audioPlayer.setLoopMode(
+      _gaplessActive ? state.loopMode : LoopMode.off,
+    );
     _saveQueue();
     Analytics.track('toggle_loop_mode', {'mode': state.loopMode.name});
   }

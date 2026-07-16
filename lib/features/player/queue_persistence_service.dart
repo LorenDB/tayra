@@ -353,6 +353,7 @@ class QueuePersistenceService {
       await prefs.remove(_keyIsShuffled);
       await prefs.remove(_keyLoopMode);
       await prefs.remove(_keyListenSession);
+      await prefs.remove(_keyQueueCompleted);
     } catch (e) {
       // Silently fail
     }

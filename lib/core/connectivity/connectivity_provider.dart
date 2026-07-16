@@ -7,10 +7,19 @@ import 'package:tayra/features/settings/settings_provider.dart';
 // ── Raw connectivity stream ──────────────────────────────────────────────
 
 /// Tracks the current list of connectivity results from the OS.
+///
+/// Seeds with [Connectivity.checkConnectivity] so cold start does not sit in
+/// the StreamProvider loading state (which optimistically reports online).
 final connectivityResultProvider = StreamProvider<List<ConnectivityResult>>((
   ref,
-) {
-  return Connectivity().onConnectivityChanged;
+) async* {
+  final connectivity = Connectivity();
+  try {
+    yield await connectivity.checkConnectivity();
+  } catch (_) {
+    // Fall through to change stream if the initial probe fails.
+  }
+  yield* connectivity.onConnectivityChanged;
 });
 
 // ── Network reachability ──────────────────────────────────────────────────

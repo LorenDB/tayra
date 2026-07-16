@@ -493,7 +493,9 @@ class _AlbumListItem extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: () => context.push('/browse/album/${album.id}'),
+        // Prefer the home album route so we don't force the Albums tab
+        // when the user opened this artist from the Artists tab.
+        onTap: () => context.push('/album/${album.id}'),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
