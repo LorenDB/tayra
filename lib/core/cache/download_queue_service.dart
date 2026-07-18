@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/cache/cache_database.dart';
@@ -55,23 +56,11 @@ class DownloadQueueItem {
 ///   app restarts.
 /// - On startup, any items that were `downloading` (killed mid-download) are
 ///   automatically reset to `queued` by the v3 DB migration and retried here.
-/// - Exposes a [StreamController]-backed stream so the UI can observe state.
 class DownloadQueueService {
   final CacheDatabase _db;
   bool _running = false;
 
-  /// Stream of the current queue state (emitted after every state change).
-  final _stateController =
-      StreamController<List<DownloadQueueItem>>.broadcast();
-
-  Stream<List<DownloadQueueItem>> get queueStream => _stateController.stream;
-
   DownloadQueueService(this._db);
-
-  /// Release resources. Called when the provider is disposed.
-  void dispose() {
-    _stateController.close();
-  }
 
   // ── Public API ───────────────────────────────────────────────────────────
 
@@ -81,7 +70,6 @@ class DownloadQueueService {
     // Reset any items stuck in 'downloading' state from a previous run.
     // (The DB migration also does this, but be defensive.)
     await _resetStuckItems();
-    await _emitState();
     _processQueue(reader);
   }
 
@@ -111,7 +99,6 @@ class DownloadQueueService {
         });
       }
     });
-    await _emitState();
     // Telemetry: user or system enqueued downloads
     Analytics.track('download_enqueued', {'count': trackIds.length});
     _processQueue(reader);
@@ -126,7 +113,6 @@ class DownloadQueueService {
       where: "track_id = ? AND status = 'queued'",
       whereArgs: [trackId],
     );
-    await _emitState();
     // Omit numeric track_id per policy
     Analytics.track('download_removed');
   }
@@ -138,7 +124,6 @@ class DownloadQueueService {
       'status': 'queued',
       'error': null,
     }, where: "status = 'failed'");
-    await _emitState();
     Analytics.track('download_retry_requested');
     _processQueue(reader);
   }
@@ -146,17 +131,6 @@ class DownloadQueueService {
   /// Resume processing if the worker is idle (e.g. after Wi‑Fi returns).
   void processIfIdle(dynamic reader) {
     _processQueue(reader);
-  }
-
-  /// Return the current queue snapshot.
-  Future<List<DownloadQueueItem>> snapshot() async {
-    final db = await _db.database;
-    final rows = await db.query(
-      'download_queue',
-      where: "status != 'completed'",
-      orderBy: 'added_at ASC',
-    );
-    return rows.map(DownloadQueueItem.fromRow).toList();
   }
 
   // ── Internal ─────────────────────────────────────────────────────────────
@@ -167,14 +141,6 @@ class DownloadQueueService {
       'status': 'queued',
       'error': null,
     }, where: "status = 'downloading'");
-  }
-
-  Future<void> _emitState() async {
-    if (_stateController.isClosed) return;
-    try {
-      final items = await snapshot();
-      _stateController.add(items);
-    } catch (_) {}
   }
 
   /// Whether current connectivity allows downloading under settings.
@@ -233,7 +199,6 @@ class DownloadQueueService {
               where: 'id = ?',
               whereArgs: [item.id],
             );
-            await _emitState();
 
             try {
               final track = await api.getTrack(item.trackId);
@@ -250,7 +215,6 @@ class DownloadQueueService {
                   'had_error': true,
                   'error_type': 'no_stream_url',
                 });
-                await _emitState();
                 continue;
               }
               // Omit numeric track_id per policy
@@ -276,7 +240,6 @@ class DownloadQueueService {
                   'had_error': true,
                   'error_type': 'null_result',
                 });
-                await _emitState();
                 continue;
               }
 
@@ -315,7 +278,6 @@ class DownloadQueueService {
                 'error_type': e.runtimeType.toString(),
               });
             }
-            await _emitState();
           }
         } finally {
           _running = false;
@@ -329,18 +291,5 @@ class DownloadQueueService {
 
 /// Riverpod provider for the download queue service (singleton)
 final downloadQueueServiceProvider = Provider<DownloadQueueService>((ref) {
-  final svc = DownloadQueueService(CacheDatabase.instance);
-  ref.onDispose(svc.dispose);
-  return svc;
-});
-
-// Alias kept for backwards-compat with existing call sites.
-final downloadQueueProvider = downloadQueueServiceProvider;
-
-/// Stream provider that exposes live queue state (active + failed items).
-final downloadQueueStateProvider = StreamProvider<List<DownloadQueueItem>>((
-  ref,
-) {
-  final svc = ref.watch(downloadQueueServiceProvider);
-  return svc.queueStream;
+  return DownloadQueueService(CacheDatabase.instance);
 });
