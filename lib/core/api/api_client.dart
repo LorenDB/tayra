@@ -11,13 +11,6 @@ final dioProvider = Provider<Dio>((ref) {
 
   dio.interceptors.add(AuthInterceptor(ref));
   dio.interceptors.add(AnalyticsInterceptor());
-  dio.interceptors.add(
-    LogInterceptor(
-      requestBody: false,
-      responseBody: false,
-      logPrint: (o) {}, // silent in release
-    ),
-  );
 
   return dio;
 });

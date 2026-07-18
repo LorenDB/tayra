@@ -212,33 +212,3 @@ Color lightenForText(Color color, {double minimumContrast = 4.5}) {
 
   return hsl.toColor();
 }
-
-@Deprecated('Use paletteColorsProvider instead')
-final dominantColorProvider = FutureProvider.family<Color, String?>((
-  ref,
-  imageUrl,
-) async {
-  if (imageUrl == null || imageUrl.isEmpty) return AppTheme.primary;
-
-  try {
-    final imageProvider = ResizeImage(
-      CachedNetworkImageProvider(imageUrl),
-      width: 100,
-      height: 100,
-      allowUpscaling: false,
-    );
-    final palette = await PaletteGenerator.fromImageProvider(
-      imageProvider,
-      maximumColorCount: 16,
-    );
-
-    final color =
-        palette.vibrantColor?.color ??
-        palette.dominantColor?.color ??
-        AppTheme.primary;
-
-    return _ensureContrast(color, minimumContrast: 3.0) ?? AppTheme.primary;
-  } catch (_) {
-    return AppTheme.primary;
-  }
-});
