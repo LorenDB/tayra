@@ -1,10 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/analytics/analytics.dart';
+import 'package:tayra/core/api/http_client_factory.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
 
 final dioProvider = Provider<Dio>((ref) {
-  final dio = Dio();
+  final dio = createDio();
   dio.options.connectTimeout = const Duration(seconds: 15);
   dio.options.receiveTimeout = const Duration(seconds: 30);
   dio.options.headers['Accept'] = 'application/json';
@@ -17,6 +18,16 @@ final dioProvider = Provider<Dio>((ref) {
 
 class AuthInterceptor extends Interceptor {
   final Ref _ref;
+
+  /// Long-lived Dio for retrying requests after a token refresh. Kept as a
+  /// field (rather than constructed per 401) so its connection pool — and
+  /// the DNS/TCP/TLS work behind it — is reused across retries.
+  final Dio _retryDio = createDio(
+    BaseOptions(
+      connectTimeout: const Duration(seconds: 15),
+      receiveTimeout: const Duration(seconds: 30),
+    ),
+  );
 
   AuthInterceptor(this._ref);
 
@@ -39,13 +50,7 @@ class AuthInterceptor extends Interceptor {
         err.requestOptions.headers['Authorization'] =
             'Bearer ${authState.accessToken}';
         try {
-          final retryDio = Dio(
-            BaseOptions(
-              connectTimeout: const Duration(seconds: 15),
-              receiveTimeout: const Duration(seconds: 30),
-            ),
-          );
-          final response = await retryDio.fetch(err.requestOptions);
+          final response = await _retryDio.fetch(err.requestOptions);
           handler.resolve(response);
           return;
         } catch (e) {

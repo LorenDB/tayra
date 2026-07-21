@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/api/audio_tagger.dart';
+import 'package:tayra/core/api/http_client_factory.dart';
 
 // ── MusicBrainz models ───────────────────────────────────────────────────
 
@@ -259,7 +260,7 @@ class UploadNotifier extends Notifier<UploadState> {
   @override
   UploadState build() {
     _mbDio =
-        Dio()
+        createDio()
           ..options.headers['User-Agent'] =
               'Tayra/1.0 (https://github.com/loren/tayra)'
           ..options.connectTimeout = const Duration(seconds: 10)

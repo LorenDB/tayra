@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tayra/core/analytics/analytics.dart';
+import 'package:tayra/core/api/http_client_factory.dart';
 import 'package:tayra/core/auth/auth_provider.dart'
     show secureStorageProvider, authStateProvider;
 import 'package:tayra/features/year_review/listen_history_service.dart';
@@ -180,6 +181,10 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
   static const _keyNcAuto = 'nc_auto_backup';
   static const _secureTokenKey = 'nc_app_password';
 
+  /// Shared Dio for the login flow (start + polling) so repeated poll
+  /// requests reuse one connection instead of re-resolving DNS each time.
+  final Dio _dio = createDio();
+
   static bool get _useSecure => Platform.isAndroid;
 
   @override
@@ -238,8 +243,7 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
     if (url.endsWith('/')) url = url.substring(0, url.length - 1);
 
     try {
-      final dio = Dio();
-      final resp = await dio.post(
+      final resp = await _dio.post(
         '$url/index.php/login/v2',
         options: Options(
           validateStatus: (_) => true,
@@ -294,11 +298,10 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
   }) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
-      final dio = Dio();
       for (int i = 0; i < 90; i++) {
         await Future.delayed(const Duration(seconds: 2));
         try {
-          final r = await dio.post(
+          final r = await _dio.post(
             pollEndpoint,
             data: {'token': pollToken},
             options: Options(
@@ -378,11 +381,10 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
     }
     state = state.copyWith(isLoading: true, error: null);
     try {
-      final dio = Dio();
       for (int i = 0; i < 90; i++) {
         await Future.delayed(const Duration(seconds: 2));
         try {
-          final r = await dio.post(
+          final r = await _dio.post(
             endpoint,
             data: {'token': token},
             options: Options(
@@ -665,7 +667,7 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
 // ── Backup service (static ops) ──────────────────────────────────────────
 
 class NextcloudBackupService {
-  static final Dio _dio = Dio();
+  static final Dio _dio = createDio();
 
   static Future<String> _buildWebDavUrl(String server, String user) async {
     final s =

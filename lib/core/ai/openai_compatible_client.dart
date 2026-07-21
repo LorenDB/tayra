@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:tayra/core/ai/ai_client.dart';
+import 'package:tayra/core/api/http_client_factory.dart';
 
 class OpenAiCompatibleClient implements AiClient {
   final String baseUrl;
@@ -14,8 +15,10 @@ class OpenAiCompatibleClient implements AiClient {
     this.requiresApiKey = true,
   });
 
+  late final Dio _dio = _buildDio();
+
   Dio _buildDio() {
-    return Dio(
+    return createDio(
       BaseOptions(
         baseUrl: baseUrl.endsWith('/') ? baseUrl : '$baseUrl/',
         headers: {
@@ -42,8 +45,7 @@ class OpenAiCompatibleClient implements AiClient {
 
   @override
   Future<String> runInference(String prompt) async {
-    final dio = _buildDio();
-    final response = await dio.post(
+    final response = await _dio.post(
       'chat/completions',
       data: {
         'model': model,
