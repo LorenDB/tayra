@@ -302,6 +302,15 @@ class AudioCacheService {
     _coverPathMemory[coverUrl] = path;
   }
 
+  /// Delete cached cover art for a given URL, including in-memory state
+  /// so that subsequent [getCachedCoverArt] calls re-query from disk.
+  Future<void> deleteCachedCoverArt(String coverUrl) async {
+    if (coverUrl.isEmpty) return;
+    _coverPathMemory.remove(coverUrl);
+    _coverFutures.remove(coverUrl);
+    await _cache.deleteFile(coverCacheKey(coverUrl));
+  }
+
   /// Derive a file extension for an audio track's temp download file.
   ///
   /// Uses the MIME type from the track's first upload if available, so that

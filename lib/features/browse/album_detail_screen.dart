@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/cache/manual_download_actions.dart';
@@ -580,6 +581,33 @@ class _AlbumHeader extends ConsumerWidget {
               if (value == 'purge_cache') {
                 try {
                   final mgr = CacheManager.instance;
+                  final audioCache = ref.read(audioCacheServiceProvider);
+
+                  // Collect all cover URLs before deleting metadata
+                  final coverUrls = album.allCoverUrls.toSet();
+                  final tracksData = tracksAsync.maybeWhen(
+                    data: (t) => t,
+                    orElse: () => null,
+                  );
+                  if (tracksData != null) {
+                    for (final t in tracksData) {
+                      if (t.cover != null) coverUrls.addAll(t.cover!.allUrls);
+                      if (t.album?.cover != null) {
+                        coverUrls.addAll(t.album!.cover!.allUrls);
+                      }
+                    }
+                  }
+
+                  // Clear app-managed cover files and in-memory state
+                  for (final url in coverUrls) {
+                    await audioCache.deleteCachedCoverArt(url);
+                  }
+
+                  // Evict from cached_network_image's built-in disk cache
+                  for (final url in coverUrls) {
+                    await CachedNetworkImage.evictFromCache(url);
+                  }
+
                   // Delete album metadata
                   await mgr.deleteMetadata('album_${album.id}');
                   // Delete all paginated track-list pages for this album
