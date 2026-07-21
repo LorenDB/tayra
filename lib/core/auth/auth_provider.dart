@@ -8,6 +8,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:tayra/core/analytics/analytics.dart';
+import 'package:tayra/core/api/http_client_factory.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/core/cache/pending_favorite_ops.dart';
 import 'package:tayra/features/player/queue_persistence_service.dart';
@@ -164,6 +165,16 @@ class AuthNotifier extends Notifier<AuthState> {
   /// In-flight automatic logout (multiple concurrent 401s share one).
   Future<void>? _autoLogoutFuture;
 
+  /// Single Dio for all OAuth calls (app registration, code exchange, token
+  /// refresh) so they reuse one connection pool instead of opening a fresh
+  /// socket — and DNS lookup — per call.
+  final Dio _dio = createDio(
+    BaseOptions(
+      connectTimeout: const Duration(seconds: 15),
+      receiveTimeout: const Duration(seconds: 30),
+    ),
+  );
+
   @override
   AuthState build() {
     Future.microtask(() => _loadSavedAuth());
@@ -257,8 +268,7 @@ class AuthNotifier extends Notifier<AuthState> {
     if (url.endsWith('/')) url = url.substring(0, url.length - 1);
 
     try {
-      final dio = Dio();
-      final response = await dio.post(
+      final response = await _dio.post(
         '$url/api/v1/oauth/apps/',
         data: {
           'name': await _getAppName(),
@@ -302,8 +312,7 @@ class AuthNotifier extends Notifier<AuthState> {
     state = state.copyWith(isLoading: true, error: null);
 
     try {
-      final dio = Dio();
-      final response = await dio.post(
+      final response = await _dio.post(
         '${state.serverUrl}/api/v1/oauth/token/',
         data: {
           'grant_type': 'authorization_code',
@@ -362,8 +371,7 @@ class AuthNotifier extends Notifier<AuthState> {
     if (state.refreshTokenValue == null) return false;
 
     try {
-      final dio = Dio();
-      final response = await dio.post(
+      final response = await _dio.post(
         '${state.serverUrl}/api/v1/oauth/token/',
         data: {
           'grant_type': 'refresh_token',

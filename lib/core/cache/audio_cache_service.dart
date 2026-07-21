@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:tayra/core/api/http_client_factory.dart';
 import 'package:tayra/core/api/models.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 
@@ -14,7 +15,7 @@ class AudioCacheService {
   /// Dedicated Dio instance for file downloads — no receive timeout so that
   /// large audio files (which can take several minutes on slow connections)
   /// are not incorrectly aborted.
-  final Dio _dio = Dio(
+  final Dio _dio = createDio(
     BaseOptions(
       connectTimeout: const Duration(seconds: 30),
       // No receiveTimeout: audio files can be very large and take a long

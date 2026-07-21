@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tayra/core/api/http_client_factory.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/settings_tiles.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
@@ -20,7 +21,7 @@ class AiModel {
 // ── Model fetching helpers ────────────────────────────────────────────────
 
 Future<List<AiModel>> _fetchGroqModels(String apiKey) async {
-  final dio = Dio(
+  final dio = createDio(
     BaseOptions(
       baseUrl: 'https://api.groq.com/openai/v1/',
       headers: {'Authorization': 'Bearer $apiKey'},
@@ -39,7 +40,7 @@ Future<List<AiModel>> _fetchGroqModels(String apiKey) async {
 }
 
 Future<List<AiModel>> _fetchOpenRouterModels() async {
-  final dio = Dio(
+  final dio = createDio(
     BaseOptions(
       baseUrl: 'https://openrouter.ai/api/v1/',
       connectTimeout: const Duration(seconds: 15),
@@ -64,7 +65,7 @@ Future<List<AiModel>> _fetchOpenRouterModels() async {
 
 Future<List<AiModel>> _fetchCustomModels(String baseUrl, String apiKey) async {
   final normalised = baseUrl.endsWith('/') ? baseUrl : '$baseUrl/';
-  final dio = Dio(
+  final dio = createDio(
     BaseOptions(
       baseUrl: normalised,
       headers: {if (apiKey.isNotEmpty) 'Authorization': 'Bearer $apiKey'},
