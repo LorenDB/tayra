@@ -74,6 +74,24 @@ class Cover {
   Map<String, dynamic> toJson() {
     return {'uuid': uuid, 'urls': urls.toJson()};
   }
+
+  /// All non-null, non-empty cover URLs across all crop sizes.
+  Set<String> get allUrls {
+    final result = <String>{};
+    if (urls.original != null && urls.original!.isNotEmpty) {
+      result.add(urls.original!);
+    }
+    if (urls.mediumSquareCrop != null && urls.mediumSquareCrop!.isNotEmpty) {
+      result.add(urls.mediumSquareCrop!);
+    }
+    if (urls.smallSquareCrop != null && urls.smallSquareCrop!.isNotEmpty) {
+      result.add(urls.smallSquareCrop!);
+    }
+    if (urls.largeSquareCrop != null && urls.largeSquareCrop!.isNotEmpty) {
+      result.add(urls.largeSquareCrop!);
+    }
+    return result;
+  }
 }
 
 // ── Artist ──────────────────────────────────────────────────────────────
@@ -269,6 +287,19 @@ class Album {
       return '${hours}h ${minutes}m';
     }
     return '$minutes min';
+  }
+
+  /// All deduplicated, non-null, non-empty cover URLs across the album,
+  /// its artist, and all associated tracks. Useful for cache invalidation.
+  Set<String> get allCoverUrls {
+    final urls = <String>{};
+    if (cover != null) urls.addAll(cover!.allUrls);
+    if (artist?.cover != null) urls.addAll(artist!.cover!.allUrls);
+    for (final track in tracks) {
+      if (track.cover != null) urls.addAll(track.cover!.allUrls);
+      if (track.album?.cover != null) urls.addAll(track.album!.cover!.allUrls);
+    }
+    return urls;
   }
 }
 
