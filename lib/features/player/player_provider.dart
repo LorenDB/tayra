@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +16,7 @@ import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/cache/audio_cache_service.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
+import 'package:tayra/core/platform/app_platform.dart';
 import 'package:tayra/features/favorites/favorites_provider.dart';
 import 'package:tayra/features/player/playback_listen_tracker.dart';
 import 'package:tayra/features/player/queue_persistence_service.dart';
@@ -1539,17 +1540,22 @@ class PlayerNotifier extends Notifier<PlayerState> {
       throw Exception('Track ${track.id} has no listen URL');
     }
 
-    final cachedFile = await _audioCache.getCachedAudio(track);
-    if (cachedFile != null) {
-      return AudioSource.uri(cachedFile.uri);
+    if (AppPlatform.supportsOfflineCache) {
+      final cachedFile = await _audioCache.getCachedAudio(track);
+      if (cachedFile != null) {
+        return AudioSource.uri(cachedFile.uri);
+      }
     }
 
     if (_isOffline) {
       throw Exception('Track ${track.id} not available offline');
     }
 
+    await _api.ensureListenToken();
     final streamUrl = _api.getStreamUrl(listenUrl);
-    return AudioSource.uri(Uri.parse(streamUrl), headers: _api.authHeaders);
+    // Web media cannot send custom headers; token is in the query string.
+    final headers = AppPlatform.isWeb ? <String, String>{} : _api.authHeaders;
+    return AudioSource.uri(Uri.parse(streamUrl), headers: headers);
   }
 
   /// Load all queue tracks into the player as a multi-source playlist
@@ -2532,8 +2538,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
         throw Exception('Track has no listen URL');
       }
 
+      await _api.ensureListenToken();
       final streamUrl = _api.getStreamUrl(listenUrl);
-      final headers = _api.authHeaders;
+      // Web media cannot send custom headers; token is in the query string.
+      final headers = AppPlatform.isWeb ? <String, String>{} : _api.authHeaders;
 
       // Build the MediaItem for the notification.
       final mediaItem = MediaItem(
@@ -2549,8 +2557,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
       if (!_isCurrentLoad(loadEpoch)) return false;
       _handler.mediaItem.add(mediaItem);
 
-      // Check audio cache first — play from local file if available.
-      final cachedFile = await _audioCache.getCachedAudio(track);
+      // Check audio cache first — play from local file if available (native only).
+      final cachedFile =
+          AppPlatform.supportsOfflineCache
+              ? await _audioCache.getCachedAudio(track)
+              : null;
       if (!_isCurrentLoad(loadEpoch)) return false;
       // Whether we ultimately streamed from server (so we know to kick off
       // background caching after playback starts).
@@ -3656,7 +3667,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// and pushes them to the native side via MethodChannel so the bridge
   /// can forward them to the watch over the Wearable Data Layer.
   void _handleWearRequestBrowseData() {
-    if (!Platform.isAndroid) return;
+    if (!AppPlatform.isAndroid) return;
     _pushBrowseDataToWatch();
   }
 

@@ -135,13 +135,19 @@ class CacheManager {
   ///
   /// Call [backgroundInitialize] after the app is visible to perform the
   /// more expensive reconcile + eviction steps without blocking the splash.
+  /// On web, offline cache is disabled (online-only).
   Future<void> initialize() async {
+    if (kIsWeb) {
+      _config = const CacheConfig();
+      return;
+    }
     _config = await CacheConfig.load();
   }
 
   /// Run the expensive startup work in the background after the app is
   /// visible.  Safe to call after [initialize] has completed.
   Future<void> backgroundInitialize() async {
+    if (kIsWeb) return;
     // Reconcile any files left on disk with the DB in case previous runs
     // copied files but failed to insert DB rows (prevents cached files from
     // being invisible to the UI).
@@ -232,6 +238,7 @@ class CacheManager {
 
   /// Get metadata from cache
   Future<Map<String, dynamic>?> getMetadata(String key) async {
+    if (kIsWeb) return null;
     final db = await _db.database;
     final results = await db.query(
       'cache_metadata',
@@ -269,6 +276,7 @@ class CacheManager {
     Map<String, dynamic> data, {
     Duration? ttl,
   }) async {
+    if (kIsWeb) return;
     final db = await _db.database;
     final jsonStr = await _encodeMetadataJson(data);
     // Use UTF-8 byte length for accurate size accounting (jsonStr.length
@@ -295,6 +303,7 @@ class CacheManager {
 
   /// Get metadata from cache, ignoring TTL expiration (for offline fallback)
   Future<Map<String, dynamic>?> getMetadataStale(String key) async {
+    if (kIsWeb) return null;
     final db = await _db.database;
     final results = await db.query(
       'cache_metadata',
@@ -313,6 +322,7 @@ class CacheManager {
 
   /// Delete metadata from cache
   Future<void> deleteMetadata(String key) async {
+    if (kIsWeb) return;
     final db = await _db.database;
     await db.delete('cache_metadata', where: 'cache_key = ?', whereArgs: [key]);
   }
@@ -332,6 +342,7 @@ class CacheManager {
 
   /// Get file path from cache
   Future<File?> getFile(String key) async {
+    if (kIsWeb) return null;
     final db = await _db.database;
     final results = await db.query(
       'cache_files',
@@ -376,6 +387,7 @@ class CacheManager {
     String? albumArtistName,
     String? albumCoverUrl,
   }) async {
+    if (kIsWeb) return;
     final db = await _db.database;
     final cacheDir = await _getCacheDir(type);
     final extension = p.extension(sourceFile.path);

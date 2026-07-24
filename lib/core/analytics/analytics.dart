@@ -1,7 +1,7 @@
-import 'dart:io';
-
 import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:tayra/core/platform/app_platform.dart';
 
 // Preference key used to persist the user's analytics choice.
 const _prefsKeyAnalyticsEnabled = 'analytics_enabled';
@@ -25,7 +25,7 @@ class Analytics {
     // precedence over any persisted preference. Treat only '1' or 'true'
     // (case-insensitive) as an opt-out signal.
     try {
-      final env = Platform.environment['DO_NOT_TRACK'];
+      final env = AppPlatform.doNotTrackEnv;
       if (env != null) {
         final v = env.trim().toLowerCase();
         final disabled = v == '1' || v == 'true';
@@ -58,7 +58,7 @@ class Analytics {
     // Persist the user's preference so the UI reflects their choice later,
     // but respect the env override.
     try {
-      final env = Platform.environment['DO_NOT_TRACK'];
+      final env = AppPlatform.doNotTrackEnv;
       final dntSet =
           env != null &&
           (env.trim().toLowerCase() == '1' ||
@@ -86,7 +86,7 @@ class Analytics {
     // initialising Aptabase in environments that explicitly opt-out. Only
     // '1' or 'true' are considered opt-out values.
     try {
-      final env = Platform.environment['DO_NOT_TRACK'];
+      final env = AppPlatform.doNotTrackEnv;
       if (env != null) {
         final v = env.trim().toLowerCase();
         final disabled = v == '1' || v == 'true';

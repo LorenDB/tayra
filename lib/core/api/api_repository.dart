@@ -355,9 +355,20 @@ class FunkwhaleApi {
 
   // ── Stream URL builder ──────────────────────────────────────────────
 
-  String getStreamUrl(String listenUrl) {
-    if (listenUrl.startsWith('http')) return listenUrl;
-    return '$_baseUrl$listenUrl';
+  /// Absolute listen URL, optionally with Funkwhale scoped `?token=` for
+  /// browser media elements that cannot send Authorization headers.
+  String getStreamUrl(String listenUrl, {bool appendListenToken = true}) {
+    final absolute =
+        listenUrl.startsWith('http') ? listenUrl : '$_baseUrl$listenUrl';
+    if (!appendListenToken) return absolute;
+
+    final listenToken = _ref.read(authStateProvider).listenToken;
+    if (listenToken == null || listenToken.isEmpty) return absolute;
+
+    final uri = Uri.parse(absolute);
+    final params = Map<String, String>.from(uri.queryParameters);
+    params.putIfAbsent('token', () => listenToken);
+    return uri.replace(queryParameters: params).toString();
   }
 
   Map<String, String> get authHeaders {
@@ -367,6 +378,10 @@ class FunkwhaleApi {
     }
     return {};
   }
+
+  /// Ensure scoped listen token is available (needed before web playback).
+  Future<void> ensureListenToken() =>
+      _ref.read(authStateProvider.notifier).ensureListenToken();
 
   // ── Channels (Podcasts) ─────────────────────────────────────────────
 

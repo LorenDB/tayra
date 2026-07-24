@@ -1200,6 +1200,9 @@ class MeUser {
   final bool isStaff;
   final bool isSuperuser;
 
+  /// Scoped token for `?token=` on listen URLs (browser media auth).
+  final String? listenToken;
+
   const MeUser({
     required this.id,
     required this.username,
@@ -1212,6 +1215,7 @@ class MeUser {
     this.dateJoined,
     this.isStaff = false,
     this.isSuperuser = false,
+    this.listenToken,
   });
 
   factory MeUser.fromJson(Map<String, dynamic> json) {
@@ -1234,6 +1238,12 @@ class MeUser {
       summaryText = summary;
     }
 
+    String? listenToken;
+    final tokens = json['tokens'];
+    if (tokens is Map) {
+      listenToken = tokens['listen'] as String?;
+    }
+
     return MeUser(
       id: (json['id'] as num?)?.toInt() ?? (json['pk'] as num?)?.toInt() ?? 0,
       username: json['username'] as String? ?? '',
@@ -1249,6 +1259,7 @@ class MeUser {
               : null,
       isStaff: json['is_staff'] as bool? ?? false,
       isSuperuser: json['is_superuser'] as bool? ?? false,
+      listenToken: listenToken,
     );
   }
 
@@ -1264,6 +1275,7 @@ class MeUser {
     DateTime? dateJoined,
     bool? isStaff,
     bool? isSuperuser,
+    String? listenToken,
   }) {
     return MeUser(
       id: id ?? this.id,
@@ -1277,6 +1289,7 @@ class MeUser {
       dateJoined: dateJoined ?? this.dateJoined,
       isStaff: isStaff ?? this.isStaff,
       isSuperuser: isSuperuser ?? this.isSuperuser,
+      listenToken: listenToken ?? this.listenToken,
     );
   }
 

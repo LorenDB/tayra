@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+import 'package:tayra/core/platform/app_platform.dart';
 import 'dart:math';
 
 import 'package:device_info_plus/device_info_plus.dart';
@@ -21,7 +21,7 @@ import 'package:tayra/features/year_review/listen_history_provider.dart';
 /// Returns a sanitized device identifier safe for use in filenames.
 Future<String> getDeviceIdentifier() async {
   try {
-    if (Platform.isAndroid) {
+    if (AppPlatform.isAndroid) {
       final info = await DeviceInfoPlugin().androidInfo;
       final name = '${info.manufacturer}_${info.model}'.replaceAll(
         RegExp(r'[^a-zA-Z0-9]'),
@@ -29,9 +29,8 @@ Future<String> getDeviceIdentifier() async {
       );
       return name.toLowerCase();
     } else {
-      return Platform.localHostname
-          .replaceAll(RegExp(r'[^a-zA-Z0-9.-]'), '_')
-          .toLowerCase();
+      final host = await AppPlatform.deviceLabel();
+      return host.replaceAll(RegExp(r'[^a-zA-Z0-9.-]'), '_').toLowerCase();
     }
   } catch (_) {
     return 'device';
@@ -44,13 +43,13 @@ Future<String> getDeviceIdentifier() async {
 /// can render it verbatim instead of guessing from the filename.
 Future<String> getDeviceDisplayName() async {
   try {
-    if (Platform.isAndroid) {
+    if (AppPlatform.isAndroid) {
       final info = await DeviceInfoPlugin().androidInfo;
       final manufacturer = _titleCaseWord(info.manufacturer);
       final model = info.model.trim();
       return model.isEmpty ? manufacturer : '$manufacturer $model';
     }
-    final host = Platform.localHostname;
+    final host = await AppPlatform.deviceLabel();
     return host.isEmpty ? 'This Device' : host;
   } catch (_) {
     return 'This Device';
@@ -185,7 +184,7 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
   /// requests reuse one connection instead of re-resolving DNS each time.
   final Dio _dio = createDio();
 
-  static bool get _useSecure => Platform.isAndroid;
+  static bool get _useSecure => AppPlatform.useSecureStorage;
 
   @override
   NextcloudState build() {

@@ -1,8 +1,9 @@
-import 'dart:io';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
+
+export 'package:tayra/core/connectivity/server_reachability.dart'
+    show checkServerReachability;
 
 // ── Download network policy ──────────────────────────────────────────────
 
@@ -181,24 +182,3 @@ final offlineFilterActiveProvider = Provider<bool>((ref) {
   );
   return state.offlineFilterEnabled || forcedOffline;
 });
-
-/// Verify that we can actually reach the configured Funkwhale server.
-/// Returns true if the server is reachable, false otherwise.
-/// Uses a lightweight TCP connection attempt rather than an HTTP call
-/// to minimise side-effects.
-Future<bool> checkServerReachability(String serverUrl) async {
-  try {
-    final uri = Uri.parse(serverUrl);
-    final host = uri.host;
-    final port = uri.port != 0 ? uri.port : (uri.scheme == 'https' ? 443 : 80);
-    final socket = await Socket.connect(
-      host,
-      port,
-      timeout: const Duration(seconds: 5),
-    );
-    socket.destroy();
-    return true;
-  } catch (_) {
-    return false;
-  }
-}

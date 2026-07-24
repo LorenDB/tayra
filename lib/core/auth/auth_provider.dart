@@ -1,6 +1,5 @@
-import 'dart:io';
+import 'dart:async';
 
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +10,7 @@ import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/http_client_factory.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/core/cache/pending_favorite_ops.dart';
+import 'package:tayra/core/platform/app_platform.dart';
 import 'package:tayra/features/player/queue_persistence_service.dart';
 import 'package:tayra/features/year_review/listen_history_service.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
@@ -44,6 +44,10 @@ class AuthState {
   /// re-login so cached data can be preserved.
   final String? pendingServerUrl;
 
+  /// Scoped listen token from `/users/me/` (`tokens.listen`). Used as `?token=`
+  /// on stream URLs so browser media elements can authenticate without headers.
+  final String? listenToken;
+
   const AuthState({
     this.serverUrl,
     this.accessToken,
@@ -54,6 +58,7 @@ class AuthState {
     this.isCheckingAuth = false,
     this.error,
     this.pendingServerUrl,
+    this.listenToken,
   });
 
   bool get isAuthenticated => accessToken != null && serverUrl != null;
@@ -77,6 +82,8 @@ class AuthState {
     Object? error = _kNoError,
     String? pendingServerUrl,
     bool clearPendingServerUrl = false,
+    String? listenToken,
+    bool clearListenToken = false,
   }) {
     return AuthState(
       serverUrl: serverUrl ?? this.serverUrl,
@@ -91,6 +98,7 @@ class AuthState {
           clearPendingServerUrl
               ? null
               : (pendingServerUrl ?? this.pendingServerUrl),
+      listenToken: clearListenToken ? null : (listenToken ?? this.listenToken),
     );
   }
 }
@@ -191,18 +199,43 @@ class AuthNotifier extends Notifier<AuthState> {
 
   // On macOS the sandboxed Keychain requires a provisioning profile to persist
   // items across launches, so we fall back to SharedPreferences for all auth
-  // fields on desktop. Android keeps using FlutterSecureStorage.
-  static bool get _useSecureStorage => Platform.isAndroid;
+  // fields on desktop/web. Android keeps using FlutterSecureStorage.
+  static bool get _useSecureStorage => AppPlatform.useSecureStorage;
 
   Future<String> _getAppName() async {
-    String deviceName;
-    if (Platform.isAndroid) {
-      final info = await DeviceInfoPlugin().androidInfo;
-      deviceName = '${info.manufacturer} ${info.model}';
-    } else {
-      deviceName = Platform.localHostname;
-    }
+    final deviceName = await AppPlatform.deviceLabel();
     return 'Tayra ($deviceName)';
+  }
+
+  /// Refresh the scoped listen token used for `?token=` stream URLs (web).
+  Future<void> ensureListenToken() async {
+    if (!state.isAuthenticated) return;
+    if (state.listenToken != null && state.listenToken!.isNotEmpty) return;
+    try {
+      final response = await _dio.get(
+        '${state.serverUrl}/api/v1/users/me/',
+        options: Options(
+          headers: {'Authorization': 'Bearer ${state.accessToken}'},
+        ),
+      );
+      final data = response.data;
+      String? listen;
+      if (data is Map) {
+        final tokens = data['tokens'];
+        if (tokens is Map) {
+          listen = tokens['listen'] as String?;
+        }
+      }
+      if (listen != null && listen.isNotEmpty) {
+        state = state.copyWith(listenToken: listen);
+      }
+    } catch (_) {
+      // Streaming may still work with Bearer headers on native; web needs this.
+    }
+  }
+
+  void clearListenToken() {
+    state = state.copyWith(clearListenToken: true);
   }
 
   FlutterSecureStorage get _storage => ref.read(secureStorageProvider);
@@ -241,6 +274,8 @@ class AuthNotifier extends Notifier<AuthState> {
           clientId: clientId,
           clientSecret: clientSecret,
         );
+        // Fire-and-forget: stream auth for web / gapless sources.
+        unawaited(ensureListenToken());
       } else {
         state = const AuthState();
       }
@@ -258,14 +293,106 @@ class AuthNotifier extends Notifier<AuthState> {
     }
   }
 
-  /// Step 1: Register an OAuth application on the server.
+  String _normalizeServerUrl(String serverUrl) {
+    var url = serverUrl.trim();
+    if (!url.startsWith('http')) url = 'https://$url';
+    if (url.endsWith('/')) url = url.substring(0, url.length - 1);
+    return url;
+  }
+
+  /// First-party password login (Funkwhale+Tayra fork: `POST /api/v1/users/token/`).
+  ///
+  /// Returns `true` on success. On a 404 (stock Funkwhale without the endpoint),
+  /// returns `false` so the caller can fall back to the OAuth code flow.
+  Future<bool> loginWithPassword({
+    required String serverUrl,
+    required String username,
+    required String password,
+  }) async {
+    state = state.copyWith(isLoading: true, error: null);
+    final url = _normalizeServerUrl(serverUrl);
+
+    try {
+      final response = await _dio.post(
+        '$url/api/v1/users/token/',
+        data: {'username': username.trim(), 'password': password},
+        options: Options(
+          contentType: Headers.jsonContentType,
+          validateStatus: (s) => s != null && s < 500,
+        ),
+      );
+
+      if (response.statusCode == 404) {
+        state = state.copyWith(isLoading: false, serverUrl: url);
+        return false;
+      }
+      if (response.statusCode != 200 || response.data is! Map) {
+        state = state.copyWith(
+          isLoading: false,
+          error: 'Invalid username or password.',
+        );
+        Analytics.track('login_failed');
+        return false;
+      }
+
+      final data = Map<String, dynamic>.from(response.data as Map);
+      final accessToken = data['access_token'] as String?;
+      if (accessToken == null || accessToken.isEmpty) {
+        state = state.copyWith(
+          isLoading: false,
+          error: 'Server did not return an access token.',
+        );
+        return false;
+      }
+
+      final pendingServer = state.pendingServerUrl;
+      if (pendingServer != null && pendingServer != url) {
+        await _clearAllUserData();
+      }
+
+      state = state.copyWith(
+        serverUrl: url,
+        accessToken: accessToken,
+        refreshTokenValue: data['refresh_token'] as String?,
+        clientId: data['client_id'] as String?,
+        clientSecret: data['client_secret'] as String? ?? '',
+        listenToken: data['listen_token'] as String?,
+        isLoading: false,
+        clearPendingServerUrl: true,
+      );
+      await _saveAuth();
+      Analytics.track('login_success');
+      return true;
+    } on DioException catch (e) {
+      final status = e.response?.statusCode;
+      if (status == 404) {
+        state = state.copyWith(isLoading: false, serverUrl: url);
+        return false;
+      }
+      state = state.copyWith(
+        isLoading: false,
+        error:
+            status == 400
+                ? 'Invalid username or password.'
+                : 'Could not connect to server. Check the URL and try again.',
+      );
+      Analytics.track('login_failed');
+      return false;
+    } catch (_) {
+      state = state.copyWith(
+        isLoading: false,
+        error: 'Could not connect to server. Check the URL and try again.',
+      );
+      Analytics.track('login_failed');
+      return false;
+    }
+  }
+
+  /// Step 1: Register an OAuth application on the server (fallback / OOB).
   Future<void> registerApp(String serverUrl) async {
     state = state.copyWith(isLoading: true, error: null);
 
-    // Normalize URL
-    String url = serverUrl.trim();
-    if (!url.startsWith('http')) url = 'https://$url';
-    if (url.endsWith('/')) url = url.substring(0, url.length - 1);
+    final url = _normalizeServerUrl(serverUrl);
 
     try {
       final response = await _dio.post(
@@ -341,9 +468,12 @@ class AuthNotifier extends Notifier<AuthState> {
         refreshTokenValue: refreshToken,
         isLoading: false,
         clearPendingServerUrl: true,
+        clearListenToken: true,
       );
 
       await _saveAuth();
+      // Fetch scoped listen token for stream URLs (required on web).
+      await ensureListenToken();
       Analytics.track('login_success');
       return true;
     } catch (e) {
@@ -388,9 +518,11 @@ class AuthNotifier extends Notifier<AuthState> {
       state = state.copyWith(
         accessToken: accessToken,
         refreshTokenValue: refreshTokenNew ?? state.refreshTokenValue,
+        clearListenToken: true,
       );
 
       await _saveAuth();
+      await ensureListenToken();
       return true;
     } catch (_) {
       return false;

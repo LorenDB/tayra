@@ -1,16 +1,11 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:math' as math;
 
-import 'package:audio_service_mpris/audio_service_mpris.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:just_audio_media_kit/just_audio_media_kit.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-// Optional: set a minimum window size on desktop platforms to avoid
-// rendering issues at very small sizes.
-import 'package:window_size/window_size.dart' as window_size;
+import 'package:flutter_web_plugins/url_strategy.dart';
 
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
@@ -19,20 +14,38 @@ import 'package:tayra/core/cache/auto_offline_coordinator.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/core/cache/download_queue_service.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
+import 'package:tayra/core/platform/app_platform.dart';
 import 'package:tayra/core/router/app_router.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/player/player_provider.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:tayra/features/year_review/listen_history_service.dart';
 
+// Desktop-only plugins — imported only on non-web via conditional stubs would
+// be ideal; guarded at call sites with [AppPlatform.isDesktop] / isLinux.
+import 'package:audio_service_mpris/audio_service_mpris.dart'
+    if (dart.library.html) 'package:tayra/core/platform/desktop_stubs.dart';
+import 'package:just_audio_media_kit/just_audio_media_kit.dart'
+    if (dart.library.html) 'package:tayra/core/platform/desktop_stubs.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart'
+    if (dart.library.html) 'package:tayra/core/platform/desktop_stubs.dart';
+import 'package:window_size/window_size.dart'
+    if (dart.library.html) 'package:tayra/core/platform/desktop_stubs.dart'
+    as window_size;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Path URLs so nginx try_files + deep links work as the primary pod UI.
+  if (kIsWeb) {
+    usePathUrlStrategy();
+  }
 
   const maxWidth = 450.0;
   const maxHeight = 650.0;
 
   // Configure a minimum window size on desktop platforms.
-  if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
+  if (AppPlatform.isDesktop) {
     try {
       // On some window managers this call can throw or be a no-op; ignore
       // errors to avoid crashing the startup path.
@@ -66,29 +79,27 @@ void main() async {
     Analytics.initializeIfEnabled().then((_) => Analytics.track("startup")),
   );
 
-  // Initialize sqflite for desktop platforms
-  if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
+  // Initialize sqflite for desktop platforms (not available / needed on web).
+  if (AppPlatform.isDesktop) {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
   }
 
-  // Initialize just_audio_media_kit for desktop platforms
-  if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
+  // Initialize just_audio_media_kit for desktop platforms.
+  if (AppPlatform.isDesktop) {
     JustAudioMediaKit.ensureInitialized();
   }
 
-  // Register MPRIS platform interface for Linux system media controls
-  if (Platform.isLinux) {
+  // Register MPRIS platform interface for Linux system media controls.
+  if (AppPlatform.isLinux) {
     AudioServiceMpris.registerWith();
   }
 
   // Run independent startup operations concurrently.
-  // - ensureTable creates the listen_history table (needed before backgroundInitialize)
-  // - CacheManager.initialize only reads SharedPreferences (no DB dependency)
-  // - initAudioHandler initializes the audio system (no DB/prefs dependency)
+  // On web, offline DB/cache paths are no-ops or light prefs only.
   late final FunkwhaleAudioHandler audioHandler;
   await Future.wait([
-    ListenHistoryService.ensureTable(),
+    if (AppPlatform.supportsOfflineCache) ListenHistoryService.ensureTable(),
     CacheManager.instance.initialize(),
     initAudioHandler().then((h) => audioHandler = h),
   ]);
@@ -119,95 +130,93 @@ void main() async {
     UncontrolledProviderScope(container: container, child: const TayraApp()),
   );
 
-  // Initialize the download queue after the UI is visible. It is not needed
-  // until the user interacts with downloads, so deferring it avoids blocking
-  // the splash screen on DB queries.
-  unawaited(
-    Future(() async {
-      try {
-        final queueSvc = container.read(downloadQueueServiceProvider);
-        await queueSvc.init(container);
-      } catch (_) {}
-    }),
-  );
+  // Offline/download/backup paths are native-only (web is online-only).
+  if (AppPlatform.supportsOfflineCache) {
+    // Initialize the download queue after the UI is visible. It is not needed
+    // until the user interacts with downloads, so deferring it avoids blocking
+    // the splash screen on DB queries.
+    unawaited(
+      Future(() async {
+        try {
+          final queueSvc = container.read(downloadQueueServiceProvider);
+          await queueSvc.init(container);
+        } catch (_) {}
+      }),
+    );
 
-  // Resume the download queue when connectivity becomes allowed again
-  // (e.g. Wi‑Fi returns while downloadWifiOnly is on).
-  container.listen(connectivityResultProvider, (previous, next) {
-    next.whenData((_) {
-      try {
-        container.read(autoOfflineCoordinatorProvider).maybeResumeDownloads();
-      } catch (_) {}
+    // Resume the download queue when connectivity becomes allowed again
+    // (e.g. Wi‑Fi returns while downloadWifiOnly is on).
+    container.listen(connectivityResultProvider, (previous, next) {
+      next.whenData((_) {
+        try {
+          container.read(autoOfflineCoordinatorProvider).maybeResumeDownloads();
+        } catch (_) {}
+      });
     });
-  });
-  container.listen(settingsProvider, (previous, next) {
-    if (previous?.downloadWifiOnly == true && !next.downloadWifiOnly) {
-      try {
-        container.read(autoOfflineCoordinatorProvider).maybeResumeDownloads();
-      } catch (_) {}
-    }
-    if (previous?.autoDownloadPodcastEpisodes != true &&
-        next.autoDownloadPodcastEpisodes) {
-      unawaited(
-        container
-            .read(autoOfflineCoordinatorProvider)
-            .reconcileSubscribedPodcasts(),
-      );
-    }
-  });
-
-  // Best-effort: auto-download latest episodes for subscribed shows.
-  unawaited(
-    Future.delayed(const Duration(seconds: 12), () {
-      try {
-        final settings = container.read(settingsProvider);
-        if (settings.autoDownloadPodcastEpisodes) {
+    container.listen(settingsProvider, (previous, next) {
+      if (previous?.downloadWifiOnly == true && !next.downloadWifiOnly) {
+        try {
+          container.read(autoOfflineCoordinatorProvider).maybeResumeDownloads();
+        } catch (_) {}
+      }
+      if (previous?.autoDownloadPodcastEpisodes != true &&
+          next.autoDownloadPodcastEpisodes) {
+        unawaited(
           container
               .read(autoOfflineCoordinatorProvider)
-              .reconcileSubscribedPodcasts();
-        }
-      } catch (_) {}
-    }),
-  );
-
-  // Reconcile cached files with the DB and enforce size limits in the
-  // background so these O(n-files) operations don't block the splash screen.
-  // ListenHistoryService.ensureTable() has already run above, so the
-  // listen_history table is guaranteed to exist before this touches the DB.
-  unawaited(CacheManager.instance.backgroundInitialize());
-
-  // Kick off an optional non-blocking periodic-ish backup and history
-  // sync on startup for Nextcloud (if configured). The sync pulls remote
-  // device listen history into the local DB so the year-review page opens
-  // instantly without a network round-trip.
-  void runPeriodicSync() async {
-    try {
-      final nc = container.read(nextcloudBackupProvider);
-      if (nc.isConnected) {
-        container
-            .read(nextcloudBackupProvider.notifier)
-            .syncNow()
-            .catchError((_) => 0);
+              .reconcileSubscribedPodcasts(),
+        );
       }
-    } catch (_) {}
-    // Schedule the next run
-    Timer(const Duration(minutes: 10), runPeriodicSync);
-  }
+    });
 
-  unawaited(
-    Future.delayed(const Duration(seconds: 8), () async {
+    // Best-effort: auto-download latest episodes for subscribed shows.
+    unawaited(
+      Future.delayed(const Duration(seconds: 12), () {
+        try {
+          final settings = container.read(settingsProvider);
+          if (settings.autoDownloadPodcastEpisodes) {
+            container
+                .read(autoOfflineCoordinatorProvider)
+                .reconcileSubscribedPodcasts();
+          }
+        } catch (_) {}
+      }),
+    );
+
+    // Reconcile cached files with the DB and enforce size limits in the
+    // background so these O(n-files) operations don't block the splash screen.
+    unawaited(CacheManager.instance.backgroundInitialize());
+
+    // Kick off an optional non-blocking periodic-ish backup and history
+    // sync on startup for Nextcloud (if configured).
+    void runPeriodicSync() async {
       try {
         final nc = container.read(nextcloudBackupProvider);
-        if (nc.isConnected && nc.autoBackupEnabled) {
+        if (nc.isConnected) {
           container
               .read(nextcloudBackupProvider.notifier)
-              .backupNow()
-              .catchError((_) => false);
+              .syncNow()
+              .catchError((_) => 0);
         }
       } catch (_) {}
-      runPeriodicSync();
-    }),
-  );
+      Timer(const Duration(minutes: 10), runPeriodicSync);
+    }
+
+    unawaited(
+      Future.delayed(const Duration(seconds: 8), () async {
+        try {
+          final nc = container.read(nextcloudBackupProvider);
+          if (nc.isConnected && nc.autoBackupEnabled) {
+            container
+                .read(nextcloudBackupProvider.notifier)
+                .backupNow()
+                .catchError((_) => false);
+          }
+        } catch (_) {}
+        runPeriodicSync();
+      }),
+    );
+  }
 }
 
 class TayraApp extends ConsumerStatefulWidget {
@@ -266,7 +275,7 @@ class _TayraAppState extends ConsumerState<TayraApp>
   /// Force that same edge on resume whenever the stack (or a PopScope) still
   /// wants to handle back.
   void _resyncAndroidBackHandling() {
-    if (!Platform.isAndroid) return;
+    if (!AppPlatform.isAndroid) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       final canPop = ref.read(appRouterProvider).canPop();

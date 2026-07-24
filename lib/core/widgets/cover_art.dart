@@ -1,10 +1,11 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
+import 'package:tayra/core/platform/app_platform.dart';
 import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/widgets/local_file_image.dart';
 
 /// Reusable cover art widget with rounded corners and placeholder.
 ///
@@ -42,7 +43,8 @@ class CoverArtWidget extends ConsumerStatefulWidget {
 }
 
 class _CoverArtWidgetState extends ConsumerState<CoverArtWidget> {
-  File? _localFile;
+  /// Local filesystem path when offline cache has the cover (native only).
+  String? _localPath;
   String? _resolvedForUrl;
   int _resolveGen = 0;
 
@@ -56,7 +58,7 @@ class _CoverArtWidgetState extends ConsumerState<CoverArtWidget> {
   void didUpdateWidget(covariant CoverArtWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.imageUrl != widget.imageUrl) {
-      _localFile = null;
+      _localPath = null;
       _resolvedForUrl = null;
       _resolveLocalFile();
     }
@@ -65,27 +67,33 @@ class _CoverArtWidgetState extends ConsumerState<CoverArtWidget> {
   Future<void> _resolveLocalFile() async {
     final url = widget.imageUrl;
     if (url == null || url.isEmpty) {
-      _localFile = null;
+      _localPath = null;
+      _resolvedForUrl = null;
+      return;
+    }
+
+    // Web is online-only — always use network images.
+    if (!AppPlatform.supportsOfflineCache || kIsWeb) {
+      _localPath = null;
       _resolvedForUrl = null;
       return;
     }
 
     // file:// or absolute path — use directly.
     if (url.startsWith('file://')) {
-      final file = File(Uri.parse(url).toFilePath());
-      if (await file.exists() && mounted && widget.imageUrl == url) {
+      final path = Uri.parse(url).toFilePath();
+      if (mounted && widget.imageUrl == url) {
         setState(() {
-          _localFile = file;
+          _localPath = path;
           _resolvedForUrl = url;
         });
       }
       return;
     }
     if (url.startsWith('/')) {
-      final file = File(url);
-      if (await file.exists() && mounted && widget.imageUrl == url) {
+      if (mounted && widget.imageUrl == url) {
         setState(() {
-          _localFile = file;
+          _localPath = url;
           _resolvedForUrl = url;
         });
       }
@@ -99,7 +107,7 @@ class _CoverArtWidgetState extends ConsumerState<CoverArtWidget> {
     if (!mounted || gen != _resolveGen || widget.imageUrl != url) return;
     if (file != null) {
       setState(() {
-        _localFile = file;
+        _localPath = file.path;
         _resolvedForUrl = url;
       });
     }
@@ -113,7 +121,12 @@ class _CoverArtWidgetState extends ConsumerState<CoverArtWidget> {
     final decodePx = (widget.size * dpr).round().clamp(32, 512);
 
     final url = widget.imageUrl;
-    final local = (_resolvedForUrl == url) ? _localFile : null;
+    final localPath = (_resolvedForUrl == url) ? _localPath : null;
+
+    final placeholder = _Placeholder(
+      size: widget.size,
+      icon: widget.placeholderIcon,
+    );
 
     return Container(
       width: widget.size,
@@ -125,21 +138,13 @@ class _CoverArtWidgetState extends ConsumerState<CoverArtWidget> {
       ),
       clipBehavior: Clip.antiAlias,
       child:
-          local != null
-              ? Image.file(
-                local,
-                fit: BoxFit.cover,
+          localPath != null
+              ? buildLocalFileImage(
+                path: localPath,
                 width: widget.size,
                 height: widget.size,
-                cacheWidth: decodePx,
-                cacheHeight: decodePx,
-                gaplessPlayback: true,
-                filterQuality: FilterQuality.low,
-                errorBuilder:
-                    (context, error, stackTrace) => _Placeholder(
-                      size: widget.size,
-                      icon: widget.placeholderIcon,
-                    ),
+                decodePx: decodePx,
+                errorBuilder: (context, error, stackTrace) => placeholder,
               )
               : (url != null && url.isNotEmpty)
               ? Image(
@@ -155,23 +160,13 @@ class _CoverArtWidgetState extends ConsumerState<CoverArtWidget> {
                 height: widget.size,
                 gaplessPlayback: true,
                 filterQuality: FilterQuality.low,
-                // Show placeholder until the first image frame is available.
                 frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                  if (frame == null && !wasSynchronouslyLoaded) {
-                    return _Placeholder(
-                      size: widget.size,
-                      icon: widget.placeholderIcon,
-                    );
-                  }
-                  return child;
+                  if (wasSynchronouslyLoaded || frame != null) return child;
+                  return placeholder;
                 },
-                errorBuilder:
-                    (context, error, stackTrace) => _Placeholder(
-                      size: widget.size,
-                      icon: widget.placeholderIcon,
-                    ),
+                errorBuilder: (context, error, stackTrace) => placeholder,
               )
-              : _Placeholder(size: widget.size, icon: widget.placeholderIcon),
+              : placeholder,
     );
   }
 }
@@ -184,11 +179,11 @@ class _Placeholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
+    return ColoredBox(
       color: AppTheme.surfaceContainerHigh,
-      child: Icon(icon, color: AppTheme.onBackgroundSubtle, size: size * 0.4),
+      child: Center(
+        child: Icon(icon, color: AppTheme.onBackgroundSubtle, size: size * 0.4),
+      ),
     );
   }
 }

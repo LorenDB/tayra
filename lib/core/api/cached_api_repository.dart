@@ -750,9 +750,12 @@ class CachedFunkwhaleApi {
     await _api.recordListening(trackId);
   }
 
-  String getStreamUrl(String listenUrl) => _api.getStreamUrl(listenUrl);
+  String getStreamUrl(String listenUrl, {bool appendListenToken = true}) =>
+      _api.getStreamUrl(listenUrl, appendListenToken: appendListenToken);
 
   Map<String, String> get authHeaders => _api.authHeaders;
+
+  Future<void> ensureListenToken() => _api.ensureListenToken();
 
   // ── Channels / Podcasts ──────────────────────────────────────────────
 

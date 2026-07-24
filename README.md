@@ -23,4 +23,22 @@ To build the app locally:
 1. Install Flutter (stable) and required Android SDK components. See https://docs.flutter.dev.
 2. `flutter run`
 
+### Web (primary pod UI)
+
+Web is **online-only**. Pair with the **Funkwhale hard fork** (`../funkwhale`,
+branch `tayra_front`) which removed Vue and exposes password login at
+`POST /api/v1/users/token/`.
+
+```bash
+# From funkwhale fork:
+make front-image FUNKWHALE_URL=https://your.funkwhale.pod
+
+# Or from Tayra alone:
+flutter build web --release \
+  --dart-define=FUNKWHALE_URL=https://your.funkwhale.pod
+```
+
+- [doc/web-deploy.md](doc/web-deploy.md)
+- [doc/web-deferred-features.md](doc/web-deferred-features.md)
+
 You probably should run `dart format .` before committing, but it isn't a huge deal IMO.

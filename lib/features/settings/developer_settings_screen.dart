@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:tayra/core/platform/app_platform.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -77,7 +77,7 @@ class DeveloperSettingsScreen extends ConsumerWidget {
           ),
 
           // ── File Locations section (desktop only) ────────────────────
-          if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) ...[
+          if (AppPlatform.isDesktop) ...[
             const SizedBox(height: 8),
             SettingsSectionHeader(title: 'File Locations'),
             SettingsActionTile(

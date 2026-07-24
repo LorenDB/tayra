@@ -1,11 +1,10 @@
-import 'dart:io';
-
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
+import 'package:tayra/core/platform/app_platform.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
@@ -25,7 +24,7 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
     final authState = ref.watch(authStateProvider);
-    final dntEnv = Platform.environment['DO_NOT_TRACK']?.trim().toLowerCase();
+    final dntEnv = AppPlatform.doNotTrackEnv?.trim().toLowerCase();
     final showAnalyticsToggle = !(dntEnv == '1' || dntEnv == 'true');
     final cacheStatsAsync = ref.watch(cacheStatsProvider);
 
@@ -109,19 +108,21 @@ class SettingsScreen extends ConsumerWidget {
             onTap: () => context.push('/upload'),
           ),
 
-          const SizedBox(height: 24),
+          if (AppPlatform.supportsOfflineCache) ...[
+            const SizedBox(height: 24),
 
-          // ── Network section ──────────────────────────────────────────
-          SettingsSectionHeader(title: 'Network'),
-          SettingsSwitchTile(
-            icon: Icons.cloud_off_rounded,
-            title: 'Force offline mode',
-            subtitle: 'Only show cached content; disable network access',
-            value: settings.forceOfflineMode,
-            onChanged: (value) {
-              ref.read(settingsProvider.notifier).setForceOfflineMode(value);
-            },
-          ),
+            // ── Network section ──────────────────────────────────────────
+            SettingsSectionHeader(title: 'Network'),
+            SettingsSwitchTile(
+              icon: Icons.cloud_off_rounded,
+              title: 'Force offline mode',
+              subtitle: 'Only show cached content; disable network access',
+              value: settings.forceOfflineMode,
+              onChanged: (value) {
+                ref.read(settingsProvider.notifier).setForceOfflineMode(value);
+              },
+            ),
+          ],
 
           const SizedBox(height: 24),
 
@@ -192,10 +193,12 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 24),
 
-          // ── Backup section ────────────────────────────────────────────
-          SettingsSectionHeader(title: 'Backup & Sync'),
-          _NextcloudBackupTile(),
-          const SizedBox(height: 24),
+          // ── Backup section (native only) ──────────────────────────────
+          if (AppPlatform.supportsOfflineCache) ...[
+            SettingsSectionHeader(title: 'Backup & Sync'),
+            _NextcloudBackupTile(),
+            const SizedBox(height: 24),
+          ],
 
           // ── AI section ────────────────────────────────────────────────
           SettingsSectionHeader(title: 'AI'),
@@ -213,128 +216,132 @@ class SettingsScreen extends ConsumerWidget {
             _AiProviderTile(currentProvider: settings.aiProviderType),
           const SizedBox(height: 24),
 
-          // ── Downloads section ─────────────────────────────────────────
-          SettingsSectionHeader(title: 'Downloads'),
-          SettingsSwitchTile(
-            icon: Icons.favorite_rounded,
-            title: 'Auto-download favorites',
-            subtitle: 'Keep favorited tracks available offline',
-            value: settings.autoDownloadFavorites,
-            onChanged: (value) {
-              Analytics.track('auto_download_favorites_toggled', {
-                'enabled': value,
-              });
-              ref
-                  .read(settingsProvider.notifier)
-                  .setAutoDownloadFavorites(value);
-            },
-          ),
-          SettingsSwitchTile(
-            icon: Icons.wifi_rounded,
-            title: 'Download on Wi‑Fi only',
-            subtitle: 'Pause the download queue on mobile data',
-            value: settings.downloadWifiOnly,
-            onChanged: (value) {
-              Analytics.track('download_wifi_only_toggled', {'enabled': value});
-              ref.read(settingsProvider.notifier).setDownloadWifiOnly(value);
-            },
-          ),
-          SettingsSwitchTile(
-            icon: Icons.podcasts_rounded,
-            title: 'Auto-download podcast episodes',
-            subtitle: 'Download the latest episodes of subscribed shows',
-            value: settings.autoDownloadPodcastEpisodes,
-            onChanged: (value) {
-              Analytics.track('auto_download_podcasts_toggled', {
-                'enabled': value,
-              });
-              ref
-                  .read(settingsProvider.notifier)
-                  .setAutoDownloadPodcastEpisodes(value);
-            },
-          ),
-          if (settings.autoDownloadPodcastEpisodes)
-            _PodcastEpisodeCountTile(
-              current: settings.autoDownloadPodcastEpisodeCount,
-              onChanged: (count) {
+          // ── Downloads / cache (native offline features) ───────────────
+          if (AppPlatform.supportsOfflineCache) ...[
+            SettingsSectionHeader(title: 'Downloads'),
+            SettingsSwitchTile(
+              icon: Icons.favorite_rounded,
+              title: 'Auto-download favorites',
+              subtitle: 'Keep favorited tracks available offline',
+              value: settings.autoDownloadFavorites,
+              onChanged: (value) {
+                Analytics.track('auto_download_favorites_toggled', {
+                  'enabled': value,
+                });
                 ref
                     .read(settingsProvider.notifier)
-                    .setAutoDownloadPodcastEpisodeCount(count);
+                    .setAutoDownloadFavorites(value);
               },
             ),
+            SettingsSwitchTile(
+              icon: Icons.wifi_rounded,
+              title: 'Download on Wi‑Fi only',
+              subtitle: 'Pause the download queue on mobile data',
+              value: settings.downloadWifiOnly,
+              onChanged: (value) {
+                Analytics.track('download_wifi_only_toggled', {
+                  'enabled': value,
+                });
+                ref.read(settingsProvider.notifier).setDownloadWifiOnly(value);
+              },
+            ),
+            SettingsSwitchTile(
+              icon: Icons.podcasts_rounded,
+              title: 'Auto-download podcast episodes',
+              subtitle: 'Download the latest episodes of subscribed shows',
+              value: settings.autoDownloadPodcastEpisodes,
+              onChanged: (value) {
+                Analytics.track('auto_download_podcasts_toggled', {
+                  'enabled': value,
+                });
+                ref
+                    .read(settingsProvider.notifier)
+                    .setAutoDownloadPodcastEpisodes(value);
+              },
+            ),
+            if (settings.autoDownloadPodcastEpisodes)
+              _PodcastEpisodeCountTile(
+                current: settings.autoDownloadPodcastEpisodeCount,
+                onChanged: (count) {
+                  ref
+                      .read(settingsProvider.notifier)
+                      .setAutoDownloadPodcastEpisodeCount(count);
+                },
+              ),
 
-          const SizedBox(height: 24),
+            const SizedBox(height: 24),
 
-          // ── Cache section ─────────────────────────────────────────────
-          SettingsSectionHeader(title: 'Cache'),
-          cacheStatsAsync.when(
-            loading: () => const _LoadingTile(),
-            error:
-                (error, stack) =>
-                    const _ErrorTile(message: 'Failed to load cache info'),
-            data: (stats) => _CacheInfoTile(stats: stats),
-          ),
-          _CacheSizeLimitTile(
-            currentLimitMB: settings.cacheSizeLimitMB,
-            onChanged: (sizeMB) {
-              // Ensure the preference and cache manager are updated before
-              // refreshing the displayed stats to avoid transient mismatches
-              // between binary/decimal representations.
-              ref
-                  .read(settingsProvider.notifier)
-                  .setCacheSizeLimit(sizeMB)
-                  .then((_) => ref.invalidate(cacheStatsProvider));
-            },
-          ),
-          SettingsActionTile(
-            icon: Icons.delete_sweep_rounded,
-            title: 'Clear audio cache',
-            subtitle: 'Delete all downloaded audio files',
-            onTap: () async {
-              final confirmed = await showShellDialog<bool>(
-                context: context,
-                builder:
-                    (context) => _ConfirmDialog(
-                      title: 'Clear audio cache?',
-                      message:
-                          'All downloaded audio files will be deleted. Album and artist info will be kept.',
-                    ),
-              );
-              if (confirmed == true) {
-                await CacheManager.instance.clearAudio();
-                if (!context.mounted) return;
-                ref.invalidate(cacheStatsProvider);
-                Analytics.track('cache_audio_cleared');
-              }
-            },
-          ),
-          SettingsActionTile(
-            icon: Icons.delete_outline_rounded,
-            title: 'Clear all cache',
-            subtitle: 'Delete all cached data',
-            iconColor: AppTheme.error,
-            onTap: () async {
-              final confirmed = await showShellDialog<bool>(
-                context: context,
-                builder:
-                    (context) => _ConfirmDialog(
-                      title: 'Clear all cache?',
-                      message:
-                          'All cached data including album info, cover art, audio files, and listening history from other devices will be deleted.\n\nYour local listening history will be kept.',
-                      confirmColor: AppTheme.error,
-                    ),
-              );
-              if (confirmed == true) {
-                await CacheManager.instance.clearAll();
-                await ListenHistoryService.clearRemote();
-                if (!context.mounted) return;
-                ref.invalidate(cacheStatsProvider);
-                ref.invalidate(availableYearsProvider);
-                ref.invalidate(totalListenCountProvider);
-                Analytics.track('cache_all_cleared');
-              }
-            },
-          ),
+            // ── Cache section ─────────────────────────────────────────────
+            SettingsSectionHeader(title: 'Cache'),
+            cacheStatsAsync.when(
+              loading: () => const _LoadingTile(),
+              error:
+                  (error, stack) =>
+                      const _ErrorTile(message: 'Failed to load cache info'),
+              data: (stats) => _CacheInfoTile(stats: stats),
+            ),
+            _CacheSizeLimitTile(
+              currentLimitMB: settings.cacheSizeLimitMB,
+              onChanged: (sizeMB) {
+                // Ensure the preference and cache manager are updated before
+                // refreshing the displayed stats to avoid transient mismatches
+                // between binary/decimal representations.
+                ref
+                    .read(settingsProvider.notifier)
+                    .setCacheSizeLimit(sizeMB)
+                    .then((_) => ref.invalidate(cacheStatsProvider));
+              },
+            ),
+            SettingsActionTile(
+              icon: Icons.delete_sweep_rounded,
+              title: 'Clear audio cache',
+              subtitle: 'Delete all downloaded audio files',
+              onTap: () async {
+                final confirmed = await showShellDialog<bool>(
+                  context: context,
+                  builder:
+                      (context) => _ConfirmDialog(
+                        title: 'Clear audio cache?',
+                        message:
+                            'All downloaded audio files will be deleted. Album and artist info will be kept.',
+                      ),
+                );
+                if (confirmed == true) {
+                  await CacheManager.instance.clearAudio();
+                  if (!context.mounted) return;
+                  ref.invalidate(cacheStatsProvider);
+                  Analytics.track('cache_audio_cleared');
+                }
+              },
+            ),
+            SettingsActionTile(
+              icon: Icons.delete_outline_rounded,
+              title: 'Clear all cache',
+              subtitle: 'Delete all cached data',
+              iconColor: AppTheme.error,
+              onTap: () async {
+                final confirmed = await showShellDialog<bool>(
+                  context: context,
+                  builder:
+                      (context) => _ConfirmDialog(
+                        title: 'Clear all cache?',
+                        message:
+                            'All cached data including album info, cover art, audio files, and listening history from other devices will be deleted.\n\nYour local listening history will be kept.',
+                        confirmColor: AppTheme.error,
+                      ),
+                );
+                if (confirmed == true) {
+                  await CacheManager.instance.clearAll();
+                  await ListenHistoryService.clearRemote();
+                  if (!context.mounted) return;
+                  ref.invalidate(cacheStatsProvider);
+                  ref.invalidate(availableYearsProvider);
+                  ref.invalidate(totalListenCountProvider);
+                  Analytics.track('cache_all_cleared');
+                }
+              },
+            ),
+          ],
 
           const SizedBox(height: 24),
 
@@ -956,8 +963,15 @@ class _BackupSheet extends ConsumerWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
+                    // Process exit is native-only; on web just close dialogs.
+                    if (AppPlatform.isWeb) {
+                      Navigator.pop(ctx);
+                      Navigator.of(context).pop();
+                      return;
+                    }
                     try {
-                      exit(0);
+                      // ignore: avoid_web_libraries_in_flutter
+                      AppPlatform.tryExitProcess();
                     } catch (_) {
                       Navigator.pop(ctx);
                     }
