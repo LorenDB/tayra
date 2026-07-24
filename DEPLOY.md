@@ -62,17 +62,29 @@ Edit at least:
 
 ## 3. Build and start
 
-From the **repository root**:
+From the **repository root** (the directory that contains `docker-compose.yml`
+and the `tayra/` folder):
 
 ```bash
+# Required if tayra/ is empty (submodule not checked out)
+git submodule update --init --recursive
+test -f tayra/pubspec.yaml   # should succeed
+
 mkdir -p data/music data/media data/static
 docker compose up -d --build
 ```
 
-This builds:
+This builds (local tags only — never pulled from Docker Hub):
 
-- `funkwhale-tayra/api:local` from `./api`
-- `funkwhale-tayra/front:local` from `./front/Dockerfile` (compiles `./tayra`)
+- `funkwhale-tayra-api:local` from `./api`
+- `funkwhale-tayra-front:local` from `./front/Dockerfile` (compiles `./tayra`)
+
+If you see `pull access denied for funkwhale-tayra/api`, you are on an older
+compose file that used a slash in the image name (Docker treated it as a Hub
+path). Pull the latest compose from this fork and retry.
+
+If you see `COPY tayra/... not found`, the submodule is empty — run the
+`git submodule update --init --recursive` line above.
 
 Services: `postgres`, `redis`, `api`, `celeryworker`, `celerybeat`, `front`.
 

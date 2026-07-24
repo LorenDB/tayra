@@ -3,12 +3,9 @@
 # Build from the **repository root** (not front/):
 #
 #   docker compose build front
-#   # or
-#   docker build -f front/Dockerfile \
-#     --build-arg FUNKWHALE_URL=https://music.example.com \
-#     -t funkwhale-tayra/front:local .
 #
-# Expects the Tayra git submodule at ./tayra (see .gitmodules).
+# Requires the Tayra git submodule checked out at ./tayra:
+#   git submodule update --init --recursive
 
 ARG FLUTTER_IMAGE=ghcr.io/cirruslabs/flutter:stable
 ARG FUNKWHALE_URL=
@@ -18,13 +15,27 @@ FROM ${FLUTTER_IMAGE} AS tayra-builder
 ARG FUNKWHALE_URL
 WORKDIR /app
 
-COPY tayra/pubspec.yaml tayra/pubspec.lock ./
-COPY tayra/packages ./packages
-# Fetch deps before full copy for better layer caching when only app code changes
-RUN flutter config --enable-web && flutter pub get
-
-COPY tayra/ ./
+# Fail early with a clear message if the submodule is missing/empty.
+# (Compose/Docker cannot auto-init git submodules into the build context.)
+COPY tayra /tmp/tayra-check
 RUN set -eux; \
+  if [ ! -f /tmp/tayra-check/pubspec.yaml ]; then \
+    echo ""; \
+    echo "ERROR: tayra/ submodule is empty or missing pubspec.yaml."; \
+    echo "From the repo root run:"; \
+    echo "  git submodule update --init --recursive"; \
+    echo "Then rebuild: docker compose build front"; \
+    echo ""; \
+    exit 1; \
+  fi; \
+  rm -rf /tmp/tayra-check
+
+# Single copy of the whole app (path packages, lib, web/, assets, …)
+COPY tayra/ ./
+
+RUN set -eux; \
+  flutter config --enable-web; \
+  flutter pub get; \
   if [ -n "${FUNKWHALE_URL}" ]; then \
     flutter build web --release --dart-define=FUNKWHALE_URL="${FUNKWHALE_URL}"; \
   else \

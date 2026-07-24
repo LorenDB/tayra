@@ -1,9 +1,13 @@
-# Stock-layout compose for this fork, meant to run from the **repo root**:
-#
+# Same source-build stack as the root docker-compose.yml.
+# Prefer the root file. If you use this path:
 #   docker compose -f deploy/docker-compose.yml --project-directory . up -d --build
-#
-# Prefer the root docker-compose.yml for new installs — same idea, simpler paths.
-# This file is kept for people migrating from upstream's deploy/ layout.
+
+x-api-image: &api_image
+  image: funkwhale-tayra-api:local
+  pull_policy: never
+  build:
+    context: ./api
+    target: production
 
 services:
   postgres:
@@ -23,11 +27,8 @@ services:
       - ./data/redis:/data
 
   api:
+    <<: *api_image
     restart: unless-stopped
-    build:
-      context: ./api
-      target: production
-    image: funkwhale-tayra/api:local
     depends_on:
       - postgres
       - redis
@@ -38,8 +39,8 @@ services:
       - "${STATIC_HOST_PATH:-./data/static}:${STATIC_ROOT:-/srv/funkwhale/data/static}"
 
   celeryworker:
+    <<: *api_image
     restart: unless-stopped
-    image: funkwhale-tayra/api:local
     depends_on:
       - postgres
       - redis
@@ -58,8 +59,8 @@ services:
       - "${MEDIA_HOST_PATH:-./data/media}:${MEDIA_ROOT:-/srv/funkwhale/data/media}"
 
   celerybeat:
+    <<: *api_image
     restart: unless-stopped
-    image: funkwhale-tayra/api:local
     depends_on:
       - postgres
       - redis
@@ -73,12 +74,13 @@ services:
 
   front:
     restart: unless-stopped
+    image: funkwhale-tayra-front:local
+    pull_policy: never
     build:
       context: .
       dockerfile: front/Dockerfile
       args:
         FUNKWHALE_URL: ${FUNKWHALE_PROTOCOL:-https}://${FUNKWHALE_HOSTNAME}
-    image: funkwhale-tayra/front:local
     depends_on:
       - api
     env_file: .env

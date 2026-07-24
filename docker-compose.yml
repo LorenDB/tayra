@@ -3,11 +3,18 @@
 # Quick start:
 #   git clone --recurse-submodules <your-fork-url> funkwhale
 #   cd funkwhale
+#   git submodule update --init --recursive   # if tayra/ is empty
 #   cp .env.example .env   # edit FUNKWHALE_HOSTNAME, secrets, etc.
 #   docker compose up -d --build
 #
-# Paths are relative to the repository root. The Tayra SPA is the `tayra/`
-# git submodule; the front image compiles it during `docker compose build`.
+# Run all commands from the **repository root** (where this file lives).
+
+x-api-image: &api_image
+  image: funkwhale-tayra-api:local
+  pull_policy: never
+  build:
+    context: ./api
+    target: production
 
 services:
   postgres:
@@ -27,11 +34,8 @@ services:
       - ./data/redis:/data
 
   api:
+    <<: *api_image
     restart: unless-stopped
-    build:
-      context: ./api
-      target: production
-    image: funkwhale-tayra/api:local
     depends_on:
       - postgres
       - redis
@@ -42,8 +46,8 @@ services:
       - "${STATIC_HOST_PATH:-./data/static}:${STATIC_ROOT:-/srv/funkwhale/data/static}"
 
   celeryworker:
+    <<: *api_image
     restart: unless-stopped
-    image: funkwhale-tayra/api:local
     depends_on:
       - postgres
       - redis
@@ -62,8 +66,8 @@ services:
       - "${MEDIA_HOST_PATH:-./data/media}:${MEDIA_ROOT:-/srv/funkwhale/data/media}"
 
   celerybeat:
+    <<: *api_image
     restart: unless-stopped
-    image: funkwhale-tayra/api:local
     depends_on:
       - postgres
       - redis
@@ -77,14 +81,14 @@ services:
 
   front:
     restart: unless-stopped
+    image: funkwhale-tayra-front:local
+    pull_policy: never
     build:
       context: .
       dockerfile: front/Dockerfile
       args:
         # Baked into the Flutter SPA at image build time (not runtime).
-        # Must match how users reach the pod in the browser.
         FUNKWHALE_URL: ${FUNKWHALE_PROTOCOL:-https}://${FUNKWHALE_HOSTNAME}
-    image: funkwhale-tayra/front:local
     depends_on:
       - api
     env_file: .env

@@ -32,6 +32,7 @@ build:
 	docker compose build
 
 up: submodule-init
+	@test -f tayra/pubspec.yaml || (echo "ERROR: tayra/ empty — run: git submodule update --init --recursive"; exit 1)
 	mkdir -p data/music data/media data/static
 	docker compose up -d --build
 
