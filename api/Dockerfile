@@ -55,16 +55,20 @@ ENV PATH="/venv/bin:$PATH"
 COPY --from=requirements /requirements.txt /requirements.txt
 COPY --from=requirements /dev-requirements.txt /dev-requirements.txt
 
+# Pin setuptools: modern setuptools dropped convert_path, which breaks
+# building django-allauth==0.42.0 (and other 2020-era sdists) from source.
+# --no-build-isolation makes pip use this setuptools instead of an isolated
+# latest copy. Matches api/pyproject.toml setuptools==60.10.0 (1.4.0 pin).
 RUN --mount=type=cache,target=~/.cache/pip; \
   set -eux; \
-  pip3 install --upgrade pip; \
-  pip3 install setuptools wheel; \
+  pip3 install --upgrade "pip==24.0"; \
+  pip3 install "setuptools==60.10.0" "wheel==0.42.0"; \
   # Currently we are unable to relieably build rust-based packages on armv7. This
   # is why we need to use the packages shipped by Alpine Linux.
   # Since poetry does not allow in-place dependency pinning, we need
   # to install the deps using pip.
   grep -Ev 'cryptography|lxml|pillow|psycopg2|watchfiles' /requirements.txt \
-  | pip3 install -r /dev/stdin \
+  | pip3 install --no-build-isolation -r /dev/stdin \
   cryptography==38.0.3 \
   lxml==4.9.3 \
   pillow==9.3.0 \
@@ -76,7 +80,7 @@ RUN --mount=type=cache,target=~/.cache/pip; \
   set -eux; \
   if [ "$install_dev_deps" = "1" ] ; then \
     grep -Ev 'cryptography|lxml|pillow|psycopg2|watchfiles' /dev-requirements.txt \
-    | pip3 install -r /dev/stdin \
+    | pip3 install --no-build-isolation -r /dev/stdin \
     cryptography==38.0.3 \
     lxml==4.9.3 \
     pillow==9.3.0 \

@@ -175,6 +175,14 @@ make front-rebuild           # rebuild SPA image only
 
 ## Troubleshooting
 
+**API build: `cannot import name 'convert_path' from 'setuptools'`**  
+Old `django-allauth` sdist vs new setuptools. The API Dockerfile pins
+`setuptools==60.10.0` and uses `--no-build-isolation`. Rebuild with no cache:
+
+```bash
+docker compose build --no-cache api
+```
+
 **Front build fails (Flutter)**  
 Ensure `tayra/` is populated (`ls tayra/pubspec.yaml`). Re-init submodules.
 
