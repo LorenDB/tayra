@@ -33,14 +33,17 @@ RUN set -eux; \
 # Single copy of the whole app (path packages, lib, web/, assets, …)
 COPY tayra/ ./
 
+# --no-web-resources-cdn: ship CanvasKit/wasm from this origin so the
+# Funkwhale CSP (script-src 'self') does not block gstatic.com.
 RUN set -eux; \
   flutter config --enable-web; \
   flutter pub get; \
   if [ -n "${FUNKWHALE_URL}" ]; then \
-    flutter build web --release --dart-define=FUNKWHALE_URL="${FUNKWHALE_URL}"; \
+    flutter build web --release --no-web-resources-cdn \
+      --dart-define=FUNKWHALE_URL="${FUNKWHALE_URL}"; \
   else \
     echo "WARNING: FUNKWHALE_URL empty — web login will ask for a server URL"; \
-    flutter build web --release; \
+    flutter build web --release --no-web-resources-cdn; \
   fi
 
 # ── nginx reverse proxy + SPA ────────────────────────────────────────────

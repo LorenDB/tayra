@@ -183,6 +183,14 @@ Old `django-allauth` sdist vs new setuptools. The API Dockerfile pins
 docker compose build --no-cache api
 ```
 
+**Browser CSP / CanvasKit blocked (gstatic.com)**  
+The front image must build with `--no-web-resources-cdn` (already in
+`front/Dockerfile`) so CanvasKit is same-origin. Rebuild front:
+
+```bash
+docker compose build --no-cache front && docker compose up -d front
+```
+
 **Front build fails (Flutter)**  
 Ensure `tayra/` is populated (`ls tayra/pubspec.yaml`). Re-init submodules.
 
