@@ -1,10 +1,12 @@
 import json
+import logging
 
 from allauth.account.adapter import get_adapter
 from dj_rest_auth import views as rest_auth_views
 from dj_rest_auth.registration import views as registration_views
 from django import http
 from django.contrib import auth
+from django.contrib.auth import get_user_model
 from django.middleware import csrf
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import mixins, viewsets
@@ -15,6 +17,8 @@ from rest_framework.response import Response
 from funkwhale_api.common import authentication, preferences, throttling
 
 from . import models, serializers, tasks
+
+logger = logging.getLogger(__name__)
 
 
 @extend_schema_view(post=extend_schema(operation_id="register", methods=["post"]))
@@ -154,8 +158,7 @@ def login(request):
     throttling.check_request(request, "login")
     if request.method != "POST":
         return http.HttpResponse(status=405)
-    # Accept form or JSON body.
-    data = request.POST if request.POST else request.data
+    data = request.POST if request.POST else getattr(request, "data", request.POST)
     serializer = serializers.LoginSerializer(
         data=data, context={"request": request}
     )
@@ -169,6 +172,33 @@ def login(request):
     response = http.HttpResponse(status=200)
     response.set_cookie("csrftoken", token, max_age=None)
     return response
+
+
+def _extract_credentials(request):
+    """Pull username/password from JSON, form, or nested body."""
+    raw = getattr(request, "data", None)
+    if raw is None:
+        raw = request.POST
+    if hasattr(raw, "dict"):
+        raw = raw.dict()
+    if not isinstance(raw, dict):
+        raw = {}
+    username = raw.get("username") or raw.get("email") or raw.get("login") or ""
+    password = raw.get("password") or ""
+    if isinstance(username, str):
+        username = username.strip()
+    if not isinstance(password, str):
+        password = str(password) if password is not None else ""
+    return username, password, raw
+
+
+def _find_user(username: str):
+    User = get_user_model()
+    qs = User.objects.all().for_auth()
+    return (
+        qs.filter(username__iexact=username).first()
+        or qs.filter(email__iexact=username).first()
+    )
 
 
 @extend_schema(
@@ -185,25 +215,103 @@ def login(request):
 def token_login(request):
     """POST username + password → OAuth tokens (no browser OAuth dance)."""
     throttling.check_request(request, "login")
-    # Accept JSON body or form fields.
-    data = request.data
-    if hasattr(data, "dict"):
-        data = data.dict()
-    serializer = serializers.TokenLoginSerializer(
-        data=data, context={"request": request}
-    )
-    if not serializer.is_valid():
-        return Response(serializer.errors, status=400)
-    try:
-        payload = serializer.save()
-    except Exception as exc:  # pragma: no cover - surfaced to client for debugging
-        import logging
+    username, password, raw = _extract_credentials(request)
 
-        logging.getLogger(__name__).exception("token_login failed to issue tokens")
+    if not username or not password:
+        logger.warning(
+            "token_login missing credentials keys=%s username_empty=%s password_empty=%s",
+            list(raw.keys()) if isinstance(raw, dict) else type(raw),
+            not bool(username),
+            not bool(password),
+        )
+        return Response(
+            {
+                "error": "missing_credentials",
+                "detail": "Both username and password are required.",
+                "non_field_errors": ["Both username and password are required."],
+            },
+            status=400,
+        )
+
+    user = _find_user(username)
+    password_ok = False
+    if user is not None:
+        password_ok = user.check_password(password)
+
+    if user is None or not password_ok:
+        # Second chance: full Django auth stack (LDAP, allauth, etc.)
+        django_request = getattr(request, "_request", request)
+        try:
+            authed = auth.authenticate(
+                request=django_request, username=username, password=password
+            )
+        except authentication.UnverifiedEmail:
+            logger.warning("token_login unverified email for login=%r", username)
+            return Response(
+                {
+                    "error": "email_unverified",
+                    "code": "email_unverified",
+                    "detail": "Please verify your e-mail address before logging in.",
+                    "non_field_errors": [
+                        "Please verify your e-mail address before logging in."
+                    ],
+                },
+                status=400,
+            )
+        if authed is None:
+            logger.warning(
+                "token_login failed login=%r user_found=%s has_usable_password=%s",
+                username,
+                user is not None,
+                getattr(user, "has_usable_password", lambda: None)(),
+            )
+            return Response(
+                {
+                    "error": "invalid_credentials",
+                    "detail": "Unable to log in with provided credentials",
+                    "non_field_errors": ["Unable to log in with provided credentials"],
+                },
+                status=400,
+            )
+        user = authed
+
+    if not user.is_active:
+        logger.warning("token_login inactive user_id=%s", user.pk)
+        return Response(
+            {
+                "error": "account_disabled",
+                "detail": "This account was disabled",
+                "non_field_errors": ["This account was disabled"],
+            },
+            status=400,
+        )
+
+    if user.should_verify_email():
+        logger.warning("token_login email not verified user_id=%s", user.pk)
+        return Response(
+            {
+                "error": "email_unverified",
+                "code": "email_unverified",
+                "detail": "Please verify your e-mail address before logging in.",
+                "non_field_errors": [
+                    "Please verify your e-mail address before logging in."
+                ],
+            },
+            status=400,
+        )
+
+    try:
+        from funkwhale_api.users import first_party
+
+        payload = first_party.issue_user_tokens(user)
+    except Exception as exc:
+        logger.exception("token_login failed to issue tokens user_id=%s", user.pk)
         return Response(
             {"error": "token_issue_failed", "detail": str(exc)},
             status=500,
         )
+
+    logger.info("token_login success user_id=%s username=%s", user.pk, user.username)
     return Response(payload, status=200)
 
 

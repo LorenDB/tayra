@@ -300,7 +300,8 @@ class UserDeleteSerializer(serializers.Serializer):
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
-    password = serializers.CharField()
+    # Never strip passwords — trailing spaces can be intentional.
+    password = serializers.CharField(trim_whitespace=False)
 
     def validate(self, data):
         request = self.context.get("request")
