@@ -312,12 +312,18 @@ class AuthNotifier extends Notifier<AuthState> {
     state = state.copyWith(isLoading: true, error: null);
     final url = _normalizeServerUrl(serverUrl);
 
+    // On web, prefer same-origin relative URL so a mismatched baked
+    // FUNKWHALE_URL still hits the nginx that serves this SPA.
+    final tokenEndpoint =
+        kIsWeb ? '/api/v1/users/token/' : '$url/api/v1/users/token/';
+
     try {
       final response = await _dio.post(
-        '$url/api/v1/users/token/',
+        tokenEndpoint,
         data: {'username': username.trim(), 'password': password},
         options: Options(
           contentType: Headers.jsonContentType,
+          headers: {'Accept': 'application/json'},
           validateStatus: (s) => s != null && s < 500,
         ),
       );
