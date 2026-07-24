@@ -329,7 +329,7 @@ class AuthNotifier extends Notifier<AuthState> {
       if (response.statusCode != 200 || response.data is! Map) {
         state = state.copyWith(
           isLoading: false,
-          error: 'Invalid username or password.',
+          error: _formatLoginError(response.data, response.statusCode),
         );
         Analytics.track('login_failed');
         return false;
@@ -371,10 +371,7 @@ class AuthNotifier extends Notifier<AuthState> {
       }
       state = state.copyWith(
         isLoading: false,
-        error:
-            status == 400
-                ? 'Invalid username or password.'
-                : 'Could not connect to server. Check the URL and try again.',
+        error: _formatLoginError(e.response?.data, status),
       );
       Analytics.track('login_failed');
       return false;
@@ -386,6 +383,35 @@ class AuthNotifier extends Notifier<AuthState> {
       Analytics.track('login_failed');
       return false;
     }
+  }
+
+  /// Prefer server-provided detail over a generic message (helps debug 400s).
+  static String _formatLoginError(dynamic data, int? status) {
+    if (data is Map) {
+      final code = data['code']?.toString();
+      if (code == 'email_unverified' ||
+          (data['non_field_errors'] is List &&
+              (data['non_field_errors'] as List).any(
+                (e) => e.toString().toLowerCase().contains('verify'),
+              ))) {
+        return 'Please verify your e-mail address before logging in.';
+      }
+      final nonField = data['non_field_errors'];
+      if (nonField is List && nonField.isNotEmpty) {
+        return nonField.first.toString();
+      }
+      final detail = data['detail'];
+      if (detail is String && detail.isNotEmpty) return detail;
+      // DRF field errors: {username: [...], password: [...]}
+      for (final key in ['username', 'password', 'error']) {
+        final v = data[key];
+        if (v is List && v.isNotEmpty) return v.first.toString();
+        if (v is String && v.isNotEmpty) return v;
+      }
+    }
+    if (status == 400) return 'Invalid username or password.';
+    if (status == 403) return 'Login not allowed for this account.';
+    return 'Could not connect to server. Check the URL and try again.';
   }
 
   /// Step 1: Register an OAuth application on the server (fallback / OOB).

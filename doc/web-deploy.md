@@ -22,8 +22,12 @@ From the Tayra repo alone:
 ```bash
 flutter build web \
   --release \
+  --no-web-resources-cdn \
   --dart-define=FUNKWHALE_URL=https://your.funkwhale.pod
 ```
+
+`--no-web-resources-cdn` is required behind Funkwhale’s CSP (`script-src 'self'`):
+otherwise the browser blocks CanvasKit from `gstatic.com`.
 
 Artifacts: `build/web/` (or `../funkwhale/front/dist/`).
 
