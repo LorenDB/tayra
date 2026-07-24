@@ -1,0 +1,4 @@
+[submodule "tayra"]
+	path = tayra
+	url = https://github.com/LorenDB/tayra.git
+	branch = master

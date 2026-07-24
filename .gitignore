@@ -104,3 +104,8 @@ tsconfig.tsbuildinfo
 
 # Vscode
 .vscode/
+
+# Local compose data
+data/
+.env
+

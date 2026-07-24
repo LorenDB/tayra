@@ -1,26 +1,10 @@
 version: "3"
 
-services:
-  front:
-    build:
-      context: front
-      dockerfile: Dockerfile.dev
-    env_file:
-      - .env.dev
-      - .env
-    environment:
-      - "HOST=0.0.0.0"
-      - "VUE_PORT=${VUE_PORT-8080}"
-    ports:
-      - "${VUE_PORT-8080}"
-    volumes:
-      - "./front:/app"
-      - "/app/node_modules"
-      - "./po:/po"
-    networks:
-      - internal
-    command: "yarn dev --host"
+# Local development compose. Vue front removed — run Tayra separately:
+#   cd ../tayra && flutter run -d chrome --dart-define=FUNKWHALE_URL=http://localhost:5000
+# Or build SPA into front/dist and use the production front image.
 
+services:
   postgres:
     env_file:
       - .env.dev
@@ -50,148 +34,71 @@ services:
       - .env
     build:
       context: ./api
-      dockerfile: Dockerfile
-      args:
-        install_dev_deps: 1
-    image: funkwhale-api
-    command: >
-      bash -c "funkwhale-manage collectstatic --no-input
-      && uvicorn --reload config.asgi:application --host 0.0.0.0 --port 5000  --reload-dir config/ --reload-dir=funkwhale_api/"
+      target: dev
     volumes:
-      - ./api:/app
-      - "${MUSIC_DIRECTORY_SERVE_PATH-./data/music}:/music:ro"
-      - "./data/plugins:/srv/funkwhale/plugins"
-      - "./data/staticfiles:/staticfiles"
-      - "./data/media:/data/media"
-    environment:
-      - "FUNKWHALE_HOSTNAME=${FUNKWHALE_HOSTNAME-localhost}"
-      - "FUNKWHALE_HOSTNAME_SUFFIX=funkwhale.test"
-      - "FUNKWHALE_HOSTNAME_PREFIX=${COMPOSE_PROJECT_NAME}"
-      - "FUNKWHALE_PROTOCOL=${FUNKWHALE_PROTOCOL-http}"
-      - "DATABASE_URL=postgresql://postgres@postgres/postgres"
-      - "CACHE_URL=redis://redis:6379/0"
-      - "STATIC_ROOT=/staticfiles"
-
-    depends_on:
-      - postgres
-      # - minio
-      - redis
+      - "./api:/app"
     networks:
       - internal
-    cap_add:
-      - SYS_PTRACE
-    extra_hosts:
-      - "node1.funkwhale.test:172.17.0.1"
-      - "node2.funkwhale.test:172.17.0.1"
-      - "node3.funkwhale.test:172.17.0.1"
+    depends_on:
+      - postgres
+      - redis
 
   celeryworker:
     env_file:
       - .env.dev
       - .env
-    image: funkwhale-api
+    build:
+      context: ./api
+      target: dev
+    command:
+      - celery
+      - --app=funkwhale_api.taskapp
+      - worker
+      - --loglevel=INFO
+    volumes:
+      - "./api:/app"
+    networks:
+      - internal
     depends_on:
       - postgres
-      # - minio
       - redis
-    command: celery -A funkwhale_api.taskapp worker -l debug -B --concurrency=${CELERYD_CONCURRENCY-0}
-    environment:
-      - "FUNKWHALE_HOSTNAME=${FUNKWHALE_HOSTNAME-localhost}"
-      - "FUNKWHALE_HOSTNAME_SUFFIX=funkwhale.test"
-      - "FUNKWHALE_HOSTNAME_PREFIX=${COMPOSE_PROJECT_NAME}"
-      - "FUNKWHALE_PROTOCOL=${FUNKWHALE_PROTOCOL-http}"
-      - "DATABASE_URL=postgresql://postgres@postgres/postgres"
-      - "CACHE_URL=redis://redis:6379/0"
-    volumes:
-      - ./api:/app
-      - "${MUSIC_DIRECTORY_SERVE_PATH-./data/music}:/music:ro"
-      - "./data/plugins:/srv/funkwhale/plugins"
-      - "./data/media:/data/media"
-    networks:
-      - internal
-    extra_hosts:
-      - "node1.funkwhale.test:172.17.0.1"
-      - "node2.funkwhale.test:172.17.0.1"
-      - "node3.funkwhale.test:172.17.0.1"
 
-  nginx:
+  celerybeat:
     env_file:
       - .env.dev
       - .env
-    image: nginx
+    build:
+      context: ./api
+      target: dev
+    command:
+      - celery
+      - --app=funkwhale_api.taskapp
+      - beat
+      - --loglevel=INFO
+    volumes:
+      - "./api:/app"
+    networks:
+      - internal
+    depends_on:
+      - postgres
+      - redis
+
+  # Optional: serve pre-built Tayra from front/dist
+  front:
+    profiles: ["front"]
+    build:
+      context: front
+      dockerfile: Dockerfile
+      target: production
+    env_file:
+      - .env.dev
+      - .env
     ports:
-      - "${NGINX_PORTS_MAPPING-8000:80}"
-    environment:
-      - "NGINX_MAX_BODY_SIZE=${NGINX_MAX_BODY_SIZE-100M}"
-      - "FUNKWHALE_API_IP=${FUNKHALE_API_IP-api}"
-      - "FUNKWHALE_API_PORT=${FUNKWHALE_API_PORT-5000}"
-      - "FUNKWHALE_FRONT_IP=${FUNKHALE_FRONT_IP-front}"
-      - "FUNKWHALE_FRONT_PORT=${VUE_PORT-8080}"
-      - "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME- }"
-      - "FUNKWHALE_HOSTNAME=${FUNKWHALE_HOSTNAME-localhost}"
+      - "${VUE_PORT-8080}:80"
+    networks:
+      - internal
     depends_on:
       - api
-      - front
-    volumes:
-      - ./docker/nginx/conf.dev:/etc/nginx/templates/default.conf.template:ro
-      - "${MUSIC_DIRECTORY_SERVE_PATH-./data/music}:/music:ro"
-      - ./deploy/funkwhale_proxy.conf:/etc/nginx/funkwhale_proxy.conf:ro
-      - "./front:/frontend:ro"
-      - "./data/staticfiles:/staticfiles:ro"
-      - "./data/media:/protected/media:ro"
-    networks:
-      - federation
-      - internal
-
-    labels:
-      traefik.backend: "${COMPOSE_PROJECT_NAME-node1}"
-      traefik.frontend.rule: "Host:${COMPOSE_PROJECT_NAME-node1}.funkwhale.test,${NODE_IP-127.0.0.1},${DJANGO_ALLOWED_HOSTS}"
-      traefik.enable: "true"
-      traefik.federation.protocol: "http"
-      traefik.federation.port: "80"
-      traefik.frontend.passHostHeader: true
-      traefik.docker.network: federation
-
-  api-docs:
-    image: swaggerapi/swagger-ui:v3.37.2
-    environment:
-      - "API_URL=/swagger.yml"
-    ports:
-      - "8002:8080"
-    volumes:
-      - "./docs/swagger.yml:/usr/share/nginx/html/swagger.yml"
-      - "./docs/api:/usr/share/nginx/html/api"
-
-  typesense:
-    env_file:
-      - .env.dev
-      - .env
-    image: typesense/typesense:0.24.0
-    networks:
-      - internal
-    volumes:
-      - ./typesense/data:/data
-    command: --data-dir /data --enable-cors
-    profiles:
-      - typesense
-
-  # minio:
-  #   image: minio/minio
-  #   command: server /data
-  #   volumes:
-  #     - "./data/${COMPOSE_PROJECT_NAME-node1}/minio:/data"
-  #   environment:
-  #     - "MINIO_ACCESS_KEY=${AWS_ACCESS_KEY_ID-access_key}"
-  #     - "MINIO_SECRET_KEY=${AWS_SECRET_ACCESS_KEY-secret_key}"
-  #     - "MINIO_HTTP_TRACE: /dev/stdout"
-  #   ports:
-  #     - "9000:9000"
-  #   networks:
-  #     - federation
-  #     - internal
 
 networks:
   internal:
-  federation:
-    name: federation
-    external: true

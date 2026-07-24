@@ -317,6 +317,21 @@ class LoginSerializer(serializers.Serializer):
         return auth.login(request, self.validated_data)
 
 
+class TokenLoginSerializer(LoginSerializer):
+    """
+    Username/password → OAuth tokens for the first-party Tayra client.
+
+    Prefer this over session login + authorization-code for SPA and native apps.
+    """
+
+    def save(self, request=None):
+        # Parent save() creates a session; token login does not need one.
+        from funkwhale_api.users import first_party
+
+        user = self.validated_data
+        return first_party.issue_user_tokens(user)
+
+
 class UserChangeEmailSerializer(serializers.Serializer):
     password = serializers.CharField()
     email = serializers.EmailField()

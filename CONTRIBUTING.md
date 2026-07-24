@@ -6,7 +6,7 @@ We welcome contributions from across the community. Whether you are a designer, 
 
 The Funkwhale software is the core of the community project. While we have a core team working on it, we are always excited to see new features, bugfixes, and refactorings from our community.
 
-Funkwhale's backend is written in [Python](https://www.python.org/) using [Django](https://www.djangoproject.com) and [Django REST framework](https://www.django-rest-framework.org/). Our web app is written in [Vue.js](https://vuejs.org/) and [Typescript](https://typescriptlang.org).
+This fork's backend is written in [Python](https://www.python.org/) using [Django](https://www.djangoproject.com) and [Django REST framework](https://www.django-rest-framework.org/). The primary web UI is **Tayra** (Flutter), maintained in a sibling repository — the Vue.js app has been removed.
 
 Whether you're an experienced developer or you're just learning, check out our [developer guide](https://docs.funkwhale.audio/developer/index.html) to get started.
 

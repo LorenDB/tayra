@@ -1,9 +1,13 @@
-# Stock-layout compose for this fork, meant to run from the **repo root**:
+# Funkwhale + Tayra — build from source (this fork)
 #
-#   docker compose -f deploy/docker-compose.yml --project-directory . up -d --build
+# Quick start:
+#   git clone --recurse-submodules <your-fork-url> funkwhale
+#   cd funkwhale
+#   cp .env.example .env   # edit FUNKWHALE_HOSTNAME, secrets, etc.
+#   docker compose up -d --build
 #
-# Prefer the root docker-compose.yml for new installs — same idea, simpler paths.
-# This file is kept for people migrating from upstream's deploy/ layout.
+# Paths are relative to the repository root. The Tayra SPA is the `tayra/`
+# git submodule; the front image compiles it during `docker compose build`.
 
 services:
   postgres:
@@ -77,6 +81,8 @@ services:
       context: .
       dockerfile: front/Dockerfile
       args:
+        # Baked into the Flutter SPA at image build time (not runtime).
+        # Must match how users reach the pod in the browser.
         FUNKWHALE_URL: ${FUNKWHALE_PROTOCOL:-https}://${FUNKWHALE_HOSTNAME}
     image: funkwhale-tayra/front:local
     depends_on:

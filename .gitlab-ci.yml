@@ -86,29 +86,9 @@ review_front:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: manual
-
-  image: $CI_REGISTRY/funkwhale/ci/node-python:18
-  variables:
-    BASE_URL: /-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/front-review/
-    VUE_APP_ROUTER_BASE_URL: /-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/front-review/
-    VUE_APP_INSTANCE_URL: https://demo.funkwhale.audio
-    NODE_ENV: review
-    NODE_OPTIONS: --max-old-space-size=4096
-  environment:
-    name: review/front/$CI_COMMIT_REF_NAME
-    url: http://$CI_PROJECT_NAMESPACE.pages.funkwhale.audio/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/front-review/index.html
-  cache: *front_cache
-  before_script:
-    - mkdir front-review
-    - cd front
-    - yarn install --frozen-lockfile
+  image: alpine:3.17
   script:
-    - yarn run build --base ./
-    - cp -r dist/* ../front-review
-  artifacts:
-    expire_in: 2 weeks
-    paths:
-      - front-review
+    - echo "Vue review builds removed; build Tayra via make front-image locally"
 
 review_docs:
   allow_failure: true
@@ -188,15 +168,9 @@ lint_front:
   rules:
     - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
     - changes: [front/**/*]
-
-  image: $CI_REGISTRY/funkwhale/ci/node-python:18
-  cache: *front_cache
-  before_script:
-    - cd front
-    - yarn install --frozen-lockfile
+  image: alpine:3.17
   script:
-    - yarn lint --max-warnings 0
-    - yarn lint:tsc
+    - echo "Vue front removed; Tayra SPA lives in sibling tayra repo (see front/README.md)"
 
 test_scripts:
   stage: test
@@ -277,20 +251,9 @@ test_front:
   rules:
     - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
     - changes: [front/**/*]
-
-  image: $CI_REGISTRY/funkwhale/ci/node-python:18
-  cache: *front_cache
-  before_script:
-    - cd front
-    - yarn install --frozen-lockfile
+  image: alpine:3.17
   script:
-    - yarn test:unit
-  artifacts:
-    reports:
-      junit: front/test_results.xml
-      coverage_report:
-        coverage_format: cobertura
-        path: front/coverage/cobertura-coverage.xml
+    - echo "No Vue unit tests; Tayra tested in its own repo"
 
 build_metadata:
   stage: build
@@ -389,24 +352,15 @@ build_docs:
 build_front:
   stage: build
   needs:
-    # The test_front job is currently disabled
-    # - job: test_front
     - job: lint_front
       optional: true
   rules:
     - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
     - changes: [front/**/*]
-
-  image: $CI_REGISTRY/funkwhale/ci/node-python:18
-  variables:
-    <<: *keep_git_files_permissions
-    NODE_OPTIONS: --max-old-space-size=4096
-  cache: *front_cache
-  before_script:
-    - cd front
-    - yarn install --frozen-lockfile
+  image: alpine:3.17
   script:
-    - yarn run build:deployment
+    - echo "Build Tayra SPA with: make front-image FUNKWHALE_URL=https://pod.example"
+    - mkdir -p front/dist && echo "placeholder" > front/dist/.ci-placeholder
   artifacts:
     name: front_${CI_COMMIT_REF_NAME}
     paths:

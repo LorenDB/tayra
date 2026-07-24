@@ -1,69 +1,66 @@
-### OSX ###
+# Repo-level ignores for compose builds (api + front)
+
+### OS / editors
 .DS_Store
-.AppleDouble
-.LSOverride
-
-### SublimeText ###
-# cache files for sublime text
-*.tmlanguage.cache
-*.tmPreferences.cache
-*.stTheme.cache
-
-# workspace files are user-specific
-*.sublime-workspace
-
-# project files should be checked into the repository, unless a significant
-# proportion of contributors will probably not be using SublimeText
-# *.sublime-project
-
-# sftp configuration file
-sftp-config.json
-
-# Basics
-*.py[cod]
-__pycache__
-
-# Logs
-*.log
-api/pip-log.txt
-
-# Unit test / coverage reports
-.coverage
-.tox
-nosetests.xml
-htmlcov
-
-# Translations
-*.mo
-*.pot
-
-# Pycharm
 .idea
-
-# Vim
-
-*~
 *.swp
-*.swo
+*~
 
-# npm
-front/node_modules/
+### Git metadata (keep sources; drop history from build context)
+.git
+**/.git
+.gitmodules
+.gitlab
+.gitlab-ci.yml
+.gitpod
+.gitpod.yml
 
-# Compass
-.sass-cache
+### Docs & unrelated
+docs
+changes
+templates
+scripts
+CODEOWNERS
+CONTRIBUTING.md
+CHANGELOG.md
+DEPLOY.md
+LICENSE
 
-# virtual environments
+### Python junk
+**/__pycache__
+**/*.py[cod]
+**/.venv
+**/venv
+**/.tox
+**/.coverage
+**/htmlcov
+**/*.sqlite3
+api/tests
+
+### Local env & data
 .env
+.env.*
+!.env.example
+data
+**/data
+typesense
 
-# User-uploaded media
-api/funkwhale_api/media/
+### Tayra / Flutter build artefacts (rebuilt in image)
+tayra/build
+tayra/.dart_tool
+tayra/.flutter-plugins
+tayra/.flutter-plugins-dependencies
+tayra/android/.gradle
+tayra/android/**/build
+tayra/ios
+tayra/macos/Flutter/ephemeral
+tayra/linux/flutter/ephemeral
+tayra/windows/flutter/ephemeral
+tayra/build-dir
+tayra/flatpak
+tayra/test
+tayra/**/*.iml
 
-# Hitch directory
-api/tests/.hitch
-
-# MailHog binary
-mailhog
-
-*.sqlite3
-api/music
-api/media
+### Front leftovers
+front/dist
+front/node_modules

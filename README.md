@@ -1,26 +1,61 @@
-# Funkwhale
+# Funkwhale + Tayra (hard fork)
 
-[![The Funkwhale logo](./front/src/assets/logo/logo-full-500.png)](https://funkwhale.audio)
+Fork of [Funkwhale](https://funkwhale.audio) **1.4.1** that:
 
-Funkwhale is a platform for uploading, sharing, and publishing audio content across the federated web. Curate your music library, listen to podcasts, or create your own content and share it with the world.
+1. **Removes the Vue.js web UI**
+2. Serves **[Tayra](https://github.com/LorenDB/tayra)** (Flutter web) as the primary SPA (git submodule)
+3. Adds **first-party password → OAuth token** login (`POST /api/v1/users/token/`)
+4. **Builds from source** via Docker Compose (no stock prebuilt front/api required)
 
-## Contribute
+## Quick deploy
 
-Want to help make Funkwhale even better? We welcome contributions from across the community. Whether you are a designer, a translator, a technical writer, or a developer, we look forward to seeing your work!
+```bash
+git clone --recurse-submodules https://github.com/YOU/this-fork.git
+cd this-fork
+cp .env.example .env
+# edit FUNKWHALE_HOSTNAME, FUNKWHALE_PROTOCOL, DJANGO_SECRET_KEY
+mkdir -p data/music data/media data/static
+docker compose up -d --build
+```
 
-You can find contribution information in our [documentation hub](https://docs.funkwhale.audio).
+Full details: **[DEPLOY.md](DEPLOY.md)**.
 
-- [Developer guides](https://docs.funkwhale.audio/developer/index.html)
-- [Contributor guides](https://docs.funkwhale.audio/contributing.html)
+## Layout
 
-## Get help
+| Path | Role |
+|---|---|
+| `api/` | Django / Funkwhale API (source build) |
+| `front/` | nginx Dockerfile + proxy config (SPA built from Tayra) |
+| `tayra/` | **Git submodule** — Tayra client |
+| `docker-compose.yml` | Source-build stack (use this) |
+| `.env.example` | Env template |
 
-Got a question or need help? Head over to our [forum](https://forum.funkwhale.audio/t/support) and open up a discussion.
+## Auth
 
-## Report a security issue
+```http
+POST /api/v1/users/token/
+{"username": "…", "password": "…"}
+```
 
-If you find a security issue or vulnerability, please report it on our [GitLab instance](https://dev.funkwhale.audio/funkwhale/funkwhale/-/issues). When you open your issue, select the **This issue is confidential and should only be visible to team members with at least Reporter access** option. This ensures developers can verify and patch the issue before disclosing it.
+Returns access/refresh tokens, client credentials for refresh, and `listen_token`
+for media URLs.
 
-## Code of conduct
+## Ops without a Vue admin UI
 
-The Funkwhale collective adheres to a [code of conduct](https://funkwhale.audio/code-of-conduct) in all our community spaces. Please familiarize yourself with this code and follow it when participating in discussions in our spaces.
+| Task | Tool |
+|---|---|
+| Users / models | Django admin (`ADMIN_URL`) |
+| Imports / federation | `manage.py` / Funkwhale CLI inside the API container |
+| Background jobs | Celery worker + beat |
+
+## Deferred (not in this package yet)
+
+- Runtime-only pod URL via compose env (SPA URL is **build-time**; rebuild front after hostname changes)
+- Admin / moderation / signup UIs in Tayra
+- Upstream Vue frontend (removed)
+
+See also Tayra’s `doc/web-deferred-features.md` in the submodule.
+
+## License
+
+AGPL (upstream Funkwhale). Tayra has its own license in the submodule.

@@ -8,7 +8,8 @@ from django.contrib import auth
 from django.middleware import csrf
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import mixins, viewsets
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, authentication_classes, permission_classes
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from funkwhale_api.common import authentication, preferences, throttling
@@ -153,8 +154,10 @@ def login(request):
     throttling.check_request(request, "login")
     if request.method != "POST":
         return http.HttpResponse(status=405)
+    # Accept form or JSON body.
+    data = request.POST if request.POST else request.data
     serializer = serializers.LoginSerializer(
-        data=request.POST, context={"request": request}
+        data=data, context={"request": request}
     )
     if not serializer.is_valid():
         return http.HttpResponse(
@@ -166,6 +169,29 @@ def login(request):
     response = http.HttpResponse(status=200)
     response.set_cookie("csrftoken", token, max_age=None)
     return response
+
+
+@extend_schema(
+    operation_id="token_login",
+    description=(
+        "First-party password login for Tayra. Returns OAuth access/refresh "
+        "tokens, client credentials for refresh, and a scoped listen_token "
+        "for media URLs (?token=)."
+    ),
+)
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@authentication_classes([])
+def token_login(request):
+    """POST username + password → OAuth tokens (no browser OAuth dance)."""
+    throttling.check_request(request, "login")
+    serializer = serializers.TokenLoginSerializer(
+        data=request.data, context={"request": request}
+    )
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=400)
+    payload = serializer.save()
+    return Response(payload, status=200)
 
 
 @extend_schema(operation_id="logout")
