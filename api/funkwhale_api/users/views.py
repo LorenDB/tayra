@@ -185,12 +185,25 @@ def login(request):
 def token_login(request):
     """POST username + password → OAuth tokens (no browser OAuth dance)."""
     throttling.check_request(request, "login")
+    # Accept JSON body or form fields.
+    data = request.data
+    if hasattr(data, "dict"):
+        data = data.dict()
     serializer = serializers.TokenLoginSerializer(
-        data=request.data, context={"request": request}
+        data=data, context={"request": request}
     )
     if not serializer.is_valid():
         return Response(serializer.errors, status=400)
-    payload = serializer.save()
+    try:
+        payload = serializer.save()
+    except Exception as exc:  # pragma: no cover - surfaced to client for debugging
+        import logging
+
+        logging.getLogger(__name__).exception("token_login failed to issue tokens")
+        return Response(
+            {"error": "token_issue_failed", "detail": str(exc)},
+            status=500,
+        )
     return Response(payload, status=200)
 
 

@@ -17,6 +17,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from funkwhale_api.activity import serializers as activity_serializers
+from funkwhale_api.common import authentication as common_authentication
 from funkwhale_api.common import models as common_models
 from funkwhale_api.common import preferences
 from funkwhale_api.common import serializers as common_serializers
@@ -302,7 +303,48 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField()
 
     def validate(self, data):
-        user = auth.authenticate(request=self.context.get("request"), **data)
+        request = self.context.get("request")
+        # Django / allauth backends expect a Django HttpRequest, not DRF's Request.
+        django_request = getattr(request, "_request", request)
+        username = (data.get("username") or "").strip()
+        password = data.get("password") or ""
+        try:
+            user = auth.authenticate(
+                request=django_request, username=username, password=password
+            )
+        except common_authentication.UnverifiedEmail:
+            raise serializers.ValidationError(
+                {
+                    "non_field_errors": [
+                        "Please verify your e-mail address before logging in."
+                    ],
+                    "code": "email_unverified",
+                }
+            )
+
+        # Fallback: case-insensitive username/email + check_password.
+        # Covers edge cases where auth backends return None unexpectedly.
+        if not user and username and password:
+            User = auth.get_user_model()
+            qs = User.objects.all().for_auth()
+            candidate = (
+                qs.filter(username__iexact=username).first()
+                or qs.filter(email__iexact=username).first()
+            )
+            if candidate and candidate.check_password(password):
+                if not candidate.is_active:
+                    raise serializers.ValidationError("This account was disabled")
+                if candidate.should_verify_email():
+                    raise serializers.ValidationError(
+                        {
+                            "non_field_errors": [
+                                "Please verify your e-mail address before logging in."
+                            ],
+                            "code": "email_unverified",
+                        }
+                    )
+                user = candidate
+
         if not user:
             raise serializers.ValidationError(
                 "Unable to log in with provided credentials"
@@ -311,10 +353,13 @@ class LoginSerializer(serializers.Serializer):
         if not user.is_active:
             raise serializers.ValidationError("This account was disabled")
 
-        return user
+        # Keep username/password in validated_data for callers that expect a dict;
+        # attach the authenticated user for save().
+        data = {"username": username, "password": password, "user": user}
+        return data
 
     def save(self, request):
-        return auth.login(request, self.validated_data)
+        return auth.login(request, self.validated_data["user"])
 
 
 class TokenLoginSerializer(LoginSerializer):
@@ -328,7 +373,7 @@ class TokenLoginSerializer(LoginSerializer):
         # Parent save() creates a session; token login does not need one.
         from funkwhale_api.users import first_party
 
-        user = self.validated_data
+        user = self.validated_data["user"]
         return first_party.issue_user_tokens(user)
 
 

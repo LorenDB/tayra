@@ -28,6 +28,21 @@ def test_token_login_returns_oauth_tokens(api_client, factories):
 
 
 @pytest.mark.django_db
+def test_token_login_by_email(api_client, factories):
+    user = factories["users.User"](username="dave", email="dave@example.com")
+    user.set_password("s3cret-pass")
+    user.save()
+
+    response = api_client.post(
+        reverse("api:v1:users:token_login"),
+        {"username": "dave@example.com", "password": "s3cret-pass"},
+        format="json",
+    )
+    assert response.status_code == 200, response.content
+    assert response.json()["access_token"]
+
+
+@pytest.mark.django_db
 def test_token_login_rejects_bad_password(api_client, factories):
     user = factories["users.User"](username="bob")
     user.set_password("right")
@@ -53,6 +68,7 @@ def test_token_login_access_token_authenticates(api_client, factories):
         {"username": "carol", "password": "s3cret-pass"},
         format="json",
     )
+    assert login.status_code == 200, login.content
     token = login.json()["access_token"]
 
     me = api_client.get(

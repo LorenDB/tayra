@@ -183,6 +183,27 @@ Old `django-allauth` sdist vs new setuptools. The API Dockerfile pins
 docker compose build --no-cache api
 ```
 
+**Login always “invalid username or password” (HTTP 400 on `/api/v1/users/token/`)**  
+That response is from the **API**. After the auth fixes, the UI should show the
+server’s real message (e.g. e-mail verification). Rebuild **api** and **front**:
+
+```bash
+docker compose build api front && docker compose up -d api front
+```
+
+Debug with curl (use your real host/user):
+
+```bash
+curl -sS -X POST "https://YOUR_HOST/api/v1/users/token/" \
+  -H "Content-Type: application/json" \
+  -d '{"username":"YOUR_USER","password":"YOUR_PASS"}' | jq .
+```
+
+- `200` + `access_token` → API OK; rebuild front if the app still fails  
+- `400` with `Unable to log in…` → wrong user/password (or wrong host in baked URL)  
+- `400` / `email_unverified` → verify e-mail or set `ACCOUNT_EMAIL_VERIFICATION_ENFORCE=false`  
+- Connection errors → `FUNKWHALE_URL` baked into the SPA doesn’t match how you open the site
+
 **Browser CSP / CanvasKit blocked (gstatic.com)**  
 The front image must build with `--no-web-resources-cdn` (already in
 `front/Dockerfile`) so CanvasKit is same-origin. Rebuild front:
