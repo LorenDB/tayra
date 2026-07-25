@@ -1,7 +1,30 @@
 from django.db import models
+from django.db.models import Q
 from django.utils import timezone
 
 from funkwhale_api.music.models import Track
+
+
+def rich_listening_q():
+    """
+    Match listenings written by rich clients (Tayra dual-write / bulk import).
+
+    Stock Funkwhale scrobbles only set track + user + creation_date. Rich rows
+    carry at least one of duration, device, or client_session_id. Year-review
+    and client UIs should ignore stock rows — they undercount and can crash
+    clients when nested track payloads are incomplete.
+    """
+    return (
+        Q(duration_seconds__isnull=False)
+        | Q(source_device__isnull=False)
+        | Q(client_session_id__isnull=False)
+    )
+
+
+class ListeningQuerySet(models.QuerySet):
+    def rich(self):
+        """Exclude thin stock scrobbles; keep rich client data only."""
+        return self.filter(rich_listening_q())
 
 
 class Listening(models.Model):
@@ -64,5 +87,15 @@ class Listening(models.Model):
             ),
         ]
 
+    objects = ListeningQuerySet.as_manager()
+
     def get_activity_url(self):
         return f"{self.user.get_activity_url()}/listenings/tracks/{self.pk}"
+
+    @property
+    def is_rich(self):
+        return (
+            self.duration_seconds is not None
+            or self.source_device_id is not None
+            or self.client_session_id is not None
+        )

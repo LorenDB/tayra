@@ -149,6 +149,9 @@ def process_bulk_listenings(user, *, mode, items, dedup_window_seconds):
     else:
         candidate_q = date_q
 
+    # Prefer matching other rich rows only — never window-merge onto stock thin
+    # scrobbles (those stay ignored by stats/list). Session-id matches still
+    # resolve via the session index even if somehow thin.
     candidates = list(
         models.Listening.objects.filter(user=user)
         .filter(candidate_q)
@@ -168,7 +171,10 @@ def process_bulk_listenings(user, *, mode, items, dedup_window_seconds):
     }
     by_track = defaultdict(list)
     for c in candidates:
-        by_track[c.track_id].append(c)
+        # Window matching: only consider already-rich rows so import creates
+        # new rich listens next to legacy stock scrobbles instead of mutating them.
+        if c.is_rich:
+            by_track[c.track_id].append(c)
 
     to_create = []
     # Existing-row enrich intents: (pk, row_dict). Applied under select_for_update.

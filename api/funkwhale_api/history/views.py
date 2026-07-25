@@ -173,6 +173,13 @@ class ListeningViewSet(
         queryset = queryset.filter(
             fields.privacy_level_query(self.request.user, "user__privacy_level")
         )
+        # List/retrieve default to rich-only so stock scrobbles (often missing
+        # nested track payloads clients expect) never reach Tayra. Opt out with
+        # ?rich_only=false. Stats always use .rich() server-side.
+        if self.action in ("list", "retrieve"):
+            rich_param = self.request.query_params.get("rich_only", "true")
+            if str(rich_param).lower() not in ("0", "false", "no"):
+                queryset = queryset.rich()
         tracks = Track.objects.with_playable_uploads(
             music_utils.get_actor_from_request(self.request)
         ).select_related(

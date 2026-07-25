@@ -106,18 +106,19 @@ def test_stats_mixed_null_and_non_null_durations(factories, logged_in_api_client
     data = response.data
 
     assert data["year"] == year
-    assert data["total_listens"] == 4
-    # 100 + 50 + 0 + 0
+    # Stock thin rows (null duration/device/session) are ignored — only 2 rich listens.
+    assert data["total_listens"] == 2
+    # 100 + 50
     assert data["total_seconds"] == 150
     assert data["listens_with_duration"] == 2
-    # 100 + 50 + 300 (track_b) + 400 (track_c)
-    assert data["estimated_seconds"] == 850
-    assert data["unique_tracks"] == 3
-    assert data["unique_artists"] == 3
-    assert data["unique_albums"] == 3
+    # All rich rows have duration → estimated == total_seconds
+    assert data["estimated_seconds"] == 150
+    assert data["unique_tracks"] == 1
+    assert data["unique_artists"] == 1
+    assert data["unique_albums"] == 1
 
-    # Top tracks ordered by count (track_a has 2)
-    assert len(data["top_tracks"]) == 3
+    # Top tracks: only track_a (rich)
+    assert len(data["top_tracks"]) == 1
     assert data["top_tracks"][0]["track_id"] == track_a.pk
     assert data["top_tracks"][0]["title"] == "Song A"
     assert data["top_tracks"][0]["count"] == 2
@@ -125,30 +126,27 @@ def test_stats_mixed_null_and_non_null_durations(factories, logged_in_api_client
     assert data["top_tracks"][0]["artist_name"] == track_a.artist.name
 
     track_ids = {t["track_id"] for t in data["top_tracks"]}
-    assert track_ids == {track_a.pk, track_b.pk, track_c.pk}
+    assert track_ids == {track_a.pk}
 
-    # Monthly: January (2 listens, 150s), March (2 listens, 0s)
+    # Monthly: January only (2 rich listens); March stock rows ignored
     monthly = {m["month"]: m for m in data["monthly"]}
     assert monthly[1]["count"] == 2
     assert monthly[1]["total_seconds"] == 150
-    assert monthly[3]["count"] == 2
+    assert monthly[3]["count"] == 0
     assert monthly[3]["total_seconds"] == 0
     assert monthly[6]["count"] == 0
 
-    # by_device: one named device + null-device group
+    # by_device: only the named device (stock null-device group excluded)
     by_device = data["by_device"]
-    assert len(by_device) == 2
-    device_row = next(r for r in by_device if r["device_uuid"] == str(device.uuid))
+    assert len(by_device) == 1
+    device_row = by_device[0]
+    assert device_row["device_uuid"] == str(device.uuid)
     assert device_row["device_name"] == "Pixel"
     assert device_row["count"] == 2
     assert device_row["total_seconds"] == 150
-    null_row = next(r for r in by_device if r["device_uuid"] is None)
-    assert null_row["count"] == 2
-    assert null_row["total_seconds"] == 0
 
-    # top artists / albums non-empty
-    assert len(data["top_artists"]) == 3
-    assert len(data["top_albums"]) == 3
+    assert len(data["top_artists"]) == 1
+    assert len(data["top_albums"]) == 1
 
 
 def test_stats_estimated_prefers_finished_upload_duration(
@@ -165,17 +163,44 @@ def test_stats_estimated_prefers_finished_upload_duration(
     factories["music.Upload"](
         track=track, duration=222, import_status="finished"
     )
+    # Rich row with null duration but device set (counts as rich; estimated uses upload).
+    device = factories["client_data.ClientDevice"](user=user)
     factories["history.Listening"](
         user=user,
         track=track,
         duration_seconds=None,
+        source_device=device,
         creation_date=_dt(year, 5, 1),
     )
 
     response = logged_in_api_client.get(_stats_url(year=year))
     assert response.status_code == 200
+    assert response.data["total_listens"] == 1
     assert response.data["total_seconds"] == 0
     assert response.data["estimated_seconds"] == 222
+
+
+def test_stats_ignores_stock_thin_listenings(factories, logged_in_api_client):
+    """Pure stock scrobbles never appear in year-review aggregates."""
+    user = logged_in_api_client.user
+    year = 2025
+    track = factories["music.Track"]()
+    factories["music.Upload"](track=track, duration=500, import_status="finished")
+    factories["history.Listening"](
+        user=user,
+        track=track,
+        duration_seconds=None,
+        source_device=None,
+        client_session_id=None,
+        creation_date=_dt(year, 7, 1),
+    )
+
+    response = logged_in_api_client.get(_stats_url(year=year))
+    assert response.status_code == 200
+    assert response.data["total_listens"] == 0
+    assert response.data["total_seconds"] == 0
+    assert response.data["estimated_seconds"] == 0
+    assert response.data["top_tracks"] == []
 
 
 def test_stats_limit_caps_top_n(factories, logged_in_api_client):

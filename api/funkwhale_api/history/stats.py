@@ -107,11 +107,14 @@ def compute_listening_stats(user, year, limit=10):
     """
     Aggregate year-in-review metrics for a single user.
 
-    total_seconds uses SUM(COALESCE(duration_seconds, 0)) — stock nulls count as 0.
+    Only rich listenings are included (duration, device, or client_session set).
+    Stock thin scrobbles are ignored.
+    total_seconds uses SUM(COALESCE(duration_seconds, 0)).
     estimated_seconds uses COALESCE(duration_seconds, track_upload_duration, 0).
     """
     start, end = _year_bounds(year)
-    base = models.Listening.objects.filter(
+    # Only rich client rows — ignore stock thin scrobbles (null duration/device/session).
+    base = models.Listening.objects.rich().filter(
         user=user,
         creation_date__gte=start,
         creation_date__lt=end,

@@ -59,10 +59,10 @@ def test_bulk_create_only_new_rows(
     activity_muted.assert_not_called()
 
 
-def test_bulk_enrich_stock_thin_row(
+def test_bulk_does_not_window_match_stock_thin_row(
     factories, logged_in_api_client, activity_muted, mocker
 ):
-    """Stock thin listening + rich import within window → enriched, not created."""
+    """Stock thin scrobbles are ignored for window match — import creates a new rich row."""
     track = factories["music.Track"]()
     device = factories["client_data.ClientDevice"](user=logged_in_api_client.user)
     listened_at = timezone.now() - datetime.timedelta(days=7)
@@ -76,7 +76,6 @@ def test_bulk_enrich_stock_thin_row(
     )
     plugin_hook = mocker.patch("config.plugins.trigger_hook")
 
-    # Client local timestamp may differ by ~1s from stock server now
     rich_at = listened_at + datetime.timedelta(seconds=1)
     response = logged_in_api_client.post(
         _bulk_url(),
@@ -96,15 +95,18 @@ def test_bulk_enrich_stock_thin_row(
     )
 
     assert response.status_code == 200
-    assert response.data["created"] == 0
-    assert response.data["enriched"] == 1
+    assert response.data["created"] == 1
+    assert response.data["enriched"] == 0
     assert response.data["skipped_duplicate"] == 0
     assert response.data["errors"] == []
-    assert models.Listening.objects.count() == 1
+    assert models.Listening.objects.count() == 2
 
     stock.refresh_from_db()
-    assert stock.duration_seconds == 200
-    assert stock.source_device_id == device.pk
+    assert stock.duration_seconds is None
+    assert stock.source_device_id is None
+    rich = models.Listening.objects.exclude(pk=stock.pk).get()
+    assert rich.duration_seconds == 200
+    assert rich.source_device_id == device.pk
     plugin_hook.assert_not_called()
     activity_muted.assert_not_called()
 
@@ -260,12 +262,12 @@ def test_bulk_session_match_wins_over_window(
     assert thin.duration_seconds is None
 
 
-def test_bulk_window_tie_break_prefers_null_duration(
+def test_bulk_window_match_only_considers_rich_rows(
     factories, logged_in_api_client, mocker
 ):
+    """Thin stock candidates are not window-matched; only rich rows enrich."""
     track = factories["music.Track"]()
     when = timezone.now() - datetime.timedelta(days=5)
-    # Two candidates at same timestamp: one already rich, one thin
     rich = factories["history.Listening"](
         user=logged_in_api_client.user,
         track=track,
@@ -298,8 +300,8 @@ def test_bulk_window_tie_break_prefers_null_duration(
     assert response.data["enriched"] == 1
     thin.refresh_from_db()
     rich.refresh_from_db()
-    assert thin.duration_seconds == 99
-    assert rich.duration_seconds == 30
+    assert thin.duration_seconds is None
+    assert rich.duration_seconds == 99
 
 
 def test_bulk_window_tie_break_closest_time(
@@ -311,13 +313,13 @@ def test_bulk_window_tie_break_closest_time(
         user=logged_in_api_client.user,
         track=track,
         creation_date=base,
-        duration_seconds=None,
+        duration_seconds=1,  # rich so it is a window candidate
     )
     closer = factories["history.Listening"](
         user=logged_in_api_client.user,
         track=track,
         creation_date=base + datetime.timedelta(seconds=1),
-        duration_seconds=None,
+        duration_seconds=2,  # rich window candidate
     )
     mocker.patch("config.plugins.trigger_hook")
 
@@ -342,24 +344,24 @@ def test_bulk_window_tie_break_closest_time(
     closer.refresh_from_db()
     farther.refresh_from_db()
     assert closer.duration_seconds == 55
-    assert farther.duration_seconds is None
+    assert farther.duration_seconds == 1  # unchanged
 
 
 def test_bulk_window_tie_break_lowest_id(factories, logged_in_api_client, mocker):
-    """Equal Δ and both thin → enrich the lowest id."""
+    """Equal Δ among rich rows → enrich the lowest id."""
     track = factories["music.Track"]()
     when = timezone.now() - datetime.timedelta(days=5)
     first = factories["history.Listening"](
         user=logged_in_api_client.user,
         track=track,
         creation_date=when,
-        duration_seconds=None,
+        duration_seconds=1,
     )
     second = factories["history.Listening"](
         user=logged_in_api_client.user,
         track=track,
         creation_date=when,
-        duration_seconds=None,
+        duration_seconds=1,
     )
     assert first.pk < second.pk
     mocker.patch("config.plugins.trigger_hook")
@@ -383,7 +385,7 @@ def test_bulk_window_tie_break_lowest_id(factories, logged_in_api_client, mocker
     first.refresh_from_db()
     second.refresh_from_db()
     assert first.duration_seconds == 42
-    assert second.duration_seconds is None
+    assert second.duration_seconds == 1
 
 
 def test_bulk_outside_window_creates(factories, logged_in_api_client, mocker):
@@ -393,7 +395,7 @@ def test_bulk_outside_window_creates(factories, logged_in_api_client, mocker):
         user=logged_in_api_client.user,
         track=track,
         creation_date=when,
-        duration_seconds=None,
+        duration_seconds=5,  # existing rich row outside window
     )
     mocker.patch("config.plugins.trigger_hook")
 
@@ -574,11 +576,11 @@ def test_bulk_default_mode_is_enrich_or_create(
         user=logged_in_api_client.user,
         track=track,
         creation_date=when,
-        duration_seconds=None,
+        duration_seconds=5,  # existing rich row
     )
     mocker.patch("config.plugins.trigger_hook")
 
-    # Omit mode — should enrich
+    # Omit mode — should enrich the rich row
     response = logged_in_api_client.post(
         _bulk_url(),
         {

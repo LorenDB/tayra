@@ -23,6 +23,8 @@ class ListeningFilter(moderation_filters.HiddenContentFilterSet):
     year = django_filters.NumberFilter(method="filter_year")
     # Wire format: device UUID string → FK uuid column
     source_device = django_filters.UUIDFilter(field_name="source_device__uuid")
+    # Default True: stock thin scrobbles are excluded unless rich_only=false.
+    rich_only = django_filters.BooleanFilter(method="filter_rich_only")
 
     class Meta:
         model = models.Listening
@@ -30,6 +32,12 @@ class ListeningFilter(moderation_filters.HiddenContentFilterSet):
             "LISTENING"
         ]
         fields = []
+
+    def filter_rich_only(self, queryset, name, value):
+        """When true (default for list), exclude stock thin listenings."""
+        if value is False:
+            return queryset
+        return queryset.rich()
 
     def filter_year(self, queryset, name, value):
         """Expand year=YYYY to [Jan 1, next Jan 1) in the active timezone.
