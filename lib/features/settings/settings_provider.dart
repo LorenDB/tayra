@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tayra/core/api/client_data_service.dart';
+import 'package:tayra/core/api/client_preferences.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 
 // ── Browse mode enum ────────────────────────────────────────────────────
@@ -224,6 +228,19 @@ class SettingsNotifier extends Notifier<SettingsState> {
     );
   }
 
+  /// Re-read SharedPreferences into state (after remote prefs pull).
+  Future<void> reloadFromPrefs() => _load();
+
+  void _schedulePreferenceSync(String key, dynamic value) {
+    if (!isAllowlistedPreferenceKey(key)) return;
+    unawaited(
+      ref
+          .read(clientDataServiceProvider)
+          .pushAllowlistedPreference(key, value)
+          .catchError((_) {}),
+    );
+  }
+
   Future<void> _load() async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -351,13 +368,16 @@ class SettingsNotifier extends Notifier<SettingsState> {
   Future<void> setMobilePinnedTabIndices(Set<int> indices) async {
     state = state.copyWith(mobilePinnedTabIndices: indices);
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_keyMobilePinnedTabIndices, indices.join(','));
+    final stored = indices.join(',');
+    await prefs.setString(_keyMobilePinnedTabIndices, stored);
+    _schedulePreferenceSync(_keyMobilePinnedTabIndices, stored);
   }
 
   Future<void> setBrowseMode(BrowseMode mode) async {
     state = state.copyWith(browseMode: mode);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keyBrowseMode, mode.name);
+    _schedulePreferenceSync(_keyBrowseMode, mode.name);
   }
 
   Future<void> setCacheSizeLimit(int sizeMB) async {
@@ -367,42 +387,49 @@ class SettingsNotifier extends Notifier<SettingsState> {
 
     // Update cache manager configuration
     await CacheManager.instance.updateConfig(sizeMB);
+    _schedulePreferenceSync(_keyCacheSizeLimit, sizeMB);
   }
 
   Future<void> setUseDynamicAlbumAccent(bool use) async {
     state = state.copyWith(useDynamicAlbumAccent: use);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_keyUseDynamicAlbumAccent, use);
+    _schedulePreferenceSync(_keyUseDynamicAlbumAccent, use);
   }
 
   Future<void> setGaplessPlayback(bool enabled) async {
     state = state.copyWith(gaplessPlayback: enabled);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_keyGaplessPlayback, enabled);
+    _schedulePreferenceSync(_keyGaplessPlayback, enabled);
   }
 
   Future<void> setAiEnabled(bool enabled) async {
     state = state.copyWith(aiEnabled: enabled);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_keyAiEnabled, enabled);
+    _schedulePreferenceSync(_keyAiEnabled, enabled);
   }
 
   Future<void> setAiDownloadPromptShown(bool shown) async {
     state = state.copyWith(aiDownloadPromptShown: shown);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_keyAiDownloadPromptShown, shown);
+    _schedulePreferenceSync(_keyAiDownloadPromptShown, shown);
   }
 
   Future<void> setShowYearEndPrompts(bool show) async {
     state = state.copyWith(showYearEndPrompts: show);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_keyShowYearEndPrompts, show);
+    _schedulePreferenceSync(_keyShowYearEndPrompts, show);
   }
 
   Future<void> setAnalyticsEnabled(bool enabled) async {
     state = state.copyWith(analyticsEnabled: enabled);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_keyAnalyticsEnabled, enabled);
+    _schedulePreferenceSync(_keyAnalyticsEnabled, enabled);
   }
 
   Future<void> setForceOfflineMode(bool enabled) async {
@@ -437,12 +464,15 @@ class SettingsNotifier extends Notifier<SettingsState> {
     state = state.copyWith(aiProviderType: type);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keyAiProviderType, type.name);
+    // Provider type is allowlisted; API keys are never pushed.
+    _schedulePreferenceSync(_keyAiProviderType, type.name);
   }
 
   Future<void> setGroqApiKey(String key) async {
     state = state.copyWith(groqApiKey: key);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keyGroqApiKey, key);
+    // Intentionally not synced (sensitive).
   }
 
   Future<void> setGroqModel(String model) async {
@@ -455,6 +485,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
     state = state.copyWith(openRouterApiKey: key);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keyOpenRouterApiKey, key);
+    // Intentionally not synced (sensitive).
   }
 
   Future<void> setOpenRouterModel(String model) async {
@@ -473,6 +504,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
     state = state.copyWith(customEndpointApiKey: key);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keyCustomEndpointApiKey, key);
+    // Intentionally not synced (sensitive).
   }
 
   Future<void> setCustomModelName(String model) async {
@@ -485,24 +517,28 @@ class SettingsNotifier extends Notifier<SettingsState> {
     state = state.copyWith(multiDiscDisplayMode: mode);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keyMultiDiscDisplayMode, mode.name);
+    _schedulePreferenceSync(_keyMultiDiscDisplayMode, mode.name);
   }
 
   Future<void> setAutoDownloadFavorites(bool enabled) async {
     state = state.copyWith(autoDownloadFavorites: enabled);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_keyAutoDownloadFavorites, enabled);
+    _schedulePreferenceSync(_keyAutoDownloadFavorites, enabled);
   }
 
   Future<void> setDownloadWifiOnly(bool enabled) async {
     state = state.copyWith(downloadWifiOnly: enabled);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_keyDownloadWifiOnly, enabled);
+    _schedulePreferenceSync(_keyDownloadWifiOnly, enabled);
   }
 
   Future<void> setAutoDownloadPodcastEpisodes(bool enabled) async {
     state = state.copyWith(autoDownloadPodcastEpisodes: enabled);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_keyAutoDownloadPodcastEpisodes, enabled);
+    _schedulePreferenceSync(_keyAutoDownloadPodcastEpisodes, enabled);
   }
 
   Future<void> setAutoDownloadPodcastEpisodeCount(int count) async {
@@ -510,6 +546,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
     state = state.copyWith(autoDownloadPodcastEpisodeCount: safe);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_keyAutoDownloadPodcastEpisodeCount, safe);
+    _schedulePreferenceSync(_keyAutoDownloadPodcastEpisodeCount, safe);
   }
 
   static Future<void> clearSettings() async {

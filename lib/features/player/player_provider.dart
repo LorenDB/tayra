@@ -851,6 +851,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// Throttle podcast progress writes (aligned with 2s queue progress).
   int _lastPodcastProgressSeconds = -1;
 
+  /// Channel UUID for the current podcast queue (set by [playTracks]).
+  String? _podcastChannelUuid;
+
   late final PodcastProgressService _podcastProgress;
 
   /// Timestamp recorded when the app enters the background (paused lifecycle
@@ -1109,18 +1112,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
             secs % 2 == 0) {
           _lastPodcastProgressSeconds = secs;
           unawaited(
-            _podcastProgress
-                .upsertPosition(
-                  trackId: track.id,
-                  positionMs: position.inMilliseconds,
-                  durationMs:
-                      state.duration.inMilliseconds > 0
-                          ? state.duration.inMilliseconds
-                          : (track.duration != null
-                              ? track.duration! * 1000
-                              : null),
-                )
-                .catchError((_) {}),
+            _persistPodcastProgress(
+              track,
+              position: position,
+              forceServer: false,
+            ),
           );
         }
         // Do not await — keep the position stream non-blocking for scroll/UI.
@@ -2034,6 +2030,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     String? source,
     Duration? initialPosition,
     bool shuffle = false,
+    String? podcastChannelUuid,
   }) async {
     // Invalidate any in-flight load from a previous play/skip request.
     final epoch = _beginLoad();
@@ -2047,8 +2044,16 @@ class PlayerNotifier extends Notifier<PlayerState> {
     }
     if (!_isCurrentLoad(epoch)) return;
 
+    // Bind channel UUID for podcast progress dual-write / channel filters.
+    if (source == 'podcast') {
+      _podcastChannelUuid = podcastChannelUuid;
+    } else if (source != 'stash_restore') {
+      _podcastChannelUuid = null;
+    }
+
     if (tracks.isEmpty) {
       _gaplessActive = false;
+      _podcastChannelUuid = null;
       state = const PlayerState();
       await _handler.audioPlayer.stop();
       await QueuePersistenceService.clearQueue();
@@ -2822,14 +2827,16 @@ class PlayerNotifier extends Notifier<PlayerState> {
   void _handleTrackCompleted() {
     final completedTrack = state.currentTrack;
     if (completedTrack != null && completedTrack.isPodcast) {
+      final durationMs =
+          completedTrack.duration != null
+              ? completedTrack.duration! * 1000
+              : state.duration.inMilliseconds;
       unawaited(
-        _podcastProgress
-            .markPlayed(
+        _clientData
+            .markEpisodePlayed(
               trackId: completedTrack.id,
-              durationMs:
-                  completedTrack.duration != null
-                      ? completedTrack.duration! * 1000
-                      : state.duration.inMilliseconds,
+              channelUuid: _podcastChannelUuid,
+              durationMs: durationMs > 0 ? durationMs : null,
             )
             .catchError((_) {}),
       );
@@ -3086,9 +3093,20 @@ class PlayerNotifier extends Notifier<PlayerState> {
     await _handler.play();
   }
 
-  Future<void> pause() {
+  Future<void> pause() async {
     _userPaused = true;
-    return _handler.pause();
+    await _handler.pause();
+    // Force podcast progress upload on pause (mirror listening duration force).
+    final track = state.currentTrack;
+    if (track != null && track.isPodcast) {
+      unawaited(
+        _persistPodcastProgress(
+          track,
+          position: _handler.audioPlayer.position,
+          forceServer: true,
+        ),
+      );
+    }
   }
 
   /// Called when the app enters the background (paused/inactive lifecycle).
@@ -3354,6 +3372,13 @@ class PlayerNotifier extends Notifier<PlayerState> {
   Future<void> seekTo(Duration position) async {
     await _handler.seek(position);
     _saveQueue(); // Save position
+    // Force podcast progress after seek so multi-device resume sees the jump.
+    final track = state.currentTrack;
+    if (track != null && track.isPodcast) {
+      unawaited(
+        _persistPodcastProgress(track, position: position, forceServer: true),
+      );
+    }
     Analytics.track('seek', {'position_seconds': position.inSeconds});
   }
 
@@ -3365,6 +3390,37 @@ class PlayerNotifier extends Notifier<PlayerState> {
     if (target.isNegative) target = Duration.zero;
     if (total > Duration.zero && target > total) target = total;
     await seekTo(target);
+  }
+
+  /// Local upsert + optional throttled/forced server dual-write for podcasts.
+  Future<void> _persistPodcastProgress(
+    Track track, {
+    required Duration position,
+    required bool forceServer,
+  }) async {
+    final positionMs = position.inMilliseconds;
+    if (positionMs < 0) return;
+    final durationMs =
+        state.duration.inMilliseconds > 0
+            ? state.duration.inMilliseconds
+            : (track.duration != null ? track.duration! * 1000 : null);
+    try {
+      await _podcastProgress.upsertPosition(
+        trackId: track.id,
+        channelUuid: _podcastChannelUuid,
+        positionMs: positionMs,
+        durationMs: durationMs,
+      );
+    } catch (_) {}
+    try {
+      await _clientData.pushPlaybackProgress(
+        trackId: track.id,
+        positionMs: positionMs,
+        durationMs: durationMs,
+        channelUuid: _podcastChannelUuid,
+        force: forceServer,
+      );
+    } catch (_) {}
   }
 
   void toggleShuffle() {

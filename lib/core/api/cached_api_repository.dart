@@ -788,6 +788,7 @@ class CachedFunkwhaleApi {
     clientVersion: clientVersion,
   );
 
+<<<<<<< HEAD
   Future<BulkListeningResult> bulkCreateListenings({
     required List<BulkListeningItem> items,
     String mode = 'enrich_or_create',
@@ -796,6 +797,63 @@ class CachedFunkwhaleApi {
     items: items,
     mode: mode,
     dedupWindowSeconds: dedupWindowSeconds,
+=======
+  Future<PaginatedResponse<Map<String, dynamic>>> getPlaybackProgress({
+    int page = 1,
+    int pageSize = 100,
+    String? channelUuid,
+    bool? completed,
+  }) => _api.getPlaybackProgress(
+    page: page,
+    pageSize: pageSize,
+    channelUuid: channelUuid,
+    completed: completed,
+  );
+
+  Future<Map<String, dynamic>?> getPlaybackProgressForTrack(int trackId) =>
+      _api.getPlaybackProgressForTrack(trackId);
+
+  Future<Map<String, dynamic>> putPlaybackProgress({
+    required int trackId,
+    required int positionMs,
+    int? durationMs,
+    bool? completed,
+    String? channelUuid,
+    String? sourceDevice,
+    DateTime? updatedAt,
+  }) => _api.putPlaybackProgress(
+    trackId: trackId,
+    positionMs: positionMs,
+    durationMs: durationMs,
+    completed: completed,
+    channelUuid: channelUuid,
+    sourceDevice: sourceDevice,
+    updatedAt: updatedAt,
+  );
+
+  Future<Map<String, dynamic>> bulkUpsertPlaybackProgress(
+    List<Map<String, dynamic>> items,
+  ) => _api.bulkUpsertPlaybackProgress(items);
+
+  Future<void> deletePlaybackProgress(int trackId) =>
+      _api.deletePlaybackProgress(trackId);
+
+  Future<List<Map<String, dynamic>>> getClientPreferences({
+    required String clientId,
+    String? deviceUuid,
+  }) => _api.getClientPreferences(clientId: clientId, deviceUuid: deviceUuid);
+
+  Future<Map<String, dynamic>> putClientPreferences({
+    required String clientId,
+    required Map<String, dynamic> preferences,
+    String? deviceUuid,
+    String mode = 'merge',
+  }) => _api.putClientPreferences(
+    clientId: clientId,
+    preferences: preferences,
+    deviceUuid: deviceUuid,
+    mode: mode,
+>>>>>>> abb432f642b90efaa37a1ceec4d5c040622615de
   );
 
   String getStreamUrl(String listenUrl, {bool appendListenToken = true}) =>
