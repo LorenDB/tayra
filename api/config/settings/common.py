@@ -279,8 +279,22 @@ LOCAL_APPS = (
     "funkwhale_api.playlists",
     "funkwhale_api.subsonic",
     "funkwhale_api.tags",
-    "funkwhale_api.typesense",
 )
+
+# Typesense is optional: the pip extra may be omitted, and a bad .dockerignore
+# once excluded api/funkwhale_api/typesense from the image entirely.
+TYPESENSE_APP_AVAILABLE = False
+try:
+    import funkwhale_api.typesense  # noqa: F401
+
+    LOCAL_APPS = LOCAL_APPS + ("funkwhale_api.typesense",)
+    TYPESENSE_APP_AVAILABLE = True
+except ImportError:
+    logger.warning(
+        "funkwhale_api.typesense not importable — Typesense app disabled. "
+        "If you need it, ensure api/funkwhale_api/typesense is in the image "
+        "and rebuild with: docker compose build --no-cache api"
+    )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 
@@ -316,6 +330,8 @@ MIDDLEWARE = (
         "django.contrib.messages.middleware.MessageMiddleware",
         "funkwhale_api.users.middleware.RecordActivityMiddleware",
         "funkwhale_api.common.middleware.ThrottleStatusMiddleware",
+        # Log response body for 400s (helps diagnose token_login / CSRF / Host issues)
+        "funkwhale_api.common.middleware.VerboseBadRequestsMiddleware",
     )
     + tuple(plugins.trigger_filter(plugins.MIDDLEWARES_AFTER, [], enabled=True))
 )
@@ -942,12 +958,15 @@ CELERY_BEAT_SCHEDULE = {
         ),
         "options": {"expires": 60 * 60},
     },
-    "typesense.build_canonical_index": {
+}
+
+# Only schedule Typesense index rebuilds when the app is installed.
+if TYPESENSE_APP_AVAILABLE:
+    CELERY_BEAT_SCHEDULE["typesense.build_canonical_index"] = {
         "task": "typesense.build_canonical_index",
         "schedule": crontab(day_of_week="*/2", minute="0", hour="3"),
         "options": {"expires": 60 * 60 * 24},
-    },
-}
+    }
 
 if env.bool("ADD_ALBUM_TAGS_FROM_TRACKS", default=True):
     CELERY_BEAT_SCHEDULE["music.albums_set_tags_from_tracks"] = {

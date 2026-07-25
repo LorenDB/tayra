@@ -43,7 +43,11 @@ api/tests
 !.env.example
 data
 **/data
-typesense
+# Host Typesense *data* directories only — do NOT use a bare "typesense" rule:
+# that also excludes api/funkwhale_api/typesense (Django app) from any build
+# whose context is the repo root.
+/typesense
+/data/typesense
 
 ### Tayra / Flutter build artefacts (rebuilt in image)
 tayra/build

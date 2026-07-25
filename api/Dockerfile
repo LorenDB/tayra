@@ -119,6 +119,10 @@ ENV PATH="/venv/bin:$PATH"
 COPY . /app
 WORKDIR /app
 
+# Fail the build if a .dockerignore (or incomplete checkout) dropped the
+# Typesense Django app — INSTALLED_APPS expects it unless we soft-disable.
+RUN test -f funkwhale_api/typesense/__init__.py
+
 RUN --mount=type=cache,target=~/.cache/pip; \
   set -eux; \
   pip3 install --no-deps --editable .

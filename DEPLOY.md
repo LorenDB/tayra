@@ -148,6 +148,28 @@ git submodule update --init --recursive
 docker compose up -d --build
 ```
 
+## Typesense / `ModuleNotFoundError: funkwhale_api.typesense`
+
+Typesense is **optional**. You do not need the `typesense` compose profile for a normal
+pod. The Django app lives at `api/funkwhale_api/typesense/`.
+
+If API/celery crash with `No module named 'funkwhale_api.typesense'`:
+
+1. Confirm the source tree has the package:
+   ```bash
+   ls api/funkwhale_api/typesense/__init__.py
+   ```
+2. Rebuild the API image without cache (stale layers / old dockerignore):
+   ```bash
+   docker compose build --no-cache api
+   docker compose up -d api celeryworker celerybeat
+   ```
+3. You do **not** need to start the Typesense container unless you set
+   `TYPESENSE_API_KEY` in `.env`.
+
+A previous repo `.dockerignore` rule of bare `typesense` could exclude the Python
+package from some builds; that rule is now limited to host data dirs only.
+
 After a Tayra release, bump the submodule:
 
 ```bash
@@ -206,18 +228,47 @@ curl -sS -X POST "https://YOUR_HOST/api/v1/users/token/" \
 - HTML / `Invalid HTTP_HOST header` → `FUNKWHALE_HOSTNAME` / `DJANGO_ALLOWED_HOSTS` mismatch  
 - Connection errors → `FUNKWHALE_URL` baked into the SPA doesn’t match how you open the site
 
-Also check API logs while reproducing:
+Also check API logs while reproducing (look for `token_login`, not only
+`Bad Request`):
 
 ```bash
-docker compose logs -f api | grep token_login
+docker compose logs -f api 2>&1 | grep -E 'token_login|Bad request|Bad Request'
 ```
 
+A failed login with body size **151** is almost always:
+
+```json
+{"error":"invalid_credentials","detail":"Unable to log in with provided credentials",...}
+```
+
+That means the API **did** parse username/password; the password check failed
+against the database the API is using. The next log line includes
+`user_found=…`, `has_usable_password=…`, `user_count=…`, and `meta=…`.
+
+**Verify the API is using your existing DB and password hashes:**
+
+```bash
+# How many users does this API see?
+docker compose exec api python manage.py shell -c \
+  "from django.contrib.auth import get_user_model; U=get_user_model(); print('users', U.objects.count()); print(list(U.objects.values_list('username', flat=True)[:20]))"
+
+# Does this password match for a known account? (does not print the password)
+docker compose exec api python manage.py shell -c \
+  "from django.contrib.auth import get_user_model; u=get_user_model().objects.filter(username__iexact='YOUR_USER').first(); print('found', u); print('usable', u.has_usable_password() if u else None); print('check', u.check_password('YOUR_PASS') if u else None)"
+```
+
+- `users 0` or missing username → **`DATABASE_URL` / Postgres volume is not your old pod DB** (common after a “from scratch” recreate). Point compose at the old database or restore a dump; do not expect old passwords in an empty DB.
+- `found <user>`, `check False`, `usable True` → wrong password for that row (or hash from another instance). Reset:  
+  `docker compose exec api python manage.py fw users update YOUR_USER --password 'new-pass'`
+- `usable False` → no local password (LDAP/social only). Set `LDAP_*` like the old pod, or set a local password with the command above.
+
 **“Passwords in plaintext” in the browser Network tab**  
-Expected. This endpoint is a first-party password → OAuth token exchange: the SPA
-POSTs JSON `{"username","password"}` over **HTTPS**. DevTools always shows the
-decrypted request body after TLS. There is no client-side password hash for this
-API (Subsonic’s md5 scheme is a different endpoint). Ensure users open the site
-via **HTTPS** (not bare `http://`) so the password is not sent on the wire in cleartext.
+Expected and **not** the cause of the 400. This endpoint is a first-party
+password → OAuth token exchange: the SPA POSTs JSON `{"username","password"}`
+over **HTTPS**. DevTools always shows the decrypted request body after TLS.
+There is no client-side password hash for this API (Subsonic’s md5 scheme is a
+different endpoint). Ensure users open the site via **HTTPS** (not bare
+`http://`) so the password is not sent on the wire in cleartext.
 **Browser CSP / CanvasKit blocked (gstatic.com)**  
 The front image must build with `--no-web-resources-cdn` (already in
 `front/Dockerfile`) so CanvasKit is same-origin. Rebuild front:

@@ -174,31 +174,75 @@ def login(request):
     return response
 
 
+def _first_value(value):
+    """Unwrap single-element lists from form multi-values."""
+    if isinstance(value, (list, tuple)):
+        return value[0] if value else ""
+    return value
+
+
 def _extract_credentials(request):
-    """Pull username/password from JSON, form, or nested body."""
-    raw = getattr(request, "data", None)
-    if raw is None:
-        raw = request.POST
-    # Some clients (or proxies) double-encode JSON so DRF leaves a string body.
-    if isinstance(raw, (bytes, str)):
+    """Pull username/password from raw body JSON, DRF parsers, or form data.
+
+    Prefer ``request.body`` so we are not dependent on content-type quirks from
+    browser clients (Flutter web / Dio sometimes send unexpected headers).
+    """
+    raw = {}
+    body_source = "none"
+    content_type = ""
+    try:
+        content_type = (getattr(request, "content_type", None) or "")[:120]
+    except Exception:
+        content_type = ""
+
+    # 1) Raw body (most reliable for JSON SPAs)
+    try:
+        body = request.body or b""
+    except Exception:
+        body = b""
+    if body:
         try:
-            if isinstance(raw, bytes):
-                raw = raw.decode("utf-8")
-            raw = json.loads(raw) if raw else {}
-        except (TypeError, ValueError, UnicodeError):
-            raw = {}
-    if hasattr(raw, "dict"):
-        raw = raw.dict()
+            text = body.decode("utf-8-sig").strip()
+            if text.startswith("{"):
+                parsed = json.loads(text)
+                if isinstance(parsed, dict):
+                    raw = parsed
+                    body_source = "body-json"
+        except (UnicodeError, ValueError, TypeError):
+            pass
+
+    # 2) DRF request.data (JSON / form / multipart parsers)
+    if not raw:
+        data = getattr(request, "data", None)
+        if data is not None:
+            if isinstance(data, (bytes, str)):
+                try:
+                    if isinstance(data, bytes):
+                        data = data.decode("utf-8-sig")
+                    data = json.loads(data) if data else {}
+                except (TypeError, ValueError, UnicodeError):
+                    data = {}
+            if hasattr(data, "dict"):
+                data = data.dict()
+            if isinstance(data, dict) and data:
+                raw = data
+                body_source = "request.data"
+
+    # 3) Django POST (application/x-www-form-urlencoded)
+    if not raw:
+        post = getattr(request, "POST", None)
+        if post:
+            raw = post.dict() if hasattr(post, "dict") else dict(post)
+            if raw:
+                body_source = "request.POST"
+
     if not isinstance(raw, dict):
         raw = {}
-    # QueryDict / form multi-values may arrive as lists.
-    def _first(value):
-        if isinstance(value, (list, tuple)):
-            return value[0] if value else ""
-        return value
 
-    username = _first(raw.get("username") or raw.get("email") or raw.get("login") or "")
-    password = _first(raw.get("password") or "")
+    username = _first_value(
+        raw.get("username") or raw.get("email") or raw.get("login") or ""
+    )
+    password = _first_value(raw.get("password") or "")
     if isinstance(username, str):
         username = username.strip()
     else:
@@ -206,16 +250,48 @@ def _extract_credentials(request):
     # Never strip passwords — trailing spaces can be intentional.
     if not isinstance(password, str):
         password = str(password) if password is not None else ""
-    return username, password, raw
+
+    meta = {
+        "body_source": body_source,
+        "content_type": content_type,
+        "body_len": len(body) if isinstance(body, (bytes, bytearray)) else 0,
+        "keys": list(raw.keys()),
+        "username_len": len(username),
+        "password_len": len(password),
+    }
+    return username, password, raw, meta
 
 
 def _find_user(username: str):
+    """Resolve local user by username, User.email, or allauth EmailAddress."""
     User = get_user_model()
     qs = User.objects.all().for_auth()
-    return (
+    user = (
         qs.filter(username__iexact=username).first()
         or qs.filter(email__iexact=username).first()
     )
+    if user is not None:
+        return user
+    # User.email can lag behind allauth's EmailAddress table.
+    try:
+        from allauth.account.models import EmailAddress
+
+        ea = (
+            EmailAddress.objects.filter(email__iexact=username)
+            .select_related("user")
+            .first()
+        )
+        if ea is not None:
+            return qs.filter(pk=ea.user_id).first()
+    except Exception:
+        logger.exception("token_login EmailAddress lookup failed")
+    return None
+
+
+def _log_token_login(msg, *args):
+    """Log to both app and django.request so it shows next to Bad Request lines."""
+    logger.warning(msg, *args)
+    logging.getLogger("django.request").warning(msg, *args)
 
 
 @extend_schema(
@@ -232,12 +308,12 @@ def _find_user(username: str):
 def token_login(request):
     """POST username + password → OAuth tokens (no browser OAuth dance)."""
     throttling.check_request(request, "login")
-    username, password, raw = _extract_credentials(request)
+    username, password, raw, meta = _extract_credentials(request)
 
     if not username or not password:
-        logger.warning(
-            "token_login missing credentials keys=%s username_empty=%s password_empty=%s",
-            list(raw.keys()) if isinstance(raw, dict) else type(raw),
+        _log_token_login(
+            "token_login missing credentials meta=%s username_empty=%s password_empty=%s",
+            meta,
             not bool(username),
             not bool(password),
         )
@@ -252,8 +328,14 @@ def token_login(request):
 
     user = _find_user(username)
     password_ok = False
+    usable = None
+    hasher = None
     if user is not None:
-        password_ok = user.check_password(password)
+        usable = user.has_usable_password()
+        password_ok = user.check_password(password) if usable else False
+        # e.g. "pbkdf2_sha256" — helps spot missing hasher / corrupt hash
+        if user.password and "$" in user.password:
+            hasher = user.password.split("$", 1)[0]
 
     if user is None or not password_ok:
         # Second chance: full Django auth stack (LDAP, allauth, etc.)
@@ -262,8 +344,15 @@ def token_login(request):
             authed = auth.authenticate(
                 request=django_request, username=username, password=password
             )
+            # allauth username_email also accepts email= in some versions
+            if authed is None and "@" in username:
+                authed = auth.authenticate(
+                    request=django_request, email=username, password=password
+                )
         except authentication.UnverifiedEmail:
-            logger.warning("token_login unverified email for login=%r", username)
+            _log_token_login(
+                "token_login unverified email for login=%r meta=%s", username, meta
+            )
             return Response(
                 {
                     "error": "email_unverified",
@@ -276,11 +365,21 @@ def token_login(request):
                 status=400,
             )
         if authed is None:
-            logger.warning(
-                "token_login failed login=%r user_found=%s has_usable_password=%s",
+            user_count = get_user_model().objects.count()
+            _log_token_login(
+                "token_login invalid_credentials login=%r user_found=%s "
+                "user_id=%s is_active=%s has_usable_password=%s hasher=%s "
+                "user_count=%s meta=%s "
+                "(if user_found=False check DATABASE_URL points at your existing DB; "
+                "if has_usable_password=False check LDAP_ENABLED / set a local password)",
                 username,
                 user is not None,
-                getattr(user, "has_usable_password", lambda: None)(),
+                getattr(user, "pk", None),
+                getattr(user, "is_active", None),
+                usable,
+                hasher,
+                user_count,
+                meta,
             )
             return Response(
                 {
@@ -293,7 +392,7 @@ def token_login(request):
         user = authed
 
     if not user.is_active:
-        logger.warning("token_login inactive user_id=%s", user.pk)
+        _log_token_login("token_login inactive user_id=%s", user.pk)
         return Response(
             {
                 "error": "account_disabled",
@@ -304,7 +403,7 @@ def token_login(request):
         )
 
     if user.should_verify_email():
-        logger.warning("token_login email not verified user_id=%s", user.pk)
+        _log_token_login("token_login email not verified user_id=%s", user.pk)
         return Response(
             {
                 "error": "email_unverified",
@@ -328,7 +427,12 @@ def token_login(request):
             status=500,
         )
 
-    logger.info("token_login success user_id=%s username=%s", user.pk, user.username)
+    logger.info(
+        "token_login success user_id=%s username=%s meta=%s",
+        user.pk,
+        user.username,
+        meta,
+    )
     return Response(payload, status=200)
 
 

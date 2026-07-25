@@ -1,3 +1,5 @@
+import json
+
 import pytest
 from django.urls import reverse
 
@@ -57,6 +59,23 @@ def test_token_login_rejects_bad_password(api_client, factories):
         format="json",
     )
     assert response.status_code == 400
+    assert response.json()["error"] == "invalid_credentials"
+
+
+@pytest.mark.django_db
+def test_token_login_accepts_raw_json_body(api_client, factories):
+    """SPA clients may hit the view with a raw JSON body (not multipart)."""
+    user = factories["users.User"](username="rawjson")
+    user.set_password("s3cret-pass")
+    user.save()
+
+    response = api_client.post(
+        reverse("api:v1:users:token_login"),
+        data=json.dumps({"username": "rawjson", "password": "s3cret-pass"}),
+        content_type="application/json",
+    )
+    assert response.status_code == 200, response.content
+    assert response.json()["access_token"]
 
 
 @pytest.mark.django_db
