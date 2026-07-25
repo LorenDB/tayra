@@ -12,6 +12,7 @@ from funkwhale_api.federation import serializers as federation_serializers
 from funkwhale_api.music.serializers import TrackActivitySerializer, TrackSerializer
 from funkwhale_api.users.serializers import UserActivitySerializer, UserBasicSerializer
 
+from . import bulk as bulk_module
 from . import models
 
 _CREATION_DATE_WINDOW = datetime.timedelta(minutes=5)
@@ -236,6 +237,22 @@ class ListeningWriteSerializer(serializers.ModelSerializer):
         return data
 
 
+class ListeningCreateResponseSerializer(serializers.Serializer):
+    """
+    OpenAPI response for POST /history/listenings/ (create + idempotent re-POST).
+
+    Wire format is flat PKs (not nested track/user/actor from ListeningSerializer).
+    """
+
+    id = serializers.IntegerField()
+    user = serializers.IntegerField()
+    track = serializers.IntegerField()
+    creation_date = serializers.DateTimeField()
+    duration_seconds = serializers.IntegerField(allow_null=True)
+    source_device = serializers.UUIDField(allow_null=True)
+    client_session_id = serializers.UUIDField(allow_null=True)
+
+
 class ListeningUpdateSerializer(serializers.ModelSerializer):
     """
     PATCH body for duration / device updates.
@@ -304,3 +321,180 @@ class ListeningUpdateSerializer(serializers.ModelSerializer):
             # Prefer already-selected relation when available.
             data["source_device"] = str(instance.source_device.uuid)
         return data
+
+
+class ListeningUpdateResponseSerializer(serializers.Serializer):
+    """
+    OpenAPI response for PATCH listening (by id or by-session).
+
+    ``source_device`` is present as a readable UUID|null on the wire even though
+    the request body marks it write_only for spectacular input schemas.
+    """
+
+    id = serializers.IntegerField()
+    duration_seconds = serializers.IntegerField(allow_null=True)
+    source_device = serializers.UUIDField(allow_null=True)
+    client_session_id = serializers.UUIDField(allow_null=True)
+    updated_at = serializers.DateTimeField()
+
+class ListeningBulkItemSerializer(serializers.Serializer):
+    track = serializers.IntegerField()
+    # Required: historical import timestamps; omitting collapses same-track rows.
+    creation_date = serializers.DateTimeField(required=True, allow_null=False)
+    duration_seconds = serializers.IntegerField(
+        required=False, allow_null=True, min_value=0, max_value=86400
+    )
+    source_device = serializers.UUIDField(required=False, allow_null=True)
+    client_session_id = serializers.UUIDField(required=False, allow_null=True)
+
+
+class ListeningBulkSerializer(serializers.Serializer):
+    """Request body for POST /history/listenings/bulk/."""
+
+    mode = serializers.ChoiceField(
+        choices=("enrich_or_create", "create_only"),
+        default="enrich_or_create",
+        required=False,
+    )
+    items = ListeningBulkItemSerializer(
+        many=True,
+        error_messages={
+            "required": "items is required",
+            "null": "items is required",
+            "not_a_list": "items must be a list",
+        },
+    )
+    dedup_window_seconds = serializers.IntegerField(
+        required=False,
+        default=bulk_module.DEFAULT_DEDUP_WINDOW_SECONDS,
+        min_value=0,
+        max_value=3600,
+    )
+    # Not exposed for use; true is rejected so historical import cannot fan out.
+    trigger_side_effects = serializers.BooleanField(required=False, default=False)
+
+    def validate_items(self, value):
+        if not value:
+            raise serializers.ValidationError(
+                [{"code": "empty_items", "detail": "items must not be empty"}]
+            )
+        if len(value) > bulk_module.BULK_MAX_ITEMS:
+            raise serializers.ValidationError(
+                [
+                    {
+                        "code": "batch_too_large",
+                        "detail": (
+                            f"Maximum {bulk_module.BULK_MAX_ITEMS} items per request"
+                        ),
+                    }
+                ]
+            )
+        return value
+
+    def validate_trigger_side_effects(self, value):
+        if value:
+            raise serializers.ValidationError(
+                [
+                    {
+                        "code": "side_effects_not_allowed",
+                        "detail": "Bulk import cannot trigger plugins or activity",
+                    }
+                ]
+            )
+        return value
+
+    def validate(self, attrs):
+        # Missing items: structured code (field-required path bypasses validate_items).
+        if "items" not in attrs and "items" not in self.initial_data:
+            raise serializers.ValidationError(
+                {
+                    "items": [
+                        {
+                            "code": "empty_items",
+                            "detail": "items must not be empty",
+                        }
+                    ]
+                }
+            )
+        return attrs
+
+    def to_internal_value(self, data):
+        # Normalize missing/null items into the same coded empty_items shape.
+        if not isinstance(data, dict):
+            return super().to_internal_value(data)
+        if "items" not in data or data.get("items") is None:
+            raise serializers.ValidationError(
+                {
+                    "items": [
+                        {
+                            "code": "empty_items",
+                            "detail": "items must not be empty",
+                        }
+                    ]
+                }
+            )
+        return super().to_internal_value(data)
+
+
+class ListeningBulkResultSerializer(serializers.Serializer):
+    created = serializers.IntegerField()
+    enriched = serializers.IntegerField()
+    skipped_duplicate = serializers.IntegerField()
+    errors = serializers.ListField(child=serializers.DictField())
+
+
+class ListeningStatsTopTrackSerializer(serializers.Serializer):
+    track_id = serializers.IntegerField()
+    title = serializers.CharField(allow_null=True)
+    artist_name = serializers.CharField(allow_null=True)
+    cover_url = serializers.CharField(allow_null=True)
+    count = serializers.IntegerField()
+    total_seconds = serializers.IntegerField()
+
+
+class ListeningStatsTopArtistSerializer(serializers.Serializer):
+    artist_id = serializers.IntegerField()
+    name = serializers.CharField(allow_null=True)
+    cover_url = serializers.CharField(allow_null=True)
+    count = serializers.IntegerField()
+    total_seconds = serializers.IntegerField()
+
+
+class ListeningStatsTopAlbumSerializer(serializers.Serializer):
+    album_id = serializers.IntegerField()
+    title = serializers.CharField(allow_null=True)
+    artist_name = serializers.CharField(allow_null=True)
+    cover_url = serializers.CharField(allow_null=True)
+    count = serializers.IntegerField()
+    total_seconds = serializers.IntegerField()
+
+
+class ListeningStatsMonthSerializer(serializers.Serializer):
+    month = serializers.IntegerField()
+    count = serializers.IntegerField()
+    total_seconds = serializers.IntegerField()
+
+
+class ListeningStatsDeviceSerializer(serializers.Serializer):
+    device_uuid = serializers.UUIDField(allow_null=True)
+    device_name = serializers.CharField(allow_null=True)
+    count = serializers.IntegerField()
+    total_seconds = serializers.IntegerField()
+
+
+class ListeningStatsSerializer(serializers.Serializer):
+    """OpenAPI schema for GET /history/listenings/stats/."""
+
+    year = serializers.IntegerField()
+    total_listens = serializers.IntegerField()
+    total_seconds = serializers.IntegerField()
+    listens_with_duration = serializers.IntegerField()
+    estimated_seconds = serializers.IntegerField()
+    unique_tracks = serializers.IntegerField()
+    unique_artists = serializers.IntegerField()
+    unique_albums = serializers.IntegerField()
+    top_tracks = ListeningStatsTopTrackSerializer(many=True)
+    top_artists = ListeningStatsTopArtistSerializer(many=True)
+    top_albums = ListeningStatsTopAlbumSerializer(many=True)
+    monthly = ListeningStatsMonthSerializer(many=True)
+    by_device = ListeningStatsDeviceSerializer(many=True)

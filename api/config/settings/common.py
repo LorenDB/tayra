@@ -1200,6 +1200,10 @@ THROTTLING_RATES = {
         ),
         "description": "Listening duration updates",
     },
+    "authenticated-listenings-bulk": {
+        "rate": "60/hour",
+        "description": "Listening history bulk import",
+    },
 }
 THROTTLING_RATES = THROTTLING_RATES
 """
