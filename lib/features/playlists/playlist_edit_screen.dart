@@ -567,7 +567,7 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
           onRemove: () => _removeTrack(index),
         );
       },
-      onReorderItem: _reorderTrack,
+      onReorder: _reorderTrack,
     );
   }
 }

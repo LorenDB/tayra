@@ -55,6 +55,7 @@ relevant.
 
 | Feature | Where | Notes |
 |---|---|---|
+| Splash while loading WASM/JS | `web/index.html` + `web/flutter_bootstrap.js` | AMOLED splash (Icon-192 + `#0992F2` spinner); removed on `flutter-first-frame`; slow-load status after 20s; external JS only for CSP. |
 | OAuth authorize for *third-party* apps | `/authorize` | Flutter consent UI; `GET /api/v1/oauth/apps/{id}/` + `POST /api/v1/oauth/authorize`. First-party login stays password token / OOB. |
 
 ## Possible later additions (not committed)

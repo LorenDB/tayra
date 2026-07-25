@@ -1,6 +1,5 @@
 | Feature | Where in Funkwhale | Escape hatch | Notes |
 |---|---|---|---|
-| Splash screen while loading WASM assets | n/a | n/a | WASM assets can take a while to load at first visit. Show some sort of splash screen while first load occurs on web. |
 | Library admin (`/manage/library/*`) | Vue manage routes | Django admin + `funkwhale-manage` CLI | Edits, uploads browser, tags, libraries detail |
 | Channels admin | `/manage/library/channels` | CLI / admin | |
 | Instance settings | `/manage/settings` | Env vars, preferences API, Django admin | |
@@ -15,4 +14,5 @@
 
 | Feature | Where | Resolution |
 |---|---|---|
+| ✅ Splash screen while loading WASM assets | n/a (pre-Flutter HTML) | Branded AMOLED splash in `web/index.html` (logo + `#0992F2` spinner); CSP-safe `web/flutter_bootstrap.js` removes it on `flutter-first-frame`, shows “Still loading…” after 20s. Auth `/splash` route unchanged. |
 | ✅ OAuth authorize for *third-party* apps | `/authorize` | Flutter consent UI (`OAuthAuthorizeScreen`) at `/authorize`; loads app via `GET /api/v1/oauth/apps/{client_id}/`, allow via `POST /api/v1/oauth/authorize` (AJAX → JSON `{code, redirect_uri}`), OOB shows copyable code, deny returns `error=access_denied`. Unauthenticated users are sent to `/login?from=…` and returned after sign-in. First-party Tayra login remains password token / OOB and is separate. |

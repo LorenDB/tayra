@@ -19,6 +19,7 @@
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="Tayra — music player for Funkwhale">
+  <meta name="theme-color" content="#000000">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -31,8 +32,81 @@
 
   <title>Tayra</title>
   <link rel="manifest" href="manifest.json">
+
+  <!--
+    Pre-Flutter splash: AMOLED black + primary accent (#0992F2).
+    Shown while WASM/JS assets load; removed by flutter_bootstrap.js on
+    flutter-first-frame (external JS only — CSP script-src 'self').
+  -->
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: #000000;
+      overflow: hidden;
+    }
+
+    #tayra-splash {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #000000;
+      color: #ffffff;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      transition: opacity 0.2s ease-out;
+    }
+
+    #tayra-splash.tayra-splash-hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #tayra-splash img {
+      width: 96px;
+      height: 96px;
+      margin-bottom: 28px;
+      border-radius: 20px;
+    }
+
+    #tayra-splash .tayra-spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid rgba(9, 146, 242, 0.25);
+      border-top-color: #0992F2;
+      border-radius: 50%;
+      animation: tayra-spin 0.85s linear infinite;
+    }
+
+    #tayra-splash-status {
+      margin-top: 20px;
+      min-height: 1.25em;
+      font-size: 14px;
+      color: #B3B3B3;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    #tayra-splash-status.tayra-status-visible {
+      opacity: 1;
+    }
+
+    @keyframes tayra-spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
+  <div id="tayra-splash" role="status" aria-live="polite" aria-label="Loading Tayra">
+    <img src="icons/Icon-192.png" alt="Tayra" width="96" height="96">
+    <div class="tayra-spinner" aria-hidden="true"></div>
+    <div id="tayra-splash-status"></div>
+  </div>
+
   <!--
     You can customize the "flutter_bootstrap.js" script.
     This is useful to provide a custom configuration to the Flutter loader
