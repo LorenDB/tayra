@@ -1,0 +1,1 @@
+Add bulk listening import at ``POST /api/v1/history/listenings/bulk/`` with ``enrich_or_create`` (default) and ``create_only`` modes, duration PATCH and by-session update, and rich listening fields (duration, device, client session). Requires ``write:listenings``.
