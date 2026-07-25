@@ -28,6 +28,8 @@ class ClientDeviceViewSet(
     anonymous_policy = False
     owner_checks = ["write"]
     lookup_field = "uuid"
+    # Design documents PATCH only (not full PUT replace) for detail writes.
+    http_method_names = ["get", "post", "patch", "delete", "head", "options"]
 
     def get_queryset(self):
         # Owner-only: never expose another user's devices.
@@ -40,16 +42,19 @@ class ClientDeviceViewSet(
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
+        defaults = {
+            "name": data["name"],
+            "client_id": data["client_id"],
+            "last_seen_at": timezone.now(),
+            "is_active": True,
+        }
+        # Only overwrite client_version when the client sends it (omit preserves).
+        if "client_version" in data:
+            defaults["client_version"] = data["client_version"]
         device, created = models.ClientDevice.objects.update_or_create(
             user=request.user,
             uuid=data["uuid"],
-            defaults={
-                "name": data["name"],
-                "client_id": data["client_id"],
-                "client_version": data.get("client_version", ""),
-                "last_seen_at": timezone.now(),
-                "is_active": True,
-            },
+            defaults=defaults,
         )
         out = self.get_serializer(device)
         headers = self.get_success_headers(out.data)

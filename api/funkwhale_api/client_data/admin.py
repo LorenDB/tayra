@@ -18,4 +18,5 @@ class ClientDeviceAdmin(admin.ModelAdmin):
     list_filter = ["is_active", "client_id"]
     search_fields = ["name", "uuid", "user__username", "client_id"]
     list_select_related = ["user"]
-    readonly_fields = ["created_at"]
+    # Identity fields are immutable in admin (API uses client-generated uuid).
+    readonly_fields = ["uuid", "created_at"]

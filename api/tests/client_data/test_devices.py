@@ -67,6 +67,32 @@ def test_upsert_refreshes_name_and_last_seen(factories, logged_in_api_client):
     assert device.is_active is True
 
 
+def test_upsert_omitting_client_version_preserves_existing(
+    factories, logged_in_api_client
+):
+    device = factories["client_data.ClientDevice"](
+        user=logged_in_api_client.user,
+        name="Phone",
+        client_id="tayra",
+        client_version="1.0.0",
+    )
+    payload = {
+        "uuid": str(device.uuid),
+        "name": "Phone renamed",
+        "client_id": "tayra",
+        # client_version intentionally omitted
+    }
+
+    response = logged_in_api_client.post(_list_url(), payload, format="json")
+
+    assert response.status_code == 200
+    assert response.data["name"] == "Phone renamed"
+    assert response.data["client_version"] == "1.0.0"
+    device.refresh_from_db()
+    assert device.client_version == "1.0.0"
+    assert device.name == "Phone renamed"
+
+
 def test_list_own_devices_only(factories, logged_in_api_client):
     mine = factories["client_data.ClientDevice"](user=logged_in_api_client.user)
     factories["client_data.ClientDevice"]()  # other user
@@ -140,13 +166,24 @@ def test_patch_set_is_active(factories, logged_in_api_client):
     assert device.is_active is False
 
 
+def test_put_not_allowed(factories, logged_in_api_client):
+    device = factories["client_data.ClientDevice"](user=logged_in_api_client.user)
+
+    response = logged_in_api_client.put(
+        _detail_url(device.uuid),
+        {"name": "full replace", "is_active": True},
+        format="json",
+    )
+
+    assert response.status_code == 405
+
+
 def test_cannot_access_other_users_device(factories, logged_in_api_client):
     other = factories["client_data.ClientDevice"]()
 
+    # No RetrieveModelMixin: detail GET is not bound → 405 (not an existence oracle).
     response = logged_in_api_client.get(_detail_url(other.uuid))
-    # No retrieve mixin — detail GET is not allowed; expect 405 or 404.
-    # We only expose list/create/patch/delete. GET detail may 405.
-    assert response.status_code in (404, 405)
+    assert response.status_code == 405
 
     response = logged_in_api_client.patch(
         _detail_url(other.uuid), {"name": "hacked"}, format="json"
@@ -172,6 +209,63 @@ def test_anonymous_denied(db, api_client, preferences):
         format="json",
     )
     assert response.status_code in (401, 403)
+
+
+def test_oauth_token_without_client_data_scope_denied(factories, api_client):
+    """listenings-only tokens must not access client-devices (K10 scope separation)."""
+    user = factories["users.User"]()
+    scope = "read:listenings write:listenings"
+    token = factories["users.AccessToken"](
+        user=user,
+        scope=scope,
+        application__scope=scope,
+    )
+
+    response = api_client.get(
+        _list_url(), HTTP_AUTHORIZATION=f"Bearer {token.token}"
+    )
+    assert response.status_code == 403
+
+    response = api_client.post(
+        _list_url(),
+        {
+            "uuid": str(uuid.uuid4()),
+            "name": "Phone",
+            "client_id": "tayra",
+        },
+        format="json",
+        HTTP_AUTHORIZATION=f"Bearer {token.token}",
+    )
+    assert response.status_code == 403
+
+
+def test_oauth_token_with_client_data_scope_allowed(factories, api_client):
+    user = factories["users.User"]()
+    scope = "read:client_data write:client_data"
+    token = factories["users.AccessToken"](
+        user=user,
+        scope=scope,
+        application__scope=scope,
+    )
+
+    response = api_client.get(
+        _list_url(), HTTP_AUTHORIZATION=f"Bearer {token.token}"
+    )
+    assert response.status_code == 200
+
+    device_uuid = uuid.uuid4()
+    response = api_client.post(
+        _list_url(),
+        {
+            "uuid": str(device_uuid),
+            "name": "Phone",
+            "client_id": "tayra",
+        },
+        format="json",
+        HTTP_AUTHORIZATION=f"Bearer {token.token}",
+    )
+    assert response.status_code == 201
+    assert models.ClientDevice.objects.filter(user=user, uuid=device_uuid).exists()
 
 
 def test_lookup_by_uuid_not_pk(factories, logged_in_api_client):
