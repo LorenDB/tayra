@@ -788,7 +788,6 @@ class CachedFunkwhaleApi {
     clientVersion: clientVersion,
   );
 
-<<<<<<< HEAD
   Future<BulkListeningResult> bulkCreateListenings({
     required List<BulkListeningItem> items,
     String mode = 'enrich_or_create',
@@ -797,7 +796,8 @@ class CachedFunkwhaleApi {
     items: items,
     mode: mode,
     dedupWindowSeconds: dedupWindowSeconds,
-=======
+  );
+
   Future<PaginatedResponse<Map<String, dynamic>>> getPlaybackProgress({
     int page = 1,
     int pageSize = 100,
@@ -853,7 +853,6 @@ class CachedFunkwhaleApi {
     preferences: preferences,
     deviceUuid: deviceUuid,
     mode: mode,
->>>>>>> abb432f642b90efaa37a1ceec4d5c040622615de
   );
 
   /// Year-in-review stats (not cached — aggregates change with each listen).
