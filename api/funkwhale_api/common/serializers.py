@@ -14,6 +14,17 @@ from rest_framework import serializers
 from . import models, utils
 
 
+def raise_coded_validation_error(field, code, detail):
+    """
+    Structured field error for rich-client-data APIs.
+
+    Payload shape: {field: [{"code": code, "detail": detail}]}
+    Use from create/update methods (not field-level validate_* which nest under
+    the field automatically — raise a list there instead).
+    """
+    raise serializers.ValidationError({field: [{"code": code, "detail": detail}]})
+
+
 class RelatedField(serializers.RelatedField):
     default_error_messages = {
         "does_not_exist": _("Object with {related_field_name}={value} does not exist."),

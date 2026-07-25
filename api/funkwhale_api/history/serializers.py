@@ -1,7 +1,13 @@
+import datetime
+
+from django.db import IntegrityError, transaction
+from django.utils import timezone
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from funkwhale_api.activity import serializers as activity_serializers
+from funkwhale_api.client_data.models import ClientDevice
+from funkwhale_api.common.serializers import raise_coded_validation_error
 from funkwhale_api.federation import serializers as federation_serializers
 from funkwhale_api.music.serializers import TrackActivitySerializer, TrackSerializer
 from funkwhale_api.users.serializers import UserActivitySerializer, UserBasicSerializer
@@ -30,10 +36,28 @@ class ListeningSerializer(serializers.ModelSerializer):
     track = TrackSerializer(read_only=True)
     user = UserBasicSerializer(read_only=True)
     actor = serializers.SerializerMethodField()
+    source_device = serializers.SerializerMethodField()
+
+    RICH_FIELDS = (
+        "duration_seconds",
+        "source_device",
+        "client_session_id",
+        "updated_at",
+    )
 
     class Meta:
         model = models.Listening
-        fields = ("id", "user", "track", "creation_date", "actor")
+        fields = (
+            "id",
+            "user",
+            "track",
+            "creation_date",
+            "actor",
+            "duration_seconds",
+            "source_device",
+            "client_session_id",
+            "updated_at",
+        )
 
     def create(self, validated_data):
         validated_data["user"] = self.context["user"]
@@ -46,13 +70,135 @@ class ListeningSerializer(serializers.ModelSerializer):
         if actor:
             return federation_serializers.APIActorSerializer(actor).data
 
+    def get_source_device(self, obj):
+        if obj.source_device_id is None:
+            return None
+        return str(obj.source_device.uuid)
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        request = self.context.get("request")
+        user = getattr(request, "user", None) if request else None
+        is_owner = (
+            user is not None
+            and getattr(user, "is_authenticated", False)
+            and instance.user_id is not None
+            and instance.user_id == user.id
+        )
+        if not is_owner:
+            for key in self.RICH_FIELDS:
+                data.pop(key, None)
+        return data
+
 
 class ListeningWriteSerializer(serializers.ModelSerializer):
+    source_device = serializers.UUIDField(
+        required=False, allow_null=True, write_only=True
+    )
+    client_session_id = serializers.UUIDField(required=False, allow_null=True)
+    duration_seconds = serializers.IntegerField(
+        required=False, allow_null=True, min_value=0, max_value=86400
+    )
+    creation_date = serializers.DateTimeField(required=False, allow_null=True)
+
     class Meta:
         model = models.Listening
-        fields = ("id", "user", "track", "creation_date")
+        fields = (
+            "id",
+            "track",
+            "creation_date",
+            "duration_seconds",
+            "source_device",
+            "client_session_id",
+        )
+
+    def validate_creation_date(self, value):
+        if value is None:
+            return value
+        now = timezone.now()
+        if value > now + datetime.timedelta(minutes=5):
+            # Field-level: raise a list so DRF places it under creation_date once.
+            raise serializers.ValidationError(
+                [
+                    {
+                        "code": "creation_date_in_future",
+                        "detail": "Too far in the future",
+                    }
+                ]
+            )
+        if value < now - datetime.timedelta(minutes=5):
+            raise serializers.ValidationError(
+                [
+                    {
+                        "code": "creation_date_too_old",
+                        "detail": "Use bulk import for historical listens",
+                    }
+                ]
+            )
+        return value
+
+    def _resolve_source_device(self, user, device_uuid):
+        try:
+            device = ClientDevice.objects.get(user=user, uuid=device_uuid)
+        except ClientDevice.DoesNotExist:
+            raise_coded_validation_error(
+                "source_device",
+                "device_not_registered",
+                "Register the device via POST /api/v1/client-devices/",
+            )
+        if not device.is_active:
+            raise_coded_validation_error(
+                "source_device",
+                "device_inactive",
+                "Device is inactive; re-register via POST /api/v1/client-devices/",
+            )
+        return device
 
     def create(self, validated_data):
-        validated_data["user"] = self.context["user"]
+        user = self.context["user"]
+        validated_data["user"] = user
+        device_uuid = validated_data.pop("source_device", serializers.empty)
+        if device_uuid is not serializers.empty and device_uuid is not None:
+            validated_data["source_device"] = self._resolve_source_device(
+                user, device_uuid
+            )
+        session_id = validated_data.get("client_session_id")
+        try:
+            with transaction.atomic():
+                instance = super().create(validated_data)
+                instance._rich_created = True
+                return instance
+        except IntegrityError:
+            if not session_id:
+                raise
+            # New atomic block required after IntegrityError rolled back the insert
+            with transaction.atomic():
+                existing = (
+                    models.Listening.objects.select_for_update()
+                    .select_related("source_device")
+                    .get(user=user, client_session_id=session_id)
+                )
+                incoming = validated_data.get("duration_seconds")
+                update_fields = []
+                if incoming is not None:
+                    existing.duration_seconds = max(
+                        existing.duration_seconds or 0, incoming
+                    )
+                    update_fields.append("duration_seconds")
+                if "source_device" in validated_data and validated_data["source_device"]:
+                    existing.source_device = validated_data["source_device"]
+                    update_fields.append("source_device")
+                if update_fields:
+                    update_fields.append("updated_at")
+                    existing.save(update_fields=update_fields)
+                existing._rich_created = False
+                return existing
 
-        return super().create(validated_data)
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        # source_device is write_only; surface UUID string (or null) on create response
+        if instance.source_device_id is None:
+            data["source_device"] = None
+        else:
+            data["source_device"] = str(instance.source_device.uuid)
+        return data

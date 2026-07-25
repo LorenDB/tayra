@@ -1,5 +1,6 @@
 from django.db.models import Prefetch
-from rest_framework import mixins, viewsets
+from rest_framework import mixins, status, viewsets
+from rest_framework.response import Response
 
 from config import plugins
 from funkwhale_api.activity import record
@@ -19,7 +20,8 @@ class ListeningViewSet(
 ):
     serializer_class = serializers.ListeningSerializer
     queryset = models.Listening.objects.all().select_related(
-        "user__actor__attachment_icon"
+        "user__actor__attachment_icon",
+        "source_device",
     )
 
     permission_classes = [
@@ -37,14 +39,29 @@ class ListeningViewSet(
         return serializers.ListeningWriteSerializer
 
     def perform_create(self, serializer):
-        r = super().perform_create(serializer)
+        # serializer.save() / create() must set serializer.instance._rich_created
+        serializer.save()
+        if not getattr(serializer.instance, "_rich_created", True):
+            # Idempotent session re-POST: duration may have been updated; no plugins/activity
+            return
         plugins.trigger_hook(
             plugins.LISTENING_CREATED,
             listening=serializer.instance,
             confs=plugins.get_confs(self.request.user),
         )
         record.send(serializer.instance)
-        return r
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        created = getattr(serializer.instance, "_rich_created", True)
+        return Response(
+            serializer.data,
+            status=status.HTTP_201_CREATED if created else status.HTTP_200_OK,
+            headers=headers,
+        )
 
     def get_queryset(self):
         queryset = super().get_queryset()
