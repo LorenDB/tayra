@@ -29,7 +29,6 @@ relevant.
 | User management UI | `/manage/users` | Django admin | |
 | Signup | `/signup` | Disable open registration; invite via admin/CLI | |
 | Password reset / email confirm | `/auth/password/*`, `/auth/email/confirm` | Email links still work if server sends them; no branded Tayra page | May need minimal static pages later |
-| OAuth authorize for *third-party* apps | `/authorize` | Still served by Funkwhale/allauth | Tayra’s own login uses OOB (or future redirect) |
 | Plugins settings | `/settings/plugins` | Server-side plugin config | |
 | Remote content / federation browser | `/content/remote` | Federation still runs server-side | No follow/scan UI in Tayra |
 | Content libraries management | `/content/libraries` | Upload screen covers basic upload; not full library manager | |
@@ -52,9 +51,15 @@ relevant.
 | Local cover-art file cache | Uses network images on web |
 | Gemini Nano (on-device AI) | Android-only |
 
+## Implemented in Tayra web (was deferred)
+
+| Feature | Where | Notes |
+|---|---|---|
+| OAuth authorize for *third-party* apps | `/authorize` | Flutter consent UI; `GET /api/v1/oauth/apps/{id}/` + `POST /api/v1/oauth/authorize`. First-party login stays password token / OOB. |
+
 ## Possible later additions (not committed)
 
-1. OAuth redirect callback (`/auth/callback`) instead of OOB paste on web  
+1. OAuth redirect callback (`/auth/callback`) instead of OOB paste on web (first-party only; not third-party consent)  
 2. Upload path polish for browser file picker (upload may work partially already)  
 3. Lightweight library cleanup UI if Django admin is too harsh  
 4. Queue + listen-history persistence via IndexedDB  

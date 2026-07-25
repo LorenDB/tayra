@@ -1,6 +1,5 @@
 | Feature | Where in Funkwhale | Escape hatch | Notes |
 |---|---|---|---|
-| OAuth authorize for *third-party* apps | `/authorize` | Still served by Funkwhale/allauth | Tayra’s own login uses OOB (or future redirect) |
 | Splash screen while loading WASM assets | n/a | n/a | WASM assets can take a while to load at first visit. Show some sort of splash screen while first load occurs on web. |
 | Library admin (`/manage/library/*`) | Vue manage routes | Django admin + `funkwhale-manage` CLI | Edits, uploads browser, tags, libraries detail |
 | Channels admin | `/manage/library/channels` | CLI / admin | |
@@ -12,3 +11,8 @@
 | Notifications | Vue notifications view | — | |
 | PWA offline (Vue service worker) | Vue SW | Web is online-only | |
 
+## Closed
+
+| Feature | Where | Resolution |
+|---|---|---|
+| ✅ OAuth authorize for *third-party* apps | `/authorize` | Flutter consent UI (`OAuthAuthorizeScreen`) at `/authorize`; loads app via `GET /api/v1/oauth/apps/{client_id}/`, allow via `POST /api/v1/oauth/authorize` (AJAX → JSON `{code, redirect_uri}`), OOB shows copyable code, deny returns `error=access_denied`. Unauthenticated users are sent to `/login?from=…` and returned after sign-in. First-party Tayra login remains password token / OOB and is separate. |
