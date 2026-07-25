@@ -341,6 +341,13 @@ class AuthNotifier extends Notifier<AuthState> {
       }
       final payload = _asJsonMap(response.data);
       if (response.statusCode != 200 || payload == null) {
+        // Surface the real API body in the browser console (DevTools).
+        // Plaintext password in the *request* is expected over HTTPS; the
+        // failure reason is almost always in this response JSON.
+        debugPrint(
+          'loginWithPassword failed status=${response.statusCode} '
+          'data=${response.data}',
+        );
         state = state.copyWith(
           isLoading: false,
           error: _formatLoginError(response.data, response.statusCode),
