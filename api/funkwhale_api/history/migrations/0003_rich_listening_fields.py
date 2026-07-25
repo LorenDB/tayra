@@ -33,10 +33,11 @@ class Migration(migrations.Migration):
                 to="client_data.clientdevice",
             ),
         ),
+        # No standalone db_index: covered by hist_listen_user_session + partial unique.
         migrations.AddField(
             model_name="listening",
             name="client_session_id",
-            field=models.UUIDField(blank=True, db_index=True, null=True),
+            field=models.UUIDField(blank=True, null=True),
         ),
         migrations.AddField(
             model_name="listening",
@@ -46,12 +47,12 @@ class Migration(migrations.Migration):
             ),
             preserve_default=False,
         ),
+        # No standalone db_index on creation_date: covered by user-leading composites.
         migrations.AlterField(
             model_name="listening",
             name="creation_date",
             field=models.DateTimeField(
                 blank=True,
-                db_index=True,
                 default=django.utils.timezone.now,
                 null=True,
             ),

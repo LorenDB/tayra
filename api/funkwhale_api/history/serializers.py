@@ -14,6 +14,8 @@ from funkwhale_api.users.serializers import UserActivitySerializer, UserBasicSer
 
 from . import models
 
+_CREATION_DATE_WINDOW = datetime.timedelta(minutes=5)
+
 
 class ListeningActivitySerializer(activity_serializers.ModelSerializer):
     type = serializers.SerializerMethodField()
@@ -92,6 +94,7 @@ class ListeningSerializer(serializers.ModelSerializer):
 
 
 class ListeningWriteSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
     source_device = serializers.UUIDField(
         required=False, allow_null=True, write_only=True
     )
@@ -105,6 +108,7 @@ class ListeningWriteSerializer(serializers.ModelSerializer):
         model = models.Listening
         fields = (
             "id",
+            "user",
             "track",
             "creation_date",
             "duration_seconds",
@@ -113,10 +117,17 @@ class ListeningWriteSerializer(serializers.ModelSerializer):
         )
 
     def validate_creation_date(self, value):
+        """
+        Always reject far-future dates.
+
+        Past age limits are applied in create() only for true inserts, so a
+        session re-POST that resends the original creation_date (crash recovery)
+        can still reach the idempotent max-duration merge path.
+        """
         if value is None:
             return value
         now = timezone.now()
-        if value > now + datetime.timedelta(minutes=5):
+        if value > now + _CREATION_DATE_WINDOW:
             # Field-level: raise a list so DRF places it under creation_date once.
             raise serializers.ValidationError(
                 [
@@ -126,16 +137,17 @@ class ListeningWriteSerializer(serializers.ModelSerializer):
                     }
                 ]
             )
-        if value < now - datetime.timedelta(minutes=5):
-            raise serializers.ValidationError(
-                [
-                    {
-                        "code": "creation_date_too_old",
-                        "detail": "Use bulk import for historical listens",
-                    }
-                ]
-            )
         return value
+
+    def _assert_creation_date_not_too_old(self, value):
+        if value is None:
+            return
+        if value < timezone.now() - _CREATION_DATE_WINDOW:
+            raise_coded_validation_error(
+                "creation_date",
+                "creation_date_too_old",
+                "Use bulk import for historical listens",
+            )
 
     def _resolve_source_device(self, user, device_uuid):
         try:
@@ -154,6 +166,26 @@ class ListeningWriteSerializer(serializers.ModelSerializer):
             )
         return device
 
+    def _merge_existing_session(self, user, session_id, validated_data):
+        existing = (
+            models.Listening.objects.select_for_update()
+            .select_related("source_device")
+            .get(user=user, client_session_id=session_id)
+        )
+        incoming = validated_data.get("duration_seconds")
+        update_fields = []
+        if incoming is not None:
+            existing.duration_seconds = max(existing.duration_seconds or 0, incoming)
+            update_fields.append("duration_seconds")
+        if "source_device" in validated_data and validated_data["source_device"]:
+            existing.source_device = validated_data["source_device"]
+            update_fields.append("source_device")
+        if update_fields:
+            update_fields.append("updated_at")
+            existing.save(update_fields=update_fields)
+        existing._rich_created = False
+        return existing
+
     def create(self, validated_data):
         user = self.context["user"]
         validated_data["user"] = user
@@ -163,36 +195,36 @@ class ListeningWriteSerializer(serializers.ModelSerializer):
                 user, device_uuid
             )
         session_id = validated_data.get("client_session_id")
+        creation_date = validated_data.get("creation_date")
+
+        # Session already known: skip insert age gate and merge (recovery path).
+        if session_id and models.Listening.objects.filter(
+            user=user, client_session_id=session_id
+        ).exists():
+            with transaction.atomic():
+                return self._merge_existing_session(user, session_id, validated_data)
+
+        # True insert: enforce past window (future already validated).
+        self._assert_creation_date_not_too_old(creation_date)
+
         try:
             with transaction.atomic():
                 instance = super().create(validated_data)
                 instance._rich_created = True
                 return instance
-        except IntegrityError:
+        except IntegrityError as exc:
             if not session_id:
                 raise
-            # New atomic block required after IntegrityError rolled back the insert
-            with transaction.atomic():
-                existing = (
-                    models.Listening.objects.select_for_update()
-                    .select_related("source_device")
-                    .get(user=user, client_session_id=session_id)
-                )
-                incoming = validated_data.get("duration_seconds")
-                update_fields = []
-                if incoming is not None:
-                    existing.duration_seconds = max(
-                        existing.duration_seconds or 0, incoming
+            # Race: concurrent insert for same session won the unique constraint.
+            # New atomic block required after IntegrityError rolled back the insert.
+            try:
+                with transaction.atomic():
+                    return self._merge_existing_session(
+                        user, session_id, validated_data
                     )
-                    update_fields.append("duration_seconds")
-                if "source_device" in validated_data and validated_data["source_device"]:
-                    existing.source_device = validated_data["source_device"]
-                    update_fields.append("source_device")
-                if update_fields:
-                    update_fields.append("updated_at")
-                    existing.save(update_fields=update_fields)
-                existing._rich_created = False
-                return existing
+            except models.Listening.DoesNotExist:
+                # IntegrityError was not from our session unique constraint.
+                raise exc from None
 
     def to_representation(self, instance):
         data = super().to_representation(instance)

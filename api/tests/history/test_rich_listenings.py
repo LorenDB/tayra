@@ -1,9 +1,12 @@
+import concurrent.futures
 import datetime
 import uuid
 
 import pytest
+from django.db import connection, connections
 from django.urls import reverse
 from django.utils import timezone
+from rest_framework.test import APIClient
 
 from funkwhale_api.history import models
 
@@ -14,6 +17,13 @@ def _list_url():
 
 def _detail_url(pk):
     return reverse("api:v1:history:listenings-detail", kwargs={"pk": pk})
+
+
+def _rich_keys_absent(data):
+    assert "duration_seconds" not in data
+    assert "source_device" not in data
+    assert "client_session_id" not in data
+    assert "updated_at" not in data
 
 
 def test_thin_stock_create_still_works(
@@ -33,6 +43,7 @@ def test_thin_stock_create_still_works(
     assert listening.duration_seconds is None
     assert listening.source_device_id is None
     assert listening.client_session_id is None
+    assert response.data["user"] == logged_in_api_client.user.pk
     activity_muted.assert_called_once_with(listening)
     plugin_hook.assert_called_once()
 
@@ -57,6 +68,7 @@ def test_rich_create_with_device_and_session(
     assert response.data["duration_seconds"] == 42
     assert response.data["source_device"] == str(device.uuid)
     assert response.data["client_session_id"] == str(session_id)
+    assert response.data["user"] == logged_in_api_client.user.pk
 
     listening = models.Listening.objects.get()
     assert listening.duration_seconds == 42
@@ -123,6 +135,35 @@ def test_idempotent_session_repost_does_not_decrease_duration(
     assert response.status_code == 200
     assert response.data["duration_seconds"] == 100
     assert models.Listening.objects.get().duration_seconds == 100
+
+
+def test_session_repost_accepts_original_creation_date_after_window(
+    factories, logged_in_api_client, activity_muted, mocker
+):
+    """Crash recovery: re-POST with original creation_date older than 5 min still merges."""
+    track = factories["music.Track"]()
+    session_id = uuid.uuid4()
+    mocker.patch("config.plugins.trigger_hook")
+
+    payload = {
+        "track": track.pk,
+        "duration_seconds": 15,
+        "client_session_id": str(session_id),
+    }
+    assert (
+        logged_in_api_client.post(_list_url(), payload, format="json").status_code
+        == 201
+    )
+
+    old = timezone.now() - datetime.timedelta(minutes=30)
+    payload["duration_seconds"] = 120
+    payload["creation_date"] = old.isoformat().replace("+00:00", "Z")
+    response = logged_in_api_client.post(_list_url(), payload, format="json")
+
+    assert response.status_code == 200
+    assert response.data["duration_seconds"] == 120
+    assert models.Listening.objects.count() == 1
+    assert models.Listening.objects.get().duration_seconds == 120
 
 
 def test_create_null_source_device_ok(
@@ -214,6 +255,24 @@ def test_creation_date_too_old(factories, logged_in_api_client):
     assert response.data["creation_date"][0]["code"] == "creation_date_too_old"
 
 
+def test_creation_date_too_old_with_new_session(factories, logged_in_api_client):
+    track = factories["music.Track"]()
+    old = timezone.now() - datetime.timedelta(minutes=10)
+    response = logged_in_api_client.post(
+        _list_url(),
+        {
+            "track": track.pk,
+            "creation_date": old.isoformat().replace("+00:00", "Z"),
+            "client_session_id": str(uuid.uuid4()),
+        },
+        format="json",
+    )
+
+    assert response.status_code == 400
+    assert response.data["creation_date"][0]["code"] == "creation_date_too_old"
+    assert models.Listening.objects.count() == 0
+
+
 def test_creation_date_in_future(factories, logged_in_api_client):
     track = factories["music.Track"]()
     future = timezone.now() + datetime.timedelta(minutes=10)
@@ -277,10 +336,7 @@ def test_non_owner_privacy_strip(factories, logged_in_api_client):
 
     assert response.status_code == 200
     assert response.data["id"] == listening.pk
-    assert "duration_seconds" not in response.data
-    assert "source_device" not in response.data
-    assert "client_session_id" not in response.data
-    assert "updated_at" not in response.data
+    _rich_keys_absent(response.data)
 
 
 def test_anonymous_privacy_strip(factories, api_client, preferences):
@@ -297,10 +353,42 @@ def test_anonymous_privacy_strip(factories, api_client, preferences):
     response = api_client.get(_detail_url(listening.pk))
 
     assert response.status_code == 200
-    assert "duration_seconds" not in response.data
-    assert "source_device" not in response.data
-    assert "client_session_id" not in response.data
-    assert "updated_at" not in response.data
+    _rich_keys_absent(response.data)
+
+
+def test_non_owner_list_privacy_strip(factories, logged_in_api_client):
+    owner = factories["users.User"](privacy_level="everyone")
+    device = factories["client_data.ClientDevice"](user=owner)
+    factories["history.Listening"](
+        user=owner,
+        duration_seconds=99,
+        source_device=device,
+        client_session_id=uuid.uuid4(),
+    )
+
+    response = logged_in_api_client.get(_list_url())
+
+    assert response.status_code == 200
+    assert response.data["count"] == 1
+    _rich_keys_absent(response.data["results"][0])
+
+
+def test_anonymous_list_privacy_strip(factories, api_client, preferences):
+    preferences["common__api_authentication_required"] = False
+    owner = factories["users.User"](privacy_level="everyone")
+    device = factories["client_data.ClientDevice"](user=owner)
+    factories["history.Listening"](
+        user=owner,
+        duration_seconds=50,
+        source_device=device,
+        client_session_id=uuid.uuid4(),
+    )
+
+    response = api_client.get(_list_url())
+
+    assert response.status_code == 200
+    assert response.data["count"] == 1
+    _rich_keys_absent(response.data["results"][0])
 
 
 def test_owner_list_includes_rich_fields(factories, logged_in_api_client):
@@ -335,3 +423,52 @@ def test_duration_seconds_bounds(factories, logged_in_api_client, seconds):
         format="json",
     )
     assert response.status_code == 400
+
+
+@pytest.mark.django_db(transaction=True)
+def test_concurrent_dual_post_same_session(factories, mocker):
+    """
+    Concurrent dual POST same client_session_id: no 500, exactly one row,
+    plugins/activity at most once. Gated on PostgreSQL — SQLite serializes writers
+    and does not reliably exercise the unique-constraint race.
+    """
+    if connection.vendor == "sqlite":
+        pytest.skip(
+            "SQLite cannot reliably exercise concurrent unique-constraint races; "
+            "sequential re-POST covers the merge path. Run on PostgreSQL for this case."
+        )
+
+    user = factories["users.User"]()
+    track = factories["music.Track"]()
+    session_id = uuid.uuid4()
+    plugin_hook = mocker.patch("config.plugins.trigger_hook")
+    activity_send = mocker.patch("funkwhale_api.activity.record.send")
+
+    def do_post(duration):
+        connections.close_all()
+        client = APIClient()
+        client.force_authenticate(user=user)
+        return client.post(
+            _list_url(),
+            {
+                "track": track.pk,
+                "duration_seconds": duration,
+                "client_session_id": str(session_id),
+            },
+            format="json",
+        )
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
+        futures = [pool.submit(do_post, d) for d in (10, 50)]
+        results = [f.result() for f in concurrent.futures.as_completed(futures)]
+
+    assert all(r.status_code in (200, 201) for r in results)
+    assert (
+        models.Listening.objects.filter(
+            user=user, client_session_id=session_id
+        ).count()
+        == 1
+    )
+    assert models.Listening.objects.get().duration_seconds == 50
+    assert plugin_hook.call_count <= 1
+    assert activity_send.call_count <= 1

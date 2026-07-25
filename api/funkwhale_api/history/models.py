@@ -5,8 +5,9 @@ from funkwhale_api.music.models import Track
 
 
 class Listening(models.Model):
+    # Indexed via Meta indexes (user, creation_date) — no standalone column index.
     creation_date = models.DateTimeField(
-        default=timezone.now, null=True, blank=True, db_index=True
+        default=timezone.now, null=True, blank=True
     )
     track = models.ForeignKey(
         Track, related_name="listenings", on_delete=models.CASCADE
@@ -36,7 +37,8 @@ class Listening(models.Model):
         on_delete=models.SET_NULL,
     )
     # Client-generated UUID for this play session. Not related to session_key.
-    client_session_id = models.UUIDField(null=True, blank=True, db_index=True)
+    # Indexed via Meta composite + partial unique (no standalone column index).
+    client_session_id = models.UUIDField(null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
