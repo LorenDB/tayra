@@ -85,9 +85,10 @@ class PlayerState {
     this.queueCompleted = false,
   });
 
-  Track? get currentTrack => currentIndex >= 0 && currentIndex < queue.length
-      ? queue[currentIndex]
-      : null;
+  Track? get currentTrack =>
+      currentIndex >= 0 && currentIndex < queue.length
+          ? queue[currentIndex]
+          : null;
 
   /// True when skip-next can advance (or wrap under [LoopMode.all]).
   bool get hasNext {
@@ -103,9 +104,10 @@ class PlayerState {
     return loopMode == LoopMode.all;
   }
 
-  double get progress => duration.inMilliseconds > 0
-      ? position.inMilliseconds / duration.inMilliseconds
-      : 0.0;
+  double get progress =>
+      duration.inMilliseconds > 0
+          ? position.inMilliseconds / duration.inMilliseconds
+          : 0.0;
 
   PlayerState copyWith({
     List<Track>? queue,
@@ -132,9 +134,8 @@ class PlayerState {
       isShuffled: isShuffled ?? this.isShuffled,
       loopMode: loopMode ?? this.loopMode,
       isLoading: isLoading ?? this.isLoading,
-      loadingRadioId: clearLoadingRadioId
-          ? null
-          : (loadingRadioId ?? this.loadingRadioId),
+      loadingRadioId:
+          clearLoadingRadioId ? null : (loadingRadioId ?? this.loadingRadioId),
       playbackSpeed: playbackSpeed ?? this.playbackSpeed,
       queueCompleted: queueCompleted ?? this.queueCompleted,
     );
@@ -726,9 +727,8 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
       artist: track.artistName,
       album: track.albumTitle,
       artUri: track.coverUrl != null ? Uri.tryParse(track.coverUrl!) : null,
-      duration: track.duration != null
-          ? Duration(seconds: track.duration!)
-          : null,
+      duration:
+          track.duration != null ? Duration(seconds: track.duration!) : null,
       playable: true,
     );
   }
@@ -742,9 +742,8 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
       artist: track.artistName,
       album: track.albumTitle,
       artUri: track.coverUrl != null ? Uri.tryParse(track.coverUrl!) : null,
-      duration: track.duration != null
-          ? Duration(seconds: track.duration!)
-          : null,
+      duration:
+          track.duration != null ? Duration(seconds: track.duration!) : null,
       playable: true,
     );
   }
@@ -852,6 +851,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// Throttle podcast progress writes (aligned with 2s queue progress).
   int _lastPodcastProgressSeconds = -1;
 
+  /// Channel UUID for the current podcast queue (set by [playTracks]).
+  String? _podcastChannelUuid;
+
   late final PodcastProgressService _podcastProgress;
 
   /// Timestamp recorded when the app enters the background (paused lifecycle
@@ -926,23 +928,28 @@ class PlayerNotifier extends Notifier<PlayerState> {
     _audioCache = ref.read(audioCacheServiceProvider);
     _podcastProgress = PodcastProgressService(CacheDatabase.instance);
     _listenTracker = PlaybackListenTracker(
-      onSessionPersisted:
-          (trackId, recordId, persistedSeconds, listenedAt, {force = false}) {
-            QueuePersistenceService.saveListenSession(
-              trackId: trackId,
-              recordId: recordId,
-              persistedSeconds: persistedSeconds,
-              listenedAt: listenedAt,
-            );
-            // Rich server duration PATCH (≥15s / pause / end). No-op when
-            // thin-only or no active rich session.
-            unawaited(
-              ref
-                  .read(clientDataServiceProvider)
-                  .syncDuration(trackId, persistedSeconds, force: force)
-                  .catchError((_) {}),
-            );
-          },
+      onSessionPersisted: (
+        trackId,
+        recordId,
+        persistedSeconds,
+        listenedAt, {
+        force = false,
+      }) {
+        QueuePersistenceService.saveListenSession(
+          trackId: trackId,
+          recordId: recordId,
+          persistedSeconds: persistedSeconds,
+          listenedAt: listenedAt,
+        );
+        // Rich server duration PATCH (≥15s / pause / end). No-op when
+        // thin-only or no active rich session.
+        unawaited(
+          ref
+              .read(clientDataServiceProvider)
+              .syncDuration(trackId, persistedSeconds, force: force)
+              .catchError((_) {}),
+        );
+      },
     );
     _init();
     Future.microtask(() => _restoreQueue());
@@ -1104,28 +1111,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
             secs != _lastPodcastProgressSeconds &&
             secs % 2 == 0) {
           _lastPodcastProgressSeconds = secs;
-          final positionMs = position.inMilliseconds;
-          final durationMs = state.duration.inMilliseconds > 0
-              ? state.duration.inMilliseconds
-              : (track.duration != null ? track.duration! * 1000 : null);
           unawaited(
-            _podcastProgress
-                .upsertPosition(
-                  trackId: track.id,
-                  positionMs: positionMs,
-                  durationMs: durationMs,
-                )
-                .catchError((_) {}),
-          );
-          // Dual-write to server when client-data API is available (throttled).
-          unawaited(
-            _clientData
-                .pushPlaybackProgress(
-                  trackId: track.id,
-                  positionMs: positionMs,
-                  durationMs: durationMs,
-                )
-                .catchError((_) {}),
+            _persistPodcastProgress(
+              track,
+              position: position,
+              forceServer: false,
+            ),
           );
         }
         // Do not await — keep the position stream non-blocking for scroll/UI.
@@ -1373,8 +1364,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // Derive duration from the saved state or from the track metadata.
       final currentTrack =
           validIndex >= 0 && validIndex < savedState.queue.length
-          ? savedState.queue[validIndex]
-          : null;
+              ? savedState.queue[validIndex]
+              : null;
       final trackDuration =
           savedState.duration ??
           (currentTrack?.duration != null
@@ -1396,9 +1387,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // When the queue completed at save time, the persisted position is the
       // end of the last track — not a valid resume point. Reset to zero so
       // playback starts from the beginning of track 0 on restore.
-      final restorePosition = savedState.isCompleted
-          ? Duration.zero
-          : savedState.position;
+      final restorePosition =
+          savedState.isCompleted ? Duration.zero : savedState.position;
 
       // Restore the saved playback position so it can be seeked to once the
       // user taps play.  We intentionally do NOT call setAudioSource here
@@ -1484,9 +1474,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
     bool? isPlaying,
   }) async {
     try {
-      final resume = _pendingRestoreListenSession?.trackId == track.id
-          ? _pendingRestoreListenSession
-          : null;
+      final resume =
+          _pendingRestoreListenSession?.trackId == track.id
+              ? _pendingRestoreListenSession
+              : null;
       _pendingRestoreListenSession = null;
       await _listenTracker.activate(
         track,
@@ -1654,9 +1645,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
         artist: track.artistName,
         album: track.albumTitle,
         artUri: track.coverUrl != null ? Uri.tryParse(track.coverUrl!) : null,
-        duration: track.duration != null
-            ? Duration(seconds: track.duration!)
-            : null,
+        duration:
+            track.duration != null ? Duration(seconds: track.duration!) : null,
       ),
     );
   }
@@ -2040,6 +2030,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     String? source,
     Duration? initialPosition,
     bool shuffle = false,
+    String? podcastChannelUuid,
   }) async {
     // Invalidate any in-flight load from a previous play/skip request.
     final epoch = _beginLoad();
@@ -2053,8 +2044,16 @@ class PlayerNotifier extends Notifier<PlayerState> {
     }
     if (!_isCurrentLoad(epoch)) return;
 
+    // Bind channel UUID for podcast progress dual-write / channel filters.
+    if (source == 'podcast') {
+      _podcastChannelUuid = podcastChannelUuid;
+    } else if (source != 'stash_restore') {
+      _podcastChannelUuid = null;
+    }
+
     if (tracks.isEmpty) {
       _gaplessActive = false;
+      _podcastChannelUuid = null;
       state = const PlayerState();
       await _handler.audioPlayer.stop();
       await QueuePersistenceService.clearQueue();
@@ -2510,9 +2509,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
       stash.queue,
       startIndex: safeIndex,
       source: 'stash_restore',
-      initialPosition: stash.position.inMilliseconds > 0
-          ? stash.position
-          : null,
+      initialPosition:
+          stash.position.inMilliseconds > 0 ? stash.position : null,
     );
 
     // playTracks resets shuffle/loop; re-apply the stashed metadata so
@@ -2584,18 +2582,18 @@ class PlayerNotifier extends Notifier<PlayerState> {
         artist: track.artistName,
         album: track.albumTitle,
         artUri: track.coverUrl != null ? Uri.tryParse(track.coverUrl!) : null,
-        duration: track.duration != null
-            ? Duration(seconds: track.duration!)
-            : null,
+        duration:
+            track.duration != null ? Duration(seconds: track.duration!) : null,
       );
 
       if (!_isCurrentLoad(loadEpoch)) return false;
       _handler.mediaItem.add(mediaItem);
 
       // Check audio cache first — play from local file if available (native only).
-      final cachedFile = AppPlatform.supportsOfflineCache
-          ? await _audioCache.getCachedAudio(track)
-          : null;
+      final cachedFile =
+          AppPlatform.supportsOfflineCache
+              ? await _audioCache.getCachedAudio(track)
+              : null;
       if (!_isCurrentLoad(loadEpoch)) return false;
       // Whether we ultimately streamed from server (so we know to kick off
       // background caching after playback starts).
@@ -2829,22 +2827,16 @@ class PlayerNotifier extends Notifier<PlayerState> {
   void _handleTrackCompleted() {
     final completedTrack = state.currentTrack;
     if (completedTrack != null && completedTrack.isPodcast) {
-      final durationMs = completedTrack.duration != null
-          ? completedTrack.duration! * 1000
-          : state.duration.inMilliseconds;
-      unawaited(
-        _podcastProgress
-            .markPlayed(trackId: completedTrack.id, durationMs: durationMs)
-            .catchError((_) {}),
-      );
+      final durationMs =
+          completedTrack.duration != null
+              ? completedTrack.duration! * 1000
+              : state.duration.inMilliseconds;
       unawaited(
         _clientData
-            .pushPlaybackProgress(
+            .markEpisodePlayed(
               trackId: completedTrack.id,
-              positionMs: durationMs,
-              durationMs: durationMs,
-              completed: true,
-              force: true,
+              channelUuid: _podcastChannelUuid,
+              durationMs: durationMs > 0 ? durationMs : null,
             )
             .catchError((_) {}),
       );
@@ -2852,9 +2844,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
     if (_gaplessActive) {
       if (completedTrack != null) {
-        final endPosition = state.duration.inSeconds > 0
-            ? state.duration
-            : Duration(seconds: completedTrack.duration ?? 0);
+        final endPosition =
+            state.duration.inSeconds > 0
+                ? state.duration
+                : Duration(seconds: completedTrack.duration ?? 0);
         unawaited(_finalizeListenAtTrackEnd(endPosition));
       }
 
@@ -2914,11 +2907,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
       return;
     }
 
-    final endPosition = completedTrack != null
-        ? (state.duration.inSeconds > 0
-              ? state.duration
-              : Duration(seconds: completedTrack.duration ?? 0))
-        : null;
+    final endPosition =
+        completedTrack != null
+            ? (state.duration.inSeconds > 0
+                ? state.duration
+                : Duration(seconds: completedTrack.duration ?? 0))
+            : null;
 
     switch (state.loopMode) {
       case LoopMode.one:
@@ -3099,9 +3093,20 @@ class PlayerNotifier extends Notifier<PlayerState> {
     await _handler.play();
   }
 
-  Future<void> pause() {
+  Future<void> pause() async {
     _userPaused = true;
-    return _handler.pause();
+    await _handler.pause();
+    // Force podcast progress upload on pause (mirror listening duration force).
+    final track = state.currentTrack;
+    if (track != null && track.isPodcast) {
+      unawaited(
+        _persistPodcastProgress(
+          track,
+          position: _handler.audioPlayer.position,
+          forceServer: true,
+        ),
+      );
+    }
   }
 
   /// Called when the app enters the background (paused/inactive lifecycle).
@@ -3367,6 +3372,13 @@ class PlayerNotifier extends Notifier<PlayerState> {
   Future<void> seekTo(Duration position) async {
     await _handler.seek(position);
     _saveQueue(); // Save position
+    // Force podcast progress after seek so multi-device resume sees the jump.
+    final track = state.currentTrack;
+    if (track != null && track.isPodcast) {
+      unawaited(
+        _persistPodcastProgress(track, position: position, forceServer: true),
+      );
+    }
     Analytics.track('seek', {'position_seconds': position.inSeconds});
   }
 
@@ -3378,6 +3390,37 @@ class PlayerNotifier extends Notifier<PlayerState> {
     if (target.isNegative) target = Duration.zero;
     if (total > Duration.zero && target > total) target = total;
     await seekTo(target);
+  }
+
+  /// Local upsert + optional throttled/forced server dual-write for podcasts.
+  Future<void> _persistPodcastProgress(
+    Track track, {
+    required Duration position,
+    required bool forceServer,
+  }) async {
+    final positionMs = position.inMilliseconds;
+    if (positionMs < 0) return;
+    final durationMs =
+        state.duration.inMilliseconds > 0
+            ? state.duration.inMilliseconds
+            : (track.duration != null ? track.duration! * 1000 : null);
+    try {
+      await _podcastProgress.upsertPosition(
+        trackId: track.id,
+        channelUuid: _podcastChannelUuid,
+        positionMs: positionMs,
+        durationMs: durationMs,
+      );
+    } catch (_) {}
+    try {
+      await _clientData.pushPlaybackProgress(
+        trackId: track.id,
+        positionMs: positionMs,
+        durationMs: durationMs,
+        channelUuid: _podcastChannelUuid,
+        force: forceServer,
+      );
+    } catch (_) {}
   }
 
   void toggleShuffle() {
@@ -3403,12 +3446,14 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // Match by track id — after persistence restore, queue and unshuffled
       // lists are different instances so identity indexOf would fail.
       final current = state.currentTrack;
-      final restored = state.unshuffledQueue.isNotEmpty
-          ? List<Track>.from(state.unshuffledQueue)
-          : List<Track>.from(state.queue);
-      final newIndex = current != null
-          ? restored.indexWhere((t) => t.id == current.id)
-          : state.currentIndex;
+      final restored =
+          state.unshuffledQueue.isNotEmpty
+              ? List<Track>.from(state.unshuffledQueue)
+              : List<Track>.from(state.queue);
+      final newIndex =
+          current != null
+              ? restored.indexWhere((t) => t.id == current.id)
+              : state.currentIndex;
       state = state.copyWith(
         isShuffled: false,
         unshuffledQueue: [],

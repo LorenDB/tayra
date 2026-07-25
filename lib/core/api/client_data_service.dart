@@ -10,8 +10,7 @@ import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/api/client_preferences.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
 import 'package:tayra/core/backup/nextcloud_backup_service.dart';
-import 'package:tayra/core/cache/cache_database.dart';
-import 'package:tayra/core/platform/app_platform.dart';
+import 'package:tayra/features/podcasts/podcast_progress_provider.dart';
 import 'package:tayra/features/podcasts/podcast_progress_service.dart';
 
 // ── Constants ───────────────────────────────────────────────────────────
@@ -73,6 +72,7 @@ class ClientDataBackend {
     this.putPlaybackProgress,
     this.bulkUpsertPlaybackProgress,
     this.getPlaybackProgressPage,
+    this.getPlaybackProgressForTrack,
     this.getClientPreferences,
     this.putClientPreferences,
     this.isAuthenticated = true,
@@ -124,6 +124,9 @@ class ClientDataBackend {
   })?
   getPlaybackProgressPage;
 
+  final Future<Map<String, dynamic>?> Function(int trackId)?
+  getPlaybackProgressForTrack;
+
   final Future<List<Map<String, dynamic>>> Function({
     required String clientId,
     String? deviceUuid,
@@ -156,11 +159,16 @@ class ClientDataBackend {
 /// When unsupported (GET client-devices → 404): thin [recordListening] only.
 /// Offline / network errors: swallow; SQLite remains the offline store.
 class ClientDataService {
-  ClientDataService(this._ref, {ClientDataBackend? backend})
-    : _backendOverride = backend;
+  ClientDataService(
+    this._ref, {
+    ClientDataBackend? backend,
+    PodcastProgressService? progressService,
+  }) : _backendOverride = backend,
+       _progressOverride = progressService;
 
   final Ref? _ref;
   final ClientDataBackend? _backendOverride;
+  final PodcastProgressService? _progressOverride;
 
   bool? _richSupported;
   bool _deviceRegistered = false;
@@ -184,9 +192,24 @@ class ClientDataService {
 
   /// Test-only construction without Riverpod.
   @visibleForTesting
-  ClientDataService.forTest(ClientDataBackend backend)
-    : _ref = null,
-      _backendOverride = backend;
+  ClientDataService.forTest(
+    ClientDataBackend backend, {
+    PodcastProgressService? progressService,
+  }) : _ref = null,
+       _backendOverride = backend,
+       _progressOverride = progressService;
+
+  PodcastProgressService get _progress {
+    final override = _progressOverride;
+    if (override != null) return override;
+    // Shared Riverpod instance so web in-memory cache is visible to UI.
+    final ref = _ref;
+    if (ref != null) {
+      return ref.read(podcastProgressServiceProvider);
+    }
+    // Fallback for tests without a progress override.
+    return PodcastProgressService.memoryOnly();
+  }
 
   ClientDataBackend get _backend {
     final override = _backendOverride;
@@ -230,6 +253,7 @@ class ClientDataService {
         );
         return (results: pageData.results, next: pageData.next);
       },
+      getPlaybackProgressForTrack: cached.getPlaybackProgressForTrack,
       getClientPreferences: cached.getClientPreferences,
       putClientPreferences: cached.putClientPreferences,
       isAuthenticated: ref.read(authStateProvider).isAuthenticated,
@@ -533,14 +557,12 @@ class ClientDataService {
   /// Optional hook invoked after remote prefs were written to SharedPreferences.
   Future<void> Function()? onPreferencesApplied;
 
-  /// Push local podcast progress (bulk LWW) then pull remote into SQLite.
+  /// Push local podcast progress (bulk LWW) then pull remote into local store
+  /// (SQLite on native, in-memory on web).
   Future<void> syncPodcastProgress() async {
     if (!isClientDataReady) return;
-    // Web has no local SQLite progress store — pull is still useful for resume
-    // if we later persist in-memory; native pushes local first.
-    if (AppPlatform.supportsOfflineCache) {
-      await _pushLocalProgressBulk();
-    }
+    // Push whatever we already know (native SQLite + memory, or web memory).
+    await _pushLocalProgressBulk();
     await _pullRemoteProgress();
   }
 
@@ -548,15 +570,17 @@ class ClientDataService {
     final bulk = _backend.bulkUpsertPlaybackProgress;
     if (bulk == null) return;
 
-    final local = PodcastProgressService(CacheDatabase.instance);
+    final local = _progress;
     final all = await local.getAllProgress();
     if (all.isEmpty) return;
 
     final deviceUuid = await _backend.getDeviceUuid();
     final items = local.toBulkItems(all.values, sourceDevice: deviceUuid);
-    for (var i = 0; i < items.length; i += kPlaybackProgressBulkChunk) {
-      final end = (i + kPlaybackProgressBulkChunk).clamp(0, items.length);
-      final chunk = items.sublist(i, end);
+    final chunks = PodcastProgressService.chunkItems(
+      items,
+      kPlaybackProgressBulkChunk,
+    );
+    for (final chunk in chunks) {
       try {
         await bulk(chunk);
       } catch (e) {
@@ -569,10 +593,9 @@ class ClientDataService {
     final pageFn = _backend.getPlaybackProgressPage;
     if (pageFn == null) return;
 
-    final local =
-        AppPlatform.supportsOfflineCache
-            ? PodcastProgressService(CacheDatabase.instance)
-            : null;
+    // Always apply into PodcastProgressService (memory on web, SQLite+memory
+    // on native) so resume UX has a server-hydrated source of truth.
+    final local = _progress;
 
     var page = 1;
     const pageSize = 100;
@@ -590,10 +613,8 @@ class ClientDataService {
       }
       if (pageData.results.isEmpty) break;
 
-      if (local != null) {
-        for (final row in pageData.results) {
-          await _applyRemoteProgressRow(local, row);
-        }
+      for (final row in pageData.results) {
+        await _applyRemoteProgressRow(local, row);
       }
 
       if (pageData.next == null || pageData.next!.isEmpty) break;
@@ -673,17 +694,12 @@ class ClientDataService {
       _lastProgressPositionMs = positionMs;
       _lastProgressPutAt = DateTime.now();
     } on DioException catch (e) {
-      // 409 = server has newer row — pull that single track into local if possible.
+      // 409 = server has newer row — apply server body into local/memory store.
       if (e.response?.statusCode == 409) {
         final body = e.response?.data;
         if (body is Map && body['progress'] is Map) {
           final progress = Map<String, dynamic>.from(body['progress'] as Map);
-          if (AppPlatform.supportsOfflineCache) {
-            await _applyRemoteProgressRow(
-              PodcastProgressService(CacheDatabase.instance),
-              progress,
-            );
-          }
+          await _applyRemoteProgressRow(_progress, progress);
         }
         return;
       }
@@ -691,6 +707,71 @@ class ClientDataService {
     } catch (e) {
       debugPrint('ClientDataService pushPlaybackProgress failed: $e');
     }
+  }
+
+  /// Local mark played + server dual-write (force). Used by podcast UI.
+  Future<void> markEpisodePlayed({
+    required int trackId,
+    String? channelUuid,
+    int? durationMs,
+  }) async {
+    await _progress.markPlayed(
+      trackId: trackId,
+      channelUuid: channelUuid,
+      durationMs: durationMs,
+    );
+    final after = await _progress.getProgress(trackId);
+    await pushPlaybackProgress(
+      trackId: trackId,
+      positionMs: after?.positionMs ?? durationMs ?? 0,
+      durationMs: after?.durationMs ?? durationMs,
+      completed: true,
+      channelUuid: channelUuid ?? after?.channelUuid,
+      updatedAt: after?.updatedAt,
+      force: true,
+    );
+  }
+
+  /// Local mark unplayed + server dual-write (force).
+  Future<void> markEpisodeUnplayed(int trackId) async {
+    final before = await _progress.getProgress(trackId);
+    await _progress.markUnplayed(trackId);
+    final after = await _progress.getProgress(trackId);
+    if (after == null && before == null) return;
+    await pushPlaybackProgress(
+      trackId: trackId,
+      positionMs: 0,
+      durationMs: after?.durationMs ?? before?.durationMs,
+      completed: false,
+      channelUuid: after?.channelUuid ?? before?.channelUuid,
+      updatedAt: after?.updatedAt,
+      force: true,
+    );
+  }
+
+  /// Fetch single-track progress from the API into the local/memory store.
+  ///
+  /// Used on web (and as a fallback) when opening a podcast episode before
+  /// play so resume position is available without SQLite.
+  Future<PodcastEpisodeProgress?> fetchAndCacheProgressForTrack(
+    int trackId,
+  ) async {
+    if (!_backend.isAuthenticated) return _progress.getProgress(trackId);
+    await ensureReady();
+    if (!isClientDataReady) return _progress.getProgress(trackId);
+
+    final getOne = _backend.getPlaybackProgressForTrack;
+    if (getOne != null) {
+      try {
+        final row = await getOne(trackId);
+        if (row != null) {
+          await _applyRemoteProgressRow(_progress, row);
+        }
+      } catch (e) {
+        debugPrint('ClientDataService fetch progress for track failed: $e');
+      }
+    }
+    return _progress.getProgress(trackId);
   }
 
   /// Sync allowlisted account-level preferences (LWW by local meta vs remote

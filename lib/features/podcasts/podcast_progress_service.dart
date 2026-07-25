@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:tayra/core/cache/cache_database.dart';
+import 'package:tayra/core/platform/app_platform.dart';
 
 // ── Episode progress model ────────────────────────────────────────────────
 
@@ -44,24 +45,61 @@ class PodcastEpisodeProgress {
       ),
     );
   }
+
+  PodcastEpisodeProgress copyWith({
+    int? trackId,
+    String? channelUuid,
+    int? positionMs,
+    int? durationMs,
+    bool? completed,
+    DateTime? updatedAt,
+  }) {
+    return PodcastEpisodeProgress(
+      trackId: trackId ?? this.trackId,
+      channelUuid: channelUuid ?? this.channelUuid,
+      positionMs: positionMs ?? this.positionMs,
+      durationMs: durationMs ?? this.durationMs,
+      completed: completed ?? this.completed,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
 }
 
 // ── Service ───────────────────────────────────────────────────────────────
 
-/// Persists podcast episode progress in the local cache database.
+/// Persists podcast episode progress for resume UX and played filters.
 ///
-/// Separate from listen history (year-in-review): this is only for resume UX
-/// and played/unplayed filters.
+/// Native: SQLite (`podcast_episode_progress`) plus an in-memory overlay.
+/// Web: in-memory only (server is source of truth; hydrated by client-data
+/// pull / single-track GET). Always update memory so web resume works.
 class PodcastProgressService {
-  PodcastProgressService(this._db);
+  PodcastProgressService(this._db) : _memoryOnly = false;
 
-  final CacheDatabase _db;
+  /// Memory-only instance (web SoT / unit tests; no SQLite).
+  PodcastProgressService.memoryOnly() : _db = null, _memoryOnly = true;
+
+  final CacheDatabase? _db;
+  final bool _memoryOnly;
+
+  /// In-memory store (web SoT cache + native write-through overlay).
+  final Map<int, PodcastEpisodeProgress> _memory = {};
 
   /// Fraction of duration at/above which an episode is auto-marked played.
   static const completedThreshold = 0.90;
 
+  bool get _useSqlite =>
+      !_memoryOnly && _db != null && AppPlatform.supportsOfflineCache;
+
+  /// Snapshot of all known progress (memory; may be incomplete until hydrated).
+  Map<int, PodcastEpisodeProgress> get memorySnapshot =>
+      Map.unmodifiable(_memory);
+
   Future<PodcastEpisodeProgress?> getProgress(int trackId) async {
-    final db = await _db.database;
+    final mem = _memory[trackId];
+    if (mem != null) return mem;
+    if (!_useSqlite) return null;
+
+    final db = await _db!.database;
     final rows = await db.query(
       'podcast_episode_progress',
       where: 'track_id = ?',
@@ -69,55 +107,87 @@ class PodcastProgressService {
       limit: 1,
     );
     if (rows.isEmpty) return null;
-    return PodcastEpisodeProgress.fromRow(rows.first);
+    final progress = PodcastEpisodeProgress.fromRow(rows.first);
+    _memory[trackId] = progress;
+    return progress;
   }
 
   Future<Map<int, PodcastEpisodeProgress>> getProgressForChannel(
     String channelUuid,
   ) async {
-    final db = await _db.database;
+    if (!_useSqlite) {
+      return {
+        for (final e in _memory.entries)
+          if (e.value.channelUuid == channelUuid) e.key: e.value,
+      };
+    }
+
+    final db = await _db!.database;
     final rows = await db.query(
       'podcast_episode_progress',
       where: 'channel_uuid = ?',
       whereArgs: [channelUuid],
     );
-    return {
-      for (final row in rows)
-        row['track_id'] as int: PodcastEpisodeProgress.fromRow(row),
-    };
+    final out = <int, PodcastEpisodeProgress>{};
+    for (final row in rows) {
+      final p = PodcastEpisodeProgress.fromRow(row);
+      _memory[p.trackId] = p;
+      out[p.trackId] = p;
+    }
+    // Merge memory rows for this channel that may not be in SQLite yet (web
+    // hybrid / race). Memory wins only if already present above.
+    for (final e in _memory.entries) {
+      if (e.value.channelUuid == channelUuid) {
+        out.putIfAbsent(e.key, () => e.value);
+      }
+    }
+    return out;
   }
 
   Future<Map<int, PodcastEpisodeProgress>> getAllProgress() async {
-    final db = await _db.database;
+    if (!_useSqlite) {
+      return Map<int, PodcastEpisodeProgress>.from(_memory);
+    }
+
+    final db = await _db!.database;
     final rows = await db.query('podcast_episode_progress');
-    return {
-      for (final row in rows)
-        row['track_id'] as int: PodcastEpisodeProgress.fromRow(row),
-    };
+    final out = <int, PodcastEpisodeProgress>{};
+    for (final row in rows) {
+      final p = PodcastEpisodeProgress.fromRow(row);
+      _memory[p.trackId] = p;
+      out[p.trackId] = p;
+    }
+    // Include pure-memory rows not yet in SQLite.
+    for (final e in _memory.entries) {
+      out.putIfAbsent(e.key, () => e.value);
+    }
+    return out;
   }
 
   /// Upsert playback position. Auto-marks completed when past threshold.
+  ///
+  /// When [channelUuid] is omitted, preserves any existing channel binding.
   Future<void> upsertPosition({
     required int trackId,
     String? channelUuid,
     required int positionMs,
     int? durationMs,
   }) async {
+    final existing = await getProgress(trackId);
     final completed =
         durationMs != null &&
         durationMs > 0 &&
         positionMs >= (durationMs * completedThreshold).round();
-
-    final db = await _db.database;
-    final now = DateTime.now().millisecondsSinceEpoch;
-    await db.insert('podcast_episode_progress', {
-      'track_id': trackId,
-      'channel_uuid': channelUuid,
-      'position_ms': positionMs,
-      'duration_ms': durationMs,
-      'completed': completed ? 1 : 0,
-      'updated_at': now,
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    final now = DateTime.now();
+    final progress = PodcastEpisodeProgress(
+      trackId: trackId,
+      channelUuid: channelUuid ?? existing?.channelUuid,
+      positionMs: positionMs,
+      durationMs: durationMs ?? existing?.durationMs,
+      completed: completed,
+      updatedAt: now,
+    );
+    await _write(progress);
   }
 
   Future<void> markPlayed({
@@ -125,39 +195,39 @@ class PodcastProgressService {
     String? channelUuid,
     int? durationMs,
   }) async {
-    final db = await _db.database;
-    final now = DateTime.now().millisecondsSinceEpoch;
     final existing = await getProgress(trackId);
     final dur = durationMs ?? existing?.durationMs;
-    await db.insert('podcast_episode_progress', {
-      'track_id': trackId,
-      'channel_uuid': channelUuid ?? existing?.channelUuid,
-      'position_ms': dur ?? existing?.positionMs ?? 0,
-      'duration_ms': dur,
-      'completed': 1,
-      'updated_at': now,
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    final progress = PodcastEpisodeProgress(
+      trackId: trackId,
+      channelUuid: channelUuid ?? existing?.channelUuid,
+      positionMs: dur ?? existing?.positionMs ?? 0,
+      durationMs: dur,
+      completed: true,
+      updatedAt: DateTime.now(),
+    );
+    await _write(progress);
   }
 
   Future<void> markUnplayed(int trackId) async {
-    final db = await _db.database;
     final existing = await getProgress(trackId);
     if (existing == null) {
       return;
     }
-    final now = DateTime.now().millisecondsSinceEpoch;
-    await db.insert('podcast_episode_progress', {
-      'track_id': trackId,
-      'channel_uuid': existing.channelUuid,
-      'position_ms': 0,
-      'duration_ms': existing.durationMs,
-      'completed': 0,
-      'updated_at': now,
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    final progress = PodcastEpisodeProgress(
+      trackId: trackId,
+      channelUuid: existing.channelUuid,
+      positionMs: 0,
+      durationMs: existing.durationMs,
+      completed: false,
+      updatedAt: DateTime.now(),
+    );
+    await _write(progress);
   }
 
   Future<void> clear(int trackId) async {
-    final db = await _db.database;
+    _memory.remove(trackId);
+    if (!_useSqlite) return;
+    final db = await _db!.database;
     await db.delete(
       'podcast_episode_progress',
       where: 'track_id = ?',
@@ -181,16 +251,41 @@ class PodcastProgressService {
       // Local is equal or newer — keep it.
       return false;
     }
-    final db = await _db.database;
-    await db.insert('podcast_episode_progress', {
-      'track_id': trackId,
-      'channel_uuid': channelUuid ?? existing?.channelUuid,
-      'position_ms': positionMs,
-      'duration_ms': durationMs ?? existing?.durationMs,
-      'completed': completed ? 1 : 0,
-      'updated_at': updatedAt.millisecondsSinceEpoch,
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    final progress = PodcastEpisodeProgress(
+      trackId: trackId,
+      channelUuid: channelUuid ?? existing?.channelUuid,
+      positionMs: positionMs,
+      durationMs: durationMs ?? existing?.durationMs,
+      completed: completed,
+      updatedAt: updatedAt,
+    );
+    await _write(progress);
     return true;
+  }
+
+  /// Seed / replace memory from a progress map (e.g. channel fetch on web).
+  void putAllInMemory(Iterable<PodcastEpisodeProgress> rows) {
+    for (final row in rows) {
+      final existing = _memory[row.trackId];
+      if (existing != null && !existing.updatedAt.isBefore(row.updatedAt)) {
+        continue;
+      }
+      _memory[row.trackId] = row;
+    }
+  }
+
+  Future<void> _write(PodcastEpisodeProgress progress) async {
+    _memory[progress.trackId] = progress;
+    if (!_useSqlite) return;
+    final db = await _db!.database;
+    await db.insert('podcast_episode_progress', {
+      'track_id': progress.trackId,
+      'channel_uuid': progress.channelUuid,
+      'position_ms': progress.positionMs,
+      'duration_ms': progress.durationMs,
+      'completed': progress.completed ? 1 : 0,
+      'updated_at': progress.updatedAt.millisecondsSinceEpoch,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   /// Wire format for `POST /api/v1/playback-progress/bulk/` items.
@@ -211,5 +306,19 @@ class PodcastProgressService {
           'updated_at': row.updatedAt.toUtc().toIso8601String(),
         },
     ];
+  }
+
+  /// Split [items] into chunks of at most [chunkSize] (server bulk max 500).
+  static List<List<T>> chunkItems<T>(List<T> items, int chunkSize) {
+    if (chunkSize <= 0) {
+      throw ArgumentError.value(chunkSize, 'chunkSize', 'must be > 0');
+    }
+    if (items.isEmpty) return const [];
+    final out = <List<T>>[];
+    for (var i = 0; i < items.length; i += chunkSize) {
+      final end = (i + chunkSize).clamp(0, items.length);
+      out.add(items.sublist(i, end));
+    }
+    return out;
   }
 }
