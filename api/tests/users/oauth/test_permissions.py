@@ -260,3 +260,52 @@ def test_scope_permission_token_honor_allowed_app_scopes(mocker, factories, now)
     should_allow.assert_called_once_with(
         required_scope="write:profile", request_scopes={"read:profile"}
     )
+
+
+def test_first_party_token_allows_instance_library_scopes(mocker, factories):
+    """Tayra first-party tokens may use instance:libraries when the user can."""
+    from funkwhale_api.users import first_party
+
+    user = factories["users.User"](permission_library=True)
+    token = factories["users.AccessToken"](
+        user=user,
+        scope="read write",
+        application__name=first_party.FIRST_PARTY_APP_NAME,
+        application__user=None,
+        application__scope="read write",
+    )
+    should_allow = mocker.patch.object(permissions, "should_allow")
+    request = mocker.Mock(method="GET", auth=token)
+    view = mocker.Mock(required_scope="instance:libraries", anonymous_policy=False)
+    p = permissions.ScopePermission()
+
+    assert p.has_permission(request, view) == should_allow.return_value
+
+    request_scopes = should_allow.call_args.kwargs["request_scopes"]
+    assert "read:instance:libraries" in request_scopes
+    assert "write:instance:libraries" in request_scopes
+    should_allow.assert_called_once_with(
+        required_scope="read:instance:libraries",
+        request_scopes=request_scopes,
+    )
+
+
+def test_third_party_token_cannot_use_instance_library_scopes(mocker, factories):
+    """Third-party OAuth apps stay limited to OAUTH_APP_SCOPES."""
+    user = factories["users.User"](permission_library=True)
+    token = factories["users.AccessToken"](
+        user=user,
+        scope="read write",
+        application__name="Some Third Party",
+        application__scope="read write",
+    )
+    should_allow = mocker.patch.object(permissions, "should_allow")
+    request = mocker.Mock(method="GET", auth=token)
+    view = mocker.Mock(required_scope="instance:libraries", anonymous_policy=False)
+    p = permissions.ScopePermission()
+
+    assert p.has_permission(request, view) == should_allow.return_value
+
+    request_scopes = should_allow.call_args.kwargs["request_scopes"]
+    assert "read:instance:libraries" not in request_scopes
+    assert "write:instance:libraries" not in request_scopes

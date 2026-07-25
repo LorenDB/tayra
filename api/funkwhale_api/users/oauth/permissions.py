@@ -111,11 +111,32 @@ class ScopePermission(permissions.BasePermission):
         user = token.user
         user_scopes = scopes.get_from_permissions(**user.get_permissions())
         token_scopes = set(token.scopes.keys())
-        final_scopes = (
-            user_scopes
-            & normalize(*token_scopes)
-            & token.application.normalized_scopes
-            & scopes.OAUTH_APP_SCOPES
-        )
+        app_scopes = token.application.normalized_scopes if token.application else set()
+
+        # Third-party OAuth apps are restricted to OAUTH_APP_SCOPES (no admin
+        # /instance scopes). The first-party Tayra application is trusted and
+        # may use privileged scopes the user actually holds (e.g.
+        # instance:libraries when permission_library is true).
+        if _is_first_party_application(token.application):
+            final_scopes = user_scopes & normalize(*token_scopes) & app_scopes
+        else:
+            final_scopes = (
+                user_scopes
+                & normalize(*token_scopes)
+                & app_scopes
+                & scopes.OAUTH_APP_SCOPES
+            )
 
         return should_allow(required_scope=required_scope, request_scopes=final_scopes)
+
+
+def _is_first_party_application(application):
+    """True for the system Tayra OAuth app (not third-party user-owned apps)."""
+    if application is None:
+        return False
+    from funkwhale_api.users import first_party
+
+    return (
+        application.name == first_party.FIRST_PARTY_APP_NAME
+        and getattr(application, "user_id", None) is None
+    )
