@@ -127,7 +127,12 @@ void main() async {
   // This ensures Android Auto can start playback even when launched in the background.
   container.read(playerProvider);
 
-  // Register ClientDevice on cold start / login when client-data API is available.
+  // After remote prefs pull, reload SettingsNotifier from SharedPreferences.
+  container.read(clientDataServiceProvider).onPreferencesApplied = () async {
+    await container.read(settingsProvider.notifier).reloadFromPrefs();
+  };
+
+  // Register ClientDevice + sync progress/prefs when client-data API is available.
   container.read(clientDataBootstrapProvider);
 
   runApp(

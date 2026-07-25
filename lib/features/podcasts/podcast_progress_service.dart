@@ -164,4 +164,52 @@ class PodcastProgressService {
       whereArgs: [trackId],
     );
   }
+
+  /// Apply a remote progress row using last-write-wins on [updatedAt].
+  ///
+  /// Returns true when the local row was inserted or updated.
+  Future<bool> applyRemoteLww({
+    required int trackId,
+    String? channelUuid,
+    required int positionMs,
+    int? durationMs,
+    required bool completed,
+    required DateTime updatedAt,
+  }) async {
+    final existing = await getProgress(trackId);
+    if (existing != null && !existing.updatedAt.isBefore(updatedAt)) {
+      // Local is equal or newer — keep it.
+      return false;
+    }
+    final db = await _db.database;
+    await db.insert('podcast_episode_progress', {
+      'track_id': trackId,
+      'channel_uuid': channelUuid ?? existing?.channelUuid,
+      'position_ms': positionMs,
+      'duration_ms': durationMs ?? existing?.durationMs,
+      'completed': completed ? 1 : 0,
+      'updated_at': updatedAt.millisecondsSinceEpoch,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    return true;
+  }
+
+  /// Wire format for `POST /api/v1/playback-progress/bulk/` items.
+  List<Map<String, dynamic>> toBulkItems(
+    Iterable<PodcastEpisodeProgress> rows, {
+    String? sourceDevice,
+  }) {
+    return [
+      for (final row in rows)
+        {
+          'track': row.trackId,
+          'position_ms': row.positionMs,
+          if (row.durationMs != null) 'duration_ms': row.durationMs,
+          'completed': row.completed,
+          if (row.channelUuid != null && row.channelUuid!.isNotEmpty)
+            'channel_uuid': row.channelUuid,
+          if (sourceDevice != null) 'source_device': sourceDevice,
+          'updated_at': row.updatedAt.toUtc().toIso8601String(),
+        },
+    ];
+  }
 }

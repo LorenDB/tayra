@@ -450,6 +450,141 @@ class FunkwhaleApi {
     return <String, dynamic>{};
   }
 
+  // ── Playback progress ───────────────────────────────────────────────
+
+  /// List own playback progress rows (paginated).
+  Future<PaginatedResponse<Map<String, dynamic>>> getPlaybackProgress({
+    int page = 1,
+    int pageSize = 100,
+    String? channelUuid,
+    bool? completed,
+  }) async {
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/playback-progress/',
+      queryParameters: {
+        'page': page,
+        'page_size': pageSize,
+        if (channelUuid != null) 'channel_uuid': channelUuid,
+        if (completed != null) 'completed': completed,
+      },
+    );
+    final body = _asStringKeyedMap(response.data);
+    final results =
+        (body['results'] as List?)
+            ?.whereType<Map>()
+            .map((m) => Map<String, dynamic>.from(m))
+            .toList() ??
+        const <Map<String, dynamic>>[];
+    return PaginatedResponse(
+      count: body['count'] as int? ?? results.length,
+      next: body['next'] as String?,
+      previous: body['previous'] as String?,
+      results: results,
+    );
+  }
+
+  /// Fetch progress for a single track. Returns null on 404.
+  Future<Map<String, dynamic>?> getPlaybackProgressForTrack(int trackId) async {
+    try {
+      final response = await _dio.get(
+        '$_baseUrl/api/v1/playback-progress/$trackId/',
+      );
+      return _asStringKeyedMap(response.data);
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) return null;
+      rethrow;
+    }
+  }
+
+  /// PUT upsert progress for [trackId]. May throw DioException 409 on LWW conflict.
+  Future<Map<String, dynamic>> putPlaybackProgress({
+    required int trackId,
+    required int positionMs,
+    int? durationMs,
+    bool? completed,
+    String? channelUuid,
+    String? sourceDevice,
+    DateTime? updatedAt,
+  }) async {
+    final data = <String, dynamic>{
+      'position_ms': positionMs,
+      if (durationMs != null) 'duration_ms': durationMs,
+      if (completed != null) 'completed': completed,
+      if (channelUuid != null) 'channel_uuid': channelUuid,
+      if (sourceDevice != null) 'source_device': sourceDevice,
+      if (updatedAt != null) 'updated_at': updatedAt.toUtc().toIso8601String(),
+    };
+    final response = await _dio.put(
+      '$_baseUrl/api/v1/playback-progress/$trackId/',
+      data: data,
+    );
+    return _asStringKeyedMap(response.data);
+  }
+
+  /// Bulk migration import (LWW by `updated_at`). Max 500 items server-side.
+  Future<Map<String, dynamic>> bulkUpsertPlaybackProgress(
+    List<Map<String, dynamic>> items,
+  ) async {
+    final response = await _dio.post(
+      '$_baseUrl/api/v1/playback-progress/bulk/',
+      data: {'items': items},
+    );
+    return _asStringKeyedMap(response.data);
+  }
+
+  Future<void> deletePlaybackProgress(int trackId) async {
+    await _dio.delete('$_baseUrl/api/v1/playback-progress/$trackId/');
+  }
+
+  // ── Client preferences ──────────────────────────────────────────────
+
+  /// GET namespaced preferences for [clientId] (optional device overlay).
+  Future<List<Map<String, dynamic>>> getClientPreferences({
+    required String clientId,
+    String? deviceUuid,
+  }) async {
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/client-preferences/',
+      queryParameters: {
+        'client_id': clientId,
+        if (deviceUuid != null) 'device_uuid': deviceUuid,
+      },
+    );
+    final body = _asStringKeyedMap(response.data);
+    final results = body['results'];
+    if (results is! List) return const [];
+    return results
+        .whereType<Map>()
+        .map((m) => Map<String, dynamic>.from(m))
+        .toList();
+  }
+
+  /// PUT merge/replace preferences for a scope.
+  Future<Map<String, dynamic>> putClientPreferences({
+    required String clientId,
+    required Map<String, dynamic> preferences,
+    String? deviceUuid,
+    String mode = 'merge',
+  }) async {
+    final data = <String, dynamic>{
+      'client_id': clientId,
+      'preferences': preferences,
+      'mode': mode,
+      if (deviceUuid != null) 'device_uuid': deviceUuid,
+    };
+    final response = await _dio.put(
+      '$_baseUrl/api/v1/client-preferences/',
+      data: data,
+    );
+    return _asStringKeyedMap(response.data);
+  }
+
+  Map<String, dynamic> _asStringKeyedMap(dynamic data) {
+    if (data is Map<String, dynamic>) return data;
+    if (data is Map) return Map<String, dynamic>.from(data);
+    return <String, dynamic>{};
+  }
+
   // ── Stream URL builder ──────────────────────────────────────────────
 
   /// Absolute listen URL, optionally with Funkwhale scoped `?token=` for
