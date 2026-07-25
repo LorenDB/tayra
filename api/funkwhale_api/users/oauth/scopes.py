@@ -18,6 +18,10 @@ BASE_SCOPES = [
     Scope("favorites", "Access favorites"),
     Scope("filters", "Access content filters"),
     Scope("listenings", "Access listening history"),
+    Scope(
+        "client_data",
+        "Access client devices, preferences, and playback progress",
+    ),
     Scope("radios", "Access radios"),
     Scope("playlists", "Access playlists"),
     Scope("notifications", "Access personal notifications"),
@@ -80,6 +84,8 @@ COMMON_SCOPES = ANONYMOUS_SCOPES | {
     "read:reports",
     "write:reports",
     "write:listenings",
+    "read:client_data",
+    "write:client_data",
 }
 
 LOGGED_IN_SCOPES = COMMON_SCOPES | {

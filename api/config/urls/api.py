@@ -68,6 +68,12 @@ v1_patterns += [
     ),
     url(
         r"^",
+        include(
+            ("funkwhale_api.client_data.urls", "client_data"), namespace="client_data"
+        ),
+    ),
+    url(
+        r"^",
         include(("funkwhale_api.users.api_urls", "users"), namespace="users"),
     ),
     # XXX: remove if Funkwhale 1.1

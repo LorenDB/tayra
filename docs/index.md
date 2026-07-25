@@ -107,6 +107,7 @@ specs/offline-mode/index
 specs/quality-filter/index
 specs/multi-artist/index
 specs/user-follow/index
+specs/rich-client-data/index
 
 ```
 

@@ -276,6 +276,7 @@ LOCAL_APPS = (
     "funkwhale_api.moderation.apps.ModerationConfig",
     "funkwhale_api.radios",
     "funkwhale_api.history",
+    "funkwhale_api.client_data",
     "funkwhale_api.playlists",
     "funkwhale_api.subsonic",
     "funkwhale_api.tags",
@@ -1192,6 +1193,16 @@ THROTTLING_RATES = {
     "fetch": {
         "rate": THROTTLING_USER_RATES.get("fetch", "200/d"),
         "description": "Fetch remote objects",
+    },
+    "authenticated-listening-update": {
+        "rate": THROTTLING_USER_RATES.get(
+            "authenticated-listening-update", "3600/hour"
+        ),
+        "description": "Listening duration updates",
+    },
+    "authenticated-listenings-bulk": {
+        "rate": "60/hour",
+        "description": "Listening history bulk import",
     },
 }
 THROTTLING_RATES = THROTTLING_RATES
