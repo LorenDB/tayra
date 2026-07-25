@@ -856,6 +856,12 @@ class CachedFunkwhaleApi {
 >>>>>>> abb432f642b90efaa37a1ceec4d5c040622615de
   );
 
+  /// Year-in-review stats (not cached — aggregates change with each listen).
+  Future<Map<String, dynamic>> getListeningStats({
+    required int year,
+    int limit = 10,
+  }) => _api.getListeningStats(year: year, limit: limit);
+
   String getStreamUrl(String listenUrl, {bool appendListenToken = true}) =>
       _api.getStreamUrl(listenUrl, appendListenToken: appendListenToken);
 

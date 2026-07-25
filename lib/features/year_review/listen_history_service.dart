@@ -144,6 +144,9 @@ class TopItem {
   /// results. Null for tracks and artists.
   final int? albumTrackCount;
 
+  /// Server entity id when loaded from [YearReviewStats.fromServerJson].
+  final int? id;
+
   const TopItem({
     required this.name,
     this.subtitle,
@@ -152,7 +155,30 @@ class TopItem {
     this.totalSeconds,
     this.totalListens,
     this.albumTrackCount,
+    this.id,
   });
+
+  TopItem copyWith({
+    String? name,
+    String? subtitle,
+    String? coverUrl,
+    int? count,
+    int? totalSeconds,
+    int? totalListens,
+    int? albumTrackCount,
+    int? id,
+  }) {
+    return TopItem(
+      name: name ?? this.name,
+      subtitle: subtitle ?? this.subtitle,
+      coverUrl: coverUrl ?? this.coverUrl,
+      count: count ?? this.count,
+      totalSeconds: totalSeconds ?? this.totalSeconds,
+      totalListens: totalListens ?? this.totalListens,
+      albumTrackCount: albumTrackCount ?? this.albumTrackCount,
+      id: id ?? this.id,
+    );
+  }
 }
 
 class MonthlyListens {
@@ -272,6 +298,15 @@ class YearReviewStats {
   /// Per-device listen breakdown for this year.
   final List<DeviceStat> deviceStats;
 
+  /// Server: COUNT(*) where duration_seconds IS NOT NULL. Null for local SQLite.
+  final int? listensWithDuration;
+
+  /// Server secondary estimate using track length for null durations.
+  final int? estimatedSeconds;
+
+  /// True when aggregates came from `GET .../listenings/stats/`.
+  final bool fromServer;
+
   const YearReviewStats({
     required this.year,
     required this.totalListens,
@@ -290,6 +325,9 @@ class YearReviewStats {
     this.lovedTopTracks = const [],
     this.unlovedTopTracks = const [],
     this.deviceStats = const [],
+    this.listensWithDuration,
+    this.estimatedSeconds,
+    this.fromServer = false,
   });
 
   bool get isEmpty => totalListens == 0;
@@ -311,6 +349,200 @@ class YearReviewStats {
     }
     return peak.month;
   }
+
+  YearReviewStats copyWith({
+    int? year,
+    int? totalListens,
+    int? totalSeconds,
+    int? uniqueTracks,
+    int? uniqueArtists,
+    int? uniqueAlbums,
+    List<TopItem>? topTracks,
+    List<TopItem>? topArtists,
+    List<TopItem>? topAlbums,
+    List<MonthlyListens>? monthlyBreakdown,
+    TopItem? topTrack,
+    TopItem? topArtist,
+    TopItem? topAlbum,
+    List<FavoritedTrack>? favoritedThisYear,
+    List<TopItem>? lovedTopTracks,
+    List<TopItem>? unlovedTopTracks,
+    List<DeviceStat>? deviceStats,
+    int? listensWithDuration,
+    int? estimatedSeconds,
+    bool? fromServer,
+  }) {
+    return YearReviewStats(
+      year: year ?? this.year,
+      totalListens: totalListens ?? this.totalListens,
+      totalSeconds: totalSeconds ?? this.totalSeconds,
+      uniqueTracks: uniqueTracks ?? this.uniqueTracks,
+      uniqueArtists: uniqueArtists ?? this.uniqueArtists,
+      uniqueAlbums: uniqueAlbums ?? this.uniqueAlbums,
+      topTracks: topTracks ?? this.topTracks,
+      topArtists: topArtists ?? this.topArtists,
+      topAlbums: topAlbums ?? this.topAlbums,
+      monthlyBreakdown: monthlyBreakdown ?? this.monthlyBreakdown,
+      topTrack: topTrack ?? this.topTrack,
+      topArtist: topArtist ?? this.topArtist,
+      topAlbum: topAlbum ?? this.topAlbum,
+      favoritedThisYear: favoritedThisYear ?? this.favoritedThisYear,
+      lovedTopTracks: lovedTopTracks ?? this.lovedTopTracks,
+      unlovedTopTracks: unlovedTopTracks ?? this.unlovedTopTracks,
+      deviceStats: deviceStats ?? this.deviceStats,
+      listensWithDuration: listensWithDuration ?? this.listensWithDuration,
+      estimatedSeconds: estimatedSeconds ?? this.estimatedSeconds,
+      fromServer: fromServer ?? this.fromServer,
+    );
+  }
+
+  /// Map `GET /api/v1/history/listenings/stats/` JSON to UI models.
+  ///
+  /// Field mapping (K14):
+  /// - `total_seconds` — actual listened only (null durations → 0)
+  /// - `listens_with_duration` / `estimated_seconds` — transparency metrics
+  /// - `monthly` → [monthlyBreakdown]
+  /// - `by_device` → [deviceStats]
+  factory YearReviewStats.fromServerJson(Map<String, dynamic> json) {
+    int asInt(dynamic v) => (v as num?)?.toInt() ?? 0;
+
+    final topTracks = _parseServerTopTracks(json['top_tracks']);
+    final topArtists = _parseServerTopArtists(json['top_artists']);
+    final topAlbums = _parseServerTopAlbums(json['top_albums']);
+    final monthly = _parseServerMonthly(json['monthly']);
+    final devices = _parseServerDevices(json['by_device']);
+
+    return YearReviewStats(
+      year: asInt(json['year']),
+      totalListens: asInt(json['total_listens']),
+      totalSeconds: asInt(json['total_seconds']),
+      uniqueTracks: asInt(json['unique_tracks']),
+      uniqueArtists: asInt(json['unique_artists']),
+      uniqueAlbums: asInt(json['unique_albums']),
+      topTracks: topTracks,
+      topArtists: topArtists,
+      topAlbums: topAlbums,
+      monthlyBreakdown: monthly,
+      topTrack: topTracks.isNotEmpty ? topTracks.first : null,
+      topArtist: topArtists.isNotEmpty ? topArtists.first : null,
+      topAlbum: topAlbums.isNotEmpty ? topAlbums.first : null,
+      deviceStats: devices,
+      listensWithDuration: (json['listens_with_duration'] as num?)?.toInt(),
+      estimatedSeconds: (json['estimated_seconds'] as num?)?.toInt(),
+      fromServer: true,
+    );
+  }
+
+  static List<TopItem> _parseServerTopTracks(dynamic raw) {
+    if (raw is! List) return const [];
+    final out = <TopItem>[];
+    for (final e in raw) {
+      if (e is! Map) continue;
+      final m = Map<String, dynamic>.from(e);
+      out.add(
+        TopItem(
+          id: (m['track_id'] as num?)?.toInt(),
+          name: m['title'] as String? ?? 'Unknown',
+          subtitle: m['artist_name'] as String?,
+          coverUrl: m['cover_url'] as String?,
+          count: (m['count'] as num?)?.toInt() ?? 0,
+          totalSeconds: (m['total_seconds'] as num?)?.toInt(),
+        ),
+      );
+    }
+    return out;
+  }
+
+  static List<TopItem> _parseServerTopArtists(dynamic raw) {
+    if (raw is! List) return const [];
+    final out = <TopItem>[];
+    for (final e in raw) {
+      if (e is! Map) continue;
+      final m = Map<String, dynamic>.from(e);
+      out.add(
+        TopItem(
+          id: (m['artist_id'] as num?)?.toInt(),
+          name: m['name'] as String? ?? 'Unknown',
+          coverUrl: m['cover_url'] as String?,
+          count: (m['count'] as num?)?.toInt() ?? 0,
+          totalSeconds: (m['total_seconds'] as num?)?.toInt(),
+        ),
+      );
+    }
+    return out;
+  }
+
+  static List<TopItem> _parseServerTopAlbums(dynamic raw) {
+    if (raw is! List) return const [];
+    final out = <TopItem>[];
+    for (final e in raw) {
+      if (e is! Map) continue;
+      final m = Map<String, dynamic>.from(e);
+      final count = (m['count'] as num?)?.toInt() ?? 0;
+      out.add(
+        TopItem(
+          id: (m['album_id'] as num?)?.toInt(),
+          name: m['title'] as String? ?? 'Unknown',
+          subtitle: m['artist_name'] as String?,
+          coverUrl: m['cover_url'] as String?,
+          // Server count is listen rows; expose as both score and totalListens
+          // so play-through UI can use albumTrackCount when available.
+          count: count,
+          totalSeconds: (m['total_seconds'] as num?)?.toInt(),
+          totalListens: count,
+        ),
+      );
+    }
+    return out;
+  }
+
+  static List<MonthlyListens> _parseServerMonthly(dynamic raw) {
+    // Always materialize 12 months so peakMonth / charts stay stable.
+    final byMonth = <int, MonthlyListens>{};
+    if (raw is List) {
+      for (final e in raw) {
+        if (e is! Map) continue;
+        final m = Map<String, dynamic>.from(e);
+        final month = (m['month'] as num?)?.toInt();
+        if (month == null || month < 1 || month > 12) continue;
+        byMonth[month] = MonthlyListens(
+          month: month,
+          count: (m['count'] as num?)?.toInt() ?? 0,
+          totalSeconds: (m['total_seconds'] as num?)?.toInt() ?? 0,
+        );
+      }
+    }
+    return List.generate(12, (i) {
+      final month = i + 1;
+      return byMonth[month] ??
+          MonthlyListens(month: month, count: 0, totalSeconds: 0);
+    });
+  }
+
+  static List<DeviceStat> _parseServerDevices(dynamic raw) {
+    if (raw is! List) return const [];
+    final out = <DeviceStat>[];
+    for (final e in raw) {
+      if (e is! Map) continue;
+      final m = Map<String, dynamic>.from(e);
+      final uuid = m['device_uuid'] as String?;
+      final name = m['device_name'] as String?;
+      out.add(
+        DeviceStat(
+          deviceId: (uuid != null && uuid.isNotEmpty) ? uuid : 'unknown',
+          listenCount: (m['count'] as num?)?.toInt() ?? 0,
+          totalSeconds: (m['total_seconds'] as num?)?.toInt() ?? 0,
+          displayNameOverride: (name != null && name.isNotEmpty)
+              ? name
+              : (uuid == null || uuid.isEmpty)
+              ? 'Other devices'
+              : null,
+        ),
+      );
+    }
+    out.sort((a, b) => b.listenCount.compareTo(a.listenCount));
+    return out;
+  }
 }
 
 // ── Device stats model ──────────────────────────────────────────────────
@@ -320,13 +552,18 @@ class DeviceStat {
   final int listenCount;
   final int totalSeconds;
 
+  /// Human label from the server (`by_device.device_name`) when present.
+  final String? displayNameOverride;
+
   const DeviceStat({
     required this.deviceId,
     required this.listenCount,
     required this.totalSeconds,
+    this.displayNameOverride,
   });
 
   String get displayName =>
+      displayNameOverride ??
       ListenHistoryService.resolveDeviceDisplayName(deviceId);
 
   double percentageOf(int total) => total > 0 ? listenCount / total : 0.0;
