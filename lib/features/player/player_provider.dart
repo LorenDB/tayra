@@ -85,9 +85,10 @@ class PlayerState {
     this.queueCompleted = false,
   });
 
-  Track? get currentTrack => currentIndex >= 0 && currentIndex < queue.length
-      ? queue[currentIndex]
-      : null;
+  Track? get currentTrack =>
+      currentIndex >= 0 && currentIndex < queue.length
+          ? queue[currentIndex]
+          : null;
 
   /// True when skip-next can advance (or wrap under [LoopMode.all]).
   bool get hasNext {
@@ -103,9 +104,10 @@ class PlayerState {
     return loopMode == LoopMode.all;
   }
 
-  double get progress => duration.inMilliseconds > 0
-      ? position.inMilliseconds / duration.inMilliseconds
-      : 0.0;
+  double get progress =>
+      duration.inMilliseconds > 0
+          ? position.inMilliseconds / duration.inMilliseconds
+          : 0.0;
 
   PlayerState copyWith({
     List<Track>? queue,
@@ -132,9 +134,8 @@ class PlayerState {
       isShuffled: isShuffled ?? this.isShuffled,
       loopMode: loopMode ?? this.loopMode,
       isLoading: isLoading ?? this.isLoading,
-      loadingRadioId: clearLoadingRadioId
-          ? null
-          : (loadingRadioId ?? this.loadingRadioId),
+      loadingRadioId:
+          clearLoadingRadioId ? null : (loadingRadioId ?? this.loadingRadioId),
       playbackSpeed: playbackSpeed ?? this.playbackSpeed,
       queueCompleted: queueCompleted ?? this.queueCompleted,
     );
@@ -726,9 +727,8 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
       artist: track.artistName,
       album: track.albumTitle,
       artUri: track.coverUrl != null ? Uri.tryParse(track.coverUrl!) : null,
-      duration: track.duration != null
-          ? Duration(seconds: track.duration!)
-          : null,
+      duration:
+          track.duration != null ? Duration(seconds: track.duration!) : null,
       playable: true,
     );
   }
@@ -742,9 +742,8 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
       artist: track.artistName,
       album: track.albumTitle,
       artUri: track.coverUrl != null ? Uri.tryParse(track.coverUrl!) : null,
-      duration: track.duration != null
-          ? Duration(seconds: track.duration!)
-          : null,
+      duration:
+          track.duration != null ? Duration(seconds: track.duration!) : null,
       playable: true,
     );
   }
@@ -926,23 +925,28 @@ class PlayerNotifier extends Notifier<PlayerState> {
     _audioCache = ref.read(audioCacheServiceProvider);
     _podcastProgress = PodcastProgressService(CacheDatabase.instance);
     _listenTracker = PlaybackListenTracker(
-      onSessionPersisted:
-          (trackId, recordId, persistedSeconds, listenedAt, {force = false}) {
-            QueuePersistenceService.saveListenSession(
-              trackId: trackId,
-              recordId: recordId,
-              persistedSeconds: persistedSeconds,
-              listenedAt: listenedAt,
-            );
-            // Rich server duration PATCH (≥15s / pause / end). No-op when
-            // thin-only or no active rich session.
-            unawaited(
-              ref
-                  .read(clientDataServiceProvider)
-                  .syncDuration(trackId, persistedSeconds, force: force)
-                  .catchError((_) {}),
-            );
-          },
+      onSessionPersisted: (
+        trackId,
+        recordId,
+        persistedSeconds,
+        listenedAt, {
+        force = false,
+      }) {
+        QueuePersistenceService.saveListenSession(
+          trackId: trackId,
+          recordId: recordId,
+          persistedSeconds: persistedSeconds,
+          listenedAt: listenedAt,
+        );
+        // Rich server duration PATCH (≥15s / pause / end). No-op when
+        // thin-only or no active rich session.
+        unawaited(
+          ref
+              .read(clientDataServiceProvider)
+              .syncDuration(trackId, persistedSeconds, force: force)
+              .catchError((_) {}),
+        );
+      },
     );
     _init();
     Future.microtask(() => _restoreQueue());
@@ -1109,11 +1113,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
                 .upsertPosition(
                   trackId: track.id,
                   positionMs: position.inMilliseconds,
-                  durationMs: state.duration.inMilliseconds > 0
-                      ? state.duration.inMilliseconds
-                      : (track.duration != null
-                            ? track.duration! * 1000
-                            : null),
+                  durationMs:
+                      state.duration.inMilliseconds > 0
+                          ? state.duration.inMilliseconds
+                          : (track.duration != null
+                              ? track.duration! * 1000
+                              : null),
                 )
                 .catchError((_) {}),
           );
@@ -1274,11 +1279,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
         }
 
         if (event.reason == PositionDiscontinuityReason.autoAdvance) {
-          try {
-            await _listenTracker.finalize(
-              position: event.previousEvent.updatePosition,
-            );
-          } catch (_) {}
+          // Ends local + rich server session so the next activate/record
+          // opens a fresh listening row.
+          await _finalizeListenAt(event.previousEvent.updatePosition);
 
           _pendingRestoreListenSession = null;
 
@@ -1365,8 +1368,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // Derive duration from the saved state or from the track metadata.
       final currentTrack =
           validIndex >= 0 && validIndex < savedState.queue.length
-          ? savedState.queue[validIndex]
-          : null;
+              ? savedState.queue[validIndex]
+              : null;
       final trackDuration =
           savedState.duration ??
           (currentTrack?.duration != null
@@ -1388,9 +1391,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // When the queue completed at save time, the persisted position is the
       // end of the last track — not a valid resume point. Reset to zero so
       // playback starts from the beginning of track 0 on restore.
-      final restorePosition = savedState.isCompleted
-          ? Duration.zero
-          : savedState.position;
+      final restorePosition =
+          savedState.isCompleted ? Duration.zero : savedState.position;
 
       // Restore the saved playback position so it can be seeked to once the
       // user taps play.  We intentionally do NOT call setAudioSource here
@@ -1449,6 +1451,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
     try {
       await _listenTracker.finalizeAt(position: position);
     } catch (_) {}
+    // Clear rich server session so same-track replay opens a new row.
+    try {
+      await _clientData.endSession();
+    } catch (_) {}
   }
 
   Future<void> _finalizeListenAtTrackEnd(Duration position) async {
@@ -1457,6 +1463,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
         position: position,
         forceAccumulate: true,
       );
+    } catch (_) {}
+    try {
+      await _clientData.endSession();
     } catch (_) {}
   }
 
@@ -1469,9 +1478,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
     bool? isPlaying,
   }) async {
     try {
-      final resume = _pendingRestoreListenSession?.trackId == track.id
-          ? _pendingRestoreListenSession
-          : null;
+      final resume =
+          _pendingRestoreListenSession?.trackId == track.id
+              ? _pendingRestoreListenSession
+              : null;
       _pendingRestoreListenSession = null;
       await _listenTracker.activate(
         track,
@@ -1639,9 +1649,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
         artist: track.artistName,
         album: track.albumTitle,
         artUri: track.coverUrl != null ? Uri.tryParse(track.coverUrl!) : null,
-        duration: track.duration != null
-            ? Duration(seconds: track.duration!)
-            : null,
+        duration:
+            track.duration != null ? Duration(seconds: track.duration!) : null,
       ),
     );
   }
@@ -2495,9 +2504,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
       stash.queue,
       startIndex: safeIndex,
       source: 'stash_restore',
-      initialPosition: stash.position.inMilliseconds > 0
-          ? stash.position
-          : null,
+      initialPosition:
+          stash.position.inMilliseconds > 0 ? stash.position : null,
     );
 
     // playTracks resets shuffle/loop; re-apply the stashed metadata so
@@ -2569,18 +2577,18 @@ class PlayerNotifier extends Notifier<PlayerState> {
         artist: track.artistName,
         album: track.albumTitle,
         artUri: track.coverUrl != null ? Uri.tryParse(track.coverUrl!) : null,
-        duration: track.duration != null
-            ? Duration(seconds: track.duration!)
-            : null,
+        duration:
+            track.duration != null ? Duration(seconds: track.duration!) : null,
       );
 
       if (!_isCurrentLoad(loadEpoch)) return false;
       _handler.mediaItem.add(mediaItem);
 
       // Check audio cache first — play from local file if available (native only).
-      final cachedFile = AppPlatform.supportsOfflineCache
-          ? await _audioCache.getCachedAudio(track)
-          : null;
+      final cachedFile =
+          AppPlatform.supportsOfflineCache
+              ? await _audioCache.getCachedAudio(track)
+              : null;
       if (!_isCurrentLoad(loadEpoch)) return false;
       // Whether we ultimately streamed from server (so we know to kick off
       // background caching after playback starts).
@@ -2818,9 +2826,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
         _podcastProgress
             .markPlayed(
               trackId: completedTrack.id,
-              durationMs: completedTrack.duration != null
-                  ? completedTrack.duration! * 1000
-                  : state.duration.inMilliseconds,
+              durationMs:
+                  completedTrack.duration != null
+                      ? completedTrack.duration! * 1000
+                      : state.duration.inMilliseconds,
             )
             .catchError((_) {}),
       );
@@ -2828,9 +2837,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
     if (_gaplessActive) {
       if (completedTrack != null) {
-        final endPosition = state.duration.inSeconds > 0
-            ? state.duration
-            : Duration(seconds: completedTrack.duration ?? 0);
+        final endPosition =
+            state.duration.inSeconds > 0
+                ? state.duration
+                : Duration(seconds: completedTrack.duration ?? 0);
         unawaited(_finalizeListenAtTrackEnd(endPosition));
       }
 
@@ -2890,22 +2900,33 @@ class PlayerNotifier extends Notifier<PlayerState> {
       return;
     }
 
-    if (completedTrack != null) {
-      final endPosition = state.duration.inSeconds > 0
-          ? state.duration
-          : Duration(seconds: completedTrack.duration ?? 0);
-      unawaited(_finalizeListenAtTrackEnd(endPosition));
-    }
+    final endPosition =
+        completedTrack != null
+            ? (state.duration.inSeconds > 0
+                ? state.duration
+                : Duration(seconds: completedTrack.duration ?? 0))
+            : null;
 
     switch (state.loopMode) {
       case LoopMode.one:
-        _handler.audioPlayer.seek(Duration.zero);
-        _handler.audioPlayer.play();
-        if (completedTrack != null) {
-          unawaited(_activateListenForTrack(completedTrack, isPlaying: true));
-        }
+        // Await finalize/endSession before re-activate so the next rich
+        // POST is a new server row (not a same-session no-op).
+        unawaited(() async {
+          if (endPosition != null) {
+            await _finalizeListenAtTrackEnd(endPosition);
+          }
+          _handler.audioPlayer.seek(Duration.zero);
+          _handler.audioPlayer.play();
+          if (completedTrack != null) {
+            await _activateListenForTrack(completedTrack, isPlaying: true);
+            await _recordServerListen(completedTrack);
+          }
+        }());
         break;
       case LoopMode.all:
+        if (endPosition != null) {
+          unawaited(_finalizeListenAtTrackEnd(endPosition));
+        }
         if (state.currentIndex < state.queue.length - 1) {
           skipNext();
         } else if (state.queue.isNotEmpty) {
@@ -2915,6 +2936,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
         }
         break;
       case LoopMode.off:
+        if (endPosition != null) {
+          unawaited(_finalizeListenAtTrackEnd(endPosition));
+        }
         if (state.currentIndex < state.queue.length - 1) {
           skipNext();
         } else if (_radioSessionId != null || _radioId != null) {
@@ -3366,12 +3390,14 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // Match by track id — after persistence restore, queue and unshuffled
       // lists are different instances so identity indexOf would fail.
       final current = state.currentTrack;
-      final restored = state.unshuffledQueue.isNotEmpty
-          ? List<Track>.from(state.unshuffledQueue)
-          : List<Track>.from(state.queue);
-      final newIndex = current != null
-          ? restored.indexWhere((t) => t.id == current.id)
-          : state.currentIndex;
+      final restored =
+          state.unshuffledQueue.isNotEmpty
+              ? List<Track>.from(state.unshuffledQueue)
+              : List<Track>.from(state.queue);
+      final newIndex =
+          current != null
+              ? restored.indexWhere((t) => t.id == current.id)
+              : state.currentIndex;
       state = state.copyWith(
         isShuffled: false,
         unshuffledQueue: [],
