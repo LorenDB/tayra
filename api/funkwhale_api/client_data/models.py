@@ -67,3 +67,54 @@ class ClientPreference(models.Model):
     def __str__(self):
         scope = str(self.device.uuid) if self.device_id else "account"
         return f"{self.client_id}/{self.key} ({scope})"
+
+
+class PlaybackProgress(models.Model):
+    """Per-user resume / completed state for a track (podcasts + general)."""
+
+    user = models.ForeignKey(
+        "users.User", related_name="playback_progress", on_delete=models.CASCADE
+    )
+    track = models.ForeignKey(
+        "music.Track", related_name="playback_progress", on_delete=models.CASCADE
+    )
+    channel_uuid = models.UUIDField(null=True, blank=True, db_index=True)
+    position_ms = models.PositiveIntegerField(default=0)
+    duration_ms = models.PositiveIntegerField(null=True, blank=True)
+    completed = models.BooleanField(default=False)
+    # Not auto_now: bulk LWW and single-PUT conflict need client-provided timestamps.
+    # Do not reintroduce auto_now — clients send updated_at for multi-device merge.
+    updated_at = models.DateTimeField(default=timezone.now)
+    source_device = models.ForeignKey(
+        ClientDevice,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="playback_progress",
+    )
+
+    class Meta:
+        unique_together = ("user", "track")
+        ordering = ("-updated_at",)
+        indexes = [
+            models.Index(fields=["user", "channel_uuid"], name="prog_user_channel"),
+            models.Index(fields=["user", "updated_at"], name="prog_user_updated"),
+        ]
+
+    def __str__(self):
+        return f"progress user={self.user_id} track={self.track_id} @ {self.position_ms}ms"
+
+    @staticmethod
+    def resolve_completed(position_ms, duration_ms, client_completed=False):
+        """
+        Honor client completed=True, or set true at ≥90% of known duration.
+
+        Integer arithmetic: position_ms * 10 >= duration_ms * 9.
+        """
+        if client_completed:
+            return True
+        if duration_ms:
+            return position_ms * COMPLETED_THRESHOLD_DEN >= (
+                duration_ms * COMPLETED_THRESHOLD_NUM
+            )
+        return False

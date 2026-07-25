@@ -1,7 +1,11 @@
+import datetime
 import json
 import uuid as uuid_mod
 
+from django.utils import timezone
 from rest_framework import serializers
+
+from funkwhale_api.music.models import Track
 
 from . import models
 from .sensitive import is_sensitive_key
@@ -10,6 +14,9 @@ from .sensitive import is_sensitive_key
 MAX_KEYS_PER_SCOPE = 200
 MAX_VALUE_BYTES = 8 * 1024  # 8 KiB per value
 MAX_PAYLOAD_BYTES = 256 * 1024  # 256 KiB preferences object (not whole HTTP body)
+BULK_MAX_ITEMS = 500
+# Client clocks may skew; reject timestamps further ahead than this.
+UPDATED_AT_FUTURE_SKEW = datetime.timedelta(minutes=5)
 
 
 def raise_coded(field, code, detail):
@@ -26,6 +33,85 @@ def raise_coded_list(code, detail):
     results in ``{field: [{code, detail}]}``.
     """
     raise serializers.ValidationError([{"code": code, "detail": detail}])
+
+
+def validate_updated_at_skew(value):
+    """Reject updated_at more than UPDATED_AT_FUTURE_SKEW ahead of server now."""
+    if value is None:
+        return value
+    if value > timezone.now() + UPDATED_AT_FUTURE_SKEW:
+        raise_coded(
+            "updated_at",
+            "updated_at_in_future",
+            "updated_at is more than 5 minutes ahead of server time",
+        )
+    return value
+
+
+def resolve_source_device(user, device_uuid):
+    """
+    Map client UUID → active ClientDevice for user.
+    Returns None if device_uuid is None. Raises coded ValidationError otherwise.
+    """
+    if device_uuid is None:
+        return None
+    try:
+        device = models.ClientDevice.objects.get(user=user, uuid=device_uuid)
+    except models.ClientDevice.DoesNotExist:
+        raise_coded(
+            "source_device",
+            "device_not_registered",
+            "Register the device via POST /api/v1/client-devices/",
+        )
+    if not device.is_active:
+        raise_coded(
+            "source_device",
+            "device_inactive",
+            "Device is soft-deleted; re-register or reactivate it",
+        )
+    return device
+
+
+def apply_progress_fields(instance, data, user, *, set_updated_at=True):
+    """
+    Mutate a PlaybackProgress instance from validated write data.
+
+    Only keys present in ``data`` are applied (partial merge for optional fields).
+    ``completed`` sticky rule:
+      - if ``completed`` present: honor True; honor False unless threshold auto-promotes
+      - if omitted: keep existing ``instance.completed`` and still auto-promote at ≥90%
+    """
+    device_uuid = data.get("source_device", serializers.empty)
+    if device_uuid is not serializers.empty:
+        instance.source_device = resolve_source_device(user, device_uuid)
+
+    if "position_ms" in data:
+        instance.position_ms = data["position_ms"]
+    if "duration_ms" in data:
+        instance.duration_ms = data["duration_ms"]
+    if "channel_uuid" in data:
+        instance.channel_uuid = data["channel_uuid"]
+
+    if "completed" in data:
+        client_completed = data["completed"]
+    else:
+        # Sticky: preserve mark-as-played; still allow threshold auto-promote.
+        client_completed = bool(instance.completed)
+
+    instance.completed = models.PlaybackProgress.resolve_completed(
+        instance.position_ms,
+        instance.duration_ms,
+        client_completed=client_completed,
+    )
+
+    if set_updated_at:
+        instance.updated_at = data.get("updated_at") or timezone.now()
+    return instance
+
+
+def ensure_track_exists(track_id):
+    if not Track.objects.filter(pk=track_id).exists():
+        raise_coded("track", "track_not_found", f"Track {track_id} does not exist")
 
 
 class ClientDeviceSerializer(serializers.ModelSerializer):
@@ -170,3 +256,116 @@ class ClientPreferenceWriteSerializer(serializers.Serializer):
                 "preferences must be JSON-serializable",
             )
         return attrs
+
+
+class ClientPreferenceListResponseSerializer(serializers.Serializer):
+    """OpenAPI schema for GET /client-preferences/."""
+
+    count = serializers.IntegerField()
+    results = ClientPreferenceSerializer(many=True)
+
+
+class ClientPreferenceWriteResponseSerializer(serializers.Serializer):
+    """OpenAPI schema for PUT /client-preferences/ (written scope only)."""
+
+    client_id = serializers.CharField()
+    device_uuid = serializers.UUIDField(allow_null=True)
+    mode = serializers.ChoiceField(choices=["merge", "replace"])
+    resolved = serializers.BooleanField()
+    count = serializers.IntegerField()
+    results = ClientPreferenceSerializer(many=True)
+
+
+class PlaybackProgressSerializer(serializers.ModelSerializer):
+    """Read representation; source_device is the device UUID string."""
+
+    source_device = serializers.SerializerMethodField()
+    track = serializers.IntegerField(source="track_id", read_only=True)
+
+    class Meta:
+        model = models.PlaybackProgress
+        fields = (
+            "track",
+            "channel_uuid",
+            "position_ms",
+            "duration_ms",
+            "completed",
+            "updated_at",
+            "source_device",
+        )
+
+    def get_source_device(self, obj):
+        if obj.source_device_id is None:
+            return None
+        return str(obj.source_device.uuid)
+
+
+class PlaybackProgressWriteSerializer(serializers.Serializer):
+    """Body for single-track PUT upsert (track comes from URL)."""
+
+    position_ms = serializers.IntegerField(min_value=0)
+    duration_ms = serializers.IntegerField(
+        min_value=0, required=False, allow_null=True
+    )
+    # No default: omit preserves sticky completed on the server row.
+    completed = serializers.BooleanField(required=False)
+    channel_uuid = serializers.UUIDField(required=False, allow_null=True)
+    source_device = serializers.UUIDField(required=False, allow_null=True)
+    updated_at = serializers.DateTimeField(required=False)
+
+    def validate_updated_at(self, value):
+        return validate_updated_at_skew(value)
+
+
+class PlaybackProgressBulkItemSerializer(serializers.Serializer):
+    track = serializers.IntegerField(min_value=1)
+    position_ms = serializers.IntegerField(min_value=0)
+    duration_ms = serializers.IntegerField(
+        min_value=0, required=False, allow_null=True
+    )
+    # No default: omit preserves sticky completed on existing rows.
+    completed = serializers.BooleanField(required=False)
+    channel_uuid = serializers.UUIDField(required=False, allow_null=True)
+    source_device = serializers.UUIDField(required=False, allow_null=True)
+    updated_at = serializers.DateTimeField(required=False)
+
+    def validate_updated_at(self, value):
+        return validate_updated_at_skew(value)
+
+
+class PlaybackProgressBulkSerializer(serializers.Serializer):
+    items = PlaybackProgressBulkItemSerializer(many=True)
+
+    def validate_items(self, value):
+        if not value:
+            raise serializers.ValidationError(
+                [{"code": "empty_batch", "detail": "items must not be empty"}]
+            )
+        if len(value) > BULK_MAX_ITEMS:
+            # Field-level validator: raise list (not field-keyed dict) to avoid nesting.
+            raise serializers.ValidationError(
+                [
+                    {
+                        "code": "batch_too_large",
+                        "detail": f"Maximum {BULK_MAX_ITEMS} items per request",
+                    }
+                ]
+            )
+        return value
+
+
+class PlaybackProgressBulkResultSerializer(serializers.Serializer):
+    """OpenAPI schema for POST /playback-progress/bulk/."""
+
+    created = serializers.IntegerField()
+    updated = serializers.IntegerField()
+    skipped = serializers.IntegerField()
+    errors = serializers.ListField(child=serializers.DictField())
+
+
+class PlaybackProgressConflictSerializer(serializers.Serializer):
+    """OpenAPI schema for PUT 409 progress_conflict."""
+
+    code = serializers.CharField()
+    detail = serializers.CharField()
+    progress = PlaybackProgressSerializer()

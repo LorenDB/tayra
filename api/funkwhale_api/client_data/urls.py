@@ -6,6 +6,7 @@ from . import views
 
 router = routers.OptionalSlashRouter()
 router.register(r"client-devices", views.ClientDeviceViewSet, "client-devices")
+router.register(r"playback-progress", views.PlaybackProgressViewSet, "playback-progress")
 
 # GET/PUT on collection only (not a standard router list/detail pair).
 client_preferences = views.ClientPreferenceViewSet.as_view(

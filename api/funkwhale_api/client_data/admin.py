@@ -29,3 +29,19 @@ class ClientPreferenceAdmin(admin.ModelAdmin):
     search_fields = ["key", "client_id", "user__username"]
     list_select_related = ["user", "device"]
     readonly_fields = ["updated_at"]
+
+class PlaybackProgressAdmin(admin.ModelAdmin):
+    list_display = [
+        "id",
+        "user",
+        "track",
+        "position_ms",
+        "duration_ms",
+        "completed",
+        "channel_uuid",
+        "updated_at",
+    ]
+    list_filter = ["completed"]
+    search_fields = ["user__username", "channel_uuid"]
+    list_select_related = ["user", "track", "source_device"]
+    readonly_fields = ["updated_at"]

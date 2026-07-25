@@ -27,3 +27,14 @@ class ClientPreferenceFactory(NoUpdateOnCreate, factory.django.DjangoModelFactor
 
     class Meta:
         model = "client_data.ClientPreference"
+
+class PlaybackProgressFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
+    user = factory.SubFactory(UserFactory)
+    track = factory.SubFactory(TrackFactory)
+    position_ms = 0
+    duration_ms = None
+    completed = False
+    channel_uuid = None
+
+    class Meta:
+        model = "client_data.PlaybackProgress"

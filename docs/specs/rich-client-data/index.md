@@ -40,7 +40,7 @@ These close product choices that would otherwise block implementation (see also 
 | Retention | **Forever** by default; optional instance setting later. |
 | Soft vs hard device delete | **Soft-delete** (`is_active=False`) is default `DELETE`; hard delete only via admin/management. |
 | Stats access | Authenticated **self only** (no staff impersonation in v1). |
-| Feature detection | Client probes `GET /api/v1/client-devices/` → 404 means unsupported; optional nodeinfo `metadata.features` in PR 8. |
+| Feature detection | Client probes `GET /api/v1/client-devices/` → 404 means unsupported. **Shipped:** NodeInfo 2.1 `metadata.features` includes `client_data` and `rich_listenings` (secondary to the HTTP probe). |
 | Export portability | **v1.1** (non-goal for v1); account deletion CASCADE is the only wipe path in v1. |
 | Top-N default for stats | **`limit` default 10** (match Tayra year-review). |
 
@@ -771,7 +771,9 @@ class PlaybackProgress(models.Model):
     position_ms = models.PositiveIntegerField(default=0)
     duration_ms = models.PositiveIntegerField(null=True, blank=True)
     completed = models.BooleanField(default=False)
-    updated_at = models.DateTimeField(auto_now=True)
+    # Not auto_now: bulk LWW and single-PUT conflict need client-provided timestamps.
+    # Do not reintroduce auto_now — clients send updated_at for multi-device merge.
+    updated_at = models.DateTimeField(default=timezone.now)
     source_device = models.ForeignKey(
         ClientDevice, null=True, blank=True, on_delete=models.SET_NULL
     )
@@ -786,9 +788,9 @@ class PlaybackProgress(models.Model):
 
 | Method | Path | Behavior |
 | --- | --- | --- |
-| `GET` | `/api/v1/playback-progress/` | List own; filter `channel_uuid`, `completed`, `updated_at` |
+| `GET` | `/api/v1/playback-progress/` | List own; filter `channel_uuid`, `completed`, `updated_at` range |
 | `GET` | `/api/v1/playback-progress/{track_id}/` | Lookup by track |
-| `PUT` | `/api/v1/playback-progress/{track_id}/` | Upsert position |
+| `PUT` | `/api/v1/playback-progress/{track_id}/` | Upsert position (partial field merge) |
 | `POST` | `/api/v1/playback-progress/bulk/` | Migration import (LWW by `updated_at`) |
 | `DELETE` | `/api/v1/playback-progress/{track_id}/` | Clear |
 
@@ -807,9 +809,13 @@ Upsert body:
 
 `source_device` wire format: UUID string (same as listenings).
 
-**Conflict:** single PUT: if client `updated_at` is older than server → **409** with server body. Bulk: last-write-wins by `updated_at` (`skipped` counter).
+**Partial merge:** only keys present in the body are applied. Omitting `duration_ms`, `channel_uuid`, or `source_device` leaves the existing server values unchanged (does not wipe them).
 
-**Completed threshold:** server sets `completed=true` when `position_ms >= 0.90 * duration_ms` if duration present, or honors client `completed`.
+**Sticky `completed`:** if `completed` is omitted on a position-only write, keep the existing server `completed` flag and still allow threshold auto-promotion to `true`. Client `completed=true` is always honored; `completed=false` is honored unless the ≥90% threshold auto-promotes.
+
+**Conflict / LWW:** single PUT: if client `updated_at` is older than server → **409** with `{code: progress_conflict, detail, progress}`. Bulk: last-write-wins by `updated_at` (`skipped` counter). Client `updated_at` more than **5 minutes** ahead of server time → `400 updated_at_in_future` (`UPDATED_AT_FUTURE_SKEW`).
+
+**Completed threshold:** integer math `position_ms * 10 >= duration_ms * 9` (≥90% when duration is known), or honor client `completed=true`.
 
 **Not listen history.**
 
@@ -1177,7 +1183,7 @@ Add a single `extra = JSONField` for client-specific keys without per-field migr
 
 1. Land spec at `docs/specs/rich-client-data/`.
 2. Server PRs (see [PR Plan](#pr-plan)).
-3. **Feature detection:** clients `GET /api/v1/client-devices/`; **404 → unsupported**. Optionally, PR 8 adds `metadata.features.client_data` / `rich_listenings` to nodeinfo (no existing general feature map — this would introduce one).
+3. **Feature detection:** clients `GET /api/v1/client-devices/`; **404 → unsupported** (canonical probe). **Shipped:** NodeInfo 2.1 `metadata.features` includes `client_data` and `rich_listenings` as a secondary hint; do not treat missing nodeinfo strings alone as unsupported if the devices endpoint exists.
 4. Tayra: device register → single rich dual-write → import → stats + prefs/progress; demote Nextcloud.
 5. Changelog notes OAuth scope widening for broad tokens.
 6. Rollback via reverse migrations; clients fall back to local SQLite if 404.
@@ -1298,9 +1304,9 @@ docs/specs/rich-client-data/index.md
 ### PR 8 — OpenAPI, feature detection, docs spec
 
 - **Title:** `docs: rich client data OpenAPI and spec`
-- **Files:** spectacular annotations; `docs/specs/rich-client-data/index.md`; optional nodeinfo `metadata.features`; changelog
+- **Files:** spectacular annotations; `docs/specs/rich-client-data/index.md`; nodeinfo `metadata.features` (`client_data`, `rich_listenings`); changelog
 - **Dependencies:** PRs 1–7 ideally
-- **Description:** Canonical feature probe remains GET client-devices 404; nodeinfo optional enhancement.
+- **Description:** Canonical feature probe remains GET client-devices 404; nodeinfo feature strings are shipped as a secondary hint.
 
 ### PR 9 — Tayra: device registration + single rich dual-write
 
