@@ -24,3 +24,46 @@ class ClientDevice(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.uuid})"
+
+
+class ClientPreference(models.Model):
+    """Namespaced key/value client preferences (account- or device-scoped)."""
+
+    user = models.ForeignKey(
+        "users.User", related_name="client_preferences", on_delete=models.CASCADE
+    )
+    client_id = models.CharField(max_length=64, db_index=True)  # e.g. "tayra"
+    device = models.ForeignKey(
+        ClientDevice,
+        null=True,
+        blank=True,
+        related_name="preferences",
+        on_delete=models.CASCADE,
+    )
+    key = models.CharField(max_length=255)
+    value = models.JSONField()
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        constraints = [
+            # Account-level (device IS NULL)
+            models.UniqueConstraint(
+                fields=["user", "client_id", "key"],
+                condition=models.Q(device__isnull=True),
+                name="clientpref_unique_account_key",
+            ),
+            # Device-scoped
+            models.UniqueConstraint(
+                fields=["user", "client_id", "key", "device"],
+                condition=models.Q(device__isnull=False),
+                name="clientpref_unique_device_key",
+            ),
+        ]
+        indexes = [
+            models.Index(fields=["user", "client_id"], name="clientpref_user_client"),
+        ]
+        ordering = ("key",)
+
+    def __str__(self):
+        scope = str(self.device.uuid) if self.device_id else "account"
+        return f"{self.client_id}/{self.key} ({scope})"

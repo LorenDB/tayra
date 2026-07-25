@@ -15,3 +15,15 @@ class ClientDeviceFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
 
     class Meta:
         model = "client_data.ClientDevice"
+
+
+@registry.register
+class ClientPreferenceFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
+    user = factory.SubFactory(UserFactory)
+    client_id = "tayra"
+    device = None
+    key = factory.Sequence(lambda n: f"pref_key_{n}")
+    value = factory.LazyFunction(lambda: True)
+
+    class Meta:
+        model = "client_data.ClientPreference"

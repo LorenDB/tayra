@@ -1,0 +1,1 @@
+Add namespaced client preferences API at ``/api/v1/client-preferences/`` (GET with device override resolution; PUT merge/replace). Sensitive keys are rejected server-side; per-scope size limits apply.
