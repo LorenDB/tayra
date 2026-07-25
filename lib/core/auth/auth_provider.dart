@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -318,13 +319,19 @@ class AuthNotifier extends Notifier<AuthState> {
         kIsWeb ? '/api/v1/users/token/' : '$url/api/v1/users/token/';
 
     try {
+      // JSON body over HTTPS (password grant style). Not hashed client-side;
+      // TLS protects transit. Force JSON content-type for reliable DRF parsing.
       final response = await _dio.post(
         tokenEndpoint,
         data: {'username': username.trim(), 'password': password},
         options: Options(
           contentType: Headers.jsonContentType,
-          headers: {'Accept': 'application/json'},
+          headers: {
+            'Accept': 'application/json',
+            Headers.contentTypeHeader: Headers.jsonContentType,
+          },
           validateStatus: (s) => s != null && s < 500,
+          responseType: ResponseType.json,
         ),
       );
 
@@ -332,7 +339,8 @@ class AuthNotifier extends Notifier<AuthState> {
         state = state.copyWith(isLoading: false, serverUrl: url);
         return false;
       }
-      if (response.statusCode != 200 || response.data is! Map) {
+      final payload = _asJsonMap(response.data);
+      if (response.statusCode != 200 || payload == null) {
         state = state.copyWith(
           isLoading: false,
           error: _formatLoginError(response.data, response.statusCode),
@@ -341,7 +349,7 @@ class AuthNotifier extends Notifier<AuthState> {
         return false;
       }
 
-      final data = Map<String, dynamic>.from(response.data as Map);
+      final data = payload;
       final accessToken = data['access_token'] as String?;
       if (accessToken == null || accessToken.isEmpty) {
         state = state.copyWith(
@@ -391,26 +399,49 @@ class AuthNotifier extends Notifier<AuthState> {
     }
   }
 
+  /// Coerce Dio response data into a JSON map (web sometimes yields a String).
+  static Map<String, dynamic>? _asJsonMap(dynamic data) {
+    if (data is Map<String, dynamic>) return data;
+    if (data is Map) return Map<String, dynamic>.from(data);
+    if (data is String && data.isNotEmpty) {
+      try {
+        final decoded = jsonDecode(data);
+        if (decoded is Map<String, dynamic>) return decoded;
+        if (decoded is Map) return Map<String, dynamic>.from(decoded);
+      } catch (_) {}
+    }
+    return null;
+  }
+
   /// Prefer server-provided detail over a generic message (helps debug 400s).
   static String _formatLoginError(dynamic data, int? status) {
-    if (data is Map) {
-      final code = data['code']?.toString();
+    final map = _asJsonMap(data);
+    if (map != null) {
+      final code = map['code']?.toString();
+      final error = map['error']?.toString();
       if (code == 'email_unverified' ||
-          (data['non_field_errors'] is List &&
-              (data['non_field_errors'] as List).any(
+          error == 'email_unverified' ||
+          (map['non_field_errors'] is List &&
+              (map['non_field_errors'] as List).any(
                 (e) => e.toString().toLowerCase().contains('verify'),
               ))) {
         return 'Please verify your e-mail address before logging in.';
       }
-      final nonField = data['non_field_errors'];
+      if (error == 'account_disabled') {
+        return 'This account was disabled.';
+      }
+      if (error == 'missing_credentials') {
+        return 'Both username and password are required.';
+      }
+      final nonField = map['non_field_errors'];
       if (nonField is List && nonField.isNotEmpty) {
         return nonField.first.toString();
       }
-      final detail = data['detail'];
+      final detail = map['detail'];
       if (detail is String && detail.isNotEmpty) return detail;
       // DRF field errors: {username: [...], password: [...]}
       for (final key in ['username', 'password', 'error']) {
-        final v = data[key];
+        final v = map[key];
         if (v is List && v.isNotEmpty) return v.first.toString();
         if (v is String && v.isNotEmpty) return v;
       }
