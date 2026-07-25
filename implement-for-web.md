@@ -11,8 +11,8 @@
 | Notifications | Vue notifications view | — | |
 | PWA offline (Vue service worker) | Vue SW | Web is online-only | |
 
-## Closed (not Tayra Flutter work)
+## Closed
 
 | Feature | Where | Resolution |
 |---|---|---|
-| ✅ OAuth authorize for *third-party* apps | `/authorize` | Intentionally deferred — not first-party Tayra login. Stock Vue hosted a consent SPA that POSTed to `/api/v1/oauth/authorize`; nginx now serves Tayra `index.html` for `/authorize` and Tayra has no such route. API endpoints remain on the server. Tayra first-party auth uses `POST /api/v1/users/token/` (password) and/or OOB against a consent UI, separate from third-party app consent. See [doc/web-deferred-features.md](doc/web-deferred-features.md). |
+| ✅ OAuth authorize for *third-party* apps | `/authorize` | Flutter consent UI (`OAuthAuthorizeScreen`) at `/authorize`; loads app via `GET /api/v1/oauth/apps/{client_id}/`, allow via `POST /api/v1/oauth/authorize` (AJAX → JSON `{code, redirect_uri}`), OOB shows copyable code, deny returns `error=access_denied`. Unauthenticated users are sent to `/login?from=…` and returned after sign-in. First-party Tayra login remains password token / OOB and is separate. |
