@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.db.models import Q
 from django.utils import timezone
@@ -79,6 +80,9 @@ class ClientPreferenceViewSet(viewsets.GenericViewSet):
 
     GET  /api/v1/client-preferences/?client_id=…&device_uuid=…
     PUT  /api/v1/client-preferences/  {client_id, device_uuid, preferences, mode}
+
+    PUT returns only the written scope (account *or* device rows). Effective
+    config for a device is GET with ``device_uuid`` (account ∪ device, device wins).
     """
 
     queryset = models.ClientPreference.objects.all()
@@ -119,6 +123,33 @@ class ClientPreferenceViewSet(viewsets.GenericViewSet):
             )
         return device
 
+    def _scope_filter(self, user, client_id, device):
+        scope_filter = Q(user=user, client_id=client_id)
+        if device is None:
+            scope_filter &= Q(device__isnull=True)
+        else:
+            scope_filter &= Q(device=device)
+        return scope_filter
+
+    def _lock_preference_scope(self, user, client_id, device):
+        """
+        Serialize concurrent writers on the same preference scope.
+
+        Locks a parent row so empty scopes (nothing to select_for_update on
+        ClientPreference) still serialize, then locks existing scope rows.
+        """
+        if device is not None:
+            models.ClientDevice.objects.select_for_update().get(pk=device.pk)
+        else:
+            # Account-level: lock the user row for first-time concurrent replaces.
+            get_user_model().objects.select_for_update().get(pk=user.pk)
+
+        scope_filter = self._scope_filter(user, client_id, device)
+        locked = list(
+            models.ClientPreference.objects.filter(scope_filter).select_for_update()
+        )
+        return scope_filter, locked
+
     def _serialize_rows(self, rows):
         return serializers.ClientPreferenceSerializer(rows, many=True).data
 
@@ -129,6 +160,9 @@ class ClientPreferenceViewSet(viewsets.GenericViewSet):
         If device_uuid is provided, account-level keys are returned with
         device-specific overrides winning on key name.
         If omitted, only account-level (device IS NULL) keys are returned.
+
+        Inactive (soft-deleted) devices remain readable so historical device
+        prefs can be recovered; writes require an active device.
         """
         client_id = request.query_params.get("client_id")
         if not client_id:
@@ -150,7 +184,7 @@ class ClientPreferenceViewSet(viewsets.GenericViewSet):
                     "invalid",
                     "device_uuid must be a valid UUID",
                 )
-            # For GET we allow inactive devices so historical prefs remain readable
+            # GET allows inactive devices so historical prefs remain readable
             try:
                 device = models.ClientDevice.objects.get(
                     user=request.user, uuid=device_uuid
@@ -179,20 +213,13 @@ class ClientPreferenceViewSet(viewsets.GenericViewSet):
         return Response({"count": len(data), "results": data})
 
     def update(self, request, *args, **kwargs):
-        """PUT merge or replace preferences for a scope."""
-        # Early payload size check on raw body when available
-        content_length = request.META.get("CONTENT_LENGTH")
-        if content_length:
-            try:
-                if int(content_length) > serializers.MAX_PAYLOAD_BYTES:
-                    raise_coded(
-                        "preferences",
-                        "payload_too_large",
-                        f"Request body exceeds {serializers.MAX_PAYLOAD_BYTES} bytes",
-                    )
-            except (TypeError, ValueError):
-                pass
+        """
+        PUT merge or replace preferences for a scope.
 
+        Response ``results`` are the **written scope only** (not the GET
+        device overlay). Effective settings for a device: GET with device_uuid.
+        ``resolved`` is always false on PUT.
+        """
         write = serializers.ClientPreferenceWriteSerializer(data=request.data)
         write.is_valid(raise_exception=True)
         data = write.validated_data
@@ -202,15 +229,19 @@ class ClientPreferenceViewSet(viewsets.GenericViewSet):
         device = self._resolve_device(request.user, data.get("device_uuid"))
 
         with transaction.atomic():
-            scope_filter = Q(user=request.user, client_id=client_id)
-            if device is None:
-                scope_filter &= Q(device__isnull=True)
-            else:
-                scope_filter &= Q(device=device)
+            scope_filter, locked_rows = self._lock_preference_scope(
+                request.user, client_id, device
+            )
 
             if mode == "replace":
-                models.ClientPreference.objects.filter(scope_filter).delete()
-                # bulk_create skips auto_now; set updated_at explicitly
+                # Locked rows serialize concurrent replaces; delete then insert.
+                if locked_rows:
+                    models.ClientPreference.objects.filter(
+                        pk__in=[r.pk for r in locked_rows]
+                    ).delete()
+                else:
+                    models.ClientPreference.objects.filter(scope_filter).delete()
+                # bulk_create skips auto_now; set updated_at explicitly (PostgreSQL NOT NULL)
                 now = timezone.now()
                 to_create = [
                     models.ClientPreference(
@@ -226,11 +257,8 @@ class ClientPreferenceViewSet(viewsets.GenericViewSet):
                 if to_create:
                     models.ClientPreference.objects.bulk_create(to_create)
             else:
-                # merge: upsert each key; enforce total key cap
-                existing = {
-                    row.key: row
-                    for row in models.ClientPreference.objects.filter(scope_filter)
-                }
+                # merge: cap check under lock; LWW upsert (never 500 on unique race)
+                existing = {row.key: row for row in locked_rows}
                 new_keys = set(preferences.keys()) - set(existing.keys())
                 if len(existing) + len(new_keys) > MAX_KEYS_PER_SCOPE:
                     raise_coded(
@@ -245,12 +273,13 @@ class ClientPreferenceViewSet(viewsets.GenericViewSet):
                         row.value = value
                         row.save(update_fields=["value", "updated_at"])
                     else:
-                        models.ClientPreference.objects.create(
+                        # update_or_create is idempotent if a race still inserts
+                        models.ClientPreference.objects.update_or_create(
                             user=request.user,
                             client_id=client_id,
                             device=device,
                             key=key,
-                            value=value,
+                            defaults={"value": value},
                         )
 
             rows = list(
@@ -265,6 +294,8 @@ class ClientPreferenceViewSet(viewsets.GenericViewSet):
                 "client_id": client_id,
                 "device_uuid": str(device.uuid) if device else None,
                 "mode": mode,
+                # Written scope only — not account∪device overlay (use GET for that).
+                "resolved": False,
                 "count": len(data_out),
                 "results": data_out,
             }
