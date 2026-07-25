@@ -1,6 +1,5 @@
 | Feature | Where in Funkwhale | Escape hatch | Notes |
 |---|---|---|---|
-| OAuth authorize for *third-party* apps | `/authorize` | Still served by Funkwhale/allauth | Tayra’s own login uses OOB (or future redirect) |
 | Splash screen while loading WASM assets | n/a | n/a | WASM assets can take a while to load at first visit. Show some sort of splash screen while first load occurs on web. |
 | Library admin (`/manage/library/*`) | Vue manage routes | Django admin + `funkwhale-manage` CLI | Edits, uploads browser, tags, libraries detail |
 | Channels admin | `/manage/library/channels` | CLI / admin | |
@@ -12,3 +11,8 @@
 | Notifications | Vue notifications view | — | |
 | PWA offline (Vue service worker) | Vue SW | Web is online-only | |
 
+## Closed (not Tayra Flutter work)
+
+| Feature | Where | Resolution |
+|---|---|---|
+| ✅ OAuth authorize for *third-party* apps | `/authorize` | Intentionally deferred — not first-party Tayra login. Stock Vue hosted a consent SPA that POSTed to `/api/v1/oauth/authorize`; nginx now serves Tayra `index.html` for `/authorize` and Tayra has no such route. API endpoints remain on the server. Tayra first-party auth uses `POST /api/v1/users/token/` (password) and/or OOB against a consent UI, separate from third-party app consent. See [doc/web-deferred-features.md](doc/web-deferred-features.md). |

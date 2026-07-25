@@ -81,6 +81,8 @@ Not required for authenticated listening.
 - Scoped listen tokens (`GET /api/v1/users/me/` → `tokens.listen`) for stream URLs
 - Media streaming, federation, Celery, Subsonic
 
+Third-party OAuth consent at `/authorize` is intentionally **not** implemented in Tayra (Vue consent SPA is gone; first-party login uses password token and/or OOB). See [web-deferred-features.md](web-deferred-features.md).
+
 ## Ops without Vue admin
 
 | Task | Tool |
