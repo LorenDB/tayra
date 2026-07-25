@@ -276,6 +276,7 @@ LOCAL_APPS = (
     "funkwhale_api.moderation.apps.ModerationConfig",
     "funkwhale_api.radios",
     "funkwhale_api.history",
+    "funkwhale_api.client_data",
     "funkwhale_api.playlists",
     "funkwhale_api.subsonic",
     "funkwhale_api.tags",
