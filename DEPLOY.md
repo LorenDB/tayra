@@ -200,10 +200,24 @@ curl -sS -X POST "https://YOUR_HOST/api/v1/users/token/" \
 ```
 
 - `200` + `access_token` → API OK; rebuild front if the app still fails  
-- `400` with `Unable to log in…` → wrong user/password (or wrong host in baked URL)  
+- `400` with `Unable to log in…` / `invalid_credentials` → wrong user/password, wrong DB, or the API container is not using this fork’s image  
 - `400` / `email_unverified` → verify e-mail or set `ACCOUNT_EMAIL_VERIFICATION_ENFORCE=false`  
+- `400` / `missing_credentials` → body not parsed (Content-Type / proxy stripping POST)  
+- HTML / `Invalid HTTP_HOST header` → `FUNKWHALE_HOSTNAME` / `DJANGO_ALLOWED_HOSTS` mismatch  
 - Connection errors → `FUNKWHALE_URL` baked into the SPA doesn’t match how you open the site
 
+Also check API logs while reproducing:
+
+```bash
+docker compose logs -f api | grep token_login
+```
+
+**“Passwords in plaintext” in the browser Network tab**  
+Expected. This endpoint is a first-party password → OAuth token exchange: the SPA
+POSTs JSON `{"username","password"}` over **HTTPS**. DevTools always shows the
+decrypted request body after TLS. There is no client-side password hash for this
+API (Subsonic’s md5 scheme is a different endpoint). Ensure users open the site
+via **HTTPS** (not bare `http://`) so the password is not sent on the wire in cleartext.
 **Browser CSP / CanvasKit blocked (gstatic.com)**  
 The front image must build with `--no-web-resources-cdn` (already in
 `front/Dockerfile`) so CanvasKit is same-origin. Rebuild front:

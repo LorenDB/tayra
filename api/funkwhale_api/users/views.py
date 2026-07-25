@@ -179,14 +179,31 @@ def _extract_credentials(request):
     raw = getattr(request, "data", None)
     if raw is None:
         raw = request.POST
+    # Some clients (or proxies) double-encode JSON so DRF leaves a string body.
+    if isinstance(raw, (bytes, str)):
+        try:
+            if isinstance(raw, bytes):
+                raw = raw.decode("utf-8")
+            raw = json.loads(raw) if raw else {}
+        except (TypeError, ValueError, UnicodeError):
+            raw = {}
     if hasattr(raw, "dict"):
         raw = raw.dict()
     if not isinstance(raw, dict):
         raw = {}
-    username = raw.get("username") or raw.get("email") or raw.get("login") or ""
-    password = raw.get("password") or ""
+    # QueryDict / form multi-values may arrive as lists.
+    def _first(value):
+        if isinstance(value, (list, tuple)):
+            return value[0] if value else ""
+        return value
+
+    username = _first(raw.get("username") or raw.get("email") or raw.get("login") or "")
+    password = _first(raw.get("password") or "")
     if isinstance(username, str):
         username = username.strip()
+    else:
+        username = str(username).strip() if username is not None else ""
+    # Never strip passwords — trailing spaces can be intentional.
     if not isinstance(password, str):
         password = str(password) if password is not None else ""
     return username, password, raw

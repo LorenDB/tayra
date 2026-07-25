@@ -10,7 +10,6 @@ from __future__ import annotations
 import datetime
 import secrets
 
-from django.conf import settings
 from django.db import transaction
 from django.utils import timezone
 from oauth2_provider.settings import oauth2_settings
@@ -34,10 +33,13 @@ def get_or_create_first_party_application() -> tuple[models.Application, str]:
     """
     Return ``(application, plain_client_secret)``.
 
-    On first creation the plain secret is the value we set; on reuse we return
-    the stored secret (Funkwhale 1.4 DOT does not hash client secrets).
+    The first-party SPA is a **public** OAuth client: django-oauth-toolkit 2.x
+    hashes ``client_secret`` on save, and this Application is shared by every
+    Tayra login. Returning a hashed secret (or rotating a confidential secret
+    on each login) breaks refresh for other sessions. Public clients do not
+    need a secret for token refresh.
     """
-    from oauth2_provider.generators import generate_client_id, generate_client_secret
+    from oauth2_provider.generators import generate_client_id
 
     app = (
         models.Application.objects.select_for_update()
@@ -45,15 +47,26 @@ def get_or_create_first_party_application() -> tuple[models.Application, str]:
         .first()
     )
     if app:
-        return app, app.client_secret
+        dirty = False
+        # Migrate any confidential Tayra app created by older builds.
+        if app.client_type != models.Application.CLIENT_PUBLIC:
+            app.client_type = models.Application.CLIENT_PUBLIC
+            dirty = True
+        if app.authorization_grant_type != models.Application.GRANT_AUTHORIZATION_CODE:
+            # Tokens are issued out-of-band; grant type only documents the app.
+            app.authorization_grant_type = models.Application.GRANT_AUTHORIZATION_CODE
+            dirty = True
+        if dirty:
+            app.save()
+        return app, ""
 
-    plain_secret = generate_client_secret()
     app = models.Application(
         name=FIRST_PARTY_APP_NAME,
         client_id=generate_client_id(),
-        client_secret=plain_secret,
-        client_type=models.Application.CLIENT_CONFIDENTIAL,
-        authorization_grant_type=models.Application.GRANT_PASSWORD,
+        # Blank secret is fine for public clients; DOT may still hash it.
+        client_secret="",
+        client_type=models.Application.CLIENT_PUBLIC,
+        authorization_grant_type=models.Application.GRANT_AUTHORIZATION_CODE,
         redirect_uris="\n".join(
             [
                 "urn:ietf:wg:oauth:2.0:oob",
@@ -65,7 +78,7 @@ def get_or_create_first_party_application() -> tuple[models.Application, str]:
         user=None,
     )
     app.save()
-    return app, plain_secret
+    return app, ""
 
 
 @transaction.atomic

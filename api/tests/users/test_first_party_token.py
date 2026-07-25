@@ -22,7 +22,9 @@ def test_token_login_returns_oauth_tokens(api_client, factories):
     assert data["access_token"]
     assert data["refresh_token"]
     assert data["client_id"]
-    assert data["client_secret"]
+    # Public first-party client: secret is empty (DOT hashes secrets on save,
+    # and a shared confidential secret cannot be recovered after create).
+    assert data.get("client_secret") in (None, "")
     assert data["listen_token"]
     assert data["expires_in"] > 0
 
@@ -77,3 +79,38 @@ def test_token_login_access_token_authenticates(api_client, factories):
     )
     assert me.status_code == 200
     assert me.json()["username"] == "carol"
+
+
+@pytest.mark.django_db
+def test_token_login_refresh_works_without_client_secret(api_client, factories):
+    """First-party app is public; refresh must not require a hashed secret."""
+    user = factories["users.User"](username="erin")
+    user.set_password("s3cret-pass")
+    user.save()
+
+    login = api_client.post(
+        reverse("api:v1:users:token_login"),
+        {"username": "erin", "password": "s3cret-pass"},
+        format="json",
+    )
+    assert login.status_code == 200, login.content
+    data = login.json()
+
+    # Second login reuses the same Application (must still succeed).
+    login2 = api_client.post(
+        reverse("api:v1:users:token_login"),
+        {"username": "erin", "password": "s3cret-pass"},
+        format="json",
+    )
+    assert login2.status_code == 200, login2.content
+
+    refresh = api_client.post(
+        reverse("api:v1:oauth:token"),
+        {
+            "grant_type": "refresh_token",
+            "refresh_token": data["refresh_token"],
+            "client_id": data["client_id"],
+        },
+    )
+    assert refresh.status_code == 200, refresh.content
+    assert refresh.json()["access_token"]
