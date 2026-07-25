@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -25,6 +26,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   int _step = 0;
   bool _initializedFromAutoLogout = false;
   bool _obscurePassword = true;
+
+  /// Match [OauthAuthorizeScreen] so login fields stay readable on wide web.
+  static const double _formMaxWidth = 440;
 
   bool get _hardcodedPod => AppPlatform.hasHardcodedPodUrl;
 
@@ -68,247 +72,283 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         child: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(32),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const LogoWidget(size: 80, borderRadius: 20),
-                const SizedBox(height: 24),
-                Text('Tayra', style: textTheme.headlineLarge),
-                const SizedBox(height: 8),
-                Text(
-                  _hardcodedPod
-                      ? 'Sign in to your music library'
-                      : 'Connect to your Funkwhale server',
-                  style: textTheme.bodyMedium,
-                ),
-                if (_hardcodedPod && AppPlatform.hardcodedPodUrl != null) ...[
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: _formMaxWidth),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const LogoWidget(size: 80, borderRadius: 20),
+                  const SizedBox(height: 24),
+                  Text('Tayra', style: textTheme.headlineLarge),
                   const SizedBox(height: 8),
                   Text(
-                    AppPlatform.hardcodedPodUrl!,
-                    style: textTheme.bodySmall?.copyWith(
-                      color: AppTheme.onBackgroundMuted,
-                    ),
-                    textAlign: TextAlign.center,
+                    _hardcodedPod
+                        ? 'Sign in to your music library'
+                        : 'Connect to your Funkwhale server',
+                    style: textTheme.bodyMedium,
                   ),
-                ],
-                const SizedBox(height: 48),
+                  if (_hardcodedPod && AppPlatform.hardcodedPodUrl != null) ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      AppPlatform.hardcodedPodUrl!,
+                      style: textTheme.bodySmall?.copyWith(
+                        color: AppTheme.onBackgroundMuted,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                  const SizedBox(height: 48),
 
-                if (_step == 0) ...[
-                  if (authState.wasAutoLoggedOut) ...[
-                    Container(
+                  if (_step == 0) ...[
+                    if (authState.wasAutoLoggedOut) ...[
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: AppTheme.surfaceContainerHigh,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          'Your session expired. Sign back in to continue where you left off.',
+                          style: textTheme.bodySmall,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                    // AutofillGroup groups fields so password managers treat
+                    // username + password (and server URL) as one login form.
+                    AutofillGroup(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (!_hardcodedPod) ...[
+                            TextField(
+                              controller: _serverController,
+                              decoration: const InputDecoration(
+                                hintText: 'https://your.funkwhale.server',
+                                prefixIcon: Icon(
+                                  Icons.dns_outlined,
+                                  color: AppTheme.onBackgroundSubtle,
+                                ),
+                              ),
+                              style: const TextStyle(
+                                color: AppTheme.onBackground,
+                              ),
+                              keyboardType: TextInputType.url,
+                              textInputAction: TextInputAction.next,
+                              autocorrect: false,
+                              enableSuggestions: false,
+                              autofillHints: const [AutofillHints.url],
+                            ),
+                            const SizedBox(height: 16),
+                          ],
+                          TextField(
+                            controller: _usernameController,
+                            decoration: const InputDecoration(
+                              hintText: 'Username',
+                              prefixIcon: Icon(
+                                Icons.person_outline,
+                                color: AppTheme.onBackgroundSubtle,
+                              ),
+                            ),
+                            style: const TextStyle(
+                              color: AppTheme.onBackground,
+                            ),
+                            keyboardType: TextInputType.text,
+                            textInputAction: TextInputAction.next,
+                            autocorrect: false,
+                            enableSuggestions: false,
+                            textCapitalization: TextCapitalization.none,
+                            autofillHints: const [AutofillHints.username],
+                          ),
+                          const SizedBox(height: 16),
+                          TextField(
+                            controller: _passwordController,
+                            obscureText: _obscurePassword,
+                            decoration: InputDecoration(
+                              hintText: 'Password',
+                              prefixIcon: const Icon(
+                                Icons.lock_outline,
+                                color: AppTheme.onBackgroundSubtle,
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _obscurePassword
+                                      ? Icons.visibility_outlined
+                                      : Icons.visibility_off_outlined,
+                                  color: AppTheme.onBackgroundSubtle,
+                                ),
+                                onPressed:
+                                    () => setState(
+                                      () =>
+                                          _obscurePassword = !_obscurePassword,
+                                    ),
+                              ),
+                            ),
+                            style: const TextStyle(
+                              color: AppTheme.onBackground,
+                            ),
+                            keyboardType: TextInputType.visiblePassword,
+                            textInputAction: TextInputAction.go,
+                            autocorrect: false,
+                            enableSuggestions: false,
+                            autofillHints: const [AutofillHints.password],
+                            onSubmitted: (_) => _submitPasswordLogin(),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    if (authState.error != null) ...[
+                      Text(
+                        authState.error!,
+                        style: TextStyle(color: AppTheme.error, fontSize: 13),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                    SizedBox(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(12),
+                      child: ElevatedButton(
+                        onPressed:
+                            authState.isLoading ? null : _submitPasswordLogin,
+                        child:
+                            authState.isLoading
+                                ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                                : const Text('Sign In'),
+                      ),
+                    ),
+                    if (!_hardcodedPod) ...[
+                      const SizedBox(height: 12),
+                      TextButton(
+                        onPressed:
+                            authState.isLoading
+                                ? null
+                                : () async {
+                                  await ref
+                                      .read(authStateProvider.notifier)
+                                      .registerApp(_serverController.text);
+                                  if (!mounted) return;
+                                  final s = ref.read(authStateProvider);
+                                  if (s.clientId != null && s.error == null) {
+                                    setState(() => _step = 1);
+                                    _openAuthUrl();
+                                  }
+                                },
+                        child: const Text(
+                          'Use browser authorization instead',
+                          style: TextStyle(color: AppTheme.onBackgroundMuted),
+                        ),
+                      ),
+                    ],
+                  ] else ...[
+                    Container(
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: AppTheme.surfaceContainerHigh,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Text(
-                        'Your session expired. Sign back in to continue where you left off.',
-                        style: textTheme.bodySmall,
-                        textAlign: TextAlign.center,
+                      child: Column(
+                        children: [
+                          const Icon(
+                            Icons.open_in_browser_rounded,
+                            color: AppTheme.primary,
+                            size: 32,
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'Authorize in your browser',
+                            style: textTheme.titleMedium,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Log in and authorize the app, then paste the code below.',
+                            style: textTheme.bodySmall,
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 16),
+                          SizedBox(
+                            width: double.infinity,
+                            child: OutlinedButton.icon(
+                              onPressed: _openAuthUrl,
+                              icon: const Icon(Icons.launch, size: 18),
+                              label: const Text('Open Browser'),
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: AppTheme.primary,
+                                side: const BorderSide(color: AppTheme.primary),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 16),
-                  ],
-                  if (!_hardcodedPod) ...[
+                    const SizedBox(height: 24),
                     TextField(
-                      controller: _serverController,
+                      controller: _codeController,
                       decoration: const InputDecoration(
-                        hintText: 'https://your.funkwhale.server',
+                        hintText: 'Paste authorization code',
                         prefixIcon: Icon(
-                          Icons.dns_outlined,
+                          Icons.key,
                           color: AppTheme.onBackgroundSubtle,
                         ),
                       ),
                       style: const TextStyle(color: AppTheme.onBackground),
-                      keyboardType: TextInputType.url,
-                      textInputAction: TextInputAction.next,
+                      textInputAction: TextInputAction.go,
+                      autocorrect: false,
+                      enableSuggestions: false,
+                      onSubmitted: (_) => _submitCode(),
                     ),
                     const SizedBox(height: 16),
-                  ],
-                  TextField(
-                    controller: _usernameController,
-                    decoration: const InputDecoration(
-                      hintText: 'Username',
-                      prefixIcon: Icon(
-                        Icons.person_outline,
-                        color: AppTheme.onBackgroundSubtle,
+                    if (authState.error != null) ...[
+                      Text(
+                        authState.error!,
+                        style: TextStyle(color: AppTheme.error, fontSize: 13),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: authState.isLoading ? null : _submitCode,
+                        child:
+                            authState.isLoading
+                                ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                                : const Text('Sign In'),
                       ),
                     ),
-                    style: const TextStyle(color: AppTheme.onBackground),
-                    textInputAction: TextInputAction.next,
-                    autofillHints: const [AutofillHints.username],
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _passwordController,
-                    obscureText: _obscurePassword,
-                    decoration: InputDecoration(
-                      hintText: 'Password',
-                      prefixIcon: const Icon(
-                        Icons.lock_outline,
-                        color: AppTheme.onBackgroundSubtle,
-                      ),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscurePassword
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
-                          color: AppTheme.onBackgroundSubtle,
-                        ),
-                        onPressed: () => setState(
-                          () => _obscurePassword = !_obscurePassword,
-                        ),
-                      ),
-                    ),
-                    style: const TextStyle(color: AppTheme.onBackground),
-                    textInputAction: TextInputAction.go,
-                    autofillHints: const [AutofillHints.password],
-                    onSubmitted: (_) => _submitPasswordLogin(),
-                  ),
-                  const SizedBox(height: 16),
-                  if (authState.error != null) ...[
-                    Text(
-                      authState.error!,
-                      style: TextStyle(color: AppTheme.error, fontSize: 13),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: authState.isLoading
-                          ? null
-                          : _submitPasswordLogin,
-                      child: authState.isLoading
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                          : const Text('Sign In'),
-                    ),
-                  ),
-                  if (!_hardcodedPod) ...[
                     const SizedBox(height: 12),
                     TextButton(
-                      onPressed: authState.isLoading
-                          ? null
-                          : () async {
-                              await ref
-                                  .read(authStateProvider.notifier)
-                                  .registerApp(_serverController.text);
-                              if (!mounted) return;
-                              final s = ref.read(authStateProvider);
-                              if (s.clientId != null && s.error == null) {
-                                setState(() => _step = 1);
-                                _openAuthUrl();
-                              }
-                            },
+                      onPressed: () => setState(() => _step = 0),
                       child: const Text(
-                        'Use browser authorization instead',
+                        'Back to password login',
                         style: TextStyle(color: AppTheme.onBackgroundMuted),
                       ),
                     ),
                   ],
-                ] else ...[
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: AppTheme.surfaceContainerHigh,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      children: [
-                        const Icon(
-                          Icons.open_in_browser_rounded,
-                          color: AppTheme.primary,
-                          size: 32,
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'Authorize in your browser',
-                          style: textTheme.titleMedium,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Log in and authorize the app, then paste the code below.',
-                          style: textTheme.bodySmall,
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 16),
-                        SizedBox(
-                          width: double.infinity,
-                          child: OutlinedButton.icon(
-                            onPressed: _openAuthUrl,
-                            icon: const Icon(Icons.launch, size: 18),
-                            label: const Text('Open Browser'),
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: AppTheme.primary,
-                              side: const BorderSide(color: AppTheme.primary),
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  TextField(
-                    controller: _codeController,
-                    decoration: const InputDecoration(
-                      hintText: 'Paste authorization code',
-                      prefixIcon: Icon(
-                        Icons.key,
-                        color: AppTheme.onBackgroundSubtle,
-                      ),
-                    ),
-                    style: const TextStyle(color: AppTheme.onBackground),
-                    textInputAction: TextInputAction.go,
-                    onSubmitted: (_) => _submitCode(),
-                  ),
-                  const SizedBox(height: 16),
-                  if (authState.error != null) ...[
-                    Text(
-                      authState.error!,
-                      style: TextStyle(color: AppTheme.error, fontSize: 13),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: authState.isLoading ? null : _submitCode,
-                      child: authState.isLoading
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                          : const Text('Sign In'),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  TextButton(
-                    onPressed: () => setState(() => _step = 0),
-                    child: const Text(
-                      'Back to password login',
-                      style: TextStyle(color: AppTheme.onBackgroundMuted),
-                    ),
-                  ),
                 ],
-              ],
+              ),
             ),
           ),
         ),
@@ -317,9 +357,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _submitPasswordLogin() async {
-    final server = _hardcodedPod
-        ? (AppPlatform.hardcodedPodUrl ?? '')
-        : _serverController.text.trim();
+    final server =
+        _hardcodedPod
+            ? (AppPlatform.hardcodedPodUrl ?? '')
+            : _serverController.text.trim();
     final username = _usernameController.text.trim();
     final password = _passwordController.text;
     if (server.isEmpty || username.isEmpty || password.isEmpty) return;
@@ -334,6 +375,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (!mounted) return;
 
     if (ok) {
+      // Persist credentials into the platform password manager when offered.
+      TextInput.finishAutofillContext(shouldSave: true);
       Analytics.track('login_password_success');
       return;
     }
