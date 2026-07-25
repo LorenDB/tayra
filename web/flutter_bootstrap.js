@@ -5,9 +5,9 @@
 // external file so Funkwhale CSP `script-src 'self'` is not violated
 // (no inline scripts in index.html).
 //
-// Build substitutes the template tokens below:
-//   {{flutter_js}}            → FlutterLoader setup
-//   {{flutter_build_config}}  → build metadata for the loader
+// Flutter's web build substitutes the two placeholder tokens below with
+// FlutterLoader setup and build metadata. Do not put those brace-brace
+// placeholders in comments — substitution is global and would mangle them.
 
 {{flutter_js}}
 {{flutter_build_config}}

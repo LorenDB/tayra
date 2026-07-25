@@ -155,7 +155,7 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
     }
   }
 
-  /// Reorder callback for [ReorderableListView.onReorderItem] — [newIndex]
+  /// Reorder callback for [ReorderableListView.onReorder] — [newIndex]
   /// is already adjusted for the removed item at [oldIndex].
   Future<void> _reorderTrack(int oldIndex, int newIndex) async {
     if (oldIndex == newIndex) return;
