@@ -53,10 +53,11 @@ void main() {
         listenedAt: listened,
         sourceDevice: 'local',
       );
-      final item = ListenHistoryImportService.mapRecord(
-        rec,
-        localDeviceUuid: 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee',
-      )!;
+      final item =
+          ListenHistoryImportService.mapRecord(
+            rec,
+            localDeviceUuid: 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee',
+          )!;
       expect(item.trackId, 42);
       expect(item.durationSeconds, 180);
       expect(item.creationDate.toUtc(), listened);
@@ -84,9 +85,10 @@ void main() {
     test('registers all device UUIDs then chunks bulk ≤500', () async {
       // 501 records so we need 2 bulk calls
       final records = List.generate(501, (i) {
-        final device = i.isEven
-            ? 'local'
-            : '11111111-1111-4111-8111-1111111111${(i % 10)}0';
+        final device =
+            i.isEven
+                ? 'local'
+                : '11111111-1111-4111-8111-1111111111${(i % 10)}0';
         return ListenRecord(
           trackId: i + 1,
           trackTitle: 'T$i',
@@ -193,8 +195,91 @@ void main() {
       expect(fake.syncedThroughMs, late.millisecondsSinceEpoch);
     });
 
+    test(
+      'unset watermark: catch-up seeds now and does not bulk history',
+      () async {
+        // Issue 2: null watermark must not upload entire local history.
+        fake.syncedThroughMs = null;
+        fake.fixedNowMs = 1_700_000_000_000;
+        fake.afterRecords = [
+          for (var i = 0; i < 50; i++)
+            ListenRecord(
+              trackId: i + 1,
+              trackTitle: 'T$i',
+              artistName: 'A',
+              albumTitle: 'Al',
+              listenedAt: DateTime.utc(2020, 1, 1).add(Duration(days: i)),
+              sourceDevice: 'local',
+            ),
+        ];
+
+        final result = await service.catchUpIfNeeded();
+
+        expect(result.totalProcessed, 0);
+        expect(fake.bulkCalls, 0);
+        expect(fake.getListensAfterCalls, 0);
+        expect(fake.syncedThroughMs, 1_700_000_000_000);
+      },
+    );
+
+    test(
+      'partial bulk failure: watermark only covers successful chunks',
+      () async {
+        // Issue 1: first chunk OK, second throws → watermark ≤ last of chunk 1.
+        final base = DateTime.utc(2024, 1, 1);
+        final records = List.generate(501, (i) {
+          return ListenRecord(
+            trackId: i + 1,
+            trackTitle: 'T$i',
+            artistName: 'A',
+            albumTitle: 'Al',
+            durationSeconds: 10,
+            listenedAt: base.add(Duration(seconds: i)),
+            sourceDevice: 'local',
+          );
+        });
+        fake.records = records;
+        fake.syncedThroughMs = null;
+        fake.failBulkAfterCalls = 1; // succeed once, then throw
+
+        final result = await service.importLocalHistory();
+
+        expect(fake.bulkCalls, 2);
+        expect(result.created, 500); // only first chunk counted
+        // Last item of chunk 1 is index 499 → base + 499s
+        final expectedMax =
+            base.add(const Duration(seconds: 499)).millisecondsSinceEpoch;
+        expect(fake.syncedThroughMs, expectedMax);
+        // Must not jump to last record (index 500).
+        final batchMax =
+            base.add(const Duration(seconds: 500)).millisecondsSinceEpoch;
+        expect(fake.syncedThroughMs, lessThan(batchMax));
+      },
+    );
+
+    test('all chunks fail: watermark not advanced', () async {
+      fake.syncedThroughMs = null;
+      fake.failBulkAfterCalls = 0; // throw on first call
+      fake.records = [
+        ListenRecord(
+          trackId: 1,
+          trackTitle: 'T',
+          artistName: 'A',
+          albumTitle: 'Al',
+          listenedAt: DateTime.utc(2024, 3, 1),
+          sourceDevice: 'local',
+        ),
+      ];
+
+      await service.importLocalHistory();
+
+      expect(fake.bulkCalls, 1);
+      expect(fake.syncedThroughMs, isNull);
+    });
+
     test('offline → skip catch-up', () async {
       fake.offline = true;
+      fake.syncedThroughMs = 1; // armed so we would otherwise query
       fake.afterRecords = [
         ListenRecord(
           trackId: 1,
@@ -257,9 +342,15 @@ class _FakeBackend {
   int probeCalls = 0;
   bool offline = false;
   bool authenticated = true;
-  int syncedThroughMs = 0;
+
+  /// `null` = catch-up not armed (prefs key missing).
+  int? syncedThroughMs;
+  int fixedNowMs = 1_600_000_000_000;
   int getListensAfterCalls = 0;
   int? lastAfterMs;
+
+  /// Throw after this many successful bulk calls (0 = always throw).
+  int? failBulkAfterCalls;
 
   List<ListenRecord> records = const [];
   List<ListenRecord> afterRecords = const [];
@@ -277,31 +368,33 @@ class _FakeBackend {
       probeCalls++;
       return probeResult;
     },
-    upsertClientDevice:
-        ({
-          required String uuid,
-          required String name,
-          String clientId = 'tayra',
-          String? clientVersion,
-        }) async {
-          upsertedUuids.add(uuid);
-        },
-    bulkCreateListenings:
-        ({
-          required List<BulkListeningItem> items,
-          String mode = 'enrich_or_create',
-          int? dedupWindowSeconds,
-        }) async {
-          bulkCalls++;
-          bulkCallSizes.add(items.length);
-          bulkModes.add(mode);
-          bulkItems.add(List.of(items));
-          if (bulkResult.created == 1 && bulkResult.enriched == 0) {
-            // Default: report all as created for this chunk size.
-            return BulkListeningResult(created: items.length);
-          }
-          return bulkResult;
-        },
+    upsertClientDevice: ({
+      required String uuid,
+      required String name,
+      String clientId = 'tayra',
+      String? clientVersion,
+    }) async {
+      upsertedUuids.add(uuid);
+    },
+    bulkCreateListenings: ({
+      required List<BulkListeningItem> items,
+      String mode = 'enrich_or_create',
+      int? dedupWindowSeconds,
+    }) async {
+      bulkCalls++;
+      bulkCallSizes.add(items.length);
+      bulkModes.add(mode);
+      bulkItems.add(List.of(items));
+      final failAfter = failBulkAfterCalls;
+      if (failAfter != null && bulkCalls > failAfter) {
+        throw Exception('simulated bulk failure');
+      }
+      if (bulkResult.created == 1 && bulkResult.enriched == 0) {
+        // Default: report all as created for this chunk size.
+        return BulkListeningResult(created: items.length);
+      }
+      return bulkResult;
+    },
     getDeviceUuid: () async => 'device-uuid',
     getDeviceName: () async => 'Test Device',
     getAllListens: () async => records,
@@ -316,6 +409,7 @@ class _FakeBackend {
     },
     isAuthenticated: () => authenticated,
     isOffline: () => offline,
+    nowMs: () => fixedNowMs,
     loadNextcloudHistory: () async {
       final fn = loadNextcloud;
       if (fn == null) return 0;

@@ -17,6 +17,10 @@ import 'package:tayra/features/year_review/listen_history_service.dart';
 const kBulkListeningChunkSize = FunkwhaleApi.bulkListeningMaxItems;
 
 /// Prefs key: highest `listened_at` ms successfully bulk-uploaded.
+///
+/// Absent key means catch-up is **not armed** — historical migration stays
+/// behind the settings/restore UI; bootstrap only seeds "now" then flushes
+/// future offline listens.
 const kListenHistoryBulkSyncedMsKey = 'listen_history_bulk_synced_ms';
 
 /// UUID (any version) acceptable as server `source_device`.
@@ -72,6 +76,7 @@ class ListenHistoryImportBackend {
     required this.setSyncedThroughMs,
     required this.isAuthenticated,
     required this.isOffline,
+    required this.nowMs,
     this.loadNextcloudHistory,
   });
 
@@ -93,10 +98,16 @@ class ListenHistoryImportBackend {
   final Future<String> Function() getDeviceName;
   final Future<List<ListenRecord>> Function() getAllListens;
   final Future<List<ListenRecord>> Function(int afterMs) getListensAfter;
-  final Future<int> Function() getSyncedThroughMs;
+
+  /// Highest successfully bulk-synced `listened_at` ms, or `null` if unset
+  /// (catch-up not armed — do not treat as epoch 0).
+  final Future<int?> Function() getSyncedThroughMs;
   final Future<void> Function(int ms) setSyncedThroughMs;
   final bool Function() isAuthenticated;
   final bool Function() isOffline;
+
+  /// Clock for seeding watermark when catch-up first arms (tests inject).
+  final int Function() nowMs;
 
   /// Optional: merge remote Nextcloud history into local DB, return added count.
   final Future<int> Function()? loadNextcloudHistory;
@@ -138,20 +149,19 @@ class ListenHistoryImportService {
     final cached = ref.read(cachedFunkwhaleApiProvider);
     return ListenHistoryImportBackend(
       probeClientDataSupport: raw.probeClientDataSupport,
-      upsertClientDevice:
-          ({
-            required String uuid,
-            required String name,
-            String clientId = kTayraClientId,
-            String? clientVersion,
-          }) async {
-            await raw.upsertClientDevice(
-              uuid: uuid,
-              name: name,
-              clientId: clientId,
-              clientVersion: clientVersion,
-            );
-          },
+      upsertClientDevice: ({
+        required String uuid,
+        required String name,
+        String clientId = kTayraClientId,
+        String? clientVersion,
+      }) async {
+        await raw.upsertClientDevice(
+          uuid: uuid,
+          name: name,
+          clientId: clientId,
+          clientVersion: clientVersion,
+        );
+      },
       bulkCreateListenings:
           ({
             required List<BulkListeningItem> items,
@@ -168,7 +178,8 @@ class ListenHistoryImportService {
       getListensAfter: ListenHistoryService.getListensAfter,
       getSyncedThroughMs: () async {
         final prefs = await SharedPreferences.getInstance();
-        return prefs.getInt(kListenHistoryBulkSyncedMsKey) ?? 0;
+        // Null (missing key) means catch-up not armed — never default to 0.
+        return prefs.getInt(kListenHistoryBulkSyncedMsKey);
       },
       setSyncedThroughMs: (ms) async {
         final prefs = await SharedPreferences.getInstance();
@@ -176,6 +187,7 @@ class ListenHistoryImportService {
       },
       isAuthenticated: () => ref.read(authStateProvider).isAuthenticated,
       isOffline: () => ref.read(offlineStateProvider).isOffline,
+      nowMs: () => DateTime.now().millisecondsSinceEpoch,
       loadNextcloudHistory: () async {
         final nc = ref.read(nextcloudBackupProvider);
         if (!nc.isConnected ||
@@ -291,6 +303,10 @@ class ListenHistoryImportService {
   /// Offline catch-up: bulk-upload listens after the last sync watermark.
   ///
   /// Uses original `listened_at` timestamps (never looped single POST).
+  ///
+  /// When the watermark key is **unset**, seeds it to "now" and returns
+  /// without bulk — full historical migration stays behind the settings /
+  /// restore UI. Only listens after the armed watermark are auto-flushed.
   Future<BulkListeningResult> catchUpIfNeeded() async {
     return _runExclusive(() async {
       if (!_backend.isAuthenticated()) return BulkListeningResult.empty;
@@ -304,6 +320,17 @@ class ListenHistoryImportService {
       }
 
       final watermark = await _backend.getSyncedThroughMs();
+      if (watermark == null) {
+        // Arm catch-up at "now" so we never silently upload all history.
+        final now = _backend.nowMs();
+        await _backend.setSyncedThroughMs(now);
+        debugPrint(
+          'ListenHistoryImportService: catch-up armed at $now '
+          '(no historical bulk; use settings upload for migration)',
+        );
+        return BulkListeningResult.empty;
+      }
+
       final records = await _backend.getListensAfter(watermark);
       if (records.isEmpty) return BulkListeningResult.empty;
 
@@ -368,6 +395,10 @@ class ListenHistoryImportService {
     if (items.isEmpty) return BulkListeningResult.empty;
 
     var aggregate = BulkListeningResult.empty;
+    // Max creation_date of items covered by HTTP-successful chunks only.
+    // Never advance past a failed chunk (would permanently skip catch-up rows).
+    int? maxSuccessfulMs;
+
     for (var i = 0; i < items.length; i += kBulkListeningChunkSize) {
       final end = (i + kBulkListeningChunkSize).clamp(0, items.length);
       final chunk = items.sublist(i, end);
@@ -395,22 +426,26 @@ class ListenHistoryImportService {
         } else {
           aggregate = aggregate + result;
         }
+        // HTTP success (including per-row errors) counts as uploaded chunk.
+        for (final it in chunk) {
+          final ms = it.creationDate.millisecondsSinceEpoch;
+          if (maxSuccessfulMs == null || ms > maxSuccessfulMs) {
+            maxSuccessfulMs = ms;
+          }
+        }
       } catch (e, st) {
         debugPrint('ListenHistoryImportService bulk chunk failed: $e\n$st');
         // Stop further chunks on hard failure; partial success kept.
+        // Do not include this chunk (or later ones) in the watermark.
         break;
       }
     }
 
-    if (advanceWatermark && records.isNotEmpty) {
-      var maxMs = 0;
-      for (final r in records) {
-        final ms = r.listenedAt.millisecondsSinceEpoch;
-        if (ms > maxMs) maxMs = ms;
-      }
+    if (advanceWatermark && maxSuccessfulMs != null) {
       final prev = await _backend.getSyncedThroughMs();
-      if (maxMs > prev) {
-        await _backend.setSyncedThroughMs(maxMs);
+      // Always arm on first successful bulk; otherwise only move forward.
+      if (prev == null || maxSuccessfulMs > prev) {
+        await _backend.setSyncedThroughMs(maxSuccessfulMs);
       }
     }
 
@@ -418,7 +453,8 @@ class ListenHistoryImportService {
       'ListenHistoryImportService: done created=${aggregate.created} '
       'enriched=${aggregate.enriched} '
       'skipped=${aggregate.skippedDuplicate} '
-      'errors=${aggregate.errors.length}',
+      'errors=${aggregate.errors.length}'
+      '${maxSuccessfulMs != null ? ' watermark<=$maxSuccessfulMs' : ''}',
     );
     return aggregate;
   }
