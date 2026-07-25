@@ -20,6 +20,7 @@ import 'package:tayra/core/router/app_router.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/player/player_provider.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
+import 'package:tayra/features/year_review/listen_history_import_service.dart';
 import 'package:tayra/features/year_review/listen_history_service.dart';
 
 // Desktop-only plugins — imported only on non-web via conditional stubs would
@@ -129,6 +130,8 @@ void main() async {
 
   // Register ClientDevice on cold start / login when client-data API is available.
   container.read(clientDataBootstrapProvider);
+  // Offline→server listen catch-up via bulk enrich_or_create (native only).
+  container.read(listenHistoryImportBootstrapProvider);
 
   runApp(
     UncontrolledProviderScope(container: container, child: const TayraApp()),

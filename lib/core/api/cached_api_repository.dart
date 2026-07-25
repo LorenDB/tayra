@@ -788,6 +788,16 @@ class CachedFunkwhaleApi {
     clientVersion: clientVersion,
   );
 
+  Future<BulkListeningResult> bulkCreateListenings({
+    required List<BulkListeningItem> items,
+    String mode = 'enrich_or_create',
+    int? dedupWindowSeconds,
+  }) => _api.bulkCreateListenings(
+    items: items,
+    mode: mode,
+    dedupWindowSeconds: dedupWindowSeconds,
+  );
+
   String getStreamUrl(String listenUrl, {bool appendListenToken = true}) =>
       _api.getStreamUrl(listenUrl, appendListenToken: appendListenToken);
 

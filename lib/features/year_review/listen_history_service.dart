@@ -1126,6 +1126,26 @@ class ListenHistoryService {
     return rows.map(ListenRecord.fromMap).toList();
   }
 
+  /// All local listen rows, oldest first. Used for server bulk import.
+  static Future<List<ListenRecord>> getAllListens() async {
+    final db = await CacheDatabase.instance.database;
+    final rows = await db.query(_tableName, orderBy: 'listened_at ASC');
+    return rows.map(ListenRecord.fromMap).toList();
+  }
+
+  /// Listens with `listened_at` strictly after [afterMs] (epoch ms), oldest first.
+  /// Used for offline→server catch-up after reconnect.
+  static Future<List<ListenRecord>> getListensAfter(int afterMs) async {
+    final db = await CacheDatabase.instance.database;
+    final rows = await db.query(
+      _tableName,
+      where: 'listened_at > ?',
+      whereArgs: [afterMs],
+      orderBy: 'listened_at ASC',
+    );
+    return rows.map(ListenRecord.fromMap).toList();
+  }
+
   /// Return per-device listen stats for a given year, ordered by count desc.
   static Future<List<DeviceStat>> getDeviceStats(int year) async {
     await _loadDeviceDisplayNames();
