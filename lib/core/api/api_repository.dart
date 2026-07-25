@@ -453,6 +453,27 @@ class FunkwhaleApi {
     return BulkListeningResult.empty;
   }
 
+  /// Year-in-review aggregates for the authenticated user.
+  ///
+  /// `GET /api/v1/history/listenings/stats/?year=&limit=`
+  /// ([limit] default 10, server max 50). Owner/self only.
+  ///
+  /// Returns the raw JSON map for mapping into year-review UI models.
+  /// HTTP 404 means the server does not expose the stats action.
+  Future<Map<String, dynamic>> getListeningStats({
+    required int year,
+    int limit = 10,
+  }) async {
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/history/listenings/stats/',
+      queryParameters: {'year': year, 'limit': limit},
+    );
+    final body = response.data;
+    if (body is Map<String, dynamic>) return body;
+    if (body is Map) return Map<String, dynamic>.from(body);
+    return <String, dynamic>{};
+  }
+
   // ── Client devices (rich client-data) ───────────────────────────────
 
   /// Feature probe: GET list endpoint. `false` on HTTP 404 (unsupported);
