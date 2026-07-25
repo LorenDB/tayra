@@ -1,5 +1,6 @@
 import datetime
 
+import pytest
 from django.urls import reverse
 from django.utils import timezone
 
@@ -72,6 +73,23 @@ def test_listening_filter_year(factories, mocker, queryset_equal_list):
 
     assert list(filterset.qs) == [in_year]
     assert other_year not in filterset.qs
+
+
+@pytest.mark.parametrize("year", [0, -1, 9999, 10000])
+def test_listening_filter_year_out_of_range_no_500(
+    factories, mocker, year, queryset_equal_list
+):
+    """Out-of-range year query params must not raise (no 500 on list)."""
+    keep = factories["history.Listening"]()
+    qs = models.Listening.objects.all()
+    filterset = filters.ListeningFilter(
+        {"year": str(year)},
+        request=mocker.Mock(user=factories["users.User"]()),
+        queryset=qs,
+    )
+
+    # Invalid year is ignored → unfiltered queryset (no crash).
+    assert list(filterset.qs) == [keep]
 
 
 def test_listening_filter_source_device_uuid(factories, mocker, queryset_equal_list):

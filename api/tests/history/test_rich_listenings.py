@@ -573,6 +573,47 @@ def test_patch_source_device_not_registered(factories, logged_in_api_client):
     assert response.data["source_device"][0]["code"] == "device_not_registered"
 
 
+def test_patch_source_device_inactive(factories, logged_in_api_client):
+    listening = factories["history.Listening"](user=logged_in_api_client.user)
+    device = factories["client_data.ClientDevice"](
+        user=logged_in_api_client.user, is_active=False
+    )
+
+    response = logged_in_api_client.patch(
+        _detail_url(listening.pk),
+        {"source_device": str(device.uuid)},
+        format="json",
+    )
+
+    assert response.status_code == 400
+    assert response.data["source_device"][0]["code"] == "device_inactive"
+
+
+def test_patch_no_plugin_or_activity_side_effects(
+    factories, logged_in_api_client, mocker
+):
+    """Duration PATCH must not fire LISTENING_CREATED plugins or activity."""
+    listening = factories["history.Listening"](
+        user=logged_in_api_client.user,
+        duration_seconds=10,
+    )
+    plugin_hook = mocker.patch("config.plugins.trigger_hook")
+    activity_send = mocker.patch("funkwhale_api.activity.record.send")
+
+    response = logged_in_api_client.patch(
+        _detail_url(listening.pk),
+        {"duration_seconds": 90},
+        format="json",
+    )
+
+    assert response.status_code == 200
+    assert response.data["duration_seconds"] == 90
+    listening.refresh_from_db()
+    assert listening.duration_seconds == 90
+    plugin_hook.assert_not_called()
+    activity_send.assert_not_called()
+
+
 def test_patch_non_owner_404(factories, logged_in_api_client):
     owner = factories["users.User"](privacy_level="everyone")
     listening = factories["history.Listening"](

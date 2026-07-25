@@ -32,14 +32,24 @@ class ListeningFilter(moderation_filters.HiddenContentFilterSet):
         fields = []
 
     def filter_year(self, queryset, name, value):
-        """Expand year=YYYY to [Jan 1, next Jan 1) in the active timezone."""
+        """Expand year=YYYY to [Jan 1, next Jan 1) in the active timezone.
+
+        Out-of-range years (datetime supports 1..9999; we need year+1 for end)
+        are ignored so user-controlled query params never 500.
+        """
         if value is None:
             return queryset
         try:
             year = int(value)
         except (TypeError, ValueError):
             return queryset
-        tz = timezone.get_current_timezone()
-        start = timezone.make_aware(datetime.datetime(year, 1, 1), tz)
-        end = timezone.make_aware(datetime.datetime(year + 1, 1, 1), tz)
+        # datetime.datetime year range is 1..9999; end bound needs year+1.
+        if year < 1 or year > 9998:
+            return queryset
+        try:
+            tz = timezone.get_current_timezone()
+            start = timezone.make_aware(datetime.datetime(year, 1, 1), tz)
+            end = timezone.make_aware(datetime.datetime(year + 1, 1, 1), tz)
+        except (ValueError, OverflowError):
+            return queryset
         return queryset.filter(creation_date__gte=start, creation_date__lt=end)

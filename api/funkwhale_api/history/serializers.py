@@ -17,6 +17,25 @@ from . import models
 _CREATION_DATE_WINDOW = datetime.timedelta(minutes=5)
 
 
+def resolve_source_device(user, device_uuid):
+    """Resolve an active ClientDevice UUID for the given user, or raise coded 400."""
+    try:
+        device = ClientDevice.objects.get(user=user, uuid=device_uuid)
+    except ClientDevice.DoesNotExist:
+        raise_coded_validation_error(
+            "source_device",
+            "device_not_registered",
+            "Register the device via POST /api/v1/client-devices/",
+        )
+    if not device.is_active:
+        raise_coded_validation_error(
+            "source_device",
+            "device_inactive",
+            "Device is inactive; re-register via POST /api/v1/client-devices/",
+        )
+    return device
+
+
 class ListeningActivitySerializer(activity_serializers.ModelSerializer):
     type = serializers.SerializerMethodField()
     object = TrackActivitySerializer(source="track")
@@ -149,23 +168,6 @@ class ListeningWriteSerializer(serializers.ModelSerializer):
                 "Use bulk import for historical listens",
             )
 
-    def _resolve_source_device(self, user, device_uuid):
-        try:
-            device = ClientDevice.objects.get(user=user, uuid=device_uuid)
-        except ClientDevice.DoesNotExist:
-            raise_coded_validation_error(
-                "source_device",
-                "device_not_registered",
-                "Register the device via POST /api/v1/client-devices/",
-            )
-        if not device.is_active:
-            raise_coded_validation_error(
-                "source_device",
-                "device_inactive",
-                "Device is inactive; re-register via POST /api/v1/client-devices/",
-            )
-        return device
-
     def _merge_existing_session(self, user, session_id, validated_data):
         existing = (
             models.Listening.objects.select_for_update()
@@ -191,9 +193,7 @@ class ListeningWriteSerializer(serializers.ModelSerializer):
         validated_data["user"] = user
         device_uuid = validated_data.pop("source_device", serializers.empty)
         if device_uuid is not serializers.empty and device_uuid is not None:
-            validated_data["source_device"] = self._resolve_source_device(
-                user, device_uuid
-            )
+            validated_data["source_device"] = resolve_source_device(user, device_uuid)
         session_id = validated_data.get("client_session_id")
         creation_date = validated_data.get("creation_date")
 
@@ -241,7 +241,7 @@ class ListeningUpdateSerializer(serializers.ModelSerializer):
     PATCH body for duration / device updates.
 
     Mutable: duration_seconds (monotonic max), optional source_device UUID.
-    Immutable (not in fields): track, user, creation_date, client_session_id.
+    Read-only / ignored on write: track, user, creation_date, client_session_id.
     """
 
     source_device = serializers.UUIDField(
@@ -262,46 +262,39 @@ class ListeningUpdateSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ("id", "client_session_id", "updated_at")
 
-    def _resolve_source_device(self, user, device_uuid):
-        try:
-            device = ClientDevice.objects.get(user=user, uuid=device_uuid)
-        except ClientDevice.DoesNotExist:
-            raise_coded_validation_error(
-                "source_device",
-                "device_not_registered",
-                "Register the device via POST /api/v1/client-devices/",
-            )
-        if not device.is_active:
-            raise_coded_validation_error(
-                "source_device",
-                "device_inactive",
-                "Device is inactive; re-register via POST /api/v1/client-devices/",
-            )
-        return device
-
     def update(self, instance, validated_data):
+        """
+        Re-fetch under select_for_update so concurrent PATCH / session re-POST
+        cannot lose a higher duration (monotonic-safe).
+        """
         user = self.context["user"]
-        update_fields = []
+        with transaction.atomic():
+            locked = (
+                models.Listening.objects.select_for_update()
+                .select_related("source_device")
+                .get(pk=instance.pk)
+            )
+            update_fields = []
 
-        if "duration_seconds" in validated_data:
-            incoming = validated_data["duration_seconds"]
-            if incoming is not None:
-                instance.duration_seconds = max(
-                    instance.duration_seconds or 0, incoming
-                )
-                update_fields.append("duration_seconds")
+            if "duration_seconds" in validated_data:
+                incoming = validated_data["duration_seconds"]
+                if incoming is not None:
+                    locked.duration_seconds = max(
+                        locked.duration_seconds or 0, incoming
+                    )
+                    update_fields.append("duration_seconds")
 
-        if "source_device" in validated_data:
-            device_uuid = validated_data["source_device"]
-            # Only apply when a UUID is provided; null means no change.
-            if device_uuid is not None:
-                instance.source_device = self._resolve_source_device(user, device_uuid)
-                update_fields.append("source_device")
+            if "source_device" in validated_data:
+                device_uuid = validated_data["source_device"]
+                # Only apply when a UUID is provided; null means no change.
+                if device_uuid is not None:
+                    locked.source_device = resolve_source_device(user, device_uuid)
+                    update_fields.append("source_device")
 
-        if update_fields:
-            update_fields.append("updated_at")
-            instance.save(update_fields=update_fields)
-        return instance
+            if update_fields:
+                update_fields.append("updated_at")
+                locked.save(update_fields=update_fields)
+            return locked
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
