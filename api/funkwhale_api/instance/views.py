@@ -162,9 +162,9 @@ class NodeInfo21(NodeInfo20):
             "features": [
                 "channels",
                 "podcasts",
-            
                 "client_data",
-                "rich_listenings",],
+                "rich_listenings",
+            ],
         }
 
         if not pref.get("common__api_authentication_required"):
