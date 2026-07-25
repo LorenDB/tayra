@@ -121,6 +121,32 @@ void main() {
         expect(updates, isEmpty);
       },
     );
+
+    test('onSessionPersisted reports force on pause/finalize', () async {
+      final forces = <bool>[];
+
+      final tracker = PlaybackListenTracker(
+        persistIntervalSeconds: 1,
+        insertListenRecord:
+            (track, {required listenedSeconds, required listenedAt}) async {
+              return 1;
+            },
+        updateListenRecord: (id, listenedSeconds) async {},
+        onSessionPersisted:
+            (trackId, recordId, persistedSeconds, listenedAt, {force = false}) {
+              forces.add(force);
+            },
+      );
+
+      await tracker.activate(_track(id: 3, duration: 300), isPlaying: true);
+      await tracker.updatePosition(const Duration(seconds: 2));
+      await tracker.setPlaying(false, position: const Duration(seconds: 5));
+      await tracker.finalize(position: const Duration(seconds: 5));
+
+      // Insert (interval) may be non-force; pause and finalize are force.
+      expect(forces, isNotEmpty);
+      expect(forces.last, isTrue);
+    });
   });
 }
 

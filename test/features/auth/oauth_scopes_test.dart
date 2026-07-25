@@ -18,6 +18,13 @@ void main() {
       final scopes = expandOAuthScopes('read:favorites');
       expect(scopes.single.label, contains('favorites'));
     });
+
+    test('includes client_data scope labels', () {
+      final scopes = expandOAuthScopes('read:client_data write:client_data');
+      expect(scopes, hasLength(2));
+      expect(scopes[0].label.toLowerCase(), contains('client'));
+      expect(scopes[1].label.toLowerCase(), contains('client'));
+    });
   });
 
   group('isOobRedirectUri', () {

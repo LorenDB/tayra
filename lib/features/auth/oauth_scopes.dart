@@ -20,6 +20,9 @@ const Map<String, String> kOAuthScopeLabels = {
   'write:filters': 'Manage content filters',
   'read:listenings': 'View listening history',
   'write:listenings': 'Record listening history',
+  'read:client_data': 'View client devices, preferences, and playback progress',
+  'write:client_data':
+      'Manage client devices, preferences, and playback progress',
   'read:radios': 'View radios',
   'write:radios': 'Manage radios',
   'read:playlists': 'View playlists',

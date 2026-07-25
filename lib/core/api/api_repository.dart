@@ -291,8 +291,8 @@ class FunkwhaleApi {
       data: {'index': index},
       options: Options(
         contentType: Headers.jsonContentType,
-        validateStatus:
-            (status) => status != null && status >= 200 && status < 300,
+        validateStatus: (status) =>
+            status != null && status >= 200 && status < 300,
       ),
     );
     // Defensive: if validateStatus is ever relaxed, still fail closed.
@@ -330,10 +330,69 @@ class FunkwhaleApi {
 
   // ── Listening history ───────────────────────────────────────────────
 
+  /// Thin stock scrobble (track id only). Used when rich client-data API
+  /// is unavailable; prefer [createRichListening] when supported.
   Future<void> recordListening(int trackId) async {
     await _dio.post(
       '$_baseUrl/api/v1/history/listenings/',
       data: {'track': trackId},
+    );
+  }
+
+  /// Rich listening create. Omits [creationDate] so the server stamps `now`
+  /// (live scrobbles). Do not send backdated timestamps here (K16).
+  Future<Map<String, dynamic>> createRichListening({
+    required int trackId,
+    int? durationSeconds,
+    String? sourceDevice,
+    String? clientSessionId,
+  }) async {
+    final data = <String, dynamic>{
+      'track': trackId,
+      if (durationSeconds != null) 'duration_seconds': durationSeconds,
+      if (sourceDevice != null) 'source_device': sourceDevice,
+      if (clientSessionId != null) 'client_session_id': clientSessionId,
+    };
+    final response = await _dio.post(
+      '$_baseUrl/api/v1/history/listenings/',
+      data: data,
+    );
+    final body = response.data;
+    if (body is Map<String, dynamic>) return body;
+    if (body is Map) return Map<String, dynamic>.from(body);
+    return <String, dynamic>{};
+  }
+
+  /// PATCH duration (and optional device) by client session UUID.
+  Future<void> patchListeningBySession(
+    String clientSessionId, {
+    int? durationSeconds,
+    String? sourceDevice,
+  }) async {
+    final data = <String, dynamic>{
+      if (durationSeconds != null) 'duration_seconds': durationSeconds,
+      if (sourceDevice != null) 'source_device': sourceDevice,
+    };
+    await _dio.patch(
+      '$_baseUrl/api/v1/history/listenings/by-session/'
+      '${Uri.encodeComponent(clientSessionId)}/',
+      data: data,
+    );
+  }
+
+  /// PATCH duration by server listening id.
+  Future<void> patchListening(
+    int listeningId, {
+    int? durationSeconds,
+    String? sourceDevice,
+  }) async {
+    final data = <String, dynamic>{
+      if (durationSeconds != null) 'duration_seconds': durationSeconds,
+      if (sourceDevice != null) 'source_device': sourceDevice,
+    };
+    await _dio.patch(
+      '$_baseUrl/api/v1/history/listenings/$listeningId/',
+      data: data,
     );
   }
 
@@ -353,13 +412,52 @@ class FunkwhaleApi {
     return PaginatedResponse.fromJson(response.data, Listening.fromJson);
   }
 
+  // ── Client devices (rich client-data) ───────────────────────────────
+
+  /// Feature probe: GET list endpoint. `false` on HTTP 404 (unsupported);
+  /// rethrows other errors so callers can treat network failures separately.
+  Future<bool> probeClientDataSupport() async {
+    try {
+      await _dio.get('$_baseUrl/api/v1/client-devices/');
+      return true;
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) return false;
+      rethrow;
+    }
+  }
+
+  /// Upsert this install as a [ClientDevice] (`client_id` e.g. `tayra`).
+  Future<Map<String, dynamic>> upsertClientDevice({
+    required String uuid,
+    required String name,
+    String clientId = 'tayra',
+    String? clientVersion,
+  }) async {
+    final data = <String, dynamic>{
+      'uuid': uuid,
+      'name': name,
+      'client_id': clientId,
+      if (clientVersion != null && clientVersion.isNotEmpty)
+        'client_version': clientVersion,
+    };
+    final response = await _dio.post(
+      '$_baseUrl/api/v1/client-devices/',
+      data: data,
+    );
+    final body = response.data;
+    if (body is Map<String, dynamic>) return body;
+    if (body is Map) return Map<String, dynamic>.from(body);
+    return <String, dynamic>{};
+  }
+
   // ── Stream URL builder ──────────────────────────────────────────────
 
   /// Absolute listen URL, optionally with Funkwhale scoped `?token=` for
   /// browser media elements that cannot send Authorization headers.
   String getStreamUrl(String listenUrl, {bool appendListenToken = true}) {
-    final absolute =
-        listenUrl.startsWith('http') ? listenUrl : '$_baseUrl$listenUrl';
+    final absolute = listenUrl.startsWith('http')
+        ? listenUrl
+        : '$_baseUrl$listenUrl';
     if (!appendListenToken) return absolute;
 
     final listenToken = _ref.read(authStateProvider).listenToken;
@@ -492,16 +590,13 @@ class FunkwhaleApi {
     // plain list of radios. Be flexible and accept both shapes.
     final data = response.data;
     if (data is List<dynamic>) {
-      final results =
-          data.map<Radio>((e) {
-            if (e is Map<String, dynamic>) return Radio.fromJson(e);
-            if (e is List && e.isNotEmpty && e.first is Map<String, dynamic>) {
-              return Radio.fromJson(e.first as Map<String, dynamic>);
-            }
-            throw StateError(
-              'Unexpected radio list item type: ${e.runtimeType}',
-            );
-          }).toList();
+      final results = data.map<Radio>((e) {
+        if (e is Map<String, dynamic>) return Radio.fromJson(e);
+        if (e is List && e.isNotEmpty && e.first is Map<String, dynamic>) {
+          return Radio.fromJson(e.first as Map<String, dynamic>);
+        }
+        throw StateError('Unexpected radio list item type: ${e.runtimeType}');
+      }).toList();
       return PaginatedResponse(
         count: results.length,
         next: null,
@@ -551,10 +646,9 @@ class FunkwhaleApi {
   }
 
   Future<Track> getRadioTrack(int id) async {
-    final opts =
-        _lastRadioSessionCookie != null
-            ? Options(headers: {'cookie': _lastRadioSessionCookie})
-            : null;
+    final opts = _lastRadioSessionCookie != null
+        ? Options(headers: {'cookie': _lastRadioSessionCookie})
+        : null;
     final response = await _dio.get(
       '$_baseUrl/api/v1/radios/radios/$id/tracks/',
       options: opts,
@@ -827,10 +921,9 @@ class FunkwhaleApi {
     if (name != null) body['name'] = name;
     if (privacyLevel != null) body['privacy_level'] = privacyLevel.apiValue;
     if (summaryText != null) {
-      body['summary'] =
-          summaryText.trim().isEmpty
-              ? null
-              : {'text': summaryText, 'content_type': 'text/plain'};
+      body['summary'] = summaryText.trim().isEmpty
+          ? null
+          : {'text': summaryText, 'content_type': 'text/plain'};
     }
 
     final response = await _dio.patch(

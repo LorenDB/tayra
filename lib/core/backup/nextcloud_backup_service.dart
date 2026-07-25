@@ -76,6 +76,34 @@ final _uuidV4Regex = RegExp(
   r'^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
 );
 
+/// Prefs keys (or substrings) that must never leave the device in a backup
+/// or client-preferences sync. Includes tokens, passwords, secrets, and
+/// `*api_key*` / `*apikey*` patterns (AI provider keys).
+bool isSensitiveSettingsKey(String key) {
+  final k = key.toLowerCase();
+  if (k.contains('token')) return true;
+  if (k.contains('password')) return true;
+  if (k.contains('secret')) return true;
+  // AI / third-party API keys (groq_api_key, open_router_api_key, …)
+  if (k.contains('api_key') || k.contains('apikey')) return true;
+  if (k == 'server_url' ||
+      k == 'access_token' ||
+      k == 'refresh_token' ||
+      k == 'client_id' ||
+      k == 'client_secret') {
+    return true;
+  }
+  // Nextcloud login material
+  if (k.startsWith('nc_') &&
+      (k.contains('password') ||
+          k.contains('token') ||
+          k.contains('secret') ||
+          k.contains('login'))) {
+    return true;
+  }
+  return false;
+}
+
 /// Returns this device's stable UUID v4, generating and persisting it on
 /// first use.  Used as the unique device identifier in backup filenames and
 /// to tag remote-device listen records.
@@ -887,28 +915,8 @@ class NextcloudBackupService {
   /// Desktop stores OAuth tokens in SharedPreferences; Android uses secure
   /// storage for tokens but still has Nextcloud app password / related keys
   /// in prefs.
-  static bool _isSensitiveSettingsKey(String key) {
-    final k = key.toLowerCase();
-    if (k.contains('token')) return true;
-    if (k.contains('password')) return true;
-    if (k.contains('secret')) return true;
-    if (k == 'server_url' ||
-        k == 'access_token' ||
-        k == 'refresh_token' ||
-        k == 'client_id' ||
-        k == 'client_secret') {
-      return true;
-    }
-    // Nextcloud login material
-    if (k.startsWith('nc_') &&
-        (k.contains('password') ||
-            k.contains('token') ||
-            k.contains('secret') ||
-            k.contains('login'))) {
-      return true;
-    }
-    return false;
-  }
+  static bool _isSensitiveSettingsKey(String key) =>
+      isSensitiveSettingsKey(key);
 
   static Future<Map<String, dynamic>> _exportSettingsAndServerInfo(
     String? funkServerUrl,

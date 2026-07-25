@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/core/api/client_data_service.dart';
 import 'package:tayra/core/cache/audio_cache_service.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
@@ -925,14 +926,23 @@ class PlayerNotifier extends Notifier<PlayerState> {
     _audioCache = ref.read(audioCacheServiceProvider);
     _podcastProgress = PodcastProgressService(CacheDatabase.instance);
     _listenTracker = PlaybackListenTracker(
-      onSessionPersisted: (trackId, recordId, persistedSeconds, listenedAt) {
-        QueuePersistenceService.saveListenSession(
-          trackId: trackId,
-          recordId: recordId,
-          persistedSeconds: persistedSeconds,
-          listenedAt: listenedAt,
-        );
-      },
+      onSessionPersisted:
+          (trackId, recordId, persistedSeconds, listenedAt, {force = false}) {
+            QueuePersistenceService.saveListenSession(
+              trackId: trackId,
+              recordId: recordId,
+              persistedSeconds: persistedSeconds,
+              listenedAt: listenedAt,
+            );
+            // Rich server duration PATCH (≥15s / pause / end). No-op when
+            // thin-only or no active rich session.
+            unawaited(
+              ref
+                  .read(clientDataServiceProvider)
+                  .syncDuration(trackId, persistedSeconds, force: force)
+                  .catchError((_) {}),
+            );
+          },
     );
     _init();
     Future.microtask(() => _restoreQueue());
@@ -1228,8 +1238,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
           final newTrack = state.currentTrack;
           if (newTrack != null) {
             _updateMediaItemForTrack(newTrack);
-            // Record server-side listen for new track.
-            _api.recordListening(newTrack.id).catchError((_) {});
+            // Record server-side listen for new track (rich or thin).
+            unawaited(_recordServerListen(newTrack));
           }
 
           _saveQueue();
@@ -1496,7 +1506,18 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
   CachedFunkwhaleApi get _api => ref.read(cachedFunkwhaleApiProvider);
 
+  ClientDataService get _clientData => ref.read(clientDataServiceProvider);
+
   bool get _isGaplessEnabled => ref.read(settingsProvider).gaplessPlayback;
+
+  /// Server listen: rich POST when client-data supported, else thin scrobble.
+  Future<void> _recordServerListen(Track track) async {
+    try {
+      await _clientData.recordTrackStarted(track);
+    } catch (_) {
+      // Non-critical telemetry
+    }
+  }
 
   /// True when the app should not rely on network streaming.
   bool get _isOffline => ref.read(offlineStateProvider).isOffline;
@@ -1982,9 +2003,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
             );
             final track = state.queue[nextIndex];
             await _activateListenForTrack(track);
-            try {
-              await _api.recordListening(track.id);
-            } catch (_) {}
+            await _recordServerListen(track);
             _saveQueue();
           }
         }
@@ -2136,9 +2155,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
           isPlaying: _handler.audioPlayer.playing,
         );
         await _activateListenForTrack(effectiveStart);
-        try {
-          await _api.recordListening(effectiveStart.id);
-        } catch (_) {}
+        await _recordServerListen(effectiveStart);
       } else {
         // Fall back to single-track loading.
         await _loadAndPlay(
@@ -2673,11 +2690,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
       // Record listening history only if auto-playing.
       if (autoPlay) {
-        try {
-          await _api.recordListening(track.id);
-        } catch (_) {
-          // Non-critical
-        }
+        await _recordServerListen(track);
       }
 
       try {
@@ -2851,7 +2864,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
               );
               final track = state.queue[nextIndex];
               _activateListenForTrack(track);
-              _api.recordListening(track.id).catchError((_) {});
+              unawaited(_recordServerListen(track));
               _saveQueue();
             }),
           );
@@ -3002,9 +3015,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
           position: seekTo,
         );
         unawaited(_activateListenForTrack(track, position: seekTo));
-        try {
-          await _api.recordListening(track.id);
-        } catch (_) {}
+        await _recordServerListen(track);
         return;
       }
     }
@@ -3191,9 +3202,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       }
       if (!_isCurrentLoad(epoch)) return;
       await _activateListenForTrack(state.queue[newIndex]);
-      try {
-        await _api.recordListening(state.queue[newIndex].id);
-      } catch (_) {}
+      await _recordServerListen(state.queue[newIndex]);
     } else if (_isGaplessEnabled) {
       // Gapless was just turned on — build the full playlist from this track.
       state = state.copyWith(currentIndex: newIndex, isLoading: true);
@@ -3207,9 +3216,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
           isPlaying: _handler.audioPlayer.playing,
         );
         await _activateListenForTrack(state.queue[newIndex]);
-        try {
-          await _api.recordListening(state.queue[newIndex].id);
-        } catch (_) {}
+        await _recordServerListen(state.queue[newIndex]);
       } else {
         await _loadAndPlay(state.queue[newIndex], epoch: epoch);
       }
@@ -3309,9 +3316,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       }
       if (!_isCurrentLoad(epoch)) return;
       await _activateListenForTrack(state.queue[newIndex]);
-      try {
-        await _api.recordListening(state.queue[newIndex].id);
-      } catch (_) {}
+      await _recordServerListen(state.queue[newIndex]);
     } else {
       state = state.copyWith(currentIndex: newIndex, isLoading: true);
       await _loadAndPlay(state.queue[newIndex], epoch: epoch);
@@ -3538,9 +3543,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       _updateMediaItemForTrack(state.queue[index]);
       await _handler.audioPlayer.seek(Duration.zero, index: index);
       await _activateListenForTrack(state.queue[index]);
-      try {
-        await _api.recordListening(state.queue[index].id);
-      } catch (_) {}
+      await _recordServerListen(state.queue[index]);
     } else {
       state = state.copyWith(currentIndex: index, isLoading: true);
       await _loadAndPlay(state.queue[index]);

@@ -742,6 +742,52 @@ class CachedFunkwhaleApi {
     await _api.recordListening(trackId);
   }
 
+  Future<Map<String, dynamic>> createRichListening({
+    required int trackId,
+    int? durationSeconds,
+    String? sourceDevice,
+    String? clientSessionId,
+  }) => _api.createRichListening(
+    trackId: trackId,
+    durationSeconds: durationSeconds,
+    sourceDevice: sourceDevice,
+    clientSessionId: clientSessionId,
+  );
+
+  Future<void> patchListeningBySession(
+    String clientSessionId, {
+    int? durationSeconds,
+    String? sourceDevice,
+  }) => _api.patchListeningBySession(
+    clientSessionId,
+    durationSeconds: durationSeconds,
+    sourceDevice: sourceDevice,
+  );
+
+  Future<void> patchListening(
+    int listeningId, {
+    int? durationSeconds,
+    String? sourceDevice,
+  }) => _api.patchListening(
+    listeningId,
+    durationSeconds: durationSeconds,
+    sourceDevice: sourceDevice,
+  );
+
+  Future<bool> probeClientDataSupport() => _api.probeClientDataSupport();
+
+  Future<Map<String, dynamic>> upsertClientDevice({
+    required String uuid,
+    required String name,
+    String clientId = 'tayra',
+    String? clientVersion,
+  }) => _api.upsertClientDevice(
+    uuid: uuid,
+    name: name,
+    clientId: clientId,
+    clientVersion: clientVersion,
+  );
+
   String getStreamUrl(String listenUrl, {bool appendListenToken = true}) =>
       _api.getStreamUrl(listenUrl, appendListenToken: appendListenToken);
 

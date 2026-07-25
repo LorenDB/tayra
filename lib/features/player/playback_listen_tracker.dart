@@ -18,8 +18,9 @@ typedef SessionPersistedCallback =
       int trackId,
       int recordId,
       int persistedSeconds,
-      DateTime listenedAt,
-    );
+      DateTime listenedAt, {
+      bool force,
+    });
 
 /// Tracks one local listen row per actual track activation.
 class PlaybackListenTracker {
@@ -172,6 +173,7 @@ class PlaybackListenTracker {
         session.recordId!,
         listenedSeconds,
         session.listenedAt,
+        force: force,
       );
       return;
     }
@@ -192,6 +194,7 @@ class PlaybackListenTracker {
       session.recordId!,
       listenedSeconds,
       session.listenedAt,
+      force: force,
     );
   }
 
