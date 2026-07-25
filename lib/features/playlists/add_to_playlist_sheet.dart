@@ -171,29 +171,27 @@ class _AddToPlaylistSheetState extends ConsumerState<_AddToPlaylistSheet> {
           // Playlist list
           Flexible(
             child: playlistsAsync.when(
-              loading:
-                  () => const Padding(
-                    padding: EdgeInsets.all(32),
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: AppTheme.primary,
-                      ),
+              loading: () => const Padding(
+                padding: EdgeInsets.all(32),
+                child: Center(
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: AppTheme.primary,
+                  ),
+                ),
+              ),
+              error: (error, stack) => const Padding(
+                padding: EdgeInsets.all(32),
+                child: Center(
+                  child: Text(
+                    'Could not load playlists',
+                    style: TextStyle(
+                      color: AppTheme.onBackgroundMuted,
+                      fontSize: 14,
                     ),
                   ),
-              error:
-                  (error, stack) => const Padding(
-                    padding: EdgeInsets.all(32),
-                    child: Center(
-                      child: Text(
-                        'Could not load playlists',
-                        style: TextStyle(
-                          color: AppTheme.onBackgroundMuted,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ),
+                ),
+              ),
               data: (playlists) {
                 if (playlists.isEmpty) {
                   return const Padding(

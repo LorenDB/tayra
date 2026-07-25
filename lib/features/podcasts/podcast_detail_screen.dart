@@ -237,8 +237,9 @@ class _PodcastDetailScreenState extends ConsumerState<PodcastDetailScreen> {
         .markPlayed(
           trackId: episode.id,
           channelUuid: widget.channelUuid,
-          durationMs:
-              episode.duration != null ? episode.duration! * 1000 : null,
+          durationMs: episode.duration != null
+              ? episode.duration! * 1000
+              : null,
         );
     ref.invalidate(channelEpisodeProgressProvider(widget.channelUuid));
     Analytics.track('podcast_marked_played');
@@ -297,8 +298,8 @@ class _PodcastDetailScreenState extends ConsumerState<PodcastDetailScreen> {
                     episode: visible[i],
                     progress: progress[visible[i].id],
                     onTap: () => _playEpisode(visible, i),
-                    onPlayFromBeginning:
-                        () => _playEpisode(visible, i, fromBeginning: true),
+                    onPlayFromBeginning: () =>
+                        _playEpisode(visible, i, fromBeginning: true),
                     onMarkPlayed: () => _markPlayed(visible[i]),
                     onMarkUnplayed: () => _markUnplayed(visible[i]),
                   ),
@@ -318,38 +319,35 @@ class _PodcastDetailScreenState extends ConsumerState<PodcastDetailScreen> {
       backgroundColor: AppTheme.background,
       expandedHeight: hasCover ? 280 : null,
       pinned: true,
-      title:
-          channel != null
-              ? Text(
-                channel.name,
-                style: const TextStyle(
-                  color: AppTheme.onBackground,
-                  fontWeight: FontWeight.w700,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              )
-              : null,
+      title: channel != null
+          ? Text(
+              channel.name,
+              style: const TextStyle(
+                color: AppTheme.onBackground,
+                fontWeight: FontWeight.w700,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            )
+          : null,
       actions: [
         IconButton(
           tooltip: _isSubscribed ? 'Unsubscribe' : 'Subscribe',
           onPressed: _subscribeBusy ? null : _toggleSubscribe,
-          icon:
-              _subscribeBusy
-                  ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                  : Icon(
-                    _isSubscribed
-                        ? Icons.bookmark_rounded
-                        : Icons.bookmark_border_rounded,
-                    color:
-                        _isSubscribed
-                            ? AppTheme.primary
-                            : AppTheme.onBackgroundMuted,
-                  ),
+          icon: _subscribeBusy
+              ? const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : Icon(
+                  _isSubscribed
+                      ? Icons.bookmark_rounded
+                      : Icons.bookmark_border_rounded,
+                  color: _isSubscribed
+                      ? AppTheme.primary
+                      : AppTheme.onBackgroundMuted,
+                ),
         ),
         PopupMenuButton<String>(
           icon: const Icon(
@@ -360,25 +358,23 @@ class _PodcastDetailScreenState extends ConsumerState<PodcastDetailScreen> {
           onSelected: (value) {
             if (value == 'download_latest') unawaited(_downloadLatest());
           },
-          itemBuilder:
-              (context) => [
-                PopupMenuItem(
-                  value: 'download_latest',
-                  child: PopupMenuRow(
-                    icon: Icons.download_rounded,
-                    label:
-                        'Download latest ${ref.read(settingsProvider).autoDownloadPodcastEpisodeCount}',
-                  ),
-                ),
-              ],
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              value: 'download_latest',
+              child: PopupMenuRow(
+                icon: Icons.download_rounded,
+                label:
+                    'Download latest ${ref.read(settingsProvider).autoDownloadPodcastEpisodeCount}',
+              ),
+            ),
+          ],
         ),
       ],
-      flexibleSpace:
-          hasCover
-              ? FlexibleSpaceBar(
-                background: _PodcastCoverBackground(channel: channel!),
-              )
-              : null,
+      flexibleSpace: hasCover
+          ? FlexibleSpaceBar(
+              background: _PodcastCoverBackground(channel: channel!),
+            )
+          : null,
     );
   }
 
@@ -429,17 +425,16 @@ class _PodcastDetailScreenState extends ConsumerState<PodcastDetailScreen> {
                   icon: Icons.play_arrow_rounded,
                   label: 'Play All',
                   onPressed: _isPlayingAll ? null : () => _playAll(visible),
-                  iconWidget:
-                      _isPlayingAll
-                          ? const SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          )
-                          : null,
+                  iconWidget: _isPlayingAll
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : null,
                 ),
               ),
               const SizedBox(width: 12),
@@ -449,17 +444,16 @@ class _PodcastDetailScreenState extends ConsumerState<PodcastDetailScreen> {
                   label: 'Shuffle',
                   onPressed: _isShuffling ? null : () => _shuffleAll(visible),
                   isPrimary: false,
-                  iconWidget:
-                      _isShuffling
-                          ? const SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: AppTheme.primary,
-                            ),
-                          )
-                          : null,
+                  iconWidget: _isShuffling
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: AppTheme.primary,
+                          ),
+                        )
+                      : null,
                 ),
               ),
             ],
@@ -506,10 +500,9 @@ class _EpisodeTile extends ConsumerWidget {
     final isCurrentTrack =
         ref.watch(currentPlayingTrackIdProvider) == episode.id;
 
-    final dateStr =
-        episode.creationDate != null
-            ? _episodeDateFormat.format(episode.creationDate!.toLocal())
-            : null;
+    final dateStr = episode.creationDate != null
+        ? _episodeDateFormat.format(episode.creationDate!.toLocal())
+        : null;
 
     final duration = episode.duration;
     String? durationStr;
@@ -523,16 +516,14 @@ class _EpisodeTile extends ConsumerWidget {
     final resume = progress?.hasResumePosition == true;
     final fraction = completed ? 1.0 : (progress?.progressFraction ?? 0.0);
 
-    final titleColor =
-        isCurrentTrack
-            ? AppTheme.primary
-            : completed
-            ? AppTheme.onBackgroundSubtle
-            : AppTheme.onBackground;
-    final subtitleColor =
-        isCurrentTrack
-            ? AppTheme.primary.withValues(alpha: 0.7)
-            : AppTheme.onBackgroundMuted;
+    final titleColor = isCurrentTrack
+        ? AppTheme.primary
+        : completed
+        ? AppTheme.onBackgroundSubtle
+        : AppTheme.onBackground;
+    final subtitleColor = isCurrentTrack
+        ? AppTheme.primary.withValues(alpha: 0.7)
+        : AppTheme.onBackgroundMuted;
 
     return Material(
       color: Colors.transparent,
@@ -555,8 +546,9 @@ class _EpisodeTile extends ConsumerWidget {
                         color: titleColor,
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        decoration:
-                            completed ? TextDecoration.lineThrough : null,
+                        decoration: completed
+                            ? TextDecoration.lineThrough
+                            : null,
                         decorationColor: AppTheme.onBackgroundSubtle,
                       ),
                       maxLines: 2,
@@ -673,40 +665,39 @@ class _EpisodeTile extends ConsumerWidget {
                       onMarkUnplayed();
                   }
                 },
-                itemBuilder:
-                    (context) => [
-                      const PopupMenuItem(
-                        value: 'play',
-                        child: PopupMenuRow(
-                          icon: Icons.play_arrow_rounded,
-                          label: 'Play',
-                        ),
+                itemBuilder: (context) => [
+                  const PopupMenuItem(
+                    value: 'play',
+                    child: PopupMenuRow(
+                      icon: Icons.play_arrow_rounded,
+                      label: 'Play',
+                    ),
+                  ),
+                  if (resume)
+                    const PopupMenuItem(
+                      value: 'from_start',
+                      child: PopupMenuRow(
+                        icon: Icons.replay_rounded,
+                        label: 'Play from beginning',
                       ),
-                      if (resume)
-                        const PopupMenuItem(
-                          value: 'from_start',
-                          child: PopupMenuRow(
-                            icon: Icons.replay_rounded,
-                            label: 'Play from beginning',
-                          ),
-                        ),
-                      if (!completed)
-                        const PopupMenuItem(
-                          value: 'played',
-                          child: PopupMenuRow(
-                            icon: Icons.check_circle_outline_rounded,
-                            label: 'Mark played',
-                          ),
-                        )
-                      else
-                        const PopupMenuItem(
-                          value: 'unplayed',
-                          child: PopupMenuRow(
-                            icon: Icons.radio_button_unchecked_rounded,
-                            label: 'Mark unplayed',
-                          ),
-                        ),
-                    ],
+                    ),
+                  if (!completed)
+                    const PopupMenuItem(
+                      value: 'played',
+                      child: PopupMenuRow(
+                        icon: Icons.check_circle_outline_rounded,
+                        label: 'Mark played',
+                      ),
+                    )
+                  else
+                    const PopupMenuItem(
+                      value: 'unplayed',
+                      child: PopupMenuRow(
+                        icon: Icons.radio_button_unchecked_rounded,
+                        label: 'Mark unplayed',
+                      ),
+                    ),
+                ],
               ),
             ],
           ),
@@ -724,49 +715,48 @@ class _EpisodeTile extends ConsumerWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      builder:
-          (ctx) => SafeArea(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ListTile(
-                  leading: const Icon(Icons.play_arrow_rounded),
-                  title: const Text('Play'),
-                  onTap: () {
-                    Navigator.pop(ctx);
-                    onTap();
-                  },
-                ),
-                if (progress?.hasResumePosition == true)
-                  ListTile(
-                    leading: const Icon(Icons.replay_rounded),
-                    title: const Text('Play from beginning'),
-                    onTap: () {
-                      Navigator.pop(ctx);
-                      onPlayFromBeginning();
-                    },
-                  ),
-                if (progress?.completed != true)
-                  ListTile(
-                    leading: const Icon(Icons.check_circle_outline_rounded),
-                    title: const Text('Mark played'),
-                    onTap: () {
-                      Navigator.pop(ctx);
-                      onMarkPlayed();
-                    },
-                  )
-                else
-                  ListTile(
-                    leading: const Icon(Icons.radio_button_unchecked_rounded),
-                    title: const Text('Mark unplayed'),
-                    onTap: () {
-                      Navigator.pop(ctx);
-                      onMarkUnplayed();
-                    },
-                  ),
-              ],
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.play_arrow_rounded),
+              title: const Text('Play'),
+              onTap: () {
+                Navigator.pop(ctx);
+                onTap();
+              },
             ),
-          ),
+            if (progress?.hasResumePosition == true)
+              ListTile(
+                leading: const Icon(Icons.replay_rounded),
+                title: const Text('Play from beginning'),
+                onTap: () {
+                  Navigator.pop(ctx);
+                  onPlayFromBeginning();
+                },
+              ),
+            if (progress?.completed != true)
+              ListTile(
+                leading: const Icon(Icons.check_circle_outline_rounded),
+                title: const Text('Mark played'),
+                onTap: () {
+                  Navigator.pop(ctx);
+                  onMarkPlayed();
+                },
+              )
+            else
+              ListTile(
+                leading: const Icon(Icons.radio_button_unchecked_rounded),
+                title: const Text('Mark unplayed'),
+                onTap: () {
+                  Navigator.pop(ctx);
+                  onMarkUnplayed();
+                },
+              ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -788,9 +778,8 @@ class _PodcastCoverBackground extends StatelessWidget {
           CachedNetworkImage(
             imageUrl: coverUrl,
             fit: BoxFit.cover,
-            errorWidget:
-                (context, error, stack) =>
-                    const ColoredBox(color: AppTheme.surfaceContainer),
+            errorWidget: (context, error, stack) =>
+                const ColoredBox(color: AppTheme.surfaceContainer),
           )
         else
           const ColoredBox(color: AppTheme.surfaceContainer),

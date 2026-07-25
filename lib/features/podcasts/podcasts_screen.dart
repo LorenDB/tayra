@@ -191,38 +191,35 @@ class _PodcastsScreenState extends ConsumerState<PodcastsScreen> {
     final controller = TextEditingController();
     final url = await showShellDialog<String>(
       context: context,
-      builder:
-          (ctx) => AlertDialog(
-            backgroundColor: AppTheme.surfaceContainerHigh,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            title: const Text(
-              'Subscribe via RSS',
-              style: TextStyle(color: AppTheme.onBackground),
-            ),
-            content: TextField(
-              controller: controller,
-              autofocus: true,
-              style: const TextStyle(color: AppTheme.onBackground),
-              decoration: const InputDecoration(
-                hintText: 'https://example.com/feed.xml',
-                hintStyle: TextStyle(color: AppTheme.onBackgroundSubtle),
-              ),
-              keyboardType: TextInputType.url,
-              onSubmitted: (v) => Navigator.of(ctx).pop(v.trim()),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(),
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(controller.text.trim()),
-                child: const Text('Subscribe'),
-              ),
-            ],
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppTheme.surfaceContainerHigh,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text(
+          'Subscribe via RSS',
+          style: TextStyle(color: AppTheme.onBackground),
+        ),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          style: const TextStyle(color: AppTheme.onBackground),
+          decoration: const InputDecoration(
+            hintText: 'https://example.com/feed.xml',
+            hintStyle: TextStyle(color: AppTheme.onBackgroundSubtle),
           ),
+          keyboardType: TextInputType.url,
+          onSubmitted: (v) => Navigator.of(ctx).pop(v.trim()),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(controller.text.trim()),
+            child: const Text('Subscribe'),
+          ),
+        ],
+      ),
     );
     if (url == null || url.isEmpty || !mounted) return;
 
@@ -334,14 +331,12 @@ class _PodcastsScreenState extends ConsumerState<PodcastsScreen> {
     if (_channels.isEmpty) {
       return EmptyState(
         icon: Icons.podcasts_rounded,
-        title:
-            _filter == _PodcastListFilter.subscribed
-                ? 'No subscriptions yet'
-                : 'No podcasts found',
-        subtitle:
-            _filter == _PodcastListFilter.subscribed
-                ? 'Subscribe via RSS or browse All podcasts on this server'
-                : 'No podcast channels are available on this server',
+        title: _filter == _PodcastListFilter.subscribed
+            ? 'No subscriptions yet'
+            : 'No podcasts found',
+        subtitle: _filter == _PodcastListFilter.subscribed
+            ? 'Subscribe via RSS or browse All podcasts on this server'
+            : 'No podcast channels are available on this server',
       );
     }
 
@@ -387,18 +382,16 @@ class _ChannelTile extends StatelessWidget {
       },
       leading: ClipRRect(
         borderRadius: BorderRadius.circular(6),
-        child:
-            coverUrl != null
-                ? CachedNetworkImage(
-                  imageUrl: coverUrl,
-                  width: 48,
-                  height: 48,
-                  fit: BoxFit.cover,
-                  errorWidget:
-                      (context, error, stack) =>
-                          const _PodcastPlaceholder(size: 48),
-                )
-                : const _PodcastPlaceholder(size: 48),
+        child: coverUrl != null
+            ? CachedNetworkImage(
+                imageUrl: coverUrl,
+                width: 48,
+                height: 48,
+                fit: BoxFit.cover,
+                errorWidget: (context, error, stack) =>
+                    const _PodcastPlaceholder(size: 48),
+              )
+            : const _PodcastPlaceholder(size: 48),
       ),
       title: Text(
         channel.name,
@@ -406,15 +399,14 @@ class _ChannelTile extends StatelessWidget {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
-      subtitle:
-          channel.description != null && channel.description!.isNotEmpty
-              ? Text(
-                channel.description!,
-                style: const TextStyle(color: AppTheme.onBackgroundMuted),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              )
-              : null,
+      subtitle: channel.description != null && channel.description!.isNotEmpty
+          ? Text(
+              channel.description!,
+              style: const TextStyle(color: AppTheme.onBackgroundMuted),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            )
+          : null,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

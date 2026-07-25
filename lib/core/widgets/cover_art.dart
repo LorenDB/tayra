@@ -137,36 +137,35 @@ class _CoverArtWidgetState extends ConsumerState<CoverArtWidget> {
         boxShadow: widget.shadow != null ? [widget.shadow!] : null,
       ),
       clipBehavior: Clip.antiAlias,
-      child:
-          localPath != null
-              ? buildLocalFileImage(
-                path: localPath,
-                width: widget.size,
-                height: widget.size,
-                decodePx: decodePx,
-                errorBuilder: (context, error, stackTrace) => placeholder,
-              )
-              : (url != null && url.isNotEmpty)
-              ? Image(
-                image: ResizeImage(
-                  CachedNetworkImageProvider(url, cacheKey: widget.cacheKey),
-                  width: decodePx,
-                  height: decodePx,
-                  allowUpscaling: false,
-                  policy: ResizeImagePolicy.fit,
-                ),
-                fit: BoxFit.cover,
-                width: widget.size,
-                height: widget.size,
-                gaplessPlayback: true,
-                filterQuality: FilterQuality.low,
-                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                  if (wasSynchronouslyLoaded || frame != null) return child;
-                  return placeholder;
-                },
-                errorBuilder: (context, error, stackTrace) => placeholder,
-              )
-              : placeholder,
+      child: localPath != null
+          ? buildLocalFileImage(
+              path: localPath,
+              width: widget.size,
+              height: widget.size,
+              decodePx: decodePx,
+              errorBuilder: (context, error, stackTrace) => placeholder,
+            )
+          : (url != null && url.isNotEmpty)
+          ? Image(
+              image: ResizeImage(
+                CachedNetworkImageProvider(url, cacheKey: widget.cacheKey),
+                width: decodePx,
+                height: decodePx,
+                allowUpscaling: false,
+                policy: ResizeImagePolicy.fit,
+              ),
+              fit: BoxFit.cover,
+              width: widget.size,
+              height: widget.size,
+              gaplessPlayback: true,
+              filterQuality: FilterQuality.low,
+              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                if (wasSynchronouslyLoaded || frame != null) return child;
+                return placeholder;
+              },
+              errorBuilder: (context, error, stackTrace) => placeholder,
+            )
+          : placeholder,
     );
   }
 }

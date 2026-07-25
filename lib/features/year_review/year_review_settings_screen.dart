@@ -26,10 +26,8 @@ class YearReviewSettingsScreen extends ConsumerWidget {
             title: 'Show year-end prompts',
             subtitle: 'Show the Year in Review banner and prompts at year end',
             value: settings.showYearEndPrompts,
-            onChanged:
-                (v) => ref
-                    .read(settingsProvider.notifier)
-                    .setShowYearEndPrompts(v),
+            onChanged: (v) =>
+                ref.read(settingsProvider.notifier).setShowYearEndPrompts(v),
           ),
         ],
       ),

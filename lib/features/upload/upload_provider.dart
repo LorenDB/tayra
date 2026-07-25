@@ -166,57 +166,50 @@ class UploadState {
     return UploadState(
       libraries: libraries ?? this.libraries,
       loadingLibraries: loadingLibraries ?? this.loadingLibraries,
-      libraryError:
-          libraryError == _sentinel
-              ? this.libraryError
-              : libraryError as String?,
-      selectedLibraryUuid:
-          selectedLibraryUuid == _sentinel
-              ? this.selectedLibraryUuid
-              : selectedLibraryUuid as String?,
+      libraryError: libraryError == _sentinel
+          ? this.libraryError
+          : libraryError as String?,
+      selectedLibraryUuid: selectedLibraryUuid == _sentinel
+          ? this.selectedLibraryUuid
+          : selectedLibraryUuid as String?,
       filePath: filePath == _sentinel ? this.filePath : filePath as String?,
       fileName: fileName == _sentinel ? this.fileName : fileName as String?,
       fileSize: fileSize == _sentinel ? this.fileSize : fileSize as int?,
       useMusicBrainz: useMusicBrainz ?? this.useMusicBrainz,
       mbRecordingId: mbRecordingId ?? this.mbRecordingId,
-      selectedMbRecording:
-          selectedMbRecording == _sentinel
-              ? this.selectedMbRecording
-              : selectedMbRecording as MbRecording?,
+      selectedMbRecording: selectedMbRecording == _sentinel
+          ? this.selectedMbRecording
+          : selectedMbRecording as MbRecording?,
       mbSearching: mbSearching ?? this.mbSearching,
       mbResults: mbResults ?? this.mbResults,
-      mbSearchError:
-          mbSearchError == _sentinel
-              ? this.mbSearchError
-              : mbSearchError as String?,
+      mbSearchError: mbSearchError == _sentinel
+          ? this.mbSearchError
+          : mbSearchError as String?,
       coverArtStatus: coverArtStatus ?? this.coverArtStatus,
-      coverArtBytes:
-          coverArtBytes == _sentinel
-              ? this.coverArtBytes
-              : coverArtBytes as Uint8List?,
-      coverArtMime:
-          coverArtMime == _sentinel
-              ? this.coverArtMime
-              : coverArtMime as String?,
-      coverArtUrl:
-          coverArtUrl == _sentinel ? this.coverArtUrl : coverArtUrl as String?,
+      coverArtBytes: coverArtBytes == _sentinel
+          ? this.coverArtBytes
+          : coverArtBytes as Uint8List?,
+      coverArtMime: coverArtMime == _sentinel
+          ? this.coverArtMime
+          : coverArtMime as String?,
+      coverArtUrl: coverArtUrl == _sentinel
+          ? this.coverArtUrl
+          : coverArtUrl as String?,
       embedCoverArt: embedCoverArt ?? this.embedCoverArt,
       uploadStatus: uploadStatus ?? this.uploadStatus,
       uploadProgress: uploadProgress ?? this.uploadProgress,
-      uploadedUuid:
-          uploadedUuid == _sentinel
-              ? this.uploadedUuid
-              : uploadedUuid as String?,
-      importStatus:
-          importStatus == _sentinel
-              ? this.importStatus
-              : importStatus as String?,
-      importErrorDetail:
-          importErrorDetail == _sentinel
-              ? this.importErrorDetail
-              : importErrorDetail as String?,
-      uploadError:
-          uploadError == _sentinel ? this.uploadError : uploadError as String?,
+      uploadedUuid: uploadedUuid == _sentinel
+          ? this.uploadedUuid
+          : uploadedUuid as String?,
+      importStatus: importStatus == _sentinel
+          ? this.importStatus
+          : importStatus as String?,
+      importErrorDetail: importErrorDetail == _sentinel
+          ? this.importErrorDetail
+          : importErrorDetail as String?,
+      uploadError: uploadError == _sentinel
+          ? this.uploadError
+          : uploadError as String?,
     );
   }
 }
@@ -259,12 +252,11 @@ class UploadNotifier extends Notifier<UploadState> {
 
   @override
   UploadState build() {
-    _mbDio =
-        createDio()
-          ..options.headers['User-Agent'] =
-              'Tayra/1.0 (https://github.com/loren/tayra)'
-          ..options.connectTimeout = const Duration(seconds: 10)
-          ..options.receiveTimeout = const Duration(seconds: 20);
+    _mbDio = createDio()
+      ..options.headers['User-Agent'] =
+          'Tayra/1.0 (https://github.com/loren/tayra)'
+      ..options.connectTimeout = const Duration(seconds: 10)
+      ..options.receiveTimeout = const Duration(seconds: 20);
 
     ref.onDispose(() {
       _pollingTimer?.cancel();
@@ -298,10 +290,9 @@ class UploadNotifier extends Notifier<UploadState> {
       final result = await ref
           .read(cachedFunkwhaleApiProvider)
           .getLibraries(scope: 'me');
-      final selected =
-          result.results.isNotEmpty
-              ? result.results.first.uuid
-              : state.selectedLibraryUuid;
+      final selected = result.results.isNotEmpty
+          ? result.results.first.uuid
+          : state.selectedLibraryUuid;
       state = state.copyWith(
         libraries: result.results,
         loadingLibraries: false,
@@ -455,8 +446,8 @@ class UploadNotifier extends Notifier<UploadState> {
         queryParameters: {'query': query, 'fmt': 'json', 'limit': 10},
       );
 
-      final recordings =
-          (response.data['recordings'] as List<dynamic>? ?? []).map((r) {
+      final recordings = (response.data['recordings'] as List<dynamic>? ?? [])
+          .map((r) {
             final map = r as Map<String, dynamic>;
             final credits = map['artist-credit'] as List<dynamic>? ?? [];
             String? artistName;
@@ -490,7 +481,8 @@ class UploadNotifier extends Notifier<UploadState> {
               year: year,
               lengthMs: map['length'] as int?,
             );
-          }).toList();
+          })
+          .toList();
 
       state = state.copyWith(mbSearching: false, mbResults: recordings);
     } catch (e) {
@@ -601,8 +593,9 @@ class UploadNotifier extends Notifier<UploadState> {
         // Determine MIME type from response headers or magic bytes.
         final contentType =
             imageResponse.headers.value('content-type') ?? 'image/jpeg';
-        final mime =
-            contentType.startsWith('image/') ? contentType : 'image/jpeg';
+        final mime = contentType.startsWith('image/')
+            ? contentType
+            : 'image/jpeg';
 
         state = state.copyWith(
           coverArtStatus: CoverArtStatus.loaded,
@@ -664,16 +657,16 @@ class UploadNotifier extends Notifier<UploadState> {
         musicBrainzReleaseId: recording.releaseMbid,
         coverArt:
             (state.embedCoverArt &&
-                    state.coverArtStatus == CoverArtStatus.loaded &&
-                    state.coverArtBytes != null)
-                ? state.coverArtBytes
-                : null,
+                state.coverArtStatus == CoverArtStatus.loaded &&
+                state.coverArtBytes != null)
+            ? state.coverArtBytes
+            : null,
         coverArtMime:
             (state.embedCoverArt &&
-                    state.coverArtStatus == CoverArtStatus.loaded &&
-                    state.coverArtBytes != null)
-                ? state.coverArtMime
-                : null,
+                state.coverArtStatus == CoverArtStatus.loaded &&
+                state.coverArtBytes != null)
+            ? state.coverArtMime
+            : null,
       );
 
       if (meta.coverArt != null) {

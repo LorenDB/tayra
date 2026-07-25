@@ -207,12 +207,11 @@ class _Spark {
     outward = (outward + dt * 0.06).clamp(0.0, 1.0);
     sinePhase += sineFreq * dt;
 
-    opacity =
-        progress < 0.12
-            ? progress / 0.12
-            : progress > 0.70
-            ? (1.0 - progress) / 0.30
-            : 1.0;
+    opacity = progress < 0.12
+        ? progress / 0.12
+        : progress > 0.70
+        ? (1.0 - progress) / 0.30
+        : 1.0;
     opacity *= 0.75;
 
     if (progress >= 1.0) {
@@ -327,10 +326,11 @@ class _Tendril {
     wobblePhase2 += wobbleSpeed2 * dt;
     opacityPhase += opacitySpeed * dt;
     // Flicker more aggressively than before.
-    opacity = (0.15 +
-            0.20 * math.sin(opacityPhase) +
-            0.08 * math.sin(opacityPhase * 2.3))
-        .clamp(0.0, 1.0);
+    opacity =
+        (0.15 +
+                0.20 * math.sin(opacityPhase) +
+                0.08 * math.sin(opacityPhase * 2.3))
+            .clamp(0.0, 1.0);
   }
 
   void draw(Canvas canvas, Rect artRect, double pad, Paint paint) {
@@ -357,10 +357,9 @@ class _Tendril {
     final cp1 = pt(a0 + length * 0.30, w1);
     final cp2 = pt(a0 + length * 0.70, w2);
 
-    final path =
-        Path()
-          ..moveTo(p0.dx, p0.dy)
-          ..cubicTo(cp1.dx, cp1.dy, cp2.dx, cp2.dy, p3.dx, p3.dy);
+    final path = Path()
+      ..moveTo(p0.dx, p0.dy)
+      ..cubicTo(cp1.dx, cp1.dy, cp2.dx, cp2.dy, p3.dx, p3.dy);
 
     paint
       ..color = const Color(0xFFFFE033).withValues(alpha: opacity)
@@ -401,13 +400,10 @@ class _AuraPainter extends CustomPainter {
     );
 
     // ── Clip: cut out the art so we never paint over the child ───────────────
-    final artCutout =
-        Path()
-          ..addRect(const Rect.fromLTWH(-4096, -4096, 8192, 8192))
-          ..addRRect(
-            RRect.fromRectAndRadius(artRect, Radius.circular(artRadius)),
-          )
-          ..fillType = PathFillType.evenOdd;
+    final artCutout = Path()
+      ..addRect(const Rect.fromLTWH(-4096, -4096, 8192, 8192))
+      ..addRRect(RRect.fromRectAndRadius(artRect, Radius.circular(artRadius)))
+      ..fillType = PathFillType.evenOdd;
     canvas.save();
     canvas.clipPath(artCutout);
 
@@ -452,11 +448,10 @@ class _AuraPainter extends CustomPainter {
     );
 
     // ── Tendrils ─────────────────────────────────────────────────────────────
-    final tendrilPaint =
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeCap = StrokeCap.round
-          ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
+    final tendrilPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
     for (final t in tendrils) {
       t.draw(canvas, artRect, pad, tendrilPaint);
     }

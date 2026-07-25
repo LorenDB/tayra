@@ -66,30 +66,28 @@ class ArtistDetailScreen extends ConsumerWidget {
       backgroundColor: AppTheme.background,
       body: artistAsync.when(
         loading: () => const _ArtistDetailShimmer(),
-        error:
-            (error, stack) => DetailPageErrorBody(
-              title: 'Failed to load artist',
-              message: error.toString(),
-              onRetry: () => ref.invalidate(_artistDetailProvider(artistId)),
-            ),
-        data:
-            (artist) => AppRefreshIndicator(
-              onRefresh: () async {
-                final api = ref.read(cachedFunkwhaleApiProvider);
-                try {
-                  await api.getArtist(artistId, forceRefresh: true);
-                } catch (_) {}
-                ref.invalidate(_artistDetailProvider(artistId));
-                // Tracks are a separate provider — invalidate so Appears On /
-                // track lists don't stay stale after pull-to-refresh.
-                ref.invalidate(_artistTracksProvider(artistId));
-                await Future.wait([
-                  ref.read(_artistDetailProvider(artistId).future),
-                  ref.read(_artistTracksProvider(artistId).future),
-                ]);
-              },
-              child: _ArtistDetailBody(artist: artist),
-            ),
+        error: (error, stack) => DetailPageErrorBody(
+          title: 'Failed to load artist',
+          message: error.toString(),
+          onRetry: () => ref.invalidate(_artistDetailProvider(artistId)),
+        ),
+        data: (artist) => AppRefreshIndicator(
+          onRefresh: () async {
+            final api = ref.read(cachedFunkwhaleApiProvider);
+            try {
+              await api.getArtist(artistId, forceRefresh: true);
+            } catch (_) {}
+            ref.invalidate(_artistDetailProvider(artistId));
+            // Tracks are a separate provider — invalidate so Appears On /
+            // track lists don't stay stale after pull-to-refresh.
+            ref.invalidate(_artistTracksProvider(artistId));
+            await Future.wait([
+              ref.read(_artistDetailProvider(artistId).future),
+              ref.read(_artistTracksProvider(artistId).future),
+            ]);
+          },
+          child: _ArtistDetailBody(artist: artist),
+        ),
       ),
     );
   }
@@ -108,10 +106,9 @@ class _ArtistDetailBody extends ConsumerWidget {
     final albumIds = artist.albums.map((a) => a.id).toSet();
 
     final appearsOnTracks = tracksAsync.whenData(
-      (tracks) =>
-          tracks
-              .where((t) => t.album == null || !albumIds.contains(t.album!.id))
-              .toList(),
+      (tracks) => tracks
+          .where((t) => t.album == null || !albumIds.contains(t.album!.id))
+          .toList(),
     );
 
     return CustomScrollView(
@@ -301,17 +298,16 @@ class _ArtistHeader extends ConsumerWidget {
                     }
                   }
                 },
-                itemBuilder:
-                    (_) => const [
-                      PopupMenuItem(
-                        value: 'purge_cache',
-                        child: PopupMenuRow(
-                          icon: Icons.delete_forever_rounded,
-                          label: 'Purge and refetch',
-                          destructive: true,
-                        ),
-                      ),
-                    ],
+                itemBuilder: (_) => const [
+                  PopupMenuItem(
+                    value: 'purge_cache',
+                    child: PopupMenuRow(
+                      icon: Icons.delete_forever_rounded,
+                      label: 'Purge and refetch',
+                      destructive: true,
+                    ),
+                  ),
+                ],
               ),
             ),
 
@@ -471,14 +467,13 @@ class _ArtistActionButtons extends ConsumerWidget {
               onPressed: isLoadingRadio ? null : startArtistRadio,
               isPrimary: false,
               borderColor: AppTheme.divider,
-              iconWidget:
-                  isLoadingRadio
-                      ? const SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                      : null,
+              iconWidget: isLoadingRadio
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : null,
             ),
           ),
         ],

@@ -137,13 +137,9 @@ class AudioCacheService {
         CacheType.track,
         track.id,
       );
-      final isAlbumManual =
-          track.album != null
-              ? await _cache.isManualDownloaded(
-                CacheType.album,
-                track.album!.id,
-              )
-              : false;
+      final isAlbumManual = track.album != null
+          ? await _cache.isManualDownloaded(CacheType.album, track.album!.id)
+          : false;
       final isProtected = isTrackManual || isAlbumManual;
       await _cache.putFile(
         key,
@@ -254,8 +250,10 @@ class AudioCacheService {
 
         // Create temp file to download to
         final tempDir = await getTemporaryDirectory();
-        final extension =
-            p.extension(coverUrl).split('?').first; // Remove query params
+        final extension = p
+            .extension(coverUrl)
+            .split('?')
+            .first; // Remove query params
         final tempPath = p.join(
           tempDir.path,
           'download_cover_${DateTime.now().millisecondsSinceEpoch}$extension',

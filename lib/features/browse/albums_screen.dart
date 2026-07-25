@@ -182,12 +182,11 @@ class _AlbumsScreenState extends ConsumerState<AlbumsScreen>
 
       return offlineAlbumsAsync.when(
         loading: () => const ShimmerList(itemCount: 12),
-        error:
-            (error, stack) => CenteredErrorView(
-              title: 'Failed to load offline albums',
-              message: error.toString(),
-              onRetry: () => ref.invalidate(offlineAlbumsProvider),
-            ),
+        error: (error, stack) => CenteredErrorView(
+          title: 'Failed to load offline albums',
+          message: error.toString(),
+          onRetry: () => ref.invalidate(offlineAlbumsProvider),
+        ),
         data: (albums) {
           return AppRefreshIndicator(
             onRefresh: () async {
@@ -210,12 +209,11 @@ class _AlbumsScreenState extends ConsumerState<AlbumsScreen>
 
     return firstPage.when(
       loading: () => const ShimmerList(itemCount: 12),
-      error:
-          (error, stack) => CenteredErrorView(
-            title: 'Failed to load albums',
-            message: error.toString(),
-            onRetry: () => ref.invalidate(albumsPageProvider(1)),
-          ),
+      error: (error, stack) => CenteredErrorView(
+        title: 'Failed to load albums',
+        message: error.toString(),
+        onRetry: () => ref.invalidate(albumsPageProvider(1)),
+      ),
       data: (response) {
         seedIfEmpty(response);
         final allAlbums = items.isEmpty ? response.results : items;

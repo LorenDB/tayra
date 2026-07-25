@@ -19,10 +19,8 @@ const _maxConnectionsPerHost = 8;
 
 void configureHttpClient(Dio dio) {
   dio.httpClientAdapter = IOHttpClientAdapter(
-    createHttpClient:
-        () =>
-            HttpClient()
-              ..idleTimeout = _idleTimeout
-              ..maxConnectionsPerHost = _maxConnectionsPerHost,
+    createHttpClient: () => HttpClient()
+      ..idleTimeout = _idleTimeout
+      ..maxConnectionsPerHost = _maxConnectionsPerHost,
   );
 }

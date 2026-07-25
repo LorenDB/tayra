@@ -28,8 +28,8 @@ class AutoOfflineCoordinator {
     final wifiOnly = _settings.downloadWifiOnly;
     final connectivity = _ref.read(connectivityResultProvider);
     return connectivity.when(
-      data:
-          (results) => connectivityAllowsDownloads(results, wifiOnly: wifiOnly),
+      data: (results) =>
+          connectivityAllowsDownloads(results, wifiOnly: wifiOnly),
       // Optimistic: allow until we know otherwise (queue will fail gracefully).
       loading: () => true,
       error: (_, _) => true,
@@ -44,8 +44,9 @@ class AutoOfflineCoordinator {
     if (trackIds.isEmpty) return;
 
     final cached = _ref.read(cachedAudioTrackIdsProvider);
-    final missing =
-        trackIds.where((id) => !cached.contains(id)).toList(growable: false);
+    final missing = trackIds
+        .where((id) => !cached.contains(id))
+        .toList(growable: false);
     if (missing.isEmpty) return;
 
     for (final id in missing) {
@@ -96,8 +97,10 @@ class AutoOfflineCoordinator {
     final n = count ?? _settings.autoDownloadPodcastEpisodeCount;
     if (n <= 0 || episodesNewestFirst.isEmpty) return;
 
-    final slice =
-        episodesNewestFirst.take(n).map((e) => e.id).toList(growable: false);
+    final slice = episodesNewestFirst
+        .take(n)
+        .map((e) => e.id)
+        .toList(growable: false);
     await enqueueTracksForOffline(slice, source: 'podcast_auto');
   }
 

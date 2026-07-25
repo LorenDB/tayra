@@ -32,80 +32,76 @@ class AccountSettingsScreen extends ConsumerWidget {
       ),
       body: meAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error:
-            (error, _) => _ErrorBody(
-              message: _friendlyError(error),
-              onRetry: () => ref.invalidate(meUserProvider),
-            ),
-        data:
-            (user) => AppRefreshIndicator(
-              onRefresh: () async => ref.invalidate(meUserProvider),
-              child: ListView(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                children: [
-                  // ── Identity ──────────────────────────────────────────
-                  SettingsSectionHeader(title: 'Profile'),
-                  SettingsInfoTile(
-                    icon: Icons.person_outline_rounded,
-                    title: 'Username',
-                    subtitle:
-                        user.fullUsername?.isNotEmpty == true
-                            ? user.fullUsername!
-                            : user.username,
-                  ),
-                  if (user.email != null && user.email!.isNotEmpty)
-                    SettingsInfoTile(
-                      icon: Icons.email_outlined,
-                      title: 'Email',
-                      subtitle: user.email!,
-                    ),
-                  SettingsActionTile(
-                    icon: Icons.badge_outlined,
-                    title: 'Display name',
-                    subtitle:
-                        user.name.trim().isEmpty
-                            ? 'Not set — tap to edit'
-                            : user.name,
-                    onTap: () => _editDisplayName(context, ref, user),
-                  ),
-                  SettingsActionTile(
-                    icon: Icons.visibility_outlined,
-                    title: 'Activity visibility',
-                    subtitle: user.privacyLevel.label,
-                    onTap: () => _editPrivacyLevel(context, ref, user),
-                  ),
-                  SettingsActionTile(
-                    icon: Icons.notes_outlined,
-                    title: 'Bio',
-                    subtitle:
-                        (user.summaryText == null ||
-                                user.summaryText!.trim().isEmpty)
-                            ? 'Not set — tap to edit'
-                            : user.summaryText!,
-                    onTap: () => _editBio(context, ref, user),
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  // ── Security ──────────────────────────────────────────
-                  SettingsSectionHeader(title: 'Security'),
-                  SettingsActionTile(
-                    icon: Icons.lock_outline_rounded,
-                    title: 'Change password',
-                    subtitle: 'Update the password for this account',
-                    onTap: () => _changePassword(context, ref),
-                  ),
-                  SettingsActionTile(
-                    icon: Icons.alternate_email_rounded,
-                    title: 'Change email',
-                    subtitle: 'Update the email address for this account',
-                    onTap: () => _changeEmail(context, ref, user),
-                  ),
-
-                  const SizedBox(height: 32),
-                ],
+        error: (error, _) => _ErrorBody(
+          message: _friendlyError(error),
+          onRetry: () => ref.invalidate(meUserProvider),
+        ),
+        data: (user) => AppRefreshIndicator(
+          onRefresh: () async => ref.invalidate(meUserProvider),
+          child: ListView(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            children: [
+              // ── Identity ──────────────────────────────────────────
+              SettingsSectionHeader(title: 'Profile'),
+              SettingsInfoTile(
+                icon: Icons.person_outline_rounded,
+                title: 'Username',
+                subtitle: user.fullUsername?.isNotEmpty == true
+                    ? user.fullUsername!
+                    : user.username,
               ),
-            ),
+              if (user.email != null && user.email!.isNotEmpty)
+                SettingsInfoTile(
+                  icon: Icons.email_outlined,
+                  title: 'Email',
+                  subtitle: user.email!,
+                ),
+              SettingsActionTile(
+                icon: Icons.badge_outlined,
+                title: 'Display name',
+                subtitle: user.name.trim().isEmpty
+                    ? 'Not set — tap to edit'
+                    : user.name,
+                onTap: () => _editDisplayName(context, ref, user),
+              ),
+              SettingsActionTile(
+                icon: Icons.visibility_outlined,
+                title: 'Activity visibility',
+                subtitle: user.privacyLevel.label,
+                onTap: () => _editPrivacyLevel(context, ref, user),
+              ),
+              SettingsActionTile(
+                icon: Icons.notes_outlined,
+                title: 'Bio',
+                subtitle:
+                    (user.summaryText == null ||
+                        user.summaryText!.trim().isEmpty)
+                    ? 'Not set — tap to edit'
+                    : user.summaryText!,
+                onTap: () => _editBio(context, ref, user),
+              ),
+
+              const SizedBox(height: 24),
+
+              // ── Security ──────────────────────────────────────────
+              SettingsSectionHeader(title: 'Security'),
+              SettingsActionTile(
+                icon: Icons.lock_outline_rounded,
+                title: 'Change password',
+                subtitle: 'Update the password for this account',
+                onTap: () => _changePassword(context, ref),
+              ),
+              SettingsActionTile(
+                icon: Icons.alternate_email_rounded,
+                title: 'Change email',
+                subtitle: 'Update the email address for this account',
+                onTap: () => _changeEmail(context, ref, user),
+              ),
+
+              const SizedBox(height: 32),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -120,39 +116,36 @@ class AccountSettingsScreen extends ConsumerWidget {
     final controller = TextEditingController(text: user.name);
     final saved = await showShellDialog<bool>(
       context: context,
-      builder:
-          (ctx) => AlertDialog(
-            backgroundColor: AppTheme.surfaceContainerHigh,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            title: const Text(
-              'Display name',
-              style: TextStyle(color: AppTheme.onBackground),
-            ),
-            content: TextField(
-              controller: controller,
-              autofocus: true,
-              maxLength: 255,
-              style: const TextStyle(color: AppTheme.onBackground),
-              decoration: const InputDecoration(
-                hintText: 'Your display name',
-                counterText: '',
-              ),
-              textInputAction: TextInputAction.done,
-              onSubmitted: (_) => Navigator.of(ctx).pop(true),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(false),
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(true),
-                child: const Text('Save'),
-              ),
-            ],
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppTheme.surfaceContainerHigh,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text(
+          'Display name',
+          style: TextStyle(color: AppTheme.onBackground),
+        ),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          maxLength: 255,
+          style: const TextStyle(color: AppTheme.onBackground),
+          decoration: const InputDecoration(
+            hintText: 'Your display name',
+            counterText: '',
           ),
+          textInputAction: TextInputAction.done,
+          onSubmitted: (_) => Navigator.of(ctx).pop(true),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('Save'),
+          ),
+        ],
+      ),
     );
 
     if (saved != true || !context.mounted) {
@@ -185,57 +178,55 @@ class AccountSettingsScreen extends ConsumerWidget {
   ) async {
     final selected = await showShellDialog<PrivacyLevel>(
       context: context,
-      builder:
-          (ctx) => SimpleDialog(
-            backgroundColor: AppTheme.surfaceContainerHigh,
-            title: const Text(
-              'Activity visibility',
-              style: TextStyle(color: AppTheme.onBackground),
-            ),
-            children: [
-              for (final level in PrivacyLevel.values)
-                SimpleDialogOption(
-                  onPressed: () => Navigator.of(ctx).pop(level),
-                  child: Row(
-                    children: [
-                      Icon(
-                        level == user.privacyLevel
-                            ? Icons.radio_button_checked
-                            : Icons.radio_button_off,
-                        color:
-                            level == user.privacyLevel
-                                ? AppTheme.primary
-                                : AppTheme.onBackgroundSubtle,
-                        size: 22,
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              level.label,
-                              style: const TextStyle(
-                                color: AppTheme.onBackground,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              level.description,
-                              style: const TextStyle(
-                                color: AppTheme.onBackgroundMuted,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+      builder: (ctx) => SimpleDialog(
+        backgroundColor: AppTheme.surfaceContainerHigh,
+        title: const Text(
+          'Activity visibility',
+          style: TextStyle(color: AppTheme.onBackground),
+        ),
+        children: [
+          for (final level in PrivacyLevel.values)
+            SimpleDialogOption(
+              onPressed: () => Navigator.of(ctx).pop(level),
+              child: Row(
+                children: [
+                  Icon(
+                    level == user.privacyLevel
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_off,
+                    color: level == user.privacyLevel
+                        ? AppTheme.primary
+                        : AppTheme.onBackgroundSubtle,
+                    size: 22,
                   ),
-                ),
-            ],
-          ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          level.label,
+                          style: const TextStyle(
+                            color: AppTheme.onBackground,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          level.description,
+                          style: const TextStyle(
+                            color: AppTheme.onBackgroundMuted,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
     );
 
     if (selected == null || selected == user.privacyLevel || !context.mounted) {
@@ -265,37 +256,34 @@ class AccountSettingsScreen extends ConsumerWidget {
     final controller = TextEditingController(text: user.summaryText ?? '');
     final saved = await showShellDialog<bool>(
       context: context,
-      builder:
-          (ctx) => AlertDialog(
-            backgroundColor: AppTheme.surfaceContainerHigh,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            title: const Text(
-              'Bio',
-              style: TextStyle(color: AppTheme.onBackground),
-            ),
-            content: TextField(
-              controller: controller,
-              autofocus: true,
-              maxLength: 5000,
-              maxLines: 5,
-              style: const TextStyle(color: AppTheme.onBackground),
-              decoration: const InputDecoration(
-                hintText: 'A short bio for your profile',
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(false),
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(true),
-                child: const Text('Save'),
-              ),
-            ],
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppTheme.surfaceContainerHigh,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text(
+          'Bio',
+          style: TextStyle(color: AppTheme.onBackground),
+        ),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          maxLength: 5000,
+          maxLines: 5,
+          style: const TextStyle(color: AppTheme.onBackground),
+          decoration: const InputDecoration(
+            hintText: 'A short bio for your profile',
           ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('Save'),
+          ),
+        ],
+      ),
     );
 
     if (saved != true || !context.mounted) {
@@ -329,80 +317,75 @@ class AccountSettingsScreen extends ConsumerWidget {
 
     final confirmed = await showShellDialog<bool>(
       context: context,
-      builder:
-          (ctx) => AlertDialog(
-            backgroundColor: AppTheme.surfaceContainerHigh,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            title: const Text(
-              'Change password',
-              style: TextStyle(color: AppTheme.onBackground),
-            ),
-            content: Form(
-              key: formKey,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextFormField(
-                      controller: oldCtrl,
-                      obscureText: true,
-                      autofocus: true,
-                      style: const TextStyle(color: AppTheme.onBackground),
-                      decoration: const InputDecoration(
-                        labelText: 'Current password',
-                      ),
-                      validator:
-                          (v) => (v == null || v.isEmpty) ? 'Required' : null,
-                    ),
-                    const SizedBox(height: 12),
-                    TextFormField(
-                      controller: newCtrl,
-                      obscureText: true,
-                      style: const TextStyle(color: AppTheme.onBackground),
-                      decoration: const InputDecoration(
-                        labelText: 'New password',
-                      ),
-                      validator: (v) {
-                        if (v == null || v.isEmpty) return 'Required';
-                        if (v.length < 8) return 'At least 8 characters';
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 12),
-                    TextFormField(
-                      controller: confirmCtrl,
-                      obscureText: true,
-                      style: const TextStyle(color: AppTheme.onBackground),
-                      decoration: const InputDecoration(
-                        labelText: 'Confirm new password',
-                      ),
-                      validator: (v) {
-                        if (v == null || v.isEmpty) return 'Required';
-                        if (v != newCtrl.text) return 'Passwords do not match';
-                        return null;
-                      },
-                    ),
-                  ],
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppTheme.surfaceContainerHigh,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text(
+          'Change password',
+          style: TextStyle(color: AppTheme.onBackground),
+        ),
+        content: Form(
+          key: formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: oldCtrl,
+                  obscureText: true,
+                  autofocus: true,
+                  style: const TextStyle(color: AppTheme.onBackground),
+                  decoration: const InputDecoration(
+                    labelText: 'Current password',
+                  ),
+                  validator: (v) =>
+                      (v == null || v.isEmpty) ? 'Required' : null,
                 ),
-              ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: newCtrl,
+                  obscureText: true,
+                  style: const TextStyle(color: AppTheme.onBackground),
+                  decoration: const InputDecoration(labelText: 'New password'),
+                  validator: (v) {
+                    if (v == null || v.isEmpty) return 'Required';
+                    if (v.length < 8) return 'At least 8 characters';
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: confirmCtrl,
+                  obscureText: true,
+                  style: const TextStyle(color: AppTheme.onBackground),
+                  decoration: const InputDecoration(
+                    labelText: 'Confirm new password',
+                  ),
+                  validator: (v) {
+                    if (v == null || v.isEmpty) return 'Required';
+                    if (v != newCtrl.text) return 'Passwords do not match';
+                    return null;
+                  },
+                ),
+              ],
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(false),
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () {
-                  if (formKey.currentState?.validate() == true) {
-                    Navigator.of(ctx).pop(true);
-                  }
-                },
-                child: const Text('Change'),
-              ),
-            ],
           ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              if (formKey.currentState?.validate() == true) {
+                Navigator.of(ctx).pop(true);
+              }
+            },
+            child: const Text('Change'),
+          ),
+        ],
+      ),
     );
 
     if (confirmed != true || !context.mounted) {
@@ -450,73 +433,70 @@ class AccountSettingsScreen extends ConsumerWidget {
 
     final confirmed = await showShellDialog<bool>(
       context: context,
-      builder:
-          (ctx) => AlertDialog(
-            backgroundColor: AppTheme.surfaceContainerHigh,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            title: const Text(
-              'Change email',
-              style: TextStyle(color: AppTheme.onBackground),
-            ),
-            content: Form(
-              key: formKey,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text(
-                      'A confirmation link will be sent to the new address.',
-                      style: TextStyle(
-                        color: AppTheme.onBackgroundMuted,
-                        fontSize: 13,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: emailCtrl,
-                      autofocus: true,
-                      keyboardType: TextInputType.emailAddress,
-                      autocorrect: false,
-                      style: const TextStyle(color: AppTheme.onBackground),
-                      decoration: const InputDecoration(labelText: 'New email'),
-                      validator: (v) {
-                        if (v == null || v.trim().isEmpty) return 'Required';
-                        if (!v.contains('@')) return 'Enter a valid email';
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 12),
-                    TextFormField(
-                      controller: passwordCtrl,
-                      obscureText: true,
-                      style: const TextStyle(color: AppTheme.onBackground),
-                      decoration: const InputDecoration(
-                        labelText: 'Current password',
-                      ),
-                      validator:
-                          (v) => (v == null || v.isEmpty) ? 'Required' : null,
-                    ),
-                  ],
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppTheme.surfaceContainerHigh,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text(
+          'Change email',
+          style: TextStyle(color: AppTheme.onBackground),
+        ),
+        content: Form(
+          key: formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'A confirmation link will be sent to the new address.',
+                  style: TextStyle(
+                    color: AppTheme.onBackgroundMuted,
+                    fontSize: 13,
+                  ),
                 ),
-              ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: emailCtrl,
+                  autofocus: true,
+                  keyboardType: TextInputType.emailAddress,
+                  autocorrect: false,
+                  style: const TextStyle(color: AppTheme.onBackground),
+                  decoration: const InputDecoration(labelText: 'New email'),
+                  validator: (v) {
+                    if (v == null || v.trim().isEmpty) return 'Required';
+                    if (!v.contains('@')) return 'Enter a valid email';
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: passwordCtrl,
+                  obscureText: true,
+                  style: const TextStyle(color: AppTheme.onBackground),
+                  decoration: const InputDecoration(
+                    labelText: 'Current password',
+                  ),
+                  validator: (v) =>
+                      (v == null || v.isEmpty) ? 'Required' : null,
+                ),
+              ],
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(false),
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () {
-                  if (formKey.currentState?.validate() == true) {
-                    Navigator.of(ctx).pop(true);
-                  }
-                },
-                child: const Text('Change'),
-              ),
-            ],
           ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              if (formKey.currentState?.validate() == true) {
+                Navigator.of(ctx).pop(true);
+              }
+            },
+            child: const Text('Change'),
+          ),
+        ],
+      ),
     );
 
     if (confirmed != true || !context.mounted) {
@@ -557,10 +537,9 @@ class AccountSettingsScreen extends ConsumerWidget {
     showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder:
-          (_) => const Center(
-            child: CircularProgressIndicator(color: AppTheme.primary),
-          ),
+      builder: (_) => const Center(
+        child: CircularProgressIndicator(color: AppTheme.primary),
+      ),
     );
 
     try {

@@ -876,4 +876,121 @@ class FunkwhaleApi {
       data: {'email': email, 'password': password},
     );
   }
+
+  // ── Library admin (manage API) ──────────────────────────────────────
+  // Requires `instance:libraries` scope (library permission / superuser)
+  // via first-party Tayra OAuth. Endpoints: `/api/v1/manage/...`.
+
+  Future<PaginatedResponse<ManageLibrary>> getManageLibraries({
+    int page = 1,
+    int pageSize = 25,
+    String? q,
+  }) async {
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/manage/library/libraries/',
+      queryParameters: {
+        'page': page,
+        'page_size': pageSize,
+        if (q != null && q.isNotEmpty) 'q': q,
+      },
+    );
+    return PaginatedResponse.fromJson(
+      response.data as Map<String, dynamic>,
+      ManageLibrary.fromJson,
+    );
+  }
+
+  Future<ManageLibrary> getManageLibrary(String uuid) async {
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/manage/library/libraries/$uuid/',
+    );
+    return ManageLibrary.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  Future<ManageLibraryStats> getManageLibraryStats(String uuid) async {
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/manage/library/libraries/$uuid/stats/',
+    );
+    return ManageLibraryStats.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  Future<ManageLibrary> updateManageLibrary(
+    String uuid, {
+    String? name,
+    String? description,
+    String? privacyLevel,
+  }) async {
+    final body = <String, dynamic>{};
+    if (name != null) body['name'] = name;
+    if (description != null) body['description'] = description;
+    if (privacyLevel != null) body['privacy_level'] = privacyLevel;
+    final response = await _dio.patch(
+      '$_baseUrl/api/v1/manage/library/libraries/$uuid/',
+      data: body,
+    );
+    return ManageLibrary.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  Future<void> deleteManageLibrary(String uuid) async {
+    await _dio.delete('$_baseUrl/api/v1/manage/library/libraries/$uuid/');
+  }
+
+  Future<PaginatedResponse<ManageUpload>> getManageUploads({
+    int page = 1,
+    int pageSize = 25,
+    String? q,
+    String? importStatus,
+  }) async {
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/manage/library/uploads/',
+      queryParameters: {
+        'page': page,
+        'page_size': pageSize,
+        if (q != null && q.isNotEmpty) 'q': q,
+        if (importStatus != null && importStatus.isNotEmpty)
+          'import_status': importStatus,
+      },
+    );
+    return PaginatedResponse.fromJson(
+      response.data as Map<String, dynamic>,
+      ManageUpload.fromJson,
+    );
+  }
+
+  Future<void> deleteManageUpload(String uuid) async {
+    await _dio.delete('$_baseUrl/api/v1/manage/library/uploads/$uuid/');
+  }
+
+  Future<PaginatedResponse<ManageTag>> getManageTags({
+    int page = 1,
+    int pageSize = 50,
+    String? q,
+  }) async {
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/manage/tags/',
+      queryParameters: {
+        'page': page,
+        'page_size': pageSize,
+        if (q != null && q.isNotEmpty) 'q': q,
+      },
+    );
+    return PaginatedResponse.fromJson(
+      response.data as Map<String, dynamic>,
+      ManageTag.fromJson,
+    );
+  }
+
+  Future<ManageTag> createManageTag(String name) async {
+    final response = await _dio.post(
+      '$_baseUrl/api/v1/manage/tags/',
+      data: {'name': name},
+    );
+    return ManageTag.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  Future<void> deleteManageTag(String name) async {
+    await _dio.delete(
+      '$_baseUrl/api/v1/manage/tags/${Uri.encodeComponent(name)}/',
+    );
+  }
 }

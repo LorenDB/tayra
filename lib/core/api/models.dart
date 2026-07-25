@@ -1200,6 +1200,12 @@ class MeUser {
   final bool isStaff;
   final bool isSuperuser;
 
+  /// Instance permission flags from `MeSerializer.get_permissions()`.
+  ///
+  /// Keys: `library`, `moderation`, `settings`. Superusers and users with the
+  /// corresponding `permission_*` flag (or defaults) get `true`.
+  final Map<String, bool> permissions;
+
   /// Scoped token for `?token=` on listen URLs (browser media auth).
   final String? listenToken;
 
@@ -1215,6 +1221,7 @@ class MeUser {
     this.dateJoined,
     this.isStaff = false,
     this.isSuperuser = false,
+    this.permissions = const {},
     this.listenToken,
   });
 
@@ -1244,6 +1251,20 @@ class MeUser {
       listenToken = tokens['listen'] as String?;
     }
 
+    final permissions = <String, bool>{};
+    final rawPerms = json['permissions'];
+    if (rawPerms is Map) {
+      for (final entry in rawPerms.entries) {
+        permissions[entry.key.toString()] = entry.value == true;
+      }
+    }
+    // Superuser always has every instance permission (server does the same).
+    if (json['is_superuser'] == true) {
+      for (final key in const ['library', 'moderation', 'settings']) {
+        permissions[key] = true;
+      }
+    }
+
     return MeUser(
       id: (json['id'] as num?)?.toInt() ?? (json['pk'] as num?)?.toInt() ?? 0,
       username: json['username'] as String? ?? '',
@@ -1259,6 +1280,7 @@ class MeUser {
               : null,
       isStaff: json['is_staff'] as bool? ?? false,
       isSuperuser: json['is_superuser'] as bool? ?? false,
+      permissions: permissions,
       listenToken: listenToken,
     );
   }
@@ -1275,6 +1297,7 @@ class MeUser {
     DateTime? dateJoined,
     bool? isStaff,
     bool? isSuperuser,
+    Map<String, bool>? permissions,
     String? listenToken,
   }) {
     return MeUser(
@@ -1289,10 +1312,293 @@ class MeUser {
       dateJoined: dateJoined ?? this.dateJoined,
       isStaff: isStaff ?? this.isStaff,
       isSuperuser: isSuperuser ?? this.isSuperuser,
+      permissions: permissions ?? this.permissions,
       listenToken: listenToken ?? this.listenToken,
     );
   }
 
   /// Display name falling back to username when empty.
   String get displayName => name.trim().isEmpty ? username : name;
+
+  /// True when the user may use library manage endpoints.
+  ///
+  /// Derived from `permissions.library` (includes superuser-derived grants).
+  bool get canManageLibrary => permissions['library'] == true || isSuperuser;
+}
+
+// ── Library admin (manage API) ──────────────────────────────────────────
+
+/// Actor summary nested under manage library / upload objects.
+class ManageActorRef {
+  final int? id;
+  final String? preferredUsername;
+  final String? fullUsername;
+  final String? domain;
+  final bool isLocal;
+
+  const ManageActorRef({
+    this.id,
+    this.preferredUsername,
+    this.fullUsername,
+    this.domain,
+    this.isLocal = false,
+  });
+
+  factory ManageActorRef.fromJson(Map<String, dynamic> json) {
+    return ManageActorRef(
+      id: (json['id'] as num?)?.toInt(),
+      preferredUsername: json['preferred_username'] as String?,
+      fullUsername: json['full_username'] as String?,
+      domain: json['domain'] as String?,
+      isLocal: json['is_local'] as bool? ?? false,
+    );
+  }
+
+  String get displayLabel {
+    if (fullUsername != null && fullUsername!.isNotEmpty) return fullUsername!;
+    if (preferredUsername != null && preferredUsername!.isNotEmpty) {
+      return preferredUsername!;
+    }
+    return domain ?? 'Unknown';
+  }
+}
+
+/// Library row from `GET /api/v1/manage/library/libraries/`.
+class ManageLibrary {
+  final int id;
+  final String uuid;
+  final String name;
+  final String? description;
+  final String? domain;
+  final bool isLocal;
+  final DateTime? creationDate;
+  final String privacyLevel;
+  final int uploadsCount;
+  final int? followersCount;
+  final ManageActorRef? actor;
+
+  const ManageLibrary({
+    required this.id,
+    required this.uuid,
+    required this.name,
+    this.description,
+    this.domain,
+    this.isLocal = false,
+    this.creationDate,
+    required this.privacyLevel,
+    this.uploadsCount = 0,
+    this.followersCount,
+    this.actor,
+  });
+
+  factory ManageLibrary.fromJson(Map<String, dynamic> json) {
+    ManageActorRef? actor;
+    final actorData = json['actor'];
+    if (actorData is Map) {
+      actor = ManageActorRef.fromJson(Map<String, dynamic>.from(actorData));
+    }
+    return ManageLibrary(
+      id: (json['id'] as num?)?.toInt() ?? 0,
+      uuid: json['uuid'] as String? ?? '',
+      name: json['name'] as String? ?? '',
+      description: json['description'] as String?,
+      domain: json['domain'] as String?,
+      isLocal: json['is_local'] as bool? ?? false,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
+      privacyLevel: json['privacy_level'] as String? ?? 'me',
+      uploadsCount: (json['uploads_count'] as num?)?.toInt() ?? 0,
+      followersCount: (json['followers_count'] as num?)?.toInt(),
+      actor: actor,
+    );
+  }
+
+  String get privacyLevelLabel {
+    switch (privacyLevel) {
+      case 'everyone':
+        return 'Public';
+      case 'instance':
+        return 'Instance';
+      case 'me':
+        return 'Private';
+      default:
+        return privacyLevel;
+    }
+  }
+}
+
+/// Stats payload from `GET /api/v1/manage/library/libraries/{uuid}/stats/`.
+class ManageLibraryStats {
+  final int uploads;
+  final int followers;
+  final int tracks;
+  final int albums;
+  final int artists;
+  final int reports;
+  final int? mediaTotalSize;
+  final int? mediaSize;
+
+  const ManageLibraryStats({
+    this.uploads = 0,
+    this.followers = 0,
+    this.tracks = 0,
+    this.albums = 0,
+    this.artists = 0,
+    this.reports = 0,
+    this.mediaTotalSize,
+    this.mediaSize,
+  });
+
+  factory ManageLibraryStats.fromJson(Map<String, dynamic> json) {
+    return ManageLibraryStats(
+      uploads: (json['uploads'] as num?)?.toInt() ?? 0,
+      followers: (json['followers'] as num?)?.toInt() ?? 0,
+      tracks: (json['tracks'] as num?)?.toInt() ?? 0,
+      albums: (json['albums'] as num?)?.toInt() ?? 0,
+      artists: (json['artists'] as num?)?.toInt() ?? 0,
+      reports: (json['reports'] as num?)?.toInt() ?? 0,
+      mediaTotalSize: (json['media_total_size'] as num?)?.toInt(),
+      mediaSize: (json['media_size'] as num?)?.toInt(),
+    );
+  }
+}
+
+/// Upload row from `GET /api/v1/manage/library/uploads/`.
+class ManageUpload {
+  final int id;
+  final String uuid;
+  final String? filename;
+  final String? mimetype;
+  final String importStatus;
+  final String? source;
+  final int? duration;
+  final int? bitrate;
+  final int? size;
+  final DateTime? creationDate;
+  final String? trackTitle;
+  final String? artistName;
+  final String? albumTitle;
+  final String? libraryName;
+  final String? libraryUuid;
+  final String? domain;
+  final bool isLocal;
+
+  const ManageUpload({
+    required this.id,
+    required this.uuid,
+    this.filename,
+    this.mimetype,
+    required this.importStatus,
+    this.source,
+    this.duration,
+    this.bitrate,
+    this.size,
+    this.creationDate,
+    this.trackTitle,
+    this.artistName,
+    this.albumTitle,
+    this.libraryName,
+    this.libraryUuid,
+    this.domain,
+    this.isLocal = false,
+  });
+
+  factory ManageUpload.fromJson(Map<String, dynamic> json) {
+    int? asInt(Object? v) =>
+        v == null ? null : (v is int ? v : (v as num).round());
+
+    String? trackTitle;
+    String? artistName;
+    String? albumTitle;
+    final track = json['track'];
+    if (track is Map) {
+      trackTitle = track['title'] as String?;
+      final artist = track['artist'];
+      if (artist is Map) {
+        artistName = artist['name'] as String?;
+      }
+      final album = track['album'];
+      if (album is Map) {
+        albumTitle = album['title'] as String?;
+        if (artistName == null) {
+          final albumArtist = album['artist'];
+          if (albumArtist is Map) {
+            artistName = albumArtist['name'] as String?;
+          }
+        }
+      }
+    }
+
+    String? libraryName;
+    String? libraryUuid;
+    final library = json['library'];
+    if (library is Map) {
+      libraryName = library['name'] as String?;
+      libraryUuid = library['uuid'] as String?;
+    }
+
+    return ManageUpload(
+      id: (json['id'] as num?)?.toInt() ?? 0,
+      uuid: json['uuid'] as String? ?? '',
+      filename: json['filename'] as String?,
+      mimetype: json['mimetype'] as String?,
+      importStatus: json['import_status'] as String? ?? 'pending',
+      source: json['source'] as String?,
+      duration: asInt(json['duration']),
+      bitrate: asInt(json['bitrate']),
+      size: asInt(json['size']),
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
+      trackTitle: trackTitle,
+      artistName: artistName,
+      albumTitle: albumTitle,
+      libraryName: libraryName,
+      libraryUuid: libraryUuid,
+      domain: json['domain'] as String?,
+      isLocal: json['is_local'] as bool? ?? false,
+    );
+  }
+
+  String get displayTitle {
+    if (trackTitle != null && trackTitle!.isNotEmpty) return trackTitle!;
+    if (filename != null && filename!.isNotEmpty) return filename!;
+    return uuid;
+  }
+}
+
+/// Tag row from `GET /api/v1/manage/tags/`.
+class ManageTag {
+  final int id;
+  final String name;
+  final DateTime? creationDate;
+  final int tracksCount;
+  final int albumsCount;
+  final int artistsCount;
+
+  const ManageTag({
+    required this.id,
+    required this.name,
+    this.creationDate,
+    this.tracksCount = 0,
+    this.albumsCount = 0,
+    this.artistsCount = 0,
+  });
+
+  factory ManageTag.fromJson(Map<String, dynamic> json) {
+    return ManageTag(
+      id: (json['id'] as num?)?.toInt() ?? 0,
+      name: json['name'] as String? ?? '',
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
+      tracksCount: (json['tracks_count'] as num?)?.toInt() ?? 0,
+      albumsCount: (json['albums_count'] as num?)?.toInt() ?? 0,
+      artistsCount: (json['artists_count'] as num?)?.toInt() ?? 0,
+    );
+  }
 }

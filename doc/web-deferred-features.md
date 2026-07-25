@@ -14,7 +14,7 @@ relevant.
 |---|---|
 | Online-only | No offline audio cache, download queue, or local library DB on web |
 | Single pod | `FUNKWHALE_URL` is compile-time; no multi-server picker |
-| No admin UI | Library admin, moderation, instance settings stay out of Tayra |
+| Limited admin UI | Library admin is in Tayra when `permissions.library`; moderation & instance settings stay out |
 | No registration UI | Signup / password reset / email confirm stay out of band |
 | Hard fork | `../funkwhale` on `tayra_front`: Vue removed; Tayra is the front image |
 
@@ -22,7 +22,6 @@ relevant.
 
 | Feature | Where in Funkwhale | Escape hatch | Notes |
 |---|---|---|---|
-| Library admin (`/manage/library/*`) | Vue manage routes | Django admin + `funkwhale-manage` CLI | Edits, uploads browser, tags, libraries detail |
 | Channels admin | `/manage/library/channels` | CLI / admin | |
 | Instance settings | `/manage/settings` | Env vars, preferences API, Django admin | |
 | Moderation (reports, domains, accounts, requests) | `/manage/moderation/*` | Django admin + moderator docs | Rare for small/private pods |
@@ -55,6 +54,7 @@ relevant.
 
 | Feature | Where | Notes |
 |---|---|---|
+| Library admin | `/manage/library/*` | Hub + libraries list/detail/edit/delete, uploads browser, tags CRUD; gated on `me.permissions.library`. Server: first-party Tayra OAuth may use `instance:libraries`. |
 | Splash while loading WASM/JS | `web/index.html` + `web/flutter_bootstrap.js` | AMOLED splash (Icon-192 + `#0992F2` spinner); removed on `flutter-first-frame`; slow-load status after 20s; external JS only for CSP. |
 | OAuth authorize for *third-party* apps | `/authorize` | Flutter consent UI; `GET /api/v1/oauth/apps/{id}/` + `POST /api/v1/oauth/authorize`. First-party login stays password token / OOB. |
 

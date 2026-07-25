@@ -123,29 +123,27 @@ class MiniPlayer extends ConsumerWidget {
                           color: AppTheme.surfaceContainerHigh,
                         ),
                         clipBehavior: Clip.antiAlias,
-                        child:
-                            track.coverUrl != null
-                                ? CachedNetworkImage(
-                                  imageUrl: track.coverUrl!,
-                                  fit: BoxFit.cover,
-                                  placeholder:
-                                      (context, url) => const Icon(
-                                        Icons.album,
-                                        color: AppTheme.onBackgroundSubtle,
-                                        size: 24,
-                                      ),
-                                  errorWidget:
-                                      (context, url, error) => const Icon(
-                                        Icons.album,
-                                        color: AppTheme.onBackgroundSubtle,
-                                        size: 24,
-                                      ),
-                                )
-                                : const Icon(
+                        child: track.coverUrl != null
+                            ? CachedNetworkImage(
+                                imageUrl: track.coverUrl!,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => const Icon(
                                   Icons.album,
                                   color: AppTheme.onBackgroundSubtle,
                                   size: 24,
                                 ),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(
+                                      Icons.album,
+                                      color: AppTheme.onBackgroundSubtle,
+                                      size: 24,
+                                    ),
+                              )
+                            : const Icon(
+                                Icons.album,
+                                color: AppTheme.onBackgroundSubtle,
+                                size: 24,
+                              ),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -181,62 +179,53 @@ class MiniPlayer extends ConsumerWidget {
                     // Controls
                     IconButton(
                       icon: const Icon(Icons.skip_previous_rounded, size: 28),
-                      color:
-                          canSkipPrevious
-                              ? AppTheme.onBackground
-                              : AppTheme.onBackgroundSubtle,
+                      color: canSkipPrevious
+                          ? AppTheme.onBackground
+                          : AppTheme.onBackgroundSubtle,
                       tooltip: 'Previous',
-                      onPressed:
-                          canSkipPrevious
-                              ? () =>
-                                  ref
-                                      .read(playerProvider.notifier)
-                                      .skipPrevious()
-                              : null,
+                      onPressed: canSkipPrevious
+                          ? () =>
+                                ref.read(playerProvider.notifier).skipPrevious()
+                          : null,
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(minWidth: 36),
                     ),
                     isLoading
                         ? IconButton(
-                          // Keep a pause/stop affordance while loading so the
-                          // user is not stuck waiting for the 30s watchdog.
-                          icon: const Icon(Icons.pause_rounded, size: 32),
-                          color: AppTheme.onBackground,
-                          tooltip: 'Pause',
-                          onPressed:
-                              () => ref.read(playerProvider.notifier).pause(),
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(minWidth: 36),
-                        )
+                            // Keep a pause/stop affordance while loading so the
+                            // user is not stuck waiting for the 30s watchdog.
+                            icon: const Icon(Icons.pause_rounded, size: 32),
+                            color: AppTheme.onBackground,
+                            tooltip: 'Pause',
+                            onPressed: () =>
+                                ref.read(playerProvider.notifier).pause(),
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(minWidth: 36),
+                          )
                         : IconButton(
-                          icon: Icon(
-                            isPlaying
-                                ? Icons.pause_rounded
-                                : Icons.play_arrow_rounded,
-                            size: 32,
+                            icon: Icon(
+                              isPlaying
+                                  ? Icons.pause_rounded
+                                  : Icons.play_arrow_rounded,
+                              size: 32,
+                            ),
+                            color: AppTheme.onBackground,
+                            tooltip: isPlaying ? 'Pause' : 'Play',
+                            onPressed: () => ref
+                                .read(playerProvider.notifier)
+                                .togglePlayPause(),
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(minWidth: 36),
                           ),
-                          color: AppTheme.onBackground,
-                          tooltip: isPlaying ? 'Pause' : 'Play',
-                          onPressed:
-                              () =>
-                                  ref
-                                      .read(playerProvider.notifier)
-                                      .togglePlayPause(),
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(minWidth: 36),
-                        ),
                     IconButton(
                       icon: const Icon(Icons.skip_next_rounded, size: 28),
-                      color:
-                          hasNext
-                              ? AppTheme.onBackground
-                              : AppTheme.onBackgroundSubtle,
+                      color: hasNext
+                          ? AppTheme.onBackground
+                          : AppTheme.onBackgroundSubtle,
                       tooltip: 'Next',
-                      onPressed:
-                          hasNext
-                              ? () =>
-                                  ref.read(playerProvider.notifier).skipNext()
-                              : null,
+                      onPressed: hasNext
+                          ? () => ref.read(playerProvider.notifier).skipNext()
+                          : null,
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(minWidth: 36),
                     ),

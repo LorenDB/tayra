@@ -3,10 +3,9 @@ import 'package:dio/dio.dart';
 /// Web: HTTP probe (no dart:io sockets).
 Future<bool> checkServerReachability(String serverUrl) async {
   try {
-    final base =
-        serverUrl.endsWith('/')
-            ? serverUrl.substring(0, serverUrl.length - 1)
-            : serverUrl;
+    final base = serverUrl.endsWith('/')
+        ? serverUrl.substring(0, serverUrl.length - 1)
+        : serverUrl;
     final dio = Dio(
       BaseOptions(
         connectTimeout: const Duration(seconds: 5),

@@ -28,18 +28,18 @@ class StashedQueue {
     required this.savedAt,
   });
 
-  Track? get currentTrack =>
-      currentIndex >= 0 && currentIndex < queue.length
-          ? queue[currentIndex]
-          : null;
+  Track? get currentTrack => currentIndex >= 0 && currentIndex < queue.length
+      ? queue[currentIndex]
+      : null;
 
   Map<String, dynamic> toJson() => {
     'id': id,
     'name': name,
     // Slim track payloads — same as live queue persistence.
     'queue': queue.map((t) => t.toPersistenceJson()).toList(),
-    'unshuffledQueue':
-        unshuffledQueue.map((t) => t.toPersistenceJson()).toList(),
+    'unshuffledQueue': unshuffledQueue
+        .map((t) => t.toPersistenceJson())
+        .toList(),
     'currentIndex': currentIndex,
     'positionMs': position.inMilliseconds,
     'isShuffled': isShuffled,
@@ -122,13 +122,15 @@ class QueuePersistenceService {
 
       // Slim track payloads — full API Track.toJson() embeds nested albums
       // with track lists and is far too heavy for periodic persistence.
-      final queueJson =
-          queue.map((track) => track.toPersistenceJson()).toList();
+      final queueJson = queue
+          .map((track) => track.toPersistenceJson())
+          .toList();
       await prefs.setString(_keyQueue, jsonEncode(queueJson));
 
       if (unshuffledQueue.isNotEmpty) {
-        final unshuffledJson =
-            unshuffledQueue.map((track) => track.toPersistenceJson()).toList();
+        final unshuffledJson = unshuffledQueue
+            .map((track) => track.toPersistenceJson())
+            .toList();
         await prefs.setString(_keyUnshuffledQueue, jsonEncode(unshuffledJson));
       } else {
         await prefs.remove(_keyUnshuffledQueue);
@@ -184,8 +186,10 @@ class QueuePersistenceService {
       if (unshuffledJsonString != null) {
         final unshuffledJson =
             jsonDecode(unshuffledJsonString) as List<dynamic>;
-        unshuffledQueue =
-            unshuffledJson.map(parseTrack).whereType<Track>().toList();
+        unshuffledQueue = unshuffledJson
+            .map(parseTrack)
+            .whereType<Track>()
+            .toList();
       }
 
       // Restore playback state
@@ -218,8 +222,9 @@ class QueuePersistenceService {
         unshuffledQueue: unshuffledQueue,
         currentIndex: currentIndex.clamp(0, queue.length - 1),
         position: Duration(milliseconds: positionMs),
-        duration:
-            durationMs != null ? Duration(milliseconds: durationMs) : null,
+        duration: durationMs != null
+            ? Duration(milliseconds: durationMs)
+            : null,
         isShuffled: isShuffled,
         loopMode: loopModeStr,
         listenSession: listenSession,

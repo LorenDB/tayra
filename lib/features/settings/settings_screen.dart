@@ -7,6 +7,7 @@ import 'package:tayra/core/auth/auth_provider.dart';
 import 'package:tayra/core/platform/app_platform.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
+import 'package:tayra/features/settings/account_settings_screen.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/features/year_review/listen_history_provider.dart';
@@ -107,6 +108,19 @@ class SettingsScreen extends ConsumerWidget {
             subtitle: 'Upload audio files to your Funkwhale library',
             onTap: () => context.push('/upload'),
           ),
+          // Library admin — only when me.permissions.library (or superuser).
+          if (ref
+              .watch(meUserProvider)
+              .maybeWhen(
+                data: (me) => me.canManageLibrary,
+                orElse: () => false,
+              ))
+            SettingsActionTile(
+              icon: Icons.admin_panel_settings_outlined,
+              title: 'Library admin',
+              subtitle: 'Manage libraries, uploads, and tags',
+              onTap: () => context.push('/manage/library'),
+            ),
 
           if (AppPlatform.supportsOfflineCache) ...[
             const SizedBox(height: 24),

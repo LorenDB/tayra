@@ -16,9 +16,7 @@ void main() {
         ),
         ShellRoute(
           builder: (_, __, child) => child,
-          routes: [
-            GoRoute(path: '/', builder: (_, __) => const Text('home')),
-          ],
+          routes: [GoRoute(path: '/', builder: (_, __) => const Text('home'))],
         ),
       ],
     );

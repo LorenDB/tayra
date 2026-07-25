@@ -161,7 +161,10 @@ class AppShell extends ConsumerWidget {
             child: SafeArea(
               bottom: false,
               child: Column(
-                children: [const OfflineStatusBar(), Expanded(child: child)],
+                children: [
+                  const OfflineStatusBar(),
+                  Expanded(child: child),
+                ],
               ),
             ),
           ),
@@ -179,17 +182,16 @@ class AppShell extends ConsumerWidget {
       ),
 
       // Show mini-player or stash bar at bottom on medium (tablet) sizes
-      bottomNavigationBar:
-          !isExpanded && (hasTrack || stashCount > 0)
-              ? Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if ((!hasTrack || queueCompleted) && stashCount > 0)
-                    _StashAccessBar(stashCount: stashCount),
-                  if (hasTrack) const MiniPlayer(),
-                ],
-              )
-              : null,
+      bottomNavigationBar: !isExpanded && (hasTrack || stashCount > 0)
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if ((!hasTrack || queueCompleted) && stashCount > 0)
+                  _StashAccessBar(stashCount: stashCount),
+                if (hasTrack) const MiniPlayer(),
+              ],
+            )
+          : null,
     );
   }
 
@@ -213,7 +215,10 @@ class AppShell extends ConsumerWidget {
       body: SafeArea(
         bottom: false,
         child: Column(
-          children: [const OfflineStatusBar(), Expanded(child: child)],
+          children: [
+            const OfflineStatusBar(),
+            Expanded(child: child),
+          ],
         ),
       ),
       bottomNavigationBar: Column(
@@ -234,64 +239,56 @@ class AppShell extends ConsumerWidget {
               child: SizedBox(
                 height: 56,
                 child: Row(
-                  children:
-                      primaryIndices.map((i) {
-                        final isSelected = i == currentIndex;
-                        return Expanded(
-                          child: Semantics(
-                            button: true,
-                            selected: isSelected,
-                            label: tabs[i].label,
-                            child: InkWell(
-                              onTap: () {
-                                final nested = shellNavigatorKey.currentState;
-                                if (nested != null) {
-                                  nested.popUntil(
-                                    (route) => route is! PopupRoute,
-                                  );
-                                }
-                                try {
-                                  Navigator.of(
-                                    context,
-                                    rootNavigator: true,
-                                  ).popUntil((route) => route is! PopupRoute);
-                                } catch (_) {}
-                                context.go(paths[i]);
-                              },
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    isSelected
-                                        ? tabs[i].activeIcon
-                                        : tabs[i].icon,
-                                    color:
-                                        isSelected
-                                            ? AppTheme.primary
-                                            : AppTheme.onBackgroundSubtle,
-                                    size: 22,
-                                  ),
-                                  const SizedBox(height: 2),
-                                  Text(
-                                    tabs[i].label,
-                                    style: TextStyle(
-                                      color:
-                                          isSelected
-                                              ? AppTheme.primary
-                                              : AppTheme.onBackgroundSubtle,
-                                      fontSize: 10,
-                                      fontWeight:
-                                          isSelected
-                                              ? FontWeight.w600
-                                              : FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
+                  children: primaryIndices.map((i) {
+                    final isSelected = i == currentIndex;
+                    return Expanded(
+                      child: Semantics(
+                        button: true,
+                        selected: isSelected,
+                        label: tabs[i].label,
+                        child: InkWell(
+                          onTap: () {
+                            final nested = shellNavigatorKey.currentState;
+                            if (nested != null) {
+                              nested.popUntil((route) => route is! PopupRoute);
+                            }
+                            try {
+                              Navigator.of(
+                                context,
+                                rootNavigator: true,
+                              ).popUntil((route) => route is! PopupRoute);
+                            } catch (_) {}
+                            context.go(paths[i]);
+                          },
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                isSelected ? tabs[i].activeIcon : tabs[i].icon,
+                                color: isSelected
+                                    ? AppTheme.primary
+                                    : AppTheme.onBackgroundSubtle,
+                                size: 22,
                               ),
-                            ),
+                              const SizedBox(height: 2),
+                              Text(
+                                tabs[i].label,
+                                style: TextStyle(
+                                  color: isSelected
+                                      ? AppTheme.primary
+                                      : AppTheme.onBackgroundSubtle,
+                                  fontSize: 10,
+                                  fontWeight: isSelected
+                                      ? FontWeight.w600
+                                      : FontWeight.w400,
+                                ),
+                              ),
+                            ],
                           ),
-                        );
-                      }).toList(),
+                        ),
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
             ),
@@ -406,26 +403,23 @@ class _DesktopNavRail extends StatelessWidget {
                               horizontal: extended ? 12 : 8,
                               vertical: 10,
                             ),
-                            decoration:
-                                isSelected
-                                    ? BoxDecoration(
-                                      color: indicatorColor,
-                                      borderRadius: BorderRadius.circular(12),
-                                    )
-                                    : null,
+                            decoration: isSelected
+                                ? BoxDecoration(
+                                    color: indicatorColor,
+                                    borderRadius: BorderRadius.circular(12),
+                                  )
+                                : null,
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment:
-                                  extended
-                                      ? MainAxisAlignment.start
-                                      : MainAxisAlignment.center,
+                              mainAxisAlignment: extended
+                                  ? MainAxisAlignment.start
+                                  : MainAxisAlignment.center,
                               children: [
                                 Icon(
                                   isSelected ? tab.activeIcon : tab.icon,
-                                  color:
-                                      isSelected
-                                          ? AppTheme.primary
-                                          : AppTheme.onBackgroundSubtle,
+                                  color: isSelected
+                                      ? AppTheme.primary
+                                      : AppTheme.onBackgroundSubtle,
                                   size: 24,
                                 ),
                                 if (extended) ...[
@@ -433,15 +427,13 @@ class _DesktopNavRail extends StatelessWidget {
                                   Text(
                                     tab.label,
                                     style: TextStyle(
-                                      color:
-                                          isSelected
-                                              ? AppTheme.primary
-                                              : AppTheme.onBackgroundSubtle,
+                                      color: isSelected
+                                          ? AppTheme.primary
+                                          : AppTheme.onBackgroundSubtle,
                                       fontSize: 13,
-                                      fontWeight:
-                                          isSelected
-                                              ? FontWeight.w600
-                                              : FontWeight.w400,
+                                      fontWeight: isSelected
+                                          ? FontWeight.w600
+                                          : FontWeight.w400,
                                     ),
                                   ),
                                 ],
@@ -475,10 +467,9 @@ class _DesktopNavRail extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
-                      mainAxisAlignment:
-                          extended
-                              ? MainAxisAlignment.start
-                              : MainAxisAlignment.center,
+                      mainAxisAlignment: extended
+                          ? MainAxisAlignment.start
+                          : MainAxisAlignment.center,
                       children: [
                         const Icon(
                           Icons.search_rounded,
@@ -520,10 +511,9 @@ class _DesktopNavRail extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
-                      mainAxisAlignment:
-                          extended
-                              ? MainAxisAlignment.start
-                              : MainAxisAlignment.center,
+                      mainAxisAlignment: extended
+                          ? MainAxisAlignment.start
+                          : MainAxisAlignment.center,
                       children: [
                         const Icon(
                           Icons.settings_outlined,

@@ -23,12 +23,11 @@ class PopupMenuRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color =
-        destructive
-            ? AppTheme.error
-            : muted
-            ? AppTheme.onBackgroundMuted
-            : AppTheme.onBackground;
+    final color = destructive
+        ? AppTheme.error
+        : muted
+        ? AppTheme.onBackgroundMuted
+        : AppTheme.onBackground;
     return Row(
       children: [
         Icon(icon, size: iconSize, color: color),

@@ -15,23 +15,22 @@ class TagChipList extends StatelessWidget {
       spacing: 8,
       runSpacing: 6,
       alignment: WrapAlignment.center,
-      children:
-          tags.map((tag) {
-            return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              decoration: BoxDecoration(
-                color: AppTheme.surfaceContainerHigh,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Text(
-                tag,
-                style: const TextStyle(
-                  color: AppTheme.onBackgroundMuted,
-                  fontSize: 12,
-                ),
-              ),
-            );
-          }).toList(),
+      children: tags.map((tag) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          decoration: BoxDecoration(
+            color: AppTheme.surfaceContainerHigh,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Text(
+            tag,
+            style: const TextStyle(
+              color: AppTheme.onBackgroundMuted,
+              fontSize: 12,
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 }

@@ -346,16 +346,15 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
             onSelected: (value) {
               if (value == 'download_all') _downloadAll();
             },
-            itemBuilder:
-                (_) => [
-                  const PopupMenuItem(
-                    value: 'download_all',
-                    child: PopupMenuRow(
-                      icon: Icons.download_rounded,
-                      label: 'Download all',
-                    ),
-                  ),
-                ],
+            itemBuilder: (_) => [
+              const PopupMenuItem(
+                value: 'download_all',
+                child: PopupMenuRow(
+                  icon: Icons.download_rounded,
+                  label: 'Download all',
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -385,8 +384,9 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
 
     // Apply offline filter if active (cached until inputs change).
     final offlineFilterActive = ref.watch(offlineFilterActiveProvider);
-    final offlineTrackIds =
-        offlineFilterActive ? ref.watch(offlineTrackIdsProvider) : null;
+    final offlineTrackIds = offlineFilterActive
+        ? ref.watch(offlineTrackIdsProvider)
+        : null;
     final displayFavorites = _displayFavorites(
       offlineFilterActive: offlineFilterActive,
       offlineTrackIds: offlineTrackIds,

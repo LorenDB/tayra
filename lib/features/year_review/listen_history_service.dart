@@ -115,10 +115,9 @@ class ListenRecord {
   }
 
   /// Map for safe backup/restore JSON export (no id, no source_device).
-  Map<String, dynamic> toMapForBackup() =>
-      toMap()
-        ..remove('id')
-        ..remove('source_device');
+  Map<String, dynamic> toMapForBackup() => toMap()
+    ..remove('id')
+    ..remove('source_device');
 
   factory ListenRecord.fromBackupMap(Map<String, dynamic> map) {
     return ListenRecord.fromMap({
@@ -596,18 +595,17 @@ class ListenHistoryService {
         [startMs, endMs],
       );
 
-      final topTracks =
-          topTracksResult
-              .map(
-                (row) => TopItem(
-                  name: row['track_title'] as String,
-                  subtitle: row['artist_name'] as String?,
-                  coverUrl: row['cover_url'] as String?,
-                  count: toInt(row['play_count']),
-                  totalSeconds: toNullableInt(row['total_seconds']),
-                ),
-              )
-              .toList();
+      final topTracks = topTracksResult
+          .map(
+            (row) => TopItem(
+              name: row['track_title'] as String,
+              subtitle: row['artist_name'] as String?,
+              coverUrl: row['cover_url'] as String?,
+              count: toInt(row['play_count']),
+              totalSeconds: toNullableInt(row['total_seconds']),
+            ),
+          )
+          .toList();
 
       // Top artists (by play count)
       final topArtistsResult = await db.rawQuery(
@@ -630,17 +628,16 @@ class ListenHistoryService {
         [startMs, endMs, startMs, endMs],
       );
 
-      final topArtists =
-          topArtistsResult
-              .map(
-                (row) => TopItem(
-                  name: row['artist_name'] as String,
-                  coverUrl: row['cover_url'] as String?,
-                  count: toInt(row['play_count']),
-                  totalSeconds: toNullableInt(row['total_seconds']),
-                ),
-              )
-              .toList();
+      final topArtists = topArtistsResult
+          .map(
+            (row) => TopItem(
+              name: row['artist_name'] as String,
+              coverUrl: row['cover_url'] as String?,
+              count: toInt(row['play_count']),
+              totalSeconds: toNullableInt(row['total_seconds']),
+            ),
+          )
+          .toList();
 
       // Top albums — sorted by completion ratio: unique_tracks / album_track_count.
       // When [albumTrackCounts] is not available, falls back to engagement score.
@@ -675,21 +672,20 @@ class ListenHistoryService {
       );
 
       // Build intermediate album data rows for sorting.
-      final albumRows =
-          topAlbumsResult
-              .map(
-                (row) => _AlbumRow(
-                  albumId: toInt(row['album_id']),
-                  title: row['album_title'] as String,
-                  artistName: row['artist_name'] as String?,
-                  coverUrl: row['cover_url'] as String?,
-                  uniqueTracks: toInt(row['unique_tracks']),
-                  engagementScore: toDouble(row['engagement_score']).round(),
-                  totalSeconds: toNullableInt(row['total_seconds']),
-                  totalListens: toInt(row['total_plays']),
-                ),
-              )
-              .toList();
+      final albumRows = topAlbumsResult
+          .map(
+            (row) => _AlbumRow(
+              albumId: toInt(row['album_id']),
+              title: row['album_title'] as String,
+              artistName: row['artist_name'] as String?,
+              coverUrl: row['cover_url'] as String?,
+              uniqueTracks: toInt(row['unique_tracks']),
+              engagementScore: toDouble(row['engagement_score']).round(),
+              totalSeconds: toNullableInt(row['total_seconds']),
+              totalListens: toInt(row['total_plays']),
+            ),
+          )
+          .toList();
 
       // Sort by completion ratio when track counts are available.
       if (albumTrackCounts != null && albumTrackCounts.isNotEmpty) {
@@ -709,27 +705,24 @@ class ListenHistoryService {
         );
       }
 
-      final topAlbums =
-          albumRows
-              .take(10)
-              .map(
-                (row) => TopItem(
-                  name: row.title,
-                  subtitle: row.artistName,
-                  coverUrl: row.coverUrl,
-                  count:
-                      albumTrackCounts != null
-                          ? row.uniqueTracks
-                          : row.engagementScore,
-                  totalSeconds: row.totalSeconds,
-                  totalListens: row.totalListens,
-                  albumTrackCount:
-                      albumTrackCounts != null
-                          ? albumTrackCounts[row.albumId]
-                          : null,
-                ),
-              )
-              .toList();
+      final topAlbums = albumRows
+          .take(10)
+          .map(
+            (row) => TopItem(
+              name: row.title,
+              subtitle: row.artistName,
+              coverUrl: row.coverUrl,
+              count: albumTrackCounts != null
+                  ? row.uniqueTracks
+                  : row.engagementScore,
+              totalSeconds: row.totalSeconds,
+              totalListens: row.totalListens,
+              albumTrackCount: albumTrackCounts != null
+                  ? albumTrackCounts[row.albumId]
+                  : null,
+            ),
+          )
+          .toList();
 
       // Monthly breakdown
       final monthlyResult = await db.rawQuery(
@@ -884,8 +877,9 @@ class ListenHistoryService {
     try {
       final db = await CacheDatabase.instance.database;
       final now = DateTime.now();
-      final startMs =
-          now.subtract(const Duration(days: 7)).millisecondsSinceEpoch;
+      final startMs = now
+          .subtract(const Duration(days: 7))
+          .millisecondsSinceEpoch;
       final endMs = now.millisecondsSinceEpoch;
 
       final totalsResult = await db.rawQuery(
@@ -926,22 +920,18 @@ class ListenHistoryService {
       return WeeklyStats(
         playCount: (totals['play_count'] as num).toInt(),
         totalSeconds: (totals['total_seconds'] as num).toInt(),
-        topArtistName:
-            topArtistResult.isNotEmpty
-                ? topArtistResult.first['artist_name'] as String?
-                : null,
-        topArtistPlays:
-            topArtistResult.isNotEmpty
-                ? (topArtistResult.first['play_count'] as num).toInt()
-                : 0,
-        topTrackTitle:
-            topTrackResult.isNotEmpty
-                ? topTrackResult.first['track_title'] as String?
-                : null,
-        topTrackArtist:
-            topTrackResult.isNotEmpty
-                ? topTrackResult.first['artist_name'] as String?
-                : null,
+        topArtistName: topArtistResult.isNotEmpty
+            ? topArtistResult.first['artist_name'] as String?
+            : null,
+        topArtistPlays: topArtistResult.isNotEmpty
+            ? (topArtistResult.first['play_count'] as num).toInt()
+            : 0,
+        topTrackTitle: topTrackResult.isNotEmpty
+            ? topTrackResult.first['track_title'] as String?
+            : null,
+        topTrackArtist: topTrackResult.isNotEmpty
+            ? topTrackResult.first['artist_name'] as String?
+            : null,
       );
     } catch (_) {
       return const WeeklyStats(
@@ -992,11 +982,10 @@ class ListenHistoryService {
     // Filter exactly to year (defensive even if caller already filtered)
     final start = DateTime(year).millisecondsSinceEpoch;
     final end = DateTime(year + 1).millisecondsSinceEpoch;
-    final filtered =
-        records.where((r) {
-          final ms = r.listenedAt.millisecondsSinceEpoch;
-          return ms >= start && ms < end;
-        }).toList();
+    final filtered = records.where((r) {
+      final ms = r.listenedAt.millisecondsSinceEpoch;
+      return ms >= start && ms < end;
+    }).toList();
 
     final totalListens = filtered.length;
     final totalSeconds = filtered.fold<int>(
@@ -1005,60 +994,45 @@ class ListenHistoryService {
     );
     final uniqueTracks = filtered.map((r) => r.trackId).toSet().length;
     final uniqueArtists = filtered.map((r) => r.artistName).toSet().length;
-    final uniqueAlbums =
-        filtered
-            .where((r) => r.albumId != null)
-            .map((r) => r.albumTitle)
-            .toSet()
-            .length;
+    final uniqueAlbums = filtered
+        .where((r) => r.albumId != null)
+        .map((r) => r.albumTitle)
+        .toSet()
+        .length;
 
     // top tracks
     final Map<int, List<ListenRecord>> byTrack = {};
     for (final r in filtered) {
       byTrack.putIfAbsent(r.trackId, () => []).add(r);
     }
-    final topTracks =
-        byTrack.entries.map((e) {
-            final recs = e.value;
-            final first = recs.first;
-            return TopItem(
-              name: first.trackTitle,
-              subtitle: first.artistName,
-              coverUrl: first.coverUrl,
-              count: recs.length,
-              totalSeconds: recs.fold<int>(
-                0,
-                (s, x) => s + (x.durationSeconds ?? 0),
-              ),
-            );
-          }).toList()
-          ..sort((a, b) => b.count.compareTo(a.count));
+    final topTracks = byTrack.entries.map((e) {
+      final recs = e.value;
+      final first = recs.first;
+      return TopItem(
+        name: first.trackTitle,
+        subtitle: first.artistName,
+        coverUrl: first.coverUrl,
+        count: recs.length,
+        totalSeconds: recs.fold<int>(0, (s, x) => s + (x.durationSeconds ?? 0)),
+      );
+    }).toList()..sort((a, b) => b.count.compareTo(a.count));
 
     // top artists
     final Map<String, List<ListenRecord>> byArtist = {};
     for (final r in filtered) {
       byArtist.putIfAbsent(r.artistName, () => []).add(r);
     }
-    final topArtists =
-        byArtist.entries.map((e) {
-            final recs = e.value;
-            return TopItem(
-              name: e.key,
-              coverUrl:
-                  recs
-                      .firstWhere(
-                        (x) => x.coverUrl != null,
-                        orElse: () => recs.first,
-                      )
-                      .coverUrl,
-              count: recs.length,
-              totalSeconds: recs.fold<int>(
-                0,
-                (s, x) => s + (x.durationSeconds ?? 0),
-              ),
-            );
-          }).toList()
-          ..sort((a, b) => b.count.compareTo(a.count));
+    final topArtists = byArtist.entries.map((e) {
+      final recs = e.value;
+      return TopItem(
+        name: e.key,
+        coverUrl: recs
+            .firstWhere((x) => x.coverUrl != null, orElse: () => recs.first)
+            .coverUrl,
+        count: recs.length,
+        totalSeconds: recs.fold<int>(0, (s, x) => s + (x.durationSeconds ?? 0)),
+      );
+    }).toList()..sort((a, b) => b.count.compareTo(a.count));
 
     // albums similar, simplified without extra album count data
     final Map<int?, List<ListenRecord>> byAlbum = {};
@@ -1067,25 +1041,24 @@ class ListenHistoryService {
     }
     final albumItems =
         byAlbum.entries.where((e) => e.key != null).map((e) {
-            final recs = e.value;
-            final first = recs.first;
-            final ut = recs.map((r) => r.trackId).toSet().length;
-            return TopItem(
-              name: first.albumTitle,
-              subtitle: first.artistName,
-              coverUrl: first.coverUrl,
-              count:
-                  ut, // use unique tracks as score proxy when no trackcount ratio
-              totalSeconds: recs.fold<int>(
-                0,
-                (s, x) => s + (x.durationSeconds ?? 0),
-              ),
-              totalListens: recs.length,
-            );
-          }).toList()
-          ..sort(
-            (a, b) => (b.totalListens ?? 0).compareTo(a.totalListens ?? 0),
+          final recs = e.value;
+          final first = recs.first;
+          final ut = recs.map((r) => r.trackId).toSet().length;
+          return TopItem(
+            name: first.albumTitle,
+            subtitle: first.artistName,
+            coverUrl: first.coverUrl,
+            count:
+                ut, // use unique tracks as score proxy when no trackcount ratio
+            totalSeconds: recs.fold<int>(
+              0,
+              (s, x) => s + (x.durationSeconds ?? 0),
+            ),
+            totalListens: recs.length,
           );
+        }).toList()..sort(
+          (a, b) => (b.totalListens ?? 0).compareTo(a.totalListens ?? 0),
+        );
 
     // monthly
     final monthMap = <int, List<ListenRecord>>{};

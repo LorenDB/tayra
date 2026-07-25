@@ -156,8 +156,9 @@ class NextcloudState {
       appPassword: appPassword ?? this.appPassword,
       isLoading: isLoading ?? this.isLoading,
       isConnected: isConnected ?? this.isConnected,
-      error:
-          identical(error, const _Sentinel()) ? this.error : error as String?,
+      error: identical(error, const _Sentinel())
+          ? this.error
+          : error as String?,
       autoBackupEnabled: autoBackupEnabled ?? this.autoBackupEnabled,
     );
   }
@@ -495,10 +496,9 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
       return [];
     }
     final auth = ref.read(authStateProvider);
-    final srvH =
-        auth.serverUrl != null
-            ? extractSanitizedHostname(auth.serverUrl!)
-            : null;
+    final srvH = auth.serverUrl != null
+        ? extractSanitizedHostname(auth.serverUrl!)
+        : null;
     final allFiles = await listRemoteBackups();
     await ListenHistoryService.loadDeviceDisplayNames();
     final result = <({String filename, String deviceLabel})>[];
@@ -507,10 +507,9 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
       if (srvH != null && !f.contains('-$srvH.')) continue;
 
       // Parse device id: tayra-settings-{device}-{host}.json
-      final deviceId =
-          srvH != null
-              ? f.substring('tayra-settings-'.length, f.indexOf('-$srvH.'))
-              : f.substring('tayra-settings-'.length).replaceAll('.json', '');
+      final deviceId = srvH != null
+          ? f.substring('tayra-settings-'.length, f.indexOf('-$srvH.'))
+          : f.substring('tayra-settings-'.length).replaceAll('.json', '');
 
       // Resolve the display name.  If the cache already has it (e.g. from
       // history sync or a previous lookup) use it; otherwise fetch the
@@ -573,10 +572,9 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
       final files = await listRemoteBackups();
       bool ok = true;
       final auth = ref.read(authStateProvider);
-      final srvH =
-          auth.serverUrl != null
-              ? extractSanitizedHostname(auth.serverUrl!)
-              : null;
+      final srvH = auth.serverUrl != null
+          ? extractSanitizedHostname(auth.serverUrl!)
+          : null;
       String? chosenSettingsFile = settingsFile;
       final histFilesForRestore = <String>[];
       for (final f in files..sort((a, b) => b.compareTo(a))) {
@@ -669,8 +667,9 @@ class NextcloudBackupService {
   static final Dio _dio = createDio();
 
   static Future<String> _buildWebDavUrl(String server, String user) async {
-    final s =
-        server.endsWith('/') ? server.substring(0, server.length - 1) : server;
+    final s = server.endsWith('/')
+        ? server.substring(0, server.length - 1)
+        : server;
     return '$s/remote.php/dav/files/${Uri.encodeComponent(user)}/.tayra/backups';
   }
 
@@ -697,8 +696,8 @@ class NextcloudBackupService {
           options: Options(
             method: 'MKCOL',
             headers: _davHeaders(username, appPassword),
-            validateStatus:
-                (s) => s != null && (s < 300 || s == 405 || s == 409),
+            validateStatus: (s) =>
+                s != null && (s < 300 || s == 405 || s == 409),
           ),
         );
       }
@@ -804,10 +803,9 @@ class NextcloudBackupService {
     final deviceId = await getDeviceIdentifier();
     final deviceUuid = await getDeviceUuid();
     final deviceName = await getDeviceDisplayName();
-    final serverHost =
-        (funkServerUrl != null && funkServerUrl.isNotEmpty)
-            ? extractSanitizedHostname(funkServerUrl)
-            : 'no-server';
+    final serverHost = (funkServerUrl != null && funkServerUrl.isNotEmpty)
+        ? extractSanitizedHostname(funkServerUrl)
+        : 'no-server';
 
     // Export settings snapshot + server info (sanitized, no user tokens)
     final settingsJson = await _exportSettingsAndServerInfo(
@@ -840,11 +838,10 @@ class NextcloudBackupService {
       // Only back up this device's own listens; skip remote-device data
       // that was synced in from other backups — its source of truth is
       // the original device's backup file.
-      final localOnly =
-          yearListens.where((r) {
-            final s = r.sourceDevice;
-            return s == null || s == 'local';
-          }).toList();
+      final localOnly = yearListens.where((r) {
+        final s = r.sourceDevice;
+        return s == null || s == 'local';
+      }).toList();
       if (localOnly.isEmpty) continue;
       final fn = 'tayra-history-$deviceUuid-$serverHost-$y.json';
       final listensJson = {
@@ -1128,13 +1125,9 @@ class NextcloudBackupService {
         // tayra-history-{devicePart}-{srvHost}-{year}.json
         // {devicePart} is either a UUID v4 (new format) or a sanitized
         // deviceId (legacy format).
-        final devicePart =
-            fn.startsWith('tayra-history-')
-                ? fn
-                    .substring('tayra-history-'.length)
-                    .split('-$srvHost-')
-                    .first
-                : 'remote';
+        final devicePart = fn.startsWith('tayra-history-')
+            ? fn.substring('tayra-history-'.length).split('-$srvHost-').first
+            : 'remote';
 
         // Is this the current device's own backup?  Match on UUID (new
         // format) or, for legacy backups created before UUIDs, the
@@ -1166,11 +1159,10 @@ class NextcloudBackupService {
           } else {
             continue;
           }
-          final records =
-              recordsList
-                  .whereType<Map<String, dynamic>>()
-                  .map(ListenRecord.fromBackupMap)
-                  .toList();
+          final records = recordsList
+              .whereType<Map<String, dynamic>>()
+              .map(ListenRecord.fromBackupMap)
+              .toList();
 
           if (isMine) {
             // Rectifier: this device's own backup.  Tag as 'local' so
@@ -1187,8 +1179,8 @@ class NextcloudBackupService {
             // to the filename device part for legacy bare-list backups.
             final sourceDevice =
                 (contentDeviceUuid != null && contentDeviceUuid.isNotEmpty)
-                    ? contentDeviceUuid
-                    : (legacyDeviceId ?? devicePart);
+                ? contentDeviceUuid
+                : (legacyDeviceId ?? devicePart);
             if (deviceName != null && deviceName.isNotEmpty) {
               await ListenHistoryService.setDeviceDisplayName(
                 sourceDevice,

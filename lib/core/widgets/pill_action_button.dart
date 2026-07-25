@@ -67,10 +67,9 @@ class PillActionButton extends StatelessWidget {
           backgroundColor: useGradient ? Colors.transparent : primaryColor,
           shadowColor: useGradient ? Colors.transparent : null,
           foregroundColor: Colors.white,
-          disabledBackgroundColor:
-              useGradient
-                  ? Colors.transparent
-                  : primaryColor.withValues(alpha: 0.3),
+          disabledBackgroundColor: useGradient
+              ? Colors.transparent
+              : primaryColor.withValues(alpha: 0.3),
           disabledForegroundColor: Colors.white.withValues(alpha: 0.4),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(radius),

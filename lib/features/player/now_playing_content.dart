@@ -214,22 +214,21 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
       orElse: () => AppTheme.primary,
     );
 
-    final content =
-        widget.layout == NowPlayingLayout.panel
-            ? _buildPanelLayout(
-              track,
-              playerState,
-              glowColor,
-              paletteAsync,
-              accentColor,
-            )
-            : _buildScreenLayout(
-              track,
-              playerState,
-              glowColor,
-              paletteAsync,
-              accentColor,
-            );
+    final content = widget.layout == NowPlayingLayout.panel
+        ? _buildPanelLayout(
+            track,
+            playerState,
+            glowColor,
+            paletteAsync,
+            accentColor,
+          )
+        : _buildScreenLayout(
+            track,
+            playerState,
+            glowColor,
+            paletteAsync,
+            accentColor,
+          );
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -495,12 +494,9 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color:
-                            superSonicActive
-                                ? const Color(
-                                  0xFFFFD700,
-                                ).withValues(alpha: 0.45)
-                                : glowColor.withValues(alpha: 0.3),
+                        color: superSonicActive
+                            ? const Color(0xFFFFD700).withValues(alpha: 0.45)
+                            : glowColor.withValues(alpha: 0.3),
                         blurRadius: 40,
                         spreadRadius: 2,
                       ),
@@ -577,10 +573,9 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color:
-                    superSonicActive
-                        ? const Color(0xFFFFD700).withValues(alpha: 0.4)
-                        : glowColor.withValues(alpha: 0.25),
+                color: superSonicActive
+                    ? const Color(0xFFFFD700).withValues(alpha: 0.4)
+                    : glowColor.withValues(alpha: 0.25),
                 blurRadius: 30,
                 spreadRadius: 2,
               ),
@@ -600,33 +595,33 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
   }
 
   Widget _buildAlbumArtImage(String? imageUrl, double? size) {
-    final Widget imageWidget =
-        imageUrl != null
-            ? CachedNetworkImage(
-              imageUrl: imageUrl,
-              fit: BoxFit.cover,
-              placeholder: (context, url) => _buildPlaceholderArt(size),
-              errorWidget: (context, url, error) => _buildPlaceholderArt(size),
-              imageBuilder: (context, imageProvider) {
-                // Image is fully decoded and ready. If the shader is active
-                // and the URL changed, bind the raw ImageProvider directly —
-                // no boundary snapshot needed, no flicker.
-                if (_showGridEasterEgg && imageUrl != _shaderImageUrl) {
-                  _shaderImageUrl = imageUrl;
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    if (mounted) _bindImageToShader(imageProvider);
-                  });
-                }
-                return Image(image: imageProvider, fit: BoxFit.cover);
-              },
-            )
-            : _buildPlaceholderArt(size);
+    final Widget imageWidget = imageUrl != null
+        ? CachedNetworkImage(
+            imageUrl: imageUrl,
+            fit: BoxFit.cover,
+            placeholder: (context, url) => _buildPlaceholderArt(size),
+            errorWidget: (context, url, error) => _buildPlaceholderArt(size),
+            imageBuilder: (context, imageProvider) {
+              // Image is fully decoded and ready. If the shader is active
+              // and the URL changed, bind the raw ImageProvider directly —
+              // no boundary snapshot needed, no flicker.
+              if (_showGridEasterEgg && imageUrl != _shaderImageUrl) {
+                _shaderImageUrl = imageUrl;
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted) _bindImageToShader(imageProvider);
+                });
+              }
+              return Image(image: imageProvider, fit: BoxFit.cover);
+            },
+          )
+        : _buildPlaceholderArt(size);
 
     return GestureDetector(
       onLongPress: () {
         // Find the current ImageProvider from the cache to pass into the shader.
-        final provider =
-            imageUrl != null ? CachedNetworkImageProvider(imageUrl) : null;
+        final provider = imageUrl != null
+            ? CachedNetworkImageProvider(imageUrl)
+            : null;
         _toggleGridEasterEgg(imageProvider: provider);
       },
       child: Stack(
@@ -730,13 +725,12 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
     AsyncValue<Color> paletteAsync,
   ) {
     final progress = _isSeeking ? _seekValue : playerState.progress;
-    final currentPosition =
-        _isSeeking
-            ? Duration(
-              milliseconds:
-                  (_seekValue * playerState.duration.inMilliseconds).round(),
-            )
-            : playerState.position;
+    final currentPosition = _isSeeking
+        ? Duration(
+            milliseconds: (_seekValue * playerState.duration.inMilliseconds)
+                .round(),
+          )
+        : playerState.position;
 
     final gradientSecondColor = AppTheme.gradientSecondColor(
       accentColor,
@@ -993,8 +987,9 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
           Center(
             child: IconButton(
               icon: Icon(icon, size: iconSize),
-              color:
-                  isActive ? effectiveActiveColor : AppTheme.onBackgroundSubtle,
+              color: isActive
+                  ? effectiveActiveColor
+                  : AppTheme.onBackgroundSubtle,
               onPressed: onPressed,
               padding: EdgeInsets.zero,
               constraints: BoxConstraints(
@@ -1064,8 +1059,8 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
             child: IconButton(
               icon: Icon(icon, size: iconSize),
               color: color,
-              onPressed:
-                  () => ref.read(playerProvider.notifier).toggleLoopMode(),
+              onPressed: () =>
+                  ref.read(playerProvider.notifier).toggleLoopMode(),
               padding: EdgeInsets.zero,
               constraints: BoxConstraints(
                 minWidth: boxSize,

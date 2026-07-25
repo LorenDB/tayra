@@ -95,10 +95,9 @@ class AuthState {
       isLoading: isLoading ?? this.isLoading,
       isCheckingAuth: isCheckingAuth ?? this.isCheckingAuth,
       error: identical(error, _kNoError) ? this.error : error as String?,
-      pendingServerUrl:
-          clearPendingServerUrl
-              ? null
-              : (pendingServerUrl ?? this.pendingServerUrl),
+      pendingServerUrl: clearPendingServerUrl
+          ? null
+          : (pendingServerUrl ?? this.pendingServerUrl),
       listenToken: clearListenToken ? null : (listenToken ?? this.listenToken),
     );
   }
@@ -315,8 +314,9 @@ class AuthNotifier extends Notifier<AuthState> {
 
     // On web, prefer same-origin relative URL so a mismatched baked
     // FUNKWHALE_URL still hits the nginx that serves this SPA.
-    final tokenEndpoint =
-        kIsWeb ? '/api/v1/users/token/' : '$url/api/v1/users/token/';
+    final tokenEndpoint = kIsWeb
+        ? '/api/v1/users/token/'
+        : '$url/api/v1/users/token/';
 
     try {
       // JSON body over HTTPS (password grant style). Not hashed client-side;

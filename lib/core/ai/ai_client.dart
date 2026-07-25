@@ -47,10 +47,9 @@ final aiClientProvider = Provider<AiClient>((ref) {
       return OpenAiCompatibleClient(
         baseUrl: settings.customEndpointUrl,
         apiKey: settings.customEndpointApiKey,
-        model:
-            settings.customModelName.isNotEmpty
-                ? settings.customModelName
-                : 'gpt-4o-mini',
+        model: settings.customModelName.isNotEmpty
+            ? settings.customModelName
+            : 'gpt-4o-mini',
         requiresApiKey: false,
       );
   }

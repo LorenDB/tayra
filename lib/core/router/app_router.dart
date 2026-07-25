@@ -28,6 +28,11 @@ import 'package:tayra/features/settings/ai_provider_settings_screen.dart';
 import 'package:tayra/features/settings/developer_settings_screen.dart';
 import 'package:tayra/features/search/search_screen.dart';
 import 'package:tayra/features/upload/upload_screen.dart';
+import 'package:tayra/features/library_admin/library_admin_screen.dart';
+import 'package:tayra/features/library_admin/manage_libraries_screen.dart';
+import 'package:tayra/features/library_admin/manage_library_detail_screen.dart';
+import 'package:tayra/features/library_admin/manage_uploads_screen.dart';
+import 'package:tayra/features/library_admin/manage_tags_screen.dart';
 import 'package:tayra/core/widgets/app_shell.dart';
 
 class NavigationObserver extends NavigatorObserver {
@@ -474,6 +479,40 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/account-settings',
         name: 'account_settings',
         builder: (context, state) => const AccountSettingsScreen(),
+      ),
+      // ── Library admin (permission-gated in each screen) ──────────────
+      GoRoute(
+        path: '/manage/library',
+        name: 'library_admin',
+        builder: (context, state) => const LibraryAdminScreen(),
+        routes: [
+          GoRoute(
+            path: 'libraries',
+            name: 'manage_libraries',
+            builder: (context, state) => const ManageLibrariesScreen(),
+            routes: [
+              GoRoute(
+                path: ':uuid',
+                name: 'manage_library_detail',
+                builder: (context, state) {
+                  final uuid = state.pathParameters['uuid'] ?? '';
+                  if (uuid.isEmpty) return const ManageLibrariesScreen();
+                  return ManageLibraryDetailScreen(uuid: uuid);
+                },
+              ),
+            ],
+          ),
+          GoRoute(
+            path: 'uploads',
+            name: 'manage_uploads',
+            builder: (context, state) => const ManageUploadsScreen(),
+          ),
+          GoRoute(
+            path: 'tags',
+            name: 'manage_tags',
+            builder: (context, state) => const ManageTagsScreen(),
+          ),
+        ],
       ),
       GoRoute(
         path: '/ai-provider-settings',

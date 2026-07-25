@@ -119,7 +119,10 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   Widget _buildBody() {
     return SafeArea(
       child: Column(
-        children: [_buildSearchField(), Expanded(child: _buildResults())],
+        children: [
+          _buildSearchField(),
+          Expanded(child: _buildResults()),
+        ],
       ),
     );
   }
@@ -137,20 +140,19 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             Icons.search_rounded,
             color: AppTheme.onBackgroundSubtle,
           ),
-          suffixIcon:
-              _controller.text.isNotEmpty
-                  ? IconButton(
-                    icon: const Icon(
-                      Icons.clear_rounded,
-                      color: AppTheme.onBackgroundSubtle,
-                      size: 20,
-                    ),
-                    onPressed: () {
-                      _controller.clear();
-                      _onQueryChanged('');
-                    },
-                  )
-                  : null,
+          suffixIcon: _controller.text.isNotEmpty
+              ? IconButton(
+                  icon: const Icon(
+                    Icons.clear_rounded,
+                    color: AppTheme.onBackgroundSubtle,
+                    size: 20,
+                  ),
+                  onPressed: () {
+                    _controller.clear();
+                    _onQueryChanged('');
+                  },
+                )
+              : null,
         ),
         onChanged: _onQueryChanged,
         textInputAction: TextInputAction.search,
@@ -202,39 +204,31 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
     // Results — apply offline filter when active
     final offlineFilterActive = ref.watch(offlineFilterActiveProvider);
-    final offlineTrackIds =
-        offlineFilterActive ? ref.watch(offlineTrackIdsProvider) : null;
-    final offlineAlbumIds =
-        offlineFilterActive
-            ? ref
-                .watch(offlineAlbumIdsProvider)
-                .maybeWhen(data: (ids) => ids, orElse: () => const <int>{})
-            : null;
-    final offlineArtistIds =
-        offlineFilterActive
-            ? ref
-                .watch(offlineArtistIdsProvider)
-                .maybeWhen(data: (ids) => ids, orElse: () => const <int>{})
-            : null;
+    final offlineTrackIds = offlineFilterActive
+        ? ref.watch(offlineTrackIdsProvider)
+        : null;
+    final offlineAlbumIds = offlineFilterActive
+        ? ref
+              .watch(offlineAlbumIdsProvider)
+              .maybeWhen(data: (ids) => ids, orElse: () => const <int>{})
+        : null;
+    final offlineArtistIds = offlineFilterActive
+        ? ref
+              .watch(offlineArtistIdsProvider)
+              .maybeWhen(data: (ids) => ids, orElse: () => const <int>{})
+        : null;
 
-    final artists =
-        offlineArtistIds != null
-            ? _result!.artists
-                .where((a) => offlineArtistIds.contains(a.id))
-                .toList()
-            : _result!.artists;
-    final albums =
-        offlineAlbumIds != null
-            ? _result!.albums
-                .where((a) => offlineAlbumIds.contains(a.id))
-                .toList()
-            : _result!.albums;
-    final tracks =
-        offlineTrackIds != null
-            ? _result!.tracks
-                .where((t) => offlineTrackIds.contains(t.id))
-                .toList()
-            : _result!.tracks;
+    final artists = offlineArtistIds != null
+        ? _result!.artists
+              .where((a) => offlineArtistIds.contains(a.id))
+              .toList()
+        : _result!.artists;
+    final albums = offlineAlbumIds != null
+        ? _result!.albums.where((a) => offlineAlbumIds.contains(a.id)).toList()
+        : _result!.albums;
+    final tracks = offlineTrackIds != null
+        ? _result!.tracks.where((t) => offlineTrackIds.contains(t.id)).toList()
+        : _result!.tracks;
 
     final hasAnyResults =
         artists.isNotEmpty ||
@@ -397,31 +391,30 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
           child: Wrap(
             spacing: 8,
             runSpacing: 8,
-            children:
-                tags.map((tag) {
-                  return ActionChip(
-                    label: Text(
-                      '#${tag.name}',
-                      style: const TextStyle(
-                        color: AppTheme.secondary,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    backgroundColor: AppTheme.surfaceContainerHigh,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      side: BorderSide(
-                        color: AppTheme.secondary.withValues(alpha: 0.3),
-                      ),
-                    ),
-                    onPressed: () {
-                      // Search for the tag name
-                      _controller.text = tag.name;
-                      _onQueryChanged(tag.name);
-                    },
-                  );
-                }).toList(),
+            children: tags.map((tag) {
+              return ActionChip(
+                label: Text(
+                  '#${tag.name}',
+                  style: const TextStyle(
+                    color: AppTheme.secondary,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                backgroundColor: AppTheme.surfaceContainerHigh,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  side: BorderSide(
+                    color: AppTheme.secondary.withValues(alpha: 0.3),
+                  ),
+                ),
+                onPressed: () {
+                  // Search for the tag name
+                  _controller.text = tag.name;
+                  _onQueryChanged(tag.name);
+                },
+              );
+            }).toList(),
           ),
         ),
         const SizedBox(height: 16),

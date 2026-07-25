@@ -29,13 +29,12 @@ class Analytics {
       if (env != null) {
         final v = env.trim().toLowerCase();
         final disabled = v == '1' || v == 'true';
-        _enabled =
-            !disabled
-                ? (await SharedPreferences.getInstance()).getBool(
-                      _prefsKeyAnalyticsEnabled,
-                    ) ??
-                    true
-                : false;
+        _enabled = !disabled
+            ? (await SharedPreferences.getInstance()).getBool(
+                    _prefsKeyAnalyticsEnabled,
+                  ) ??
+                  true
+            : false;
         return;
       }
     } catch (_) {

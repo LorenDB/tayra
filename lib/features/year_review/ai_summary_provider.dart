@@ -330,9 +330,8 @@ String _buildPrompt(YearReviewStats stats) {
     ];
     final peakData = stats.monthlyBreakdown.firstWhere(
       (m) => m.month == peakMonthNumber,
-      orElse:
-          () =>
-              MonthlyListens(month: peakMonthNumber, count: 0, totalSeconds: 0),
+      orElse: () =>
+          MonthlyListens(month: peakMonthNumber, count: 0, totalSeconds: 0),
     );
     buf.writeln(
       '- Most active month: ${monthNames[peakMonthNumber - 1]}'

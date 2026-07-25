@@ -12,20 +12,17 @@ void main() {
 
         final tracker = PlaybackListenTracker(
           persistIntervalSeconds: 1,
-          insertListenRecord: (
-            track, {
-            required listenedSeconds,
-            required listenedAt,
-          }) async {
-            inserts.add(
-              _InsertCall(
-                trackId: track.id,
-                listenedSeconds: listenedSeconds,
-                listenedAt: listenedAt,
-              ),
-            );
-            return 41;
-          },
+          insertListenRecord:
+              (track, {required listenedSeconds, required listenedAt}) async {
+                inserts.add(
+                  _InsertCall(
+                    trackId: track.id,
+                    listenedSeconds: listenedSeconds,
+                    listenedAt: listenedAt,
+                  ),
+                );
+                return 41;
+              },
           updateListenRecord: (id, listenedSeconds) async {
             updates.add(_UpdateCall(id: id, listenedSeconds: listenedSeconds));
           },
@@ -52,20 +49,17 @@ void main() {
 
       final tracker = PlaybackListenTracker(
         persistIntervalSeconds: 1,
-        insertListenRecord: (
-          track, {
-          required listenedSeconds,
-          required listenedAt,
-        }) async {
-          inserts.add(
-            _InsertCall(
-              trackId: track.id,
-              listenedSeconds: listenedSeconds,
-              listenedAt: listenedAt,
-            ),
-          );
-          return 7;
-        },
+        insertListenRecord:
+            (track, {required listenedSeconds, required listenedAt}) async {
+              inserts.add(
+                _InsertCall(
+                  trackId: track.id,
+                  listenedSeconds: listenedSeconds,
+                  listenedAt: listenedAt,
+                ),
+              );
+              return 7;
+            },
         updateListenRecord: (id, listenedSeconds) async {
           updates.add(_UpdateCall(id: id, listenedSeconds: listenedSeconds));
         },
@@ -94,20 +88,17 @@ void main() {
 
         final tracker = PlaybackListenTracker(
           persistIntervalSeconds: 1,
-          insertListenRecord: (
-            track, {
-            required listenedSeconds,
-            required listenedAt,
-          }) async {
-            inserts.add(
-              _InsertCall(
-                trackId: track.id,
-                listenedSeconds: listenedSeconds,
-                listenedAt: listenedAt,
-              ),
-            );
-            return nextId++;
-          },
+          insertListenRecord:
+              (track, {required listenedSeconds, required listenedAt}) async {
+                inserts.add(
+                  _InsertCall(
+                    trackId: track.id,
+                    listenedSeconds: listenedSeconds,
+                    listenedAt: listenedAt,
+                  ),
+                );
+                return nextId++;
+              },
           updateListenRecord: (id, listenedSeconds) async {
             updates.add(_UpdateCall(id: id, listenedSeconds: listenedSeconds));
           },

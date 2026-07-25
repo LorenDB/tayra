@@ -321,24 +321,19 @@ class _AlbumCarousel extends ConsumerWidget {
 
     return albumsAsync.when(
       loading: () => const ShimmerGrid(itemCount: 5, itemSize: 150),
-      error:
-          (error, _) => _ErrorCard(
-            message: 'Could not load albums',
-            onRetry: () => ref.invalidate(provider),
-          ),
+      error: (error, _) => _ErrorCard(
+        message: 'Could not load albums',
+        onRetry: () => ref.invalidate(provider),
+      ),
       data: (albums) {
-        final displayAlbums =
-            offlineFilterActive
-                ? offlineAlbumIdsAsync.when(
-                  data:
-                      (offlineIds) =>
-                          albums
-                              .where((a) => offlineIds.contains(a.id))
-                              .toList(),
-                  loading: () => albums,
-                  error: (_, e) => albums,
-                )
-                : albums;
+        final displayAlbums = offlineFilterActive
+            ? offlineAlbumIdsAsync.when(
+                data: (offlineIds) =>
+                    albums.where((a) => offlineIds.contains(a.id)).toList(),
+                loading: () => albums,
+                error: (_, e) => albums,
+              )
+            : albums;
 
         if (displayAlbums.isEmpty) {
           return const SizedBox(
@@ -369,8 +364,8 @@ class _AlbumCarousel extends ConsumerWidget {
                 child: RepaintBoundary(
                   child: AlbumCard(
                     album: displayAlbums[index],
-                    onTap:
-                        () => context.push('/album/${displayAlbums[index].id}'),
+                    onTap: () =>
+                        context.push('/album/${displayAlbums[index].id}'),
                     width: cardWidth,
                     // Shadows are costly while scrolling carousels.
                     showShadow: false,
@@ -412,31 +407,25 @@ class _AlbumGridSection extends ConsumerWidget {
         ),
         const SizedBox(height: 12),
         albumsAsync.when(
-          loading:
-              () => const SizedBox(
-                height: 200,
-                child: Center(
-                  child: CircularProgressIndicator(color: AppTheme.primary),
-                ),
-              ),
-          error:
-              (error, _) => _ErrorCard(
-                message: 'Could not load albums',
-                onRetry: () => ref.invalidate(provider),
-              ),
+          loading: () => const SizedBox(
+            height: 200,
+            child: Center(
+              child: CircularProgressIndicator(color: AppTheme.primary),
+            ),
+          ),
+          error: (error, _) => _ErrorCard(
+            message: 'Could not load albums',
+            onRetry: () => ref.invalidate(provider),
+          ),
           data: (albums) {
-            final displayAlbums =
-                offlineFilterActive
-                    ? offlineAlbumIdsAsync.when(
-                      data:
-                          (offlineIds) =>
-                              albums
-                                  .where((a) => offlineIds.contains(a.id))
-                                  .toList(),
-                      loading: () => albums,
-                      error: (_, e) => albums,
-                    )
-                    : albums;
+            final displayAlbums = offlineFilterActive
+                ? offlineAlbumIdsAsync.when(
+                    data: (offlineIds) =>
+                        albums.where((a) => offlineIds.contains(a.id)).toList(),
+                    loading: () => albums,
+                    error: (_, e) => albums,
+                  )
+                : albums;
 
             if (displayAlbums.isEmpty) {
               return const SizedBox(
@@ -539,26 +528,24 @@ class _TrackListSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final tracksAsync = ref.watch(recentTracksProvider);
     final offlineFilterActive = ref.watch(offlineFilterActiveProvider);
-    final offlineTrackIds =
-        offlineFilterActive ? ref.watch(offlineTrackIdsProvider) : null;
+    final offlineTrackIds = offlineFilterActive
+        ? ref.watch(offlineTrackIdsProvider)
+        : null;
 
     return tracksAsync.when(
-      loading:
-          () => SliverToBoxAdapter(
-            child: SizedBox(height: 400, child: ShimmerList(itemCount: 6)),
-          ),
-      error:
-          (error, _) => SliverToBoxAdapter(
-            child: _ErrorCard(
-              message: 'Could not load recent listens',
-              onRetry: () => ref.invalidate(recentTracksProvider),
-            ),
-          ),
+      loading: () => SliverToBoxAdapter(
+        child: SizedBox(height: 400, child: ShimmerList(itemCount: 6)),
+      ),
+      error: (error, _) => SliverToBoxAdapter(
+        child: _ErrorCard(
+          message: 'Could not load recent listens',
+          onRetry: () => ref.invalidate(recentTracksProvider),
+        ),
+      ),
       data: (tracks) {
-        final displayTracks =
-            offlineTrackIds != null
-                ? tracks.where((t) => offlineTrackIds.contains(t.id)).toList()
-                : tracks;
+        final displayTracks = offlineTrackIds != null
+            ? tracks.where((t) => offlineTrackIds.contains(t.id)).toList()
+            : tracks;
 
         if (displayTracks.isEmpty) {
           return const SliverToBoxAdapter(
@@ -581,14 +568,13 @@ class _TrackListSection extends ConsumerWidget {
             return RepaintBoundary(
               child: TrackListTile(
                 track: track,
-                onTap:
-                    () => ref
-                        .read(playerProvider.notifier)
-                        .playTracks(
-                          displayTracks,
-                          startIndex: index,
-                          source: 'recent_listenings',
-                        ),
+                onTap: () => ref
+                    .read(playerProvider.notifier)
+                    .playTracks(
+                      displayTracks,
+                      startIndex: index,
+                      source: 'recent_listenings',
+                    ),
               ),
             );
           }, childCount: displayTracks.length),
@@ -679,30 +665,29 @@ class _YearReviewBannerState extends ConsumerState<_YearReviewBanner>
             children: [
               // Animated backdrop only — content row below is static.
               Positioned.fill(
-                child:
-                    shader != null
-                        ? ListenableBuilder(
-                          listenable: _elapsedSeconds,
-                          builder: (context, _) {
-                            return CustomPaint(
-                              painter: _RipplePainter(
-                                shader: shader,
-                                time: _elapsedSeconds.value,
-                                colorA: _colorA,
-                                colorB: _colorB,
-                              ),
-                            );
-                          },
-                        )
-                        : const DecoratedBox(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [_colorA, _colorB],
+                child: shader != null
+                    ? ListenableBuilder(
+                        listenable: _elapsedSeconds,
+                        builder: (context, _) {
+                          return CustomPaint(
+                            painter: _RipplePainter(
+                              shader: shader,
+                              time: _elapsedSeconds.value,
+                              colorA: _colorA,
+                              colorB: _colorB,
                             ),
+                          );
+                        },
+                      )
+                    : const DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [_colorA, _colorB],
                           ),
                         ),
+                      ),
               ),
               Material(
                 color: Colors.transparent,
@@ -877,11 +862,10 @@ class _OverflowNavSection extends ConsumerWidget {
     );
 
     // All non-home tab indices (1–6) that aren't pinned.
-    final overflowIndices =
-        List.generate(
-          AppShell.tabs.length - 1,
-          (i) => i + 1,
-        ).where((i) => !pinnedIndices.contains(i)).toList();
+    final overflowIndices = List.generate(
+      AppShell.tabs.length - 1,
+      (i) => i + 1,
+    ).where((i) => !pinnedIndices.contains(i)).toList();
 
     if (overflowIndices.isEmpty) return const SizedBox.shrink();
 

@@ -238,34 +238,32 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
   }) {
     return ListTile(
       title: Text(title, style: const TextStyle(color: AppTheme.onBackground)),
-      subtitle:
-          subtitle != null
-              ? Text(
-                subtitle,
-                style: const TextStyle(color: AppTheme.onBackgroundMuted),
-              )
-              : null,
+      subtitle: subtitle != null
+          ? Text(
+              subtitle,
+              style: const TextStyle(color: AppTheme.onBackgroundMuted),
+            )
+          : null,
       leading: const Icon(
         Icons.radio_outlined,
         color: AppTheme.onBackgroundSubtle,
       ),
-      trailing:
-          isLoading
-              ? const SizedBox(
-                width: 24,
-                height: 24,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: AppTheme.primary,
-                ),
-              )
-              : IconButton(
-                icon: const Icon(
-                  Icons.play_arrow_rounded,
-                  color: AppTheme.primary,
-                ),
-                onPressed: onPlay,
+      trailing: isLoading
+          ? const SizedBox(
+              width: 24,
+              height: 24,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: AppTheme.primary,
               ),
+            )
+          : IconButton(
+              icon: const Icon(
+                Icons.play_arrow_rounded,
+                color: AppTheme.primary,
+              ),
+              onPressed: onPlay,
+            ),
     );
   }
 }

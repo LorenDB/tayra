@@ -149,9 +149,8 @@ class DownloadQueueService {
       final wifiOnly = ref.read(settingsProvider).downloadWifiOnly as bool;
       final connectivity = ref.read(connectivityResultProvider);
       return connectivity.when(
-        data:
-            (results) =>
-                connectivityAllowsDownloads(results, wifiOnly: wifiOnly),
+        data: (results) =>
+            connectivityAllowsDownloads(results, wifiOnly: wifiOnly),
         loading: () => true,
         error: (_, _) => true,
       );

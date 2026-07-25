@@ -62,14 +62,13 @@ final connectivityResultProvider = StreamProvider<List<ConnectivityResult>>((
 final hasNetworkProvider = Provider<bool>((ref) {
   final connectivity = ref.watch(connectivityResultProvider);
   return connectivity.when(
-    data:
-        (results) => results.any(
-          (r) =>
-              r == ConnectivityResult.wifi ||
-              r == ConnectivityResult.mobile ||
-              r == ConnectivityResult.ethernet ||
-              r == ConnectivityResult.vpn,
-        ),
+    data: (results) => results.any(
+      (r) =>
+          r == ConnectivityResult.wifi ||
+          r == ConnectivityResult.mobile ||
+          r == ConnectivityResult.ethernet ||
+          r == ConnectivityResult.vpn,
+    ),
     loading: () => true, // Optimistic until we know otherwise
     error: (_, e) => true,
   );

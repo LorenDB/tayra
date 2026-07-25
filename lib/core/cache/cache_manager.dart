@@ -708,11 +708,10 @@ class CacheManager {
         ''',
         [FileType.audio.name, CacheType.album.name],
       );
-      final fromFiles =
-          results
-              .map((r) => r['resource_parent_id'] as int?)
-              .whereType<int>()
-              .toSet();
+      final fromFiles = results
+          .map((r) => r['resource_parent_id'] as int?)
+          .whereType<int>()
+          .toSet();
 
       // Also include albums that are manually downloaded.
       final manualAlbums = await db.query(
@@ -721,8 +720,9 @@ class CacheManager {
         where: 'resource_type = ?',
         whereArgs: [CacheType.album.name],
       );
-      final fromManual =
-          manualAlbums.map((r) => r['resource_id'] as int).toSet();
+      final fromManual = manualAlbums
+          .map((r) => r['resource_id'] as int)
+          .toSet();
 
       return fromFiles.union(fromManual);
     } catch (e) {
@@ -775,10 +775,10 @@ class CacheManager {
         }
       }
 
-      final albums =
-          albumsById.values.toList()..sort(
-            (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()),
-          );
+      final albums = albumsById.values.toList()
+        ..sort(
+          (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()),
+        );
       return albums;
     } catch (e) {
       debugPrint('getCachedAlbums error: $e');
@@ -813,16 +813,15 @@ class CacheManager {
           id: id,
           title: title,
           artist: artistName != null ? Artist(id: 0, name: artistName) : null,
-          cover:
-              coverUrl != null
-                  ? Cover(
-                    uuid: '',
-                    urls: CoverUrls(
-                      original: coverUrl,
-                      mediumSquareCrop: coverUrl,
-                    ),
-                  )
-                  : null,
+          cover: coverUrl != null
+              ? Cover(
+                  uuid: '',
+                  urls: CoverUrls(
+                    original: coverUrl,
+                    mediumSquareCrop: coverUrl,
+                  ),
+                )
+              : null,
           isPlayable: true,
         );
       }
@@ -872,10 +871,10 @@ class CacheManager {
         );
       }
 
-      final albums =
-          albumsById.values.toList()..sort(
-            (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()),
-          );
+      final albums = albumsById.values.toList()
+        ..sort(
+          (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()),
+        );
       return albums;
     } catch (e) {
       debugPrint('getOfflineAlbums error: $e');
@@ -983,10 +982,8 @@ class CacheManager {
       } catch (_) {}
     }
 
-    final artists =
-        byId.values.toList()..sort(
-          (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),
-        );
+    final artists = byId.values.toList()
+      ..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
     return artists;
   }
 
@@ -1199,10 +1196,9 @@ class CacheManager {
         ],
         limit: 1,
       );
-      final parentAlbumId =
-          parentRows.isNotEmpty
-              ? parentRows.first['resource_parent_id'] as int?
-              : null;
+      final parentAlbumId = parentRows.isNotEmpty
+          ? parentRows.first['resource_parent_id'] as int?
+          : null;
 
       final audioDir = await _getCacheDir(FileType.audio);
       final prefix = 'audio_$trackId.';
@@ -1365,8 +1361,9 @@ class CacheManager {
       where: 'file_type = ?',
       whereArgs: [FileType.audio.name],
     );
-    final existingKeys =
-        existingRows.map((r) => r['cache_key'] as String).toSet();
+    final existingKeys = existingRows
+        .map((r) => r['cache_key'] as String)
+        .toSet();
 
     for (final file in files) {
       final name = p.basename(file.path);

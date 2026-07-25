@@ -62,40 +62,37 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
 
     final ok = await showShellDialog<bool>(
       context: context,
-      builder:
-          (ctx) => AlertDialog(
-            backgroundColor: AppTheme.surfaceContainerHigh,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            title: const Text(
-              'Remove track',
-              style: TextStyle(
-                color: AppTheme.onBackground,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            content: const Text(
-              'Remove this track from the playlist?',
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppTheme.surfaceContainerHigh,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        title: const Text(
+          'Remove track',
+          style: TextStyle(
+            color: AppTheme.onBackground,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        content: const Text(
+          'Remove this track from the playlist?',
+          style: TextStyle(color: AppTheme.onBackgroundMuted),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text(
+              'Cancel',
               style: TextStyle(color: AppTheme.onBackgroundMuted),
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(false),
-                child: const Text(
-                  'Cancel',
-                  style: TextStyle(color: AppTheme.onBackgroundMuted),
-                ),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(true),
-                child: const Text(
-                  'Remove',
-                  style: TextStyle(color: AppTheme.error),
-                ),
-              ),
-            ],
           ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text(
+              'Remove',
+              style: TextStyle(color: AppTheme.error),
+            ),
+          ),
+        ],
+      ),
     );
 
     if (ok != true) return;
@@ -258,40 +255,37 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
 
     final ok = await showShellDialog<bool>(
       context: context,
-      builder:
-          (ctx) => AlertDialog(
-            backgroundColor: AppTheme.surfaceContainerHigh,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            title: const Text(
-              'Delete playlist',
-              style: TextStyle(
-                color: AppTheme.onBackground,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            content: const Text(
-              'Delete this playlist? This cannot be undone.',
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppTheme.surfaceContainerHigh,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        title: const Text(
+          'Delete playlist',
+          style: TextStyle(
+            color: AppTheme.onBackground,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        content: const Text(
+          'Delete this playlist? This cannot be undone.',
+          style: TextStyle(color: AppTheme.onBackgroundMuted),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text(
+              'Cancel',
               style: TextStyle(color: AppTheme.onBackgroundMuted),
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(false),
-                child: const Text(
-                  'Cancel',
-                  style: TextStyle(color: AppTheme.onBackgroundMuted),
-                ),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(true),
-                child: const Text(
-                  'Delete',
-                  style: TextStyle(color: AppTheme.error),
-                ),
-              ),
-            ],
           ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text(
+              'Delete',
+              style: TextStyle(color: AppTheme.error),
+            ),
+          ),
+        ],
+      ),
     );
 
     if (ok != true) return;
@@ -357,12 +351,11 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.background,
-      body:
-          _isLoading
-              ? _buildLoading()
-              : _error != null
-              ? _buildError()
-              : _buildContent(),
+      body: _isLoading
+          ? _buildLoading()
+          : _error != null
+          ? _buildError()
+          : _buildContent(),
     );
   }
 
@@ -405,11 +398,10 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
           parentType: CacheType.playlist,
           parentId: playlist.id,
           trackIds: _tracks.map((t) => t.id).toList(),
-          enqueueTrackIds:
-              _tracks
-                  .where((t) => t.listenUrl != null)
-                  .map((t) => t.id)
-                  .toList(),
+          enqueueTrackIds: _tracks
+              .where((t) => t.listenUrl != null)
+              .map((t) => t.id)
+              .toList(),
           currentlyManual: current,
         );
         // Omit playlist ID; keep counts and booleans only.
@@ -495,48 +487,46 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                     unawaited(_confirmDeletePlaylist(context, playlist));
                   }
                 },
-                itemBuilder:
-                    (_) => [
-                      const PopupMenuItem(
-                        value: 'play_next',
-                        child: PopupMenuRow(
-                          icon: Icons.queue_play_next,
-                          label: 'Play next',
-                        ),
-                      ),
-                      const PopupMenuItem(
-                        value: 'add_queue',
-                        child: PopupMenuRow(
-                          icon: Icons.playlist_add,
-                          label: 'Add to queue',
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: 'download',
-                        child: PopupMenuRow(
-                          icon:
-                              isManual
-                                  ? Icons.download_done_rounded
-                                  : Icons.download_rounded,
-                          label: isManual ? 'Remove download' : 'Download',
-                        ),
-                      ),
-                      const PopupMenuItem(
-                        value: 'edit',
-                        child: PopupMenuRow(
-                          icon: Icons.edit_rounded,
-                          label: 'Edit playlist',
-                        ),
-                      ),
-                      const PopupMenuItem(
-                        value: 'delete',
-                        child: PopupMenuRow(
-                          icon: Icons.delete_rounded,
-                          label: 'Delete playlist',
-                          destructive: true,
-                        ),
-                      ),
-                    ],
+                itemBuilder: (_) => [
+                  const PopupMenuItem(
+                    value: 'play_next',
+                    child: PopupMenuRow(
+                      icon: Icons.queue_play_next,
+                      label: 'Play next',
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: 'add_queue',
+                    child: PopupMenuRow(
+                      icon: Icons.playlist_add,
+                      label: 'Add to queue',
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: 'download',
+                    child: PopupMenuRow(
+                      icon: isManual
+                          ? Icons.download_done_rounded
+                          : Icons.download_rounded,
+                      label: isManual ? 'Remove download' : 'Download',
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: 'edit',
+                    child: PopupMenuRow(
+                      icon: Icons.edit_rounded,
+                      label: 'Edit playlist',
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: 'delete',
+                    child: PopupMenuRow(
+                      icon: Icons.delete_rounded,
+                      label: 'Delete playlist',
+                      destructive: true,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

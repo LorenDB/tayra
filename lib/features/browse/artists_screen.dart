@@ -61,12 +61,11 @@ class _ArtistsScreenState extends ConsumerState<ArtistsScreen>
       final offlineArtistsAsync = ref.watch(offlineArtistsProvider);
       return offlineArtistsAsync.when(
         loading: () => const ShimmerList(showCircular: true, itemCount: 12),
-        error:
-            (error, stack) => CenteredErrorView(
-              title: 'Failed to load offline artists',
-              message: error.toString(),
-              onRetry: () => ref.invalidate(offlineArtistsProvider),
-            ),
+        error: (error, stack) => CenteredErrorView(
+          title: 'Failed to load offline artists',
+          message: error.toString(),
+          onRetry: () => ref.invalidate(offlineArtistsProvider),
+        ),
         data: (artists) {
           return AppRefreshIndicator(
             onRefresh: () async {
@@ -89,12 +88,11 @@ class _ArtistsScreenState extends ConsumerState<ArtistsScreen>
 
     return firstPage.when(
       loading: () => const ShimmerList(showCircular: true, itemCount: 12),
-      error:
-          (error, stack) => CenteredErrorView(
-            title: 'Failed to load artists',
-            message: error.toString(),
-            onRetry: () => ref.invalidate(artistsPageProvider(1)),
-          ),
+      error: (error, stack) => CenteredErrorView(
+        title: 'Failed to load artists',
+        message: error.toString(),
+        onRetry: () => ref.invalidate(artistsPageProvider(1)),
+      ),
       data: (response) {
         seedIfEmpty(response);
         final allArtists = items.isEmpty ? response.results : items;
@@ -136,10 +134,9 @@ class _ArtistGrid extends StatelessWidget {
       return EmptyState(
         icon: Icons.people_rounded,
         title: offlineMode ? 'No offline artists' : 'No artists found',
-        subtitle:
-            offlineMode
-                ? 'Download albums or tracks to browse artists offline'
-                : 'Pull down to refresh',
+        subtitle: offlineMode
+            ? 'Download albums or tracks to browse artists offline'
+            : 'Pull down to refresh',
       );
     }
 

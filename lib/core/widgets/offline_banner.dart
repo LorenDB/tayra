@@ -87,11 +87,8 @@ class _OfflineSuggestionBanner extends ConsumerWidget {
             ),
             const SizedBox(width: 4),
             InkWell(
-              onTap:
-                  () =>
-                      ref
-                          .read(offlineStateProvider.notifier)
-                          .dismissSuggestion(),
+              onTap: () =>
+                  ref.read(offlineStateProvider.notifier).dismissSuggestion(),
               borderRadius: BorderRadius.circular(12),
               child: const Padding(
                 padding: EdgeInsets.all(4),
@@ -145,10 +142,9 @@ class _OfflineStatusChip extends ConsumerWidget {
     return Material(
       color: AppTheme.surfaceContainerHigh,
       child: InkWell(
-        onTap:
-            (filterEnabled || forcedOffline)
-                ? () => _showOfflineOptions(context, ref, offlineState)
-                : null,
+        onTap: (filterEnabled || forcedOffline)
+            ? () => _showOfflineOptions(context, ref, offlineState)
+            : null,
         child: Container(
           decoration: BoxDecoration(
             border: Border(
