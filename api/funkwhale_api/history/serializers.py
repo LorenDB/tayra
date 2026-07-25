@@ -234,3 +234,80 @@ class ListeningWriteSerializer(serializers.ModelSerializer):
         else:
             data["source_device"] = str(instance.source_device.uuid)
         return data
+
+
+class ListeningUpdateSerializer(serializers.ModelSerializer):
+    """
+    PATCH body for duration / device updates.
+
+    Mutable: duration_seconds (monotonic max), optional source_device UUID.
+    Immutable (not in fields): track, user, creation_date, client_session_id.
+    """
+
+    source_device = serializers.UUIDField(
+        required=False, allow_null=True, write_only=True
+    )
+    duration_seconds = serializers.IntegerField(
+        required=False, allow_null=True, min_value=0, max_value=86400
+    )
+
+    class Meta:
+        model = models.Listening
+        fields = (
+            "id",
+            "duration_seconds",
+            "source_device",
+            "client_session_id",
+            "updated_at",
+        )
+        read_only_fields = ("id", "client_session_id", "updated_at")
+
+    def _resolve_source_device(self, user, device_uuid):
+        try:
+            device = ClientDevice.objects.get(user=user, uuid=device_uuid)
+        except ClientDevice.DoesNotExist:
+            raise_coded_validation_error(
+                "source_device",
+                "device_not_registered",
+                "Register the device via POST /api/v1/client-devices/",
+            )
+        if not device.is_active:
+            raise_coded_validation_error(
+                "source_device",
+                "device_inactive",
+                "Device is inactive; re-register via POST /api/v1/client-devices/",
+            )
+        return device
+
+    def update(self, instance, validated_data):
+        user = self.context["user"]
+        update_fields = []
+
+        if "duration_seconds" in validated_data:
+            incoming = validated_data["duration_seconds"]
+            if incoming is not None:
+                instance.duration_seconds = max(
+                    instance.duration_seconds or 0, incoming
+                )
+                update_fields.append("duration_seconds")
+
+        if "source_device" in validated_data:
+            device_uuid = validated_data["source_device"]
+            # Only apply when a UUID is provided; null means no change.
+            if device_uuid is not None:
+                instance.source_device = self._resolve_source_device(user, device_uuid)
+                update_fields.append("source_device")
+
+        if update_fields:
+            update_fields.append("updated_at")
+            instance.save(update_fields=update_fields)
+        return instance
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        if instance.source_device_id is None:
+            data["source_device"] = None
+        else:
+            # Prefer already-selected relation when available.
+            data["source_device"] = str(instance.source_device.uuid)
+        return data

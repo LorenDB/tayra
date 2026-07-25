@@ -1,5 +1,8 @@
+from django.core.exceptions import ValidationError
 from django.db.models import Prefetch
+from django.http import Http404
 from rest_framework import mixins, status, viewsets
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from config import plugins
@@ -16,6 +19,7 @@ class ListeningViewSet(
     mixins.CreateModelMixin,
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
     viewsets.GenericViewSet,
 ):
     serializer_class = serializers.ListeningSerializer
@@ -32,10 +36,24 @@ class ListeningViewSet(
     anonymous_policy = "setting"
     owner_checks = ["write"]
     filterset_class = filters.ListeningFilter
+    # Design documents PATCH only (not full PUT) for duration updates.
+    http_method_names = ["get", "post", "patch", "head", "options"]
+    throttling_scopes = {
+        "partial_update": {"authenticated": "authenticated-listening-update"},
+        "by_session": {"authenticated": "authenticated-listening-update"},
+    }
 
     def get_serializer_class(self):
         if self.request.method.lower() in ["head", "get", "options"]:
             return serializers.ListeningSerializer
+        if self.request.method.lower() == "patch" or getattr(
+            self, "action", None
+        ) in (
+            "partial_update",
+            "update",
+            "by_session",
+        ):
+            return serializers.ListeningUpdateSerializer
         return serializers.ListeningWriteSerializer
 
     def perform_create(self, serializer):
@@ -62,6 +80,39 @@ class ListeningViewSet(
             status=status.HTTP_201_CREATED if created else status.HTTP_200_OK,
             headers=headers,
         )
+
+    @action(
+        methods=["patch"],
+        detail=False,
+        url_path=r"by-session/(?P<client_session_id>[^/.]+)",
+        url_name="by-session",
+    )
+    def by_session(self, request, client_session_id=None, *args, **kwargs):
+        """
+        PATCH duration/device by client_session_id (owner-scoped).
+
+        Primary mobile path after create when the client retained only the
+        session UUID (not the server integer id).
+        """
+        if not request.user.is_authenticated:
+            raise Http404
+        try:
+            listening = self.get_queryset().get(
+                user=request.user,
+                client_session_id=client_session_id,
+            )
+        except (
+            models.Listening.DoesNotExist,
+            ValueError,
+            TypeError,
+            ValidationError,
+        ):
+            raise Http404
+
+        serializer = self.get_serializer(listening, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
     def get_queryset(self):
         queryset = super().get_queryset()

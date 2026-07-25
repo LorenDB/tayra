@@ -472,3 +472,258 @@ def test_concurrent_dual_post_same_session(factories, mocker):
     assert models.Listening.objects.get().duration_seconds == 50
     assert plugin_hook.call_count <= 1
     assert activity_send.call_count <= 1
+
+
+# --- PATCH / duration update / by-session (PR 3) ---
+
+
+def _by_session_url(client_session_id):
+    return reverse(
+        "api:v1:history:listenings-by-session",
+        kwargs={"client_session_id": str(client_session_id)},
+    )
+
+
+def test_patch_duration_increases(factories, logged_in_api_client):
+    listening = factories["history.Listening"](
+        user=logged_in_api_client.user,
+        duration_seconds=10,
+    )
+
+    response = logged_in_api_client.patch(
+        _detail_url(listening.pk),
+        {"duration_seconds": 180},
+        format="json",
+    )
+
+    assert response.status_code == 200
+    assert response.data["duration_seconds"] == 180
+    listening.refresh_from_db()
+    assert listening.duration_seconds == 180
+
+
+def test_patch_duration_monotonic_max(factories, logged_in_api_client):
+    listening = factories["history.Listening"](
+        user=logged_in_api_client.user,
+        duration_seconds=100,
+    )
+
+    response = logged_in_api_client.patch(
+        _detail_url(listening.pk),
+        {"duration_seconds": 20},
+        format="json",
+    )
+
+    assert response.status_code == 200
+    assert response.data["duration_seconds"] == 100
+    listening.refresh_from_db()
+    assert listening.duration_seconds == 100
+
+
+def test_patch_duration_from_null(factories, logged_in_api_client):
+    listening = factories["history.Listening"](
+        user=logged_in_api_client.user,
+        duration_seconds=None,
+    )
+
+    response = logged_in_api_client.patch(
+        _detail_url(listening.pk),
+        {"duration_seconds": 45},
+        format="json",
+    )
+
+    assert response.status_code == 200
+    assert response.data["duration_seconds"] == 45
+    listening.refresh_from_db()
+    assert listening.duration_seconds == 45
+
+
+def test_patch_source_device(factories, logged_in_api_client):
+    listening = factories["history.Listening"](
+        user=logged_in_api_client.user,
+        duration_seconds=5,
+        source_device=None,
+    )
+    device = factories["client_data.ClientDevice"](user=logged_in_api_client.user)
+
+    response = logged_in_api_client.patch(
+        _detail_url(listening.pk),
+        {"source_device": str(device.uuid), "duration_seconds": 30},
+        format="json",
+    )
+
+    assert response.status_code == 200
+    assert response.data["source_device"] == str(device.uuid)
+    assert response.data["duration_seconds"] == 30
+    listening.refresh_from_db()
+    assert listening.source_device_id == device.pk
+    assert listening.duration_seconds == 30
+
+
+def test_patch_source_device_not_registered(factories, logged_in_api_client):
+    listening = factories["history.Listening"](user=logged_in_api_client.user)
+
+    response = logged_in_api_client.patch(
+        _detail_url(listening.pk),
+        {"source_device": str(uuid.uuid4())},
+        format="json",
+    )
+
+    assert response.status_code == 400
+    assert response.data["source_device"][0]["code"] == "device_not_registered"
+
+
+def test_patch_non_owner_404(factories, logged_in_api_client):
+    owner = factories["users.User"](privacy_level="everyone")
+    listening = factories["history.Listening"](
+        user=owner,
+        duration_seconds=10,
+    )
+
+    response = logged_in_api_client.patch(
+        _detail_url(listening.pk),
+        {"duration_seconds": 99},
+        format="json",
+    )
+
+    assert response.status_code == 404
+    listening.refresh_from_db()
+    assert listening.duration_seconds == 10
+
+
+def test_patch_immutable_fields_ignored(factories, logged_in_api_client):
+    track = factories["music.Track"]()
+    other_track = factories["music.Track"]()
+    session_id = uuid.uuid4()
+    creation = timezone.now() - datetime.timedelta(minutes=1)
+    listening = factories["history.Listening"](
+        user=logged_in_api_client.user,
+        track=track,
+        duration_seconds=10,
+        client_session_id=session_id,
+        creation_date=creation,
+    )
+
+    response = logged_in_api_client.patch(
+        _detail_url(listening.pk),
+        {
+            "duration_seconds": 50,
+            "track": other_track.pk,
+            "client_session_id": str(uuid.uuid4()),
+            "creation_date": timezone.now().isoformat().replace("+00:00", "Z"),
+            "user": factories["users.User"]().pk,
+        },
+        format="json",
+    )
+
+    assert response.status_code == 200
+    listening.refresh_from_db()
+    assert listening.duration_seconds == 50
+    assert listening.track_id == track.pk
+    assert listening.client_session_id == session_id
+    assert listening.user_id == logged_in_api_client.user.pk
+    # creation_date unchanged (within second precision)
+    assert abs((listening.creation_date - creation).total_seconds()) < 1
+
+
+def test_patch_duration_bounds(factories, logged_in_api_client):
+    listening = factories["history.Listening"](user=logged_in_api_client.user)
+
+    response = logged_in_api_client.patch(
+        _detail_url(listening.pk),
+        {"duration_seconds": 86401},
+        format="json",
+    )
+    assert response.status_code == 400
+
+
+def test_by_session_patch_duration(factories, logged_in_api_client):
+    session_id = uuid.uuid4()
+    listening = factories["history.Listening"](
+        user=logged_in_api_client.user,
+        duration_seconds=10,
+        client_session_id=session_id,
+    )
+
+    response = logged_in_api_client.patch(
+        _by_session_url(session_id),
+        {"duration_seconds": 200},
+        format="json",
+    )
+
+    assert response.status_code == 200
+    assert response.data["duration_seconds"] == 200
+    assert response.data["client_session_id"] == str(session_id)
+    listening.refresh_from_db()
+    assert listening.duration_seconds == 200
+
+
+def test_by_session_patch_monotonic_and_device(factories, logged_in_api_client):
+    session_id = uuid.uuid4()
+    device = factories["client_data.ClientDevice"](user=logged_in_api_client.user)
+    listening = factories["history.Listening"](
+        user=logged_in_api_client.user,
+        duration_seconds=80,
+        client_session_id=session_id,
+    )
+
+    response = logged_in_api_client.patch(
+        _by_session_url(session_id),
+        {"duration_seconds": 40, "source_device": str(device.uuid)},
+        format="json",
+    )
+
+    assert response.status_code == 200
+    assert response.data["duration_seconds"] == 80
+    assert response.data["source_device"] == str(device.uuid)
+    listening.refresh_from_db()
+    assert listening.duration_seconds == 80
+    assert listening.source_device_id == device.pk
+
+
+def test_by_session_unknown_404(factories, logged_in_api_client):
+    response = logged_in_api_client.patch(
+        _by_session_url(uuid.uuid4()),
+        {"duration_seconds": 10},
+        format="json",
+    )
+    assert response.status_code == 404
+
+
+def test_by_session_other_user_404(factories, logged_in_api_client):
+    other = factories["users.User"]()
+    session_id = uuid.uuid4()
+    factories["history.Listening"](
+        user=other,
+        duration_seconds=10,
+        client_session_id=session_id,
+    )
+
+    response = logged_in_api_client.patch(
+        _by_session_url(session_id),
+        {"duration_seconds": 99},
+        format="json",
+    )
+    assert response.status_code == 404
+
+
+def test_put_not_allowed(factories, logged_in_api_client):
+    listening = factories["history.Listening"](user=logged_in_api_client.user)
+
+    response = logged_in_api_client.put(
+        _detail_url(listening.pk),
+        {"duration_seconds": 10},
+        format="json",
+    )
+    assert response.status_code == 405
+
+
+def test_throttling_scopes_configured():
+    from funkwhale_api.history.views import ListeningViewSet
+
+    assert ListeningViewSet.throttling_scopes["partial_update"]["authenticated"] == (
+        "authenticated-listening-update"
+    )
+    assert ListeningViewSet.throttling_scopes["by_session"]["authenticated"] == (
+        "authenticated-listening-update"
+    )

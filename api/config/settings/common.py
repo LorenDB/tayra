@@ -1194,6 +1194,12 @@ THROTTLING_RATES = {
         "rate": THROTTLING_USER_RATES.get("fetch", "200/d"),
         "description": "Fetch remote objects",
     },
+    "authenticated-listening-update": {
+        "rate": THROTTLING_USER_RATES.get(
+            "authenticated-listening-update", "3600/hour"
+        ),
+        "description": "Listening duration updates",
+    },
 }
 THROTTLING_RATES = THROTTLING_RATES
 """
