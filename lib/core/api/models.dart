@@ -513,12 +513,24 @@ class Listening {
   final DateTime? created;
   const Listening({required this.id, required this.track, this.created});
   factory Listening.fromJson(Map<String, dynamic> json) {
+    final trackRaw = json['track'];
+    if (trackRaw is! Map) {
+      // Stock / incomplete payloads (or non-playable track prefetch misses)
+      // used to crash Track.fromJson. Rich-only listing avoids this; still
+      // fail clearly if a bad row slips through.
+      throw FormatException(
+        'Listening ${json['id']} missing track object',
+        json,
+      );
+    }
     return Listening(
       id: (json['id'] as num).toInt(),
-      track: Track.fromJson(_toMap(json['track'])),
+      track: Track.fromJson(_toMap(trackRaw)),
       created: json['created'] != null
           ? DateTime.tryParse(json['created'] as String)
-          : null,
+          : (json['creation_date'] != null
+                ? DateTime.tryParse(json['creation_date'] as String)
+                : null),
     );
   }
 }

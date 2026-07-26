@@ -400,6 +400,9 @@ class FunkwhaleApi {
     int page = 1,
     int pageSize = 20,
     String ordering = '-created',
+    /// When true (default), only rich client rows are returned — stock
+    /// scrobbles without duration/device/session are excluded server-side.
+    bool richOnly = true,
   }) async {
     final response = await _dio.get(
       '$_baseUrl/api/v1/history/listenings/',
@@ -407,6 +410,7 @@ class FunkwhaleApi {
         'page': page,
         'page_size': pageSize,
         'ordering': ordering,
+        'rich_only': richOnly,
       },
     );
     return PaginatedResponse.fromJson(response.data, Listening.fromJson);

@@ -599,9 +599,10 @@ class CachedFunkwhaleApi {
     int page = 1,
     int pageSize = 20,
     String ordering = '-created',
+    bool richOnly = true,
     bool forceRefresh = false,
   }) async {
-    final baseSuffix = '_s${pageSize}_o$ordering';
+    final baseSuffix = '_s${pageSize}_o$ordering${richOnly ? '_rich' : '_all'}';
     final cacheKey = 'listenings_p$page$baseSuffix';
 
     // Cache all pages so offline browsing beyond page 1 is possible. Rely on
@@ -616,6 +617,7 @@ class CachedFunkwhaleApi {
         page: page,
         pageSize: pageSize,
         ordering: ordering,
+        richOnly: richOnly,
       ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,

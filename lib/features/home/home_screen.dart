@@ -42,7 +42,12 @@ final randomAlbumsProvider = FutureProvider<List<Album>>((ref) async {
 
 final recentTracksProvider = FutureProvider<List<Track>>((ref) async {
   final api = ref.watch(cachedFunkwhaleApiProvider);
-  final response = await api.getListenings(ordering: '-created', pageSize: 15);
+  // richOnly: ignore stock thin scrobbles (no duration/device/session).
+  final response = await api.getListenings(
+    ordering: '-created',
+    pageSize: 15,
+    richOnly: true,
+  );
   // Deduplicate tracks by ID, preserving listening order
   final seen = <int>{};
   return response.results
@@ -83,6 +88,7 @@ class HomeScreen extends ConsumerWidget {
               api.getListenings(
                 ordering: '-created',
                 pageSize: 15,
+                richOnly: true,
                 forceRefresh: true,
               ),
             ]);
