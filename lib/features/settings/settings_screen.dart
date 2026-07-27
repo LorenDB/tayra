@@ -53,7 +53,7 @@ class SettingsScreen extends ConsumerWidget {
             icon: Icons.manage_accounts_outlined,
             title: 'Account settings',
             subtitle: 'Profile, visibility, email, and password',
-            onTap: () => context.push('/account-settings'),
+                        onTap: () => context.push('/settings/account'),
           ),
           SettingsActionTile(
             icon: Icons.logout_rounded,
@@ -205,7 +205,7 @@ class SettingsScreen extends ConsumerWidget {
             icon: Icons.settings_rounded,
             title: 'Year in Review settings',
             subtitle: 'Control year-end prompts and related options',
-            onTap: () => context.push('/year-review-settings'),
+            onTap: () => context.push('/settings/year-review-settings'),
           ),
           const SizedBox(height: 24),
 
@@ -406,7 +406,7 @@ class SettingsScreen extends ConsumerWidget {
               icon: Icons.code_rounded,
               title: 'Developer settings',
               subtitle: 'Tools for testing and development',
-              onTap: () => context.push('/developer-settings'),
+              onTap: () => context.push('/settings/developer'),
             ),
           ],
         ],
@@ -433,7 +433,7 @@ class _AiProviderTile extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () => context.push('/ai-provider-settings'),
+          onTap: () => context.push('/settings/ai-provider'),
           borderRadius: BorderRadius.circular(12),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),

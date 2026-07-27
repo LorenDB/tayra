@@ -259,6 +259,32 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 path: 'settings',
                 name: 'settings',
                 builder: (context, state) => const SettingsScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'account',
+                    name: 'account_settings',
+                    builder: (context, state) =>
+                        const AccountSettingsScreen(),
+                  ),
+                  GoRoute(
+                    path: 'year-review-settings',
+                    name: 'year_review_settings',
+                    builder: (context, state) =>
+                        const YearReviewSettingsScreen(),
+                  ),
+                  GoRoute(
+                    path: 'ai-provider',
+                    name: 'ai_provider_settings',
+                    builder: (context, state) =>
+                        const AiProviderSettingsScreen(),
+                  ),
+                  GoRoute(
+                    path: 'developer',
+                    name: 'developer_settings',
+                    builder: (context, state) =>
+                        const DeveloperSettingsScreen(),
+                  ),
+                ],
               ),
               GoRoute(
                 path: 'year-review',
@@ -460,70 +486,54 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   ),
                 ],
               ),
+              GoRoute(
+                path: 'upload',
+                name: 'upload',
+                builder: (context, state) => const UploadScreen(),
+              ),
+              GoRoute(
+                path: 'manage/library',
+                name: 'library_admin',
+                builder: (context, state) => const LibraryAdminScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'libraries',
+                    name: 'manage_libraries',
+                    builder: (context, state) =>
+                        const ManageLibrariesScreen(),
+                    routes: [
+                      GoRoute(
+                        path: ':uuid',
+                        name: 'manage_library_detail',
+                        builder: (context, state) {
+                          final uuid =
+                              state.pathParameters['uuid'] ?? '';
+                          if (uuid.isEmpty)
+                            return const ManageLibrariesScreen();
+                          return ManageLibraryDetailScreen(uuid: uuid);
+                        },
+                      ),
+                    ],
+                  ),
+                  GoRoute(
+                    path: 'uploads',
+                    name: 'manage_uploads',
+                    builder: (context, state) =>
+                        const ManageUploadsScreen(),
+                  ),
+                  GoRoute(
+                    path: 'tags',
+                    name: 'manage_tags',
+                    builder: (context, state) =>
+                        const ManageTagsScreen(),
+                  ),
+                ],
+              ),
             ],
           ),
         ],
       ),
       // Full-screen routes (overlay the shell)
-      GoRoute(
-        path: '/upload',
-        name: 'upload',
-        builder: (context, state) => const UploadScreen(),
-      ),
-      GoRoute(
-        path: '/year-review-settings',
-        name: 'year_review_settings',
-        builder: (context, state) => const YearReviewSettingsScreen(),
-      ),
-      GoRoute(
-        path: '/account-settings',
-        name: 'account_settings',
-        builder: (context, state) => const AccountSettingsScreen(),
-      ),
-      // ── Library admin (permission-gated in each screen) ──────────────
-      GoRoute(
-        path: '/manage/library',
-        name: 'library_admin',
-        builder: (context, state) => const LibraryAdminScreen(),
-        routes: [
-          GoRoute(
-            path: 'libraries',
-            name: 'manage_libraries',
-            builder: (context, state) => const ManageLibrariesScreen(),
-            routes: [
-              GoRoute(
-                path: ':uuid',
-                name: 'manage_library_detail',
-                builder: (context, state) {
-                  final uuid = state.pathParameters['uuid'] ?? '';
-                  if (uuid.isEmpty) return const ManageLibrariesScreen();
-                  return ManageLibraryDetailScreen(uuid: uuid);
-                },
-              ),
-            ],
-          ),
-          GoRoute(
-            path: 'uploads',
-            name: 'manage_uploads',
-            builder: (context, state) => const ManageUploadsScreen(),
-          ),
-          GoRoute(
-            path: 'tags',
-            name: 'manage_tags',
-            builder: (context, state) => const ManageTagsScreen(),
-          ),
-        ],
-      ),
-      GoRoute(
-        path: '/ai-provider-settings',
-        name: 'ai_provider_settings',
-        builder: (context, state) => const AiProviderSettingsScreen(),
-      ),
-      GoRoute(
-        path: '/developer-settings',
-        name: 'developer_settings',
-        builder: (context, state) => const DeveloperSettingsScreen(),
-      ),
       GoRoute(
         path: '/now-playing',
         name: 'now_playing',
