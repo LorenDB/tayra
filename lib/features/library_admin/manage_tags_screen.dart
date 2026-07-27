@@ -179,6 +179,64 @@ class _ManageTagsScreenState extends ConsumerState<ManageTagsScreen> {
     }
   }
 
+  Future<void> _purgeUnused() async {
+    final confirmed = await showShellDialog<bool>(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            title: const Text(
+              'Purge unused tags?',
+              style: TextStyle(color: AppTheme.onBackground),
+            ),
+            content: const Text(
+              'Delete all tags that are not associated with any tracks, albums, or artists.',
+              style: TextStyle(color: AppTheme.onBackgroundMuted),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                style: TextButton.styleFrom(foregroundColor: AppTheme.error),
+                child: const Text('Purge'),
+              ),
+            ],
+          ),
+    );
+    if (confirmed != true || !mounted) return;
+
+    try {
+      final count = await ref.read(funkwhaleApiProvider).purgeUnusedTags();
+      if (!mounted) return;
+      setState(() {
+        _items.removeWhere(
+          (t) =>
+              t.tracksCount == 0 &&
+              t.albumsCount == 0 &&
+              t.artistsCount == 0,
+        );
+        _count -= count;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Purged $count unused tag${count == 1 ? '' : 's'}')),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Purge failed: ${_friendlyError(e)}'),
+          backgroundColor: AppTheme.error,
+        ),
+      );
+    }
+  }
+
   Future<void> _confirmDelete(ManageTag tag) async {
     final confirmed = await showShellDialog<bool>(
       context: context,
@@ -242,6 +300,11 @@ class _ManageTagsScreenState extends ConsumerState<ManageTagsScreen> {
         title: const Text('Tags'),
         backgroundColor: AppTheme.background,
         actions: [
+          IconButton(
+            tooltip: 'Purge unused tags',
+            onPressed: _creating ? null : _purgeUnused,
+            icon: const Icon(Icons.auto_delete_rounded),
+          ),
           IconButton(
             tooltip: 'Create tag',
             onPressed: _creating ? null : _createTag,

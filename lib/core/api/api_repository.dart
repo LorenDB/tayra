@@ -1287,4 +1287,11 @@ class FunkwhaleApi {
       '$_baseUrl/api/v1/manage/tags/${Uri.encodeComponent(name)}/',
     );
   }
+
+  Future<int> purgeUnusedTags() async {
+    final response = await _dio.post(
+      '$_baseUrl/api/v1/manage/tags/purge/',
+    );
+    return (response.data as Map<String, dynamic>)['count'] as int;
+  }
 }
