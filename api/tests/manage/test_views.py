@@ -500,6 +500,20 @@ def test_tag_delete(factories, superuser_api_client):
     assert response.status_code == 204
 
 
+def test_tag_purge(factories, superuser_api_client):
+    tag_with_items = factories["tags.Tag"]()
+    track = factories["music.Track"]()
+    track.tagged_items.create(tag=tag_with_items)
+    unused_tag = factories["tags.Tag"]()
+
+    url = reverse("api:v1:manage:tags-purge")
+    response = superuser_api_client.post(url)
+
+    assert response.status_code == 200
+    assert response.data["action"] == "purge"
+    assert response.data["count"] == 1
+
+
 def test_report_detail(factories, superuser_api_client):
     report = factories["moderation.Report"]()
     url = reverse(

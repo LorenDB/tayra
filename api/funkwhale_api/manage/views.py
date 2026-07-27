@@ -615,6 +615,13 @@ class ManageTagViewSet(
         result = serializer.save()
         return response.Response(result, status=200)
 
+    @rest_decorators.action(methods=["post"], detail=False)
+    def purge(self, request, *args, **kwargs):
+        qs = self.get_queryset().filter(items_count=0)
+        count = qs.count()
+        qs.delete()
+        return response.Response({"count": count, "action": "purge"}, status=200)
+
 
 class ManageUserRequestViewSet(
     mixins.ListModelMixin,
