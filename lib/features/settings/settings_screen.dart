@@ -1465,7 +1465,7 @@ class _NavBarSheetState extends State<_NavBarSheet> {
           const Padding(
             padding: EdgeInsets.fromLTRB(20, 0, 20, 12),
             child: Text(
-              'Choose up to 4 items to pin to the nav bar. Unpinned items appear on the home screen.',
+              'Choose up to 4 items to pin to the bottom nav bar when the narrow layout is active. Unpinned items appear on the home screen.',
               style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 13),
             ),
           ),
