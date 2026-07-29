@@ -4,7 +4,7 @@
   <name>Tayra</name>
   <summary>A modern music player client for Funkwhale servers</summary>
   <metadata_license>CC0-1.0</metadata_license>
-  <project_license>LicenseRef-proprietary</project_license>
+  <project_license>AGPL-3.0-or-later</project_license>
 
   <description>
     <p>

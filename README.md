@@ -123,7 +123,5 @@ See also [doc/web-deferred-features.md](doc/web-deferred-features.md).
 
 ## License
 
-- **Tayra client** — MIT ([LICENSE.MIT](LICENSE.MIT))
-- **Funkwhale API / server stack** — AGPL-3.0 ([LICENSE.AGPL](LICENSE.AGPL))
-
-See [LICENSE](LICENSE) for the dual-license summary.
+This monorepo (Flutter client and Funkwhale API/server stack) is licensed under
+the **GNU Affero General Public License v3.0**. See [LICENSE](LICENSE).
