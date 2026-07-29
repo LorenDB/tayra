@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:tayra/core/analytics/analytics.dart';
@@ -226,8 +227,31 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 : const Text('Sign In'),
                       ),
                     ),
+                    const SizedBox(height: 12),
+                    TextButton(
+                      onPressed:
+                          authState.isLoading
+                              ? null
+                              : () {
+                                final server =
+                                    _hardcodedPod
+                                        ? (AppPlatform.hardcodedPodUrl ?? '')
+                                        : _serverController.text.trim();
+                                final uri = Uri(
+                                  path: '/auth/password/reset',
+                                  queryParameters:
+                                      server.isEmpty
+                                          ? null
+                                          : {'server': server},
+                                );
+                                context.go(uri.toString());
+                              },
+                      child: const Text(
+                        'Forgot password?',
+                        style: TextStyle(color: AppTheme.onBackgroundMuted),
+                      ),
+                    ),
                     if (!_hardcodedPod) ...[
-                      const SizedBox(height: 12),
                       TextButton(
                         onPressed:
                             authState.isLoading

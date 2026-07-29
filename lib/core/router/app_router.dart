@@ -5,6 +5,8 @@ import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
 import 'package:tayra/features/auth/presentation/login_screen.dart';
 import 'package:tayra/features/auth/presentation/oauth_authorize_screen.dart';
+import 'package:tayra/features/auth/presentation/password_reset_confirm_screen.dart';
+import 'package:tayra/features/auth/presentation/password_reset_request_screen.dart';
 import 'package:tayra/features/home/home_screen.dart';
 import 'package:tayra/features/browse/browse_screen.dart';
 import 'package:tayra/features/radios/radios_screen.dart';
@@ -153,12 +155,20 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       final isLoginRoute = path == '/login';
       final isSplashRoute = path == '/splash';
       final isAuthorizeRoute = path == '/authorize';
+      final isPasswordResetRoute =
+          path == '/auth/password/reset' ||
+          path == '/auth/password/reset/confirm';
 
       // While restoring session, keep auth-related surfaces mounted so
       // `/authorize?…` query params are not stripped by a bounce through
       // `/splash` → `/` or `/login`.
       if (authState.isCheckingAuth) {
-        if (isSplashRoute || isLoginRoute || isAuthorizeRoute) return null;
+        if (isSplashRoute ||
+            isLoginRoute ||
+            isAuthorizeRoute ||
+            isPasswordResetRoute) {
+          return null;
+        }
         return '/splash';
       }
 
@@ -167,7 +177,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       if (isSplashRoute) return isAuth ? '/' : '/login';
 
       if (!isAuth) {
-        if (isLoginRoute) return null;
+        if (isLoginRoute || isPasswordResetRoute) return null;
         // Preserve third-party OAuth query string across login.
         if (isAuthorizeRoute) {
           return Uri(
@@ -184,6 +194,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         if (safe != null) return safe;
         return '/';
       }
+      // Allow finishing a reset while already signed in (rare email reopen).
+      if (isPasswordResetRoute) return null;
       return null;
     },
     routes: [
@@ -201,6 +213,29 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: 'login',
         parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) => const LoginScreen(),
+      ),
+      // Password reset (email link: /auth/password/reset/confirm?uid=&token=).
+      // Register confirm before the shorter request path so matching is unambiguous.
+      GoRoute(
+        path: '/auth/password/reset/confirm',
+        name: 'password_reset_confirm',
+        parentNavigatorKey: rootNavigatorKey,
+        builder: (context, state) {
+          final q = state.uri.queryParameters;
+          return PasswordResetConfirmScreen(
+            uid: q['uid'] ?? '',
+            token: q['token'] ?? '',
+          );
+        },
+      ),
+      GoRoute(
+        path: '/auth/password/reset',
+        name: 'password_reset_request',
+        parentNavigatorKey: rootNavigatorKey,
+        builder: (context, state) {
+          final server = state.uri.queryParameters['server'];
+          return PasswordResetRequestScreen(initialServerUrl: server);
+        },
       ),
       // Third-party OAuth consent (outside the main shell).
       GoRoute(
@@ -263,26 +298,25 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   GoRoute(
                     path: 'account',
                     name: 'account_settings',
-                    builder: (context, state) =>
-                        const AccountSettingsScreen(),
+                    builder: (context, state) => const AccountSettingsScreen(),
                   ),
                   GoRoute(
                     path: 'year-review-settings',
                     name: 'year_review_settings',
-                    builder: (context, state) =>
-                        const YearReviewSettingsScreen(),
+                    builder:
+                        (context, state) => const YearReviewSettingsScreen(),
                   ),
                   GoRoute(
                     path: 'ai-provider',
                     name: 'ai_provider_settings',
-                    builder: (context, state) =>
-                        const AiProviderSettingsScreen(),
+                    builder:
+                        (context, state) => const AiProviderSettingsScreen(),
                   ),
                   GoRoute(
                     path: 'developer',
                     name: 'developer_settings',
-                    builder: (context, state) =>
-                        const DeveloperSettingsScreen(),
+                    builder:
+                        (context, state) => const DeveloperSettingsScreen(),
                   ),
                 ],
               ),
@@ -499,15 +533,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   GoRoute(
                     path: 'libraries',
                     name: 'manage_libraries',
-                    builder: (context, state) =>
-                        const ManageLibrariesScreen(),
+                    builder: (context, state) => const ManageLibrariesScreen(),
                     routes: [
                       GoRoute(
                         path: ':uuid',
                         name: 'manage_library_detail',
                         builder: (context, state) {
-                          final uuid =
-                              state.pathParameters['uuid'] ?? '';
+                          final uuid = state.pathParameters['uuid'] ?? '';
                           if (uuid.isEmpty)
                             return const ManageLibrariesScreen();
                           return ManageLibraryDetailScreen(uuid: uuid);
@@ -518,14 +550,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   GoRoute(
                     path: 'uploads',
                     name: 'manage_uploads',
-                    builder: (context, state) =>
-                        const ManageUploadsScreen(),
+                    builder: (context, state) => const ManageUploadsScreen(),
                   ),
                   GoRoute(
                     path: 'tags',
                     name: 'manage_tags',
-                    builder: (context, state) =>
-                        const ManageTagsScreen(),
+                    builder: (context, state) => const ManageTagsScreen(),
                   ),
                 ],
               ),

@@ -27,7 +27,7 @@ relevant.
 | Moderation (reports, domains, accounts, requests) | `/manage/moderation/*` | Django admin + moderator docs | Rare for small/private pods |
 | User management UI | `/manage/users` | Django admin | |
 | Signup | `/signup` | Disable open registration; invite via admin/CLI | |
-| Password reset / email confirm | `/auth/password/*`, `/auth/email/confirm` | Email links still work if server sends them; no branded Tayra page | May need minimal static pages later |
+| Email confirm | `/auth/email/confirm` | Email links still work if server sends them; no branded Tayra page | Password reset is implemented in Tayra (`/auth/password/reset*`) |
 | Plugins settings | `/settings/plugins` | Server-side plugin config | |
 | Remote content / federation browser | `/content/remote` | Federation still runs server-side | No follow/scan UI in Tayra |
 | Content libraries management | `/content/libraries` | Upload screen covers basic upload; not full library manager | |

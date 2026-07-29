@@ -4,7 +4,8 @@
 | Instance settings | `/manage/settings` | Env vars, preferences API, Django admin | |
 | User management UI | `/manage/users` | Django admin | |
 | Signup | `/signup` | Disable open registration; invite via admin/CLI | |
-| Password reset / email confirm | `/auth/password/*`, `/auth/email/confirm` | Email links still work if server sends them; no branded Tayra page | May need minimal static pages later |
+| Password reset | `/auth/password/reset`, `/auth/password/reset/confirm` | ✅ Branded Tayra UI (request + confirm from email link) | Email confirm still out of band |
+| Email confirm | `/auth/email/confirm` | Email links still work if server sends them; no branded Tayra page | May need minimal static pages later |
 | User profiles / activity | `/@username`, profile activity | N/A for private pods | Nice-to-have |
 | Notifications | Vue notifications view | — | |
 | PWA offline (Vue service worker) | Vue SW | Web is online-only | |
