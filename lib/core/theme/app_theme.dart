@@ -39,6 +39,23 @@ class AppTheme {
     stops: const [0.0, 0.5, 1.0],
   );
 
+  /// Ambient page tint for now-playing (full-screen + side panel).
+  ///
+  /// Fades the accent to fully transparent by the ~2/3 mark so the lower third
+  /// stays pure background. Uses alpha-only stops of the same hue (never an
+  /// opaque black stop) so the mid-page doesn't re-strengthen from alpha
+  /// ramping up while RGB collapses to black.
+  static LinearGradient nowPlayingTint(Color accentColor) => LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      accentColor.withValues(alpha: 0.35),
+      accentColor.withValues(alpha: 0.12),
+      accentColor.withValues(alpha: 0.0),
+    ],
+    stops: const [0.0, 0.35, 0.75],
+  );
+
   static LinearGradient get subtleFade => LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,

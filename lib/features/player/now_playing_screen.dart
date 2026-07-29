@@ -49,9 +49,9 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen> {
             Navigator.of(context).pop();
           }
         },
-        child: const SafeArea(
-          child: NowPlayingContent(layout: NowPlayingLayout.screen),
-        ),
+        // SafeArea is applied inside NowPlayingContent so the accent
+        // background tint can extend edge-to-edge under the status bar.
+        child: const NowPlayingContent(layout: NowPlayingLayout.screen),
       ),
     );
   }
