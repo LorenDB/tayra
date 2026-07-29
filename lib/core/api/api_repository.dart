@@ -1362,4 +1362,43 @@ class FunkwhaleApi {
     final response = await _dio.post('$_baseUrl/api/v1/manage/tags/purge/');
     return (response.data as Map<String, dynamic>)['count'] as int;
   }
+
+  Future<PaginatedResponse<ManageChannel>> getManageChannels({
+    int page = 1,
+    int pageSize = 25,
+    String? q,
+  }) async {
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/manage/channels/',
+      queryParameters: {
+        'page': page,
+        'page_size': pageSize,
+        if (q != null && q.isNotEmpty) 'q': q,
+      },
+    );
+    return PaginatedResponse.fromJson(
+      response.data as Map<String, dynamic>,
+      ManageChannel.fromJson,
+    );
+  }
+
+  Future<ManageChannel> getManageChannel(String composite) async {
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/manage/channels/${Uri.encodeComponent(composite)}/',
+    );
+    return ManageChannel.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  Future<ManageChannelStats> getManageChannelStats(String composite) async {
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/manage/channels/${Uri.encodeComponent(composite)}/stats/',
+    );
+    return ManageChannelStats.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  Future<void> deleteManageChannel(String composite) async {
+    await _dio.delete(
+      '$_baseUrl/api/v1/manage/channels/${Uri.encodeComponent(composite)}/',
+    );
+  }
 }

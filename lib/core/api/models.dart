@@ -1757,3 +1757,155 @@ class ManageTag {
     );
   }
 }
+
+/// Channel row from `GET /api/v1/manage/channels/`.
+///
+/// Nested artist supplies display name and content category; actor / attributed_to
+/// provide owner identity. Lookup path uses [uuid] (also accepts username on the API).
+class ManageChannel {
+  final int id;
+  final String uuid;
+  final DateTime? creationDate;
+  final String name;
+  final String? contentCategory;
+  final int? tracksCount;
+  final int? albumsCount;
+  final String? domain;
+  final bool isLocal;
+  final String? rssUrl;
+  final ManageActorRef? actor;
+  final ManageActorRef? attributedTo;
+  final Map<String, dynamic>? metadata;
+
+  const ManageChannel({
+    required this.id,
+    required this.uuid,
+    this.creationDate,
+    required this.name,
+    this.contentCategory,
+    this.tracksCount,
+    this.albumsCount,
+    this.domain,
+    this.isLocal = false,
+    this.rssUrl,
+    this.actor,
+    this.attributedTo,
+    this.metadata,
+  });
+
+  factory ManageChannel.fromJson(Map<String, dynamic> json) {
+    ManageActorRef? parseActor(Object? raw) {
+      if (raw is Map) {
+        return ManageActorRef.fromJson(Map<String, dynamic>.from(raw));
+      }
+      return null;
+    }
+
+    String name = '';
+    String? contentCategory;
+    int? tracksCount;
+    int? albumsCount;
+    String? domain;
+    bool isLocal = false;
+
+    final artist = json['artist'];
+    if (artist is Map) {
+      final a = Map<String, dynamic>.from(artist);
+      name = a['name'] as String? ?? '';
+      contentCategory = a['content_category'] as String?;
+      tracksCount = (a['tracks_count'] as num?)?.toInt();
+      albumsCount = (a['albums_count'] as num?)?.toInt();
+      domain = a['domain'] as String?;
+      isLocal = a['is_local'] as bool? ?? false;
+    }
+
+    final actor = parseActor(json['actor']);
+    final attributedTo = parseActor(json['attributed_to']);
+
+    domain ??= actor?.domain ?? attributedTo?.domain;
+    if (!isLocal) {
+      isLocal = actor?.isLocal ?? attributedTo?.isLocal ?? false;
+    }
+
+    Map<String, dynamic>? metadata;
+    final metaRaw = json['metadata'];
+    if (metaRaw is Map) {
+      metadata = Map<String, dynamic>.from(metaRaw);
+    }
+
+    return ManageChannel(
+      id: (json['id'] as num?)?.toInt() ?? 0,
+      uuid: json['uuid'] as String? ?? '',
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
+      name: name,
+      contentCategory: contentCategory,
+      tracksCount: tracksCount,
+      albumsCount: albumsCount,
+      domain: domain,
+      isLocal: isLocal,
+      rssUrl: json['rss_url'] as String?,
+      actor: actor,
+      attributedTo: attributedTo,
+      metadata: metadata,
+    );
+  }
+
+  String get categoryLabel {
+    switch (contentCategory) {
+      case 'podcast':
+        return 'Podcast';
+      case 'music':
+        return 'Music';
+      case null:
+      case '':
+        return '—';
+      default:
+        return contentCategory!;
+    }
+  }
+
+  String get ownerLabel =>
+      actor?.displayLabel ?? attributedTo?.displayLabel ?? '—';
+}
+
+/// Stats from `GET /api/v1/manage/channels/{uuid}/stats/`.
+class ManageChannelStats {
+  final int listenings;
+  final int mutations;
+  final int playlists;
+  final int trackFavorites;
+  final int uploads;
+  final int reports;
+  final int follows;
+  final int? mediaTotalSize;
+  final int? mediaDownloadedSize;
+
+  const ManageChannelStats({
+    this.listenings = 0,
+    this.mutations = 0,
+    this.playlists = 0,
+    this.trackFavorites = 0,
+    this.uploads = 0,
+    this.reports = 0,
+    this.follows = 0,
+    this.mediaTotalSize,
+    this.mediaDownloadedSize,
+  });
+
+  factory ManageChannelStats.fromJson(Map<String, dynamic> json) {
+    return ManageChannelStats(
+      listenings: (json['listenings'] as num?)?.toInt() ?? 0,
+      mutations: (json['mutations'] as num?)?.toInt() ?? 0,
+      playlists: (json['playlists'] as num?)?.toInt() ?? 0,
+      trackFavorites: (json['track_favorites'] as num?)?.toInt() ?? 0,
+      uploads: (json['uploads'] as num?)?.toInt() ?? 0,
+      reports: (json['reports'] as num?)?.toInt() ?? 0,
+      follows: (json['follows'] as num?)?.toInt() ?? 0,
+      mediaTotalSize: (json['media_total_size'] as num?)?.toInt(),
+      mediaDownloadedSize: (json['media_downloaded_size'] as num?)?.toInt(),
+    );
+  }
+}

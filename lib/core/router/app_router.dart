@@ -35,6 +35,8 @@ import 'package:tayra/features/library_admin/manage_libraries_screen.dart';
 import 'package:tayra/features/library_admin/manage_library_detail_screen.dart';
 import 'package:tayra/features/library_admin/manage_uploads_screen.dart';
 import 'package:tayra/features/library_admin/manage_tags_screen.dart';
+import 'package:tayra/features/library_admin/manage_channels_screen.dart';
+import 'package:tayra/features/library_admin/manage_channel_detail_screen.dart';
 import 'package:tayra/core/widgets/app_shell.dart';
 
 class NavigationObserver extends NavigatorObserver {
@@ -600,6 +602,24 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     path: 'tags',
                     name: 'manage_tags',
                     builder: (context, state) => const ManageTagsScreen(),
+                  ),
+                  GoRoute(
+                    path: 'channels',
+                    name: 'manage_channels',
+                    builder: (context, state) => const ManageChannelsScreen(),
+                    routes: [
+                      GoRoute(
+                        path: ':uuid',
+                        name: 'manage_channel_detail',
+                        builder: (context, state) {
+                          final uuid = state.pathParameters['uuid'] ?? '';
+                          if (uuid.isEmpty) {
+                            return const ManageChannelsScreen();
+                          }
+                          return ManageChannelDetailScreen(uuid: uuid);
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),

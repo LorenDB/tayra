@@ -11,7 +11,8 @@ import 'package:tayra/features/settings/account_settings_screen.dart';
 
 /// Hub for library admin (`/manage/library`).
 ///
-/// Links to libraries, uploads, and tags. Unauthorized users see a denied state.
+/// Links to libraries, uploads, tags, and channels. Unauthorized users see a
+/// denied state.
 class LibraryAdminScreen extends ConsumerWidget {
   const LibraryAdminScreen({super.key});
 
@@ -62,6 +63,12 @@ class LibraryAdminScreen extends ConsumerWidget {
                 title: 'Tags',
                 subtitle: 'Create and delete tags',
                 onTap: () => context.push('/manage/library/tags'),
+              ),
+              SettingsActionTile(
+                icon: Icons.podcasts_rounded,
+                title: 'Channels',
+                subtitle: 'Browse and delete podcast / artist channels',
+                onTap: () => context.push('/manage/library/channels'),
               ),
             ],
           );
