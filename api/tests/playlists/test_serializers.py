@@ -87,6 +87,7 @@ def test_playlist_serializer(factories, to_api_date):
         "duration": 0,
         "tracks_count": 0,
         "album_covers": [],
+        "cover": None,
     }
     serializer = serializers.PlaylistSerializer(playlist)
 

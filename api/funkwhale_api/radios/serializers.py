@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from funkwhale_api.music.serializers import TrackSerializer
+from funkwhale_api.music.serializers import COVER_WRITE_FIELD, CoverField, TrackSerializer
 from funkwhale_api.users.serializers import UserBasicSerializer
 
 from . import filters, models
@@ -16,6 +16,8 @@ class FilterSerializer(serializers.Serializer):
 
 class RadioSerializer(serializers.ModelSerializer):
     user = UserBasicSerializer(read_only=True)
+    # Write: attachment UUID. Read representation is set in to_representation.
+    cover = COVER_WRITE_FIELD
 
     class Meta:
         model = models.Radio
@@ -27,15 +29,27 @@ class RadioSerializer(serializers.ModelSerializer):
             "user",
             "config",
             "description",
+            "cover",
         )
         read_only_fields = ("user", "creation_date")
 
-    def save(self, **kwargs):
-        kwargs["config"] = [
-            filters.registry[f["type"]].clean_config(f)
-            for f in self.validated_data["config"]
-        ]
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        cover = instance.attachment_cover
+        data["cover"] = (
+            CoverField(context=self.context).to_representation(cover) if cover else None
+        )
+        return data
 
+    def save(self, **kwargs):
+        if "config" in self.validated_data:
+            kwargs["config"] = [
+                filters.registry[f["type"]].clean_config(f)
+                for f in self.validated_data["config"]
+            ]
+        if "cover" in self.validated_data:
+            # Map API "cover" (attachment UUID) → model attachment_cover.
+            kwargs["attachment_cover"] = self.validated_data.pop("cover")
         return super().save(**kwargs)
 
 

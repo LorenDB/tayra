@@ -15,6 +15,38 @@ def test_can_create_playlist_via_api(logged_in_api_client):
     assert playlist.privacy_level == "everyone"
 
 
+def test_can_set_playlist_cover(logged_in_api_client, factories):
+    actor = logged_in_api_client.user.create_actor()
+    attachment = factories["common.Attachment"](actor=actor)
+    playlist = factories["playlists.Playlist"](user=logged_in_api_client.user)
+    url = reverse("api:v1:playlists-detail", kwargs={"pk": playlist.pk})
+
+    response = logged_in_api_client.patch(
+        url, {"cover": str(attachment.uuid)}, format="json"
+    )
+
+    assert response.status_code == 200
+    playlist.refresh_from_db()
+    assert playlist.attachment_cover == attachment
+    assert response.data["cover"]["uuid"] == str(attachment.uuid)
+
+
+def test_can_clear_playlist_cover(logged_in_api_client, factories):
+    actor = logged_in_api_client.user.create_actor()
+    attachment = factories["common.Attachment"](actor=actor)
+    playlist = factories["playlists.Playlist"](
+        user=logged_in_api_client.user, attachment_cover=attachment
+    )
+    url = reverse("api:v1:playlists-detail", kwargs={"pk": playlist.pk})
+
+    response = logged_in_api_client.patch(url, {"cover": None}, format="json")
+
+    assert response.status_code == 200
+    playlist.refresh_from_db()
+    assert playlist.attachment_cover is None
+    assert response.data["cover"] is None
+
+
 def test_serializer_includes_tracks_count(factories, logged_in_api_client):
     playlist = factories["playlists.Playlist"]()
     factories["playlists.PlaylistTrack"](playlist=playlist)

@@ -176,6 +176,8 @@ class AttachmentQuerySet(models.QuerySet):
             "mutation_attachment",
             "covered_track",
             "covered_artist",
+            "covered_playlist",
+            "covered_radio",
             "iconed_actor",
         ]
         query = None

@@ -264,7 +264,7 @@ def library_playlist(request, pk, redirect_to_ap):
         settings.FUNKWHALE_URL,
         utils.spa_reverse("library_playlist", kwargs={"pk": obj.pk}),
     )
-    # we use the first playlist track's album's cover as image
+    # Prefer custom playlist cover, else first track album cover
     playlist_tracks = obj.playlist_tracks.exclude(track__album__attachment_cover=None)
     playlist_tracks = playlist_tracks.select_related("track__album").order_by("index")
     first_playlist_track = playlist_tracks.first()
@@ -274,12 +274,19 @@ def library_playlist(request, pk, redirect_to_ap):
         {"tag": "meta", "property": "og:type", "content": "music.playlist"},
     ]
 
-    if first_playlist_track:
+    cover_url = None
+    if obj.attachment_cover:
+        cover_url = obj.attachment_cover.download_url_medium_square_crop
+    elif first_playlist_track:
+        cover_url = (
+            first_playlist_track.track.album.attachment_cover.download_url_medium_square_crop
+        )
+    if cover_url:
         metas.append(
             {
                 "tag": "meta",
                 "property": "og:image",
-                "content": first_playlist_track.track.album.attachment_cover.download_url_medium_square_crop,
+                "content": cover_url,
             }
         )
 

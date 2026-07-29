@@ -751,7 +751,13 @@ class OembedSerializer(serializers.Serializer):
             ).order_by("index")
             first_playlist_track = playlist_tracks.first()
 
-            if first_playlist_track:
+            if obj.attachment_cover:
+                data["thumbnail_url"] = (
+                    obj.attachment_cover.download_url_medium_square_crop
+                )
+                data["thumbnail_width"] = 200
+                data["thumbnail_height"] = 200
+            elif first_playlist_track:
                 data[
                     "thumbnail_url"
                 ] = (

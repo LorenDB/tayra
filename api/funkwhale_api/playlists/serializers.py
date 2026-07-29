@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from funkwhale_api.federation import serializers as federation_serializers
 from funkwhale_api.music.models import Track
-from funkwhale_api.music.serializers import TrackSerializer
+from funkwhale_api.music.serializers import COVER_WRITE_FIELD, CoverField, TrackSerializer
 from funkwhale_api.users.serializers import UserBasicSerializer
 
 from . import models
@@ -30,6 +30,8 @@ class PlaylistSerializer(serializers.ModelSerializer):
     user = UserBasicSerializer(read_only=True)
     is_playable = serializers.SerializerMethodField()
     actor = serializers.SerializerMethodField()
+    # Write: attachment UUID. Read representation is set in to_representation.
+    cover = COVER_WRITE_FIELD
 
     class Meta:
         model = models.Playlist
@@ -45,8 +47,26 @@ class PlaylistSerializer(serializers.ModelSerializer):
             "duration",
             "is_playable",
             "actor",
+            "cover",
         )
         read_only_fields = ["id", "modification_date", "creation_date"]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        cover = instance.attachment_cover
+        data["cover"] = (
+            CoverField(context=self.context).to_representation(cover) if cover else None
+        )
+        return data
+
+    def create(self, validated_data):
+        cover = validated_data.pop("cover", None)
+        return super().create({**validated_data, "attachment_cover": cover})
+
+    def update(self, instance, validated_data):
+        if "cover" in validated_data:
+            instance.attachment_cover = validated_data.pop("cover")
+        return super().update(instance, validated_data)
 
     @extend_schema_field(federation_serializers.APIActorSerializer)
     def get_actor(self, obj):

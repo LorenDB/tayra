@@ -35,7 +35,7 @@ class RadioViewSet(
     anonymous_policy = "setting"
 
     def get_queryset(self):
-        queryset = models.Radio.objects.all()
+        queryset = models.Radio.objects.select_related("attachment_cover", "user")
         query = Q(is_public=True)
         if self.request.user.is_authenticated:
             query |= Q(user=self.request.user)

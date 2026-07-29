@@ -75,6 +75,13 @@ class Playlist(models.Model):
     creation_date = models.DateTimeField(default=timezone.now)
     modification_date = models.DateTimeField(auto_now=True)
     privacy_level = fields.get_privacy_field()
+    attachment_cover = models.ForeignKey(
+        "common.Attachment",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="covered_playlist",
+    )
 
     objects = PlaylistQuerySet.as_manager()
 
@@ -83,6 +90,10 @@ class Playlist(models.Model):
 
     def get_absolute_url(self):
         return f"/library/playlists/{self.pk}"
+
+    @property
+    def cover(self):
+        return self.attachment_cover
 
     @transaction.atomic
     def insert(self, plt, index=None, allow_duplicates=True):

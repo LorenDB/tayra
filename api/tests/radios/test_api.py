@@ -103,6 +103,38 @@ def test_user_can_edit_his_radio(logged_in_api_client, factories):
     assert radio.name == "new"
 
 
+def test_can_set_radio_cover(logged_in_api_client, factories):
+    actor = logged_in_api_client.user.create_actor()
+    attachment = factories["common.Attachment"](actor=actor)
+    radio = factories["radios.Radio"](user=logged_in_api_client.user)
+    url = reverse("api:v1:radios:radios-detail", kwargs={"pk": radio.pk})
+
+    response = logged_in_api_client.patch(
+        url, {"cover": str(attachment.uuid)}, format="json"
+    )
+
+    assert response.status_code == 200
+    radio.refresh_from_db()
+    assert radio.attachment_cover == attachment
+    assert response.data["cover"]["uuid"] == str(attachment.uuid)
+
+
+def test_can_clear_radio_cover(logged_in_api_client, factories):
+    actor = logged_in_api_client.user.create_actor()
+    attachment = factories["common.Attachment"](actor=actor)
+    radio = factories["radios.Radio"](
+        user=logged_in_api_client.user, attachment_cover=attachment
+    )
+    url = reverse("api:v1:radios:radios-detail", kwargs={"pk": radio.pk})
+
+    response = logged_in_api_client.patch(url, {"cover": None}, format="json")
+
+    assert response.status_code == 200
+    radio.refresh_from_db()
+    assert radio.attachment_cover is None
+    assert response.data["cover"] is None
+
+
 def test_user_cannot_edit_someone_else_radio(logged_in_api_client, factories):
     radio = factories["radios.Radio"](is_public=True)
     url = reverse("api:v1:radios:radios-detail", kwargs={"pk": radio.pk})

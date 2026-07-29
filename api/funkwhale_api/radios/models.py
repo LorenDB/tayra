@@ -25,9 +25,20 @@ class Radio(models.Model):
     is_public = models.BooleanField(default=False)
     version = models.PositiveIntegerField(default=0)
     config = JSONField(encoder=DjangoJSONEncoder)
+    attachment_cover = models.ForeignKey(
+        "common.Attachment",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="covered_radio",
+    )
 
     def get_candidates(self):
         return filters.run(self.config)
+
+    @property
+    def cover(self):
+        return self.attachment_cover
 
 
 class RadioSession(models.Model):
