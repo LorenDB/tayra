@@ -68,6 +68,9 @@ class ListeningViewSet(
     anonymous_policy = "setting"
     owner_checks = ["write"]
     filterset_class = filters.ListeningFilter
+    # Explicit allow-list (model field is creation_date, not "created").
+    ordering_fields = ("creation_date", "id")
+    ordering = ("-creation_date",)
     # Design documents PATCH only (not full PUT) for duration updates.
     http_method_names = ["get", "post", "patch", "head", "options"]
     throttling_scopes = {

@@ -158,7 +158,8 @@ def compute_listening_stats(user, year, limit=10):
 
 def _top_tracks(base, limit):
     rows = list(
-        base.values("track_id")
+        base.order_by()
+        .values("track_id")
         .annotate(
             count=Count("id"),
             total_seconds=Sum(_SECONDS_ZERO),
@@ -193,7 +194,8 @@ def _top_tracks(base, limit):
 
 def _top_artists(base, limit):
     rows = list(
-        base.exclude(track__artist_id__isnull=True)
+        base.order_by()
+        .exclude(track__artist_id__isnull=True)
         .values("track__artist_id")
         .annotate(
             count=Count("id"),
@@ -229,7 +231,8 @@ def _top_artists(base, limit):
 
 def _top_albums(base, limit):
     rows = list(
-        base.exclude(track__album_id__isnull=True)
+        base.order_by()
+        .exclude(track__album_id__isnull=True)
         .values("track__album_id")
         .annotate(
             count=Count("id"),
@@ -266,9 +269,13 @@ def _top_albums(base, limit):
 
 def _monthly(base):
     """Return all 12 months; months with no listens have count/seconds 0."""
+    # Clear Meta.ordering (Listening defaults to -creation_date). Without this,
+    # Django adds creation_date to GROUP BY via ORDER BY, so each timestamp
+    # becomes its own group with count=1 and the month dict keeps only the last.
     rows = {
         r["month"]: r
-        for r in base.annotate(month=ExtractMonth("creation_date"))
+        for r in base.order_by()
+        .annotate(month=ExtractMonth("creation_date"))
         .values("month")
         .annotate(
             count=Count("id"),
@@ -290,7 +297,8 @@ def _monthly(base):
 
 def _by_device(base):
     rows = (
-        base.values("source_device__uuid", "source_device__name")
+        base.order_by()
+        .values("source_device__uuid", "source_device__name")
         .annotate(
             count=Count("id"),
             total_seconds=Sum(_SECONDS_ZERO),

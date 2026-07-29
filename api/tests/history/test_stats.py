@@ -42,6 +42,37 @@ def test_stats_empty_year(factories, logged_in_api_client):
     assert data["by_device"] == []
 
 
+def test_stats_monthly_aggregates_many_distinct_timestamps(
+    factories, logged_in_api_client
+):
+    """
+    Many listens in one month with unique creation_dates must sum correctly.
+
+    Listening.Meta.ordering includes creation_date; without clearing that
+    order before values().annotate(), Django folds creation_date into
+    GROUP BY and each month collapses to count=1.
+    """
+    user = logged_in_api_client.user
+    year = 2025
+    track = factories["music.Track"]()
+    device = factories["client_data.ClientDevice"](user=user)
+    for day in range(1, 11):
+        factories["history.Listening"](
+            user=user,
+            track=track,
+            duration_seconds=30,
+            source_device=device,
+            creation_date=_dt(year, 3, day, hour=day),
+        )
+
+    response = logged_in_api_client.get(_stats_url(year=year))
+    assert response.status_code == 200
+    monthly = {m["month"]: m for m in response.data["monthly"]}
+    assert monthly[3]["count"] == 10
+    assert monthly[3]["total_seconds"] == 300
+    assert response.data["total_listens"] == 10
+
+
 def test_stats_mixed_null_and_non_null_durations(factories, logged_in_api_client):
     """total_seconds ignores null durations; estimated_seconds uses track length."""
     user = logged_in_api_client.user

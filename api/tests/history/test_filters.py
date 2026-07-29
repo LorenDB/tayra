@@ -156,3 +156,61 @@ def test_listening_list_api_filters(factories, logged_in_api_client):
     assert response.status_code == 200
     assert response.data["count"] == 1
     assert response.data["results"][0]["id"] == in_range.pk
+
+
+def test_listening_list_rich_only_false_includes_stock(
+    factories, logged_in_api_client
+):
+    """Homepage recent listens need stock thin scrobbles when rich_only=false."""
+    user = logged_in_api_client.user
+    device = factories["client_data.ClientDevice"](user=user)
+    stock = factories["history.Listening"](
+        user=user,
+        duration_seconds=None,
+        source_device=None,
+        client_session_id=None,
+        creation_date=timezone.now() - datetime.timedelta(hours=1),
+    )
+    rich = factories["history.Listening"](
+        user=user,
+        duration_seconds=40,
+        source_device=device,
+        creation_date=timezone.now() - datetime.timedelta(hours=2),
+    )
+
+    url = reverse("api:v1:history:listenings-list")
+
+    default = logged_in_api_client.get(url, {"ordering": "-creation_date"})
+    assert default.status_code == 200
+    # Default list is rich-only (stats/year-review safety).
+    default_ids = {row["id"] for row in default.data["results"]}
+    assert rich.pk in default_ids
+    assert stock.pk not in default_ids
+
+    all_rows = logged_in_api_client.get(
+        url, {"ordering": "-creation_date", "rich_only": "false"}
+    )
+    assert all_rows.status_code == 200
+    all_ids = {row["id"] for row in all_rows.data["results"]}
+    assert stock.pk in all_ids
+    assert rich.pk in all_ids
+
+
+def test_listening_list_ordering_creation_date(factories, logged_in_api_client):
+    user = logged_in_api_client.user
+    older = factories["history.Listening"](
+        user=user,
+        duration_seconds=10,
+        creation_date=timezone.now() - datetime.timedelta(days=2),
+    )
+    newer = factories["history.Listening"](
+        user=user,
+        duration_seconds=10,
+        creation_date=timezone.now() - datetime.timedelta(hours=1),
+    )
+
+    url = reverse("api:v1:history:listenings-list")
+    response = logged_in_api_client.get(url, {"ordering": "-creation_date"})
+    assert response.status_code == 200
+    ids = [row["id"] for row in response.data["results"]]
+    assert ids.index(newer.pk) < ids.index(older.pk)
