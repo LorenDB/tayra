@@ -14,7 +14,7 @@ relevant.
 |---|---|
 | Online-only | No offline audio cache, download queue, or local library DB on web |
 | Single pod | `FUNKWHALE_URL` is compile-time; no multi-server picker |
-| Limited admin UI | Library admin (libraries, uploads, tags, channels) when `permissions.library`; instance settings when `permissions.settings`; moderation stays out |
+| Limited admin UI | Library admin (libraries, uploads, tags, channels) when `permissions.library`; instance settings + user management when `permissions.settings`; moderation stays out |
 | No registration UI | Signup / password reset / email confirm stay out of band |
 | Hard fork | `../funkwhale` on `tayra_front`: Vue removed; Tayra is the front image |
 
@@ -23,7 +23,6 @@ relevant.
 | Feature | Where in Funkwhale | Escape hatch | Notes |
 |---|---|---|---|
 | Moderation (reports, domains, accounts, requests) | `/manage/moderation/*` | Django admin + moderator docs | Rare for small/private pods |
-| User management UI | `/manage/users` | Django admin | |
 | Signup | `/signup` | Disable open registration; invite via admin/CLI | |
 | Email confirm | `/auth/email/confirm` | Email links still work if server sends them; no branded Tayra page | Password reset is implemented in Tayra (`/auth/password/reset*`) |
 | Plugins settings | `/settings/plugins` | Server-side plugin config | |
@@ -52,6 +51,7 @@ relevant.
 
 | Feature | Where | Notes |
 |---|---|---|
+| User management | `/manage/users` | List/detail + invitations; PATCH name/active/quota/permissions; gated on `me.permissions.settings` / superuser. |
 | Instance settings | `/manage/settings` | Section-grouped global prefs; `GET/POST bulk` admin settings API; bool/string/int/choice/multi-choice; file/complex read-only; gated on `me.permissions.settings`. |
 | Channels admin | `/manage/library/channels` | List/detail/delete under Library admin; `GET/DELETE /api/v1/manage/channels/`; search, infinite scroll, stats; gated on `me.permissions.library`. |
 | Library admin | `/manage/library/*` | Hub + libraries list/detail/edit/delete, uploads browser, tags CRUD, channels; gated on `me.permissions.library`. Server: first-party Tayra OAuth may use `instance:libraries`. |
