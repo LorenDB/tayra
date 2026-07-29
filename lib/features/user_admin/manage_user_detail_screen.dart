@@ -17,8 +17,8 @@ import 'package:tayra/features/user_admin/user_admin_provider.dart';
 final manageUserDetailProvider = FutureProvider.autoDispose
     .family<ManageUser, int>((ref, id) async {
       // Wait for permission before hitting manage APIs (avoids 403 on denied deep-links).
-      final allowed = await ref.watch(canManageUsersProvider.future);
-      if (!allowed) {
+      final me = await ref.watch(meUserProvider.future);
+      if (!me.canManageUsers) {
         throw StateError('Missing settings permission for user management');
       }
       return ref.watch(funkwhaleApiProvider).getManageUser(id);
@@ -253,7 +253,7 @@ class _ManageUserDetailScreenState
   @override
   Widget build(BuildContext context) {
     final canManage = ref.watch(canManageUsersProvider);
-    final allowed = canManage.valueOrNull == true;
+    final allowed = canManage.asData?.value == true;
     final detailAsync = ref.watch(manageUserDetailProvider(widget.userId));
 
     // Hydrate edit form once data arrives (not during pure build side-effects).

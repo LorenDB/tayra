@@ -219,7 +219,7 @@ class _ManageInvitationsScreenState
   @override
   Widget build(BuildContext context) {
     final canManage = ref.watch(canManageUsersProvider);
-    final allowed = canManage.valueOrNull == true;
+    final allowed = canManage.asData?.value == true;
     _ensureLoaded(allowed);
 
     return Scaffold(
