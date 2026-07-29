@@ -1142,6 +1142,9 @@ class CacheManager {
   /// switch so favorites, download queue, and offline album index are wiped
   /// and cannot leak to the next account.
   Future<void> clearAll({bool clearUserData = false}) async {
+    // Offline cache is native-only; web has nothing to wipe on disk/SQLite.
+    if (kIsWeb) return;
+
     final db = await _db.database;
 
     // Delete all files
@@ -1168,6 +1171,8 @@ class CacheManager {
 
   /// Clear only audio files
   Future<void> clearAudio() async {
+    if (kIsWeb) return;
+
     final db = await _db.database;
     final results = await db.query(
       'cache_files',

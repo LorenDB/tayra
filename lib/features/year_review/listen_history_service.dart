@@ -1190,6 +1190,9 @@ class ListenHistoryService {
 
   /// Clear all listen history data.
   static Future<void> clearAll() async {
+    // Listen history lives in SQLite, which is not available on web.
+    if (kIsWeb) return;
+
     final db = await CacheDatabase.instance.database;
     await db.delete(_tableName);
   }

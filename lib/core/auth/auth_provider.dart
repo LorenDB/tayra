@@ -603,9 +603,16 @@ class AuthNotifier extends Notifier<AuthState> {
   }
 
   /// Manual logout triggered by the user. Clears all cached data immediately.
+  ///
+  /// Credential wipe and auth-state reset always run, even if local cache
+  /// cleanup fails (e.g. SQLite paths that are unavailable on web).
   Future<void> logout() async {
     Analytics.track('logout');
-    await _clearAllUserData();
+    try {
+      await _clearAllUserData();
+    } catch (e, st) {
+      debugPrint('logout: failed to clear local user data: $e\n$st');
+    }
     await _deleteAuthCredentials();
     state = const AuthState();
   }
@@ -654,11 +661,33 @@ class AuthNotifier extends Notifier<AuthState> {
   Future<void> _clearAllUserData() async {
     // Wipe files + favorites + download queue so the next account cannot
     // inherit hearts, offline stubs, or pending downloads from this user.
-    await CacheManager.instance.clearAll(clearUserData: true);
-    await PendingFavoriteOps.clear();
-    await QueuePersistenceService.clearQueue();
-    await ListenHistoryService.clearAll();
-    await SettingsNotifier.clearSettings();
+    // Each step is isolated so one platform-specific failure cannot leave
+    // prefs / queue / credentials half-cleared.
+    try {
+      await CacheManager.instance.clearAll(clearUserData: true);
+    } catch (e, st) {
+      debugPrint('logout: CacheManager.clearAll failed: $e\n$st');
+    }
+    try {
+      await PendingFavoriteOps.clear();
+    } catch (e, st) {
+      debugPrint('logout: PendingFavoriteOps.clear failed: $e\n$st');
+    }
+    try {
+      await QueuePersistenceService.clearQueue();
+    } catch (e, st) {
+      debugPrint('logout: QueuePersistenceService.clearQueue failed: $e\n$st');
+    }
+    try {
+      await ListenHistoryService.clearAll();
+    } catch (e, st) {
+      debugPrint('logout: ListenHistoryService.clearAll failed: $e\n$st');
+    }
+    try {
+      await SettingsNotifier.clearSettings();
+    } catch (e, st) {
+      debugPrint('logout: SettingsNotifier.clearSettings failed: $e\n$st');
+    }
   }
 
   Future<void> logoutAndClearData() async {
