@@ -27,7 +27,8 @@ To build the app locally:
 
 Web is **online-only**. Pair with the **Funkwhale hard fork** (`../funkwhale`,
 branch `tayra_front`) which removed Vue and exposes password login at
-`POST /api/v1/users/token/`.
+`POST /api/v1/users/token/` (password field is a SHA-256 transport digest, not
+plaintext).
 
 ```bash
 # From funkwhale fork:

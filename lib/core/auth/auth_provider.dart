@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/http_client_factory.dart';
+import 'package:tayra/core/auth/password_transport.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/core/cache/pending_favorite_ops.dart';
 import 'package:tayra/core/platform/app_platform.dart';
@@ -95,9 +96,10 @@ class AuthState {
       isLoading: isLoading ?? this.isLoading,
       isCheckingAuth: isCheckingAuth ?? this.isCheckingAuth,
       error: identical(error, _kNoError) ? this.error : error as String?,
-      pendingServerUrl: clearPendingServerUrl
-          ? null
-          : (pendingServerUrl ?? this.pendingServerUrl),
+      pendingServerUrl:
+          clearPendingServerUrl
+              ? null
+              : (pendingServerUrl ?? this.pendingServerUrl),
       listenToken: clearListenToken ? null : (listenToken ?? this.listenToken),
     );
   }
@@ -314,16 +316,16 @@ class AuthNotifier extends Notifier<AuthState> {
 
     // On web, prefer same-origin relative URL so a mismatched baked
     // FUNKWHALE_URL still hits the nginx that serves this SPA.
-    final tokenEndpoint = kIsWeb
-        ? '/api/v1/users/token/'
-        : '$url/api/v1/users/token/';
+    final tokenEndpoint =
+        kIsWeb ? '/api/v1/users/token/' : '$url/api/v1/users/token/';
 
     try {
-      // JSON body over HTTPS (password grant style). Not hashed client-side;
-      // TLS protects transit. Force JSON content-type for reliable DRF parsing.
+      // Domain-separated SHA-256 digest — never send the account password
+      // in plaintext (API rejects non-hex digests). Still use HTTPS.
+      final passwordDigest = hashPasswordForTransport(password);
       final response = await _dio.post(
         tokenEndpoint,
-        data: {'username': username.trim(), 'password': password},
+        data: {'username': username.trim(), 'password': passwordDigest},
         options: Options(
           contentType: Headers.jsonContentType,
           headers: {
@@ -342,8 +344,6 @@ class AuthNotifier extends Notifier<AuthState> {
       final payload = _asJsonMap(response.data);
       if (response.statusCode != 200 || payload == null) {
         // Surface the real API body in the browser console (DevTools).
-        // Plaintext password in the *request* is expected over HTTPS; the
-        // failure reason is almost always in this response JSON.
         debugPrint(
           'loginWithPassword failed status=${response.statusCode} '
           'data=${response.data}',
@@ -439,6 +439,9 @@ class AuthNotifier extends Notifier<AuthState> {
       }
       if (error == 'missing_credentials') {
         return 'Both username and password are required.';
+      }
+      if (error == 'password_not_hashed') {
+        return 'This server requires a newer Tayra client for password login.';
       }
       final nonField = map['non_field_errors'];
       if (nonField is List && nonField.isNotEmpty) {

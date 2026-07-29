@@ -36,7 +36,7 @@ Notes:
 - `FUNKWHALE_URL` enables branded single-pod login.
 - Prefer same-origin with `/api/`.
 - Path URL strategy is on for nginx `try_files`.
-- Auth: `POST /api/v1/users/token/` (username/password → OAuth tokens).
+- Auth: `POST /api/v1/users/token/` (username + transport-hashed password → OAuth tokens).
 
 ## Drop-in on stock Funkwhale
 
