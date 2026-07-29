@@ -50,7 +50,13 @@ class AuthInterceptor extends Interceptor {
         err.requestOptions.headers['Authorization'] =
             'Bearer ${authState.accessToken}';
         try {
-          final response = await _retryDio.fetch(err.requestOptions);
+          final opts = err.requestOptions;
+          // FormData streams can only be finalized once. Clone before retry so
+          // multipart uploads (attachments, audio) survive token refresh.
+          if (opts.data is FormData) {
+            opts.data = (opts.data as FormData).clone();
+          }
+          final response = await _retryDio.fetch(opts);
           handler.resolve(response);
           return;
         } catch (e) {
@@ -142,6 +148,7 @@ class PaginatedResponse<T> {
   factory PaginatedResponse.fromJson(
     Map<String, dynamic> json,
     T Function(Map<String, dynamic>) fromJsonT, {
+
     /// When true, skip individual results that fail to parse instead of
     /// failing the whole page (e.g. listenings with a missing nested track).
     bool skipMalformed = false,
@@ -150,9 +157,8 @@ class PaginatedResponse<T> {
     final results = <T>[];
     for (final item in raw) {
       if (item is! Map) continue;
-      final map = item is Map<String, dynamic>
-          ? item
-          : Map<String, dynamic>.from(item);
+      final map =
+          item is Map<String, dynamic> ? item : Map<String, dynamic>.from(item);
       if (!skipMalformed) {
         results.add(fromJsonT(map));
         continue;

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,6 +17,50 @@ class CoverArtSelection {
   const CoverArtSelection({this.uploaded, this.cleared = false});
 
   bool get hasChange => uploaded != null || cleared;
+}
+
+/// Human-readable message for cover upload failures (API validation, network).
+String describeCoverUploadError(Object error) {
+  if (error is DioException) {
+    final status = error.response?.statusCode;
+    final data = error.response?.data;
+    String? detail;
+    if (data is Map) {
+      // DRF shapes: {"file": ["…"]}, {"detail": "…"}, {"file": [{"detail":…}]}
+      final fileErr = data['file'];
+      if (fileErr is List && fileErr.isNotEmpty) {
+        final first = fileErr.first;
+        if (first is String) {
+          detail = first;
+        } else if (first is Map && first['detail'] != null) {
+          detail = first['detail'].toString();
+        } else {
+          detail = first.toString();
+        }
+      } else if (data['detail'] != null) {
+        detail = data['detail'].toString();
+      }
+    } else if (data is String && data.trim().isNotEmpty) {
+      detail = data.trim();
+    }
+    if (detail != null && detail.isNotEmpty) {
+      return status != null ? 'Upload failed ($status): $detail' : detail;
+    }
+    if (status == 401 || status == 403) {
+      return 'Upload failed: not authorized to upload images.';
+    }
+    if (status == 413) {
+      return 'Upload failed: image is too large (max 5 MB).';
+    }
+    if (status != null) {
+      return 'Upload failed (HTTP $status).';
+    }
+    if (error.type == DioExceptionType.connectionError ||
+        error.type == DioExceptionType.connectionTimeout) {
+      return 'Upload failed: could not reach the server.';
+    }
+  }
+  return 'Failed to upload cover art';
 }
 
 /// Tap-to-change cover art tile used on playlist/radio edit screens.
@@ -64,13 +109,18 @@ class _CoverArtEditorState extends ConsumerState<CoverArtEditor> {
 
     final file = await FilePicker.pickFile(
       type: FileType.custom,
-      allowedExtensions: const ['png', 'jpg', 'jpeg'],
+      allowedExtensions: const ['png', 'jpg', 'jpeg', 'webp'],
     );
     if (file == null) return;
 
     setState(() => _isUploading = true);
     try {
       final bytes = await file.readAsBytes();
+      if (bytes.isEmpty) {
+        throw StateError('Selected file is empty');
+      }
+      // Reject obviously undersized images early (API requires ≥50×50).
+      // Dimension check is best-effort; the server remains the source of truth.
       final api = ref.read(cachedFunkwhaleApiProvider);
       final cover = await api.createAttachment(
         bytes: bytes,
@@ -78,11 +128,12 @@ class _CoverArtEditorState extends ConsumerState<CoverArtEditor> {
       );
       if (!mounted) return;
       widget.onChanged(CoverArtSelection(uploaded: cover));
-    } catch (e) {
+    } catch (e, st) {
+      debugPrint('Cover upload failed: $e\n$st');
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to upload cover art')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(describeCoverUploadError(e))));
     } finally {
       if (mounted) setState(() => _isUploading = false);
     }
@@ -193,7 +244,7 @@ class _CoverArtEditorState extends ConsumerState<CoverArtEditor> {
                     ),
                   const SizedBox(height: 4),
                   const Text(
-                    'PNG or JPEG, at least 50×50 px.',
+                    'PNG, JPEG, or WebP · at least 50×50 px · max 5 MB',
                     style: TextStyle(
                       color: AppTheme.onBackgroundSubtle,
                       fontSize: 11,

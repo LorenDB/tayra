@@ -283,15 +283,46 @@ class FunkwhaleApi {
     required List<int> bytes,
     required String fileName,
   }) async {
+    final safeName = _normalizeImageFileName(fileName);
     final formData = FormData.fromMap({
-      'file': MultipartFile.fromBytes(bytes, filename: fileName),
+      'file': MultipartFile.fromBytes(
+        bytes,
+        filename: safeName,
+        contentType: _imageDioMediaType(safeName),
+      ),
     });
+    // Do not set Options.contentType — Dio must append the multipart boundary
+    // when serializing [FormData].
     final response = await _dio.post(
       '$_baseUrl/api/v1/attachments/',
       data: formData,
-      options: Options(contentType: 'multipart/form-data'),
     );
-    return Cover.fromJson(response.data as Map<String, dynamic>);
+    final data = response.data;
+    if (data is! Map) {
+      throw StateError('Unexpected attachment response: ${data.runtimeType}');
+    }
+    return Cover.fromJson(Map<String, dynamic>.from(data));
+  }
+
+  /// Ensure the filename has a known image extension so the API's extension
+  /// validator and Pillow re-encoder can resolve a format.
+  static String _normalizeImageFileName(String fileName) {
+    final base = fileName.split(RegExp(r'[/\\]')).last.trim();
+    if (base.isEmpty) return 'cover.jpg';
+    final lower = base.toLowerCase();
+    const allowed = {'.png', '.jpg', '.jpeg', '.webp'};
+    for (final ext in allowed) {
+      if (lower.endsWith(ext)) return base;
+    }
+    // No usable extension (common on some pickers) — default to JPEG.
+    return '$base.jpg';
+  }
+
+  static DioMediaType _imageDioMediaType(String fileName) {
+    final lower = fileName.toLowerCase();
+    if (lower.endsWith('.png')) return DioMediaType('image', 'png');
+    if (lower.endsWith('.webp')) return DioMediaType('image', 'webp');
+    return DioMediaType('image', 'jpeg');
   }
 
   Future<void> addTracksToPlaylist(int playlistId, List<int> trackIds) async {
