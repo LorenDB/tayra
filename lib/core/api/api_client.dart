@@ -141,18 +141,33 @@ class PaginatedResponse<T> {
 
   factory PaginatedResponse.fromJson(
     Map<String, dynamic> json,
-    T Function(Map<String, dynamic>) fromJsonT,
-  ) {
+    T Function(Map<String, dynamic>) fromJsonT, {
+    /// When true, skip individual results that fail to parse instead of
+    /// failing the whole page (e.g. listenings with a missing nested track).
+    bool skipMalformed = false,
+  }) {
+    final raw = json['results'] as List<dynamic>? ?? const [];
+    final results = <T>[];
+    for (final item in raw) {
+      if (item is! Map) continue;
+      final map = item is Map<String, dynamic>
+          ? item
+          : Map<String, dynamic>.from(item);
+      if (!skipMalformed) {
+        results.add(fromJsonT(map));
+        continue;
+      }
+      try {
+        results.add(fromJsonT(map));
+      } catch (_) {
+        // Best-effort: one bad row should not blank a whole list UI.
+      }
+    }
     return PaginatedResponse<T>(
-      count: json['count'] as int? ?? 0,
+      count: (json['count'] as num?)?.toInt() ?? 0,
       next: json['next'] as String?,
       previous: json['previous'] as String?,
-      results:
-          (json['results'] as List<dynamic>?)
-              ?.whereType<Map<String, dynamic>>()
-              .map(fromJsonT)
-              .toList() ??
-          [],
+      results: results,
     );
   }
 }

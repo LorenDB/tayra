@@ -790,8 +790,8 @@ class CachedFunkwhaleApi {
   Future<PaginatedResponse<Listening>> getListenings({
     int page = 1,
     int pageSize = 20,
-    String ordering = '-created',
-    bool richOnly = true,
+    String ordering = '-creation_date',
+    bool richOnly = false,
     bool forceRefresh = false,
   }) async {
     final baseSuffix = '_s${pageSize}_o$ordering${richOnly ? '_rich' : '_all'}';
@@ -803,7 +803,11 @@ class CachedFunkwhaleApi {
     return _cachedFetch(
       cacheKey: cacheKey,
       cacheType: CacheType.track,
-      fromJson: (j) => PaginatedResponse.fromJson(j, Listening.fromJson),
+      fromJson: (j) => PaginatedResponse.fromJson(
+        j,
+        Listening.fromJson,
+        skipMalformed: true,
+      ),
       toJson: (r) => _paginatedResponseToJson(r, _listeningToJson),
       fetch:
           () => _api.getListenings(

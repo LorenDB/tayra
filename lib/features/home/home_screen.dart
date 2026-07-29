@@ -53,11 +53,12 @@ final randomAlbumsProvider = FutureProvider<List<Album>>((ref) async {
 final recentTracksProvider = FutureProvider<List<Track>>((ref) async {
   watchMetadataRevalidation(ref, (key) => key.startsWith('listenings_p'));
   final api = ref.watch(cachedFunkwhaleApiProvider);
-  // richOnly: ignore stock thin scrobbles (no duration/device/session).
+  // Include stock thin scrobbles so pre-rich history still populates the
+  // homepage. Year-review stays on rich-only server stats.
   final response = await api.getListenings(
-    ordering: '-created',
+    ordering: '-creation_date',
     pageSize: 15,
-    richOnly: true,
+    richOnly: false,
   );
   // Deduplicate tracks by ID, preserving listening order
   final seen = <int>{};
@@ -97,9 +98,9 @@ class HomeScreen extends ConsumerWidget {
                 forceRefresh: true,
               ),
               api.getListenings(
-                ordering: '-created',
+                ordering: '-creation_date',
                 pageSize: 15,
-                richOnly: true,
+                richOnly: false,
                 forceRefresh: true,
               ),
             ]);

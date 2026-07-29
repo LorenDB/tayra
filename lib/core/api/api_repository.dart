@@ -399,10 +399,13 @@ class FunkwhaleApi {
   Future<PaginatedResponse<Listening>> getListenings({
     int page = 1,
     int pageSize = 20,
-    String ordering = '-created',
-    /// When true (default), only rich client rows are returned — stock
-    /// scrobbles without duration/device/session are excluded server-side.
-    bool richOnly = true,
+    /// Server field is `creation_date` (not `created`).
+    String ordering = '-creation_date',
+    /// When true, only rich client rows are returned — stock scrobbles
+    /// without duration/device/session are excluded server-side.
+    /// Homepage recent listens should pass false so thin scrobbles still
+    /// surface; year-review stats stay rich-only on the server.
+    bool richOnly = false,
   }) async {
     final response = await _dio.get(
       '$_baseUrl/api/v1/history/listenings/',
@@ -413,7 +416,13 @@ class FunkwhaleApi {
         'rich_only': richOnly,
       },
     );
-    return PaginatedResponse.fromJson(response.data, Listening.fromJson);
+    return PaginatedResponse.fromJson(
+      response.data is Map<String, dynamic>
+          ? response.data as Map<String, dynamic>
+          : Map<String, dynamic>.from(response.data as Map),
+      Listening.fromJson,
+      skipMalformed: true,
+    );
   }
 
   /// Max items per bulk request (server hard limit).
