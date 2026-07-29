@@ -2,7 +2,7 @@
 |---|---|---|---|
 | Instance settings | `/manage/settings` | Env vars, preferences API, Django admin | |
 | User management UI | `/manage/users` | Django admin | |
-| Signup | `/signup` | Disable open registration; invite via admin/CLI | |
+| ✅ Signup | `/signup` | Disable open registration; invite via admin/CLI | Branded Tayra form; `POST /api/v1/auth/registration/` with optional invitation; `?invitation=` deep links; success → sign-in. Invite creation stays admin/CLI; email confirm deferred. |
 | Password reset | `/auth/password/reset`, `/auth/password/reset/confirm` | ✅ Branded Tayra UI (request + confirm from email link) | Email confirm still out of band |
 | Email confirm | `/auth/email/confirm` | Email links still work if server sends them; no branded Tayra page | May need minimal static pages later |
 | User profiles / activity | `/@username`, profile activity | N/A for private pods | Nice-to-have |
