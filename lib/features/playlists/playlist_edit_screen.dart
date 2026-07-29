@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:tayra/core/ai/ai_client.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/core/widgets/cover_art_editor.dart';
@@ -194,7 +195,7 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
 
   Future<void> _onPopRequested() async {
     if (!_isDirty) {
-      if (mounted) Navigator.of(context).pop();
+      if (mounted) popPage(context);
       return;
     }
 
@@ -235,9 +236,9 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
 
     if (discard == false) {
       final saved = await _save();
-      if (saved && mounted) Navigator.of(context).pop();
+      if (saved && mounted) popPage(context);
     } else if (discard == true) {
-      if (mounted) Navigator.of(context).pop();
+      if (mounted) popPage(context);
     }
   }
 

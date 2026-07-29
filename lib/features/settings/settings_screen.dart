@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
 import 'package:tayra/core/platform/app_platform.dart';
+import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:tayra/features/settings/account_settings_screen.dart';
@@ -37,6 +38,7 @@ class SettingsScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Settings'),
         backgroundColor: AppTheme.background,
+        leading: const AppBackButton(fallbackLocation: '/'),
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -53,7 +55,7 @@ class SettingsScreen extends ConsumerWidget {
             icon: Icons.manage_accounts_outlined,
             title: 'Account settings',
             subtitle: 'Profile, visibility, email, and password',
-                        onTap: () => context.push('/settings/account'),
+            onTap: () => context.push('/settings/account'),
           ),
           SettingsActionTile(
             icon: Icons.logout_rounded,
@@ -63,33 +65,34 @@ class SettingsScreen extends ConsumerWidget {
             onTap: () async {
               final confirmed = await showShellDialog<bool>(
                 context: context,
-                builder: (context) => AlertDialog(
-                  backgroundColor: AppTheme.surfaceContainerHigh,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  title: const Text(
-                    'Log out?',
-                    style: TextStyle(color: AppTheme.onBackground),
-                  ),
-                  content: const Text(
-                    'You will need to log in again to access your library.',
-                    style: TextStyle(color: AppTheme.onBackgroundMuted),
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(false),
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(true),
-                      style: TextButton.styleFrom(
-                        foregroundColor: AppTheme.error,
+                builder:
+                    (context) => AlertDialog(
+                      backgroundColor: AppTheme.surfaceContainerHigh,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      child: const Text('Log out'),
+                      title: const Text(
+                        'Log out?',
+                        style: TextStyle(color: AppTheme.onBackground),
+                      ),
+                      content: const Text(
+                        'You will need to log in again to access your library.',
+                        style: TextStyle(color: AppTheme.onBackgroundMuted),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(false),
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(true),
+                          style: TextButton.styleFrom(
+                            foregroundColor: AppTheme.error,
+                          ),
+                          child: const Text('Log out'),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
               );
               if (confirmed == true && context.mounted) {
                 await ref.read(authStateProvider.notifier).logout();
@@ -292,8 +295,9 @@ class SettingsScreen extends ConsumerWidget {
             SettingsSectionHeader(title: 'Cache'),
             cacheStatsAsync.when(
               loading: () => const _LoadingTile(),
-              error: (error, stack) =>
-                  const _ErrorTile(message: 'Failed to load cache info'),
+              error:
+                  (error, stack) =>
+                      const _ErrorTile(message: 'Failed to load cache info'),
               data: (stats) => _CacheInfoTile(stats: stats),
             ),
             _CacheSizeLimitTile(
@@ -315,11 +319,12 @@ class SettingsScreen extends ConsumerWidget {
               onTap: () async {
                 final confirmed = await showShellDialog<bool>(
                   context: context,
-                  builder: (context) => _ConfirmDialog(
-                    title: 'Clear audio cache?',
-                    message:
-                        'All downloaded audio files will be deleted. Album and artist info will be kept.',
-                  ),
+                  builder:
+                      (context) => _ConfirmDialog(
+                        title: 'Clear audio cache?',
+                        message:
+                            'All downloaded audio files will be deleted. Album and artist info will be kept.',
+                      ),
                 );
                 if (confirmed == true) {
                   await CacheManager.instance.clearAudio();
@@ -337,12 +342,13 @@ class SettingsScreen extends ConsumerWidget {
               onTap: () async {
                 final confirmed = await showShellDialog<bool>(
                   context: context,
-                  builder: (context) => _ConfirmDialog(
-                    title: 'Clear all cache?',
-                    message:
-                        'All cached data including album info, cover art, audio files, and listening history from other devices will be deleted.\n\nYour local listening history will be kept.',
-                    confirmColor: AppTheme.error,
-                  ),
+                  builder:
+                      (context) => _ConfirmDialog(
+                        title: 'Clear all cache?',
+                        message:
+                            'All cached data including album info, cover art, audio files, and listening history from other devices will be deleted.\n\nYour local listening history will be kept.',
+                        confirmColor: AppTheme.error,
+                      ),
                 );
                 if (confirmed == true) {
                   await CacheManager.instance.clearAll();
@@ -534,29 +540,32 @@ class _YearReviewTile extends ConsumerWidget {
                       ),
                       const SizedBox(height: 2),
                       listenCountAsync.when(
-                        loading: () => const Text(
-                          'Loading...',
-                          style: TextStyle(
-                            color: AppTheme.onBackgroundMuted,
-                            fontSize: 12,
-                          ),
-                        ),
-                        error: (error, stack) => const Text(
-                          'See your listening recap',
-                          style: TextStyle(
-                            color: AppTheme.onBackgroundMuted,
-                            fontSize: 12,
-                          ),
-                        ),
-                        data: (count) => Text(
-                          count > 0
-                              ? '$count total listens tracked'
-                              : 'Start listening to build your recap',
-                          style: const TextStyle(
-                            color: AppTheme.onBackgroundMuted,
-                            fontSize: 12,
-                          ),
-                        ),
+                        loading:
+                            () => const Text(
+                              'Loading...',
+                              style: TextStyle(
+                                color: AppTheme.onBackgroundMuted,
+                                fontSize: 12,
+                              ),
+                            ),
+                        error:
+                            (error, stack) => const Text(
+                              'See your listening recap',
+                              style: TextStyle(
+                                color: AppTheme.onBackgroundMuted,
+                                fontSize: 12,
+                              ),
+                            ),
+                        data:
+                            (count) => Text(
+                              count > 0
+                                  ? '$count total listens tracked'
+                                  : 'Start listening to build your recap',
+                              style: const TextStyle(
+                                color: AppTheme.onBackgroundMuted,
+                                fontSize: 12,
+                              ),
+                            ),
                       ),
                     ],
                   ),
@@ -597,9 +606,8 @@ class _ServerHistoryImportTileState
   }
 
   Future<void> _probe() async {
-    final ok = await ref
-        .read(listenHistoryImportServiceProvider)
-        .isRichSupported();
+    final ok =
+        await ref.read(listenHistoryImportServiceProvider).isRichSupported();
     if (mounted) setState(() => _supported = ok);
   }
 
@@ -611,12 +619,13 @@ class _ServerHistoryImportTileState
           .read(listenHistoryImportServiceProvider)
           .importLocalHistory(includeNextcloud: includeNextcloud);
       if (!mounted) return;
-      final msg = result.totalProcessed == 0 && result.errors.isEmpty
-          ? 'No listening history to upload (or server does not support it).'
-          : 'Uploaded history: ${result.created} new, '
-                '${result.enriched} enriched, '
-                '${result.skippedDuplicate} already present'
-                '${result.errors.isEmpty ? '' : ', ${result.errors.length} errors'}.';
+      final msg =
+          result.totalProcessed == 0 && result.errors.isEmpty
+              ? 'No listening history to upload (or server does not support it).'
+              : 'Uploaded history: ${result.created} new, '
+                  '${result.enriched} enriched, '
+                  '${result.skippedDuplicate} already present'
+                  '${result.errors.isEmpty ? '' : ', ${result.errors.length} errors'}.';
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
     } catch (e) {
       if (mounted) {
@@ -635,11 +644,12 @@ class _ServerHistoryImportTileState
     if (_supported == false) return const SizedBox.shrink();
 
     final nc = ref.watch(nextcloudBackupProvider);
-    final subtitle = _busy
-        ? 'Uploading…'
-        : (_supported == null
-              ? 'Checking server support…'
-              : 'Upload local${nc.isConnected ? ' + Nextcloud' : ''} history '
+    final subtitle =
+        _busy
+            ? 'Uploading…'
+            : (_supported == null
+                ? 'Checking server support…'
+                : 'Upload local${nc.isConnected ? ' + Nextcloud' : ''} history '
                     'to this Funkwhale server (safe to re-run)');
 
     return SettingsActionTile(
@@ -651,29 +661,30 @@ class _ServerHistoryImportTileState
         final includeNc = nc.isConnected;
         final confirmed = await showShellDialog<bool>(
           context: context,
-          builder: (ctx) => AlertDialog(
-            backgroundColor: AppTheme.surfaceContainerHigh,
-            title: const Text('Upload listen history'),
-            content: Text(
-              includeNc
-                  ? 'Upload local SQLite history and merge Nextcloud '
-                        'device backups to the server via bulk import '
-                        '(enrich or create). Safe to run more than once.'
-                  : 'Upload local listening history to the server via '
-                        'bulk import (enrich or create). Safe to run more '
-                        'than once.',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx, false),
-                child: const Text('Cancel'),
+          builder:
+              (ctx) => AlertDialog(
+                backgroundColor: AppTheme.surfaceContainerHigh,
+                title: const Text('Upload listen history'),
+                content: Text(
+                  includeNc
+                      ? 'Upload local SQLite history and merge Nextcloud '
+                          'device backups to the server via bulk import '
+                          '(enrich or create). Safe to run more than once.'
+                      : 'Upload local listening history to the server via '
+                          'bulk import (enrich or create). Safe to run more '
+                          'than once.',
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(ctx, false),
+                    child: const Text('Cancel'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => Navigator.pop(ctx, true),
+                    child: const Text('Upload'),
+                  ),
+                ],
               ),
-              ElevatedButton(
-                onPressed: () => Navigator.pop(ctx, true),
-                child: const Text('Upload'),
-              ),
-            ],
-          ),
         );
         if (confirmed == true && mounted) {
           await _runImport(includeNextcloud: includeNc);
@@ -824,9 +835,8 @@ class _BackupSheet extends ConsumerWidget {
               const SizedBox(height: 16),
               if (!nc.isConnected) ...[
                 ElevatedButton.icon(
-                  onPressed: nc.isLoading
-                      ? null
-                      : () => _startConnect(context, ref),
+                  onPressed:
+                      nc.isLoading ? null : () => _startConnect(context, ref),
                   icon: const Icon(Icons.link),
                   label: const Text('Connect Nextcloud (SSO)'),
                 ),
@@ -850,24 +860,25 @@ class _BackupSheet extends ConsumerWidget {
                   children: [
                     Expanded(
                       child: OutlinedButton.icon(
-                        onPressed: nc.isLoading
-                            ? null
-                            : () async {
-                                final ok = await ref
-                                    .read(nextcloudBackupProvider.notifier)
-                                    .backupNow(force: true);
-                                if (context.mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        ok
-                                            ? 'Backup complete'
-                                            : 'Backup failed',
+                        onPressed:
+                            nc.isLoading
+                                ? null
+                                : () async {
+                                  final ok = await ref
+                                      .read(nextcloudBackupProvider.notifier)
+                                      .backupNow(force: true);
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          ok
+                                              ? 'Backup complete'
+                                              : 'Backup failed',
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                }
-                              },
+                                    );
+                                  }
+                                },
                         icon: const Icon(Icons.backup),
                         label: const Text('Backup now'),
                       ),
@@ -875,9 +886,10 @@ class _BackupSheet extends ConsumerWidget {
                     const SizedBox(width: 8),
                     Expanded(
                       child: OutlinedButton.icon(
-                        onPressed: nc.isLoading
-                            ? null
-                            : () => _restoreWithPicker(context, ref),
+                        onPressed:
+                            nc.isLoading
+                                ? null
+                                : () => _restoreWithPicker(context, ref),
                         icon: const Icon(Icons.restore),
                         label: const Text('Restore'),
                       ),
@@ -886,24 +898,26 @@ class _BackupSheet extends ConsumerWidget {
                 ),
                 const SizedBox(height: 8),
                 OutlinedButton.icon(
-                  onPressed: nc.isLoading
-                      ? null
-                      : () async {
-                          final count = await ref
-                              .read(nextcloudBackupProvider.notifier)
-                              .syncNow();
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  count > 0
-                                      ? 'Synced $count new listening records'
-                                      : 'No new listening records',
+                  onPressed:
+                      nc.isLoading
+                          ? null
+                          : () async {
+                            final count =
+                                await ref
+                                    .read(nextcloudBackupProvider.notifier)
+                                    .syncNow();
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    count > 0
+                                        ? 'Synced $count new listening records'
+                                        : 'No new listening records',
+                                  ),
                                 ),
-                              ),
-                            );
-                          }
-                        },
+                              );
+                            }
+                          },
                   icon: const Icon(Icons.sync),
                   label: const Text('Sync now'),
                 ),
@@ -921,20 +935,22 @@ class _BackupSheet extends ConsumerWidget {
                     ),
                   ),
                   value: nc.autoBackupEnabled,
-                  onChanged: (v) => ref
-                      .read(nextcloudBackupProvider.notifier)
-                      .setAutoBackupEnabled(v),
+                  onChanged:
+                      (v) => ref
+                          .read(nextcloudBackupProvider.notifier)
+                          .setAutoBackupEnabled(v),
                 ),
                 const SizedBox(height: 8),
                 TextButton(
-                  onPressed: nc.isLoading
-                      ? null
-                      : () async {
-                          await ref
-                              .read(nextcloudBackupProvider.notifier)
-                              .disconnect();
-                          if (context.mounted) Navigator.of(context).pop();
-                        },
+                  onPressed:
+                      nc.isLoading
+                          ? null
+                          : () async {
+                            await ref
+                                .read(nextcloudBackupProvider.notifier)
+                                .disconnect();
+                            if (context.mounted) Navigator.of(context).pop();
+                          },
                   style: TextButton.styleFrom(foregroundColor: AppTheme.error),
                   child: const Text('Disconnect Nextcloud'),
                 ),
@@ -973,33 +989,34 @@ class _BackupSheet extends ConsumerWidget {
 
     final chosen = await showShellDialog<String>(
       context: context,
-      builder: (ctx) => SimpleDialog(
-        backgroundColor: AppTheme.surfaceContainerHigh,
-        title: const Text('Restore from device'),
-        children: [
-          for (final entry in settingsFiles)
-            SimpleDialogOption(
-              onPressed: () => Navigator.pop(ctx, entry.filename),
-              child: Row(
-                children: [
-                  const Icon(Icons.phone_android_rounded, size: 20),
-                  const SizedBox(width: 12),
-                  Flexible(
-                    child: Text(
-                      entry.deviceLabel,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+      builder:
+          (ctx) => SimpleDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            title: const Text('Restore from device'),
+            children: [
+              for (final entry in settingsFiles)
+                SimpleDialogOption(
+                  onPressed: () => Navigator.pop(ctx, entry.filename),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.phone_android_rounded, size: 20),
+                      const SizedBox(width: 12),
+                      Flexible(
+                        child: Text(
+                          entry.deviceLabel,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
+              const Divider(),
+              SimpleDialogOption(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('Cancel'),
               ),
-            ),
-          const Divider(),
-          SimpleDialogOption(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            ],
           ),
-        ],
-      ),
     );
 
     if (chosen != null && context.mounted) {
@@ -1014,30 +1031,31 @@ class _BackupSheet extends ConsumerWidget {
   ) async {
     final reuseDeviceUuid = await showShellDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppTheme.surfaceContainerHigh,
-        title: const Text('Restore Settings'),
-        content: const Text(
-          'Are you restoring to the same device?\n\n'
-          'Select "Same Device" if you are recovering after a wipe or '
-          'reinstall on this device. Select "Different Device" if you '
-          'are syncing your settings to another device.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+      builder:
+          (ctx) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            title: const Text('Restore Settings'),
+            content: const Text(
+              'Are you restoring to the same device?\n\n'
+              'Select "Same Device" if you are recovering after a wipe or '
+              'reinstall on this device. Select "Different Device" if you '
+              'are syncing your settings to another device.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, false),
+                child: const Text('Different Device'),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.pop(ctx, true),
+                child: const Text('Same Device'),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Different Device'),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Same Device'),
-          ),
-        ],
-      ),
     );
     if (reuseDeviceUuid == null || !context.mounted) return;
 
@@ -1051,47 +1069,47 @@ class _BackupSheet extends ConsumerWidget {
 
     if (ok) {
       // Best-effort: offer server bulk upload when rich client-data is available.
-      final canUpload = await ref
-          .read(listenHistoryImportServiceProvider)
-          .isRichSupported();
+      final canUpload =
+          await ref.read(listenHistoryImportServiceProvider).isRichSupported();
       if (!context.mounted) return;
 
       final action = await showShellDialog<String>(
         context: context,
-        builder: (ctx) => AlertDialog(
-          backgroundColor: AppTheme.surfaceContainerHigh,
-          icon: const Icon(
-            Icons.check_circle_rounded,
-            color: AppTheme.primary,
-            size: 40,
-          ),
-          title: const Text('Settings Restored'),
-          content: Text(
-            canUpload
-                ? 'Your settings and listening history have been restored.\n\n'
-                      'Upload the restored history to this Funkwhale server '
-                      '(bulk enrich-or-create), restart the app, or do this later.'
-                : 'Your settings and listening history have been restored.\n\n'
-                      'A restart is recommended for all changes to take effect.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(ctx, 'later');
-              },
-              child: const Text('Later'),
-            ),
-            if (canUpload)
-              TextButton(
-                onPressed: () => Navigator.pop(ctx, 'upload'),
-                child: const Text('Upload to server'),
+        builder:
+            (ctx) => AlertDialog(
+              backgroundColor: AppTheme.surfaceContainerHigh,
+              icon: const Icon(
+                Icons.check_circle_rounded,
+                color: AppTheme.primary,
+                size: 40,
               ),
-            ElevatedButton(
-              onPressed: () => Navigator.pop(ctx, 'restart'),
-              child: const Text('Restart Now'),
+              title: const Text('Settings Restored'),
+              content: Text(
+                canUpload
+                    ? 'Your settings and listening history have been restored.\n\n'
+                        'Upload the restored history to this Funkwhale server '
+                        '(bulk enrich-or-create), restart the app, or do this later.'
+                    : 'Your settings and listening history have been restored.\n\n'
+                        'A restart is recommended for all changes to take effect.',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(ctx, 'later');
+                  },
+                  child: const Text('Later'),
+                ),
+                if (canUpload)
+                  TextButton(
+                    onPressed: () => Navigator.pop(ctx, 'upload'),
+                    child: const Text('Upload to server'),
+                  ),
+                ElevatedButton(
+                  onPressed: () => Navigator.pop(ctx, 'restart'),
+                  child: const Text('Restart Now'),
+                ),
+              ],
             ),
-          ],
-        ),
       );
 
       if (!context.mounted) return;
@@ -1135,25 +1153,28 @@ class _BackupSheet extends ConsumerWidget {
     final ctrl = TextEditingController();
     final server = await showShellDialog<String>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppTheme.surfaceContainerHigh,
-        title: const Text('Connect Nextcloud'),
-        content: TextField(
-          controller: ctrl,
-          decoration: const InputDecoration(hintText: 'https://your.nextcloud'),
-          autofocus: true,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+      builder:
+          (ctx) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            title: const Text('Connect Nextcloud'),
+            content: TextField(
+              controller: ctrl,
+              decoration: const InputDecoration(
+                hintText: 'https://your.nextcloud',
+              ),
+              autofocus: true,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, ctrl.text.trim()),
+                child: const Text('Connect'),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, ctrl.text.trim()),
-            child: const Text('Connect'),
-          ),
-        ],
-      ),
     );
     if (server == null || server.isEmpty || !context.mounted) return;
 
@@ -1167,29 +1188,29 @@ class _BackupSheet extends ConsumerWidget {
     // Show second dialog: "Finish login in browser then tap done"
     final finished = await showShellDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppTheme.surfaceContainerHigh,
-        title: const Text('Complete login in browser'),
-        content: const Text(
-          'After signing in and authorizing in your browser (Nextcloud), tap Done here. We will securely retrieve an app password.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Done'),
+      builder:
+          (ctx) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            title: const Text('Complete login in browser'),
+            content: const Text(
+              'After signing in and authorizing in your browser (Nextcloud), tap Done here. We will securely retrieve an app password.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, true),
+                child: const Text('Done'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, false),
+                child: const Text('Cancel'),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancel'),
-          ),
-        ],
-      ),
     );
 
     if (finished == true && context.mounted) {
-      final success = await ref
-          .read(nextcloudBackupProvider.notifier)
-          .pollForAppPassword();
+      final success =
+          await ref.read(nextcloudBackupProvider.notifier).pollForAppPassword();
       if (context.mounted) {
         if (!success) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -1313,10 +1334,11 @@ class _NavBarSettingsTile extends ConsumerWidget {
   static const _configurableIndices = [1, 2, 3, 4, 5, 6];
 
   String get _subtitle {
-    final names = _configurableIndices
-        .where((i) => pinnedIndices.contains(i))
-        .map((i) => AppShell.tabs[i].label)
-        .toList();
+    final names =
+        _configurableIndices
+            .where((i) => pinnedIndices.contains(i))
+            .map((i) => AppShell.tabs[i].label)
+            .toList();
     return names.isEmpty ? 'None' : names.join(', ');
   }
 
@@ -1381,12 +1403,14 @@ class _NavBarSettingsTile extends ConsumerWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (_) => _NavBarSheet(
-        initialPinned: pinnedIndices,
-        onChanged: (updated) => ref
-            .read(settingsProvider.notifier)
-            .setMobilePinnedTabIndices(updated),
-      ),
+      builder:
+          (_) => _NavBarSheet(
+            initialPinned: pinnedIndices,
+            onChanged:
+                (updated) => ref
+                    .read(settingsProvider.notifier)
+                    .setMobilePinnedTabIndices(updated),
+          ),
     );
   }
 }
@@ -1723,42 +1747,45 @@ class _PodcastEpisodeCountTile extends StatelessWidget {
       onTap: () async {
         final selected = await showShellDialog<int>(
           context: context,
-          builder: (ctx) => SimpleDialog(
-            backgroundColor: AppTheme.surfaceContainerHigh,
-            title: const Text(
-              'Episodes per show',
-              style: TextStyle(color: AppTheme.onBackground),
-            ),
-            children: [
-              for (final n in _options)
-                SimpleDialogOption(
-                  onPressed: () => Navigator.of(ctx).pop(n),
-                  child: Row(
-                    children: [
-                      Icon(
-                        n == current
-                            ? Icons.radio_button_checked_rounded
-                            : Icons.radio_button_off_rounded,
-                        color: n == current
-                            ? AppTheme.primary
-                            : AppTheme.onBackgroundMuted,
-                        size: 20,
-                      ),
-                      const SizedBox(width: 12),
-                      Text(
-                        n == 1 ? '1 episode' : '$n episodes',
-                        style: TextStyle(
-                          color: AppTheme.onBackground,
-                          fontWeight: n == current
-                              ? FontWeight.w600
-                              : FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
+          builder:
+              (ctx) => SimpleDialog(
+                backgroundColor: AppTheme.surfaceContainerHigh,
+                title: const Text(
+                  'Episodes per show',
+                  style: TextStyle(color: AppTheme.onBackground),
                 ),
-            ],
-          ),
+                children: [
+                  for (final n in _options)
+                    SimpleDialogOption(
+                      onPressed: () => Navigator.of(ctx).pop(n),
+                      child: Row(
+                        children: [
+                          Icon(
+                            n == current
+                                ? Icons.radio_button_checked_rounded
+                                : Icons.radio_button_off_rounded,
+                            color:
+                                n == current
+                                    ? AppTheme.primary
+                                    : AppTheme.onBackgroundMuted,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            n == 1 ? '1 episode' : '$n episodes',
+                            style: TextStyle(
+                              color: AppTheme.onBackground,
+                              fontWeight:
+                                  n == current
+                                      ? FontWeight.w600
+                                      : FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
         );
         if (selected != null) onChanged(selected);
       },

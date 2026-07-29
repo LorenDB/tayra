@@ -2,10 +2,10 @@ import 'package:tayra/core/platform/app_platform.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:tayra/core/analytics/analytics.dart';
+import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/settings_tiles.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
@@ -23,6 +23,7 @@ class DeveloperSettingsScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Developer'),
         backgroundColor: AppTheme.background,
+        leading: const AppBackButton(fallbackLocation: '/settings'),
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -37,7 +38,9 @@ class DeveloperSettingsScreen extends ConsumerWidget {
             iconColor: AppTheme.error,
             onTap: () async {
               await ref.read(settingsProvider.notifier).disableDeveloperMode();
-              if (context.mounted) context.pop();
+              if (context.mounted) {
+                popPage(context, fallbackLocation: '/settings');
+              }
             },
           ),
 

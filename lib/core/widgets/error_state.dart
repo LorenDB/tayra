@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 
 // ── Inline error state ───────────────────────────────────────────────────
@@ -131,10 +131,7 @@ class DetailPageErrorBody extends StatelessWidget {
         children: [
           AppBar(
             backgroundColor: Colors.transparent,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () => context.pop(),
-            ),
+            leading: const AppBackButton(),
           ),
           Expanded(
             child: Center(

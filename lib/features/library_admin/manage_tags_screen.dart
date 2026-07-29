@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/api/api_repository.dart';
 import 'package:tayra/core/api/models.dart';
+import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/app_refresh_indicator.dart';
 import 'package:tayra/core/widgets/dialog_utils.dart';
@@ -217,14 +218,14 @@ class _ManageTagsScreenState extends ConsumerState<ManageTagsScreen> {
       setState(() {
         _items.removeWhere(
           (t) =>
-              t.tracksCount == 0 &&
-              t.albumsCount == 0 &&
-              t.artistsCount == 0,
+              t.tracksCount == 0 && t.albumsCount == 0 && t.artistsCount == 0,
         );
         _count -= count;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Purged $count unused tag${count == 1 ? '' : 's'}')),
+        SnackBar(
+          content: Text('Purged $count unused tag${count == 1 ? '' : 's'}'),
+        ),
       );
     } catch (e) {
       if (!mounted) return;
@@ -299,6 +300,7 @@ class _ManageTagsScreenState extends ConsumerState<ManageTagsScreen> {
       appBar: AppBar(
         title: const Text('Tags'),
         backgroundColor: AppTheme.background,
+        leading: const AppBackButton(fallbackLocation: '/manage/library'),
         actions: [
           IconButton(
             tooltip: 'Purge unused tags',

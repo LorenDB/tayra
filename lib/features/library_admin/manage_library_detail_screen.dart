@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:tayra/core/api/api_repository.dart';
 import 'package:tayra/core/api/models.dart';
+import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/dialog_utils.dart';
 import 'package:tayra/core/widgets/error_state.dart';
@@ -215,11 +215,7 @@ class _ManageLibraryDetailScreenState
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Library deleted')));
-      if (context.canPop()) {
-        context.pop();
-      } else {
-        context.go('/manage/library/libraries');
-      }
+      popPage(context, fallbackLocation: '/manage/library/libraries');
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -249,6 +245,9 @@ class _ManageLibraryDetailScreenState
           ),
         ),
         backgroundColor: AppTheme.background,
+        leading: const AppBackButton(
+          fallbackLocation: '/manage/library/libraries',
+        ),
         actions: [
           if (detailAsync.hasValue) ...[
             IconButton(

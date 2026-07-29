@@ -8,6 +8,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/cache/manual_download_actions.dart';
+import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/theme/palette_provider.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
@@ -565,7 +566,7 @@ class _AlbumHeader extends ConsumerWidget {
           left: 8,
           child: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => context.pop(),
+            onPressed: () => popPage(context),
           ),
         ),
 

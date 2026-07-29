@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tayra/core/router/app_router.dart';
+import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
@@ -475,13 +476,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                 fontWeight: FontWeight.w700,
               ),
             ),
-            leading: IconButton(
-              icon: const Icon(
-                Icons.arrow_back_rounded,
-                color: AppTheme.onBackground,
-              ),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
+            leading: const AppBackButton(),
             actions: [
               PopupMenuButton<String>(
                 icon: const Icon(
@@ -680,13 +675,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
           fontWeight: FontWeight.w700,
         ),
       ),
-      leading: IconButton(
-        icon: const Icon(
-          Icons.arrow_back_rounded,
-          color: AppTheme.onBackground,
-        ),
-        onPressed: () => Navigator.of(context).pop(),
-      ),
+      leading: const AppBackButton(),
     );
   }
 

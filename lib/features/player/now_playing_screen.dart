@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:tayra/core/layout/responsive.dart';
+import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/player/now_playing_content.dart';
 import 'package:tayra/features/player/player_provider.dart';
@@ -21,9 +21,7 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen> {
     // pop the full-screen route so the sidebar version is shown instead.
     if (Responsive.isExpanded(context)) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted && context.canPop()) {
-          context.pop();
-        }
+        if (mounted) popPage(context);
       });
     }
   }
@@ -35,7 +33,7 @@ class _NowPlayingScreenState extends ConsumerState<NowPlayingScreen> {
     ref.listen(playerProvider.select((s) => s.currentTrack), (previous, next) {
       if (previous != null && next == null) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted && context.canPop()) context.pop();
+          if (mounted) popPage(context);
         });
       }
     });

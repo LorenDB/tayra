@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/settings_tiles.dart';
 import 'package:tayra/features/library_admin/library_admin_provider.dart';
@@ -23,6 +24,7 @@ class LibraryAdminScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Library admin'),
         backgroundColor: AppTheme.background,
+        leading: const AppBackButton(fallbackLocation: '/settings'),
       ),
       body: canManage.when(
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -118,13 +120,8 @@ class LibraryAdminDeniedBody extends StatelessWidget {
               TextButton(onPressed: onRetry, child: const Text('Retry'))
             else
               FilledButton(
-                onPressed: () {
-                  if (context.canPop()) {
-                    context.pop();
-                  } else {
-                    context.go('/settings');
-                  }
-                },
+                onPressed:
+                    () => popPage(context, fallbackLocation: '/settings'),
                 child: const Text('Back to settings'),
               ),
           ],

@@ -216,8 +216,8 @@ class SettingsNotifier extends Notifier<SettingsState> {
       defaultTargetPlatform == TargetPlatform.android;
   static AiProviderType get _defaultAiProviderType =>
       defaultTargetPlatform == TargetPlatform.android
-      ? AiProviderType.geminiNano
-      : AiProviderType.groq;
+          ? AiProviderType.geminiNano
+          : AiProviderType.groq;
 
   @override
   SettingsState build() {
@@ -253,12 +253,13 @@ class SettingsNotifier extends Notifier<SettingsState> {
     final pinnedStr = prefs.getString(_keyMobilePinnedTabIndices);
     Set<int> mobilePinnedTabIndices = const {2, 3, 5, 6};
     if (pinnedStr != null && pinnedStr.isNotEmpty) {
-      final parsed = pinnedStr
-          .split(',')
-          .map((s) => int.tryParse(s.trim()))
-          .whereType<int>()
-          .where((i) => i >= 1 && i <= 6)
-          .toSet();
+      final parsed =
+          pinnedStr
+              .split(',')
+              .map((s) => int.tryParse(s.trim()))
+              .whereType<int>()
+              .where((i) => i >= 1 && i <= 6)
+              .toSet();
       if (parsed.isNotEmpty) mobilePinnedTabIndices = parsed;
     }
 
@@ -332,9 +333,9 @@ class SettingsNotifier extends Notifier<SettingsState> {
     final rawPodcastCount = prefs.getInt(_keyAutoDownloadPodcastEpisodeCount);
     final autoDownloadPodcastEpisodeCount =
         (rawPodcastCount != null &&
-            const {1, 3, 5, 10}.contains(rawPodcastCount))
-        ? rawPodcastCount
-        : 3;
+                const {1, 3, 5, 10}.contains(rawPodcastCount))
+            ? rawPodcastCount
+            : 3;
 
     state = state.copyWith(
       browseMode: browseMode,

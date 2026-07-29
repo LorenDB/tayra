@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/app_refresh_indicator.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
@@ -273,7 +274,7 @@ class _ArtistHeader extends ConsumerWidget {
             left: 8,
             child: IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.white),
-              onPressed: () => context.pop(),
+              onPressed: () => popPage(context),
             ),
           ),
 

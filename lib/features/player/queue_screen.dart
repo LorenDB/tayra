@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/widgets/dialog_utils.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
@@ -102,8 +103,8 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
           if (!mounted) return;
           if (widget.onBack != null) {
             widget.onBack!();
-          } else if (context.canPop()) {
-            context.pop();
+          } else {
+            popPage(context);
           }
         });
       }
@@ -136,37 +137,38 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
       ],
     );
 
-    final miniPlayer = hasCurrentTrack
-        ? SafeArea(
-            top: false,
-            child: MiniPlayer(
-              // Priority: explicit prop -> panel onBack (switch panel view)
-              // -> close inline stashes -> pop nav if possible -> push now-playing
-              onTap:
-                  widget.miniPlayerOnTap ??
-                  () {
-                    if (widget.onBack != null) {
-                      // Panel mode: ask parent to switch back to now-playing view.
-                      widget.onBack!.call();
-                      return;
-                    }
+    final miniPlayer =
+        hasCurrentTrack
+            ? SafeArea(
+              top: false,
+              child: MiniPlayer(
+                // Priority: explicit prop -> panel onBack (switch panel view)
+                // -> close inline stashes -> pop nav if possible -> push now-playing
+                onTap:
+                    widget.miniPlayerOnTap ??
+                    () {
+                      if (widget.onBack != null) {
+                        // Panel mode: ask parent to switch back to now-playing view.
+                        widget.onBack!.call();
+                        return;
+                      }
 
-                    if (_showInlineStashes) {
-                      // If the inline stashes view is open, close it instead of
-                      // navigating so the user returns to the queue/now-playing UI.
-                      setState(() => _showInlineStashes = false);
-                      return;
-                    }
+                      if (_showInlineStashes) {
+                        // If the inline stashes view is open, close it instead of
+                        // navigating so the user returns to the queue/now-playing UI.
+                        setState(() => _showInlineStashes = false);
+                        return;
+                      }
 
-                    if (context.canPop()) {
-                      context.pop();
-                    } else {
-                      context.push('/now-playing');
-                    }
-                  },
-            ),
-          )
-        : null;
+                      if (context.canPop()) {
+                        popPage(context);
+                      } else {
+                        context.push('/now-playing');
+                      }
+                    },
+              ),
+            )
+            : null;
 
     // ── Panel mode (sidebar) ────────────────────────────────────────────
     // Render a compact header instead of a Scaffold AppBar so the widget
@@ -222,51 +224,46 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
       },
       child: Scaffold(
         backgroundColor: AppTheme.background,
-        appBar: _showInlineStashes
-            ? AppBar(
-                backgroundColor: AppTheme.background,
-                leading: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_rounded,
-                    color: AppTheme.onBackground,
+        appBar:
+            _showInlineStashes
+                ? AppBar(
+                  backgroundColor: AppTheme.background,
+                  leading: IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back_rounded,
+                      color: AppTheme.onBackground,
+                    ),
+                    onPressed: () => setState(() => _showInlineStashes = false),
                   ),
-                  onPressed: () => setState(() => _showInlineStashes = false),
+                  title: const Text(
+                    'Stashed Queues',
+                    style: TextStyle(
+                      color: AppTheme.onBackground,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                )
+                : AppBar(
+                  backgroundColor: AppTheme.background,
+                  leading: const AppBackButton(),
+                  title: const Text(
+                    'Queue',
+                    style: TextStyle(
+                      color: AppTheme.onBackground,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  actions: [
+                    _QueueActions(
+                      iconSize: 24,
+                      onStash: () => _stashQueue(context, ref),
+                      onOpenInbox:
+                          () => setState(() => _showInlineStashes = true),
+                    ),
+                  ],
                 ),
-                title: const Text(
-                  'Stashed Queues',
-                  style: TextStyle(
-                    color: AppTheme.onBackground,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              )
-            : AppBar(
-                backgroundColor: AppTheme.background,
-                leading: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_rounded,
-                    color: AppTheme.onBackground,
-                  ),
-                  onPressed: () => context.pop(),
-                ),
-                title: const Text(
-                  'Queue',
-                  style: TextStyle(
-                    color: AppTheme.onBackground,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                actions: [
-                  _QueueActions(
-                    iconSize: 24,
-                    onStash: () => _stashQueue(context, ref),
-                    onOpenInbox: () =>
-                        setState(() => _showInlineStashes = true),
-                  ),
-                ],
-              ),
         body: body,
         // Show the mini-player fixed at the bottom of the queue screen so
         // playback controls remain available while viewing/manipulating the
@@ -280,7 +277,7 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
     await ref.read(playerProvider.notifier).stashQueue();
     // Pop back after stashing — the queue is now empty so there's nothing to
     // show, and the user can retrieve the stash via the inbox button later.
-    if (context.mounted && context.canPop()) context.pop();
+    if (context.mounted) popPage(context);
   }
 
   Widget _buildBody(
@@ -364,29 +361,35 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
                 duration: const Duration(milliseconds: 150),
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: isTarget
-                      ? AppTheme.primary.withValues(alpha: 0.1)
-                      : Colors.transparent,
-                  border: isTarget
-                      ? const Border(
-                          bottom: BorderSide(color: AppTheme.primary, width: 2),
-                        )
-                      : null,
+                  color:
+                      isTarget
+                          ? AppTheme.primary.withValues(alpha: 0.1)
+                          : Colors.transparent,
+                  border:
+                      isTarget
+                          ? const Border(
+                            bottom: BorderSide(
+                              color: AppTheme.primary,
+                              width: 2,
+                            ),
+                          )
+                          : null,
                 ),
-                child: showNowPlayingHeader
-                    ? const Padding(
-                        padding: EdgeInsets.fromLTRB(20, 8, 20, 4),
-                        child: Text(
-                          'Now Playing',
-                          style: TextStyle(
-                            color: AppTheme.primary,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0.5,
+                child:
+                    showNowPlayingHeader
+                        ? const Padding(
+                          padding: EdgeInsets.fromLTRB(20, 8, 20, 4),
+                          child: Text(
+                            'Now Playing',
+                            style: TextStyle(
+                              color: AppTheme.primary,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0.5,
+                            ),
                           ),
-                        ),
-                      )
-                    : SizedBox(height: isTarget ? 40 : 16),
+                        )
+                        : SizedBox(height: isTarget ? 40 : 16),
               );
             },
           ),
@@ -469,14 +472,16 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
                 width: double.infinity,
                 height: isTarget ? 48 : 24,
                 decoration: BoxDecoration(
-                  color: isTarget
-                      ? AppTheme.primary.withValues(alpha: 0.1)
-                      : Colors.transparent,
-                  border: isTarget
-                      ? const Border(
-                          top: BorderSide(color: AppTheme.primary, width: 2),
-                        )
-                      : null,
+                  color:
+                      isTarget
+                          ? AppTheme.primary.withValues(alpha: 0.1)
+                          : Colors.transparent,
+                  border:
+                      isTarget
+                          ? const Border(
+                            top: BorderSide(color: AppTheme.primary, width: 2),
+                          )
+                          : null,
                 ),
               );
             },
@@ -574,48 +579,51 @@ Future<void> _saveQueueAsPlaylist(
   final nameController = TextEditingController();
   final name = await showShellDialog<String?>(
     context: context,
-    builder: (d) => AlertDialog(
-      backgroundColor: AppTheme.surfaceContainerHigh,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      title: const Text(
-        'Save Queue as Playlist',
-        style: TextStyle(
-          color: AppTheme.onBackground,
-          fontSize: 18,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-      content: TextField(
-        controller: nameController,
-        autofocus: true,
-        style: const TextStyle(color: AppTheme.onBackground),
-        decoration: const InputDecoration(
-          hintText: 'Playlist name',
-          filled: true,
-          fillColor: AppTheme.surfaceContainer,
-        ),
-        onSubmitted: (_) => Navigator.of(d).pop(nameController.text.trim()),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(d).pop(null),
-          child: const Text(
-            'Cancel',
-            style: TextStyle(color: AppTheme.onBackgroundMuted),
+    builder:
+        (d) => AlertDialog(
+          backgroundColor: AppTheme.surfaceContainerHigh,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
-        ),
-        TextButton(
-          onPressed: () => Navigator.of(d).pop(nameController.text.trim()),
-          child: const Text(
-            'Create',
+          title: const Text(
+            'Save Queue as Playlist',
             style: TextStyle(
-              color: AppTheme.primary,
-              fontWeight: FontWeight.w600,
+              color: AppTheme.onBackground,
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
             ),
           ),
+          content: TextField(
+            controller: nameController,
+            autofocus: true,
+            style: const TextStyle(color: AppTheme.onBackground),
+            decoration: const InputDecoration(
+              hintText: 'Playlist name',
+              filled: true,
+              fillColor: AppTheme.surfaceContainer,
+            ),
+            onSubmitted: (_) => Navigator.of(d).pop(nameController.text.trim()),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(d).pop(null),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: AppTheme.onBackgroundMuted),
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(d).pop(nameController.text.trim()),
+              child: const Text(
+                'Create',
+                style: TextStyle(
+                  color: AppTheme.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
-    ),
   );
   nameController.dispose();
 
@@ -651,45 +659,48 @@ Future<void> _saveQueueAsPlaylist(
 void showClearQueueConfirmation(BuildContext context, WidgetRef ref) {
   showShellDialog<void>(
     context: context,
-    builder: (dialogContext) => AlertDialog(
-      backgroundColor: AppTheme.surfaceContainerHigh,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      title: const Text(
-        'Clear Queue',
-        style: TextStyle(
-          color: AppTheme.onBackground,
-          fontSize: 18,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-      content: const Text(
-        'Remove all tracks from the queue? This will stop playback.',
-        style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 14),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(dialogContext).pop(),
-          child: const Text(
-            'Cancel',
-            style: TextStyle(color: AppTheme.onBackgroundMuted),
+    builder:
+        (dialogContext) => AlertDialog(
+          backgroundColor: AppTheme.surfaceContainerHigh,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
-        ),
-        TextButton(
-          onPressed: () {
-            Analytics.track('queue_cleared');
-            ref.read(playerProvider.notifier).playTracks([]);
-            Navigator.of(dialogContext).pop();
-          },
-          child: const Text(
-            'Clear',
+          title: const Text(
+            'Clear Queue',
             style: TextStyle(
-              color: AppTheme.error,
-              fontWeight: FontWeight.w600,
+              color: AppTheme.onBackground,
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
             ),
           ),
+          content: const Text(
+            'Remove all tracks from the queue? This will stop playback.',
+            style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 14),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: AppTheme.onBackgroundMuted),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Analytics.track('queue_cleared');
+                ref.read(playerProvider.notifier).playTracks([]);
+                Navigator.of(dialogContext).pop();
+              },
+              child: const Text(
+                'Clear',
+                style: TextStyle(
+                  color: AppTheme.error,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
-    ),
   );
 }
 
@@ -723,17 +734,18 @@ class _QueueTrackRow extends StatelessWidget {
           // locally so the whole queue list does not rebuild on play/pause.
           SizedBox(
             width: 32,
-            child: isCurrentTrack
-                ? const _PlayingIndicator()
-                : Text(
-                    '${index + 1}',
-                    style: const TextStyle(
-                      color: AppTheme.onBackgroundSubtle,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
+            child:
+                isCurrentTrack
+                    ? const _PlayingIndicator()
+                    : Text(
+                      '${index + 1}',
+                      style: const TextStyle(
+                        color: AppTheme.onBackgroundSubtle,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
           ),
           const SizedBox(width: 12),
           // Cover art — thumb crop + decode-at-display-size.
@@ -753,9 +765,10 @@ class _QueueTrackRow extends StatelessWidget {
                 Text(
                   track.title,
                   style: TextStyle(
-                    color: isCurrentTrack
-                        ? AppTheme.primary
-                        : AppTheme.onBackground,
+                    color:
+                        isCurrentTrack
+                            ? AppTheme.primary
+                            : AppTheme.onBackground,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                   ),
@@ -766,9 +779,10 @@ class _QueueTrackRow extends StatelessWidget {
                 Text(
                   track.artistName,
                   style: TextStyle(
-                    color: isCurrentTrack
-                        ? AppTheme.primaryLight
-                        : AppTheme.onBackgroundMuted,
+                    color:
+                        isCurrentTrack
+                            ? AppTheme.primaryLight
+                            : AppTheme.onBackgroundMuted,
                     fontSize: 12,
                   ),
                   maxLines: 1,
@@ -1142,12 +1156,16 @@ class _DraggableQueueItemState extends ConsumerState<_DraggableQueueItem> {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 150),
       decoration: BoxDecoration(
-        color: isTarget
-            ? AppTheme.primary.withValues(alpha: 0.1)
-            : Colors.transparent,
-        border: isTarget
-            ? const Border(top: BorderSide(color: AppTheme.primary, width: 2))
-            : null,
+        color:
+            isTarget
+                ? AppTheme.primary.withValues(alpha: 0.1)
+                : Colors.transparent,
+        border:
+            isTarget
+                ? const Border(
+                  top: BorderSide(color: AppTheme.primary, width: 2),
+                )
+                : null,
       ),
       child: child,
     );
@@ -1172,9 +1190,10 @@ class _DraggableQueueItemState extends ConsumerState<_DraggableQueueItem> {
         );
 
         final inkRow = Material(
-          color: widget.isCurrentTrack
-              ? AppTheme.primary.withValues(alpha: 0.08)
-              : Colors.transparent,
+          color:
+              widget.isCurrentTrack
+                  ? AppTheme.primary.withValues(alpha: 0.08)
+                  : Colors.transparent,
           child: AnimatedOpacity(
             opacity: _isDragging ? 0.35 : 1.0,
             duration: const Duration(milliseconds: 150),
@@ -1183,17 +1202,14 @@ class _DraggableQueueItemState extends ConsumerState<_DraggableQueueItem> {
               // Long-press (touch) and right-click (mouse) both open the menu.
               // The handle's LongPressDraggable wins over long-press on the grip.
               onLongPress: () => _onOpenMenu(null),
-              onSecondaryTapDown: (details) =>
-                  _onOpenMenu(details.globalPosition),
+              onSecondaryTapDown:
+                  (details) => _onOpenMenu(details.globalPosition),
               // Fixed-height row: no IntrinsicHeight (expensive during scroll).
               child: SizedBox(
                 height: kQueueTrackRowExtent,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(child: row),
-                    _buildDragHandle(),
-                  ],
+                  children: [Expanded(child: row), _buildDragHandle()],
                 ),
               ),
             ),
@@ -1201,24 +1217,25 @@ class _DraggableQueueItemState extends ConsumerState<_DraggableQueueItem> {
         );
 
         // Now-playing stays non-dismissible (removing it would skip playback).
-        final body = widget.isCurrentTrack
-            ? inkRow
-            : Dismissible(
-                key: ValueKey('queue_${widget.index}_${widget.track.id}'),
-                direction: DismissDirection.endToStart,
-                background: Container(
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.only(right: 24),
-                  color: AppTheme.error.withValues(alpha: 0.2),
-                  child: const Icon(
-                    Icons.delete_outline_rounded,
-                    color: AppTheme.error,
-                    size: 22,
+        final body =
+            widget.isCurrentTrack
+                ? inkRow
+                : Dismissible(
+                  key: ValueKey('queue_${widget.index}_${widget.track.id}'),
+                  direction: DismissDirection.endToStart,
+                  background: Container(
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.only(right: 24),
+                    color: AppTheme.error.withValues(alpha: 0.2),
+                    child: const Icon(
+                      Icons.delete_outline_rounded,
+                      color: AppTheme.error,
+                      size: 22,
+                    ),
                   ),
-                ),
-                onDismissed: (_) => widget.onDismissed(),
-                child: inkRow,
-              );
+                  onDismissed: (_) => widget.onDismissed(),
+                  child: inkRow,
+                );
 
         return _buildDropHighlight(isTarget: isTarget, child: body);
       },
@@ -1280,48 +1297,49 @@ class _StashedQueuesSheet extends ConsumerWidget {
                       onPressed: () async {
                         final confirmed = await showShellDialog<bool>(
                           context: context,
-                          builder: (d) => AlertDialog(
-                            backgroundColor: AppTheme.surfaceContainerHigh,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            title: const Text(
-                              'Clear All Stashes',
-                              style: TextStyle(
-                                color: AppTheme.onBackground,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            content: const Text(
-                              'Delete all stashed queues? This cannot be undone.',
-                              style: TextStyle(
-                                color: AppTheme.onBackgroundMuted,
-                                fontSize: 14,
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.of(d).pop(false),
-                                child: const Text(
-                                  'Cancel',
+                          builder:
+                              (d) => AlertDialog(
+                                backgroundColor: AppTheme.surfaceContainerHigh,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                title: const Text(
+                                  'Clear All Stashes',
+                                  style: TextStyle(
+                                    color: AppTheme.onBackground,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                content: const Text(
+                                  'Delete all stashed queues? This cannot be undone.',
                                   style: TextStyle(
                                     color: AppTheme.onBackgroundMuted,
+                                    fontSize: 14,
                                   ),
                                 ),
-                              ),
-                              TextButton(
-                                onPressed: () => Navigator.of(d).pop(true),
-                                child: const Text(
-                                  'Clear',
-                                  style: TextStyle(
-                                    color: AppTheme.error,
-                                    fontWeight: FontWeight.w600,
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.of(d).pop(false),
+                                    child: const Text(
+                                      'Cancel',
+                                      style: TextStyle(
+                                        color: AppTheme.onBackgroundMuted,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  TextButton(
+                                    onPressed: () => Navigator.of(d).pop(true),
+                                    child: const Text(
+                                      'Clear',
+                                      style: TextStyle(
+                                        color: AppTheme.error,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
                         );
                         if (confirmed == true) {
                           for (final s in stashes) {
@@ -1347,24 +1365,26 @@ class _StashedQueuesSheet extends ConsumerWidget {
             const Divider(color: AppTheme.divider, height: 1),
             // List
             Expanded(
-              child: stashes.isEmpty
-                  ? const Center(
-                      child: Text(
-                        'No stashed queues',
-                        style: TextStyle(
-                          color: AppTheme.onBackgroundMuted,
-                          fontSize: 14,
+              child:
+                  stashes.isEmpty
+                      ? const Center(
+                        child: Text(
+                          'No stashed queues',
+                          style: TextStyle(
+                            color: AppTheme.onBackgroundMuted,
+                            fontSize: 14,
+                          ),
                         ),
+                      )
+                      : ListView.builder(
+                        controller: scrollController,
+                        itemCount: stashes.length,
+                        itemBuilder:
+                            (context, index) => StashedQueueTile(
+                              stash: stashes[index],
+                              onRestored: () => Navigator.of(context).pop(),
+                            ),
                       ),
-                    )
-                  : ListView.builder(
-                      controller: scrollController,
-                      itemCount: stashes.length,
-                      itemBuilder: (context, index) => StashedQueueTile(
-                        stash: stashes[index],
-                        onRestored: () => Navigator.of(context).pop(),
-                      ),
-                    ),
             ),
           ],
         );
@@ -1398,8 +1418,9 @@ class _StashedQueuesInline extends ConsumerWidget {
         parent: AlwaysScrollableScrollPhysics(),
       ),
       itemCount: stashes.length,
-      itemBuilder: (context, index) =>
-          StashedQueueTile(stash: stashes[index], onRestored: onRestored),
+      itemBuilder:
+          (context, index) =>
+              StashedQueueTile(stash: stashes[index], onRestored: onRestored),
     );
   }
 }
@@ -1512,30 +1533,31 @@ class StashedQueueTile extends ConsumerWidget {
                         break;
                     }
                   },
-                  itemBuilder: (c) => [
-                    const PopupMenuItem(
-                      value: 'rename',
-                      child: PopupMenuRow(
-                        icon: Icons.edit_rounded,
-                        label: 'Rename',
-                      ),
-                    ),
-                    const PopupMenuItem(
-                      value: 'save_playlist',
-                      child: PopupMenuRow(
-                        icon: Icons.queue_music_rounded,
-                        label: 'Save as playlist',
-                      ),
-                    ),
-                    const PopupMenuItem(
-                      value: 'delete',
-                      child: PopupMenuRow(
-                        icon: Icons.delete_outline_rounded,
-                        label: 'Delete',
-                        destructive: true,
-                      ),
-                    ),
-                  ],
+                  itemBuilder:
+                      (c) => [
+                        const PopupMenuItem(
+                          value: 'rename',
+                          child: PopupMenuRow(
+                            icon: Icons.edit_rounded,
+                            label: 'Rename',
+                          ),
+                        ),
+                        const PopupMenuItem(
+                          value: 'save_playlist',
+                          child: PopupMenuRow(
+                            icon: Icons.queue_music_rounded,
+                            label: 'Save as playlist',
+                          ),
+                        ),
+                        const PopupMenuItem(
+                          value: 'delete',
+                          child: PopupMenuRow(
+                            icon: Icons.delete_outline_rounded,
+                            label: 'Delete',
+                            destructive: true,
+                          ),
+                        ),
+                      ],
                   child: Padding(
                     padding: const EdgeInsets.only(right: 8),
                     child: Icon(
@@ -1566,103 +1588,113 @@ class StashedQueueTile extends ConsumerWidget {
     });
     showShellDialog(
       context: context,
-      builder: (d) => AlertDialog(
-        backgroundColor: AppTheme.surfaceContainerHigh,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          'Rename Stash',
-          style: TextStyle(
-            color: AppTheme.onBackground,
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          style: const TextStyle(color: AppTheme.onBackground),
-          decoration: const InputDecoration(
-            hintText: 'Name',
-            filled: true,
-            fillColor: AppTheme.surfaceContainer,
-          ),
-          onSubmitted: (_) async {
-            Navigator.of(d).pop();
-            await QueuePersistenceService.renameStash(
-              stash.id,
-              controller.text.trim().isEmpty ? null : controller.text.trim(),
-            );
-            ref.invalidate(stashedQueuesProvider);
-          },
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(d).pop(),
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: AppTheme.onBackgroundMuted),
+      builder:
+          (d) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.of(d).pop();
-              await QueuePersistenceService.renameStash(
-                stash.id,
-                controller.text.trim().isEmpty ? null : controller.text.trim(),
-              );
-              ref.invalidate(stashedQueuesProvider);
-            },
-            child: const Text(
-              'Save',
+            title: const Text(
+              'Rename Stash',
               style: TextStyle(
-                color: AppTheme.primary,
-                fontWeight: FontWeight.w600,
+                color: AppTheme.onBackground,
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
               ),
             ),
+            content: TextField(
+              controller: controller,
+              autofocus: true,
+              style: const TextStyle(color: AppTheme.onBackground),
+              decoration: const InputDecoration(
+                hintText: 'Name',
+                filled: true,
+                fillColor: AppTheme.surfaceContainer,
+              ),
+              onSubmitted: (_) async {
+                Navigator.of(d).pop();
+                await QueuePersistenceService.renameStash(
+                  stash.id,
+                  controller.text.trim().isEmpty
+                      ? null
+                      : controller.text.trim(),
+                );
+                ref.invalidate(stashedQueuesProvider);
+              },
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(d).pop(),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(color: AppTheme.onBackgroundMuted),
+                ),
+              ),
+              TextButton(
+                onPressed: () async {
+                  Navigator.of(d).pop();
+                  await QueuePersistenceService.renameStash(
+                    stash.id,
+                    controller.text.trim().isEmpty
+                        ? null
+                        : controller.text.trim(),
+                  );
+                  ref.invalidate(stashedQueuesProvider);
+                },
+                child: const Text(
+                  'Save',
+                  style: TextStyle(
+                    color: AppTheme.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
     ).whenComplete(controller.dispose);
   }
 
   Future<void> _confirmDelete(BuildContext context, WidgetRef ref) async {
     final confirmed = await showShellDialog<bool>(
       context: context,
-      builder: (d) => AlertDialog(
-        backgroundColor: AppTheme.surfaceContainerHigh,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          'Delete Stash',
-          style: TextStyle(
-            color: AppTheme.onBackground,
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        content: const Text(
-          'Delete this stashed queue? This cannot be undone.',
-          style: TextStyle(color: AppTheme.onBackgroundMuted),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(d).pop(false),
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: AppTheme.onBackgroundMuted),
+      builder:
+          (d) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(d).pop(true),
-            child: const Text(
-              'Delete',
+            title: const Text(
+              'Delete Stash',
               style: TextStyle(
-                color: AppTheme.error,
-                fontWeight: FontWeight.w600,
+                color: AppTheme.onBackground,
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
               ),
             ),
+            content: const Text(
+              'Delete this stashed queue? This cannot be undone.',
+              style: TextStyle(color: AppTheme.onBackgroundMuted),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(d).pop(false),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(color: AppTheme.onBackgroundMuted),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(d).pop(true),
+                child: const Text(
+                  'Delete',
+                  style: TextStyle(
+                    color: AppTheme.error,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
     );
     if (confirmed == true) {
       await ref.read(playerProvider.notifier).deleteStash(stash.id);
@@ -1682,46 +1714,50 @@ class StashedQueueTile extends ConsumerWidget {
     });
     final name = await showShellDialog<String?>(
       context: context,
-      builder: (d) => AlertDialog(
-        backgroundColor: AppTheme.surfaceContainerHigh,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          'Create Playlist',
-          style: TextStyle(
-            color: AppTheme.onBackground,
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        content: TextField(
-          controller: nameController,
-          autofocus: true,
-          decoration: const InputDecoration(
-            hintText: 'Playlist name',
-            filled: true,
-            fillColor: AppTheme.surfaceContainer,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(d).pop(null),
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: AppTheme.onBackgroundMuted),
+      builder:
+          (d) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(d).pop(nameController.text.trim()),
-            child: const Text(
-              'Create & Add',
+            title: const Text(
+              'Create Playlist',
               style: TextStyle(
-                color: AppTheme.primary,
-                fontWeight: FontWeight.w600,
+                color: AppTheme.onBackground,
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
               ),
             ),
+            content: TextField(
+              controller: nameController,
+              autofocus: true,
+              decoration: const InputDecoration(
+                hintText: 'Playlist name',
+                filled: true,
+                fillColor: AppTheme.surfaceContainer,
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(d).pop(null),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(color: AppTheme.onBackgroundMuted),
+                ),
+              ),
+              TextButton(
+                onPressed:
+                    () => Navigator.of(d).pop(nameController.text.trim()),
+                child: const Text(
+                  'Create & Add',
+                  style: TextStyle(
+                    color: AppTheme.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
     );
     nameController.dispose();
 
@@ -1763,48 +1799,51 @@ class StashedQueueTile extends ConsumerWidget {
 
     showShellDialog<void>(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        backgroundColor: AppTheme.surfaceContainerHigh,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          'Restore Stash',
-          style: TextStyle(
-            color: AppTheme.onBackground,
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        content: const Text(
-          'Restoring this stash will replace the current queue. Continue?',
-          style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 14),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: AppTheme.onBackgroundMuted),
+      builder:
+          (dialogContext) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(dialogContext).pop();
-              ref.read(playerProvider.notifier).restoreStash(stash.id);
-              // Ensure any inline UI is closed by calling the provided
-              // onRestored callback (parent will hide inline UI). Do not
-              // manipulate global providers here.
-              onRestored?.call();
-            },
-            child: const Text(
-              'Restore',
+            title: const Text(
+              'Restore Stash',
               style: TextStyle(
-                color: AppTheme.primary,
-                fontWeight: FontWeight.w600,
+                color: AppTheme.onBackground,
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
               ),
             ),
+            content: const Text(
+              'Restoring this stash will replace the current queue. Continue?',
+              style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 14),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(color: AppTheme.onBackgroundMuted),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(dialogContext).pop();
+                  ref.read(playerProvider.notifier).restoreStash(stash.id);
+                  // Ensure any inline UI is closed by calling the provided
+                  // onRestored callback (parent will hide inline UI). Do not
+                  // manipulate global providers here.
+                  onRestored?.call();
+                },
+                child: const Text(
+                  'Restore',
+                  style: TextStyle(
+                    color: AppTheme.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 }

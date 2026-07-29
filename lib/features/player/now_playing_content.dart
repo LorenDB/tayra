@@ -12,6 +12,7 @@ import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/models.dart';
 import 'package:tayra/core/easter_eggs/super_sonic_aura.dart';
 import 'package:tayra/core/easter_eggs/super_sonic_ids.dart';
+import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/theme/palette_provider.dart';
 import 'package:tayra/features/player/player_provider.dart';
@@ -402,7 +403,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
           IconButton(
             icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 32),
             color: AppTheme.onBackground,
-            onPressed: () => context.pop(),
+            onPressed: () => popPage(context),
           ),
           const Text(
             'NOW PLAYING',

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/settings_tiles.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
@@ -16,6 +17,7 @@ class YearReviewSettingsScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Year in Review'),
         backgroundColor: AppTheme.background,
+        leading: const AppBackButton(fallbackLocation: '/settings'),
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -26,8 +28,10 @@ class YearReviewSettingsScreen extends ConsumerWidget {
             title: 'Show year-end prompts',
             subtitle: 'Show the Year in Review banner and prompts at year end',
             value: settings.showYearEndPrompts,
-            onChanged: (v) =>
-                ref.read(settingsProvider.notifier).setShowYearEndPrompts(v),
+            onChanged:
+                (v) => ref
+                    .read(settingsProvider.notifier)
+                    .setShowYearEndPrompts(v),
           ),
         ],
       ),

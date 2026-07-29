@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tayra/core/api/api_repository.dart';
 import 'package:tayra/core/api/models.dart';
+import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/app_refresh_indicator.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
@@ -127,6 +128,7 @@ class _ManageLibrariesScreenState extends ConsumerState<ManageLibrariesScreen> {
       appBar: AppBar(
         title: const Text('Libraries'),
         backgroundColor: AppTheme.background,
+        leading: const AppBackButton(fallbackLocation: '/manage/library'),
       ),
       body: canManage.when(
         loading: () => const Center(child: CircularProgressIndicator()),

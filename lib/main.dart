@@ -17,6 +17,7 @@ import 'package:tayra/core/cache/download_queue_service.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/platform/app_platform.dart';
 import 'package:tayra/core/router/app_router.dart';
+import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/features/player/player_provider.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
@@ -323,6 +324,13 @@ class _TayraAppState extends ConsumerState<TayraApp>
       theme: AppTheme.darkTheme,
       routerConfig: router,
       onNavigationNotification: _onNavigationNotification,
+      // Desktop: mouse side-button / OS browser-back → pop route (web uses
+      // browser history for this already).
+      builder: (context, child) {
+        return DesktopBackGestureHandler(
+          child: child ?? const SizedBox.shrink(),
+        );
+      },
     );
   }
 }

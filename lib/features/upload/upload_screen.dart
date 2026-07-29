@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/api/models.dart';
+import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/dialog_utils.dart';
 import 'package:tayra/features/upload/upload_provider.dart';
@@ -24,6 +25,7 @@ class UploadScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Upload Music'),
         backgroundColor: AppTheme.background,
+        leading: const AppBackButton(fallbackLocation: '/settings'),
         actions: [
           if (isDone)
             TextButton(
@@ -141,9 +143,10 @@ class _FileCard extends ConsumerWidget {
           ),
           const SizedBox(width: 12),
           ElevatedButton.icon(
-            onPressed: isLocked
-                ? null
-                : () => ref.read(uploadProvider.notifier).pickFile(),
+            onPressed:
+                isLocked
+                    ? null
+                    : () => ref.read(uploadProvider.notifier).pickFile(),
             icon: const Icon(Icons.folder_open_rounded, size: 18),
             label: Text(state.hasFile ? 'Change' : 'Select'),
             style: ElevatedButton.styleFrom(
@@ -320,9 +323,8 @@ class _LibraryTile extends StatelessWidget {
                 isSelected
                     ? Icons.radio_button_checked_rounded
                     : Icons.radio_button_unchecked_rounded,
-                color: isSelected
-                    ? AppTheme.primary
-                    : AppTheme.onBackgroundSubtle,
+                color:
+                    isSelected ? AppTheme.primary : AppTheme.onBackgroundSubtle,
                 size: 20,
               ),
               const SizedBox(width: 10),
@@ -333,13 +335,13 @@ class _LibraryTile extends StatelessWidget {
                     Text(
                       library.name,
                       style: TextStyle(
-                        color: isSelected
-                            ? AppTheme.onBackground
-                            : AppTheme.onBackgroundMuted,
+                        color:
+                            isSelected
+                                ? AppTheme.onBackground
+                                : AppTheme.onBackgroundMuted,
                         fontSize: 14,
-                        fontWeight: isSelected
-                            ? FontWeight.w500
-                            : FontWeight.normal,
+                        fontWeight:
+                            isSelected ? FontWeight.w500 : FontWeight.normal,
                       ),
                     ),
                     Text(
@@ -383,9 +385,8 @@ class _MusicBrainzCard extends ConsumerWidget {
               ),
               Switch(
                 value: state.useMusicBrainz,
-                onChanged: isLocked
-                    ? null
-                    : (v) => notifier.setUseMusicBrainz(v),
+                onChanged:
+                    isLocked ? null : (v) => notifier.setUseMusicBrainz(v),
                 activeThumbColor: AppTheme.primary,
                 activeTrackColor: AppTheme.primary.withAlpha(100),
               ),
@@ -407,9 +408,8 @@ class _MusicBrainzCard extends ConsumerWidget {
             SizedBox(
               width: double.infinity,
               child: OutlinedButton.icon(
-                onPressed: isLocked
-                    ? null
-                    : () => _showMbSearchSheet(context, ref),
+                onPressed:
+                    isLocked ? null : () => _showMbSearchSheet(context, ref),
                 icon: const Icon(Icons.search_rounded, size: 18),
                 label: Text(
                   state.mbRecordingId.isEmpty
@@ -536,19 +536,19 @@ class _MbSearchSheetState extends ConsumerState<_MbSearchSheet> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
-                      onPressed: state.mbSearching
-                          ? null
-                          : () => _search(notifier),
-                      icon: state.mbSearching
-                          ? const SizedBox(
-                              width: 16,
-                              height: 16,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: AppTheme.onBackground,
-                              ),
-                            )
-                          : const Icon(Icons.search_rounded),
+                      onPressed:
+                          state.mbSearching ? null : () => _search(notifier),
+                      icon:
+                          state.mbSearching
+                              ? const SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: AppTheme.onBackground,
+                                ),
+                              )
+                              : const Icon(Icons.search_rounded),
                       label: Text(state.mbSearching ? 'Searching…' : 'Search'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppTheme.primary,
@@ -692,52 +692,54 @@ class _MbRecordingSummary extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           Expanded(
-            child: rec != null
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        rec.title,
-                        style: const TextStyle(
-                          color: AppTheme.primary,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
+            child:
+                rec != null
+                    ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          rec.title,
+                          style: const TextStyle(
+                            color: AppTheme.primary,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
+                        if (rec.artistName != null)
+                          Text(
+                            rec.artistName!,
+                            style: const TextStyle(
+                              color: AppTheme.onBackgroundMuted,
+                              fontSize: 12,
+                            ),
+                          ),
+                        if (rec.albumTitle != null)
+                          Text(
+                            [
+                              rec.albumTitle!,
+                              if (rec.year != null) '(${rec.year})',
+                              if (rec.discNumber != null && rec.discNumber! > 1)
+                                'Disc ${rec.discNumber}',
+                              if (rec.trackNumber != null)
+                                'Track ${rec.trackNumber}',
+                              if (rec.durationLabel.isNotEmpty)
+                                rec.durationLabel,
+                            ].join(' \u00b7 '),
+                            style: const TextStyle(
+                              color: AppTheme.onBackgroundSubtle,
+                              fontSize: 11,
+                            ),
+                          ),
+                      ],
+                    )
+                    : Text(
+                      state.mbRecordingId,
+                      style: const TextStyle(
+                        color: AppTheme.onBackgroundMuted,
+                        fontSize: 12,
+                        fontFamily: 'monospace',
                       ),
-                      if (rec.artistName != null)
-                        Text(
-                          rec.artistName!,
-                          style: const TextStyle(
-                            color: AppTheme.onBackgroundMuted,
-                            fontSize: 12,
-                          ),
-                        ),
-                      if (rec.albumTitle != null)
-                        Text(
-                          [
-                            rec.albumTitle!,
-                            if (rec.year != null) '(${rec.year})',
-                            if (rec.discNumber != null && rec.discNumber! > 1)
-                              'Disc ${rec.discNumber}',
-                            if (rec.trackNumber != null)
-                              'Track ${rec.trackNumber}',
-                            if (rec.durationLabel.isNotEmpty) rec.durationLabel,
-                          ].join(' \u00b7 '),
-                          style: const TextStyle(
-                            color: AppTheme.onBackgroundSubtle,
-                            fontSize: 11,
-                          ),
-                        ),
-                    ],
-                  )
-                : Text(
-                    state.mbRecordingId,
-                    style: const TextStyle(
-                      color: AppTheme.onBackgroundMuted,
-                      fontSize: 12,
-                      fontFamily: 'monospace',
                     ),
-                  ),
           ),
         ],
       ),
@@ -820,15 +822,16 @@ class _CoverArtPreview extends ConsumerWidget {
             width: 56,
             height: 56,
             fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) => Container(
-              width: 56,
-              height: 56,
-              color: AppTheme.surfaceContainerHigh,
-              child: const Icon(
-                Icons.broken_image_outlined,
-                color: AppTheme.onBackgroundSubtle,
-              ),
-            ),
+            errorBuilder:
+                (context, error, stackTrace) => Container(
+                  width: 56,
+                  height: 56,
+                  color: AppTheme.surfaceContainerHigh,
+                  child: const Icon(
+                    Icons.broken_image_outlined,
+                    color: AppTheme.onBackgroundSubtle,
+                  ),
+                ),
           ),
         ),
         const SizedBox(width: 12),
@@ -845,11 +848,12 @@ class _CoverArtPreview extends ConsumerWidget {
               ),
               const SizedBox(height: 4),
               InkWell(
-                onTap: isLocked
-                    ? null
-                    : () => ref
-                          .read(uploadProvider.notifier)
-                          .setEmbedCoverArt(!embed),
+                onTap:
+                    isLocked
+                        ? null
+                        : () => ref
+                            .read(uploadProvider.notifier)
+                            .setEmbedCoverArt(!embed),
                 borderRadius: BorderRadius.circular(4),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -859,11 +863,12 @@ class _CoverArtPreview extends ConsumerWidget {
                       height: 20,
                       child: Checkbox(
                         value: embed,
-                        onChanged: isLocked
-                            ? null
-                            : (v) => ref
-                                  .read(uploadProvider.notifier)
-                                  .setEmbedCoverArt(v ?? true),
+                        onChanged:
+                            isLocked
+                                ? null
+                                : (v) => ref
+                                    .read(uploadProvider.notifier)
+                                    .setEmbedCoverArt(v ?? true),
                         activeColor: AppTheme.primary,
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
@@ -966,19 +971,21 @@ class _UploadButton extends StatelessWidget {
           const SizedBox(height: 8),
         ],
         ElevatedButton.icon(
-          onPressed: state.canUpload
-              ? () => ref.read(uploadProvider.notifier).upload()
-              : null,
-          icon: isBusy
-              ? const SizedBox(
-                  width: 18,
-                  height: 18,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: Colors.white,
-                  ),
-                )
-              : const Icon(Icons.cloud_upload_rounded),
+          onPressed:
+              state.canUpload
+                  ? () => ref.read(uploadProvider.notifier).upload()
+                  : null,
+          icon:
+              isBusy
+                  ? const SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Colors.white,
+                    ),
+                  )
+                  : const Icon(Icons.cloud_upload_rounded),
           label: Text(
             isPolling
                 ? 'Processing…'
@@ -1060,13 +1067,10 @@ class _StatusCard extends StatelessWidget {
         children: [
           showSpinner
               ? SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: color,
-                  ),
-                )
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(strokeWidth: 2, color: color),
+              )
               : Icon(icon, color: color, size: 20),
           const SizedBox(width: 12),
           Expanded(
@@ -1174,10 +1178,11 @@ class _CreateLibraryDialogState extends State<_CreateLibraryDialog> {
           child: const Text('Cancel'),
         ),
         ElevatedButton(
-          onPressed: () => Navigator.of(context).pop({
-            'name': _nameController.text.trim(),
-            'privacy_level': _privacyLevel,
-          }),
+          onPressed:
+              () => Navigator.of(context).pop({
+                'name': _nameController.text.trim(),
+                'privacy_level': _privacyLevel,
+              }),
           style: ElevatedButton.styleFrom(
             backgroundColor: AppTheme.primary,
             foregroundColor: Colors.white,
@@ -1218,9 +1223,8 @@ class _PrivacyRadio extends StatelessWidget {
               isSelected
                   ? Icons.radio_button_checked_rounded
                   : Icons.radio_button_unchecked_rounded,
-              color: isSelected
-                  ? AppTheme.primary
-                  : AppTheme.onBackgroundSubtle,
+              color:
+                  isSelected ? AppTheme.primary : AppTheme.onBackgroundSubtle,
               size: 20,
             ),
             const SizedBox(width: 10),

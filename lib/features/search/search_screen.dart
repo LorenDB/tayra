@@ -6,6 +6,7 @@ import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
+import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/album_card.dart';
 import 'package:tayra/core/widgets/content_section_header.dart';
@@ -134,10 +135,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       appBar: AppBar(
         backgroundColor: AppTheme.background,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded),
-          onPressed: () => context.pop(),
-        ),
+        leading: const AppBackButton(),
       ),
       body: _buildBody(),
     );

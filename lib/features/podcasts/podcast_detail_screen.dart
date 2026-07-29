@@ -11,6 +11,7 @@ import 'package:tayra/core/api/client_data_service.dart';
 import 'package:tayra/core/api/models.dart' as models;
 import 'package:tayra/core/cache/auto_offline_coordinator.dart';
 import 'package:tayra/core/platform/app_platform.dart';
+import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/app_refresh_indicator.dart';
 import 'package:tayra/core/widgets/error_state.dart';
@@ -358,6 +359,7 @@ class _PodcastDetailScreenState extends ConsumerState<PodcastDetailScreen> {
       backgroundColor: AppTheme.background,
       expandedHeight: hasCover ? 280 : null,
       pinned: true,
+      leading: const AppBackButton(),
       title:
           channel != null
               ? Text(

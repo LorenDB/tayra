@@ -2,6 +2,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/app_refresh_indicator.dart';
 import 'package:tayra/core/theme/palette_provider.dart';
@@ -102,45 +103,50 @@ class _YearReviewScreenState extends ConsumerState<YearReviewScreen>
     return Scaffold(
       backgroundColor: AppTheme.background,
       body: statsAsync.when(
-        loading: () => const Center(
-          child: CircularProgressIndicator(color: AppTheme.primary),
-        ),
-        error: (error, stack) => AppRefreshIndicator(
-          onRefresh: _refresh,
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: SizedBox(
-              height: MediaQuery.sizeOf(context).height,
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(
-                      Icons.error_outline,
-                      color: AppTheme.error,
-                      size: 48,
-                    ),
-                    const SizedBox(height: 16),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: Text(
-                        // Surface the actual error message to help debugging.
-                        error.toString(),
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: AppTheme.onBackgroundMuted,
-                          fontSize: 14,
+        loading:
+            () => const Center(
+              child: CircularProgressIndicator(color: AppTheme.primary),
+            ),
+        error:
+            (error, stack) => AppRefreshIndicator(
+              onRefresh: _refresh,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: SizedBox(
+                  height: MediaQuery.sizeOf(context).height,
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.error_outline,
+                          color: AppTheme.error,
+                          size: 48,
                         ),
-                      ),
+                        const SizedBox(height: 16),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: Text(
+                            // Surface the actual error message to help debugging.
+                            error.toString(),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: AppTheme.onBackgroundMuted,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        TextButton(
+                          onPressed: _refresh,
+                          child: const Text('Retry'),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 8),
-                    TextButton(onPressed: _refresh, child: const Text('Retry')),
-                  ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
         data: (stats) {
           if (stats.isEmpty) {
             return AppRefreshIndicator(
@@ -496,7 +502,7 @@ class _AppBarRow extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.arrow_back_rounded),
             color: AppTheme.onBackground,
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => popPage(context),
           ),
           const SizedBox(width: 4),
           Text(
@@ -655,7 +661,7 @@ class _ReviewContentState extends State<_ReviewContent>
             isStoryMode: _isStoryMode,
             onStoryTap: _switchToStory,
             onDetailsTap: _switchToDetails,
-            onBack: () => Navigator.of(context).pop(),
+            onBack: () => popPage(context),
           ),
           const SizedBox(height: 4),
 
@@ -830,9 +836,8 @@ class _StoryTabRow extends StatelessWidget {
                       vertical: 8,
                     ),
                     decoration: BoxDecoration(
-                      color: isStoryMode
-                          ? AppTheme.primary
-                          : Colors.transparent,
+                      color:
+                          isStoryMode ? AppTheme.primary : Colors.transparent,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Row(
@@ -841,9 +846,10 @@ class _StoryTabRow extends StatelessWidget {
                         Icon(
                           Icons.auto_awesome_rounded,
                           size: 14,
-                          color: isStoryMode
-                              ? Colors.white
-                              : AppTheme.onBackgroundMuted,
+                          color:
+                              isStoryMode
+                                  ? Colors.white
+                                  : AppTheme.onBackgroundMuted,
                         ),
                         const SizedBox(width: 4),
                         Text(
@@ -851,9 +857,10 @@ class _StoryTabRow extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
-                            color: isStoryMode
-                                ? Colors.white
-                                : AppTheme.onBackgroundMuted,
+                            color:
+                                isStoryMode
+                                    ? Colors.white
+                                    : AppTheme.onBackgroundMuted,
                           ),
                         ),
                       ],
@@ -868,9 +875,8 @@ class _StoryTabRow extends StatelessWidget {
                       vertical: 8,
                     ),
                     decoration: BoxDecoration(
-                      color: !isStoryMode
-                          ? AppTheme.primary
-                          : Colors.transparent,
+                      color:
+                          !isStoryMode ? AppTheme.primary : Colors.transparent,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Row(
@@ -879,9 +885,10 @@ class _StoryTabRow extends StatelessWidget {
                         Icon(
                           Icons.list_alt_rounded,
                           size: 14,
-                          color: !isStoryMode
-                              ? Colors.white
-                              : AppTheme.onBackgroundMuted,
+                          color:
+                              !isStoryMode
+                                  ? Colors.white
+                                  : AppTheme.onBackgroundMuted,
                         ),
                         const SizedBox(width: 4),
                         Text(
@@ -889,9 +896,10 @@ class _StoryTabRow extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
-                            color: !isStoryMode
-                                ? Colors.white
-                                : AppTheme.onBackgroundMuted,
+                            color:
+                                !isStoryMode
+                                    ? Colors.white
+                                    : AppTheme.onBackgroundMuted,
                           ),
                         ),
                       ],
@@ -938,9 +946,8 @@ class _StoryProgress extends StatelessWidget {
             width: isActive ? 20 : 6,
             height: 4,
             decoration: BoxDecoration(
-              color: isActive
-                  ? AppTheme.primary
-                  : AppTheme.surfaceContainerHigh,
+              color:
+                  isActive ? AppTheme.primary : AppTheme.surfaceContainerHigh,
               borderRadius: BorderRadius.circular(2),
             ),
           );
@@ -1728,21 +1735,26 @@ class _StoryPeakMonthCardState extends State<_StoryPeakMonthCard>
       'November',
       'December',
     ];
-    final monthName = peakMonth > 0 && peakMonth <= 12
-        ? fullMonths[peakMonth - 1]
-        : 'Unknown';
-    final peakData = peakMonth > 0
-        ? s.monthlyBreakdown.firstWhere(
-            (m) => m.month == peakMonth,
-            orElse: () =>
-                MonthlyListens(month: peakMonth, count: 0, totalSeconds: 0),
-          )
-        : null;
+    final monthName =
+        peakMonth > 0 && peakMonth <= 12
+            ? fullMonths[peakMonth - 1]
+            : 'Unknown';
+    final peakData =
+        peakMonth > 0
+            ? s.monthlyBreakdown.firstWhere(
+              (m) => m.month == peakMonth,
+              orElse:
+                  () => MonthlyListens(
+                    month: peakMonth,
+                    count: 0,
+                    totalSeconds: 0,
+                  ),
+            )
+            : null;
 
     final medianIndex = s.monthlyBreakdown.map((m) => m.count).toList()..sort();
-    final median = medianIndex.isNotEmpty
-        ? medianIndex[medianIndex.length ~/ 2]
-        : 1;
+    final median =
+        medianIndex.isNotEmpty ? medianIndex[medianIndex.length ~/ 2] : 1;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
@@ -1876,12 +1888,12 @@ class _StoryFunStatsCardState extends State<_StoryFunStatsCard>
   @override
   Widget build(BuildContext context) {
     final s = widget.stats;
-    final perDay = s.totalListens > 0
-        ? (s.totalListens / 365).toStringAsFixed(1)
-        : '0';
-    final perDayMins = s.totalListens > 0
-        ? ((s.totalSeconds / s.totalListens)).toStringAsFixed(0)
-        : '0';
+    final perDay =
+        s.totalListens > 0 ? (s.totalListens / 365).toStringAsFixed(1) : '0';
+    final perDayMins =
+        s.totalListens > 0
+            ? ((s.totalSeconds / s.totalListens)).toStringAsFixed(0)
+            : '0';
     final topGenre = s.topArtist?.name ?? 'unknown sounds';
 
     return Padding(
@@ -2295,28 +2307,30 @@ class _DetailsView extends StatelessWidget {
                             });
                             final name = await showDialog<String?>(
                               context: context,
-                              builder: (ctx) => AlertDialog(
-                                title: const Text('Create playlist'),
-                                content: TextField(
-                                  controller: nameController,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Playlist name',
+                              builder:
+                                  (ctx) => AlertDialog(
+                                    title: const Text('Create playlist'),
+                                    content: TextField(
+                                      controller: nameController,
+                                      decoration: const InputDecoration(
+                                        labelText: 'Playlist name',
+                                      ),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed:
+                                            () => Navigator.of(ctx).pop(null),
+                                        child: const Text('Cancel'),
+                                      ),
+                                      TextButton(
+                                        onPressed:
+                                            () => Navigator.of(
+                                              ctx,
+                                            ).pop(nameController.text.trim()),
+                                        child: const Text('Create'),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.of(ctx).pop(null),
-                                    child: const Text('Cancel'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () => Navigator.of(
-                                      ctx,
-                                    ).pop(nameController.text.trim()),
-                                    child: const Text('Create'),
-                                  ),
-                                ],
-                              ),
                             );
 
                             if (name == null || name.isEmpty) {
@@ -2546,13 +2560,15 @@ class _HeroCardState extends State<_HeroCard>
         curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
       ),
       child: SlideTransition(
-        position: Tween<Offset>(begin: const Offset(0, 0.15), end: Offset.zero)
-            .animate(
-              CurvedAnimation(
-                parent: widget.animController,
-                curve: const Interval(0.0, 0.6, curve: Curves.easeOutCubic),
-              ),
-            ),
+        position: Tween<Offset>(
+          begin: const Offset(0, 0.15),
+          end: Offset.zero,
+        ).animate(
+          CurvedAnimation(
+            parent: widget.animController,
+            curve: const Interval(0.0, 0.6, curve: Curves.easeOutCubic),
+          ),
+        ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: card,
@@ -2877,9 +2893,8 @@ class _DeviceRow extends StatelessWidget {
                   backgroundColor: AppTheme.onBackground.withValues(
                     alpha: 0.08,
                   ),
-                  color: rank == 1
-                      ? AppTheme.primary
-                      : AppTheme.onBackgroundMuted,
+                  color:
+                      rank == 1 ? AppTheme.primary : AppTheme.onBackgroundMuted,
                 ),
               ),
             ),
@@ -3048,9 +3063,12 @@ class _StoryDeviceStatsCardState extends State<_StoryDeviceStatsCard>
                                 backgroundColor: Colors.white.withValues(
                                   alpha: 0.1,
                                 ),
-                                color: i == 0
-                                    ? AppTheme.primary
-                                    : AppTheme.secondary.withValues(alpha: 0.7),
+                                color:
+                                    i == 0
+                                        ? AppTheme.primary
+                                        : AppTheme.secondary.withValues(
+                                          alpha: 0.7,
+                                        ),
                               ),
                             ),
                           ],
@@ -3081,44 +3099,46 @@ class _LovedVsListenedSection extends StatelessWidget {
     // Decide which "loved" list to surface:
     //   • Prefer tracks favourited *this specific year* — most relevant.
     //   • Fall back to currently-favourited tracks from the top-listened list.
-    final lovedItems = stats.favoritedThisYear.isNotEmpty
-        ? stats.favoritedThisYear
-              .take(5)
-              .map(
-                (f) => _LoveTile(
-                  trackTitle: f.trackTitle,
-                  artistName: f.artistName,
-                  coverUrl: f.coverUrl,
-                  listenCount: f.listenCount,
-                  isFavorited: true,
-                ),
-              )
-              .toList()
-        : stats.lovedTopTracks
-              .take(5)
-              .map(
-                (t) => _LoveTile(
-                  trackTitle: t.name,
-                  artistName: t.subtitle ?? '',
-                  coverUrl: t.coverUrl,
-                  listenCount: t.count,
-                  isFavorited: true,
-                ),
-              )
-              .toList();
+    final lovedItems =
+        stats.favoritedThisYear.isNotEmpty
+            ? stats.favoritedThisYear
+                .take(5)
+                .map(
+                  (f) => _LoveTile(
+                    trackTitle: f.trackTitle,
+                    artistName: f.artistName,
+                    coverUrl: f.coverUrl,
+                    listenCount: f.listenCount,
+                    isFavorited: true,
+                  ),
+                )
+                .toList()
+            : stats.lovedTopTracks
+                .take(5)
+                .map(
+                  (t) => _LoveTile(
+                    trackTitle: t.name,
+                    artistName: t.subtitle ?? '',
+                    coverUrl: t.coverUrl,
+                    listenCount: t.count,
+                    isFavorited: true,
+                  ),
+                )
+                .toList();
 
-    final unlovedItems = stats.unlovedTopTracks
-        .take(5)
-        .map(
-          (t) => _LoveTile(
-            trackTitle: t.name,
-            artistName: t.subtitle ?? '',
-            coverUrl: t.coverUrl,
-            listenCount: t.count,
-            isFavorited: false,
-          ),
-        )
-        .toList();
+    final unlovedItems =
+        stats.unlovedTopTracks
+            .take(5)
+            .map(
+              (t) => _LoveTile(
+                trackTitle: t.name,
+                artistName: t.subtitle ?? '',
+                coverUrl: t.coverUrl,
+                listenCount: t.count,
+                isFavorited: false,
+              ),
+            )
+            .toList();
 
     // Don't render the section at all if both halves are empty.
     if (lovedItems.isEmpty && unlovedItems.isEmpty) return const SizedBox();
@@ -3127,16 +3147,17 @@ class _LovedVsListenedSection extends StatelessWidget {
     // we show alternate wording so the UI doesn't read like a contrast ("vs")
     // when only a single column is rendered.
     final noFavoritedThisYear = stats.favoritedThisYear.isEmpty;
-    final sectionTitle = noFavoritedThisYear
-        ? 'Most Played'
-        : 'Loved vs. Listened';
-    final sectionSubtitle = noFavoritedThisYear
-        ? 'Your most-played tracks'
-        : 'What you favorited vs. what you played most';
+    final sectionTitle =
+        noFavoritedThisYear ? 'Most Played' : 'Loved vs. Listened';
+    final sectionSubtitle =
+        noFavoritedThisYear
+            ? 'Your most-played tracks'
+            : 'What you favorited vs. what you played most';
 
-    final hasLovedLabel = stats.favoritedThisYear.isNotEmpty
-        ? 'Favorited This Year'
-        : 'Most Played';
+    final hasLovedLabel =
+        stats.favoritedThisYear.isNotEmpty
+            ? 'Favorited This Year'
+            : 'Most Played';
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -3279,11 +3300,12 @@ class _LoveColumn extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        border: isLast
-            ? null
-            : const Border(
-                bottom: BorderSide(color: AppTheme.divider, width: 0.5),
-              ),
+        border:
+            isLast
+                ? null
+                : const Border(
+                  bottom: BorderSide(color: AppTheme.divider, width: 0.5),
+                ),
       ),
       child: Row(
         children: [
@@ -3408,15 +3430,14 @@ class _MonthlyChartState extends State<_MonthlyChart> {
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
-                            _highlightedIndex = _highlightedIndex == i
-                                ? null
-                                : i;
+                            _highlightedIndex =
+                                _highlightedIndex == i ? null : i;
                           });
                         },
                         child: MouseRegion(
                           onEnter: (_) => setState(() => _highlightedIndex = i),
-                          onExit: (_) =>
-                              setState(() => _highlightedIndex = null),
+                          onExit:
+                              (_) => setState(() => _highlightedIndex = null),
                           cursor: SystemMouseCursors.click,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
@@ -3429,9 +3450,10 @@ class _MonthlyChartState extends State<_MonthlyChart> {
                                     child: Text(
                                       '${data.count}',
                                       style: TextStyle(
-                                        color: isTop
-                                            ? AppTheme.primary
-                                            : AppTheme.onBackgroundMuted,
+                                        color:
+                                            isTop
+                                                ? AppTheme.primary
+                                                : AppTheme.onBackgroundMuted,
                                         fontSize: 10,
                                         fontWeight: FontWeight.w700,
                                       ),
@@ -3443,24 +3465,27 @@ class _MonthlyChartState extends State<_MonthlyChart> {
                                   duration: const Duration(milliseconds: 600),
                                   curve: Curves.easeOutCubic,
                                   width: double.infinity,
-                                  height: data.count > 0
-                                      ? (fraction * 100).clamp(4.0, 100.0)
-                                      : 4.0,
+                                  height:
+                                      data.count > 0
+                                          ? (fraction * 100).clamp(4.0, 100.0)
+                                          : 4.0,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(3),
-                                    gradient: data.count > 0
-                                        ? LinearGradient(
-                                            begin: Alignment.bottomCenter,
-                                            end: Alignment.topCenter,
-                                            colors: [
-                                              AppTheme.primary,
-                                              AppTheme.secondary,
-                                            ],
-                                          )
-                                        : null,
-                                    color: data.count == 0
-                                        ? AppTheme.surfaceContainerHigh
-                                        : null,
+                                    gradient:
+                                        data.count > 0
+                                            ? LinearGradient(
+                                              begin: Alignment.bottomCenter,
+                                              end: Alignment.topCenter,
+                                              colors: [
+                                                AppTheme.primary,
+                                                AppTheme.secondary,
+                                              ],
+                                            )
+                                            : null,
+                                    color:
+                                        data.count == 0
+                                            ? AppTheme.surfaceContainerHigh
+                                            : null,
                                   ),
                                 ),
                               ),
@@ -3560,9 +3585,8 @@ class _RankedItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fillFraction = maxCount > 0
-        ? (item.count / maxCount).clamp(0.0, 1.0)
-        : 0.0;
+    final fillFraction =
+        maxCount > 0 ? (item.count / maxCount).clamp(0.0, 1.0) : 0.0;
 
     return Stack(
       children: [
@@ -3590,11 +3614,12 @@ class _RankedItem extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
-            border: isLast
-                ? null
-                : const Border(
-                    bottom: BorderSide(color: AppTheme.divider, width: 0.5),
-                  ),
+            border:
+                isLast
+                    ? null
+                    : const Border(
+                      bottom: BorderSide(color: AppTheme.divider, width: 0.5),
+                    ),
           ),
           child: Row(
             children: [
@@ -3604,9 +3629,10 @@ class _RankedItem extends StatelessWidget {
                 child: Text(
                   '$rank',
                   style: TextStyle(
-                    color: rank <= 3
-                        ? AppTheme.primary
-                        : AppTheme.onBackgroundSubtle,
+                    color:
+                        rank <= 3
+                            ? AppTheme.primary
+                            : AppTheme.onBackgroundSubtle,
                     fontSize: rank <= 3 ? 18 : 16,
                     fontWeight: rank <= 3 ? FontWeight.w800 : FontWeight.w600,
                   ),
@@ -3698,98 +3724,106 @@ class YearReviewSelectorScreen extends ConsumerWidget {
                   await ref.read(availableYearsProvider.future);
                 },
                 child: yearsAsync.when(
-                  loading: () => LayoutBuilder(
-                    builder: (context, constraints) => SingleChildScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      child: SizedBox(
-                        height: constraints.maxHeight,
-                        child: const Center(
-                          child: CircularProgressIndicator(
-                            color: AppTheme.primary,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  error: (error, stack) => LayoutBuilder(
-                    builder: (context, constraints) => SingleChildScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      child: SizedBox(
-                        height: constraints.maxHeight,
-                        child: Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(
-                                Icons.error_outline,
-                                color: AppTheme.error,
-                                size: 48,
-                              ),
-                              const SizedBox(height: 16),
-                              const Text(
-                                'Could not load data',
-                                style: TextStyle(
-                                  color: AppTheme.onBackgroundMuted,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () =>
-                                    ref.invalidate(availableYearsProvider),
-                                child: const Text('Retry'),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  data: (years) {
-                    // Always show current year, even if no data yet
-                    final allYears = {currentYear, ...years}.toList()
-                      ..sort((a, b) => b.compareTo(a));
-
-                    if (allYears.isEmpty) {
-                      return LayoutBuilder(
-                        builder: (context, constraints) => SingleChildScrollView(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          child: SizedBox(
-                            height: constraints.maxHeight,
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(32),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(
-                                      Icons.music_off_rounded,
-                                      color: AppTheme.onBackgroundSubtle,
-                                      size: 64,
-                                    ),
-                                    const SizedBox(height: 16),
-                                    const Text(
-                                      'No listening data yet',
-                                      style: TextStyle(
-                                        color: AppTheme.onBackgroundMuted,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    const Text(
-                                      'Start playing music to build your year in review.',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: AppTheme.onBackgroundSubtle,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
+                  loading:
+                      () => LayoutBuilder(
+                        builder:
+                            (context, constraints) => SingleChildScrollView(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              child: SizedBox(
+                                height: constraints.maxHeight,
+                                child: const Center(
+                                  child: CircularProgressIndicator(
+                                    color: AppTheme.primary,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ),
+                      ),
+                  error:
+                      (error, stack) => LayoutBuilder(
+                        builder:
+                            (context, constraints) => SingleChildScrollView(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              child: SizedBox(
+                                height: constraints.maxHeight,
+                                child: Center(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(
+                                        Icons.error_outline,
+                                        color: AppTheme.error,
+                                        size: 48,
+                                      ),
+                                      const SizedBox(height: 16),
+                                      const Text(
+                                        'Could not load data',
+                                        style: TextStyle(
+                                          color: AppTheme.onBackgroundMuted,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      TextButton(
+                                        onPressed:
+                                            () => ref.invalidate(
+                                              availableYearsProvider,
+                                            ),
+                                        child: const Text('Retry'),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                      ),
+                  data: (years) {
+                    // Always show current year, even if no data yet
+                    final allYears =
+                        {currentYear, ...years}.toList()
+                          ..sort((a, b) => b.compareTo(a));
+
+                    if (allYears.isEmpty) {
+                      return LayoutBuilder(
+                        builder:
+                            (context, constraints) => SingleChildScrollView(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              child: SizedBox(
+                                height: constraints.maxHeight,
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(32),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          Icons.music_off_rounded,
+                                          color: AppTheme.onBackgroundSubtle,
+                                          size: 64,
+                                        ),
+                                        const SizedBox(height: 16),
+                                        const Text(
+                                          'No listening data yet',
+                                          style: TextStyle(
+                                            color: AppTheme.onBackgroundMuted,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        const Text(
+                                          'Start playing music to build your year in review.',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: AppTheme.onBackgroundSubtle,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                       );
                     }
 
@@ -3850,20 +3884,22 @@ class _YearCard extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              gradient: isCurrent
-                  ? const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Color(0xFF1A1540), Color(0xFF0D2A2A)],
-                    )
-                  : null,
+              gradient:
+                  isCurrent
+                      ? const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Color(0xFF1A1540), Color(0xFF0D2A2A)],
+                      )
+                      : null,
               color: isCurrent ? null : AppTheme.surfaceContainer,
-              border: isCurrent
-                  ? Border.all(
-                      color: AppTheme.primary.withValues(alpha: 0.3),
-                      width: 1,
-                    )
-                  : null,
+              border:
+                  isCurrent
+                      ? Border.all(
+                        color: AppTheme.primary.withValues(alpha: 0.3),
+                        width: 1,
+                      )
+                      : null,
             ),
             child: Row(
               children: [
@@ -3894,8 +3930,8 @@ class _YearCard extends StatelessWidget {
                       Text(
                         hasData
                             ? isCurrent
-                                  ? 'In progress - see your stats so far'
-                                  : 'View your listening recap'
+                                ? 'In progress - see your stats so far'
+                                : 'View your listening recap'
                             : 'No data yet',
                         style: const TextStyle(
                           color: AppTheme.onBackgroundMuted,
@@ -3907,9 +3943,10 @@ class _YearCard extends StatelessWidget {
                 ),
                 Icon(
                   Icons.chevron_right_rounded,
-                  color: isCurrent
-                      ? AppTheme.primary
-                      : AppTheme.onBackgroundSubtle,
+                  color:
+                      isCurrent
+                          ? AppTheme.primary
+                          : AppTheme.onBackgroundSubtle,
                   size: 24,
                 ),
               ],

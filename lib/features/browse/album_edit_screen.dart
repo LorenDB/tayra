@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
+import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/core/widgets/error_state.dart';
@@ -132,16 +133,17 @@ class _AlbumEditScreenState extends ConsumerState<AlbumEditScreen> {
       initialDate: initial,
       firstDate: DateTime(1900),
       lastDate: DateTime(2100),
-      builder: (ctx, child) => Theme(
-        data: Theme.of(ctx).copyWith(
-          colorScheme: const ColorScheme.dark(
-            primary: AppTheme.primary,
-            surface: AppTheme.surfaceContainerHigh,
-            onSurface: AppTheme.onBackground,
+      builder:
+          (ctx, child) => Theme(
+            data: Theme.of(ctx).copyWith(
+              colorScheme: const ColorScheme.dark(
+                primary: AppTheme.primary,
+                surface: AppTheme.surfaceContainerHigh,
+                onSurface: AppTheme.onBackground,
+              ),
+            ),
+            child: child!,
           ),
-        ),
-        child: child!,
-      ),
     );
 
     if (picked != null) {
@@ -215,47 +217,50 @@ class _AlbumEditScreenState extends ConsumerState<AlbumEditScreen> {
 
   Future<void> _onPopRequested() async {
     if (!_isDirty) {
-      if (mounted) Navigator.of(context).pop();
+      if (mounted) popPage(context);
       return;
     }
 
     final discard = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppTheme.surfaceContainerHigh,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        title: const Text(
-          'Unsaved changes',
-          style: TextStyle(color: AppTheme.onBackground),
-        ),
-        content: const Text(
-          'Save your changes before leaving?',
-          style: TextStyle(color: AppTheme.onBackgroundMuted),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text(
-              'Discard',
-              style: TextStyle(color: AppTheme.error),
+      builder:
+          (ctx) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text(
-              'Save',
-              style: TextStyle(color: AppTheme.primary),
+            title: const Text(
+              'Unsaved changes',
+              style: TextStyle(color: AppTheme.onBackground),
             ),
+            content: const Text(
+              'Save your changes before leaving?',
+              style: TextStyle(color: AppTheme.onBackgroundMuted),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: const Text(
+                  'Discard',
+                  style: TextStyle(color: AppTheme.error),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: const Text(
+                  'Save',
+                  style: TextStyle(color: AppTheme.primary),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
     );
 
     if (discard == false) {
       final saved = await _save();
-      if (saved && mounted) Navigator.of(context).pop();
+      if (saved && mounted) popPage(context);
     } else if (discard == true) {
-      if (mounted) Navigator.of(context).pop();
+      if (mounted) popPage(context);
     }
   }
 
@@ -299,34 +304,37 @@ class _AlbumEditScreenState extends ConsumerState<AlbumEditScreen> {
             ),
             TextButton(
               onPressed: (_isSaving || !_isDirty) ? null : _save,
-              child: _isSaving
-                  ? const SizedBox(
-                      width: 16,
-                      height: 16,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: AppTheme.primary,
+              child:
+                  _isSaving
+                      ? const SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: AppTheme.primary,
+                        ),
+                      )
+                      : Text(
+                        'Save',
+                        style: TextStyle(
+                          color:
+                              _isDirty
+                                  ? AppTheme.primary
+                                  : AppTheme.onBackgroundSubtle,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                        ),
                       ),
-                    )
-                  : Text(
-                      'Save',
-                      style: TextStyle(
-                        color: _isDirty
-                            ? AppTheme.primary
-                            : AppTheme.onBackgroundSubtle,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
-                      ),
-                    ),
             ),
             const SizedBox(width: 4),
           ],
         ),
-        body: _isLoading
-            ? const ShimmerList(itemCount: 6)
-            : _loadError != null
-            ? InlineErrorState(message: _loadError!, onRetry: _loadData)
-            : _buildContent(),
+        body:
+            _isLoading
+                ? const ShimmerList(itemCount: 6)
+                : _loadError != null
+                ? InlineErrorState(message: _loadError!, onRetry: _loadData)
+                : _buildContent(),
       ),
     );
   }
@@ -426,9 +434,10 @@ class _AlbumEditScreenState extends ConsumerState<AlbumEditScreen> {
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: _tags.map((tag) {
-              return _TagChip(tag: tag, onRemove: () => _removeTag(tag));
-            }).toList(),
+            children:
+                _tags.map((tag) {
+                  return _TagChip(tag: tag, onRemove: () => _removeTag(tag));
+                }).toList(),
           ),
         const SizedBox(height: 24),
 
