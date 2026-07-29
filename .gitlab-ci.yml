@@ -1,0 +1,456 @@
+---
+include:
+  - project: funkwhale/ci
+    file: /templates/pre-commit.yml
+  - project: funkwhale/ci
+    file: /templates/lychee.yml
+  - project: funkwhale/ci
+    file: /templates/ssh-agent.yml
+
+variables:
+  PYTHONDONTWRITEBYTECODE: "true"
+
+  PIP_CACHE_DIR: $CI_PROJECT_DIR/.cache/pip
+  YARN_CACHE_FOLDER: $CI_PROJECT_DIR/.cache/yarn
+  POETRY_VIRTUALENVS_IN_PROJECT: "true"
+
+.shared_variables:
+  # Keep the git files permissions during job setup
+  keep_git_files_permissions: &keep_git_files_permissions
+    GIT_STRATEGY: clone
+    GIT_DEPTH: "5"
+    FF_DISABLE_UMASK_FOR_DOCKER_EXECUTOR: "true"
+
+.shared_caches:
+  # Cache for front related jobs
+  front_cache: &front_cache
+    - key: front-yarn
+      paths: [$YARN_CACHE_FOLDER]
+    - key:
+        prefix: front-node_modules
+        files: [front/yarn.lock]
+      paths: [front/node_modules]
+    - key:
+        prefix: front-lint
+        files:
+          - front/.eslintcache
+          - front/tsconfig.tsbuildinfo
+
+  # Cache for api related jobs
+  # Include the python version to prevent loosing caches in the test matrix
+  api_cache: &api_cache
+    - key: api-pip-$PYTHON_VERSION
+      paths: [$PIP_CACHE_DIR]
+    - key:
+        prefix: api-venv-$PYTHON_VERSION
+        files: [api/poetry.lock]
+      paths: [api/.venv]
+
+  # Cache for docs related jobs
+  docs_cache: &docs_cache
+    - key: docs-pip
+      paths: [$PIP_CACHE_DIR]
+    - key:
+        prefix: docs-venv
+        files: [docs/poetry.lock]
+      paths: [docs/.venv]
+
+default:
+  interruptible: true
+  tags:
+    - docker
+
+workflow:
+  rules:
+    # Run for any event on the default branches in the funkwhale namespace
+    - if: >
+        $CI_PROJECT_NAMESPACE == "funkwhale" &&
+        (
+          $CI_COMMIT_BRANCH =~ /^(stable|develop)$/ ||
+          $CI_COMMIT_TAG
+        )
+    # Run for merge requests from any repo or branches
+    - if: $CI_MERGE_REQUEST_ID
+
+stages:
+  - review
+  - lint
+  - test
+  - build
+  - publish
+
+review_front:
+  allow_failure: true
+  stage: review
+  needs: []
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: manual
+  image: alpine:3.17
+  script:
+    - echo "Vue review builds removed; build Tayra via make front-image locally"
+
+review_docs:
+  allow_failure: true
+  stage: review
+  needs: []
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes: [docs/**/*]
+
+  image: $CI_REGISTRY/funkwhale/ci/python-funkwhale-docs:3.11
+  environment:
+    name: review/docs/$CI_COMMIT_REF_NAME
+    url: http://$CI_PROJECT_NAMESPACE.pages.funkwhale.audio/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/docs-review/index.html
+  cache: *docs_cache
+  before_script:
+    - cd docs
+    - make install
+  script:
+    - make build BUILD_DIR=../docs-review
+  artifacts:
+    expire_in: 2 weeks
+    paths:
+      - docs-review
+
+find_broken_links:
+  extends: [.lychee]
+  allow_failure:
+    exit_codes: 2
+
+  script:
+    - >
+      lychee
+      --cache
+      --no-progress
+      --exclude-all-private
+      --exclude-mail
+      --exclude 'demo\.funkwhale\.audio'
+      --exclude 'nginx\.com'
+      --exclude-path 'docs/_templates/'
+      -- . || exit $?
+
+
+pre-commit:
+  extends: [.pre-commit]
+
+lint_api:
+  allow_failure: true
+  stage: lint
+  needs: []
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
+    - changes: [api/**/*]
+
+  image: $CI_REGISTRY/funkwhale/ci/python-funkwhale-api:3.11
+  before_script:
+    - cd api
+    - make install
+  script:
+    - make lint
+
+lint_front:
+  stage: lint
+  needs: []
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
+    - changes: [front/**/*]
+  image: alpine:3.17
+  script:
+    - echo "Vue front removed; Tayra SPA lives in sibling tayra repo (see front/README.md)"
+
+test_scripts:
+  stage: test
+  needs: []
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
+    - changes: [scripts/**/*]
+
+  image: $CI_REGISTRY/funkwhale/ci/python:3.11
+  cache:
+    - key: scripts-pip
+      paths: [$PIP_CACHE_DIR]
+    - key:
+        prefix: scripts-venv
+        files: [scripts/poetry.lock]
+      paths: [scripts/.venv]
+  before_script:
+    - cd scripts
+    - make install
+  script:
+    - make test
+
+test_api:
+  retry: 1
+  stage: test
+  needs:
+    - job: lint_api
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
+    - changes: [api/**/*]
+
+  image: $CI_REGISTRY/funkwhale/ci/python-funkwhale-api:$PYTHON_VERSION
+  parallel:
+    matrix:
+      - PYTHON_VERSION: ["3.8", "3.9", "3.10", "3.11"]
+  services:
+    - name: postgres:15-alpine
+      command:
+        - --fsync=off
+        - --full_page_writes=off
+        - --synchronous_commit=off
+    - name: redis:7-alpine
+  cache: *api_cache
+  variables:
+    DATABASE_URL: "postgresql://postgres@postgres/postgres"
+    FUNKWHALE_URL: "https://funkwhale.ci"
+    DJANGO_SETTINGS_MODULE: config.settings.local
+    POSTGRES_HOST_AUTH_METHOD: trust
+    CACHE_URL: "redis://redis:6379/0"
+  before_script:
+    - cd api
+    - poetry env info
+    - poetry run pip install "setuptools==60.10.0" wheel
+    - poetry run pip install --no-use-pep517 django-allauth==0.42.0
+    - poetry install --all-extras
+  script:
+    - >
+      poetry run pytest
+      --junitxml=report.xml
+      --cov
+      --cov-config=pyproject.toml
+      --cov-report=term-missing:skip-covered
+      --cov-report=xml
+      tests
+  artifacts:
+    expire_in: 2 weeks
+    reports:
+      junit: api/report.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: api/coverage.xml
+  coverage: '/TOTAL\s*\d*\s*\d*\s*(\d*%)/'
+
+test_front:
+  stage: test
+  needs:
+    - job: lint_front
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
+    - changes: [front/**/*]
+  image: alpine:3.17
+  script:
+    - echo "No Vue unit tests; Tayra tested in its own repo"
+
+build_metadata:
+  stage: build
+
+  image: $CI_REGISTRY/funkwhale/ci/python:3.11
+  variables:
+    GIT_FETCH_EXTRA_FLAGS: --prune
+  script:
+    - make build-metadata
+    - make docker-metadata
+  artifacts:
+    reports:
+      dotenv: build_metadata.env
+    paths:
+      - docker-bake.json
+      - docker-bake.api.json
+      - docker-bake.front.json
+
+test_integration:
+  stage: test
+  rules:
+    - if: $RUN_CYPRESS
+  interruptible: true
+
+  image:
+    name: cypress/included:12.14.0
+    entrypoint: [""]
+  cache:
+    - *front_cache
+    - key:
+      paths:
+        - /root/.cache/Cypress
+  before_script:
+    - cd front
+    - yarn install
+  script:
+    - yarn run cypress run
+
+build_api_schema:
+  stage: build
+  needs:
+    - job: test_api
+      optional: true
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
+    - changes: [api/**/*]
+    # Add build_docs rules because it depends on the build_api_schema artifact
+    - changes: [docs/**/*]
+
+  image: $CI_REGISTRY/funkwhale/ci/python-funkwhale-api:3.11
+  services:
+    - postgres:15-alpine
+    - redis:7-alpine
+  cache: *api_cache
+  variables:
+    DATABASE_URL: "postgresql://postgres@postgres/postgres"
+    FUNKWHALE_URL: "https://funkwhale.ci"
+    DJANGO_SETTINGS_MODULE: config.settings.local
+    POSTGRES_HOST_AUTH_METHOD: trust
+    CACHE_URL: "redis://redis:6379/0"
+    API_TYPE: "v1"
+  before_script:
+    - cd api
+    - poetry run pip install "setuptools==60.10.0" wheel
+    - poetry run pip install --no-use-pep517 django-allauth==0.42.0
+    - poetry install --all-extras
+    - poetry run funkwhale-manage migrate
+  script:
+    - poetry run funkwhale-manage spectacular --file ../docs/schema.yml
+  artifacts:
+    expire_in: 2 weeks
+    paths:
+      - docs/schema.yml
+
+build_docs:
+  stage: build
+  needs:
+    - job: build_api_schema
+      artifacts: true
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
+    - changes: [docs/**/*]
+
+  image: $CI_REGISTRY/funkwhale/ci/python-funkwhale-docs:3.11
+  cache: *docs_cache
+  before_script:
+    - cd docs
+    - make install
+  script:
+    - make build-all BUILD_DIR=../public
+  artifacts:
+    expire_in: 2 weeks
+    paths:
+      - public
+
+build_front:
+  stage: build
+  needs:
+    - job: lint_front
+      optional: true
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
+    - changes: [front/**/*]
+  image: alpine:3.17
+  script:
+    - echo "Build Tayra SPA with: make front-image FUNKWHALE_URL=https://pod.example"
+    - mkdir -p front/dist && echo "placeholder" > front/dist/.ci-placeholder
+  artifacts:
+    name: front_${CI_COMMIT_REF_NAME}
+    paths:
+      - front/dist
+
+build_api:
+  stage: build
+  needs:
+    - job: test_api
+      optional: true
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
+    - changes: [api/**/*]
+
+  image: $CI_REGISTRY/funkwhale/ci/python:3.11
+  variables:
+    <<: *keep_git_files_permissions
+  script:
+    - rm -rf api/tests
+    - >
+      if [[ -z "$CI_COMMIT_TAG" ]]; then
+        ./scripts/set-api-build-metadata.sh $CI_COMMIT_SHORT_SHA;
+      fi
+  artifacts:
+    name: api_${CI_COMMIT_REF_NAME}
+    paths:
+      - api
+
+deploy_docs:
+  interruptible: false
+  extends: .ssh-agent
+  stage: publish
+  needs:
+    - job: build_docs
+      artifacts: true
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
+
+  image: $CI_REGISTRY/funkwhale/ci/python:3.11
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - rsync -r --delete -e "ssh -p 2282" $CI_PROJECT_DIR/public/ docs@docs.funkwhale.audio:/htdocs/$CI_COMMIT_REF_NAME
+
+docker:
+  interruptible: false
+  tags: [docker, privileged, multiarch]
+  stage: build
+  needs:
+    - job: build_metadata
+      artifacts: true
+    - job: test_api
+      optional: true
+    - job: test_front
+      optional: true
+  rules:
+    - if: $CI_COMMIT_TAG
+      variables:
+        BUILD_ARGS: >
+          --set *.platform=linux/amd64,linux/arm64
+          --no-cache
+          --push
+
+    - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
+      variables:
+        BUILD_ARGS: >
+          --set *.platform=linux/amd64,linux/arm64
+          --set *.cache-from=type=registry,ref=$DOCKER_CACHE_IMAGE:$CI_COMMIT_BRANCH,oci-mediatypes=false
+          --set *.cache-to=type=registry,ref=$DOCKER_CACHE_IMAGE:$CI_COMMIT_BRANCH,mode=max,oci-mediatypes=false
+          --push
+
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      variables:
+        BUILD_ARGS: >
+          --set *.platform=linux/amd64
+          --set *.cache-from=type=registry,ref=$DOCKER_CACHE_IMAGE:$CI_MERGE_REQUEST_TARGET_BRANCH_NAME,oci-mediatypes=false
+
+  image: $CI_REGISTRY/funkwhale/ci/docker:20
+  services:
+    - docker:20-dind
+  variables:
+    <<: *keep_git_files_permissions
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+    BUILDKIT_PROGRESS: plain
+
+    DOCKER_CACHE_IMAGE: $CI_REGISTRY/funkwhale/funkwhale/cache
+  before_script:
+    - >
+      echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY";
+      if [[ "$BUILD_ARGS" =~ "--push" ]]; then
+        echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_LOGIN" --password-stdin docker.io;
+      fi
+  script:
+    - >
+      if [[ -z "$CI_COMMIT_TAG" ]]; then
+        ./scripts/set-api-build-metadata.sh $CI_COMMIT_SHORT_SHA;
+      fi
+    - docker buildx create --use
+    - make docker-build BUILD_ARGS="--metadata-file metadata.json $BUILD_ARGS"
+    - cat metadata.json
+  artifacts:
+    name: docker_metadata_${CI_COMMIT_REF_NAME}
+    paths:
+      - metadata.json

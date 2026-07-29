@@ -1,0 +1,121 @@
+image:
+  file: .gitpod/Dockerfile
+
+tasks:
+  - name: Backend
+    env:
+      ENV_FILE: /workspace/funkwhale/.gitpod/.env
+      COMPOSE_FILE: /workspace/funkwhale/.gitpod/docker-compose.yml
+    before: |
+      cp .gitpod/gitpod.env .gitpod/.env
+      cd api
+    init: |
+      mkdir -p ../data/media/attachments ../data/music ../data/staticfiles
+      docker-compose up -d
+
+      poetry env use python
+      poetry install
+
+      gp ports await 5432
+
+      poetry run funkwhale-manage migrate
+      poetry run funkwhale-manage fw users create --superuser --username gitpod --password funkwhale --email test@example.org
+      poetry run funkwhale-manage gitpod init
+    command: |
+      echo "MEDIA_URL=`gp url 8000`/media/" >> ../.gitpod/.env
+      echo "STATIC_URL=`gp url 8000`/staticfiles/" >> ../.gitpod/.env
+      echo "FUNKWHALE_HOSTNAME=`gp url 8000 | sed 's#https://##'`" >> ../.gitpod/.env
+      echo "FUNKWHALE_PROTOCOL=https" >> ../.gitpod/.env
+
+      docker-compose up -d
+      gp ports await 5432
+      poetry run funkwhale-manage collectstatic --no-input
+      poetry run funkwhale-manage gitpod dev
+
+  - name: Celery Worker
+    env:
+      ENV_FILE: /workspace/funkwhale/.gitpod/.env
+    before: cd api
+    command: |
+      gp ports await 5000
+      poetry run celery -A funkwhale_api.taskapp worker -l debug -B --concurrency=0
+
+  - name: Frontend
+    env:
+      VUE_EDITOR: code
+    before: cd front
+    init: |
+      yarn install
+    command: yarn dev --host 0.0.0.0 --base ./
+
+  - name: Documentation
+    before: cd docs
+    init: make install
+    command: make dev
+
+  - name: Welcome to Funkwhale development!
+    env:
+      COMPOSE_FILE: /workspace/funkwhale/.gitpod/docker-compose.yml
+      ENV_FILE: /workspace/funkwhale/.gitpod/.env
+      VUE_EDITOR: code
+      DJANGO_SETTINGS_MODULE: config.settings.local
+    init: |
+      pre-commit install
+      pre-commit run --all
+    command: |
+      echo ""
+      echo -e "    ⠀⠀⠸⣿⣷⣦⣄⣠⣶⣾⣿⠇⠀⠀    You can now start developing Funkwhale with gitpod!"
+      echo -e "    ⠀⠀⠀⠈⠉⠻⣿⣿⠟⠉⠁⠀⠀⠀"
+      echo -e "    \u1b[34m⣀⠀⢀⡀⢀⣀\u1b[0m⠹⠇\u1b[34m⣀⡀⢀⡀⠀⣀    \u1b[0mTo sign in to the superuser account,"
+      echo -e "    \u1b[34m⢻⣇⠘⣧⡈⠻⠶⠶⠟⢁⣾⠃⣸⡟    \u1b[0mplease use these credentials:"
+      echo -e "    \u1b[34m⠀⠻⣦⡈⠻⠶⣶⣶⠶⠟⢁⣴⠟⠀"
+      echo -e "    \u1b[34m⠀⠀⠈⠻⠷⣦⣤⣤⣴⠾⠟⠁⠀⠀    gitpod\u1b[0m:\u1b[34mfunkwhale"
+      echo ""
+
+ports:
+  - name: Funkwhale
+    port: 8000
+    visibility: public
+    onOpen: notify
+
+  - name: Funkwhale API
+    port: 5000
+    visibility: private
+    onOpen: ignore
+
+  - name: PostgreSQL
+    port: 5432
+    visibility: private
+    onOpen: ignore
+
+  - name: Debugpy
+    port: 5678
+    visibility: private
+    onOpen: ignore
+
+  - name: Redis
+    port: 6379
+    visibility: private
+    onOpen: ignore
+
+  - name: Frontend
+    port: 8080
+    visibility: private
+    onOpen: ignore
+
+  - name: Documentation
+    port: 8001
+    visibility: public
+    onOpen: notify
+
+vscode:
+  extensions:
+    - Vue.volar
+    - ms-python.python
+    - ms-toolsai.jupyter
+    - ms-toolsai.jupyter-keymap
+    - ms-toolsai.jupyter-renderers
+    - hbenl.vscode-test-explorer
+    - hbenl.test-adapter-converter
+    - littlefoxteam.vscode-python-test-adapter
+    - ZixuanChen.vitest-explorer

@@ -1,29 +1,33 @@
-# Miscellaneous
+# ── OS / editors ──────────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*~
+*.swp
+*.swo
+
+# SublimeText
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+*.sublime-workspace
+sftp-config.json
+
+# ── Flutter / Dart / Pub ──────────────────────────────────────────────
 *.class
 *.log
 *.pyc
-*.swp
-.DS_Store
-.atom/
 .build/
 .buildlog/
 .history
 .svn/
 .swiftpm/
 migrate_working_dir/
-
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
-.idea/
-
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
-
-# Flutter/Dart/Pub related
 **/doc/api/
 **/ios/Flutter/.last_build_id
 .dart_tool/
@@ -32,15 +36,59 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
-
-# Symbolication related
 app.*.symbols
-
-# Obfuscation related
 app.*.map.json
-
-# Android Studio will place build artifacts here
 /android/app/debug
 /android/app/profile
 /android/app/release
 android/key.properties
+
+# ── Python / API ──────────────────────────────────────────────────────
+*.py[cod]
+__pycache__
+pip-log.txt
+.coverage
+.tox
+nosetests.xml
+htmlcov
+*.mo
+*.sqlite3
+api/funkwhale_api/media/
+demo/music
+api/music
+api/media
+api/staticfiles
+api/static
+api/.pytest_cache
+api/celerybeat-*
+
+# ── Front / JS leftovers ──────────────────────────────────────────────
+front/node_modules/
+front/static/translations
+front/dist/
+front/npm-debug.log*
+front/yarn-debug.log*
+front/yarn-error.log*
+front/tests/unit/coverage
+front/tests/e2e/reports
+front/selenium-debug.log
+oldfront/node_modules/
+.sass-cache
+.eslintcache
+tsconfig.tsbuildinfo
+
+# ── Env, data, docs build ─────────────────────────────────────────────
+.env
+data/
+/data/
+docs/_build
+docs/swagger
+_build
+*.prof
+po/*.po
+tests/.hitch
+mailhog
+
+# ── Docker ────────────────────────────────────────────────────────────
+docker-bake.*.json
+metadata.json

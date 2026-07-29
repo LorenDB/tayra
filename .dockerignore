@@ -1,0 +1,89 @@
+# Repo-level ignores for compose builds (api + front)
+
+### OS / editors
+.DS_Store
+.idea
+*.swp
+*~
+
+### Git metadata (keep sources; drop history from build context)
+.git
+**/.git
+.gitmodules
+.gitlab
+.gitlab-ci.yml
+.gitpod
+.gitpod.yml
+
+### Docs & unrelated
+docs
+changes
+templates
+scripts
+CODEOWNERS
+CONTRIBUTING.md
+CHANGELOG.md
+DEPLOY.md
+LICENSE
+
+### Python junk
+**/__pycache__
+**/*.py[cod]
+**/.venv
+**/venv
+**/.tox
+**/.coverage
+**/htmlcov
+**/*.sqlite3
+api/tests
+
+### Local env & data
+.env
+.env.*
+!.env.example
+data
+**/data
+# Host Typesense *data* directories only — do NOT use a bare "typesense" rule:
+# that also excludes api/funkwhale_api/typesense (Django app) from any build
+# whose context is the repo root.
+/typesense
+/data/typesense
+
+### Flutter build artefacts (rebuilt in image)
+build
+.dart_tool
+.flutter-plugins
+.flutter-plugins-dependencies
+android/.gradle
+android/**/build
+ios
+macos/Flutter/ephemeral
+linux/flutter/ephemeral
+windows/flutter/ephemeral
+flatpak
+test
+**/*.iml
+
+### Server / docs not needed for front Flutter build
+# (front Dockerfile only COPYs Flutter paths; still shrink context)
+api
+docs
+deploy
+scripts
+templates
+CHANGELOG.md
+CONTRIBUTING.md
+CODEOWNERS
+pyproject.toml
+.pre-commit-config.yaml
+.flake8
+.codespellignore
+.yarnrc
+.gitpod
+.gitpod.yml
+.gitlab
+.gitlab-ci.yml
+
+### Front leftovers
+front/dist
+front/node_modules

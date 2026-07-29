@@ -1,0 +1,177 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.10\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-24 18:14+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../user/channels/edit.md:1
+msgid "Edit a channel"
+msgstr ""
+
+#: ../../user/channels/edit.md:4
+msgid "You can't change a channel's __Fediverse handle__."
+msgstr ""
+
+#: ../../user/channels/edit.md:7
+msgid "Channels are like user profiles on other {term}`Fediverse` software. This means you can edit their details at any time to reflect changes you've made."
+msgstr ""
+
+#: ../../user/channels/edit.md:9
+msgid "You can change different details depending on what type of channel you are editing:"
+msgstr ""
+
+#: ../../user/channels/edit.md:15
+msgid "Edit an Artist channel"
+msgstr ""
+
+#: ../../user/channels/edit.md:17
+msgid "To edit an **Artist channel**:"
+msgstr ""
+
+#: ../../user/channels/edit.md:0
+msgid "Desktop"
+msgstr ""
+
+#: ../../user/channels/edit.md:25
+#: ../../user/channels/edit.md:43
+#: ../../user/channels/edit.md:70
+#: ../../user/channels/edit.md:93
+msgid "Log in to your {term}`pod`."
+msgstr ""
+
+#: ../../user/channels/edit.md:26
+#: ../../user/channels/edit.md:71
+msgid "Select the upload icon ({fa}`upload`) in the top of the sidebar."
+msgstr ""
+
+#: ../../user/channels/edit.md:27
+#: ../../user/channels/edit.md:45
+#: ../../user/channels/edit.md:72
+#: ../../user/channels/edit.md:95
+msgid "Select {guilabel}`Get started` under {guilabel}`Publish your work in a channel`. Your user profile opens."
+msgstr ""
+
+#: ../../user/channels/edit.md:28
+#: ../../user/channels/edit.md:46
+#: ../../user/channels/edit.md:73
+#: ../../user/channels/edit.md:96
+msgid "Select the channel you want to delete under the {guilabel}`Channels` header. The channel's page opens."
+msgstr ""
+
+#: ../../user/channels/edit.md:29
+#: ../../user/channels/edit.md:47
+#: ../../user/channels/edit.md:74
+#: ../../user/channels/edit.md:97
+msgid "Select the kebab menu ({fa}`ellipsis-v`) to show the channel options."
+msgstr ""
+
+#: ../../user/channels/edit.md:30
+#: ../../user/channels/edit.md:48
+#: ../../user/channels/edit.md:75
+#: ../../user/channels/edit.md:98
+msgid "Select {guilabel}`Edit…`. The {guilabel}`Artist channel` form appears."
+msgstr ""
+
+#: ../../user/channels/edit.md:31
+#: ../../user/channels/edit.md:49
+#: ../../user/channels/edit.md:76
+#: ../../user/channels/edit.md:99
+msgid "Change the details in any of these fields:"
+msgstr ""
+
+#: ../../user/channels/edit.md:32
+#: ../../user/channels/edit.md:50
+#: ../../user/channels/edit.md:77
+#: ../../user/channels/edit.md:100
+msgid "{guilabel}`Name`"
+msgstr ""
+
+#: ../../user/channels/edit.md:33
+#: ../../user/channels/edit.md:51
+#: ../../user/channels/edit.md:78
+#: ../../user/channels/edit.md:101
+msgid "{guilabel}`Channel Picture`"
+msgstr ""
+
+#: ../../user/channels/edit.md:34
+#: ../../user/channels/edit.md:52
+#: ../../user/channels/edit.md:79
+#: ../../user/channels/edit.md:102
+msgid "{guilabel}`Tags`"
+msgstr ""
+
+#: ../../user/channels/edit.md:35
+#: ../../user/channels/edit.md:53
+#: ../../user/channels/edit.md:81
+#: ../../user/channels/edit.md:104
+msgid "{guilabel}`Description`"
+msgstr ""
+
+#: ../../user/channels/edit.md:36
+#: ../../user/channels/edit.md:54
+#: ../../user/channels/edit.md:86
+#: ../../user/channels/edit.md:109
+msgid "Select {guilabel}`Update channel` to save your changes."
+msgstr ""
+
+#: ../../user/channels/edit.md:0
+msgid "Mobile"
+msgstr ""
+
+#: ../../user/channels/edit.md:44
+#: ../../user/channels/edit.md:94
+msgid "Select the upload icon ({fa}`upload`) at the top of the screen."
+msgstr ""
+
+#: ../../user/channels/edit.md:58
+msgid "That's it! You've updated your channel details. Users see the new details when they visit your channel page."
+msgstr ""
+
+#: ../../user/channels/edit.md:60
+msgid "Edit a Podcast channel"
+msgstr ""
+
+#: ../../user/channels/edit.md:62
+msgid "To edit a **Podcast channel**:"
+msgstr ""
+
+#: ../../user/channels/edit.md:80
+#: ../../user/channels/edit.md:103
+msgid "{guilabel}`Language`"
+msgstr ""
+
+#: ../../user/channels/edit.md:82
+#: ../../user/channels/edit.md:105
+msgid "{guilabel}`Category`"
+msgstr ""
+
+#: ../../user/channels/edit.md:83
+#: ../../user/channels/edit.md:106
+msgid "{guilabel}`Subcategory`"
+msgstr ""
+
+#: ../../user/channels/edit.md:84
+#: ../../user/channels/edit.md:107
+msgid "{guilabel}`Owner e-mail address`"
+msgstr ""
+
+#: ../../user/channels/edit.md:85
+#: ../../user/channels/edit.md:108
+msgid "{guilabel}`Owner name`"
+msgstr ""
+
+#: ../../user/channels/edit.md:113
+msgid "You're done! Users see the new details when they visit your channel page. The changes also reflect on your podcast's {abbr}`RSS (Really Simple Syndication)` feed."
+msgstr ""

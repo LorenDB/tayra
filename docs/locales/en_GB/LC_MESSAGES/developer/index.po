@@ -1,0 +1,64 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.11.0\n"
+
+#: ../../developer_documentation/index.md:1
+msgid "Get started"
+msgstr ""
+
+#: ../../developer_documentation/index.md:3
+msgid ""
+"Funkwhale welcomes contributions from all developers. If this is your "
+"first time contributing to an open source project, don't be afraid to get"
+" stuck in! The Funkwhale community will guide you through the process and"
+" help you grow your confidence."
+msgstr ""
+
+#: ../../developer_documentation/index.md:5
+msgid "Set up your development environment"
+msgstr ""
+
+#: ../../developer_documentation/index.md:7
+msgid ""
+"Before you begin, you need to set up a development environment. Follow "
+"the [guides in the setup section](setup/index.md) to set up an "
+"environment that's right for you."
+msgstr ""
+
+#: ../../developer_documentation/index.md:9
+msgid "Read up on our processes"
+msgstr ""
+
+#: ../../developer_documentation/index.md:11
+msgid ""
+"The Funkwhale project follows a few processes to make managing "
+"contributions easier. If you're not sure how to get started, check out "
+"the [guides in the workflows section](workflows/index.md) to get a better"
+" understanding of what you need to do."
+msgstr ""
+
+#: ../../developer_documentation/index.md:13
+msgid "Contribute to the codebase"
+msgstr ""
+
+#: ../../developer_documentation/index.md:15
+msgid ""
+"Ready to get stuck in? Take a look at the [contribution "
+"guides](contribute/index.md) and start making your changes!"
+msgstr ""
+

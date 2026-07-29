@@ -1,6 +1,71 @@
-# Tayra - Agent Guidelines
+# Tayra monorepo — Agent Guidelines
 
-Flutter/Dart music player client for Funkwhale servers. Android-primary with desktop (Linux/Windows) support. Uses OAuth authentication, audio playback (just_audio + audio_service), AMOLED dark theme.
+Monorepo combining:
+
+1. **Tayra** — Flutter/Dart music player client for Funkwhale (repo root)
+2. **Funkwhale + Tayra fork** — Django API / server stack that replaces Vue with the Tayra web SPA
+
+Android-primary client with desktop (Linux/Windows) and web support. OAuth authentication, audio playback (`just_audio` + `audio_service`), AMOLED dark theme.
+
+**Flutter package name:** `tayra`  
+**Flutter lives at the repository root** — run `flutter run` / `flutter test` from `/`, not a subdirectory.
+
+## Repo layout
+
+| Path | Role |
+|---|---|
+| `lib/`, `android/`, `web/`, `pubspec.yaml`, … | Tayra Flutter client |
+| `api/` | Django / Funkwhale API (Python, Poetry) |
+| `front/` | nginx Dockerfile that compiles root Flutter sources into a web SPA |
+| `docker-compose.yml` | Production source-build stack |
+| `dev.yml` | Local dev compose (API only; run Flutter separately) |
+| `schema.yml` | Cached Funkwhale OpenAPI schema for the client |
+
+## Coordinated client + server development
+
+```bash
+# API in dev mode
+docker compose -f dev.yml up -d
+
+# Client from repo root against local API
+flutter pub get
+flutter run -d chrome --dart-define=FUNKWHALE_URL=http://localhost:5000
+```
+
+## Full-stack compose commands
+
+```bash
+make up               # docker compose up -d --build (full stack)
+make front-rebuild    # rebuild SPA only (after hostname or client change)
+make down             # docker compose down
+make logs             # follow all logs
+```
+
+## Key gotchas
+
+- **`FUNKWHALE_URL` is build-time.** The server URL is baked into the SPA. After hostname changes: `make front-rebuild`.
+- **Flutter sources are at repo root.** `pubspec.yaml` must exist at `/` before `docker compose build front`.
+- **First-party login** (this fork's addition): `POST /api/v1/users/token/` with `{"username","password"}` → OAuth tokens + `listen_token`. `password` must be the domain-separated SHA-256 transport digest (never plaintext); see `password_transport` on API and client.
+- **First-time setup:** `docker compose exec api python manage.py migrate` then `docker compose exec api python manage.py fw users create`.
+
+## API (Django) commands
+
+```bash
+cd api
+poetry install                   # install deps
+poetry run pytest tests          # run tests
+poetry run pylint --recursive=true config funkwhale_api tests   # lint
+```
+
+## Pre-commit (server side)
+
+`.pre-commit-config.yaml` runs: black, isort, flake8, codespell, prettier, pyupgrade, shellcheck, poetry lock check. Must pass before commit when touching API/server files.
+
+---
+
+# Tayra client guidelines
+
+Flutter/Dart music player client. Uses OAuth authentication, audio playback (`just_audio` + `audio_service`), AMOLED dark theme.
 
 **Package:** `tayra`
 

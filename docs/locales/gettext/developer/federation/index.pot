@@ -1,0 +1,823 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.10\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-24 18:14+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../developer/federation/index.md:1
+msgid "Funkwhale federation"
+msgstr ""
+
+#: ../../developer/federation/index.md:4
+msgid "We aim to keep this document up-to-date to reflect the current state of federation. If you notice an issue, please open a thread on [our forum](https://forum.funkwhale.audio/t/documentation)."
+msgstr ""
+
+#: ../../developer/federation/index.md:7
+msgid "Funkwhale is a federated platform. Funkwhale pods can share information between one another, and can also communicate with other {term}`Fediverse` software. This article outlines which tools we use, our approach to federation, and how we implement standards."
+msgstr ""
+
+#: ../../developer/federation/index.md:14
+msgid "Technologies and standards"
+msgstr ""
+
+#: ../../developer/federation/index.md:16
+msgid "Funkwhale's federation is built on top of the following technologies:"
+msgstr ""
+
+#: ../../developer/federation/index.md:18
+msgid "[`ActivityPub`](https://www.w3.org/TR/activitypub/): Our federation protocol"
+msgstr ""
+
+#: ../../developer/federation/index.md:19
+msgid "[`HTTP Signatures`](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-01.html): A library for authenticating messages sent over the federation"
+msgstr ""
+
+#: ../../developer/federation/index.md:20
+msgid "[`Webfinger`](https://tools.ietf.org/html/rfc7033): A protocol for discovering resources using readable names"
+msgstr ""
+
+#: ../../developer/federation/index.md:21
+msgid "[`ActivityStreams`](https://www.w3.org/TR/activitystreams-core/) and [`ActivityStreams vocabulary`](https://www.w3.org/TR/activitystreams-vocabulary/): Our approach to structuring messages"
+msgstr ""
+
+#: ../../developer/federation/index.md:23
+msgid "We plan for support [`JSON-LD signatures`](https://w3c-dvcg.github.io/ld-signatures/) in the future as an alternative to `HTTP Signatures`."
+msgstr ""
+
+#: ../../developer/federation/index.md:25
+msgid "Our philosophy"
+msgstr ""
+
+#: ../../developer/federation/index.md:27
+msgid "Funkwhale aims to align with the above specifications where possible to maintain compatibility with other ActivityPub-aware platforms. This documentation covers where we have departed from the specifications."
+msgstr ""
+
+#: ../../developer/federation/index.md:29
+msgid "While we will always aim for compatibility with other services where it makes sense, Funkwhale to Funkwhale interaction is our focus. We use these standards to support activities and objects that fit in with our use cases, such as **follows** and **likes**."
+msgstr ""
+
+#: ../../developer/federation/index.md:31
+#: ../../developer/federation/index.md:84
+#: ../../developer/federation/index.md:126
+#: ../../developer/federation/index.md:166
+#: ../../developer/federation/index.md:206
+#: ../../developer/federation/index.md:247
+#: ../../developer/federation/index.md:293
+msgid "Internal logic"
+msgstr ""
+
+#: ../../developer/federation/index.md:33
+msgid "This section covers how we handle federation within the Funkwhale ecosystem."
+msgstr ""
+
+#: ../../developer/federation/index.md:35
+msgid "Database schema"
+msgstr ""
+
+#: ../../developer/federation/index.md:37
+msgid "We use ActivityPub entities as a guide when creating [our models](https://dev.funkwhale.audio/funkwhale/funkwhale/blob/develop/api/funkwhale_api/federation/models.py) and database schemas. This ensures compatibility with other ActivityPub projects."
+msgstr ""
+
+#: ../../developer/federation/index.md:39
+msgid "Funkwhale pods store received activities payloads in the database before attempting to process or deliver them. This enables us to debug federation issues, resend messages, or process historical activities that weren't previously supported."
+msgstr ""
+
+#: ../../developer/federation/index.md:41
+msgid "Funkwhale users are associated to an `Actor`. Remote and local actors are stord in the same database table. Any federated entities, such as uploads, are linked to the `Actor` rather than the user. We don't distinguish between local and remote users on the database level."
+msgstr ""
+
+#: ../../developer/federation/index.md:43
+msgid "Activity creation and delivery"
+msgstr ""
+
+#: ../../developer/federation/index.md:45
+msgid "Any action carried out by a local actor should trigger an `Activity`. This is the equivalent to posting an activity to an object. Funkwhale creates an object with the activity payload and stores it in the `Activity` table. Funkwhale triggers 2 types of deliveries:"
+msgstr ""
+
+#: ../../developer/federation/index.md:47
+msgid "Local recipients: Funkwhale creates an `InboxItem` linked to the activity for each local recipient. Funkwhale then creates a feed of available inbox items for each local actor. Items in this feed have both a `Read` and `Unread` status to allow users to mark items as handled."
+msgstr ""
+
+#: ../../developer/federation/index.md:48
+msgid "Remote recipients: Funkwhale collects the inboxes and shared inbox URLs of all remote recipients. Funkwhale then creates a `Delivery` object and linked to the initial activity and the inbox or shared inbox URL. The worker uses this `Delivery` object to post the activity to the correct inbox."
+msgstr ""
+
+#: ../../developer/federation/index.md:50
+msgid "When a local inbox receives an activity from a remote actor, it ends up in their inbox for them to handle."
+msgstr ""
+
+#: ../../developer/federation/index.md:52
+msgid "Funkwhale doesn't support all activities. Our routing logic enables the software to handle supported activities and discard unsupported ones. When Funkwhale receives an activity it checks if there is a route to handle it. If there is, Funkwhale calls a dedicated handler."
+msgstr ""
+
+#: ../../developer/federation/index.md:54
+msgid "For example: if Funkwhale receives an [`activity-create`](#create) activity for an `object-audio` object, Funkwhale calls a handler to:"
+msgstr ""
+
+#: ../../developer/federation/index.md:56
+msgid "Persist the data in the local `Upload` table"
+msgstr ""
+
+#: ../../developer/federation/index.md:57
+msgid "Retrieve data associated with the audio"
+msgstr ""
+
+#: ../../developer/federation/index.md:59
+msgid "You can find the code for our routing logic here:"
+msgstr ""
+
+#: ../../developer/federation/index.md:61
+msgid "[Routing logic for activities](https://dev.funkwhale.audio/funkwhale/funkwhale/blob/develop/api/funkwhale_api/federation/routes.py)"
+msgstr ""
+
+#: ../../developer/federation/index.md:62
+msgid "[Delivery logic for activities](https://dev.funkwhale.audio/funkwhale/funkwhale/blob/develop/api/funkwhale_api/federation/tasks.py)"
+msgstr ""
+
+#: ../../developer/federation/index.md:64
+msgid "Service actor"
+msgstr ""
+
+#: ../../developer/federation/index.md:66
+msgid "Funkwhale uses a dedicated service actor to send messages or authenticate fetches. This actor isn't associated to a user."
+msgstr ""
+
+#: ../../developer/federation/index.md:68
+msgid "You can query a pod's nodeinfo endpoint to return the ID of the service actor in the `metadata > actorId` field. See the [API explorer](https://docs.funkwhale.audio/swagger/) for more information about this endpoint."
+msgstr ""
+
+#: ../../developer/federation/index.md:70
+msgid "Funkwhale considers a pod's service actor to be an authoritative source for activities associated with **all** objects on its pod's domain. If the service actor sends an activity linked to an object on its domain, remote pods will recognize its authority."
+msgstr ""
+
+#: ../../developer/federation/index.md:72
+msgid "Supported activities"
+msgstr ""
+
+#: ../../developer/federation/index.md:74
+msgid "Follow"
+msgstr ""
+
+#: ../../developer/federation/index.md:76
+msgid "A **follow** enables actors to access and retrieve content from other actors as soon as it updates."
+msgstr ""
+
+#: ../../developer/federation/index.md:0
+msgid "Supported on"
+msgstr ""
+
+#: ../../developer/federation/index.md:80
+msgid "[Library objects](#library)"
+msgstr ""
+
+#: ../../developer/federation/index.md:86
+msgid "When Funkwhale receives a follow on a [library object](#library), it performs one of the following actions depending on the library's visibility:"
+msgstr ""
+
+#: ../../developer/federation/index.md:88
+msgid "Automatically accept: If the library is public, Funkwhale automatically accepts the follow activity. Funkwhale sends a notification to the owner of the library and an [`Accept`](#accept) activity to the actor who sent the follow"
+msgstr ""
+
+#: ../../developer/federation/index.md:89
+msgid "Accept request: If the library isn't public, Funkwhale sends a notification to the library owner. If the owner approves the request, Funkwhale sends an [`Accept`](#accept) activity to the actor who sent the follow"
+msgstr ""
+
+#: ../../developer/federation/index.md:91
+msgid "Funkwhale uses the library follow status to grant access to the actor who sent the follow request. If the library isn't public and the owner doesn't send an approval, the requesting actor can't access the library's content."
+msgstr ""
+
+#: ../../developer/federation/index.md:93
+#: ../../developer/federation/index.md:130
+#: ../../developer/federation/index.md:170
+#: ../../developer/federation/index.md:214
+#: ../../developer/federation/index.md:255
+#: ../../developer/federation/index.md:297
+msgid "Checks"
+msgstr ""
+
+#: ../../developer/federation/index.md:95
+msgid "Funkwhale ensures the activity is being sent to the library's owner before handling it."
+msgstr ""
+
+#: ../../developer/federation/index.md:97
+#: ../../developer/federation/index.md:134
+#: ../../developer/federation/index.md:174
+#: ../../developer/federation/index.md:218
+#: ../../developer/federation/index.md:264
+#: ../../developer/federation/index.md:301
+#: ../../developer/federation/index.md:392
+#: ../../developer/federation/index.md:442
+#: ../../developer/federation/index.md:501
+#: ../../developer/federation/index.md:560
+#: ../../developer/federation/index.md:627
+msgid "Example"
+msgstr ""
+
+#: ../../developer/federation/index.md:99
+msgid "In this example, **Alice** sends a follow activity for a [library object](#library) owned by **Bob**."
+msgstr ""
+
+#: ../../developer/federation/index.md:116
+msgid "Accept"
+msgstr ""
+
+#: ../../developer/federation/index.md:118
+msgid "The `Accept` activity sends a positive response, such as confirming a [`Follow` activity](#follow)."
+msgstr ""
+
+#: ../../developer/federation/index.md:122
+msgid "`Activity` objects"
+msgstr ""
+
+#: ../../developer/federation/index.md:128
+msgid "When Funkwhale receives an `Accept` activity related to a [`Follow`](#follow) activity, it marks the `Follow` as accepted in the database. If the `Follow` activity relates to a [`Library` object](#library), the requester receives future activities associated with the library. This includes [`Create`](#create), [`Audio`](#audio), and [`Delete`](#delete) activities. They can also browse and download the library's audio files. See the section on [Audio fetching on restricted libraries](#audio-fetching-on-restricted-libraries) for more details."
+msgstr ""
+
+#: ../../developer/federation/index.md:132
+msgid "Funkwhale ensures the activity is sent by the library's owner before handling it."
+msgstr ""
+
+#: ../../developer/federation/index.md:136
+msgid "In this example, **Bob** accepts a follow request from **Alice**."
+msgstr ""
+
+#: ../../developer/federation/index.md:158
+msgid "Undo"
+msgstr ""
+
+#: ../../developer/federation/index.md:162
+msgid "[`Follow` objects](#follow)"
+msgstr ""
+
+#: ../../developer/federation/index.md:168
+msgid "When Funkwhale receives an `Undo` activity, it deletes the corresponding `Follow` from the database."
+msgstr ""
+
+#: ../../developer/federation/index.md:172
+msgid "Funkwhale ensures the request actor is the same actor who sent the `Follow` activity before handling it."
+msgstr ""
+
+#: ../../developer/federation/index.md:176
+msgid "In this example, **Alice** notifies **Bob** that she's undoing her follow."
+msgstr ""
+
+#: ../../developer/federation/index.md:198
+msgid "Create"
+msgstr ""
+
+#: ../../developer/federation/index.md:202
+#: ../../developer/federation/index.md:288
+msgid "[`Audio` objects](#audio)"
+msgstr ""
+
+#: ../../developer/federation/index.md:209
+msgid "See [the `Audio` object reference](#audio) for details on the object's structure."
+msgstr ""
+
+#: ../../developer/federation/index.md:212
+msgid "When Funkwhale receives a `Create` activity with an [`Audio` object](#audio), it persists a local upload in the database. It then associates the upload to related library and track information. If no track matches the audio metadata, Funkwhale creates on using the `metadata` attribute in the object."
+msgstr ""
+
+#: ../../developer/federation/index.md:216
+msgid "Funkwhale ensures the activity actor and library owner are the same before handling the activity. If the associated library has no local followers, Funkwhale discards the activity."
+msgstr ""
+
+#: ../../developer/federation/index.md:220
+msgid "In this example, **Bob** creates new content in his library and sends a message to its followers."
+msgstr ""
+
+#: ../../developer/federation/index.md:238
+msgid "Update"
+msgstr ""
+
+#: ../../developer/federation/index.md:242
+#: ../../developer/federation/index.md:289
+msgid "[`Library` objects](#library)"
+msgstr ""
+
+#: ../../developer/federation/index.md:243
+msgid "[`Track` objects](#track)"
+msgstr ""
+
+#: ../../developer/federation/index.md:250
+msgid "See [the `Track` object reference](#track) and [`Library` object reference](#library) for details on the object's structure."
+msgstr ""
+
+#: ../../developer/federation/index.md:253
+msgid "When Funkwhale receives an update associated with a [`Library`](#library) or [`Track`](#track) object, it attempts to update the corresponding object in its database."
+msgstr ""
+
+#: ../../developer/federation/index.md:257
+msgid "Funkwhale performs different checks depending on the target of the update:"
+msgstr ""
+
+#: ../../developer/federation/index.md:259
+msgid "For [`Library`](#library) objects, Funkwhale ensures the actor sending the message is the library owner"
+msgstr ""
+
+#: ../../developer/federation/index.md:260
+msgid "For [`Track`](#track) objects, Funkwhale ensures the actor sending the message **either**:"
+msgstr ""
+
+#: ../../developer/federation/index.md:261
+msgid "Matches the [`attributedTo`](#attributedto) property on the local copy of the object"
+msgstr ""
+
+#: ../../developer/federation/index.md:262
+msgid "Is the [service actor](#service-actor)"
+msgstr ""
+
+#: ../../developer/federation/index.md:266
+msgid "In this example, **Bob** updates his library and sends a message to its followers."
+msgstr ""
+
+#: ../../developer/federation/index.md:284
+msgid "Delete"
+msgstr ""
+
+#: ../../developer/federation/index.md:295
+msgid "When Funkwhale receives a `Delete` activity, it deletes the associated object from the database."
+msgstr ""
+
+#: ../../developer/federation/index.md:299
+msgid "Funkwhale ensures the actor initiating the activity is the owner of the associated object before handling it."
+msgstr ""
+
+#: ../../developer/federation/index.md:0
+#: ../../developer/federation/index.md:518
+msgid "Library"
+msgstr ""
+
+#: ../../developer/federation/index.md:308
+msgid "In this example, **Bob** deletes a library and notifies its followers."
+msgstr ""
+
+#: ../../developer/federation/index.md:0
+#: ../../developer/federation/index.md:576
+msgid "Audio"
+msgstr ""
+
+#: ../../developer/federation/index.md:333
+msgid "In this example, **Bob** deletes three audio objects in a library and notifies the library's followers."
+msgstr ""
+
+#: ../../developer/federation/index.md:361
+msgid "Supported objects"
+msgstr ""
+
+#: ../../developer/federation/index.md:363
+msgid "Artist"
+msgstr ""
+
+#: ../../developer/federation/index.md:365
+msgid "An `Artist` is a custom object used to store musical artist and podcast creator information."
+msgstr ""
+
+#: ../../developer/federation/index.md:367
+#: ../../developer/federation/index.md:408
+#: ../../developer/federation/index.md:467
+#: ../../developer/federation/index.md:526
+#: ../../developer/federation/index.md:584
+msgid "Properties"
+msgstr ""
+
+#: ../../developer/federation/index.md:372
+#: ../../developer/federation/index.md:413
+#: ../../developer/federation/index.md:472
+#: ../../developer/federation/index.md:531
+#: ../../developer/federation/index.md:589
+msgid "Property"
+msgstr ""
+
+#: ../../developer/federation/index.md:373
+#: ../../developer/federation/index.md:414
+#: ../../developer/federation/index.md:473
+#: ../../developer/federation/index.md:532
+#: ../../developer/federation/index.md:590
+msgid "Data type"
+msgstr ""
+
+#: ../../developer/federation/index.md:374
+#: ../../developer/federation/index.md:415
+#: ../../developer/federation/index.md:474
+#: ../../developer/federation/index.md:533
+#: ../../developer/federation/index.md:591
+msgid "Description"
+msgstr ""
+
+#: ../../developer/federation/index.md:375
+#: ../../developer/federation/index.md:416
+#: ../../developer/federation/index.md:475
+#: ../../developer/federation/index.md:534
+#: ../../developer/federation/index.md:592
+msgid "`type`*"
+msgstr ""
+
+#: ../../developer/federation/index.md:376
+#: ../../developer/federation/index.md:382
+#: ../../developer/federation/index.md:417
+#: ../../developer/federation/index.md:423
+#: ../../developer/federation/index.md:476
+#: ../../developer/federation/index.md:482
+#: ../../developer/federation/index.md:535
+#: ../../developer/federation/index.md:541
+#: ../../developer/federation/index.md:556
+#: ../../developer/federation/index.md:593
+#: ../../developer/federation/index.md:599
+msgid "String"
+msgstr ""
+
+#: ../../developer/federation/index.md:377
+msgid "The object type (`Artist`)"
+msgstr ""
+
+#: ../../developer/federation/index.md:378
+#: ../../developer/federation/index.md:419
+#: ../../developer/federation/index.md:478
+#: ../../developer/federation/index.md:537
+#: ../../developer/federation/index.md:595
+msgid "`id`*"
+msgstr ""
+
+#: ../../developer/federation/index.md:379
+#: ../../developer/federation/index.md:420
+#: ../../developer/federation/index.md:479
+#: ../../developer/federation/index.md:538
+#: ../../developer/federation/index.md:544
+#: ../../developer/federation/index.md:550
+#: ../../developer/federation/index.md:553
+#: ../../developer/federation/index.md:596
+#: ../../developer/federation/index.md:611
+msgid "String (URI)"
+msgstr ""
+
+#: ../../developer/federation/index.md:380
+msgid "A URI that identifies the artist over federation"
+msgstr ""
+
+#: ../../developer/federation/index.md:381
+#: ../../developer/federation/index.md:422
+#: ../../developer/federation/index.md:481
+#: ../../developer/federation/index.md:540
+#: ../../developer/federation/index.md:598
+msgid "`name`*"
+msgstr ""
+
+#: ../../developer/federation/index.md:383
+msgid "The artist's name"
+msgstr ""
+
+#: ../../developer/federation/index.md:384
+#: ../../developer/federation/index.md:428
+#: ../../developer/federation/index.md:487
+#: ../../developer/federation/index.md:613
+msgid "`published`*"
+msgstr ""
+
+#: ../../developer/federation/index.md:385
+#: ../../developer/federation/index.md:429
+#: ../../developer/federation/index.md:432
+#: ../../developer/federation/index.md:488
+#: ../../developer/federation/index.md:614
+#: ../../developer/federation/index.md:617
+msgid "Datetime"
+msgstr ""
+
+#: ../../developer/federation/index.md:386
+#: ../../developer/federation/index.md:430
+msgid "The date on which the artist was published over the federation"
+msgstr ""
+
+#: ../../developer/federation/index.md:387
+#: ../../developer/federation/index.md:434
+#: ../../developer/federation/index.md:490
+msgid "`musicbrainzId`"
+msgstr ""
+
+#: ../../developer/federation/index.md:388
+#: ../../developer/federation/index.md:435
+#: ../../developer/federation/index.md:491
+msgid "String (UUID)"
+msgstr ""
+
+#: ../../developer/federation/index.md:389
+msgid "The Musicbrainz artist ID"
+msgstr ""
+
+#: ../../developer/federation/index.md:404
+msgid "Album"
+msgstr ""
+
+#: ../../developer/federation/index.md:406
+msgid "An `Album` is a custom object used to store album and podcast series information."
+msgstr ""
+
+#: ../../developer/federation/index.md:418
+msgid "The object type (`Album`)"
+msgstr ""
+
+#: ../../developer/federation/index.md:421
+msgid "A URI that identifies the album over federation"
+msgstr ""
+
+#: ../../developer/federation/index.md:424
+msgid "The album's title"
+msgstr ""
+
+#: ../../developer/federation/index.md:425
+#: ../../developer/federation/index.md:496
+msgid "`artists`"
+msgstr ""
+
+#: ../../developer/federation/index.md:426
+msgid "Array of strings"
+msgstr ""
+
+#: ../../developer/federation/index.md:427
+msgid "A list of [`Artist` objects](#artist) associated with the albums"
+msgstr ""
+
+#: ../../developer/federation/index.md:431
+msgid "`released`"
+msgstr ""
+
+#: ../../developer/federation/index.md:433
+msgid "The date on which the album was released"
+msgstr ""
+
+#: ../../developer/federation/index.md:436
+msgid "The Musicbrainz release ID"
+msgstr ""
+
+#: ../../developer/federation/index.md:437
+msgid "`cover`"
+msgstr ""
+
+#: ../../developer/federation/index.md:438
+#: ../../developer/federation/index.md:620
+msgid "[`Link` object](https://www.w3.org/TR/activitystreams-vocabulary/#dfn-link)"
+msgstr ""
+
+#: ../../developer/federation/index.md:439
+msgid "A `Link` object representing the album cover"
+msgstr ""
+
+#: ../../developer/federation/index.md:463
+msgid "Track"
+msgstr ""
+
+#: ../../developer/federation/index.md:465
+msgid "A `Track` is a custom object used to store track information."
+msgstr ""
+
+#: ../../developer/federation/index.md:477
+msgid "The object type (`Track`)"
+msgstr ""
+
+#: ../../developer/federation/index.md:480
+msgid "A URI that identifies the track over federation"
+msgstr ""
+
+#: ../../developer/federation/index.md:483
+msgid "The track title"
+msgstr ""
+
+#: ../../developer/federation/index.md:484
+msgid "`position`*"
+msgstr ""
+
+#: ../../developer/federation/index.md:485
+#: ../../developer/federation/index.md:547
+#: ../../developer/federation/index.md:602
+#: ../../developer/federation/index.md:605
+#: ../../developer/federation/index.md:608
+msgid "Integer"
+msgstr ""
+
+#: ../../developer/federation/index.md:486
+msgid "The position of the track in the album"
+msgstr ""
+
+#: ../../developer/federation/index.md:489
+msgid "The date on which the track was published over the federation"
+msgstr ""
+
+#: ../../developer/federation/index.md:492
+msgid "The Musicbrainz recording ID"
+msgstr ""
+
+#: ../../developer/federation/index.md:493
+msgid "`album`"
+msgstr ""
+
+#: ../../developer/federation/index.md:494
+msgid "[`Album` object](#album)"
+msgstr ""
+
+#: ../../developer/federation/index.md:495
+msgid "The album that contains the track"
+msgstr ""
+
+#: ../../developer/federation/index.md:497
+msgid "Array of [`Artist` objects](#artist)"
+msgstr ""
+
+#: ../../developer/federation/index.md:498
+msgid "A list of artists associated to the track. This can differ from the album artists"
+msgstr ""
+
+#: ../../developer/federation/index.md:521
+msgid "Crawling library pages requires authentication and an approved follow unless the library is public."
+msgstr ""
+
+#: ../../developer/federation/index.md:524
+msgid "A `Library` is a custom object used to store music collection information. It inherits its behavior and properties from ActivityPub's [`Actor`](https://www.w3.org/TR/activitypub/#actors) and [`Collection`](https://www.w3.org/TR/activitypub/#collections) objects."
+msgstr ""
+
+#: ../../developer/federation/index.md:536
+msgid "The object type (`Library`)"
+msgstr ""
+
+#: ../../developer/federation/index.md:539
+msgid "A URI that identifies the library over federation"
+msgstr ""
+
+#: ../../developer/federation/index.md:542
+msgid "The library's name"
+msgstr ""
+
+#: ../../developer/federation/index.md:543
+msgid "`followers`*"
+msgstr ""
+
+#: ../../developer/federation/index.md:545
+msgid "The ID of the library's followers collection"
+msgstr ""
+
+#: ../../developer/federation/index.md:546
+msgid "`totalItems`*"
+msgstr ""
+
+#: ../../developer/federation/index.md:548
+msgid "The number of [`Audio` objects](#audio) in the library"
+msgstr ""
+
+#: ../../developer/federation/index.md:549
+msgid "`first`*"
+msgstr ""
+
+#: ../../developer/federation/index.md:551
+msgid "The URL of the library's first page"
+msgstr ""
+
+#: ../../developer/federation/index.md:552
+msgid "`last`*"
+msgstr ""
+
+#: ../../developer/federation/index.md:554
+msgid "The URL of the library's last page"
+msgstr ""
+
+#: ../../developer/federation/index.md:555
+msgid "`summary`"
+msgstr ""
+
+#: ../../developer/federation/index.md:557
+msgid "The library's description"
+msgstr ""
+
+#: ../../developer/federation/index.md:579
+msgid "Accessing audio files requires authentication and an approved follow for the containing library unless the library is public."
+msgstr ""
+
+#: ../../developer/federation/index.md:582
+msgid "An `Audio` object is a custom object used to store upload information. It extends the [ActivityStreams Audio object](https://www.w3.org/TR/activitystreams-vocabulary/#dfn-audio) with custom attributes."
+msgstr ""
+
+#: ../../developer/federation/index.md:594
+msgid "The object type (`Audio`)"
+msgstr ""
+
+#: ../../developer/federation/index.md:597
+msgid "A URI that identifies the audio over federation"
+msgstr ""
+
+#: ../../developer/federation/index.md:600
+msgid "A readable title for the order. Funkwhale concatenates the track name, album title, and artist name"
+msgstr ""
+
+#: ../../developer/federation/index.md:601
+msgid "`size`*"
+msgstr ""
+
+#: ../../developer/federation/index.md:603
+msgid "The size of the audio in bytes"
+msgstr ""
+
+#: ../../developer/federation/index.md:604
+msgid "`bitrate`*"
+msgstr ""
+
+#: ../../developer/federation/index.md:606
+msgid "The bitrate of the audio in bytes/s"
+msgstr ""
+
+#: ../../developer/federation/index.md:607
+msgid "`duration`*"
+msgstr ""
+
+#: ../../developer/federation/index.md:609
+msgid "The duration of the audio in seconds"
+msgstr ""
+
+#: ../../developer/federation/index.md:610
+msgid "`library`*"
+msgstr ""
+
+#: ../../developer/federation/index.md:612
+msgid "The ID of the audio's containing [`Library` object](#library)"
+msgstr ""
+
+#: ../../developer/federation/index.md:615
+msgid "The date on which the audio was published over the federation"
+msgstr ""
+
+#: ../../developer/federation/index.md:616
+msgid "`updated`*"
+msgstr ""
+
+#: ../../developer/federation/index.md:618
+msgid "The date on which the audio was last updated over the federation"
+msgstr ""
+
+#: ../../developer/federation/index.md:619
+msgid "`url`*"
+msgstr ""
+
+#: ../../developer/federation/index.md:621
+msgid "A `Link` object object containing the download location of the audio file"
+msgstr ""
+
+#: ../../developer/federation/index.md:622
+msgid "`track`"
+msgstr ""
+
+#: ../../developer/federation/index.md:623
+msgid "[`Track` object](#track)"
+msgstr ""
+
+#: ../../developer/federation/index.md:624
+msgid "The track associated with the audio file"
+msgstr ""
+
+#: ../../developer/federation/index.md:649
+msgid "Audio fetching on restricted libraries"
+msgstr ""
+
+#: ../../developer/federation/index.md:651
+msgid "[`Library` objects](#library) and [`Audio` objects] are subject to the following access rules:"
+msgstr ""
+
+#: ../../developer/federation/index.md:658
+msgid "Public libraries can be accessed by actors without restriction"
+msgstr ""
+
+#: ../../developer/federation/index.md:659
+msgid "Restricted libraries can only be accessed if the HTTP request is signed by an actor who has an associated **approved** [`Follow` activity](#follow)"
+msgstr ""
+
+#: ../../developer/federation/index.md:665
+msgid "Audio items in public libraries can be accessed by actors without restriction"
+msgstr ""
+
+#: ../../developer/federation/index.md:666
+msgid "Audio items in restricted libraries can only be accessed if the HTTP request is signed by an actor who has an associated **approved** [`Follow` activity](#follow)"
+msgstr ""
+
+#: ../../developer/federation/index.md:671
+msgid "Custom properties"
+msgstr ""
+
+#: ../../developer/federation/index.md:673
+msgid "attributedTo"
+msgstr ""
+
+#: ../../developer/federation/index.md:675
+msgid "Funkwhale uses the `attributedTo` property to denote the actor responsible for an object. If an object has an `attributedTo` attributed, the associated actor can perform activities to it, including [`Update`](#update) and [`Delete`](#delete)."
+msgstr ""
+
+#: ../../developer/federation/index.md:677
+msgid "Funkwhale also attributes all objects on a domain with the domain's [Service actor](#service-actor)"
+msgstr ""

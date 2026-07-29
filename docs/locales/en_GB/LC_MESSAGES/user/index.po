@@ -1,0 +1,122 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.11.0\n"
+
+#: ../../user_documentation/index.md:1
+msgid "Get started"
+msgstr ""
+
+#: ../../user_documentation/index.md:3
+msgid ""
+"Follow the guides in our user documentation to get started using "
+"Funkwhale."
+msgstr ""
+
+#: ../../user_documentation/index.md:9
+msgid "Set up your Funkwhale account"
+msgstr ""
+
+#: ../../user_documentation/index.md:11
+msgid ""
+"Some {term}`Funkwhale pods <Pod>` allow you to listen to music without "
+"signing up. To get the most out of Funkwhale, you should create an "
+"account. Check out [Your account](accounts/index.md) to get started."
+msgstr ""
+
+#: ../../user_documentation/index.md:13
+msgid "Publish your content on Funkwhale"
+msgstr ""
+
+#: ../../user_documentation/index.md:15
+msgid ""
+"Got a podcast you want to share with the world? Working on a new album? "
+"Funkwhale gives you the tools you need to share your creativity with the "
+"{term}`Fediverse`. Publish your work in [Channels](channels/index.md) to "
+"start building up your following."
+msgstr ""
+
+#: ../../user_documentation/index.md:17
+msgid "Upload your collection to Funkwhale"
+msgstr ""
+
+#: ../../user_documentation/index.md:19
+msgid ""
+"Want to listen to your private collection using Funkwhale? Upload your "
+"files to [Libraries](libraries/index.md) to store your collection on your"
+" pod and share it with others."
+msgstr ""
+
+#: ../../user_documentation/index.md:21
+msgid "Start listening"
+msgstr ""
+
+#: ../../user_documentation/index.md:23
+msgid ""
+"Want to listen to something new or enjoy an old favorite? Follow the "
+"guides in the sections linked below to master playback in Funkwhale:"
+msgstr ""
+
+#: ../../user_documentation/index.md:25
+msgid "Learn how to use the [Queue](queue/index.md) to organize playback."
+msgstr ""
+
+#: ../../user_documentation/index.md:26
+msgid ""
+"Build [Playlists](playlists/index.md) to personalize how you enjoy your "
+"favorite content."
+msgstr ""
+
+#: ../../user_documentation/index.md:27
+msgid ""
+"Create new [Radios](radios/index.md) to automate your listening "
+"experience."
+msgstr ""
+
+#: ../../user_documentation/index.md:29
+msgid "Report content and users"
+msgstr ""
+
+#: ../../user_documentation/index.md:31
+msgid ""
+"If you've come across something that doesn't abide by a pod's rules or "
+"the law, you can report it. Follow the guides in the "
+"[Reporting](reports/index.md) section to see how."
+msgstr ""
+
+#: ../../user_documentation/index.md:33
+msgid "Access Funkwhale from other apps"
+msgstr ""
+
+#: ../../user_documentation/index.md:35
+msgid ""
+"Funkwhale supports a subset of the Subsonic API. This means you can play "
+"your Funkwhale content on Subsonic apps. Learn more about how to do this "
+"in the [Subsonic](subsonic/index.md) section."
+msgstr ""
+
+#: ../../user_documentation/index.md:37
+msgid "Enhance your experience with plugins"
+msgstr ""
+
+#: ../../user_documentation/index.md:39
+msgid ""
+"Funkwhale supports plugins to extend its features or to add new features."
+" Check out our [Plugins](plugins/index.md) section for details about our "
+"plugins and how to use them."
+msgstr ""
+

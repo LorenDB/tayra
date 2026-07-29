@@ -1,0 +1,83 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.10\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-24 18:14+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../user/queue/remove.md:1
+msgid "Remove content from your queue"
+msgstr ""
+
+#: ../../user/queue/remove.md:4
+msgid "If you remove the currently playing track, the next item in the queue plays. If you remove all items, the queue closes."
+msgstr ""
+
+#: ../../user/queue/remove.md:7
+msgid "You can remove content from your queue at any time. You can choose between the following options:"
+msgstr ""
+
+#: ../../user/queue/remove.md:13
+msgid "Remove individual tracks from the queue"
+msgstr ""
+
+#: ../../user/queue/remove.md:15
+msgid "To remove individual tracks from the queue:"
+msgstr ""
+
+#: ../../user/queue/remove.md:0
+msgid "Desktop"
+msgstr ""
+
+#: ../../user/queue/remove.md:23
+#: ../../user/queue/remove.md:32
+#: ../../user/queue/remove.md:49
+#: ../../user/queue/remove.md:58
+msgid "Select the up arrow ({fa}`caret-up`) on the queue menu to expand the queue."
+msgstr ""
+
+#: ../../user/queue/remove.md:24
+#: ../../user/queue/remove.md:33
+msgid "Select the delete icon ({fa}`times`) next to the track you want to remove."
+msgstr ""
+
+#: ../../user/queue/remove.md:0
+msgid "Mobile"
+msgstr ""
+
+#: ../../user/queue/remove.md:31
+#: ../../user/queue/remove.md:57
+msgid "Select the player bar at the bottom of the screen to expand the player."
+msgstr ""
+
+#: ../../user/queue/remove.md:37
+msgid "That's it! You've removed tracks from your queue."
+msgstr ""
+
+#: ../../user/queue/remove.md:39
+msgid "Remove all content from the queue"
+msgstr ""
+
+#: ../../user/queue/remove.md:41
+msgid "To remove all content from your queue at once:"
+msgstr ""
+
+#: ../../user/queue/remove.md:50
+#: ../../user/queue/remove.md:59
+msgid "Select {guilabel}`Clear` to remove all content from the queue."
+msgstr ""
+
+#: ../../user/queue/remove.md:63
+msgid "That's it! You've removed all content from your queue."
+msgstr ""

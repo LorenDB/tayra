@@ -1,0 +1,7 @@
+# Built Tayra SPA (generate via flutter build web)
+dist/**
+!dist/.gitkeep
+
+node_modules/
+.yarn/
+*.log

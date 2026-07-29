@@ -1,0 +1,313 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.10\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-24 18:14+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../administrator/import.md:1
+msgid "Import music from your server"
+msgstr ""
+
+#: ../../administrator/import.md:3
+msgid "You can import music files you have saved on your server. You need to make sure your files have the [required ID3 tags](../user/libraries/content/tag.md). We recommend using [Musicbrainz Picard](https://picard.musicbrainz.org/) for tagging."
+msgstr ""
+
+#: ../../administrator/import.md:5
+msgid "Funkwhale supports the following import methods:"
+msgstr ""
+
+#: ../../administrator/import.md:7
+msgid "Copy (default) – Funkwhale copies files from your server into the media store."
+msgstr ""
+
+#: ../../administrator/import.md:8
+msgid "In-place import – Funkwhale adds the storage location of your files to the database. This uses less space than the copy method and ensures your collection is always up-to-date."
+msgstr ""
+
+#: ../../administrator/import.md:10
+msgid "To see a full list of options, run the command with the `--help` flag."
+msgstr ""
+
+#: ../../administrator/import.md:0
+msgid "Debian"
+msgstr ""
+
+#: ../../administrator/import.md:0
+msgid "Docker"
+msgstr ""
+
+#: ../../administrator/import.md:37
+msgid "Get demo music"
+msgstr ""
+
+#: ../../administrator/import.md:39
+msgid "If you don't have music on your server, you can download creative commons music to test imports with. The Funkwhale project provides a collection courtesy of [Jamendo](https://jamendo.com). To download these tracks:"
+msgstr ""
+
+#: ../../administrator/import.md:41
+msgid "Download the shell script."
+msgstr ""
+
+#: ../../administrator/import.md:47
+msgid "Download the music list."
+msgstr ""
+
+#: ../../administrator/import.md:53
+msgid "Run the shell script against the music list to download the tracks."
+msgstr ""
+
+#: ../../administrator/import.md:59
+msgid "This downloads a set compressed albums to your `data/music` directory and unzips them. You can then import these tracks using the methods in this article."
+msgstr ""
+
+#: ../../administrator/import.md:61
+msgid "Find your library ID"
+msgstr ""
+
+#: ../../administrator/import.md:63
+msgid "You need to create a library before you can import music. Follow the instructions in [Create a library](../user/libraries/create.md) to get started."
+msgstr ""
+
+#: ../../administrator/import.md:65
+msgid "Once you've created your library, you can find its ID by following these steps:"
+msgstr ""
+
+#: ../../administrator/import.md:67
+msgid "Visit `https://<yourdomain>/content/libraries/` in your browser. This page contains a list of your libraries."
+msgstr ""
+
+#: ../../administrator/import.md:68
+msgid "Find the library you want to upload content into. Select {guilabel}`Library details` to open the library details page."
+msgstr ""
+
+#: ../../administrator/import.md:69
+msgid "Your library's ID is the long string of letters and numbers shown in the URL bar. Copy the content before the first hyphen (`-`)."
+msgstr ""
+
+#: ../../administrator/import.md:71
+msgid "For example, if your library ID is `769a2bc3-eb1d-4aff-9f84-2c4d80d5c2d1`, copy the `769a2bc3`. You can use this as a shorthand reference for your library."
+msgstr ""
+
+#: ../../administrator/import.md:73
+msgid "Import your music"
+msgstr ""
+
+#: ../../administrator/import.md:75
+msgid "Copy files from your server"
+msgstr ""
+
+#: ../../administrator/import.md:77
+msgid "Once you have your library ID, you can copy content from your server and import it into the library. To do this:"
+msgstr ""
+
+#: ../../administrator/import.md:79
+#: ../../administrator/import.md:162
+msgid "Log in to your server and navigate to your Funkwhale directory."
+msgstr ""
+
+#: ../../administrator/import.md:85
+#: ../../administrator/import.md:169
+msgid "Export your library ID to reference it later. In this example, the library ID is \"769a2bc3\". Replace this with your library ID."
+msgstr ""
+
+#: ../../administrator/import.md:91
+msgid "Run the `import_files` command to copy your files. In this example, the music is stored in `data/music`. Replace this with your music directory."
+msgstr ""
+
+#: ../../administrator/import.md:97
+msgid "Funkwhale copies your files to your media store."
+msgstr ""
+
+#: ../../administrator/import.md:99
+msgid "Access your files in-place"
+msgstr ""
+
+#: ../../administrator/import.md:101
+msgid "The in-place import method references your files in their current directory. This is useful if you have limited storage space."
+msgstr ""
+
+#: ../../administrator/import.md:103
+msgid "Link your file directory"
+msgstr ""
+
+#: ../../administrator/import.md:105
+msgid "We recommend you symbolically link your music directories to `/srv/funkwhale/data/music`. You can then run the `import_files` command from that directory. This means you can use many directories without needing to add to them to your webserver."
+msgstr ""
+
+#: ../../administrator/import.md:113
+msgid "To link your storage directory to the Funkwhale store, use the `ln -s` command. For example, if you have an NFS share at `/media/nfsshare`, you can link it to a folder like this:"
+msgstr ""
+
+#: ../../administrator/import.md:119
+#: ../../administrator/import.md:148
+msgid "You can then run the `import_files` command against `/srv/funkwhale/data/music/nfsshare`."
+msgstr ""
+
+#: ../../administrator/import.md:126
+msgid "On a Docker install you can use bind mounts to reference your storage directory. To do this, you need to add the directory to the `api` and `celeryworker` blocks in your `docker-compose.yml` file. For example, if you have an NFS share at `/media/nfsshare`, you can add the following to your `docker-compose.yml` file:"
+msgstr ""
+
+#: ../../administrator/import.md:152
+msgid "Import your files"
+msgstr ""
+
+#: ../../administrator/import.md:154
+msgid "To use the in-place import method, follow these steps:"
+msgstr ""
+
+#: ../../administrator/import.md:168
+msgid "Add your storage location to your `.env` file if you don't want to link it to the Funkwhale store. See the [in-place import configuration variables](configuration/env-file.md#in-place-import-configuration) for more information."
+msgstr ""
+
+#: ../../administrator/import.md:175
+msgid "Run your import command against your music storage directory. In this example, the storage directory is `/srv/funkwhale/data/music/nfsshare`. Replace this with your storage directory."
+msgstr ""
+
+#: ../../administrator/import.md:181
+#: ../../administrator/import.md:195
+msgid "Funkwhale imports the music in your storage directory into the specified library."
+msgstr ""
+
+#: ../../administrator/import.md:188
+msgid "Add your storage location to your `.env` file if you don't want to bind it to the Funkwhale store. See the [in-place import configuration variables](configuration/env-file.md#in-place-import-configuration) for more information."
+msgstr ""
+
+#: ../../administrator/import.md:189
+msgid "Run your import command against your music storage directory:"
+msgstr ""
+
+#: ../../administrator/import.md:199
+msgid "Album art"
+msgstr ""
+
+#: ../../administrator/import.md:201
+msgid "Funkwhale attempts to import album art for your music library. The import process checks for the following."
+msgstr ""
+
+#: ../../administrator/import.md:203
+msgid "The cover embedded in the audio files (works with FLAC and MP3 files)."
+msgstr ""
+
+#: ../../administrator/import.md:204
+msgid "A `cover.jpg` or `cover.png` in the the track's directory."
+msgstr ""
+
+#: ../../administrator/import.md:205
+msgid "An `mbid` in the file's tags. If there is an `mbid`, the import process tries to fetch cover art from Musicbrainz."
+msgstr ""
+
+#: ../../administrator/import.md:207
+msgid "Watch for filesystem changes"
+msgstr ""
+
+#: ../../administrator/import.md:209
+msgid "You can run the `import_files` command any time you add new files or update files. For larger collections, this may not be practical. To watch for changes, run the `import_files` command with the `--watch` flag. This instructs the `import_files` command to watch for filesystem events and update your database when something changes."
+msgstr ""
+
+#: ../../administrator/import.md:211
+msgid "The `--watch` flag performs the following actions when it detects a change:"
+msgstr ""
+
+#: ../../administrator/import.md:213
+msgid "File created – imports the track."
+msgstr ""
+
+#: ../../administrator/import.md:214
+msgid "File moved – updates the location of the track in the database."
+msgstr ""
+
+#: ../../administrator/import.md:215
+msgid "File metadata updated – updates the track metadata in the database."
+msgstr ""
+
+#: ../../administrator/import.md:216
+msgid "File deleted – removes the file from the database."
+msgstr ""
+
+#: ../../administrator/import.md:0
+msgid "Watched metadata"
+msgstr ""
+
+#: ../../administrator/import.md:220
+msgid "The `import_files --watch` command watches for changes to the following metadata fields:"
+msgstr ""
+
+#: ../../administrator/import.md:222
+msgid "Track mbid"
+msgstr ""
+
+#: ../../administrator/import.md:223
+msgid "Track title"
+msgstr ""
+
+#: ../../administrator/import.md:224
+msgid "Track position and disc number"
+msgstr ""
+
+#: ../../administrator/import.md:225
+msgid "Track license and copyright"
+msgstr ""
+
+#: ../../administrator/import.md:226
+msgid "Track genre"
+msgstr ""
+
+#: ../../administrator/import.md:227
+msgid "Album cover"
+msgstr ""
+
+#: ../../administrator/import.md:228
+msgid "Album title"
+msgstr ""
+
+#: ../../administrator/import.md:229
+msgid "Album mbid"
+msgstr ""
+
+#: ../../administrator/import.md:230
+msgid "Album release date"
+msgstr ""
+
+#: ../../administrator/import.md:231
+msgid "Artist name"
+msgstr ""
+
+#: ../../administrator/import.md:232
+msgid "Artist mbid"
+msgstr ""
+
+#: ../../administrator/import.md:233
+msgid "Album artist name"
+msgstr ""
+
+#: ../../administrator/import.md:234
+msgid "Album artist mbid"
+msgstr ""
+
+#: ../../administrator/import.md:259
+msgid "Prune dangling metadata"
+msgstr ""
+
+#: ../../administrator/import.md:261
+msgid "Funkwhale doesn't delete track metadata when you delete a track. This is useful if you want to delete a file but keep a record of a track for created playlists or favorites."
+msgstr ""
+
+#: ../../administrator/import.md:263
+msgid "If you want to remove the file's metadata when you delete the file, run `import_files` with the `--prune` flag. This flag removes the metadata of any"
+msgstr ""
+
+#: ../../administrator/import.md:266
+msgid "You can use the `--prune` flag with the `--watch` flag. This means Funkwhale removes the metadata of referenced files you delete from your storage."
+msgstr ""

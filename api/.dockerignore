@@ -1,0 +1,12 @@
+# Exclude everything and allow only the necessary files
+*
+!/docker/
+!/config/
+!/funkwhale_api/
+!/manage.py
+!/poetry.lock
+!/pyproject.toml
+
+# Python
+*.py[cod]
+__pycache__

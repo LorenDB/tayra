@@ -1,0 +1,12 @@
+[tool.black]
+extend-exclude = "(api/.*/migrations/.*)"
+force-exclude = "(api/.*/migrations/.*)" # pre-commit pass files as args
+
+[tool.isort]
+profile = "black"
+extend_skip_glob = ["api/*/migrations/*"]
+known_first_party = ["funkwhale_api", "config"]
+
+[tool.codespell]
+ignore-words = ".codespellignore"
+skip = "*.po,*.pot,*.lock,api/funkwhale_api/common/locales.py,front/src/locales/*.json"

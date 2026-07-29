@@ -1,0 +1,50 @@
+import funkwhale_api
+from config import plugins
+
+from .client import ListenBrainzClient, Track
+from .funkwhale_startup import PLUGIN
+
+
+@plugins.register_hook(plugins.LISTENING_CREATED, PLUGIN)
+def submit_listen(listening, conf, **kwargs):
+    user_token = conf["user_token"]
+    if not user_token:
+        return
+
+    logger = PLUGIN["logger"]
+    logger.info("Submitting listen to ListenBrainz")
+    client = ListenBrainzClient(user_token=user_token, logger=logger)
+    track = get_track(listening.track)
+    client.listen(int(listening.creation_date.timestamp()), track)
+
+
+def get_track(track):
+    artist = track.artist.name
+    title = track.title
+    album = None
+    additional_info = {
+        "media_player": "Funkwhale",
+        "media_player_version": funkwhale_api.__version__,
+        "submission_client": "Funkwhale ListenBrainz plugin",
+        "submission_client_version": PLUGIN["version"],
+        "tracknumber": track.position,
+        "discnumber": track.disc_number,
+    }
+
+    if track.mbid:
+        additional_info["recording_mbid"] = str(track.mbid)
+
+    if track.album:
+        if track.album.title:
+            album = track.album.title
+        if track.album.mbid:
+            additional_info["release_mbid"] = str(track.album.mbid)
+
+    if track.artist.mbid:
+        additional_info["artist_mbids"] = [str(track.artist.mbid)]
+
+    upload = track.uploads.filter(duration__gte=0).first()
+    if upload:
+        additional_info["duration"] = upload.duration
+
+    return Track(artist, title, album, additional_info)

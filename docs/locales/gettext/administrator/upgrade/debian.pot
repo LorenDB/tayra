@@ -1,0 +1,85 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.10\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-24 18:14+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../administrator/upgrade/debian.md:1
+msgid "Upgrade your Debian Funkwhale installation"
+msgstr ""
+
+#: ../../administrator/upgrade/debian.md:3
+msgid "If you installed Funkwhale following the [Debian guide](../installation/debian.md), follow these steps to upgrade."
+msgstr ""
+
+#: ../../administrator/upgrade/debian.md:5
+msgid "Cleanup old funkwhale files"
+msgstr ""
+
+#: ../../administrator/upgrade/debian.md:7
+msgid "Stop the Funkwhale services."
+msgstr ""
+
+#: ../../administrator/upgrade/debian.md:13
+msgid "Navigate to your Funkwhale directory."
+msgstr ""
+
+#: ../../administrator/upgrade/debian.md:19
+msgid "Remove the old files."
+msgstr ""
+
+#: ../../administrator/upgrade/debian.md:25
+msgid "Download Funkwhale"
+msgstr ""
+
+#: ../../administrator/upgrade/debian.md:27
+msgid "Export the Funkwhale version you want to update to. You'll use this in the rest of the commands in this guide."
+msgstr ""
+
+#: ../../administrator/upgrade/debian.md:33
+msgid "Follow the [Download Funkwhale](../installation/debian.md#3-download-funkwhale) instructions in the installation guide."
+msgstr ""
+
+#: ../../administrator/upgrade/debian.md:35
+msgid "Follow the [Install the Funkwhale API](../installation/debian.md#4-install-the-funkwhale-api) instructions in the installation guide."
+msgstr ""
+
+#: ../../administrator/upgrade/debian.md:37
+msgid "Update your Funkwhale instance"
+msgstr ""
+
+#: ../../administrator/upgrade/debian.md:39
+msgid "Once you have downloaded the new files, you can update your Funkwhale instance. To do this:"
+msgstr ""
+
+#: ../../administrator/upgrade/debian.md:41
+msgid "Install or upgrade all OS dependencies using the dependencies script."
+msgstr ""
+
+#: ../../administrator/upgrade/debian.md:47
+msgid "Collect the new static files to serve."
+msgstr ""
+
+#: ../../administrator/upgrade/debian.md:53
+msgid "Apply new database migrations."
+msgstr ""
+
+#: ../../administrator/upgrade/debian.md:59
+msgid "Restart the Funkwhale services."
+msgstr ""
+
+#: ../../administrator/upgrade/debian.md:65
+msgid "That's it! You've updated your Funkwhale pod. You should now see the new version running in your web browser."
+msgstr ""
