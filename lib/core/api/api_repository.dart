@@ -346,8 +346,8 @@ class FunkwhaleApi {
       data: {'index': index},
       options: Options(
         contentType: Headers.jsonContentType,
-        validateStatus:
-            (status) => status != null && status >= 200 && status < 300,
+        validateStatus: (status) =>
+            status != null && status >= 200 && status < 300,
       ),
     );
     // Defensive: if validateStatus is ever relaxed, still fail closed.
@@ -722,8 +722,9 @@ class FunkwhaleApi {
   /// Absolute listen URL, optionally with Funkwhale scoped `?token=` for
   /// browser media elements that cannot send Authorization headers.
   String getStreamUrl(String listenUrl, {bool appendListenToken = true}) {
-    final absolute =
-        listenUrl.startsWith('http') ? listenUrl : '$_baseUrl$listenUrl';
+    final absolute = listenUrl.startsWith('http')
+        ? listenUrl
+        : '$_baseUrl$listenUrl';
     if (!appendListenToken) return absolute;
 
     final listenToken = _ref.read(authStateProvider).listenToken;
@@ -856,16 +857,13 @@ class FunkwhaleApi {
     // plain list of radios. Be flexible and accept both shapes.
     final data = response.data;
     if (data is List<dynamic>) {
-      final results =
-          data.map<Radio>((e) {
-            if (e is Map<String, dynamic>) return Radio.fromJson(e);
-            if (e is List && e.isNotEmpty && e.first is Map<String, dynamic>) {
-              return Radio.fromJson(e.first as Map<String, dynamic>);
-            }
-            throw StateError(
-              'Unexpected radio list item type: ${e.runtimeType}',
-            );
-          }).toList();
+      final results = data.map<Radio>((e) {
+        if (e is Map<String, dynamic>) return Radio.fromJson(e);
+        if (e is List && e.isNotEmpty && e.first is Map<String, dynamic>) {
+          return Radio.fromJson(e.first as Map<String, dynamic>);
+        }
+        throw StateError('Unexpected radio list item type: ${e.runtimeType}');
+      }).toList();
       return PaginatedResponse(
         count: results.length,
         next: null,
@@ -915,10 +913,9 @@ class FunkwhaleApi {
   }
 
   Future<Track> getRadioTrack(int id) async {
-    final opts =
-        _lastRadioSessionCookie != null
-            ? Options(headers: {'cookie': _lastRadioSessionCookie})
-            : null;
+    final opts = _lastRadioSessionCookie != null
+        ? Options(headers: {'cookie': _lastRadioSessionCookie})
+        : null;
     final response = await _dio.get(
       '$_baseUrl/api/v1/radios/radios/$id/tracks/',
       options: opts,
@@ -1191,10 +1188,9 @@ class FunkwhaleApi {
     if (name != null) body['name'] = name;
     if (privacyLevel != null) body['privacy_level'] = privacyLevel.apiValue;
     if (summaryText != null) {
-      body['summary'] =
-          summaryText.trim().isEmpty
-              ? null
-              : {'text': summaryText, 'content_type': 'text/plain'};
+      body['summary'] = summaryText.trim().isEmpty
+          ? null
+          : {'text': summaryText, 'content_type': 'text/plain'};
     }
 
     final response = await _dio.patch(
@@ -1399,6 +1395,106 @@ class FunkwhaleApi {
   Future<void> deleteManageChannel(String composite) async {
     await _dio.delete(
       '$_baseUrl/api/v1/manage/channels/${Uri.encodeComponent(composite)}/',
+    );
+  }
+
+  // ── User admin (manage API) ─────────────────────────────────────────
+  // Requires `instance:users` / `instance:invitations` scopes (settings
+  // permission / superuser) via first-party Tayra OAuth.
+  // Endpoints: `/api/v1/manage/users/...`.
+
+  Future<PaginatedResponse<ManageUser>> getManageUsers({
+    int page = 1,
+    int pageSize = 25,
+    String? q,
+  }) async {
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/manage/users/users/',
+      queryParameters: {
+        'page': page,
+        'page_size': pageSize,
+        if (q != null && q.isNotEmpty) 'q': q,
+      },
+    );
+    return PaginatedResponse.fromJson(
+      response.data as Map<String, dynamic>,
+      ManageUser.fromJson,
+    );
+  }
+
+  Future<ManageUser> getManageUser(int id) async {
+    final response = await _dio.get('$_baseUrl/api/v1/manage/users/users/$id/');
+    return ManageUser.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  Future<ManageUser> updateManageUser(
+    int id, {
+    String? name,
+    bool? isActive,
+    bool? isStaff,
+    bool? isSuperuser,
+    int? uploadQuota,
+    bool clearUploadQuota = false,
+    Map<String, bool>? permissions,
+  }) async {
+    final body = <String, dynamic>{};
+    if (name != null) body['name'] = name;
+    if (isActive != null) body['is_active'] = isActive;
+    if (isStaff != null) body['is_staff'] = isStaff;
+    if (isSuperuser != null) body['is_superuser'] = isSuperuser;
+    if (clearUploadQuota) {
+      body['upload_quota'] = null;
+    } else if (uploadQuota != null) {
+      body['upload_quota'] = uploadQuota;
+    }
+    if (permissions != null) body['permissions'] = permissions;
+    final response = await _dio.patch(
+      '$_baseUrl/api/v1/manage/users/users/$id/',
+      data: body,
+    );
+    return ManageUser.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  Future<PaginatedResponse<ManageInvitation>> getManageInvitations({
+    int page = 1,
+    int pageSize = 25,
+    String? q,
+    bool? isOpen,
+  }) async {
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/manage/users/invitations/',
+      queryParameters: {
+        'page': page,
+        'page_size': pageSize,
+        if (q != null && q.isNotEmpty) 'q': q,
+        if (isOpen != null) 'is_open': isOpen,
+      },
+    );
+    return PaginatedResponse.fromJson(
+      response.data as Map<String, dynamic>,
+      ManageInvitation.fromJson,
+    );
+  }
+
+  /// Create invitation with server-generated code (empty body).
+  Future<ManageInvitation> createManageInvitation({String? code}) async {
+    final body = <String, dynamic>{};
+    if (code != null && code.isNotEmpty) body['code'] = code;
+    final response = await _dio.post(
+      '$_baseUrl/api/v1/manage/users/invitations/',
+      data: body,
+    );
+    return ManageInvitation.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  /// Bulk action on invitations (`delete` open invitations only).
+  Future<void> manageInvitationAction({
+    required String action,
+    required List<int> ids,
+  }) async {
+    await _dio.post(
+      '$_baseUrl/api/v1/manage/users/invitations/action/',
+      data: {'action': action, 'objects': ids},
     );
   }
 }

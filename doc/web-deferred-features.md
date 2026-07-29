@@ -14,7 +14,7 @@ relevant.
 |---|---|
 | Online-only | No offline audio cache, download queue, or local library DB on web |
 | Single pod | `FUNKWHALE_URL` is compile-time; no multi-server picker |
-| Limited admin UI | Library admin (libraries, uploads, tags, channels) is in Tayra when `permissions.library`; moderation & instance settings stay out |
+| Limited admin UI | Library admin when `permissions.library`; user management when `permissions.settings`; moderation & instance settings stay out |
 | No registration UI | Signup / password reset / email confirm stay out of band |
 | Hard fork | `../funkwhale` on `tayra_front`: Vue removed; Tayra is the front image |
 
@@ -24,7 +24,6 @@ relevant.
 |---|---|---|---|
 | Instance settings | `/manage/settings` | Env vars, preferences API, Django admin | |
 | Moderation (reports, domains, accounts, requests) | `/manage/moderation/*` | Django admin + moderator docs | Rare for small/private pods |
-| User management UI | `/manage/users` | Django admin | |
 | Signup | `/signup` | Disable open registration; invite via admin/CLI | |
 | Email confirm | `/auth/email/confirm` | Email links still work if server sends them; no branded Tayra page | Password reset is implemented in Tayra (`/auth/password/reset*`) |
 | Plugins settings | `/settings/plugins` | Server-side plugin config | |
