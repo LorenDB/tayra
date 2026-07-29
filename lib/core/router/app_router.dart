@@ -94,6 +94,48 @@ String? _safeInternalPath(String? from) {
 /// Root navigator for routes outside [ShellRoute] (login, OAuth consent, …).
 final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 
+/// Paths that must work while logged out (and during auth restore).
+///
+/// Email password-reset links land on `/auth/password/reset/confirm?…`.
+bool isPublicAuthPath(String path) {
+  final p = _normalizePath(path);
+  if (p == '/login' || p == '/splash' || p == '/authorize') return true;
+  if (p == '/auth/password/reset' || p == '/auth/password/reset/confirm') {
+    return true;
+  }
+  // Path-style confirm: /auth/password/reset/confirm/<uid>/<token>
+  if (p.startsWith('/auth/password/reset/confirm/')) return true;
+  return false;
+}
+
+String _normalizePath(String path) {
+  if (path.length > 1 && path.endsWith('/')) {
+    return path.substring(0, path.length - 1);
+  }
+  return path;
+}
+
+/// Strip a trailing slash from the browser URL so go_router matches cleanly.
+String? _trailingSlashRedirect(GoRouterState state) {
+  final path = state.uri.path;
+  if (path.length > 1 && path.endsWith('/')) {
+    final normalized = path.substring(0, path.length - 1);
+    if (state.uri.hasQuery) {
+      return '$normalized?${state.uri.query}';
+    }
+    return normalized;
+  }
+  return null;
+}
+
+/// Build the password-reset confirm screen from query and/or path params.
+Widget _passwordResetConfirmFromState(GoRouterState state) {
+  final q = state.uri.queryParameters;
+  final uid = q['uid'] ?? state.pathParameters['uid'] ?? '';
+  final token = q['token'] ?? state.pathParameters['token'] ?? '';
+  return PasswordResetConfirmScreen(uid: uid, token: token);
+}
+
 final appRouterProvider = Provider<GoRouter>((ref) {
   final authChangeNotifier = ref.watch(authChangeNotifierProvider);
 
@@ -106,6 +148,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     // deep link fails to match (helps diagnose deploy/stale-build issues).
     errorBuilder: (context, state) {
       final path = state.uri.path;
+      // Near-miss auth URLs → send people to the request form, not a dead end.
+      if (_normalizePath(path).startsWith('/auth/password')) {
+        return const PasswordResetRequestScreen();
+      }
       return Scaffold(
         backgroundColor: Colors.black,
         body: Center(
@@ -138,8 +184,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 ],
                 const SizedBox(height: 24),
                 FilledButton(
-                  onPressed: () => GoRouter.of(context).go('/'),
-                  child: const Text('Go home'),
+                  onPressed: () => GoRouter.of(context).go('/login'),
+                  child: const Text('Go to sign in'),
                 ),
               ],
             ),
@@ -148,27 +194,23 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       );
     },
     redirect: (context, state) {
+      final slash = _trailingSlashRedirect(state);
+      if (slash != null) return slash;
+
       final authState = authChangeNotifier.state;
       // Prefer uri.path over matchedLocation so query-bearing OAuth URLs are
       // classified correctly even mid-redirect.
-      final path = state.uri.path;
+      final path = _normalizePath(state.uri.path);
       final isLoginRoute = path == '/login';
       final isSplashRoute = path == '/splash';
       final isAuthorizeRoute = path == '/authorize';
-      final isPasswordResetRoute =
-          path == '/auth/password/reset' ||
-          path == '/auth/password/reset/confirm';
+      final isPublicAuth = isPublicAuthPath(path);
 
       // While restoring session, keep auth-related surfaces mounted so
-      // `/authorize?…` query params are not stripped by a bounce through
+      // `/authorize?…` / email reset links are not stripped by a bounce through
       // `/splash` → `/` or `/login`.
       if (authState.isCheckingAuth) {
-        if (isSplashRoute ||
-            isLoginRoute ||
-            isAuthorizeRoute ||
-            isPasswordResetRoute) {
-          return null;
-        }
+        if (isPublicAuth) return null;
         return '/splash';
       }
 
@@ -177,7 +219,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       if (isSplashRoute) return isAuth ? '/' : '/login';
 
       if (!isAuth) {
-        if (isLoginRoute || isPasswordResetRoute) return null;
+        if (isPublicAuth) return null;
         // Preserve third-party OAuth query string across login.
         if (isAuthorizeRoute) {
           return Uri(
@@ -195,7 +237,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         return '/';
       }
       // Allow finishing a reset while already signed in (rare email reopen).
-      if (isPasswordResetRoute) return null;
+      if (isPublicAuthPath(path) && path.startsWith('/auth/password')) {
+        return null;
+      }
       return null;
     },
     routes: [
@@ -214,19 +258,19 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) => const LoginScreen(),
       ),
-      // Password reset (email link: /auth/password/reset/confirm?uid=&token=).
-      // Register confirm before the shorter request path so matching is unambiguous.
+      // Password reset deep links (must stay outside ShellRoute).
+      // Email template: {url}/auth/password/reset/confirm?uid=…&token=…
+      GoRoute(
+        path: '/auth/password/reset/confirm/:uid/:token',
+        name: 'password_reset_confirm_path',
+        parentNavigatorKey: rootNavigatorKey,
+        builder: (context, state) => _passwordResetConfirmFromState(state),
+      ),
       GoRoute(
         path: '/auth/password/reset/confirm',
         name: 'password_reset_confirm',
         parentNavigatorKey: rootNavigatorKey,
-        builder: (context, state) {
-          final q = state.uri.queryParameters;
-          return PasswordResetConfirmScreen(
-            uid: q['uid'] ?? '',
-            token: q['token'] ?? '',
-          );
-        },
+        builder: (context, state) => _passwordResetConfirmFromState(state),
       ),
       GoRoute(
         path: '/auth/password/reset',
