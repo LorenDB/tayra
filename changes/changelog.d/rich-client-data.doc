@@ -1,1 +1,0 @@
-Document the rich client data APIs (design spec at ``docs/specs/rich-client-data/``) and improve OpenAPI annotations for client devices, preferences, playback progress, and listening bulk/stats/PATCH/by-session endpoints. NodeInfo 2.1 ``metadata.features`` now includes ``client_data`` and ``rich_listenings`` (canonical feature probe remains ``GET /api/v1/client-devices/`` → 404).

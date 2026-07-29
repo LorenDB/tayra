@@ -1,1 +1,0 @@
-Add playback progress API at ``/api/v1/playback-progress/`` (list/retrieve/PUT upsert with LWW conflict, DELETE, bulk import). Completed auto-sets at ≥90% of duration when known. Requires ``read:client_data`` / ``write:client_data``.

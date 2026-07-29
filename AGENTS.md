@@ -12,8 +12,6 @@ The `tayra/` submodule is the Flutter client; everything else is the Django API/
 | `tayra/` | **Git submodule** — Tayra Flutter client |
 | `docker-compose.yml` | Production source-build stack |
 | `dev.yml` | Local dev compose (API only; Tayra runs separately) |
-| `changes/changelog.d/` | Towncrier changelog fragments (CI requires one) |
-
 ## Coordinated client+server development
 
 The `tayra/` submodule is pinned to a specific commit. When working on both repos,

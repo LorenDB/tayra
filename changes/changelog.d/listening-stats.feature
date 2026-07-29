@@ -1,1 +1,0 @@
-Add year-in-review listening stats at ``GET /api/v1/history/listenings/stats/`` (owner/self only; query params ``year``, ``limit`` default 10 max 50). Returns totals, unique counts, top tracks/artists/albums, monthly breakdown, and per-device aggregates. Requires ``read:listenings``.
