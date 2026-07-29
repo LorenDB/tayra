@@ -722,7 +722,9 @@ class CachedFunkwhaleApi {
       forceRefresh: forceRefresh,
       coverUrls:
           (r) =>
-              r.results.expand((p) => p.albumCovers).cast<String?>().toList(),
+              r.results
+                  .expand((p) => <String?>[p.coverUrl, ...p.albumCovers])
+                  .toList(),
     );
   }
 
@@ -735,7 +737,7 @@ class CachedFunkwhaleApi {
       fetch: () => _api.getPlaylist(id),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
-      coverUrls: (p) => p.albumCovers.cast<String?>().toList(),
+      coverUrls: (p) => <String?>[p.coverUrl, ...p.albumCovers],
     );
   }
 
@@ -803,11 +805,12 @@ class CachedFunkwhaleApi {
     return _cachedFetch(
       cacheKey: cacheKey,
       cacheType: CacheType.track,
-      fromJson: (j) => PaginatedResponse.fromJson(
-        j,
-        Listening.fromJson,
-        skipMalformed: true,
-      ),
+      fromJson:
+          (j) => PaginatedResponse.fromJson(
+            j,
+            Listening.fromJson,
+            skipMalformed: true,
+          ),
       toJson: (r) => _paginatedResponseToJson(r, _listeningToJson),
       fetch:
           () => _api.getListenings(
@@ -846,6 +849,7 @@ class CachedFunkwhaleApi {
         duration: duration ?? playlist.duration,
         isPlayable: playlist.isPlayable,
         albumCovers: playlist.albumCovers,
+        cover: playlist.cover,
         privacyLevel: playlist.privacyLevel,
         creationDate: playlist.creationDate,
         modificationDate: DateTime.now(),
@@ -866,13 +870,29 @@ class CachedFunkwhaleApi {
   Future<Playlist> createPlaylist({
     required String name,
     String privacyLevel = 'me',
+    String? coverUuid,
   }) async {
     final result = await _api.createPlaylist(
       name: name,
       privacyLevel: privacyLevel,
+      coverUuid: coverUuid,
     );
     unawaited(refetchPlaylistsAfterWrite());
     return result;
+  }
+
+  /// Upload an image attachment used as playlist/radio cover art.
+  Future<Cover> createAttachment({
+    required List<int> bytes,
+    required String fileName,
+  }) async {
+    return _api.createAttachment(bytes: bytes, fileName: fileName);
+  }
+
+  Future<Radio> patchRadio(int id, Map<String, dynamic> body) async {
+    final res = await _api.patchRadio(id, body);
+    await _cache.deleteMetadataLike('radios_p%');
+    return res;
   }
 
   Future<void> addTracksToPlaylist(int playlistId, List<int> trackIds) async {
@@ -1191,6 +1211,7 @@ class CachedFunkwhaleApi {
           ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
+      coverUrls: (r) => r.results.map((radio) => radio.coverUrl).toList(),
     );
   }
 
@@ -1358,6 +1379,7 @@ class CachedFunkwhaleApi {
       'duration': playlist.duration,
       'is_playable': playlist.isPlayable,
       'album_covers': playlist.albumCovers,
+      'cover': playlist.cover != null ? _coverToJson(playlist.cover!) : null,
       'creation_date': playlist.creationDate?.toIso8601String(),
       'modification_date': playlist.modificationDate?.toIso8601String(),
     };

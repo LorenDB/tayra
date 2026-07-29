@@ -262,12 +262,36 @@ class FunkwhaleApi {
   Future<Playlist> createPlaylist({
     required String name,
     String privacyLevel = 'me',
+    String? coverUuid,
   }) async {
     final response = await _dio.post(
       '$_baseUrl/api/v1/playlists/',
-      data: {'name': name, 'privacy_level': privacyLevel},
+      data: {
+        'name': name,
+        'privacy_level': privacyLevel,
+        if (coverUuid != null) 'cover': coverUuid,
+      },
     );
     return Playlist.fromJson(response.data);
+  }
+
+  /// Upload an image attachment (playlist/radio cover, etc.).
+  ///
+  /// Returns the created [Cover] whose [Cover.uuid] can be passed as
+  /// `cover` when creating/updating playlists or custom radios.
+  Future<Cover> createAttachment({
+    required List<int> bytes,
+    required String fileName,
+  }) async {
+    final formData = FormData.fromMap({
+      'file': MultipartFile.fromBytes(bytes, filename: fileName),
+    });
+    final response = await _dio.post(
+      '$_baseUrl/api/v1/attachments/',
+      data: formData,
+      options: Options(contentType: 'multipart/form-data'),
+    );
+    return Cover.fromJson(response.data as Map<String, dynamic>);
   }
 
   Future<void> addTracksToPlaylist(int playlistId, List<int> trackIds) async {
@@ -291,8 +315,8 @@ class FunkwhaleApi {
       data: {'index': index},
       options: Options(
         contentType: Headers.jsonContentType,
-        validateStatus: (status) =>
-            status != null && status >= 200 && status < 300,
+        validateStatus:
+            (status) => status != null && status >= 200 && status < 300,
       ),
     );
     // Defensive: if validateStatus is ever relaxed, still fail closed.
@@ -399,8 +423,10 @@ class FunkwhaleApi {
   Future<PaginatedResponse<Listening>> getListenings({
     int page = 1,
     int pageSize = 20,
+
     /// Server field is `creation_date` (not `created`).
     String ordering = '-creation_date',
+
     /// When true, only rich client rows are returned — stock scrobbles
     /// without duration/device/session are excluded server-side.
     /// Homepage recent listens should pass false so thin scrobbles still
@@ -665,9 +691,8 @@ class FunkwhaleApi {
   /// Absolute listen URL, optionally with Funkwhale scoped `?token=` for
   /// browser media elements that cannot send Authorization headers.
   String getStreamUrl(String listenUrl, {bool appendListenToken = true}) {
-    final absolute = listenUrl.startsWith('http')
-        ? listenUrl
-        : '$_baseUrl$listenUrl';
+    final absolute =
+        listenUrl.startsWith('http') ? listenUrl : '$_baseUrl$listenUrl';
     if (!appendListenToken) return absolute;
 
     final listenToken = _ref.read(authStateProvider).listenToken;
@@ -800,13 +825,16 @@ class FunkwhaleApi {
     // plain list of radios. Be flexible and accept both shapes.
     final data = response.data;
     if (data is List<dynamic>) {
-      final results = data.map<Radio>((e) {
-        if (e is Map<String, dynamic>) return Radio.fromJson(e);
-        if (e is List && e.isNotEmpty && e.first is Map<String, dynamic>) {
-          return Radio.fromJson(e.first as Map<String, dynamic>);
-        }
-        throw StateError('Unexpected radio list item type: ${e.runtimeType}');
-      }).toList();
+      final results =
+          data.map<Radio>((e) {
+            if (e is Map<String, dynamic>) return Radio.fromJson(e);
+            if (e is List && e.isNotEmpty && e.first is Map<String, dynamic>) {
+              return Radio.fromJson(e.first as Map<String, dynamic>);
+            }
+            throw StateError(
+              'Unexpected radio list item type: ${e.runtimeType}',
+            );
+          }).toList();
       return PaginatedResponse(
         count: results.length,
         next: null,
@@ -856,9 +884,10 @@ class FunkwhaleApi {
   }
 
   Future<Track> getRadioTrack(int id) async {
-    final opts = _lastRadioSessionCookie != null
-        ? Options(headers: {'cookie': _lastRadioSessionCookie})
-        : null;
+    final opts =
+        _lastRadioSessionCookie != null
+            ? Options(headers: {'cookie': _lastRadioSessionCookie})
+            : null;
     final response = await _dio.get(
       '$_baseUrl/api/v1/radios/radios/$id/tracks/',
       options: opts,
@@ -1131,9 +1160,10 @@ class FunkwhaleApi {
     if (name != null) body['name'] = name;
     if (privacyLevel != null) body['privacy_level'] = privacyLevel.apiValue;
     if (summaryText != null) {
-      body['summary'] = summaryText.trim().isEmpty
-          ? null
-          : {'text': summaryText, 'content_type': 'text/plain'};
+      body['summary'] =
+          summaryText.trim().isEmpty
+              ? null
+              : {'text': summaryText, 'content_type': 'text/plain'};
     }
 
     final response = await _dio.patch(
@@ -1298,9 +1328,7 @@ class FunkwhaleApi {
   }
 
   Future<int> purgeUnusedTags() async {
-    final response = await _dio.post(
-      '$_baseUrl/api/v1/manage/tags/purge/',
-    );
+    final response = await _dio.post('$_baseUrl/api/v1/manage/tags/purge/');
     return (response.data as Map<String, dynamic>)['count'] as int;
   }
 }

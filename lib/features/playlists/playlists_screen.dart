@@ -173,8 +173,12 @@ class _PlaylistCard extends StatelessWidget {
             ),
             child: Row(
               children: [
-                // Mosaic cover art (up to 4 album covers)
-                _PlaylistMosaic(covers: playlist.albumCovers, size: 64),
+                // Custom cover when set; otherwise mosaic of album covers.
+                _PlaylistMosaic(
+                  covers: playlist.albumCovers,
+                  customCoverUrl: playlist.coverUrl,
+                  size: 64,
+                ),
                 const SizedBox(width: 14),
                 // Playlist info
                 Expanded(
@@ -243,9 +247,14 @@ class _PlaylistCard extends StatelessWidget {
 
 class _PlaylistMosaic extends StatelessWidget {
   final List<String> covers;
+  final String? customCoverUrl;
   final double size;
 
-  const _PlaylistMosaic({required this.covers, required this.size});
+  const _PlaylistMosaic({
+    required this.covers,
+    this.customCoverUrl,
+    required this.size,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -258,7 +267,9 @@ class _PlaylistMosaic extends StatelessWidget {
       ),
       clipBehavior: Clip.antiAlias,
       child:
-          covers.isEmpty
+          customCoverUrl != null && customCoverUrl!.isNotEmpty
+              ? _coverImage(customCoverUrl!, size, size)
+              : covers.isEmpty
               ? Center(
                 child: Icon(
                   Icons.queue_music_rounded,

@@ -12,6 +12,7 @@ import 'package:tayra/core/cache/auto_offline_coordinator.dart';
 import 'package:tayra/core/cache/manual_download_actions.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/app_refresh_indicator.dart';
+import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
 import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/pill_action_button.dart';
@@ -564,6 +565,15 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  if (playlist.coverUrl != null) ...[
+                    CoverArtWidget(
+                      imageUrl: playlist.coverUrl,
+                      size: 120,
+                      borderRadius: 12,
+                      placeholderIcon: Icons.queue_music_rounded,
+                    ),
+                    const SizedBox(height: 16),
+                  ],
                   // Playlist stats
                   Text(
                     _buildStatsText(playlist),

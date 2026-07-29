@@ -5,6 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/app_refresh_indicator.dart';
+import 'package:tayra/core/widgets/cover_art.dart';
+import 'package:tayra/core/widgets/cover_art_editor.dart';
+import 'package:tayra/core/widgets/dialog_utils.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
@@ -132,6 +135,87 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
         );
   }
 
+  /// Edit cover art for a user-owned (custom) radio only.
+  Future<void> _editCustomRadioCover(models.Radio radio) async {
+    if (!radio.isCustom) return;
+
+    CoverArtSelection? selection;
+    final saved = await showShellDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (ctx, setDialogState) {
+            return AlertDialog(
+              backgroundColor: AppTheme.surfaceContainerHigh,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              title: Text(
+                'Cover art · ${radio.name}',
+                style: const TextStyle(
+                  color: AppTheme.onBackground,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              content: CoverArtEditor(
+                currentCover: radio.cover,
+                placeholderIcon: Icons.radio_rounded,
+                selection: selection,
+                onChanged: (sel) {
+                  setDialogState(() => selection = sel);
+                },
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(dialogContext).pop(false),
+                  child: const Text(
+                    'Cancel',
+                    style: TextStyle(color: AppTheme.onBackgroundMuted),
+                  ),
+                ),
+                TextButton(
+                  onPressed:
+                      selection == null || !selection!.hasChange
+                          ? null
+                          : () => Navigator.of(dialogContext).pop(true),
+                  child: const Text(
+                    'Save',
+                    style: TextStyle(color: AppTheme.primary),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+
+    if (saved != true || selection == null || !selection!.hasChange) return;
+
+    try {
+      final api = ref.read(cached_api.cachedFunkwhaleApiProvider);
+      final updated = await api.patchRadio(radio.id, {
+        'cover': selection!.uploaded?.uuid,
+      });
+      if (!mounted) return;
+      setState(() {
+        final idx = _userRadios.indexWhere((r) => r.id == radio.id);
+        if (idx >= 0) {
+          _userRadios[idx] = updated;
+        }
+      });
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Cover art updated')));
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to update cover art')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -236,8 +320,12 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
             _RadioListServer(:final radio) => _radioTile(
               title: radio.name,
               subtitle: radio.description,
+              coverUrl: radio.coverUrl,
               isLoading: loadingRadioId == radio.id,
               onPlay: () => _playRadio(radio),
+              // Pre-programmed / system radios (no user) cannot set custom art.
+              onEditCover:
+                  radio.isCustom ? () => _editCustomRadioCover(radio) : null,
             ),
           };
         },
@@ -248,8 +336,10 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
   Widget _radioTile({
     required String title,
     required String? subtitle,
+    String? coverUrl,
     required bool isLoading,
     required VoidCallback onPlay,
+    VoidCallback? onEditCover,
   }) {
     return ListTile(
       title: Text(title, style: const TextStyle(color: AppTheme.onBackground)),
@@ -260,27 +350,45 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
                 style: const TextStyle(color: AppTheme.onBackgroundMuted),
               )
               : null,
-      leading: const Icon(
-        Icons.radio_outlined,
-        color: AppTheme.onBackgroundSubtle,
+      leading: CoverArtWidget(
+        imageUrl: coverUrl,
+        size: 44,
+        borderRadius: 8,
+        placeholderIcon: Icons.radio_rounded,
       ),
-      trailing:
-          isLoading
-              ? const SizedBox(
-                width: 24,
-                height: 24,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: AppTheme.primary,
-                ),
-              )
-              : IconButton(
-                icon: const Icon(
-                  Icons.play_arrow_rounded,
-                  color: AppTheme.primary,
-                ),
-                onPressed: onPlay,
+      onLongPress: onEditCover,
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (onEditCover != null)
+            IconButton(
+              tooltip: 'Edit cover art',
+              icon: const Icon(
+                Icons.image_outlined,
+                color: AppTheme.onBackgroundSubtle,
+                size: 20,
               ),
+              onPressed: onEditCover,
+            ),
+          if (isLoading)
+            const SizedBox(
+              width: 24,
+              height: 24,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: AppTheme.primary,
+              ),
+            )
+          else
+            IconButton(
+              icon: const Icon(
+                Icons.play_arrow_rounded,
+                color: AppTheme.primary,
+              ),
+              onPressed: onPlay,
+            ),
+        ],
+      ),
     );
   }
 }
