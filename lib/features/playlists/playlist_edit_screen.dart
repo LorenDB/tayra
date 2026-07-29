@@ -487,6 +487,8 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
         children: [
           CoverArtEditor(
             currentCover: _playlist?.cover,
+            // Mosaic of album art when no custom cover (matches list/detail).
+            fallbackCovers: _playlist?.albumCovers ?? const [],
             fallbackUrl:
                 _playlist?.albumCovers.isNotEmpty == true
                     ? _playlist!.albumCovers.first

@@ -12,7 +12,6 @@ import 'package:tayra/core/cache/auto_offline_coordinator.dart';
 import 'package:tayra/core/cache/manual_download_actions.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/app_refresh_indicator.dart';
-import 'package:tayra/core/widgets/cover_art.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
 import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/core/widgets/pill_action_button.dart';
@@ -21,6 +20,7 @@ import 'package:tayra/core/widgets/track_list_tile.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/player/player_provider.dart';
 import 'package:tayra/features/player/queue_actions.dart';
+import 'package:tayra/core/widgets/playlist_mosaic.dart';
 import 'package:tayra/features/playlists/playlists_screen.dart';
 import 'package:tayra/core/widgets/dialog_utils.dart';
 
@@ -565,15 +565,21 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (playlist.coverUrl != null) ...[
-                    CoverArtWidget(
-                      imageUrl: playlist.coverUrl,
-                      size: 120,
-                      borderRadius: 12,
-                      placeholderIcon: Icons.queue_music_rounded,
+                  // Custom art when set; otherwise collage of first 4 unique
+                  // album covers from tracks (or placeholder if empty).
+                  PlaylistMosaic(
+                    key: ValueKey(
+                      playlist.customCoverUrl ??
+                          PlaylistMosaic.uniqueCovers(
+                            playlist.albumCovers,
+                          ).join('|'),
                     ),
-                    const SizedBox(height: 16),
-                  ],
+                    covers: playlist.albumCovers,
+                    customCoverUrl: playlist.customCoverUrl,
+                    size: 120,
+                    borderRadius: 12,
+                  ),
+                  const SizedBox(height: 16),
                   // Playlist stats
                   Text(
                     _buildStatsText(playlist),

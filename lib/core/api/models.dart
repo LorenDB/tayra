@@ -697,9 +697,15 @@ class Playlist {
     );
   }
 
+  /// User-uploaded playlist cover only (no album-art fallback).
+  ///
+  /// Use this when deciding whether to show custom art vs a mosaic of
+  /// [albumCovers].
+  String? get customCoverUrl => cover?.urls.best;
+
   /// Custom cover first, otherwise the first derived album cover.
   String? get coverUrl =>
-      cover?.urls.best ?? (albumCovers.isNotEmpty ? albumCovers.first : null);
+      customCoverUrl ?? (albumCovers.isNotEmpty ? albumCovers.first : null);
 
   /// Thumbnail-sized cover for dense lists.
   String? get thumbCoverUrl => cover?.urls.thumb ?? coverUrl;

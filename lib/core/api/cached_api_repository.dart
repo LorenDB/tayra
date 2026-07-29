@@ -741,7 +741,8 @@ class CachedFunkwhaleApi {
     );
   }
 
-  /// Patch a playlist (rename, etc.) and update cached metadata in-place.
+  /// Patch a playlist (rename, cover, etc.) and update cached metadata
+  /// in-place so list/detail UIs refresh without a manual pull-to-refresh.
   Future<Playlist> patchPlaylist(int id, Map<String, dynamic> body) async {
     final res = await _api.patchPlaylist(id, body);
     // Directly cache the API response so the UI sees the new name/covers
@@ -752,16 +753,94 @@ class CachedFunkwhaleApi {
       _playlistToJson(res),
       ttl: const Duration(hours: 1),
     );
+    _emitMetadataUpdate('playlist_$id');
+    // Also rewrite any cached list pages that include this playlist — list
+    // keys use a different pageSize than a naive refetch and would otherwise
+    // keep serving the pre-edit cover until a cold restart.
+    await _upsertInPaginatedCaches(
+      keyLike: 'playlists_p%',
+      cacheType: CacheType.playlist,
+      id: id,
+      itemJson: _playlistToJson(res),
+    );
+    _scheduleCoverCaching(<String?>[res.customCoverUrl, ...res.albumCovers]);
     unawaited(refetchPlaylistsAfterWrite());
     return res;
   }
 
   // Helper to refresh playlists list cache after a write operation.
+  //
+  // Must match [playlistsProvider] (pageSize 50, scope me) so the same cache
+  // keys the list reads are updated. Emits [metadataUpdates] after each page
+  // so Riverpod re-reads without a full app restart.
   Future<void> refetchPlaylistsAfterWrite() async {
     try {
-      // Call the cached wrapper with forceRefresh so the cache is refreshed.
-      await getPlaylists(scope: 'me', forceRefresh: true);
+      var page = 1;
+      // Safety cap — extremely large libraries still get page 1 updated.
+      while (page <= 20) {
+        final res = await getPlaylists(
+          page: page,
+          pageSize: 50,
+          scope: 'me',
+          forceRefresh: true,
+        );
+        _emitMetadataUpdate('playlists_p${page}_s50_scme');
+        if (res.next == null || res.results.isEmpty) break;
+        page++;
+      }
     } catch (_) {}
+  }
+
+  void _emitMetadataUpdate(String key) {
+    if (!_metadataUpdates.isClosed) {
+      _metadataUpdates.add(key);
+    }
+  }
+
+  /// Replace an entity (by `id`) inside every cached paginated list matching
+  /// [keyLike], then notify listeners so UIs pick up cover/name changes.
+  ///
+  /// Returns true when at least one cached page was rewritten.
+  Future<bool> _upsertInPaginatedCaches({
+    required String keyLike,
+    required CacheType cacheType,
+    required int id,
+    required Map<String, dynamic> itemJson,
+  }) async {
+    final keys = await _cache.listMetadataKeysLike(keyLike);
+    var any = false;
+    for (final key in keys) {
+      try {
+        final cached = await _cache.getMetadataStale(key);
+        if (cached == null) continue;
+        final results = cached['results'];
+        if (results is! List) continue;
+        var changed = false;
+        final nextResults = <dynamic>[];
+        for (final item in results) {
+          if (item is Map && (item['id'] as num?)?.toInt() == id) {
+            nextResults.add(itemJson);
+            changed = true;
+          } else {
+            nextResults.add(item);
+          }
+        }
+        if (!changed) continue;
+        any = true;
+        final updated = Map<String, dynamic>.from(cached);
+        updated['results'] = nextResults;
+        await _cache.putMetadata(
+          key,
+          cacheType,
+          updated,
+          ttl: const Duration(hours: 1),
+        );
+        _emitMetadataUpdate(key);
+      } catch (e) {
+        debugPrint('Cache: failed to upsert $id into $key: $e');
+      }
+    }
+    return any;
   }
 
   Future<PaginatedResponse<PlaylistTrack>> getPlaylistTracks(
@@ -891,7 +970,20 @@ class CachedFunkwhaleApi {
 
   Future<Radio> patchRadio(int id, Map<String, dynamic> body) async {
     final res = await _api.patchRadio(id, body);
-    await _cache.deleteMetadataLike('radios_p%');
+    // Rewrite list pages in place so cover art updates without a restart.
+    final upserted = await _upsertInPaginatedCaches(
+      keyLike: 'radios_p%',
+      cacheType: CacheType.radio,
+      id: id,
+      itemJson: _radioToJson(res),
+    );
+    if (!upserted) {
+      // Radio wasn't in any cached page — drop list caches and notify so the
+      // radios screen reloads from the network.
+      await _cache.deleteMetadataLike('radios_p%');
+      _emitMetadataUpdate('radios_p1');
+    }
+    _scheduleCoverCaching(<String?>[res.coverUrl]);
     return res;
   }
 

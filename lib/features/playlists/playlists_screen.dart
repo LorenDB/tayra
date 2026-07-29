@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tayra/core/analytics/analytics.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
@@ -10,6 +9,7 @@ import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/app_refresh_indicator.dart';
 import 'package:tayra/core/widgets/empty_state.dart';
 import 'package:tayra/core/widgets/error_state.dart';
+import 'package:tayra/core/widgets/playlist_mosaic.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/features/search/search_screen.dart';
 import 'package:tayra/core/layout/responsive.dart';
@@ -174,9 +174,15 @@ class _PlaylistCard extends StatelessWidget {
             child: Row(
               children: [
                 // Custom cover when set; otherwise mosaic of album covers.
-                _PlaylistMosaic(
+                // ValueKey forces a full rebuild when cover URLs change so
+                // CachedNetworkImage does not keep a stale frame after upload.
+                PlaylistMosaic(
+                  key: ValueKey(
+                    playlist.customCoverUrl ??
+                        PlaylistMosaic.uniqueCovers(playlist.albumCovers).join('|'),
+                  ),
                   covers: playlist.albumCovers,
-                  customCoverUrl: playlist.coverUrl,
+                  customCoverUrl: playlist.customCoverUrl,
                   size: 64,
                 ),
                 const SizedBox(width: 14),
@@ -240,95 +246,6 @@ class _PlaylistCard extends StatelessWidget {
       parts.add(formatTotalDuration(playlist.duration!));
     }
     return parts.join(' · ');
-  }
-}
-
-// ── Playlist Mosaic (up to 4 covers) ────────────────────────────────────
-
-class _PlaylistMosaic extends StatelessWidget {
-  final List<String> covers;
-  final String? customCoverUrl;
-  final double size;
-
-  const _PlaylistMosaic({
-    required this.covers,
-    this.customCoverUrl,
-    required this.size,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: AppTheme.surfaceContainerHigh,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child:
-          customCoverUrl != null && customCoverUrl!.isNotEmpty
-              ? _coverImage(customCoverUrl!, size, size)
-              : covers.isEmpty
-              ? Center(
-                child: Icon(
-                  Icons.queue_music_rounded,
-                  color: AppTheme.onBackgroundSubtle,
-                  size: size * 0.4,
-                ),
-              )
-              : covers.length == 1
-              ? _coverImage(covers[0], size, size)
-              : covers.length < 4
-              ? _coverImage(covers[0], size, size)
-              : _buildMosaic(),
-    );
-  }
-
-  Widget _buildMosaic() {
-    final halfSize = size / 2;
-    return Column(
-      children: [
-        Row(
-          children: [
-            _coverImage(covers[0], halfSize, halfSize),
-            _coverImage(covers[1], halfSize, halfSize),
-          ],
-        ),
-        Row(
-          children: [
-            _coverImage(covers[2], halfSize, halfSize),
-            _coverImage(covers[3], halfSize, halfSize),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _coverImage(String url, double w, double h) {
-    return CachedNetworkImage(
-      imageUrl: url,
-      width: w,
-      height: h,
-      fit: BoxFit.cover,
-      placeholder:
-          (context, url) => Container(
-            width: w,
-            height: h,
-            color: AppTheme.surfaceContainerHigh,
-          ),
-      errorWidget:
-          (context, url, error) => Container(
-            width: w,
-            height: h,
-            color: AppTheme.surfaceContainerHigh,
-            child: Icon(
-              Icons.album_rounded,
-              color: AppTheme.onBackgroundSubtle,
-              size: w * 0.4,
-            ),
-          ),
-    );
   }
 }
 

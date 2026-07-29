@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
+import 'package:tayra/core/widgets/playlist_mosaic.dart';
 
 /// Result of a cover art edit session before the parent persists metadata.
 class CoverArtSelection {
@@ -67,12 +68,17 @@ String describeCoverUploadError(Object error) {
 
 /// Tap-to-change cover art tile used on playlist/radio edit screens.
 ///
-/// Shows [currentCover] when set, otherwise [fallbackUrl] (e.g. first album
-/// mosaic tile). Tapping opens the system image picker, uploads via
-/// `/api/v1/attachments/`, and reports the new [Cover] through [onChanged].
+/// Shows [currentCover] (or a newly uploaded selection) when set. When no
+/// custom art is active, shows a [PlaylistMosaic] of [fallbackCovers] if
+/// provided, otherwise a single [fallbackUrl] / placeholder. Tapping opens
+/// the system image picker, uploads via `/api/v1/attachments/`, and reports
+/// the new [Cover] through [onChanged].
 class CoverArtEditor extends ConsumerStatefulWidget {
   final Cover? currentCover;
   final String? fallbackUrl;
+
+  /// Album-art URLs for a mosaic when no custom cover is set (playlists).
+  final List<String> fallbackCovers;
   final double size;
   final IconData placeholderIcon;
   final ValueChanged<CoverArtSelection> onChanged;
@@ -82,6 +88,7 @@ class CoverArtEditor extends ConsumerStatefulWidget {
     super.key,
     this.currentCover,
     this.fallbackUrl,
+    this.fallbackCovers = const [],
     this.size = 96,
     this.placeholderIcon = Icons.image_rounded,
     required this.onChanged,
@@ -95,15 +102,28 @@ class CoverArtEditor extends ConsumerStatefulWidget {
 class _CoverArtEditorState extends ConsumerState<CoverArtEditor> {
   bool _isUploading = false;
 
-  String? get _displayUrl {
+  /// Active custom cover URL (user-set or freshly uploaded), if any.
+  String? get _customCoverUrl {
     final selection = widget.selection;
     if (selection?.uploaded != null) {
       return selection!.uploaded!.urls.best;
     }
     if (selection?.cleared == true) {
-      return widget.fallbackUrl;
+      return null;
     }
-    return widget.currentCover?.urls.best ?? widget.fallbackUrl;
+    return widget.currentCover?.urls.best;
+  }
+
+  bool get _showMosaicFallback {
+    return _customCoverUrl == null && widget.fallbackCovers.isNotEmpty;
+  }
+
+  String? get _displayUrl {
+    final custom = _customCoverUrl;
+    if (custom != null) return custom;
+    // Single-image fallback only when not using a multi-cover mosaic.
+    if (widget.fallbackCovers.isNotEmpty) return null;
+    return widget.fallbackUrl;
   }
 
   Future<void> _pickAndUpload() async {
@@ -196,12 +216,24 @@ class _CoverArtEditorState extends ConsumerState<CoverArtEditor> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  CoverArtWidget(
-                    imageUrl: _displayUrl,
-                    size: widget.size,
-                    borderRadius: 10,
-                    placeholderIcon: widget.placeholderIcon,
-                  ),
+                  if (_showMosaicFallback)
+                    PlaylistMosaic(
+                      key: ValueKey(
+                        'mosaic|${PlaylistMosaic.uniqueCovers(widget.fallbackCovers).join('|')}',
+                      ),
+                      covers: widget.fallbackCovers,
+                      size: widget.size,
+                      borderRadius: 10,
+                      placeholderIcon: widget.placeholderIcon,
+                    )
+                  else
+                    CoverArtWidget(
+                      key: ValueKey(_displayUrl ?? 'cover-placeholder'),
+                      imageUrl: _displayUrl,
+                      size: widget.size,
+                      borderRadius: 10,
+                      placeholderIcon: widget.placeholderIcon,
+                    ),
                   if (_isUploading)
                     Container(
                       width: widget.size,

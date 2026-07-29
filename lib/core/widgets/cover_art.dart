@@ -57,7 +57,8 @@ class _CoverArtWidgetState extends ConsumerState<CoverArtWidget> {
   @override
   void didUpdateWidget(covariant CoverArtWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.imageUrl != widget.imageUrl) {
+    if (oldWidget.imageUrl != widget.imageUrl ||
+        oldWidget.cacheKey != widget.cacheKey) {
       _localPath = null;
       _resolvedForUrl = null;
       _resolveLocalFile();

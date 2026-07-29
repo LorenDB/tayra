@@ -330,12 +330,26 @@ class CacheManager {
   /// Delete all metadata entries whose key matches a SQL LIKE pattern.
   /// Use `%` as the wildcard, e.g. `'tracks_%_al42_%'`.
   Future<void> deleteMetadataLike(String likePattern) async {
+    if (kIsWeb) return;
     final db = await _db.database;
     await db.delete(
       'cache_metadata',
       where: 'cache_key LIKE ?',
       whereArgs: [likePattern],
     );
+  }
+
+  /// List metadata cache keys matching a SQL LIKE pattern (e.g. `'playlists_p%'`).
+  Future<List<String>> listMetadataKeysLike(String likePattern) async {
+    if (kIsWeb) return const [];
+    final db = await _db.database;
+    final results = await db.query(
+      'cache_metadata',
+      columns: ['cache_key'],
+      where: 'cache_key LIKE ?',
+      whereArgs: [likePattern],
+    );
+    return results.map((r) => r['cache_key'] as String).toList();
   }
 
   // ── File cache operations ──────────────────────────────────────────────

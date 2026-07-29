@@ -351,6 +351,8 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
               )
               : null,
       leading: CoverArtWidget(
+        // Rebuild when art changes after an in-app upload.
+        key: ValueKey(coverUrl ?? 'radio-placeholder'),
         imageUrl: coverUrl,
         size: 44,
         borderRadius: 8,
