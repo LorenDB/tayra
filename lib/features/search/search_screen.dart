@@ -37,9 +37,24 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   bool _isLoading = false;
   String? _error;
   String _lastQuery = '';
+  StreamSubscription<String>? _cacheSub;
+
+  @override
+  void initState() {
+    super.initState();
+    _cacheSub = ref.read(cachedFunkwhaleApiProvider).metadataUpdates.listen((
+      key,
+    ) {
+      if (_lastQuery.isEmpty) return;
+      if (key == 'search_$_lastQuery') {
+        unawaited(_performSearch(_lastQuery, fromCacheUpdate: true));
+      }
+    });
+  }
 
   @override
   void dispose() {
+    _cacheSub?.cancel();
     _debounce?.cancel();
     _controller.dispose();
     super.dispose();
@@ -66,7 +81,10 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     });
   }
 
-  Future<void> _performSearch(String query) async {
+  Future<void> _performSearch(
+    String query, {
+    bool fromCacheUpdate = false,
+  }) async {
     if (query.isEmpty) return;
 
     // Record the query before the await so Retry works after a failure, and
@@ -74,14 +92,21 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     _lastQuery = query;
 
     setState(() {
-      _isLoading = true;
+      // Keep previous results visible when applying a background revalidation.
+      if (!fromCacheUpdate) {
+        _isLoading = true;
+      }
       _error = null;
     });
 
-    Analytics.track('search', {'query_length': query.length});
+    if (!fromCacheUpdate) {
+      Analytics.track('search', {'query_length': query.length});
+    }
 
     try {
       final api = ref.read(cachedFunkwhaleApiProvider);
+      // Cache-first: previous searches for this query paint instantly; a
+      // background revalidate may fire metadataUpdates for a silent refresh.
       final result = await api.search(query);
       if (!mounted) return;
       // Discard stale results if the user typed a newer query meanwhile.
@@ -94,7 +119,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       if (!mounted) return;
       if (query != _lastQuery) return;
       setState(() {
-        _error = 'Search failed. Please try again.';
+        if (_result == null) {
+          _error = 'Search failed. Please try again.';
+        }
         _isLoading = false;
       });
     }
@@ -119,10 +146,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   Widget _buildBody() {
     return SafeArea(
       child: Column(
-        children: [
-          _buildSearchField(),
-          Expanded(child: _buildResults()),
-        ],
+        children: [_buildSearchField(), Expanded(child: _buildResults())],
       ),
     );
   }
@@ -140,19 +164,20 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             Icons.search_rounded,
             color: AppTheme.onBackgroundSubtle,
           ),
-          suffixIcon: _controller.text.isNotEmpty
-              ? IconButton(
-                  icon: const Icon(
-                    Icons.clear_rounded,
-                    color: AppTheme.onBackgroundSubtle,
-                    size: 20,
-                  ),
-                  onPressed: () {
-                    _controller.clear();
-                    _onQueryChanged('');
-                  },
-                )
-              : null,
+          suffixIcon:
+              _controller.text.isNotEmpty
+                  ? IconButton(
+                    icon: const Icon(
+                      Icons.clear_rounded,
+                      color: AppTheme.onBackgroundSubtle,
+                      size: 20,
+                    ),
+                    onPressed: () {
+                      _controller.clear();
+                      _onQueryChanged('');
+                    },
+                  )
+                  : null,
         ),
         onChanged: _onQueryChanged,
         textInputAction: TextInputAction.search,
@@ -204,31 +229,39 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
     // Results — apply offline filter when active
     final offlineFilterActive = ref.watch(offlineFilterActiveProvider);
-    final offlineTrackIds = offlineFilterActive
-        ? ref.watch(offlineTrackIdsProvider)
-        : null;
-    final offlineAlbumIds = offlineFilterActive
-        ? ref
-              .watch(offlineAlbumIdsProvider)
-              .maybeWhen(data: (ids) => ids, orElse: () => const <int>{})
-        : null;
-    final offlineArtistIds = offlineFilterActive
-        ? ref
-              .watch(offlineArtistIdsProvider)
-              .maybeWhen(data: (ids) => ids, orElse: () => const <int>{})
-        : null;
+    final offlineTrackIds =
+        offlineFilterActive ? ref.watch(offlineTrackIdsProvider) : null;
+    final offlineAlbumIds =
+        offlineFilterActive
+            ? ref
+                .watch(offlineAlbumIdsProvider)
+                .maybeWhen(data: (ids) => ids, orElse: () => const <int>{})
+            : null;
+    final offlineArtistIds =
+        offlineFilterActive
+            ? ref
+                .watch(offlineArtistIdsProvider)
+                .maybeWhen(data: (ids) => ids, orElse: () => const <int>{})
+            : null;
 
-    final artists = offlineArtistIds != null
-        ? _result!.artists
-              .where((a) => offlineArtistIds.contains(a.id))
-              .toList()
-        : _result!.artists;
-    final albums = offlineAlbumIds != null
-        ? _result!.albums.where((a) => offlineAlbumIds.contains(a.id)).toList()
-        : _result!.albums;
-    final tracks = offlineTrackIds != null
-        ? _result!.tracks.where((t) => offlineTrackIds.contains(t.id)).toList()
-        : _result!.tracks;
+    final artists =
+        offlineArtistIds != null
+            ? _result!.artists
+                .where((a) => offlineArtistIds.contains(a.id))
+                .toList()
+            : _result!.artists;
+    final albums =
+        offlineAlbumIds != null
+            ? _result!.albums
+                .where((a) => offlineAlbumIds.contains(a.id))
+                .toList()
+            : _result!.albums;
+    final tracks =
+        offlineTrackIds != null
+            ? _result!.tracks
+                .where((t) => offlineTrackIds.contains(t.id))
+                .toList()
+            : _result!.tracks;
 
     final hasAnyResults =
         artists.isNotEmpty ||
@@ -391,30 +424,31 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
           child: Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: tags.map((tag) {
-              return ActionChip(
-                label: Text(
-                  '#${tag.name}',
-                  style: const TextStyle(
-                    color: AppTheme.secondary,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                backgroundColor: AppTheme.surfaceContainerHigh,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  side: BorderSide(
-                    color: AppTheme.secondary.withValues(alpha: 0.3),
-                  ),
-                ),
-                onPressed: () {
-                  // Search for the tag name
-                  _controller.text = tag.name;
-                  _onQueryChanged(tag.name);
-                },
-              );
-            }).toList(),
+            children:
+                tags.map((tag) {
+                  return ActionChip(
+                    label: Text(
+                      '#${tag.name}',
+                      style: const TextStyle(
+                        color: AppTheme.secondary,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    backgroundColor: AppTheme.surfaceContainerHigh,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      side: BorderSide(
+                        color: AppTheme.secondary.withValues(alpha: 0.3),
+                      ),
+                    ),
+                    onPressed: () {
+                      // Search for the tag name
+                      _controller.text = tag.name;
+                      _onQueryChanged(tag.name);
+                    },
+                  );
+                }).toList(),
           ),
         ),
         const SizedBox(height: 16),

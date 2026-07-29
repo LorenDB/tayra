@@ -140,16 +140,69 @@ mixin PaginatedGridMixin<T, W extends ConsumerStatefulWidget>
   /// Seed [items] from [response] when the list is empty (first load).
   /// Must be called from [build] when the first-page data arrives.
   void seedIfEmpty(PaginatedResponse<T> response) {
-    if (items.isEmpty && response.results.isNotEmpty) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted && items.isEmpty) {
+    seedOrUpdateFirstPage(response, idOf: null);
+  }
+
+  /// Apply first-page [response] for initial seed *and* background
+  /// revalidation updates.
+  ///
+  /// When only page 1 is loaded (`_currentPage == 1`), replaces [items] so
+  /// inserts/removes from a stale-while-revalidate refresh appear immediately.
+  /// When the user has scrolled further, leaves deeper pages alone (pull to
+  /// refresh still resets via [refresh]).
+  ///
+  /// If [idOf] is provided, skips [setState] when the id sequence is unchanged
+  /// to avoid scroll jank on no-op revalidations that still rebuild the
+  /// provider.
+  void seedOrUpdateFirstPage(
+    PaginatedResponse<T> response, {
+    int Function(T item)? idOf,
+  }) {
+    if (response.results.isEmpty && items.isEmpty) return;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
+      // Don't clobber multi-page scroll state on a silent page-1 refresh.
+      if (_currentPage > 1) {
+        if (items.isEmpty && response.results.isNotEmpty) {
           setState(() {
             items.addAll(response.results);
             hasMore = response.next != null;
           });
           _loadMoreIfNeeded();
         }
+        return;
+      }
+
+      if (idOf != null && items.isNotEmpty) {
+        final oldIds = items.map(idOf).toList(growable: false);
+        final newIds = response.results.map(idOf).toList(growable: false);
+        if (oldIds.length == newIds.length) {
+          var same = true;
+          for (var i = 0; i < oldIds.length; i++) {
+            if (oldIds[i] != newIds[i]) {
+              same = false;
+              break;
+            }
+          }
+          if (same) {
+            // IDs match — still refresh item objects (titles/covers may change)
+            // but only if the list reference would look different. For simplicity
+            // replace when result count or next-link differs; otherwise skip.
+            final nextChanged = hasMore != (response.next != null);
+            if (!nextChanged) return;
+          }
+        }
+      }
+
+      setState(() {
+        items
+          ..clear()
+          ..addAll(response.results);
+        hasMore = response.next != null;
       });
-    }
+      _loadMoreIfNeeded();
+    });
   }
 }

@@ -51,6 +51,7 @@ class _PodcastDetailScreenState extends ConsumerState<PodcastDetailScreen> {
   bool _isSubscribed = false;
   bool _subscribeBusy = false;
   _EpisodeFilter _filter = _EpisodeFilter.all;
+  StreamSubscription<String>? _cacheSub;
 
   @override
   void initState() {
@@ -58,11 +59,28 @@ class _PodcastDetailScreenState extends ConsumerState<PodcastDetailScreen> {
     _channel = widget.channel;
     _isSubscribed = widget.initiallySubscribed ?? false;
     _loadEpisodes();
+    final uuid = widget.channelUuid;
+    _cacheSub = ref
+        .read(cached_api.cachedFunkwhaleApiProvider)
+        .metadataUpdates
+        .listen((key) {
+          if (key == 'channel_$uuid' ||
+              key.startsWith('channel_tracks_$uuid')) {
+            unawaited(_loadEpisodes());
+          }
+        });
+  }
+
+  @override
+  void dispose() {
+    _cacheSub?.cancel();
+    super.dispose();
   }
 
   Future<void> _loadEpisodes({bool forceRefresh = false}) async {
     setState(() {
-      if (!forceRefresh || _episodes.isEmpty) _isLoading = true;
+      // Keep episodes visible while a cache-first revalidate runs.
+      if (_episodes.isEmpty && _channel == null) _isLoading = true;
       _error = null;
     });
     try {
@@ -70,7 +88,8 @@ class _PodcastDetailScreenState extends ConsumerState<PodcastDetailScreen> {
 
       final futures = <Future>[
         _fetchAllEpisodes(api, forceRefresh: forceRefresh),
-        if (_channel == null) api.getChannel(widget.channelUuid),
+        if (_channel == null || forceRefresh)
+          api.getChannel(widget.channelUuid, forceRefresh: forceRefresh),
       ];
       final results = await Future.wait(futures);
 
@@ -78,7 +97,7 @@ class _PodcastDetailScreenState extends ConsumerState<PodcastDetailScreen> {
       final episodes = results[0] as List<models.Track>;
       setState(() {
         _episodes = episodes;
-        if (_channel == null && results.length > 1) {
+        if (results.length > 1) {
           _channel = results[1] as models.Channel;
         }
         _isLoading = false;

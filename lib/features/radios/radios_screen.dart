@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
@@ -46,22 +48,33 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
   final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
   String? _error;
+  StreamSubscription<String>? _cacheSub;
 
   @override
   void initState() {
     super.initState();
     _loadRadios();
+    _cacheSub = ref
+        .read(cached_api.cachedFunkwhaleApiProvider)
+        .metadataUpdates
+        .listen((key) {
+          if (key.startsWith('radios_p')) {
+            unawaited(_loadRadios());
+          }
+        });
   }
 
   @override
   void dispose() {
+    _cacheSub?.cancel();
     _scrollController.dispose();
     super.dispose();
   }
 
   Future<void> _loadRadios({bool forceRefresh = false}) async {
     setState(() {
-      if (!forceRefresh || (_userRadios.isEmpty && _builtinRadios.isEmpty)) {
+      // Only full-screen shimmer when we have nothing to show yet.
+      if (_userRadios.isEmpty && _builtinRadios.isEmpty) {
         _isLoading = true;
       }
       _error = null;
@@ -69,6 +82,8 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
 
     try {
       final api = ref.read(cached_api.cachedFunkwhaleApiProvider);
+      // Cache-first: returns immediately when metadata is cached, then the
+      // repository revalidates in the background and metadataUpdates fires.
       final response = await api.getRadios(
         page: 1,
         pageSize: 50,
@@ -238,32 +253,34 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
   }) {
     return ListTile(
       title: Text(title, style: const TextStyle(color: AppTheme.onBackground)),
-      subtitle: subtitle != null
-          ? Text(
-              subtitle,
-              style: const TextStyle(color: AppTheme.onBackgroundMuted),
-            )
-          : null,
+      subtitle:
+          subtitle != null
+              ? Text(
+                subtitle,
+                style: const TextStyle(color: AppTheme.onBackgroundMuted),
+              )
+              : null,
       leading: const Icon(
         Icons.radio_outlined,
         color: AppTheme.onBackgroundSubtle,
       ),
-      trailing: isLoading
-          ? const SizedBox(
-              width: 24,
-              height: 24,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: AppTheme.primary,
+      trailing:
+          isLoading
+              ? const SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: AppTheme.primary,
+                ),
+              )
+              : IconButton(
+                icon: const Icon(
+                  Icons.play_arrow_rounded,
+                  color: AppTheme.primary,
+                ),
+                onPressed: onPlay,
               ),
-            )
-          : IconButton(
-              icon: const Icon(
-                Icons.play_arrow_rounded,
-                color: AppTheme.primary,
-              ),
-              onPressed: onPlay,
-            ),
     );
   }
 }

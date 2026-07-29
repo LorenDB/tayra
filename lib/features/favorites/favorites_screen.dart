@@ -38,6 +38,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
   bool _hasMore = true;
   int _currentPage = 1;
   String? _error;
+  StreamSubscription<String>? _cacheSub;
 
   // Cached offline-filtered view so scrolling doesn't re-filter every build.
   List<Favorite> _displayCache = const [];
@@ -51,13 +52,61 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
     super.initState();
     _loadFavorites();
     _scrollController.addListener(_onScroll);
+    // When background revalidation changes the favorites cache, merge page 1
+    // into the visible list (insert/remove) without a full-screen reload.
+    _cacheSub = ref.read(cachedFunkwhaleApiProvider).metadataUpdates.listen((
+      key,
+    ) {
+      if (key.startsWith('favorites_p')) {
+        unawaited(_applyRevalidatedFirstPage());
+      }
+    });
   }
 
   @override
   void dispose() {
+    _cacheSub?.cancel();
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
+  }
+
+  /// Apply a background-revalidated page-1 favorites list.
+  Future<void> _applyRevalidatedFirstPage() async {
+    if (!mounted || _isLoadingMore) return;
+    try {
+      final api = ref.read(cachedFunkwhaleApiProvider);
+      final response = await api.getFavorites(page: 1);
+      if (!mounted) return;
+      // Only rewrite the list when the user is still on the first page of
+      // infinite scroll so we don't drop already-loaded later pages.
+      if (_currentPage > 1) return;
+
+      final newIds = response.results.map((f) => f.track.id).toList();
+      final oldIds = _favorites.map((f) => f.track.id).toList();
+      if (newIds.length == oldIds.length) {
+        var same = true;
+        for (var i = 0; i < newIds.length; i++) {
+          if (newIds[i] != oldIds[i]) {
+            same = false;
+            break;
+          }
+        }
+        if (same) return;
+      }
+
+      setState(() {
+        _favorites
+          ..clear()
+          ..addAll(response.results);
+        _hasMore = response.next != null;
+        _currentPage = 1;
+        _invalidateDisplayCache();
+      });
+      _loadMoreIfNeeded();
+    } catch (_) {
+      // Keep showing whatever is already on screen.
+    }
   }
 
   void _invalidateDisplayCache() {
@@ -346,15 +395,16 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
             onSelected: (value) {
               if (value == 'download_all') _downloadAll();
             },
-            itemBuilder: (_) => [
-              const PopupMenuItem(
-                value: 'download_all',
-                child: PopupMenuRow(
-                  icon: Icons.download_rounded,
-                  label: 'Download all',
-                ),
-              ),
-            ],
+            itemBuilder:
+                (_) => [
+                  const PopupMenuItem(
+                    value: 'download_all',
+                    child: PopupMenuRow(
+                      icon: Icons.download_rounded,
+                      label: 'Download all',
+                    ),
+                  ),
+                ],
           ),
         ],
       ),
@@ -384,9 +434,8 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
 
     // Apply offline filter if active (cached until inputs change).
     final offlineFilterActive = ref.watch(offlineFilterActiveProvider);
-    final offlineTrackIds = offlineFilterActive
-        ? ref.watch(offlineTrackIdsProvider)
-        : null;
+    final offlineTrackIds =
+        offlineFilterActive ? ref.watch(offlineTrackIdsProvider) : null;
     final displayFavorites = _displayFavorites(
       offlineFilterActive: offlineFilterActive,
       offlineTrackIds: offlineTrackIds,

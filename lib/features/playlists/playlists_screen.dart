@@ -16,6 +16,7 @@ import 'package:tayra/core/layout/responsive.dart';
 import 'package:tayra/core/widgets/dialog_utils.dart';
 
 final playlistsProvider = FutureProvider<List<Playlist>>((ref) async {
+  watchMetadataRevalidation(ref, (key) => key.startsWith('playlists_p'));
   final api = ref.watch(cachedFunkwhaleApiProvider);
   // Fetch every page — users with >20 playlists must see the full list
   // (also used by add-to-playlist).
@@ -53,10 +54,11 @@ class PlaylistsScreen extends ConsumerWidget {
       ),
       body: playlistsAsync.when(
         loading: () => const ShimmerList(itemCount: 6, itemHeight: 80),
-        error: (error, _) => InlineErrorState(
-          message: 'Could not load playlists',
-          onRetry: () => ref.invalidate(playlistsProvider),
-        ),
+        error:
+            (error, _) => InlineErrorState(
+              message: 'Could not load playlists',
+              onRetry: () => ref.invalidate(playlistsProvider),
+            ),
         data: (playlists) {
           if (playlists.isEmpty) {
             return EmptyState(
@@ -105,10 +107,11 @@ class PlaylistsScreen extends ConsumerWidget {
   void _showCreatePlaylistDialog(BuildContext context, WidgetRef ref) {
     showShellDialog(
       context: context,
-      builder: (dialogContext) => _CreatePlaylistDialog(
-        onCreated: () => ref.invalidate(playlistsProvider),
-        ref: ref,
-      ),
+      builder:
+          (dialogContext) => _CreatePlaylistDialog(
+            onCreated: () => ref.invalidate(playlistsProvider),
+            ref: ref,
+          ),
     );
   }
 }
@@ -254,19 +257,20 @@ class _PlaylistMosaic extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       clipBehavior: Clip.antiAlias,
-      child: covers.isEmpty
-          ? Center(
-              child: Icon(
-                Icons.queue_music_rounded,
-                color: AppTheme.onBackgroundSubtle,
-                size: size * 0.4,
-              ),
-            )
-          : covers.length == 1
-          ? _coverImage(covers[0], size, size)
-          : covers.length < 4
-          ? _coverImage(covers[0], size, size)
-          : _buildMosaic(),
+      child:
+          covers.isEmpty
+              ? Center(
+                child: Icon(
+                  Icons.queue_music_rounded,
+                  color: AppTheme.onBackgroundSubtle,
+                  size: size * 0.4,
+                ),
+              )
+              : covers.length == 1
+              ? _coverImage(covers[0], size, size)
+              : covers.length < 4
+              ? _coverImage(covers[0], size, size)
+              : _buildMosaic(),
     );
   }
 
@@ -296,18 +300,23 @@ class _PlaylistMosaic extends StatelessWidget {
       width: w,
       height: h,
       fit: BoxFit.cover,
-      placeholder: (context, url) =>
-          Container(width: w, height: h, color: AppTheme.surfaceContainerHigh),
-      errorWidget: (context, url, error) => Container(
-        width: w,
-        height: h,
-        color: AppTheme.surfaceContainerHigh,
-        child: Icon(
-          Icons.album_rounded,
-          color: AppTheme.onBackgroundSubtle,
-          size: w * 0.4,
-        ),
-      ),
+      placeholder:
+          (context, url) => Container(
+            width: w,
+            height: h,
+            color: AppTheme.surfaceContainerHigh,
+          ),
+      errorWidget:
+          (context, url, error) => Container(
+            width: w,
+            height: h,
+            color: AppTheme.surfaceContainerHigh,
+            child: Icon(
+              Icons.album_rounded,
+              color: AppTheme.onBackgroundSubtle,
+              size: w * 0.4,
+            ),
+          ),
     );
   }
 }
@@ -422,22 +431,23 @@ class _CreatePlaylistDialogState extends State<_CreatePlaylistDialog> {
         ),
         TextButton(
           onPressed: _isCreating ? null : _create,
-          child: _isCreating
-              ? const SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: AppTheme.primary,
+          child:
+              _isCreating
+                  ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: AppTheme.primary,
+                    ),
+                  )
+                  : const Text(
+                    'Create',
+                    style: TextStyle(
+                      color: AppTheme.primary,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                )
-              : const Text(
-                  'Create',
-                  style: TextStyle(
-                    color: AppTheme.primary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
         ),
       ],
     );
@@ -464,51 +474,62 @@ class _PrivacySelector extends StatelessWidget {
     return Wrap(
       spacing: 8,
       runSpacing: 8,
-      children: _options.map((opt) {
-        final (level, icon, label) = opt;
-        final selected = value == level;
-        return GestureDetector(
-          onTap: () => onChanged(level),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 150),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: BoxDecoration(
-              color: selected
-                  ? AppTheme.primary.withValues(alpha: 0.15)
-                  : AppTheme.surfaceContainer,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: selected
-                    ? AppTheme.primary
-                    : AppTheme.onBackgroundSubtle.withValues(alpha: 0.3),
-              ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  icon,
-                  size: 14,
-                  color: selected
-                      ? AppTheme.primary
-                      : AppTheme.onBackgroundMuted,
+      children:
+          _options.map((opt) {
+            final (level, icon, label) = opt;
+            final selected = value == level;
+            return GestureDetector(
+              onTap: () => onChanged(level),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 150),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
                 ),
-                const SizedBox(width: 5),
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
-                    color: selected
-                        ? AppTheme.primary
-                        : AppTheme.onBackgroundMuted,
+                decoration: BoxDecoration(
+                  color:
+                      selected
+                          ? AppTheme.primary.withValues(alpha: 0.15)
+                          : AppTheme.surfaceContainer,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color:
+                        selected
+                            ? AppTheme.primary
+                            : AppTheme.onBackgroundSubtle.withValues(
+                              alpha: 0.3,
+                            ),
                   ),
                 ),
-              ],
-            ),
-          ),
-        );
-      }).toList(),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      icon,
+                      size: 14,
+                      color:
+                          selected
+                              ? AppTheme.primary
+                              : AppTheme.onBackgroundMuted,
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      label,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight:
+                            selected ? FontWeight.w600 : FontWeight.normal,
+                        color:
+                            selected
+                                ? AppTheme.primary
+                                : AppTheme.onBackgroundMuted,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }).toList(),
     );
   }
 }

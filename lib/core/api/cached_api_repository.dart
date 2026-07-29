@@ -29,12 +29,18 @@ class OfflineCacheMissException implements Exception {
 
 /// Cached API repository that wraps FunkwhaleApi with caching layer.
 ///
-/// Strategy for reads:
+/// Strategy for reads (stale-while-revalidate):
 ///  1. If offline (or force-offline), serve any cached entry immediately
 ///     (ignoring TTL) and never dial the network.
-///  2. If online and a non-expired cache entry exists, return it immediately.
-///  3. Otherwise try the network. On success, update the cache and return.
-///  4. If the network fails, serve *stale* (expired) cache data if available.
+///  2. If online and any cache entry exists (fresh *or* expired), return it
+///     immediately so the UI never waits on the network when we have data.
+///  3. Simultaneously revalidate in the background when connected. On
+///     success the cache is updated; if the payload changed, [metadataUpdates]
+///     emits the cache key so Riverpod providers / screens can insert/remove
+///     items without a full-screen reload.
+///  4. On a cold cache miss, wait for the network. If the network fails,
+///     rethrow (no data to show).
+///  5. [forceRefresh] still blocks on the network (pull-to-refresh).
 class CachedFunkwhaleApi {
   final FunkwhaleApi _api;
   final CacheManager _cache;
@@ -44,6 +50,22 @@ class CachedFunkwhaleApi {
   /// forced offline mode). Injected so unit tests can override it.
   final bool Function() _isOffline;
 
+  /// Broadcast stream of metadata cache keys that were revalidated with a
+  /// *different* payload. Listeners should re-read the key (or invalidate
+  /// their Riverpod provider) so the UI inserts/removes items.
+  final StreamController<String> _metadataUpdates =
+      StreamController<String>.broadcast();
+
+  /// In-flight background revalidations, keyed by cache key.
+  final Map<String, Future<void>> _inFlightRevalidations = {};
+
+  /// Last successful network write time per key — used to debounce soft
+  /// revalidation so invalidate→reload loops cannot thrash the API.
+  final Map<String, DateTime> _lastNetworkSuccess = {};
+
+  /// Minimum gap between background revalidations of the same key.
+  static const Duration _minRevalidateInterval = Duration(seconds: 20);
+
   CachedFunkwhaleApi(
     this._api,
     this._cache,
@@ -52,6 +74,9 @@ class CachedFunkwhaleApi {
   }) : _isOffline = isOffline ?? (() => false);
 
   bool get isOffline => _isOffline();
+
+  /// Emits cache keys whose metadata changed after a background revalidate.
+  Stream<String> get metadataUpdates => _metadataUpdates.stream;
 
   // ── Generic cache-or-fetch helpers ──────────────────────────────────
 
@@ -63,9 +88,10 @@ class CachedFunkwhaleApi {
     T Function(Map<String, dynamic>) fromJson, {
     bool allowStale = false,
   }) async {
-    final cached = allowStale
-        ? await _cache.getMetadataStale(cacheKey)
-        : await _cache.getMetadata(cacheKey);
+    final cached =
+        allowStale
+            ? await _cache.getMetadataStale(cacheKey)
+            : await _cache.getMetadata(cacheKey);
     if (cached == null) return null;
     try {
       return fromJson(cached);
@@ -74,7 +100,12 @@ class CachedFunkwhaleApi {
     }
   }
 
-  /// Generic cache-or-fetch pattern used by every read method.
+  /// Random-ordered list keys reshuffle on every network hit; soft-revalidating
+  /// them would constantly reorder carousels. Only revalidate when stale.
+  static bool _isRandomListKey(String cacheKey) =>
+      cacheKey.contains('_orandom');
+
+  /// Generic cache-or-fetch with stale-while-revalidate.
   Future<T> _cachedFetch<T>({
     required String cacheKey,
     required CacheType cacheType,
@@ -95,18 +126,75 @@ class CachedFunkwhaleApi {
     }
 
     if (!forceRefresh) {
-      final hit = await _tryCache(cacheKey, fromJson);
-      if (hit != null) return hit;
+      // Prefer a non-expired entry, but fall back to expired (stale) so the
+      // UI paints immediately while we revalidate in the background.
+      final fresh = await _tryCache(cacheKey, fromJson, allowStale: false);
+      if (fresh != null) {
+        // Soft revalidate while data is still "fresh" so lists stay current
+        // without blocking first paint. Skip pure-random lists (see above).
+        if (!_isRandomListKey(cacheKey)) {
+          _scheduleBackgroundRevalidate(
+            cacheKey: cacheKey,
+            cacheType: cacheType,
+            fromJson: fromJson,
+            toJson: toJson,
+            fetch: fetch,
+            ttl: ttl,
+            previous: fresh,
+            coverUrls: coverUrls,
+          );
+        }
+        return fresh;
+      }
+
+      final stale = await _tryCache(cacheKey, fromJson, allowStale: true);
+      if (stale != null) {
+        // Expired cache: show it now, always refresh in the background.
+        _scheduleBackgroundRevalidate(
+          cacheKey: cacheKey,
+          cacheType: cacheType,
+          fromJson: fromJson,
+          toJson: toJson,
+          fetch: fetch,
+          ttl: ttl,
+          previous: stale,
+          coverUrls: coverUrls,
+        );
+        return stale;
+      }
     }
 
+    // Cold miss, or forceRefresh: wait for the network.
+    return _fetchAndStore(
+      cacheKey: cacheKey,
+      cacheType: cacheType,
+      fromJson: fromJson,
+      toJson: toJson,
+      fetch: fetch,
+      ttl: ttl,
+      coverUrls: coverUrls,
+    );
+  }
+
+  /// Blocking network fetch that updates the metadata cache on success and
+  /// falls back to any stale cache entry on failure.
+  Future<T> _fetchAndStore<T>({
+    required String cacheKey,
+    required CacheType cacheType,
+    required T Function(Map<String, dynamic>) fromJson,
+    required Map<String, dynamic> Function(T) toJson,
+    required Future<T> Function() fetch,
+    required Duration ttl,
+    List<String?> Function(T)? coverUrls,
+  }) async {
     try {
       final result = await fetch();
+      _lastNetworkSuccess[cacheKey] = DateTime.now();
       try {
         await _cache.putMetadata(cacheKey, cacheType, toJson(result), ttl: ttl);
       } catch (e) {
         debugPrint('Cache: failed to write metadata for $cacheKey: $e');
       }
-      // Fire-and-forget cover art caching for the fresh network result.
       if (coverUrls != null) {
         _scheduleCoverCaching(coverUrls(result));
       }
@@ -120,6 +208,104 @@ class CachedFunkwhaleApi {
       }
       rethrow;
     }
+  }
+
+  /// Fire-and-forget revalidation. Dedupes in-flight work and debounces
+  /// repeats so provider invalidate loops cannot hammer the server.
+  void _scheduleBackgroundRevalidate<T>({
+    required String cacheKey,
+    required CacheType cacheType,
+    required T Function(Map<String, dynamic>) fromJson,
+    required Map<String, dynamic> Function(T) toJson,
+    required Future<T> Function() fetch,
+    required Duration ttl,
+    required T previous,
+    List<String?> Function(T)? coverUrls,
+  }) {
+    if (_isOffline()) return;
+    if (_inFlightRevalidations.containsKey(cacheKey)) return;
+
+    final last = _lastNetworkSuccess[cacheKey];
+    if (last != null &&
+        DateTime.now().difference(last) < _minRevalidateInterval) {
+      return;
+    }
+
+    final future = _runBackgroundRevalidate(
+      cacheKey: cacheKey,
+      cacheType: cacheType,
+      fromJson: fromJson,
+      toJson: toJson,
+      fetch: fetch,
+      ttl: ttl,
+      previous: previous,
+      coverUrls: coverUrls,
+    );
+    _inFlightRevalidations[cacheKey] = future;
+    unawaited(
+      future.whenComplete(() {
+        _inFlightRevalidations.remove(cacheKey);
+      }),
+    );
+  }
+
+  Future<void> _runBackgroundRevalidate<T>({
+    required String cacheKey,
+    required CacheType cacheType,
+    required T Function(Map<String, dynamic>) fromJson,
+    required Map<String, dynamic> Function(T) toJson,
+    required Future<T> Function() fetch,
+    required Duration ttl,
+    required T previous,
+    List<String?> Function(T)? coverUrls,
+  }) async {
+    try {
+      final result = await fetch();
+      if (_isOffline()) return;
+
+      final newJson = toJson(result);
+      final oldJson = toJson(previous);
+      final changed = !_jsonMapsEqual(oldJson, newJson);
+
+      try {
+        await _cache.putMetadata(cacheKey, cacheType, newJson, ttl: ttl);
+      } catch (e) {
+        debugPrint('Cache: failed to write metadata for $cacheKey: $e');
+      }
+      _lastNetworkSuccess[cacheKey] = DateTime.now();
+
+      if (coverUrls != null) {
+        _scheduleCoverCaching(coverUrls(result));
+      }
+
+      if (changed && !_metadataUpdates.isClosed) {
+        _metadataUpdates.add(cacheKey);
+      }
+    } catch (e) {
+      // Silent: the UI already has cached data. Next open will retry.
+      debugPrint('Cache: background revalidate failed for $cacheKey: $e');
+    }
+  }
+
+  /// Structural equality for JSON-like maps/lists used for change detection.
+  static bool _jsonMapsEqual(Object? a, Object? b) {
+    if (identical(a, b)) return true;
+    if (a is Map && b is Map) {
+      if (a.length != b.length) return false;
+      for (final key in a.keys) {
+        if (!b.containsKey(key)) return false;
+        if (!_jsonMapsEqual(a[key], b[key])) return false;
+      }
+      return true;
+    }
+    if (a is List && b is List) {
+      if (a.length != b.length) return false;
+      for (var i = 0; i < a.length; i++) {
+        if (!_jsonMapsEqual(a[i], b[i])) return false;
+      }
+      return true;
+    }
+    return a == b;
   }
 
   /// Kick off background cover-art downloads for a list of URLs (nulls ignored).
@@ -146,9 +332,8 @@ class CachedFunkwhaleApi {
     List<String>? tag,
     bool forceRefresh = false,
   }) async {
-    final tagSuffix = (tag != null && tag.isNotEmpty)
-        ? '_t${tag.join(',')}'
-        : '';
+    final tagSuffix =
+        (tag != null && tag.isNotEmpty) ? '_t${tag.join(',')}' : '';
     final baseSuffix =
         '_s${pageSize}_o${ordering}_a${artist}_sc${scope}_q$q$tagSuffix';
     final cacheKey = 'albums_p$page$baseSuffix';
@@ -158,15 +343,16 @@ class CachedFunkwhaleApi {
       cacheType: CacheType.recentAlbums,
       fromJson: (j) => PaginatedResponse.fromJson(j, Album.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _albumToJson),
-      fetch: () => _api.getAlbums(
-        page: page,
-        pageSize: pageSize,
-        ordering: ordering,
-        artist: artist,
-        scope: scope,
-        q: q,
-        tag: tag,
-      ),
+      fetch:
+          () => _api.getAlbums(
+            page: page,
+            pageSize: pageSize,
+            ordering: ordering,
+            artist: artist,
+            scope: scope,
+            q: q,
+            tag: tag,
+          ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
       // List pages: rely on CachedNetworkImage; don't fan out cover downloads.
@@ -182,12 +368,13 @@ class CachedFunkwhaleApi {
       fetch: () => _api.getAlbum(id),
       ttl: const Duration(hours: 24),
       forceRefresh: forceRefresh,
-      coverUrls: (a) => [
-        a.coverUrl,
-        a.largeCoverUrl,
-        a.artist?.coverUrl,
-        ...a.tracks.map((t) => t.coverUrl),
-      ],
+      coverUrls:
+          (a) => [
+            a.coverUrl,
+            a.largeCoverUrl,
+            a.artist?.coverUrl,
+            ...a.tracks.map((t) => t.coverUrl),
+          ],
     );
   }
 
@@ -219,14 +406,15 @@ class CachedFunkwhaleApi {
       cacheType: CacheType.recentArtists,
       fromJson: (j) => PaginatedResponse.fromJson(j, Artist.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _artistToJson),
-      fetch: () => _api.getArtists(
-        page: page,
-        pageSize: pageSize,
-        ordering: ordering,
-        hasAlbums: hasAlbums,
-        scope: scope,
-        q: q,
-      ),
+      fetch:
+          () => _api.getArtists(
+            page: page,
+            pageSize: pageSize,
+            ordering: ordering,
+            hasAlbums: hasAlbums,
+            scope: scope,
+            q: q,
+          ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
     );
@@ -269,15 +457,16 @@ class CachedFunkwhaleApi {
       cacheType: CacheType.track,
       fromJson: (j) => PaginatedResponse.fromJson(j, Track.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _trackToJson),
-      fetch: () => _api.getTracks(
-        page: page,
-        pageSize: pageSize,
-        ordering: ordering,
-        album: album,
-        artist: artist,
-        scope: scope,
-        q: q,
-      ),
+      fetch:
+          () => _api.getTracks(
+            page: page,
+            pageSize: pageSize,
+            ordering: ordering,
+            album: album,
+            artist: artist,
+            scope: scope,
+            q: q,
+          ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
     );
@@ -311,12 +500,13 @@ class CachedFunkwhaleApi {
       cacheType: CacheType.tags,
       fromJson: (j) => PaginatedResponse.fromJson(j, Tag.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _tagToJson),
-      fetch: () => _api.getTags(
-        page: page,
-        pageSize: pageSize,
-        ordering: ordering,
-        q: q,
-      ),
+      fetch:
+          () => _api.getTags(
+            page: page,
+            pageSize: pageSize,
+            ordering: ordering,
+            q: q,
+          ),
       ttl: const Duration(hours: 6),
       forceRefresh: forceRefresh,
     );
@@ -333,11 +523,12 @@ class CachedFunkwhaleApi {
       fetch: () => _api.search(query),
       ttl: const Duration(minutes: 10),
       forceRefresh: forceRefresh,
-      coverUrls: (r) => [
-        ...r.albums.map((a) => a.coverUrl),
-        ...r.artists.map((a) => a.coverUrl),
-        ...r.tracks.map((t) => t.coverUrl),
-      ],
+      coverUrls:
+          (r) => [
+            ...r.albums.map((a) => a.coverUrl),
+            ...r.artists.map((a) => a.coverUrl),
+            ...r.tracks.map((t) => t.coverUrl),
+          ],
     );
   }
 
@@ -525,12 +716,13 @@ class CachedFunkwhaleApi {
       cacheType: CacheType.playlist,
       fromJson: (j) => PaginatedResponse.fromJson(j, Playlist.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _playlistToJson),
-      fetch: () =>
-          _api.getPlaylists(page: page, pageSize: pageSize, scope: scope),
+      fetch:
+          () => _api.getPlaylists(page: page, pageSize: pageSize, scope: scope),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
-      coverUrls: (r) =>
-          r.results.expand((p) => p.albumCovers).cast<String?>().toList(),
+      coverUrls:
+          (r) =>
+              r.results.expand((p) => p.albumCovers).cast<String?>().toList(),
     );
   }
 
@@ -613,12 +805,13 @@ class CachedFunkwhaleApi {
       cacheType: CacheType.track,
       fromJson: (j) => PaginatedResponse.fromJson(j, Listening.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _listeningToJson),
-      fetch: () => _api.getListenings(
-        page: page,
-        pageSize: pageSize,
-        ordering: ordering,
-        richOnly: richOnly,
-      ),
+      fetch:
+          () => _api.getListenings(
+            page: page,
+            pageSize: pageSize,
+            ordering: ordering,
+            richOnly: richOnly,
+          ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
     );
@@ -887,13 +1080,14 @@ class CachedFunkwhaleApi {
       cacheType: CacheType.channel,
       fromJson: (j) => PaginatedResponse.fromJson(j, Channel.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _channelToJson),
-      fetch: () => _api.getChannels(
-        page: page,
-        pageSize: pageSize,
-        ordering: ordering,
-        q: q,
-        subscribed: subscribed,
-      ),
+      fetch:
+          () => _api.getChannels(
+            page: page,
+            pageSize: pageSize,
+            ordering: ordering,
+            q: q,
+            subscribed: subscribed,
+          ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
     );
@@ -926,12 +1120,13 @@ class CachedFunkwhaleApi {
       cacheType: CacheType.track,
       fromJson: (j) => PaginatedResponse.fromJson(j, Track.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _trackToJson),
-      fetch: () => _api.getChannelTracks(
-        channelUuid: channelUuid,
-        page: page,
-        pageSize: pageSize,
-        ordering: ordering,
-      ),
+      fetch:
+          () => _api.getChannelTracks(
+            channelUuid: channelUuid,
+            page: page,
+            pageSize: pageSize,
+            ordering: ordering,
+          ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
     );
@@ -981,14 +1176,15 @@ class CachedFunkwhaleApi {
       cacheType: CacheType.radio,
       fromJson: (j) => PaginatedResponse.fromJson(j, Radio.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _radioToJson),
-      fetch: () => _api.getRadios(
-        page: page,
-        pageSize: pageSize,
-        ordering: ordering,
-        q: q,
-        scope: scope,
-        name: name,
-      ),
+      fetch:
+          () => _api.getRadios(
+            page: page,
+            pageSize: pageSize,
+            ordering: ordering,
+            q: q,
+            scope: scope,
+            name: name,
+          ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
     );
@@ -1027,8 +1223,8 @@ class CachedFunkwhaleApi {
       cacheType: CacheType.library,
       fromJson: (j) => PaginatedResponse.fromJson(j, Library.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _libraryToJson),
-      fetch: () =>
-          _api.getLibraries(page: page, pageSize: pageSize, scope: scope),
+      fetch:
+          () => _api.getLibraries(page: page, pageSize: pageSize, scope: scope),
       ttl: const Duration(hours: 6),
       forceRefresh: forceRefresh,
     );
@@ -1053,15 +1249,17 @@ class CachedFunkwhaleApi {
       'id': album.id,
       'title': album.title,
       'release_date': album.releaseDate,
-      'artist': album.artist != null
-          ? {
-              'id': album.artist!.id,
-              'name': album.artist!.name,
-              'cover': album.artist!.cover != null
-                  ? _coverToJson(album.artist!.cover!)
-                  : null,
-            }
-          : null,
+      'artist':
+          album.artist != null
+              ? {
+                'id': album.artist!.id,
+                'name': album.artist!.name,
+                'cover':
+                    album.artist!.cover != null
+                        ? _coverToJson(album.artist!.cover!)
+                        : null,
+              }
+              : null,
       'cover': album.cover != null ? _coverToJson(album.cover!) : null,
       'tracks_count': album.tracksCount,
       'duration': album.duration,
@@ -1101,32 +1299,36 @@ class CachedFunkwhaleApi {
       'disc_number': track.discNumber,
       'is_playable': track.isPlayable,
       'tags': track.tags,
-      'artist': track.artist != null
-          ? {'id': track.artist!.id, 'name': track.artist!.name}
-          : null,
-      'album': track.album != null
-          ? {
-              'id': track.album!.id,
-              'title': track.album!.title,
-              'cover': track.album!.cover != null
-                  ? _coverToJson(track.album!.cover!)
-                  : null,
-            }
-          : null,
+      'artist':
+          track.artist != null
+              ? {'id': track.artist!.id, 'name': track.artist!.name}
+              : null,
+      'album':
+          track.album != null
+              ? {
+                'id': track.album!.id,
+                'title': track.album!.title,
+                'cover':
+                    track.album!.cover != null
+                        ? _coverToJson(track.album!.cover!)
+                        : null,
+              }
+              : null,
       'listen_url': track.listenUrl,
       'cover': track.cover != null ? _coverToJson(track.cover!) : null,
-      'uploads': track.uploads
-          .map(
-            (u) => {
-              'uuid': u.uuid,
-              'duration': u.duration,
-              'bitrate': u.bitrate,
-              'size': u.size,
-              'mimetype': u.mimetype,
-              'listen_url': u.listenUrl,
-            },
-          )
-          .toList(),
+      'uploads':
+          track.uploads
+              .map(
+                (u) => {
+                  'uuid': u.uuid,
+                  'duration': u.duration,
+                  'bitrate': u.bitrate,
+                  'size': u.size,
+                  'mimetype': u.mimetype,
+                  'listen_url': u.listenUrl,
+                },
+              )
+              .toList(),
       'creation_date': track.creationDate?.toIso8601String(),
     };
   }
@@ -1224,3 +1426,25 @@ final cachedFunkwhaleApiProvider = Provider<CachedFunkwhaleApi>((ref) {
     },
   );
 });
+
+/// Keep a Riverpod provider in sync with background metadata revalidation.
+///
+/// Call at the start of a [FutureProvider] / [AsyncNotifier.build] body.
+/// When a matching cache key is revalidated with new data, this provider is
+/// invalidated and re-reads the (now fresh) cache immediately — so lists
+/// insert/remove items without a loading flash.
+///
+/// [matches] typically checks a cache-key prefix, e.g.
+/// `(key) => key.startsWith('albums_p1')`.
+void watchMetadataRevalidation(
+  Ref ref,
+  bool Function(String cacheKey) matches,
+) {
+  final api = ref.watch(cachedFunkwhaleApiProvider);
+  final sub = api.metadataUpdates.listen((key) {
+    if (matches(key)) {
+      ref.invalidateSelf();
+    }
+  });
+  ref.onDispose(sub.cancel);
+}

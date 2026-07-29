@@ -27,6 +27,7 @@ import 'package:tayra/features/settings/settings_provider.dart';
 
 final _albumDetailProvider = FutureProvider.family<Album, int>((ref, albumId) {
   ref.keepAlive();
+  watchMetadataRevalidation(ref, (key) => key == 'album_$albumId');
   final api = ref.watch(cachedFunkwhaleApiProvider);
   return api.getAlbum(albumId);
 });
@@ -42,6 +43,11 @@ class _AlbumTracksNotifier extends AsyncNotifier<List<Track>> {
   @override
   Future<List<Track>> build() async {
     ref.keepAlive();
+    // Track list pages for this album (ordering=position).
+    watchMetadataRevalidation(
+      ref,
+      (key) => key.startsWith('tracks_p') && key.contains('_al$albumId'),
+    );
     return _fetchIncremental();
   }
 
@@ -181,14 +187,15 @@ class AlbumDetailScreen extends ConsumerWidget {
       backgroundColor: AppTheme.background,
       body: albumAsync.when(
         loading: () => const _AlbumDetailShimmer(),
-        error: (error, stack) => DetailPageErrorBody(
-          title: 'Failed to load album',
-          message: error.toString(),
-          onRetry: () {
-            ref.invalidate(_albumDetailProvider(albumId));
-            ref.read(_albumTracksProvider(albumId).notifier).reload();
-          },
-        ),
+        error:
+            (error, stack) => DetailPageErrorBody(
+              title: 'Failed to load album',
+              message: error.toString(),
+              onRetry: () {
+                ref.invalidate(_albumDetailProvider(albumId));
+                ref.read(_albumTracksProvider(albumId).notifier).reload();
+              },
+            ),
         data: (album) {
           final imageUrl = album.largeCoverUrl ?? album.coverUrl;
           // Use an encoded key that includes the preferred cache key which
@@ -278,28 +285,31 @@ class _AlbumDetailBody extends ConsumerWidget {
         // ── Album info ──
         SliverToBoxAdapter(
           child: tracksAsync.when(
-            data: (tracks) => _AlbumInfo(
-              album: album,
-              dominantColor: dominantColor,
-              textColor: textColor,
-              totalDuration: tracks.fold<int>(
-                0,
-                (sum, track) => sum + (track.duration ?? 0),
-              ),
-            ),
+            data:
+                (tracks) => _AlbumInfo(
+                  album: album,
+                  dominantColor: dominantColor,
+                  textColor: textColor,
+                  totalDuration: tracks.fold<int>(
+                    0,
+                    (sum, track) => sum + (track.duration ?? 0),
+                  ),
+                ),
             // Always pass the computed accent/text colors so the UI (for
             // example the artist name) can tint immediately while tracks are
             // still loading or if track loading failed.
-            loading: () => _AlbumInfo(
-              album: album,
-              dominantColor: dominantColor,
-              textColor: textColor,
-            ),
-            error: (_, _) => _AlbumInfo(
-              album: album,
-              dominantColor: dominantColor,
-              textColor: textColor,
-            ),
+            loading:
+                () => _AlbumInfo(
+                  album: album,
+                  dominantColor: dominantColor,
+                  textColor: textColor,
+                ),
+            error:
+                (_, _) => _AlbumInfo(
+                  album: album,
+                  dominantColor: dominantColor,
+                  textColor: textColor,
+                ),
           ),
         ),
 
@@ -315,30 +325,32 @@ class _AlbumDetailBody extends ConsumerWidget {
 
         // ── Track list ──
         tracksAsync.when(
-          loading: () => SliverToBoxAdapter(
-            child: SizedBox(
-              height: (56 + 12) * 6,
-              child: const Padding(
-                padding: EdgeInsets.only(top: 8),
-                child: ShimmerList(itemCount: 6, itemHeight: 56),
-              ),
-            ),
-          ),
-          error: (error, _) => SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Center(
-                child: Text(
-                  'Failed to load tracks: $error',
-                  style: const TextStyle(
-                    color: AppTheme.onBackgroundMuted,
-                    fontSize: 13,
+          loading:
+              () => SliverToBoxAdapter(
+                child: SizedBox(
+                  height: (56 + 12) * 6,
+                  child: const Padding(
+                    padding: EdgeInsets.only(top: 8),
+                    child: ShimmerList(itemCount: 6, itemHeight: 56),
                   ),
-                  textAlign: TextAlign.center,
                 ),
               ),
-            ),
-          ),
+          error:
+              (error, _) => SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Center(
+                    child: Text(
+                      'Failed to load tracks: $error',
+                      style: const TextStyle(
+                        color: AppTheme.onBackgroundMuted,
+                        fontSize: 13,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ),
           data: (tracks) {
             if (tracks.isEmpty) {
               return const SliverToBoxAdapter(
@@ -447,10 +459,11 @@ class _AlbumHeader extends ConsumerWidget {
           parentType: CacheType.album,
           parentId: album.id,
           trackIds: tracks.map((t) => t.id).toList(),
-          enqueueTrackIds: tracks
-              .where((t) => t.listenUrl != null)
-              .map((t) => t.id)
-              .toList(),
+          enqueueTrackIds:
+              tracks
+                  .where((t) => t.listenUrl != null)
+                  .map((t) => t.id)
+                  .toList(),
           currentlyManual: current,
         );
         if (context.mounted) {
@@ -621,54 +634,56 @@ class _AlbumHeader extends ConsumerWidget {
                 }
               }
             },
-            itemBuilder: (_) => [
-              const PopupMenuItem(
-                value: 'edit',
-                child: PopupMenuRow(
-                  icon: Icons.edit_rounded,
-                  label: 'Edit album',
-                ),
-              ),
-              PopupMenuItem(
-                value: 'download',
-                child: PopupMenuRow(
-                  icon: isManual
-                      ? Icons.download_done_rounded
-                      : Icons.download_rounded,
-                  label: isManual ? 'Remove download' : 'Download',
-                ),
-              ),
-              const PopupMenuItem(
-                value: 'add_playlist',
-                child: PopupMenuRow(
-                  icon: Icons.playlist_add_rounded,
-                  label: 'Add to playlist',
-                ),
-              ),
-              const PopupMenuItem(
-                value: 'play_next',
-                child: PopupMenuRow(
-                  icon: Icons.queue_play_next,
-                  label: 'Play next',
-                ),
-              ),
-              const PopupMenuItem(
-                value: 'add_queue',
-                child: PopupMenuRow(
-                  icon: Icons.queue_music_rounded,
-                  label: 'Add to queue',
-                ),
-              ),
-              if (showPurge)
-                const PopupMenuItem(
-                  value: 'purge_cache',
-                  child: PopupMenuRow(
-                    icon: Icons.delete_forever_rounded,
-                    label: 'Purge and refetch',
-                    destructive: true,
+            itemBuilder:
+                (_) => [
+                  const PopupMenuItem(
+                    value: 'edit',
+                    child: PopupMenuRow(
+                      icon: Icons.edit_rounded,
+                      label: 'Edit album',
+                    ),
                   ),
-                ),
-            ],
+                  PopupMenuItem(
+                    value: 'download',
+                    child: PopupMenuRow(
+                      icon:
+                          isManual
+                              ? Icons.download_done_rounded
+                              : Icons.download_rounded,
+                      label: isManual ? 'Remove download' : 'Download',
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: 'add_playlist',
+                    child: PopupMenuRow(
+                      icon: Icons.playlist_add_rounded,
+                      label: 'Add to playlist',
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: 'play_next',
+                    child: PopupMenuRow(
+                      icon: Icons.queue_play_next,
+                      label: 'Play next',
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: 'add_queue',
+                    child: PopupMenuRow(
+                      icon: Icons.queue_music_rounded,
+                      label: 'Add to queue',
+                    ),
+                  ),
+                  if (showPurge)
+                    const PopupMenuItem(
+                      value: 'purge_cache',
+                      child: PopupMenuRow(
+                        icon: Icons.delete_forever_rounded,
+                        label: 'Purge and refetch',
+                        destructive: true,
+                      ),
+                    ),
+                ],
           ),
         ),
 
@@ -724,11 +739,12 @@ class _AlbumInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final displayDuration = (album.duration != null && album.duration! > 0)
-        ? album.formattedDuration
-        : (totalDuration != null && totalDuration! > 0)
-        ? formatTotalDuration(totalDuration!)
-        : null;
+    final displayDuration =
+        (album.duration != null && album.duration! > 0)
+            ? album.formattedDuration
+            : (totalDuration != null && totalDuration! > 0)
+            ? formatTotalDuration(totalDuration!)
+            : null;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),

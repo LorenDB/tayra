@@ -49,6 +49,20 @@ The cache system provides offline access to music metadata, album art, and audio
 - **Playlists**: 2 minutes (can be modified)
 - **Favorites**: Persistent (no expiration)
 
+### Stale-while-revalidate (SWR)
+
+List and detail reads use **cache-first painting** with background refresh:
+
+1. **Any** cached entry (fresh or expired) is returned immediately when online.
+2. A background network revalidation runs when connected (debounced ~20s per
+   key). Pure `ordering=random` lists soft-revalidate only when the entry is
+   expired, so carousels do not reshuffle every open.
+3. If the revalidated payload differs, `CachedFunkwhaleApi.metadataUpdates`
+   emits the cache key. Riverpod providers call `watchMetadataRevalidation`
+   (or screens subscribe) so UI inserts/removes items without a full-screen
+   loading state.
+4. Pull-to-refresh still uses `forceRefresh: true` (blocking network write).
+
 ### Eviction Priority
 
 When cache reaches its limit, items are evicted in this order:
@@ -163,8 +177,11 @@ Users can manage cache from Settings > Cache:
 
 1. **Automatic Cache Updates**: Last accessed timestamps update on every read
 2. **Background Eviction**: Runs after every write operation
-3. **Optimistic Reads**: Cache is checked first, API only called on miss
+3. **Stale-while-revalidate**: Cache is returned immediately; network refresh
+   runs in the background and only notifies UI when data actually changed
 4. **Silent Failures**: Cache errors don't disrupt user experience
+5. **Revalidation debounce**: Same cache key is not re-fetched more than once
+   every ~20s to avoid invalidate→reload loops
 
 ## Future Enhancements
 

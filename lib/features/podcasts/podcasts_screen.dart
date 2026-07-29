@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,6 +36,7 @@ class _PodcastsScreenState extends ConsumerState<PodcastsScreen> {
   String? _nextPage;
   _PodcastListFilter _filter = _PodcastListFilter.subscribed;
   bool _filterResolved = false;
+  StreamSubscription<String>? _cacheSub;
 
   final ScrollController _scrollController = ScrollController();
 
@@ -42,10 +45,20 @@ class _PodcastsScreenState extends ConsumerState<PodcastsScreen> {
     super.initState();
     _bootstrap();
     _scrollController.addListener(_onScroll);
+    _cacheSub = ref
+        .read(cached_api.cachedFunkwhaleApiProvider)
+        .metadataUpdates
+        .listen((key) {
+          if (!key.startsWith('channels_p')) return;
+          // Only apply page-1 revalidation while still on the first page.
+          if (_nextPage != null && _channels.length > 50) return;
+          unawaited(_loadChannels());
+        });
   }
 
   @override
   void dispose() {
+    _cacheSub?.cancel();
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
@@ -101,16 +114,22 @@ class _PodcastsScreenState extends ConsumerState<PodcastsScreen> {
 
   Future<void> _loadChannels({bool forceRefresh = false}) async {
     setState(() {
-      if (!forceRefresh || _channels.isEmpty) {
-        _isLoading = true;
-        _channels = [];
+      // Keep existing rows visible for silent revalidation. Pull-to-refresh /
+      // filter switches use forceRefresh and reset pagination; shimmer only
+      // when there is nothing to paint yet.
+      if (forceRefresh) {
         _nextPage = null;
+      }
+      if (_channels.isEmpty) {
+        _isLoading = true;
       }
       _error = null;
     });
     try {
       final api = ref.read(cached_api.cachedFunkwhaleApiProvider);
       final subscribedOnly = _filter == _PodcastListFilter.subscribed;
+      // Returns cached page immediately when available; background revalidate
+      // updates via metadataUpdates → _loadChannels again.
       final response = await api.getChannels(
         pageSize: 50,
         subscribed: subscribedOnly ? true : null,
@@ -191,35 +210,38 @@ class _PodcastsScreenState extends ConsumerState<PodcastsScreen> {
     final controller = TextEditingController();
     final url = await showShellDialog<String>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppTheme.surfaceContainerHigh,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          'Subscribe via RSS',
-          style: TextStyle(color: AppTheme.onBackground),
-        ),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          style: const TextStyle(color: AppTheme.onBackground),
-          decoration: const InputDecoration(
-            hintText: 'https://example.com/feed.xml',
-            hintStyle: TextStyle(color: AppTheme.onBackgroundSubtle),
+      builder:
+          (ctx) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            title: const Text(
+              'Subscribe via RSS',
+              style: TextStyle(color: AppTheme.onBackground),
+            ),
+            content: TextField(
+              controller: controller,
+              autofocus: true,
+              style: const TextStyle(color: AppTheme.onBackground),
+              decoration: const InputDecoration(
+                hintText: 'https://example.com/feed.xml',
+                hintStyle: TextStyle(color: AppTheme.onBackgroundSubtle),
+              ),
+              keyboardType: TextInputType.url,
+              onSubmitted: (v) => Navigator.of(ctx).pop(v.trim()),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(controller.text.trim()),
+                child: const Text('Subscribe'),
+              ),
+            ],
           ),
-          keyboardType: TextInputType.url,
-          onSubmitted: (v) => Navigator.of(ctx).pop(v.trim()),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(controller.text.trim()),
-            child: const Text('Subscribe'),
-          ),
-        ],
-      ),
     );
     if (url == null || url.isEmpty || !mounted) return;
 
@@ -289,7 +311,13 @@ class _PodcastsScreenState extends ConsumerState<PodcastsScreen> {
                 onSelectionChanged: (sel) {
                   final next = sel.first;
                   if (next == _filter) return;
-                  setState(() => _filter = next);
+                  // Drop the other filter's rows so we never flash the wrong set.
+                  setState(() {
+                    _filter = next;
+                    _channels = [];
+                    _nextPage = null;
+                    _isLoading = true;
+                  });
                   _loadChannels(forceRefresh: true);
                 },
                 style: ButtonStyle(
@@ -331,12 +359,14 @@ class _PodcastsScreenState extends ConsumerState<PodcastsScreen> {
     if (_channels.isEmpty) {
       return EmptyState(
         icon: Icons.podcasts_rounded,
-        title: _filter == _PodcastListFilter.subscribed
-            ? 'No subscriptions yet'
-            : 'No podcasts found',
-        subtitle: _filter == _PodcastListFilter.subscribed
-            ? 'Subscribe via RSS or browse All podcasts on this server'
-            : 'No podcast channels are available on this server',
+        title:
+            _filter == _PodcastListFilter.subscribed
+                ? 'No subscriptions yet'
+                : 'No podcasts found',
+        subtitle:
+            _filter == _PodcastListFilter.subscribed
+                ? 'Subscribe via RSS or browse All podcasts on this server'
+                : 'No podcast channels are available on this server',
       );
     }
 
@@ -382,16 +412,18 @@ class _ChannelTile extends StatelessWidget {
       },
       leading: ClipRRect(
         borderRadius: BorderRadius.circular(6),
-        child: coverUrl != null
-            ? CachedNetworkImage(
-                imageUrl: coverUrl,
-                width: 48,
-                height: 48,
-                fit: BoxFit.cover,
-                errorWidget: (context, error, stack) =>
-                    const _PodcastPlaceholder(size: 48),
-              )
-            : const _PodcastPlaceholder(size: 48),
+        child:
+            coverUrl != null
+                ? CachedNetworkImage(
+                  imageUrl: coverUrl,
+                  width: 48,
+                  height: 48,
+                  fit: BoxFit.cover,
+                  errorWidget:
+                      (context, error, stack) =>
+                          const _PodcastPlaceholder(size: 48),
+                )
+                : const _PodcastPlaceholder(size: 48),
       ),
       title: Text(
         channel.name,
@@ -399,14 +431,15 @@ class _ChannelTile extends StatelessWidget {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
-      subtitle: channel.description != null && channel.description!.isNotEmpty
-          ? Text(
-              channel.description!,
-              style: const TextStyle(color: AppTheme.onBackgroundMuted),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            )
-          : null,
+      subtitle:
+          channel.description != null && channel.description!.isNotEmpty
+              ? Text(
+                channel.description!,
+                style: const TextStyle(color: AppTheme.onBackgroundMuted),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              )
+              : null,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
