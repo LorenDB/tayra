@@ -53,6 +53,8 @@ make logs             # follow all logs
   `docker compose build front`.
 - **First-party login** (this fork's addition): `POST /api/v1/users/token/`
   with `{"username","password"}` → OAuth tokens + `listen_token`.
+  `password` must be the domain-separated SHA-256 transport digest (never
+  plaintext); see `password_transport` on API and client.
 - **First-time setup:** `docker compose exec api python manage.py migrate`
   then `docker compose exec api python manage.py fw users create`.
 

@@ -34,12 +34,19 @@ Full details: **[DEPLOY.md](DEPLOY.md)**.
 
 ```http
 POST /api/v1/users/token/
-{"username": "…", "password": "…"}
+{"username": "…", "password": "<sha256 hex transport digest>"}
 ```
+
+The `password` field is **not** the account password in plaintext. Tayra sends a
+domain-separated SHA-256 digest (`tayra-login-v1` + NUL + password); the API
+rejects non-digest values. See `api/funkwhale_api/users/password_transport.py`.
 
 Returns access/refresh tokens, client credentials for refresh, and `listen_token`
 for media URLs.
 
+**Upgrade note:** passwords set before this change need a one-time reset
+(`fw users update USER --password '…'` or the password-reset email flow) so the
+stored hash matches the transport scheme.
 ## Ops without a Vue admin UI
 
 | Task | Tool |

@@ -1,8 +1,8 @@
 """First-party (Tayra) OAuth application helpers and token issuance.
 
 The Vue SPA is gone; Tayra is the primary client. Same-origin web and native
-clients can exchange username/password for OAuth access + refresh tokens in one
-API call instead of the OOB authorization-code dance.
+clients can exchange username + transport-hashed password for OAuth access +
+refresh tokens in one API call instead of the OOB authorization-code dance.
 """
 
 from __future__ import annotations

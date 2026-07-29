@@ -216,13 +216,17 @@ docker compose build api front && docker compose up -d api front
 Debug with curl (use your real host/user):
 
 ```bash
+# password must be the transport digest, not plaintext:
+# python3 -c "import hashlib; print(hashlib.sha256(b'tayra-login-v1\0'+b'YOUR_PASS').hexdigest())"
+DIGEST=$(python3 -c "import hashlib; print(hashlib.sha256(b'tayra-login-v1\0'+b'YOUR_PASS').hexdigest())")
 curl -sS -X POST "https://YOUR_HOST/api/v1/users/token/" \
   -H "Content-Type: application/json" \
-  -d '{"username":"YOUR_USER","password":"YOUR_PASS"}' | jq .
+  -d "{\"username\":\"YOUR_USER\",\"password\":\"$DIGEST\"}" | jq .
 ```
 
 - `200` + `access_token` → API OK; rebuild front if the app still fails  
-- `400` with `Unable to log in…` / `invalid_credentials` → wrong user/password, wrong DB, or the API container is not using this fork’s image  
+- `400` with `Unable to log in…` / `invalid_credentials` → wrong user/password, wrong DB, API image not this fork, or password was set before transport hashing (reset once with `fw users update USER --password '…'`)  
+- `400` / `password_not_hashed` → body still has plaintext; use the digest above or a current Tayra build  
 - `400` / `email_unverified` → verify e-mail or set `ACCOUNT_EMAIL_VERIFICATION_ENFORCE=false`  
 - `400` / `missing_credentials` → body not parsed (Content-Type / proxy stripping POST)  
 - HTML / `Invalid HTTP_HOST header` → `FUNKWHALE_HOSTNAME` / `DJANGO_ALLOWED_HOSTS` mismatch  
@@ -262,13 +266,12 @@ docker compose exec api python manage.py shell -c \
   `docker compose exec api python manage.py fw users update YOUR_USER --password 'new-pass'`
 - `usable False` → no local password (LDAP/social only). Set `LDAP_*` like the old pod, or set a local password with the command above.
 
-**“Passwords in plaintext” in the browser Network tab**  
-Expected and **not** the cause of the 400. This endpoint is a first-party
-password → OAuth token exchange: the SPA POSTs JSON `{"username","password"}`
-over **HTTPS**. DevTools always shows the decrypted request body after TLS.
-There is no client-side password hash for this API (Subsonic’s md5 scheme is a
-different endpoint). Ensure users open the site via **HTTPS** (not bare
-`http://`) so the password is not sent on the wire in cleartext.
+**“Passwords in the browser Network tab”**  
+Tayra sends a **SHA-256 transport digest** in the `password` field (not the
+account password). DevTools still shows the JSON body after TLS decryption;
+you should see a 64-character hex string, not the typed password. Ensure users
+open the site via **HTTPS**. If you see plaintext there, the SPA build is too
+old—rebuild `front`.
 **Browser CSP / CanvasKit blocked (gstatic.com)**  
 The front image must build with `--no-web-resources-cdn` (already in
 `front/Dockerfile`) so CanvasKit is same-origin. Rebuild front:

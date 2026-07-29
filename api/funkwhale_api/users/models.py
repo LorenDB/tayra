@@ -235,10 +235,50 @@ class User(AbstractUser):
         return self.subsonic_api_token
 
     def set_password(self, raw_password):
+        # First-party login sends a transport digest (never plaintext). Store
+        # django_hash(transport_hash(password)) so token login can verify that
+        # digest. Callers (admin, CLI, forms) still pass the real password.
+        if raw_password is not None:
+            from funkwhale_api.users.password_transport import (
+                hash_password_for_transport,
+            )
+
+            raw_password = hash_password_for_transport(raw_password)
         super().set_password(raw_password)
         self.update_secret_key()
         if self.subsonic_api_token:
             self.update_subsonic_api_token()
+
+    def check_password(self, raw_password):
+        """Accept plaintext (admin/CLI/legacy) or transport digest (token login).
+
+        Uses django.contrib.auth.hashers.check_password directly so hasher
+        upgrades re-save the *transport* digest and never double-wrap it via
+        our set_password().
+        """
+        from django.contrib.auth.hashers import check_password as django_check
+
+        from funkwhale_api.users.password_transport import hash_password_for_transport
+
+        if raw_password is None:
+            return super().check_password(raw_password)
+
+        def setter(value_for_storage):
+            # value_for_storage is already what Django should hash (transport
+            # digest for new-scheme users, or plaintext for legacy rows).
+            super(User, self).set_password(value_for_storage)
+            self._password = None
+            self.save(update_fields=["password"])
+
+        # New scheme: storage is django_hash(transport_hash(plaintext)).
+        transported = hash_password_for_transport(raw_password)
+        if django_check(transported, self.password, setter=setter):
+            return True
+        # Token login already sent a transport digest, or legacy storage is
+        # still django_hash(plaintext).
+        if django_check(raw_password, self.password, setter=setter):
+            return True
+        return False
 
     def get_activity_url(self):
         return settings.FUNKWHALE_URL + f"/@{self.username}"

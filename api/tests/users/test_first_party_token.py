@@ -3,6 +3,16 @@ import json
 import pytest
 from django.urls import reverse
 
+from funkwhale_api.users.password_transport import hash_password_for_transport
+
+
+def _login_payload(username: str, password: str) -> dict:
+    """Build a token-login body with a transport-hashed password."""
+    return {
+        "username": username,
+        "password": hash_password_for_transport(password),
+    }
+
 
 @pytest.mark.django_db
 def test_token_login_returns_oauth_tokens(api_client, factories):
@@ -13,7 +23,7 @@ def test_token_login_returns_oauth_tokens(api_client, factories):
     url = reverse("api:v1:users:token_login")
     response = api_client.post(
         url,
-        {"username": "alice", "password": "s3cret-pass"},
+        _login_payload("alice", "s3cret-pass"),
         format="json",
     )
 
@@ -39,7 +49,7 @@ def test_token_login_by_email(api_client, factories):
 
     response = api_client.post(
         reverse("api:v1:users:token_login"),
-        {"username": "dave@example.com", "password": "s3cret-pass"},
+        _login_payload("dave@example.com", "s3cret-pass"),
         format="json",
     )
     assert response.status_code == 200, response.content
@@ -55,11 +65,26 @@ def test_token_login_rejects_bad_password(api_client, factories):
     url = reverse("api:v1:users:token_login")
     response = api_client.post(
         url,
-        {"username": "bob", "password": "wrong"},
+        _login_payload("bob", "wrong"),
         format="json",
     )
     assert response.status_code == 400
     assert response.json()["error"] == "invalid_credentials"
+
+
+@pytest.mark.django_db
+def test_token_login_rejects_plaintext_password(api_client, factories):
+    user = factories["users.User"](username="plain")
+    user.set_password("s3cret-pass")
+    user.save()
+
+    response = api_client.post(
+        reverse("api:v1:users:token_login"),
+        {"username": "plain", "password": "s3cret-pass"},
+        format="json",
+    )
+    assert response.status_code == 400
+    assert response.json()["error"] == "password_not_hashed"
 
 
 @pytest.mark.django_db
@@ -71,7 +96,7 @@ def test_token_login_accepts_raw_json_body(api_client, factories):
 
     response = api_client.post(
         reverse("api:v1:users:token_login"),
-        data=json.dumps({"username": "rawjson", "password": "s3cret-pass"}),
+        data=json.dumps(_login_payload("rawjson", "s3cret-pass")),
         content_type="application/json",
     )
     assert response.status_code == 200, response.content
@@ -86,7 +111,7 @@ def test_token_login_access_token_authenticates(api_client, factories):
 
     login = api_client.post(
         reverse("api:v1:users:token_login"),
-        {"username": "carol", "password": "s3cret-pass"},
+        _login_payload("carol", "s3cret-pass"),
         format="json",
     )
     assert login.status_code == 200, login.content
@@ -109,7 +134,7 @@ def test_token_login_refresh_works_without_client_secret(api_client, factories):
 
     login = api_client.post(
         reverse("api:v1:users:token_login"),
-        {"username": "erin", "password": "s3cret-pass"},
+        _login_payload("erin", "s3cret-pass"),
         format="json",
     )
     assert login.status_code == 200, login.content
@@ -118,7 +143,7 @@ def test_token_login_refresh_works_without_client_secret(api_client, factories):
     # Second login reuses the same Application (must still succeed).
     login2 = api_client.post(
         reverse("api:v1:users:token_login"),
-        {"username": "erin", "password": "s3cret-pass"},
+        _login_payload("erin", "s3cret-pass"),
         format="json",
     )
     assert login2.status_code == 200, login2.content

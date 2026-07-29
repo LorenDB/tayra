@@ -297,16 +297,20 @@ def _log_token_login(msg, *args):
 @extend_schema(
     operation_id="token_login",
     description=(
-        "First-party password login for Tayra. Returns OAuth access/refresh "
-        "tokens, client credentials for refresh, and a scoped listen_token "
-        "for media URLs (?token=)."
+        "First-party password login for Tayra. The password field must be a "
+        "domain-separated SHA-256 hex digest of the account password (see "
+        "password_transport.hash_password_for_transport), not plaintext. "
+        "Returns OAuth access/refresh tokens, client credentials for refresh, "
+        "and a scoped listen_token for media URLs (?token=)."
     ),
 )
 @api_view(["POST"])
 @permission_classes([AllowAny])
 @authentication_classes([])
 def token_login(request):
-    """POST username + password → OAuth tokens (no browser OAuth dance)."""
+    """POST username + transport-hashed password → OAuth tokens."""
+    from funkwhale_api.users.password_transport import is_transport_password_hash
+
     throttling.check_request(request, "login")
     username, password, raw, meta = _extract_credentials(request)
 
@@ -326,6 +330,26 @@ def token_login(request):
             status=400,
         )
 
+    if not is_transport_password_hash(password):
+        _log_token_login(
+            "token_login plaintext_password_rejected meta=%s password_len=%s",
+            meta,
+            len(password),
+        )
+        return Response(
+            {
+                "error": "password_not_hashed",
+                "detail": (
+                    "Password must be a SHA-256 hex digest "
+                    "(tayra-login-v1 transport hash), not plaintext."
+                ),
+                "non_field_errors": [
+                    "Password must be hashed client-side before login."
+                ],
+            },
+            status=400,
+        )
+
     user = _find_user(username)
     password_ok = False
     usable = None
@@ -338,7 +362,9 @@ def token_login(request):
             hasher = user.password.split("$", 1)[0]
 
     if user is None or not password_ok:
-        # Second chance: full Django auth stack (LDAP, allauth, etc.)
+        # Second chance: full Django auth stack (LDAP, allauth, etc.).
+        # Note: LDAP backends need the real password; this endpoint only
+        # receives a transport digest, so LDAP users should use OAuth code flow.
         django_request = getattr(request, "_request", request)
         try:
             authed = auth.authenticate(
@@ -371,7 +397,8 @@ def token_login(request):
                 "user_id=%s is_active=%s has_usable_password=%s hasher=%s "
                 "user_count=%s meta=%s "
                 "(if user_found=False check DATABASE_URL points at your existing DB; "
-                "if has_usable_password=False check LDAP_ENABLED / set a local password)",
+                "if has_usable_password=False check LDAP_ENABLED / set a local password; "
+                "passwords set before transport hashing need a one-time reset)",
                 username,
                 user is not None,
                 getattr(user, "pk", None),
