@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -107,20 +109,27 @@ class _CoverArtEditorState extends ConsumerState<CoverArtEditor> {
   Future<void> _pickAndUpload() async {
     if (_isUploading) return;
 
-    final file = await FilePicker.pickFile(
+    // Prefer [pickFiles] over [pickFile]: the single-file helper forces
+    // `withData: false`, which leaves web without in-memory bytes and makes
+    // [PlatformFile.readAsBytes] throw (no fetchable blob path).
+    // ignore: deprecated_member_use — required for web; pickFile omits bytes.
+    final result = await FilePicker.pickFiles(
       type: FileType.custom,
       allowedExtensions: const ['png', 'jpg', 'jpeg', 'webp'],
+      // ignore: deprecated_member_use
+      allowMultiple: false,
+      // ignore: deprecated_member_use — withData must be true on web.
+      withData: true,
     );
+    final file = result?.files.firstOrNull;
     if (file == null) return;
 
     setState(() => _isUploading = true);
     try {
-      final bytes = await file.readAsBytes();
+      final bytes = await _readPlatformFileBytes(file);
       if (bytes.isEmpty) {
         throw StateError('Selected file is empty');
       }
-      // Reject obviously undersized images early (API requires ≥50×50).
-      // Dimension check is best-effort; the server remains the source of truth.
       final api = ref.read(cachedFunkwhaleApiProvider);
       final cover = await api.createAttachment(
         bytes: bytes,
@@ -136,6 +145,26 @@ class _CoverArtEditorState extends ConsumerState<CoverArtEditor> {
       ).showSnackBar(SnackBar(content: Text(describeCoverUploadError(e))));
     } finally {
       if (mounted) setState(() => _isUploading = false);
+    }
+  }
+
+  /// Load bytes for a picked image on every platform (including web).
+  Future<List<int>> _readPlatformFileBytes(PlatformFile file) async {
+    // ignore: deprecated_member_use — still populated when withData: true
+    final embedded = file.bytes;
+    if (embedded != null && embedded.isNotEmpty) {
+      return embedded;
+    }
+    try {
+      return await file.readAsBytes();
+    } catch (_) {
+      // Web / some desktop backends: stream the blob when eager bytes
+      // were not attached to the [PlatformFile].
+      final builder = BytesBuilder(copy: false);
+      await for (final chunk in file.readAsByteStream()) {
+        builder.add(chunk);
+      }
+      return builder.takeBytes();
     }
   }
 
