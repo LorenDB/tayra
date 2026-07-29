@@ -1479,6 +1479,241 @@ class MeUser {
   ///
   /// Derived from `permissions.library` (includes superuser-derived grants).
   bool get canManageLibrary => permissions['library'] == true || isSuperuser;
+
+  /// True when the user may edit instance-level preferences.
+  ///
+  /// Derived from `permissions.settings` (includes superuser-derived grants).
+  bool get canManageSettings => permissions['settings'] == true || isSuperuser;
+}
+
+// ── Instance admin settings (global preferences) ────────────────────────
+
+/// Field kind inferred from dynamic-preferences `field.class` for UI widgets.
+enum GlobalPreferenceFieldKind {
+  boolean,
+  string,
+  integer,
+  choice,
+  multiChoice,
+  file,
+  complex,
+}
+
+/// Choice entry from `additional_data.choices` (`[value, label]` pairs).
+class GlobalPreferenceChoice {
+  final String value;
+  final String label;
+
+  const GlobalPreferenceChoice({required this.value, required this.label});
+
+  factory GlobalPreferenceChoice.fromDynamic(dynamic raw) {
+    if (raw is List && raw.isNotEmpty) {
+      final v = raw[0]?.toString() ?? '';
+      final label = raw.length > 1 ? (raw[1]?.toString() ?? v) : v;
+      return GlobalPreferenceChoice(value: v, label: label);
+    }
+    if (raw is Map) {
+      final v = (raw['value'] ?? raw['id'] ?? '').toString();
+      final label = (raw['label'] ?? raw['name'] ?? v).toString();
+      return GlobalPreferenceChoice(value: v, label: label);
+    }
+    final s = raw?.toString() ?? '';
+    return GlobalPreferenceChoice(value: s, label: s);
+  }
+}
+
+/// Row from `GET /api/v1/instance/admin/settings/`.
+///
+/// Values are JSON-decoded Python values via dynamic-preferences `api_repr`
+/// (bool/int/string/list/map/URL). Bulk update posts identifier → value.
+class GlobalPreference {
+  final String section;
+  final String name;
+  final String identifier;
+  final dynamic defaultValue;
+  final dynamic value;
+  final String verboseName;
+  final String helpText;
+  final Map<String, dynamic> additionalData;
+  final Map<String, dynamic> field;
+  final GlobalPreferenceFieldKind fieldKind;
+  final List<GlobalPreferenceChoice> choices;
+
+  const GlobalPreference({
+    required this.section,
+    required this.name,
+    required this.identifier,
+    this.defaultValue,
+    this.value,
+    this.verboseName = '',
+    this.helpText = '',
+    this.additionalData = const {},
+    this.field = const {},
+    this.fieldKind = GlobalPreferenceFieldKind.string,
+    this.choices = const [],
+  });
+
+  factory GlobalPreference.fromJson(Map<String, dynamic> json) {
+    final field = _preferenceMap(json['field']);
+    final additional = _preferenceMap(json['additional_data']);
+    final fieldClass = (field['class'] as String?) ?? '';
+    final kind = _inferPreferenceFieldKind(fieldClass, additional);
+    final choices = _parsePreferenceChoices(additional['choices']);
+
+    return GlobalPreference(
+      section: json['section'] as String? ?? '',
+      name: json['name'] as String? ?? '',
+      identifier:
+          json['identifier'] as String? ??
+          _preferenceIdentifier(
+            json['section'] as String?,
+            json['name'] as String?,
+          ),
+      defaultValue: json['default'],
+      value: json['value'],
+      verboseName: json['verbose_name'] as String? ?? '',
+      helpText: json['help_text'] as String? ?? '',
+      additionalData: additional,
+      field: field,
+      fieldKind: kind,
+      choices: choices,
+    );
+  }
+
+  /// Copy with an optional new [value]. Pass [clearValue] to set value to null.
+  GlobalPreference copyWith({dynamic value, bool clearValue = false}) {
+    return GlobalPreference(
+      section: section,
+      name: name,
+      identifier: identifier,
+      defaultValue: defaultValue,
+      value: clearValue ? null : (value ?? this.value),
+      verboseName: verboseName,
+      helpText: helpText,
+      additionalData: additionalData,
+      field: field,
+      fieldKind: fieldKind,
+      choices: choices,
+    );
+  }
+
+  /// Human label for the tile title.
+  String get displayName =>
+      verboseName.trim().isEmpty ? name : verboseName.trim();
+
+  /// Whether the preference can be edited in-app (not file/complex).
+  bool get isEditable =>
+      fieldKind != GlobalPreferenceFieldKind.file &&
+      fieldKind != GlobalPreferenceFieldKind.complex;
+
+  /// Boolean value (false when missing/non-bool).
+  bool get boolValue => value == true;
+
+  /// Integer value if parseable.
+  int? get intValue {
+    if (value is int) return value as int;
+    if (value is num) return (value as num).toInt();
+    if (value is String) return int.tryParse(value as String);
+    return null;
+  }
+
+  /// String form of the current value for display / text editors.
+  String get stringValue {
+    if (value == null) return '';
+    if (value is String) return value as String;
+    if (value is List || value is Map) {
+      try {
+        // Prefer compact display for multi-select lists.
+        if (value is List) {
+          return (value as List).map((e) => e.toString()).join(', ');
+        }
+      } catch (_) {}
+      return value.toString();
+    }
+    return value.toString();
+  }
+
+  /// Multi-choice selection as a list of string values.
+  List<String> get multiValues {
+    final v = value;
+    if (v is List) {
+      return v.map((e) => e.toString()).toList();
+    }
+    if (v is String && v.isNotEmpty) {
+      return v
+          .split(',')
+          .map((s) => s.trim())
+          .where((s) => s.isNotEmpty)
+          .toList();
+    }
+    return const [];
+  }
+
+  /// Label for a single choice value, falling back to the raw value.
+  String labelForChoice(String raw) {
+    for (final c in choices) {
+      if (c.value == raw) return c.label;
+    }
+    return raw;
+  }
+}
+
+Map<String, dynamic> _preferenceMap(dynamic raw) {
+  if (raw is Map<String, dynamic>) return raw;
+  if (raw is Map) return Map<String, dynamic>.from(raw);
+  return <String, dynamic>{};
+}
+
+String _preferenceIdentifier(String? section, String? name) {
+  final s = section ?? '';
+  final n = name ?? '';
+  if (s.isEmpty) return n;
+  if (n.isEmpty) return s;
+  return '${s}__$n';
+}
+
+GlobalPreferenceFieldKind _inferPreferenceFieldKind(
+  String fieldClass,
+  Map<String, dynamic> additional,
+) {
+  final c = fieldClass.toLowerCase();
+  if (c.contains('boolean')) return GlobalPreferenceFieldKind.boolean;
+  if (c.contains('integer') || c == 'intfield') {
+    return GlobalPreferenceFieldKind.integer;
+  }
+  if (c.contains('multiplechoice') || c.contains('multiple_choice')) {
+    return GlobalPreferenceFieldKind.multiChoice;
+  }
+  if (c.contains('choice') && !c.contains('file')) {
+    return GlobalPreferenceFieldKind.choice;
+  }
+  if (c.contains('file') || c.contains('image')) {
+    return GlobalPreferenceFieldKind.file;
+  }
+  if (c.contains('json') ||
+      c.contains('duration') ||
+      c.contains('date') ||
+      c.contains('time') ||
+      c.contains('decimal') ||
+      c.contains('float') ||
+      c.contains('model')) {
+    return GlobalPreferenceFieldKind.complex;
+  }
+  // CharField / empty — promote to multi-choice if choices present and value is list.
+  if (additional['choices'] != null &&
+      (c.contains('char') || c.isEmpty) == false &&
+      c.contains('multiple')) {
+    return GlobalPreferenceFieldKind.multiChoice;
+  }
+  if (c.contains('char') || c.isEmpty) return GlobalPreferenceFieldKind.string;
+  // Unknown field classes with choices: treat as choice.
+  if (additional['choices'] is List) return GlobalPreferenceFieldKind.choice;
+  return GlobalPreferenceFieldKind.complex;
+}
+
+List<GlobalPreferenceChoice> _parsePreferenceChoices(dynamic raw) {
+  if (raw is! List) return const [];
+  return raw.map(GlobalPreferenceChoice.fromDynamic).toList();
 }
 
 // ── Library admin (manage API) ──────────────────────────────────────────

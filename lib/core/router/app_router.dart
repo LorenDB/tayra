@@ -37,6 +37,7 @@ import 'package:tayra/features/library_admin/manage_uploads_screen.dart';
 import 'package:tayra/features/library_admin/manage_tags_screen.dart';
 import 'package:tayra/features/library_admin/manage_channels_screen.dart';
 import 'package:tayra/features/library_admin/manage_channel_detail_screen.dart';
+import 'package:tayra/features/instance_settings/instance_settings_screen.dart';
 import 'package:tayra/core/widgets/app_shell.dart';
 
 class NavigationObserver extends NavigatorObserver {
@@ -622,6 +623,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     ],
                   ),
                 ],
+              ),
+              GoRoute(
+                path: 'manage/settings',
+                name: 'instance_settings',
+                builder: (context, state) => const InstanceSettingsScreen(),
               ),
             ],
           ),

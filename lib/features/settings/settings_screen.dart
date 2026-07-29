@@ -126,6 +126,19 @@ class SettingsScreen extends ConsumerWidget {
               subtitle: 'Manage libraries, uploads, and tags',
               onTap: () => context.push('/manage/library'),
             ),
+          // Instance settings — only when me.permissions.settings (or superuser).
+          if (ref
+              .watch(meUserProvider)
+              .maybeWhen(
+                data: (me) => me.canManageSettings,
+                orElse: () => false,
+              ))
+            SettingsActionTile(
+              icon: Icons.tune_rounded,
+              title: 'Instance settings',
+              subtitle: 'Edit pod-wide Funkwhale preferences',
+              onTap: () => context.push('/manage/settings'),
+            ),
 
           if (AppPlatform.supportsOfflineCache) ...[
             const SizedBox(height: 24),
