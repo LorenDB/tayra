@@ -1,6 +1,5 @@
 | Feature | Where in Funkwhale | Escape hatch | Notes |
 |---|---|---|---|
-| Signup | `/signup` | Disable open registration; invite via admin/CLI | |
 | Password reset | `/auth/password/reset`, `/auth/password/reset/confirm` | ✅ Branded Tayra UI (request + confirm from email link) | Email confirm still out of band |
 | Email confirm | `/auth/email/confirm` | Email links still work if server sends them; no branded Tayra page | May need minimal static pages later |
 | User profiles / activity | `/@username`, profile activity | N/A for private pods | Nice-to-have |
@@ -11,6 +10,7 @@
 
 | Feature | Where | Resolution |
 |---|---|---|
+| ✅ Signup | `/signup` | Branded Tayra form; `POST /api/v1/auth/registration/` with optional invitation; `?invitation=` deep links; success → sign-in. Invite creation stays admin/CLI; email confirm deferred. |
 | ✅ User management UI | `/manage/users` | Permission-gated list/detail (`/manage/users`, `/manage/users/:id`) + invitations (`/manage/users/invitations`). Settings entry when `me.permissions.settings`/superuser. PATCH name, is_active, upload_quota, permissions; staff/superuser confirm; self-deactivation double-confirm. Invitation create (empty POST), copy, delete via `invitations/action/`. |
 | ✅ Instance settings | `/manage/settings` | Permission-gated section-grouped prefs UI; `GET /api/v1/instance/admin/settings/` + `POST …/bulk/`; bool/string/int/choice/multi-choice editable; file/complex read-only. Gated on `me.permissions.settings`. |
 | ✅ Channels admin | `/manage/library/channels` | Permission-gated list/detail/delete under Library admin; `GET/DELETE /api/v1/manage/channels/`, search + infinite scroll, stats on detail. Reuses `canManageLibrary`. |

@@ -180,11 +180,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                       : Icons.visibility_off_outlined,
                                   color: AppTheme.onBackgroundSubtle,
                                 ),
-                                onPressed:
-                                    () => setState(
-                                      () =>
-                                          _obscurePassword = !_obscurePassword,
-                                    ),
+                                onPressed: () => setState(
+                                  () => _obscurePassword = !_obscurePassword,
+                                ),
                               ),
                             ),
                             style: const TextStyle(
@@ -212,61 +210,77 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed:
-                            authState.isLoading ? null : _submitPasswordLogin,
-                        child:
-                            authState.isLoading
-                                ? const SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Colors.white,
-                                  ),
-                                )
-                                : const Text('Sign In'),
+                        onPressed: authState.isLoading
+                            ? null
+                            : _submitPasswordLogin,
+                        child: authState.isLoading
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const Text('Sign In'),
                       ),
                     ),
                     const SizedBox(height: 12),
                     TextButton(
-                      onPressed:
-                          authState.isLoading
-                              ? null
-                              : () {
-                                final server =
-                                    _hardcodedPod
-                                        ? (AppPlatform.hardcodedPodUrl ?? '')
-                                        : _serverController.text.trim();
-                                final uri = Uri(
-                                  path: '/auth/password/reset',
-                                  queryParameters:
-                                      server.isEmpty
-                                          ? null
-                                          : {'server': server},
-                                );
-                                context.go(uri.toString());
-                              },
+                      onPressed: authState.isLoading
+                          ? null
+                          : () {
+                              final server = _hardcodedPod
+                                  ? (AppPlatform.hardcodedPodUrl ?? '')
+                                  : _serverController.text.trim();
+                              final uri = Uri(
+                                path: '/auth/password/reset',
+                                queryParameters: server.isEmpty
+                                    ? null
+                                    : {'server': server},
+                              );
+                              context.go(uri.toString());
+                            },
                       child: const Text(
                         'Forgot password?',
                         style: TextStyle(color: AppTheme.onBackgroundMuted),
                       ),
                     ),
+                    TextButton(
+                      onPressed: authState.isLoading
+                          ? null
+                          : () {
+                              final server = _hardcodedPod
+                                  ? (AppPlatform.hardcodedPodUrl ?? '')
+                                  : _serverController.text.trim();
+                              final uri = Uri(
+                                path: '/signup',
+                                queryParameters: server.isEmpty
+                                    ? null
+                                    : {'server': server},
+                              );
+                              context.go(uri.toString());
+                            },
+                      child: const Text(
+                        'Create account',
+                        style: TextStyle(color: AppTheme.onBackgroundMuted),
+                      ),
+                    ),
                     if (!_hardcodedPod) ...[
                       TextButton(
-                        onPressed:
-                            authState.isLoading
-                                ? null
-                                : () async {
-                                  await ref
-                                      .read(authStateProvider.notifier)
-                                      .registerApp(_serverController.text);
-                                  if (!mounted) return;
-                                  final s = ref.read(authStateProvider);
-                                  if (s.clientId != null && s.error == null) {
-                                    setState(() => _step = 1);
-                                    _openAuthUrl();
-                                  }
-                                },
+                        onPressed: authState.isLoading
+                            ? null
+                            : () async {
+                                await ref
+                                    .read(authStateProvider.notifier)
+                                    .registerApp(_serverController.text);
+                                if (!mounted) return;
+                                final s = ref.read(authStateProvider);
+                                if (s.clientId != null && s.error == null) {
+                                  setState(() => _step = 1);
+                                  _openAuthUrl();
+                                }
+                              },
                         child: const Text(
                           'Use browser authorization instead',
                           style: TextStyle(color: AppTheme.onBackgroundMuted),
@@ -349,17 +363,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: authState.isLoading ? null : _submitCode,
-                        child:
-                            authState.isLoading
-                                ? const SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Colors.white,
-                                  ),
-                                )
-                                : const Text('Sign In'),
+                        child: authState.isLoading
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const Text('Sign In'),
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -381,10 +394,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _submitPasswordLogin() async {
-    final server =
-        _hardcodedPod
-            ? (AppPlatform.hardcodedPodUrl ?? '')
-            : _serverController.text.trim();
+    final server = _hardcodedPod
+        ? (AppPlatform.hardcodedPodUrl ?? '')
+        : _serverController.text.trim();
     final username = _usernameController.text.trim();
     final password = _passwordController.text;
     if (server.isEmpty || username.isEmpty || password.isEmpty) return;

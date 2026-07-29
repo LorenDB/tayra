@@ -5,10 +5,12 @@ import 'package:tayra/core/router/app_router.dart';
 
 void main() {
   group('isPublicAuthPath', () {
-    test('login splash authorize', () {
+    test('login splash authorize signup', () {
       expect(isPublicAuthPath('/login'), isTrue);
       expect(isPublicAuthPath('/splash'), isTrue);
       expect(isPublicAuthPath('/authorize'), isTrue);
+      expect(isPublicAuthPath('/signup'), isTrue);
+      expect(isPublicAuthPath('/signup/'), isTrue);
     });
 
     test('password reset request and confirm', () {
@@ -44,18 +46,16 @@ void main() {
           GoRoute(
             path: '/auth/password/reset/confirm/:uid/:token',
             parentNavigatorKey: rootKey,
-            builder:
-                (_, state) => Text(
-                  'path:${state.pathParameters['uid']}:${state.pathParameters['token']}',
-                ),
+            builder: (_, state) => Text(
+              'path:${state.pathParameters['uid']}:${state.pathParameters['token']}',
+            ),
           ),
           GoRoute(
             path: '/auth/password/reset/confirm',
             parentNavigatorKey: rootKey,
-            builder:
-                (_, state) => Text(
-                  'query:${state.uri.queryParameters['uid']}:${state.uri.queryParameters['token']}',
-                ),
+            builder: (_, state) => Text(
+              'query:${state.uri.queryParameters['uid']}:${state.uri.queryParameters['token']}',
+            ),
           ),
           GoRoute(
             path: '/auth/password/reset',

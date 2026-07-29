@@ -7,6 +7,7 @@ import 'package:tayra/features/auth/presentation/login_screen.dart';
 import 'package:tayra/features/auth/presentation/oauth_authorize_screen.dart';
 import 'package:tayra/features/auth/presentation/password_reset_confirm_screen.dart';
 import 'package:tayra/features/auth/presentation/password_reset_request_screen.dart';
+import 'package:tayra/features/auth/presentation/signup_screen.dart';
 import 'package:tayra/features/home/home_screen.dart';
 import 'package:tayra/features/browse/browse_screen.dart';
 import 'package:tayra/features/radios/radios_screen.dart';
@@ -103,9 +104,12 @@ final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 /// Paths that must work while logged out (and during auth restore).
 ///
 /// Email password-reset links land on `/auth/password/reset/confirm?…`.
+/// Invite deep links land on `/signup?invitation=…`.
 bool isPublicAuthPath(String path) {
   final p = _normalizePath(path);
-  if (p == '/login' || p == '/splash' || p == '/authorize') return true;
+  if (p == '/login' || p == '/splash' || p == '/authorize' || p == '/signup') {
+    return true;
+  }
   if (p == '/auth/password/reset' || p == '/auth/password/reset/confirm') {
     return true;
   }
@@ -261,6 +265,20 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: 'login',
         parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) => const LoginScreen(),
+      ),
+      // Account registration (must stay outside ShellRoute).
+      // Invite deep links: /signup?invitation=CODE
+      GoRoute(
+        path: '/signup',
+        name: 'signup',
+        parentNavigatorKey: rootNavigatorKey,
+        builder: (context, state) {
+          final q = state.uri.queryParameters;
+          return SignupScreen(
+            initialServerUrl: q['server'],
+            initialInvitation: q['invitation'],
+          );
+        },
       ),
       // Password reset deep links (must stay outside ShellRoute).
       // Email template: {url}/auth/password/reset/confirm?uid=…&token=…
