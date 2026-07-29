@@ -33,13 +33,21 @@ class _ManageInvitationsScreenState
   bool _loading = true;
   bool _loadingMore = false;
   bool _creating = false;
+  bool _loadStarted = false;
   String? _error;
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    WidgetsBinding.instance.addPostFrameCallback((_) => _load(reset: true));
+  }
+
+  void _ensureLoaded(bool allowed) {
+    if (!allowed || _loadStarted) return;
+    _loadStarted = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _load(reset: true);
+    });
   }
 
   @override
@@ -211,6 +219,8 @@ class _ManageInvitationsScreenState
   @override
   Widget build(BuildContext context) {
     final canManage = ref.watch(canManageUsersProvider);
+    final allowed = canManage.valueOrNull == true;
+    _ensureLoaded(allowed);
 
     return Scaffold(
       backgroundColor: AppTheme.background,
@@ -219,26 +229,29 @@ class _ManageInvitationsScreenState
         backgroundColor: AppTheme.background,
         leading: const AppBackButton(fallbackLocation: '/manage/users'),
         actions: [
-          IconButton(
-            tooltip: 'Create invitation',
-            onPressed: _creating ? null : _createInvitation,
-            icon: _creating
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : const Icon(Icons.add_rounded),
-          ),
+          if (allowed)
+            IconButton(
+              tooltip: 'Create invitation',
+              onPressed: _creating ? null : _createInvitation,
+              icon: _creating
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.add_rounded),
+            ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _creating ? null : _createInvitation,
-        backgroundColor: AppTheme.primary,
-        foregroundColor: Colors.white,
-        icon: const Icon(Icons.add_rounded),
-        label: const Text('New invitation'),
-      ),
+      floatingActionButton: allowed
+          ? FloatingActionButton.extended(
+              onPressed: _creating ? null : _createInvitation,
+              backgroundColor: AppTheme.primary,
+              foregroundColor: Colors.white,
+              icon: const Icon(Icons.add_rounded),
+              label: const Text('New invitation'),
+            )
+          : null,
       body: canManage.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, _) => UserAdminDeniedBody(

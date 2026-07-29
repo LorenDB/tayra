@@ -30,6 +30,7 @@ class _ManageUsersScreenState extends ConsumerState<ManageUsersScreen> {
   int _count = 0;
   bool _loading = true;
   bool _loadingMore = false;
+  bool _loadStarted = false;
   String? _error;
   String _query = '';
 
@@ -37,7 +38,14 @@ class _ManageUsersScreenState extends ConsumerState<ManageUsersScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    WidgetsBinding.instance.addPostFrameCallback((_) => _load(reset: true));
+  }
+
+  void _ensureLoaded(bool allowed) {
+    if (!allowed || _loadStarted) return;
+    _loadStarted = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _load(reset: true);
+    });
   }
 
   @override
@@ -121,6 +129,8 @@ class _ManageUsersScreenState extends ConsumerState<ManageUsersScreen> {
   @override
   Widget build(BuildContext context) {
     final canManage = ref.watch(canManageUsersProvider);
+    final allowed = canManage.valueOrNull == true;
+    _ensureLoaded(allowed);
 
     return Scaffold(
       backgroundColor: AppTheme.background,
@@ -129,11 +139,12 @@ class _ManageUsersScreenState extends ConsumerState<ManageUsersScreen> {
         backgroundColor: AppTheme.background,
         leading: const AppBackButton(fallbackLocation: '/settings'),
         actions: [
-          IconButton(
-            tooltip: 'Invitations',
-            onPressed: () => context.push('/manage/users/invitations'),
-            icon: const Icon(Icons.mail_outline_rounded),
-          ),
+          if (allowed)
+            IconButton(
+              tooltip: 'Invitations',
+              onPressed: () => context.push('/manage/users/invitations'),
+              icon: const Icon(Icons.mail_outline_rounded),
+            ),
         ],
       ),
       body: canManage.when(
