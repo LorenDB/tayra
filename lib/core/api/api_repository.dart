@@ -1401,4 +1401,40 @@ class FunkwhaleApi {
       '$_baseUrl/api/v1/manage/channels/${Uri.encodeComponent(composite)}/',
     );
   }
+
+  // ── Instance admin settings (global preferences) ────────────────────
+  // Requires `instance:settings` scope (settings permission / superuser)
+  // via first-party Tayra OAuth. Endpoints under `/api/v1/instance/admin/`.
+
+  /// GET `/api/v1/instance/admin/settings/` — all global preferences.
+  Future<List<GlobalPreference>> getAdminSettings() async {
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/instance/admin/settings/',
+    );
+    final data = response.data;
+    if (data is! List) return const [];
+    return data
+        .whereType<Map>()
+        .map((e) => GlobalPreference.fromJson(Map<String, dynamic>.from(e)))
+        .toList();
+  }
+
+  /// POST `/api/v1/instance/admin/settings/bulk/` — update many prefs.
+  ///
+  /// Payload is `{ identifier: value, ... }`. Returns the updated preference
+  /// rows. Throws on 400 validation errors.
+  Future<List<GlobalPreference>> bulkUpdateAdminSettings(
+    Map<String, dynamic> updates,
+  ) async {
+    final response = await _dio.post(
+      '$_baseUrl/api/v1/instance/admin/settings/bulk/',
+      data: updates,
+    );
+    final data = response.data;
+    if (data is! List) return const [];
+    return data
+        .whereType<Map>()
+        .map((e) => GlobalPreference.fromJson(Map<String, dynamic>.from(e)))
+        .toList();
+  }
 }
