@@ -24,6 +24,12 @@ void main() {
       );
     });
 
+    test('email confirm', () {
+      expect(isPublicAuthPath('/auth/email/confirm'), isTrue);
+      expect(isPublicAuthPath('/auth/email/confirm/'), isTrue);
+      expect(isPublicAuthPath('/auth/email/confirm/abc-def-key'), isTrue);
+    });
+
     test('non-auth paths', () {
       expect(isPublicAuthPath('/'), isFalse);
       expect(isPublicAuthPath('/settings'), isFalse);
@@ -61,6 +67,18 @@ void main() {
             path: '/auth/password/reset',
             parentNavigatorKey: rootKey,
             builder: (_, __) => const Text('request'),
+          ),
+          GoRoute(
+            path: '/auth/email/confirm/:key',
+            parentNavigatorKey: rootKey,
+            builder: (_, state) =>
+                Text('email-path:${state.pathParameters['key']}'),
+          ),
+          GoRoute(
+            path: '/auth/email/confirm',
+            parentNavigatorKey: rootKey,
+            builder: (_, state) =>
+                Text('email-query:${state.uri.queryParameters['key']}'),
           ),
           ShellRoute(
             builder: (_, __, child) => child,
@@ -117,6 +135,31 @@ void main() {
       await tester.pumpWidget(MaterialApp.router(routerConfig: router));
       await tester.pumpAndSettle();
       expect(find.text('request'), findsOneWidget);
+    });
+
+    testWidgets('email confirm query-param link (primary)', (tester) async {
+      final router = buildRouter(
+        initial: '/auth/email/confirm?key=abc-def-key',
+      );
+      await tester.pumpWidget(MaterialApp.router(routerConfig: router));
+      await tester.pumpAndSettle();
+      expect(find.text('email-query:abc-def-key'), findsOneWidget);
+    });
+
+    testWidgets('email confirm with trailing slash', (tester) async {
+      final router = buildRouter(
+        initial: '/auth/email/confirm/?key=abc-def-key',
+      );
+      await tester.pumpWidget(MaterialApp.router(routerConfig: router));
+      await tester.pumpAndSettle();
+      expect(find.text('email-query:abc-def-key'), findsOneWidget);
+    });
+
+    testWidgets('email confirm path-param form', (tester) async {
+      final router = buildRouter(initial: '/auth/email/confirm/abc-def-key');
+      await tester.pumpWidget(MaterialApp.router(routerConfig: router));
+      await tester.pumpAndSettle();
+      expect(find.text('email-path:abc-def-key'), findsOneWidget);
     });
   });
 }

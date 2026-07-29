@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
+import 'package:tayra/features/auth/presentation/email_confirm_screen.dart';
 import 'package:tayra/features/auth/presentation/login_screen.dart';
 import 'package:tayra/features/auth/presentation/oauth_authorize_screen.dart';
 import 'package:tayra/features/auth/presentation/password_reset_confirm_screen.dart';
@@ -104,6 +105,7 @@ final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 /// Paths that must work while logged out (and during auth restore).
 ///
 /// Email password-reset links land on `/auth/password/reset/confirm?…`.
+/// Email verification links land on `/auth/email/confirm?key=…`.
 /// Invite deep links land on `/signup?invitation=…`.
 bool isPublicAuthPath(String path) {
   final p = _normalizePath(path);
@@ -115,6 +117,9 @@ bool isPublicAuthPath(String path) {
   }
   // Path-style confirm: /auth/password/reset/confirm/<uid>/<token>
   if (p.startsWith('/auth/password/reset/confirm/')) return true;
+  if (p == '/auth/email/confirm') return true;
+  // Path-style confirm: /auth/email/confirm/<key>
+  if (p.startsWith('/auth/email/confirm/')) return true;
   return false;
 }
 
@@ -146,6 +151,13 @@ Widget _passwordResetConfirmFromState(GoRouterState state) {
   return PasswordResetConfirmScreen(uid: uid, token: token);
 }
 
+/// Build the email-confirm screen from query and/or path params.
+Widget _emailConfirmFromState(GoRouterState state) {
+  final q = state.uri.queryParameters;
+  final key = q['key'] ?? state.pathParameters['key'] ?? '';
+  return EmailConfirmScreen(keyToken: key);
+}
+
 final appRouterProvider = Provider<GoRouter>((ref) {
   final authChangeNotifier = ref.watch(authChangeNotifierProvider);
 
@@ -158,9 +170,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     // deep link fails to match (helps diagnose deploy/stale-build issues).
     errorBuilder: (context, state) {
       final path = state.uri.path;
-      // Near-miss auth URLs → send people to the request form, not a dead end.
-      if (_normalizePath(path).startsWith('/auth/password')) {
+      // Near-miss auth URLs → send people to a useful recovery page.
+      final normalized = _normalizePath(path);
+      if (normalized.startsWith('/auth/password')) {
         return const PasswordResetRequestScreen();
+      }
+      if (normalized.startsWith('/auth/email')) {
+        return const EmailConfirmScreen(keyToken: '');
       }
       return Scaffold(
         backgroundColor: Colors.black,
@@ -246,8 +262,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         if (safe != null) return safe;
         return '/';
       }
-      // Allow finishing a reset while already signed in (rare email reopen).
-      if (isPublicAuthPath(path) && path.startsWith('/auth/password')) {
+      // Allow finishing reset/confirm while already signed in (rare email reopen).
+      if (isPublicAuthPath(path) &&
+          (path.startsWith('/auth/password') ||
+              path.startsWith('/auth/email'))) {
         return null;
       }
       return null;
@@ -302,6 +320,20 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           final server = state.uri.queryParameters['server'];
           return PasswordResetRequestScreen(initialServerUrl: server);
         },
+      ),
+      // Email verification deep links (must stay outside ShellRoute).
+      // Email template: {url}/auth/email/confirm?key=…
+      GoRoute(
+        path: '/auth/email/confirm/:key',
+        name: 'email_confirm_path',
+        parentNavigatorKey: rootNavigatorKey,
+        builder: (context, state) => _emailConfirmFromState(state),
+      ),
+      GoRoute(
+        path: '/auth/email/confirm',
+        name: 'email_confirm',
+        parentNavigatorKey: rootNavigatorKey,
+        builder: (context, state) => _emailConfirmFromState(state),
       ),
       // Third-party OAuth consent (outside the main shell).
       GoRoute(

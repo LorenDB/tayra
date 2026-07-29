@@ -15,7 +15,7 @@ relevant.
 | Online-only | No offline audio cache, download queue, or local library DB on web |
 | Single pod | `FUNKWHALE_URL` is compile-time; no multi-server picker |
 | Limited admin UI | Library admin (libraries, uploads, tags, channels) when `permissions.library`; instance settings + user management when `permissions.settings`; moderation stays out |
-| No registration UI | Email confirm stays out of band; signup + password reset are branded Tayra pages |
+| Registration UI | Signup, password reset, and email confirm are branded Tayra pages |
 | Hard fork | `../funkwhale` on `tayra_front`: Vue removed; Tayra is the front image |
 
 ## Stock Funkwhale Vue surfaces not in Tayra web
@@ -23,7 +23,6 @@ relevant.
 | Feature | Where in Funkwhale | Escape hatch | Notes |
 |---|---|---|---|
 | Moderation (reports, domains, accounts, requests) | `/manage/moderation/*` | Django admin + moderator docs | Rare for small/private pods |
-| Email confirm | `/auth/email/confirm` | Email links still work if server sends them; no branded Tayra page | Signup + password reset are implemented in Tayra |
 | Plugins settings | `/settings/plugins` | Server-side plugin config | |
 | Remote content / federation browser | `/content/remote` | Federation still runs server-side | No follow/scan UI in Tayra |
 | Content libraries management | `/content/libraries` | Upload screen covers basic upload; not full library manager | |
@@ -51,6 +50,8 @@ relevant.
 | Feature | Where | Notes |
 |---|---|---|
 | Signup | `/signup` | Branded form (username, email, password, confirm, optional invitation); `POST /api/v1/auth/registration/`; invite deep links `?invitation=`; success → `/login`. Invite creation stays admin/CLI. |
+| Email confirm | `/auth/email/confirm` | Branded page; auto-POSTs `key` to `/api/v1/auth/registration/verify-email/`. Primary link form: `?key=…` (also accepts path `/:key`). |
+| Password reset | `/auth/password/reset`, `/auth/password/reset/confirm` | Branded request + confirm screens; email links use `?uid=&token=`. |
 | User management | `/manage/users` | List/detail + invitations; PATCH name/active/quota/permissions; gated on `me.permissions.settings` / superuser. |
 | Instance settings | `/manage/settings` | Section-grouped global prefs; `GET/POST bulk` admin settings API; bool/string/int/choice/multi-choice; file/complex read-only; gated on `me.permissions.settings`. |
 | Channels admin | `/manage/library/channels` | List/detail/delete under Library admin; `GET/DELETE /api/v1/manage/channels/`; search, infinite scroll, stats; gated on `me.permissions.library`. |
