@@ -190,7 +190,13 @@ class AttachmentViewSet(
         return redirect
 
     def perform_create(self, serializer):
-        return serializer.save(actor=self.request.user.actor)
+        user = self.request.user
+        actor = getattr(user, "actor", None)
+        # Cover assignment later filters by the request user's actor; ensure one
+        # exists so the uploaded attachment is "owned" and usable as a cover.
+        if actor is None and user.is_authenticated:
+            actor = user.create_actor()
+        return serializer.save(actor=actor)
 
     def perform_destroy(self, instance):
         if instance.actor is None or instance.actor != self.request.user.actor:

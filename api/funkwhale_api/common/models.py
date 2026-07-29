@@ -1,3 +1,4 @@
+import logging
 import mimetypes
 import uuid
 
@@ -19,6 +20,8 @@ from versatileimagefield.image_warmer import VersatileImageFieldWarmer
 from funkwhale_api.federation import utils as federation_utils
 
 from . import utils, validators
+
+logger = logging.getLogger(__name__)
 
 CONTENT_TEXT_MAX_LENGTH = 5000
 CONTENT_TEXT_SUPPORTED_TYPES = [
@@ -220,7 +223,7 @@ class Attachment(models.Model):
         validators=[
             validators.ImageDimensionsValidator(min_width=50, min_height=50),
             validators.FileValidator(
-                allowed_extensions=["png", "jpg", "jpeg"],
+                allowed_extensions=["png", "jpg", "jpeg", "webp"],
                 max_size=1024 * 1024 * 5,
             ),
         ],
@@ -326,12 +329,20 @@ class Content(models.Model):
 def warm_attachment_thumbnails(sender, instance, **kwargs):
     if not instance.file or not settings.CREATE_IMAGE_THUMBNAILS:
         return
-    warmer = VersatileImageFieldWarmer(
-        instance_or_queryset=instance,
-        rendition_key_set="attachment_square",
-        image_attr="file",
-    )
-    num_created, failed_to_create = warmer.warm()
+    try:
+        warmer = VersatileImageFieldWarmer(
+            instance_or_queryset=instance,
+            rendition_key_set="attachment_square",
+            image_attr="file",
+        )
+        warmer.warm()
+    except Exception:
+        # Thumbnail generation must never fail the upload itself. Crops can be
+        # rebuilt later via common scripts; a missing crop is preferable to a
+        # 500 on POST /attachments/.
+        logger.exception(
+            "Failed to warm thumbnails for attachment %s", instance.pk
+        )
 
 
 @receiver(models.signals.post_save, sender=Mutation)

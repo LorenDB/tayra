@@ -1,5 +1,6 @@
 import collections
 import io
+import mimetypes
 import os
 
 import PIL
@@ -219,25 +220,84 @@ def track_fields_for_update(*fields):
     return decorator
 
 
+def _image_save_format(file_name, image):
+    """
+    Resolve a Pillow save format from the upload filename, with safe fallbacks.
+
+    Pillow's EXTENSION map is incomplete for some real-world names (e.g. .jfif,
+    missing extension). Falling back to the decoded image's format (or PNG)
+    avoids KeyError 500s during EXIF stripping.
+    """
+    ext = os.path.splitext(file_name or "")[-1].lower()
+    if ext in PIL.Image.EXTENSION:
+        return PIL.Image.EXTENSION[ext]
+    if image.format:
+        return image.format
+    # Sensible default for re-encoding when neither source is available.
+    return "PNG"
+
+
+def _prepare_image_for_format(image, fmt):
+    """Convert pixel mode so Pillow can save to the target format."""
+    fmt = (fmt or "").upper()
+    if fmt in ("JPEG", "JPG") and image.mode not in ("RGB", "L"):
+        # JPEG has no alpha; flatten onto white.
+        if image.mode in ("RGBA", "LA") or (
+            image.mode == "P" and "transparency" in image.info
+        ):
+            background = PIL.Image.new("RGB", image.size, (255, 255, 255))
+            rgba = image.convert("RGBA")
+            background.paste(rgba, mask=rgba.split()[-1])
+            return background
+        return image.convert("RGB")
+    if fmt == "WEBP" and image.mode not in ("RGB", "RGBA", "L"):
+        return image.convert("RGBA")
+    if fmt == "PNG" and image.mode == "P":
+        return image.convert("RGBA")
+    return image
+
+
 class StripExifImageField(serializers.ImageField):
     def to_internal_value(self, data):
         file_obj = super().to_internal_value(data)
 
-        image = PIL.Image.open(file_obj)
-        data = list(image.getdata())
-        image_without_exif = PIL.Image.new(image.mode, image.size)
-        image_without_exif.putdata(data)
+        # ImageField validation may leave the pointer at EOF.
+        if hasattr(file_obj, "seek"):
+            file_obj.seek(0)
 
-        with io.BytesIO() as output:
-            image_without_exif.save(
-                output,
-                format=PIL.Image.EXTENSION[os.path.splitext(file_obj.name)[-1].lower()],
-                quality=100,
-            )
-            content = output.getvalue()
+        with PIL.Image.open(file_obj) as image:
+            image.load()
+            # Re-encode without EXIF / ancillary metadata.
+            fmt = _image_save_format(getattr(file_obj, "name", None), image)
+            cleaned = _prepare_image_for_format(image, fmt)
+            # Copy pixels into a new image so EXIF is not carried over.
+            if cleaned.mode in ("RGB", "L", "RGBA"):
+                pixels = list(cleaned.getdata())
+                image_without_exif = PIL.Image.new(cleaned.mode, cleaned.size)
+                image_without_exif.putdata(pixels)
+            else:
+                image_without_exif = cleaned.convert("RGBA")
+                pixels = list(image_without_exif.getdata())
+                rebuilt = PIL.Image.new("RGBA", image_without_exif.size)
+                rebuilt.putdata(pixels)
+                image_without_exif = rebuilt
+                fmt = fmt if fmt != "JPEG" else "PNG"
 
+            with io.BytesIO() as output:
+                save_kwargs = {"format": fmt}
+                if fmt.upper() in ("JPEG", "JPG", "WEBP"):
+                    save_kwargs["quality"] = 95
+                if fmt.upper() in ("JPEG", "JPG"):
+                    # Explicitly drop EXIF payload when re-saving JPEG.
+                    save_kwargs["exif"] = b""
+                image_without_exif.save(output, **save_kwargs)
+                content = output.getvalue()
+
+        content_type = getattr(file_obj, "content_type", None) or mimetypes.guess_type(
+            file_obj.name or ""
+        )[0]
         return SimpleUploadedFile(
-            file_obj.name, content, content_type=file_obj.content_type
+            file_obj.name, content, content_type=content_type
         )
 
 
