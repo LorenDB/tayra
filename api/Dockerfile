@@ -1,15 +1,20 @@
 FROM alpine:3.17 as requirements
 
-# We need this additional step to avoid having poetrys deps interacting with our
-# dependencies. This is only required until alpine 3.16 is released, since this
-# allows us to install poetry as package.
+# Isolate poetry from runtime deps. Export only — pip installs the real
+# packages in the builder stage.
+#
+# poetry.lock is generated with Poetry 2.x (lock-version 2.1). Alpine 3.17
+# only ships Poetry 1.2.2, which cannot read that lock format. Install a
+# matching Poetry into its own venv (system pip conflicts with apk distutils
+# packages). poetry export lives in poetry-plugin-export as of Poetry 2.0.
 
 RUN set -eux; \
   apk add --no-cache \
-  poetry \
-  py3-cryptography \
   py3-pip \
-  python3
+  python3; \
+  python3 -m venv /opt/poetry; \
+  /opt/poetry/bin/pip install --no-cache-dir "poetry==2.2.1" "poetry-plugin-export"; \
+  ln -s /opt/poetry/bin/poetry /usr/local/bin/poetry
 
 COPY pyproject.toml poetry.lock /
 RUN set -eux; \
