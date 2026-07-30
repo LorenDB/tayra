@@ -13,6 +13,8 @@ urlpatterns = [
     url(r"^users/logout/?$", views.logout, name="logout"),
     # First-party Tayra password → OAuth tokens
     url(r"^users/token/?$", views.token_login, name="token_login"),
+    # Complete password login after TOTP challenge
+    url(r"^users/token/2fa/?$", views.token_login_2fa, name="token_login_2fa"),
     # OIDC SSO
     url(r"^users/auth-methods/?$", oidc_views.auth_methods, name="auth_methods"),
     url(r"^users/oidc/login/?$", oidc_views.oidc_login, name="oidc_login"),

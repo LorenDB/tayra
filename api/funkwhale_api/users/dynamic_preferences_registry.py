@@ -148,3 +148,17 @@ class OidcAutoCreate(types.BooleanPreference):
         "existing users can sign in with SSO. Can also be set with "
         "OIDC_AUTO_CREATE."
     )
+
+
+@global_preferences_registry.register
+class Force2fa(types.BooleanPreference):
+    show_in_api = True
+    section = users
+    name = "force_2fa"
+    default = False
+    verbose_name = "Require two-factor authentication (TOTP)"
+    help_text = (
+        "When enabled, all users who sign in with a password must configure "
+        "an authenticator app (TOTP). SSO-only accounts (no local password) "
+        "are exempt. Users cannot disable 2FA while this setting is on."
+    )

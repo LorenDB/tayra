@@ -86,6 +86,12 @@ class AuthState {
   /// on stream URLs so browser media elements can authenticate without headers.
   final String? listenToken;
 
+  /// Short-lived MFA challenge token when password login requires TOTP.
+  final String? pendingMfaToken;
+
+  /// Instance requires this password user to configure TOTP after login.
+  final bool totpSetupRequired;
+
   const AuthState({
     this.serverUrl,
     this.accessToken,
@@ -97,6 +103,8 @@ class AuthState {
     this.error,
     this.pendingServerUrl,
     this.listenToken,
+    this.pendingMfaToken,
+    this.totpSetupRequired = false,
   });
 
   bool get isAuthenticated => accessToken != null && serverUrl != null;
@@ -104,6 +112,9 @@ class AuthState {
   /// True when the user was automatically logged out and still needs to
   /// re-authenticate (as opposed to having deliberately logged out).
   bool get wasAutoLoggedOut => pendingServerUrl != null;
+
+  /// Password verified; waiting for authenticator / recovery code.
+  bool get needsTotp => pendingMfaToken != null && !isAuthenticated;
 
   // Sentinel used by copyWith so that passing error: null explicitly clears
   // the error, while omitting the parameter preserves the current error.
@@ -122,6 +133,9 @@ class AuthState {
     bool clearPendingServerUrl = false,
     String? listenToken,
     bool clearListenToken = false,
+    String? pendingMfaToken,
+    bool clearPendingMfaToken = false,
+    bool? totpSetupRequired,
   }) {
     return AuthState(
       serverUrl: serverUrl ?? this.serverUrl,
@@ -137,6 +151,11 @@ class AuthState {
               ? null
               : (pendingServerUrl ?? this.pendingServerUrl),
       listenToken: clearListenToken ? null : (listenToken ?? this.listenToken),
+      pendingMfaToken:
+          clearPendingMfaToken
+              ? null
+              : (pendingMfaToken ?? this.pendingMfaToken),
+      totpSetupRequired: totpSetupRequired ?? this.totpSetupRequired,
     );
   }
 }
@@ -153,12 +172,14 @@ class AuthChangeNotifier extends ChangeNotifier {
   void updateState(AuthState newState) {
     final wasAuthenticated = _state.isAuthenticated;
     final wasCheckingAuth = _state.isCheckingAuth;
+    final wasTotpSetup = _state.totpSetupRequired;
     _state = newState;
 
     // Notify listeners when authentication status or checking state changes
     // (isCheckingAuth changes trigger router redirects away from the splash screen)
     if (wasAuthenticated != newState.isAuthenticated ||
-        wasCheckingAuth != newState.isCheckingAuth) {
+        wasCheckingAuth != newState.isCheckingAuth ||
+        wasTotpSetup != newState.totpSetupRequired) {
       notifyListeners();
     }
   }
@@ -246,9 +267,10 @@ class AuthNotifier extends Notifier<AuthState> {
   }
 
   /// Refresh the scoped listen token used for `?token=` stream URLs (web).
+  ///
+  /// Also refreshes [AuthState.totpSetupRequired] from `/users/me/`.
   Future<void> ensureListenToken() async {
     if (!state.isAuthenticated) return;
-    if (state.listenToken != null && state.listenToken!.isNotEmpty) return;
     try {
       final response = await _dio.get(
         '${state.serverUrl}/api/v1/users/me/',
@@ -257,16 +279,20 @@ class AuthNotifier extends Notifier<AuthState> {
         ),
       );
       final data = response.data;
+      if (data is! Map) return;
+
       String? listen;
-      if (data is Map) {
-        final tokens = data['tokens'];
-        if (tokens is Map) {
-          listen = tokens['listen'] as String?;
-        }
+      final tokens = data['tokens'];
+      if (tokens is Map) {
+        listen = tokens['listen'] as String?;
       }
+      final totpRequired = data['totp_required'] == true;
+
+      var next = state.copyWith(totpSetupRequired: totpRequired);
       if (listen != null && listen.isNotEmpty) {
-        state = state.copyWith(listenToken: listen);
+        next = next.copyWith(listenToken: listen);
       }
+      state = next;
     } catch (_) {
       // Streaming may still work with Bearer headers on native; web needs this.
     }
@@ -450,6 +476,7 @@ class AuthNotifier extends Notifier<AuthState> {
         listenToken: payload['listen_token'] as String?,
         isLoading: false,
         clearPendingServerUrl: true,
+        totpSetupRequired: payload['totp_setup_required'] == true,
       );
       await _saveAuth();
       if (state.listenToken == null || state.listenToken!.isEmpty) {
@@ -501,14 +528,21 @@ class AuthNotifier extends Notifier<AuthState> {
 
   /// First-party password login (Funkwhale+Tayra fork: `POST /api/v1/users/token/`).
   ///
-  /// Returns `true` on success. On a 404 (stock Funkwhale without the endpoint),
-  /// returns `false` so the caller can fall back to the OAuth code flow.
+  /// Returns `true` on full success (tokens stored). Returns `false` on
+  /// failure **or** when TOTP is required (see [AuthState.needsTotp] /
+  /// [AuthState.pendingMfaToken]). On a 404 (stock Funkwhale without the
+  /// endpoint), returns `false` with no error so the caller can fall back
+  /// to the OAuth code flow.
   Future<bool> loginWithPassword({
     required String serverUrl,
     required String username,
     required String password,
   }) async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(
+      isLoading: true,
+      error: null,
+      clearPendingMfaToken: true,
+    );
     final url = _normalizeServerUrl(serverUrl);
 
     // On web, prefer same-origin relative URL so a mismatched baked
@@ -539,6 +573,25 @@ class AuthNotifier extends Notifier<AuthState> {
         return false;
       }
       final payload = _asJsonMap(response.data);
+
+      // TOTP second factor required after password verification.
+      if (response.statusCode == 401 &&
+          payload != null &&
+          (payload['error'] == 'totp_required' ||
+              payload['code'] == 'totp_required')) {
+        final mfa = payload['mfa_token'] as String?;
+        if (mfa != null && mfa.isNotEmpty) {
+          state = state.copyWith(
+            isLoading: false,
+            serverUrl: url,
+            pendingMfaToken: mfa,
+            error: null,
+          );
+          Analytics.track('login_totp_required');
+          return false;
+        }
+      }
+
       if (response.statusCode != 200 || payload == null) {
         // Surface the real API body in the browser console (DevTools).
         debugPrint(
@@ -548,39 +601,13 @@ class AuthNotifier extends Notifier<AuthState> {
         state = state.copyWith(
           isLoading: false,
           error: _formatLoginError(response.data, response.statusCode),
+          clearPendingMfaToken: true,
         );
         Analytics.track('login_failed');
         return false;
       }
 
-      final data = payload;
-      final accessToken = data['access_token'] as String?;
-      if (accessToken == null || accessToken.isEmpty) {
-        state = state.copyWith(
-          isLoading: false,
-          error: 'Server did not return an access token.',
-        );
-        return false;
-      }
-
-      final pendingServer = state.pendingServerUrl;
-      if (pendingServer != null && pendingServer != url) {
-        await _clearAllUserData();
-      }
-
-      state = state.copyWith(
-        serverUrl: url,
-        accessToken: accessToken,
-        refreshTokenValue: data['refresh_token'] as String?,
-        clientId: data['client_id'] as String?,
-        clientSecret: data['client_secret'] as String? ?? '',
-        listenToken: data['listen_token'] as String?,
-        isLoading: false,
-        clearPendingServerUrl: true,
-      );
-      await _saveAuth();
-      Analytics.track('login_success');
-      return true;
+      return await _applyTokenPayload(url, payload);
     } on DioException catch (e) {
       final status = e.response?.statusCode;
       if (status == 404) {
@@ -590,6 +617,7 @@ class AuthNotifier extends Notifier<AuthState> {
       state = state.copyWith(
         isLoading: false,
         error: _formatLoginError(e.response?.data, status),
+        clearPendingMfaToken: true,
       );
       Analytics.track('login_failed');
       return false;
@@ -597,10 +625,119 @@ class AuthNotifier extends Notifier<AuthState> {
       state = state.copyWith(
         isLoading: false,
         error: 'Could not connect to server. Check the URL and try again.',
+        clearPendingMfaToken: true,
       );
       Analytics.track('login_failed');
       return false;
     }
+  }
+
+  /// Complete password login after TOTP challenge (`POST .../users/token/2fa/`).
+  Future<bool> completeTotpLogin({required String totpCode}) async {
+    final mfaToken = state.pendingMfaToken;
+    final url = state.serverUrl;
+    if (mfaToken == null || url == null) {
+      state = state.copyWith(
+        error: 'Two-factor challenge expired. Sign in again.',
+      );
+      return false;
+    }
+
+    state = state.copyWith(isLoading: true, error: null);
+    final endpoint =
+        kIsWeb ? '/api/v1/users/token/2fa/' : '$url/api/v1/users/token/2fa/';
+
+    try {
+      final response = await _dio.post(
+        endpoint,
+        data: {'mfa_token': mfaToken, 'totp_code': totpCode.trim()},
+        options: Options(
+          contentType: Headers.jsonContentType,
+          headers: {
+            'Accept': 'application/json',
+            Headers.contentTypeHeader: Headers.jsonContentType,
+          },
+          validateStatus: (s) => s != null && s < 500,
+          responseType: ResponseType.json,
+        ),
+      );
+      final payload = _asJsonMap(response.data);
+      if (response.statusCode != 200 || payload == null) {
+        state = state.copyWith(
+          isLoading: false,
+          error: _formatLoginError(response.data, response.statusCode),
+        );
+        Analytics.track('login_totp_failed');
+        return false;
+      }
+      final ok = await _applyTokenPayload(url, payload);
+      if (ok) Analytics.track('login_totp_success');
+      return ok;
+    } on DioException catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: _formatLoginError(e.response?.data, e.response?.statusCode),
+      );
+      Analytics.track('login_totp_failed');
+      return false;
+    } catch (_) {
+      state = state.copyWith(
+        isLoading: false,
+        error: 'Could not verify the authentication code. Try again.',
+      );
+      Analytics.track('login_totp_failed');
+      return false;
+    }
+  }
+
+  /// Clear a pending MFA challenge (back to password form).
+  void cancelTotpChallenge() {
+    state = state.copyWith(
+      clearPendingMfaToken: true,
+      error: null,
+      isLoading: false,
+    );
+  }
+
+  /// Clear the force-2FA setup gate after the user finishes enrollment.
+  void clearTotpSetupRequired() {
+    state = state.copyWith(totpSetupRequired: false);
+  }
+
+  Future<bool> _applyTokenPayload(String url, Map<String, dynamic> data) async {
+    final accessToken = data['access_token'] as String?;
+    if (accessToken == null || accessToken.isEmpty) {
+      state = state.copyWith(
+        isLoading: false,
+        error: 'Server did not return an access token.',
+        clearPendingMfaToken: true,
+      );
+      return false;
+    }
+
+    final pendingServer = state.pendingServerUrl;
+    if (pendingServer != null && pendingServer != url) {
+      await _clearAllUserData();
+    }
+
+    final setupRequired = data['totp_setup_required'] == true;
+
+    state = state.copyWith(
+      serverUrl: url,
+      accessToken: accessToken,
+      refreshTokenValue: data['refresh_token'] as String?,
+      clientId: data['client_id'] as String?,
+      clientSecret: data['client_secret'] as String? ?? '',
+      listenToken: data['listen_token'] as String?,
+      isLoading: false,
+      clearPendingServerUrl: true,
+      clearPendingMfaToken: true,
+      totpSetupRequired: setupRequired,
+      error: null,
+    );
+    await _saveAuth();
+    Analytics.track('login_success');
+    return true;
   }
 
   /// Coerce Dio response data into a JSON map (web sometimes yields a String).
@@ -639,6 +776,12 @@ class AuthNotifier extends Notifier<AuthState> {
       }
       if (error == 'password_not_hashed') {
         return 'This server requires a newer Tayra client for password login.';
+      }
+      if (error == 'invalid_totp') {
+        return 'Invalid authentication or recovery code.';
+      }
+      if (error == 'invalid_mfa_token') {
+        return 'Two-factor challenge expired. Sign in again.';
       }
       final nonField = map['non_field_errors'];
       if (nonField is List && nonField.isNotEmpty) {

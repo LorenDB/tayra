@@ -145,9 +145,10 @@ class Artist {
       tags:
           (json['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ??
           const [],
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
     );
   }
 
@@ -236,9 +237,10 @@ class Album {
       tags:
           (json['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ??
           const [],
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
       tracks:
           (json['tracks'] as List<dynamic>?)
               ?.map((e) => Track.fromJson(_toMap(e)))
@@ -380,9 +382,10 @@ class Track {
               ?.map((e) => Upload.fromJson(_toMap(e)))
               .toList() ??
           const [],
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
       mbid: json['mbid'] as String?,
     );
   }
@@ -526,11 +529,12 @@ class Listening {
     return Listening(
       id: (json['id'] as num).toInt(),
       track: Track.fromJson(_toMap(trackRaw)),
-      created: json['created'] != null
-          ? DateTime.tryParse(json['created'] as String)
-          : (json['creation_date'] != null
-                ? DateTime.tryParse(json['creation_date'] as String)
-                : null),
+      created:
+          json['created'] != null
+              ? DateTime.tryParse(json['created'] as String)
+              : (json['creation_date'] != null
+                  ? DateTime.tryParse(json['creation_date'] as String)
+                  : null),
     );
   }
 }
@@ -682,12 +686,14 @@ class Playlist {
           const [],
       cover: parseCover(json['cover']),
       privacyLevel: json['privacy_level'] as String?,
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
-      modificationDate: json['modification_date'] != null
-          ? DateTime.tryParse(json['modification_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
+      modificationDate:
+          json['modification_date'] != null
+              ? DateTime.tryParse(json['modification_date'] as String)
+              : null,
     );
   }
 
@@ -727,9 +733,10 @@ class PlaylistTrack {
     return PlaylistTrack(
       track: Track.fromJson(_toMap(json['track'])),
       index: (json['index'] as num?)?.toInt(),
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
     );
   }
 }
@@ -747,9 +754,10 @@ class Favorite {
     return Favorite(
       id: (json['id'] as num).toInt(),
       track: Track.fromJson(_toMap(json['track'])),
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
     );
   }
 }
@@ -809,9 +817,10 @@ class Tag {
   factory Tag.fromJson(Map<String, dynamic> json) {
     return Tag(
       name: json['name'] as String? ?? '',
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
     );
   }
 }
@@ -898,9 +907,10 @@ class Channel {
       rssUrl: json['rss_url'] as String?,
       url: json['url'] as String?,
       downloadsCount: (json['downloads_count'] as num?)?.toInt(),
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
     );
   }
 
@@ -1013,9 +1023,10 @@ class Radio {
       id: (json['id'] as num).toInt(),
       isPublic: json['is_public'] as bool?,
       name: json['name'] as String? ?? '',
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
       user: userMap,
       config: configMap,
       description: json['description'] as String?,
@@ -1073,9 +1084,8 @@ class RadioSession {
     if (u is int) {
       userId = u;
     } else if (u is Map && u.containsKey('id')) {
-      userId = (u['id'] is int)
-          ? u['id'] as int
-          : int.tryParse(u['id'].toString());
+      userId =
+          (u['id'] is int) ? u['id'] as int : int.tryParse(u['id'].toString());
     }
 
     int? custom;
@@ -1095,9 +1105,10 @@ class RadioSession {
       radioType: json['radio_type'] as String?,
       relatedObjectId: related,
       user: userId,
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
       customRadio: custom,
       config: cfg,
     );
@@ -1163,9 +1174,10 @@ class Library {
       privacyLevel: json['privacy_level'] as String? ?? 'me',
       uploadsCount: (json['uploads_count'] as num?)?.toInt() ?? 0,
       size: (json['size'] as num?)?.toInt() ?? 0,
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
     );
   }
 
@@ -1223,27 +1235,32 @@ class UploadForOwner {
     return UploadForOwner(
       uuid: json['uuid'] as String? ?? '',
       filename: json['filename'] as String?,
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
       mimetype: json['mimetype'] as String?,
-      library: json['library'] is Map<String, dynamic>
-          ? (json['library'] as Map<String, dynamic>)['uuid'] as String?
-          : json['library'] as String?,
+      library:
+          json['library'] is Map<String, dynamic>
+              ? (json['library'] as Map<String, dynamic>)['uuid'] as String?
+              : json['library'] as String?,
       importStatus: json['import_status'] as String? ?? 'pending',
-      importDetails: json['import_details'] is Map<String, dynamic>
-          ? json['import_details'] as Map<String, dynamic>
-          : {},
-      importMetadata: json['import_metadata'] is Map<String, dynamic>
-          ? json['import_metadata'] as Map<String, dynamic>
-          : null,
+      importDetails:
+          json['import_details'] is Map<String, dynamic>
+              ? json['import_details'] as Map<String, dynamic>
+              : {},
+      importMetadata:
+          json['import_metadata'] is Map<String, dynamic>
+              ? json['import_metadata'] as Map<String, dynamic>
+              : null,
       importReference: json['import_reference'] as String?,
       duration: asInt(json['duration']),
       bitrate: asInt(json['bitrate']),
       size: asInt(json['size']),
-      importDate: json['import_date'] != null
-          ? DateTime.tryParse(json['import_date'] as String)
-          : null,
+      importDate:
+          json['import_date'] != null
+              ? DateTime.tryParse(json['import_date'] as String)
+              : null,
     );
   }
 
@@ -1347,6 +1364,15 @@ class MeUser {
   /// Scoped token for `?token=` on listen URLs (browser media auth).
   final String? listenToken;
 
+  /// Whether TOTP 2FA is confirmed for this account.
+  final bool totpEnabled;
+
+  /// Whether the instance requires this password user to set up TOTP.
+  final bool totpRequired;
+
+  /// Whether the account has a local password (false for SSO-only users).
+  final bool hasUsablePassword;
+
   const MeUser({
     required this.id,
     required this.username,
@@ -1361,6 +1387,9 @@ class MeUser {
     this.isSuperuser = false,
     this.permissions = const {},
     this.listenToken,
+    this.totpEnabled = false,
+    this.totpRequired = false,
+    this.hasUsablePassword = true,
   });
 
   factory MeUser.fromJson(Map<String, dynamic> json) {
@@ -1412,13 +1441,17 @@ class MeUser {
       privacyLevel: PrivacyLevel.fromString(json['privacy_level'] as String?),
       avatar: avatar,
       summaryText: summaryText,
-      dateJoined: json['date_joined'] != null
-          ? DateTime.tryParse(json['date_joined'] as String)
-          : null,
+      dateJoined:
+          json['date_joined'] != null
+              ? DateTime.tryParse(json['date_joined'] as String)
+              : null,
       isStaff: json['is_staff'] as bool? ?? false,
       isSuperuser: json['is_superuser'] as bool? ?? false,
       permissions: permissions,
       listenToken: listenToken,
+      totpEnabled: json['totp_enabled'] == true,
+      totpRequired: json['totp_required'] == true,
+      hasUsablePassword: json['has_usable_password'] != false,
     );
   }
 
@@ -1436,6 +1469,9 @@ class MeUser {
     bool? isSuperuser,
     Map<String, bool>? permissions,
     String? listenToken,
+    bool? totpEnabled,
+    bool? totpRequired,
+    bool? hasUsablePassword,
   }) {
     return MeUser(
       id: id ?? this.id,
@@ -1451,6 +1487,9 @@ class MeUser {
       isSuperuser: isSuperuser ?? this.isSuperuser,
       permissions: permissions ?? this.permissions,
       listenToken: listenToken ?? this.listenToken,
+      totpEnabled: totpEnabled ?? this.totpEnabled,
+      totpRequired: totpRequired ?? this.totpRequired,
+      hasUsablePassword: hasUsablePassword ?? this.hasUsablePassword,
     );
   }
 
@@ -1473,6 +1512,82 @@ class MeUser {
   /// First-party Tayra OAuth grants `instance:users` / `instance:invitations`
   /// when the user holds the settings permission.
   bool get canManageUsers => permissions['settings'] == true || isSuperuser;
+}
+
+// ── TOTP 2FA ────────────────────────────────────────────────────────────
+
+/// Status from `GET /api/v1/users/me/2fa/`.
+class TotpStatus {
+  final bool enabled;
+  final bool required;
+  final bool force2fa;
+  final bool isPasswordUser;
+  final int recoveryCodesRemaining;
+
+  const TotpStatus({
+    this.enabled = false,
+    this.required = false,
+    this.force2fa = false,
+    this.isPasswordUser = true,
+    this.recoveryCodesRemaining = 0,
+  });
+
+  factory TotpStatus.fromJson(Map<String, dynamic> json) {
+    return TotpStatus(
+      enabled: json['enabled'] == true,
+      required: json['required'] == true,
+      force2fa: json['force_2fa'] == true,
+      isPasswordUser: json['is_password_user'] != false,
+      recoveryCodesRemaining:
+          (json['recovery_codes_remaining'] as num?)?.toInt() ?? 0,
+    );
+  }
+}
+
+/// Pending enrollment payload from `POST /api/v1/users/me/2fa/setup/`.
+class TotpSetup {
+  final String secret;
+  final String otpauthUri;
+  final int digits;
+  final int period;
+
+  const TotpSetup({
+    required this.secret,
+    required this.otpauthUri,
+    this.digits = 6,
+    this.period = 30,
+  });
+
+  factory TotpSetup.fromJson(Map<String, dynamic> json) {
+    return TotpSetup(
+      secret: json['secret'] as String? ?? '',
+      otpauthUri: json['otpauth_uri'] as String? ?? '',
+      digits: (json['digits'] as num?)?.toInt() ?? 6,
+      period: (json['period'] as num?)?.toInt() ?? 30,
+    );
+  }
+}
+
+/// Result of confirming TOTP setup (includes one-time recovery codes).
+class TotpConfirmResult {
+  final bool enabled;
+  final List<String> recoveryCodes;
+
+  const TotpConfirmResult({required this.enabled, required this.recoveryCodes});
+
+  factory TotpConfirmResult.fromJson(Map<String, dynamic> json) {
+    final raw = json['recovery_codes'];
+    final codes = <String>[];
+    if (raw is List) {
+      for (final c in raw) {
+        if (c != null) codes.add(c.toString());
+      }
+    }
+    return TotpConfirmResult(
+      enabled: json['enabled'] != false,
+      recoveryCodes: codes,
+    );
+  }
 }
 
 // ── Instance admin settings (global preferences) ────────────────────────
@@ -1783,9 +1898,10 @@ class ManageLibrary {
       description: json['description'] as String?,
       domain: json['domain'] as String?,
       isLocal: json['is_local'] as bool? ?? false,
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
       privacyLevel: json['privacy_level'] as String? ?? 'me',
       uploadsCount: (json['uploads_count'] as num?)?.toInt() ?? 0,
       followersCount: (json['followers_count'] as num?)?.toInt(),
@@ -1927,9 +2043,10 @@ class ManageUpload {
       duration: asInt(json['duration']),
       bitrate: asInt(json['bitrate']),
       size: asInt(json['size']),
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
       trackTitle: trackTitle,
       artistName: artistName,
       albumTitle: albumTitle,
@@ -1969,9 +2086,10 @@ class ManageTag {
     return ManageTag(
       id: (json['id'] as num?)?.toInt() ?? 0,
       name: json['name'] as String? ?? '',
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
       tracksCount: (json['tracks_count'] as num?)?.toInt() ?? 0,
       albumsCount: (json['albums_count'] as num?)?.toInt() ?? 0,
       artistsCount: (json['artists_count'] as num?)?.toInt() ?? 0,
@@ -2057,9 +2175,10 @@ class ManageChannel {
     return ManageChannel(
       id: (json['id'] as num?)?.toInt() ?? 0,
       uuid: json['uuid'] as String? ?? '',
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
       name: name,
       contentCategory: contentCategory,
       tracksCount: tracksCount,
@@ -2198,12 +2317,14 @@ class ManageUser {
       isActive: json['is_active'] as bool? ?? true,
       isStaff: json['is_staff'] as bool? ?? false,
       isSuperuser: json['is_superuser'] as bool? ?? false,
-      dateJoined: json['date_joined'] != null
-          ? DateTime.tryParse(json['date_joined'] as String)
-          : null,
-      lastActivity: json['last_activity'] != null
-          ? DateTime.tryParse(json['last_activity'] as String)
-          : null,
+      dateJoined:
+          json['date_joined'] != null
+              ? DateTime.tryParse(json['date_joined'] as String)
+              : null,
+      lastActivity:
+          json['last_activity'] != null
+              ? DateTime.tryParse(json['last_activity'] as String)
+              : null,
       privacyLevel: json['privacy_level'] as String? ?? 'me',
       uploadQuota: (json['upload_quota'] as num?)?.toInt(),
       permissions: permissions,
@@ -2270,12 +2391,14 @@ class ManageInvitation {
     return ManageInvitation(
       id: (json['id'] as num?)?.toInt() ?? 0,
       code: json['code'] as String?,
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
-      expirationDate: json['expiration_date'] != null
-          ? DateTime.tryParse(json['expiration_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
+      expirationDate:
+          json['expiration_date'] != null
+              ? DateTime.tryParse(json['expiration_date'] as String)
+              : null,
       ownerUsername: ownerUsername,
       invitedUsername: invitedUsername,
       usersCount: usersCount,

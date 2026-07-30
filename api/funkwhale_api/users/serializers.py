@@ -222,6 +222,9 @@ class MeSerializer(UserReadSerializer):
     quota_status = serializers.SerializerMethodField()
     summary = serializers.SerializerMethodField()
     tokens = serializers.SerializerMethodField()
+    totp_enabled = serializers.SerializerMethodField()
+    totp_required = serializers.SerializerMethodField()
+    has_usable_password = serializers.SerializerMethodField()
 
     class Meta(UserReadSerializer.Meta):
         fields = UserReadSerializer.Meta.fields + [
@@ -231,6 +234,9 @@ class MeSerializer(UserReadSerializer):
             "summary",
             "tokens",
             "settings",
+            "totp_enabled",
+            "totp_required",
+            "has_usable_password",
         ]
 
     def get_quota_status(self, o):
@@ -247,6 +253,21 @@ class MeSerializer(UserReadSerializer):
                 user_id=o.pk, user_secret=o.secret_key, scopes=["read:libraries"]
             )
         }
+
+    def get_totp_enabled(self, o):
+        from funkwhale_api.users import totp as totp_mod
+
+        return totp_mod.is_totp_enabled(o)
+
+    def get_totp_required(self, o):
+        from funkwhale_api.users import totp as totp_mod
+
+        return totp_mod.needs_totp_setup(o)
+
+    def get_has_usable_password(self, o):
+        from funkwhale_api.users import totp as totp_mod
+
+        return totp_mod.is_password_user(o)
 
 
 class PasswordResetSerializer(PRS):

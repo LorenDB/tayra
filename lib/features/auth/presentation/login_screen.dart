@@ -25,8 +25,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _codeController = TextEditingController();
+  final _totpController = TextEditingController();
 
-  /// 0 = credentials (password login), 1 = OAuth/OIDC code paste
+  /// 0 = credentials (password login), 1 = OAuth/OIDC code paste, 2 = TOTP
   int _step = 0;
   bool _initializedFromAutoLogout = false;
   bool _obscurePassword = true;
@@ -74,6 +75,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     _usernameController.dispose();
     _passwordController.dispose();
     _codeController.dispose();
+    _totpController.dispose();
     super.dispose();
   }
 
@@ -158,7 +160,106 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ],
                   const SizedBox(height: 48),
 
-                  if (_step == 0) ...[
+                  if (_step == 2) ...[
+                    // ── TOTP second factor ─────────────────────────────
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: AppTheme.surfaceContainerHigh,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        children: [
+                          const Icon(
+                            Icons.security_outlined,
+                            color: AppTheme.primary,
+                            size: 32,
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'Two-factor authentication',
+                            style: textTheme.titleMedium,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Enter the 6-digit code from your authenticator '
+                            'app, or a recovery code.',
+                            style: textTheme.bodySmall,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    TextField(
+                      controller: _totpController,
+                      autofocus: true,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.go,
+                      autocorrect: false,
+                      enableSuggestions: false,
+                      style: const TextStyle(
+                        color: AppTheme.onBackground,
+                        letterSpacing: 2,
+                        fontSize: 18,
+                      ),
+                      decoration: const InputDecoration(
+                        hintText: '123456 or recovery code',
+                        prefixIcon: Icon(
+                          Icons.pin_outlined,
+                          color: AppTheme.onBackgroundSubtle,
+                        ),
+                      ),
+                      autofillHints: const [AutofillHints.oneTimeCode],
+                      onSubmitted: (_) => _submitTotp(),
+                    ),
+                    const SizedBox(height: 16),
+                    if (authState.error != null) ...[
+                      Text(
+                        authState.error!,
+                        style: TextStyle(color: AppTheme.error, fontSize: 13),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: authState.isLoading ? null : _submitTotp,
+                        child:
+                            authState.isLoading
+                                ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                                : const Text('Verify'),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    TextButton(
+                      onPressed:
+                          authState.isLoading
+                              ? null
+                              : () {
+                                ref
+                                    .read(authStateProvider.notifier)
+                                    .cancelTotpChallenge();
+                                setState(() {
+                                  _step = 0;
+                                  _totpController.clear();
+                                });
+                              },
+                      child: const Text(
+                        'Back to password login',
+                        style: TextStyle(color: AppTheme.onBackgroundMuted),
+                      ),
+                    ),
+                  ] else if (_step == 0) ...[
                     if (authState.wasAutoLoggedOut) ...[
                       Container(
                         width: double.infinity,
@@ -534,8 +635,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       return;
     }
 
-    // Endpoint missing (stock Funkwhale) → OAuth OOB fallback.
     final authState = ref.read(authStateProvider);
+    // Password OK but TOTP required.
+    if (authState.needsTotp) {
+      setState(() {
+        _step = 2;
+        _totpController.clear();
+      });
+      return;
+    }
+
+    // Endpoint missing (stock Funkwhale) → OAuth OOB fallback.
     if (authState.error != null) return;
 
     await ref.read(authStateProvider.notifier).registerApp(server);
@@ -547,6 +657,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         _ssoOob = false;
       });
       _openAuthUrl();
+    }
+  }
+
+  Future<void> _submitTotp() async {
+    final code = _totpController.text.trim();
+    if (code.isEmpty) return;
+    final ok = await ref
+        .read(authStateProvider.notifier)
+        .completeTotpLogin(totpCode: code);
+    if (!mounted) return;
+    if (ok) {
+      Analytics.track('login_password_success');
     }
   }
 

@@ -21,6 +21,7 @@ import 'package:tayra/features/browse/album_detail_screen.dart';
 import 'package:tayra/features/browse/album_edit_screen.dart';
 import 'package:tayra/features/settings/settings_screen.dart';
 import 'package:tayra/features/settings/account_settings_screen.dart';
+import 'package:tayra/features/settings/totp_settings_screen.dart';
 import 'package:tayra/features/favorites/favorites_screen.dart';
 import 'package:tayra/features/playlists/playlists_screen.dart';
 import 'package:tayra/features/playlists/playlist_detail_screen.dart';
@@ -289,10 +290,19 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       }
 
       if (isLoginRoute) {
+        // Force 2FA setup before landing on the main app when required.
+        if (authState.totpSetupRequired) return '/auth/2fa/setup';
         final safe = safeInternalPath(fromParam);
         if (safe != null) return safe;
         return '/';
       }
+
+      // Instance requires TOTP for this password user — only allow the setup
+      // screen (and logout via settings is not needed; setup is mandatory).
+      if (authState.totpSetupRequired && path != '/auth/2fa/setup') {
+        return '/auth/2fa/setup';
+      }
+
       // Allow finishing reset/confirm while already signed in (rare email reopen).
       if (isPublicAuthPath(path) &&
           (path.startsWith('/auth/password') ||
@@ -316,6 +326,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: 'login',
         parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) => const LoginScreen(),
+      ),
+      // Mandatory TOTP enrollment when users__force_2fa is on.
+      GoRoute(
+        path: '/auth/2fa/setup',
+        name: 'totp_forced_setup',
+        parentNavigatorKey: rootNavigatorKey,
+        builder: (context, state) => const TotpSettingsScreen(mandatory: true),
       ),
       // OIDC SSO callback (must stay outside ShellRoute; public while logged out).
       GoRoute(
@@ -437,6 +454,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     path: 'account',
                     name: 'account_settings',
                     builder: (context, state) => const AccountSettingsScreen(),
+                    routes: [
+                      GoRoute(
+                        path: '2fa',
+                        name: 'totp_settings',
+                        builder: (context, state) => const TotpSettingsScreen(),
+                      ),
+                    ],
                   ),
                   GoRoute(
                     path: 'year-review-settings',

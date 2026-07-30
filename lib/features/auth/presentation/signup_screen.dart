@@ -103,7 +103,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       _done
                           ? 'Your account is ready.'
                           : 'Sign up for this music library. '
-                                'An invitation code may be required.',
+                              'An invitation code may be required.',
                       style: textTheme.bodyMedium,
                       textAlign: TextAlign.center,
                     ),
@@ -128,6 +128,45 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                               'Account created successfully. '
                               'You can sign in with your new credentials.',
                               style: textTheme.bodySmall,
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: AppTheme.surfaceContainer,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: AppTheme.primary.withValues(alpha: 0.35),
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            const Icon(
+                              Icons.security_outlined,
+                              color: AppTheme.primary,
+                              size: 28,
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              'Protect your account with 2FA',
+                              style: textTheme.titleSmall?.copyWith(
+                                color: AppTheme.onBackground,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'After you sign in, open Account settings to '
+                              'add an authenticator app. Some servers require '
+                              'two-factor authentication for all password users.',
+                              style: textTheme.bodySmall?.copyWith(
+                                color: AppTheme.onBackgroundMuted,
+                              ),
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -230,9 +269,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                   : Icons.visibility_off_outlined,
                               color: AppTheme.onBackgroundSubtle,
                             ),
-                            onPressed: () => setState(
-                              () => _obscurePassword = !_obscurePassword,
-                            ),
+                            onPressed:
+                                () => setState(
+                                  () => _obscurePassword = !_obscurePassword,
+                                ),
                           ),
                         ),
                         style: const TextStyle(color: AppTheme.onBackground),
@@ -262,9 +302,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                   : Icons.visibility_off_outlined,
                               color: AppTheme.onBackgroundSubtle,
                             ),
-                            onPressed: () => setState(
-                              () => _obscureConfirm = !_obscureConfirm,
-                            ),
+                            onPressed:
+                                () => setState(
+                                  () => _obscureConfirm = !_obscureConfirm,
+                                ),
                           ),
                         ),
                         style: const TextStyle(color: AppTheme.onBackground),
@@ -313,16 +354,17 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: _loading ? null : _submit,
-                          child: _loading
-                              ? const SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Colors.white,
-                                  ),
-                                )
-                              : const Text('Create account'),
+                          child:
+                              _loading
+                                  ? const SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                  : const Text('Create account'),
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -352,9 +394,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     final password1 = _passwordController.text;
     final password2 = _confirmController.text;
     final invitation = _invitationController.text.trim();
-    final server = _hardcodedPod
-        ? (AppPlatform.hardcodedPodUrl ?? '')
-        : _serverController.text.trim();
+    final server =
+        _hardcodedPod
+            ? (AppPlatform.hardcodedPodUrl ?? '')
+            : _serverController.text.trim();
 
     setState(() {
       _loading = true;

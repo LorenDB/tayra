@@ -350,8 +350,8 @@ class FunkwhaleApi {
       data: {'index': index},
       options: Options(
         contentType: Headers.jsonContentType,
-        validateStatus: (status) =>
-            status != null && status >= 200 && status < 300,
+        validateStatus:
+            (status) => status != null && status >= 200 && status < 300,
       ),
     );
     // Defensive: if validateStatus is ever relaxed, still fail closed.
@@ -726,9 +726,8 @@ class FunkwhaleApi {
   /// Absolute listen URL, optionally with Funkwhale scoped `?token=` for
   /// browser media elements that cannot send Authorization headers.
   String getStreamUrl(String listenUrl, {bool appendListenToken = true}) {
-    final absolute = listenUrl.startsWith('http')
-        ? listenUrl
-        : '$_baseUrl$listenUrl';
+    final absolute =
+        listenUrl.startsWith('http') ? listenUrl : '$_baseUrl$listenUrl';
     if (!appendListenToken) return absolute;
 
     final listenToken = _ref.read(authStateProvider).listenToken;
@@ -861,13 +860,16 @@ class FunkwhaleApi {
     // plain list of radios. Be flexible and accept both shapes.
     final data = response.data;
     if (data is List<dynamic>) {
-      final results = data.map<Radio>((e) {
-        if (e is Map<String, dynamic>) return Radio.fromJson(e);
-        if (e is List && e.isNotEmpty && e.first is Map<String, dynamic>) {
-          return Radio.fromJson(e.first as Map<String, dynamic>);
-        }
-        throw StateError('Unexpected radio list item type: ${e.runtimeType}');
-      }).toList();
+      final results =
+          data.map<Radio>((e) {
+            if (e is Map<String, dynamic>) return Radio.fromJson(e);
+            if (e is List && e.isNotEmpty && e.first is Map<String, dynamic>) {
+              return Radio.fromJson(e.first as Map<String, dynamic>);
+            }
+            throw StateError(
+              'Unexpected radio list item type: ${e.runtimeType}',
+            );
+          }).toList();
       return PaginatedResponse(
         count: results.length,
         next: null,
@@ -917,9 +919,10 @@ class FunkwhaleApi {
   }
 
   Future<Track> getRadioTrack(int id) async {
-    final opts = _lastRadioSessionCookie != null
-        ? Options(headers: {'cookie': _lastRadioSessionCookie})
-        : null;
+    final opts =
+        _lastRadioSessionCookie != null
+            ? Options(headers: {'cookie': _lastRadioSessionCookie})
+            : null;
     final response = await _dio.get(
       '$_baseUrl/api/v1/radios/radios/$id/tracks/',
       options: opts,
@@ -1192,9 +1195,10 @@ class FunkwhaleApi {
     if (name != null) body['name'] = name;
     if (privacyLevel != null) body['privacy_level'] = privacyLevel.apiValue;
     if (summaryText != null) {
-      body['summary'] = summaryText.trim().isEmpty
-          ? null
-          : {'text': summaryText, 'content_type': 'text/plain'};
+      body['summary'] =
+          summaryText.trim().isEmpty
+              ? null
+              : {'text': summaryText, 'content_type': 'text/plain'};
     }
 
     final response = await _dio.patch(
@@ -1212,6 +1216,43 @@ class FunkwhaleApi {
       }
     }
     return getMe();
+  }
+
+  // ── TOTP 2FA ────────────────────────────────────────────────────────
+
+  /// GET `/api/v1/users/me/2fa/` — TOTP status for the current user.
+  Future<TotpStatus> getTotpStatus() async {
+    final response = await _dio.get('$_baseUrl/api/v1/users/me/2fa/');
+    return TotpStatus.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  /// POST `/api/v1/users/me/2fa/setup/` — begin enrollment (secret + URI).
+  Future<TotpSetup> setupTotp() async {
+    final response = await _dio.post('$_baseUrl/api/v1/users/me/2fa/setup/');
+    return TotpSetup.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  /// POST `/api/v1/users/me/2fa/confirm/` — confirm with authenticator code.
+  Future<TotpConfirmResult> confirmTotp(String code) async {
+    final response = await _dio.post(
+      '$_baseUrl/api/v1/users/me/2fa/confirm/',
+      data: {'code': code},
+    );
+    return TotpConfirmResult.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  /// POST `/api/v1/users/me/2fa/disable/` — disable with password + code.
+  ///
+  /// [password] should already be the transport digest when calling from the
+  /// account UI (same as first-party login).
+  Future<void> disableTotp({
+    required String passwordDigest,
+    required String code,
+  }) async {
+    await _dio.post(
+      '$_baseUrl/api/v1/users/me/2fa/disable/',
+      data: {'password': passwordDigest, 'code': code},
+    );
   }
 
   /// POST `/api/v1/auth/password/change/` — change password.

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/api_repository.dart';
 import 'package:tayra/core/api/models.dart';
@@ -103,6 +104,20 @@ class AccountSettingsScreen extends ConsumerWidget {
                     subtitle: 'Update the email address for this account',
                     onTap: () => _changeEmail(context, ref, user),
                   ),
+                  if (user.hasUsablePassword)
+                    SettingsActionTile(
+                      icon: Icons.security_outlined,
+                      title: 'Two-factor authentication',
+                      subtitle:
+                          user.totpEnabled
+                              ? (user.totpRequired
+                                  ? 'Enabled (required by this server)'
+                                  : 'Enabled — protect password sign-in')
+                              : (user.totpRequired
+                                  ? 'Required — set up an authenticator app'
+                                  : 'Add an authenticator app (optional)'),
+                      onTap: () => context.push('/settings/account/2fa'),
+                    ),
 
                   const SizedBox(height: 32),
                 ],

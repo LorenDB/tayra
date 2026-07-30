@@ -352,6 +352,44 @@ class User(AbstractUser):
         return has_unverified_email and mandatory_verification
 
 
+class TotpDevice(models.Model):
+    """Per-user TOTP authenticator (RFC 6238) for first-party password login."""
+
+    user = models.OneToOneField(
+        User, related_name="totp_device", on_delete=models.CASCADE
+    )
+    # Base32 shared secret (no padding). Never expose after confirmation.
+    secret = models.CharField(max_length=64)
+    confirmed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    confirmed_at = models.DateTimeField(null=True, blank=True)
+    # Last accepted time-step counter (replay protection within window).
+    last_used_step = models.BigIntegerField(null=True, blank=True)
+
+    def __str__(self):
+        state = "confirmed" if self.confirmed else "pending"
+        return f"TotpDevice(user={self.user_id}, {state})"
+
+
+class TotpRecoveryCode(models.Model):
+    """Single-use recovery code (stored as SHA-256 of normalized form)."""
+
+    user = models.ForeignKey(
+        User, related_name="totp_recovery_codes", on_delete=models.CASCADE
+    )
+    code_hash = models.CharField(max_length=64, db_index=True)
+    used_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["user", "used_at"]),
+        ]
+
+    def __str__(self):
+        return f"TotpRecoveryCode(user={self.user_id}, used={bool(self.used_at)})"
+
+
 def generate_code(length=10):
     return "".join(
         random.SystemRandom().choice(string.ascii_uppercase) for _ in range(length)

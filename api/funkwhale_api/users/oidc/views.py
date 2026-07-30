@@ -352,4 +352,9 @@ def oidc_token(request):
         )
 
     tokens = first_party.issue_user_tokens(user)
+    # Surface force-2FA for password users even when they signed in via SSO.
+    from funkwhale_api.users import totp as totp_mod
+
+    tokens["totp_enabled"] = totp_mod.is_totp_enabled(user)
+    tokens["totp_setup_required"] = totp_mod.needs_totp_setup(user)
     return Response(tokens)

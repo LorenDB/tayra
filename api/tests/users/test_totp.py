@@ -1,0 +1,258 @@
+"""Tests for TOTP 2FA: crypto helpers, setup/confirm/disable, and login challenge."""
+
+from __future__ import annotations
+
+import pytest
+from django.urls import reverse
+
+from funkwhale_api.users import models, totp
+from funkwhale_api.users.password_transport import hash_password_for_transport
+
+
+def _login_payload(username: str, password: str) -> dict:
+    return {
+        "username": username,
+        "password": hash_password_for_transport(password),
+    }
+
+
+def _enable_totp(user, secret=None) -> str:
+    from django.utils import timezone
+
+    secret = secret or totp.generate_base32_secret()
+    models.TotpDevice.objects.update_or_create(
+        user=user,
+        defaults={
+            "secret": secret,
+            "confirmed": True,
+            "confirmed_at": timezone.now(),
+            "last_used_step": None,
+        },
+    )
+    return secret
+
+
+@pytest.mark.django_db
+def test_totp_verify_roundtrip():
+    secret = totp.generate_base32_secret()
+    code = totp.totp_at(secret)
+    ok, step = totp.verify_totp(secret, code)
+    assert ok
+    assert step is not None
+    # Replay same step rejected when last_used_step set
+    ok2, _ = totp.verify_totp(secret, code, last_used_step=step)
+    assert not ok2
+
+
+@pytest.mark.django_db
+def test_token_login_requires_totp_when_enabled(api_client, factories):
+    user = factories["users.User"](username="2fa-user")
+    user.set_password("s3cret-pass")
+    user.save()
+    secret = _enable_totp(user)
+
+    url = reverse("api:v1:users:token_login")
+    response = api_client.post(url, _login_payload("2fa-user", "s3cret-pass"), format="json")
+    assert response.status_code == 401, response.content
+    data = response.json()
+    assert data["error"] == "totp_required"
+    assert data["mfa_token"]
+
+    code = totp.totp_at(secret)
+    complete = api_client.post(
+        reverse("api:v1:users:token_login_2fa"),
+        {"mfa_token": data["mfa_token"], "totp_code": code},
+        format="json",
+    )
+    assert complete.status_code == 200, complete.content
+    body = complete.json()
+    assert body["access_token"]
+    assert body["totp_enabled"] is True
+    assert body["totp_setup_required"] is False
+
+
+@pytest.mark.django_db
+def test_token_login_2fa_rejects_bad_code(api_client, factories):
+    user = factories["users.User"](username="2fa-bad")
+    user.set_password("s3cret-pass")
+    user.save()
+    _enable_totp(user)
+
+    challenge = api_client.post(
+        reverse("api:v1:users:token_login"),
+        _login_payload("2fa-bad", "s3cret-pass"),
+        format="json",
+    )
+    assert challenge.status_code == 401
+    mfa = challenge.json()["mfa_token"]
+
+    bad = api_client.post(
+        reverse("api:v1:users:token_login_2fa"),
+        {"mfa_token": mfa, "totp_code": "000000"},
+        format="json",
+    )
+    assert bad.status_code == 400
+    assert bad.json()["error"] == "invalid_totp"
+
+
+@pytest.mark.django_db
+def test_token_login_2fa_recovery_code(api_client, factories):
+    user = factories["users.User"](username="2fa-rec")
+    user.set_password("s3cret-pass")
+    user.save()
+    _enable_totp(user)
+    codes = totp.generate_recovery_codes(count=2)
+    totp.store_recovery_codes(user, codes)
+
+    challenge = api_client.post(
+        reverse("api:v1:users:token_login"),
+        _login_payload("2fa-rec", "s3cret-pass"),
+        format="json",
+    )
+    mfa = challenge.json()["mfa_token"]
+
+    ok = api_client.post(
+        reverse("api:v1:users:token_login_2fa"),
+        {"mfa_token": mfa, "totp_code": codes[0]},
+        format="json",
+    )
+    assert ok.status_code == 200, ok.content
+    assert ok.json()["access_token"]
+
+    # Same recovery code cannot be reused
+    challenge2 = api_client.post(
+        reverse("api:v1:users:token_login"),
+        _login_payload("2fa-rec", "s3cret-pass"),
+        format="json",
+    )
+    mfa2 = challenge2.json()["mfa_token"]
+    reuse = api_client.post(
+        reverse("api:v1:users:token_login_2fa"),
+        {"mfa_token": mfa2, "totp_code": codes[0]},
+        format="json",
+    )
+    assert reuse.status_code == 400
+
+
+@pytest.mark.django_db
+def test_setup_confirm_disable_flow(logged_in_api_client, factories):
+    user = logged_in_api_client.user
+    user.set_password("s3cret-pass")
+    user.save()
+
+    setup = logged_in_api_client.post(reverse("api:v1:users:users-me-2fa-setup"))
+    assert setup.status_code == 200, setup.content
+    secret = setup.json()["secret"]
+    assert setup.json()["otpauth_uri"].startswith("otpauth://totp/")
+
+    code = totp.totp_at(secret)
+    confirm = logged_in_api_client.post(
+        reverse("api:v1:users:users-me-2fa-confirm"),
+        {"code": code},
+        format="json",
+    )
+    assert confirm.status_code == 200, confirm.content
+    recovery = confirm.json()["recovery_codes"]
+    assert len(recovery) == totp.RECOVERY_CODE_COUNT
+
+    status = logged_in_api_client.get(reverse("api:v1:users:users-me-2fa"))
+    assert status.status_code == 200
+    assert status.json()["enabled"] is True
+
+    me = logged_in_api_client.get(reverse("api:v1:users:users-me"))
+    assert me.json()["totp_enabled"] is True
+    assert me.json()["totp_required"] is False
+
+    disable_code = totp.totp_at(secret)
+    # Small sleep if same step would collide with confirm's last_used_step
+    if totp.verify_totp(secret, disable_code, last_used_step=user.totp_device.last_used_step)[0] is False:
+        # Use recovery code instead
+        disable_code = recovery[0]
+
+    disable = logged_in_api_client.post(
+        reverse("api:v1:users:users-me-2fa-disable"),
+        {
+            "password": hash_password_for_transport("s3cret-pass"),
+            "code": disable_code,
+        },
+        format="json",
+    )
+    assert disable.status_code == 204, getattr(disable, "content", b"")
+    assert not models.TotpDevice.objects.filter(user=user).exists()
+
+
+@pytest.mark.django_db
+def test_force_2fa_blocks_disable_and_flags_me(logged_in_api_client, factories, preferences):
+    preferences["users__force_2fa"] = True
+    user = logged_in_api_client.user
+    user.set_password("s3cret-pass")
+    user.save()
+    secret = _enable_totp(user)
+
+    me = logged_in_api_client.get(reverse("api:v1:users:users-me"))
+    # Enabled already → not required
+    assert me.json()["totp_enabled"] is True
+    assert me.json()["totp_required"] is False
+
+    # New password user without TOTP would need setup
+    other = factories["users.User"](username="needs-2fa")
+    other.set_password("x")
+    other.save()
+    assert totp.needs_totp_setup(other) is True
+
+    disable = logged_in_api_client.post(
+        reverse("api:v1:users:users-me-2fa-disable"),
+        {
+            "password": hash_password_for_transport("s3cret-pass"),
+            "code": totp.totp_at(secret),
+        },
+        format="json",
+    )
+    assert disable.status_code == 403
+    assert disable.json()["error"] == "force_2fa"
+
+
+@pytest.mark.django_db
+def test_login_flags_totp_setup_required_when_forced(api_client, factories, preferences):
+    preferences["users__force_2fa"] = True
+    user = factories["users.User"](username="force-me")
+    user.set_password("s3cret-pass")
+    user.save()
+
+    response = api_client.post(
+        reverse("api:v1:users:token_login"),
+        _login_payload("force-me", "s3cret-pass"),
+        format="json",
+    )
+    assert response.status_code == 200, response.content
+    data = response.json()
+    assert data["access_token"]
+    assert data["totp_setup_required"] is True
+    assert data["totp_enabled"] is False
+
+
+@pytest.mark.django_db
+def test_sso_only_user_skips_force_2fa(factories, preferences):
+    preferences["users__force_2fa"] = True
+    user = factories["users.User"](username="sso-only")
+    user.set_unusable_password()
+    user.save()
+    assert totp.needs_totp_setup(user) is False
+    assert totp.is_password_user(user) is False
+
+
+@pytest.mark.django_db
+def test_token_login_without_2fa_unchanged(api_client, factories):
+    user = factories["users.User"](username="plain")
+    user.set_password("s3cret-pass")
+    user.save()
+    response = api_client.post(
+        reverse("api:v1:users:token_login"),
+        _login_payload("plain", "s3cret-pass"),
+        format="json",
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data["access_token"]
+    assert data.get("totp_enabled") is False
+    assert data.get("totp_setup_required") is False
