@@ -130,11 +130,13 @@ class AlbumsFilter {
   final AlbumSortMode sortMode;
   final List<String> tags;
   final AlbumDurationPreset durationPreset;
+  final String? libraryId;
 
   const AlbumsFilter({
     this.sortMode = AlbumSortMode.titleAsc,
     this.tags = const [],
     this.durationPreset = AlbumDurationPreset.any,
+    this.libraryId,
   });
 
   int? get minDuration => durationPreset.minDuration;
@@ -143,17 +145,21 @@ class AlbumsFilter {
   bool get isActive =>
       sortMode != AlbumSortMode.titleAsc ||
       tags.isNotEmpty ||
-      durationPreset != AlbumDurationPreset.any;
+      durationPreset != AlbumDurationPreset.any ||
+      libraryId != null;
 
   AlbumsFilter copyWith({
     AlbumSortMode? sortMode,
     List<String>? tags,
     AlbumDurationPreset? durationPreset,
+    String? libraryId,
+    bool clearLibrary = false,
   }) {
     return AlbumsFilter(
       sortMode: sortMode ?? this.sortMode,
       tags: tags ?? this.tags,
       durationPreset: durationPreset ?? this.durationPreset,
+      libraryId: clearLibrary ? null : (libraryId ?? this.libraryId),
     );
   }
 }
@@ -167,6 +173,8 @@ class AlbumsFilterNotifier extends Notifier<AlbumsFilter> {
   void setTags(List<String> tags) => state = state.copyWith(tags: tags);
   void setDurationPreset(AlbumDurationPreset preset) =>
       state = state.copyWith(durationPreset: preset);
+  void setLibrary(String? libraryId) =>
+      state = state.copyWith(libraryId: libraryId, clearLibrary: libraryId == null);
   void reset() => state = const AlbumsFilter();
 }
 
@@ -192,6 +200,7 @@ final albumsPageProvider = FutureProvider.family<PaginatedResponse<Album>, int>(
         tag: filter.tags.isEmpty ? null : filter.tags,
         minDuration: filter.minDuration,
         maxDuration: filter.maxDuration,
+        library: filter.libraryId,
       );
     }
 
@@ -205,6 +214,7 @@ final albumsPageProvider = FutureProvider.family<PaginatedResponse<Album>, int>(
           tag: [tag],
           minDuration: filter.minDuration,
           maxDuration: filter.maxDuration,
+          library: filter.libraryId,
         ),
       ),
     );
@@ -256,6 +266,7 @@ class _AlbumsScreenState extends ConsumerState<AlbumsScreen>
           tag: filter.tags.isEmpty ? null : filter.tags,
           minDuration: filter.minDuration,
           maxDuration: filter.maxDuration,
+          library: filter.libraryId,
           forceRefresh: true,
         );
   }

@@ -332,13 +332,15 @@ class CachedFunkwhaleApi {
     List<String>? tag,
     int? minDuration,
     int? maxDuration,
+    String? library,
     bool forceRefresh = false,
   }) async {
     final tagSuffix =
         (tag != null && tag.isNotEmpty) ? '_t${tag.join(',')}' : '';
     final durationSuffix = '_dmin${minDuration}_dmax$maxDuration';
+    final librarySuffix = library != null ? '_lib$library' : '';
     final baseSuffix =
-        '_s${pageSize}_o${ordering}_a${artist}_sc${scope}_q$q$tagSuffix$durationSuffix';
+        '_s${pageSize}_o${ordering}_a${artist}_sc${scope}_q$q$tagSuffix$durationSuffix$librarySuffix';
     final cacheKey = 'albums_p$page$baseSuffix';
 
     return _cachedFetch(
@@ -357,6 +359,7 @@ class CachedFunkwhaleApi {
             tag: tag,
             minDuration: minDuration,
             maxDuration: maxDuration,
+            library: library,
           ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,

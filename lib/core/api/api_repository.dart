@@ -45,6 +45,7 @@ class FunkwhaleApi {
     List<String>? tag,
     int? minDuration,
     int? maxDuration,
+    String? library,
   }) async {
     final response = await _dio.get(
       '$_baseUrl/api/v1/albums/',
@@ -59,6 +60,7 @@ class FunkwhaleApi {
         if (tag != null && tag.isNotEmpty) 'tag': tag,
         if (minDuration != null) 'min_duration': minDuration,
         if (maxDuration != null) 'max_duration': maxDuration,
+        if (library != null) 'library': library,
       },
     );
     return parseAlbumsPage(response.data);

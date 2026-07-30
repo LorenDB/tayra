@@ -17,6 +17,14 @@ final albumTagsProvider = FutureProvider<List<String>>((ref) async {
   return response.results.map((t) => t.name).toList();
 });
 
+final librariesProvider =
+    FutureProvider<List<Library>>((ref) async {
+      watchMetadataRevalidation(ref, (key) => key.startsWith('libraries_p'));
+      final api = ref.watch(cachedFunkwhaleApiProvider);
+      final response = await api.getLibraries(pageSize: 200);
+      return response.results;
+    });
+
 // ── Albums tab screen ─────────────────────────────────────────────────────
 
 class BrowseScreen extends ConsumerWidget {
@@ -118,6 +126,7 @@ class _AlbumFilterSheetState extends ConsumerState<_AlbumFilterSheet> {
   late AlbumSortMode _sortMode;
   late Set<String> _selectedTags;
   late AlbumDurationPreset _durationPreset;
+  late String? _selectedLibrary;
   String _tagSearch = '';
 
   @override
@@ -127,6 +136,7 @@ class _AlbumFilterSheetState extends ConsumerState<_AlbumFilterSheet> {
     _sortMode = filter.sortMode;
     _selectedTags = Set.from(filter.tags);
     _durationPreset = filter.durationPreset;
+    _selectedLibrary = filter.libraryId;
   }
 
   void _apply() {
@@ -134,6 +144,7 @@ class _AlbumFilterSheetState extends ConsumerState<_AlbumFilterSheet> {
     notifier.setSortMode(_sortMode);
     notifier.setTags(_selectedTags.toList());
     notifier.setDurationPreset(_durationPreset);
+    notifier.setLibrary(_selectedLibrary);
     Navigator.of(context).pop();
   }
 
@@ -398,6 +409,60 @@ class _AlbumFilterSheetState extends ConsumerState<_AlbumFilterSheet> {
                                     );
                                   }).toList(),
                             ),
+                        ],
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  // ── Library section ──────────────────────────────
+                  const Text(
+                    'Filter by library',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: AppTheme.onBackgroundMuted,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  ref.watch(librariesProvider).when(
+                    loading:
+                        () => const Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            child: CircularProgressIndicator(
+                              color: AppTheme.primary,
+                              strokeWidth: 2,
+                            ),
+                          ),
+                        ),
+                    error:
+                        (e, _) => Text(
+                          'Could not load libraries',
+                          style: TextStyle(color: AppTheme.onBackgroundMuted),
+                        ),
+                    data: (libraries) {
+                      return Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          _choiceChip(
+                            label: 'All libraries',
+                            selected: _selectedLibrary == null,
+                            onSelected:
+                                () =>
+                                    setState(() => _selectedLibrary = null),
+                          ),
+                          ...libraries.map((lib) {
+                            return _choiceChip(
+                              label: lib.name,
+                              selected: _selectedLibrary == lib.uuid,
+                              onSelected:
+                                  () =>
+                                      setState(
+                                        () => _selectedLibrary = lib.uuid,
+                                      ),
+                            );
+                          }),
                         ],
                       );
                     },
