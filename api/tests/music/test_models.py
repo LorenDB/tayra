@@ -62,7 +62,7 @@ def test_album_duration_updated_when_track_moves_album(factories):
     assert album_b.duration == 120
 
 
-def test_compute_album_duration_matches_with_duration(factories):
+def test_compute_album_duration_matches_stored_duration(factories):
     album = factories["music.Album"]()
     track1 = factories["music.Track"](album=album)
     track2 = factories["music.Track"](album=album)
@@ -71,8 +71,8 @@ def test_compute_album_duration_matches_with_duration(factories):
     factories["music.Upload"](track=track2, duration=21)
 
     assert models.compute_album_duration(album.pk) == 42
-    annotated = album.__class__.objects.with_duration().get(pk=album.pk)
-    assert annotated.duration == 42
+    album.refresh_from_db()
+    assert album.duration == 42
 
 
 def test_import_album_stores_release_group(factories):

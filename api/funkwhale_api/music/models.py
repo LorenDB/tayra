@@ -309,16 +309,6 @@ class AlbumQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
         else:
             return self.exclude(pk__in=matches)
 
-    def with_duration(self):
-        """
-        Legacy no-op for callers that used to annotate duration from uploads.
-
-        Album.duration is now a stored field (kept up to date by signals), so
-        annotating ``duration`` would conflict with the model field. Kept so
-        existing call sites (Subsonic views, tests) continue to work.
-        """
-        return self
-
 
 def compute_album_duration(album_id):
     """

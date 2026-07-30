@@ -195,9 +195,7 @@ class AlbumSerializer(OptionalDescriptionMixin, serializers.Serializer):
         return [ti.tag.name for ti in tagged_items]
 
     def get_duration(self, obj) -> int:
-        # Prefer the precalculated model field (or with_duration annotation).
-        value = getattr(obj, "duration", None)
-        return int(value or 0)
+        return int(getattr(obj, "duration", None) or 0)
 
 
 class TrackAlbumSerializer(serializers.ModelSerializer):

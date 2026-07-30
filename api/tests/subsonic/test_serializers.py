@@ -174,6 +174,7 @@ def test_get_album_serializer(factories):
     track = factories["music.Track"](album=album, disc_number=42)
     upload = factories["music.Upload"](track=track, bitrate=42000, duration=43, size=44)
     tagged_item = factories["tags.TaggedItem"](content_object=album, tag__name="foo")
+    album.refresh_from_db()
     expected = {
         "id": album.pk,
         "artistId": artist.pk,
@@ -211,9 +212,7 @@ def test_get_album_serializer(factories):
         ],
     }
 
-    qs = album.__class__.objects.with_duration()
-
-    assert serializers.GetAlbumSerializer(qs.first()).data == expected
+    assert serializers.GetAlbumSerializer(album).data == expected
 
 
 def test_starred_tracks2_serializer(factories):
@@ -229,10 +228,10 @@ def test_starred_tracks2_serializer(factories):
 
 
 def test_get_album_list2_serializer(factories):
-    album1 = factories["music.Album"]().__class__.objects.with_duration().first()
-    album2 = factories["music.Album"]().__class__.objects.with_duration().last()
+    album1 = factories["music.Album"]()
+    album2 = factories["music.Album"]()
 
-    qs = music_models.Album.objects.with_tracks_count().with_duration().order_by("pk")
+    qs = music_models.Album.objects.with_tracks_count().order_by("pk")
     expected = [
         serializers.get_album2_data(album1),
         serializers.get_album2_data(album2),

@@ -263,7 +263,7 @@ class SubsonicViewSet(viewsets.GenericViewSet):
         detail=False, methods=["get", "post"], url_name="get_album", url_path="getAlbum"
     )
     @find_object(
-        music_models.Album.objects.with_duration().select_related("artist"),
+        music_models.Album.objects.select_related("artist"),
         filter_playable=True,
     )
     def get_album(self, request, *args, **kwargs):
@@ -441,7 +441,6 @@ class SubsonicViewSet(viewsets.GenericViewSet):
                 )
             )
             .with_tracks_count()
-            .with_duration()
             .order_by("artist__name")
         )
         data = request.GET or request.POST
@@ -532,9 +531,9 @@ class SubsonicViewSet(viewsets.GenericViewSet):
                 "subsonic": "album",
                 "search_fields": ["title"],
                 "queryset": (
-                    music_models.Album.objects.with_duration()
-                    .with_tracks_count()
-                    .select_related("artist")
+                    music_models.Album.objects.with_tracks_count().select_related(
+                        "artist"
+                    )
                 ),
                 "serializer": serializers.get_album_list2_data,
             },
