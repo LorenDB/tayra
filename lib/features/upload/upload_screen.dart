@@ -16,9 +16,6 @@ class UploadScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(uploadProvider);
-    final isDone =
-        state.uploadStatus == UploadStatus.finished ||
-        state.uploadStatus == UploadStatus.errored;
 
     return Scaffold(
       backgroundColor: AppTheme.background,
@@ -27,10 +24,10 @@ class UploadScreen extends ConsumerWidget {
         backgroundColor: AppTheme.background,
         leading: const AppBackButton(fallbackLocation: '/settings'),
         actions: [
-          if (isDone)
+          if (state.isDone)
             TextButton(
               onPressed: () => ref.read(uploadProvider.notifier).reset(),
-              child: const Text('Upload Another'),
+              child: const Text('Upload More'),
             ),
         ],
       ),
@@ -67,20 +64,20 @@ class _DisclaimerBanner extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: AppTheme.onBackgroundSubtle.withAlpha(60)),
       ),
-      child: Row(
+      child: const Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(
+          Icon(
             Icons.info_outline_rounded,
             size: 16,
             color: AppTheme.onBackgroundSubtle,
           ),
-          const SizedBox(width: 10),
-          const Expanded(
+          SizedBox(width: 10),
+          Expanded(
             child: Text(
-              'This uploader is designed for single tracks. For bulk imports, '
-              'use the Funkwhale web interface together with a tool like '
-              'MusicBrainz Picard to tag your files first.',
+              'Select one or more audio files. For best results, tag files with '
+              'MusicBrainz Picard, or use the MusicBrainz lookup below to match '
+              'an album and embed metadata before upload.',
               style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 12),
             ),
           ),
@@ -96,81 +93,281 @@ class _FileCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(uploadProvider);
-    final isLocked = _isLocked(state);
+    final isLocked = state.isLocked;
 
     return _SectionCard(
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Icon + label column
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const _CardTitle(
+          Row(
+            children: [
+              const Expanded(
+                child: _CardTitle(
                   icon: Icons.audio_file_outlined,
-                  title: 'Audio File',
+                  title: 'Audio Files',
                 ),
-                const SizedBox(height: 8),
-                if (state.hasFile) ...[
-                  Text(
-                    state.fileName!,
-                    style: const TextStyle(
-                      color: AppTheme.onBackground,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+              ),
+              if (state.hasFiles && !isLocked)
+                TextButton(
+                  onPressed:
+                      () => ref.read(uploadProvider.notifier).clearFiles(),
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppTheme.onBackgroundMuted,
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
-                  if (state.fileSize != null)
-                    Text(
-                      _formatFileSize(state.fileSize!),
-                      style: const TextStyle(
-                        color: AppTheme.onBackgroundMuted,
-                        fontSize: 12,
-                      ),
+                  child: const Text('Clear'),
+                ),
+              const SizedBox(width: 4),
+              ElevatedButton.icon(
+                onPressed:
+                    isLocked
+                        ? null
+                        : () => ref.read(uploadProvider.notifier).pickFiles(),
+                icon: const Icon(Icons.folder_open_rounded, size: 18),
+                label: Text(state.hasFiles ? 'Change' : 'Select'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.surfaceContainerHigh,
+                  foregroundColor: AppTheme.onBackground,
+                  disabledBackgroundColor: AppTheme.surfaceContainer,
+                  disabledForegroundColor: AppTheme.onBackgroundSubtle,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 10,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          if (state.readingTags)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: AppTheme.primary,
                     ),
-                ] else
-                  const Text(
-                    'No file selected',
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    'Reading tags…',
                     style: TextStyle(
-                      color: AppTheme.onBackgroundSubtle,
+                      color: AppTheme.onBackgroundMuted,
                       fontSize: 13,
                     ),
                   ),
-              ],
+                ],
+              ),
+            )
+          else if (!state.hasFiles)
+            const Text(
+              'No files selected',
+              style: TextStyle(
+                color: AppTheme.onBackgroundSubtle,
+                fontSize: 13,
+              ),
+            )
+          else ...[
+            Text(
+              '${state.fileCount} file${state.fileCount == 1 ? '' : 's'} · '
+              '${_formatFileSize(state.items.fold<int>(0, (a, i) => a + i.fileSize))}',
+              style: const TextStyle(
+                color: AppTheme.onBackgroundMuted,
+                fontSize: 12,
+              ),
             ),
-          ),
-          const SizedBox(width: 12),
-          ElevatedButton.icon(
-            onPressed:
-                isLocked
-                    ? null
-                    : () => ref.read(uploadProvider.notifier).pickFile(),
-            icon: const Icon(Icons.folder_open_rounded, size: 18),
-            label: Text(state.hasFile ? 'Change' : 'Select'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.surfaceContainerHigh,
-              foregroundColor: AppTheme.onBackground,
-              disabledBackgroundColor: AppTheme.surfaceContainer,
-              disabledForegroundColor: AppTheme.onBackgroundSubtle,
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            const SizedBox(height: 8),
+            ...state.items.map(
+              (item) => _FileRow(
+                item: item,
+                showMb: state.useMusicBrainz,
+                isLocked: isLocked,
+                onRemove:
+                    isLocked
+                        ? null
+                        : () => ref
+                            .read(uploadProvider.notifier)
+                            .removeItem(item.localId),
+                onSearchTrack:
+                    isLocked || !state.useMusicBrainz
+                        ? null
+                        : () => _showMbSearchSheet(
+                          context,
+                          ref,
+                          targetItemId: item.localId,
+                          mode: _MbSearchMode.recording,
+                        ),
+              ),
             ),
-          ),
+          ],
         ],
       ),
     );
   }
+}
 
-  String _formatFileSize(int bytes) {
-    if (bytes >= 1024 * 1024 * 1024) {
-      return '${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(1)} GB';
-    } else if (bytes >= 1024 * 1024) {
-      return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
-    } else if (bytes >= 1024) {
-      return '${(bytes / 1024).toStringAsFixed(1)} KB';
-    }
-    return '$bytes B';
+class _FileRow extends StatelessWidget {
+  final UploadItem item;
+  final bool showMb;
+  final bool isLocked;
+  final VoidCallback? onRemove;
+  final VoidCallback? onSearchTrack;
+
+  const _FileRow({
+    required this.item,
+    required this.showMb,
+    required this.isLocked,
+    this.onRemove,
+    this.onSearchTrack,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final statusColor = switch (item.status) {
+      UploadItemStatus.finished => AppTheme.secondary,
+      UploadItemStatus.errored => AppTheme.error,
+      UploadItemStatus.uploading ||
+      UploadItemStatus.embedding ||
+      UploadItemStatus.pollingImport => AppTheme.primary,
+      _ => AppTheme.onBackgroundSubtle,
+    };
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        decoration: BoxDecoration(
+          color: AppTheme.surfaceContainerHigh.withAlpha(120),
+          borderRadius: BorderRadius.circular(8),
+          border:
+              item.status == UploadItemStatus.errored
+                  ? Border.all(color: AppTheme.error.withAlpha(80))
+                  : null,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  switch (item.status) {
+                    UploadItemStatus.finished =>
+                      Icons.check_circle_outline_rounded,
+                    UploadItemStatus.errored => Icons.error_outline_rounded,
+                    UploadItemStatus.uploading ||
+                    UploadItemStatus.embedding ||
+                    UploadItemStatus.pollingImport => Icons.sync_rounded,
+                    _ => Icons.music_note_rounded,
+                  },
+                  size: 16,
+                  color: statusColor,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item.fileName,
+                        style: const TextStyle(
+                          color: AppTheme.onBackground,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        [
+                          _formatFileSize(item.fileSize),
+                          if (item.existingTitle != null)
+                            item.existingTitle!
+                          else if (item.selectedMbRecording != null)
+                            item.selectedMbRecording!.title,
+                          if (item.existingArtist != null)
+                            item.existingArtist!
+                          else if (item.selectedMbRecording?.artistName != null)
+                            item.selectedMbRecording!.artistName!,
+                        ].join(' · '),
+                        style: const TextStyle(
+                          color: AppTheme.onBackgroundSubtle,
+                          fontSize: 11,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                if (showMb && onSearchTrack != null)
+                  IconButton(
+                    onPressed: onSearchTrack,
+                    icon: Icon(
+                      item.selectedMbRecording != null
+                          ? Icons.edit_note_rounded
+                          : Icons.search_rounded,
+                      size: 18,
+                      color:
+                          item.selectedMbRecording != null
+                              ? AppTheme.primary
+                              : AppTheme.onBackgroundMuted,
+                    ),
+                    tooltip:
+                        item.selectedMbRecording != null
+                            ? 'Change track match'
+                            : 'Search track',
+                    visualDensity: VisualDensity.compact,
+                  ),
+                if (onRemove != null)
+                  IconButton(
+                    onPressed: onRemove,
+                    icon: const Icon(
+                      Icons.close_rounded,
+                      size: 18,
+                      color: AppTheme.onBackgroundSubtle,
+                    ),
+                    tooltip: 'Remove',
+                    visualDensity: VisualDensity.compact,
+                  ),
+              ],
+            ),
+            if (showMb && item.selectedMbRecording != null) ...[
+              const SizedBox(height: 4),
+              Text(
+                'MB: ${item.selectedMbRecording!.title}'
+                '${item.selectedMbRecording!.trackNumber != null ? ' · #${item.selectedMbRecording!.trackNumber}' : ''}',
+                style: const TextStyle(color: AppTheme.primary, fontSize: 11),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+            if (item.status == UploadItemStatus.uploading) ...[
+              const SizedBox(height: 6),
+              LinearProgressIndicator(
+                value: item.progress,
+                backgroundColor: AppTheme.surfaceContainer,
+                color: AppTheme.primary,
+                borderRadius: BorderRadius.circular(2),
+                minHeight: 3,
+              ),
+            ],
+            if (item.errorDetail != null) ...[
+              const SizedBox(height: 4),
+              Text(
+                item.errorDetail!,
+                style: const TextStyle(color: AppTheme.error, fontSize: 11),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -181,7 +378,7 @@ class _LibraryCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(uploadProvider);
     final notifier = ref.read(uploadProvider.notifier);
-    final isLocked = _isLocked(state);
+    final isLocked = state.isLocked;
 
     return _SectionCard(
       child: Column(
@@ -369,7 +566,7 @@ class _MusicBrainzCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(uploadProvider);
     final notifier = ref.read(uploadProvider.notifier);
-    final isLocked = _isLocked(state);
+    final isLocked = state.isLocked;
 
     return _SectionCard(
       child: Column(
@@ -405,27 +602,86 @@ class _MusicBrainzCard extends ConsumerWidget {
             )
           else ...[
             const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton.icon(
-                onPressed:
-                    isLocked ? null : () => _showMbSearchSheet(context, ref),
-                icon: const Icon(Icons.search_rounded, size: 18),
-                label: Text(
-                  state.mbRecordingId.isEmpty
-                      ? 'Search MusicBrainz'
-                      : 'Change Recording',
-                ),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: AppTheme.primary,
-                  side: const BorderSide(color: AppTheme.primary),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+            if (state.fileCount > 1) ...[
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed:
+                      isLocked || !state.hasFiles
+                          ? null
+                          : () => _showMbSearchSheet(
+                            context,
+                            ref,
+                            mode: _MbSearchMode.album,
+                          ),
+                  icon: const Icon(Icons.album_rounded, size: 18),
+                  label: Text(
+                    state.selectedMbRelease != null
+                        ? 'Change Album Match'
+                        : 'Search Album on MusicBrainz',
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppTheme.primary,
+                    side: const BorderSide(color: AppTheme.primary),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
                 ),
               ),
-            ),
-            if (state.mbRecordingId.isNotEmpty) ...[
-              const SizedBox(height: 10),
-              _MbRecordingSummary(state: state),
+              if (state.selectedMbRelease != null) ...[
+                const SizedBox(height: 10),
+                _MbReleaseSummary(release: state.selectedMbRelease!),
+                const SizedBox(height: 6),
+                Text(
+                  '${state.matchedMbCount} of ${state.fileCount} files matched',
+                  style: TextStyle(
+                    color:
+                        state.matchedMbCount == state.fileCount
+                            ? AppTheme.secondary
+                            : AppTheme.onBackgroundMuted,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+              const SizedBox(height: 8),
+              const Text(
+                'Tip: use the search icon on each file to override its track match.',
+                style: TextStyle(
+                  color: AppTheme.onBackgroundSubtle,
+                  fontSize: 11,
+                ),
+              ),
+            ] else ...[
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed:
+                      isLocked || !state.hasFiles
+                          ? null
+                          : () => _showMbSearchSheet(
+                            context,
+                            ref,
+                            targetItemId: state.items.firstOrNull?.localId,
+                            mode: _MbSearchMode.recording,
+                          ),
+                  icon: const Icon(Icons.search_rounded, size: 18),
+                  label: Text(
+                    state.matchedMbCount > 0
+                        ? 'Change Recording'
+                        : 'Search MusicBrainz',
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppTheme.primary,
+                    side: const BorderSide(color: AppTheme.primary),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                ),
+              ),
+              if (state.items.firstOrNull?.selectedMbRecording != null) ...[
+                const SizedBox(height: 10),
+                _MbRecordingSummary(
+                  recording: state.items.first.selectedMbRecording!,
+                ),
+              ],
             ],
             if (state.coverArtStatus != CoverArtStatus.none) ...[
               const SizedBox(height: 12),
@@ -436,38 +692,88 @@ class _MusicBrainzCard extends ConsumerWidget {
       ),
     );
   }
+}
 
-  Future<void> _showMbSearchSheet(BuildContext context, WidgetRef ref) async {
-    await showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: AppTheme.surfaceContainer,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => _MbSearchSheet(parentRef: ref),
-    );
-  }
+enum _MbSearchMode { recording, album }
+
+Future<void> _showMbSearchSheet(
+  BuildContext context,
+  WidgetRef ref, {
+  String? targetItemId,
+  required _MbSearchMode mode,
+}) async {
+  ref.read(uploadProvider.notifier).setMbTargetItem(targetItemId);
+  await showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: AppTheme.surfaceContainer,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder:
+        (context) => _MbSearchSheet(mode: mode, targetItemId: targetItemId),
+  );
 }
 
 // ── MusicBrainz search sheet ─────────────────────────────────────────────
 
 class _MbSearchSheet extends ConsumerStatefulWidget {
-  final WidgetRef parentRef;
-  const _MbSearchSheet({required this.parentRef});
+  final _MbSearchMode mode;
+  final String? targetItemId;
+
+  const _MbSearchSheet({required this.mode, this.targetItemId});
 
   @override
   ConsumerState<_MbSearchSheet> createState() => _MbSearchSheetState();
 }
 
 class _MbSearchSheetState extends ConsumerState<_MbSearchSheet> {
-  final _titleController = TextEditingController();
-  final _artistController = TextEditingController();
+  late final TextEditingController _titleController;
+  late final TextEditingController _artistController;
+  late final TextEditingController _albumController;
+
+  @override
+  void initState() {
+    super.initState();
+    final state = ref.read(uploadProvider);
+
+    // Autofill from existing file metadata when available.
+    if (widget.mode == _MbSearchMode.recording) {
+      final item =
+          widget.targetItemId != null
+              ? state.items
+                  .where((i) => i.localId == widget.targetItemId)
+                  .firstOrNull
+              : state.items.firstOrNull;
+      _titleController = TextEditingController(
+        text:
+            item?.existingTitle ??
+            (item != null
+                ? _titleFromName(item.fileName)
+                : state.suggestedTitle),
+      );
+      _artistController = TextEditingController(
+        text: item?.existingArtist ?? state.suggestedArtist,
+      );
+      _albumController = TextEditingController();
+    } else {
+      _titleController = TextEditingController();
+      _artistController = TextEditingController(text: state.suggestedArtist);
+      _albumController = TextEditingController(text: state.suggestedAlbum);
+    }
+  }
+
+  String _titleFromName(String name) {
+    final base =
+        name.contains('.') ? name.substring(0, name.lastIndexOf('.')) : name;
+    return base.replaceFirst(RegExp(r'^\d{1,3}[\s.\-_]+'), '');
+  }
 
   @override
   void dispose() {
     _titleController.dispose();
     _artistController.dispose();
+    _albumController.dispose();
     super.dispose();
   }
 
@@ -475,6 +781,7 @@ class _MbSearchSheetState extends ConsumerState<_MbSearchSheet> {
   Widget build(BuildContext context) {
     final state = ref.watch(uploadProvider);
     final notifier = ref.read(uploadProvider.notifier);
+    final isAlbum = widget.mode == _MbSearchMode.album;
 
     return DraggableScrollableSheet(
       initialChildSize: 0.85,
@@ -484,7 +791,6 @@ class _MbSearchSheetState extends ConsumerState<_MbSearchSheet> {
       builder: (context, scrollController) {
         return Column(
           children: [
-            // Handle
             Center(
               child: Container(
                 margin: const EdgeInsets.only(top: 12, bottom: 8),
@@ -501,37 +807,76 @@ class _MbSearchSheetState extends ConsumerState<_MbSearchSheet> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Search MusicBrainz',
-                    style: TextStyle(
+                  Text(
+                    isAlbum
+                        ? 'Search MusicBrainz Album'
+                        : 'Search MusicBrainz Recording',
+                    style: const TextStyle(
                       color: AppTheme.onBackground,
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
+                  if (state.suggestedAlbum.isNotEmpty ||
+                      state.suggestedArtist.isNotEmpty ||
+                      state.suggestedTitle.isNotEmpty) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      'Prefills come from your file tags when available.',
+                      style: TextStyle(
+                        color: AppTheme.onBackgroundSubtle.withAlpha(200),
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
                   const SizedBox(height: 12),
-                  TextField(
-                    controller: _titleController,
-                    decoration: const InputDecoration(
-                      labelText: 'Track title',
-                      border: OutlineInputBorder(),
-                      isDense: true,
+                  if (isAlbum) ...[
+                    TextField(
+                      controller: _albumController,
+                      decoration: const InputDecoration(
+                        labelText: 'Album title',
+                        border: OutlineInputBorder(),
+                        isDense: true,
+                      ),
+                      style: const TextStyle(color: AppTheme.onBackground),
+                      textInputAction: TextInputAction.next,
                     ),
-                    style: const TextStyle(color: AppTheme.onBackground),
-                    textInputAction: TextInputAction.next,
-                  ),
-                  const SizedBox(height: 8),
-                  TextField(
-                    controller: _artistController,
-                    decoration: const InputDecoration(
-                      labelText: 'Artist (optional)',
-                      border: OutlineInputBorder(),
-                      isDense: true,
+                    const SizedBox(height: 8),
+                    TextField(
+                      controller: _artistController,
+                      decoration: const InputDecoration(
+                        labelText: 'Artist (optional)',
+                        border: OutlineInputBorder(),
+                        isDense: true,
+                      ),
+                      style: const TextStyle(color: AppTheme.onBackground),
+                      textInputAction: TextInputAction.search,
+                      onSubmitted: (_) => _search(notifier),
                     ),
-                    style: const TextStyle(color: AppTheme.onBackground),
-                    textInputAction: TextInputAction.search,
-                    onSubmitted: (_) => _search(notifier),
-                  ),
+                  ] else ...[
+                    TextField(
+                      controller: _titleController,
+                      decoration: const InputDecoration(
+                        labelText: 'Track title',
+                        border: OutlineInputBorder(),
+                        isDense: true,
+                      ),
+                      style: const TextStyle(color: AppTheme.onBackground),
+                      textInputAction: TextInputAction.next,
+                    ),
+                    const SizedBox(height: 8),
+                    TextField(
+                      controller: _artistController,
+                      decoration: const InputDecoration(
+                        labelText: 'Artist (optional)',
+                        border: OutlineInputBorder(),
+                        isDense: true,
+                      ),
+                      style: const TextStyle(color: AppTheme.onBackground),
+                      textInputAction: TextInputAction.search,
+                      onSubmitted: (_) => _search(notifier),
+                    ),
+                  ],
                   const SizedBox(height: 10),
                   SizedBox(
                     width: double.infinity,
@@ -561,44 +906,35 @@ class _MbSearchSheetState extends ConsumerState<_MbSearchSheet> {
             ),
             const SizedBox(height: 8),
             const Divider(color: AppTheme.surfaceContainerHigh),
-            Expanded(child: _buildResults(context, state, scrollController)),
+            Expanded(
+              child:
+                  isAlbum
+                      ? _buildReleaseResults(context, state, scrollController)
+                      : _buildRecordingResults(
+                        context,
+                        state,
+                        scrollController,
+                      ),
+            ),
           ],
         );
       },
     );
   }
 
-  Widget _buildResults(
+  Widget _buildRecordingResults(
     BuildContext context,
     UploadState state,
     ScrollController scrollController,
   ) {
     if (state.mbSearchError != null) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Text(
-            state.mbSearchError!,
-            style: const TextStyle(color: AppTheme.error, fontSize: 13),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
+      return _ErrorCenter(state.mbSearchError!);
     }
-
     if (state.mbResults.isEmpty && !state.mbSearching) {
-      return const Center(
-        child: Padding(
-          padding: EdgeInsets.all(16),
-          child: Text(
-            'Enter a title above and tap Search to find recordings.',
-            style: TextStyle(color: AppTheme.onBackgroundMuted, fontSize: 13),
-            textAlign: TextAlign.center,
-          ),
-        ),
+      return const _EmptyCenter(
+        'Enter a title above and tap Search to find recordings.',
       );
     }
-
     return ListView.builder(
       controller: scrollController,
       itemCount: state.mbResults.length,
@@ -650,7 +986,9 @@ class _MbSearchSheetState extends ConsumerState<_MbSearchSheet> {
             ],
           ),
           onTap: () {
-            ref.read(uploadProvider.notifier).selectMbRecording(rec);
+            ref
+                .read(uploadProvider.notifier)
+                .selectMbRecording(rec, itemId: widget.targetItemId);
             Navigator.of(context).pop();
           },
         );
@@ -658,20 +996,111 @@ class _MbSearchSheetState extends ConsumerState<_MbSearchSheet> {
     );
   }
 
+  Widget _buildReleaseResults(
+    BuildContext context,
+    UploadState state,
+    ScrollController scrollController,
+  ) {
+    if (state.mbSearchError != null) {
+      return _ErrorCenter(state.mbSearchError!);
+    }
+    if (state.mbReleaseResults.isEmpty && !state.mbSearching) {
+      return const _EmptyCenter(
+        'Enter an album title and tap Search. Tracks will be matched to your files automatically.',
+      );
+    }
+    return ListView.builder(
+      controller: scrollController,
+      itemCount: state.mbReleaseResults.length,
+      itemBuilder: (context, index) {
+        final rel = state.mbReleaseResults[index];
+        return ListTile(
+          leading: const Icon(
+            Icons.album_rounded,
+            color: AppTheme.onBackgroundMuted,
+          ),
+          title: Text(
+            rel.title,
+            style: const TextStyle(color: AppTheme.onBackground),
+          ),
+          subtitle: Text(
+            [
+              if (rel.artistName != null) rel.artistName!,
+              if (rel.year != null) '${rel.year}',
+              if (rel.trackCount != null) '${rel.trackCount} tracks',
+            ].join(' · '),
+            style: const TextStyle(color: AppTheme.onBackgroundMuted),
+          ),
+          onTap: () async {
+            await ref.read(uploadProvider.notifier).selectMbRelease(rel);
+            if (context.mounted) Navigator.of(context).pop();
+          },
+        );
+      },
+    );
+  }
+
   void _search(UploadNotifier notifier) {
-    notifier.searchMusicBrainz(_titleController.text, _artistController.text);
+    if (widget.mode == _MbSearchMode.album) {
+      notifier.searchMusicBrainzAlbum(
+        _albumController.text,
+        _artistController.text,
+      );
+    } else {
+      notifier.searchMusicBrainz(_titleController.text, _artistController.text);
+    }
   }
 }
 
-// ── MusicBrainz recording summary ────────────────────────────────────────
-
-class _MbRecordingSummary extends StatelessWidget {
-  final UploadState state;
-  const _MbRecordingSummary({required this.state});
+class _ErrorCenter extends StatelessWidget {
+  final String message;
+  const _ErrorCenter(this.message);
 
   @override
   Widget build(BuildContext context) {
-    final rec = state.selectedMbRecording;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+          message,
+          style: const TextStyle(color: AppTheme.error, fontSize: 13),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+}
+
+class _EmptyCenter extends StatelessWidget {
+  final String message;
+  const _EmptyCenter(this.message);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+          message,
+          style: const TextStyle(
+            color: AppTheme.onBackgroundMuted,
+            fontSize: 13,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+}
+
+// ── MusicBrainz summaries ────────────────────────────────────────────────
+
+class _MbRecordingSummary extends StatelessWidget {
+  final MbRecording recording;
+  const _MbRecordingSummary({required this.recording});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
@@ -692,54 +1121,99 @@ class _MbRecordingSummary extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           Expanded(
-            child:
-                rec != null
-                    ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          rec.title,
-                          style: const TextStyle(
-                            color: AppTheme.primary,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        if (rec.artistName != null)
-                          Text(
-                            rec.artistName!,
-                            style: const TextStyle(
-                              color: AppTheme.onBackgroundMuted,
-                              fontSize: 12,
-                            ),
-                          ),
-                        if (rec.albumTitle != null)
-                          Text(
-                            [
-                              rec.albumTitle!,
-                              if (rec.year != null) '(${rec.year})',
-                              if (rec.discNumber != null && rec.discNumber! > 1)
-                                'Disc ${rec.discNumber}',
-                              if (rec.trackNumber != null)
-                                'Track ${rec.trackNumber}',
-                              if (rec.durationLabel.isNotEmpty)
-                                rec.durationLabel,
-                            ].join(' \u00b7 '),
-                            style: const TextStyle(
-                              color: AppTheme.onBackgroundSubtle,
-                              fontSize: 11,
-                            ),
-                          ),
-                      ],
-                    )
-                    : Text(
-                      state.mbRecordingId,
-                      style: const TextStyle(
-                        color: AppTheme.onBackgroundMuted,
-                        fontSize: 12,
-                        fontFamily: 'monospace',
-                      ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  recording.title,
+                  style: const TextStyle(
+                    color: AppTheme.primary,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                if (recording.artistName != null)
+                  Text(
+                    recording.artistName!,
+                    style: const TextStyle(
+                      color: AppTheme.onBackgroundMuted,
+                      fontSize: 12,
                     ),
+                  ),
+                if (recording.albumTitle != null)
+                  Text(
+                    [
+                      recording.albumTitle!,
+                      if (recording.year != null) '(${recording.year})',
+                      if (recording.discNumber != null &&
+                          recording.discNumber! > 1)
+                        'Disc ${recording.discNumber}',
+                      if (recording.trackNumber != null)
+                        'Track ${recording.trackNumber}',
+                      if (recording.durationLabel.isNotEmpty)
+                        recording.durationLabel,
+                    ].join(' · '),
+                    style: const TextStyle(
+                      color: AppTheme.onBackgroundSubtle,
+                      fontSize: 11,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MbReleaseSummary extends StatelessWidget {
+  final MbRelease release;
+  const _MbReleaseSummary({required this.release});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppTheme.primary.withAlpha(20),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppTheme.primary.withAlpha(60)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(top: 1),
+            child: Icon(Icons.album_rounded, color: AppTheme.primary, size: 16),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  release.title,
+                  style: const TextStyle(
+                    color: AppTheme.primary,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(
+                  [
+                    if (release.artistName != null) release.artistName!,
+                    if (release.year != null) '${release.year}',
+                    if (release.trackCount != null)
+                      '${release.trackCount} tracks',
+                  ].join(' · '),
+                  style: const TextStyle(
+                    color: AppTheme.onBackgroundMuted,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -875,7 +1349,7 @@ class _CoverArtPreview extends ConsumerWidget {
                     ),
                     const SizedBox(width: 6),
                     const Text(
-                      'Embed in file',
+                      'Embed in files',
                       style: TextStyle(
                         color: AppTheme.onBackgroundMuted,
                         fontSize: 12,
@@ -899,14 +1373,9 @@ class _UploadSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(uploadProvider);
 
-    final isDone =
-        state.uploadStatus == UploadStatus.finished ||
-        state.uploadStatus == UploadStatus.errored;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Error banner
         if (state.uploadError != null) ...[
           Container(
             padding: const EdgeInsets.all(12),
@@ -922,15 +1391,11 @@ class _UploadSection extends ConsumerWidget {
             ),
           ),
         ],
-
-        // Status card (finished / errored / in-progress)
         if (state.uploadStatus != UploadStatus.idle) ...[
           _StatusCard(state: state),
           const SizedBox(height: 12),
         ],
-
-        // Upload button — hidden after success/error (use appbar action instead)
-        if (!isDone) _UploadButton(state: state, ref: ref),
+        if (!state.isDone) _UploadButton(state: state, ref: ref),
       ],
     );
   }
@@ -949,19 +1414,32 @@ class _UploadButton extends StatelessWidget {
     final isEmbedding = state.uploadStatus == UploadStatus.embedding;
     final isBusy = isUploading || isPolling || isEmbedding;
 
+    final label =
+        isPolling
+            ? 'Processing…'
+            : isUploading
+            ? (state.fileCount > 1
+                ? 'Uploading ${state.finishedCount + state.erroredCount + 1}/${state.fileCount}…'
+                : 'Uploading…')
+            : isEmbedding
+            ? 'Embedding tags…'
+            : (state.fileCount > 1
+                ? 'Upload ${state.fileCount} Files'
+                : 'Upload');
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (isUploading) ...[
+        if (isBusy) ...[
           LinearProgressIndicator(
-            value: state.uploadProgress,
+            value: state.batchProgress > 0 ? state.batchProgress : null,
             backgroundColor: AppTheme.surfaceContainerHigh,
             color: AppTheme.primary,
             borderRadius: BorderRadius.circular(4),
           ),
           const SizedBox(height: 6),
           Text(
-            '${(state.uploadProgress * 100).toStringAsFixed(0)}%',
+            '${(state.batchProgress * 100).toStringAsFixed(0)}%',
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: AppTheme.onBackgroundMuted,
@@ -986,15 +1464,7 @@ class _UploadButton extends StatelessWidget {
                     ),
                   )
                   : const Icon(Icons.cloud_upload_rounded),
-          label: Text(
-            isPolling
-                ? 'Processing…'
-                : isUploading
-                ? 'Uploading…'
-                : isEmbedding
-                ? 'Embedding tags…'
-                : 'Upload',
-          ),
+          label: Text(label),
           style: ElevatedButton.styleFrom(
             backgroundColor: AppTheme.primary,
             foregroundColor: Colors.white,
@@ -1021,32 +1491,49 @@ class _StatusCard extends StatelessWidget {
         AppTheme.secondary,
         Icons.check_circle_outline_rounded,
         'Import Complete',
-        'Your track has been successfully imported into your library.',
+        state.fileCount > 1
+            ? 'All ${state.fileCount} tracks imported successfully.'
+            : 'Your track has been successfully imported into your library.',
+      ),
+      UploadStatus.partial => (
+        AppTheme.primary,
+        Icons.warning_amber_rounded,
+        'Partial Success',
+        '${state.finishedCount} imported, ${state.erroredCount} failed. '
+            'See details on each file above.',
       ),
       UploadStatus.errored => (
         AppTheme.error,
         Icons.error_outline_rounded,
         'Import Failed',
-        state.importErrorDetail ?? 'The server could not process this file.',
+        state.uploadError ??
+            (state.items
+                    .where((i) => i.errorDetail != null)
+                    .map((i) => i.errorDetail!)
+                    .firstOrNull ??
+                'The server could not process these files.'),
       ),
       UploadStatus.pollingImport => (
         AppTheme.primary,
         Icons.sync_rounded,
         'Processing',
-        'Waiting for the server to import the track '
-            '(status: ${state.importStatus ?? 'pending'})…',
+        state.fileCount > 1
+            ? 'Waiting for the server to import ${state.fileCount} tracks…'
+            : 'Waiting for the server to import the track…',
       ),
       UploadStatus.embedding => (
         AppTheme.primary,
         Icons.label_rounded,
         'Embedding Metadata',
-        'Writing MusicBrainz tags into the audio file…',
+        'Writing MusicBrainz tags into audio files…',
       ),
       UploadStatus.uploading => (
         AppTheme.primary,
         Icons.upload_rounded,
         'Uploading',
-        'Transfer in progress…',
+        state.fileCount > 1
+            ? 'Transferring files to the server…'
+            : 'Transfer in progress…',
       ),
       _ => (AppTheme.primary, Icons.upload_rounded, 'Working', 'Please wait…'),
     };
@@ -1302,7 +1789,13 @@ class _CardTitle extends StatelessWidget {
 
 // ── Helpers ───────────────────────────────────────────────────────────────
 
-bool _isLocked(UploadState state) =>
-    state.uploadStatus == UploadStatus.uploading ||
-    state.uploadStatus == UploadStatus.pollingImport ||
-    state.uploadStatus == UploadStatus.embedding;
+String _formatFileSize(int bytes) {
+  if (bytes >= 1024 * 1024 * 1024) {
+    return '${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(1)} GB';
+  } else if (bytes >= 1024 * 1024) {
+    return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
+  } else if (bytes >= 1024) {
+    return '${(bytes / 1024).toStringAsFixed(1)} KB';
+  }
+  return '$bytes B';
+}

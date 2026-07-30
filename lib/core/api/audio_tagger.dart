@@ -61,6 +61,343 @@ Future<Uint8List?> tagAudioFile(String filePath, AudioMetadata meta) async {
   }
 }
 
+/// Reads basic tags from an audio file. Returns `null` when the format is
+/// unsupported or no tags can be parsed. Failures are non-fatal.
+Future<AudioMetadata?> readAudioMetadata(String filePath) async {
+  try {
+    final bytes = await File(filePath).readAsBytes();
+    final ext = filePath.split('.').last.toLowerCase();
+    switch (ext) {
+      case 'mp3':
+        return _readMp3(bytes);
+      case 'flac':
+        return _readFlac(bytes);
+      case 'ogg':
+      case 'oga':
+        return _readOgg(bytes, _OggCodec.vorbis);
+      case 'opus':
+        return _readOgg(bytes, _OggCodec.opus);
+      default:
+        return null;
+    }
+  } catch (e, st) {
+    developer.log(
+      'AudioTagger: failed to read metadata from $filePath: $e',
+      name: 'tayra.tagger',
+      error: e,
+      stackTrace: st,
+    );
+    return null;
+  }
+}
+
+// ── Metadata readers ───────────────────────────────────────────────────
+
+AudioMetadata? _readMp3(Uint8List data) {
+  if (data.length < 10 ||
+      data[0] != 0x49 ||
+      data[1] != 0x44 ||
+      data[2] != 0x33) {
+    return null;
+  }
+
+  final version = data[3]; // 2, 3, or 4
+  final flags = data[5];
+  final tagSize = _readSyncsafe(data, 6);
+  int offset = 10;
+
+  // Skip extended header if present.
+  if ((flags & 0x40) != 0 && offset + 4 <= data.length) {
+    final extSize =
+        version >= 4
+            ? _readSyncsafe(data, offset)
+            : _readUint32BE(data, offset);
+    offset += extSize;
+  }
+
+  final end = (10 + tagSize).clamp(0, data.length);
+  String? title;
+  String? artist;
+  String? album;
+  int? trackNumber;
+  int? discNumber;
+  int? year;
+  String? mbRecordingId;
+  String? mbReleaseId;
+
+  while (offset + 10 <= end) {
+    final id = ascii.decode(
+      data.sublist(offset, offset + 4),
+      allowInvalid: true,
+    );
+    if (id == '\x00\x00\x00\x00' || !RegExp(r'^[A-Z0-9]{4}$').hasMatch(id)) {
+      break;
+    }
+    final frameSize =
+        version >= 4
+            ? _readSyncsafe(data, offset + 4)
+            : _readUint32BE(data, offset + 4);
+    if (frameSize <= 0 || offset + 10 + frameSize > end) break;
+
+    final frameData = data.sublist(offset + 10, offset + 10 + frameSize);
+    offset += 10 + frameSize;
+
+    if (id == 'TIT2') {
+      title = _decodeId3Text(frameData);
+    } else if (id == 'TPE1') {
+      artist = _decodeId3Text(frameData);
+    } else if (id == 'TALB') {
+      album = _decodeId3Text(frameData);
+    } else if (id == 'TRCK') {
+      trackNumber = _parseLeadingInt(_decodeId3Text(frameData));
+    } else if (id == 'TPOS') {
+      discNumber = _parseLeadingInt(_decodeId3Text(frameData));
+    } else if (id == 'TDRC' || id == 'TYER' || id == 'TDAT') {
+      year ??= _parseLeadingInt(_decodeId3Text(frameData));
+    } else if (id == 'TXXX') {
+      final txxx = _decodeId3Txxx(frameData);
+      if (txxx == null) continue;
+      final desc = txxx.$1.toLowerCase();
+      if (desc.contains('musicbrainz') && desc.contains('recording')) {
+        mbRecordingId = txxx.$2;
+      } else if (desc.contains('musicbrainz') &&
+          (desc.contains('album') || desc.contains('release'))) {
+        mbReleaseId = txxx.$2;
+      }
+    }
+  }
+
+  if (title == null &&
+      artist == null &&
+      album == null &&
+      mbRecordingId == null) {
+    return null;
+  }
+
+  return AudioMetadata(
+    title: title,
+    artist: artist,
+    album: album,
+    trackNumber: trackNumber,
+    discNumber: discNumber,
+    year: year,
+    musicBrainzRecordingId: mbRecordingId,
+    musicBrainzReleaseId: mbReleaseId,
+  );
+}
+
+String? _decodeId3Text(Uint8List frameData) {
+  if (frameData.isEmpty) return null;
+  final encoding = frameData[0];
+  final body = frameData.sublist(1);
+  try {
+    switch (encoding) {
+      case 0: // ISO-8859-1
+        return _stripNulls(latin1.decode(body, allowInvalid: true)).trim();
+      case 1: // UTF-16 with BOM
+      case 2: // UTF-16BE
+        return _stripNulls(_decodeUtf16(body, encoding == 2)).trim();
+      case 3: // UTF-8
+        return _stripNulls(utf8.decode(body, allowMalformed: true)).trim();
+      default:
+        return _stripNulls(utf8.decode(body, allowMalformed: true)).trim();
+    }
+  } catch (_) {
+    return null;
+  }
+}
+
+(String, String)? _decodeId3Txxx(Uint8List frameData) {
+  if (frameData.isEmpty) return null;
+  final encoding = frameData[0];
+  final body = frameData.sublist(1);
+  try {
+    if (encoding == 0 || encoding == 3) {
+      final nullIdx = body.indexOf(0);
+      if (nullIdx < 0) return null;
+      final descBytes = body.sublist(0, nullIdx);
+      final valBytes = body.sublist(nullIdx + 1);
+      final description =
+          encoding == 0
+              ? latin1.decode(descBytes, allowInvalid: true)
+              : utf8.decode(descBytes, allowMalformed: true);
+      final value =
+          encoding == 0
+              ? latin1.decode(valBytes, allowInvalid: true)
+              : utf8.decode(valBytes, allowMalformed: true);
+      return (description, _stripNulls(value).trim());
+    }
+    // UTF-16 variants: null separator is 0x00 0x00
+    for (int i = 0; i + 1 < body.length; i += 2) {
+      if (body[i] == 0 && body[i + 1] == 0) {
+        final desc = _decodeUtf16(body.sublist(0, i), encoding == 2);
+        final value = _decodeUtf16(body.sublist(i + 2), encoding == 2);
+        return (desc, _stripNulls(value).trim());
+      }
+    }
+  } catch (_) {
+    return null;
+  }
+  return null;
+}
+
+String _decodeUtf16(Uint8List data, bool forceBe) {
+  if (data.isEmpty) return '';
+  Endian endian = forceBe ? Endian.big : Endian.little;
+  int start = 0;
+  if (data.length >= 2) {
+    if (data[0] == 0xFF && data[1] == 0xFE) {
+      endian = Endian.little;
+      start = 2;
+    } else if (data[0] == 0xFE && data[1] == 0xFF) {
+      endian = Endian.big;
+      start = 2;
+    }
+  }
+  final codeUnits = <int>[];
+  for (int i = start; i + 1 < data.length; i += 2) {
+    final unit =
+        endian == Endian.little
+            ? (data[i] | (data[i + 1] << 8))
+            : ((data[i] << 8) | data[i + 1]);
+    if (unit == 0) break;
+    codeUnits.add(unit);
+  }
+  return String.fromCharCodes(codeUnits);
+}
+
+String _stripNulls(String s) => s.replaceAll(RegExp(r'\x00+'), '');
+
+int? _parseLeadingInt(String? s) {
+  if (s == null || s.isEmpty) return null;
+  final match = RegExp(r'^(\d+)').firstMatch(s.trim());
+  return match != null ? int.tryParse(match.group(1)!) : null;
+}
+
+int _readUint32BE(Uint8List data, int offset) {
+  return (data[offset] << 24) |
+      (data[offset + 1] << 16) |
+      (data[offset + 2] << 8) |
+      data[offset + 3];
+}
+
+AudioMetadata? _readFlac(Uint8List data) {
+  if (data.length < 8 ||
+      data[0] != 0x66 ||
+      data[1] != 0x4C ||
+      data[2] != 0x61 ||
+      data[3] != 0x43) {
+    return null;
+  }
+
+  int offset = 4;
+  bool lastBlock = false;
+  while (!lastBlock && offset + 4 <= data.length) {
+    final header = data[offset];
+    lastBlock = (header & 0x80) != 0;
+    final blockType = header & 0x7F;
+    final blockLen =
+        (data[offset + 1] << 16) | (data[offset + 2] << 8) | data[offset + 3];
+    if (offset + 4 + blockLen > data.length) break;
+    final blockData = data.sublist(offset + 4, offset + 4 + blockLen);
+    offset += 4 + blockLen;
+
+    if (blockType == 4) {
+      // Vorbis comment
+      return _metadataFromVorbisComments(_parseVorbisComments(blockData));
+    }
+  }
+  return null;
+}
+
+AudioMetadata? _readOgg(Uint8List data, _OggCodec codec) {
+  final pages = _parseOggPages(data);
+  for (int i = 1; i < pages.length; i++) {
+    final payload = pages[i].payload;
+    if (codec == _OggCodec.vorbis &&
+        payload.length >= 7 &&
+        payload[0] == 0x03 &&
+        utf8.decode(payload.sublist(1, 7), allowMalformed: true) == 'vorbis') {
+      return _metadataFromVorbisComments(
+        _parseVorbisComments(payload.sublist(7)),
+      );
+    }
+    if (codec == _OggCodec.opus &&
+        payload.length >= 8 &&
+        utf8.decode(payload.sublist(0, 8), allowMalformed: true) ==
+            'OpusTags') {
+      return _metadataFromVorbisComments(
+        _parseVorbisComments(payload.sublist(8)),
+      );
+    }
+  }
+  return null;
+}
+
+Map<String, String> _parseVorbisComments(Uint8List data) {
+  final result = <String, String>{};
+  if (data.length < 8) return result;
+  try {
+    int offset = 0;
+    final vendorLen = _readUint32LE(data, offset);
+    offset += 4 + vendorLen;
+    if (offset + 4 > data.length) return result;
+    final commentCount = _readUint32LE(data, offset);
+    offset += 4;
+    for (int i = 0; i < commentCount && offset + 4 <= data.length; i++) {
+      final len = _readUint32LE(data, offset);
+      offset += 4;
+      if (offset + len > data.length) break;
+      final comment = utf8.decode(
+        data.sublist(offset, offset + len),
+        allowMalformed: true,
+      );
+      offset += len;
+      final eq = comment.indexOf('=');
+      if (eq <= 0) continue;
+      final key = comment.substring(0, eq).toUpperCase();
+      final value = comment.substring(eq + 1);
+      // Keep first occurrence for each key.
+      result.putIfAbsent(key, () => value);
+    }
+  } catch (_) {
+    // best-effort
+  }
+  return result;
+}
+
+AudioMetadata? _metadataFromVorbisComments(Map<String, String> comments) {
+  if (comments.isEmpty) return null;
+  final title = comments['TITLE'];
+  final artist = comments['ARTIST'];
+  final album = comments['ALBUM'];
+  final trackNumber = _parseLeadingInt(comments['TRACKNUMBER']);
+  final discNumber = _parseLeadingInt(comments['DISCNUMBER']);
+  final year = _parseLeadingInt(comments['DATE'] ?? comments['YEAR']);
+  final mbRecordingId =
+      comments['MUSICBRAINZ_TRACKID'] ?? comments['MUSICBRAINZ_RECORDINGID'];
+  final mbReleaseId =
+      comments['MUSICBRAINZ_ALBUMID'] ?? comments['MUSICBRAINZ_RELEASEID'];
+
+  if (title == null &&
+      artist == null &&
+      album == null &&
+      mbRecordingId == null) {
+    return null;
+  }
+
+  return AudioMetadata(
+    title: title,
+    artist: artist,
+    album: album,
+    trackNumber: trackNumber,
+    discNumber: discNumber,
+    year: year,
+    musicBrainzRecordingId: mbRecordingId,
+    musicBrainzReleaseId: mbReleaseId,
+  );
+}
+
 // ── ID3v2.4 (MP3) ──────────────────────────────────────────────────────
 
 Uint8List _tagMp3(Uint8List original, AudioMetadata meta) {

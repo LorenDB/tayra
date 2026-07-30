@@ -235,11 +235,12 @@ def process_upload(upload, update_denormalization=True):
         try:
             serializer = metadata.TrackMetadataSerializer(data=m)
             serializer.is_valid()
-        except Exception:
-            fail_import(upload, "unknown_error")
+        except Exception as e:
+            fail_import(upload, "unknown_error", detail=str(e))
             raise
         if not serializer.is_valid():
             detail = serializer.errors
+            metadata_dump = None
             try:
                 metadata_dump = m.all()
             except Exception as e:
@@ -251,8 +252,12 @@ def process_upload(upload, update_denormalization=True):
         if check_mbid and not serializer.validated_data.get("mbid"):
             return fail_import(
                 upload,
-                "Only content tagged with a MusicBrainz ID is permitted on this pod.",
-                detail="You can tag your files with MusicBrainz Picard",
+                "missing_musicbrainz_id",
+                detail=(
+                    "Only content tagged with a MusicBrainz ID is permitted on this "
+                    "pod. Tag your files with MusicBrainz Picard, or use the "
+                    "MusicBrainz lookup in the upload form before uploading."
+                ),
             )
 
         final_metadata = collections.ChainMap(
@@ -270,8 +275,8 @@ def process_upload(upload, update_denormalization=True):
         )
     except UploadImportError as e:
         return fail_import(upload, e.code)
-    except Exception:
-        fail_import(upload, "unknown_error")
+    except Exception as e:
+        fail_import(upload, "unknown_error", detail=str(e))
         raise
 
     broadcast = getter(
