@@ -319,6 +319,36 @@ class UserDeleteSerializer(serializers.Serializer):
         return value
 
 
+class UserDeactivateSerializer(serializers.Serializer):
+    """Confirm self-service account deactivation (soft-disable).
+
+    Password is required when the user has a usable password. SSO-only accounts
+    only need ``confirm=true`` (client should still use type-to-confirm UX).
+    """
+
+    password = serializers.CharField(
+        required=False, allow_blank=True, trim_whitespace=False
+    )
+    confirm = serializers.BooleanField()
+
+    def validate_confirm(self, value):
+        if not value:
+            raise serializers.ValidationError("Please confirm deactivation")
+        return value
+
+    def validate(self, attrs):
+        user = self.instance
+        if user.has_usable_password():
+            password = attrs.get("password") or ""
+            if not password:
+                raise serializers.ValidationError(
+                    {"password": "Password is required to deactivate your account"}
+                )
+            if not user.check_password(password):
+                raise serializers.ValidationError({"password": "Invalid password"})
+        return attrs
+
+
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     # Never strip passwords — trailing spaces can be intentional.

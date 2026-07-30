@@ -21,6 +21,35 @@ def test_user_view(factories, superuser_api_client, mocker):
     assert response.data["results"] == expected
 
 
+def test_user_delete(factories, superuser_api_client, mocker):
+    user = factories["users.User"]()
+    user.create_actor()
+    delete = mocker.patch("funkwhale_api.users.tasks.delete_account.delay")
+    url = reverse("api:v1:manage:users:users-detail", kwargs={"pk": user.pk})
+
+    response = superuser_api_client.delete(url)
+
+    assert response.status_code == 204
+    user.refresh_from_db()
+    assert user.is_active is False
+    delete.assert_called_once_with(user_id=user.pk)
+
+
+def test_user_delete_cannot_delete_self(superuser_api_client, mocker):
+    delete = mocker.patch("funkwhale_api.users.tasks.delete_account.delay")
+    url = reverse(
+        "api:v1:manage:users:users-detail",
+        kwargs={"pk": superuser_api_client.user.pk},
+    )
+
+    response = superuser_api_client.delete(url)
+
+    assert response.status_code == 400
+    delete.assert_not_called()
+    superuser_api_client.user.refresh_from_db()
+    assert superuser_api_client.user.is_active is True
+
+
 def test_invitation_view(factories, superuser_api_client, mocker):
     invitations = factories["users.Invitation"].create_batch(size=5)
     qs = invitations[0].__class__.objects.order_by("-id")

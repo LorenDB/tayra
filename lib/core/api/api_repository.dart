@@ -1183,6 +1183,22 @@ class FunkwhaleApi {
     return MeUser.fromJson(response.data as Map<String, dynamic>);
   }
 
+  /// POST `/api/v1/users/me/deactivate/` — soft-disable own account.
+  ///
+  /// [passwordDigest] should be the transport hash when the account has a
+  /// usable password (same as first-party login / 2FA disable). Pass null for
+  /// SSO-only accounts that have no password.
+  Future<void> deactivateMe({String? passwordDigest}) async {
+    await _dio.post(
+      '$_baseUrl/api/v1/users/me/deactivate/',
+      data: {
+        'confirm': true,
+        if (passwordDigest != null && passwordDigest.isNotEmpty)
+          'password': passwordDigest,
+      },
+    );
+  }
+
   /// PATCH `/api/v1/users/{username}/` — update profile fields.
   ///
   /// Writable fields per [UserWriteSerializer]: name, privacy_level, summary,
@@ -1536,6 +1552,13 @@ class FunkwhaleApi {
       data: body,
     );
     return ManageUser.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  /// DELETE `/api/v1/manage/users/users/{id}/` — permanently delete a user.
+  ///
+  /// Requires `instance:users` write scope. Cannot delete the signed-in admin.
+  Future<void> deleteManageUser(int id) async {
+    await _dio.delete('$_baseUrl/api/v1/manage/users/users/$id/');
   }
 
   Future<PaginatedResponse<ManageInvitation>> getManageInvitations({

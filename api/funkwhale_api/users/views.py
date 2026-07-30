@@ -92,6 +92,29 @@ class UserViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
         serializer = serializers.MeSerializer(request.user)
         return Response(serializer.data)
 
+    @extend_schema(operation_id="deactivate_authenticated_user")
+    @action(
+        methods=["post"],
+        detail=False,
+        url_path="me/deactivate",
+        url_name="me-deactivate",
+        required_scope="security",
+    )
+    def deactivate_me(self, request, *args, **kwargs):
+        """Soft-disable the current account (reversible by an admin).
+
+        Requires password confirmation when the account has a usable password.
+        Immediately logs the user out by revoking OAuth tokens.
+        """
+        if not request.user.is_authenticated:
+            return Response(status=403)
+        serializer = serializers.UserDeactivateSerializer(
+            request.user, data=request.data
+        )
+        serializer.is_valid(raise_exception=True)
+        request.user.deactivate()
+        return Response(status=204)
+
     @extend_schema(operation_id="update_settings")
     @action(methods=["post"], detail=False, url_name="settings", url_path="settings")
     def set_settings(self, request, *args, **kwargs):

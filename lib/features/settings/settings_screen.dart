@@ -54,7 +54,7 @@ class SettingsScreen extends ConsumerWidget {
           SettingsActionTile(
             icon: Icons.manage_accounts_outlined,
             title: 'Account settings',
-            subtitle: 'Profile, visibility, email, and password',
+            subtitle: 'Profile, security, and account deactivation',
             onTap: () => context.push('/settings/account'),
           ),
           SettingsActionTile(

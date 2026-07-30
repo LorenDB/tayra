@@ -2255,6 +2255,7 @@ class ManageChannelStats {
 ///
 /// Writable via PATCH: [name], [isActive], [isStaff], [isSuperuser],
 /// [uploadQuota], and [permissions] (`library` | `moderation` | `settings`).
+/// Permanent removal via DELETE (admin cannot delete themselves).
 class ManageUser {
   final int id;
   final String username;

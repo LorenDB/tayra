@@ -14,15 +14,17 @@ import 'package:tayra/features/user_admin/user_admin_provider.dart';
 
 // ── Providers ───────────────────────────────────────────────────────────
 
-final manageUserDetailProvider = FutureProvider.autoDispose
-    .family<ManageUser, int>((ref, id) async {
-      // Wait for permission before hitting manage APIs (avoids 403 on denied deep-links).
-      final me = await ref.watch(meUserProvider.future);
-      if (!me.canManageUsers) {
-        throw StateError('Missing settings permission for user management');
-      }
-      return ref.watch(funkwhaleApiProvider).getManageUser(id);
-    });
+final manageUserDetailProvider = FutureProvider.autoDispose.family<
+  ManageUser,
+  int
+>((ref, id) async {
+  // Wait for permission before hitting manage APIs (avoids 403 on denied deep-links).
+  final me = await ref.watch(meUserProvider.future);
+  if (!me.canManageUsers) {
+    throw StateError('Missing settings permission for user management');
+  }
+  return ref.watch(funkwhaleApiProvider).getManageUser(id);
+});
 
 // ── Screen ──────────────────────────────────────────────────────────────
 
@@ -39,6 +41,7 @@ class ManageUserDetailScreen extends ConsumerStatefulWidget {
 class _ManageUserDetailScreenState
     extends ConsumerState<ManageUserDetailScreen> {
   bool _saving = false;
+  bool _deleting = false;
   bool _initialized = false;
 
   late TextEditingController _nameCtrl;
@@ -86,30 +89,33 @@ class _ManageUserDetailScreenState
   Future<bool> _confirmStaffChange(ManageUser user) async {
     final confirmed = await showShellDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: AppTheme.surfaceContainerHigh,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          'Change staff privileges?',
-          style: TextStyle(color: AppTheme.onBackground),
-        ),
-        content: Text(
-          'You are changing staff/superuser flags for “${user.username}”. '
-          'This affects who can access Django admin and elevated tools.',
-          style: const TextStyle(color: AppTheme.onBackgroundMuted),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Cancel'),
+      builder:
+          (context) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            title: const Text(
+              'Change staff privileges?',
+              style: TextStyle(color: AppTheme.onBackground),
+            ),
+            content: Text(
+              'You are changing staff/superuser flags for “${user.username}”. '
+              'This affects who can access Django admin and elevated tools.',
+              style: const TextStyle(color: AppTheme.onBackgroundMuted),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                style: TextButton.styleFrom(foregroundColor: AppTheme.error),
+                child: const Text('Confirm'),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            style: TextButton.styleFrom(foregroundColor: AppTheme.error),
-            child: const Text('Confirm'),
-          ),
-        ],
-      ),
     );
     return confirmed == true;
   }
@@ -117,60 +123,66 @@ class _ManageUserDetailScreenState
   Future<bool> _confirmSelfDeactivate(ManageUser user) async {
     final confirmed = await showShellDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: AppTheme.surfaceContainerHigh,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          'Deactivate your own account?',
-          style: TextStyle(color: AppTheme.onBackground),
-        ),
-        content: const Text(
-          'You are about to deactivate yourself. You may lose access '
-          'immediately and need another admin to re-enable the account.',
-          style: TextStyle(color: AppTheme.onBackgroundMuted),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Cancel'),
+      builder:
+          (context) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            title: const Text(
+              'Deactivate your own account?',
+              style: TextStyle(color: AppTheme.onBackground),
+            ),
+            content: const Text(
+              'You are about to deactivate yourself. You may lose access '
+              'immediately and need another admin to re-enable the account.',
+              style: TextStyle(color: AppTheme.onBackgroundMuted),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                style: TextButton.styleFrom(foregroundColor: AppTheme.error),
+                child: const Text('Deactivate me'),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            style: TextButton.styleFrom(foregroundColor: AppTheme.error),
-            child: const Text('Deactivate me'),
-          ),
-        ],
-      ),
     );
     if (confirmed != true || !mounted) return false;
 
     // Second confirmation for self-deactivation.
     final again = await showShellDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: AppTheme.surfaceContainerHigh,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          'Are you sure?',
-          style: TextStyle(color: AppTheme.onBackground),
-        ),
-        content: Text(
-          'Really deactivate “${user.username}”? This cannot be undone '
-          'from this session.',
-          style: const TextStyle(color: AppTheme.onBackgroundMuted),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Cancel'),
+      builder:
+          (context) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            title: const Text(
+              'Are you sure?',
+              style: TextStyle(color: AppTheme.onBackground),
+            ),
+            content: Text(
+              'Really deactivate “${user.username}”? This cannot be undone '
+              'from this session.',
+              style: const TextStyle(color: AppTheme.onBackgroundMuted),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                style: TextButton.styleFrom(foregroundColor: AppTheme.error),
+                child: const Text('Yes, deactivate'),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            style: TextButton.styleFrom(foregroundColor: AppTheme.error),
-            child: const Text('Yes, deactivate'),
-          ),
-        ],
-      ),
     );
     return again == true;
   }
@@ -250,6 +262,58 @@ class _ManageUserDetailScreenState
     }
   }
 
+  Future<void> _confirmDelete(ManageUser user) async {
+    final me = await ref.read(meUserProvider.future);
+    if (!mounted) return;
+    if (me.id == user.id) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'You cannot delete your own account from user management. '
+            'Use Account settings to deactivate it instead.',
+          ),
+          backgroundColor: AppTheme.error,
+        ),
+      );
+      return;
+    }
+
+    final confirmed = await showShellDialog<bool>(
+      context: context,
+      builder:
+          (context) => _TypeUsernameConfirmDialog(
+            title: 'Delete user?',
+            message:
+                'This permanently deletes “${user.username}” and related data '
+                '(libraries, tokens, etc.). This cannot be undone.\n\n'
+                'Type the username to confirm:',
+            expectedUsername: user.username,
+            confirmLabel: 'Delete user',
+          ),
+    );
+    if (confirmed != true || !mounted) return;
+
+    setState(() => _deleting = true);
+    try {
+      await ref.read(funkwhaleApiProvider).deleteManageUser(widget.userId);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('User “${user.username}” deleted')),
+      );
+      popPage(context, fallbackLocation: '/manage/users');
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Delete failed: ${_friendlyError(e)}'),
+            backgroundColor: AppTheme.error,
+          ),
+        );
+        setState(() => _deleting = false);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final canManage = ref.watch(canManageUsersProvider);
@@ -290,25 +354,28 @@ class _ManageUserDetailScreenState
         actions: [
           if (allowed && detailAsync.hasValue)
             TextButton(
-              onPressed: _saving || !_initialized
-                  ? null
-                  : () => _save(detailAsync.requireValue),
-              child: _saving
-                  ? const SizedBox(
-                      width: 18,
-                      height: 18,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Text('Save'),
+              onPressed:
+                  _saving || _deleting || !_initialized
+                      ? null
+                      : () => _save(detailAsync.requireValue),
+              child:
+                  _saving
+                      ? const SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                      : const Text('Save'),
             ),
         ],
       ),
       body: canManage.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => UserAdminDeniedBody(
-          message: 'Could not verify user-management permissions.\n$error',
-          onRetry: () => ref.invalidate(meUserProvider),
-        ),
+        error:
+            (error, _) => UserAdminDeniedBody(
+              message: 'Could not verify user-management permissions.\n$error',
+              onRetry: () => ref.invalidate(meUserProvider),
+            ),
         data: (allowed) {
           if (!allowed) {
             return const UserAdminDeniedBody(
@@ -317,19 +384,26 @@ class _ManageUserDetailScreenState
           }
           return detailAsync.when(
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (error, _) => InlineErrorState(
-              message: _friendlyError(error),
-              onRetry: () =>
-                  ref.invalidate(manageUserDetailProvider(widget.userId)),
-            ),
+            error:
+                (error, _) => InlineErrorState(
+                  message: _friendlyError(error),
+                  onRetry:
+                      () => ref.invalidate(
+                        manageUserDetailProvider(widget.userId),
+                      ),
+                ),
             data: (user) {
               if (!_initialized) {
                 return const Center(child: CircularProgressIndicator());
               }
+              final meId = ref.watch(meUserProvider).asData?.value.id;
+              final isSelf = meId != null && meId == user.id;
+
               return ListView(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 children: [
-                  if (_saving) const LinearProgressIndicator(minHeight: 2),
+                  if (_saving || _deleting)
+                    const LinearProgressIndicator(minHeight: 2),
                   SettingsSectionHeader(title: 'Identity'),
                   SettingsInfoTile(
                     icon: Icons.badge_outlined,
@@ -452,6 +526,29 @@ class _ManageUserDetailScreenState
                     value: _permSettings,
                     onChanged: (v) => setState(() => _permSettings = v),
                   ),
+                  const SizedBox(height: 16),
+                  SettingsSectionHeader(title: 'Danger zone'),
+                  if (isSelf)
+                    const SettingsInfoTile(
+                      icon: Icons.info_outline_rounded,
+                      title: 'Delete unavailable',
+                      subtitle:
+                          'You cannot delete your own account here. '
+                          'Deactivate it from Account settings, or ask '
+                          'another admin to delete it.',
+                    )
+                  else
+                    SettingsActionTile(
+                      icon: Icons.delete_forever_rounded,
+                      title: 'Delete user',
+                      subtitle:
+                          'Permanently remove this account and related data',
+                      iconColor: AppTheme.error,
+                      onTap: () {
+                        if (_saving || _deleting) return;
+                        _confirmDelete(user);
+                      },
+                    ),
                   const SizedBox(height: 24),
                 ],
               );
@@ -459,6 +556,104 @@ class _ManageUserDetailScreenState
           );
         },
       ),
+    );
+  }
+}
+
+// ── Type-username confirmation dialog ─────────────────────────────────
+
+class _TypeUsernameConfirmDialog extends StatefulWidget {
+  final String title;
+  final String message;
+  final String expectedUsername;
+  final String confirmLabel;
+
+  const _TypeUsernameConfirmDialog({
+    required this.title,
+    required this.message,
+    required this.expectedUsername,
+    required this.confirmLabel,
+  });
+
+  @override
+  State<_TypeUsernameConfirmDialog> createState() =>
+      _TypeUsernameConfirmDialogState();
+}
+
+class _TypeUsernameConfirmDialogState
+    extends State<_TypeUsernameConfirmDialog> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+    _controller.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  bool get _matches => _controller.text.trim() == widget.expectedUsername;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: AppTheme.surfaceContainerHigh,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      title: Text(
+        widget.title,
+        style: const TextStyle(color: AppTheme.onBackground),
+      ),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              widget.message,
+              style: const TextStyle(color: AppTheme.onBackgroundMuted),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _controller,
+              autofocus: true,
+              autocorrect: false,
+              enableSuggestions: false,
+              style: const TextStyle(color: AppTheme.onBackground),
+              decoration: InputDecoration(
+                labelText: 'Username',
+                hintText: widget.expectedUsername,
+                labelStyle: const TextStyle(color: AppTheme.onBackgroundMuted),
+                hintStyle: const TextStyle(color: AppTheme.onBackgroundSubtle),
+                filled: true,
+                fillColor: AppTheme.surfaceContainer,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+              onSubmitted: (_) {
+                if (_matches) Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: _matches ? () => Navigator.of(context).pop(true) : null,
+          style: TextButton.styleFrom(foregroundColor: AppTheme.error),
+          child: Text(widget.confirmLabel),
+        ),
+      ],
     );
   }
 }

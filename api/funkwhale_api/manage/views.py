@@ -334,6 +334,7 @@ class ManageUserViewSet(
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
     viewsets.GenericViewSet,
 ):
     queryset = users_models.User.objects.all().select_related("actor").order_by("-id")
@@ -346,6 +347,25 @@ class ManageUserViewSet(
         context = super().get_serializer_context()
         context["default_permissions"] = preferences.get("users__default_permissions")
         return context
+
+    def destroy(self, request, *args, **kwargs):
+        """Permanently delete a local user account (async cascade).
+
+        Admins cannot delete their own account through this endpoint — use the
+        self-service deactivate/delete flows instead.
+        """
+        from funkwhale_api.users import tasks as users_tasks
+
+        instance = self.get_object()
+        if instance.pk == request.user.pk:
+            return response.Response(
+                {"detail": "You cannot delete your own account from user management."},
+                status=400,
+            )
+        # Lock the account out immediately; hard-delete runs in the background.
+        instance.deactivate()
+        users_tasks.delete_account.delay(user_id=instance.pk)
+        return response.Response(status=204)
 
 
 class ManageInvitationViewSet(

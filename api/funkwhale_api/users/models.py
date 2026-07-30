@@ -230,6 +230,25 @@ class User(AbstractUser):
         self.secret_key = uuid.uuid4()
         return self.secret_key
 
+    def revoke_auth_sessions(self):
+        """Invalidate scoped tokens and OAuth grants so the user is logged out."""
+        self.update_secret_key()
+        self.subsonic_api_token = None
+        self.save(update_fields=["secret_key", "subsonic_api_token"])
+        self.users_grant.all().delete()
+        self.users_accesstoken.all().delete()
+        self.users_refreshtoken.all().delete()
+
+    def deactivate(self):
+        """Soft-disable the account and force logout (reversible by an admin)."""
+        self.is_active = False
+        self.update_secret_key()
+        self.subsonic_api_token = None
+        self.save(update_fields=["is_active", "secret_key", "subsonic_api_token"])
+        self.users_grant.all().delete()
+        self.users_accesstoken.all().delete()
+        self.users_refreshtoken.all().delete()
+
     def update_subsonic_api_token(self):
         self.subsonic_api_token = get_token()
         return self.subsonic_api_token

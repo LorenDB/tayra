@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/api_repository.dart';
 import 'package:tayra/core/api/models.dart';
+import 'package:tayra/core/auth/auth_provider.dart';
+import 'package:tayra/core/auth/password_transport.dart';
 import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/app_refresh_indicator.dart';
@@ -119,12 +121,87 @@ class AccountSettingsScreen extends ConsumerWidget {
                       onTap: () => context.push('/settings/account/2fa'),
                     ),
 
+                  const SizedBox(height: 24),
+
+                  // ── Danger zone ───────────────────────────────────────
+                  SettingsSectionHeader(title: 'Danger zone'),
+                  SettingsActionTile(
+                    icon: Icons.person_off_outlined,
+                    title: 'Deactivate account',
+                    subtitle:
+                        'Disable your account. An admin can re-enable it later.',
+                    iconColor: AppTheme.error,
+                    onTap: () => _deactivateAccount(context, ref, user),
+                  ),
+
                   const SizedBox(height: 32),
                 ],
               ),
             ),
       ),
     );
+  }
+
+  // ── Deactivate account ────────────────────────────────────────────────
+
+  Future<void> _deactivateAccount(
+    BuildContext context,
+    WidgetRef ref,
+    MeUser user,
+  ) async {
+    final result = await showShellDialog<_DeactivateConfirmResult>(
+      context: context,
+      builder:
+          (ctx) => _DeactivateAccountDialog(
+            username: user.username,
+            requirePassword: user.hasUsablePassword,
+          ),
+    );
+    if (result == null || !context.mounted) return;
+
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder:
+          (_) => const Center(
+            child: CircularProgressIndicator(color: AppTheme.primary),
+          ),
+    );
+
+    try {
+      final passwordDigest =
+          result.password == null
+              ? null
+              : hashPasswordForTransport(result.password!);
+      await ref
+          .read(funkwhaleApiProvider)
+          .deactivateMe(passwordDigest: passwordDigest);
+      Analytics.track('account_deactivated');
+      if (!context.mounted) return;
+      Navigator.of(context, rootNavigator: true).pop(); // loading
+      final messenger = ScaffoldMessenger.of(context);
+      await ref.read(authStateProvider.notifier).logout();
+      if (context.mounted) {
+        context.go('/login');
+      }
+      messenger.showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Your account has been deactivated. Contact an admin to restore it.',
+          ),
+        ),
+      );
+    } catch (e) {
+      if (context.mounted) {
+        Navigator.of(context, rootNavigator: true).pop(); // loading
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(_friendlyError(e)),
+            backgroundColor: AppTheme.error,
+          ),
+        );
+      }
+    }
   }
 
   // ── Edit display name ─────────────────────────────────────────────────
@@ -605,6 +682,164 @@ class AccountSettingsScreen extends ConsumerWidget {
         );
       }
     }
+  }
+}
+
+// ── Deactivate confirmation ─────────────────────────────────────────────
+
+class _DeactivateConfirmResult {
+  final String? password;
+  const _DeactivateConfirmResult({this.password});
+}
+
+class _DeactivateAccountDialog extends StatefulWidget {
+  final String username;
+  final bool requirePassword;
+
+  const _DeactivateAccountDialog({
+    required this.username,
+    required this.requirePassword,
+  });
+
+  @override
+  State<_DeactivateAccountDialog> createState() =>
+      _DeactivateAccountDialogState();
+}
+
+class _DeactivateAccountDialogState extends State<_DeactivateAccountDialog> {
+  late final TextEditingController _usernameCtrl;
+  late final TextEditingController _passwordCtrl;
+  bool _obscurePassword = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _usernameCtrl = TextEditingController();
+    _passwordCtrl = TextEditingController();
+    _usernameCtrl.addListener(() => setState(() {}));
+    _passwordCtrl.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _usernameCtrl.dispose();
+    _passwordCtrl.dispose();
+    super.dispose();
+  }
+
+  bool get _usernameMatches => _usernameCtrl.text.trim() == widget.username;
+
+  bool get _canConfirm {
+    if (!_usernameMatches) return false;
+    if (widget.requirePassword && _passwordCtrl.text.isEmpty) return false;
+    return true;
+  }
+
+  void _submit() {
+    if (!_canConfirm) return;
+    Navigator.of(context).pop(
+      _DeactivateConfirmResult(
+        password: widget.requirePassword ? _passwordCtrl.text : null,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: AppTheme.surfaceContainerHigh,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      title: const Text(
+        'Deactivate account?',
+        style: TextStyle(color: AppTheme.onBackground),
+      ),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text(
+              'Your account will be disabled and you will be signed out. '
+              'An administrator can re-enable it later. Your data is not '
+              'permanently deleted.\n\n'
+              'Type your username to confirm:',
+              style: TextStyle(color: AppTheme.onBackgroundMuted),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _usernameCtrl,
+              autofocus: true,
+              autocorrect: false,
+              enableSuggestions: false,
+              style: const TextStyle(color: AppTheme.onBackground),
+              decoration: InputDecoration(
+                labelText: 'Username',
+                hintText: widget.username,
+                labelStyle: const TextStyle(color: AppTheme.onBackgroundMuted),
+                hintStyle: const TextStyle(color: AppTheme.onBackgroundSubtle),
+                filled: true,
+                fillColor: AppTheme.surfaceContainer,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+              textInputAction:
+                  widget.requirePassword
+                      ? TextInputAction.next
+                      : TextInputAction.done,
+              onSubmitted: (_) {
+                if (!widget.requirePassword) _submit();
+              },
+            ),
+            if (widget.requirePassword) ...[
+              const SizedBox(height: 12),
+              TextField(
+                controller: _passwordCtrl,
+                obscureText: _obscurePassword,
+                style: const TextStyle(color: AppTheme.onBackground),
+                decoration: InputDecoration(
+                  labelText: 'Current password',
+                  labelStyle: const TextStyle(
+                    color: AppTheme.onBackgroundMuted,
+                  ),
+                  filled: true,
+                  fillColor: AppTheme.surfaceContainer,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword
+                          ? Icons.visibility_outlined
+                          : Icons.visibility_off_outlined,
+                      color: AppTheme.onBackgroundSubtle,
+                    ),
+                    onPressed:
+                        () => setState(
+                          () => _obscurePassword = !_obscurePassword,
+                        ),
+                  ),
+                ),
+                onSubmitted: (_) => _submit(),
+              ),
+            ],
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: _canConfirm ? _submit : null,
+          style: TextButton.styleFrom(foregroundColor: AppTheme.error),
+          child: const Text('Deactivate'),
+        ),
+      ],
+    );
   }
 }
 

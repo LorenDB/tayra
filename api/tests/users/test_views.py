@@ -520,3 +520,50 @@ def test_user_change_email(logged_in_api_client, mocker, mailoutbox):
     assert address.verified is False
     assert response.status_code == 204
     assert len(mailoutbox) == 1
+
+
+def test_user_deactivate_requires_confirm(logged_in_api_client):
+    user = logged_in_api_client.user
+    user.set_password("mypassword")
+    user.save()
+    url = reverse("api:v1:users:users-me-deactivate")
+
+    response = logged_in_api_client.post(
+        url, {"password": "mypassword", "confirm": False}, format="json"
+    )
+
+    assert response.status_code == 400
+    user.refresh_from_db()
+    assert user.is_active is True
+
+
+def test_user_deactivate_requires_valid_password(logged_in_api_client):
+    user = logged_in_api_client.user
+    user.set_password("mypassword")
+    user.save()
+    url = reverse("api:v1:users:users-me-deactivate")
+
+    response = logged_in_api_client.post(
+        url, {"password": "wrong", "confirm": True}, format="json"
+    )
+
+    assert response.status_code == 400
+    user.refresh_from_db()
+    assert user.is_active is True
+
+
+def test_user_deactivate(logged_in_api_client, factories):
+    user = logged_in_api_client.user
+    user.set_password("mypassword")
+    user.save()
+    factories["users.AccessToken"](user=user)
+    url = reverse("api:v1:users:users-me-deactivate")
+
+    response = logged_in_api_client.post(
+        url, {"password": "mypassword", "confirm": True}, format="json"
+    )
+
+    assert response.status_code == 204
+    user.refresh_from_db()
+    assert user.is_active is False
+    assert user.users_accesstoken.count() == 0
