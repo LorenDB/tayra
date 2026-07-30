@@ -891,12 +891,12 @@ Future<void> _showQueueTrackMenu({
   switch (value) {
     case 'go_to_album':
       if (albumAvailable) {
-        context.push('/album/${track.album!.id}');
+        context.go('/album/${track.album!.id}');
       }
       break;
     case 'go_to_artist':
       if (artistAvailable) {
-        context.push('/artist/${track.artist!.id}');
+        context.go('/artist/${track.artist!.id}');
       }
       break;
     case 'add_playlist':
