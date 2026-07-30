@@ -85,19 +85,43 @@ final navigationObserverProvider = Provider<NavigationObserver>((ref) {
 /// non-home tabs to the home tab rather than immediately exiting the app.
 final shellNavigatorKey = GlobalKey<NavigatorState>();
 
+/// SharedPreferences key for the post-login path after OIDC (full page leave).
+const kPostLoginRedirectKey = 'post_login_redirect';
+
 /// Allow only same-app relative paths (blocks open redirects via `from=`).
 ///
 /// Query strings may legitimately contain `https://…` (OAuth `redirect_uri`);
 /// only the path / host are validated, not the raw string.
-String? _safeInternalPath(String? from) {
+///
+/// Rejects `/login` and `/splash` so auth bounce loops cannot nest `from=`.
+String? safeInternalPath(String? from) {
   if (from == null || from.isEmpty) return null;
   final uri = Uri.tryParse(from);
   if (uri == null) return null;
   // Reject absolute URLs (open redirect).
   if (uri.hasScheme || uri.host.isNotEmpty) return null;
   if (!uri.path.startsWith('/') || uri.path.startsWith('//')) return null;
+  final path = _normalizePath(uri.path);
+  if (path == '/login' || path == '/splash') return null;
   // Re-serialize so query values are correctly encoded for go_router.
   return uri.toString();
+}
+
+/// Location string for [uri] suitable as a `from=` deep-link target.
+String _locationOf(Uri uri) {
+  if (uri.hasQuery) return '${uri.path}?${uri.query}';
+  return uri.path.isEmpty ? '/' : uri.path;
+}
+
+/// Build `/path?from=…` when [intended] is a safe in-app location.
+String _withFrom(String path, Uri intended) {
+  final safe = safeInternalPath(_locationOf(intended));
+  if (safe == null) return path;
+  // Already on the target path with no useful destination.
+  if (_normalizePath(intended.path) == path && !intended.hasQuery) {
+    return path;
+  }
+  return Uri(path: path, queryParameters: {'from': safe}).toString();
 }
 
 /// Root navigator for routes outside [ShellRoute] (login, OAuth consent, …).
@@ -232,36 +256,40 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       final path = _normalizePath(state.uri.path);
       final isLoginRoute = path == '/login';
       final isSplashRoute = path == '/splash';
-      final isAuthorizeRoute = path == '/authorize';
       final isPublicAuth = isPublicAuthPath(path);
+      final fromParam = state.uri.queryParameters['from'];
 
       // While restoring session, keep auth-related surfaces mounted so
       // `/authorize?…` / email reset links are not stripped by a bounce through
-      // `/splash` → `/` or `/login`.
+      // `/splash` → `/` or `/login`. For all other deep links, park on splash
+      // with `from=` so the original path is restored after auth settles.
       if (authState.isCheckingAuth) {
-        if (isPublicAuth) return null;
-        return '/splash';
+        if (isPublicAuth || isSplashRoute) return null;
+        return _withFrom('/splash', state.uri);
       }
 
       final isAuth = authState.isAuthenticated;
 
-      if (isSplashRoute) return isAuth ? '/' : '/login';
-
-      if (!isAuth) {
-        if (isPublicAuth) return null;
-        // Preserve third-party OAuth query string across login.
-        if (isAuthorizeRoute) {
+      if (isSplashRoute) {
+        final safe = safeInternalPath(fromParam);
+        if (isAuth) return safe ?? '/';
+        if (safe != null) {
           return Uri(
             path: '/login',
-            queryParameters: {'from': state.uri.toString()},
+            queryParameters: {'from': safe},
           ).toString();
         }
         return '/login';
       }
 
+      if (!isAuth) {
+        if (isPublicAuth) return null;
+        // Preserve deep link (and OAuth authorize query) across login.
+        return _withFrom('/login', state.uri);
+      }
+
       if (isLoginRoute) {
-        final from = state.uri.queryParameters['from'];
-        final safe = _safeInternalPath(from);
+        final safe = safeInternalPath(fromParam);
         if (safe != null) return safe;
         return '/';
       }

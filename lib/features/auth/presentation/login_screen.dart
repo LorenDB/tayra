@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
 import 'package:tayra/core/platform/app_platform.dart';
+import 'package:tayra/core/router/app_router.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/logo_widget.dart';
 
@@ -554,13 +555,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (server.isEmpty) return;
 
     // Persist server URL so OOB exchange / native callback can find it.
+    // Also stash any deep-link `from=` so the OIDC return path can restore it
+    // after the full-page IdP round-trip on web.
     final prefsServer = server.startsWith('http') ? server : 'https://$server';
+    final from = GoRouterState.of(context).uri.queryParameters['from'];
+    final safeFrom = safeInternalPath(from);
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(
         'server_url',
         prefsServer.replaceAll(RegExp(r'/$'), ''),
       );
+      if (safeFrom != null) {
+        await prefs.setString(kPostLoginRedirectKey, safeFrom);
+      } else {
+        await prefs.remove(kPostLoginRedirectKey);
+      }
     } catch (_) {}
 
     final notifier = ref.read(authStateProvider.notifier);

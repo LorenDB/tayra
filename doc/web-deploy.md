@@ -36,6 +36,9 @@ Notes:
 - `FUNKWHALE_URL` enables branded single-pod login.
 - Prefer same-origin with `/api/`.
 - Path URL strategy is on for nginx `try_files` (SPA deep links).
+- Client routes update the browser URL on every page (e.g. `/browse/album/12`,
+  `/playlists/3`, `/search?q=…`, `/year-review/2025`). Cold loads and refreshes
+  restore the path after session restore (`from=` on `/splash` / `/login`).
 - Auth: `POST /api/v1/users/token/` (username + transport-hashed password → OAuth tokens).
 - Password reset email links: `/auth/password/reset/confirm?uid=…&token=…`
   (nginx must serve `index.html` for `/auth/*`; front image uses `root`+`try_files`).

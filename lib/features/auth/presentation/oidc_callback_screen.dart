@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:tayra/core/auth/auth_provider.dart';
 import 'package:tayra/core/platform/app_platform.dart';
+import 'package:tayra/core/router/app_router.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 
 /// Completes OIDC SSO after the API redirects back with `?code=` or `?error=`.
@@ -59,7 +60,17 @@ class _OidcCallbackScreenState extends ConsumerState<OidcCallbackScreen> {
         .completeOidcLogin(serverUrl: server, code: code);
     if (!mounted) return;
     if (ok) {
-      context.go('/');
+      // Restore deep link saved before the IdP full-page redirect, if any.
+      var dest = '/';
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        final saved = prefs.getString(kPostLoginRedirectKey);
+        await prefs.remove(kPostLoginRedirectKey);
+        final safe = safeInternalPath(saved);
+        if (safe != null) dest = safe;
+      } catch (_) {}
+      if (!mounted) return;
+      context.go(dest);
       return;
     }
     final authError = ref.read(authStateProvider).error;

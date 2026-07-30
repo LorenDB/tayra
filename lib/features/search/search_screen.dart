@@ -39,6 +39,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   String? _error;
   String _lastQuery = '';
   StreamSubscription<String>? _cacheSub;
+  bool _seededFromUrl = false;
 
   @override
   void initState() {
@@ -54,11 +55,43 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Seed from `/search?q=…` once so deep links and browser refresh work.
+    // Defer past the current frame so we never navigate during build.
+    if (_seededFromUrl) return;
+    _seededFromUrl = true;
+    final q = GoRouterState.of(context).uri.queryParameters['q']?.trim() ?? '';
+    if (q.isEmpty) return;
+    _controller.text = q;
+    _controller.selection = TextSelection.collapsed(offset: q.length);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      unawaited(_performSearch(q));
+    });
+  }
+
+  @override
   void dispose() {
     _cacheSub?.cancel();
     _debounce?.cancel();
     _controller.dispose();
     super.dispose();
+  }
+
+  /// Keep the browser URL in sync with the active query (`/search?q=…`).
+  void _syncSearchUrl(String query) {
+    if (!mounted) return;
+    final uri = GoRouterState.of(context).uri;
+    final current = uri.queryParameters['q'] ?? '';
+    final next = query.trim();
+    if (current == next) return;
+    final location =
+        next.isEmpty
+            ? uri.path
+            : Uri(path: uri.path, queryParameters: {'q': next}).toString();
+    // Replace so each keystroke does not spam browser history.
+    context.replace(location);
   }
 
   void _onQueryChanged(String query) {
@@ -72,6 +105,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         _error = null;
         _lastQuery = '';
       });
+      _syncSearchUrl('');
       return;
     }
 
@@ -91,6 +125,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     // Record the query before the await so Retry works after a failure, and
     // so late responses from an older query can be discarded.
     _lastQuery = query;
+    if (!fromCacheUpdate) {
+      _syncSearchUrl(query);
+    }
 
     setState(() {
       // Keep previous results visible when applying a background revalidation.
