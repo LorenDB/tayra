@@ -15,10 +15,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models, transaction
-from django.db.models import Count, JSONField, Prefetch
+from django.db.models import Count, JSONField, Min, Prefetch, Sum
 from django.db.models.expressions import OuterRef, Subquery
 from django.db.models.query_utils import Q
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import timezone
@@ -312,6 +312,10 @@ class AlbumQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
             return self.exclude(pk__in=matches)
 
     def with_duration(self):
+        """
+        Annotate duration from uploads (legacy). Prefer the stored Album.duration
+        field, which is kept up to date by signals.
+        """
         # takes one upload per track
         subquery = Subquery(
             Upload.objects.filter(track_id=OuterRef("tracks"))
@@ -326,11 +330,33 @@ class AlbumQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
         )
 
 
+def compute_album_duration(album_id):
+    """
+    Total album duration in seconds: sum of one upload duration per track
+    (lowest upload id per track, matching AlbumQuerySet.with_duration).
+    """
+    if not album_id:
+        return 0
+    first_upload_ids = (
+        Upload.objects.filter(track__album_id=album_id)
+        .values("track_id")
+        .annotate(first_id=Min("id"))
+        .values_list("first_id", flat=True)
+    )
+    total = Upload.objects.filter(pk__in=first_upload_ids).aggregate(
+        total=Sum("duration")
+    )["total"]
+    return total or 0
+
+
 class Album(APIModelMixin):
     title = models.TextField()
     artist = models.ForeignKey(Artist, related_name="albums", on_delete=models.CASCADE)
     release_date = models.DateField(null=True, blank=True, db_index=True)
     release_group_id = models.UUIDField(null=True, blank=True)
+    # Precalculated total length in seconds (one upload per track).
+    # Updated when tracks/uploads are added, modified, or removed.
+    duration = models.PositiveIntegerField(default=0, db_index=True)
     attachment_cover = models.ForeignKey(
         "common.Attachment",
         null=True,
@@ -398,6 +424,24 @@ class Album(APIModelMixin):
 
     def get_moderation_url(self):
         return f"/manage/library/albums/{self.pk}"
+
+    def recalculate_duration(self, save=True):
+        """Recompute and optionally persist stored duration for this album."""
+        new_duration = compute_album_duration(self.pk)
+        self.duration = new_duration
+        if save and self.pk:
+            type(self).objects.filter(pk=self.pk).update(duration=new_duration)
+        return new_duration
+
+    @classmethod
+    def update_durations(cls, album_ids):
+        """Recalculate stored duration for each album id in *album_ids*."""
+        ids = {aid for aid in album_ids if aid}
+        if not ids:
+            return
+        for album_id in ids:
+            duration = compute_album_duration(album_id)
+            cls.objects.filter(pk=album_id).update(duration=duration)
 
     @classmethod
     def get_or_create_from_title(cls, title, **kwargs):
@@ -1383,6 +1427,96 @@ def update_denormalization_track_actor(sender, instance, created, **kwargs):
             delete_existing=False,
             upload_and_track_ids=[(instance.pk, instance.track_id)],
         )
+
+
+# ── Album duration denormalization ─────────────────────────────────────────
+
+
+def _album_ids_for_tracks(track_ids):
+    track_ids = [tid for tid in track_ids if tid]
+    if not track_ids:
+        return set()
+    return set(
+        Track.objects.filter(pk__in=track_ids)
+        .exclude(album_id=None)
+        .values_list("album_id", flat=True)
+    )
+
+
+@receiver(pre_save, sender=Upload)
+def cache_upload_album_ids_for_duration(sender, instance, **kwargs):
+    """Remember album(s) that may need duration refresh after this upload save."""
+    album_ids = set()
+    if instance.pk:
+        old = (
+            Upload.objects.filter(pk=instance.pk)
+            .values_list("track_id", "track__album_id")
+            .first()
+        )
+        if old:
+            old_track_id, old_album_id = old
+            instance._duration_old_track_id = old_track_id
+            if old_album_id:
+                album_ids.add(old_album_id)
+    instance._duration_album_ids = album_ids
+
+
+@receiver(post_save, sender=Upload)
+def update_album_duration_on_upload_save(sender, instance, created, **kwargs):
+    update_fields = kwargs.get("update_fields")
+    if update_fields is not None and not created:
+        relevant = {"duration", "track", "track_id"}
+        if not relevant.intersection(update_fields):
+            return
+
+    album_ids = set(getattr(instance, "_duration_album_ids", set()) or set())
+    if instance.track_id:
+        album_ids |= _album_ids_for_tracks([instance.track_id])
+    if album_ids:
+        Album.update_durations(album_ids)
+
+
+@receiver(post_delete, sender=Upload)
+def update_album_duration_on_upload_delete(sender, instance, **kwargs):
+    album_ids = _album_ids_for_tracks([instance.track_id])
+    if album_ids:
+        Album.update_durations(album_ids)
+
+
+@receiver(pre_save, sender=Track)
+def cache_track_album_id_for_duration(sender, instance, **kwargs):
+    if instance.pk:
+        old_album_id = (
+            Track.objects.filter(pk=instance.pk)
+            .values_list("album_id", flat=True)
+            .first()
+        )
+        instance._duration_old_album_id = old_album_id
+    else:
+        instance._duration_old_album_id = None
+
+
+@receiver(post_save, sender=Track)
+def update_album_duration_on_track_save(sender, instance, created, **kwargs):
+    update_fields = kwargs.get("update_fields")
+    if update_fields is not None and not created:
+        if "album" not in update_fields and "album_id" not in update_fields:
+            return
+
+    album_ids = set()
+    old_album_id = getattr(instance, "_duration_old_album_id", None)
+    if old_album_id:
+        album_ids.add(old_album_id)
+    if instance.album_id:
+        album_ids.add(instance.album_id)
+    if album_ids:
+        Album.update_durations(album_ids)
+
+
+@receiver(post_delete, sender=Track)
+def update_album_duration_on_track_delete(sender, instance, **kwargs):
+    if instance.album_id:
+        Album.update_durations([instance.album_id])
 
 
 @receiver(pre_save, sender=Library)

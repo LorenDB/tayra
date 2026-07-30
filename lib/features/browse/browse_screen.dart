@@ -117,6 +117,7 @@ class _AlbumFilterSheet extends ConsumerStatefulWidget {
 class _AlbumFilterSheetState extends ConsumerState<_AlbumFilterSheet> {
   late AlbumSortMode _sortMode;
   late Set<String> _selectedTags;
+  late AlbumDurationPreset _durationPreset;
   String _tagSearch = '';
 
   @override
@@ -125,12 +126,14 @@ class _AlbumFilterSheetState extends ConsumerState<_AlbumFilterSheet> {
     final filter = ref.read(albumsFilterProvider);
     _sortMode = filter.sortMode;
     _selectedTags = Set.from(filter.tags);
+    _durationPreset = filter.durationPreset;
   }
 
   void _apply() {
     final notifier = ref.read(albumsFilterProvider.notifier);
     notifier.setSortMode(_sortMode);
     notifier.setTags(_selectedTags.toList());
+    notifier.setDurationPreset(_durationPreset);
     Navigator.of(context).pop();
   }
 
@@ -147,6 +150,31 @@ class _AlbumFilterSheetState extends ConsumerState<_AlbumFilterSheet> {
         _selectedTags.add(tag);
       }
     });
+  }
+
+  Widget _choiceChip({
+    required String label,
+    required bool selected,
+    required VoidCallback onSelected,
+  }) {
+    return ChoiceChip(
+      label: Text(label),
+      selected: selected,
+      onSelected: (_) => onSelected(),
+      selectedColor: AppTheme.primary.withValues(alpha: 0.2),
+      side: BorderSide(
+        color:
+            selected
+                ? AppTheme.primary
+                : AppTheme.onBackgroundMuted.withValues(alpha: 0.3),
+      ),
+      labelStyle: TextStyle(
+        color: selected ? AppTheme.primary : null,
+        fontWeight: selected ? FontWeight.w600 : null,
+      ),
+      backgroundColor: Colors.transparent,
+      showCheckmark: false,
+    );
   }
 
   @override
@@ -221,28 +249,36 @@ class _AlbumFilterSheetState extends ConsumerState<_AlbumFilterSheet> {
                     runSpacing: 8,
                     children:
                         AlbumSortMode.values.map((mode) {
-                          final selected = _sortMode == mode;
-                          return ChoiceChip(
-                            label: Text(mode.label),
-                            selected: selected,
-                            onSelected: (_) => setState(() => _sortMode = mode),
-                            selectedColor: AppTheme.primary.withValues(
-                              alpha: 0.2,
-                            ),
-                            side: BorderSide(
-                              color:
-                                  selected
-                                      ? AppTheme.primary
-                                      : AppTheme.onBackgroundMuted.withValues(
-                                        alpha: 0.3,
-                                      ),
-                            ),
-                            labelStyle: TextStyle(
-                              color: selected ? AppTheme.primary : null,
-                              fontWeight: selected ? FontWeight.w600 : null,
-                            ),
-                            backgroundColor: Colors.transparent,
-                            showCheckmark: false,
+                          return _choiceChip(
+                            label: mode.label,
+                            selected: _sortMode == mode,
+                            onSelected:
+                                () => setState(() => _sortMode = mode),
+                          );
+                        }).toList(),
+                  ),
+                  const SizedBox(height: 24),
+                  // ── Duration section ───────────────────────────────
+                  const Text(
+                    'Duration',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: AppTheme.onBackgroundMuted,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children:
+                        AlbumDurationPreset.values.map((preset) {
+                          return _choiceChip(
+                            label: preset.label,
+                            selected: _durationPreset == preset,
+                            onSelected:
+                                () =>
+                                    setState(() => _durationPreset = preset),
                           );
                         }).toList(),
                   ),

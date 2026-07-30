@@ -16,6 +16,65 @@ def test_can_store_release_group_id_on_album(factories):
     assert album.release_group_id is not None
 
 
+def test_album_duration_updated_when_uploads_change(factories):
+    album = factories["music.Album"]()
+    track1 = factories["music.Track"](album=album)
+    track2 = factories["music.Track"](album=album)
+
+    upload1 = factories["music.Upload"](track=track1, duration=100)
+    factories["music.Upload"](track=track2, duration=50)
+    album.refresh_from_db()
+    assert album.duration == 150
+
+    # Second upload on same track does not double-count (lowest upload id wins).
+    factories["music.Upload"](track=track1, duration=999)
+    album.refresh_from_db()
+    assert album.duration == 150
+
+    upload1.duration = 200
+    upload1.save(update_fields=["duration"])
+    album.refresh_from_db()
+    assert album.duration == 250
+
+    upload1.delete()
+    album.refresh_from_db()
+    # After deleting the first upload on track1, the 999s one remains for track1.
+    assert album.duration == 999 + 50
+
+
+def test_album_duration_updated_when_track_moves_album(factories):
+    album_a = factories["music.Album"]()
+    album_b = factories["music.Album"]()
+    track = factories["music.Track"](album=album_a)
+    factories["music.Upload"](track=track, duration=120)
+
+    album_a.refresh_from_db()
+    album_b.refresh_from_db()
+    assert album_a.duration == 120
+    assert album_b.duration == 0
+
+    track.album = album_b
+    track.save(update_fields=["album"])
+
+    album_a.refresh_from_db()
+    album_b.refresh_from_db()
+    assert album_a.duration == 0
+    assert album_b.duration == 120
+
+
+def test_compute_album_duration_matches_with_duration(factories):
+    album = factories["music.Album"]()
+    track1 = factories["music.Track"](album=album)
+    track2 = factories["music.Track"](album=album)
+    factories["music.Upload"](track=track1, duration=21)
+    factories["music.Upload"](track=track1, duration=21)
+    factories["music.Upload"](track=track2, duration=21)
+
+    assert models.compute_album_duration(album.pk) == 42
+    annotated = album.__class__.objects.with_duration().get(pk=album.pk)
+    assert annotated.duration == 42
+
+
 def test_import_album_stores_release_group(factories):
     album_data = {
         "artist-credit": [

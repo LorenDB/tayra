@@ -39,6 +39,49 @@ def test_album_filter_hidden(factories, mocker, queryset_equal_list):
     assert filterset.qs == [hidden_album]
 
 
+def test_album_filter_ordering_by_duration(factories, mocker):
+    short = factories["music.Album"](duration=60)
+    long_album = factories["music.Album"](duration=3600)
+    mid = factories["music.Album"](duration=600)
+
+    qs = models.Album.objects.filter(pk__in=[short.pk, mid.pk, long_album.pk])
+    filterset = filters.AlbumFilter(
+        {"ordering": "duration"},
+        request=mocker.Mock(user=mocker.Mock(is_authenticated=False)),
+        queryset=qs,
+    )
+    assert list(filterset.qs.values_list("pk", flat=True)) == [
+        short.pk,
+        mid.pk,
+        long_album.pk,
+    ]
+
+    filterset_desc = filters.AlbumFilter(
+        {"ordering": "-duration"},
+        request=mocker.Mock(user=mocker.Mock(is_authenticated=False)),
+        queryset=qs,
+    )
+    assert list(filterset_desc.qs.values_list("pk", flat=True)) == [
+        long_album.pk,
+        mid.pk,
+        short.pk,
+    ]
+
+
+def test_album_filter_min_max_duration(factories, mocker, queryset_equal_list):
+    short = factories["music.Album"](duration=60)
+    mid = factories["music.Album"](duration=600)
+    long_album = factories["music.Album"](duration=3600)
+    qs = models.Album.objects.filter(pk__in=[short.pk, mid.pk, long_album.pk])
+
+    filterset = filters.AlbumFilter(
+        {"min_duration": 120, "max_duration": 1200},
+        request=mocker.Mock(user=mocker.Mock(is_authenticated=False)),
+        queryset=qs,
+    )
+    assert list(filterset.qs) == [mid]
+
+
 def test_artist_filter_hidden(factories, mocker, queryset_equal_list):
     factories["music.Artist"]()
     cf = factories["moderation.UserFilter"](for_artist=True)

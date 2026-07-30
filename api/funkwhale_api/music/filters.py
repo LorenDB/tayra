@@ -254,6 +254,9 @@ class AlbumFilter(
     )
     content_category = filters.CharFilter("artist__content_category")
     tag = TAG_FILTER
+    # Duration filters use the precalculated Album.duration field (seconds).
+    min_duration = filters.NumberFilter(field_name="duration", lookup_expr="gte")
+    max_duration = filters.NumberFilter(field_name="duration", lookup_expr="lte")
     scope = common_filters.ActorScopeFilter(
         actor_field="tracks__uploads__library__actor",
         distinct=True,
@@ -265,6 +268,7 @@ class AlbumFilter(
             ("creation_date", "creation_date"),
             ("release_date", "release_date"),
             ("title", "title"),
+            ("duration", "duration"),
             ("artist__modification_date", "artist__modification_date"),
             ("?", "random"),
             ("tag_matches", "related"),

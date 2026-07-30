@@ -649,7 +649,9 @@ def test_album_serializer_includes_duration(tmpfile, factories):
         audio_file=None,
         duration=21,
     )
-    qs = album.__class__.objects.with_duration()
+    album.refresh_from_db()
+    # One upload per track (lowest id): 21 + 21 = 42; stored by post_save signals.
+    assert album.duration == 42
 
-    serializer = serializers.AlbumSerializer(qs.get())
+    serializer = serializers.AlbumSerializer(album)
     assert serializer.data["duration"] == 42

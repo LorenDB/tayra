@@ -22,6 +22,8 @@ enum AlbumSortMode {
   releaseDateOldest,
   dateAddedNewest,
   dateAddedOldest,
+  durationShortest,
+  durationLongest,
 }
 
 extension AlbumSortModeX on AlbumSortMode {
@@ -39,6 +41,10 @@ extension AlbumSortModeX on AlbumSortMode {
         return 'Date added (newest)';
       case AlbumSortMode.dateAddedOldest:
         return 'Date added (oldest)';
+      case AlbumSortMode.durationShortest:
+        return 'Duration (shortest)';
+      case AlbumSortMode.durationLongest:
+        return 'Duration (longest)';
     }
   }
 
@@ -56,6 +62,66 @@ extension AlbumSortModeX on AlbumSortMode {
         return '-creation_date';
       case AlbumSortMode.dateAddedOldest:
         return 'creation_date';
+      case AlbumSortMode.durationShortest:
+        return 'duration';
+      case AlbumSortMode.durationLongest:
+        return '-duration';
+    }
+  }
+}
+
+/// Preset duration ranges for the albums filter sheet (seconds).
+enum AlbumDurationPreset {
+  any,
+  under30Min,
+  min30To60,
+  hour1To2,
+  over2Hours,
+}
+
+extension AlbumDurationPresetX on AlbumDurationPreset {
+  String get label {
+    switch (this) {
+      case AlbumDurationPreset.any:
+        return 'Any length';
+      case AlbumDurationPreset.under30Min:
+        return 'Under 30 min';
+      case AlbumDurationPreset.min30To60:
+        return '30–60 min';
+      case AlbumDurationPreset.hour1To2:
+        return '1–2 hours';
+      case AlbumDurationPreset.over2Hours:
+        return 'Over 2 hours';
+    }
+  }
+
+  /// Inclusive minimum duration in seconds, or null for no lower bound.
+  int? get minDuration {
+    switch (this) {
+      case AlbumDurationPreset.any:
+      case AlbumDurationPreset.under30Min:
+        return null;
+      case AlbumDurationPreset.min30To60:
+        return 30 * 60;
+      case AlbumDurationPreset.hour1To2:
+        return 60 * 60;
+      case AlbumDurationPreset.over2Hours:
+        return 2 * 60 * 60;
+    }
+  }
+
+  /// Inclusive maximum duration in seconds, or null for no upper bound.
+  int? get maxDuration {
+    switch (this) {
+      case AlbumDurationPreset.any:
+      case AlbumDurationPreset.over2Hours:
+        return null;
+      case AlbumDurationPreset.under30Min:
+        return 30 * 60 - 1;
+      case AlbumDurationPreset.min30To60:
+        return 60 * 60;
+      case AlbumDurationPreset.hour1To2:
+        return 2 * 60 * 60;
     }
   }
 }
@@ -63,18 +129,31 @@ extension AlbumSortModeX on AlbumSortMode {
 class AlbumsFilter {
   final AlbumSortMode sortMode;
   final List<String> tags;
+  final AlbumDurationPreset durationPreset;
 
   const AlbumsFilter({
     this.sortMode = AlbumSortMode.titleAsc,
     this.tags = const [],
+    this.durationPreset = AlbumDurationPreset.any,
   });
 
-  bool get isActive => sortMode != AlbumSortMode.titleAsc || tags.isNotEmpty;
+  int? get minDuration => durationPreset.minDuration;
+  int? get maxDuration => durationPreset.maxDuration;
 
-  AlbumsFilter copyWith({AlbumSortMode? sortMode, List<String>? tags}) {
+  bool get isActive =>
+      sortMode != AlbumSortMode.titleAsc ||
+      tags.isNotEmpty ||
+      durationPreset != AlbumDurationPreset.any;
+
+  AlbumsFilter copyWith({
+    AlbumSortMode? sortMode,
+    List<String>? tags,
+    AlbumDurationPreset? durationPreset,
+  }) {
     return AlbumsFilter(
       sortMode: sortMode ?? this.sortMode,
       tags: tags ?? this.tags,
+      durationPreset: durationPreset ?? this.durationPreset,
     );
   }
 }
@@ -86,6 +165,8 @@ class AlbumsFilterNotifier extends Notifier<AlbumsFilter> {
   void setSortMode(AlbumSortMode sortMode) =>
       state = state.copyWith(sortMode: sortMode);
   void setTags(List<String> tags) => state = state.copyWith(tags: tags);
+  void setDurationPreset(AlbumDurationPreset preset) =>
+      state = state.copyWith(durationPreset: preset);
   void reset() => state = const AlbumsFilter();
 }
 
@@ -109,6 +190,8 @@ final albumsPageProvider = FutureProvider.family<PaginatedResponse<Album>, int>(
         pageSize: 30,
         ordering: filter.sortMode.apiOrdering,
         tag: filter.tags.isEmpty ? null : filter.tags,
+        minDuration: filter.minDuration,
+        maxDuration: filter.maxDuration,
       );
     }
 
@@ -120,6 +203,8 @@ final albumsPageProvider = FutureProvider.family<PaginatedResponse<Album>, int>(
           pageSize: 30,
           ordering: filter.sortMode.apiOrdering,
           tag: [tag],
+          minDuration: filter.minDuration,
+          maxDuration: filter.maxDuration,
         ),
       ),
     );
@@ -169,6 +254,8 @@ class _AlbumsScreenState extends ConsumerState<AlbumsScreen>
           pageSize: 30,
           ordering: filter.sortMode.apiOrdering,
           tag: filter.tags.isEmpty ? null : filter.tags,
+          minDuration: filter.minDuration,
+          maxDuration: filter.maxDuration,
           forceRefresh: true,
         );
   }
