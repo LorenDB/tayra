@@ -557,7 +557,7 @@ class _AlbumHeader extends ConsumerWidget {
         // ── Gradient glow background ──
         Container(
           height: topPadding + artSize + 100,
-          decoration: BoxDecoration(gradient: AppTheme.coverGlow(glowColor)),
+          decoration: BoxDecoration(gradient: AppTheme.nowPlayingTint(glowColor)),
         ),
 
         // ── Back button ──

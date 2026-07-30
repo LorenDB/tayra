@@ -28,17 +28,6 @@ class AppTheme {
     colors: [Color(0xFF6C63FF), Color(0xFF00D4AA)],
   );
 
-  static LinearGradient coverGlow(Color dominantColor) => LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    colors: [
-      dominantColor.withValues(alpha: 0.35),
-      dominantColor.withValues(alpha: 0.08),
-      background,
-    ],
-    stops: const [0.0, 0.5, 1.0],
-  );
-
   /// Ambient page tint for now-playing (full-screen + side panel).
   ///
   /// Fades the accent to fully transparent by the ~2/3 mark so the lower third
