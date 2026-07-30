@@ -124,7 +124,7 @@ class HomeScreen extends ConsumerWidget {
               child: SizedBox(height: MediaQuery.of(context).padding.top),
             ),
 
-            // Greeting header with subtle gradient background
+            // Greeting header
             // Desktop: greeting in left column, banner in right column
             if (isWide)
               SliverToBoxAdapter(
@@ -227,8 +227,7 @@ class _GreetingHeader extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final greeting = _getGreeting();
 
-    return Container(
-      decoration: BoxDecoration(gradient: AppTheme.subtleFade),
+    return Padding(
       padding: EdgeInsets.fromLTRB(
         horizontalPadding,
         20,
