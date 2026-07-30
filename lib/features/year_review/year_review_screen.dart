@@ -3569,7 +3569,7 @@ class _RankedList extends StatelessWidget {
   }
 }
 
-class _RankedItem extends StatelessWidget {
+class _RankedItem extends ConsumerWidget {
   final int rank;
   final TopItem item;
   final IconData placeholderIcon;
@@ -3585,9 +3585,17 @@ class _RankedItem extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final fillFraction =
         maxCount > 0 ? (item.count / maxCount).clamp(0.0, 1.0) : 0.0;
+
+    final paletteAsync = ref.watch(
+      paletteColorsProvider(encodePaletteKey(item.coverUrl, null)),
+    );
+    final accentColor = paletteAsync.maybeWhen(
+      data: (color) => color,
+      orElse: () => AppTheme.primary,
+    );
 
     return Stack(
       children: [
@@ -3603,7 +3611,7 @@ class _RankedItem extends StatelessWidget {
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
                     colors: [
-                      AppTheme.primary.withValues(alpha: 0.10),
+                      accentColor.withValues(alpha: 0.10),
                       Colors.transparent,
                     ],
                   ),
