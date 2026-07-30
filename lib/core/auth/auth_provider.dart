@@ -28,6 +28,42 @@ final secureStorageProvider = Provider<FlutterSecureStorage>((ref) {
   return const FlutterSecureStorage();
 });
 
+// ── Auth methods discovery ──────────────────────────────────────────────
+
+/// Public auth-methods payload from `GET /api/v1/users/auth-methods/`.
+class AuthMethods {
+  final bool password;
+  final bool oidcEnabled;
+  final String oidcDisplayName;
+  final String oidcLoginPath;
+
+  const AuthMethods({
+    this.password = true,
+    this.oidcEnabled = false,
+    this.oidcDisplayName = 'SSO',
+    this.oidcLoginPath = '/api/v1/users/oidc/login/',
+  });
+
+  factory AuthMethods.fromJson(Map<String, dynamic> json) {
+    final oidc = json['oidc'];
+    final Map<String, dynamic> oidcMap =
+        oidc is Map
+            ? Map<String, dynamic>.from(oidc)
+            : const <String, dynamic>{};
+    final display = (oidcMap['display_name'] as String?)?.trim() ?? '';
+    final loginPath = (oidcMap['login_path'] as String?)?.trim() ?? '';
+    return AuthMethods(
+      password: json['password'] != false,
+      oidcEnabled: oidcMap['enabled'] == true,
+      oidcDisplayName: display.isNotEmpty ? display : 'SSO',
+      oidcLoginPath:
+          loginPath.isNotEmpty ? loginPath : '/api/v1/users/oidc/login/',
+    );
+  }
+
+  static const disabled = AuthMethods();
+}
+
 // ── Auth state ──────────────────────────────────────────────────────────
 
 class AuthState {
@@ -300,6 +336,167 @@ class AuthNotifier extends Notifier<AuthState> {
     if (!url.startsWith('http')) url = 'https://$url';
     if (url.endsWith('/')) url = url.substring(0, url.length - 1);
     return url;
+  }
+
+  /// Discover available login methods (`GET /api/v1/users/auth-methods/`).
+  ///
+  /// Returns [AuthMethods.disabled] when the server does not expose the
+  /// endpoint (stock Funkwhale) or on network errors.
+  Future<AuthMethods> fetchAuthMethods(String serverUrl) async {
+    final url = _normalizeServerUrl(serverUrl);
+    final endpoint =
+        kIsWeb
+            ? '/api/v1/users/auth-methods/'
+            : '$url/api/v1/users/auth-methods/';
+    try {
+      final response = await _dio.get(
+        endpoint,
+        options: Options(
+          headers: {'Accept': 'application/json'},
+          validateStatus: (s) => s != null && s < 500,
+          responseType: ResponseType.json,
+        ),
+      );
+      if (response.statusCode != 200) return AuthMethods.disabled;
+      final map = _asJsonMap(response.data);
+      if (map == null) return AuthMethods.disabled;
+      return AuthMethods.fromJson(map);
+    } catch (_) {
+      return AuthMethods.disabled;
+    }
+  }
+
+  /// Absolute URL that starts the server-side OIDC login redirect.
+  ///
+  /// [clientRedirect] is where the API sends the browser after IdP auth
+  /// (SPA callback URL or OOB URN).
+  String buildOidcLoginUrl({
+    required String serverUrl,
+    required String clientRedirect,
+    required String loginPath,
+    String? clientState,
+  }) {
+    final url = _normalizeServerUrl(serverUrl);
+    final path = loginPath.startsWith('/') ? loginPath : '/$loginPath';
+    final base = kIsWeb ? path : '$url$path';
+    final params = <String, String>{
+      'client_redirect': clientRedirect,
+      if (clientState != null && clientState.isNotEmpty) 'state': clientState,
+    };
+    final uri = Uri.parse(base).replace(queryParameters: params);
+    // Relative paths need the current origin for url_launcher / browser nav.
+    if (!uri.hasScheme) {
+      // Caller on web should prefer full URL; keep path+query usable with go.
+      return uri.toString();
+    }
+    return uri.toString();
+  }
+
+  /// Complete OIDC SSO by exchanging a one-time code for first-party tokens.
+  Future<bool> completeOidcLogin({
+    required String serverUrl,
+    required String code,
+  }) async {
+    state = state.copyWith(isLoading: true, error: null);
+    final url = _normalizeServerUrl(serverUrl);
+    final endpoint =
+        kIsWeb ? '/api/v1/users/oidc/token/' : '$url/api/v1/users/oidc/token/';
+
+    try {
+      final response = await _dio.post(
+        endpoint,
+        data: {'code': code.trim()},
+        options: Options(
+          contentType: Headers.jsonContentType,
+          headers: {
+            'Accept': 'application/json',
+            Headers.contentTypeHeader: Headers.jsonContentType,
+          },
+          validateStatus: (s) => s != null && s < 500,
+          responseType: ResponseType.json,
+        ),
+      );
+      final payload = _asJsonMap(response.data);
+      if (response.statusCode != 200 || payload == null) {
+        state = state.copyWith(
+          isLoading: false,
+          error: _formatOidcError(payload, response.statusCode),
+        );
+        Analytics.track('login_sso_failed');
+        return false;
+      }
+
+      final accessToken = payload['access_token'] as String?;
+      if (accessToken == null || accessToken.isEmpty) {
+        state = state.copyWith(
+          isLoading: false,
+          error: 'Server did not return an access token.',
+        );
+        Analytics.track('login_sso_failed');
+        return false;
+      }
+
+      final pendingServer = state.pendingServerUrl;
+      if (pendingServer != null && pendingServer != url) {
+        await _clearAllUserData();
+      }
+
+      state = state.copyWith(
+        serverUrl: url,
+        accessToken: accessToken,
+        refreshTokenValue: payload['refresh_token'] as String?,
+        clientId: payload['client_id'] as String?,
+        clientSecret: payload['client_secret'] as String? ?? '',
+        listenToken: payload['listen_token'] as String?,
+        isLoading: false,
+        clearPendingServerUrl: true,
+      );
+      await _saveAuth();
+      if (state.listenToken == null || state.listenToken!.isEmpty) {
+        await ensureListenToken();
+      }
+      Analytics.track('login_sso_success');
+      return true;
+    } on DioException catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: _formatOidcError(
+          _asJsonMap(e.response?.data),
+          e.response?.statusCode,
+        ),
+      );
+      Analytics.track('login_sso_failed');
+      return false;
+    } catch (_) {
+      state = state.copyWith(
+        isLoading: false,
+        error: 'Could not complete SSO login. Try again.',
+      );
+      Analytics.track('login_sso_failed');
+      return false;
+    }
+  }
+
+  static String _formatOidcError(Map<String, dynamic>? map, int? status) {
+    if (map != null) {
+      final error = map['error']?.toString();
+      final detail = map['detail']?.toString();
+      if (error == 'user_not_found') {
+        return 'No local account matches this SSO user.';
+      }
+      if (error == 'inactive' || error == 'account_disabled') {
+        return 'This account was disabled.';
+      }
+      if (error == 'invalid_code' || error == 'missing_code') {
+        return 'Invalid or expired sign-in code. Start SSO again.';
+      }
+      if (detail != null && detail.isNotEmpty) return detail;
+      if (error != null && error.isNotEmpty) return error;
+    }
+    if (status == 404) {
+      return 'SSO is not available on this server.';
+    }
+    return 'SSO login failed. Try again or use password login.';
   }
 
   /// First-party password login (Funkwhale+Tayra fork: `POST /api/v1/users/token/`).

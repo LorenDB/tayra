@@ -245,6 +245,35 @@ docker compose exec api python manage.py shell -c \
   `docker compose exec api python manage.py fw users update YOUR_USER --password 'new-pass'`
 - `usable False` → no local password (LDAP/social only). Set `LDAP_*` like the old pod, or set a local password with the command above.
 
+### OIDC single sign-on (optional)
+
+Tayra can act as an OpenID Connect relying party so users sign in with an
+external IdP. After SSO, the IdP **username claim** (default
+`preferred_username`) is matched to an existing local `User.username`
+(case-insensitive). Password login remains available.
+
+1. Register a confidential OIDC client at your IdP with redirect URI:
+   ```
+   {FUNKWHALE_PROTOCOL}://{FUNKWHALE_HOSTNAME}/api/v1/users/oidc/callback/
+   ```
+2. Either set env vars (and restart the API) **or** configure under
+   **Settings → Instance settings** (`users` section):
+
+   | Env | Instance preference | Notes |
+   |---|---|---|
+   | `OIDC_ENABLED` | `users__oidc_enabled` | Either path can enable SSO |
+   | `OIDC_DISCOVERY_URL` | `users__oidc_discovery_url` | Issuer or discovery URL |
+   | `OIDC_CLIENT_ID` | `users__oidc_client_id` | |
+   | `OIDC_CLIENT_SECRET` | `users__oidc_client_secret` | Prefer env for secrets |
+   | `OIDC_SCOPES` | `users__oidc_scopes` | Default `openid profile email` |
+   | `OIDC_USERNAME_CLAIM` | `users__oidc_username_claim` | Default `preferred_username` |
+   | `OIDC_DISPLAY_NAME` | `users__oidc_display_name` | Login button label |
+   | `OIDC_AUTO_CREATE` | `users__oidc_auto_create` | Off = match existing users only |
+
+3. Ensure local usernames match the IdP claim values (or enable auto-create).
+4. Clients discover SSO via `GET /api/v1/users/auth-methods/` and show
+   **Sign in with …** on the login screen.
+
 **“Passwords in the browser Network tab”**  
 Tayra sends a **SHA-256 transport digest** in the `password` field (not the
 account password). DevTools still shows the JSON body after TLS decryption;

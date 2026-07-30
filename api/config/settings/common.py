@@ -826,6 +826,54 @@ if AUTH_LDAP_ENABLED:
             AUTH_LDAP_DENY_GROUP = LDAP_DENY_GROUP
 
 
+# OIDC SSO CONFIGURATION
+# ------------------------------------------------------------------------------
+# Optional OpenID Connect relying-party login. Env values are fallbacks when
+# instance preferences (users__oidc_*) are empty; either path can enable SSO.
+# Register this redirect URI at the IdP:
+#   {FUNKWHALE_PROTOCOL}://{FUNKWHALE_HOSTNAME}/api/v1/users/oidc/callback/
+OIDC_ENABLED = env.bool("OIDC_ENABLED", default=False)
+"""
+Whether to enable OIDC single sign-on (in addition to password login).
+
+Can also be toggled via instance setting ``users__oidc_enabled``.
+"""
+
+OIDC_DISCOVERY_URL = env("OIDC_DISCOVERY_URL", default="")
+"""
+OIDC discovery document URL or issuer base URL.
+
+Example: ``https://idp.example.com/.well-known/openid-configuration``
+or ``https://idp.example.com``.
+"""
+
+OIDC_CLIENT_ID = env("OIDC_CLIENT_ID", default="")
+"""OIDC client ID registered at the identity provider."""
+
+OIDC_CLIENT_SECRET = env("OIDC_CLIENT_SECRET", default="")
+"""
+OIDC client secret. Prefer setting this via env rather than the instance
+settings UI when possible.
+"""
+
+OIDC_SCOPES = env("OIDC_SCOPES", default="openid profile email")
+"""Space-separated OIDC scopes requested during authorization."""
+
+OIDC_USERNAME_CLAIM = env("OIDC_USERNAME_CLAIM", default="preferred_username")
+"""
+ID token / userinfo claim used to match an existing local ``User.username``.
+"""
+
+OIDC_DISPLAY_NAME = env("OIDC_DISPLAY_NAME", default="SSO")
+"""Label shown on the client “Sign in with …” button."""
+
+OIDC_AUTO_CREATE = env.bool("OIDC_AUTO_CREATE", default=False)
+"""
+When true, create a local user (unusable password) on first successful SSO
+login if no username match exists. Default is match-only.
+"""
+
+
 # SLUGLIFIER
 AUTOSLUG_SLUGIFY_FUNCTION = "slugify.slugify"
 
