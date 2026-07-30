@@ -57,6 +57,18 @@ class _AlbumTracksNotifier extends AsyncNotifier<List<Track>> {
     state = await AsyncValue.guard(_fetchIncremental);
   }
 
+  Future<List<Track>> getAllTracks() async {
+    final api = ref.read(cachedFunkwhaleApiProvider);
+    final allTracks = await fetchAllPages((page) => api.getTracks(
+      album: albumId,
+      ordering: 'position',
+      pageSize: 100,
+      page: page,
+    ));
+    sortTracksByDiscAndPosition(allTracks);
+    return allTracks;
+  }
+
   Future<List<Track>> _fetchIncremental() async {
     final gen = ++_generation;
     final api = ref.read(cachedFunkwhaleApiProvider);
@@ -381,12 +393,22 @@ class _AlbumDetailBody extends ConsumerWidget {
                 showAlbumArt: false,
                 dominantColor: dominantColor,
                 textColor: textColor,
-                onTap: () {
+                onTap: () async {
+                  final allTracks = tracks.length >= album.tracksCount
+                      ? tracks
+                      : await ref
+                          .read(_albumTracksProvider(album.id).notifier)
+                          .getAllTracks();
+                  if (!context.mounted) return;
+                  final targetId = trackEntry.track.id;
+                  final startIndex =
+                      allTracks.indexWhere((t) => t.id == targetId);
+                  if (startIndex == -1) return;
                   ref
                       .read(playerProvider.notifier)
                       .playTracks(
-                        tracks,
-                        startIndex: trackEntry.trackIndex,
+                        allTracks,
+                        startIndex: startIndex,
                         source: 'album_detail_from_track',
                       );
                 },
@@ -452,7 +474,9 @@ class _AlbumHeader extends ConsumerWidget {
     Future<void> toggleDownload() async {
       // Ensure we have the full list of tracks (wait for paging to finish
       // if necessary) so downloads are queued for every track.
-      final tracks = await ref.read(_albumTracksProvider(album.id).future);
+      final tracks = await ref
+          .read(_albumTracksProvider(album.id).notifier)
+          .getAllTracks();
       try {
         final current = ref.read(isManualAlbumProvider(album.id));
         final enabled = await toggleCollectionManualDownload(
@@ -516,7 +540,9 @@ class _AlbumHeader extends ConsumerWidget {
 
     Future<void> addAlbumToQueue() async {
       try {
-        final tracks = await ref.read(_albumTracksProvider(album.id).future);
+        final tracks = await ref
+            .read(_albumTracksProvider(album.id).notifier)
+            .getAllTracks();
         final message = addTracksToQueue(ref, tracks);
         if (context.mounted) {
           ScaffoldMessenger.of(
@@ -535,7 +561,9 @@ class _AlbumHeader extends ConsumerWidget {
 
     Future<void> playAlbumNext() async {
       try {
-        final tracks = await ref.read(_albumTracksProvider(album.id).future);
+        final tracks = await ref
+            .read(_albumTracksProvider(album.id).notifier)
+            .getAllTracks();
         final message = insertTracksToPlayNext(ref, tracks);
         if (context.mounted) {
           ScaffoldMessenger.of(
@@ -832,7 +860,7 @@ class _AlbumInfo extends StatelessWidget {
 
 // ── Play All / Shuffle buttons ──────────────────────────────────────────
 
-class _ActionButtons extends ConsumerWidget {
+class _ActionButtons extends ConsumerStatefulWidget {
   final Album album;
   final AsyncValue<List<Track>> tracksAsync;
   final Color dominantColor;
@@ -846,22 +874,77 @@ class _ActionButtons extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final tracks = tracksAsync.asData?.value ?? [];
+  ConsumerState<_ActionButtons> createState() => _ActionButtonsState();
+}
 
-    void playAll() {
-      if (tracks.isEmpty) return;
+class _ActionButtonsState extends ConsumerState<_ActionButtons> {
+  bool _isLoadingAll = false;
+
+  bool get _hasTracks =>
+      (widget.tracksAsync.asData?.value ?? []).isNotEmpty;
+
+  Future<List<Track>> _ensureAllTracks() async {
+    final current = widget.tracksAsync.asData?.value ?? [];
+    if (current.length >= widget.album.tracksCount) return current;
+    final notifier = ref.read(_albumTracksProvider(widget.album.id).notifier);
+    return notifier.getAllTracks();
+  }
+
+  Future<void> _playAll() async {
+    if (_isLoadingAll) return;
+    setState(() => _isLoadingAll = true);
+    try {
+      final allTracks = await _ensureAllTracks();
+      if (!mounted) return;
       ref
           .read(playerProvider.notifier)
-          .playTracks(tracks, source: 'album_detail_play_all');
+          .playTracks(allTracks, source: 'album_detail_play_all');
+    } finally {
+      if (mounted) setState(() => _isLoadingAll = false);
     }
+  }
 
-    void shuffleAll() {
-      if (tracks.isEmpty) return;
+  Future<void> _shuffleAll() async {
+    if (_isLoadingAll) return;
+    setState(() => _isLoadingAll = true);
+    try {
+      final allTracks = await _ensureAllTracks();
+      if (!mounted) return;
       ref
           .read(playerProvider.notifier)
-          .playTracks(tracks, source: 'album_detail_shuffle', shuffle: true);
+          .playTracks(allTracks, source: 'album_detail_shuffle', shuffle: true);
+    } finally {
+      if (mounted) setState(() => _isLoadingAll = false);
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final playIcon = _isLoadingAll
+        ? SizedBox(
+            width: 22,
+            height: 22,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              valueColor: AlwaysStoppedAnimation(
+                widget.dominantColor.computeLuminance() > 0.5
+                    ? Colors.black87
+                    : Colors.white,
+              ),
+            ),
+          )
+        : null;
+
+    final shuffleIcon = _isLoadingAll
+        ? SizedBox(
+            width: 20,
+            height: 20,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              valueColor: AlwaysStoppedAnimation(widget.textColor),
+            ),
+          )
+        : null;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -869,20 +952,22 @@ class _ActionButtons extends ConsumerWidget {
         children: [
           Expanded(
             child: PillActionButton(
-              icon: Icons.play_arrow_rounded,
-              label: 'Play All',
-              onPressed: tracks.isNotEmpty ? playAll : null,
-              color: dominantColor,
+              icon: _isLoadingAll ? Icons.play_arrow_rounded : Icons.play_arrow_rounded,
+              label: _isLoadingAll ? 'Loading...' : 'Play All',
+              onPressed: (_hasTracks && !_isLoadingAll) ? _playAll : null,
+              color: widget.dominantColor,
+              iconWidget: playIcon,
             ),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: PillActionButton(
               icon: Icons.shuffle_rounded,
-              label: 'Shuffle',
-              onPressed: tracks.isNotEmpty ? shuffleAll : null,
+              label: _isLoadingAll ? 'Loading...' : 'Shuffle',
+              onPressed: (_hasTracks && !_isLoadingAll) ? _shuffleAll : null,
               isPrimary: false,
-              outlineColor: tracks.isNotEmpty ? textColor : null,
+              outlineColor: _hasTracks ? widget.textColor : null,
+              iconWidget: shuffleIcon,
             ),
           ),
         ],

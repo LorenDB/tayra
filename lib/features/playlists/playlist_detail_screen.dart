@@ -43,6 +43,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
   // Guard against concurrent track removals, which would cause list-index
   // drift between the local list and the server's ordering.
   bool _isRemovingTrack = false;
+  bool _isPreparingAllTracks = false;
   StreamSubscription<String>? _cacheSub;
 
   /// Bumped on each [_loadData] so background page appends from an older
@@ -345,30 +346,76 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
 
   List<Track> get _tracks => _playlistTracks.map((pt) => pt.track).toList();
 
-  void _playAll() {
-    if (_tracks.isEmpty) return;
-    Analytics.track('playlist_play_all', {'track_count': _tracks.length});
-    ref
-        .read(playerProvider.notifier)
-        .playTracks(_tracks, source: 'playlist_detail_play_all');
+  Future<List<Track>> _getAllPlaylistTracks() async {
+    final current = _tracks;
+    final expectedCount = _playlist?.tracksCount ?? 0;
+    if (current.length >= expectedCount && expectedCount > 0) return current;
+
+    final api = ref.read(cachedFunkwhaleApiProvider);
+    final allPt = await fetchAllPages<PlaylistTrack>(
+      (page) => api.getPlaylistTracks(
+        widget.playlistId,
+        page: page,
+        pageSize: 100,
+      ),
+    );
+    return allPt.map((pt) => pt.track).toList();
   }
 
-  void _shuffleAll() {
-    if (_tracks.isEmpty) return;
-    Analytics.track('playlist_shuffle_all', {'track_count': _tracks.length});
-    ref
-        .read(playerProvider.notifier)
-        .playTracks(_tracks, source: 'playlist_detail_shuffle', shuffle: true);
+  Future<void> _playAll() async {
+    if (_isPreparingAllTracks) return;
+    setState(() => _isPreparingAllTracks = true);
+    try {
+      final allTracks = await _getAllPlaylistTracks();
+      if (!mounted) return;
+      Analytics.track('playlist_play_all', {'track_count': allTracks.length});
+      ref
+          .read(playerProvider.notifier)
+          .playTracks(allTracks, source: 'playlist_detail_play_all');
+    } finally {
+      if (mounted) setState(() => _isPreparingAllTracks = false);
+    }
   }
 
-  void _playFromIndex(int index) {
-    ref
-        .read(playerProvider.notifier)
-        .playTracks(
-          _tracks,
-          startIndex: index,
-          source: 'playlist_detail_from_track',
-        );
+  Future<void> _shuffleAll() async {
+    if (_isPreparingAllTracks) return;
+    setState(() => _isPreparingAllTracks = true);
+    try {
+      final allTracks = await _getAllPlaylistTracks();
+      if (!mounted) return;
+      Analytics.track('playlist_shuffle_all', {'track_count': allTracks.length});
+      ref
+          .read(playerProvider.notifier)
+          .playTracks(
+            allTracks,
+            source: 'playlist_detail_shuffle',
+            shuffle: true,
+          );
+    } finally {
+      if (mounted) setState(() => _isPreparingAllTracks = false);
+    }
+  }
+
+  Future<void> _playFromIndex(int index) async {
+    if (_isPreparingAllTracks) return;
+    setState(() => _isPreparingAllTracks = true);
+    try {
+      final allTracks = await _getAllPlaylistTracks();
+      if (!mounted) return;
+      final targetTrack = _playlistTracks[index].track;
+      final startIndex =
+          allTracks.indexWhere((t) => t.id == targetTrack.id);
+      if (startIndex == -1) return;
+      ref
+          .read(playerProvider.notifier)
+          .playTracks(
+            allTracks,
+            startIndex: startIndex,
+            source: 'playlist_detail_from_track',
+          );
+    } finally {
+      if (mounted) setState(() => _isPreparingAllTracks = false);
+    }
   }
 
   @override
@@ -417,14 +464,15 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
     Future<void> toggleDownload() async {
       if (_tracks.isEmpty) return;
       try {
+        final allTracks = await _getAllPlaylistTracks();
         final current = ref.read(isManualPlaylistProvider(playlist.id));
         final enabled = await toggleCollectionManualDownload(
           ref: ref,
           parentType: CacheType.playlist,
           parentId: playlist.id,
-          trackIds: _tracks.map((t) => t.id).toList(),
+          trackIds: allTracks.map((t) => t.id).toList(),
           enqueueTrackIds:
-              _tracks
+              allTracks
                   .where((t) => t.listenUrl != null)
                   .map((t) => t.id)
                   .toList(),
@@ -433,7 +481,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
         // Omit playlist ID; keep counts and booleans only.
         Analytics.track('playlist_download_toggled', {
           'enabled': enabled,
-          'track_count': _tracks.length,
+          'track_count': allTracks.length,
         });
 
         if (!mounted) return;
@@ -484,16 +532,20 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                   color: AppTheme.onBackground,
                 ),
                 color: AppTheme.surfaceContainer,
-                onSelected: (value) {
+                onSelected: (value) async {
                   if (value == 'download') unawaited(toggleDownload());
                   if (value == 'play_next') {
-                    final message = insertTracksToPlayNext(ref, _tracks);
+                    final allTracks = await _getAllPlaylistTracks();
+                    if (!mounted) return;
+                    final message = insertTracksToPlayNext(ref, allTracks);
                     ScaffoldMessenger.of(
                       context,
                     ).showSnackBar(SnackBar(content: Text(message)));
                   }
                   if (value == 'add_queue') {
-                    final message = addTracksToQueue(ref, _tracks);
+                    final allTracks = await _getAllPlaylistTracks();
+                    if (!mounted) return;
+                    final message = addTracksToQueue(ref, allTracks);
                     ScaffoldMessenger.of(
                       context,
                     ).showSnackBar(SnackBar(content: Text(message)));
@@ -593,8 +645,11 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                         child: _ActionButton(
                           icon: Icons.play_arrow_rounded,
                           label: 'Play All',
-                          onPressed: _tracks.isNotEmpty ? _playAll : null,
+                          onPressed: (_tracks.isNotEmpty && !_isPreparingAllTracks)
+                              ? _playAll
+                              : null,
                           isPrimary: true,
+                          isLoading: _isPreparingAllTracks,
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -603,8 +658,11 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                         child: _ActionButton(
                           icon: Icons.shuffle_rounded,
                           label: 'Shuffle',
-                          onPressed: _tracks.isNotEmpty ? _shuffleAll : null,
+                          onPressed: (_tracks.isNotEmpty && !_isPreparingAllTracks)
+                              ? _shuffleAll
+                              : null,
                           isPrimary: false,
+                          isLoading: _isPreparingAllTracks,
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -696,23 +754,38 @@ class _ActionButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
   final bool isPrimary;
+  final bool isLoading;
 
   const _ActionButton({
     required this.icon,
     required this.label,
     required this.onPressed,
     required this.isPrimary,
+    this.isLoading = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return PillActionButton(
       icon: icon,
-      label: label,
-      onPressed: onPressed,
+      label: isLoading ? 'Loading...' : label,
+      onPressed: isLoading ? null : onPressed,
       isPrimary: isPrimary,
-      // Primary Play All keeps the gradient fill used before pill unification.
-      useGradient: isPrimary,
+      useGradient: isPrimary && !isLoading,
+      iconWidget: isLoading
+          ? SizedBox(
+              width: 22,
+              height: 22,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation(
+                  isPrimary
+                      ? Colors.white
+                      : AppTheme.onBackgroundSubtle,
+                ),
+              ),
+            )
+          : null,
     );
   }
 }
