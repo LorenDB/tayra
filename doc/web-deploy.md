@@ -36,6 +36,8 @@ Notes:
 - `FUNKWHALE_URL` enables branded single-pod login.
 - Prefer same-origin with `/api/`.
 - Path URL strategy is on for nginx `try_files` (SPA deep links).
+- `GoRouter.optionURLReflectsImperativeAPIs = true` so `context.push` (album,
+  artist, settings, …) updates the browser URL the same way `context.go` does.
 - Client routes update the browser URL on every page (e.g. `/browse/album/12`,
   `/playlists/3`, `/search?q=…`, `/year-review/2025`). Cold loads and refreshes
   restore the path after session restore (`from=` on `/splash` / `/login`).

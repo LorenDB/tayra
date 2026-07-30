@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
@@ -42,6 +43,10 @@ void main() async {
   // Path URLs so nginx try_files + deep links work as the primary pod UI.
   if (kIsWeb) {
     usePathUrlStrategy();
+    // Detail navigation uses context.push (albums, artists, settings, …).
+    // By default go_router keeps those off the browser URL bar; enable so
+    // every page has a shareable, refreshable location.
+    GoRouter.optionURLReflectsImperativeAPIs = true;
   }
 
   const maxWidth = 450.0;
