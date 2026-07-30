@@ -16,8 +16,6 @@ from django.core.files.base import ContentFile
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models, transaction
 from django.db.models import Count, JSONField, Min, Prefetch, Sum
-from django.db.models.expressions import OuterRef, Subquery
-from django.db.models.query_utils import Q
 from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 from django.urls import reverse
@@ -313,27 +311,19 @@ class AlbumQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
 
     def with_duration(self):
         """
-        Annotate duration from uploads (legacy). Prefer the stored Album.duration
-        field, which is kept up to date by signals.
+        Legacy no-op for callers that used to annotate duration from uploads.
+
+        Album.duration is now a stored field (kept up to date by signals), so
+        annotating ``duration`` would conflict with the model field. Kept so
+        existing call sites (Subsonic views, tests) continue to work.
         """
-        # takes one upload per track
-        subquery = Subquery(
-            Upload.objects.filter(track_id=OuterRef("tracks"))
-            .order_by("id")
-            .values("id")[:1]
-        )
-        return self.annotate(
-            duration=models.Sum(
-                "tracks__uploads__duration",
-                filter=Q(tracks__uploads=subquery),
-            )
-        )
+        return self
 
 
 def compute_album_duration(album_id):
     """
     Total album duration in seconds: sum of one upload duration per track
-    (lowest upload id per track, matching AlbumQuerySet.with_duration).
+    (lowest upload id per track).
     """
     if not album_id:
         return 0
