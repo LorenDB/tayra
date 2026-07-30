@@ -172,7 +172,6 @@ class ListeningWriteSerializer(serializers.ModelSerializer):
     def _merge_existing_session(self, user, session_id, validated_data):
         existing = (
             models.Listening.objects.select_for_update()
-            .select_related("source_device")
             .get(user=user, client_session_id=session_id)
         )
         incoming = validated_data.get("duration_seconds")
@@ -288,7 +287,6 @@ class ListeningUpdateSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             locked = (
                 models.Listening.objects.select_for_update()
-                .select_related("source_device")
                 .get(pk=instance.pk)
             )
             update_fields = []
