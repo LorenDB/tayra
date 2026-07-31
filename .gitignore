@@ -92,3 +92,7 @@ mailhog
 # ── Docker ────────────────────────────────────────────────────────────
 docker-bake.*.json
 metadata.json
+
+# ── TLS material (never commit private keys) ──────────────────────────
+docker/ssl/*.key
+docker/ssl/*.crt

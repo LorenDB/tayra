@@ -72,8 +72,20 @@ class ScopePermission(permissions.BasePermission):
         if isinstance(token, models.AccessToken):
             return self.has_permission_token(token, required_scope)
         elif getattr(request, "scopes", None):
+            # Application tokens (ApplicationTokenAuthentication): the
+            # declared app scope must never grant more than the owner's
+            # actual permissions, restricted to the OAuth app allowlist —
+            # same contract as regular OAuth access tokens.
+            if not request.user.is_authenticated:
+                return False
+            user_scopes = scopes.get_from_permissions(
+                **request.user.get_permissions()
+            )
+            final_scopes = (
+                user_scopes & normalize(*request.scopes) & scopes.OAUTH_APP_SCOPES
+            )
             return should_allow(
-                required_scope=required_scope, request_scopes=set(request.scopes)
+                required_scope=required_scope, request_scopes=final_scopes
             )
         elif request.user.is_authenticated:
             user_scopes = scopes.get_from_permissions(**request.user.get_permissions())

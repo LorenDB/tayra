@@ -51,7 +51,9 @@ class ApplicationViewSet(
         request_data = request.data.copy()
         secret = secrets.token_hex(64)
         request_data["client_secret"] = secret
-        serializer = self.get_serializer(data=request_data)
+        serializer = self.get_serializer(
+            data=request_data, context={"include_token": True}
+        )
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
@@ -82,19 +84,25 @@ class ApplicationViewSet(
         if owned:
             serializer_class = serializers.CreateApplicationSerializer
 
-        kwargs["context"] = self.get_serializer_context()
+        context = kwargs.pop("context", None) or {}
+        context.update(self.get_serializer_context())
+        kwargs["context"] = context
         return serializer_class(*args, **kwargs)
 
     def get_queryset(self):
         qs = super().get_queryset()
         if self.action in [
+            "retrieve",
             "list",
             "destroy",
             "update",
             "partial_update",
             "refresh_token",
         ]:
-            qs = qs.filter(user=self.request.user)
+            if self.request.user.is_authenticated:
+                qs = qs.filter(user=self.request.user)
+            else:
+                qs = qs.none()
         return qs
 
     @extend_schema(operation_id="refresh_oauth_token")
@@ -110,7 +118,9 @@ class ApplicationViewSet(
             return response.Response(status=404)
         app.token = models.get_token()
         app.save(update_fields=["token"])
-        serializer = serializers.CreateApplicationSerializer(app)
+        serializer = serializers.CreateApplicationSerializer(
+            app, context={"include_token": True}
+        )
         return response.Response(serializer.data, status=200)
 
 

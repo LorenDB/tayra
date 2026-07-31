@@ -132,16 +132,34 @@ def test_scope_permission_token(mocker, factories):
 
 def test_scope_permission_request_scopes(mocker, factories):
     should_allow = mocker.patch.object(permissions, "should_allow")
-    request = mocker.Mock(method="POST", scopes=["write:profile", "read:playlists"])
+    user = factories["users.User"]()
+    request = mocker.Mock(
+        method="POST",
+        scopes=["write:profile", "read:playlists", "read:instance:settings"],
+        user=user,
+    )
     view = mocker.Mock(required_scope="profile", anonymous_policy=False)
     p = permissions.ScopePermission()
 
     assert p.has_permission(request, view) == should_allow.return_value
 
+    # Privileged scopes declared on the app are stripped: the effective
+    # scope is the owner's permissions ∩ app scopes ∩ OAUTH_APP_SCOPES.
     should_allow.assert_called_once_with(
         required_scope="write:profile",
         request_scopes={"write:profile", "read:playlists"},
     )
+
+
+def test_scope_permission_request_scopes_unauthenticated(mocker):
+    should_allow = mocker.patch.object(permissions, "should_allow")
+    request = mocker.Mock(method="POST", scopes=["read"])
+    request.user.is_authenticated = False
+    view = mocker.Mock(required_scope="profile", anonymous_policy=False)
+    p = permissions.ScopePermission()
+
+    assert p.has_permission(request, view) is False
+    should_allow.assert_not_called()
 
 
 def test_scope_permission_actor(mocker, factories, anonymous_user):

@@ -20,7 +20,7 @@ exposedbydefault = false
     entryPoint = "http"
   [entryPoints.https]
   address = ":443"
-    [entryPoints.https.tls]
-      [[entryPoints.https.tls.certificates]]
-      certFile = "/ssl/traefik.crt"
-      keyFile = "/ssl/traefik.key"
+    # Provide your own certificates here, e.g.:
+    # [[entryPoints.https.tls.certificates]]
+    # certFile = "/ssl/traefik.crt"
+    # keyFile = "/ssl/traefik.key"

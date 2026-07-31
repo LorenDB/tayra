@@ -46,11 +46,42 @@ def test_apps_post_logged_in_user(logged_in_api_client, db):
     assert app.client_type == models.Application.CLIENT_CONFIDENTIAL
     assert app.authorization_grant_type == models.Application.GRANT_AUTHORIZATION_CODE
     assert app.redirect_uris == data["redirect_uris"]
-    assert response.data == serializers.CreateApplicationSerializer(app).data
+    assert (
+        response.data
+        == serializers.CreateApplicationSerializer(
+            app, context={"include_token": True}
+        ).data
+    )
     assert app.scope == "read write:profile"
     assert app.user == logged_in_api_client.user
     assert app.token is not None
     assert response.data["token"] == app.token
+
+
+def test_apps_post_privileged_scopes_rejected(logged_in_api_client, db):
+    url = reverse("api:v1:oauth:apps-list")
+    data = {
+        "name": "Test app",
+        "redirect_uris": "http://test.app",
+        "scopes": "read instance:settings write:instance:users",
+    }
+    response = logged_in_api_client.post(url, data)
+
+    assert response.status_code == 400
+    assert not models.Application.objects.filter(name=data["name"]).exists()
+
+
+def test_apps_post_unknown_scope_rejected(logged_in_api_client, db):
+    url = reverse("api:v1:oauth:apps-list")
+    data = {
+        "name": "Test app",
+        "redirect_uris": "http://test.app",
+        "scopes": "read banana",
+    }
+    response = logged_in_api_client.post(url, data)
+
+    assert response.status_code == 400
+    assert not models.Application.objects.filter(name=data["name"]).exists()
 
 
 def test_apps_list_anonymous(api_client, db):
@@ -108,23 +139,29 @@ def test_apps_update_owner(factories, logged_in_api_client, db):
     assert app.name == "Hello"
 
 
-def test_apps_get(preferences, logged_in_api_client, factories):
+def test_apps_get_not_owner(preferences, logged_in_api_client, factories):
     app = factories["users.Application"]()
     url = reverse("api:v1:oauth:apps-detail", kwargs={"client_id": app.client_id})
     response = logged_in_api_client.get(url)
 
-    assert response.status_code == 200
-    assert response.data == serializers.ApplicationSerializer(app).data
+    assert response.status_code == 404
 
 
-def test_apps_get_owner(preferences, logged_in_api_client, factories):
+def test_apps_get_anonymous(preferences, api_client, factories):
+    app = factories["users.Application"](user=factories["users.User"]())
+    url = reverse("api:v1:oauth:apps-detail", kwargs={"client_id": app.client_id})
+    response = api_client.get(url)
+
+    assert response.status_code == 404
+
+
+def test_apps_get_owner_does_not_leak_token(preferences, logged_in_api_client, factories):
     app = factories["users.Application"](user=logged_in_api_client.user)
     url = reverse("api:v1:oauth:apps-detail", kwargs={"client_id": app.client_id})
     response = logged_in_api_client.get(url)
 
     assert response.status_code == 200
-    assert response.data == serializers.CreateApplicationSerializer(app).data
-    assert response.data["token"] == app.token
+    assert "token" not in response.data
 
 
 def test_apps_refresh_token(preferences, logged_in_api_client, factories):
@@ -137,7 +174,8 @@ def test_apps_refresh_token(preferences, logged_in_api_client, factories):
 
     app.refresh_from_db()
     assert response.status_code == 200
-    assert response.data == serializers.CreateApplicationSerializer(app).data
+    assert response.data["client_id"] == app.client_id
+    assert response.data["token"] == app.token
     assert app.token != old_token
 
 
@@ -149,6 +187,46 @@ def test_apps_refresh_token_not_owner(preferences, logged_in_api_client, factori
     response = logged_in_api_client.post(url)
 
     assert response.status_code == 404
+
+
+def test_app_token_cannot_escalate_to_admin_scopes(factories, api_client):
+    user = factories["users.User"]()
+    app = factories["users.Application"](user=user, scope="read write")
+    url = reverse("api:v1:instance:admin-settings-list")
+    response = api_client.get(url, HTTP_AUTHORIZATION=f"Bearer {app.token}")
+
+    assert response.status_code == 403
+
+
+def test_app_token_denied_admin_scopes_even_with_permission(factories, api_client):
+    user = factories["users.User"](permission_settings=True)
+    app = factories["users.Application"](
+        user=user, scope="read instance:settings"
+    )
+    url = reverse("api:v1:instance:admin-settings-list")
+    response = api_client.get(url, HTTP_AUTHORIZATION=f"Bearer {app.token}")
+
+    assert response.status_code == 403
+
+
+def test_app_token_grants_common_scopes(factories, api_client):
+    user = factories["users.User"]()
+    app = factories["users.Application"](user=user, scope="read")
+    url = reverse("api:v1:users:users-me")
+    response = api_client.get(url, HTTP_AUTHORIZATION=f"Bearer {app.token}")
+
+    assert response.status_code == 200
+
+
+def test_app_token_cannot_use_privileged_scope_without_permission(factories, api_client):
+    user = factories["users.User"]()
+    app = factories["users.Application"](
+        user=user, scope="read instance:settings write:instance:users"
+    )
+    url = reverse("api:v1:instance:admin-settings-list")
+    response = api_client.get(url, HTTP_AUTHORIZATION=f"Bearer {app.token}")
+
+    assert response.status_code == 403
 
 
 def test_authorize_view_post(logged_in_client, factories):
