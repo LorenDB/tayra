@@ -5,7 +5,6 @@ from dynamic_preferences import types
 from dynamic_preferences.registries import global_preferences_registry
 
 instance = types.Section("instance")
-ui = types.Section("ui")
 
 
 @global_preferences_registry.register
@@ -78,35 +77,6 @@ class InstanceContactEmail(types.StringPreference):
 
 
 @global_preferences_registry.register
-class InstanceSupportMessage(types.StringPreference):
-    show_in_api = True
-    section = instance
-    name = "support_message"
-    verbose_name = "Support message"
-    default = ""
-    help_text = (
-        "A short message that will be displayed periodically to local users. "
-        "Use it to ask for financial support or anything else you might need. "
-        "(markdown allowed)."
-    )
-    widget = widgets.Textarea
-    field_kwargs = {"required": False}
-
-
-@global_preferences_registry.register
-class InstanceFunkwhaleSupportMessageEnabled(types.BooleanPreference):
-    show_in_api = True
-    section = instance
-    name = "funkwhale_support_message_enabled"
-    verbose_name = "Funkwhale Support message"
-    default = True
-    help_text = (
-        "If this is enabled, we will periodically display a message to encourage "
-        "local users to support Funkwhale."
-    )
-
-
-@global_preferences_registry.register
 class InstanceNodeinfoPrivate(types.BooleanPreference):
     show_in_api = False
     section = instance
@@ -131,22 +101,6 @@ class InstanceNodeinfoStatsEnabled(types.BooleanPreference):
         "Disable this if you don't want to share usage and library statistics "
         "in the nodeinfo endpoint but don't want to disable it completely."
     )
-
-
-@global_preferences_registry.register
-class CustomCSS(types.StringPreference):
-    show_in_api = True
-    section = ui
-    name = "custom_css"
-    verbose_name = "Custom CSS code"
-    default = ""
-    help_text = (
-        "Custom CSS code, to be included in a <style> tag on all pages. "
-        "Loading third-party resources such as fonts or images can affect the performance "
-        "of the app and the privacy of your users."
-    )
-    widget = widgets.Textarea
-    field_kwargs = {"required": False}
 
 
 class ImageWidget(widgets.ClearableFileInput):

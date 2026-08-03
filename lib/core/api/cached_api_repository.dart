@@ -1107,16 +1107,6 @@ class CachedFunkwhaleApi {
     clientVersion: clientVersion,
   );
 
-  Future<BulkListeningResult> bulkCreateListenings({
-    required List<BulkListeningItem> items,
-    String mode = 'enrich_or_create',
-    int? dedupWindowSeconds,
-  }) => _api.bulkCreateListenings(
-    items: items,
-    mode: mode,
-    dedupWindowSeconds: dedupWindowSeconds,
-  );
-
   Future<PaginatedResponse<Map<String, dynamic>>> getPlaybackProgress({
     int page = 1,
     int pageSize = 100,

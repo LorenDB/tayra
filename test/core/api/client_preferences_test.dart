@@ -10,7 +10,7 @@ void main() {
       expect(isSensitiveSettingsKey('client_secret'), isTrue);
     });
 
-    test('strips api_key patterns (AI keys)', () {
+    test('strips api_key patterns', () {
       expect(isSensitiveSettingsKey('groq_api_key'), isTrue);
       expect(isSensitiveSettingsKey('open_router_api_key'), isTrue);
       expect(isSensitiveSettingsKey('custom_endpoint_api_key'), isTrue);

@@ -465,9 +465,8 @@ class IndexViewSet(FederationMixin, viewsets.GenericViewSet):
     renderer_classes = renderers.get_ap_renderers()
 
     def dispatch(self, request, *args, **kwargs):
-        if not preferences.get("federation__public_index"):
-            return HttpResponse(status=405)
-        return super().dispatch(request, *args, **kwargs)
+        # Public index is permanently disabled (not configurable).
+        return HttpResponse(status=405)
 
     @action(
         methods=["get"],

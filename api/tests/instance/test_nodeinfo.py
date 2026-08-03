@@ -75,8 +75,6 @@ def test_nodeinfo_20(api_client):
                     [("type", "other"), ("label", "Other"), ("anonymous", False)]
                 ),
             ],
-            "funkwhaleSupportMessageEnabled": True,
-            "instanceSupportMessage": "",
             "endpoints": OrderedDict(
                 [("knownNodes", None), ("channels", None), ("libraries", None)]
             ),
@@ -126,8 +124,6 @@ def test_nodeinfo_21(api_client):
             "defaultUploadQuota": 1000,
             "supportedUploadExtensions": SUPPORTED_EXTENSIONS,
             "allowList": {"enabled": False, "domains": None},
-            "funkwhaleSupportMessageEnabled": True,
-            "instanceSupportMessage": "",
             "usage": OrderedDict(
                 [
                     ("favorites", OrderedDict([("tracks", {"total": 0})])),

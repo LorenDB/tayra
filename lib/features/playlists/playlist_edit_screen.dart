@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/analytics/analytics.dart';
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:tayra/core/ai/ai_client.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/router/navigation_utils.dart';
@@ -15,8 +13,6 @@ import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/core/widgets/error_state.dart';
 import 'package:tayra/features/playlists/playlists_screen.dart';
 import 'package:tayra/core/widgets/dialog_utils.dart';
-import 'package:tayra/features/settings/settings_provider.dart';
-import 'package:tayra/features/year_review/ai_summary_provider.dart';
 
 class PlaylistEditScreen extends ConsumerStatefulWidget {
   final int playlistId;
@@ -37,7 +33,6 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
   String _privacyLevel = 'me';
   bool _isSaving = false;
   bool _isDirty = false;
-  bool _isGenerating = false;
   CoverArtSelection? _coverSelection;
 
   @override
@@ -242,37 +237,6 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
     }
   }
 
-  // ── AI name generation ──────────────────────────────────────────────
-
-  Future<void> _generateName() async {
-    final playlist = _playlist;
-    if (playlist == null) return;
-
-    if (_isGenerating) return;
-    setState(() => _isGenerating = true);
-    try {
-      final client = ref.read(aiClientProvider);
-      final name = await client.generatePlaylistName(
-        playlist.name,
-        playlistId: playlist.id,
-      );
-      if (name.isNotEmpty && mounted) {
-        _nameController.text = name;
-      } else if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('AI did not suggest a name')),
-        );
-      }
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('AI failed to generate name')),
-      );
-    } finally {
-      if (mounted) setState(() => _isGenerating = false);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -467,20 +431,6 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
   }
 
   Widget _buildMetadataSection() {
-    final settings = ref.watch(settingsProvider);
-    // For Gemini Nano, check model status; for cloud providers, check config.
-    final modelStatusAsync = ref.watch(genaiModelStatusProvider);
-    final bool hasAi;
-    if (!settings.aiEnabled) {
-      hasAi = false;
-    } else if (settings.aiProviderType == AiProviderType.geminiNano) {
-      hasAi =
-          defaultTargetPlatform == TargetPlatform.android &&
-          (modelStatusAsync.asData?.value ?? 0) == 3;
-    } else {
-      hasAi = settings.isAiProviderConfigured;
-    }
-
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
       child: Column(
@@ -524,27 +474,6 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
                   textCapitalization: TextCapitalization.sentences,
                 ),
               ),
-              if (hasAi) ...[
-                const SizedBox(width: 8),
-                _isGenerating
-                    ? const SizedBox(
-                      width: 36,
-                      height: 36,
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: AppTheme.primary,
-                        ),
-                      ),
-                    )
-                    : IconButton(
-                      tooltip: 'Generate name with AI',
-                      color: AppTheme.primary,
-                      icon: const Icon(Icons.auto_awesome_rounded),
-                      onPressed: _generateName,
-                    ),
-              ],
             ],
           ),
           const SizedBox(height: 16),

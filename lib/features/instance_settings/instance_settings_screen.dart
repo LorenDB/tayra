@@ -139,9 +139,7 @@ class _InstanceSettingsScreenState
         pref.stringValue.length > 80 ||
         pref.name.contains('description') ||
         pref.name.contains('terms') ||
-        pref.name.contains('rules') ||
-        pref.name.contains('css') ||
-        pref.name.contains('message');
+        pref.name.contains('rules');
 
     final saved = await showShellDialog<String?>(
       context: context,

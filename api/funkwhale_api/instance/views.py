@@ -140,13 +140,7 @@ class NodeInfo20(views.APIView):
                 data["endpoints"]["knownNodes"] = reverse(
                     "api:v1:federation:domains-list"
                 )
-            if pref.get("federation__public_index"):
-                data["endpoints"]["libraries"] = reverse(
-                    "federation:index:index-libraries"
-                )
-                data["endpoints"]["channels"] = reverse(
-                    "federation:index:index-channels"
-                )
+            # Public library/channel indexes are permanently disabled.
         serializer = self.serializer_class(data)
         return Response(
             serializer.data, status=200, content_type=NODEINFO_2_CONTENT_TYPE

@@ -111,8 +111,6 @@ class MetadataSerializer(serializers.Serializer):
     defaultUploadQuota = serializers.SerializerMethodField()
     supportedUploadExtensions = serializers.ListField(child=serializers.CharField())
     allowList = serializers.SerializerMethodField()
-    funkwhaleSupportMessageEnabled = serializers.SerializerMethodField()
-    instanceSupportMessage = serializers.SerializerMethodField()
     usage = MetadataUsageSerializer(source="stats", required=False)
 
     def get_private(self, obj) -> bool:
@@ -147,12 +145,6 @@ class MetadataSerializer(serializers.Serializer):
                 "domains": obj["allowed_domains"] or None,
             }
         ).data
-
-    def get_funkwhaleSupportMessageEnabled(self, obj) -> bool:
-        return obj["preferences"].get("instance__funkwhale_support_message_enabled")
-
-    def get_instanceSupportMessage(self, obj) -> str:
-        return obj["preferences"].get("instance__support_message")
 
     @extend_schema_field(MetadataUsageSerializer)
     def get_usage(self, obj):

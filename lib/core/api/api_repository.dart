@@ -488,47 +488,6 @@ class FunkwhaleApi {
     );
   }
 
-  /// Max items per bulk request (server hard limit).
-  static const bulkListeningMaxItems = 500;
-
-  /// Bulk import listenings with [mode] (default `enrich_or_create`).
-  ///
-  /// Historical / offline catch-up **must** use this endpoint — single POST
-  /// rejects `creation_date` older than 5 minutes (K16). Caller should chunk
-  /// to [bulkListeningMaxItems]. Does not fire plugins/activity.
-  Future<BulkListeningResult> bulkCreateListenings({
-    required List<BulkListeningItem> items,
-    String mode = 'enrich_or_create',
-    int? dedupWindowSeconds,
-  }) async {
-    if (items.isEmpty) return BulkListeningResult.empty;
-    if (items.length > bulkListeningMaxItems) {
-      throw ArgumentError.value(
-        items.length,
-        'items',
-        'Max $bulkListeningMaxItems items per bulk request; chunk first',
-      );
-    }
-    final data = <String, dynamic>{
-      'mode': mode,
-      'items': items.map((e) => e.toJson()).toList(),
-      if (dedupWindowSeconds != null)
-        'dedup_window_seconds': dedupWindowSeconds,
-    };
-    final response = await _dio.post(
-      '$_baseUrl/api/v1/history/listenings/bulk/',
-      data: data,
-    );
-    final body = response.data;
-    if (body is Map<String, dynamic>) {
-      return BulkListeningResult.fromJson(body);
-    }
-    if (body is Map) {
-      return BulkListeningResult.fromJson(Map<String, dynamic>.from(body));
-    }
-    return BulkListeningResult.empty;
-  }
-
   /// Year-in-review aggregates for the authenticated user.
   ///
   /// `GET /api/v1/history/listenings/stats/?year=&limit=`

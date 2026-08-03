@@ -45,11 +45,13 @@ class LibraryAdminScreen extends ConsumerWidget {
           return ListView(
             padding: const EdgeInsets.symmetric(vertical: 8),
             children: [
-              SettingsSectionHeader(title: 'Manage'),
+              // Instance-wide tools — distinct from personal "Your library"
+              // upload under Settings.
+              const SettingsSectionHeader(title: 'Instance library'),
               SettingsActionTile(
                 icon: Icons.library_music_rounded,
-                title: 'Libraries',
-                subtitle: 'Browse, edit, and delete instance libraries',
+                title: 'All libraries',
+                subtitle: 'Browse, edit, and delete libraries across the pod',
                 onTap: () => context.push('/manage/library/libraries'),
               ),
               SettingsActionTile(

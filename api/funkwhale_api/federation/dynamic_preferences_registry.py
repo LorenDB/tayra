@@ -53,11 +53,3 @@ class ActorFetchDelay(types.IntPreference):
     field_kwargs = {"required": False}
 
 
-@global_preferences_registry.register
-class PublicIndex(types.BooleanPreference):
-    show_in_api = True
-    section = federation
-    name = "public_index"
-    default = True
-    verbose_name = "Enable public index"
-    help_text = "If this is enabled, public channels and libraries will be crawlable by other pods and bots"

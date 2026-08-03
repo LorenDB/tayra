@@ -71,7 +71,6 @@ flutter {
 }
 
 dependencies {
-    implementation("com.google.mlkit:genai-prompt:1.0.0-beta2")
     implementation("com.google.android.gms:play-services-wearable:18.2.0")
     // MediaBrowserCompat / MediaControllerCompat / MediaMetadataCompat / PlaybackStateCompat
     implementation("androidx.media:media:1.7.0")

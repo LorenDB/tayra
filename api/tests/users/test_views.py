@@ -393,16 +393,9 @@ def test_signup_with_approval_enabled(
         "email": "test1@test.com",
         "password1": "thisismypassword",
         "password2": "thisismypassword",
-        "request_fields": {"field1": "Value 1", "field2": "Value 2", "noop": "Noop"},
     }
     preferences["users__registration_enabled"] = True
     preferences["moderation__signup_approval_enabled"] = True
-    preferences["moderation__signup_form_customization"] = {
-        "fields": [
-            {"label": "field1", "input_type": "short_text"},
-            {"label": "field2", "input_type": "short_text"},
-        ]
-    }
     on_commit = mocker.patch("funkwhale_api.common.utils.on_commit")
     response = api_client.post(url, data, format="json")
     assert response.status_code == 201
@@ -412,10 +405,7 @@ def test_signup_with_approval_enabled(
     user_request = u.actor.requests.latest("id")
     assert user_request.type == "signup"
     assert user_request.status == "pending"
-    assert user_request.metadata == {
-        "field1": "Value 1",
-        "field2": "Value 2",
-    }
+    assert user_request.metadata is None
 
     on_commit.assert_any_call(
         moderation_tasks.user_request_handle.delay,
@@ -426,29 +416,6 @@ def test_signup_with_approval_enabled(
     confirmation_message = mailoutbox[-1]
     assert "confirm" in confirmation_message.body
     assert settings.FUNKWHALE_HOSTNAME in confirmation_message.body
-
-
-def test_signup_with_approval_enabled_validation_error(
-    preferences, factories, api_client
-):
-    url = reverse("rest_register")
-    data = {
-        "username": "test1",
-        "email": "test1@test.com",
-        "password1": "thisismypassword",
-        "password2": "thisismypassword",
-        "request_fields": {"field1": "Value 1"},
-    }
-    preferences["users__registration_enabled"] = True
-    preferences["moderation__signup_approval_enabled"] = True
-    preferences["moderation__signup_form_customization"] = {
-        "fields": [
-            {"label": "field1", "input_type": "short_text"},
-            {"label": "field2", "input_type": "short_text"},
-        ]
-    }
-    response = api_client.post(url, data, format="json")
-    assert response.status_code == 400
 
 
 def test_login_via_api(api_client, factories):

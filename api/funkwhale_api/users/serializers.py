@@ -25,7 +25,6 @@ from funkwhale_api.common import utils as common_utils
 from funkwhale_api.federation import models as federation_models
 from funkwhale_api.moderation import models as moderation_models
 from funkwhale_api.moderation import tasks as moderation_tasks
-from funkwhale_api.moderation import utils as moderation_utils
 
 from . import adapters
 from . import authentication as users_authentication
@@ -54,13 +53,6 @@ class RegisterSerializer(RS):
     def __init__(self, *args, **kwargs):
         self.approval_enabled = preferences.get("moderation__signup_approval_enabled")
         super().__init__(*args, **kwargs)
-        if self.approval_enabled:
-            customization = preferences.get("moderation__signup_form_customization")
-            self.fields[
-                "request_fields"
-            ] = moderation_utils.get_signup_form_additional_fields_serializer(
-                customization
-            )
 
     def validate_invitation(self, value):
         if not value:
@@ -102,7 +94,7 @@ class RegisterSerializer(RS):
             user_request = moderation_models.UserRequest.objects.create(
                 submitter=user.actor,
                 type="signup",
-                metadata=self.validated_data.get("request_fields", None) or None,
+                metadata=None,
             )
             update_fields.append("is_active")
         if self.validated_data.get("invitation"):
@@ -160,8 +152,6 @@ class UserWriteSerializer(serializers.ModelSerializer):
             "name",
             "privacy_level",
             "avatar",
-            "instance_support_message_display_date",
-            "funkwhale_support_message_display_date",
             "summary",
         ]
 
@@ -229,8 +219,6 @@ class MeSerializer(UserReadSerializer):
     class Meta(UserReadSerializer.Meta):
         fields = UserReadSerializer.Meta.fields + [
             "quota_status",
-            "instance_support_message_display_date",
-            "funkwhale_support_message_display_date",
             "summary",
             "tokens",
             "settings",

@@ -7,10 +7,6 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : AudioServiceActivity() {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-        MethodChannel(
-            flutterEngine.dartExecutor.binaryMessenger,
-            GenaiPromptPlugin.CHANNEL,
-        ).setMethodCallHandler(GenaiPromptPlugin(this))
 
         // Wear OS browse data channel: receives playlists/radios JSON from Flutter
         // and pushes it to the watch via the Wearable Data Layer.

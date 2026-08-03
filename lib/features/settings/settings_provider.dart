@@ -1,13 +1,10 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tayra/core/api/client_data_service.dart';
 import 'package:tayra/core/api/client_preferences.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
-import 'package:tayra/core/platform/app_platform.dart';
 
 // ── Browse mode enum ────────────────────────────────────────────────────
 
@@ -17,25 +14,6 @@ enum BrowseMode { albums, artists }
 
 enum MultiDiscDisplayMode { discSections, continuousNumbers }
 
-// ── AI provider type enum ───────────────────────────────────────────────
-
-enum AiProviderType { geminiNano, groq, openRouter, custom }
-
-extension AiProviderTypeX on AiProviderType {
-  String get displayName {
-    switch (this) {
-      case AiProviderType.geminiNano:
-        return 'On-device (Gemini Nano)';
-      case AiProviderType.groq:
-        return 'Groq';
-      case AiProviderType.openRouter:
-        return 'OpenRouter';
-      case AiProviderType.custom:
-        return 'Custom endpoint';
-    }
-  }
-}
-
 // ── Settings state ──────────────────────────────────────────────────────
 
 class SettingsState {
@@ -44,21 +22,11 @@ class SettingsState {
   final int cacheSizeLimitMB;
   final bool useDynamicAlbumAccent;
   final bool gaplessPlayback;
-  final bool aiEnabled;
-  final bool aiDownloadPromptShown;
   final bool showYearEndPrompts;
   final bool analyticsEnabled;
   final bool forceOfflineMode;
   final bool developerModeUnlocked;
   final bool showPurgeCacheOption;
-  final AiProviderType aiProviderType;
-  final String groqApiKey;
-  final String groqModel;
-  final String openRouterApiKey;
-  final String openRouterModel;
-  final String customEndpointUrl;
-  final String customEndpointApiKey;
-  final String customModelName;
   final MultiDiscDisplayMode multiDiscDisplayMode;
   final bool autoDownloadFavorites;
   final bool downloadWifiOnly;
@@ -71,21 +39,11 @@ class SettingsState {
     this.cacheSizeLimitMB = 500,
     this.useDynamicAlbumAccent = true,
     this.gaplessPlayback = true,
-    this.aiEnabled = true,
-    this.aiDownloadPromptShown = false,
     this.showYearEndPrompts = true,
     this.analyticsEnabled = true,
     this.forceOfflineMode = false,
     this.developerModeUnlocked = false,
     this.showPurgeCacheOption = false,
-    this.aiProviderType = AiProviderType.geminiNano,
-    this.groqApiKey = '',
-    this.groqModel = 'llama-3.1-8b-instant',
-    this.openRouterApiKey = '',
-    this.openRouterModel = 'meta-llama/llama-3.1-8b-instruct:free',
-    this.customEndpointUrl = '',
-    this.customEndpointApiKey = '',
-    this.customModelName = 'gpt-4o-mini',
     this.multiDiscDisplayMode = MultiDiscDisplayMode.discSections,
     this.autoDownloadFavorites = false,
     this.downloadWifiOnly = true,
@@ -99,41 +57,17 @@ class SettingsState {
   bool get effectiveShowPurgeCacheOption =>
       developerModeUnlocked && showPurgeCacheOption;
 
-  bool get isAiProviderConfigured {
-    if (!aiEnabled) return false;
-    switch (aiProviderType) {
-      case AiProviderType.geminiNano:
-        return true; // actual availability checked async via MethodChannel
-      case AiProviderType.groq:
-        return groqApiKey.isNotEmpty;
-      case AiProviderType.openRouter:
-        return openRouterApiKey.isNotEmpty;
-      case AiProviderType.custom:
-        return customEndpointUrl.isNotEmpty;
-    }
-  }
-
   SettingsState copyWith({
     BrowseMode? browseMode,
     Set<int>? mobilePinnedTabIndices,
     int? cacheSizeLimitMB,
     bool? useDynamicAlbumAccent,
     bool? gaplessPlayback,
-    bool? aiEnabled,
-    bool? aiDownloadPromptShown,
     bool? showYearEndPrompts,
     bool? analyticsEnabled,
     bool? forceOfflineMode,
     bool? developerModeUnlocked,
     bool? showPurgeCacheOption,
-    AiProviderType? aiProviderType,
-    String? groqApiKey,
-    String? groqModel,
-    String? openRouterApiKey,
-    String? openRouterModel,
-    String? customEndpointUrl,
-    String? customEndpointApiKey,
-    String? customModelName,
     MultiDiscDisplayMode? multiDiscDisplayMode,
     bool? autoDownloadFavorites,
     bool? downloadWifiOnly,
@@ -148,23 +82,12 @@ class SettingsState {
       useDynamicAlbumAccent:
           useDynamicAlbumAccent ?? this.useDynamicAlbumAccent,
       gaplessPlayback: gaplessPlayback ?? this.gaplessPlayback,
-      aiEnabled: aiEnabled ?? this.aiEnabled,
-      aiDownloadPromptShown:
-          aiDownloadPromptShown ?? this.aiDownloadPromptShown,
       showYearEndPrompts: showYearEndPrompts ?? this.showYearEndPrompts,
       analyticsEnabled: analyticsEnabled ?? this.analyticsEnabled,
       forceOfflineMode: forceOfflineMode ?? this.forceOfflineMode,
       developerModeUnlocked:
           developerModeUnlocked ?? this.developerModeUnlocked,
       showPurgeCacheOption: showPurgeCacheOption ?? this.showPurgeCacheOption,
-      aiProviderType: aiProviderType ?? this.aiProviderType,
-      groqApiKey: groqApiKey ?? this.groqApiKey,
-      groqModel: groqModel ?? this.groqModel,
-      openRouterApiKey: openRouterApiKey ?? this.openRouterApiKey,
-      openRouterModel: openRouterModel ?? this.openRouterModel,
-      customEndpointUrl: customEndpointUrl ?? this.customEndpointUrl,
-      customEndpointApiKey: customEndpointApiKey ?? this.customEndpointApiKey,
-      customModelName: customModelName ?? this.customModelName,
       multiDiscDisplayMode: multiDiscDisplayMode ?? this.multiDiscDisplayMode,
       autoDownloadFavorites:
           autoDownloadFavorites ?? this.autoDownloadFavorites,
@@ -190,21 +113,11 @@ class SettingsNotifier extends Notifier<SettingsState> {
   static const _keyCacheSizeLimit = 'cache_max_size_mb';
   static const _keyUseDynamicAlbumAccent = 'use_dynamic_album_accent';
   static const _keyGaplessPlayback = 'gapless_playback';
-  static const _keyAiEnabled = 'ai_enabled';
-  static const _keyAiDownloadPromptShown = 'ai_download_prompt_shown';
   static const _keyShowYearEndPrompts = 'show_year_end_prompts';
   static const _keyAnalyticsEnabled = 'analytics_enabled';
   static const _keyForceOfflineMode = 'force_offline_mode';
   static const _keyDeveloperModeUnlocked = 'developer_mode_unlocked';
   static const _keyShowPurgeCacheOption = 'show_purge_cache_option';
-  static const _keyAiProviderType = 'ai_provider_type';
-  static const _keyGroqApiKey = 'groq_api_key';
-  static const _keyGroqModel = 'groq_model';
-  static const _keyOpenRouterApiKey = 'open_router_api_key';
-  static const _keyOpenRouterModel = 'open_router_model';
-  static const _keyCustomEndpointUrl = 'custom_endpoint_url';
-  static const _keyCustomEndpointApiKey = 'custom_endpoint_api_key';
-  static const _keyCustomModelName = 'custom_model_name';
   static const _keyMultiDiscDisplayMode = 'multi_disc_display_mode';
   static const _keyAutoDownloadFavorites = 'auto_download_favorites';
   static const _keyDownloadWifiOnly = 'download_wifi_only';
@@ -213,84 +126,10 @@ class SettingsNotifier extends Notifier<SettingsState> {
   static const _keyAutoDownloadPodcastEpisodeCount =
       'auto_download_podcast_episode_count';
 
-  // H5: API keys go in platform secure storage where it is durable
-  // (see AppPlatform.useSecureStorage; macOS uses SharedPreferences).
-  static bool get _useSecure => AppPlatform.useSecureStorage;
-  static const FlutterSecureStorage _secure = FlutterSecureStorage();
-
-  /// Read a secret from secure storage, migrating legacy SharedPreferences.
-  static Future<String> _readSecret(SharedPreferences prefs, String key) async {
-    if (_useSecure) {
-      final secureVal = await _secure.read(key: key);
-      if (secureVal != null && secureVal.isNotEmpty) return secureVal;
-      final legacy = prefs.getString(key);
-      if (legacy != null && legacy.isNotEmpty) {
-        await _secure.write(key: key, value: legacy);
-        await prefs.remove(key);
-        return legacy;
-      }
-      return '';
-    }
-    final fromPrefs = prefs.getString(key);
-    if (fromPrefs != null && fromPrefs.isNotEmpty) return fromPrefs;
-
-    // Recover keys written only to Keychain during the macOS H5 window.
-    if (AppPlatform.isMacOS) {
-      try {
-        final fromKeychain = await _secure.read(key: key);
-        if (fromKeychain != null && fromKeychain.isNotEmpty) {
-          await prefs.setString(key, fromKeychain);
-          await _secure.delete(key: key);
-          return fromKeychain;
-        }
-      } catch (_) {}
-    }
-    return '';
-  }
-
-  static Future<void> _writeSecret(
-    SharedPreferences prefs,
-    String key,
-    String value,
-  ) async {
-    if (_useSecure) {
-      if (value.isEmpty) {
-        await _secure.delete(key: key);
-      } else {
-        await _secure.write(key: key, value: value);
-      }
-      await prefs.remove(key);
-    } else {
-      if (value.isEmpty) {
-        await prefs.remove(key);
-      } else {
-        await prefs.setString(key, value);
-      }
-    }
-  }
-
-  static Future<void> _deleteSecret(SharedPreferences prefs, String key) async {
-    await prefs.remove(key);
-    if (_useSecure) {
-      await _secure.delete(key: key);
-    }
-  }
-
-  // On non-Android platforms, AI defaults to off and Groq is the default provider.
-  static bool get _defaultAiEnabled =>
-      defaultTargetPlatform == TargetPlatform.android;
-  static AiProviderType get _defaultAiProviderType =>
-      defaultTargetPlatform == TargetPlatform.android
-          ? AiProviderType.geminiNano
-          : AiProviderType.groq;
-
   @override
   SettingsState build() {
     Future.microtask(() => _load());
-    return SettingsState(
-      aiEnabled: _defaultAiEnabled,
-      aiProviderType: _defaultAiProviderType,
-    );
+    return const SettingsState();
   }
 
   /// Re-read SharedPreferences into state (after remote prefs pull).
@@ -348,9 +187,6 @@ class SettingsNotifier extends Notifier<SettingsState> {
     }
     final useDynamicAccent = prefs.getBool(_keyUseDynamicAlbumAccent) ?? true;
     final gapless = prefs.getBool(_keyGaplessPlayback) ?? true;
-    final aiEnabled = prefs.getBool(_keyAiEnabled) ?? _defaultAiEnabled;
-    final aiDownloadPromptShown =
-        prefs.getBool(_keyAiDownloadPromptShown) ?? false;
     final showYearEndPrompts = prefs.getBool(_keyShowYearEndPrompts) ?? true;
     final analyticsEnabled = prefs.getBool(_keyAnalyticsEnabled) ?? true;
     final forceOfflineMode = prefs.getBool(_keyForceOfflineMode) ?? false;
@@ -358,27 +194,6 @@ class SettingsNotifier extends Notifier<SettingsState> {
         prefs.getBool(_keyDeveloperModeUnlocked) ?? false;
     final showPurgeCacheOption =
         prefs.getBool(_keyShowPurgeCacheOption) ?? false;
-
-    final providerTypeStr = prefs.getString(_keyAiProviderType);
-    AiProviderType aiProviderType = _defaultAiProviderType;
-    if (providerTypeStr != null) {
-      aiProviderType = AiProviderType.values.firstWhere(
-        (e) => e.name == providerTypeStr,
-        orElse: () => _defaultAiProviderType,
-      );
-    }
-
-    final groqApiKey = await _readSecret(prefs, _keyGroqApiKey);
-    final groqModel = prefs.getString(_keyGroqModel) ?? 'llama-3.1-8b-instant';
-    final openRouterApiKey = await _readSecret(prefs, _keyOpenRouterApiKey);
-    final openRouterModel =
-        prefs.getString(_keyOpenRouterModel) ??
-        'meta-llama/llama-3.1-8b-instruct:free';
-    final customEndpointUrl = prefs.getString(_keyCustomEndpointUrl) ?? '';
-    final customEndpointApiKey =
-        await _readSecret(prefs, _keyCustomEndpointApiKey);
-    final customModelName =
-        prefs.getString(_keyCustomModelName) ?? 'gpt-4o-mini';
 
     final multiDiscModeStr = prefs.getString(_keyMultiDiscDisplayMode);
     MultiDiscDisplayMode multiDiscDisplayMode =
@@ -408,21 +223,11 @@ class SettingsNotifier extends Notifier<SettingsState> {
       cacheSizeLimitMB: cacheSizeMB,
       useDynamicAlbumAccent: useDynamicAccent,
       gaplessPlayback: gapless,
-      aiEnabled: aiEnabled,
-      aiDownloadPromptShown: aiDownloadPromptShown,
       showYearEndPrompts: showYearEndPrompts,
       analyticsEnabled: analyticsEnabled,
       forceOfflineMode: forceOfflineMode,
       developerModeUnlocked: developerModeUnlocked,
       showPurgeCacheOption: showPurgeCacheOption,
-      aiProviderType: aiProviderType,
-      groqApiKey: groqApiKey,
-      groqModel: groqModel,
-      openRouterApiKey: openRouterApiKey,
-      openRouterModel: openRouterModel,
-      customEndpointUrl: customEndpointUrl,
-      customEndpointApiKey: customEndpointApiKey,
-      customModelName: customModelName,
       multiDiscDisplayMode: multiDiscDisplayMode,
       autoDownloadFavorites: autoDownloadFavorites,
       downloadWifiOnly: downloadWifiOnly,
@@ -470,20 +275,6 @@ class SettingsNotifier extends Notifier<SettingsState> {
     _schedulePreferenceSync(_keyGaplessPlayback, enabled);
   }
 
-  Future<void> setAiEnabled(bool enabled) async {
-    state = state.copyWith(aiEnabled: enabled);
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_keyAiEnabled, enabled);
-    _schedulePreferenceSync(_keyAiEnabled, enabled);
-  }
-
-  Future<void> setAiDownloadPromptShown(bool shown) async {
-    state = state.copyWith(aiDownloadPromptShown: shown);
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_keyAiDownloadPromptShown, shown);
-    _schedulePreferenceSync(_keyAiDownloadPromptShown, shown);
-  }
-
   Future<void> setShowYearEndPrompts(bool show) async {
     state = state.copyWith(showYearEndPrompts: show);
     final prefs = await SharedPreferences.getInstance();
@@ -524,59 +315,6 @@ class SettingsNotifier extends Notifier<SettingsState> {
     state = state.copyWith(showPurgeCacheOption: show);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_keyShowPurgeCacheOption, show);
-  }
-
-  Future<void> setAiProviderType(AiProviderType type) async {
-    state = state.copyWith(aiProviderType: type);
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_keyAiProviderType, type.name);
-    // Provider type is allowlisted; API keys are never pushed.
-    _schedulePreferenceSync(_keyAiProviderType, type.name);
-  }
-
-  Future<void> setGroqApiKey(String key) async {
-    state = state.copyWith(groqApiKey: key);
-    final prefs = await SharedPreferences.getInstance();
-    await _writeSecret(prefs, _keyGroqApiKey, key);
-    // Intentionally not synced (sensitive).
-  }
-
-  Future<void> setGroqModel(String model) async {
-    state = state.copyWith(groqModel: model);
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_keyGroqModel, model);
-  }
-
-  Future<void> setOpenRouterApiKey(String key) async {
-    state = state.copyWith(openRouterApiKey: key);
-    final prefs = await SharedPreferences.getInstance();
-    await _writeSecret(prefs, _keyOpenRouterApiKey, key);
-    // Intentionally not synced (sensitive).
-  }
-
-  Future<void> setOpenRouterModel(String model) async {
-    state = state.copyWith(openRouterModel: model);
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_keyOpenRouterModel, model);
-  }
-
-  Future<void> setCustomEndpointUrl(String url) async {
-    state = state.copyWith(customEndpointUrl: url);
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_keyCustomEndpointUrl, url);
-  }
-
-  Future<void> setCustomEndpointApiKey(String key) async {
-    state = state.copyWith(customEndpointApiKey: key);
-    final prefs = await SharedPreferences.getInstance();
-    await _writeSecret(prefs, _keyCustomEndpointApiKey, key);
-    // Intentionally not synced (sensitive).
-  }
-
-  Future<void> setCustomModelName(String model) async {
-    state = state.copyWith(customModelName: model);
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_keyCustomModelName, model);
   }
 
   Future<void> setMultiDiscDisplayMode(MultiDiscDisplayMode mode) async {
@@ -622,21 +360,11 @@ class SettingsNotifier extends Notifier<SettingsState> {
     await prefs.remove(_keyCacheSizeLimit);
     await prefs.remove(_keyUseDynamicAlbumAccent);
     await prefs.remove(_keyGaplessPlayback);
-    await prefs.remove(_keyAiEnabled);
-    await prefs.remove(_keyAiDownloadPromptShown);
     await prefs.remove(_keyShowYearEndPrompts);
     await prefs.remove(_keyAnalyticsEnabled);
     await prefs.remove(_keyForceOfflineMode);
     await prefs.remove(_keyDeveloperModeUnlocked);
     await prefs.remove(_keyShowPurgeCacheOption);
-    await prefs.remove(_keyAiProviderType);
-    await _deleteSecret(prefs, _keyGroqApiKey);
-    await prefs.remove(_keyGroqModel);
-    await _deleteSecret(prefs, _keyOpenRouterApiKey);
-    await prefs.remove(_keyOpenRouterModel);
-    await prefs.remove(_keyCustomEndpointUrl);
-    await _deleteSecret(prefs, _keyCustomEndpointApiKey);
-    await prefs.remove(_keyCustomModelName);
     await prefs.remove(_keyMultiDiscDisplayMode);
     await prefs.remove(_keyAutoDownloadFavorites);
     await prefs.remove(_keyDownloadWifiOnly);

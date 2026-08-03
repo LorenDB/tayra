@@ -152,30 +152,6 @@ def test_get_route_head_tags(mocker, settings):
     resolve.assert_called_once_with(request.path, urlconf=settings.SPA_URLCONF)
 
 
-def test_serve_spa_includes_custom_css(mocker, no_api_auth):
-    request = mocker.Mock(path="/", META={})
-    mocker.patch.object(
-        middleware,
-        "get_spa_html",
-        return_value="<html><head></head><body></body></html>",
-    )
-    mocker.patch.object(middleware, "get_default_head_tags", return_value=[])
-    mocker.patch.object(middleware, "get_request_head_tags", return_value=[])
-    get_custom_css = mocker.patch.object(
-        middleware, "get_custom_css", return_value="body { background: black; }"
-    )
-    response = middleware.serve_spa(request)
-
-    assert response.status_code == 200
-    expected = [
-        "<html><head>\n\n</head><body>",
-        "<style>body { background: black; }</style>",
-        "</body></html>",
-    ]
-    get_custom_css.assert_called_once_with()
-    assert response.content == "\n".join(expected).encode()
-
-
 def test_serve_spa_sets_csrf_token(mocker, no_api_auth):
     request = mocker.Mock(path="/", META={})
     get_token = mocker.patch.object(middleware.csrf, "get_token", return_value="test")
@@ -191,26 +167,6 @@ def test_serve_spa_sets_csrf_token(mocker, no_api_auth):
     assert response.status_code == 200
     get_token.assert_called_once_with(request)
     assert response.cookies["csrftoken"].value == get_token.return_value
-
-
-@pytest.mark.parametrize(
-    "custom_css, expected",
-    [
-        ("body { background: black; }", "body { background: black; }"),
-        (
-            "body { injection: </style> & Hello",
-            "body { injection: &lt;/style&gt; &amp; Hello",
-        ),
-        (
-            'body { background: url("image/url"); }',
-            'body { background: url("image/url"); }',
-        ),
-    ],
-)
-def test_get_custom_css(preferences, custom_css, expected):
-    preferences["ui__custom_css"] = custom_css
-
-    assert middleware.get_custom_css() == expected
 
 
 def test_throttle_status_middleware_includes_info_in_response_headers(mocker):

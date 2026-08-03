@@ -6,12 +6,12 @@ void main() {
     test('parses boolean preference', () {
       final pref = GlobalPreference.fromJson({
         'section': 'instance',
-        'name': 'funkwhale_support_message_enabled',
-        'identifier': 'instance__funkwhale_support_message_enabled',
+        'name': 'nodeinfo_stats_enabled',
+        'identifier': 'instance__nodeinfo_stats_enabled',
         'default': true,
         'value': false,
-        'verbose_name': 'Funkwhale Support message',
-        'help_text': 'Show support message',
+        'verbose_name': 'Enable usage and library stats',
+        'help_text': 'Share usage stats in nodeinfo',
         'additional_data': {},
         'field': {
           'class': 'BooleanField',
@@ -22,8 +22,8 @@ void main() {
       expect(pref.fieldKind, GlobalPreferenceFieldKind.boolean);
       expect(pref.boolValue, isFalse);
       expect(pref.isEditable, isTrue);
-      expect(pref.displayName, 'Funkwhale Support message');
-      expect(pref.identifier, 'instance__funkwhale_support_message_enabled');
+      expect(pref.displayName, 'Enable usage and library stats');
+      expect(pref.identifier, 'instance__nodeinfo_stats_enabled');
     });
 
     test('parses string preference', () {
@@ -171,16 +171,16 @@ void main() {
 
     test('marks JSON / complex field as non-editable', () {
       final pref = GlobalPreference.fromJson({
-        'section': 'moderation',
-        'name': 'signup_form',
-        'identifier': 'moderation__signup_form',
+        'section': 'common',
+        'name': 'example_json',
+        'identifier': 'common__example_json',
         'default': {'fields': []},
         'value': {
           'fields': [
             {'label': 'Why?', 'required': true, 'input_type': 'long_text'},
           ],
         },
-        'verbose_name': 'Signup form',
+        'verbose_name': 'Example JSON',
         'help_text': '',
         'additional_data': {},
         'field': {
@@ -195,11 +195,11 @@ void main() {
 
     test('builds identifier from section and name when missing', () {
       final pref = GlobalPreference.fromJson({
-        'section': 'ui',
-        'name': 'custom_css',
+        'section': 'instance',
+        'name': 'terms',
         'default': '',
-        'value': 'body{}',
-        'verbose_name': 'Custom CSS',
+        'value': 'Be nice',
+        'verbose_name': 'Terms of service',
         'help_text': '',
         'additional_data': {},
         'field': {
@@ -208,7 +208,7 @@ void main() {
           'input_type': 'text',
         },
       });
-      expect(pref.identifier, 'ui__custom_css');
+      expect(pref.identifier, 'instance__terms');
     });
 
     test('copyWith updates value and clearValue nulls it', () {

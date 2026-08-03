@@ -6,7 +6,6 @@ import re
 import time
 import tracemalloc
 import urllib.parse
-import xml.sax.saxutils
 
 from django import http, urls
 from django.conf import settings
@@ -17,7 +16,7 @@ from rest_framework import views
 
 from funkwhale_api.federation import utils as federation_utils
 
-from . import preferences, session, throttling, utils
+from . import session, throttling, utils
 
 EXCLUDED_PATHS = ["/api", "/federation", "/.well-known"]
 
@@ -73,13 +72,6 @@ def serve_spa(request):
 
     # let's inject our meta tags in the HTML
     head += "\n" + "\n".join(render_tags(final_tags)) + "\n</head>"
-    css = get_custom_css() or ""
-    if css:
-        # We add the style add the end of the body to ensure it has the highest
-        # priority (since it will come after other stylesheets)
-        body, tail = tail.split("</body>", 1)
-        css = f"<style>{css}</style>"
-        tail = body + "\n" + css + "\n</body>" + tail
 
     # set a csrf token so that visitor can login / query API if needed
     token = csrf.get_token(request)
@@ -188,14 +180,6 @@ def get_request_head_tags(request):
     return match.func(
         request, *match.args, redirect_to_ap=redirect_to_ap, **match.kwargs
     )
-
-
-def get_custom_css():
-    css = preferences.get("ui__custom_css").strip()
-    if not css:
-        return
-
-    return xml.sax.saxutils.escape(css)
 
 
 class ApiRedirect(Exception):

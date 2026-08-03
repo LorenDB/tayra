@@ -7,7 +7,6 @@ import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/platform/app_platform.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
-import 'package:tayra/features/year_review/ai_summary_provider.dart';
 import 'package:tayra/features/year_review/listen_history_service.dart';
 
 // ── Providers ───────────────────────────────────────────────────────────
@@ -129,13 +128,15 @@ Future<YearReviewStats> _loadServerYearReview(
       for (final album in response.results) {
         if (album.tracksCount > 0) counts[album.id] = album.tracksCount;
       }
-      final enriched = stats.topAlbums
-          .map(
-            (a) => a.id != null && counts.containsKey(a.id)
-                ? a.copyWith(albumTrackCount: counts[a.id!])
-                : a,
-          )
-          .toList();
+      final enriched =
+          stats.topAlbums
+              .map(
+                (a) =>
+                    a.id != null && counts.containsKey(a.id)
+                        ? a.copyWith(albumTrackCount: counts[a.id!])
+                        : a,
+              )
+              .toList();
       stats = stats.copyWith(
         topAlbums: enriched,
         topAlbum: enriched.isNotEmpty ? enriched.first : null,
@@ -146,21 +147,23 @@ Future<YearReviewStats> _loadServerYearReview(
   }
 
   final allFavorites = await favoritesF;
-  final lovedTopTracks = stats.topTracks.where((t) {
-    return allFavorites.any(
-      (f) =>
-          f.track.title == t.name &&
-          (t.subtitle == null || f.track.artistName == t.subtitle),
-    );
-  }).toList();
+  final lovedTopTracks =
+      stats.topTracks.where((t) {
+        return allFavorites.any(
+          (f) =>
+              f.track.title == t.name &&
+              (t.subtitle == null || f.track.artistName == t.subtitle),
+        );
+      }).toList();
 
-  final unlovedTopTracks = stats.topTracks.where((t) {
-    return !allFavorites.any(
-      (f) =>
-          f.track.title == t.name &&
-          (t.subtitle == null || f.track.artistName == t.subtitle),
-    );
-  }).toList();
+  final unlovedTopTracks =
+      stats.topTracks.where((t) {
+        return !allFavorites.any(
+          (f) =>
+              f.track.title == t.name &&
+              (t.subtitle == null || f.track.artistName == t.subtitle),
+        );
+      }).toList();
 
   // Favorited-this-year still needs local listen rows for play counts when
   // offline cache exists; on web we skip (API has no per-favorite listen map).
@@ -202,21 +205,23 @@ Future<YearReviewStats> _loadLocalYearReview(
   // Partition top tracks into loved / unloved by matching against the
   // full favorites list by title + artist (TopItem only carries strings,
   // not IDs, so we can't use a Set<int> lookup here).
-  final lovedTopTracks = stats.topTracks.where((t) {
-    return allFavorites.any(
-      (f) =>
-          f.track.title == t.name &&
-          (t.subtitle == null || f.track.artistName == t.subtitle),
-    );
-  }).toList();
+  final lovedTopTracks =
+      stats.topTracks.where((t) {
+        return allFavorites.any(
+          (f) =>
+              f.track.title == t.name &&
+              (t.subtitle == null || f.track.artistName == t.subtitle),
+        );
+      }).toList();
 
-  final unlovedTopTracks = stats.topTracks.where((t) {
-    return !allFavorites.any(
-      (f) =>
-          f.track.title == t.name &&
-          (t.subtitle == null || f.track.artistName == t.subtitle),
-    );
-  }).toList();
+  final unlovedTopTracks =
+      stats.topTracks.where((t) {
+        return !allFavorites.any(
+          (f) =>
+              f.track.title == t.name &&
+              (t.subtitle == null || f.track.artistName == t.subtitle),
+        );
+      }).toList();
 
   final favoritedThisYear = await ListenHistoryService.getFavoritedThisYear(
     year,
@@ -372,24 +377,6 @@ class YearReviewBannerNotifier extends Notifier<bool> {
 
     final count = await ref.read(totalListenCountProvider.future);
     state = count > 0;
-    // If the banner is visible for the current year, pregenerate the AI
-    // summary in the background so it's ready when the user opens the
-    // Year in Review. Also, ensure the previous calendar year's final
-    // summary (if any) is saved permanently after the year ends.
-    if (state) {
-      try {
-        // Pregenerate for the current calendar year.
-        ref
-            .read(aiSummaryProvider(now.year).notifier)
-            .ensureGeneratedForBanner();
-      } catch (_) {}
-    }
-
-    // Ensure final copy for previous year exists if needed.
-    try {
-      final prev = now.year - 1;
-      ref.read(aiSummaryProvider(prev).notifier).ensureFinalSaved();
-    } catch (_) {}
   }
 
   /// Permanently hide the banner for this calendar year.

@@ -88,18 +88,6 @@ PERMISSIONS = sorted(PERMISSIONS_CONFIGURATION.keys())
 get_file_path = common_utils.ChunkedPath("users/avatars", preserve_file_name=False)
 
 
-def get_default_instance_support_message_display_date():
-    return timezone.now() + datetime.timedelta(
-        days=settings.INSTANCE_SUPPORT_MESSAGE_DELAY
-    )
-
-
-def get_default_funkwhale_support_message_display_date():
-    return timezone.now() + datetime.timedelta(
-        days=settings.FUNKWHALE_SUPPORT_MESSAGE_DELAY
-    )
-
-
 class UserQuerySet(models.QuerySet):
     def for_auth(self):
         """Optimization to avoid additional queries during authentication"""
@@ -181,14 +169,6 @@ class User(AbstractUser):
 
     upload_quota = models.PositiveIntegerField(null=True, blank=True)
 
-    instance_support_message_display_date = models.DateTimeField(
-        default=get_default_instance_support_message_display_date, null=True, blank=True
-    )
-    funkwhale_support_message_display_date = models.DateTimeField(
-        default=get_default_funkwhale_support_message_display_date,
-        null=True,
-        blank=True,
-    )
     settings = JSONField(default=None, null=True, blank=True, max_length=50000)
 
     objects = UserManager()

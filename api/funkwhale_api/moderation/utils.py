@@ -25,19 +25,3 @@ NOTE_TARGET_FIELDS = {
 }
 
 
-def get_signup_form_additional_fields_serializer(customization):
-    fields = (customization or {}).get("fields", []) or []
-
-    class AdditionalFieldsSerializer(serializers.Serializer):
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            for field in fields:
-                required = bool(field.get("required", True))
-                self.fields[field["label"]] = serializers.CharField(
-                    max_length=5000,
-                    required=required,
-                    allow_null=not required,
-                    allow_blank=not required,
-                )
-
-    return AdditionalFieldsSerializer(required=fields, allow_null=not fields)

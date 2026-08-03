@@ -1587,17 +1587,6 @@ FEDERATION_DUPLICATE_FETCH_DELAY = env.int(
 """
 The delay in seconds between two manual fetches of the same remote object.
 """
-INSTANCE_SUPPORT_MESSAGE_DELAY = env.int("INSTANCE_SUPPORT_MESSAGE_DELAY", default=15)
-"""
-The number of days before your pod shows the "support your pod" message.
-The timer starts after the user signs up.
-"""
-FUNKWHALE_SUPPORT_MESSAGE_DELAY = env.int("FUNKWHALE_SUPPORT_MESSAGE_DELAY", default=15)
-"""
-The number of days before your pod shows the "support Funkwhale" message.
-The timer starts after the user signs up.
-"""
-
 MIN_DELAY_BETWEEN_DOWNLOADS_COUNT = env.int(
     "MIN_DELAY_BETWEEN_DOWNLOADS_COUNT", default=60 * 60 * 6
 )
