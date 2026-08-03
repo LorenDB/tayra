@@ -354,7 +354,10 @@ class _TotpSettingsScreenState extends ConsumerState<TotpSettingsScreen> {
       await ref
           .read(funkwhaleApiProvider)
           .disableTotp(
-            passwordDigest: hashPasswordForTransport(passwordCtrl.text),
+            passwordDigest: hashPasswordForTransport(
+              passwordCtrl.text,
+              serverUrl: ref.read(authStateProvider).serverUrl,
+            ),
             code: codeCtrl.text.trim(),
           );
       if (!mounted) return;

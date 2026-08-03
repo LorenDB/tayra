@@ -12,6 +12,7 @@ from django.urls import reverse
 
 from funkwhale_api.users.oidc import client as oidc_client
 from funkwhale_api.users.oidc import config as oidc_config
+from funkwhale_api.users.oidc import redirects as oidc_redirects
 from funkwhale_api.users.oidc import session as oidc_session
 from funkwhale_api.users.oidc import users as oidc_users
 
@@ -42,6 +43,8 @@ def oidc_env(settings):
     settings.OIDC_USERNAME_CLAIM = "preferred_username"
     settings.OIDC_DISPLAY_NAME = "Company SSO"
     settings.OIDC_AUTO_CREATE = False
+    # Align FUNKWHALE_URL with redirects used in tests (H3 allowlist).
+    settings.FUNKWHALE_URL = "https://app.example.com"
     return settings
 
 
@@ -101,6 +104,8 @@ def test_oidc_login_redirects_to_idp(api_client, oidc_env):
     assert "state=" in location
     assert "code_challenge=" in location
     assert "nonce=" in location
+    # H3: transaction binding cookie set on login start.
+    assert oidc_session.TX_COOKIE_NAME in response.cookies
 
 
 @pytest.mark.django_db
@@ -111,6 +116,44 @@ def test_oidc_login_rejects_bad_redirect(api_client, oidc_env):
     )
     assert response.status_code == 400
     assert response.json()["error"] == "invalid_redirect"
+
+
+@pytest.mark.django_db
+def test_oidc_login_rejects_open_redirect(api_client, oidc_env):
+    """H3: arbitrary https URLs are no longer accepted."""
+    response = api_client.get(
+        reverse("api:v1:users:oidc_login"),
+        {"client_redirect": "https://evil.example/phish"},
+    )
+    assert response.status_code == 400
+    assert response.json()["error"] == "invalid_redirect"
+
+
+@pytest.mark.django_db
+def test_oidc_login_allows_oob(api_client, oidc_env):
+    with mock.patch(
+        "funkwhale_api.users.oidc.client.fetch_discovery",
+        return_value=DISCOVERY,
+    ):
+        response = api_client.get(
+            reverse("api:v1:users:oidc_login"),
+            {"client_redirect": "urn:ietf:wg:oauth:2.0:oob", "tx": "a" * 32},
+        )
+    assert response.status_code in (302, 301)
+
+
+@pytest.mark.django_db
+def test_oidc_login_allows_extra_origin(api_client, oidc_env, settings):
+    settings.OIDC_CLIENT_REDIRECT_ORIGINS = ["https://spa.dev.example"]
+    with mock.patch(
+        "funkwhale_api.users.oidc.client.fetch_discovery",
+        return_value=DISCOVERY,
+    ):
+        response = api_client.get(
+            reverse("api:v1:users:oidc_login"),
+            {"client_redirect": "https://spa.dev.example/auth/sso/callback"},
+        )
+    assert response.status_code in (302, 301)
 
 
 @pytest.mark.django_db
@@ -131,11 +174,13 @@ def test_oidc_callback_happy_path_oob(api_client, oidc_env, factories):
 
     nonce = "test-nonce"
     code_verifier = "verifier"
+    tx_binding = "tx-binding-test-value-32chars!!"
     state = oidc_session.store_login_state(
         client_redirect="urn:ietf:wg:oauth:2.0:oob",
         client_state="",
         nonce=nonce,
         code_verifier=code_verifier,
+        tx_binding=tx_binding,
     )
 
     id_claims = {
@@ -172,9 +217,20 @@ def test_oidc_callback_happy_path_oob(api_client, oidc_env, factories):
     assert match
     exchange_code = match.group(1)
 
-    token_response = api_client.post(
+    # Stolen code without binding must fail (H3). Drop cookies so this
+    # simulates an attacker who only observed the code (not the oidc_tx cookie).
+    api_client.cookies.clear()
+    stolen = api_client.post(
         reverse("api:v1:users:oidc_token"),
         {"code": exchange_code},
+        format="json",
+    )
+    assert stolen.status_code == 400
+    assert stolen.json()["error"] == "invalid_code"
+
+    token_response = api_client.post(
+        reverse("api:v1:users:oidc_token"),
+        {"code": exchange_code, "tx": tx_binding},
         format="json",
     )
     assert token_response.status_code == 200, token_response.content
@@ -187,7 +243,7 @@ def test_oidc_callback_happy_path_oob(api_client, oidc_env, factories):
     # Code is single-use
     again = api_client.post(
         reverse("api:v1:users:oidc_token"),
-        {"code": exchange_code},
+        {"code": exchange_code, "tx": tx_binding},
         format="json",
     )
     assert again.status_code == 400
@@ -202,6 +258,7 @@ def test_oidc_callback_user_not_found(api_client, oidc_env, factories):
         client_state="s1",
         nonce=nonce,
         code_verifier="v",
+        tx_binding="tx1",
     )
     with mock.patch(
         "funkwhale_api.users.oidc.client.fetch_discovery",
@@ -234,6 +291,7 @@ def test_oidc_callback_auto_create(api_client, oidc_env, factories, settings):
         client_state="",
         nonce=nonce,
         code_verifier="v",
+        tx_binding="tx2",
     )
     with mock.patch(
         "funkwhale_api.users.oidc.client.fetch_discovery",
@@ -274,6 +332,7 @@ def test_oidc_callback_inactive_user(api_client, oidc_env, factories):
         client_state="",
         nonce=nonce,
         code_verifier="v",
+        tx_binding="tx3",
     )
     with mock.patch(
         "funkwhale_api.users.oidc.client.fetch_discovery",
@@ -339,6 +398,21 @@ def test_extract_username():
         == "bob"
     )
     assert oidc_client.extract_username({}, "preferred_username") == ""
+
+
+def test_redirect_allowlist_helpers(settings):
+    settings.FUNKWHALE_URL = "https://music.example.org"
+    assert oidc_redirects.is_allowed_client_redirect(
+        "https://music.example.org/auth/sso/callback"
+    )
+    assert oidc_redirects.is_allowed_client_redirect(
+        "urn:ietf:wg:oauth:2.0:oob"
+    )
+    assert oidc_redirects.is_allowed_client_redirect("tayra://sso/callback")
+    assert not oidc_redirects.is_allowed_client_redirect(
+        "https://evil.example/"
+    )
+    assert not oidc_redirects.is_allowed_client_redirect("javascript:alert(1)")
 
 
 @pytest.mark.django_db

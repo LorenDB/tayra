@@ -45,8 +45,8 @@ make logs             # follow all logs
 
 - **`FUNKWHALE_URL` is build-time.** The server URL is baked into the SPA. After hostname changes: `make front-rebuild`.
 - **Flutter sources are at repo root.** `pubspec.yaml` must exist at `/` before `docker compose build front`.
-- **First-party login** (this fork's addition): `POST /api/v1/users/token/` with `{"username","password"}` → OAuth tokens + `listen_token`. `password` must be the domain-separated SHA-256 transport digest (never plaintext); see `password_transport` on API and client.
-- **OIDC SSO** (optional): env `OIDC_*` and/or instance prefs `users__oidc_*`. Server is the OIDC RP; clients use `GET /api/v1/users/auth-methods/`, then `/users/oidc/login/` → IdP → callback → `POST /users/oidc/token/`. Username claim (default `preferred_username`) matches local `User.username`. See `DEPLOY.md`.
+- **First-party login** (this fork's addition): `POST /api/v1/users/token/challenge/` then `POST /api/v1/users/token/` with a SCRAM-like per-request proof (never the account password or a static digest alone); see `password_transport` on API and client. Returns OAuth tokens + `listen_token`.
+- **OIDC SSO** (optional): env `OIDC_*` and/or instance prefs `users__oidc_*`. Server is the OIDC RP; clients use `GET /api/v1/users/auth-methods/`, then `/users/oidc/login/` (allowlisted `client_redirect` only) → IdP → callback → `POST /users/oidc/token/` with SSO transaction binding (`oidc_tx` cookie or `tx` field). Username claim (default `preferred_username`) matches local `User.username`. See `DEPLOY.md`.
 - **First-time setup:** `docker compose exec api python manage.py migrate` then `docker compose exec api python manage.py fw users create`.
 
 ## API (Django) commands

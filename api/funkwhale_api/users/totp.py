@@ -131,13 +131,20 @@ def _default_issuer() -> str:
 
 
 def is_totp_enabled(user) -> bool:
-    device = getattr(user, "totp_device", None)
-    if device is None:
-        # May not be prefetched; try reverse relation safely.
-        try:
-            device = user.totp_device
-        except Exception:
-            return False
+    """True when the user has a confirmed TOTP device.
+
+    Always hits the database (not the reverse-descriptor cache) so a
+    long-lived ``request.user`` / force_authenticate object cannot report
+    a stale pre-setup or pre-confirm state within the same process.
+    """
+    from funkwhale_api.users import models as users_models
+
+    if user is None or not getattr(user, "pk", None):
+        return False
+    try:
+        device = users_models.TotpDevice.objects.filter(user_id=user.pk).first()
+    except Exception:
+        return False
     return bool(device and device.confirmed and device.secret)
 
 

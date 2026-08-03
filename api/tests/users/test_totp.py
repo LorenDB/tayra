@@ -2,18 +2,56 @@
 
 from __future__ import annotations
 
+import base64
+
 import pytest
 from django.urls import reverse
 
 from funkwhale_api.users import models, totp
-from funkwhale_api.users.password_transport import hash_password_for_transport
+from funkwhale_api.users.password_transport import (
+    compute_client_proof,
+    transport_secret,
+)
 
 
-def _login_payload(username: str, password: str) -> dict:
-    return {
-        "username": username,
-        "password": hash_password_for_transport(password),
-    }
+def _b64url_decode(s: str) -> bytes:
+    pad = "=" * (-len(s) % 4)
+    return base64.urlsafe_b64decode(s + pad)
+
+
+def _password_confirm(password: str) -> str:
+    """Hex transport secret for password-confirmation endpoints."""
+    return transport_secret(password).hex()
+
+
+def _login(api_client, username: str, password: str):
+    """Challenge + SCRAM proof login (returns response)."""
+    challenge = api_client.post(
+        reverse("api:v1:users:token_login_challenge"),
+        {"username": username},
+        format="json",
+    )
+    assert challenge.status_code == 200, challenge.content
+    data = challenge.json()
+    client_nonce = "totp-cn"
+    proof = compute_client_proof(
+        transport_secret(password),
+        salt=_b64url_decode(data["salt"]),
+        iterations=int(data["iterations"]),
+        username=username,
+        client_nonce=client_nonce,
+        server_nonce=data["server_nonce"],
+    )
+    return api_client.post(
+        reverse("api:v1:users:token_login"),
+        {
+            "username": username,
+            "challenge_id": data["challenge_id"],
+            "client_nonce": client_nonce,
+            "client_proof": proof,
+        },
+        format="json",
+    )
 
 
 def _enable_totp(user, secret=None) -> str:
@@ -51,8 +89,7 @@ def test_token_login_requires_totp_when_enabled(api_client, factories):
     user.save()
     secret = _enable_totp(user)
 
-    url = reverse("api:v1:users:token_login")
-    response = api_client.post(url, _login_payload("2fa-user", "s3cret-pass"), format="json")
+    response = _login(api_client, "2fa-user", "s3cret-pass")
     assert response.status_code == 401, response.content
     data = response.json()
     assert data["error"] == "totp_required"
@@ -78,11 +115,7 @@ def test_token_login_2fa_rejects_bad_code(api_client, factories):
     user.save()
     _enable_totp(user)
 
-    challenge = api_client.post(
-        reverse("api:v1:users:token_login"),
-        _login_payload("2fa-bad", "s3cret-pass"),
-        format="json",
-    )
+    challenge = _login(api_client, "2fa-bad", "s3cret-pass")
     assert challenge.status_code == 401
     mfa = challenge.json()["mfa_token"]
 
@@ -104,11 +137,7 @@ def test_token_login_2fa_recovery_code(api_client, factories):
     codes = totp.generate_recovery_codes(count=2)
     totp.store_recovery_codes(user, codes)
 
-    challenge = api_client.post(
-        reverse("api:v1:users:token_login"),
-        _login_payload("2fa-rec", "s3cret-pass"),
-        format="json",
-    )
+    challenge = _login(api_client, "2fa-rec", "s3cret-pass")
     mfa = challenge.json()["mfa_token"]
 
     ok = api_client.post(
@@ -120,11 +149,7 @@ def test_token_login_2fa_recovery_code(api_client, factories):
     assert ok.json()["access_token"]
 
     # Same recovery code cannot be reused
-    challenge2 = api_client.post(
-        reverse("api:v1:users:token_login"),
-        _login_payload("2fa-rec", "s3cret-pass"),
-        format="json",
-    )
+    challenge2 = _login(api_client, "2fa-rec", "s3cret-pass")
     mfa2 = challenge2.json()["mfa_token"]
     reuse = api_client.post(
         reverse("api:v1:users:token_login_2fa"),
@@ -163,17 +188,13 @@ def test_setup_confirm_disable_flow(logged_in_api_client, factories):
     assert me.json()["totp_enabled"] is True
     assert me.json()["totp_required"] is False
 
-    disable_code = totp.totp_at(secret)
-    # Small sleep if same step would collide with confirm's last_used_step
-    if totp.verify_totp(secret, disable_code, last_used_step=user.totp_device.last_used_step)[0] is False:
-        # Use recovery code instead
-        disable_code = recovery[0]
-
+    # Prefer a recovery code so we don't collide with confirm's last_used_step
+    # within the same TOTP period.
     disable = logged_in_api_client.post(
         reverse("api:v1:users:users-me-2fa-disable"),
         {
-            "password": hash_password_for_transport("s3cret-pass"),
-            "code": disable_code,
+            "password": _password_confirm("s3cret-pass"),
+            "code": recovery[0],
         },
         format="json",
     )
@@ -203,7 +224,7 @@ def test_force_2fa_blocks_disable_and_flags_me(logged_in_api_client, factories, 
     disable = logged_in_api_client.post(
         reverse("api:v1:users:users-me-2fa-disable"),
         {
-            "password": hash_password_for_transport("s3cret-pass"),
+            "password": _password_confirm("s3cret-pass"),
             "code": totp.totp_at(secret),
         },
         format="json",
@@ -219,11 +240,7 @@ def test_login_flags_totp_setup_required_when_forced(api_client, factories, pref
     user.set_password("s3cret-pass")
     user.save()
 
-    response = api_client.post(
-        reverse("api:v1:users:token_login"),
-        _login_payload("force-me", "s3cret-pass"),
-        format="json",
-    )
+    response = _login(api_client, "force-me", "s3cret-pass")
     assert response.status_code == 200, response.content
     data = response.json()
     assert data["access_token"]
@@ -246,11 +263,7 @@ def test_token_login_without_2fa_unchanged(api_client, factories):
     user = factories["users.User"](username="plain")
     user.set_password("s3cret-pass")
     user.save()
-    response = api_client.post(
-        reverse("api:v1:users:token_login"),
-        _login_payload("plain", "s3cret-pass"),
-        format="json",
-    )
+    response = _login(api_client, "plain", "s3cret-pass")
     assert response.status_code == 200
     data = response.json()
     assert data["access_token"]

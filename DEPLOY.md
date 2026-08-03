@@ -192,20 +192,24 @@ server’s real message (e.g. e-mail verification). Rebuild **api** and **front*
 docker compose build api front && docker compose up -d api front
 ```
 
-Debug with curl (use your real host/user):
+Debug with curl (use your real host/user). Login is a **two-step** challenge
++ SCRAM-like proof (H2); never send the account password:
 
 ```bash
-# password must be the transport digest, not plaintext:
-# python3 -c "import hashlib; print(hashlib.sha256(b'tayra-login-v1\0'+b'YOUR_PASS').hexdigest())"
-DIGEST=$(python3 -c "import hashlib; print(hashlib.sha256(b'tayra-login-v1\0'+b'YOUR_PASS').hexdigest())")
-curl -sS -X POST "https://YOUR_HOST/api/v1/users/token/" \
+# 1) Get a one-time challenge
+CH=$(curl -sS -X POST "https://YOUR_HOST/api/v1/users/token/challenge/" \
   -H "Content-Type: application/json" \
-  -d "{\"username\":\"YOUR_USER\",\"password\":\"$DIGEST\"}" | jq .
+  -d '{"username":"YOUR_USER"}')
+echo "$CH" | jq .
+
+# 2) Complete login with a client that implements the challenge proof
+#    (Tayra app, or a small script using password_transport.compute_client_proof).
+#    A static SHA-256 digest alone is rejected (missing_challenge).
 ```
 
 - `200` + `access_token` → API OK; rebuild front if the app still fails  
-- `400` with `Unable to log in…` / `invalid_credentials` → wrong user/password, wrong DB, API image not this fork, or password was set before transport hashing (reset once with `fw users update USER --password '…'`)  
-- `400` / `password_not_hashed` → body still has plaintext; use the digest above or a current Tayra build  
+- `400` with `Unable to log in…` / `invalid_credentials` → wrong user/password, wrong DB, API image not this fork, or password needs a reset (`fw users update USER --password '…'`)  
+- `400` / `missing_challenge` / `invalid_challenge` → need a fresh `POST …/token/challenge/` first  
 - `400` / `email_unverified` → verify e-mail or set `ACCOUNT_EMAIL_VERIFICATION_ENFORCE=false`  
 - `400` / `missing_credentials` → body not parsed (Content-Type / proxy stripping POST)  
 - HTML / `Invalid HTTP_HOST header` → `FUNKWHALE_HOSTNAME` / `DJANGO_ALLOWED_HOSTS` mismatch  
@@ -275,8 +279,10 @@ external IdP. After SSO, the IdP **username claim** (default
    **Sign in with …** on the login screen.
 
 **“Passwords in the browser Network tab”**  
-Tayra sends a **SHA-256 transport digest** in the `password` field (not the
-account password). DevTools still shows the JSON body after TLS decryption;
+Tayra never sends the account password. Login uses a one-time SCRAM-like
+proof bound to a server challenge (not a static reusable digest). DevTools
+still shows the JSON body after TLS decryption;
+
 you should see a 64-character hex string, not the typed password. Ensure users
 open the site via **HTTPS**. If you see plaintext there, the SPA build is too
 old—rebuild `front`.

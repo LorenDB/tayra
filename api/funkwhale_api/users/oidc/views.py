@@ -18,41 +18,17 @@ from funkwhale_api.users import first_party
 
 from . import client as oidc_client
 from . import config as oidc_config
+from . import redirects as oidc_redirects
 from . import session as oidc_session
 from . import users as oidc_users
 
 logger = logging.getLogger(__name__)
 
-OOB_REDIRECTS = frozenset(
-    {
-        "urn:ietf:wg:oauth:2.0:oob",
-        "urn:ietf:wg:oauth:2.0:oob:auto",
-    }
-)
+OOB_REDIRECTS = oidc_redirects.OOB_REDIRECTS
 
 
 def _is_allowed_client_redirect(value: str) -> bool:
-    if not value or not isinstance(value, str):
-        return False
-    value = value.strip()
-    if value in OOB_REDIRECTS:
-        return True
-    try:
-        parsed = urlsplit(value)
-    except Exception:
-        return False
-    if parsed.scheme in ("http", "https") and parsed.netloc:
-        # Disallow credentials in netloc.
-        if "@" in parsed.netloc:
-            return False
-        return True
-    # Optional custom app scheme (e.g. tayra://sso/callback)
-    if parsed.scheme and parsed.scheme not in ("javascript", "data", "file"):
-        if parsed.scheme.isalnum() or all(
-            c.isalnum() or c in "+-." for c in parsed.scheme
-        ):
-            return True
-    return False
+    return oidc_redirects.is_allowed_client_redirect(value)
 
 
 def _append_query(url: str, params: dict) -> str:
@@ -136,6 +112,44 @@ def _oob_error_response(error: str) -> HttpResponse:
     return HttpResponse(html, content_type="text/html; charset=utf-8")
 
 
+def _set_tx_cookie(response, tx_binding: str):
+    """Bind the SSO transaction to this browser (HttpOnly cookie on API host)."""
+    if not tx_binding:
+        return
+    # Secure when the pod is HTTPS; SameSite=Lax so top-level redirects keep it
+    # and the SPA same-site POST to /oidc/token/ includes it.
+    from django.conf import settings
+
+    fw = (getattr(settings, "FUNKWHALE_URL", "") or "").lower()
+    secure = fw.startswith("https://")
+    response.set_cookie(
+        oidc_session.TX_COOKIE_NAME,
+        tx_binding,
+        max_age=oidc_session.TX_COOKIE_MAX_AGE,
+        httponly=True,
+        samesite="Lax",
+        secure=secure,
+        path="/",
+    )
+
+
+def _clear_tx_cookie(response):
+    response.delete_cookie(oidc_session.TX_COOKIE_NAME, path="/")
+
+
+def _tx_from_request(request) -> str:
+    """SSO transaction binding from cookie or JSON body (native OOB clients)."""
+    cookie_val = (request.COOKIES.get(oidc_session.TX_COOKIE_NAME) or "").strip()
+    if cookie_val:
+        return cookie_val
+    data = getattr(request, "data", None) or {}
+    if isinstance(data, dict):
+        body_val = str(data.get("tx") or data.get("tx_binding") or "").strip()
+        if body_val:
+            return body_val
+    return ""
+
+
 @extend_schema(
     operation_id="auth_methods",
     description="Public discovery of available authentication methods for clients.",
@@ -174,10 +188,18 @@ def oidc_login(request):
         return Response(
             {
                 "error": "invalid_redirect",
-                "detail": "Missing or disallowed client_redirect parameter.",
+                "detail": (
+                    "Missing or disallowed client_redirect parameter. "
+                    "Use the pod origin, an OOB URN, or a configured allowlist entry."
+                ),
             },
             status=400,
         )
+
+    # Optional client-supplied binding for native OOB (app keeps this and
+    # posts it with the exchange code). Browser flows use the cookie instead.
+    client_tx = (request.GET.get("tx") or "").strip()
+    tx_binding = client_tx if client_tx and len(client_tx) >= 16 else oidc_session.new_tx_binding()
 
     try:
         discovery = oidc_client.fetch_discovery(cfg["discovery_url"])
@@ -188,6 +210,7 @@ def oidc_login(request):
             client_state=client_state,
             nonce=nonce,
             code_verifier=code_verifier,
+            tx_binding=tx_binding,
         )
         auth_url = oidc_client.build_authorization_url(
             discovery=discovery,
@@ -205,7 +228,11 @@ def oidc_login(request):
             status=502,
         )
 
-    return HttpResponseRedirect(auth_url)
+    response = HttpResponseRedirect(auth_url)
+    # Always set cookie so browser-based SPA exchange is bound even when the
+    # client also passed tx= for native.
+    _set_tx_cookie(response, tx_binding)
+    return response
 
 
 @extend_schema(operation_id="oidc_callback")
@@ -236,13 +263,31 @@ def oidc_callback(request):
 
     client_redirect = pending.get("client_redirect") or ""
     client_state = pending.get("client_state") or ""
+    tx_binding = pending.get("tx_binding") or ""
+
+    # Re-validate redirect at callback time (state may be old / prefs changed).
+    if not _is_allowed_client_redirect(client_redirect):
+        logger.warning("OIDC callback rejected stored client_redirect")
+        return Response(
+            {
+                "error": "invalid_redirect",
+                "detail": "Stored client_redirect is no longer allowed.",
+            },
+            status=400,
+        )
 
     if error:
         logger.info("OIDC IdP returned error=%s", error)
-        return _error_redirect(client_redirect, error or "access_denied", client_state)
+        response = _error_redirect(
+            client_redirect, error or "access_denied", client_state
+        )
+        _set_tx_cookie(response, tx_binding)
+        return response
 
     if not code:
-        return _error_redirect(client_redirect, "missing_code", client_state)
+        response = _error_redirect(client_redirect, "missing_code", client_state)
+        _set_tx_cookie(response, tx_binding)
+        return response
 
     try:
         discovery = oidc_client.fetch_discovery(cfg["discovery_url"])
@@ -278,23 +323,34 @@ def oidc_callback(request):
         )
     except oidc_client.OidcError as exc:
         logger.warning("OIDC callback protocol error: %s", exc.detail)
-        return _error_redirect(client_redirect, exc.code, client_state)
+        response = _error_redirect(client_redirect, exc.code, client_state)
+        _set_tx_cookie(response, tx_binding)
+        return response
     except oidc_users.OidcUserError as exc:
         logger.info("OIDC user resolution failed: %s", exc.detail)
-        return _error_redirect(client_redirect, exc.code, client_state)
+        response = _error_redirect(client_redirect, exc.code, client_state)
+        _set_tx_cookie(response, tx_binding)
+        return response
     except Exception:
         logger.exception("OIDC callback unexpected error")
-        return _error_redirect(client_redirect, "server_error", client_state)
+        response = _error_redirect(client_redirect, "server_error", client_state)
+        _set_tx_cookie(response, tx_binding)
+        return response
 
-    exchange = oidc_session.store_exchange_code(user.pk)
-    return _success_redirect(client_redirect, exchange, client_state)
+    exchange = oidc_session.store_exchange_code(user.pk, tx_binding=tx_binding)
+    response = _success_redirect(client_redirect, exchange, client_state)
+    # Keep / refresh binding cookie so SPA can redeem without reading the code
+    # in a third-party context; OOB clients use the tx they started with.
+    _set_tx_cookie(response, tx_binding)
+    return response
 
 
 @extend_schema(
     operation_id="oidc_token",
     description=(
         "Exchange a one-time OIDC login code for first-party OAuth tokens "
-        "(same response shape as POST /api/v1/users/token/)."
+        "(same response shape as POST /api/v1/users/token/). Requires the "
+        "SSO transaction binding cookie (browser) or ``tx`` body field (native)."
     ),
 )
 @api_view(["POST"])
@@ -318,6 +374,8 @@ def oidc_token(request):
                 parsed = json.loads(body.decode("utf-8"))
                 if isinstance(parsed, dict):
                     code = str(parsed.get("code") or "").strip()
+                    if not data:
+                        data = parsed
         except Exception:
             pass
 
@@ -330,12 +388,18 @@ def oidc_token(request):
             status=400,
         )
 
-    user_id = oidc_session.pop_exchange_code(code)
+    tx_binding = _tx_from_request(request)
+    if not tx_binding and isinstance(data, dict):
+        tx_binding = str(data.get("tx") or data.get("tx_binding") or "").strip()
+
+    user_id = oidc_session.pop_exchange_code(code, tx_binding=tx_binding)
     if user_id is None:
         return Response(
             {
                 "error": "invalid_code",
-                "detail": "Invalid or expired login code.",
+                "detail": (
+                    "Invalid or expired login code, or SSO session binding mismatch."
+                ),
             },
             status=400,
         )
@@ -357,4 +421,7 @@ def oidc_token(request):
 
     tokens["totp_enabled"] = totp_mod.is_totp_enabled(user)
     tokens["totp_setup_required"] = totp_mod.needs_totp_setup(user)
-    return Response(tokens)
+
+    response = Response(tokens)
+    _clear_tx_cookie(response)
+    return response

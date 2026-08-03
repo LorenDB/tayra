@@ -72,20 +72,23 @@ make logs
 ## Auth (this fork)
 
 ```http
+POST /api/v1/users/token/challenge/
+{"username": "…"}
+→ {challenge_id, server_nonce, salt, iterations, instance_binding, scheme}
+
 POST /api/v1/users/token/
-{"username": "…", "password": "<sha256 hex transport digest>"}
+{"username": "…", "challenge_id": "…", "client_nonce": "…", "client_proof": "…"}
 ```
 
-The `password` field is **not** the account password in plaintext. Tayra sends a
-domain-separated SHA-256 digest (`tayra-login-v1` + NUL + password); the API
-rejects non-digest values. See `api/funkwhale_api/users/password_transport.py`.
+The account password never goes on the wire. Login uses an instance-bound PBKDF2
+secret and a SCRAM-like per-request proof (see
+`api/funkwhale_api/users/password_transport.py` and the matching Dart helper).
 
 Returns access/refresh tokens, client credentials for refresh, and `listen_token`
 for media URLs.
 
-**Upgrade note:** passwords set before this change need a one-time reset
-(`fw users update USER --password '…'` or the password-reset email flow) so the
-stored hash matches the transport scheme.
+**OIDC SSO** (optional): `client_redirect` is allowlisted to the pod origin /
+OOB / `tayra://`, and exchange codes require an SSO transaction binding.
 
 ### Web SPA build
 

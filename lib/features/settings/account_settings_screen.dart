@@ -169,10 +169,14 @@ class AccountSettingsScreen extends ConsumerWidget {
     );
 
     try {
+      final serverUrl = ref.read(authStateProvider).serverUrl;
       final passwordDigest =
           result.password == null
               ? null
-              : hashPasswordForTransport(result.password!);
+              : hashPasswordForTransport(
+                result.password!,
+                serverUrl: serverUrl,
+              );
       await ref
           .read(funkwhaleApiProvider)
           .deactivateMe(passwordDigest: passwordDigest);

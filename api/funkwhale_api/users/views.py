@@ -560,12 +560,77 @@ def _log_token_login(msg, *args):
     logging.getLogger("django.request").warning(msg, *args)
 
 
+def _extract_login_proof_fields(raw: dict) -> dict:
+    """Pull challenge/proof fields from a parsed login body."""
+    if not isinstance(raw, dict):
+        return {}
+
+    def _s(key):
+        val = raw.get(key)
+        if val is None:
+            return ""
+        return str(val).strip()
+
+    return {
+        "challenge_id": _s("challenge_id"),
+        "client_nonce": _s("client_nonce"),
+        "client_proof": _s("client_proof"),
+        "server_nonce": _s("server_nonce"),
+    }
+
+
+@extend_schema(
+    operation_id="token_login_challenge",
+    description=(
+        "Issue a one-time salted login challenge for first-party password login. "
+        "Clients must complete POST /api/v1/users/token/ with a per-request proof "
+        "bound to this challenge (SCRAM-like). Never send the account password or "
+        "a static digest alone."
+    ),
+)
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@authentication_classes([])
+def token_login_challenge(request):
+    """POST username → one-time challenge parameters for token_login."""
+    from funkwhale_api.users.password_transport import create_login_challenge
+
+    throttling.check_request(request, "login")
+    username, _password, raw, meta = _extract_credentials(request)
+    if not username:
+        # Allow username-only body (password field empty).
+        if isinstance(raw, dict):
+            username = str(
+                raw.get("username") or raw.get("email") or raw.get("login") or ""
+            ).strip()
+
+    if not username:
+        return Response(
+            {
+                "error": "missing_username",
+                "detail": "Username is required to start login.",
+            },
+            status=400,
+        )
+
+    user = _find_user(username)
+    challenge = create_login_challenge(username, user=user)
+    _log_token_login(
+        "token_login_challenge issued scheme=%s user_found=%s meta=%s",
+        challenge.get("scheme"),
+        user is not None,
+        {k: meta.get(k) for k in ("body_source", "content_type", "username_len")},
+    )
+    return Response(challenge)
+
+
 @extend_schema(
     operation_id="token_login",
     description=(
-        "First-party password login for Tayra. The password field must be a "
-        "domain-separated SHA-256 hex digest of the account password (see "
-        "password_transport.hash_password_for_transport), not plaintext. "
+        "First-party password login for Tayra. Requires a prior "
+        "POST /api/v1/users/token/challenge/ and a per-request verifier: "
+        "either a SCRAM-like client_proof (scram_v2) or, for legacy password "
+        "rows only, a one-shot transport digest bound to the challenge. "
         "Returns OAuth access/refresh tokens, client credentials for refresh, "
         "and a scoped listen_token for media URLs (?token=)."
     ),
@@ -574,47 +639,84 @@ def _log_token_login(msg, *args):
 @permission_classes([AllowAny])
 @authentication_classes([])
 def token_login(request):
-    """POST username + transport-hashed password → OAuth tokens."""
-    from funkwhale_api.users.password_transport import is_transport_password_hash
+    """POST username + challenge-bound proof → OAuth tokens."""
+    from funkwhale_api.users.password_transport import (
+        is_scram_hash,
+        is_transport_password_hash,
+        pop_login_challenge,
+        verify_client_proof,
+    )
 
     throttling.check_request(request, "login")
     username, password, raw, meta = _extract_credentials(request)
+    proof = _extract_login_proof_fields(raw)
+    challenge_id = proof.get("challenge_id") or ""
+    client_nonce = proof.get("client_nonce") or ""
+    client_proof = proof.get("client_proof") or ""
 
-    if not username or not password:
+    if not username:
         _log_token_login(
-            "token_login missing credentials meta=%s username_empty=%s password_empty=%s",
+            "token_login missing username meta=%s",
             meta,
-            not bool(username),
-            not bool(password),
         )
         return Response(
             {
                 "error": "missing_credentials",
-                "detail": "Both username and password are required.",
-                "non_field_errors": ["Both username and password are required."],
-            },
-            status=400,
-        )
-
-    if not is_transport_password_hash(password):
-        _log_token_login(
-            "token_login plaintext_password_rejected meta=%s password_len=%s",
-            meta,
-            len(password),
-        )
-        return Response(
-            {
-                "error": "password_not_hashed",
-                "detail": (
-                    "Password must be a SHA-256 hex digest "
-                    "(tayra-login-v1 transport hash), not plaintext."
-                ),
+                "detail": "Username and a challenge-bound proof are required.",
                 "non_field_errors": [
-                    "Password must be hashed client-side before login."
+                    "Username and a challenge-bound proof are required."
                 ],
             },
             status=400,
         )
+
+    if not challenge_id:
+        _log_token_login(
+            "token_login missing challenge meta=%s",
+            meta,
+        )
+        return Response(
+            {
+                "error": "missing_challenge",
+                "detail": (
+                    "Login requires a one-time challenge from "
+                    "POST /api/v1/users/token/challenge/."
+                ),
+                "non_field_errors": ["Login challenge is required."],
+            },
+            status=400,
+        )
+
+    challenge = pop_login_challenge(challenge_id)
+    if challenge is None:
+        _log_token_login("token_login invalid_or_expired_challenge meta=%s", meta)
+        return Response(
+            {
+                "error": "invalid_challenge",
+                "detail": "Login challenge is invalid or expired. Request a new one.",
+                "non_field_errors": ["Login challenge is invalid or expired."],
+            },
+            status=400,
+        )
+
+    # Challenge is bound to the username that requested it.
+    challenge_user = (challenge.get("username") or "").strip()
+    if challenge_user.lower() != username.lower():
+        _log_token_login(
+            "token_login challenge_username_mismatch meta=%s",
+            meta,
+        )
+        return Response(
+            {
+                "error": "invalid_challenge",
+                "detail": "Login challenge does not match this username.",
+                "non_field_errors": ["Login challenge does not match this username."],
+            },
+            status=400,
+        )
+
+    server_nonce = challenge.get("server_nonce") or ""
+    scheme = challenge.get("scheme") or "scram_v2"
 
     user = _find_user(username)
     password_ok = False
@@ -622,67 +724,84 @@ def token_login(request):
     hasher = None
     if user is not None:
         usable = user.has_usable_password()
-        password_ok = user.check_password(password) if usable else False
-        # e.g. "pbkdf2_sha256" — helps spot missing hasher / corrupt hash
         if user.password and "$" in user.password:
             hasher = user.password.split("$", 1)[0]
 
-    if user is None or not password_ok:
-        # Second chance: full Django auth stack (LDAP, allauth, etc.).
-        # Note: LDAP backends need the real password; this endpoint only
-        # receives a transport digest, so LDAP users should use OAuth code flow.
-        django_request = getattr(request, "_request", request)
-        try:
-            authed = auth.authenticate(
-                request=django_request, username=username, password=password
-            )
-            # allauth username_email also accepts email= in some versions
-            if authed is None and "@" in username:
-                authed = auth.authenticate(
-                    request=django_request, email=username, password=password
+        if usable and scheme == "scram_v2" and is_scram_hash(user.password):
+            if not client_nonce or not client_proof:
+                _log_token_login(
+                    "token_login missing proof meta=%s",
+                    meta,
                 )
-        except authentication.UnverifiedEmail:
-            _log_token_login(
-                "token_login unverified email for login=%r meta=%s", username, meta
+                return Response(
+                    {
+                        "error": "missing_proof",
+                        "detail": (
+                            "SCRAM login requires client_nonce and client_proof."
+                        ),
+                        "non_field_errors": ["Login proof is required."],
+                    },
+                    status=400,
+                )
+            password_ok = verify_client_proof(
+                user.password,
+                username=username,
+                client_nonce=client_nonce,
+                server_nonce=server_nonce,
+                client_proof_hex=client_proof,
             )
-            return Response(
-                {
-                    "error": "email_unverified",
-                    "code": "email_unverified",
-                    "detail": "Please verify your e-mail address before logging in.",
-                    "non_field_errors": [
-                        "Please verify your e-mail address before logging in."
-                    ],
-                },
-                status=400,
-            )
-        if authed is None:
-            user_count = get_user_model().objects.count()
-            _log_token_login(
-                "token_login invalid_credentials login=%r user_found=%s "
-                "user_id=%s is_active=%s has_usable_password=%s hasher=%s "
-                "user_count=%s meta=%s "
-                "(if user_found=False check DATABASE_URL points at your existing DB; "
-                "if has_usable_password=False check LDAP_ENABLED / set a local password; "
-                "passwords set before transport hashing need a one-time reset)",
-                username,
-                user is not None,
-                getattr(user, "pk", None),
-                getattr(user, "is_active", None),
-                usable,
-                hasher,
-                user_count,
-                meta,
-            )
-            return Response(
-                {
-                    "error": "invalid_credentials",
-                    "detail": "Unable to log in with provided credentials",
-                    "non_field_errors": ["Unable to log in with provided credentials"],
-                },
-                status=400,
-            )
-        user = authed
+        elif usable and scheme == "legacy_v1":
+            # Legacy django_hash(v1_digest) rows: digest still goes on the
+            # wire but is bound to a one-time challenge (not reusable alone).
+            # Password change via set_password migrates the row to SCRAM.
+            if not is_transport_password_hash(password):
+                _log_token_login(
+                    "token_login legacy plaintext_rejected meta=%s password_len=%s",
+                    meta,
+                    len(password),
+                )
+                return Response(
+                    {
+                        "error": "password_not_hashed",
+                        "detail": (
+                            "Legacy login requires the tayra-login-v1 transport "
+                            "digest bound to a challenge, not plaintext."
+                        ),
+                        "non_field_errors": [
+                            "Password must be hashed client-side before login."
+                        ],
+                    },
+                    status=400,
+                )
+            password_ok = user.check_password(password)
+        elif usable:
+            # Scheme/storage mismatch (e.g. race after password change).
+            password_ok = False
+
+    if user is None or not password_ok:
+        user_count = get_user_model().objects.count()
+        _log_token_login(
+            "token_login invalid_credentials login=%r user_found=%s "
+            "user_id=%s is_active=%s has_usable_password=%s hasher=%s "
+            "scheme=%s user_count=%s meta=%s",
+            username,
+            user is not None,
+            getattr(user, "pk", None),
+            getattr(user, "is_active", None),
+            usable,
+            hasher,
+            scheme,
+            user_count,
+            meta,
+        )
+        return Response(
+            {
+                "error": "invalid_credentials",
+                "detail": "Unable to log in with provided credentials",
+                "non_field_errors": ["Unable to log in with provided credentials"],
+            },
+            status=400,
+        )
 
     if not user.is_active:
         _log_token_login("token_login inactive user_id=%s", user.pk)

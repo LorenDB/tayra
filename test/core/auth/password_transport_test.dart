@@ -5,24 +5,92 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tayra/core/auth/password_transport.dart';
 
 void main() {
-  test('hashPasswordForTransport is stable hex digest', () {
-    final a = hashPasswordForTransport('s3cret-pass');
-    final b = hashPasswordForTransport('s3cret-pass');
+  test('legacyTransportDigest is stable hex and domain-separated', () {
+    final a = legacyTransportDigest('s3cret-pass');
+    final b = legacyTransportDigest('s3cret-pass');
     expect(a, b);
     expect(a, matches(RegExp(r'^[0-9a-f]{64}$')));
-    expect(hashPasswordForTransport('other'), isNot(a));
-  });
-
-  test('hash is domain-separated (not bare SHA-256)', () {
+    expect(legacyTransportDigest('other'), isNot(a));
     final bare = sha256.convert(utf8.encode('s3cret-pass')).toString();
-    expect(hashPasswordForTransport('s3cret-pass'), isNot(bare));
+    expect(a, isNot(bare));
   });
 
-  test('matches Python reference vector', () {
-    // hashlib.sha256(b"tayra-login-v1\0" + b"s3cret-pass").hexdigest()
-    // Computed independently so client and server stay aligned.
+  test('legacyTransportDigest matches Python v1 reference vector', () {
     final expected =
         sha256.convert(utf8.encode('tayra-login-v1\x00s3cret-pass')).toString();
-    expect(hashPasswordForTransport('s3cret-pass'), expected);
+    expect(legacyTransportDigest('s3cret-pass'), expected);
+  });
+
+  test('instanceBindingForServerUrl is stable 16 bytes', () {
+    final a = instanceBindingForServerUrl('https://music.example.org');
+    final b = instanceBindingForServerUrl('https://music.example.org/');
+    expect(a, b);
+    expect(a.length, 16);
+    expect(
+      instanceBindingForServerUrl('https://other.example.org'),
+      isNot(a),
+    );
+  });
+
+  test('transportSecret is 32 bytes and password-dependent', () {
+    final binding = instanceBindingForServerUrl('http://funkwhale.dev');
+    final a = transportSecret('s3cret-pass', binding);
+    final b = transportSecret('s3cret-pass', binding);
+    expect(a, b);
+    expect(a.length, 32);
+    expect(transportSecret('other', binding), isNot(a));
+  });
+
+  test('hashPasswordForTransport uses serverUrl binding', () {
+    final hex = hashPasswordForTransport(
+      's3cret-pass',
+      serverUrl: 'http://funkwhale.dev',
+    );
+    expect(hex, matches(RegExp(r'^[0-9a-f]{64}$')));
+    final binding = instanceBindingForServerUrl('http://funkwhale.dev');
+    final expected = transportSecret('s3cret-pass', binding)
+        .map((b) => b.toRadixString(16).padLeft(2, '0'))
+        .join();
+    expect(hex, expected);
+  });
+
+  test('computeClientProof is deterministic for fixed inputs', () {
+    final secret = List<int>.generate(32, (i) => i);
+    final salt = List<int>.generate(16, (i) => 100 + i);
+    final a = computeClientProof(
+      secret: secret,
+      salt: salt,
+      iterations: 1000, // low for unit-test speed
+      username: 'alice',
+      clientNonce: 'cn',
+      serverNonce: 'sn',
+    );
+    final b = computeClientProof(
+      secret: secret,
+      salt: salt,
+      iterations: 1000,
+      username: 'alice',
+      clientNonce: 'cn',
+      serverNonce: 'sn',
+    );
+    expect(a, b);
+    expect(a, matches(RegExp(r'^[0-9a-f]{64}$')));
+    expect(
+      computeClientProof(
+        secret: secret,
+        salt: salt,
+        iterations: 1000,
+        username: 'alice',
+        clientNonce: 'cn',
+        serverNonce: 'other',
+      ),
+      isNot(a),
+    );
+  });
+
+  test('newClientNonce and newOidcTxBinding are non-empty', () {
+    expect(newClientNonce().length, greaterThan(10));
+    expect(newOidcTxBinding().length, greaterThan(10));
+    expect(newClientNonce(), isNot(newClientNonce()));
   });
 }

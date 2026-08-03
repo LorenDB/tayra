@@ -12,6 +12,11 @@ urlpatterns = [
     url(r"^users/login/?$", views.login, name="login"),
     url(r"^users/logout/?$", views.logout, name="logout"),
     # First-party Tayra password → OAuth tokens
+    url(
+        r"^users/token/challenge/?$",
+        views.token_login_challenge,
+        name="token_login_challenge",
+    ),
     url(r"^users/token/?$", views.token_login, name="token_login"),
     # Complete password login after TOTP challenge
     url(r"^users/token/2fa/?$", views.token_login_2fa, name="token_login_2fa"),

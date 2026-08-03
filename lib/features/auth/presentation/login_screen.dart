@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
+import 'package:tayra/core/auth/password_transport.dart';
 import 'package:tayra/core/platform/app_platform.dart';
 import 'package:tayra/core/router/app_router.dart';
 import 'package:tayra/core/theme/app_theme.dart';
@@ -34,6 +35,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   /// When true, code-paste step exchanges via OIDC one-time code endpoint.
   bool _ssoOob = false;
+
+  /// SSO transaction binding for native OOB (must match login start + redeem).
+  String? _ssoTxBinding;
 
   AuthMethods _authMethods = AuthMethods.disabled;
   bool _authMethodsLoading = false;
@@ -699,11 +703,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final clientRedirect =
         kIsWeb ? _webSsoCallbackUrl() : 'urn:ietf:wg:oauth:2.0:oob';
 
+    // Native OOB must prove the same tx binding when redeeming the code (H3).
+    // Web relies on the HttpOnly oidc_tx cookie set by the API.
+    final txBinding = kIsWeb ? null : newOidcTxBinding();
+
     final loginPath = _authMethods.oidcLoginPath;
     var loginUrl = notifier.buildOidcLoginUrl(
       serverUrl: server,
       clientRedirect: clientRedirect,
       loginPath: loginPath,
+      txBinding: txBinding,
     );
 
     // On web, relative paths must become absolute for navigation.
@@ -721,6 +730,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       setState(() {
         _step = 1;
         _ssoOob = true;
+        _ssoTxBinding = txBinding;
       });
     }
 
@@ -750,9 +760,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (_ssoOob) {
       final server = _currentServer();
       if (server.isEmpty) return;
-      await ref
-          .read(authStateProvider.notifier)
-          .completeOidcLogin(serverUrl: server, code: _codeController.text);
+      await ref.read(authStateProvider.notifier).completeOidcLogin(
+            serverUrl: server,
+            code: _codeController.text,
+            txBinding: _ssoTxBinding,
+          );
       return;
     }
     await ref

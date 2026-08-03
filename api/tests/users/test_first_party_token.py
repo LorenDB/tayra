@@ -1,17 +1,51 @@
+import base64
 import json
 
 import pytest
 from django.urls import reverse
 
-from funkwhale_api.users.password_transport import hash_password_for_transport
+from funkwhale_api.users.password_transport import (
+    compute_client_proof,
+    transport_secret,
+)
 
 
-def _login_payload(username: str, password: str) -> dict:
-    """Build a token-login body with a transport-hashed password."""
-    return {
-        "username": username,
-        "password": hash_password_for_transport(password),
-    }
+def _b64url_decode(s: str) -> bytes:
+    pad = "=" * (-len(s) % 4)
+    return base64.urlsafe_b64decode(s + pad)
+
+
+def _login_via_challenge(api_client, username: str, password: str):
+    """Complete challenge + proof login; return the token response."""
+    challenge = api_client.post(
+        reverse("api:v1:users:token_login_challenge"),
+        {"username": username},
+        format="json",
+    )
+    assert challenge.status_code == 200, challenge.content
+    data = challenge.json()
+    assert data["scheme"] == "scram_v2"
+
+    secret = transport_secret(password)
+    client_nonce = "test-client-nonce"
+    proof = compute_client_proof(
+        secret,
+        salt=_b64url_decode(data["salt"]),
+        iterations=int(data["iterations"]),
+        username=username,
+        client_nonce=client_nonce,
+        server_nonce=data["server_nonce"],
+    )
+    return api_client.post(
+        reverse("api:v1:users:token_login"),
+        {
+            "username": username,
+            "challenge_id": data["challenge_id"],
+            "client_nonce": client_nonce,
+            "client_proof": proof,
+        },
+        format="json",
+    )
 
 
 @pytest.mark.django_db
@@ -20,12 +54,7 @@ def test_token_login_returns_oauth_tokens(api_client, factories):
     user.set_password("s3cret-pass")
     user.save()
 
-    url = reverse("api:v1:users:token_login")
-    response = api_client.post(
-        url,
-        _login_payload("alice", "s3cret-pass"),
-        format="json",
-    )
+    response = _login_via_challenge(api_client, "alice", "s3cret-pass")
 
     assert response.status_code == 200, response.content
     data = response.json()
@@ -47,11 +76,7 @@ def test_token_login_by_email(api_client, factories):
     user.set_password("s3cret-pass")
     user.save()
 
-    response = api_client.post(
-        reverse("api:v1:users:token_login"),
-        _login_payload("dave@example.com", "s3cret-pass"),
-        format="json",
-    )
+    response = _login_via_challenge(api_client, "dave@example.com", "s3cret-pass")
     assert response.status_code == 200, response.content
     assert response.json()["access_token"]
 
@@ -62,12 +87,7 @@ def test_token_login_rejects_bad_password(api_client, factories):
     user.set_password("right")
     user.save()
 
-    url = reverse("api:v1:users:token_login")
-    response = api_client.post(
-        url,
-        _login_payload("bob", "wrong"),
-        format="json",
-    )
+    response = _login_via_challenge(api_client, "bob", "wrong")
     assert response.status_code == 400
     assert response.json()["error"] == "invalid_credentials"
 
@@ -78,13 +98,26 @@ def test_token_login_rejects_plaintext_password(api_client, factories):
     user.set_password("s3cret-pass")
     user.save()
 
+    challenge = api_client.post(
+        reverse("api:v1:users:token_login_challenge"),
+        {"username": "plain"},
+        format="json",
+    ).json()
+
+    # Plaintext in password field with a SCRAM challenge is not a valid proof.
     response = api_client.post(
         reverse("api:v1:users:token_login"),
-        {"username": "plain", "password": "s3cret-pass"},
+        {
+            "username": "plain",
+            "challenge_id": challenge["challenge_id"],
+            "password": "s3cret-pass",
+            "client_nonce": "x",
+            "client_proof": "0" * 64,
+        },
         format="json",
     )
     assert response.status_code == 400
-    assert response.json()["error"] == "password_not_hashed"
+    assert response.json()["error"] == "invalid_credentials"
 
 
 @pytest.mark.django_db
@@ -94,9 +127,33 @@ def test_token_login_accepts_raw_json_body(api_client, factories):
     user.set_password("s3cret-pass")
     user.save()
 
+    challenge = api_client.post(
+        reverse("api:v1:users:token_login_challenge"),
+        data=json.dumps({"username": "rawjson"}),
+        content_type="application/json",
+    )
+    assert challenge.status_code == 200, challenge.content
+    data = challenge.json()
+    secret = transport_secret("s3cret-pass")
+    client_nonce = "raw-cn"
+    proof = compute_client_proof(
+        secret,
+        salt=_b64url_decode(data["salt"]),
+        iterations=int(data["iterations"]),
+        username="rawjson",
+        client_nonce=client_nonce,
+        server_nonce=data["server_nonce"],
+    )
     response = api_client.post(
         reverse("api:v1:users:token_login"),
-        data=json.dumps(_login_payload("rawjson", "s3cret-pass")),
+        data=json.dumps(
+            {
+                "username": "rawjson",
+                "challenge_id": data["challenge_id"],
+                "client_nonce": client_nonce,
+                "client_proof": proof,
+            }
+        ),
         content_type="application/json",
     )
     assert response.status_code == 200, response.content
@@ -109,11 +166,7 @@ def test_token_login_access_token_authenticates(api_client, factories):
     user.set_password("s3cret-pass")
     user.save()
 
-    login = api_client.post(
-        reverse("api:v1:users:token_login"),
-        _login_payload("carol", "s3cret-pass"),
-        format="json",
-    )
+    login = _login_via_challenge(api_client, "carol", "s3cret-pass")
     assert login.status_code == 200, login.content
     token = login.json()["access_token"]
 
@@ -132,20 +185,12 @@ def test_token_login_refresh_works_without_client_secret(api_client, factories):
     user.set_password("s3cret-pass")
     user.save()
 
-    login = api_client.post(
-        reverse("api:v1:users:token_login"),
-        _login_payload("erin", "s3cret-pass"),
-        format="json",
-    )
+    login = _login_via_challenge(api_client, "erin", "s3cret-pass")
     assert login.status_code == 200, login.content
     data = login.json()
 
     # Second login reuses the same Application (must still succeed).
-    login2 = api_client.post(
-        reverse("api:v1:users:token_login"),
-        _login_payload("erin", "s3cret-pass"),
-        format="json",
-    )
+    login2 = _login_via_challenge(api_client, "erin", "s3cret-pass")
     assert login2.status_code == 200, login2.content
 
     refresh = api_client.post(

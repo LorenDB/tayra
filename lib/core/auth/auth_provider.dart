@@ -396,11 +396,16 @@ class AuthNotifier extends Notifier<AuthState> {
   ///
   /// [clientRedirect] is where the API sends the browser after IdP auth
   /// (SPA callback URL or OOB URN).
+  ///
+  /// [txBinding] binds the one-time exchange code to this client (H3).
+  /// Native/OOB clients must pass the same value to [completeOidcLogin].
+  /// Browser flows rely on the HttpOnly ``oidc_tx`` cookie instead.
   String buildOidcLoginUrl({
     required String serverUrl,
     required String clientRedirect,
     required String loginPath,
     String? clientState,
+    String? txBinding,
   }) {
     final url = _normalizeServerUrl(serverUrl);
     final path = loginPath.startsWith('/') ? loginPath : '/$loginPath';
@@ -408,6 +413,7 @@ class AuthNotifier extends Notifier<AuthState> {
     final params = <String, String>{
       'client_redirect': clientRedirect,
       if (clientState != null && clientState.isNotEmpty) 'state': clientState,
+      if (txBinding != null && txBinding.isNotEmpty) 'tx': txBinding,
     };
     final uri = Uri.parse(base).replace(queryParameters: params);
     // Relative paths need the current origin for url_launcher / browser nav.
@@ -419,9 +425,13 @@ class AuthNotifier extends Notifier<AuthState> {
   }
 
   /// Complete OIDC SSO by exchanging a one-time code for first-party tokens.
+  ///
+  /// [txBinding] is required for native/OOB (must match the value passed to
+  /// [buildOidcLoginUrl]). On web the session cookie is sent automatically.
   Future<bool> completeOidcLogin({
     required String serverUrl,
     required String code,
+    String? txBinding,
   }) async {
     state = state.copyWith(isLoading: true, error: null);
     final url = _normalizeServerUrl(serverUrl);
@@ -429,15 +439,21 @@ class AuthNotifier extends Notifier<AuthState> {
         kIsWeb ? '/api/v1/users/oidc/token/' : '$url/api/v1/users/oidc/token/';
 
     try {
+      final body = <String, dynamic>{
+        'code': code.trim(),
+        if (txBinding != null && txBinding.isNotEmpty) 'tx': txBinding,
+      };
       final response = await _dio.post(
         endpoint,
-        data: {'code': code.trim()},
+        data: body,
         options: Options(
           contentType: Headers.jsonContentType,
           headers: {
             'Accept': 'application/json',
             Headers.contentTypeHeader: Headers.jsonContentType,
           },
+          // Include cookies on web so oidc_tx binding is sent (H3).
+          extra: const {'withCredentials': true},
           validateStatus: (s) => s != null && s < 500,
           responseType: ResponseType.json,
         ),
@@ -526,7 +542,11 @@ class AuthNotifier extends Notifier<AuthState> {
     return 'SSO login failed. Try again or use password login.';
   }
 
-  /// First-party password login (Funkwhale+Tayra fork: `POST /api/v1/users/token/`).
+  /// First-party password login (Funkwhale+Tayra fork).
+  ///
+  /// Flow (H2): `POST /api/v1/users/token/challenge/` then
+  /// `POST /api/v1/users/token/` with a per-request SCRAM-like proof (or a
+  /// challenge-bound legacy digest). Never sends the account password.
   ///
   /// Returns `true` on full success (tokens stored). Returns `false` on
   /// failure **or** when TOTP is required (see [AuthState.needsTotp] /
@@ -544,19 +564,111 @@ class AuthNotifier extends Notifier<AuthState> {
       clearPendingMfaToken: true,
     );
     final url = _normalizeServerUrl(serverUrl);
+    final user = username.trim();
 
     // On web, prefer same-origin relative URL so a mismatched baked
     // FUNKWHALE_URL still hits the nginx that serves this SPA.
+    final challengeEndpoint = kIsWeb
+        ? '/api/v1/users/token/challenge/'
+        : '$url/api/v1/users/token/challenge/';
     final tokenEndpoint =
         kIsWeb ? '/api/v1/users/token/' : '$url/api/v1/users/token/';
 
     try {
-      // Domain-separated SHA-256 digest — never send the account password
-      // in plaintext (API rejects non-hex digests). Still use HTTPS.
-      final passwordDigest = hashPasswordForTransport(password);
+      final challengeResponse = await _dio.post(
+        challengeEndpoint,
+        data: {'username': user},
+        options: Options(
+          contentType: Headers.jsonContentType,
+          headers: {
+            'Accept': 'application/json',
+            Headers.contentTypeHeader: Headers.jsonContentType,
+          },
+          validateStatus: (s) => s != null && s < 500,
+          responseType: ResponseType.json,
+        ),
+      );
+
+      if (challengeResponse.statusCode == 404) {
+        state = state.copyWith(isLoading: false, serverUrl: url);
+        return false;
+      }
+      final challenge = _asJsonMap(challengeResponse.data);
+      if (challengeResponse.statusCode != 200 || challenge == null) {
+        state = state.copyWith(
+          isLoading: false,
+          error: _formatLoginError(
+            challengeResponse.data,
+            challengeResponse.statusCode,
+          ),
+          clearPendingMfaToken: true,
+        );
+        Analytics.track('login_failed');
+        return false;
+      }
+
+      final challengeId = challenge['challenge_id'] as String? ?? '';
+      final serverNonce = challenge['server_nonce'] as String? ?? '';
+      final scheme = challenge['scheme'] as String? ?? 'scram_v2';
+      if (challengeId.isEmpty) {
+        state = state.copyWith(
+          isLoading: false,
+          error: 'Server did not return a login challenge.',
+          clearPendingMfaToken: true,
+        );
+        Analytics.track('login_failed');
+        return false;
+      }
+
+      final Map<String, dynamic> loginBody = {
+        'username': user,
+        'challenge_id': challengeId,
+      };
+
+      if (scheme == 'legacy_v1') {
+        // One-shot legacy digest bound to the challenge.
+        loginBody['password'] = legacyTransportDigest(password);
+      } else {
+        final saltB64 = challenge['salt'] as String? ?? '';
+        final iterations =
+            (challenge['iterations'] as num?)?.toInt() ?? transportIterations;
+        final transportIters =
+            (challenge['transport_iterations'] as num?)?.toInt() ??
+                transportIterations;
+        final bindingHex = challenge['instance_binding'] as String? ?? '';
+        if (saltB64.isEmpty || serverNonce.isEmpty) {
+          state = state.copyWith(
+            isLoading: false,
+            error: 'Server returned an incomplete login challenge.',
+            clearPendingMfaToken: true,
+          );
+          Analytics.track('login_failed');
+          return false;
+        }
+        final binding = bindingHex.isNotEmpty
+            ? instanceBindingFromHex(bindingHex)
+            : instanceBindingForServerUrl(url);
+        final secret = transportSecret(
+          password,
+          binding,
+          iterations: transportIters,
+        );
+        final clientNonce = newClientNonce();
+        final proof = computeClientProof(
+          secret: secret,
+          salt: b64UrlDecode(saltB64),
+          iterations: iterations,
+          username: user,
+          clientNonce: clientNonce,
+          serverNonce: serverNonce,
+        );
+        loginBody['client_nonce'] = clientNonce;
+        loginBody['client_proof'] = proof;
+      }
+
       final response = await _dio.post(
         tokenEndpoint,
-        data: {'username': username.trim(), 'password': passwordDigest},
+        data: loginBody,
         options: Options(
           contentType: Headers.jsonContentType,
           headers: {
@@ -776,6 +888,12 @@ class AuthNotifier extends Notifier<AuthState> {
       }
       if (error == 'password_not_hashed') {
         return 'This server requires a newer Tayra client for password login.';
+      }
+      if (error == 'missing_challenge' || error == 'invalid_challenge') {
+        return 'Login challenge expired. Please try again.';
+      }
+      if (error == 'missing_proof') {
+        return 'Login proof missing. Update Tayra and try again.';
       }
       if (error == 'invalid_totp') {
         return 'Invalid authentication or recovery code.';
