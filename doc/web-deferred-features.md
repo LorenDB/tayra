@@ -39,7 +39,6 @@ relevant.
 | Offline downloads / audio file cache | Browser storage model; product decision |
 | Download queue / Wi‑Fi-only policy | Same |
 | Force offline mode | Online-only |
-| Nextcloud backup / history sync | Relies on local DB + native paths |
 | Android Auto / Wear OS | Platform-specific |
 | Desktop window chrome / MPRIS | Desktop-only |
 | Local cover-art file cache | Uses network images on web |

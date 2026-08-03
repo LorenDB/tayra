@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/api/client_preferences.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
-import 'package:tayra/core/backup/nextcloud_backup_service.dart';
+import 'package:tayra/core/device/device_identity.dart';
 import 'package:tayra/features/podcasts/podcast_progress_provider.dart';
 import 'package:tayra/features/podcasts/podcast_progress_service.dart';
 
@@ -910,7 +910,7 @@ class ClientDataService {
     }
   }
 
-  /// Push all current allowlisted local prefs (e.g. after Nextcloud restore).
+  /// Push all current allowlisted local prefs (e.g. after a full local restore).
   Future<void> pushAllAllowlistedPreferences() async {
     if (!_backend.isAuthenticated) return;
     await ensureReady();

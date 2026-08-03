@@ -6,8 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/api/client_data_service.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
-import 'package:tayra/core/backup/nextcloud_backup_service.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
+import 'package:tayra/core/device/device_identity.dart';
 import 'package:tayra/core/platform/app_platform.dart';
 import 'package:tayra/features/year_review/listen_history_service.dart';
 
@@ -77,7 +77,6 @@ class ListenHistoryImportBackend {
     required this.isAuthenticated,
     required this.isOffline,
     required this.nowMs,
-    this.loadNextcloudHistory,
   });
 
   final Future<bool> Function() probeClientDataSupport;
@@ -108,15 +107,12 @@ class ListenHistoryImportBackend {
 
   /// Clock for seeding watermark when catch-up first arms (tests inject).
   final int Function() nowMs;
-
-  /// Optional: merge remote Nextcloud history into local DB, return added count.
-  final Future<int> Function()? loadNextcloudHistory;
 }
 
 // ── Service ─────────────────────────────────────────────────────────────
 
-/// Import local / Nextcloud listen history to the server via bulk
-/// `enrich_or_create`, and flush offline listens after reconnect.
+/// Import local listen history to the server via bulk `enrich_or_create`,
+/// and flush offline listens after reconnect.
 ///
 /// Flow:
 /// 1. Register every device UUID present in the batch (local + remote)
@@ -188,23 +184,6 @@ class ListenHistoryImportService {
       isAuthenticated: () => ref.read(authStateProvider).isAuthenticated,
       isOffline: () => ref.read(offlineStateProvider).isOffline,
       nowMs: () => DateTime.now().millisecondsSinceEpoch,
-      loadNextcloudHistory: () async {
-        final nc = ref.read(nextcloudBackupProvider);
-        if (!nc.isConnected ||
-            nc.serverUrl == null ||
-            nc.username == null ||
-            nc.appPassword == null) {
-          return 0;
-        }
-        final funkHost = ref.read(authStateProvider).serverUrl ?? '';
-        if (funkHost.isEmpty) return 0;
-        return NextcloudBackupService.syncRemoteHistory(
-          ncServer: nc.serverUrl!,
-          ncUser: nc.username!,
-          ncAppPassword: nc.appPassword!,
-          funkServerHost: funkHost,
-        );
-      },
     );
   }
 
@@ -263,12 +242,10 @@ class ListenHistoryImportService {
 
   static bool isDeviceUuid(String value) => _deviceUuidRegex.hasMatch(value);
 
-  /// Full import of local SQLite history (and optionally Nextcloud first).
+  /// Full import of local SQLite history.
   ///
   /// Re-runnable: server `enrich_or_create` dedups / enriches stock rows.
-  Future<BulkListeningResult> importLocalHistory({
-    bool includeNextcloud = false,
-  }) async {
+  Future<BulkListeningResult> importLocalHistory() async {
     return _runExclusive(() async {
       if (!_backend.isAuthenticated()) return BulkListeningResult.empty;
       if (_backend.isOffline()) {
@@ -278,22 +255,6 @@ class ListenHistoryImportService {
 
       final supported = await _backend.probeClientDataSupport();
       if (!supported) return BulkListeningResult.empty;
-
-      if (includeNextcloud) {
-        final loader = _backend.loadNextcloudHistory;
-        if (loader != null) {
-          try {
-            final n = await loader();
-            debugPrint(
-              'ListenHistoryImportService: merged $n Nextcloud records',
-            );
-          } catch (e) {
-            debugPrint(
-              'ListenHistoryImportService: Nextcloud merge failed: $e',
-            );
-          }
-        }
-      }
 
       final records = await _backend.getAllListens();
       return _importRecords(records, advanceWatermark: true);

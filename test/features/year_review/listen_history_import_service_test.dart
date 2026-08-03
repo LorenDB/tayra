@@ -293,27 +293,6 @@ void main() {
       expect(result.totalProcessed, 0);
       expect(fake.bulkCalls, 0);
     });
-
-    test('includeNextcloud calls loader before bulk', () async {
-      var loaded = false;
-      fake.loadNextcloud = () async {
-        loaded = true;
-        return 3;
-      };
-      fake.records = [
-        ListenRecord(
-          trackId: 1,
-          trackTitle: 'T',
-          artistName: 'A',
-          albumTitle: 'Al',
-          listenedAt: DateTime.utc(2024, 1, 1),
-          sourceDevice: 'local',
-        ),
-      ];
-      await service.importLocalHistory(includeNextcloud: true);
-      expect(loaded, isTrue);
-      expect(fake.bulkCalls, 1);
-    });
   });
 
   group('BulkListeningResult', () {
@@ -355,7 +334,6 @@ class _FakeBackend {
   List<ListenRecord> records = const [];
   List<ListenRecord> afterRecords = const [];
   BulkListeningResult bulkResult = const BulkListeningResult(created: 1);
-  Future<int> Function()? loadNextcloud;
 
   final upsertedUuids = <String>[];
   int bulkCalls = 0;
@@ -410,10 +388,5 @@ class _FakeBackend {
     isAuthenticated: () => authenticated,
     isOffline: () => offline,
     nowMs: () => fixedNowMs,
-    loadNextcloudHistory: () async {
-      final fn = loadNextcloud;
-      if (fn == null) return 0;
-      return fn();
-    },
   );
 }

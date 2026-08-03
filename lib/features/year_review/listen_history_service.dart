@@ -578,11 +578,10 @@ class ListenHistoryService {
 
   // ── Device display-name cache ──────────────────────────────────────────
   //
-  // Remote backups carry a human-readable device name (see
-  // NextcloudBackupService.getDeviceDisplayName) alongside the sanitized
-  // device id used in filenames / source_device.  We persist a deviceId →
-  // display-name map in SharedPreferences so the year-review screen can
-  // render "Samsung SM-S908U" instead of guessing from "samsung_sm_s908u".
+  // Remote / multi-device listens carry a human-readable device name (see
+  // getDeviceDisplayName) alongside the source_device id. We persist a
+  // deviceId → display-name map in SharedPreferences so the year-review
+  // screen can render "Samsung SM-S908U" instead of a raw id.
   static const _deviceNamesKey = 'tayra_device_display_names';
   static Map<String, String> _deviceDisplayNames = {};
   static bool _deviceNamesLoaded = false;
@@ -1197,13 +1196,11 @@ class ListenHistoryService {
     await db.delete(_tableName);
   }
 
-  /// Clear only remote-device listen history (synced from Nextcloud).
+  /// Clear only remote-device listen history.
   ///
   /// Local listens — those tagged `source_device = 'local'` (this device's
-  /// own recordings, plus records restored by the rectifier from this
-  /// device's own cloud backup) — are preserved.  Every other
-  /// `source_device` value (a remote device's UUID, or a legacy sanitized
-  /// deviceId from pre-UUID backups) is deleted.
+  /// own recordings) — are preserved. Every other `source_device` value
+  /// (a remote device's UUID, or a legacy sanitized deviceId) is deleted.
   static Future<int> clearRemote() async {
     final db = await CacheDatabase.instance.database;
     return db.delete(

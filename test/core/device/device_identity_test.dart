@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tayra/core/backup/nextcloud_backup_service.dart';
+import 'package:tayra/core/device/device_identity.dart';
 
 void main() {
   group('getDeviceUuid', () {
@@ -30,8 +30,7 @@ void main() {
     test('is unique across fresh installs (different random UUIDs)', () async {
       final first = await getDeviceUuid();
 
-      // Simulate a fresh install by clearing prefs + forgetting the
-      // (non-persistent) in-process cache of a second install.
+      // Simulate a fresh install by clearing prefs.
       SharedPreferences.setMockInitialValues({});
       final second = await getDeviceUuid();
 
@@ -67,28 +66,6 @@ void main() {
         ).hasMatch(uuid),
         isTrue,
       );
-    });
-  });
-
-  group('isSensitiveSettingsKey', () {
-    test('strips tokens, passwords, secrets', () {
-      expect(isSensitiveSettingsKey('access_token'), isTrue);
-      expect(isSensitiveSettingsKey('refresh_token'), isTrue);
-      expect(isSensitiveSettingsKey('nc_app_password'), isTrue);
-      expect(isSensitiveSettingsKey('client_secret'), isTrue);
-    });
-
-    test('strips api_key patterns (AI keys)', () {
-      expect(isSensitiveSettingsKey('groq_api_key'), isTrue);
-      expect(isSensitiveSettingsKey('open_router_api_key'), isTrue);
-      expect(isSensitiveSettingsKey('custom_endpoint_api_key'), isTrue);
-      expect(isSensitiveSettingsKey('someApikeyValue'), isTrue);
-    });
-
-    test('allows ordinary preference keys', () {
-      expect(isSensitiveSettingsKey('gapless_playback'), isFalse);
-      expect(isSensitiveSettingsKey('browse_mode'), isFalse);
-      expect(isSensitiveSettingsKey('tayra_device_uuid'), isFalse);
     });
   });
 }

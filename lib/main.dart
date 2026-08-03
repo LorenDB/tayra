@@ -11,7 +11,6 @@ import 'package:go_router/go_router.dart';
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/api/client_data_service.dart';
-import 'package:tayra/core/backup/nextcloud_backup_service.dart';
 import 'package:tayra/core/cache/auto_offline_coordinator.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/core/cache/download_queue_service.dart';
@@ -204,36 +203,6 @@ void main() async {
     // Reconcile cached files with the DB and enforce size limits in the
     // background so these O(n-files) operations don't block the splash screen.
     unawaited(CacheManager.instance.backgroundInitialize());
-
-    // Kick off an optional non-blocking periodic-ish backup and history
-    // sync on startup for Nextcloud (if configured).
-    void runPeriodicSync() async {
-      try {
-        final nc = container.read(nextcloudBackupProvider);
-        if (nc.isConnected) {
-          container
-              .read(nextcloudBackupProvider.notifier)
-              .syncNow()
-              .catchError((_) => 0);
-        }
-      } catch (_) {}
-      Timer(const Duration(minutes: 10), runPeriodicSync);
-    }
-
-    unawaited(
-      Future.delayed(const Duration(seconds: 8), () async {
-        try {
-          final nc = container.read(nextcloudBackupProvider);
-          if (nc.isConnected && nc.autoBackupEnabled) {
-            container
-                .read(nextcloudBackupProvider.notifier)
-                .backupNow()
-                .catchError((_) => false);
-          }
-        } catch (_) {}
-        runPeriodicSync();
-      }),
-    );
   }
 }
 

@@ -1,4 +1,32 @@
-import 'package:tayra/core/backup/nextcloud_backup_service.dart';
+// ── Sensitive key denylist ──────────────────────────────────────────────
+
+/// Prefs keys (or substrings) that must never leave the device in a
+/// client-preferences sync. Includes tokens, passwords, secrets, and
+/// `*api_key*` / `*apikey*` patterns (AI provider keys).
+bool isSensitiveSettingsKey(String key) {
+  final k = key.toLowerCase();
+  if (k.contains('token')) return true;
+  if (k.contains('password')) return true;
+  if (k.contains('secret')) return true;
+  // AI / third-party API keys (groq_api_key, open_router_api_key, …)
+  if (k.contains('api_key') || k.contains('apikey')) return true;
+  if (k == 'server_url' ||
+      k == 'access_token' ||
+      k == 'refresh_token' ||
+      k == 'client_id' ||
+      k == 'client_secret') {
+    return true;
+  }
+  // Legacy Nextcloud login material (keys may still exist on upgraded installs)
+  if (k.startsWith('nc_') &&
+      (k.contains('password') ||
+          k.contains('token') ||
+          k.contains('secret') ||
+          k.contains('login'))) {
+    return true;
+  }
+  return false;
+}
 
 // ── Allowlist (safe keys only) ──────────────────────────────────────────
 
