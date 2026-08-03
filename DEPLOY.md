@@ -32,6 +32,8 @@ Edit at least:
 | `FUNKWHALE_HOSTNAME` | Public host (e.g. `music.example.com`) |
 | `FUNKWHALE_PROTOCOL` | Usually `https` |
 | `DJANGO_SECRET_KEY` | Long random secret |
+| `POSTGRES_PASSWORD` | Postgres password (also put in `DATABASE_URL`) |
+| `REDIS_PASSWORD` | Redis `requirepass` (also in `CACHE_URL` as `redis://:PASSWORD@redis:6379/0`) |
 
 `FUNKWHALE_PROTOCOL` + `FUNKWHALE_HOSTNAME` are:
 

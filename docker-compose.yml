@@ -16,6 +16,12 @@ x-api-image: &api_image
     context: ./api
     target: production
 
+# Django/Celery redis URL must include the same password as redis --requirepass.
+# Injected into api/celery* so a pre-M5 "redis://redis:6379/0" in .env cannot
+# leave workers stuck on "Authentication required".
+x-cache-env: &cache_env
+  CACHE_URL: redis://:${REDIS_PASSWORD}@redis:6379/0
+
 services:
   postgres:
     restart: unless-stopped
@@ -51,6 +57,8 @@ services:
       - postgres
       - redis
     env_file: .env
+    environment:
+      <<: *cache_env
     # M5: process runs as UID 1000 via image entrypoint (su-exec after it
     # fixes bind-mount ownership). Do not set user: here — that skips chown
     # and breaks collectstatic on root-owned data/static.
@@ -67,6 +75,8 @@ services:
       - redis
       - api
     env_file: .env
+    environment:
+      <<: *cache_env
     command:
       - celery
       - --app=funkwhale_api.taskapp
@@ -85,6 +95,8 @@ services:
       - redis
       - api
     env_file: .env
+    environment:
+      <<: *cache_env
     command:
       - celery
       - --app=funkwhale_api.taskapp
