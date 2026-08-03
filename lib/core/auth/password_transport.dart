@@ -23,7 +23,30 @@ const _domainV1 = 'tayra-login-v1\x00';
 const transportIterations = 210000;
 const _keyLen = 32;
 
+/// Upper bound for server-advertised PBKDF2 iteration counts.
+///
+/// Prevents a hostile/misconfigured pod (or MITM rewriting the challenge JSON)
+/// from freezing the UI with multi-million-iteration PBKDF2. Production uses
+/// 210_000; allow a modest headroom for future raises.
+const maxTransportIterations = 1_000_000;
+
 const _clientKeyLabel = 'Client Key';
+
+/// Clamp a server-supplied iteration count into a safe range.
+///
+/// Values below 1 fall back to [transportIterations]. Values above
+/// [maxTransportIterations] are rejected with [ArgumentError] so login fails
+/// closed rather than running unbounded work.
+int clampTransportIterations(int? value) {
+  if (value == null || value < 1) return transportIterations;
+  if (value > maxTransportIterations) {
+    throw ArgumentError(
+      'PBKDF2 iteration count $value exceeds safe maximum '
+      '($maxTransportIterations)',
+    );
+  }
+  return value;
+}
 
 // ── PBKDF2-HMAC-SHA256 ──────────────────────────────────────────────────
 

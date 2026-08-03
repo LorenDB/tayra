@@ -240,6 +240,20 @@ def load_mfa_token(token: str) -> Optional[int]:
 
 
 def hash_recovery_code(code: str) -> str:
+    """Hash a recovery code with a domain-separated digest.
+
+    Codes are high-entropy (≥128 bits); SHA-256 with a fixed domain label is
+    enough to block naive rainbow tables. Per-row salt would require a schema
+    change and is unnecessary at this entropy.
+    """
+    normalized = normalize_recovery_code(code)
+    return hashlib.sha256(
+        b"tayra-totp-recovery\0" + normalized.encode("utf-8")
+    ).hexdigest()
+
+
+def _legacy_hash_recovery_code(code: str) -> str:
+    """Pre-domain-separation hash (still accepted for existing rows)."""
     normalized = normalize_recovery_code(code)
     return hashlib.sha256(normalized.encode("utf-8")).hexdigest()
 
@@ -249,11 +263,15 @@ def normalize_recovery_code(code: str) -> str:
 
 
 def generate_recovery_codes(count: int = RECOVERY_CODE_COUNT) -> List[str]:
-    """Return human-readable recovery codes (shown once to the user)."""
+    """Return human-readable recovery codes (shown once to the user).
+
+    Each code is 128 bits of entropy (32 hex chars), grouped for readability.
+    """
     codes = []
     for _ in range(count):
-        raw = secrets.token_hex(4).upper()  # 8 hex chars
-        codes.append(f"{raw[:4]}-{raw[4:]}")
+        raw = secrets.token_hex(16).upper()  # 32 hex chars ≈ 128 bits
+        parts = [raw[i : i + 4] for i in range(0, 32, 4)]
+        codes.append("-".join(parts))
     return codes
 
 
@@ -272,11 +290,16 @@ def store_recovery_codes(user, plain_codes: Iterable[str]) -> None:
 def consume_recovery_code(user, code: str) -> bool:
     from funkwhale_api.users.models import TotpRecoveryCode
 
-    digest = hash_recovery_code(code)
-    if not digest or len(normalize_recovery_code(code)) < 8:
+    if len(normalize_recovery_code(code)) < 8:
+        return False
+    digests = {hash_recovery_code(code), _legacy_hash_recovery_code(code)}
+    digests.discard("")
+    if not digests:
         return False
     row = (
-        TotpRecoveryCode.objects.filter(user=user, code_hash=digest, used_at__isnull=True)
+        TotpRecoveryCode.objects.filter(
+            user=user, code_hash__in=digests, used_at__isnull=True
+        )
         .select_for_update()
         .first()
     )

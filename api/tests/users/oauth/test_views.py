@@ -300,6 +300,32 @@ def test_authorize_view_post_ajax_no_redirect(logged_in_client, factories):
     }
 
 
+def test_authorize_view_post_ajax_deny(logged_in_client, factories):
+    """Deny must return a server-validated redirect (no open client-side URI)."""
+    app = factories["users.Application"]()
+    url = reverse("api:v1:oauth:authorize")
+    response = logged_in_client.post(
+        url,
+        {
+            "allow": False,
+            "redirect_uri": app.redirect_uris,
+            "client_id": app.client_id,
+            "state": "hello",
+            "response_type": "code",
+            "scope": "read",
+        },
+        HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+    )
+    assert response.status_code == 200, response.content
+    payload = json.loads(response.content.decode())
+    assert "redirect_uri" in payload
+    assert "code" not in payload
+    # Registered redirect only; error params from the authorization server.
+    assert payload["redirect_uri"].startswith(app.redirect_uris)
+    assert "error=" in payload["redirect_uri"]
+    assert models.Grant.objects.filter(application=app).count() == 0
+
+
 def test_authorize_view_post_ajax_oob(logged_in_client, factories):
     app = factories["users.Application"](redirect_uris="urn:ietf:wg:oauth:2.0:oob")
     url = reverse("api:v1:oauth:authorize")

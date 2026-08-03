@@ -128,6 +128,26 @@ def test_token_login_2fa_rejects_bad_code(api_client, factories):
     assert bad.json()["error"] == "invalid_totp"
 
 
+def test_recovery_code_hash_is_domain_separated():
+    """New hashes differ from the pre-domain bare sha256; both still normalize."""
+    code = "ABCD-EF01-2345-6789-ABCD-EF01-2345-6789"
+    new_digest = totp.hash_recovery_code(code)
+    legacy = totp._legacy_hash_recovery_code(code)
+    assert new_digest != legacy
+    assert len(new_digest) == 64
+    # Same code with different grouping still hashes the same.
+    assert totp.hash_recovery_code(code.replace("-", "")) == new_digest
+
+
+def test_generate_recovery_codes_have_high_entropy():
+    codes = totp.generate_recovery_codes(count=3)
+    assert len(codes) == 3
+    for c in codes:
+        normalized = totp.normalize_recovery_code(c)
+        assert len(normalized) == 32  # 128 bits hex
+        assert normalized.isalnum()
+
+
 @pytest.mark.django_db
 def test_token_login_2fa_recovery_code(api_client, factories):
     user = factories["users.User"](username="2fa-rec")

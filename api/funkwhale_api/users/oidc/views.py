@@ -415,11 +415,27 @@ def oidc_token(request):
             status=400,
         )
 
-    tokens = first_party.issue_user_tokens(user)
-    # Surface force-2FA for password users even when they signed in via SSO.
+    # Match password login: confirmed TOTP must be completed before tokens.
+    # IdP auth alone must not bypass local 2FA once the user enabled it.
     from funkwhale_api.users import totp as totp_mod
 
-    tokens["totp_enabled"] = totp_mod.is_totp_enabled(user)
+    if totp_mod.is_totp_enabled(user):
+        mfa_token = totp_mod.create_mfa_token(user.pk)
+        response = Response(
+            {
+                "error": "totp_required",
+                "code": "totp_required",
+                "detail": "Two-factor authentication code required.",
+                "mfa_token": mfa_token,
+            },
+            status=401,
+        )
+        _clear_tx_cookie(response)
+        return response
+
+    tokens = first_party.issue_user_tokens(user)
+    # Surface force-2FA for password users even when they signed in via SSO.
+    tokens["totp_enabled"] = False
     tokens["totp_setup_required"] = totp_mod.needs_totp_setup(user)
 
     response = Response(tokens)

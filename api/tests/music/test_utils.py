@@ -115,6 +115,25 @@ def test_get_dirs_and_files(path, expected, tmpdir):
 
 
 @pytest.mark.parametrize(
+    "evil_path",
+    [
+        "/etc",
+        "/etc/passwd",
+        "../",
+        "Magic/../..",
+        "Magic/../../etc",
+        "//etc",
+    ],
+)
+def test_browse_dir_rejects_path_escape(evil_path, tmpdir):
+    """Absolute paths and .. must not escape the music root (path containment)."""
+    root_path = pathlib.Path(tmpdir)
+    (root_path / "Magic").mkdir()
+    with pytest.raises(ValueError):
+        utils.browse_dir(root_path, evil_path)
+
+
+@pytest.mark.parametrize(
     "name, expected",
     [
         ("sample.flac", {"bitrate": 128000, "length": 0}),

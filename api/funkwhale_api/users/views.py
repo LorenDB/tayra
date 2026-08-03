@@ -858,10 +858,13 @@ def _issue_token_response(user, meta=None):
 
     try:
         payload = first_party.issue_user_tokens(user)
-    except Exception as exc:
+    except Exception:
         logger.exception("token_login failed to issue tokens user_id=%s", user.pk)
         return Response(
-            {"error": "token_issue_failed", "detail": str(exc)},
+            {
+                "error": "token_issue_failed",
+                "detail": "Could not issue tokens. Try again later.",
+            },
             status=500,
         )
 

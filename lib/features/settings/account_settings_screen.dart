@@ -517,6 +517,14 @@ class AccountSettingsScreen extends ConsumerWidget {
     newCtrl.dispose();
     confirmCtrl.dispose();
 
+    final serverUrl = ref.read(authStateProvider).serverUrl ?? '';
+    // Confirm with the instance-bound transport secret, not the account
+    // password (server User.check_password accepts either).
+    final oldDigest = hashPasswordForTransport(
+      oldPassword,
+      serverUrl: serverUrl,
+    );
+
     await _runSave(
       context,
       ref,
@@ -524,7 +532,7 @@ class AccountSettingsScreen extends ConsumerWidget {
         await ref
             .read(funkwhaleApiProvider)
             .changePassword(
-              oldPassword: oldPassword,
+              oldPassword: oldDigest,
               newPassword1: newPassword,
               newPassword2: confirmPassword,
             );
@@ -628,13 +636,19 @@ class AccountSettingsScreen extends ConsumerWidget {
     emailCtrl.dispose();
     passwordCtrl.dispose();
 
+    final serverUrl = ref.read(authStateProvider).serverUrl ?? '';
+    final passwordDigest = hashPasswordForTransport(
+      password,
+      serverUrl: serverUrl,
+    );
+
     await _runSave(
       context,
       ref,
       action: () async {
         await ref
             .read(funkwhaleApiProvider)
-            .changeEmail(email: email, password: password);
+            .changeEmail(email: email, password: passwordDigest);
       },
       successMessage: 'Check your inbox to confirm the new email address',
       analyticsEvent: 'account_email_change_requested',

@@ -56,12 +56,15 @@ def store_login_state(
 
 
 def pop_login_state(state: str) -> Optional[Dict[str, Any]]:
-    """Load and delete pending auth state (one-time)."""
+    """Load and delete pending auth state (one-time under concurrency)."""
     if not state:
         return None
     key = f"{STATE_PREFIX}{state}"
     payload = cache.get(key)
     if payload is None:
+        return None
+    claim_key = f"{key}:claimed"
+    if not cache.add(claim_key, 1, STATE_TTL):
         return None
     cache.delete(key)
     return payload
@@ -97,6 +100,11 @@ def pop_exchange_code(code: str, tx_binding: str) -> Optional[int]:
         if not provided or not hmac.compare_digest(expected, provided):
             # Do not delete on mismatch — legitimate client may retry with cookie.
             return None
+    # Claim after binding check so wrong-tx retries do not burn the code,
+    # while concurrent correct presenters still only mint tokens once.
+    claim_key = f"{key}:claimed"
+    if not cache.add(claim_key, 1, CODE_TTL):
+        return None
     cache.delete(key)
     try:
         return int(payload["user_id"])

@@ -136,11 +136,37 @@ def increment_downloads_count(upload, user, wsgi_request):
 
 
 def browse_dir(root, path):
-    if ".." in path:
-        raise ValueError("Relative browsing is not allowed")
+    """List entries under *root*/*path*, strictly contained within *root*.
 
-    root = pathlib.Path(root)
-    real_path = root / path
+    Rejects ``..`` segments, absolute *path* values (``Path(root) / "/etc"``
+    would otherwise escape), and resolved paths outside the music root
+    (symlink / normalization escapes).
+    """
+    root_path = pathlib.Path(root).resolve()
+    rel = "" if path is None else str(path).strip()
+    # Empty relative path → root itself.
+    if rel in ("", ".", "./"):
+        real_path = root_path
+    else:
+        candidate = pathlib.Path(rel)
+        # Absolute right-hand sides replace the root under pathlib (e.g.
+        # Path("/music") / "/etc" → /etc). Block before join.
+        if candidate.is_absolute() or os.path.isabs(rel):
+            raise ValueError("Absolute browsing is not allowed")
+        if ".." in candidate.parts or ".." in rel.split("/"):
+            raise ValueError("Relative browsing is not allowed")
+        # Also reject Windows-style absolute / drive escapes on non-POSIX.
+        if "\\" in rel and os.path.isabs(rel.replace("\\", "/")):
+            raise ValueError("Absolute browsing is not allowed")
+        real_path = (root_path / candidate).resolve()
+
+    try:
+        real_path.relative_to(root_path)
+    except ValueError as exc:
+        raise ValueError("Path escapes music root") from exc
+
+    if not real_path.is_dir():
+        raise ValueError("Not a directory")
 
     dirs = []
     files = []

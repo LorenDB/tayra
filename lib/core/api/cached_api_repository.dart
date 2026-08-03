@@ -1170,7 +1170,7 @@ class CachedFunkwhaleApi {
     int limit = 10,
   }) => _api.getListeningStats(year: year, limit: limit);
 
-  String getStreamUrl(String listenUrl, {bool appendListenToken = true}) =>
+  String getStreamUrl(String listenUrl, {bool? appendListenToken}) =>
       _api.getStreamUrl(listenUrl, appendListenToken: appendListenToken);
 
   Map<String, String> get authHeaders => _api.authHeaders;

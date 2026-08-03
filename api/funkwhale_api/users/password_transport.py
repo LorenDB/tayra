@@ -363,12 +363,16 @@ def create_login_challenge(username: str, user=None) -> Dict[str, Any]:
 
 
 def pop_login_challenge(challenge_id: str) -> Optional[Dict[str, Any]]:
-    """Load and consume a one-time login challenge."""
+    """Load and consume a one-time login challenge (single-use under concurrency)."""
     if not challenge_id:
         return None
     key = f"{_CHALLENGE_PREFIX}{challenge_id}"
     payload = cache.get(key)
     if payload is None:
+        return None
+    # Claim lock so two concurrent workers cannot both redeem the same challenge.
+    claim_key = f"{key}:claimed"
+    if not cache.add(claim_key, 1, CHALLENGE_TTL):
         return None
     cache.delete(key)
     return payload

@@ -587,6 +587,26 @@ class AuthNotifier extends Notifier<AuthState> {
         ),
       );
       final payload = _asJsonMap(response.data);
+
+      // Confirmed TOTP is required after SSO when the local account has 2FA
+      // (same wire shape as password login).
+      if (response.statusCode == 401 &&
+          payload != null &&
+          (payload['error'] == 'totp_required' ||
+              payload['code'] == 'totp_required')) {
+        final mfa = payload['mfa_token'] as String?;
+        if (mfa != null && mfa.isNotEmpty) {
+          state = state.copyWith(
+            isLoading: false,
+            serverUrl: url,
+            pendingMfaToken: mfa,
+            error: null,
+          );
+          Analytics.track('login_totp_required');
+          return false;
+        }
+      }
+
       if (response.statusCode != 200 || payload == null) {
         state = state.copyWith(
           isLoading: false,
@@ -620,6 +640,7 @@ class AuthNotifier extends Notifier<AuthState> {
         listenToken: payload['listen_token'] as String?,
         isLoading: false,
         clearPendingServerUrl: true,
+        clearPendingMfaToken: true,
         totpSetupRequired: payload['totp_setup_required'] == true,
       );
       await _saveAuth();
@@ -758,16 +779,29 @@ class AuthNotifier extends Notifier<AuthState> {
         loginBody['password'] = legacyTransportDigest(password);
       } else {
         final saltB64 = challenge['salt'] as String? ?? '';
-        final iterations =
-            (challenge['iterations'] as num?)?.toInt() ?? transportIterations;
-        final transportIters =
-            (challenge['transport_iterations'] as num?)?.toInt() ??
-                transportIterations;
         final bindingHex = challenge['instance_binding'] as String? ?? '';
         if (saltB64.isEmpty || serverNonce.isEmpty) {
           state = state.copyWith(
             isLoading: false,
             error: 'Server returned an incomplete login challenge.',
+            clearPendingMfaToken: true,
+          );
+          Analytics.track('login_failed');
+          return false;
+        }
+        final int iterations;
+        final int transportIters;
+        try {
+          iterations = clampTransportIterations(
+            (challenge['iterations'] as num?)?.toInt(),
+          );
+          transportIters = clampTransportIterations(
+            (challenge['transport_iterations'] as num?)?.toInt(),
+          );
+        } on ArgumentError {
+          state = state.copyWith(
+            isLoading: false,
+            error: 'Server returned an invalid login challenge.',
             clearPendingMfaToken: true,
           );
           Analytics.track('login_failed');
@@ -833,11 +867,14 @@ class AuthNotifier extends Notifier<AuthState> {
       }
 
       if (response.statusCode != 200 || payload == null) {
-        // Surface the real API body in the browser console (DevTools).
-        debugPrint(
-          'loginWithPassword failed status=${response.statusCode} '
-          'data=${response.data}',
-        );
+        // Log status only — never dump auth response bodies (may include
+        // challenge fragments or account hints) into device logs.
+        assert(() {
+          debugPrint(
+            'loginWithPassword failed status=${response.statusCode}',
+          );
+          return true;
+        }());
         state = state.copyWith(
           isLoading: false,
           error: _formatLoginError(response.data, response.statusCode),

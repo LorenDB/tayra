@@ -162,26 +162,46 @@ class _OAuthAuthorizeScreenState extends ConsumerState<OAuthAuthorizeScreen> {
     if (_submitting) return;
     Analytics.track('oauth_authorize_denied');
 
-    // Client-side access_denied avoids a DOT AJAX path that only parses `code`.
+    // Never open the client-supplied redirect_uri without server validation
+    // (open-redirect on Deny). Prefer the authorize endpoint so the API only
+    // returns a redirect that matches the registered application.
     if (isOobRedirectUri(_redirectUri)) {
       if (mounted) context.go('/');
       return;
     }
 
-    final denied = Uri.parse(_redirectUri).replace(
-      queryParameters: {
-        'error': 'access_denied',
-        if (_state != null && _state!.isNotEmpty) 'state': _state!,
-      },
-    );
+    setState(() {
+      _submitting = true;
+      _actionError = null;
+    });
 
-    final ok = await _navigateToClient(denied.toString());
+    final result = await ref
+        .read(oauthAuthorizeServiceProvider)
+        .authorize(
+          allow: false,
+          clientId: _clientId,
+          redirectUri: _redirectUri,
+          responseType: _responseType,
+          scope: _scope.isNotEmpty ? _scope : (_app?.scopes ?? 'read'),
+          state: _state,
+        );
+
     if (!mounted) return;
-    if (!ok) {
-      setState(() {
-        _actionError = 'Could not return to the application.';
-      });
+
+    final redirect = result.redirectUri;
+    if (redirect != null && redirect.isNotEmpty) {
+      final ok = await _navigateToClient(redirect);
+      if (!mounted) return;
+      if (ok) return;
     }
+
+    // Fallback: stay on-screen rather than navigating to an unvalidated URI.
+    setState(() {
+      _submitting = false;
+      _actionError =
+          result.errorDetail ??
+          'Authorization denied. Return to the application manually.';
+    });
   }
 
   Future<bool> _navigateToClient(String url) async {

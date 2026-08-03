@@ -5,6 +5,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tayra/core/auth/password_transport.dart';
 
 void main() {
+  test('clampTransportIterations accepts normal values and rejects extremes', () {
+    expect(clampTransportIterations(null), transportIterations);
+    expect(clampTransportIterations(0), transportIterations);
+    expect(clampTransportIterations(210000), 210000);
+    expect(clampTransportIterations(maxTransportIterations), maxTransportIterations);
+    expect(
+      () => clampTransportIterations(maxTransportIterations + 1),
+      throwsArgumentError,
+    );
+  });
+
   test('legacyTransportDigest is stable hex and domain-separated', () {
     final a = legacyTransportDigest('s3cret-pass');
     final b = legacyTransportDigest('s3cret-pass');

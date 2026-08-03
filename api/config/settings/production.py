@@ -61,9 +61,13 @@ if (
 # SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
 #     "DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", default=True)
 # SECURE_BROWSER_XSS_FILTER = True
-# Prefer Secure cookies when the pod is served over HTTPS (H1 still open for
-# plaintext compose; operators should set SESSION_COOKIE_SECURE=true with TLS).
-SESSION_COOKIE_SECURE = env.bool("SESSION_COOKIE_SECURE", default=False)
+# Prefer Secure cookies when the pod is served over HTTPS. Default follows
+# FUNKWHALE_PROTOCOL so HTTPS deployments get secure cookies without an extra
+# env flag; HTTP-only pods can set SESSION_COOKIE_SECURE=false explicitly.
+_secure_cookie_default = FUNKWHALE_PROTOCOL == "https"
+SESSION_COOKIE_SECURE = env.bool(
+    "SESSION_COOKIE_SECURE", default=_secure_cookie_default
+)
 CSRF_COOKIE_SECURE = env.bool("CSRF_COOKIE_SECURE", default=SESSION_COOKIE_SECURE)
 SESSION_COOKIE_HTTPONLY = True
 # SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)

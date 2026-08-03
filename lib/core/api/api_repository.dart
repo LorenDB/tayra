@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-// 'foundation.dart' is unused here; keeping the import list minimal.
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/api/api_client.dart';
 import 'package:tayra/core/api/json_isolate.dart';
@@ -686,10 +686,16 @@ class FunkwhaleApi {
 
   /// Absolute listen URL, optionally with Funkwhale scoped `?token=` for
   /// browser media elements that cannot send Authorization headers.
-  String getStreamUrl(String listenUrl, {bool appendListenToken = true}) {
+  ///
+  /// Defaults to appending the listen token **only on web**, where media
+  /// elements cannot send `Authorization`. Native/desktop already send Bearer
+  /// headers, so embedding the token in query strings only leaks it into
+  /// logs, CDN caches, and crash dumps.
+  String getStreamUrl(String listenUrl, {bool? appendListenToken}) {
     final absolute =
         listenUrl.startsWith('http') ? listenUrl : '$_baseUrl$listenUrl';
-    if (!appendListenToken) return absolute;
+    final useToken = appendListenToken ?? kIsWeb;
+    if (!useToken) return absolute;
 
     final listenToken = _ref.read(authStateProvider).listenToken;
     if (listenToken == null || listenToken.isEmpty) return absolute;

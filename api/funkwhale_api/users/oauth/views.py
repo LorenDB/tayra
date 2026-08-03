@@ -233,12 +233,16 @@ class AuthorizeView(views.APIView, oauth_views.AuthorizationView):
 
     def redirect(self, redirect_to, application):
         if self.request.is_ajax():
-            # Web client need this to be able to redirect the user
+            # Web client needs JSON so it can navigate after Allow *or* Deny.
+            # Deny redirects carry error=access_denied (no code) — do not assume
+            # a grant code is present (KeyError previously broke Deny AJAX).
             query = urllib.parse.urlparse(redirect_to).query
-            code = urllib.parse.parse_qs(query)["code"][0]
-            return self.json_payload(
-                {"redirect_uri": redirect_to, "code": code}, status_code=200
-            )
+            params = urllib.parse.parse_qs(query)
+            code = (params.get("code") or [None])[0]
+            payload = {"redirect_uri": redirect_to}
+            if code:
+                payload["code"] = code
+            return self.json_payload(payload, status_code=200)
 
         return super().redirect(redirect_to, application)
 

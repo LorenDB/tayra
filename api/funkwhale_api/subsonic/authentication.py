@@ -39,7 +39,11 @@ def authenticate_salt(username, salt, token):
         user = (
             User.objects.all()
             .for_auth()
-            .get(username=username, is_active=True, subsonic_api_token__isnull=False)
+            .get(
+                username__iexact=username,
+                is_active=True,
+                subsonic_api_token__isnull=False,
+            )
         )
     except User.DoesNotExist:
         raise exceptions.AuthenticationFailed("Wrong username or password.")
