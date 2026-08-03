@@ -362,23 +362,26 @@ def test_oidc_callback_invalid_state(api_client, oidc_env):
     assert response.json()["error"] == "invalid_state"
 
 
-@pytest.mark.django_db
-def test_preference_overrides_env_display_name(preferences, oidc_env):
-    preferences["users__oidc_display_name"] = "Okta"
+def test_config_from_env_only(oidc_env):
     cfg = oidc_config.get_oidc_config()
-    assert cfg["display_name"] == "Okta"
+    assert cfg["enabled"] is True
+    assert cfg["ready"] is True
+    assert cfg["display_name"] == "Company SSO"
+    assert cfg["client_id"] == "tayra-client"
+    assert cfg["auto_create"] is False
 
 
-@pytest.mark.django_db
-def test_preference_enables_when_env_disabled(preferences, settings):
+def test_config_env_disabled_is_not_ready(settings):
+    """OIDC stays off when env is disabled (UI prefs no longer apply)."""
     settings.OIDC_ENABLED = False
     settings.OIDC_DISCOVERY_URL = "https://idp.example.com"
     settings.OIDC_CLIENT_ID = "cid"
     settings.OIDC_CLIENT_SECRET = "sec"
-    preferences["users__oidc_enabled"] = True
+    settings.OIDC_DISPLAY_NAME = "Env Label"
     cfg = oidc_config.get_oidc_config()
-    assert cfg["enabled"] is True
-    assert cfg["ready"] is True
+    assert cfg["enabled"] is False
+    assert cfg["ready"] is False
+    assert cfg["display_name"] == "Env Label"
 
 
 def test_normalize_discovery_url():

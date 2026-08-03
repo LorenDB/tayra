@@ -262,19 +262,19 @@ external IdP. After SSO, the IdP **username claim** (default
    ```
    {FUNKWHALE_PROTOCOL}://{FUNKWHALE_HOSTNAME}/api/v1/users/oidc/callback/
    ```
-2. Either set env vars (and restart the API) **or** configure under
-   **Settings → Instance settings** (`users` section):
+2. Set env vars in `.env` (and restart the API). OIDC is **not** configurable
+   via Instance settings; any previously saved UI prefs are ignored.
 
-   | Env | Instance preference | Notes |
-   |---|---|---|
-   | `OIDC_ENABLED` | `users__oidc_enabled` | Either path can enable SSO |
-   | `OIDC_DISCOVERY_URL` | `users__oidc_discovery_url` | Issuer or discovery URL |
-   | `OIDC_CLIENT_ID` | `users__oidc_client_id` | |
-   | `OIDC_CLIENT_SECRET` | `users__oidc_client_secret` | Prefer env for secrets |
-   | `OIDC_SCOPES` | `users__oidc_scopes` | Default `openid profile email` |
-   | `OIDC_USERNAME_CLAIM` | `users__oidc_username_claim` | Default `preferred_username` |
-   | `OIDC_DISPLAY_NAME` | `users__oidc_display_name` | Login button label |
-   | `OIDC_AUTO_CREATE` | `users__oidc_auto_create` | Off = match existing users only |
+   | Env | Notes |
+   |---|---|
+   | `OIDC_ENABLED` | Set `true` to enable SSO |
+   | `OIDC_DISCOVERY_URL` | Issuer or discovery URL |
+   | `OIDC_CLIENT_ID` | Client ID from the IdP |
+   | `OIDC_CLIENT_SECRET` | Client secret from the IdP |
+   | `OIDC_SCOPES` | Default `openid profile email` |
+   | `OIDC_USERNAME_CLAIM` | Default `preferred_username` |
+   | `OIDC_DISPLAY_NAME` | Login button label (default `SSO`) |
+   | `OIDC_AUTO_CREATE` | Off = match existing users only |
 
 3. Ensure local usernames match the IdP claim values (or enable auto-create).
 4. Clients discover SSO via `GET /api/v1/users/auth-methods/` and show

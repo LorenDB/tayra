@@ -843,16 +843,11 @@ if AUTH_LDAP_ENABLED:
 
 # OIDC SSO CONFIGURATION
 # ------------------------------------------------------------------------------
-# Optional OpenID Connect relying-party login. Env values are fallbacks when
-# instance preferences (users__oidc_*) are empty; either path can enable SSO.
-# Register this redirect URI at the IdP:
+# Optional OpenID Connect relying-party login. Configured only via environment
+# variables (not instance settings). Register this redirect URI at the IdP:
 #   {FUNKWHALE_PROTOCOL}://{FUNKWHALE_HOSTNAME}/api/v1/users/oidc/callback/
 OIDC_ENABLED = env.bool("OIDC_ENABLED", default=False)
-"""
-Whether to enable OIDC single sign-on (in addition to password login).
-
-Can also be toggled via instance setting ``users__oidc_enabled``.
-"""
+"""Whether to enable OIDC single sign-on (in addition to password login)."""
 
 OIDC_DISCOVERY_URL = env("OIDC_DISCOVERY_URL", default="")
 """
@@ -866,10 +861,7 @@ OIDC_CLIENT_ID = env("OIDC_CLIENT_ID", default="")
 """OIDC client ID registered at the identity provider."""
 
 OIDC_CLIENT_SECRET = env("OIDC_CLIENT_SECRET", default="")
-"""
-OIDC client secret. Prefer setting this via env rather than the instance
-settings UI when possible.
-"""
+"""OIDC client secret from the identity provider."""
 
 OIDC_SCOPES = env("OIDC_SCOPES", default="openid profile email")
 """Space-separated OIDC scopes requested during authorization."""
