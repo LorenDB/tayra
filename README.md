@@ -88,7 +88,11 @@ Returns access/refresh tokens, client credentials for refresh, and `listen_token
 for media URLs.
 
 **OIDC SSO** (optional): `client_redirect` is allowlisted to the pod origin /
-OOB / `tayra://`, and exchange codes require an SSO transaction binding.
+OOB / `tayra://`, exchange codes require an SSO transaction binding, and local
+accounts are linked by ID-token `(iss, sub)` (`OidcIdentity`), not username alone.
+
+Residual security follow-ups (web token storage, legacy login, etc.):  
+[doc/security-followups.md](doc/security-followups.md).
 
 ### Web SPA build
 

@@ -305,6 +305,9 @@ def oidc_callback(request):
             client_id=cfg["client_id"],
             nonce=pending.get("nonce") or "",
         )
+        # Never let UserInfo overwrite the verified id_token subject pair.
+        id_iss = claims.get("iss")
+        id_sub = claims.get("sub")
         username = oidc_client.extract_username(claims, cfg["username_claim"])
         if not username and token_payload.get("access_token"):
             userinfo = oidc_client.fetch_userinfo(
@@ -313,6 +316,8 @@ def oidc_callback(request):
             )
             if userinfo:
                 claims = {**claims, **userinfo}
+                claims["iss"] = id_iss
+                claims["sub"] = id_sub
                 username = oidc_client.extract_username(
                     claims, cfg["username_claim"]
                 )

@@ -254,9 +254,14 @@ docker compose exec api python manage.py shell -c \
 ### OIDC single sign-on (optional)
 
 Tayra can act as an OpenID Connect relying party so users sign in with an
-external IdP. After SSO, the IdP **username claim** (default
-`preferred_username`) is matched to an existing local `User.username`
-(case-insensitive). Password login remains available.
+external IdP. Local accounts are bound to the IdP by the stable
+**`(iss, sub)`** pair from the verified ID token (stored as `OidcIdentity`).
+
+**First SSO** for a given `sub` still uses the username claim (default
+`preferred_username`) to find or create a local `User`, then permanently
+links that subject. Later logins resolve by `(iss, sub)` only — changing or
+spoofing the username claim cannot take over another account once linked.
+Password login remains available.
 
 1. Register a confidential OIDC client at your IdP with redirect URI:
    ```
@@ -272,13 +277,21 @@ external IdP. After SSO, the IdP **username claim** (default
    | `OIDC_CLIENT_ID` | Client ID from the IdP |
    | `OIDC_CLIENT_SECRET` | Client secret from the IdP |
    | `OIDC_SCOPES` | Default `openid profile email` |
-   | `OIDC_USERNAME_CLAIM` | Default `preferred_username` |
+   | `OIDC_USERNAME_CLAIM` | Default `preferred_username` (first link / auto-create only) |
    | `OIDC_DISPLAY_NAME` | Login button label (default `SSO`) |
-   | `OIDC_AUTO_CREATE` | Off = match existing users only |
+   | `OIDC_AUTO_CREATE` | Off = first link to existing local usernames only |
 
-3. Ensure local usernames match the IdP claim values (or enable auto-create).
+3. For first-time link, local usernames must match the IdP username claim
+   (or enable auto-create). After that, only `(iss, sub)` matters.
 4. Clients discover SSO via `GET /api/v1/users/auth-methods/` and show
    **Sign in with …** on the login screen.
+5. Apply migrations so `OidcIdentity` exists:
+   `docker compose exec api python manage.py migrate`
+
+**Re-link / troubleshooting:** bindings live in the `users_oidcidentity` table
+(Django admin: OIDC identities). Delete a row to force a fresh first-time
+username link for that IdP subject. Two different `sub` values cannot share
+the same local user under one issuer (returns `username_conflict`).
 
 **“Passwords in the browser Network tab”**  
 Tayra never sends the account password. Login uses a one-time SCRAM-like

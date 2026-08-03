@@ -91,6 +91,15 @@ class UserAdmin(AuthUserAdmin):
     )
 
 
+@admin.register(models.OidcIdentity)
+class OidcIdentityAdmin(admin.ModelAdmin):
+    list_select_related = ("user",)
+    list_display = ["user", "issuer", "subject", "created_at", "last_login_at"]
+    search_fields = ["user__username", "issuer", "subject"]
+    readonly_fields = ["created_at", "last_login_at"]
+    raw_id_fields = ["user"]
+
+
 @admin.register(models.Invitation)
 class InvitationAdmin(admin.ModelAdmin):
     list_select_related = True

@@ -186,7 +186,7 @@ def test_oidc_callback_happy_path_oob(api_client, oidc_env, factories):
     id_claims = {
         "iss": DISCOVERY["issuer"],
         "aud": "tayra-client",
-        "sub": "sub-1",
+        "sub": "alice-sub-1",
         "exp": int(time.time()) + 300,
         "iat": int(time.time()),
         "nonce": nonce,
@@ -269,6 +269,8 @@ def test_oidc_callback_user_not_found(api_client, oidc_env, factories):
     ), mock.patch(
         "funkwhale_api.users.oidc.client.validate_id_token",
         return_value={
+            "iss": DISCOVERY["issuer"],
+            "sub": "unknown-sub",
             "preferred_username": "nobody",
             "nonce": nonce,
         },
@@ -302,6 +304,8 @@ def test_oidc_callback_auto_create(api_client, oidc_env, factories, settings):
     ), mock.patch(
         "funkwhale_api.users.oidc.client.validate_id_token",
         return_value={
+            "iss": DISCOVERY["issuer"],
+            "sub": "newperson-sub",
             "preferred_username": "newperson",
             "email": "new@example.com",
             "name": "New Person",
@@ -315,11 +319,16 @@ def test_oidc_callback_auto_create(api_client, oidc_env, factories, settings):
     assert response.status_code == 200
     from django.contrib.auth import get_user_model
 
+    from funkwhale_api.users.models import OidcIdentity
+
     User = get_user_model()
     user = User.objects.get(username="newperson")
     assert user.email == "new@example.com"
     assert not user.has_usable_password()
     assert user.actor_id is not None
+    binding = OidcIdentity.objects.get(user=user)
+    assert binding.subject == "newperson-sub"
+    assert binding.issuer == DISCOVERY["issuer"]
 
 
 @pytest.mark.django_db
@@ -342,7 +351,12 @@ def test_oidc_callback_inactive_user(api_client, oidc_env, factories):
         return_value={"id_token": "x"},
     ), mock.patch(
         "funkwhale_api.users.oidc.client.validate_id_token",
-        return_value={"preferred_username": "ghost", "nonce": nonce},
+        return_value={
+            "iss": DISCOVERY["issuer"],
+            "sub": "ghost-sub",
+            "preferred_username": "ghost",
+            "nonce": nonce,
+        },
     ):
         response = api_client.get(
             reverse("api:v1:users:oidc_callback"),
@@ -418,15 +432,106 @@ def test_redirect_allowlist_helpers(settings):
     assert not oidc_redirects.is_allowed_client_redirect("javascript:alert(1)")
 
 
+def _claims(sub="sub-1", iss="https://idp.example.com", **extra):
+    data = {"iss": iss, "sub": sub}
+    data.update(extra)
+    return data
+
+
 @pytest.mark.django_db
-def test_resolve_user_match_only(factories):
+def test_resolve_user_first_time_username_link_creates_binding(factories):
     factories["users.User"](username="Sam")
     user, created = oidc_users.resolve_user(
-        username="sam", claims={}, auto_create=False
+        username="sam",
+        claims=_claims(sub="idp-sam"),
+        auto_create=False,
     )
     assert created is False
     assert user.username == "Sam"
+    binding = user.oidc_identities.get()
+    assert binding.issuer == "https://idp.example.com"
+    assert binding.subject == "idp-sam"
 
+
+@pytest.mark.django_db
+def test_resolve_user_matches_by_sub_not_username(factories):
+    """After binding, login uses (iss, sub) even if username claim changes."""
+    local = factories["users.User"](username="alice")
+    oidc_users.resolve_user(
+        username="alice",
+        claims=_claims(sub="stable-sub"),
+        auto_create=False,
+    )
+    # Attacker-controlled or renamed claim must not matter.
+    user, created = oidc_users.resolve_user(
+        username="admin",
+        claims=_claims(sub="stable-sub"),
+        auto_create=False,
+    )
+    assert created is False
+    assert user.pk == local.pk
+    assert user.username == "alice"
+
+
+@pytest.mark.django_db
+def test_resolve_user_rejects_username_hijack_after_binding(factories):
+    """A second IdP subject cannot bind to a user already linked for that issuer."""
+    factories["users.User"](username="admin")
+    oidc_users.resolve_user(
+        username="admin",
+        claims=_claims(sub="real-admin-sub"),
+        auto_create=False,
+    )
     with pytest.raises(oidc_users.OidcUserError) as exc:
-        oidc_users.resolve_user(username="missing", claims={}, auto_create=False)
+        oidc_users.resolve_user(
+            username="admin",
+            claims=_claims(sub="attacker-sub"),
+            auto_create=False,
+        )
+    assert exc.value.code == "username_conflict"
+
+
+@pytest.mark.django_db
+def test_resolve_user_missing_subject_rejected(factories):
+    factories["users.User"](username="x")
+    with pytest.raises(oidc_users.OidcUserError) as exc:
+        oidc_users.resolve_user(
+            username="x",
+            claims={"iss": "https://idp.example.com"},
+            auto_create=False,
+        )
+    assert exc.value.code == "missing_subject"
+
+
+@pytest.mark.django_db
+def test_resolve_user_not_found_without_auto_create(factories):
+    with pytest.raises(oidc_users.OidcUserError) as exc:
+        oidc_users.resolve_user(
+            username="missing",
+            claims=_claims(sub="nope"),
+            auto_create=False,
+        )
     assert exc.value.code == "user_not_found"
+
+
+@pytest.mark.django_db
+def test_resolve_user_auto_create_binds_subject(factories):
+    user, created = oidc_users.resolve_user(
+        username="newperson",
+        claims=_claims(sub="new-sub", email="new@example.com", name="New Person"),
+        auto_create=True,
+    )
+    assert created is True
+    assert user.username == "newperson"
+    assert user.email == "new@example.com"
+    binding = user.oidc_identities.get()
+    assert binding.subject == "new-sub"
+
+    # Second login is not a create and still matches by sub.
+    again, created2 = oidc_users.resolve_user(
+        username="ignored-claim",
+        claims=_claims(sub="new-sub"),
+        auto_create=True,
+    )
+    assert created2 is False
+    assert again.pk == user.pk

@@ -375,6 +375,39 @@ class User(AbstractUser):
         return has_unverified_email and mandatory_verification
 
 
+class OidcIdentity(models.Model):
+    """Stable binding between an OIDC IdP subject and a local User.
+
+    Matching on ``preferred_username`` alone is unsafe: a mutable or
+    attacker-influenced claim can take over another local account. After the
+    first successful SSO (or auto-create), logins resolve by ``(issuer, sub)``.
+    """
+
+    user = models.ForeignKey(
+        User, related_name="oidc_identities", on_delete=models.CASCADE
+    )
+    # OpenID Provider issuer identifier (id_token ``iss``).
+    issuer = models.CharField(max_length=512)
+    # Subject identifier at that issuer (id_token ``sub``) — stable per account.
+    subject = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_login_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["issuer", "subject"],
+                name="users_oidcidentity_issuer_subject_uniq",
+            ),
+        ]
+        indexes = [
+            models.Index(fields=["user", "issuer"]),
+        ]
+
+    def __str__(self):
+        return f"OidcIdentity(user={self.user_id}, iss={self.issuer!r}, sub={self.subject!r})"
+
+
 class TotpDevice(models.Model):
     """Per-user TOTP authenticator (RFC 6238) for first-party password login."""
 
