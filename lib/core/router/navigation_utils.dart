@@ -21,11 +21,19 @@ import 'package:tayra/core/router/app_router.dart';
 ///
 /// When nothing can be popped (cold deep link), optionally [go]s to
 /// [fallbackLocation].
-void popPage(BuildContext context, {String? fallbackLocation}) {
+///
+/// [result] is forwarded to [GoRouter.pop] so a matching
+/// `await context.push<T>(...)` can react (e.g. refresh a list after delete).
+/// It is ignored when falling back to [go].
+void popPage(
+  BuildContext context, {
+  String? fallbackLocation,
+  Object? result,
+}) {
   final router = GoRouter.maybeOf(context);
   if (router != null && router.canPop()) {
     Router.neglect(context, () {
-      router.pop();
+      router.pop(result);
     });
     return;
   }

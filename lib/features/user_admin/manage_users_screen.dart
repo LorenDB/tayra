@@ -126,6 +126,21 @@ class _ManageUsersScreenState extends ConsumerState<ManageUsersScreen> {
     _load(reset: true);
   }
 
+  /// Opens the user detail route and, after a successful delete, removes the
+  /// entry from the in-memory list so the UI updates without leaving the page.
+  Future<void> _openUserDetail(ManageUser user) async {
+    final deleted = await context.push<bool>('/manage/users/${user.id}');
+    if (!mounted || deleted != true) return;
+    setState(() {
+      final before = _items.length;
+      _items.removeWhere((u) => u.id == user.id);
+      final removed = before - _items.length;
+      if (removed > 0) {
+        _count = _count > removed ? _count - removed : 0;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final canManage = ref.watch(canManageUsersProvider);
@@ -251,7 +266,7 @@ class _ManageUsersScreenState extends ConsumerState<ManageUsersScreen> {
           final user = _items[index];
           return _UserTile(
             user: user,
-            onTap: () => context.push('/manage/users/${user.id}'),
+            onTap: () => _openUserDetail(user),
           );
         },
       ),

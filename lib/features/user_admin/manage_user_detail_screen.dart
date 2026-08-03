@@ -300,7 +300,8 @@ class _ManageUserDetailScreenState
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('User “${user.username}” deleted')),
       );
-      popPage(context, fallbackLocation: '/manage/users');
+      // Signal the users list to drop this entry without a manual refresh.
+      popPage(context, fallbackLocation: '/manage/users', result: true);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
