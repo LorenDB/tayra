@@ -9,7 +9,9 @@
 
 # M11: pin a concrete Flutter image tag (override at build time if needed).
 # "stable" floats; pin reduces supply-chain surprise. Bump deliberately.
-ARG FLUTTER_IMAGE=ghcr.io/cirruslabs/flutter:3.32.0
+# Must satisfy pubspec.lock (Flutter >=3.38.4, Dart >=3.11). Cirrus Labs
+# latest pin is 3.44.0; 3.32.x ships Dart 3.8 and fails pub get.
+ARG FLUTTER_IMAGE=ghcr.io/cirruslabs/flutter:3.44.0
 ARG FUNKWHALE_URL=
 
 # ── Compile Tayra web ────────────────────────────────────────────────────
