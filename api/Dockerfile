@@ -105,8 +105,10 @@ RUN set -eux; \
   py3-lxml \
   py3-psycopg2 \
   python3 \
+  # su-exec: root entrypoint drops to funkwhale after fixing volume ownership
+  su-exec \
   tzdata; \
-  # M5: run API/celery as non-root
+  # M5: run API/celery as non-root (entrypoint drops privileges)
   addgroup -g 1000 -S funkwhale; \
   adduser -u 1000 -S -G funkwhale -h /app -s /sbin/nologin funkwhale; \
   mkdir -p /srv/funkwhale/data/media /srv/funkwhale/data/static /music; \
@@ -128,10 +130,12 @@ RUN test -f funkwhale_api/typesense/__init__.py
 # read/execute. pip -e writes egg-info under /app, so chown that only.
 RUN set -eux; \
   pip3 install --no-deps --editable .; \
-  chown -R funkwhale:funkwhale /app
+  chown -R funkwhale:funkwhale /app; \
+  chmod +x /app/docker/entrypoint.sh /app/docker/server.sh
 
-USER funkwhale
-
+# Stay root for entrypoint so bind-mounted data/static + data/media can be
+# chown'd when host ownership is wrong; entrypoint then su-exec's to funkwhale.
 ENV IS_DOCKER_SETUP=true
 
+ENTRYPOINT ["./docker/entrypoint.sh"]
 CMD ["./docker/server.sh"]

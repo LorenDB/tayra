@@ -51,8 +51,9 @@ services:
       - postgres
       - redis
     env_file: .env
-    # M5: non-root process (matches USER in api/Dockerfile).
-    user: "1000:1000"
+    # M5: process runs as UID 1000 via image entrypoint (su-exec after it
+    # fixes bind-mount ownership). Do not set user: here — that skips chown
+    # and breaks collectstatic on root-owned data/static.
     volumes:
       - "${MUSIC_DIRECTORY_SERVE_PATH:-./data/music}:${MUSIC_DIRECTORY_PATH:-/music}:ro"
       - "${MEDIA_HOST_PATH:-./data/media}:${MEDIA_ROOT:-/srv/funkwhale/data/media}"
@@ -66,7 +67,6 @@ services:
       - redis
       - api
     env_file: .env
-    user: "1000:1000"
     command:
       - celery
       - --app=funkwhale_api.taskapp
@@ -85,7 +85,6 @@ services:
       - redis
       - api
     env_file: .env
-    user: "1000:1000"
     command:
       - celery
       - --app=funkwhale_api.taskapp
