@@ -38,6 +38,37 @@ def test_admin_settings_correct_permission(db, logged_in_api_client, preferences
     assert len(response.data) == len(preferences.all())
 
 
+def test_admin_settings_hides_orphaned_preferences(
+    db, logged_in_api_client, preferences
+):
+    """Unregistered DB rows (e.g. removed OIDC prefs) must not appear in the UI."""
+    from dynamic_preferences.models import GlobalPreferenceModel
+
+    user = logged_in_api_client.user
+    user.permission_settings = True
+    user.save()
+
+    GlobalPreferenceModel.objects.create(
+        section="users",
+        name="oidc_enabled",
+        raw_value="True",
+    )
+    GlobalPreferenceModel.objects.create(
+        section="users",
+        name="oidc_display_name",
+        raw_value='"Okta"',
+    )
+
+    url = reverse("api:v1:instance:admin-settings-list")
+    response = logged_in_api_client.get(url)
+    assert response.status_code == 200
+
+    identifiers = {row["identifier"] for row in response.data}
+    assert "users__oidc_enabled" not in identifiers
+    assert "users__oidc_display_name" not in identifiers
+    assert len(response.data) == len(preferences.all())
+
+
 def test_manifest_endpoint(api_client, preferences):
     with mock.patch(
         "funkwhale_api.instance.views.PWA_MANIFEST",

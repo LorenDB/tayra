@@ -36,6 +36,37 @@ class AdminSettings(preferences_viewsets.GlobalPreferencesViewSet):
     permission_classes = [oauth_permissions.ScopePermission]
     required_scope = "instance:settings"
 
+    def get_queryset(self):
+        """
+        List only preferences still registered in code.
+
+        GlobalPreferenceModel.objects.all() also returns orphaned rows left
+        after a preference is removed from the registry (django-dynamic-
+        preferences falls back to MissingPreference and would still show them
+        in Instance settings). OIDC was moved to env-only; those rows must not
+        appear in the admin UI.
+        """
+        self.init_preferences()
+        registered = {
+            (pref.section.name if pref.section else None, pref.name)
+            for pref in global_preferences_registry.preferences()
+        }
+        qs = self.queryset
+        if not registered:
+            qs = qs.none()
+        else:
+            from django.db.models import Q
+
+            match = Q(pk__in=[])
+            for section, name in registered:
+                match |= Q(section=section, name=name)
+            qs = qs.filter(match)
+
+        section = self.request.query_params.get("section")
+        if section:
+            qs = qs.filter(section=section)
+        return qs
+
 
 class InstanceSettings(generics.GenericAPIView):
     permission_classes = []

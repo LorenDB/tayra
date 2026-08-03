@@ -1466,6 +1466,9 @@ class FunkwhaleApi {
   // via first-party Tayra OAuth. Endpoints under `/api/v1/instance/admin/`.
 
   /// GET `/api/v1/instance/admin/settings/` — all global preferences.
+  ///
+  /// OIDC is configured only via server env (`OIDC_*`); any leftover
+  /// `users__oidc_*` preference rows are hidden client-side as well.
   Future<List<GlobalPreference>> getAdminSettings() async {
     final response = await _dio.get(
       '$_baseUrl/api/v1/instance/admin/settings/',
@@ -1475,6 +1478,7 @@ class FunkwhaleApi {
     return data
         .whereType<Map>()
         .map((e) => GlobalPreference.fromJson(Map<String, dynamic>.from(e)))
+        .where((p) => !_isEnvOnlyOidcPreference(p))
         .toList();
   }
 
@@ -1603,4 +1607,11 @@ class FunkwhaleApi {
       data: {'action': action, 'objects': ids},
     );
   }
+}
+
+/// OIDC is configured via `OIDC_*` env only; hide any leftover instance prefs.
+bool _isEnvOnlyOidcPreference(GlobalPreference pref) {
+  if (pref.section == 'users' && pref.name.startsWith('oidc_')) return true;
+  if (pref.identifier.startsWith('users__oidc_')) return true;
+  return false;
 }
