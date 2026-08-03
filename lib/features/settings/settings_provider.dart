@@ -213,7 +213,8 @@ class SettingsNotifier extends Notifier<SettingsState> {
   static const _keyAutoDownloadPodcastEpisodeCount =
       'auto_download_podcast_episode_count';
 
-  // H5: API keys go in platform secure storage on native targets.
+  // H5: API keys go in platform secure storage where it is durable
+  // (see AppPlatform.useSecureStorage; macOS uses SharedPreferences).
   static bool get _useSecure => AppPlatform.useSecureStorage;
   static const FlutterSecureStorage _secure = FlutterSecureStorage();
 
@@ -230,7 +231,21 @@ class SettingsNotifier extends Notifier<SettingsState> {
       }
       return '';
     }
-    return prefs.getString(key) ?? '';
+    final fromPrefs = prefs.getString(key);
+    if (fromPrefs != null && fromPrefs.isNotEmpty) return fromPrefs;
+
+    // Recover keys written only to Keychain during the macOS H5 window.
+    if (AppPlatform.isMacOS) {
+      try {
+        final fromKeychain = await _secure.read(key: key);
+        if (fromKeychain != null && fromKeychain.isNotEmpty) {
+          await prefs.setString(key, fromKeychain);
+          await _secure.delete(key: key);
+          return fromKeychain;
+        }
+      } catch (_) {}
+    }
+    return '';
   }
 
   static Future<void> _writeSecret(

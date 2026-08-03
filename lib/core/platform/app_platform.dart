@@ -25,12 +25,20 @@ abstract final class AppPlatform {
 
   /// Prefer platform secure storage for secrets (OAuth tokens, API keys).
   ///
-  /// Enabled on all **native** platforms (Android Keystore, iOS/macOS Keychain,
-  /// Linux libsecret, Windows Credential Manager / DPAPI). Web has no
-  /// equivalent that survives XSS, so it still uses SharedPreferences
-  /// (localStorage); keep the SPA CSP tight and treat web tokens as
-  /// browser-compromisable.
-  static bool get useSecureStorage => !isWeb;
+  /// Enabled on Android (Keystore), iOS (Keychain), Linux (libsecret), and
+  /// Windows (Credential Manager / DPAPI).
+  ///
+  /// **macOS is excluded:** a sandboxed macOS app needs Keychain Sharing /
+  /// `keychain-access-groups` (and a working provisioning profile) for
+  /// Keychain items to survive relaunch. Without that, `flutter_secure_storage`
+  /// accepts writes but credentials vanish on next start — which looks like
+  /// "auth is not persisted". Until those entitlements are set up for
+  /// distribution builds, macOS keeps secrets in SharedPreferences.
+  ///
+  /// Web has no XSS-resistant store either, so it also uses
+  /// SharedPreferences (localStorage); keep the SPA CSP tight and treat web
+  /// tokens as browser-compromisable.
+  static bool get useSecureStorage => !isWeb && !isMacOS;
 
   /// Compile-time pod URL for branded web builds.
   ///

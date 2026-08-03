@@ -268,8 +268,9 @@ class AuthNotifier extends Notifier<AuthState> {
   static const _redirectUri = 'urn:ietf:wg:oauth:2.0:oob';
   static const _scopes = 'read write';
 
-  // H5: native platforms use Keychain/Keystore/libsecret/DPAPI. Web cannot
-  // protect secrets from XSS; see AppPlatform.useSecureStorage.
+  // H5: prefer platform secure storage where it is durable. macOS sandboxed
+  // Keychain is not (without keychain-access-groups), so that platform uses
+  // SharedPreferences — see AppPlatform.useSecureStorage.
   static bool get _useSecureStorage => AppPlatform.useSecureStorage;
 
   Future<String> _getAppName() async {
@@ -374,6 +375,43 @@ class AuthNotifier extends Notifier<AuthState> {
         refreshToken = prefs.getString(_keyRefreshToken);
         clientId = prefs.getString(_keyClientId);
         clientSecret = prefs.getString(_keyClientSecret);
+
+        // Best-effort recovery: a brief window of H5 wrote macOS tokens only
+        // into Keychain (which does not survive relaunch without entitlements).
+        // If anything is still readable, move it back to SharedPreferences.
+        if (AppPlatform.isMacOS && accessToken == null) {
+          try {
+            final kcAccess = await _storage.read(key: _keyAccessToken);
+            if (kcAccess != null && kcAccess.isNotEmpty) {
+              accessToken = kcAccess;
+              refreshToken ??= await _storage.read(key: _keyRefreshToken);
+              clientId ??= await _storage.read(key: _keyClientId);
+              clientSecret ??= await _storage.read(key: _keyClientSecret);
+
+              await prefs.setString(_keyAccessToken, accessToken);
+              if (refreshToken != null) {
+                await prefs.setString(_keyRefreshToken, refreshToken);
+              }
+              if (clientId != null) {
+                await prefs.setString(_keyClientId, clientId);
+              }
+              if (clientSecret != null) {
+                await prefs.setString(_keyClientSecret, clientSecret);
+              }
+              await _storage.delete(key: _keyAccessToken);
+              await _storage.delete(key: _keyRefreshToken);
+              await _storage.delete(key: _keyClientId);
+              await _storage.delete(key: _keyClientSecret);
+            }
+          } catch (e, stack) {
+            assert(() {
+              debugPrint(
+                'AuthNotifier: keychain recovery failed: $e\n$stack',
+              );
+              return true;
+            }());
+          }
+        }
       }
 
       if (accessToken != null) {

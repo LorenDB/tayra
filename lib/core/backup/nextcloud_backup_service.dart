@@ -249,6 +249,17 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
           }
         } else {
           token = prefs.getString(_secureTokenKey);
+          // Recover app password written only to Keychain on macOS (H5).
+          if ((token == null || token.isEmpty) && AppPlatform.isMacOS) {
+            try {
+              final fromKeychain = await _secure.read(key: _secureTokenKey);
+              if (fromKeychain != null && fromKeychain.isNotEmpty) {
+                await prefs.setString(_secureTokenKey, fromKeychain);
+                await _secure.delete(key: _secureTokenKey);
+                token = fromKeychain;
+              }
+            } catch (_) {}
+          }
         }
       }
 
@@ -936,8 +947,9 @@ class NextcloudBackupService {
   }
 
   /// Prefs keys (or substrings) that must never leave the device in a backup.
-  /// OAuth tokens and Nextcloud app passwords use secure storage on native
-  /// platforms; still denylist prefs keys for web / legacy plaintext.
+  /// OAuth tokens and Nextcloud app passwords use secure storage where durable
+  /// (see AppPlatform.useSecureStorage); still denylist prefs keys for web,
+  /// macOS, and legacy plaintext.
   static bool _isSensitiveSettingsKey(String key) =>
       isSensitiveSettingsKey(key);
 
