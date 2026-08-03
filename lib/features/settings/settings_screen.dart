@@ -169,15 +169,18 @@ class SettingsScreen extends ConsumerWidget {
 
           // ── Playback section ─────────────────────────────────────────
           SettingsSectionHeader(title: 'Playback'),
-          SettingsSwitchTile(
-            icon: Icons.music_note_outlined,
-            title: 'Gapless playback',
-            subtitle: 'Eliminate silence between tracks',
-            value: settings.gaplessPlayback,
-            onChanged: (value) {
-              ref.read(settingsProvider.notifier).setGaplessPlayback(value);
-            },
-          ),
+          // just_audio has no gapless support on web; multi-source playlists
+          // there can stick on the same audio after a few tracks.
+          if (!AppPlatform.isWeb)
+            SettingsSwitchTile(
+              icon: Icons.music_note_outlined,
+              title: 'Gapless playback',
+              subtitle: 'Eliminate silence between tracks',
+              value: settings.gaplessPlayback,
+              onChanged: (value) {
+                ref.read(settingsProvider.notifier).setGaplessPlayback(value);
+              },
+            ),
 
           const SizedBox(height: 24),
 

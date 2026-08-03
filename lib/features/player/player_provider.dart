@@ -1514,7 +1514,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
   ClientDataService get _clientData => ref.read(clientDataServiceProvider);
 
-  bool get _isGaplessEnabled => ref.read(settingsProvider).gaplessPlayback;
+  /// Gapless (concatenated multi-source) playlists. Disabled on web:
+  /// just_audio does not support gapless there, and using [setAudioSources]
+  /// on HTML5 audio leaves the UI able to advance while the same decoded
+  /// audio keeps playing after a few track changes.
+  bool get _isGaplessEnabled =>
+      !AppPlatform.isWeb && ref.read(settingsProvider).gaplessPlayback;
 
   /// Server listen: rich POST when client-data supported, else thin scrobble.
   Future<void> _recordServerListen(Track track) async {
@@ -1593,6 +1598,14 @@ class PlayerNotifier extends Notifier<PlayerState> {
     Duration? initialPosition,
   }) async {
     _needsReload = false;
+
+    // Web: single HTMLAudioElement cannot do reliable multi-source/gapless
+    // playlists (just_audio marks gapless unsupported on web). Always fall
+    // back so each skip reloads via [setAudioSource].
+    if (AppPlatform.isWeb) {
+      _gaplessActive = false;
+      return false;
+    }
 
     // Offline: gapless would mix stream URLs for uncached tracks and stall.
     // Force the single-track path which skips uncached items.
@@ -2560,6 +2573,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }) async {
     final loadEpoch = epoch ?? _loadEpoch;
     _needsReload = false;
+    // Single-source load always replaces any multi-source playlist.
+    _gaplessActive = false;
     try {
       final listenUrl = track.listenUrl;
       if (listenUrl == null) {
