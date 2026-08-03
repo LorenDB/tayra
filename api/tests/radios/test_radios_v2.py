@@ -1,6 +1,6 @@
 import json
 import logging
-import pickle
+
 import random
 
 from django.core.cache import cache
@@ -118,8 +118,10 @@ def test_can_cache_radio_track(factories):
     session = radio.start_session(user)
     picked = session.radio(api_version=2).pick_many(quantity=1, filter_playable=False)
     assert len(picked) == 1
-    for t in pickle.loads(cache.get(f"radiotracks{session.id}")):
-        assert t in uploads
+    cached_ids = radios_v2.load_radio_track_ids(session.id)
+    upload_ids = {t.pk for t in uploads}
+    for tid in cached_ids:
+        assert tid in upload_ids
 
 
 def test_regenerate_cache_if_not_enought_tracks_in_it(

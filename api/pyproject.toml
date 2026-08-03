@@ -30,7 +30,8 @@ setuptools = "==60.10.0"
 
 # Django
 dj-rest-auth = { extras = ["with_social"], version = "2.2.8" }
-django = "==3.2.24"
+# M1: last 3.2 LTS patch (3.2 is EOL — plan Django 4.2+ upgrade next).
+django = "==3.2.25"
 django-allauth = "==0.42.0"
 django-cache-memoize = "0.1.10"
 django-cacheops = "==6.1"
@@ -67,21 +68,22 @@ gunicorn = "==20.1.0"
 uvicorn = { version = "==0.20.0", extras = ["standard"] }
 
 # Libs
-aiohttp = "==3.8.6"
+# M1: patched releases for known CVEs in aiohttp / cryptography / pillow / requests.
+aiohttp = "==3.10.11"
 arrow = "==1.2.3"
 backports-zoneinfo = { version = "==0.2.1", python = "<3.9" }
 bleach = "==5.0.1"
 boto3 = "==1.26.161"
 click = "==8.1.7"
-cryptography = "==38.0.4"
+cryptography = "==42.0.8"
 feedparser = "==6.0.11"
 musicbrainzngs = "==0.7.1"
 mutagen = "==1.46.0"
-pillow = "==9.3.0"
+pillow = "==10.4.0"
 pydub = "==0.25.1"
 pyld = "==2.0.4"
 python-magic = "==0.4.27"
-requests = "==2.28.2"
+requests = "==2.32.3"
 requests-http-message-signatures = "==0.3.1"
 PyJWT = { version = "==2.8.0", extras = ["crypto"] }
 sentry-sdk = "==1.19.1"

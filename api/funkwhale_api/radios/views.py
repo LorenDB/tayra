@@ -1,6 +1,3 @@
-import pickle
-
-from django.core.cache import cache
 from django.db.models import Q
 from drf_spectacular.utils import extend_schema
 from rest_framework import mixins, status, viewsets
@@ -12,7 +9,7 @@ from funkwhale_api.music import utils as music_utils
 from funkwhale_api.music.serializers import TrackSerializer
 from funkwhale_api.users.oauth import permissions as oauth_permissions
 
-from . import filters, filtersets, models, serializers
+from . import filters, filtersets, models, radios_v2, serializers
 
 
 class RadioViewSet(
@@ -201,8 +198,6 @@ class V2_RadioSessionViewSet(
         ):
             return Response(status=status.HTTP_403_FORBIDDEN)
         try:
-            from . import radios_v2  # noqa
-
             session.radio(api_version=2).pick_many(
                 count, filter_playable=filter_playable
             )
@@ -211,18 +206,14 @@ class V2_RadioSessionViewSet(
                 "Radio doesn't have more candidates", status=status.HTTP_404_NOT_FOUND
             )
 
-        # dirty override here, since we use a different serializer for creation and detail
-        evaluated_radio_tracks = pickle.loads(cache.get(f"radiotracks{session.id}"))
-        batch = evaluated_radio_tracks[:count]
-        serializer = TrackSerializer(
-            data=batch,
-            many="true",
-        )
-        serializer.is_valid()
+        # JSON list of track PKs only (M8 — no pickle of model instances).
+        track_ids = radios_v2.load_radio_track_ids(session.id)
+        batch_ids = track_ids[:count]
+        batch = radios_v2.tracks_from_ids(batch_ids)
+        serializer = TrackSerializer(batch, many=True)
 
-        # delete the tracks we sent from the cache
-        new_cached_radiotracks = evaluated_radio_tracks[count:]
-        cache.set(f"radiotracks{session.id}", pickle.dumps(new_cached_radiotracks))
+        remaining_ids = track_ids[count:]
+        radios_v2.store_radio_track_ids(session.id, remaining_ids)
 
         return Response(
             serializer.data,

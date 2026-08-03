@@ -1,6 +1,6 @@
 import datetime
 import os
-import random
+import secrets
 import string
 import uuid
 
@@ -27,13 +27,16 @@ from funkwhale_api.federation import utils as federation_utils
 
 
 def get_token(length=5):
+    """Return a space-free passphrase from the wordlist (secrets CSPRNG)."""
     wordlist_path = os.path.join(
         os.path.dirname(os.path.abspath(__file__)), "wordlist.txt"
     )
     with open(wordlist_path) as f:
-        words = f.readlines()
-    phrase = "".join(random.choice(words) for i in range(length))
-    return phrase.replace("\n", "-").rstrip("-")
+        words = [line.strip() for line in f if line.strip()]
+    if not words:
+        return secrets.token_urlsafe(16)
+    phrase = "-".join(secrets.choice(words) for _ in range(length))
+    return phrase.rstrip("-")
 
 
 PERMISSIONS_CONFIGURATION = {
@@ -431,9 +434,7 @@ class TotpRecoveryCode(models.Model):
 
 
 def generate_code(length=10):
-    return "".join(
-        random.SystemRandom().choice(string.ascii_uppercase) for _ in range(length)
-    )
+    return "".join(secrets.choice(string.ascii_uppercase) for _ in range(length))
 
 
 class InvitationQuerySet(models.QuerySet):

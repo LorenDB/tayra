@@ -93,4 +93,13 @@ void main() {
     expect(newOidcTxBinding().length, greaterThan(10));
     expect(newClientNonce(), isNot(newClientNonce()));
   });
+
+  test('PKCE S256 challenge is stable and non-empty', () {
+    final verifier = newPkceCodeVerifier();
+    expect(verifier.length, greaterThan(20));
+    final challenge = pkceCodeChallengeS256(verifier);
+    expect(challenge.length, greaterThan(20));
+    expect(pkceCodeChallengeS256(verifier), challenge);
+    expect(pkceCodeChallengeS256(newPkceCodeVerifier()), isNot(challenge));
+  });
 }

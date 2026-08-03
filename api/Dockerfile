@@ -1,12 +1,12 @@
-FROM alpine:3.17 as requirements
+# M11: supported Alpine (3.19 ships Python 3.11, within pyproject ^3.8,<3.12).
+FROM alpine:3.19 as requirements
 
 # Isolate poetry from runtime deps. Export only — pip installs the real
 # packages in the builder stage.
 #
-# poetry.lock is generated with Poetry 2.x (lock-version 2.1). Alpine 3.17
-# only ships Poetry 1.2.2, which cannot read that lock format. Install a
-# matching Poetry into its own venv (system pip conflicts with apk distutils
-# packages). poetry export lives in poetry-plugin-export as of Poetry 2.0.
+# poetry.lock is generated with Poetry 2.x (lock-version 2.1). Install a
+# matching Poetry into its own venv. poetry export lives in poetry-plugin-export
+# as of Poetry 2.0.
 
 RUN set -eux; \
   apk add --no-cache \
@@ -21,13 +21,15 @@ RUN set -eux; \
   poetry export --without-hashes --extras typesense > requirements.txt; \
   poetry export --without-hashes --with dev > dev-requirements.txt;
 
-FROM alpine:3.17 as builder
+FROM alpine:3.19 as builder
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ARG PIP_NO_CACHE_DIR=1
 ENV CARGO_NET_GIT_FETCH_WITH_CLI=true
 
+# M1/M11: install build deps; security-sensitive pure/wheels come from pip
+# (cryptography, pillow, aiohttp) rather than EOL Alpine package pins.
 RUN set -eux; \
   apk add --no-cache \
   cargo \
@@ -46,11 +48,8 @@ RUN set -eux; \
   openssl-dev \
   postgresql-dev \
   zlib-dev \
-  py3-cryptography=38.0.3-r1 \
-  py3-lxml=4.9.3-r1 \
-  py3-pillow=9.3.0-r0 \
-  py3-psycopg2=2.9.5-r0 \
-  py3-watchfiles=0.18.1-r0 \
+  py3-lxml \
+  py3-psycopg2 \
   python3-dev
 
 # Create virtual env
@@ -68,32 +67,24 @@ RUN --mount=type=cache,target=~/.cache/pip; \
   set -eux; \
   pip3 install --upgrade "pip==24.0"; \
   pip3 install "setuptools==60.10.0" "wheel==0.42.0"; \
-  # Currently we are unable to relieably build rust-based packages on armv7. This
-  # is why we need to use the packages shipped by Alpine Linux.
-  # Since poetry does not allow in-place dependency pinning, we need
-  # to install the deps using pip.
-  grep -Ev 'cryptography|lxml|pillow|psycopg2|watchfiles' /requirements.txt \
+  # lxml/psycopg2 still prefer Alpine system packages on armv7; everything
+  # else (including cryptography, pillow) installs from requirements.
+  grep -Ev 'lxml|psycopg2' /requirements.txt \
   | pip3 install --no-build-isolation -r /dev/stdin \
-  cryptography==38.0.3 \
-  lxml==4.9.3 \
-  pillow==9.3.0 \
-  psycopg2==2.9.5 \
-  watchfiles==0.18.1
+  lxml \
+  psycopg2
 
 ARG install_dev_deps=0
 RUN --mount=type=cache,target=~/.cache/pip; \
   set -eux; \
   if [ "$install_dev_deps" = "1" ] ; then \
-    grep -Ev 'cryptography|lxml|pillow|psycopg2|watchfiles' /dev-requirements.txt \
+    grep -Ev 'lxml|psycopg2' /dev-requirements.txt \
     | pip3 install --no-build-isolation -r /dev/stdin \
-    cryptography==38.0.3 \
-    lxml==4.9.3 \
-    pillow==9.3.0 \
-    psycopg2==2.9.5 \
-    watchfiles==0.18.1; \
+    lxml \
+    psycopg2; \
   fi
 
-FROM alpine:3.17 as production
+FROM alpine:3.19 as production
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
@@ -104,24 +95,27 @@ RUN set -eux; \
   bash \
   ffmpeg \
   gettext \
-  jpeg-dev \
+  jpeg \
+  libffi \
   libldap \
   libmagic \
   libpq \
   libxml2 \
   libxslt \
-  py3-cryptography=38.0.3-r1 \
-  py3-lxml=4.9.3-r1 \
-  py3-pillow=9.3.0-r0 \
-  py3-psycopg2=2.9.5-r0 \
-  py3-watchfiles=0.18.1-r0 \
+  py3-lxml \
+  py3-psycopg2 \
   python3 \
-  tzdata
+  tzdata; \
+  # M5: run API/celery as non-root
+  addgroup -g 1000 -S funkwhale; \
+  adduser -u 1000 -S -G funkwhale -h /app -s /sbin/nologin funkwhale; \
+  mkdir -p /srv/funkwhale/data/media /srv/funkwhale/data/static /music; \
+  chown -R funkwhale:funkwhale /srv/funkwhale
 
 COPY --from=builder /venv /venv
 ENV PATH="/venv/bin:$PATH"
 
-COPY . /app
+COPY --chown=funkwhale:funkwhale . /app
 WORKDIR /app
 
 # Fail the build if a .dockerignore (or incomplete checkout) dropped the
@@ -130,7 +124,10 @@ RUN test -f funkwhale_api/typesense/__init__.py
 
 RUN --mount=type=cache,target=~/.cache/pip; \
   set -eux; \
-  pip3 install --no-deps --editable .
+  pip3 install --no-deps --editable .; \
+  chown -R funkwhale:funkwhale /app /venv
+
+USER funkwhale
 
 ENV IS_DOCKER_SETUP=true
 

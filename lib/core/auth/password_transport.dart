@@ -201,3 +201,21 @@ String newOidcTxBinding({int bytes = 32}) {
   final buf = List<int>.generate(bytes, (_) => rnd.nextInt(256));
   return base64Url.encode(buf).replaceAll('=', '');
 }
+
+/// OAuth/OIDC `state` parameter (login CSRF protection — M3).
+String newOidcClientState({int bytes = 32}) => newOidcTxBinding(bytes: bytes);
+
+// ── PKCE (RFC 7636) ─────────────────────────────────────────────────────
+
+/// High-entropy `code_verifier` for OAuth PKCE (M2).
+String newPkceCodeVerifier({int bytes = 32}) {
+  final rnd = Random.secure();
+  final buf = List<int>.generate(bytes, (_) => rnd.nextInt(256));
+  return base64Url.encode(buf).replaceAll('=', '');
+}
+
+/// S256 `code_challenge` for [codeVerifier].
+String pkceCodeChallengeS256(String codeVerifier) {
+  final digest = sha256.convert(utf8.encode(codeVerifier));
+  return base64Url.encode(digest.bytes).replaceAll('=', '');
+}

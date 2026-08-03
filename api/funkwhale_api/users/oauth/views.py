@@ -49,17 +49,36 @@ class ApplicationViewSet(
 
     def create(self, request, *args, **kwargs):
         request_data = request.data.copy()
-        secret = secrets.token_hex(64)
+        # M2: default to public clients (PKCE, no client_secret). Confidential
+        # apps remain available when explicitly requested by authenticated users.
+        requested_type = (request_data.get("client_type") or "").strip().lower()
+        if requested_type == models.Application.CLIENT_CONFIDENTIAL:
+            if not request.user.is_authenticated:
+                return response.Response(
+                    {"detail": "Authentication required for confidential clients."},
+                    status=403,
+                )
+            client_type = models.Application.CLIENT_CONFIDENTIAL
+            secret = secrets.token_hex(64)
+        else:
+            client_type = models.Application.CLIENT_PUBLIC
+            secret = ""
         request_data["client_secret"] = secret
         serializer = self.get_serializer(
             data=request_data, context={"include_token": True}
         )
         serializer.is_valid(raise_exception=True)
+        self._create_client_type = client_type
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         data = serializer.data
-        # Since the serializer returns a hashed secret, we need to override it for the response.
-        data["client_secret"] = secret
+        # Public clients never receive a usable secret (M2).
+        if client_type == models.Application.CLIENT_PUBLIC:
+            data["client_secret"] = ""
+        else:
+            # Since the serializer returns a hashed secret, return the plain one once.
+            data["client_secret"] = secret
+        data["client_type"] = client_type
         return response.Response(data, status=201, headers=headers)
 
     def get_serializer_class(self):
@@ -68,8 +87,11 @@ class ApplicationViewSet(
         return super().get_serializer_class()
 
     def perform_create(self, serializer):
+        client_type = getattr(
+            self, "_create_client_type", models.Application.CLIENT_PUBLIC
+        )
         return serializer.save(
-            client_type=models.Application.CLIENT_CONFIDENTIAL,
+            client_type=client_type,
             authorization_grant_type=models.Application.GRANT_AUTHORIZATION_CODE,
             user=self.request.user if self.request.user.is_authenticated else None,
             token=models.get_token() if self.request.user.is_authenticated else None,

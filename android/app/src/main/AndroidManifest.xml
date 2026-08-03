@@ -26,6 +26,14 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <!-- M2: first-party OAuth / SSO deep links (tayra://oauth/callback, …) -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="tayra" android:host="oauth" android:pathPrefix="/"/>
+                <data android:scheme="tayra" android:host="sso" android:pathPrefix="/"/>
+            </intent-filter>
         </activity>
 
         <!-- audio_service foreground service -->

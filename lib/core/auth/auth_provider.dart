@@ -92,6 +92,9 @@ class AuthState {
   /// Instance requires this password user to configure TOTP after login.
   final bool totpSetupRequired;
 
+  /// Ephemeral PKCE code_verifier for the OAuth authorization-code fallback (M2).
+  final String? codeVerifier;
+
   const AuthState({
     this.serverUrl,
     this.accessToken,
@@ -105,6 +108,7 @@ class AuthState {
     this.listenToken,
     this.pendingMfaToken,
     this.totpSetupRequired = false,
+    this.codeVerifier,
   });
 
   bool get isAuthenticated => accessToken != null && serverUrl != null;
@@ -136,6 +140,8 @@ class AuthState {
     String? pendingMfaToken,
     bool clearPendingMfaToken = false,
     bool? totpSetupRequired,
+    String? codeVerifier,
+    bool clearCodeVerifier = false,
   }) {
     return AuthState(
       serverUrl: serverUrl ?? this.serverUrl,
@@ -156,6 +162,8 @@ class AuthState {
               ? null
               : (pendingMfaToken ?? this.pendingMfaToken),
       totpSetupRequired: totpSetupRequired ?? this.totpSetupRequired,
+      codeVerifier:
+          clearCodeVerifier ? null : (codeVerifier ?? this.codeVerifier),
     );
   }
 }
@@ -253,6 +261,10 @@ class AuthNotifier extends Notifier<AuthState> {
   static const _keyRefreshToken = 'refresh_token';
   static const _keyClientId = 'client_id';
   static const _keyClientSecret = 'client_secret';
+  /// Prefs key for OIDC login CSRF `state` (M3). Cleared after validation.
+  static const keyOidcPendingState = 'oidc_pending_state';
+  /// OOB paste-code fallback (still PKCE-bound). Prefer tayra:// when deep links
+  /// are wired; OOB remains for the authorization-code paste UX (M2).
   static const _redirectUri = 'urn:ietf:wg:oauth:2.0:oob';
   static const _scopes = 'read write';
 
@@ -458,19 +470,63 @@ class AuthNotifier extends Notifier<AuthState> {
     return uri.toString();
   }
 
+  /// Persist OIDC `state` before redirecting to the IdP (M3).
+  Future<void> storeOidcPendingState(String stateValue) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(keyOidcPendingState, stateValue);
+  }
+
+  /// Validate callback `state` against the value stored in [storeOidcPendingState].
+  ///
+  /// Returns false when missing or mismatched (login CSRF). Always clears the
+  /// stored value so it cannot be reused.
+  Future<bool> validateAndClearOidcState(String? callbackState) async {
+    final prefs = await SharedPreferences.getInstance();
+    final expected = prefs.getString(keyOidcPendingState);
+    await prefs.remove(keyOidcPendingState);
+    if (expected == null || expected.isEmpty) {
+      // No pending state (stale tab / direct navigation) — reject.
+      return false;
+    }
+    if (callbackState == null || callbackState.isEmpty) {
+      return false;
+    }
+    // Constant-time-ish compare for equal-length tokens.
+    if (expected.length != callbackState.length) return false;
+    var diff = 0;
+    for (var i = 0; i < expected.length; i++) {
+      diff |= expected.codeUnitAt(i) ^ callbackState.codeUnitAt(i);
+    }
+    return diff == 0;
+  }
+
   /// Complete OIDC SSO by exchanging a one-time code for first-party tokens.
   ///
   /// [txBinding] is required for native/OOB (must match the value passed to
   /// [buildOidcLoginUrl]). On web the session cookie is sent automatically.
+  ///
+  /// [clientState] must match the value sent to [buildOidcLoginUrl] / stored
+  /// via [storeOidcPendingState] (M3 login CSRF).
   Future<bool> completeOidcLogin({
     required String serverUrl,
     required String code,
     String? txBinding,
+    String? clientState,
   }) async {
     state = state.copyWith(isLoading: true, error: null);
     final url = _normalizeServerUrl(serverUrl);
     final endpoint =
         kIsWeb ? '/api/v1/users/oidc/token/' : '$url/api/v1/users/oidc/token/';
+
+    final stateOk = await validateAndClearOidcState(clientState);
+    if (!stateOk) {
+      state = state.copyWith(
+        isLoading: false,
+        error: 'SSO session mismatch. Start sign-in again from the login page.',
+      );
+      Analytics.track('login_sso_failed');
+      return false;
+    }
 
     try {
       final body = <String, dynamic>{
@@ -953,11 +1009,12 @@ class AuthNotifier extends Notifier<AuthState> {
     return 'Could not connect to server. Check the URL and try again.';
   }
 
-  /// Step 1: Register an OAuth application on the server (fallback / OOB).
+  /// Step 1: Register a **public** OAuth application (PKCE; no client_secret).
   Future<void> registerApp(String serverUrl) async {
     state = state.copyWith(isLoading: true, error: null);
 
     final url = _normalizeServerUrl(serverUrl);
+    final codeVerifier = newPkceCodeVerifier();
 
     try {
       final response = await _dio.post(
@@ -966,16 +1023,18 @@ class AuthNotifier extends Notifier<AuthState> {
           'name': await _getAppName(),
           'scopes': _scopes,
           'redirect_uris': _redirectUri,
+          'client_type': 'public',
         },
       );
 
       final clientId = response.data['client_id'] as String;
-      final clientSecret = response.data['client_secret'] as String?;
 
       state = state.copyWith(
         serverUrl: url,
         clientId: clientId,
-        clientSecret: clientSecret ?? '',
+        // Public clients must not store a secret (M2).
+        clientSecret: '',
+        codeVerifier: codeVerifier,
         isLoading: false,
       );
     } catch (e) {
@@ -988,20 +1047,35 @@ class AuthNotifier extends Notifier<AuthState> {
 
   /// Returns the authorization URL for the user to visit, or null if
   /// [registerApp] has not completed yet (serverUrl / clientId not set).
+  ///
+  /// Includes PKCE S256 challenge (M2).
   String? getAuthorizationUrl() {
     final serverUrl = state.serverUrl;
     final clientId = state.clientId;
-    if (serverUrl == null || clientId == null) return null;
+    final verifier = state.codeVerifier;
+    if (serverUrl == null || clientId == null || verifier == null) return null;
+    final challenge = pkceCodeChallengeS256(verifier);
     return '$serverUrl/authorize?'
         'response_type=code'
         '&client_id=$clientId'
         '&redirect_uri=${Uri.encodeComponent(_redirectUri)}'
-        '&scope=${Uri.encodeComponent(_scopes)}';
+        '&scope=${Uri.encodeComponent(_scopes)}'
+        '&code_challenge=${Uri.encodeComponent(challenge)}'
+        '&code_challenge_method=S256';
   }
 
-  /// Step 2: Exchange the authorization code for tokens.
+  /// Step 2: Exchange the authorization code for tokens (with PKCE verifier).
   Future<bool> exchangeCode(String code) async {
     state = state.copyWith(isLoading: true, error: null);
+
+    final verifier = state.codeVerifier;
+    if (verifier == null || verifier.isEmpty) {
+      state = state.copyWith(
+        isLoading: false,
+        error: 'Login session expired. Start authorization again.',
+      );
+      return false;
+    }
 
     try {
       final response = await _dio.post(
@@ -1010,8 +1084,8 @@ class AuthNotifier extends Notifier<AuthState> {
           'grant_type': 'authorization_code',
           'code': code.trim(),
           'client_id': state.clientId,
-          'client_secret': state.clientSecret,
           'redirect_uri': _redirectUri,
+          'code_verifier': verifier,
         },
         options: Options(contentType: Headers.formUrlEncodedContentType),
       );
@@ -1031,9 +1105,11 @@ class AuthNotifier extends Notifier<AuthState> {
       state = state.copyWith(
         accessToken: accessToken,
         refreshTokenValue: refreshToken,
+        clientSecret: '',
         isLoading: false,
         clearPendingServerUrl: true,
         clearListenToken: true,
+        clearCodeVerifier: true,
       );
 
       await _saveAuth();
@@ -1066,14 +1142,19 @@ class AuthNotifier extends Notifier<AuthState> {
     if (state.refreshTokenValue == null) return false;
 
     try {
+      // Public clients refresh without client_secret (M2).
+      final data = <String, dynamic>{
+        'grant_type': 'refresh_token',
+        'refresh_token': state.refreshTokenValue,
+        'client_id': state.clientId,
+      };
+      final secret = state.clientSecret;
+      if (secret != null && secret.isNotEmpty) {
+        data['client_secret'] = secret;
+      }
       final response = await _dio.post(
         '${state.serverUrl}/api/v1/oauth/token/',
-        data: {
-          'grant_type': 'refresh_token',
-          'refresh_token': state.refreshTokenValue,
-          'client_id': state.clientId,
-          'client_secret': state.clientSecret,
-        },
+        data: data,
         options: Options(contentType: Headers.formUrlEncodedContentType),
       );
 

@@ -5,13 +5,16 @@ version: "3"
 # Or build SPA into front/dist and use the production front image.
 
 services:
+  # Local dev still defaults to trust/no-auth for convenience. Production
+  # docker-compose.yml requires passwords (M5). Prefer passwords here too when
+  # exposing ports beyond the internal network.
   postgres:
     env_file:
       - .env.dev
       - .env
     image: postgres:${POSTGRES_VERSION-11}-alpine
     environment:
-      - "POSTGRES_HOST_AUTH_METHOD=trust"
+      - "POSTGRES_HOST_AUTH_METHOD=${POSTGRES_HOST_AUTH_METHOD:-trust}"
     command: postgres ${POSTGRES_ARGS-}
     volumes:
       - "./data/${COMPOSE_PROJECT_NAME-node1}/postgres:/var/lib/postgresql/data"

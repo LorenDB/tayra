@@ -953,11 +953,48 @@ def token_login_2fa(request):
             status=400,
         )
 
+    # M7: per-account lockout after repeated failed TOTP attempts (in addition
+    # to the IP-based login throttle above).
+    if totp_mod.is_totp_locked(user.pk):
+        _log_token_login("token_login_2fa locked user_id=%s", user.pk)
+        return Response(
+            {
+                "error": "totp_locked",
+                "detail": (
+                    "Too many failed two-factor attempts. "
+                    "Try again later or use a recovery code after the lockout."
+                ),
+                "non_field_errors": [
+                    "Too many failed two-factor attempts. Try again later."
+                ],
+            },
+            status=429,
+        )
+
     from django.db import transaction
 
     with transaction.atomic():
         if not totp_mod.verify_user_totp(user, code):
-            _log_token_login("token_login_2fa invalid_code user_id=%s", user.pk)
+            locked = totp_mod.record_totp_failure(user.pk)
+            _log_token_login(
+                "token_login_2fa invalid_code user_id=%s locked=%s",
+                user.pk,
+                locked,
+            )
+            if locked:
+                return Response(
+                    {
+                        "error": "totp_locked",
+                        "detail": (
+                            "Too many failed two-factor attempts. "
+                            "Try again later."
+                        ),
+                        "non_field_errors": [
+                            "Too many failed two-factor attempts. Try again later."
+                        ],
+                    },
+                    status=429,
+                )
             return Response(
                 {
                     "error": "invalid_totp",
@@ -967,6 +1004,7 @@ def token_login_2fa(request):
                 status=400,
             )
 
+    totp_mod.clear_totp_failures(user.pk)
     return _issue_token_response(user, meta="2fa")
 
 

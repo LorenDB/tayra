@@ -394,6 +394,8 @@ deploy_docs:
 
 docker:
   interruptible: false
+  # M12: multiarch buildx still needs a privileged DinD-capable runner; TLS to
+  # the daemon is required. Registry passwords only via --password-stdin.
   tags: [docker, privileged, multiarch]
   stage: build
   needs:
@@ -419,7 +421,8 @@ docker:
           --set *.cache-to=type=registry,ref=$DOCKER_CACHE_IMAGE:$CI_COMMIT_BRANCH,mode=max,oci-mediatypes=false
           --push
 
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    # M12: same-project MR builds only (no push, no fork runners minting images).
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_SOURCE_PROJECT_ID == $CI_PROJECT_ID
       variables:
         BUILD_ARGS: >
           --set *.platform=linux/amd64
@@ -427,20 +430,24 @@ docker:
 
   image: $CI_REGISTRY/funkwhale/ci/docker:20
   services:
+    # TLS DinD (M12): docker:dind mints certs under DOCKER_TLS_CERTDIR.
     - docker:20-dind
   variables:
     <<: *keep_git_files_permissions
-    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_HOST: tcp://docker:2376
     DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ""
+    DOCKER_TLS_CERTDIR: "/certs"
+    DOCKER_TLS_VERIFY: "1"
+    DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
     BUILDKIT_PROGRESS: plain
 
     DOCKER_CACHE_IMAGE: $CI_REGISTRY/funkwhale/funkwhale/cache
   before_script:
-    - >
-      echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY";
-      if [[ "$BUILD_ARGS" =~ "--push" ]]; then
-        echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_LOGIN" --password-stdin docker.io;
+    - |
+      set -euo pipefail
+      echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+      if [[ "${BUILD_ARGS:-}" == *"--push"* ]]; then
+        echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_LOGIN" --password-stdin docker.io
       fi
   script:
     - >
@@ -454,3 +461,4 @@ docker:
     name: docker_metadata_${CI_COMMIT_REF_NAME}
     paths:
       - metadata.json
+    expire_in: 1 week

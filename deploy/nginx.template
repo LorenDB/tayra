@@ -81,7 +81,8 @@ server {
     # end of compression settings
 
     # headers
-    add_header Content-Security-Policy "default-src 'self'; connect-src https: wss: http: ws: 'self' 'unsafe-eval'; script-src 'self' 'wasm-unsafe-eval' 'unsafe-eval' blob:; worker-src 'self' blob:; style-src https: http: 'self' 'unsafe-inline'; img-src https: http: 'self' data: blob:; font-src https: http: 'self' data:; media-src https: http: 'self' data: blob:; object-src 'none'; frame-src 'none'";
+    # M15: tighten CSP — no script 'unsafe-eval'; wasm-unsafe-eval for CanvasKit.
+    add_header Content-Security-Policy "default-src 'self'; connect-src https: wss: http: ws: 'self'; script-src 'self' 'wasm-unsafe-eval' blob:; worker-src 'self' blob:; style-src https: http: 'self' 'unsafe-inline'; img-src https: http: 'self' data: blob:; font-src https: http: 'self' data:; media-src https: http: 'self' data: blob:; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'";
     add_header Referrer-Policy "strict-origin-when-cross-origin";
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header Service-Worker-Allowed "/";
@@ -123,7 +124,7 @@ server {
 
     location ~ "/(front/)?embed.html" {
         alias ${FUNKWHALE_FRONTEND_PATH}/embed.html;
-        add_header Content-Security-Policy "connect-src https: http: 'self'; default-src 'self'; script-src 'self' unpkg.com 'unsafe-inline' 'unsafe-eval'; style-src https: http: 'self' 'unsafe-inline'; img-src https: http: 'self' data:; font-src https: http: 'self' data:; object-src 'none'; media-src https: http: 'self' data:";
+        add_header Content-Security-Policy "connect-src https: http: 'self'; default-src 'self'; script-src 'self' unpkg.com; style-src https: http: 'self' 'unsafe-inline'; img-src https: http: 'self' data:; font-src https: http: 'self' data:; object-src 'none'; media-src https: http: 'self' data:; base-uri 'self'";
         add_header Referrer-Policy "strict-origin-when-cross-origin";
 
         expires 1d;

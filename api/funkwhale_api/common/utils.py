@@ -80,14 +80,14 @@ class ChunkedPath:
         self.preserve_file_name = preserve_file_name
 
     def __call__(self, instance, filename):
-        self.sanitize_filename(filename)
+        safe_name = self.sanitize_filename(filename)
         uid = str(uuid.uuid4())
         chunk_size = 2
         chunks = [uid[i : i + chunk_size] for i in range(0, len(uid), chunk_size)]
         if self.preserve_file_name:
-            parts = chunks[:3] + [filename]
+            parts = chunks[:3] + [safe_name]
         else:
-            ext = os.path.splitext(filename)[1][1:].lower()
+            ext = os.path.splitext(safe_name)[1][1:].lower()
             new_filename = "".join(chunks[3:]) + f".{ext}"
             parts = chunks[:3] + [new_filename]
         return os.path.join(self.root, *parts)

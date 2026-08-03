@@ -701,7 +701,8 @@ AUTHENTICATION_BACKENDS = (
     "funkwhale_api.users.auth_backends.ModelBackend",
     "funkwhale_api.users.auth_backends.AllAuthBackend",
 )
-SESSION_COOKIE_HTTPONLY = False
+# M15: never expose session cookies to JavaScript (XSS → session theft).
+SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_AGE = env.int("SESSION_COOKIE_AGE", default=3600 * 25 * 60)
 
 # Some really nice defaults
@@ -732,9 +733,23 @@ LOGIN_URL = "account_login"
 # OAuth configuration
 from funkwhale_api.users.oauth import scopes  # noqa
 
+def _oauth_pkce_required(client_id):
+    """Require PKCE for public OAuth clients (M2). Confidential apps optional."""
+    from oauth2_provider.models import get_application_model
+
+    Application = get_application_model()
+    try:
+        app = Application.objects.get(client_id=client_id)
+    except Application.DoesNotExist:
+        # Unknown client: require PKCE (fail closed for public-style clients).
+        return True
+    return app.client_type == Application.CLIENT_PUBLIC
+
+
 OAUTH2_PROVIDER = {
     "SCOPES": {s.id: s.label for s in scopes.SCOPES_BY_ID.values()},
-    "ALLOWED_REDIRECT_URI_SCHEMES": ["http", "https", "urn"],
+    # Include first-party app scheme for native OAuth redirects (M2).
+    "ALLOWED_REDIRECT_URI_SCHEMES": ["http", "https", "urn", "tayra"],
     # we keep expired tokens for 15 days, for tracability
     "REFRESH_TOKEN_EXPIRE_SECONDS": 3600 * 24 * 15,
     "AUTHORIZATION_CODE_EXPIRE_SECONDS": 5 * 60,
@@ -742,7 +757,7 @@ OAUTH2_PROVIDER = {
         "ACCESS_TOKEN_EXPIRE_SECONDS", default=60 * 60 * 10
     ),
     "OAUTH2_SERVER_CLASS": "funkwhale_api.users.oauth.server.OAuth2Server",
-    "PKCE_REQUIRED": False,
+    "PKCE_REQUIRED": _oauth_pkce_required,
 }
 OAUTH2_PROVIDER_APPLICATION_MODEL = "users.Application"
 OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL = "users.AccessToken"
@@ -1060,12 +1075,91 @@ Validators include password length, common words, similarity with username.
 if DISABLE_PASSWORD_VALIDATORS:
     AUTH_PASSWORD_VALIDATORS = []
 ACCOUNT_ADAPTER = "funkwhale_api.users.adapters.FunkwhaleAccountAdapter"
-CORS_ORIGIN_ALLOW_ALL = True
-# CORS_ORIGIN_WHITELIST = (
-#     'localhost',
-#     'funkwhale.localhost',
-# )
-CORS_ALLOW_CREDENTIALS = True
+
+# ── CORS (M4) ────────────────────────────────────────────────────────────
+# Never combine Access-Control-Allow-Origin reflection of arbitrary origins
+# with credentials — any malicious site could then use the victim's session
+# cookie. Restrict to the pod origin + explicit extras.
+
+
+def _cors_origin(url: str):
+    """Return ``scheme://netloc`` for an absolute URL, or None."""
+    if not url or not isinstance(url, str):
+        return None
+    text = url.strip()
+    if not text:
+        return None
+    if "://" not in text:
+        text = "https://" + text
+    try:
+        parsed = urlsplit(text)
+    except Exception:
+        return None
+    if not parsed.scheme or not parsed.netloc:
+        return None
+    if "@" in parsed.netloc:
+        return None
+    return f"{parsed.scheme.lower()}://{parsed.netloc.lower()}"
+
+
+def _default_cors_allowed_origins():
+    origins = set()
+    for candidate in (
+        FUNKWHALE_URL,
+        FUNKWHALE_SPA_HTML_ROOT
+        if str(FUNKWHALE_SPA_HTML_ROOT).startswith(("http://", "https://"))
+        else None,
+        FUNKWHALE_EMBED_URL,
+    ):
+        origin = _cors_origin(candidate) if candidate else None
+        if origin:
+            origins.add(origin)
+    for entry in env.list("CORS_ALLOWED_ORIGINS", default=[]):
+        origin = _cors_origin(entry)
+        if origin:
+            origins.add(origin)
+    # Optional localhost helpers for cross-port Flutter web / tools.
+    if env.bool("CORS_ALLOW_LOCALHOST", default=False):
+        for host in ("localhost", "127.0.0.1"):
+            for port in ("", ":5000", ":8080", ":3000", ":4173", ":5173"):
+                origins.add(f"http://{host}{port}")
+                origins.add(f"https://{host}{port}")
+    return sorted(origins)
+
+
+# Escape hatch only for emergency debugging — never with credentials.
+CORS_ALLOW_ALL_ORIGINS = env.bool("CORS_ALLOW_ALL_ORIGINS", default=False)
+# Legacy alias used by older django-cors-headers docs / env snippets.
+CORS_ORIGIN_ALLOW_ALL = CORS_ALLOW_ALL_ORIGINS
+CORS_ALLOWED_ORIGINS = _default_cors_allowed_origins()
+CORS_ORIGIN_WHITELIST = CORS_ALLOWED_ORIGINS  # legacy alias
+CORS_ALLOW_CREDENTIALS = env.bool("CORS_ALLOW_CREDENTIALS", default=True)
+CORS_URLS_REGEX = env("CORS_URLS_REGEX", default=r"^.*$")
+
+if CORS_ALLOW_ALL_ORIGINS and CORS_ALLOW_CREDENTIALS:
+    from django.core.exceptions import ImproperlyConfigured
+
+    raise ImproperlyConfigured(
+        "CORS_ALLOW_ALL_ORIGINS and CORS_ALLOW_CREDENTIALS cannot both be true "
+        "(M4). Restrict CORS_ALLOWED_ORIGINS to your pod origin, or disable "
+        "credentials. Set CORS_ALLOW_ALL_ORIGINS=false (default)."
+    )
+
+# Align CSRF trusted origins with the CORS allowlist (hostnames without scheme
+# for Django <4 style lists; absolute origins also accepted on newer Django).
+_csrf_from_cors = []
+for _origin in CORS_ALLOWED_ORIGINS:
+    _p = urlsplit(_origin)
+    if _p.netloc:
+        _csrf_from_cors.append(_p.netloc)
+CSRF_TRUSTED_ORIGINS = list(
+    dict.fromkeys(
+        list(env.list("CSRF_TRUSTED_ORIGINS", default=[]))
+        + list(ALLOWED_HOSTS)
+        + _csrf_from_cors
+    )
+)
+CSRF_COOKIE_HTTPONLY = True
 
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "funkwhale_api.common.pagination.FunkwhalePagination",
@@ -1076,10 +1170,13 @@ REST_FRAMEWORK = {
         "rest_framework.parsers.MultiPartParser",
         "funkwhale_api.federation.parsers.ActivityParser",
     ),
+    # M4: OAuth bearer tokens are the primary API auth. SessionAuthentication
+    # stays for same-origin SPA / admin / authorize UI only — safe once CORS
+    # no longer reflects arbitrary origins with credentials. Basic auth is
+    # disabled by default (enable via API_ENABLE_BASIC_AUTH for legacy tools).
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "funkwhale_api.common.authentication.OAuth2Authentication",
         "funkwhale_api.common.authentication.ApplicationTokenAuthentication",
-        "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": (
@@ -1092,6 +1189,15 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
     "NUM_PROXIES": env.int("NUM_PROXIES", default=1),
 }
+# Opt-in Basic auth for legacy Subsonic-adjacent tools / debugging only.
+if env.bool("API_ENABLE_BASIC_AUTH", default=False):
+    REST_FRAMEWORK["DEFAULT_AUTHENTICATION_CLASSES"] = (
+        "funkwhale_api.common.authentication.OAuth2Authentication",
+        "funkwhale_api.common.authentication.ApplicationTokenAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    )
+
 THROTTLING_ENABLED = env.bool("THROTTLING_ENABLED", default=True)
 """
 Whether to enable throttling (also known as rate-limiting).

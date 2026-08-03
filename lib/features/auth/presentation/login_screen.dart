@@ -39,6 +39,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   /// SSO transaction binding for native OOB (must match login start + redeem).
   String? _ssoTxBinding;
 
+  /// OIDC login CSRF state for native OOB (M3; OOB page does not echo state).
+  String? _ssoClientState;
+
   AuthMethods _authMethods = AuthMethods.disabled;
   bool _authMethodsLoading = false;
   String? _lastAuthMethodsServer;
@@ -707,11 +710,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     // Web relies on the HttpOnly oidc_tx cookie set by the API.
     final txBinding = kIsWeb ? null : newOidcTxBinding();
 
+    // M3: login CSRF state — echoed by the API on redirect / required on redeem.
+    final clientState = newOidcClientState();
+    await notifier.storeOidcPendingState(clientState);
+
     final loginPath = _authMethods.oidcLoginPath;
     var loginUrl = notifier.buildOidcLoginUrl(
       serverUrl: server,
       clientRedirect: clientRedirect,
       loginPath: loginPath,
+      clientState: clientState,
       txBinding: txBinding,
     );
 
@@ -731,6 +739,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         _step = 1;
         _ssoOob = true;
         _ssoTxBinding = txBinding;
+        _ssoClientState = clientState;
       });
     }
 
@@ -764,6 +773,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             serverUrl: server,
             code: _codeController.text,
             txBinding: _ssoTxBinding,
+            // OOB HTML does not echo state; use the value generated at start (M3).
+            clientState: _ssoClientState,
           );
       return;
     }

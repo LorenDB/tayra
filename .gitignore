@@ -79,6 +79,9 @@ tsconfig.tsbuildinfo
 
 # ── Env, data, docs build ─────────────────────────────────────────────
 .env
+.env.dev
+.env.local
+.env.*.local
 data/
 /data/
 docs/_build

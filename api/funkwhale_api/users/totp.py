@@ -18,6 +18,7 @@ from urllib.parse import quote
 
 from django.conf import settings
 from django.core import signing
+from django.core.cache import cache
 from django.utils import timezone
 
 from funkwhale_api.common import preferences
@@ -31,6 +32,53 @@ MFA_TOKEN_MAX_AGE = 5 * 60  # seconds
 SETUP_TOKEN_SALT = "tayra-totp-setup"
 SETUP_TOKEN_MAX_AGE = 15 * 60
 RECOVERY_CODE_COUNT = 8
+
+# Per-account TOTP / recovery-code lockout (M7) — independent of IP throttling.
+TOTP_FAIL_LIMIT = 5
+TOTP_FAIL_WINDOW = 15 * 60  # seconds
+TOTP_LOCKOUT_SECONDS = 15 * 60
+
+
+def _totp_fail_cache_key(user_id: int) -> str:
+    return f"totp:fail:{int(user_id)}"
+
+
+def _totp_lock_cache_key(user_id: int) -> str:
+    return f"totp:lock:{int(user_id)}"
+
+
+def is_totp_locked(user_id: int) -> bool:
+    """True when this account is temporarily locked after failed 2FA attempts."""
+    return bool(cache.get(_totp_lock_cache_key(user_id)))
+
+
+def record_totp_failure(user_id: int) -> bool:
+    """
+    Record a failed TOTP/recovery attempt for ``user_id``.
+
+    Returns True if the account is now locked (or was already locked).
+    """
+    uid = int(user_id)
+    if is_totp_locked(uid):
+        return True
+    key = _totp_fail_cache_key(uid)
+    try:
+        count = cache.incr(key)
+    except ValueError:
+        cache.set(key, 1, TOTP_FAIL_WINDOW)
+        count = 1
+    if count >= TOTP_FAIL_LIMIT:
+        cache.set(_totp_lock_cache_key(uid), 1, TOTP_LOCKOUT_SECONDS)
+        cache.delete(key)
+        return True
+    return False
+
+
+def clear_totp_failures(user_id: int) -> None:
+    """Clear failure counter and lockout after a successful 2FA verification."""
+    uid = int(user_id)
+    cache.delete(_totp_fail_cache_key(uid))
+    cache.delete(_totp_lock_cache_key(uid))
 
 
 def generate_base32_secret(num_bytes: int = 20) -> str:

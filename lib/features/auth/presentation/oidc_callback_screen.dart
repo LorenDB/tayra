@@ -35,6 +35,7 @@ class _OidcCallbackScreenState extends ConsumerState<OidcCallbackScreen> {
     final uri = GoRouterState.of(context).uri;
     final error = uri.queryParameters['error'];
     final code = uri.queryParameters['code'];
+    final clientState = uri.queryParameters['state'];
 
     if (error != null && error.isNotEmpty) {
       setState(() => _error = _humanizeError(error));
@@ -55,9 +56,14 @@ class _OidcCallbackScreenState extends ConsumerState<OidcCallbackScreen> {
       return;
     }
 
+    // M3: reject callbacks without a matching state (login CSRF).
     final ok = await ref
         .read(authStateProvider.notifier)
-        .completeOidcLogin(serverUrl: server, code: code);
+        .completeOidcLogin(
+          serverUrl: server,
+          code: code,
+          clientState: clientState,
+        );
     if (!mounted) return;
     if (ok) {
       // Restore deep link saved before the IdP full-page redirect, if any.

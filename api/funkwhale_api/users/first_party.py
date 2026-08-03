@@ -23,6 +23,16 @@ FIRST_PARTY_APP_NAME = "Tayra"
 # Scopes used by the first-party client (matches historical web client).
 FIRST_PARTY_SCOPES = "read write"
 
+# Preferred native deep-link callbacks (M2); OOB kept for paste-code flows.
+FIRST_PARTY_REDIRECT_URIS = "\n".join(
+    [
+        "tayra://oauth/callback",
+        "tayra://sso/callback",
+        "urn:ietf:wg:oauth:2.0:oob",
+        "urn:ietf:wg:oauth:2.0:oob:auto",
+    ]
+)
+
 
 def _generate_token() -> str:
     return secrets.token_urlsafe(48)
@@ -56,6 +66,12 @@ def get_or_create_first_party_application() -> tuple[models.Application, str]:
             # Tokens are issued out-of-band; grant type only documents the app.
             app.authorization_grant_type = models.Application.GRANT_AUTHORIZATION_CODE
             dirty = True
+        # Ensure preferred redirect URIs are present (additive).
+        existing = set((app.redirect_uris or "").split())
+        desired = set(FIRST_PARTY_REDIRECT_URIS.split())
+        if not desired.issubset(existing):
+            app.redirect_uris = "\n".join(sorted(existing | desired))
+            dirty = True
         if dirty:
             app.save()
         return app, ""
@@ -67,12 +83,7 @@ def get_or_create_first_party_application() -> tuple[models.Application, str]:
         client_secret="",
         client_type=models.Application.CLIENT_PUBLIC,
         authorization_grant_type=models.Application.GRANT_AUTHORIZATION_CODE,
-        redirect_uris="\n".join(
-            [
-                "urn:ietf:wg:oauth:2.0:oob",
-                "urn:ietf:wg:oauth:2.0:oob:auto",
-            ]
-        ),
+        redirect_uris=FIRST_PARTY_REDIRECT_URIS,
         scope=FIRST_PARTY_SCOPES,
         skip_authorization=True,
         user=None,

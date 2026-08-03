@@ -7,7 +7,9 @@
 # Compiles the Flutter client that lives at the repository root
 # (pubspec.yaml, lib/, web/, assets/, packages/, …).
 
-ARG FLUTTER_IMAGE=ghcr.io/cirruslabs/flutter:stable
+# M11: pin a concrete Flutter image tag (override at build time if needed).
+# "stable" floats; pin reduces supply-chain surprise. Bump deliberately.
+ARG FLUTTER_IMAGE=ghcr.io/cirruslabs/flutter:3.32.0
 ARG FUNKWHALE_URL=
 
 # ── Compile Tayra web ────────────────────────────────────────────────────
@@ -55,7 +57,8 @@ RUN set -eux; \
   fi
 
 # ── nginx reverse proxy + SPA ────────────────────────────────────────────
-FROM nginx:1.23.4-alpine AS production
+# M11: supported nginx alpine (1.23 is EOL).
+FROM nginx:1.27-alpine AS production
 
 COPY --from=tayra-builder /app/build/web/ /usr/share/nginx/html/
 COPY front/docker/funkwhale.conf.template /etc/nginx/templates/default.conf.template

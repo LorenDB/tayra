@@ -1,5 +1,6 @@
 import binascii
 import hashlib
+import hmac
 
 from rest_framework import authentication, exceptions
 
@@ -7,8 +8,9 @@ from funkwhale_api.users.models import User
 
 
 def get_token(salt, password):
+    """Subsonic legacy token: MD5(password + salt). Required by the protocol."""
     to_hash = password + salt
-    h = hashlib.md5()
+    h = hashlib.md5()  # nosec B324 — Subsonic API mandates MD5
     h.update(to_hash.encode("utf-8"))
     return h.hexdigest()
 
@@ -42,7 +44,10 @@ def authenticate_salt(username, salt, token):
     except User.DoesNotExist:
         raise exceptions.AuthenticationFailed("Wrong username or password.")
     expected = get_token(salt, user.subsonic_api_token)
-    if expected != token:
+    # Constant-time compare so token content cannot be timed.
+    # compare_digest requires equal length; unequal length is always a miss.
+    provided = str(token or "")
+    if len(provided) != len(expected) or not hmac.compare_digest(expected, provided):
         raise exceptions.AuthenticationFailed("Wrong username or password.")
 
     if user.should_verify_email():

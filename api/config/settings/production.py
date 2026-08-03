@@ -9,6 +9,8 @@ Production Configurations
 
 """
 
+from django.core.exceptions import ImproperlyConfigured
+
 from .common import *  # noqa
 
 # SECRET CONFIGURATION
@@ -16,6 +18,28 @@ from .common import *  # noqa
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 # Raises ImproperlyConfigured exception if DJANGO_SECRET_KEY not in os.environ
 SECRET_KEY = env("DJANGO_SECRET_KEY")
+
+# M13: reject placeholder / trivially weak secrets in production.
+_WEAK_SECRET_MARKERS = (
+    "change-me",
+    "changeme",
+    "insecure",
+    "secret-key",
+    "django-insecure",
+    "your-secret",
+    "placeholder",
+)
+_secret_lower = (SECRET_KEY or "").strip().lower()
+if (
+    not SECRET_KEY
+    or len(SECRET_KEY) < 40
+    or any(marker in _secret_lower for marker in _WEAK_SECRET_MARKERS)
+):
+    raise ImproperlyConfigured(
+        "DJANGO_SECRET_KEY is missing, too short (<40 chars), or still a "
+        "placeholder (e.g. 'change-me-…'). Generate a strong random value, e.g.:\n"
+        "  python -c \"import secrets; print(secrets.token_urlsafe(50))\""
+    )
 
 # django-secure
 # ------------------------------------------------------------------------------
@@ -37,15 +61,21 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 # SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
 #     "DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", default=True)
 # SECURE_BROWSER_XSS_FILTER = True
-# SESSION_COOKIE_SECURE = False
-# SESSION_COOKIE_HTTPONLY = True
+# Prefer Secure cookies when the pod is served over HTTPS (H1 still open for
+# plaintext compose; operators should set SESSION_COOKIE_SECURE=true with TLS).
+SESSION_COOKIE_SECURE = env.bool("SESSION_COOKIE_SECURE", default=False)
+CSRF_COOKIE_SECURE = env.bool("CSRF_COOKIE_SECURE", default=SESSION_COOKIE_SECURE)
+SESSION_COOKIE_HTTPONLY = True
 # SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)
 
 # SITE CONFIGURATION
 # ------------------------------------------------------------------------------
 # Hosts/domain names that are valid for this site
 # See https://docs.djangoproject.com/en/1.6/ref/settings/#allowed-hosts
-CSRF_TRUSTED_ORIGINS = ALLOWED_HOSTS
+# Keep common.py's CORS-aligned CSRF list and ensure ALLOWED_HOSTS is present.
+CSRF_TRUSTED_ORIGINS = list(
+    dict.fromkeys(list(CSRF_TRUSTED_ORIGINS) + list(ALLOWED_HOSTS))
+)
 
 # END SITE CONFIGURATION
 

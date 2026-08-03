@@ -20,8 +20,11 @@ services:
   postgres:
     restart: unless-stopped
     env_file: .env
+    # M5: password auth only (no trust). Set POSTGRES_PASSWORD in .env.
     environment:
-      - "POSTGRES_HOST_AUTH_METHOD=trust"
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
     image: postgres:15-alpine
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
@@ -30,6 +33,14 @@ services:
     restart: unless-stopped
     env_file: .env
     image: redis:7-alpine
+    # M5: require a password (set REDIS_PASSWORD in .env).
+    command:
+      - redis-server
+      - --requirepass
+      - ${REDIS_PASSWORD:?Set REDIS_PASSWORD in .env}
+      - --save
+      - "60"
+      - "1"
     volumes:
       - ./data/redis:/data
 
@@ -40,6 +51,8 @@ services:
       - postgres
       - redis
     env_file: .env
+    # M5: non-root process (matches USER in api/Dockerfile).
+    user: "1000:1000"
     volumes:
       - "${MUSIC_DIRECTORY_SERVE_PATH:-./data/music}:${MUSIC_DIRECTORY_PATH:-/music}:ro"
       - "${MEDIA_HOST_PATH:-./data/media}:${MEDIA_ROOT:-/srv/funkwhale/data/media}"
@@ -53,14 +66,13 @@ services:
       - redis
       - api
     env_file: .env
+    user: "1000:1000"
     command:
       - celery
       - --app=funkwhale_api.taskapp
       - worker
       - --loglevel=INFO
       - --concurrency=${CELERYD_CONCURRENCY:-0}
-    environment:
-      - C_FORCE_ROOT=true
     volumes:
       - "${MUSIC_DIRECTORY_SERVE_PATH:-./data/music}:${MUSIC_DIRECTORY_PATH:-/music}:ro"
       - "${MEDIA_HOST_PATH:-./data/media}:${MEDIA_ROOT:-/srv/funkwhale/data/media}"
@@ -73,6 +85,7 @@ services:
       - redis
       - api
     env_file: .env
+    user: "1000:1000"
     command:
       - celery
       - --app=funkwhale_api.taskapp

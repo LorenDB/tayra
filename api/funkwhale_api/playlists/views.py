@@ -105,8 +105,9 @@ class PlaylistViewSet(
         playlist = self.get_object()
         try:
             index = int(request.data["index"])
-            assert index >= 0
-        except (KeyError, ValueError, AssertionError, TypeError):
+        except (KeyError, ValueError, TypeError):
+            return Response(status=400)
+        if index < 0:
             return Response(status=400)
 
         try:
@@ -124,14 +125,16 @@ class PlaylistViewSet(
         playlist = self.get_object()
         try:
             from_index = int(request.data["from"])
-            assert from_index >= 0
-        except (KeyError, ValueError, AssertionError, TypeError):
+        except (KeyError, ValueError, TypeError):
+            return Response({"detail": "invalid from index"}, status=400)
+        if from_index < 0:
             return Response({"detail": "invalid from index"}, status=400)
 
         try:
             to_index = int(request.data["to"])
-            assert to_index >= 0
-        except (KeyError, ValueError, AssertionError, TypeError):
+        except (KeyError, ValueError, TypeError):
+            return Response({"detail": "invalid to index"}, status=400)
+        if to_index < 0:
             return Response({"detail": "invalid to index"}, status=400)
 
         try:

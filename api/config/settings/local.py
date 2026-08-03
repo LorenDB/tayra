@@ -96,7 +96,24 @@ CELERY_TASK_ALWAYS_EAGER = False
 
 # Your local stuff: Below this line define 3rd party library settings
 
-CSRF_TRUSTED_ORIGINS = [o for o in ALLOWED_HOSTS]
+# M4: allow cross-port Flutter web / tooling against a local API.
+# Production relies on FUNKWHALE_URL + CORS_ALLOWED_ORIGINS only.
+_local_cors = list(CORS_ALLOWED_ORIGINS)
+for _host in ("localhost", "127.0.0.1"):
+    for _port in ("", ":5000", ":8080", ":3000", ":4173", ":5173"):
+        _local_cors.append(f"http://{_host}{_port}")
+        _local_cors.append(f"https://{_host}{_port}")
+CORS_ALLOWED_ORIGINS = sorted(set(_local_cors))
+CORS_ORIGIN_WHITELIST = CORS_ALLOWED_ORIGINS
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ORIGIN_ALLOW_ALL = False
+
+CSRF_TRUSTED_ORIGINS = list(
+    dict.fromkeys(
+        [o for o in ALLOWED_HOSTS]
+        + [urlsplit(o).netloc for o in CORS_ALLOWED_ORIGINS if "://" in o]
+    )
+)
 
 REST_FRAMEWORK["DEFAULT_SCHEMA_CLASS"] = "funkwhale_api.schema.CustomAutoSchema"
 SPECTACULAR_SETTINGS = {

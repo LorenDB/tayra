@@ -4,10 +4,10 @@ import pytest
 from django.urls import reverse
 
 from funkwhale_api.users import models
-from funkwhale_api.users.oauth import serializers
 
 
 def test_apps_post(api_client, db):
+    """Anonymous app registration defaults to public client (M2 / PKCE)."""
     url = reverse("api:v1:oauth:apps-list")
     data = {
         "name": "Test app",
@@ -19,17 +19,18 @@ def test_apps_post(api_client, db):
     assert response.status_code == 201
 
     app = models.Application.objects.get(name=data["name"])
-    setattr(app, "client_secret", response.data["client_secret"])
 
-    assert app.client_type == models.Application.CLIENT_CONFIDENTIAL
+    assert app.client_type == models.Application.CLIENT_PUBLIC
     assert app.authorization_grant_type == models.Application.GRANT_AUTHORIZATION_CODE
     assert app.redirect_uris == data["redirect_uris"]
-    assert response.data == serializers.CreateApplicationSerializer(app).data
+    assert response.data["client_secret"] == ""
+    assert response.data["client_type"] == models.Application.CLIENT_PUBLIC
     assert app.scope == "read write:profile"
     assert app.user is None
 
 
 def test_apps_post_logged_in_user(logged_in_api_client, db):
+    """Authenticated create defaults to public; confidential is opt-in."""
     url = reverse("api:v1:oauth:apps-list")
     data = {
         "name": "Test app",
@@ -41,21 +42,45 @@ def test_apps_post_logged_in_user(logged_in_api_client, db):
     assert response.status_code == 201
 
     app = models.Application.objects.get(name=data["name"])
-    setattr(app, "client_secret", response.data["client_secret"])
 
-    assert app.client_type == models.Application.CLIENT_CONFIDENTIAL
+    assert app.client_type == models.Application.CLIENT_PUBLIC
     assert app.authorization_grant_type == models.Application.GRANT_AUTHORIZATION_CODE
     assert app.redirect_uris == data["redirect_uris"]
-    assert (
-        response.data
-        == serializers.CreateApplicationSerializer(
-            app, context={"include_token": True}
-        ).data
-    )
+    assert response.data["client_secret"] == ""
     assert app.scope == "read write:profile"
     assert app.user == logged_in_api_client.user
     assert app.token is not None
     assert response.data["token"] == app.token
+
+
+def test_apps_post_confidential_authenticated(logged_in_api_client, db):
+    url = reverse("api:v1:oauth:apps-list")
+    data = {
+        "name": "Confidential app",
+        "redirect_uris": "http://test.app",
+        "scopes": "read write:profile",
+        "client_type": models.Application.CLIENT_CONFIDENTIAL,
+    }
+    response = logged_in_api_client.post(url, data)
+
+    assert response.status_code == 201
+    app = models.Application.objects.get(name=data["name"])
+    assert app.client_type == models.Application.CLIENT_CONFIDENTIAL
+    assert response.data["client_secret"]
+    assert len(response.data["client_secret"]) >= 32
+
+
+def test_apps_post_confidential_anonymous_rejected(api_client, db):
+    url = reverse("api:v1:oauth:apps-list")
+    data = {
+        "name": "Confidential app",
+        "redirect_uris": "http://test.app",
+        "scopes": "read",
+        "client_type": models.Application.CLIENT_CONFIDENTIAL,
+    }
+    response = api_client.post(url, data)
+    assert response.status_code == 403
+    assert not models.Application.objects.filter(name=data["name"]).exists()
 
 
 def test_apps_post_privileged_scopes_rejected(logged_in_api_client, db):
