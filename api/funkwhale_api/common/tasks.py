@@ -70,6 +70,11 @@ def fetch_remote_attachment(attachment, filename=None, save=True):
         # already there, no need to fetch
         return
 
+    from funkwhale_api.common.ssrf import validate_external_url
+
+    # H4: media proxy must not fetch private/loopback targets.
+    validate_external_url(attachment.url)
+
     s = session.get_session()
     attachment.last_fetch_date = timezone.now()
     with tempfile.TemporaryFile() as tf:

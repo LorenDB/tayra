@@ -23,8 +23,14 @@ abstract final class AppPlatform {
   /// Web builds are online-only: no local audio cache / download queue.
   static bool get supportsOfflineCache => !kIsWeb;
 
-  /// Secure storage (Keystore) is only used on Android in this app.
-  static bool get useSecureStorage => isAndroid;
+  /// Prefer platform secure storage for secrets (OAuth tokens, API keys).
+  ///
+  /// Enabled on all **native** platforms (Android Keystore, iOS/macOS Keychain,
+  /// Linux libsecret, Windows Credential Manager / DPAPI). Web has no
+  /// equivalent that survives XSS, so it still uses SharedPreferences
+  /// (localStorage); keep the SPA CSP tight and treat web tokens as
+  /// browser-compromisable.
+  static bool get useSecureStorage => !isWeb;
 
   /// Compile-time pod URL for branded web builds.
   ///

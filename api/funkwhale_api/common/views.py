@@ -181,7 +181,14 @@ class AttachmentViewSet(
 
         try:
             tasks.fetch_remote_attachment(instance)
-        except Exception:
+        except Exception as exc:
+            from funkwhale_api.common.ssrf import UnsafeURLError
+
+            if isinstance(exc, UnsafeURLError):
+                logger.warning(
+                    "Blocked SSRF attachment proxy for %s", instance.url
+                )
+                return response.Response(status=400)
             logger.exception("Error while fetching attachment %s", instance.url)
             return response.Response(status=500)
         data = self.serializer_class(instance).data

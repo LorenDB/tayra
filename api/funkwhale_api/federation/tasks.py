@@ -313,6 +313,8 @@ def fetch(fetch_obj):
         fetch_obj.detail.update(kwargs)
         fetch_obj.save(update_fields=["fetch_date", "status", "detail"])
 
+    from funkwhale_api.common.ssrf import UnsafeURLError, validate_external_url
+
     url = fetch_obj.url
     mrf_check_url = url
     if not mrf_check_url.startswith("webfinger://"):
@@ -326,6 +328,8 @@ def fetch(fetch_obj):
     else:
         auth = None
     try:
+        # H4: reject private/loopback/metadata targets before any network I/O.
+        validate_external_url(url, allow_webfinger=True)
         if url.startswith("webfinger://"):
             # we first grab the corresponding webfinger representation
             # to get the ActivityPub actor ID
@@ -335,6 +339,7 @@ def fetch(fetch_obj):
             url = webfinger.get_ap_url(webfinger_data["links"])
             if not url:
                 return error("webfinger", message="Invalid or missing webfinger data")
+            validate_external_url(url)
             payload, updated = mrf.inbox.apply({"id": url})
             if not payload:
                 return error("blocked", message="Blocked by MRF")
@@ -345,20 +350,23 @@ def fetch(fetch_obj):
         )
         logger.debug("Remote answered with %s: %s", response.status_code, response.text)
         response.raise_for_status()
+    except UnsafeURLError:
+        # Do not echo attacker-controlled or internal URL detail beyond a code.
+        return error("blocked", message="URL not allowed for outbound fetch")
     except requests.exceptions.HTTPError as e:
+        # Never return remote response bodies (SSRF exfiltration vector).
         return error(
             "http",
             status_code=e.response.status_code if e.response else None,
-            message=e.response.text,
         )
     except requests.exceptions.Timeout:
         return error("timeout")
-    except requests.exceptions.ConnectionError as e:
-        return error("connection", message=str(e))
-    except requests.RequestException as e:
-        return error("request", message=str(e))
-    except Exception as e:
-        return error("unhandled", message=str(e))
+    except requests.exceptions.ConnectionError:
+        return error("connection")
+    except requests.RequestException:
+        return error("request")
+    except Exception:
+        return error("unhandled")
 
     try:
         payload = response.json()

@@ -4,12 +4,16 @@ services:
   traefik:
     image: traefik:alpine
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      # H7: docker.sock grants the container control of the host Docker daemon.
+      # Prefer a read-only mount and never expose the Traefik API/dashboard
+      # (see traefik.toml — [web] disabled). On shared hosts, use a socket
+      # proxy (e.g. Tecnativa/docker-socket-proxy) instead of a direct mount.
+      - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./traefik.toml:/traefik.toml
     ports:
       - "80:80"
       - "443:443"
-      - "8040:8040"
+      # H7: do not publish :8040 (unauthenticated Traefik API/dashboard).
     networks:
       federation:
 

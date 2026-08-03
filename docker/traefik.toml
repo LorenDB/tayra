@@ -1,10 +1,14 @@
 defaultEntryPoints = ["http", "https"]
 [accessLog]
 ################################################################
-# Web configuration backend
+# Web / API dashboard (H7)
 ################################################################
-[web]
-address = ":8040"
+# The Traefik v1 dashboard + API must NOT listen on 0.0.0.0 without auth.
+# With the Docker provider enabled, an open API can reconfigure routing and
+# effectively drive the mounted docker.sock. Leave the [web] section disabled
+# in shared/dev stacks. If you need the dashboard locally, bind loopback only:
+#   [web]
+#   address = "127.0.0.1:8040"
 ################################################################
 # Docker configuration backend
 ################################################################

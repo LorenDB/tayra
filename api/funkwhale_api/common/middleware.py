@@ -344,13 +344,36 @@ class ThrottleStatusMiddleware:
 
 
 class VerboseBadRequestsMiddleware:
+    """Log 400s without dumping response bodies (may echo PII / passwords).
+
+    H8: previously logged full ``response.content``, which often re-emits
+    request fields from serializer error payloads.
+    """
+
+    # Cap path length in logs.
+    _PATH_MAX = 200
+
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
         response = self.get_response(request)
         if response.status_code == 400:
-            logger.warning("Bad request: %s", response.content)
+            path = getattr(request, "path", "") or ""
+            if len(path) > self._PATH_MAX:
+                path = path[: self._PATH_MAX] + "…"
+            method = getattr(request, "method", "?")
+            # Size only — never log body content.
+            try:
+                body_len = len(response.content or b"")
+            except Exception:
+                body_len = -1
+            logger.warning(
+                "Bad request method=%s path=%s body_bytes=%s",
+                method,
+                path,
+                body_len,
+            )
         return response
 
 

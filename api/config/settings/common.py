@@ -1371,6 +1371,14 @@ EXTERNAL_REQUESTS_TIMEOUT = env.int("EXTERNAL_REQUESTS_TIMEOUT", default=10)
 """
 Default timeout for external requests.
 """
+EXTERNAL_REQUESTS_BLOCK_PRIVATE_IPS = env.bool(
+    "EXTERNAL_REQUESTS_BLOCK_PRIVATE_IPS", default=True
+)
+"""
+When True (default), outbound HTTP fetches refuse private, loopback,
+link-local, and cloud-metadata addresses after DNS resolution, and re-check
+each redirect hop. Disable only for tightly controlled private federations.
+"""
 
 MUSIC_DIRECTORY_PATH = env("MUSIC_DIRECTORY_PATH", default=None)
 """

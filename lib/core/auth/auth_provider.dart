@@ -256,9 +256,8 @@ class AuthNotifier extends Notifier<AuthState> {
   static const _redirectUri = 'urn:ietf:wg:oauth:2.0:oob';
   static const _scopes = 'read write';
 
-  // On macOS the sandboxed Keychain requires a provisioning profile to persist
-  // items across launches, so we fall back to SharedPreferences for all auth
-  // fields on desktop/web. Android keeps using FlutterSecureStorage.
+  // H5: native platforms use Keychain/Keystore/libsecret/DPAPI. Web cannot
+  // protect secrets from XSS; see AppPlatform.useSecureStorage.
   static bool get _useSecureStorage => AppPlatform.useSecureStorage;
 
   Future<String> _getAppName() async {
@@ -313,16 +312,51 @@ class AuthNotifier extends Notifier<AuthState> {
         return;
       }
 
-      final String? accessToken;
-      final String? refreshToken;
-      final String? clientId;
-      final String? clientSecret;
+      String? accessToken;
+      String? refreshToken;
+      String? clientId;
+      String? clientSecret;
 
       if (_useSecureStorage) {
         accessToken = await _storage.read(key: _keyAccessToken);
         refreshToken = await _storage.read(key: _keyRefreshToken);
         clientId = await _storage.read(key: _keyClientId);
         clientSecret = await _storage.read(key: _keyClientSecret);
+
+        // Migrate legacy plaintext prefs → secure storage (pre-H5 desktop).
+        var migrated = false;
+        if (accessToken == null) {
+          accessToken = prefs.getString(_keyAccessToken);
+          if (accessToken != null) migrated = true;
+        }
+        if (refreshToken == null) {
+          refreshToken = prefs.getString(_keyRefreshToken);
+          if (refreshToken != null) migrated = true;
+        }
+        if (clientId == null) {
+          clientId = prefs.getString(_keyClientId);
+          if (clientId != null) migrated = true;
+        }
+        if (clientSecret == null) {
+          clientSecret = prefs.getString(_keyClientSecret);
+          if (clientSecret != null) migrated = true;
+        }
+        if (migrated && accessToken != null) {
+          await _storage.write(key: _keyAccessToken, value: accessToken);
+          if (refreshToken != null) {
+            await _storage.write(key: _keyRefreshToken, value: refreshToken);
+          }
+          if (clientId != null) {
+            await _storage.write(key: _keyClientId, value: clientId);
+          }
+          if (clientSecret != null) {
+            await _storage.write(key: _keyClientSecret, value: clientSecret);
+          }
+          await prefs.remove(_keyAccessToken);
+          await prefs.remove(_keyRefreshToken);
+          await prefs.remove(_keyClientId);
+          await prefs.remove(_keyClientSecret);
+        }
       } else {
         accessToken = prefs.getString(_keyAccessToken);
         refreshToken = prefs.getString(_keyRefreshToken);
@@ -1103,16 +1137,16 @@ class AuthNotifier extends Notifier<AuthState> {
   Future<void> _deleteAuthCredentials() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_keyServerUrl);
+    // Always clear plaintext prefs (legacy + web) and secure keys when used.
+    await prefs.remove(_keyAccessToken);
+    await prefs.remove(_keyRefreshToken);
+    await prefs.remove(_keyClientId);
+    await prefs.remove(_keyClientSecret);
     if (_useSecureStorage) {
       await _storage.delete(key: _keyAccessToken);
       await _storage.delete(key: _keyRefreshToken);
       await _storage.delete(key: _keyClientId);
       await _storage.delete(key: _keyClientSecret);
-    } else {
-      await prefs.remove(_keyAccessToken);
-      await prefs.remove(_keyRefreshToken);
-      await prefs.remove(_keyClientId);
-      await prefs.remove(_keyClientSecret);
     }
   }
 

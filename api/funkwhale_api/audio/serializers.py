@@ -335,10 +335,15 @@ class BlockedFeedException(FeedFetchException):
 
 
 def retrieve_feed(url):
+    from funkwhale_api.common.ssrf import UnsafeURLError, validate_external_url
+
     try:
+        validate_external_url(url)
         logger.info("Fetching RSS feed at %s", url)
         response = session.get_session().get(url)
         response.raise_for_status()
+    except UnsafeURLError:
+        raise FeedFetchException("Error while fetching feed: URL not allowed")
     except requests.exceptions.HTTPError as e:
         if e.response:
             raise FeedFetchException(

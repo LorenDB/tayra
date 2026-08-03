@@ -555,9 +555,23 @@ def _find_user(username: str):
 
 
 def _log_token_login(msg, *args):
-    """Log to both app and django.request so it shows next to Bad Request lines."""
+    """Log to both app and django.request so it shows next to Bad Request lines.
+
+    H8: never interpolate raw usernames/emails/passwords into *args.
+    """
     logger.warning(msg, *args)
     logging.getLogger("django.request").warning(msg, *args)
+
+
+def _safe_login_meta(meta):
+    """Return non-identifying request meta for login logs (H8)."""
+    if not isinstance(meta, dict):
+        return {}
+    return {
+        k: meta.get(k)
+        for k in ("body_source", "content_type", "username_len", "password_len")
+        if k in meta
+    }
 
 
 def _extract_login_proof_fields(raw: dict) -> dict:
@@ -615,11 +629,11 @@ def token_login_challenge(request):
 
     user = _find_user(username)
     challenge = create_login_challenge(username, user=user)
+    # H8: do not log whether the username exists (user enumeration).
     _log_token_login(
-        "token_login_challenge issued scheme=%s user_found=%s meta=%s",
+        "token_login_challenge issued scheme=%s meta=%s",
         challenge.get("scheme"),
-        user is not None,
-        {k: meta.get(k) for k in ("body_source", "content_type", "username_len")},
+        _safe_login_meta(meta),
     )
     return Response(challenge)
 
@@ -657,7 +671,7 @@ def token_login(request):
     if not username:
         _log_token_login(
             "token_login missing username meta=%s",
-            meta,
+            _safe_login_meta(meta),
         )
         return Response(
             {
@@ -673,7 +687,7 @@ def token_login(request):
     if not challenge_id:
         _log_token_login(
             "token_login missing challenge meta=%s",
-            meta,
+            _safe_login_meta(meta),
         )
         return Response(
             {
@@ -689,7 +703,10 @@ def token_login(request):
 
     challenge = pop_login_challenge(challenge_id)
     if challenge is None:
-        _log_token_login("token_login invalid_or_expired_challenge meta=%s", meta)
+        _log_token_login(
+            "token_login invalid_or_expired_challenge meta=%s",
+            _safe_login_meta(meta),
+        )
         return Response(
             {
                 "error": "invalid_challenge",
@@ -704,7 +721,7 @@ def token_login(request):
     if challenge_user.lower() != username.lower():
         _log_token_login(
             "token_login challenge_username_mismatch meta=%s",
-            meta,
+            _safe_login_meta(meta),
         )
         return Response(
             {
@@ -721,17 +738,14 @@ def token_login(request):
     user = _find_user(username)
     password_ok = False
     usable = None
-    hasher = None
     if user is not None:
         usable = user.has_usable_password()
-        if user.password and "$" in user.password:
-            hasher = user.password.split("$", 1)[0]
 
         if usable and scheme == "scram_v2" and is_scram_hash(user.password):
             if not client_nonce or not client_proof:
                 _log_token_login(
                     "token_login missing proof meta=%s",
-                    meta,
+                    _safe_login_meta(meta),
                 )
                 return Response(
                     {
@@ -757,8 +771,8 @@ def token_login(request):
             if not is_transport_password_hash(password):
                 _log_token_login(
                     "token_login legacy plaintext_rejected meta=%s password_len=%s",
-                    meta,
-                    len(password),
+                    _safe_login_meta(meta),
+                    len(password) if password else 0,
                 )
                 return Response(
                     {
@@ -778,21 +792,14 @@ def token_login(request):
             # Scheme/storage mismatch (e.g. race after password change).
             password_ok = False
 
+    # H8: single generic failure for wrong password, missing user, disabled,
+    # and unverified-email accounts — do not reveal account state or 2FA.
+    # TOTP is still returned only after a correct password (protocol need).
     if user is None or not password_ok:
-        user_count = get_user_model().objects.count()
         _log_token_login(
-            "token_login invalid_credentials login=%r user_found=%s "
-            "user_id=%s is_active=%s has_usable_password=%s hasher=%s "
-            "scheme=%s user_count=%s meta=%s",
-            username,
-            user is not None,
-            getattr(user, "pk", None),
-            getattr(user, "is_active", None),
-            usable,
-            hasher,
+            "token_login invalid_credentials scheme=%s meta=%s",
             scheme,
-            user_count,
-            meta,
+            _safe_login_meta(meta),
         )
         return Response(
             {
@@ -803,38 +810,33 @@ def token_login(request):
             status=400,
         )
 
-    if not user.is_active:
-        _log_token_login("token_login inactive user_id=%s", user.pk)
-        return Response(
-            {
-                "error": "account_disabled",
-                "detail": "This account was disabled",
-                "non_field_errors": ["This account was disabled"],
-            },
-            status=400,
+    if not user.is_active or user.should_verify_email():
+        # Same wire response as bad credentials (no account-state oracle).
+        _log_token_login(
+            "token_login rejected_account_state scheme=%s meta=%s",
+            scheme,
+            _safe_login_meta(meta),
         )
-
-    if user.should_verify_email():
-        _log_token_login("token_login email not verified user_id=%s", user.pk)
         return Response(
             {
-                "error": "email_unverified",
-                "code": "email_unverified",
-                "detail": "Please verify your e-mail address before logging in.",
-                "non_field_errors": [
-                    "Please verify your e-mail address before logging in."
-                ],
+                "error": "invalid_credentials",
+                "detail": "Unable to log in with provided credentials",
+                "non_field_errors": ["Unable to log in with provided credentials"],
             },
             status=400,
         )
 
     # TOTP second factor when the user has confirmed an authenticator.
+    # Returning totp_required after a correct password is required for the
+    # MFA flow; it does not distinguish users who do not exist or have a
+    # wrong password (those already received invalid_credentials).
     from funkwhale_api.users import totp as totp_mod
 
     if totp_mod.is_totp_enabled(user):
         mfa_token = totp_mod.create_mfa_token(user.pk)
         _log_token_login(
-            "token_login totp_required user_id=%s meta=%s", user.pk, meta
+            "token_login totp_required meta=%s",
+            _safe_login_meta(meta),
         )
         return Response(
             {
@@ -867,10 +869,9 @@ def _issue_token_response(user, meta=None):
     payload["totp_setup_required"] = totp_mod.needs_totp_setup(user)
 
     logger.info(
-        "token_login success user_id=%s username=%s meta=%s totp_setup_required=%s",
+        "token_login success user_id=%s meta=%s totp_setup_required=%s",
         user.pk,
-        user.username,
-        meta,
+        _safe_login_meta(meta),
         payload["totp_setup_required"],
     )
     return Response(payload, status=200)

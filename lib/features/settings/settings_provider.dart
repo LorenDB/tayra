@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tayra/core/api/client_data_service.dart';
 import 'package:tayra/core/api/client_preferences.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
+import 'package:tayra/core/platform/app_platform.dart';
 
 // ── Browse mode enum ────────────────────────────────────────────────────
 
@@ -211,6 +213,54 @@ class SettingsNotifier extends Notifier<SettingsState> {
   static const _keyAutoDownloadPodcastEpisodeCount =
       'auto_download_podcast_episode_count';
 
+  // H5: API keys go in platform secure storage on native targets.
+  static bool get _useSecure => AppPlatform.useSecureStorage;
+  static const FlutterSecureStorage _secure = FlutterSecureStorage();
+
+  /// Read a secret from secure storage, migrating legacy SharedPreferences.
+  static Future<String> _readSecret(SharedPreferences prefs, String key) async {
+    if (_useSecure) {
+      final secureVal = await _secure.read(key: key);
+      if (secureVal != null && secureVal.isNotEmpty) return secureVal;
+      final legacy = prefs.getString(key);
+      if (legacy != null && legacy.isNotEmpty) {
+        await _secure.write(key: key, value: legacy);
+        await prefs.remove(key);
+        return legacy;
+      }
+      return '';
+    }
+    return prefs.getString(key) ?? '';
+  }
+
+  static Future<void> _writeSecret(
+    SharedPreferences prefs,
+    String key,
+    String value,
+  ) async {
+    if (_useSecure) {
+      if (value.isEmpty) {
+        await _secure.delete(key: key);
+      } else {
+        await _secure.write(key: key, value: value);
+      }
+      await prefs.remove(key);
+    } else {
+      if (value.isEmpty) {
+        await prefs.remove(key);
+      } else {
+        await prefs.setString(key, value);
+      }
+    }
+  }
+
+  static Future<void> _deleteSecret(SharedPreferences prefs, String key) async {
+    await prefs.remove(key);
+    if (_useSecure) {
+      await _secure.delete(key: key);
+    }
+  }
+
   // On non-Android platforms, AI defaults to off and Groq is the default provider.
   static bool get _defaultAiEnabled =>
       defaultTargetPlatform == TargetPlatform.android;
@@ -303,15 +353,15 @@ class SettingsNotifier extends Notifier<SettingsState> {
       );
     }
 
-    final groqApiKey = prefs.getString(_keyGroqApiKey) ?? '';
+    final groqApiKey = await _readSecret(prefs, _keyGroqApiKey);
     final groqModel = prefs.getString(_keyGroqModel) ?? 'llama-3.1-8b-instant';
-    final openRouterApiKey = prefs.getString(_keyOpenRouterApiKey) ?? '';
+    final openRouterApiKey = await _readSecret(prefs, _keyOpenRouterApiKey);
     final openRouterModel =
         prefs.getString(_keyOpenRouterModel) ??
         'meta-llama/llama-3.1-8b-instruct:free';
     final customEndpointUrl = prefs.getString(_keyCustomEndpointUrl) ?? '';
     final customEndpointApiKey =
-        prefs.getString(_keyCustomEndpointApiKey) ?? '';
+        await _readSecret(prefs, _keyCustomEndpointApiKey);
     final customModelName =
         prefs.getString(_keyCustomModelName) ?? 'gpt-4o-mini';
 
@@ -472,7 +522,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
   Future<void> setGroqApiKey(String key) async {
     state = state.copyWith(groqApiKey: key);
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_keyGroqApiKey, key);
+    await _writeSecret(prefs, _keyGroqApiKey, key);
     // Intentionally not synced (sensitive).
   }
 
@@ -485,7 +535,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
   Future<void> setOpenRouterApiKey(String key) async {
     state = state.copyWith(openRouterApiKey: key);
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_keyOpenRouterApiKey, key);
+    await _writeSecret(prefs, _keyOpenRouterApiKey, key);
     // Intentionally not synced (sensitive).
   }
 
@@ -504,7 +554,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
   Future<void> setCustomEndpointApiKey(String key) async {
     state = state.copyWith(customEndpointApiKey: key);
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_keyCustomEndpointApiKey, key);
+    await _writeSecret(prefs, _keyCustomEndpointApiKey, key);
     // Intentionally not synced (sensitive).
   }
 
@@ -565,12 +615,12 @@ class SettingsNotifier extends Notifier<SettingsState> {
     await prefs.remove(_keyDeveloperModeUnlocked);
     await prefs.remove(_keyShowPurgeCacheOption);
     await prefs.remove(_keyAiProviderType);
-    await prefs.remove(_keyGroqApiKey);
+    await _deleteSecret(prefs, _keyGroqApiKey);
     await prefs.remove(_keyGroqModel);
-    await prefs.remove(_keyOpenRouterApiKey);
+    await _deleteSecret(prefs, _keyOpenRouterApiKey);
     await prefs.remove(_keyOpenRouterModel);
     await prefs.remove(_keyCustomEndpointUrl);
-    await prefs.remove(_keyCustomEndpointApiKey);
+    await _deleteSecret(prefs, _keyCustomEndpointApiKey);
     await prefs.remove(_keyCustomModelName);
     await prefs.remove(_keyMultiDiscDisplayMode);
     await prefs.remove(_keyAutoDownloadFavorites);

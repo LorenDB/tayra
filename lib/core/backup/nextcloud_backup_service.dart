@@ -238,6 +238,15 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
       if (server != null && user != null) {
         if (_useSecure) {
           token = await _secure.read(key: _secureTokenKey);
+          // Migrate legacy plaintext app password → secure storage.
+          if (token == null || token.isEmpty) {
+            final legacy = prefs.getString(_secureTokenKey);
+            if (legacy != null && legacy.isNotEmpty) {
+              await _secure.write(key: _secureTokenKey, value: legacy);
+              await prefs.remove(_secureTokenKey);
+              token = legacy;
+            }
+          }
         } else {
           token = prefs.getString(_secureTokenKey);
         }
@@ -381,6 +390,7 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
     await prefs.setString(_keyNcUser, user);
     if (_useSecure) {
       await _secure.write(key: _secureTokenKey, value: token);
+      await prefs.remove(_secureTokenKey);
     } else {
       await prefs.setString(_secureTokenKey, token);
     }
@@ -390,10 +400,9 @@ class NextcloudBackupNotifier extends Notifier<NextcloudState> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_keyNcServer);
     await prefs.remove(_keyNcUser);
+    await prefs.remove(_secureTokenKey);
     if (_useSecure) {
       await _secure.delete(key: _secureTokenKey);
-    } else {
-      await prefs.remove(_secureTokenKey);
     }
     _pendingPollEndpoint = null;
     _pendingPollToken = null;
@@ -927,9 +936,8 @@ class NextcloudBackupService {
   }
 
   /// Prefs keys (or substrings) that must never leave the device in a backup.
-  /// Desktop stores OAuth tokens in SharedPreferences; Android uses secure
-  /// storage for tokens but still has Nextcloud app password / related keys
-  /// in prefs.
+  /// OAuth tokens and Nextcloud app passwords use secure storage on native
+  /// platforms; still denylist prefs keys for web / legacy plaintext.
   static bool _isSensitiveSettingsKey(String key) =>
       isSensitiveSettingsKey(key);
 
