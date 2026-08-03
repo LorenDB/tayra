@@ -122,10 +122,13 @@ WORKDIR /app
 # Typesense Django app — INSTALLED_APPS expects it unless we soft-disable.
 RUN test -f funkwhale_api/typesense/__init__.py
 
-RUN --mount=type=cache,target=~/.cache/pip; \
-  set -eux; \
+# Do not chown /venv here: it is ~30k files and recursive chown hangs for
+# minutes on Docker Desktop (virtiofs) with no BuildKit progress. A
+# root-owned venv is fine for USER funkwhale — site-packages only need
+# read/execute. pip -e writes egg-info under /app, so chown that only.
+RUN set -eux; \
   pip3 install --no-deps --editable .; \
-  chown -R funkwhale:funkwhale /app /venv
+  chown -R funkwhale:funkwhale /app
 
 USER funkwhale
 
