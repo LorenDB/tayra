@@ -643,8 +643,9 @@ def token_login_challenge(request):
     description=(
         "First-party password login for Tayra. Requires a prior "
         "POST /api/v1/users/token/challenge/ and a per-request verifier: "
-        "either a SCRAM-like client_proof (scram_v2) or, for legacy password "
-        "rows only, a one-shot transport digest bound to the challenge. "
+        "SCRAM-like client_proof (scram_v2), or for legacy password rows a "
+        "v1 transport digest plus HMAC client_proof bound to the challenge "
+        "(and optional upgrade_password to migrate storage to SCRAM). "
         "Returns OAuth access/refresh tokens, client credentials for refresh, "
         "and a scoped listen_token for media URLs (?token=)."
     ),
@@ -658,7 +659,9 @@ def token_login(request):
         is_scram_hash,
         is_transport_password_hash,
         pop_login_challenge,
+        upgrade_password_matches_legacy_digest,
         verify_client_proof,
+        verify_legacy_client_proof,
     )
 
     throttling.check_request(request, "login")
@@ -765,9 +768,11 @@ def token_login(request):
                 client_proof_hex=client_proof,
             )
         elif usable and scheme == "legacy_v1":
-            # Legacy django_hash(v1_digest) rows: digest still goes on the
-            # wire but is bound to a one-time challenge (not reusable alone).
-            # Password change via set_password migrates the row to SCRAM.
+            # Legacy django_hash(v1_digest) rows: static digest alone is not
+            # enough — require an HMAC proof bound to this challenge, plus
+            # upgrade_password matching the digest so storage migrates to
+            # SCRAM. A stolen digest cannot complete login without the
+            # account password.
             if not is_transport_password_hash(password):
                 _log_token_login(
                     "token_login legacy plaintext_rejected meta=%s password_len=%s",
@@ -779,7 +784,7 @@ def token_login(request):
                         "error": "password_not_hashed",
                         "detail": (
                             "Legacy login requires the tayra-login-v1 transport "
-                            "digest bound to a challenge, not plaintext."
+                            "digest plus a challenge-bound HMAC proof."
                         ),
                         "non_field_errors": [
                             "Password must be hashed client-side before login."
@@ -787,7 +792,90 @@ def token_login(request):
                     },
                     status=400,
                 )
-            password_ok = user.check_password(password)
+            if not client_nonce or not client_proof:
+                _log_token_login(
+                    "token_login legacy missing proof meta=%s",
+                    _safe_login_meta(meta),
+                )
+                return Response(
+                    {
+                        "error": "missing_proof",
+                        "detail": (
+                            "Legacy login requires client_nonce and client_proof "
+                            "binding the digest to the challenge."
+                        ),
+                        "non_field_errors": ["Login proof is required."],
+                    },
+                    status=400,
+                )
+            digest_ok = user.check_password(password)
+            proof_ok = verify_legacy_client_proof(
+                password,
+                client_proof,
+                username=username,
+                client_nonce=client_nonce,
+                server_nonce=server_nonce,
+                challenge_id=challenge_id,
+            )
+            upgrade = ""
+            if isinstance(raw, dict):
+                upgrade = (
+                    raw.get("upgrade_password")
+                    or raw.get("upgradePassword")
+                    or ""
+                )
+            upgrade = str(upgrade) if upgrade is not None else ""
+            # Require a matching account password so we can migrate off the
+            # static digest. A stolen digest alone cannot complete login.
+            upgrade_ok = bool(
+                upgrade
+                and upgrade_password_matches_legacy_digest(upgrade, password)
+            )
+            password_ok = bool(digest_ok and proof_ok and upgrade_ok)
+            if digest_ok and proof_ok and not upgrade_ok:
+                _log_token_login(
+                    "token_login legacy missing_or_bad_upgrade meta=%s",
+                    _safe_login_meta(meta),
+                )
+                return Response(
+                    {
+                        "error": "legacy_upgrade_required",
+                        "detail": (
+                            "This account still uses a legacy password hash. "
+                            "Update the app and sign in again so the password "
+                            "can be upgraded (send upgrade_password)."
+                        ),
+                        "non_field_errors": [
+                            "Legacy password upgrade required. Update the app."
+                        ],
+                    },
+                    status=400,
+                )
+            if password_ok:
+                try:
+                    user.set_password(upgrade)
+                    fields = ["password", "secret_key"]
+                    if user.subsonic_api_token:
+                        fields.append("subsonic_api_token")
+                    user.save(update_fields=fields)
+                    _log_token_login(
+                        "token_login legacy upgraded to SCRAM user_id=%s",
+                        user.pk,
+                    )
+                except Exception:
+                    logger.exception(
+                        "token_login legacy SCRAM upgrade failed user_id=%s",
+                        user.pk,
+                    )
+                    return Response(
+                        {
+                            "error": "token_issue_failed",
+                            "detail": (
+                                "Could not upgrade password storage. Try again."
+                            ),
+                        },
+                        status=500,
+                    )
         elif usable:
             # Scheme/storage mismatch (e.g. race after password change).
             password_ok = False

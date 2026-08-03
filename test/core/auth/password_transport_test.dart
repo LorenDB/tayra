@@ -16,6 +16,36 @@ void main() {
     );
   });
 
+  test('computeLegacyClientProof is stable and challenge-bound', () {
+    final digest = legacyTransportDigest('s3cret-pass');
+    final a = computeLegacyClientProof(
+      digestHex: digest,
+      username: 'legacy',
+      clientNonce: 'cn',
+      serverNonce: 'sn',
+      challengeId: 'ch1',
+    );
+    final b = computeLegacyClientProof(
+      digestHex: digest,
+      username: 'legacy',
+      clientNonce: 'cn',
+      serverNonce: 'sn',
+      challengeId: 'ch1',
+    );
+    expect(a, b);
+    expect(a, matches(RegExp(r'^[0-9a-f]{64}$')));
+    expect(
+      computeLegacyClientProof(
+        digestHex: digest,
+        username: 'legacy',
+        clientNonce: 'cn',
+        serverNonce: 'sn',
+        challengeId: 'ch2',
+      ),
+      isNot(a),
+    );
+  });
+
   test('legacyTransportDigest is stable hex and domain-separated', () {
     final a = legacyTransportDigest('s3cret-pass');
     final b = legacyTransportDigest('s3cret-pass');

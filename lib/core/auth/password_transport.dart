@@ -155,6 +155,31 @@ String legacyTransportDigest(String password) {
   return sha256.convert(bytes).toString();
 }
 
+/// HMAC-SHA256 proof that binds a v1 [digestHex] to a one-time challenge.
+///
+/// Matches server ``compute_legacy_client_proof``. A stolen static digest
+/// alone is not enough to mint a valid login without this per-challenge proof.
+String computeLegacyClientProof({
+  required String digestHex,
+  required String username,
+  required String clientNonce,
+  required String serverNonce,
+  required String challengeId,
+}) {
+  final cleaned = digestHex.trim().toLowerCase();
+  if (cleaned.length != 64 || !RegExp(r'^[0-9a-f]+$').hasMatch(cleaned)) {
+    throw ArgumentError('Invalid legacy digest');
+  }
+  final key = <int>[];
+  for (var i = 0; i < 32; i++) {
+    key.add(int.parse(cleaned.substring(i * 2, i * 2 + 2), radix: 16));
+  }
+  final authMsg = utf8.encode(
+    'v1,n=$username,r=$clientNonce,s=$serverNonce,c=$challengeId',
+  );
+  return _toHex(_hmacSha256(key, authMsg));
+}
+
 // ── SCRAM-like client proof ─────────────────────────────────────────────
 
 /// URL-safe base64 without padding (matches Python helper).

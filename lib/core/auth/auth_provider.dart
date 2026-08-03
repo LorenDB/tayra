@@ -775,8 +775,21 @@ class AuthNotifier extends Notifier<AuthState> {
       };
 
       if (scheme == 'legacy_v1') {
-        // One-shot legacy digest bound to the challenge.
-        loginBody['password'] = legacyTransportDigest(password);
+        // Legacy storage: static v1 digest + HMAC proof bound to this
+        // challenge. Also send the account password as upgrade_password so
+        // the server can migrate the row to SCRAM (must match the digest).
+        final digest = legacyTransportDigest(password);
+        final clientNonce = newClientNonce();
+        loginBody['password'] = digest;
+        loginBody['client_nonce'] = clientNonce;
+        loginBody['client_proof'] = computeLegacyClientProof(
+          digestHex: digest,
+          username: user,
+          clientNonce: clientNonce,
+          serverNonce: serverNonce,
+          challengeId: challengeId,
+        );
+        loginBody['upgrade_password'] = password;
       } else {
         final saltB64 = challenge['salt'] as String? ?? '';
         final bindingHex = challenge['instance_binding'] as String? ?? '';

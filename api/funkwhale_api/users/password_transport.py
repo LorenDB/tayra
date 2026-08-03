@@ -22,7 +22,10 @@ Login
 3. Stolen proofs cannot be replayed (nonce is single-use).
 
 Legacy rows (``django_hash(sha256(prefix+password))``) still verify for
-admin/CLI and for a one-shot digest login that upgrades storage to SCRAM.
+admin/CLI. Login for those rows requires a challenge-bound HMAC over the
+v1 digest (not the bare digest alone). When the client also supplies the
+account password as ``upgrade_password`` (must match the digest), storage
+is upgraded to SCRAM in the same request.
 """
 
 from __future__ import annotations
@@ -126,8 +129,10 @@ def transport_secret_hex(password: str) -> str:
 def hash_password_for_transport(password: str) -> str:
     """Legacy v1 static digest. Kept for migration and older clients.
 
-    New login must use the challenge/proof flow. Password-confirmation
-    endpoints may still accept this form via :meth:`User.check_password`.
+    Must not be accepted alone for login: pair with
+    :func:`compute_legacy_client_proof` bound to a one-time challenge.
+    Password-confirmation endpoints may still accept this form via
+    :meth:`User.check_password`.
     """
     if not isinstance(password, str):
         raise TypeError("password must be str")
@@ -135,8 +140,79 @@ def hash_password_for_transport(password: str) -> str:
 
 
 def is_transport_password_hash(value: str) -> bool:
-    """True if ``value`` looks like a legacy 64-char hex digest."""
+    """True if ``value`` looks like a 64-char lowercase hex digest."""
     return isinstance(value, str) and bool(TRANSPORT_HASH_RE.fullmatch(value))
+
+
+def _legacy_auth_message(
+    username: str,
+    client_nonce: str,
+    server_nonce: str,
+    challenge_id: str,
+) -> bytes:
+    """Auth message for HMAC-bound legacy digests (includes challenge id)."""
+    return (
+        f"v1,n={username},r={client_nonce},s={server_nonce},"
+        f"c={challenge_id}".encode("utf-8")
+    )
+
+
+def compute_legacy_client_proof(
+    digest_hex: str,
+    *,
+    username: str,
+    client_nonce: str,
+    server_nonce: str,
+    challenge_id: str,
+) -> str:
+    """HMAC-SHA256(digest, auth_message) as hex — binds the digest to a challenge."""
+    if not is_transport_password_hash(digest_hex):
+        raise ValueError("digest_hex must be a 64-char lowercase hex string")
+    key = bytes.fromhex(digest_hex)
+    msg = _legacy_auth_message(
+        username, client_nonce, server_nonce, challenge_id
+    )
+    return hmac.new(key, msg, hashlib.sha256).hexdigest()
+
+
+def verify_legacy_client_proof(
+    digest_hex: str,
+    client_proof_hex: str,
+    *,
+    username: str,
+    client_nonce: str,
+    server_nonce: str,
+    challenge_id: str,
+) -> bool:
+    """Constant-time verify of a challenge-bound legacy proof."""
+    if not is_transport_password_hash(digest_hex):
+        return False
+    if not CLIENT_PROOF_RE.fullmatch(client_proof_hex or ""):
+        return False
+    try:
+        expected = compute_legacy_client_proof(
+            digest_hex,
+            username=username,
+            client_nonce=client_nonce,
+            server_nonce=server_nonce,
+            challenge_id=challenge_id,
+        )
+    except (ValueError, TypeError):
+        return False
+    return hmac.compare_digest(expected, client_proof_hex)
+
+
+def upgrade_password_matches_legacy_digest(
+    upgrade_password: str, digest_hex: str
+) -> bool:
+    """True when ``upgrade_password`` is the account password for ``digest_hex``."""
+    if not upgrade_password or not is_transport_password_hash(digest_hex):
+        return False
+    try:
+        expected = hash_password_for_transport(upgrade_password)
+    except (TypeError, ValueError):
+        return False
+    return hmac.compare_digest(expected, digest_hex)
 
 
 # ── SCRAM storage ────────────────────────────────────────────────────────
@@ -308,7 +384,10 @@ def create_login_challenge(username: str, user=None) -> Dict[str, Any]:
     """Mint a one-time login challenge for ``username``.
 
     Returns a public dict the client needs to build a proof. Always succeeds
-    with plausible parameters even when the user is missing (no enumeration).
+    with the **same public shape** (salt + iterations always present) so field
+    presence does not enumerate account state. ``scheme`` still distinguishes
+    ``legacy_v1`` storage for clients that must send a digest + HMAC proof
+    (and optional ``upgrade_password`` to migrate to SCRAM).
     """
     username = (username or "").strip()
     challenge_id = secrets.token_urlsafe(32)
@@ -317,7 +396,6 @@ def create_login_challenge(username: str, user=None) -> Dict[str, Any]:
     scheme = "scram_v2"
     salt_b64 = None
     iterations = _iterations()
-    legacy = False
 
     if user is not None and getattr(user, "is_active", True):
         encoded = getattr(user, "password", "") or ""
@@ -327,15 +405,17 @@ def create_login_challenge(username: str, user=None) -> Dict[str, Any]:
                 salt_b64 = params["salt"]
                 iterations = params["iterations"]
         else:
-            # Legacy django_hash(v1_digest) rows — one-shot digest login.
+            # Legacy django_hash(v1_digest) rows — HMAC-bound digest login.
             scheme = "legacy_v1"
-            legacy = True
+            fake = _fake_scram_params(username or "anonymous")
+            salt_b64 = fake["salt"]
+            iterations = fake["iterations"]
     else:
         fake = _fake_scram_params(username or "anonymous")
         salt_b64 = fake["salt"]
         iterations = fake["iterations"]
 
-    if salt_b64 is None and not legacy:
+    if salt_b64 is None:
         fake = _fake_scram_params(username or "anonymous")
         salt_b64 = fake["salt"]
         iterations = fake["iterations"]
@@ -348,18 +428,16 @@ def create_login_challenge(username: str, user=None) -> Dict[str, Any]:
     }
     cache.set(f"{_CHALLENGE_PREFIX}{challenge_id}", payload, CHALLENGE_TTL)
 
-    result: Dict[str, Any] = {
+    return {
         "challenge_id": challenge_id,
         "server_nonce": server_nonce,
         "scheme": scheme,
+        "salt": salt_b64,
+        "iterations": iterations,
         "instance_binding": get_instance_binding_hex(),
         "transport_iterations": _iterations(),
         "expires_in": CHALLENGE_TTL,
     }
-    if not legacy:
-        result["salt"] = salt_b64
-        result["iterations"] = iterations
-    return result
 
 
 def pop_login_challenge(challenge_id: str) -> Optional[Dict[str, Any]]:

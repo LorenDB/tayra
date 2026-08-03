@@ -7,6 +7,7 @@ from django.urls import reverse
 
 from funkwhale_api.users.password_transport import (
     compute_client_proof,
+    compute_legacy_client_proof,
     create_scram_hash,
     get_instance_binding,
     hash_password_for_transport,
@@ -14,7 +15,9 @@ from funkwhale_api.users.password_transport import (
     is_transport_password_hash,
     parse_scram_hash,
     transport_secret,
+    upgrade_password_matches_legacy_digest,
     verify_client_proof,
+    verify_legacy_client_proof,
     verify_scram_secret,
 )
 
@@ -255,8 +258,38 @@ def test_token_login_proof_not_replayable_across_challenges(api_client, factorie
     assert bad.json()["error"] == "invalid_credentials"
 
 
+def test_legacy_client_proof_binds_to_challenge():
+    digest = hash_password_for_transport("s3cret-pass")
+    proof = compute_legacy_client_proof(
+        digest,
+        username="legacy",
+        client_nonce="cn",
+        server_nonce="sn",
+        challenge_id="ch1",
+    )
+    assert verify_legacy_client_proof(
+        digest,
+        proof,
+        username="legacy",
+        client_nonce="cn",
+        server_nonce="sn",
+        challenge_id="ch1",
+    )
+    # Different challenge id → proof invalid.
+    assert not verify_legacy_client_proof(
+        digest,
+        proof,
+        username="legacy",
+        client_nonce="cn",
+        server_nonce="sn",
+        challenge_id="ch2",
+    )
+    assert upgrade_password_matches_legacy_digest("s3cret-pass", digest)
+    assert not upgrade_password_matches_legacy_digest("wrong", digest)
+
+
 @pytest.mark.django_db
-def test_legacy_v1_login_with_challenge(api_client, factories):
+def test_legacy_v1_login_requires_hmac_proof(api_client, factories):
     from django.contrib.auth.hashers import make_password
 
     user = factories["users.User"](username="legacy")
@@ -270,8 +303,12 @@ def test_legacy_v1_login_with_challenge(api_client, factories):
         format="json",
     ).json()
     assert challenge["scheme"] == "legacy_v1"
+    # Uniform public shape (anti-enumeration of field presence).
+    assert challenge.get("salt")
+    assert challenge.get("iterations")
 
-    login = api_client.post(
+    # Digest alone (pre-fix) must fail.
+    bare = api_client.post(
         reverse("api:v1:users:token_login"),
         {
             "username": "legacy",
@@ -280,5 +317,132 @@ def test_legacy_v1_login_with_challenge(api_client, factories):
         },
         format="json",
     )
+    assert bare.status_code == 400
+    assert bare.json()["error"] == "missing_proof"
+
+    # Fresh challenge after bare attempt consumed the first id.
+    challenge = api_client.post(
+        reverse("api:v1:users:token_login_challenge"),
+        {"username": "legacy"},
+        format="json",
+    ).json()
+    client_nonce = "legacy-cn"
+    proof = compute_legacy_client_proof(
+        digest,
+        username="legacy",
+        client_nonce=client_nonce,
+        server_nonce=challenge["server_nonce"],
+        challenge_id=challenge["challenge_id"],
+    )
+    login = api_client.post(
+        reverse("api:v1:users:token_login"),
+        {
+            "username": "legacy",
+            "challenge_id": challenge["challenge_id"],
+            "password": digest,
+            "client_nonce": client_nonce,
+            "client_proof": proof,
+            "upgrade_password": "s3cret-pass",
+        },
+        format="json",
+    )
     assert login.status_code == 200, login.content
     assert login.json()["access_token"]
+
+    user.refresh_from_db()
+    assert is_scram_hash(user.password)
+    assert user.check_password("s3cret-pass")
+
+    # Next login is SCRAM (no longer legacy_v1).
+    challenge2 = api_client.post(
+        reverse("api:v1:users:token_login_challenge"),
+        {"username": "legacy"},
+        format="json",
+    ).json()
+    assert challenge2["scheme"] == "scram_v2"
+
+
+@pytest.mark.django_db
+def test_legacy_v1_digest_not_reusable_across_challenges(api_client, factories):
+    """HMAC proof for challenge A must not work on challenge B."""
+    from django.contrib.auth.hashers import make_password
+
+    user = factories["users.User"](username="leg2")
+    digest = hash_password_for_transport("s3cret-pass")
+    user.password = make_password(digest)
+    user.save(update_fields=["password"])
+
+    c1 = api_client.post(
+        reverse("api:v1:users:token_login_challenge"),
+        {"username": "leg2"},
+        format="json",
+    ).json()
+    c2 = api_client.post(
+        reverse("api:v1:users:token_login_challenge"),
+        {"username": "leg2"},
+        format="json",
+    ).json()
+    proof = compute_legacy_client_proof(
+        digest,
+        username="leg2",
+        client_nonce="cn",
+        server_nonce=c1["server_nonce"],
+        challenge_id=c1["challenge_id"],
+    )
+    bad = api_client.post(
+        reverse("api:v1:users:token_login"),
+        {
+            "username": "leg2",
+            "challenge_id": c2["challenge_id"],
+            "password": digest,
+            "client_nonce": "cn",
+            "client_proof": proof,
+            "upgrade_password": "s3cret-pass",
+        },
+        format="json",
+    )
+    assert bad.status_code == 400
+    assert bad.json()["error"] == "invalid_credentials"
+
+
+@pytest.mark.django_db
+def test_legacy_v1_login_rejects_digest_without_upgrade_password(
+    api_client, factories
+):
+    """Stolen digest + HMAC is not enough; upgrade_password is required."""
+    from django.contrib.auth.hashers import make_password
+
+    user = factories["users.User"](username="leg3")
+    digest = hash_password_for_transport("s3cret-pass")
+    user.password = make_password(digest)
+    user.save(update_fields=["password"])
+
+    challenge = api_client.post(
+        reverse("api:v1:users:token_login_challenge"),
+        {"username": "leg3"},
+        format="json",
+    ).json()
+    client_nonce = "cn"
+    proof = compute_legacy_client_proof(
+        digest,
+        username="leg3",
+        client_nonce=client_nonce,
+        server_nonce=challenge["server_nonce"],
+        challenge_id=challenge["challenge_id"],
+    )
+    resp = api_client.post(
+        reverse("api:v1:users:token_login"),
+        {
+            "username": "leg3",
+            "challenge_id": challenge["challenge_id"],
+            "password": digest,
+            "client_nonce": client_nonce,
+            "client_proof": proof,
+            # no upgrade_password
+        },
+        format="json",
+    )
+    assert resp.status_code == 400
+    assert resp.json()["error"] == "legacy_upgrade_required"
+    user.refresh_from_db()
+    assert not is_scram_hash(user.password)
