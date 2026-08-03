@@ -414,8 +414,9 @@ class TotpDevice(models.Model):
     user = models.OneToOneField(
         User, related_name="totp_device", on_delete=models.CASCADE
     )
-    # Base32 shared secret (no padding). Never expose after confirmation.
-    secret = models.CharField(max_length=64)
+    # Base32 shared secret, stored encrypted (enc1:… via totp.protect_totp_secret).
+    # Legacy plaintext base32 rows are still accepted by reveal_totp_secret.
+    secret = models.CharField(max_length=512)
     confirmed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     confirmed_at = models.DateTimeField(null=True, blank=True)

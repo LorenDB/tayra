@@ -59,7 +59,10 @@ def test_token_login_returns_oauth_tokens(api_client, factories):
     assert response.status_code == 200, response.content
     data = response.json()
     assert data["token_type"] == "Bearer"
-    assert data["scope"] == "read write"
+    # Leaf scopes for the user (not the parent "read write" string).
+    scope_parts = set(data["scope"].split())
+    assert "read:profile" in scope_parts
+    assert "write:libraries" in scope_parts
     assert data["access_token"]
     assert data["refresh_token"]
     assert data["client_id"]

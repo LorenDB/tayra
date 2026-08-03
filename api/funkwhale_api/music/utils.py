@@ -135,6 +135,57 @@ def increment_downloads_count(upload, user, wsgi_request):
     cache.set(cache_key, 1, duration)
 
 
+def resolve_contained_path(path, *roots):
+    """Resolve *path* and ensure it stays under one of *roots*.
+
+    Used for ``file://`` in-place sources so symlinks / ``..`` cannot escape
+    the music (or media) directory. Returns a resolved :class:`pathlib.Path`
+    or raises :class:`ValueError`.
+    """
+    if not path:
+        raise ValueError("Empty path")
+    real = pathlib.Path(path).resolve()
+    allowed = []
+    for root in roots:
+        if not root:
+            continue
+        try:
+            allowed.append(pathlib.Path(root).resolve())
+        except (OSError, RuntimeError):
+            continue
+    if not allowed:
+        raise ValueError("No music/media roots configured")
+    for root in allowed:
+        try:
+            real.relative_to(root)
+            return real
+        except ValueError:
+            continue
+    raise ValueError("Path escapes allowed music/media roots")
+
+
+def resolve_inplace_source(source: str):
+    """Return a contained filesystem path for a ``file://`` upload source.
+
+    Returns ``None`` when *source* is missing/unsafe (caller should not open).
+    """
+    if not source or not isinstance(source, str):
+        return None
+    if not source.startswith("file://"):
+        return None
+    raw = source[len("file://") :]
+    from django.conf import settings
+
+    roots = [
+        getattr(settings, "MUSIC_DIRECTORY_PATH", None),
+        getattr(settings, "MEDIA_ROOT", None),
+    ]
+    try:
+        return resolve_contained_path(raw, *roots)
+    except ValueError:
+        return None
+
+
 def browse_dir(root, path):
     """List entries under *root*/*path*, strictly contained within *root*.
 

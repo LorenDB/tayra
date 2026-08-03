@@ -71,7 +71,9 @@ repository root (not from `front/` or `api/`).
 
 Services: `postgres`, `redis`, `api`, `celeryworker`, `celerybeat`, `front`.
 
-Default publish: `http://0.0.0.0:5000` → nginx (SPA + `/api/` proxy).
+Default publish: `http://127.0.0.1:5000` → nginx (SPA + `/api/` proxy).
+Set `FUNKWHALE_API_IP=0.0.0.0` only if you intentionally bind all interfaces
+(prefer TLS at a reverse proxy and a host firewall).
 
 ## 4. First-time Django setup
 
@@ -294,13 +296,26 @@ username link for that IdP subject. Two different `sub` values cannot share
 the same local user under one issuer (returns `username_conflict`).
 
 **“Passwords in the browser Network tab”**  
-Tayra never sends the account password. Login uses a one-time SCRAM-like
-proof bound to a server challenge (not a static reusable digest). DevTools
-still shows the JSON body after TLS decryption;
+Tayra never sends the account password on the SCRAM login path. Login uses a
+one-time SCRAM-like proof bound to a server challenge. DevTools still shows
+the JSON body after TLS decryption; you should see hex proofs, not the typed
+password. Ensure users open the site via **HTTPS**.
 
-you should see a 64-character hex string, not the typed password. Ensure users
-open the site via **HTTPS**. If you see plaintext there, the SPA build is too
-old—rebuild `front`.
+### Subsonic API (optional)
+
+Subsonic clients authenticate with a **token in the query string** (`u`, `p` or
+`s`/`t`) and the protocol mandates MD5 for the salted token form. Treat this
+as a legacy protocol surface:
+
+1. **TLS only** — never expose Subsonic over cleartext HTTP on a public network.
+2. **Disable when unused** — instance preference `subsonic__enabled` (or
+   equivalent admin setting). Prefer first-party Tayra OAuth for new clients.
+3. **Log redaction** — configure your reverse proxy / access logs so query
+   strings for `/rest/` (or Subsonic paths) are not stored; tokens in `p=` /
+   `t=` are password-equivalent for that user.
+4. **Rotate** — users can regenerate their Subsonic token from account
+   settings if a URL was leaked.
+
 **Browser CSP / CanvasKit blocked (gstatic.com)**  
 The front image must build with `--no-web-resources-cdn` (already in
 `front/Dockerfile`) so CanvasKit is same-origin. Rebuild front:

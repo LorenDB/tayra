@@ -178,6 +178,37 @@ def _default_issuer() -> str:
     return str(hostname)[:64]
 
 
+# At-rest encryption for TotpDevice.secret (Fernet-like via Django signing).
+_TOTP_SECRET_SALT = "tayra-totp-device-secret"
+_TOTP_SECRET_PREFIX = "enc1:"
+
+
+def protect_totp_secret(secret: str) -> str:
+    """Encrypt a base32 TOTP secret for database storage."""
+    if not secret:
+        return secret
+    if secret.startswith(_TOTP_SECRET_PREFIX):
+        return secret
+    return _TOTP_SECRET_PREFIX + signing.dumps(
+        secret, salt=_TOTP_SECRET_SALT
+    )
+
+
+def reveal_totp_secret(stored: str) -> str:
+    """Decrypt a stored TOTP secret; accept legacy plaintext base32 rows."""
+    if not stored:
+        return ""
+    if stored.startswith(_TOTP_SECRET_PREFIX):
+        try:
+            return signing.loads(
+                stored[len(_TOTP_SECRET_PREFIX) :], salt=_TOTP_SECRET_SALT
+            )
+        except signing.BadSignature:
+            return ""
+    # Legacy unencrypted base32 secret.
+    return stored
+
+
 def is_totp_enabled(user) -> bool:
     """True when the user has a confirmed TOTP device.
 
@@ -193,7 +224,7 @@ def is_totp_enabled(user) -> bool:
         device = users_models.TotpDevice.objects.filter(user_id=user.pk).first()
     except Exception:
         return False
-    return bool(device and device.confirmed and device.secret)
+    return bool(device and device.confirmed and reveal_totp_secret(device.secret))
 
 
 def is_password_user(user) -> bool:
@@ -220,11 +251,24 @@ def needs_totp_setup(user) -> bool:
     return not is_totp_enabled(user)
 
 
+def _mfa_jti_cache_key(jti: str) -> str:
+    return f"mfa:jti:{jti}"
+
+
 def create_mfa_token(user_id: int) -> str:
-    return signing.dumps({"uid": int(user_id), "t": "totp"}, salt=MFA_TOKEN_SALT)
+    """Mint a short-lived MFA challenge token with a single-use ``jti``."""
+    jti = secrets.token_urlsafe(16)
+    cache.set(_mfa_jti_cache_key(jti), int(user_id), MFA_TOKEN_MAX_AGE)
+    return signing.dumps(
+        {"uid": int(user_id), "t": "totp", "j": jti}, salt=MFA_TOKEN_SALT
+    )
 
 
 def load_mfa_token(token: str) -> Optional[int]:
+    """Validate signature/age and that the jti has not been consumed yet.
+
+    Does **not** consume the token (callers may retry wrong TOTP codes).
+    """
     try:
         payload = signing.loads(
             token, salt=MFA_TOKEN_SALT, max_age=MFA_TOKEN_MAX_AGE
@@ -234,7 +278,42 @@ def load_mfa_token(token: str) -> Optional[int]:
     try:
         if payload.get("t") != "totp":
             return None
-        return int(payload["uid"])
+        uid = int(payload["uid"])
+        jti = payload.get("j")
+        if not jti:
+            # Pre-jti tokens (should not appear after upgrade) — reject.
+            return None
+        cached = cache.get(_mfa_jti_cache_key(str(jti)))
+        if cached is None:
+            return None
+        if int(cached) != uid:
+            return None
+        return uid
+    except (KeyError, TypeError, ValueError):
+        return None
+
+
+def consume_mfa_token(token: str) -> Optional[int]:
+    """Validate and invalidate an MFA token (single successful use)."""
+    try:
+        payload = signing.loads(
+            token, salt=MFA_TOKEN_SALT, max_age=MFA_TOKEN_MAX_AGE
+        )
+    except signing.BadSignature:
+        return None
+    try:
+        if payload.get("t") != "totp":
+            return None
+        uid = int(payload["uid"])
+        jti = payload.get("j")
+        if not jti:
+            return None
+        key = _mfa_jti_cache_key(str(jti))
+        cached = cache.get(key)
+        if cached is None or int(cached) != uid:
+            return None
+        cache.delete(key)
+        return uid
     except (KeyError, TypeError, ValueError):
         return None
 
@@ -325,7 +404,9 @@ def verify_user_totp(user, code: str) -> bool:
             return False
 
         ok, step = verify_totp(
-            device.secret, code, last_used_step=device.last_used_step
+            reveal_totp_secret(device.secret),
+            code,
+            last_used_step=device.last_used_step,
         )
         if ok and step is not None:
             device.last_used_step = step

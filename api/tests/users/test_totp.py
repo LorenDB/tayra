@@ -61,7 +61,7 @@ def _enable_totp(user, secret=None) -> str:
     models.TotpDevice.objects.update_or_create(
         user=user,
         defaults={
-            "secret": secret,
+            "secret": totp.protect_totp_secret(secret),
             "confirmed": True,
             "confirmed_at": timezone.now(),
             "last_used_step": None,
@@ -107,6 +107,15 @@ def test_token_login_requires_totp_when_enabled(api_client, factories):
     assert body["totp_enabled"] is True
     assert body["totp_setup_required"] is False
 
+    # MFA challenge is single-use after success.
+    again = api_client.post(
+        reverse("api:v1:users:token_login_2fa"),
+        {"mfa_token": data["mfa_token"], "totp_code": code},
+        format="json",
+    )
+    assert again.status_code == 400
+    assert again.json()["error"] == "invalid_mfa_token"
+
 
 @pytest.mark.django_db
 def test_token_login_2fa_rejects_bad_code(api_client, factories):
@@ -137,6 +146,32 @@ def test_recovery_code_hash_is_domain_separated():
     assert len(new_digest) == 64
     # Same code with different grouping still hashes the same.
     assert totp.hash_recovery_code(code.replace("-", "")) == new_digest
+
+
+def test_totp_secret_protect_reveal_roundtrip():
+    secret = totp.generate_base32_secret()
+    stored = totp.protect_totp_secret(secret)
+    assert stored.startswith("enc1:")
+    assert stored != secret
+    assert totp.reveal_totp_secret(stored) == secret
+    # Legacy plaintext still works.
+    assert totp.reveal_totp_secret(secret) == secret
+    # Idempotent protect.
+    assert totp.protect_totp_secret(stored) == stored
+
+
+def test_mfa_token_is_single_use(settings):
+    from django.core.cache import cache
+
+    cache.clear()
+    token = totp.create_mfa_token(42)
+    assert totp.load_mfa_token(token) == 42
+    # Peek does not consume.
+    assert totp.load_mfa_token(token) == 42
+    assert totp.consume_mfa_token(token) == 42
+    # Second consume / load fails.
+    assert totp.consume_mfa_token(token) is None
+    assert totp.load_mfa_token(token) is None
 
 
 def test_generate_recovery_codes_have_high_entropy():

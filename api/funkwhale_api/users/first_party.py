@@ -20,7 +20,8 @@ from funkwhale_api.users import models
 # Stable name so we reuse a single Application row across logins.
 FIRST_PARTY_APP_NAME = "Tayra"
 
-# Scopes used by the first-party client (matches historical web client).
+# Parent scopes requested by the first-party client. Actual issued tokens use
+# the intersection with the user's granted permissions (see issue_user_tokens).
 FIRST_PARTY_SCOPES = "read write"
 
 # Preferred native deep-link callbacks (M2); OOB kept for paste-code flows.
@@ -92,6 +93,28 @@ def get_or_create_first_party_application() -> tuple[models.Application, str]:
     return app, ""
 
 
+def first_party_scope_for_user(user: models.User) -> str:
+    """
+    Leaf scopes for a first-party token: user grants ∩ expanded ``read write``.
+
+    Avoids minting a token that *claims* admin scopes the user does not hold.
+    Privileged instance scopes are still included when the user has the
+    corresponding permission (library/settings/moderation).
+    """
+    from funkwhale_api.users.oauth import scopes as oauth_scopes
+    from funkwhale_api.users.oauth.permissions import normalize
+
+    user_scopes = oauth_scopes.get_from_permissions(**user.get_permissions())
+    fp_leaves = normalize(*FIRST_PARTY_SCOPES.split())
+    granted = sorted(user_scopes & fp_leaves)
+    if not granted:
+        # Extremely locked-down account: still allow basic read profile.
+        granted = sorted(oauth_scopes.LOGGED_IN_SCOPES & fp_leaves) or [
+            "read:profile"
+        ]
+    return " ".join(granted)
+
+
 @transaction.atomic
 def issue_user_tokens(user: models.User) -> dict:
     """
@@ -100,6 +123,7 @@ def issue_user_tokens(user: models.User) -> dict:
     Returns a dict suitable for a JSON API response (OAuth-shaped fields).
     """
     application, client_secret = get_or_create_first_party_application()
+    scope = first_party_scope_for_user(user)
 
     access_expires = timezone.now() + datetime.timedelta(
         seconds=oauth2_settings.ACCESS_TOKEN_EXPIRE_SECONDS
@@ -109,7 +133,7 @@ def issue_user_tokens(user: models.User) -> dict:
         application=application,
         token=_generate_token(),
         expires=access_expires,
-        scope=FIRST_PARTY_SCOPES,
+        scope=scope,
     )
     refresh = models.RefreshToken.objects.create(
         user=user,
@@ -127,7 +151,7 @@ def issue_user_tokens(user: models.User) -> dict:
         "access_token": access.token,
         "refresh_token": refresh.token,
         "token_type": "Bearer",
-        "scope": FIRST_PARTY_SCOPES,
+        "scope": scope,
         "expires_in": oauth2_settings.ACCESS_TOKEN_EXPIRE_SECONDS,
         "client_id": application.client_id,
         "client_secret": client_secret,

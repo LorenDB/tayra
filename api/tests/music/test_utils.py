@@ -133,6 +133,24 @@ def test_browse_dir_rejects_path_escape(evil_path, tmpdir):
         utils.browse_dir(root_path, evil_path)
 
 
+def test_resolve_contained_path_rejects_symlink_escape(tmpdir):
+    root = pathlib.Path(tmpdir) / "music"
+    root.mkdir()
+    outside = pathlib.Path(tmpdir) / "secret.txt"
+    outside.write_text("nope")
+    link = root / "escape"
+    try:
+        link.symlink_to(outside)
+    except OSError:
+        pytest.skip("symlinks not supported")
+    with pytest.raises(ValueError):
+        utils.resolve_contained_path(str(link), str(root))
+    # Direct child is fine.
+    ok = root / "track.ogg"
+    ok.write_bytes(b"x")
+    assert utils.resolve_contained_path(str(ok), str(root)) == ok.resolve()
+
+
 @pytest.mark.parametrize(
     "name, expected",
     [

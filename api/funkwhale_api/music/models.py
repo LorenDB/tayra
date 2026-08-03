@@ -865,14 +865,20 @@ class Upload(models.Model):
         if self.audio_file:
             return self.audio_file.size
 
-        if self.source.startswith("file://"):
-            return os.path.getsize(self.source.replace("file://", "", 1))
+        if self.source and self.source.startswith("file://"):
+            path = utils.resolve_inplace_source(self.source)
+            if path is None:
+                return None
+            return os.path.getsize(path)
 
     def get_audio_file(self):
         if self.audio_file:
             return self.audio_file.open()
         if self.source and self.source.startswith("file://"):
-            return open(self.source.replace("file://", "", 1), "rb")
+            path = utils.resolve_inplace_source(self.source)
+            if path is None:
+                return None
+            return open(path, "rb")
 
     def get_audio_data(self):
         audio_file = self.get_audio_file()
@@ -989,7 +995,8 @@ class Upload(models.Model):
     def in_place_path(self):
         if not self.source or not self.source.startswith("file://"):
             return
-        return self.source.lstrip("file://")
+        path = utils.resolve_inplace_source(self.source)
+        return str(path) if path is not None else None
 
     @property
     def audio_file_path(self):

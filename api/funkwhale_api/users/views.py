@@ -230,10 +230,11 @@ class UserViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
             )
 
         secret = totp_mod.generate_base32_secret()
+        protected = totp_mod.protect_totp_secret(secret)
         device, _created = models.TotpDevice.objects.update_or_create(
             user=user,
             defaults={
-                "secret": secret,
+                "secret": protected,
                 "confirmed": False,
                 "confirmed_at": None,
                 "last_used_step": None,
@@ -241,7 +242,7 @@ class UserViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
         )
         # update_or_create with defaults may not replace secret if we only
         # want a fresh secret when restarting — force-save above via defaults.
-        device.secret = secret
+        device.secret = protected
         device.confirmed = False
         device.confirmed_at = None
         device.last_used_step = None
@@ -305,7 +306,9 @@ class UserViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
                     },
                     status=400,
                 )
-            ok, step = totp_mod.verify_totp(device.secret, code)
+            ok, step = totp_mod.verify_totp(
+                totp_mod.reveal_totp_secret(device.secret), code
+            )
             if not ok:
                 return Response(
                     {
@@ -1016,6 +1019,7 @@ def token_login_2fa(request):
             status=400,
         )
 
+    # Peek without consuming so wrong codes can be retried within the TTL.
     user_id = totp_mod.load_mfa_token(mfa_token)
     if user_id is None:
         return Response(
@@ -1094,6 +1098,16 @@ def token_login_2fa(request):
                 },
                 status=400,
             )
+
+    # Success: burn the MFA challenge so the same mfa_token cannot re-issue.
+    if totp_mod.consume_mfa_token(mfa_token) is None:
+        return Response(
+            {
+                "error": "invalid_mfa_token",
+                "detail": "Invalid or expired two-factor challenge. Sign in again.",
+            },
+            status=400,
+        )
 
     totp_mod.clear_totp_failures(user.pk)
     return _issue_token_response(user, meta="2fa")

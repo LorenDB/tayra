@@ -1,6 +1,7 @@
 import base64
 import datetime
 import logging
+import pathlib
 import urllib.parse
 
 import django.db.utils
@@ -462,6 +463,22 @@ def strip_absolute_media_url(path):
     return path
 
 
+def _contained_inplace_path(path_str):
+    """Validate an in-place absolute path is under MUSIC_DIRECTORY_PATH."""
+    from funkwhale_api.music import utils as music_utils
+
+    prefix = settings.MUSIC_DIRECTORY_PATH
+    if not prefix:
+        raise ValueError(
+            "You need to specify MUSIC_DIRECTORY_SERVE_PATH and "
+            "MUSIC_DIRECTORY_PATH to serve in-place imported files"
+        )
+    try:
+        return music_utils.resolve_contained_path(path_str, prefix)
+    except ValueError as exc:
+        raise ValueError("In-place path is outside MUSIC_DIRECTORY_PATH") from exc
+
+
 def get_file_path(audio_file):
     serve_path = settings.MUSIC_DIRECTORY_SERVE_PATH
     prefix = settings.MUSIC_DIRECTORY_PATH
@@ -471,13 +488,16 @@ def get_file_path(audio_file):
         try:
             path = audio_file.url
         except AttributeError:
-            # a path was given
+            # a path was given (in-place import)
             if not serve_path or not prefix:
                 raise ValueError(
                     "You need to specify MUSIC_DIRECTORY_SERVE_PATH and "
                     "MUSIC_DIRECTORY_PATH to serve in-place imported files"
                 )
-            path = "/music" + audio_file.replace(prefix, "", 1)
+            contained = _contained_inplace_path(audio_file)
+            root = pathlib.Path(prefix).resolve()
+            rel = str(contained.relative_to(root))
+            path = "/music/" + rel.lstrip("/")
         path = strip_absolute_media_url(path)
         if path.startswith("http://") or path.startswith("https://"):
             protocol, remainder = path.split("://", 1)
@@ -498,7 +518,10 @@ def get_file_path(audio_file):
                     "You need to specify MUSIC_DIRECTORY_SERVE_PATH and "
                     "MUSIC_DIRECTORY_PATH to serve in-place imported files"
                 )
-            path = audio_file.replace(prefix, serve_path, 1)
+            contained = _contained_inplace_path(audio_file)
+            root = pathlib.Path(prefix).resolve()
+            rel = str(contained.relative_to(root))
+            path = str(pathlib.Path(serve_path) / rel)
         path = strip_absolute_media_url(path)
         return path.encode("utf-8")
 
