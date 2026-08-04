@@ -509,6 +509,31 @@ class FunkwhaleApi {
     return <String, dynamic>{};
   }
 
+  /// Bulk import listenings (`POST /api/v1/history/listenings/bulk/`).
+  ///
+  /// Owner-only; never triggers plugins/activity. Max 500 items per request.
+  /// [items] entries use wire keys: `track`, `creation_date` (ISO-8601),
+  /// optional `duration_seconds`, `source_device`, `client_session_id`.
+  ///
+  /// Returns `{created, enriched, skipped_duplicate, errors: [{index, code, detail}]}`.
+  Future<Map<String, dynamic>> bulkCreateListenings({
+    required List<Map<String, dynamic>> items,
+    String mode = 'enrich_or_create',
+    int? dedupWindowSeconds,
+  }) async {
+    final data = <String, dynamic>{
+      'mode': mode,
+      'items': items,
+      if (dedupWindowSeconds != null)
+        'dedup_window_seconds': dedupWindowSeconds,
+    };
+    final response = await _dio.post(
+      '$_baseUrl/api/v1/history/listenings/bulk/',
+      data: data,
+    );
+    return _asStringKeyedMap(response.data);
+  }
+
   // ── Client devices (rich client-data) ───────────────────────────────
 
   /// Feature probe: GET list endpoint. `false` on HTTP 404 (unsupported);

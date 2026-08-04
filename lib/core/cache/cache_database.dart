@@ -276,4 +276,11 @@ class CacheDatabase {
     _database = null;
     _initFuture = null;
   }
+
+  /// Inject an already-open database (unit tests with sqflite_common_ffi).
+  @visibleForTesting
+  void debugSetDatabase(Database? db) {
+    _database = db;
+    _initFuture = null;
+  }
 }

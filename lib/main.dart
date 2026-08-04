@@ -11,6 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/api/client_data_service.dart';
+import 'package:tayra/core/auth/auth_provider.dart';
 import 'package:tayra/core/cache/auto_offline_coordinator.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/core/cache/download_queue_service.dart';
@@ -139,6 +140,21 @@ void main() async {
 
   // Register ClientDevice + sync progress/prefs when client-data API is available.
   container.read(clientDataBootstrapProvider);
+
+  // When connectivity returns, push pending local listens (bulk) and purge
+  // synced rows past retention. Avoids importing connectivity into
+  // client_data_service (settings ↔ client_data cycle).
+  if (AppPlatform.supportsOfflineCache) {
+    container.listen<OfflineState>(offlineStateProvider, (previous, next) {
+      final cameOnline =
+          previous != null && previous.isOffline && !next.isOffline;
+      if (!cameOnline) return;
+      if (!container.read(authStateProvider).isAuthenticated) return;
+      unawaited(
+        container.read(clientDataServiceProvider).syncProgressAndPreferences(),
+      );
+    });
+  }
 
   runApp(
     UncontrolledProviderScope(container: container, child: const TayraApp()),

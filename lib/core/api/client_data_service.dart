@@ -10,8 +10,10 @@ import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/api/client_preferences.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
 import 'package:tayra/core/device/device_identity.dart';
+import 'package:tayra/core/platform/app_platform.dart';
 import 'package:tayra/features/podcasts/podcast_progress_provider.dart';
 import 'package:tayra/features/podcasts/podcast_progress_service.dart';
+import 'package:tayra/features/year_review/listen_history_service.dart';
 
 // ── Constants ───────────────────────────────────────────────────────────
 
@@ -26,6 +28,11 @@ const kServerProgressPutInterval = Duration(seconds: 15);
 
 /// Bulk batch size for playback-progress migration (server max 500).
 const kPlaybackProgressBulkChunk = 500;
+
+final _uuidV4Regex = RegExp(
+  r'^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
+  caseSensitive: false,
+);
 
 /// SharedPreferences key for per-pref local change timestamps (ms).
 const _prefLocalUpdatedMetaKey = 'tayra_pref_local_updated_ms';
@@ -42,6 +49,9 @@ final clientDataServiceProvider = Provider<ClientDataService>((ref) {
 /// registration without coupling AuthNotifier to the API layer.
 /// Wire [ClientDataService.onPreferencesApplied] from main (settings reload)
 /// to avoid a circular import with settings_provider.
+///
+/// Offline → online re-sync is wired from [main] (see connectivity listen)
+/// so this file does not import connectivity/settings (cycle risk).
 final clientDataBootstrapProvider = Provider<void>((ref) {
   ref.listen<AuthState>(authStateProvider, (previous, next) {
     if (next.isAuthenticated) {
@@ -69,6 +79,7 @@ class ClientDataBackend {
     required this.getDeviceUuid,
     required this.getDeviceName,
     required this.getAppVersion,
+    this.bulkCreateListenings,
     this.putPlaybackProgress,
     this.bulkUpsertPlaybackProgress,
     this.getPlaybackProgressPage,
@@ -103,6 +114,14 @@ class ClientDataBackend {
   final Future<String> Function() getDeviceUuid;
   final Future<String> Function() getDeviceName;
   final Future<String> Function() getAppVersion;
+
+  /// Historical / offline catch-up. Null when tests omit bulk support.
+  final Future<Map<String, dynamic>> Function({
+    required List<Map<String, dynamic>> items,
+    String mode,
+    int? dedupWindowSeconds,
+  })?
+  bulkCreateListenings;
 
   final Future<Map<String, dynamic>> Function({
     required int trackId,
@@ -174,9 +193,11 @@ class ClientDataService {
   bool _deviceRegistered = false;
   Future<void>? _readyFuture;
   Future<void>? _syncFuture;
+  Future<void>? _listenSyncFuture;
 
   String? _activeSessionId;
   int? _activeTrackId;
+  int? _activeServerListeningId;
   int _lastKnownSeconds = 0;
   int _lastPatchedSeconds = 0;
   DateTime? _lastPatchAt;
@@ -241,6 +262,16 @@ class ClientDataService {
         final info = await PackageInfo.fromPlatform();
         return info.version;
       },
+      bulkCreateListenings:
+          ({
+            required List<Map<String, dynamic>> items,
+            String mode = 'enrich_or_create',
+            int? dedupWindowSeconds,
+          }) => cached.bulkCreateListenings(
+            items: items,
+            mode: mode,
+            dedupWindowSeconds: dedupWindowSeconds,
+          ),
       putPlaybackProgress: cached.putPlaybackProgress,
       bulkUpsertPlaybackProgress: cached.bulkUpsertPlaybackProgress,
       getPlaybackProgressPage: ({
@@ -303,7 +334,8 @@ class ClientDataService {
     _richSupported = supported;
     if (!supported) return;
     await _registerDevice();
-    // Progress + prefs sync after device is registered (non-blocking).
+    // Listen history catch-up + progress/prefs after device is registered
+    // (non-blocking so login / cold start stay snappy).
     unawaited(syncProgressAndPreferences());
   }
 
@@ -359,37 +391,66 @@ class ClientDataService {
     if (_richSupported == true && _deviceRegistered) {
       final sessionId = generateUuidV4();
       _activeSessionId = sessionId;
+      _activeServerListeningId = null;
       try {
         final deviceUuid = await _backend.getDeviceUuid();
-        await _backend.createRichListening(
+        final created = await _backend.createRichListening(
           trackId: track.id,
           sourceDevice: deviceUuid,
           clientSessionId: sessionId,
         );
+        _activeServerListeningId = (created['id'] as num?)?.toInt();
         return;
       } catch (e) {
         debugPrint('ClientDataService rich create failed: $e');
         // Device may have been soft-deleted server-side — re-register once.
         try {
           await _registerDevice();
-          await _backend.createRichListening(
+          final created = await _backend.createRichListening(
             trackId: track.id,
             sourceDevice: await _backend.getDeviceUuid(),
             clientSessionId: sessionId,
           );
+          _activeServerListeningId = (created['id'] as num?)?.toInt();
           return;
         } catch (e2) {
           debugPrint('ClientDataService rich create retry failed: $e2');
           _activeSessionId = null;
+          _activeServerListeningId = null;
         }
       }
     }
 
     // Thin stock path (unsupported server or rich create failed).
     _activeSessionId = null;
+    _activeServerListeningId = null;
     try {
       await _backend.recordListening(track.id);
     } catch (_) {}
+  }
+
+  /// Link a local SQLite listen row to the active rich server session.
+  ///
+  /// Call when the local row is first inserted (online dual-write). Marks
+  /// the row [synced_at] so retention purge may later free disk space.
+  /// No-op when there is no active rich session for [trackId], on web, or
+  /// when the server only supports thin scrobbles.
+  Future<void> linkLocalListenToServer({
+    required int recordId,
+    required int trackId,
+  }) async {
+    if (!AppPlatform.supportsOfflineCache) return;
+    if (recordId <= 0) return;
+    if (_activeSessionId == null || _activeTrackId != trackId) return;
+    try {
+      await ListenHistoryService.markListenSynced(
+        recordId,
+        clientSessionId: _activeSessionId,
+        serverListeningId: _activeServerListeningId,
+      );
+    } catch (e) {
+      debugPrint('ClientDataService linkLocalListenToServer failed: $e');
+    }
   }
 
   /// Push duration to the server for the active rich session.
@@ -451,6 +512,7 @@ class ClientDataService {
   void _clearActiveSession() {
     _activeSessionId = null;
     _activeTrackId = null;
+    _activeServerListeningId = null;
     _lastKnownSeconds = 0;
     _lastPatchedSeconds = 0;
     _lastPatchAt = null;
@@ -490,12 +552,13 @@ class ClientDataService {
   ) async {
     try {
       final deviceUuid = await _backend.getDeviceUuid();
-      await _backend.createRichListening(
+      final created = await _backend.createRichListening(
         trackId: trackId,
         durationSeconds: seconds,
         sourceDevice: deviceUuid,
         clientSessionId: sessionId,
       );
+      _activeServerListeningId = (created['id'] as num?)?.toInt();
       _lastPatchedSeconds = seconds;
       _lastPatchAt = DateTime.now();
     } catch (e) {
@@ -509,6 +572,7 @@ class ClientDataService {
     _deviceRegistered = false;
     _readyFuture = null;
     _syncFuture = null;
+    _listenSyncFuture = null;
     _lastProgressTrackId = null;
     _lastProgressPositionMs = -1;
     _lastProgressPutAt = null;
@@ -538,6 +602,8 @@ class ClientDataService {
   }
 
   Future<void> _doSyncProgressAndPreferences() async {
+    // Offline → server catch-up for listen history, then free local disk.
+    await syncPendingListensAndPurge();
     await syncPodcastProgress();
     final prefsApplied = await syncAllowlistedPreferences();
     if (prefsApplied) {
@@ -552,6 +618,174 @@ class ClientDataService {
         }
       }
     }
+  }
+
+  /// Upload pending local listens via bulk enrich_or_create, then purge
+  /// synced rows past [kListenHistoryRetention].
+  ///
+  /// Native only. Safe to call repeatedly; concurrent calls coalesce.
+  /// Skips rows newer than [kListenHistorySyncGrace] so live dual-write
+  /// sessions are not racing bulk import.
+  Future<void> syncPendingListensAndPurge() async {
+    if (!AppPlatform.supportsOfflineCache) return;
+    if (!_backend.isAuthenticated) return;
+    await ensureReady();
+    if (!isClientDataReady) return;
+
+    _listenSyncFuture ??= _doSyncPendingListensAndPurge();
+    try {
+      await _listenSyncFuture;
+    } catch (e, st) {
+      debugPrint(
+        'ClientDataService.syncPendingListensAndPurge failed: $e\n$st',
+      );
+    } finally {
+      _listenSyncFuture = null;
+    }
+  }
+
+  Future<void> _doSyncPendingListensAndPurge() async {
+    final bulk = _backend.bulkCreateListenings;
+    if (bulk == null) {
+      // Still free disk for rows already marked synced (live dual-write).
+      await _purgeRetainedListens();
+      return;
+    }
+
+    final deviceUuid = await _backend.getDeviceUuid();
+    final graceCutoff = DateTime.now().subtract(kListenHistorySyncGrace);
+
+    var chunks = 0;
+    while (chunks < kListenHistoryMaxChunksPerSync) {
+      chunks++;
+      final pending = await ListenHistoryService.getPendingSyncListens(
+        olderThan: graceCutoff,
+        limit: kListenHistoryBulkChunk,
+      );
+      if (pending.isEmpty) break;
+
+      // Register any remote device UUIDs before bulk (K: device_not_registered).
+      await _ensureDevicesForPending(pending);
+
+      final items = <Map<String, dynamic>>[];
+      final localIds = <int>[];
+
+      for (final rec in pending) {
+        final id = rec.id;
+        if (id == null) continue;
+
+        final sessionId =
+            rec.clientSessionId ??
+            await ListenHistoryService.ensureClientSessionId(id);
+        if (sessionId == null) continue;
+
+        final sourceDevice = _resolveBulkSourceDevice(
+          rec.sourceDevice,
+          localDeviceUuid: deviceUuid,
+        );
+
+        items.add({
+          'track': rec.trackId,
+          'creation_date': rec.listenedAt.toUtc().toIso8601String(),
+          if (rec.durationSeconds != null)
+            'duration_seconds': rec.durationSeconds,
+          'source_device': sourceDevice,
+          'client_session_id': sessionId,
+        });
+        localIds.add(id);
+      }
+
+      if (items.isEmpty) break;
+
+      try {
+        final result = await bulk(items: items, mode: 'enrich_or_create');
+        final errorIndexes = _bulkErrorIndexes(result);
+        final syncedIds = <int>[];
+        for (var i = 0; i < localIds.length; i++) {
+          if (!errorIndexes.contains(i)) {
+            syncedIds.add(localIds[i]);
+          }
+        }
+        if (syncedIds.isNotEmpty) {
+          await ListenHistoryService.markListensSynced(syncedIds);
+        }
+        // If every item failed, stop to avoid hot-looping the same batch.
+        if (syncedIds.isEmpty) break;
+      } catch (e) {
+        debugPrint('ClientDataService listen bulk chunk failed: $e');
+        break;
+      }
+    }
+
+    await _purgeRetainedListens();
+  }
+
+  Future<void> _purgeRetainedListens() async {
+    try {
+      final purged = await ListenHistoryService.purgeSyncedPastRetention();
+      if (purged > 0) {
+        debugPrint(
+          'ClientDataService: purged $purged synced listen row(s) '
+          'past ${kListenHistoryRetention.inDays}d retention',
+        );
+      }
+    } catch (e) {
+      debugPrint('ClientDataService listen retention purge failed: $e');
+    }
+  }
+
+  Future<void> _ensureDevicesForPending(List<ListenRecord> pending) async {
+    final seen = <String>{};
+    for (final rec in pending) {
+      final raw = rec.sourceDevice;
+      if (raw == null || raw.isEmpty || raw == 'local') continue;
+      if (!_uuidV4Regex.hasMatch(raw)) continue;
+      if (!seen.add(raw.toLowerCase())) continue;
+
+      final name =
+          ListenHistoryService.getCachedDeviceDisplayName(raw) ??
+          'Imported device';
+      try {
+        await _backend.upsertClientDevice(
+          uuid: raw,
+          name: name,
+          clientId: kTayraClientId,
+        );
+      } catch (e) {
+        debugPrint('ClientDataService: register remote device $raw failed: $e');
+      }
+    }
+  }
+
+  /// Map local `source_device` tags to a server-registrable UUID.
+  ///
+  /// `'local'` / empty → this install's device UUID. Real UUIDs are kept
+  /// (after registration). Legacy sanitized device ids (non-UUID) fall back
+  /// to this install so historical rows still reach the server rather than
+  /// blocking the pending queue forever.
+  static String _resolveBulkSourceDevice(
+    String? sourceDevice, {
+    required String localDeviceUuid,
+  }) {
+    if (sourceDevice == null ||
+        sourceDevice.isEmpty ||
+        sourceDevice == 'local') {
+      return localDeviceUuid;
+    }
+    if (_uuidV4Regex.hasMatch(sourceDevice)) return sourceDevice;
+    return localDeviceUuid;
+  }
+
+  static Set<int> _bulkErrorIndexes(Map<String, dynamic> result) {
+    final errors = result['errors'];
+    if (errors is! List) return {};
+    final out = <int>{};
+    for (final e in errors) {
+      if (e is! Map) continue;
+      final idx = e['index'];
+      if (idx is num) out.add(idx.toInt());
+    }
+    return out;
   }
 
   /// Optional hook invoked after remote prefs were written to SharedPreferences.

@@ -941,11 +941,18 @@ class PlayerNotifier extends Notifier<PlayerState> {
           persistedSeconds: persistedSeconds,
           listenedAt: listenedAt,
         );
+        final clientData = ref.read(clientDataServiceProvider);
+        // Mark local row synced once the rich server session exists so
+        // retention purge can free older history after upload.
+        unawaited(
+          clientData
+              .linkLocalListenToServer(recordId: recordId, trackId: trackId)
+              .catchError((_) {}),
+        );
         // Rich server duration PATCH (≥15s / pause / end). No-op when
         // thin-only or no active rich session.
         unawaited(
-          ref
-              .read(clientDataServiceProvider)
+          clientData
               .syncDuration(trackId, persistedSeconds, force: force)
               .catchError((_) {}),
         );

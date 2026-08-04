@@ -4,6 +4,25 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tayra/core/cache/cache_database.dart';
 import 'package:tayra/core/api/models.dart';
+import 'package:tayra/core/device/device_identity.dart';
+import 'package:tayra/core/platform/app_platform.dart';
+
+// ── Retention / sync policy ─────────────────────────────────────────────
+
+/// How long to keep **synced** local listen rows for offline year-review and
+/// weekly stats before purging. Unsynced rows are never purged.
+const kListenHistoryRetention = Duration(days: 30);
+
+/// Skip bulk-upload of listens newer than this so in-progress sessions can
+/// finish via the live rich POST/PATCH path first.
+const kListenHistorySyncGrace = Duration(minutes: 15);
+
+/// Server bulk max (matches `BULK_MAX_ITEMS` on the API).
+const kListenHistoryBulkChunk = 500;
+
+/// Cap chunks per background sync so cold-start does not upload unbounded
+/// historical data in one go (500 × 20 = 10k rows).
+const kListenHistoryMaxChunksPerSync = 20;
 
 // ── Listen history record ───────────────────────────────────────────────
 
@@ -21,6 +40,16 @@ class ListenRecord {
   final DateTime listenedAt;
   final String? sourceDevice;
 
+  /// When non-null, this row has been confirmed on the server (rich create,
+  /// bulk import ACK, or live dual-write link). Used for retention purge.
+  final DateTime? syncedAt;
+
+  /// Client session UUID shared with the server rich listening row.
+  final String? clientSessionId;
+
+  /// Server `Listening.id` when known (optional).
+  final int? serverListeningId;
+
   const ListenRecord({
     this.id,
     required this.trackId,
@@ -33,7 +62,12 @@ class ListenRecord {
     this.durationSeconds,
     required this.listenedAt,
     this.sourceDevice,
+    this.syncedAt,
+    this.clientSessionId,
+    this.serverListeningId,
   });
+
+  bool get isSynced => syncedAt != null;
 
   Map<String, dynamic> toMap() {
     return {
@@ -47,10 +81,14 @@ class ListenRecord {
       'duration_seconds': durationSeconds,
       'listened_at': listenedAt.millisecondsSinceEpoch,
       if (sourceDevice != null) 'source_device': sourceDevice,
+      if (syncedAt != null) 'synced_at': syncedAt!.millisecondsSinceEpoch,
+      if (clientSessionId != null) 'client_session_id': clientSessionId,
+      if (serverListeningId != null) 'server_listening_id': serverListeningId,
     };
   }
 
   factory ListenRecord.fromMap(Map<String, dynamic> map) {
+    final syncedRaw = map['synced_at'];
     return ListenRecord(
       id: map['id'] as int?,
       trackId: map['track_id'] as int,
@@ -65,6 +103,12 @@ class ListenRecord {
         map['listened_at'] as int,
       ),
       sourceDevice: map['source_device'] as String?,
+      syncedAt:
+          syncedRaw is int
+              ? DateTime.fromMillisecondsSinceEpoch(syncedRaw)
+              : null,
+      clientSessionId: map['client_session_id'] as String?,
+      serverListeningId: (map['server_listening_id'] as num?)?.toInt(),
     );
   }
 
@@ -98,6 +142,10 @@ class ListenRecord {
     int? durationSeconds,
     DateTime? listenedAt,
     String? sourceDevice,
+    DateTime? syncedAt,
+    String? clientSessionId,
+    int? serverListeningId,
+    bool clearSyncedAt = false,
   }) {
     return ListenRecord(
       id: id ?? this.id,
@@ -111,14 +159,21 @@ class ListenRecord {
       durationSeconds: durationSeconds ?? this.durationSeconds,
       listenedAt: listenedAt ?? this.listenedAt,
       sourceDevice: sourceDevice ?? this.sourceDevice,
+      syncedAt: clearSyncedAt ? null : (syncedAt ?? this.syncedAt),
+      clientSessionId: clientSessionId ?? this.clientSessionId,
+      serverListeningId: serverListeningId ?? this.serverListeningId,
     );
   }
 
-  /// Map for safe backup/restore JSON export (no id, no source_device).
+  /// Map for safe backup/restore JSON export (no id, no source_device, no
+  /// sync bookkeeping — restored rows re-upload as pending).
   Map<String, dynamic> toMapForBackup() =>
       toMap()
         ..remove('id')
-        ..remove('source_device');
+        ..remove('source_device')
+        ..remove('synced_at')
+        ..remove('client_session_id')
+        ..remove('server_listening_id');
 
   factory ListenRecord.fromBackupMap(Map<String, dynamic> map) {
     return ListenRecord.fromMap({
@@ -660,6 +715,9 @@ class ListenHistoryService {
 
   /// Ensure the listen_history table exists. Called during app init.
   static Future<void> ensureTable() async {
+    // Web is online-only (server stats); no local listen DB.
+    if (!AppPlatform.supportsOfflineCache) return;
+
     final db = await CacheDatabase.instance.database;
     await db.execute('''
       CREATE TABLE IF NOT EXISTS $_tableName (
@@ -673,14 +731,24 @@ class ListenHistoryService {
         cover_url TEXT,
         duration_seconds INTEGER,
         listened_at INTEGER NOT NULL,
-        source_device TEXT
+        source_device TEXT,
+        synced_at INTEGER,
+        client_session_id TEXT,
+        server_listening_id INTEGER
       )
     ''');
-    // Migrate: add source_device column for existing tables
-    try {
-      await db.execute('ALTER TABLE $_tableName ADD COLUMN source_device TEXT');
-    } catch (_) {
-      // Column already exists — ignore
+    // Migrate: add columns for existing tables (each ALTER is idempotent).
+    for (final col in const [
+      'source_device TEXT',
+      'synced_at INTEGER',
+      'client_session_id TEXT',
+      'server_listening_id INTEGER',
+    ]) {
+      try {
+        await db.execute('ALTER TABLE $_tableName ADD COLUMN $col');
+      } catch (_) {
+        // Column already exists — ignore
+      }
     }
     // Any NULL source_device rows are this device's own listens from before
     // the column existed (or ingested by an older build that didn't tag
@@ -699,6 +767,11 @@ class ListenHistoryService {
       CREATE INDEX IF NOT EXISTS idx_listen_history_track_id
       ON $_tableName(track_id)
     ''');
+    // Pending upload + retention purge scans.
+    await db.execute('''
+      CREATE INDEX IF NOT EXISTS idx_listen_history_sync
+      ON $_tableName(synced_at, listened_at)
+    ''');
   }
 
   /// Record a listen event for the given track.
@@ -714,11 +787,14 @@ class ListenHistoryService {
   }
 
   /// Insert a listen row and return its database id.
+  ///
+  /// New rows start with [ListenRecord.syncedAt] null (pending server upload).
   static Future<int> insertListen(
     Track track, {
     int? listenedSeconds,
     DateTime? listenedAt,
   }) async {
+    if (!AppPlatform.supportsOfflineCache) return -1;
     final db = await CacheDatabase.instance.database;
     final record = ListenRecord.fromTrack(
       track,
@@ -729,6 +805,7 @@ class ListenHistoryService {
 
   /// Update the listened duration for an existing row.
   static Future<void> updateListenDuration(int id, int listenedSeconds) async {
+    if (!AppPlatform.supportsOfflineCache) return;
     final db = await CacheDatabase.instance.database;
     await db.update(
       _tableName,
@@ -736,6 +813,135 @@ class ListenHistoryService {
       where: 'id = ?',
       whereArgs: [id],
     );
+  }
+
+  // ── Server sync bookkeeping ─────────────────────────────────────────
+
+  /// Mark a local listen row as confirmed on the server.
+  ///
+  /// Safe to call repeatedly; sets [syncedAt] to now (or [syncedAt]) and
+  /// optionally stores session / server ids for debugging and re-import.
+  static Future<void> markListenSynced(
+    int id, {
+    String? clientSessionId,
+    int? serverListeningId,
+    DateTime? syncedAt,
+  }) async {
+    if (!AppPlatform.supportsOfflineCache) return;
+    final db = await CacheDatabase.instance.database;
+    final at = syncedAt ?? DateTime.now();
+    final values = <String, Object?>{'synced_at': at.millisecondsSinceEpoch};
+    if (clientSessionId != null) {
+      values['client_session_id'] = clientSessionId;
+    }
+    if (serverListeningId != null) {
+      values['server_listening_id'] = serverListeningId;
+    }
+    await db.update(_tableName, values, where: 'id = ?', whereArgs: [id]);
+  }
+
+  /// Mark many local rows synced after a successful bulk chunk.
+  static Future<void> markListensSynced(
+    Iterable<int> ids, {
+    DateTime? syncedAt,
+  }) async {
+    if (!AppPlatform.supportsOfflineCache) return;
+    final idList = ids.where((id) => id > 0).toList();
+    if (idList.isEmpty) return;
+    final db = await CacheDatabase.instance.database;
+    final at = (syncedAt ?? DateTime.now()).millisecondsSinceEpoch;
+    final batch = db.batch();
+    for (final id in idList) {
+      batch.update(
+        _tableName,
+        {'synced_at': at},
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+    }
+    await batch.commit(noResult: true);
+  }
+
+  /// Ensure a stable [client_session_id] exists on the row (for bulk dedup).
+  ///
+  /// Returns the existing or newly generated UUID, or null if the row is gone.
+  static Future<String?> ensureClientSessionId(int id) async {
+    if (!AppPlatform.supportsOfflineCache) return null;
+    final db = await CacheDatabase.instance.database;
+    final rows = await db.query(
+      _tableName,
+      columns: ['client_session_id'],
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+    if (rows.isEmpty) return null;
+    final existing = rows.first['client_session_id'] as String?;
+    if (existing != null && existing.isNotEmpty) return existing;
+    final sessionId = generateUuidV4();
+    await db.update(
+      _tableName,
+      {'client_session_id': sessionId},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    return sessionId;
+  }
+
+  /// Pending local listens older than [olderThan] (not yet on the server).
+  ///
+  /// Ordered oldest-first for chronological bulk import. Only rows with a
+  /// positive duration are returned (zero/null never help year-review).
+  static Future<List<ListenRecord>> getPendingSyncListens({
+    required DateTime olderThan,
+    int limit = kListenHistoryBulkChunk,
+  }) async {
+    if (!AppPlatform.supportsOfflineCache) return const [];
+    final db = await CacheDatabase.instance.database;
+    final rows = await db.query(
+      _tableName,
+      where:
+          'synced_at IS NULL '
+          'AND listened_at < ? '
+          'AND duration_seconds IS NOT NULL '
+          'AND duration_seconds > 0',
+      whereArgs: [olderThan.millisecondsSinceEpoch],
+      orderBy: 'listened_at ASC',
+      limit: limit,
+    );
+    return rows.map(ListenRecord.fromMap).toList();
+  }
+
+  /// Delete synced rows whose listen time is strictly before [olderThan].
+  ///
+  /// Unsynced rows are never deleted. Returns the number of rows removed.
+  static Future<int> purgeSyncedListens({required DateTime olderThan}) async {
+    if (!AppPlatform.supportsOfflineCache) return 0;
+    final db = await CacheDatabase.instance.database;
+    return db.delete(
+      _tableName,
+      where: 'synced_at IS NOT NULL AND listened_at < ?',
+      whereArgs: [olderThan.millisecondsSinceEpoch],
+    );
+  }
+
+  /// Apply the default retention window ([kListenHistoryRetention]).
+  static Future<int> purgeSyncedPastRetention({
+    Duration retention = kListenHistoryRetention,
+    DateTime? now,
+  }) async {
+    final cutoff = (now ?? DateTime.now()).subtract(retention);
+    return purgeSyncedListens(olderThan: cutoff);
+  }
+
+  /// Count of rows still waiting for server upload (any age).
+  static Future<int> getPendingSyncCount() async {
+    if (!AppPlatform.supportsOfflineCache) return 0;
+    final db = await CacheDatabase.instance.database;
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) as count FROM $_tableName WHERE synced_at IS NULL',
+    );
+    return (result.first['count'] as num).toInt();
   }
 
   /// Get all available years that have listen data.

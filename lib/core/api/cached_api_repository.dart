@@ -1093,6 +1093,16 @@ class CachedFunkwhaleApi {
     sourceDevice: sourceDevice,
   );
 
+  Future<Map<String, dynamic>> bulkCreateListenings({
+    required List<Map<String, dynamic>> items,
+    String mode = 'enrich_or_create',
+    int? dedupWindowSeconds,
+  }) => _api.bulkCreateListenings(
+    items: items,
+    mode: mode,
+    dedupWindowSeconds: dedupWindowSeconds,
+  );
+
   Future<bool> probeClientDataSupport() => _api.probeClientDataSupport();
 
   Future<Map<String, dynamic>> upsertClientDevice({

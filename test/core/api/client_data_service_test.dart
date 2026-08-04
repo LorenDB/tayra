@@ -1,24 +1,53 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:tayra/core/api/client_data_service.dart';
 import 'package:tayra/core/api/models.dart';
+import 'package:tayra/core/cache/cache_database.dart';
 import 'package:tayra/features/podcasts/podcast_progress_service.dart';
+import 'package:tayra/features/year_review/listen_history_service.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  setUpAll(() {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  });
+
   group('ClientDataService', () {
     late _FakeApi api;
     late ClientDataService service;
     late PodcastProgressService progress;
+    late Database db;
 
-    setUp(() {
+    setUp(() async {
       SharedPreferences.setMockInitialValues({});
+      // In-memory DB so ensureReady → listen bulk/purge does not hit path_provider.
+      db = await databaseFactory.openDatabase(
+        inMemoryDatabasePath,
+        options: OpenDatabaseOptions(version: 1),
+      );
+      CacheDatabase.instance.debugSetDatabase(db);
+      await ListenHistoryService.ensureTable();
+
       api = _FakeApi();
       progress = PodcastProgressService.memoryOnly();
       service = ClientDataService.forTest(
         api.backend,
         progressService: progress,
       );
+    });
+
+    tearDown(() async {
+      // Drain background ensureReady → listen sync while the DB is still open.
+      try {
+        await service.syncPendingListensAndPurge();
+      } catch (_) {}
+      service.reset();
+      CacheDatabase.instance.debugSetDatabase(null);
+      await db.close();
     });
 
     Track track(int id) => Track(
@@ -283,6 +312,56 @@ void main() {
       await service.pushAllowlistedPreference('groq_api_key', 'sk-x');
       expect(api.prefsPuts, isEmpty);
     });
+
+    test(
+      'linkLocalListenToServer marks row when rich session active',
+      () async {
+        await service.recordTrackStarted(track(42));
+        expect(service.debugActiveSessionId, isNotNull);
+
+        final recordId = await ListenHistoryService.insertListen(
+          track(42),
+          listenedSeconds: 12,
+          listenedAt: DateTime.now(),
+        );
+        await service.linkLocalListenToServer(recordId: recordId, trackId: 42);
+
+        expect(await ListenHistoryService.getPendingSyncCount(), 0);
+        final all = await ListenHistoryService.getAllListens();
+        expect(all.single.isSynced, isTrue);
+        expect(all.single.clientSessionId, service.debugActiveSessionId);
+      },
+    );
+
+    test(
+      'syncPendingListensAndPurge bulk-uploads then purges old synced',
+      () async {
+        final old = DateTime.now().subtract(const Duration(days: 45));
+        final id = await ListenHistoryService.insertListen(
+          track(99),
+          listenedSeconds: 55,
+          listenedAt: old,
+        );
+
+        await service.ensureReady();
+        // Coalesce with ensureReady's background sync, then run once more.
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+        await service.syncPendingListensAndPurge();
+
+        expect(api.listenBulkChunks, isNotEmpty);
+        final item = api.listenBulkChunks.first.single;
+        expect(item['track'], 99);
+        expect(item['duration_seconds'], 55);
+        expect(item['source_device'], 'device-uuid');
+        expect(item['client_session_id'], isNotNull);
+        expect(item['creation_date'], isNotNull);
+
+        // Marked synced then purged (past 30d retention).
+        expect(await ListenHistoryService.getPendingSyncCount(), 0);
+        final remaining = await ListenHistoryService.getAllListens();
+        expect(remaining.any((r) => r.id == id), isFalse);
+      },
+    );
   });
 }
 
@@ -307,9 +386,11 @@ class _FakeApi {
   final patches = <_PatchCall>[];
 
   final bulkChunks = <List<Map<String, dynamic>>>[];
+  final listenBulkChunks = <List<Map<String, dynamic>>>[];
   final progressPuts = <Map<String, dynamic>>[];
   final prefsPuts = <Map<String, dynamic>>[];
   final eventLog = <String>[];
+  int nextListeningId = 1000;
 
   List<List<Map<String, dynamic>>> remoteProgressPages = const [];
   List<Map<String, dynamic>> remotePrefs = const [];
@@ -353,6 +434,7 @@ class _FakeApi {
         );
       }
       final body = <String, dynamic>{
+        'id': nextListeningId++,
         'trackId': trackId,
         if (durationSeconds != null) 'durationSeconds': durationSeconds,
         if (sourceDevice != null) 'sourceDevice': sourceDevice,
@@ -380,6 +462,20 @@ class _FakeApi {
     },
     recordListening: (trackId) async {
       thinRecords.add(trackId);
+    },
+    bulkCreateListenings: ({
+      required List<Map<String, dynamic>> items,
+      String mode = 'enrich_or_create',
+      int? dedupWindowSeconds,
+    }) async {
+      listenBulkChunks.add(List<Map<String, dynamic>>.from(items));
+      eventLog.add('listen_bulk');
+      return {
+        'created': items.length,
+        'enriched': 0,
+        'skipped_duplicate': 0,
+        'errors': <dynamic>[],
+      };
     },
     getDeviceUuid: () async => 'device-uuid',
     getDeviceName: () async => 'Test Device',
