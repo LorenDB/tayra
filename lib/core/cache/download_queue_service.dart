@@ -149,8 +149,9 @@ class DownloadQueueService {
       final wifiOnly = ref.read(settingsProvider).downloadWifiOnly as bool;
       final connectivity = ref.read(connectivityResultProvider);
       return connectivity.when(
-        data: (results) =>
-            connectivityAllowsDownloads(results, wifiOnly: wifiOnly),
+        data:
+            (results) =>
+                connectivityAllowsDownloads(results, wifiOnly: wifiOnly),
         loading: () => true,
         error: (_, _) => true,
       );
@@ -218,9 +219,15 @@ class DownloadQueueService {
               }
               // Omit numeric track_id per policy
               Analytics.track('download_started');
+              final downloadQuality =
+                  ref.read(settingsProvider).downloadQuality;
               final file = await audioSvc.cacheAudio(
                 track,
-                api.getStreamUrl(track.listenUrl!),
+                api.getStreamUrl(
+                  track.listenUrl!,
+                  quality: downloadQuality,
+                  forDownload: true,
+                ),
                 api.authHeaders,
               );
               // cacheAudio returns null on failure (and swallows errors). Also

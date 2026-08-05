@@ -446,6 +446,8 @@ def test_listen_explicit_file(factories, logged_in_api_client, mocker, settings)
         max_bitrate=None,
         proxy_media=settings.PROXY_MEDIA,
         download=True,
+        quality=None,
+        allow_blocking_transcode=True,
         wsgi_request=response.wsgi_request,
     )
 
@@ -470,6 +472,8 @@ def test_stream(factories, logged_in_api_client, mocker, settings):
         download=False,
         max_bitrate=None,
         proxy_media=True,
+        quality=None,
+        allow_blocking_transcode=True,
         wsgi_request=response.wsgi_request,
     )
 
@@ -569,6 +573,8 @@ def test_listen_transcode(factories, now, logged_in_api_client, mocker, settings
         max_bitrate=None,
         proxy_media=settings.PROXY_MEDIA,
         download=True,
+        quality=None,
+        allow_blocking_transcode=True,
         wsgi_request=response.wsgi_request,
     )
 
@@ -603,6 +609,8 @@ def test_listen_transcode_bitrate(
         max_bitrate=expected,
         proxy_media=settings.PROXY_MEDIA,
         download=True,
+        quality=None,
+        allow_blocking_transcode=True,
         wsgi_request=response.wsgi_request,
     )
 
@@ -635,6 +643,8 @@ def test_listen_transcode_in_place(
         max_bitrate=None,
         proxy_media=settings.PROXY_MEDIA,
         download=True,
+        quality=None,
+        allow_blocking_transcode=True,
         wsgi_request=response.wsgi_request,
     )
 

@@ -14,6 +14,7 @@ import 'package:dio/dio.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/api/client_data_service.dart';
+import 'package:tayra/core/audio/audio_quality.dart';
 import 'package:tayra/core/cache/audio_cache_service.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
@@ -848,6 +849,19 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// event; cancelled when the player reaches a non-buffering state.
   Timer? _bufferingWatchdog;
 
+  /// Shorter timer used for quality step-down on sustained buffering.
+  Timer? _qualityFallbackWatchdog;
+
+  /// Effective streaming quality for the currently loaded track (after
+  /// auto-resolution and any stall fallback steps).
+  AudioQuality _activeStreamQuality = AudioQuality.original;
+
+  /// Track id we last applied a quality fallback for (cooldown).
+  int? _qualityFallbackTrackId;
+
+  /// How many quality steps we've already taken on the current track.
+  int _qualityFallbackSteps = 0;
+
   /// Throttle podcast progress writes (aligned with 2s queue progress).
   int _lastPodcastProgressSeconds = -1;
 
@@ -970,6 +984,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
       }
       _bufferingWatchdog?.cancel();
       _bufferingWatchdog = null;
+      _qualityFallbackWatchdog?.cancel();
+      _qualityFallbackWatchdog = null;
       _radioFetchTimer?.cancel();
       _radioFetchTimer = null;
     });
@@ -1188,15 +1204,27 @@ class PlayerNotifier extends Notifier<PlayerState> {
                 state = state.copyWith(isLoading: false, isPlaying: false);
               }
             });
+
+            // Quality fallback: after sustained buffering, step down one tier.
+            _qualityFallbackWatchdog?.cancel();
+            _qualityFallbackWatchdog = Timer(const Duration(seconds: 8), () {
+              if (state.isLoading) {
+                unawaited(_tryQualityFallback());
+              }
+            });
           } else {
             _bufferingWatchdog?.cancel();
             _bufferingWatchdog = null;
+            _qualityFallbackWatchdog?.cancel();
+            _qualityFallbackWatchdog = null;
           }
         },
         onError: (Object e) {
           debugPrint('PlayerNotifier: playerStateStream error: $e');
           _bufferingWatchdog?.cancel();
           _bufferingWatchdog = null;
+          _qualityFallbackWatchdog?.cancel();
+          _qualityFallbackWatchdog = null;
           state = state.copyWith(isLoading: false);
         },
       ),
@@ -1210,6 +1238,14 @@ class PlayerNotifier extends Notifier<PlayerState> {
         debugPrint('PlayerNotifier: audioPlayer error: $error');
         _bufferingWatchdog?.cancel();
         _bufferingWatchdog = null;
+        _qualityFallbackWatchdog?.cancel();
+        _qualityFallbackWatchdog = null;
+        // Try one quality step-down before giving up to the user.
+        if (ref.read(settingsProvider).autoQualityFallback &&
+            _activeStreamQuality.lowerTier != null) {
+          unawaited(_tryQualityFallback());
+          return;
+        }
         _gaplessActive = false;
         // Mark the source as broken so the next play() reloads it from the
         // current position instead of no-op'ing on the stale source.
@@ -1572,14 +1608,32 @@ class PlayerNotifier extends Notifier<PlayerState> {
     ).showSnackBar(SnackBar(content: Text('$label is not available offline')));
   }
 
+  /// Resolved streaming quality from user settings (platform-aware).
+  AudioQuality get _preferredStreamQuality {
+    final preferred = ref.read(settingsProvider).streamingQuality;
+    return resolveStreamingQuality(preferred);
+  }
+
+  /// Quality used for offline / background full-file downloads.
+  AudioQuality get _preferredDownloadQuality {
+    final preferred = ref.read(settingsProvider).downloadQuality;
+    return resolveStreamingQuality(
+      preferred == AudioQuality.auto ? AudioQuality.high : preferred,
+    );
+  }
+
   /// Build a single [AudioSource] for a track, preferring cached local files.
-  Future<AudioSource> _audioSourceForTrack(Track track) async {
+  Future<AudioSource> _audioSourceForTrack(
+    Track track, {
+    bool probeCache = true,
+    AudioQuality? qualityOverride,
+  }) async {
     final listenUrl = track.listenUrl;
     if (listenUrl == null) {
       throw Exception('Track ${track.id} has no listen URL');
     }
 
-    if (AppPlatform.supportsOfflineCache) {
+    if (probeCache && AppPlatform.supportsOfflineCache) {
       final cachedFile = await _audioCache.getCachedAudio(track);
       if (cachedFile != null) {
         return AudioSource.uri(cachedFile.uri);
@@ -1591,15 +1645,19 @@ class PlayerNotifier extends Notifier<PlayerState> {
     }
 
     await _api.ensureListenToken();
-    final streamUrl = _api.getStreamUrl(listenUrl);
+    final quality = qualityOverride ?? _preferredStreamQuality;
+    final streamUrl = _api.getStreamUrl(listenUrl, quality: quality);
     // Web media cannot send custom headers; token is in the query string.
     final headers = AppPlatform.isWeb ? <String, String>{} : _api.authHeaders;
     return AudioSource.uri(Uri.parse(streamUrl), headers: headers);
   }
 
-  /// Load all queue tracks into the player as a multi-source playlist
-  /// for gapless playback.  Returns true on success, false on failure
-  /// (caller should fall back to single-track loading).
+  /// Load queue tracks into the player as a multi-source playlist for gapless
+  /// playback. Builds the start window first so first audio is not blocked by
+  /// probing every later track, then appends the remainder.
+  ///
+  /// Returns true on success, false on failure (caller falls back to
+  /// single-track loading).
   Future<bool> _loadGaplessSource(
     int startIndex, {
     Duration? initialPosition,
@@ -1622,16 +1680,35 @@ class PlayerNotifier extends Notifier<PlayerState> {
     }
 
     try {
-      final sources = <AudioSource>[];
-      for (final track in state.queue) {
-        sources.add(await _audioSourceForTrack(track));
+      final queue = state.queue;
+      if (queue.isEmpty || startIndex < 0 || startIndex >= queue.length) {
+        _gaplessActive = false;
+        return false;
       }
 
+      // Window: current track + next two. Probe cache for these; others use
+      // stream URLs without serial disk checks so start is faster.
+      const windowAhead = 2;
+      final windowEnd = (startIndex + 1 + windowAhead).clamp(0, queue.length);
+
+      Future<AudioSource> buildAt(int i) {
+        final inWindow = i >= startIndex && i < windowEnd;
+        return _audioSourceForTrack(queue[i], probeCache: inWindow);
+      }
+
+      // Parallel build for the prefix that setAudioSources needs immediately.
+      final initialSources = await Future.wait(
+        List.generate(windowEnd, buildAt),
+      );
+
       // Update notification metadata for the starting track.
-      _updateMediaItemForTrack(state.queue[startIndex]);
+      _updateMediaItemForTrack(queue[startIndex]);
+      _activeStreamQuality = _preferredStreamQuality;
+      _qualityFallbackSteps = 0;
+      _qualityFallbackTrackId = null;
 
       await _handler.audioPlayer.setAudioSources(
-        sources,
+        initialSources,
         initialIndex: startIndex,
         initialPosition: initialPosition,
       );
@@ -1646,6 +1723,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
       _handler.audioPlayer.setLoopMode(state.loopMode);
 
       _gaplessActive = true;
+
+      // Append remaining tracks without blocking first audio.
+      if (windowEnd < queue.length) {
+        unawaited(_appendGaplessTail(queue, fromIndex: windowEnd));
+      }
+
       return true;
     } catch (e) {
       debugPrint('Failed to build gapless source: $e');
@@ -1653,6 +1736,27 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // Source failed to load; reload on next play() attempt.
       _needsReload = true;
       return false;
+    }
+  }
+
+  /// Append remaining gapless sources after the initial window is playing.
+  Future<void> _appendGaplessTail(
+    List<Track> queue, {
+    required int fromIndex,
+  }) async {
+    final epoch = _loadEpoch;
+    for (var i = fromIndex; i < queue.length; i++) {
+      if (!_isCurrentLoad(epoch) || !_gaplessActive) return;
+      try {
+        final source = await _audioSourceForTrack(queue[i], probeCache: false);
+        if (!_isCurrentLoad(epoch) || !_gaplessActive) return;
+        await _handler.audioPlayer.addAudioSource(source);
+      } catch (e) {
+        debugPrint(
+          'PlayerNotifier: failed to append gapless source for '
+          'track ${queue[i].id}: $e',
+        );
+      }
     }
   }
 
@@ -2593,7 +2697,15 @@ class PlayerNotifier extends Notifier<PlayerState> {
       }
 
       await _api.ensureListenToken();
-      final streamUrl = _api.getStreamUrl(listenUrl);
+      _activeStreamQuality = _preferredStreamQuality;
+      _qualityFallbackSteps = 0;
+      if (_qualityFallbackTrackId != track.id) {
+        _qualityFallbackTrackId = null;
+      }
+      final streamUrl = _api.getStreamUrl(
+        listenUrl,
+        quality: _activeStreamQuality,
+      );
       // Web media cannot send custom headers; token is in the query string.
       final headers = AppPlatform.isWeb ? <String, String>{} : _api.authHeaders;
 
@@ -2712,9 +2824,14 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
       if (!_isCurrentLoad(loadEpoch)) return false;
 
-      // Background-cache the audio file if we streamed it (fire-and-forget).
+      // Do not full-file download the track that is currently streaming —
+      // that competes with just_audio for bandwidth and hurts TTFA.
+      // Upcoming tracks are pre-cached separately via [_preCacheAudio].
       if (streamedFromServer) {
-        unawaited(_cacheAudioAndNotify(track, streamUrl, headers));
+        debugPrint(
+          'PlayerNotifier._loadTrack: skipping same-track full-file cache '
+          'while streaming track ${track.id}',
+        );
       }
 
       // Cache cover art in the background (fire-and-forget).
@@ -2794,12 +2911,15 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
   /// Pre-cache audio files for upcoming tracks in the queue so that
   /// subsequent tracks play from local storage without buffering.
-  /// Downloads are sequential to avoid saturating the connection while the
-  /// current track is still streaming.
+  /// Downloads are sequential and capped so we do not saturate the pipe
+  /// while the current track is still streaming.
   void _preCacheAudio(List<Track> tracks, int startIndex) {
     if (_isOffline) return;
     unawaited(_preCacheAudioSequential(tracks, startIndex));
   }
+
+  /// Max number of upcoming tracks to full-file pre-cache.
+  static const int _preCacheAheadLimit = 3;
 
   Future<void> _preCacheAudioSequential(
     List<Track> tracks,
@@ -2807,14 +2927,19 @@ class PlayerNotifier extends Notifier<PlayerState> {
   ) async {
     final headers = _api.authHeaders;
     final epoch = _loadEpoch;
-    // Cache the tracks *after* startIndex (the current track is already being
-    // cached / played inside _loadTrack).
-    for (final track in tracks.skip(startIndex + 1)) {
+    final downloadQuality = _preferredDownloadQuality;
+    // Cache only a few tracks after startIndex (current track is streaming).
+    final upcoming = tracks.skip(startIndex + 1).take(_preCacheAheadLimit);
+    for (final track in upcoming) {
       // Abort if the user started a different queue.
       if (!_isCurrentLoad(epoch)) return;
       final listenUrl = track.listenUrl;
       if (listenUrl == null) continue;
-      final streamUrl = _api.getStreamUrl(listenUrl);
+      final streamUrl = _api.getStreamUrl(
+        listenUrl,
+        quality: downloadQuality,
+        forDownload: true,
+      );
       await _cacheAudioAndNotify(track, streamUrl, headers);
     }
   }
@@ -2829,6 +2954,75 @@ class PlayerNotifier extends Notifier<PlayerState> {
     final file = await _audioCache.cacheAudio(track, streamUrl, headers);
     if (file != null) {
       ref.read(cachedAudioTrackIdsProvider.notifier).add(track.id);
+    }
+  }
+
+  /// Step down streaming quality after sustained buffering (user-configurable).
+  Future<void> _tryQualityFallback() async {
+    final settings = ref.read(settingsProvider);
+    if (!settings.autoQualityFallback) return;
+    if (_isOffline) return;
+
+    final track = state.currentTrack;
+    if (track == null || track.listenUrl == null) return;
+
+    // At most two step-downs per track per session to avoid thrashing.
+    if (_qualityFallbackTrackId == track.id && _qualityFallbackSteps >= 2) {
+      return;
+    }
+
+    final next = _activeStreamQuality.lowerTier;
+    if (next == null) return;
+
+    final position = state.position;
+    final wasPlaying = state.isPlaying || state.isLoading;
+    debugPrint(
+      'PlayerNotifier: quality fallback ${_activeStreamQuality.apiValue} '
+      '→ ${next.apiValue} at ${position.inSeconds}s for track ${track.id}',
+    );
+
+    _activeStreamQuality = next;
+    _qualityFallbackTrackId = track.id;
+    _qualityFallbackSteps += 1;
+    _qualityFallbackWatchdog?.cancel();
+    _qualityFallbackWatchdog = null;
+
+    // Disable gapless for this reload so we can re-set a single source.
+    _gaplessActive = false;
+    final epoch = ++_loadEpoch;
+
+    try {
+      await _api.ensureListenToken();
+      final streamUrl = _api.getStreamUrl(track.listenUrl!, quality: next);
+      final headers = AppPlatform.isWeb ? <String, String>{} : _api.authHeaders;
+
+      if (!_isCurrentLoad(epoch)) return;
+
+      await _handler.audioPlayer.setAudioSource(
+        AudioSource.uri(
+          Uri.parse(streamUrl),
+          headers: headers,
+          tag: track.title,
+        ),
+        initialPosition: position,
+      );
+
+      if (!_isCurrentLoad(epoch)) return;
+      if (position > Duration.zero) {
+        await _handler.audioPlayer.seek(position);
+      }
+      if (!_isCurrentLoad(epoch)) return;
+      if (wasPlaying) {
+        await _handler.audioPlayer.play();
+      }
+
+      Analytics.track('audio_quality_fallback', {
+        'to_quality': next.apiValue,
+        'steps': _qualityFallbackSteps,
+      });
+    } catch (e) {
+      debugPrint('PlayerNotifier: quality fallback failed: $e');
+      _needsReload = true;
     }
   }
 
@@ -3172,6 +3366,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
       if (track != null) {
         _bufferingWatchdog?.cancel();
         _bufferingWatchdog = null;
+        _qualityFallbackWatchdog?.cancel();
+        _qualityFallbackWatchdog = null;
         final position = _handler.audioPlayer.position;
         await _loadAndPlay(track, initialPosition: position);
       }

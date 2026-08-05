@@ -577,8 +577,18 @@ def record_downloads(f):
 
 @record_downloads
 def handle_serve(
-    upload, user, format=None, max_bitrate=None, proxy_media=True, download=True
+    upload,
+    user,
+    format=None,
+    max_bitrate=None,
+    proxy_media=True,
+    download=True,
+    quality=None,
+    allow_blocking_transcode=False,
 ):
+    from . import quality as quality_mod
+    from . import tasks as music_tasks
+
     f = upload
     # we update the accessed_date
     now = timezone.now()
@@ -618,13 +628,67 @@ def handle_serve(
         file_path = get_file_path(f.source.replace("file://", "", 1))
     mt = f.mimetype
 
-    if should_transcode(f, format, max_bitrate=max_bitrate):
-        transcoded_version = f.get_transcoded_version(format, max_bitrate=max_bitrate)
-        transcoded_version.accessed_date = now
-        transcoded_version.save(update_fields=["accessed_date"])
-        f = transcoded_version
-        file_path = get_file_path(f.audio_file)
-        mt = f.mimetype
+    resolved = quality_mod.resolve_serve_file(
+        f, format=format, max_bitrate=max_bitrate, quality=quality
+    )
+    if resolved["pending"] and resolved["format"]:
+        # Enqueue background encode; do not block the response for quality=.
+        try:
+            music_tasks.ensure_transcoded_version.delay(
+                f.pk, resolved["format"], resolved["max_bitrate"]
+            )
+        except Exception:
+            # Celery unavailable in some test/dev contexts — ignore.
+            pass
+
+    served_quality = resolved.get("served_quality") or "original"
+    pending = bool(resolved.get("pending"))
+
+    if should_transcode(f, resolved["format"], max_bitrate=resolved["max_bitrate"]):
+        ready = quality_mod.find_transcoded_version(
+            f, resolved["format"], max_bitrate=resolved["max_bitrate"]
+        )
+        if ready is not None:
+            ready.accessed_date = now
+            ready.save(update_fields=["accessed_date"])
+            f = ready
+            file_path = get_file_path(f.audio_file)
+            mt = f.mimetype
+            served_quality = quality_mod.normalize_quality(quality) or (
+                resolved["format"] or "transcoded"
+            )
+            pending = False
+        elif allow_blocking_transcode or (
+            quality is None and (format is not None or max_bitrate is not None)
+        ):
+            # Legacy ?to= / Subsonic: create on demand if still missing.
+            # Prefer ffmpeg via ensure_transcoded_version_sync.
+            try:
+                transcoded_version = quality_mod.ensure_transcoded_version_sync(
+                    f, resolved["format"], max_bitrate=resolved["max_bitrate"]
+                )
+            except Exception:
+                # Fall back to historical pydub path.
+                transcoded_version = f.get_transcoded_version(
+                    resolved["format"], max_bitrate=resolved["max_bitrate"]
+                )
+            transcoded_version.accessed_date = now
+            transcoded_version.save(update_fields=["accessed_date"])
+            f = transcoded_version
+            file_path = get_file_path(f.audio_file)
+            mt = f.mimetype
+            served_quality = quality_mod.normalize_quality(quality) or (
+                resolved["format"] or "transcoded"
+            )
+            pending = False
+        else:
+            # Non-blocking quality request: serve best ready fallback if any.
+            fallback = resolved["file"]
+            if fallback is not f and getattr(fallback, "audio_file", None):
+                f = fallback
+                file_path = get_file_path(f.audio_file)
+                mt = getattr(f, "mimetype", None) or mt
+                served_quality = resolved.get("served_quality") or "original"
     if not proxy_media and f.audio_file:
         # we simply issue a 302 redirect to the real URL
         response = Response(status=302)
@@ -642,6 +706,15 @@ def handle_serve(
         response["Content-Disposition"] = get_content_disposition(filename)
     if mt:
         response["Content-Type"] = mt
+
+    # Expose what was actually served so clients can adapt.
+    response["X-Audio-Quality"] = str(served_quality)
+    if quality:
+        response["X-Audio-Quality-Requested"] = str(
+            quality_mod.normalize_quality(quality) or quality
+        )
+    if pending:
+        response["X-Audio-Quality-Pending"] = "1"
 
     return response
 
@@ -665,12 +738,15 @@ class ListenMixin(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
             "download": request.GET.get("download", "true").lower() == "true",
             "format": request.GET.get("to"),
             "max_bitrate": request.GET.get("max_bitrate"),
+            "quality": request.GET.get("quality"),
         }
         track = self.get_object()
         return handle_stream(track, request, **config)
 
 
-def handle_stream(track, request, download, explicit_file, format, max_bitrate):
+def handle_stream(
+    track, request, download, explicit_file, format, max_bitrate, quality=None
+):
     actor = utils.get_actor_from_request(request)
     queryset = track.uploads.prefetch_related("track__album__artist", "track__artist")
     if explicit_file:
@@ -695,6 +771,9 @@ def handle_stream(track, request, download, explicit_file, format, max_bitrate):
         max_bitrate=max_bitrate,
         proxy_media=settings.PROXY_MEDIA,
         download=download,
+        quality=quality,
+        # quality= requests never block on cold encode; legacy to=/bitrate may.
+        allow_blocking_transcode=quality is None,
         wsgi_request=request._request,
     )
 
@@ -723,6 +802,7 @@ class StreamViewSet(ListenMixin):
             "download": False,
             "format": "mp3",
             "max_bitrate": None,
+            "quality": None,
         }
         track = self.get_object()
         return handle_stream(track, request, **config)

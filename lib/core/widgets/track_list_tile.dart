@@ -80,21 +80,24 @@ class TrackListTile extends ConsumerWidget {
         );
 
     final accent = textColor ?? dominantColor ?? AppTheme.primary;
-    final titleColor = isCurrentTrack
-        ? accent
-        : (isPlayable
-              ? AppTheme.onBackground
-              : AppTheme.onBackground.withValues(alpha: 0.5));
-    final subtitleColor = isCurrentTrack
-        ? accent.withValues(alpha: 0.8)
-        : (isPlayable
-              ? AppTheme.onBackgroundMuted
-              : AppTheme.onBackgroundMuted.withValues(alpha: 0.5));
-    final numberColor = isCurrentTrack
-        ? accent
-        : (isPlayable
-              ? AppTheme.onBackgroundSubtle
-              : AppTheme.onBackgroundSubtle.withValues(alpha: 0.5));
+    final titleColor =
+        isCurrentTrack
+            ? accent
+            : (isPlayable
+                ? AppTheme.onBackground
+                : AppTheme.onBackground.withValues(alpha: 0.5));
+    final subtitleColor =
+        isCurrentTrack
+            ? accent.withValues(alpha: 0.8)
+            : (isPlayable
+                ? AppTheme.onBackgroundMuted
+                : AppTheme.onBackgroundMuted.withValues(alpha: 0.5));
+    final numberColor =
+        isCurrentTrack
+            ? accent
+            : (isPlayable
+                ? AppTheme.onBackgroundSubtle
+                : AppTheme.onBackgroundSubtle.withValues(alpha: 0.5));
 
     // GestureDetector instead of Material/InkWell: splash ink + Material
     // layers per row were a major Favorites scroll cost.
@@ -159,9 +162,12 @@ class TrackListTile extends ConsumerWidget {
                   child: Text(
                     formatTrackDuration(track.duration!),
                     style: TextStyle(
-                      color: isPlayable
-                          ? AppTheme.onBackgroundSubtle
-                          : AppTheme.onBackgroundSubtle.withValues(alpha: 0.5),
+                      color:
+                          isPlayable
+                              ? AppTheme.onBackgroundSubtle
+                              : AppTheme.onBackgroundSubtle.withValues(
+                                alpha: 0.5,
+                              ),
                       fontSize: 12,
                     ),
                   ),
@@ -402,7 +408,13 @@ class _TrackMenuButton extends ConsumerWidget {
           if (!wasCached && !isManual) {
             final api = ref.read(cachedFunkwhaleApiProvider);
             if (track.listenUrl != null) {
-              final streamUrl = api.getStreamUrl(track.listenUrl!);
+              final downloadQuality =
+                  ref.read(settingsProvider).downloadQuality;
+              final streamUrl = api.getStreamUrl(
+                track.listenUrl!,
+                quality: downloadQuality,
+                forDownload: true,
+              );
               final headers = api.authHeaders;
               final audioSvc = ref.read(audioCacheServiceProvider);
               unawaited(
@@ -508,9 +520,10 @@ class _TrackMenuButton extends ConsumerWidget {
         child: Icon(
           Icons.more_vert,
           size: 18,
-          color: enabled
-              ? AppTheme.onBackgroundSubtle
-              : AppTheme.onBackgroundSubtle.withValues(alpha: 0.4),
+          color:
+              enabled
+                  ? AppTheme.onBackgroundSubtle
+                  : AppTheme.onBackgroundSubtle.withValues(alpha: 0.4),
         ),
       ),
     );

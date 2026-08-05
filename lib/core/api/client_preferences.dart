@@ -51,6 +51,9 @@ const Set<String> kAllowlistedPreferenceKeys = {
   'download_wifi_only',
   'auto_download_podcast_episodes',
   'auto_download_podcast_episode_count',
+  'streaming_quality',
+  'download_quality',
+  'auto_quality_fallback',
 };
 
 /// Keys we write to SharedPreferences when pulling from the server.

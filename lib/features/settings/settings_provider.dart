@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tayra/core/api/client_data_service.dart';
 import 'package:tayra/core/api/client_preferences.dart';
+import 'package:tayra/core/audio/audio_quality.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 
 // ── Browse mode enum ────────────────────────────────────────────────────
@@ -33,6 +34,15 @@ class SettingsState {
   final bool autoDownloadPodcastEpisodes;
   final int autoDownloadPodcastEpisodeCount;
 
+  /// Preferred streaming quality (resolved to a concrete tier at play time).
+  final AudioQuality streamingQuality;
+
+  /// Preferred quality for offline / background downloads.
+  final AudioQuality downloadQuality;
+
+  /// When true, step down streaming quality after sustained buffering.
+  final bool autoQualityFallback;
+
   const SettingsState({
     this.browseMode = BrowseMode.albums,
     this.mobilePinnedTabIndices = const {2, 3, 5, 6},
@@ -49,6 +59,9 @@ class SettingsState {
     this.downloadWifiOnly = true,
     this.autoDownloadPodcastEpisodes = false,
     this.autoDownloadPodcastEpisodeCount = 3,
+    this.streamingQuality = AudioQuality.auto,
+    this.downloadQuality = AudioQuality.high,
+    this.autoQualityFallback = true,
   });
 
   // Dev-mode settings are only active when developer mode is unlocked.
@@ -73,6 +86,9 @@ class SettingsState {
     bool? downloadWifiOnly,
     bool? autoDownloadPodcastEpisodes,
     int? autoDownloadPodcastEpisodeCount,
+    AudioQuality? streamingQuality,
+    AudioQuality? downloadQuality,
+    bool? autoQualityFallback,
   }) {
     return SettingsState(
       browseMode: browseMode ?? this.browseMode,
@@ -97,6 +113,9 @@ class SettingsState {
       autoDownloadPodcastEpisodeCount:
           autoDownloadPodcastEpisodeCount ??
           this.autoDownloadPodcastEpisodeCount,
+      streamingQuality: streamingQuality ?? this.streamingQuality,
+      downloadQuality: downloadQuality ?? this.downloadQuality,
+      autoQualityFallback: autoQualityFallback ?? this.autoQualityFallback,
     );
   }
 }
@@ -125,6 +144,9 @@ class SettingsNotifier extends Notifier<SettingsState> {
       'auto_download_podcast_episodes';
   static const _keyAutoDownloadPodcastEpisodeCount =
       'auto_download_podcast_episode_count';
+  static const _keyStreamingQuality = 'streaming_quality';
+  static const _keyDownloadQuality = 'download_quality';
+  static const _keyAutoQualityFallback = 'auto_quality_fallback';
 
   @override
   SettingsState build() {
@@ -217,6 +239,14 @@ class SettingsNotifier extends Notifier<SettingsState> {
             ? rawPodcastCount
             : 3;
 
+    final streamingQuality =
+        AudioQualityX.tryParse(prefs.getString(_keyStreamingQuality)) ??
+        AudioQuality.auto;
+    final downloadQuality =
+        AudioQualityX.tryParse(prefs.getString(_keyDownloadQuality)) ??
+        AudioQuality.high;
+    final autoQualityFallback = prefs.getBool(_keyAutoQualityFallback) ?? true;
+
     state = state.copyWith(
       browseMode: browseMode,
       mobilePinnedTabIndices: mobilePinnedTabIndices,
@@ -233,6 +263,9 @@ class SettingsNotifier extends Notifier<SettingsState> {
       downloadWifiOnly: downloadWifiOnly,
       autoDownloadPodcastEpisodes: autoDownloadPodcastEpisodes,
       autoDownloadPodcastEpisodeCount: autoDownloadPodcastEpisodeCount,
+      streamingQuality: streamingQuality,
+      downloadQuality: downloadQuality,
+      autoQualityFallback: autoQualityFallback,
     );
   }
 
@@ -353,6 +386,29 @@ class SettingsNotifier extends Notifier<SettingsState> {
     _schedulePreferenceSync(_keyAutoDownloadPodcastEpisodeCount, safe);
   }
 
+  Future<void> setStreamingQuality(AudioQuality quality) async {
+    state = state.copyWith(streamingQuality: quality);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keyStreamingQuality, quality.name);
+    _schedulePreferenceSync(_keyStreamingQuality, quality.name);
+  }
+
+  Future<void> setDownloadQuality(AudioQuality quality) async {
+    // Downloads should be a concrete tier, not Auto.
+    final concrete = quality == AudioQuality.auto ? AudioQuality.high : quality;
+    state = state.copyWith(downloadQuality: concrete);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keyDownloadQuality, concrete.name);
+    _schedulePreferenceSync(_keyDownloadQuality, concrete.name);
+  }
+
+  Future<void> setAutoQualityFallback(bool enabled) async {
+    state = state.copyWith(autoQualityFallback: enabled);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyAutoQualityFallback, enabled);
+    _schedulePreferenceSync(_keyAutoQualityFallback, enabled);
+  }
+
   static Future<void> clearSettings() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_keyBrowseMode);
@@ -370,5 +426,8 @@ class SettingsNotifier extends Notifier<SettingsState> {
     await prefs.remove(_keyDownloadWifiOnly);
     await prefs.remove(_keyAutoDownloadPodcastEpisodes);
     await prefs.remove(_keyAutoDownloadPodcastEpisodeCount);
+    await prefs.remove(_keyStreamingQuality);
+    await prefs.remove(_keyDownloadQuality);
+    await prefs.remove(_keyAutoQualityFallback);
   }
 }

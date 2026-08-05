@@ -223,7 +223,9 @@ class TrackAlbumSerializer(serializers.ModelSerializer):
 
 
 def serialize_upload(upload) -> object:
-    return {
+    from . import quality as quality_mod
+
+    data = {
         "uuid": str(upload.uuid),
         "listen_url": upload.listen_url,
         "size": upload.size,
@@ -233,6 +235,11 @@ def serialize_upload(upload) -> object:
         "extension": upload.extension,
         "is_local": federation_utils.is_local(upload.fid),
     }
+    try:
+        data["audio_qualities"] = quality_mod.serialize_audio_qualities(upload)
+    except Exception:
+        data["audio_qualities"] = []
+    return data
 
 
 def sort_uploads_for_listen(uploads):
@@ -256,6 +263,7 @@ class TrackSerializer(OptionalDescriptionMixin, serializers.Serializer):
     album = TrackAlbumSerializer(read_only=True)
     uploads = serializers.SerializerMethodField()
     listen_url = serializers.SerializerMethodField()
+    audio_qualities = serializers.SerializerMethodField()
     tags = serializers.SerializerMethodField()
     attributed_to = APIActorSerializer(allow_null=True)
 
@@ -284,6 +292,22 @@ class TrackSerializer(OptionalDescriptionMixin, serializers.Serializer):
         uploads = [serialize_upload(u) for u in sort_uploads_for_listen(uploads)]
         uploads = sorted(uploads, key=lambda u: u["is_local"], reverse=True)
         return list(uploads)
+
+    @extend_schema_field({"type": "array", "items": {"type": "object"}})
+    def get_audio_qualities(self, obj):
+        """Quality ladder for the preferred playable upload (if any)."""
+        from . import quality as quality_mod
+
+        uploads = getattr(obj, "playable_uploads", None)
+        if uploads is None:
+            return []
+        ordered = sort_uploads_for_listen(list(uploads))
+        if not ordered:
+            return []
+        try:
+            return quality_mod.serialize_audio_qualities(ordered[0])
+        except Exception:
+            return []
 
     @extend_schema_field({"type": "array", "items": {"type": "string"}})
     def get_tags(self, obj):

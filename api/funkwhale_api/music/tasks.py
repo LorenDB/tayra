@@ -807,6 +807,90 @@ def clean_transcoding_cache():
     return candidates.delete()
 
 
+@celery.app.task(
+    name="music.ensure_transcoded_version",
+    ignore_result=True,
+    soft_time_limit=900,
+    time_limit=960,
+)
+def ensure_transcoded_version(upload_id, format, max_bitrate=None):
+    """Create a progressive derivative for *upload_id* if missing (ffmpeg)."""
+    from . import quality as quality_mod
+
+    try:
+        upload = models.Upload.objects.get(pk=upload_id)
+    except models.Upload.DoesNotExist:
+        logger.warning("ensure_transcoded_version: upload %s missing", upload_id)
+        return
+
+    if not format:
+        return
+
+    if not quality_mod.needs_transcode(upload, format, max_bitrate=max_bitrate):
+        return
+
+    existing = quality_mod.find_transcoded_version(
+        upload, format, max_bitrate=max_bitrate
+    )
+    if existing:
+        return existing.pk
+
+    try:
+        version = quality_mod.ensure_transcoded_version_sync(
+            upload, format, max_bitrate=max_bitrate
+        )
+        logger.info(
+            "Transcoded upload %s → %s @ %s (%s bytes)",
+            upload_id,
+            format,
+            max_bitrate,
+            getattr(version, "size", None),
+        )
+        return version.pk
+    except Exception:
+        logger.exception(
+            "Failed to transcode upload %s to %s @ %s",
+            upload_id,
+            format,
+            max_bitrate,
+        )
+        raise
+
+
+@celery.app.task(name="music.prewarm_upload_qualities", ignore_result=True)
+def prewarm_upload_qualities(upload_id, tiers=None):
+    """Enqueue common quality rungs for faster first play."""
+    from . import quality as quality_mod
+
+    try:
+        upload = models.Upload.objects.get(pk=upload_id)
+    except models.Upload.DoesNotExist:
+        return
+
+    for tier in tiers or quality_mod.PREWARM_TIERS:
+        fmt, bitrate = quality_mod.profile_for_quality(tier)
+        if not fmt:
+            continue
+        if not quality_mod.needs_transcode(upload, fmt, max_bitrate=bitrate):
+            continue
+        if quality_mod.find_transcoded_version(upload, fmt, max_bitrate=bitrate):
+            continue
+        ensure_transcoded_version.delay(upload_id, fmt, bitrate)
+
+
+@receiver(signals.upload_import_status_updated)
+def prewarm_qualities_on_import(old_status, new_status, upload, **kwargs):
+    """After a successful import, pre-warm high/medium progressive rungs."""
+    if new_status != "finished":
+        return
+    if not preferences.get("music__transcoding_enabled"):
+        return
+    try:
+        prewarm_upload_qualities.delay(upload.pk)
+    except Exception:
+        logger.debug("Could not enqueue quality prewarm for upload %s", upload.pk)
+
+
 @celery.app.task(name="music.albums_set_tags_from_tracks")
 @transaction.atomic
 def albums_set_tags_from_tracks(ids=None, dry_run=False):

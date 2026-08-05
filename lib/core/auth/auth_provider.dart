@@ -261,8 +261,10 @@ class AuthNotifier extends Notifier<AuthState> {
   static const _keyRefreshToken = 'refresh_token';
   static const _keyClientId = 'client_id';
   static const _keyClientSecret = 'client_secret';
+
   /// Prefs key for OIDC login CSRF `state` (M3). Cleared after validation.
   static const keyOidcPendingState = 'oidc_pending_state';
+
   /// OOB paste-code fallback (still PKCE-bound). Prefer tayra:// when deep links
   /// are wired; OOB remains for the authorization-code paste UX (M2).
   static const _redirectUri = 'urn:ietf:wg:oauth:2.0:oob';
@@ -281,8 +283,14 @@ class AuthNotifier extends Notifier<AuthState> {
   /// Refresh the scoped listen token used for `?token=` stream URLs (web).
   ///
   /// Also refreshes [AuthState.totpSetupRequired] from `/users/me/`.
-  Future<void> ensureListenToken() async {
+  ///
+  /// When [force] is false (default) and a listen token is already present,
+  /// skips the network round-trip so playback can start immediately.
+  Future<void> ensureListenToken({bool force = false}) async {
     if (!state.isAuthenticated) return;
+    if (!force && state.listenToken != null && state.listenToken!.isNotEmpty) {
+      return;
+    }
     try {
       final response = await _dio.get(
         '${state.serverUrl}/api/v1/users/me/',
@@ -405,9 +413,7 @@ class AuthNotifier extends Notifier<AuthState> {
             }
           } catch (e, stack) {
             assert(() {
-              debugPrint(
-                'AuthNotifier: keychain recovery failed: $e\n$stack',
-              );
+              debugPrint('AuthNotifier: keychain recovery failed: $e\n$stack');
               return true;
             }());
           }
@@ -717,9 +723,10 @@ class AuthNotifier extends Notifier<AuthState> {
 
     // On web, prefer same-origin relative URL so a mismatched baked
     // FUNKWHALE_URL still hits the nginx that serves this SPA.
-    final challengeEndpoint = kIsWeb
-        ? '/api/v1/users/token/challenge/'
-        : '$url/api/v1/users/token/challenge/';
+    final challengeEndpoint =
+        kIsWeb
+            ? '/api/v1/users/token/challenge/'
+            : '$url/api/v1/users/token/challenge/';
     final tokenEndpoint =
         kIsWeb ? '/api/v1/users/token/' : '$url/api/v1/users/token/';
 
@@ -820,9 +827,10 @@ class AuthNotifier extends Notifier<AuthState> {
           Analytics.track('login_failed');
           return false;
         }
-        final binding = bindingHex.isNotEmpty
-            ? instanceBindingFromHex(bindingHex)
-            : instanceBindingForServerUrl(url);
+        final binding =
+            bindingHex.isNotEmpty
+                ? instanceBindingFromHex(bindingHex)
+                : instanceBindingForServerUrl(url);
         final secret = transportSecret(
           password,
           binding,
@@ -883,9 +891,7 @@ class AuthNotifier extends Notifier<AuthState> {
         // Log status only — never dump auth response bodies (may include
         // challenge fragments or account hints) into device logs.
         assert(() {
-          debugPrint(
-            'loginWithPassword failed status=${response.statusCode}',
-          );
+          debugPrint('loginWithPassword failed status=${response.statusCode}');
           return true;
         }());
         state = state.copyWith(

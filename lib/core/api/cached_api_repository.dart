@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/api/api_client.dart';
 import 'package:tayra/core/api/api_repository.dart';
 import 'package:tayra/core/api/models.dart';
+import 'package:tayra/core/audio/audio_quality.dart';
 import 'package:tayra/core/cache/audio_cache_service.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
@@ -1180,12 +1181,22 @@ class CachedFunkwhaleApi {
     int limit = 10,
   }) => _api.getListeningStats(year: year, limit: limit);
 
-  String getStreamUrl(String listenUrl, {bool? appendListenToken}) =>
-      _api.getStreamUrl(listenUrl, appendListenToken: appendListenToken);
+  String getStreamUrl(
+    String listenUrl, {
+    bool? appendListenToken,
+    AudioQuality? quality,
+    bool forDownload = false,
+  }) => _api.getStreamUrl(
+    listenUrl,
+    appendListenToken: appendListenToken,
+    quality: quality,
+    forDownload: forDownload,
+  );
 
   Map<String, String> get authHeaders => _api.authHeaders;
 
-  Future<void> ensureListenToken() => _api.ensureListenToken();
+  Future<void> ensureListenToken({bool force = false}) =>
+      _api.ensureListenToken(force: force);
 
   // ── Channels / Podcasts ──────────────────────────────────────────────
 
