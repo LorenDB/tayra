@@ -793,18 +793,32 @@ def broadcast_import_status_update_to_owner(old_status, new_status, upload, **kw
 
 @celery.app.task(name="music.clean_transcoding_cache")
 def clean_transcoding_cache():
+    """Delete stale ad-hoc UploadVersions.
+
+    Duration 0 (default) disables cleanup entirely. Quality-ladder rungs
+    (high/medium/low) are always retained so background pre-warm work is not
+    thrown away.
+    """
+    from . import quality as quality_mod
+
     delay = preferences.get("music__transcoding_cache_duration")
-    if delay < 1:
+    if delay is None or delay < 1:
         return  # cache clearing disabled
     limit = timezone.now() - datetime.timedelta(minutes=delay)
-    candidates = (
-        models.UploadVersion.objects.filter(
-            Q(accessed_date__lt=limit) | Q(accessed_date=None)
-        )
-        .only("audio_file", "id")
-        .order_by("id")
-    )
-    return candidates.delete()
+    candidates = models.UploadVersion.objects.filter(
+        Q(accessed_date__lt=limit) | Q(accessed_date=None)
+    ).order_by("id")
+
+    # Never GC multi-quality ladder derivatives.
+    delete_ids = []
+    for version in candidates.iterator(chunk_size=200):
+        if quality_mod.is_ladder_version(version):
+            continue
+        delete_ids.append(version.pk)
+
+    if not delete_ids:
+        return 0
+    return models.UploadVersion.objects.filter(pk__in=delete_ids).delete()
 
 
 @celery.app.task(
@@ -859,7 +873,7 @@ def ensure_transcoded_version(upload_id, format, max_bitrate=None):
 
 @celery.app.task(name="music.prewarm_upload_qualities", ignore_result=True)
 def prewarm_upload_qualities(upload_id, tiers=None):
-    """Enqueue common quality rungs for faster first play."""
+    """Enqueue quality-ladder rungs for faster first play."""
     from . import quality as quality_mod
 
     try:
@@ -878,12 +892,77 @@ def prewarm_upload_qualities(upload_id, tiers=None):
         ensure_transcoded_version.delay(upload_id, fmt, bitrate)
 
 
+def _upload_needs_quality_prewarm(upload, tiers=None):
+    """True if any ladder tier is missing for *upload*."""
+    from . import quality as quality_mod
+
+    for tier in tiers or quality_mod.PREWARM_TIERS:
+        fmt, bitrate = quality_mod.profile_for_quality(tier)
+        if not fmt:
+            continue
+        if not quality_mod.needs_transcode(upload, fmt, max_bitrate=bitrate):
+            continue
+        if not quality_mod.find_transcoded_version(
+            upload, fmt, max_bitrate=bitrate
+        ):
+            return True
+    return False
+
+
+@celery.app.task(name="music.schedule_quality_prewarm", ignore_result=True)
+def schedule_quality_prewarm(max_enqueue=100):
+    """Scan the library and enqueue missing quality-ladder encodes.
+
+    Runs on Celery beat. Processes a bounded batch each tick so a large
+    library is gradually covered without flooding the worker.
+    """
+    if not preferences.get("music__transcoding_enabled"):
+        return 0
+    if not preferences.get("music__auto_prewarm_qualities"):
+        return 0
+
+    # Finished (or skipped-but-playable) uploads that have a local source.
+    qs = (
+        models.Upload.objects.filter(import_status__in=["finished", "skipped"])
+        .filter(
+            Q(audio_file__isnull=False) & ~Q(audio_file="")
+            | Q(source__startswith="file://")
+        )
+        .order_by("id")
+        .only("id", "audio_file", "source", "mimetype", "bitrate")
+    )
+
+    enqueued = 0
+    for upload in qs.iterator(chunk_size=100):
+        if enqueued >= max_enqueue:
+            break
+        try:
+            if not _upload_needs_quality_prewarm(upload):
+                continue
+            prewarm_upload_qualities.delay(upload.pk)
+            enqueued += 1
+        except Exception:
+            logger.exception(
+                "schedule_quality_prewarm: failed evaluating upload %s",
+                upload.pk,
+            )
+
+    if enqueued:
+        logger.info(
+            "schedule_quality_prewarm: enqueued prewarm for %s upload(s)",
+            enqueued,
+        )
+    return enqueued
+
+
 @receiver(signals.upload_import_status_updated)
 def prewarm_qualities_on_import(old_status, new_status, upload, **kwargs):
-    """After a successful import, pre-warm high/medium progressive rungs."""
+    """After a successful import, pre-warm the progressive quality ladder."""
     if new_status != "finished":
         return
     if not preferences.get("music__transcoding_enabled"):
+        return
+    if not preferences.get("music__auto_prewarm_qualities"):
         return
     try:
         prewarm_upload_qualities.delay(upload.pk)

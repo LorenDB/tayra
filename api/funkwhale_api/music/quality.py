@@ -30,8 +30,30 @@ QUALITY_PROFILES = {
 
 QUALITY_ORDER = ("original", "high", "medium", "low")
 
-# Pre-warm these rungs after import / first play (when source is higher quality).
-PREWARM_TIERS = ("high", "medium")
+# Pre-warm the full progressive ladder in the background (import + beat scan).
+PREWARM_TIERS = ("high", "medium", "low")
+
+
+def ladder_bitrate_set():
+    """Exact bitrates used by quality-ladder profiles (never GC these)."""
+    return {profile["bitrate"] for profile in QUALITY_PROFILES.values()}
+
+
+def is_ladder_version(version):
+    """True if *version* matches a multi-quality ladder rung we retain forever."""
+    if not version:
+        return False
+    fmt = utils.MIMETYPE_TO_EXTENSION.get(version.mimetype)
+    if not fmt:
+        return False
+    for profile in QUALITY_PROFILES.values():
+        if profile["format"] != fmt:
+            continue
+        target = profile["bitrate"]
+        # Match the same 80–120% window used when looking up versions.
+        if version.bitrate and target * 0.8 <= version.bitrate <= target * 1.2:
+            return True
+    return False
 
 
 def normalize_quality(value):

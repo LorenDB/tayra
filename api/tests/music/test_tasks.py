@@ -838,19 +838,58 @@ def test_scan_page_trigger_next_page_scan_skip_if_same(mocker, factories, r_mock
 
 def test_clean_transcoding_cache(preferences, now, factories):
     preferences["music__transcoding_cache_duration"] = 60
+    # Non-ladder ad-hoc version (odd bitrate) past the retention window.
     u1 = factories["music.UploadVersion"](
-        accessed_date=now - datetime.timedelta(minutes=61)
+        accessed_date=now - datetime.timedelta(minutes=61),
+        bitrate=111000,
+        mimetype="audio/mpeg",
     )
     u2 = factories["music.UploadVersion"](
-        accessed_date=now - datetime.timedelta(minutes=59)
+        accessed_date=now - datetime.timedelta(minutes=59),
+        bitrate=111000,
+        mimetype="audio/mpeg",
+    )
+    # Quality-ladder rung must never be GC'd even when stale.
+    ladder = factories["music.UploadVersion"](
+        accessed_date=now - datetime.timedelta(minutes=61),
+        bitrate=128000,
+        mimetype="audio/mpeg",
     )
 
     tasks.clean_transcoding_cache()
 
     u2.refresh_from_db()
+    ladder.refresh_from_db()
 
     with pytest.raises(u1.__class__.DoesNotExist):
         u1.refresh_from_db()
+
+
+def test_clean_transcoding_cache_disabled_by_default(preferences, now, factories):
+    preferences["music__transcoding_cache_duration"] = 0
+    stale = factories["music.UploadVersion"](
+        accessed_date=now - datetime.timedelta(days=30),
+        bitrate=111000,
+        mimetype="audio/mpeg",
+    )
+    tasks.clean_transcoding_cache()
+    stale.refresh_from_db()
+
+
+def test_schedule_quality_prewarm_enqueues(preferences, factories, mocker):
+    preferences["music__transcoding_enabled"] = True
+    preferences["music__auto_prewarm_qualities"] = True
+    upload = factories["music.Upload"](
+        import_status="finished",
+        bitrate=900000,
+        mimetype="audio/flac",
+    )
+    delayed = mocker.patch(
+        "funkwhale_api.music.tasks.prewarm_upload_qualities.delay"
+    )
+    count = tasks.schedule_quality_prewarm(max_enqueue=10)
+    assert count >= 1
+    delayed.assert_any_call(upload.pk)
 
 
 def test_get_prunable_tracks(factories):

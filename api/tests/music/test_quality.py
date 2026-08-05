@@ -29,6 +29,21 @@ def test_quality_order_covers_profiles():
         assert tier in quality.QUALITY_ORDER
 
 
+def test_prewarm_tiers_cover_ladder():
+    assert set(quality.PREWARM_TIERS) == {"high", "medium", "low"}
+
+
+def test_is_ladder_version(factories):
+    ladder = factories["music.UploadVersion"](
+        bitrate=256000, mimetype="audio/mpeg"
+    )
+    ad_hoc = factories["music.UploadVersion"](
+        bitrate=111000, mimetype="audio/mpeg"
+    )
+    assert quality.is_ladder_version(ladder) is True
+    assert quality.is_ladder_version(ad_hoc) is False
+
+
 def test_serialize_audio_qualities_structure(factories, preferences):
     preferences["music__transcoding_enabled"] = True
     upload = factories["music.Upload"](

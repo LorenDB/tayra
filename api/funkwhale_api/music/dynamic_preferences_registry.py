@@ -24,14 +24,31 @@ class MusicCacheDuration(types.IntPreference):
     show_in_api = True
     section = music
     name = "transcoding_cache_duration"
-    default = 60 * 24 * 7
+    # 0 = keep forever. Multi-quality ladder rungs are expensive to rebuild and
+    # are pre-warmed in the background; do not discard them by default.
+    default = 0
     verbose_name = "Transcoding cache duration"
     help_text = (
-        "How many minutes do you want to keep a copy of transcoded tracks "
-        "on the server? Transcoded files that were not listened in this interval "
-        "will be erased and retranscoded on the next listening."
+        "How many minutes to keep ad-hoc transcoded files that were not "
+        "accessed. Set to 0 (default) to never delete transcoded versions. "
+        "Quality-ladder rungs (high/medium/low) are always retained even when "
+        "this is greater than zero."
     )
     field_kwargs = {"required": False}
+
+
+@global_preferences_registry.register
+class AutoPrewarmQualities(types.BooleanPreference):
+    show_in_api = True
+    section = music
+    name = "auto_prewarm_qualities"
+    verbose_name = "Background multi-quality transcoding"
+    help_text = (
+        "When enabled, Celery periodically encodes progressive quality "
+        "variants (high/medium/low MP3) for all finished uploads so clients "
+        "can start playback faster without waiting on first request."
+    )
+    default = True
 
 
 @global_preferences_registry.register

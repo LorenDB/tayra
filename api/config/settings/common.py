@@ -984,6 +984,12 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": crontab(minute="0", hour="*"),
         "options": {"expires": 60 * 2},
     },
+    # Gradually encode multi-quality progressive derivatives for the library.
+    "music.schedule_quality_prewarm": {
+        "task": "music.schedule_quality_prewarm",
+        "schedule": crontab(minute="*/10"),
+        "options": {"expires": 60 * 9},
+    },
     "oauth.clear_expired_tokens": {
         "task": "oauth.clear_expired_tokens",
         "schedule": crontab(minute="0", hour="0"),
