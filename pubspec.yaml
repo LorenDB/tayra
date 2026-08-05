@@ -55,7 +55,7 @@ dependencies:
   file_picker: ^12.0.0-beta.7
 
   # Misc
-  aptabase_flutter: ^0.4.1
+  aptabase_flutter: ^0.5.0
   crypto: ^3.0.6
   device_info_plus: ^13.2.0
   package_info_plus: ^10.2.0
@@ -63,7 +63,7 @@ dependencies:
   intl: ^0.20.2
   collection: ^1.19.0
   # Desktop window sizing helpers
-  window_size: ^0.1.0
+  window_size: ^0.2.0
   connectivity_plus: ^7.1.1
   qr_flutter: ^4.1.0
 
@@ -79,10 +79,10 @@ dev_dependencies:
   msix: ^3.16.13
 
 dependency_overrides:
-  # Override pinned by aptabase_flutter; its usage only touches stable APIs,
-  # and these versions support AGP built-in Kotlin (no standalone KGP).
-  device_info_plus: ^13.2.0
-  package_info_plus: ^10.2.0
+  # jni 1.0.1+ dropped __ENVP_CAST for AttachCurrentThread / JNI_CreateJavaVM,
+  # which breaks Linux builds with -Wincompatible-pointer-types (JNIEnv** vs void**).
+  # path_provider_android pulls jni via ^1.0.0; pin until upstream restores the cast.
+  jni: 1.0.0
 
 flutter:
   uses-material-design: true
