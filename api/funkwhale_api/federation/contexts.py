@@ -293,6 +293,7 @@ CONTEXTS = [
                 "Album": "fw:Album",
                 "Track": "fw:Track",
                 "Artist": "fw:Artist",
+                "ArtistCredit": "fw:ArtistCredit",
                 "Library": "fw:Library",
                 "bitrate": {"@id": "fw:bitrate", "@type": "xsd:nonNegativeInteger"},
                 "size": {"@id": "fw:size", "@type": "xsd:nonNegativeInteger"},
@@ -302,6 +303,7 @@ CONTEXTS = [
                 "track": {"@id": "fw:track", "@type": "@id"},
                 "cover": {"@id": "fw:cover", "@type": "as:Link"},
                 "album": {"@id": "fw:album", "@type": "@id"},
+                "artist": {"@id": "fw:artist", "@type": "@id"},
                 "artists": {"@id": "fw:artists", "@type": "@id", "@container": "@list"},
                 "artist_credit": {
                     "@id": "fw:artist_credit",
