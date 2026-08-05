@@ -127,7 +127,7 @@ def compute_listening_stats(user, year, limit=10):
             "id", filter=Q(duration_seconds__isnull=False)
         ),
         unique_tracks=Count("track_id", distinct=True),
-        unique_artists=Count("track__artist_id", distinct=True),
+        unique_artists=Count("track__artist_credit__artist_id", distinct=True),
         unique_albums=Count("track__album_id", distinct=True),
     )
     total_seconds = _int_or_zero(totals["total_seconds"])
@@ -172,7 +172,8 @@ def _top_tracks(base, limit):
     tracks = {
         t.id: t
         for t in Track.objects.filter(id__in=[r["track_id"] for r in rows])
-        .select_related("artist", "attachment_cover", "album__attachment_cover")
+        .prefetch_related("artist_credit__artist")
+        .select_related("attachment_cover", "album__attachment_cover")
     }
     result = []
     for row in rows:
@@ -183,7 +184,7 @@ def _top_tracks(base, limit):
             {
                 "track_id": track.id,
                 "title": track.title,
-                "artist_name": track.artist.name if track.artist_id else None,
+                "artist_name": track.get_artist_credit_string or None,
                 "cover_url": _track_cover_url(track),
                 "count": row["count"],
                 "total_seconds": _int_or_zero(row["total_seconds"]),
@@ -195,13 +196,13 @@ def _top_tracks(base, limit):
 def _top_artists(base, limit):
     rows = list(
         base.order_by()
-        .exclude(track__artist_id__isnull=True)
-        .values("track__artist_id")
+        .exclude(track__artist_credit__artist_id__isnull=True)
+        .values("track__artist_credit__artist_id")
         .annotate(
             count=Count("id"),
             total_seconds=Sum(_SECONDS_ZERO),
         )
-        .order_by("-count", "-total_seconds", "track__artist_id")[:limit]
+        .order_by("-count", "-total_seconds", "track__artist_credit__artist_id")[:limit]
     )
     if not rows:
         return []
@@ -209,12 +210,12 @@ def _top_artists(base, limit):
     artists = {
         a.id: a
         for a in Artist.objects.filter(
-            id__in=[r["track__artist_id"] for r in rows]
+            id__in=[r["track__artist_credit__artist_id"] for r in rows]
         ).select_related("attachment_cover")
     }
     result = []
     for row in rows:
-        artist = artists.get(row["track__artist_id"])
+        artist = artists.get(row["track__artist_credit__artist_id"])
         if artist is None:
             continue
         result.append(
@@ -247,7 +248,7 @@ def _top_albums(base, limit):
         a.id: a
         for a in Album.objects.filter(
             id__in=[r["track__album_id"] for r in rows]
-        ).select_related("artist", "attachment_cover")
+        ).prefetch_related("artist_credit__artist").select_related("attachment_cover")
     }
     result = []
     for row in rows:
@@ -258,7 +259,7 @@ def _top_albums(base, limit):
             {
                 "album_id": album.id,
                 "title": album.title,
-                "artist_name": album.artist.name if album.artist_id else None,
+                "artist_name": album.get_artist_credit_string or None,
                 "cover_url": _cover_url(album.attachment_cover),
                 "count": row["count"],
                 "total_seconds": _int_or_zero(row["total_seconds"]),

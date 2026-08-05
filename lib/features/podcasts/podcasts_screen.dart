@@ -248,8 +248,23 @@ class _PodcastsScreenState extends ConsumerState<PodcastsScreen> {
     try {
       final api = ref.read(cached_api.cachedFunkwhaleApiProvider);
       final channel = await api.subscribeChannelRss(url);
-      Analytics.track('podcast_rss_subscribed');
+      final isMusic = !channel.isPodcast;
+      Analytics.track(
+        isMusic ? 'music_rss_subscribed' : 'podcast_rss_subscribed',
+      );
       if (!mounted) return;
+      if (isMusic) {
+        // Music RSS feeds are not listed under Podcasts; still confirm subscribe.
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Subscribed to music channel “${channel.name}”. '
+              'It is classified as music (not a podcast).',
+            ),
+          ),
+        );
+        return;
+      }
       setState(() {
         _subscribedUuids.add(channel.uuid);
         if (_filter == _PodcastListFilter.subscribed ||

@@ -3,7 +3,6 @@ import re
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.postgres.fields import CICharField
 from django.db import models, transaction
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -12,7 +11,10 @@ TAG_REGEX = re.compile(r"^((\w+)([\d_]*))$")
 
 
 class Tag(models.Model):
-    name = CICharField(max_length=100, unique=True)
+    # CharField (not CICharField) for Django 5+; uniqueness is case-sensitive at the
+    # DB level. Import paths normalize via TAG_REGEX / TagNameField.
+    name = models.CharField(max_length=100, unique=True)
+    mbid = models.UUIDField(null=True, blank=True, unique=True, db_index=True)
     creation_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):

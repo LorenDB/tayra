@@ -1258,10 +1258,11 @@ class CachedFunkwhaleApi {
     String ordering = '-creation_date',
     String? q,
     bool? subscribed,
+    String? contentCategory = 'podcast',
     bool forceRefresh = false,
   }) async {
     final cacheKey =
-        'channels_p${page}_s${pageSize}_o${ordering}_q${q}_sub$subscribed';
+        'channels_p${page}_s${pageSize}_o${ordering}_q${q}_sub${subscribed}_c$contentCategory';
     return _cachedFetch(
       cacheKey: cacheKey,
       cacheType: CacheType.channel,
@@ -1274,6 +1275,7 @@ class CachedFunkwhaleApi {
             ordering: ordering,
             q: q,
             subscribed: subscribed,
+            contentCategory: contentCategory,
           ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,

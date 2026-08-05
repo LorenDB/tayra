@@ -21,12 +21,40 @@ def get_privacy_field():
 
 
 def privacy_level_query(user, lookup_field="privacy_level", user_field="user"):
+    """
+    Filter rows whose owner privacy (or row privacy) is visible to *user*.
+
+    Supports ``me``, ``followers``, ``instance``, and ``everyone``.
+
+    ``followers`` means the owner and their approved followers (ActivityPub
+    follows). Callers that use account-level privacy pass
+    ``lookup_field="user__privacy_level"`` (history/favorites/activity).
+    """
     if user.is_anonymous:
         return models.Q(**{lookup_field: "everyone"})
 
-    return models.Q(**{f"{lookup_field}__in": ["instance", "everyone"]}) | models.Q(
+    query = models.Q(**{f"{lookup_field}__in": ["instance", "everyone"]}) | models.Q(
         **{lookup_field: "me", user_field: user}
     )
+
+    # Owner always sees their own "followers"-level content.
+    followers_owner = models.Q(**{lookup_field: "followers", user_field: user})
+
+    actor = getattr(user, "actor", None)
+    if actor is not None:
+        # People the viewer follows (approved): show their followers-level rows.
+        followings = actor.get_approved_followings()
+        followers_from_followings = models.Q(
+            **{
+                lookup_field: "followers",
+                f"{user_field}__actor__in": followings,
+            }
+        )
+        query = query | followers_owner | followers_from_followings
+    else:
+        query = query | followers_owner
+
+    return query
 
 
 class SearchFilter(django_filters.CharFilter):

@@ -85,7 +85,7 @@ class IncludeChannelsFilterSet(django_filters.FilterSet):
 
     class MyFilterSet(IncludeChannelsFilterSet):
         class Meta:
-            include_channels_field = "album__artist__channel"
+            include_channels_field = "album__artist_credit__artist__channel"
 
     """
 

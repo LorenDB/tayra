@@ -84,7 +84,7 @@
 #                     pk = hit["document"]["pk"]
 #                     fw_track = music_models.Track.objects.get(pk=pk)
 #                     logger.info(
-#                         f"Duplicate match found for {fw_track.artist.name} {fw_track.title} \
+#                         f"Duplicate match found for {fw_track.get_artist_credit_string} {fw_track.title} \
 #                                 and primary key {pk}. Skipping because of better match."
 #                     )
 #         else:

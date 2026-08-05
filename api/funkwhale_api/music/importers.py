@@ -3,7 +3,7 @@ def load(model, *args, **kwargs):
     return importer.load(*args, **kwargs)
 
 
-EXCLUDE_VALIDATION = {"Track": ["artist"]}
+EXCLUDE_VALIDATION = {"Track": ["artist_credit"], "Album": ["artist_credit"]}
 
 
 class Importer:
@@ -12,11 +12,14 @@ class Importer:
 
     def load(self, cleaned_data, raw_data, import_hooks):
         mbid = cleaned_data.pop("mbid")
+        artists_credits = cleaned_data.pop("artist_credit", None)
         # let's validate data, just in case
         instance = self.model(**cleaned_data)
         exclude = EXCLUDE_VALIDATION.get(self.model.__name__, [])
         instance.full_clean(exclude=["mbid", "uuid", "fid", "from_activity"] + exclude)
         m = self.model.objects.update_or_create(mbid=mbid, defaults=cleaned_data)[0]
+        if artists_credits:
+            m.artist_credit.set(artists_credits)
         for hook in import_hooks:
             hook(m, cleaned_data, raw_data)
         return m
@@ -47,4 +50,9 @@ class Mapping:
         )
 
 
-registry = {"Artist": Importer, "Track": Importer, "Album": Importer}
+registry = {
+    "Artist": Importer,
+    "ArtistCredit": Importer,
+    "Track": Importer,
+    "Album": Importer,
+}

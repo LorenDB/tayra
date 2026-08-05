@@ -98,7 +98,7 @@ class ManageArtistViewSet(
     def stats(self, request, *args, **kwargs):
         artist = self.get_object()
         tracks = music_models.Track.objects.filter(
-            Q(artist=artist) | Q(album__artist=artist)
+            Q(artist_credit__artist=artist) | Q(album__artist_credit__artist=artist)
         )
         data = get_stats(tracks, artist)
         return response.Response(data, status=200)
@@ -128,7 +128,7 @@ class ManageAlbumViewSet(
     queryset = (
         music_models.Album.objects.all()
         .order_by("-id")
-        .select_related("attributed_to", "artist", "attachment_cover")
+        .select_related("attributed_to", "attachment_cover").prefetch_related("artist_credit__artist")
         .prefetch_related("tracks")
     )
     serializer_class = serializers.ManageAlbumSerializer
@@ -177,13 +177,7 @@ class ManageTrackViewSet(
     queryset = (
         music_models.Track.objects.all()
         .order_by("-id")
-        .select_related(
-            "attributed_to",
-            "artist",
-            "album__artist",
-            "album__attachment_cover",
-            "attachment_cover",
-        )
+        .select_related("attributed_to", "album__attachment_cover", "attachment_cover").prefetch_related("artist_credit__artist", "album__artist_credit__artist")
         .annotate(uploads_count=Coalesce(Subquery(uploads_subquery), 0))
         .prefetch_related(music_views.TAG_PREFETCH)
     )
@@ -313,7 +307,7 @@ class ManageUploadViewSet(
     queryset = (
         music_models.Upload.objects.all()
         .order_by("-id")
-        .select_related("library__actor", "track__artist", "track__album__artist")
+        .select_related("library__actor").prefetch_related("track__artist_credit__artist", "track__album__artist_credit__artist")
     )
     serializer_class = serializers.ManageUploadSerializer
     filterset_class = filters.ManageUploadFilterSet
@@ -746,7 +740,7 @@ class ManageChannelViewSet(
     def stats(self, request, *args, **kwargs):
         channel = self.get_object()
         tracks = music_models.Track.objects.filter(
-            Q(artist=channel.artist) | Q(album__artist=channel.artist)
+            Q(artist_credit__artist=channel.artist) | Q(album__artist_credit__artist=channel.artist)
         )
         data = get_stats(tracks, channel, ignore_fields=["libraries", "channels"])
         data["follows"] = channel.actor.received_follows.count()

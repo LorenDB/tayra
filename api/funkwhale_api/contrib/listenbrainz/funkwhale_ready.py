@@ -19,7 +19,7 @@ def submit_listen(listening, conf, **kwargs):
 
 
 def get_track(track):
-    artist = track.artist.name
+    artist = track.get_artist_credit_string
     title = track.title
     album = None
     additional_info = {
@@ -40,8 +40,9 @@ def get_track(track):
         if track.album.mbid:
             additional_info["release_mbid"] = str(track.album.mbid)
 
-    if track.artist.mbid:
-        additional_info["artist_mbids"] = [str(track.artist.mbid)]
+    mbids = [str(a.mbid) for a in track.get_artists_list() if a.mbid]
+    if mbids:
+        additional_info["artist_mbids"] = mbids
 
     upload = track.uploads.filter(duration__gte=0).first()
     if upload:

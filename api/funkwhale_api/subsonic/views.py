@@ -263,7 +263,7 @@ class SubsonicViewSet(viewsets.GenericViewSet):
         detail=False, methods=["get", "post"], url_name="get_album", url_path="getAlbum"
     )
     @find_object(
-        music_models.Album.objects.select_related("artist"),
+        music_models.Album.objects.prefetch_related("artist_credit__artist"),
         filter_playable=True,
     )
     def get_album(self, request, *args, **kwargs):
@@ -277,7 +277,7 @@ class SubsonicViewSet(viewsets.GenericViewSet):
     def stream(self, request, *args, **kwargs):
         data = request.GET or request.POST
         track = kwargs.pop("obj")
-        queryset = track.uploads.select_related("track__album__artist", "track__artist")
+        queryset = track.uploads.select_related("track__album").prefetch_related("track__album__artist_credit__artist", "track__artist_credit__artist")
         sorted_uploads = music_serializers.sort_uploads_for_listen(queryset)
 
         if not sorted_uploads:
@@ -402,7 +402,7 @@ class SubsonicViewSet(viewsets.GenericViewSet):
             .filter(
                 Q(tagged_items__tag__name=genre)
                 | Q(artist__tagged_items__tag__name=genre)
-                | Q(album__artist__tagged_items__tag__name=genre)
+                | Q(album__artist_credit__artist__tagged_items__tag__name=genre)
                 | Q(album__tagged_items__tag__name=genre)
             )
             .prefetch_related("uploads")
@@ -531,9 +531,7 @@ class SubsonicViewSet(viewsets.GenericViewSet):
                 "subsonic": "album",
                 "search_fields": ["title"],
                 "queryset": (
-                    music_models.Album.objects.with_tracks_count().select_related(
-                        "artist"
-                    )
+                    music_models.Album.objects.with_tracks_count().prefetch_related("artist_credit__artist")
                 ),
                 "serializer": serializers.get_album_list2_data,
             },
@@ -543,7 +541,7 @@ class SubsonicViewSet(viewsets.GenericViewSet):
                 "queryset": (
                     music_models.Track.objects.prefetch_related(
                         "uploads"
-                    ).select_related("album__artist")
+                    ).prefetch_related("album__artist_credit__artist")
                 ),
                 "serializer": serializers.get_song_list_data,
             },

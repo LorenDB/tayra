@@ -972,3 +972,58 @@ def test_opml_outline_serializer(factories, now):
     }
 
     assert serializers.get_opml_outline(channel) == expected
+
+
+def test_rss_feed_validate_tags_keeps_music_sentinel():
+    """Free-form tag 'music' must survive validation for content_category detection."""
+    s = serializers.RssFeedSerializer()
+    data = s.validate_tags(
+        [
+            {"scheme": "http://www.itunes.com/", "term": "Arts"},
+            {"term": "music"},
+            {"term": "indie"},
+        ]
+    )
+    assert "music" in data["tags"]
+    assert data.get("parent") == "Arts"
+
+
+def test_rss_feed_save_sets_music_content_category(factories, mocker):
+    """Feeds tagged 'music' create music channels, not podcasts."""
+    service = factories["federation.Actor"](local=True)
+    mocker.patch(
+        "funkwhale_api.federation.actors.get_service_actor", return_value=service
+    )
+    s = serializers.RssFeedSerializer(
+        data={
+            "title": "Faircamp feed",
+            "link": "https://example.test/band",
+            "tags": [
+                {"term": "music"},
+                {"term": "rock"},
+            ],
+        }
+    )
+    assert s.is_valid(), s.errors
+    channel = s.save(rss_url="https://example.test/feed.xml")
+    assert channel.artist.content_category == "music"
+    # sentinel removed from stored tags
+    names = list(channel.artist.tagged_items.values_list("tag__name", flat=True))
+    assert "music" not in names
+
+
+def test_rss_feed_save_defaults_to_podcast(factories, mocker):
+    service = factories["federation.Actor"](local=True)
+    mocker.patch(
+        "funkwhale_api.federation.actors.get_service_actor", return_value=service
+    )
+    s = serializers.RssFeedSerializer(
+        data={
+            "title": "Talk show",
+            "link": "https://example.test/show",
+            "tags": [{"scheme": "http://www.itunes.com/", "term": "Comedy"}],
+        }
+    )
+    assert s.is_valid(), s.errors
+    channel = s.save(rss_url="https://example.test/podcast.xml")
+    assert channel.artist.content_category == "podcast"

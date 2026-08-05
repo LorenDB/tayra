@@ -37,7 +37,7 @@ def get_content():
 
 def get_top_music_categories():
     return (
-        models.Track.objects.filter(artist__content_category="music")
+        models.Track.objects.filter(artist_credit__artist__content_category="music")
         .exclude(tagged_items__tag_id=None)
         .values(name=F("tagged_items__tag__name"))
         .annotate(count=Count("name"))
@@ -47,7 +47,7 @@ def get_top_music_categories():
 
 def get_top_podcast_categories():
     return (
-        models.Track.objects.filter(artist__content_category="podcast")
+        models.Track.objects.filter(artist_credit__artist__content_category="podcast")
         .exclude(tagged_items__tag_id=None)
         .values(name=F("tagged_items__tag__name"))
         .annotate(count=Count("name"))

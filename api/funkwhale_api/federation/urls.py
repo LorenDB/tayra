@@ -16,6 +16,7 @@ router.register(r".well-known", views.WellKnownViewSet, "well-known")
 music_router.register(r"libraries", views.MusicLibraryViewSet, "libraries")
 music_router.register(r"uploads", views.MusicUploadViewSet, "uploads")
 music_router.register(r"artists", views.MusicArtistViewSet, "artists")
+music_router.register(r"artistcredit", views.MusicArtistCreditViewSet, "artistcredit")
 music_router.register(r"albums", views.MusicAlbumViewSet, "albums")
 music_router.register(r"tracks", views.MusicTrackViewSet, "tracks")
 

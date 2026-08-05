@@ -228,3 +228,13 @@ def browse_dir(root, path):
             files.append({"name": el, "dir": False})
 
     return dirs + files
+
+
+def get_artist_credit_string(obj):
+    """Join ArtistCredit credit + joinphrase values into a display string."""
+    final_credit = ""
+    for ac in obj.artist_credit.all():
+        credit = ac.credit or ""
+        joinphrase = ac.joinphrase or ""
+        final_credit = final_credit + credit + joinphrase
+    return final_credit

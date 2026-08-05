@@ -75,12 +75,70 @@ Default publish: `http://127.0.0.1:5000` → nginx (SPA + `/api/` proxy).
 Set `FUNKWHALE_API_IP=0.0.0.0` only if you intentionally bind all interfaces
 (prefer TLS at a reverse proxy and a host firewall).
 
+### PostgreSQL requirements
+
+**PostgreSQL 12 or newer is required** (production compose uses `postgres:15-alpine`;
+local `dev.yml` defaults to 15 as well). Older majors (e.g. 11) are not supported.
+
+Major-version upgrades **cannot** reuse the same data directory. If you still have
+a Postgres 11 volume (typical for older `dev.yml` defaults):
+
+```bash
+# 1. Dump while the old database is running
+docker compose -f dev.yml exec postgres pg_dump -U postgres postgres > backup-pg11.sql
+
+# 2. Stop the stack and move/rename the old data dir
+docker compose -f dev.yml down
+mv "data/${COMPOSE_PROJECT_NAME:-node1}/postgres" \
+   "data/${COMPOSE_PROJECT_NAME:-node1}/postgres-pg11.bak"
+
+# 3. Start Postgres 15 (default) and restore
+docker compose -f dev.yml up -d postgres
+# wait until ready, then:
+docker compose -f dev.yml exec -T postgres psql -U postgres postgres < backup-pg11.sql
+docker compose -f dev.yml up -d
+```
+
+Override the image tag only if needed: `POSTGRES_VERSION=15` (or 14+).
+
 ## 4. First-time Django setup
 
 ```bash
 docker compose exec api python manage.py migrate
 docker compose exec api python manage.py fw users create  # or createsuperuser
 ```
+
+### Optional: seed MusicBrainz genre tags
+
+After migrate, you can pre-populate the tag table with official MusicBrainz genres
+(recommended for empty pods so users can pick genres immediately):
+
+```bash
+docker compose exec api python manage.py fw tags sync-musicbrainz-genres
+```
+
+This hits MusicBrainz at ~1 request/second and may take several minutes. The same
+task also runs monthly via Celery beat (`tags.update_musicbrainz_genre`).
+
+### Multi-artist migration (`music.0060`)
+
+`migrate` includes a **breaking** music schema change: album/track single `artist`
+FKs are replaced by `ArtistCredit` M2M. On large libraries this can take minutes
+and locks album/track tables.
+
+```bash
+# Backup first
+docker compose exec postgres pg_dump -U postgres postgres > pre-multiartist.sql
+docker compose exec api python manage.py migrate music
+```
+
+**Client:** ship a Tayra build that understands `artist_credit` in lockstep; older
+clients expecting top-level `artist` on tracks/albums will break.
+
+### Activity privacy
+
+No migration. After deploy, account privacy level `followers` is honored on
+listenings, favorites, and activity feeds (requires approved ActivityPub follows).
 
 (Use whatever management commands your image exposes; stock Funkwhale uses
 `funkwhale-manage` / `manage.py` depending on image entrypoint.)

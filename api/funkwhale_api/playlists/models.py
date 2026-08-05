@@ -202,9 +202,7 @@ class Playlist(models.Model):
 class PlaylistTrackQuerySet(models.QuerySet):
     def for_nested_serialization(self, actor=None):
         tracks = music_models.Track.objects.with_playable_uploads(actor)
-        tracks = tracks.select_related(
-            "artist", "album__artist", "album__attachment_cover", "attributed_to"
-        )
+        tracks = tracks.select_related("album__attachment_cover", "attributed_to").prefetch_related("artist_credit__artist", "album__artist_credit__artist")
         return self.prefetch_related(
             models.Prefetch("track", queryset=tracks, to_attr="_prefetched_track")
         )

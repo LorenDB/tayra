@@ -129,13 +129,13 @@ class ManageTrackFilterSet(filters.FilterSet):
                 "mbid": {"to": "mbid"},
                 "artist": {"to": "artist__name"},
                 "album": {"to": "album__title"},
-                "album_artist": {"to": "album__artist__name"},
+                "album_artist": {"to": "album__artist_credit__artist__name"},
                 "copyright": {"to": "copyright"},
             },
             filter_fields={
                 "album_id": {"to": "album_id", "field": forms.IntegerField()},
                 "album_artist_id": {
-                    "to": "album__artist_id",
+                    "to": "album__artist_credit__artist_id",
                     "field": forms.IntegerField(),
                 },
                 "artist_id": {"to": "artist_id", "field": forms.IntegerField()},
@@ -156,7 +156,7 @@ class ManageTrackFilterSet(filters.FilterSet):
 
     class Meta:
         model = music_models.Track
-        fields = ["title", "mbid", "fid", "artist", "album", "license"]
+        fields = ["title", "mbid", "fid", "artist_credit__artist", "album", "license"]
 
 
 class ManageLibraryFilterSet(filters.FilterSet):
@@ -178,7 +178,7 @@ class ManageLibraryFilterSet(filters.FilterSet):
             filter_fields={
                 "uuid": {"to": "uuid"},
                 "artist_id": {
-                    "to": "uploads__track__artist_id",
+                    "to": "uploads__track__artist_credit__artist_id",
                     "field": forms.IntegerField(),
                     "distinct": True,
                 },
@@ -224,12 +224,12 @@ class ManageUploadFilterSet(filters.FilterSet):
                 "fid": {"to": "fid"},
                 "track": {"to": "track__title"},
                 "album": {"to": "track__album__title"},
-                "artist": {"to": "track__artist__name"},
+                "artist": {"to": "track__artist_credit__artist__name"},
             },
             filter_fields={
                 "uuid": {"to": "uuid"},
                 "library_id": {"to": "library_id", "field": forms.IntegerField()},
-                "artist_id": {"to": "track__artist_id", "field": forms.IntegerField()},
+                "artist_id": {"to": "track__artist_credit__artist_id", "field": forms.IntegerField()},
                 "album_id": {"to": "track__album_id", "field": forms.IntegerField()},
                 "track_id": {"to": "track__id", "field": forms.IntegerField()},
                 "domain": {"to": "library__actor__domain_id"},

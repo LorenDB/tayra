@@ -354,8 +354,8 @@ class FunkwhaleApi {
       data: {'index': index},
       options: Options(
         contentType: Headers.jsonContentType,
-        validateStatus: (status) =>
-            status != null && status >= 200 && status < 300,
+        validateStatus:
+            (status) => status != null && status >= 200 && status < 300,
       ),
     );
     // Defensive: if validateStatus is ever relaxed, still fail closed.
@@ -727,9 +727,8 @@ class FunkwhaleApi {
     AudioQuality? quality,
     bool forDownload = false,
   }) {
-    final absolute = listenUrl.startsWith('http')
-        ? listenUrl
-        : '$_baseUrl$listenUrl';
+    final absolute =
+        listenUrl.startsWith('http') ? listenUrl : '$_baseUrl$listenUrl';
     final uri = Uri.parse(absolute);
     final params = Map<String, String>.from(uri.queryParameters);
 
@@ -766,12 +765,15 @@ class FunkwhaleApi {
 
   // ── Channels (Podcasts) ─────────────────────────────────────────────
 
+  /// List channels. [contentCategory] defaults to `podcast` for the podcasts
+  /// screen; pass `music` for music RSS channels, or null to omit the filter.
   Future<PaginatedResponse<Channel>> getChannels({
     int page = 1,
     int pageSize = 50,
     String ordering = '-creation_date',
     String? q,
     bool? subscribed,
+    String? contentCategory = 'podcast',
   }) async {
     final response = await _dio.get(
       '$_baseUrl/api/v1/channels/',
@@ -779,7 +781,7 @@ class FunkwhaleApi {
         'page': page,
         'page_size': pageSize,
         'ordering': ordering,
-        'content_category': 'podcast',
+        if (contentCategory != null) 'content_category': contentCategory,
         if (q != null) 'q': q,
         if (subscribed != null) 'subscribed': subscribed,
       },
@@ -873,13 +875,16 @@ class FunkwhaleApi {
     // plain list of radios. Be flexible and accept both shapes.
     final data = response.data;
     if (data is List<dynamic>) {
-      final results = data.map<Radio>((e) {
-        if (e is Map<String, dynamic>) return Radio.fromJson(e);
-        if (e is List && e.isNotEmpty && e.first is Map<String, dynamic>) {
-          return Radio.fromJson(e.first as Map<String, dynamic>);
-        }
-        throw StateError('Unexpected radio list item type: ${e.runtimeType}');
-      }).toList();
+      final results =
+          data.map<Radio>((e) {
+            if (e is Map<String, dynamic>) return Radio.fromJson(e);
+            if (e is List && e.isNotEmpty && e.first is Map<String, dynamic>) {
+              return Radio.fromJson(e.first as Map<String, dynamic>);
+            }
+            throw StateError(
+              'Unexpected radio list item type: ${e.runtimeType}',
+            );
+          }).toList();
       return PaginatedResponse(
         count: results.length,
         next: null,
@@ -929,9 +934,10 @@ class FunkwhaleApi {
   }
 
   Future<Track> getRadioTrack(int id) async {
-    final opts = _lastRadioSessionCookie != null
-        ? Options(headers: {'cookie': _lastRadioSessionCookie})
-        : null;
+    final opts =
+        _lastRadioSessionCookie != null
+            ? Options(headers: {'cookie': _lastRadioSessionCookie})
+            : null;
     final response = await _dio.get(
       '$_baseUrl/api/v1/radios/radios/$id/tracks/',
       options: opts,
@@ -1268,10 +1274,7 @@ class FunkwhaleApi {
   Future<void> deactivateMe({Map<String, String>? passwordProof}) async {
     await _dio.post(
       '$_baseUrl/api/v1/users/me/deactivate/',
-      data: {
-        'confirm': true,
-        if (passwordProof != null) ...passwordProof,
-      },
+      data: {'confirm': true, if (passwordProof != null) ...passwordProof},
     );
   }
 
@@ -1289,9 +1292,10 @@ class FunkwhaleApi {
     if (name != null) body['name'] = name;
     if (privacyLevel != null) body['privacy_level'] = privacyLevel.apiValue;
     if (summaryText != null) {
-      body['summary'] = summaryText.trim().isEmpty
-          ? null
-          : {'text': summaryText, 'content_type': 'text/plain'};
+      body['summary'] =
+          summaryText.trim().isEmpty
+              ? null
+              : {'text': summaryText, 'content_type': 'text/plain'};
     }
 
     final response = await _dio.patch(

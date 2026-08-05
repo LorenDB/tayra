@@ -451,17 +451,25 @@ class ManageNestedArtistSerializer(ManageBaseArtistSerializer):
     pass
 
 
+class ManageNestedArtistCreditSerializer(serializers.ModelSerializer):
+    artist = ManageNestedArtistSerializer()
+
+    class Meta:
+        model = music_models.ArtistCredit
+        fields = ["artist", "credit", "joinphrase", "index"]
+
+
 class ManageAlbumSerializer(
     music_serializers.OptionalDescriptionMixin, ManageBaseAlbumSerializer
 ):
     attributed_to = ManageBaseActorSerializer()
-    artist = ManageNestedArtistSerializer()
+    artist_credit = ManageNestedArtistCreditSerializer(many=True)
     tags = serializers.SerializerMethodField()
 
     class Meta:
         model = music_models.Album
         fields = ManageBaseAlbumSerializer.Meta.fields + [
-            "artist",
+            "artist_credit",
             "attributed_to",
             "tags",
             "tracks_count",
@@ -477,17 +485,17 @@ class ManageAlbumSerializer(
 
 
 class ManageTrackAlbumSerializer(ManageBaseAlbumSerializer):
-    artist = ManageNestedArtistSerializer()
+    artist_credit = ManageNestedArtistCreditSerializer(many=True)
 
     class Meta:
         model = music_models.Album
-        fields = ManageBaseAlbumSerializer.Meta.fields + ["artist"]
+        fields = ManageBaseAlbumSerializer.Meta.fields + ["artist_credit"]
 
 
 class ManageTrackSerializer(
     music_serializers.OptionalDescriptionMixin, ManageNestedTrackSerializer
 ):
-    artist = ManageNestedArtistSerializer()
+    artist_credit = ManageNestedArtistCreditSerializer(many=True)
     album = ManageTrackAlbumSerializer(allow_null=True)
     attributed_to = ManageBaseActorSerializer(allow_null=True)
     uploads_count = serializers.SerializerMethodField()
@@ -497,7 +505,7 @@ class ManageTrackSerializer(
     class Meta:
         model = music_models.Track
         fields = ManageNestedTrackSerializer.Meta.fields + [
-            "artist",
+            "artist_credit",
             "album",
             "attributed_to",
             "uploads_count",

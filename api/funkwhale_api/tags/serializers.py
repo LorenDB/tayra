@@ -7,7 +7,7 @@ from . import models
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Tag
-        fields = ["name", "creation_date"]
+        fields = ["name", "creation_date", "mbid"]
 
 
 class TagNameField(serializers.CharField):

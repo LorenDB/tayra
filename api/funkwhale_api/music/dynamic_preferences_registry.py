@@ -64,3 +64,37 @@ class MbidTaggedContent(types.BooleanPreference):
         "or enable quality filtering to hide untagged content from API calls. "
     )
     default = False
+
+
+@global_preferences_registry.register
+class JoinPhrases(types.StringPreference):
+    show_in_api = True
+    section = music
+    name = "join_phrases"
+    verbose_name = "Join Phrases"
+    help_text = (
+        "Used by the artist parser to create multiple artists when metadata "
+        "is a single string. Prefer MusicBrainz Picard tags when possible."
+    )
+    default = (
+        r"featuring | feat\. | ft\. | feat | with | and | & | vs\. | \| | \||\| |\|| , | ,|, |"
+        r" ; | ;|; |;| versus | vs | \( | \(|\( |\(| Remix\) |Remix\) | Remix\)| \) | \)|\) |\)| x |"
+        "accompanied by | alongside | together with | collaboration with | featuring special guest |"
+        "joined by | joined with | featuring guest | introducing | performed by | performed with |"
+        "presenting | featuring and | featuring & | and featuring "
+    )
+    field_kwargs = {"required": False}
+
+
+@global_preferences_registry.register
+class DefaultJoinPhrases(types.StringPreference):
+    show_in_api = True
+    section = music
+    name = "default_join_phrase"
+    verbose_name = "Default Join Phrase"
+    help_text = (
+        "The default join phrase used when splitting multi-artist credits. "
+        "Changing this does not update already parsed credits."
+    )
+    default = ", "
+    field_kwargs = {"required": False}

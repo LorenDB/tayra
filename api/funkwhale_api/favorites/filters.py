@@ -7,7 +7,7 @@ from . import models
 
 class TrackFavoriteFilter(moderation_filters.HiddenContentFilterSet):
     q = fields.SearchFilter(
-        search_fields=["track__title", "track__artist__name", "track__album__title"]
+        search_fields=["track__title", "track__artist_credit__artist__name", "track__album__title"]
     )
     scope = common_filters.ActorScopeFilter(actor_field="user__actor", distinct=True)
 

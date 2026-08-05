@@ -32,7 +32,7 @@ def channel_detail(query, redirect_to_ap):
     )
     metas = [
         {"tag": "meta", "property": "og:url", "content": obj_url},
-        {"tag": "meta", "property": "og:title", "content": obj.artist.name},
+        {"tag": "meta", "property": "og:title", "content": obj.get_artist_credit_string},
         {"tag": "meta", "property": "og:type", "content": "profile"},
     ]
 
@@ -61,7 +61,7 @@ def channel_detail(query, redirect_to_ap):
             "rel": "alternate",
             "type": "application/rss+xml",
             "href": obj.get_rss_url(),
-            "title": f"{obj.artist.name} - RSS Podcast Feed",
+            "title": f"{obj.get_artist_credit_string} - RSS Podcast Feed",
         },
     )
 

@@ -168,12 +168,12 @@ class License(models.Model):
 
 class ArtistQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
     def with_albums_count(self):
-        return self.annotate(_albums_count=models.Count("albums"))
+        return self.annotate(_albums_count=models.Count("artist_credit__albums"))
 
     def with_albums(self):
         return self.prefetch_related(
             models.Prefetch(
-                "albums",
+                "artist_credit__albums",
                 queryset=Album.objects.with_tracks_count().select_related(
                     "attachment_cover", "attributed_to"
                 ),
@@ -183,7 +183,7 @@ class ArtistQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
     def annotate_playable_by_actor(self, actor):
         tracks = (
             Upload.objects.playable_by(actor)
-            .filter(track__artist=models.OuterRef("id"))
+            .filter(track__artist_credit__artist=models.OuterRef("id"))
             .order_by("id")
             .values("id")[:1]
         )
@@ -192,7 +192,9 @@ class ArtistQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
 
     def playable_by(self, actor, include=True):
         tracks = Track.objects.playable_by(actor)
-        matches = self.filter(pk__in=tracks.values("artist_id")).values_list("pk")
+        matches = self.filter(
+            pk__in=tracks.values("artist_credit__artist_id")
+        ).values_list("pk")
         if include:
             return self.filter(pk__in=matches)
         else:
@@ -268,10 +270,34 @@ class Artist(APIModelMixin):
         except ObjectDoesNotExist:
             return None
 
+    def get_tracks_count(self):
+        return Track.objects.filter(artist_credit__artist=self).count()
 
-def import_artist(v):
-    a = Artist.get_or_create_from_api(mbid=v[0]["artist"]["id"])[0]
-    return a
+
+def import_artist_credit(v):
+    """Convert MusicBrainz artist-credit list into ArtistCredit instances."""
+    from funkwhale_api.common import preferences
+
+    artists_credits = []
+    for i, ac in enumerate(v):
+        if isinstance(ac, str):
+            continue
+        artist, _created = Artist.get_or_create_from_api(mbid=ac["artist"]["id"])
+        if "joinphrase" in ac:
+            joinphrase = ac["joinphrase"]
+        elif i < len(v) - 1:
+            joinphrase = preferences.get("music__default_join_phrase") or ", "
+        else:
+            joinphrase = ""
+        credit_name = ac.get("name", ac["artist"]["name"])
+        artist_credit, _created = ArtistCredit.objects.get_or_create(
+            artist=artist,
+            credit=credit_name,
+            index=i,
+            joinphrase=joinphrase,
+        )
+        artists_credits.append(artist_credit)
+    return artists_credits
 
 
 def parse_date(v):
@@ -285,6 +311,40 @@ def import_tracks(instance, cleaned_data, raw_data):
         track_cleaned_data["album"] = instance
         track_cleaned_data["position"] = int(track_data["position"])
         importers.load(Track, track_cleaned_data, track_data, Track.import_hooks)
+
+
+
+class ArtistCreditQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
+    def albums(self):
+        albums_ids = self.prefetch_related("albums").values_list("albums", flat=True)
+        return Album.objects.filter(id__in=albums_ids)
+
+
+class ArtistCredit(APIModelMixin):
+    artist = models.ForeignKey(
+        Artist, related_name="artist_credit", on_delete=models.CASCADE
+    )
+    credit = models.CharField(
+        null=True,
+        blank=True,
+        max_length=500,
+    )
+    joinphrase = models.CharField(
+        null=True,
+        blank=True,
+        max_length=250,
+    )
+    index = models.IntegerField(
+        null=True,
+        blank=True,
+    )
+
+    federation_namespace = "artistcredit"
+
+    objects = ArtistCreditQuerySet.as_manager()
+
+    class Meta:
+        ordering = ["index", "credit"]
 
 
 class AlbumQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
@@ -331,7 +391,7 @@ def compute_album_duration(album_id):
 
 class Album(APIModelMixin):
     title = models.TextField()
-    artist = models.ForeignKey(Artist, related_name="albums", on_delete=models.CASCADE)
+    artist_credit = models.ManyToManyField(ArtistCredit, related_name="albums")
     release_date = models.DateField(null=True, blank=True, db_index=True)
     release_group_id = models.UUIDField(null=True, blank=True)
     # Precalculated total length in seconds (one upload per track).
@@ -385,9 +445,9 @@ class Album(APIModelMixin):
         "title": {"musicbrainz_field_name": "title"},
         "release_date": {"musicbrainz_field_name": "date", "converter": parse_date},
         "type": {"musicbrainz_field_name": "type", "converter": lambda v: v.lower()},
-        "artist": {
+        "artist_credit": {
             "musicbrainz_field_name": "artist-credit",
-            "converter": import_artist,
+            "converter": import_artist_credit,
         },
     }
     objects = AlbumQuerySet.as_manager()
@@ -428,6 +488,13 @@ class Album(APIModelMixin):
         kwargs.update({"title": title})
         return cls.objects.get_or_create(title__iexact=title, defaults=kwargs)
 
+    @property
+    def get_artist_credit_string(self):
+        return utils.get_artist_credit_string(self)
+
+    def get_artists_list(self):
+        return [ac.artist for ac in self.artist_credit.all()]
+
 
 def import_tags(instance, cleaned_data, raw_data):
     MINIMUM_COUNT = 2
@@ -451,11 +518,12 @@ def import_album(v):
 class TrackQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
     def for_nested_serialization(self):
         return self.prefetch_related(
-            "artist",
+            "artist_credit",
+            "artist_credit__artist",
             Prefetch(
                 "album",
-                queryset=Album.objects.select_related(
-                    "artist", "attachment_cover"
+                queryset=Album.objects.prefetch_related(
+                    "artist_credit", "artist_credit__artist", "attachment_cover"
                 ).annotate(_prefetched_tracks_count=Count("tracks")),
             ),
         )
@@ -508,7 +576,7 @@ def get_artist(release_list):
 class Track(APIModelMixin):
     mbid = models.UUIDField(db_index=True, null=True, blank=True)
     title = models.TextField()
-    artist = models.ForeignKey(Artist, related_name="tracks", on_delete=models.CASCADE)
+    artist_credit = models.ManyToManyField(ArtistCredit, related_name="tracks")
     disc_number = models.PositiveIntegerField(null=True, blank=True)
     position = models.PositiveIntegerField(null=True, blank=True)
     album = models.ForeignKey(
@@ -550,11 +618,9 @@ class Track(APIModelMixin):
     musicbrainz_mapping = {
         "mbid": {"musicbrainz_field_name": "id"},
         "title": {"musicbrainz_field_name": "title"},
-        "artist": {
+        "artist_credit": {
             "musicbrainz_field_name": "artist-credit",
-            "converter": lambda v: Artist.get_or_create_from_api(
-                mbid=v[0]["artist"]["id"]
-            )[0],
+            "converter": import_artist_credit,
         },
         "album": {"musicbrainz_field_name": "release-list", "converter": import_album},
     }
@@ -582,19 +648,21 @@ class Track(APIModelMixin):
     def get_moderation_url(self):
         return f"/manage/library/tracks/{self.pk}"
 
-    def save(self, **kwargs):
-        try:
-            self.artist
-        except Artist.DoesNotExist:
-            self.artist = self.album.artist
-        super().save(**kwargs)
+    @property
+    def get_artist_credit_string(self):
+        return utils.get_artist_credit_string(self)
+
+    def get_artists_list(self):
+        return [ac.artist for ac in self.artist_credit.all()]
 
     @property
     def full_name(self):
         try:
-            return f"{self.artist.name} - {self.album.title} - {self.title}"
+            return (
+                f"{self.get_artist_credit_string} - {self.album.title} - {self.title}"
+            )
         except AttributeError:
-            return f"{self.artist.name} - {self.title}"
+            return f"{self.get_artist_credit_string} - {self.title}"
 
     @property
     def cover(self):
@@ -632,33 +700,37 @@ class Track(APIModelMixin):
         if not track_data:
             raise ValueError("No track found matching this ID")
 
-        track_artist_mbid = None
-        for ac in track_data["recording"]["artist-credit"]:
+        artists_credits = []
+        for i, ac in enumerate(track_data["recording"]["artist-credit"]):
             try:
                 ac_mbid = ac["artist"]["id"]
             except TypeError:
                 # it's probably a string, like "feat."
                 continue
 
-            if ac_mbid == str(album.artist.mbid):
-                continue
+            track_artist = Artist.get_or_create_from_api(ac_mbid)[0]
+            joinphrase = ac.get("joinphrase", "") or ""
+            artist_credit, _created = ArtistCredit.objects.get_or_create(
+                artist=track_artist,
+                credit=ac["artist"]["name"],
+                joinphrase=joinphrase,
+                index=i,
+            )
+            artists_credits.append(artist_credit)
 
-            track_artist_mbid = ac_mbid
-            break
-        track_artist_mbid = track_artist_mbid or album.artist.mbid
-        if track_artist_mbid == str(album.artist.mbid):
-            track_artist = album.artist
-        else:
-            track_artist = Artist.get_or_create_from_api(track_artist_mbid)[0]
-        return cls.objects.update_or_create(
+        if artists_credits:
+            album.artist_credit.set(artists_credits)
+
+        track = cls.objects.update_or_create(
             mbid=mbid,
             defaults={
                 "position": int(track["position"]),
                 "title": track["recording"]["title"],
                 "album": album,
-                "artist": track_artist,
             },
         )
+        track[0].artist_credit.set(artists_credits)
+        return track
 
     @property
     def listen_url(self) -> str:
@@ -828,7 +900,7 @@ class Upload(models.Model):
             title_parts.append(self.track.title)
             if self.track.album:
                 title_parts.append(self.track.album.title)
-            title_parts.append(self.track.artist.name)
+            title_parts.append(self.track.get_artist_credit_string)
 
             title = " - ".join(title_parts)
             filename = f"{title}.{extension}"
@@ -1015,7 +1087,9 @@ class Upload(models.Model):
             if self.track.album
             else tags_models.TaggedItem.objects.none()
         )
-        artist_tags = self.track.artist.tagged_items.all()
+        artist_tags = tags_models.TaggedItem.objects.none()
+        for ac in self.track.artist_credit.all():
+            artist_tags = artist_tags | ac.artist.tagged_items.all()
 
         items = (track_tags | album_tags | artist_tags).order_by("tag__name")
         return items

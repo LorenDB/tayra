@@ -123,11 +123,7 @@ class ArtistViewSet(
         .prefetch_related("attributed_to", "attachment_cover")
         .prefetch_related(
             "channel__actor",
-            Prefetch(
-                "tracks",
-                queryset=models.Track.objects.all(),
-                to_attr="_prefetched_tracks",
-            ),
+            "artist_credit__tracks",
         )
         .order_by("-id")
     )
@@ -160,18 +156,20 @@ class ArtistViewSet(
         albums = (
             models.Album.objects.with_tracks_count()
             .select_related("attachment_cover")
-            .prefetch_related("tracks")
+            .prefetch_related("tracks", "artist_credit__artist")
         )
         albums = albums.annotate_playable_by_actor(
             utils.get_actor_from_request(self.request)
         )
         return queryset.prefetch_related(
-            Prefetch("albums", queryset=albums), TAG_PREFETCH
+            Prefetch("artist_credit__albums", queryset=albums),
+            "artist_credit",
+            TAG_PREFETCH,
         )
 
     libraries = get_libraries(
         lambda o, uploads: uploads.filter(
-            Q(track__artist=o) | Q(track__album__artist=o)
+            Q(track__artist_credit__artist=o) | Q(track__album__artist_credit__artist=o)
         )
     )
 
@@ -186,7 +184,7 @@ class AlbumViewSet(
     queryset = (
         models.Album.objects.all()
         .order_by("-creation_date")
-        .prefetch_related("artist__channel", "attributed_to", "attachment_cover")
+        .prefetch_related("artist_credit__artist__channel", "attributed_to", "attachment_cover")
     )
     serializer_class = serializers.AlbumSerializer
     permission_classes = [oauth_permissions.ScopePermission]
@@ -219,8 +217,8 @@ class AlbumViewSet(
     def get_queryset(self):
         queryset = super().get_queryset()
         if self.action in ["destroy"]:
-            queryset = queryset.exclude(artist__channel=None).filter(
-                artist__attributed_to=self.request.user.actor
+            queryset = queryset.exclude(artist_credit__artist__channel=None).filter(
+                artist_credit__artist__attributed_to=self.request.user.actor
             )
 
         tracks = models.Track.objects.all().prefetch_related("album")
@@ -423,8 +421,8 @@ class TrackViewSet(
     def get_queryset(self):
         queryset = super().get_queryset()
         if self.action in ["destroy"]:
-            queryset = queryset.exclude(artist__channel=None).filter(
-                artist__attributed_to=self.request.user.actor
+            queryset = queryset.exclude(artist_credit__artist__channel=None).filter(
+                artist_credit__artist__attributed_to=self.request.user.actor
             )
         filter_favorites = self.request.GET.get("favorites", None)
         user = self.request.user
@@ -836,7 +834,7 @@ def handle_stream(
     track, request, download, explicit_file, format, max_bitrate, quality=None
 ):
     actor = utils.get_actor_from_request(request)
-    queryset = track.uploads.prefetch_related("track__album__artist", "track__artist")
+    queryset = track.uploads.prefetch_related("track__album__artist_credit__artist", "track__artist_credit__artist")
     if explicit_file:
         queryset = queryset.filter(uuid=explicit_file)
     queryset = queryset.playable_by(actor)
@@ -925,8 +923,8 @@ class UploadViewSet(
         .order_by("-creation_date")
         .prefetch_related(
             "library__actor",
-            "track__artist",
-            "track__album__artist",
+            "track__artist_credit__artist",
+            "track__album__artist_credit__artist",
             "track__attachment_cover",
         )
     )
@@ -945,7 +943,7 @@ class UploadViewSet(
         "import_date",
         "bitrate",
         "size",
-        "artist__name",
+        "artist_credit__artist__name",
     )
 
     def get_queryset(self):
@@ -1048,20 +1046,20 @@ class Search(views.APIView):
     def get_tracks(self, query):
         query_obj = utils.get_fts_query(
             query,
-            fts_fields=["body_text", "album__body_text", "artist__body_text"],
+            fts_fields=["body_text", "album__body_text", "artist_credit__artist__body_text"],
             model=models.Track,
         )
         qs = (
             models.Track.objects.all()
             .filter(query_obj)
             .prefetch_related(
-                "artist",
+                "artist_credit__artist",
                 "attributed_to",
                 Prefetch(
                     "album",
                     queryset=models.Album.objects.select_related(
-                        "artist", "attachment_cover", "attributed_to"
-                    ).prefetch_related("tracks"),
+                        "attachment_cover", "attributed_to"
+                    ).prefetch_related("artist_credit__artist", "tracks"),
                 ),
             )
         )
@@ -1069,13 +1067,13 @@ class Search(views.APIView):
 
     def get_albums(self, query):
         query_obj = utils.get_fts_query(
-            query, fts_fields=["body_text", "artist__body_text"], model=models.Album
+            query, fts_fields=["body_text", "artist_credit__artist__body_text"], model=models.Album
         )
         qs = (
             models.Album.objects.all()
             .filter(query_obj)
-            .select_related("artist", "attachment_cover", "attributed_to")
-            .prefetch_related("tracks__artist")
+            .select_related("attachment_cover", "attributed_to").prefetch_related("artist_credit__artist")
+            .prefetch_related("tracks__artist_credit__artist")
         )
         return common_utils.order_for_search(qs, "title")[: self.max_results]
 

@@ -55,7 +55,7 @@ def add_tracks_to_index(tracks_pk):
             document = dict()
             document["pk"] = track.pk
             document["combined"] = utils.delete_non_alnum_characters(
-                track.artist.name + track.title
+                track.get_artist_credit_string + track.title
             )
             documents.append(document)
 

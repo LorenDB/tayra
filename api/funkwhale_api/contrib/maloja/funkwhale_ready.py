@@ -35,9 +35,12 @@ def get_payload(listening, api_key, conf):
     track = listening.track
 
     # See https://github.com/krateng/maloja/blob/master/API.md
+    artists = [a.name for a in track.get_artists_list()]
+    if not artists and track.get_artist_credit_string:
+        artists = [track.get_artist_credit_string]
     payload = {
         "key": api_key,
-        "artists": [track.artist.name],
+        "artists": artists,
         "title": track.title,
         "time": int(listening.creation_date.timestamp()),
         "nofix": bool(conf.get("nofix")),
@@ -46,8 +49,9 @@ def get_payload(listening, api_key, conf):
     if track.album:
         if track.album.title:
             payload["album"] = track.album.title
-        if track.album.artist:
-            payload["albumartists"] = [track.album.artist.name]
+        album_artists = [a.name for a in track.album.get_artists_list()]
+        if album_artists:
+            payload["albumartists"] = album_artists
 
     upload = track.uploads.filter(duration__gte=0).first()
     if upload:

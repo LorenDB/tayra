@@ -12,7 +12,10 @@ services:
     env_file:
       - .env.dev
       - .env
-    image: postgres:${POSTGRES_VERSION-11}-alpine
+    # PostgreSQL ≥12 required (Funkwhale 2.x floor). Prod uses 15.
+    # Migrating an existing PG11 data volume: dump → remove volume → restore
+    # (see DEPLOY.md "PostgreSQL requirements").
+    image: postgres:${POSTGRES_VERSION-15}-alpine
     environment:
       - "POSTGRES_HOST_AUTH_METHOD=${POSTGRES_HOST_AUTH_METHOD:-trust}"
     command: postgres ${POSTGRES_ARGS-}

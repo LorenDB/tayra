@@ -22,7 +22,7 @@ class PlaylistFilter(filters.FilterSet):
         distinct=True,
     )
     artist = filters.ModelChoiceFilter(
-        "playlist_tracks__track__artist",
+        "playlist_tracks__track__artist_credit__artist",
         queryset=music_models.Artist.objects.all(),
         distinct=True,
     )

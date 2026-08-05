@@ -24,7 +24,7 @@ def get_twitter_card_metas(type, id):
 
 
 def library_track(request, pk, redirect_to_ap):
-    queryset = models.Track.objects.filter(pk=pk).select_related("album", "artist")
+    queryset = models.Track.objects.filter(pk=pk).select_related("album").prefetch_related("artist_credit__artist")
     try:
         obj = queryset.get()
     except models.Track.DoesNotExist:
@@ -119,7 +119,7 @@ def library_track(request, pk, redirect_to_ap):
 
 
 def library_album(request, pk, redirect_to_ap):
-    queryset = models.Album.objects.filter(pk=pk).select_related("artist")
+    queryset = models.Album.objects.filter(pk=pk).prefetch_related("artist_credit__artist")
     try:
         obj = queryset.get()
     except models.Album.DoesNotExist:
@@ -206,7 +206,7 @@ def library_artist(request, pk, redirect_to_ap):
     )
     # we use latest album's cover as artist image
     latest_album = (
-        obj.albums.exclude(attachment_cover=None).order_by("release_date").last()
+        models.Album.objects.filter(artist_credit__artist=obj).exclude(attachment_cover=None).order_by("release_date").last()
     )
     metas = [
         {"tag": "meta", "property": "og:url", "content": artist_url},
@@ -234,7 +234,7 @@ def library_artist(request, pk, redirect_to_ap):
         )
 
     if (
-        models.Upload.objects.filter(Q(track__artist=obj) | Q(track__album__artist=obj))
+        models.Upload.objects.filter(Q(track__artist_credit__artist=obj) | Q(track__album__artist_credit__artist=obj))
         .playable_by(None)
         .exists()
     ):

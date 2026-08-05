@@ -145,9 +145,10 @@ class Artist {
       tags:
           (json['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ??
           const [],
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
     );
   }
 
@@ -174,12 +175,102 @@ class Artist {
       (albums.isNotEmpty ? albums.first.thumbCoverUrl : null);
 }
 
+// ── Artist credit (multi-artist) ────────────────────────────────────────
+
+/// One credited artist on a track or album (Funkwhale `artist_credit`).
+class ArtistCredit {
+  final Artist artist;
+  final String? credit;
+  final String joinphrase;
+  final int index;
+
+  const ArtistCredit({
+    required this.artist,
+    this.credit,
+    this.joinphrase = '',
+    this.index = 0,
+  });
+
+  factory ArtistCredit.fromJson(Map<String, dynamic> json) {
+    final artistData = json['artist'];
+    final Artist artist;
+    if (artistData is Map<String, dynamic>) {
+      artist = Artist.fromJson(artistData);
+    } else if (artistData is Map) {
+      artist = Artist.fromJson(Map<String, dynamic>.from(artistData));
+    } else {
+      artist = Artist(
+        id: 0,
+        name: json['credit'] as String? ?? 'Unknown Artist',
+      );
+    }
+    return ArtistCredit(
+      artist: artist,
+      credit: json['credit'] as String?,
+      joinphrase: json['joinphrase'] as String? ?? '',
+      index: (json['index'] as num?)?.toInt() ?? 0,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'artist': artist.toJson(),
+      'credit': credit,
+      'joinphrase': joinphrase,
+      'index': index,
+    };
+  }
+
+  /// Display name for this credit (credit string or nested artist name).
+  String get displayName =>
+      (credit != null && credit!.isNotEmpty) ? credit! : artist.name;
+}
+
+/// Join credits the same way Funkwhale builds display strings.
+String joinArtistCredits(List<ArtistCredit> credits) {
+  if (credits.isEmpty) return 'Unknown Artist';
+  final sorted = [...credits]..sort((a, b) => a.index.compareTo(b.index));
+  final buf = StringBuffer();
+  for (var i = 0; i < sorted.length; i++) {
+    final c = sorted[i];
+    buf.write(c.displayName);
+    if (i < sorted.length - 1) {
+      final jp = c.joinphrase;
+      buf.write(jp.isNotEmpty ? jp : ', ');
+    }
+  }
+  return buf.toString();
+}
+
+List<ArtistCredit> parseArtistCredits(dynamic raw) {
+  if (raw is! List) return const [];
+  return raw
+      .whereType<Object>()
+      .map((e) => ArtistCredit.fromJson(_toMap(e)))
+      .toList();
+}
+
+/// Primary artist: first credit, else legacy nested `artist` object.
+Artist? primaryArtistFromJson(Map<String, dynamic> json) {
+  final credits = parseArtistCredits(json['artist_credit']);
+  if (credits.isNotEmpty) return credits.first.artist;
+  final artistData = json['artist'];
+  if (artistData is Map<String, dynamic>) {
+    return Artist.fromJson(artistData);
+  }
+  if (artistData is Map) {
+    return Artist.fromJson(Map<String, dynamic>.from(artistData));
+  }
+  return null;
+}
+
 // ── Album ───────────────────────────────────────────────────────────────
 
 class Album {
   final int id;
   final String title;
   final Artist? artist;
+  final List<ArtistCredit> artistCredit;
   final Cover? cover;
   final String? releaseDate;
   final int tracksCount;
@@ -194,6 +285,7 @@ class Album {
     required this.id,
     required this.title,
     this.artist,
+    this.artistCredit = const [],
     this.cover,
     this.releaseDate,
     this.tracksCount = 0,
@@ -215,19 +307,13 @@ class Album {
       return null;
     }
 
-    // Helper to safely parse artist
-    Artist? parseArtist(dynamic artistData) {
-      if (artistData == null) return null;
-      if (artistData is Map<String, dynamic>) {
-        return Artist.fromJson(artistData);
-      }
-      return null;
-    }
+    final credits = parseArtistCredits(json['artist_credit']);
 
     return Album(
       id: (json['id'] as num).toInt(),
       title: json['title'] as String? ?? 'Unknown Album',
-      artist: parseArtist(json['artist']),
+      artist: primaryArtistFromJson(json),
+      artistCredit: credits,
       cover: parseCover(json['cover']),
       releaseDate: json['release_date'] as String?,
       tracksCount: (json['tracks_count'] as num?)?.toInt() ?? 0,
@@ -236,9 +322,10 @@ class Album {
       tags:
           (json['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ??
           const [],
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
       tracks:
           (json['tracks'] as List<dynamic>?)
               ?.map((e) => Track.fromJson(_toMap(e)))
@@ -253,6 +340,7 @@ class Album {
       'id': id,
       'title': title,
       'artist': artist?.toJson(),
+      'artist_credit': artistCredit.map((c) => c.toJson()).toList(),
       'cover': cover?.toJson(),
       'release_date': releaseDate,
       'tracks_count': tracksCount,
@@ -264,6 +352,12 @@ class Album {
       'mbid': mbid,
     };
   }
+
+  /// Multi-artist display string (falls back to primary artist name).
+  String get artistName =>
+      artistCredit.isNotEmpty
+          ? joinArtistCredits(artistCredit)
+          : (artist?.name ?? 'Unknown Artist');
 
   String? get coverUrl => cover?.urls.best;
   String? get largeCoverUrl => cover?.urls.large;
@@ -307,6 +401,7 @@ class Track {
   final int id;
   final String title;
   final Artist? artist;
+  final List<ArtistCredit> artistCredit;
   final Album? album;
   final String? listenUrl;
   final int? position;
@@ -322,6 +417,7 @@ class Track {
     required this.id,
     required this.title,
     this.artist,
+    this.artistCredit = const [],
     this.album,
     this.listenUrl,
     this.position,
@@ -344,15 +440,6 @@ class Track {
       return null;
     }
 
-    // Helper to safely parse artist
-    Artist? parseArtist(dynamic artistData) {
-      if (artistData == null) return null;
-      if (artistData is Map<String, dynamic>) {
-        return Artist.fromJson(artistData);
-      }
-      return null;
-    }
-
     // Helper to safely parse album
     Album? parseAlbum(dynamic albumData) {
       if (albumData == null) return null;
@@ -362,10 +449,13 @@ class Track {
       return null;
     }
 
+    final credits = parseArtistCredits(json['artist_credit']);
+
     return Track(
       id: (json['id'] as num).toInt(),
       title: json['title'] as String? ?? 'Unknown Track',
-      artist: parseArtist(json['artist']),
+      artist: primaryArtistFromJson(json),
+      artistCredit: credits,
       album: parseAlbum(json['album']),
       listenUrl: json['listen_url'] as String?,
       position: (json['position'] as num?)?.toInt(),
@@ -380,9 +470,10 @@ class Track {
               ?.map((e) => Upload.fromJson(_toMap(e)))
               .toList() ??
           const [],
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
       mbid: json['mbid'] as String?,
     );
   }
@@ -392,6 +483,7 @@ class Track {
       'id': id,
       'title': title,
       'artist': artist?.toJson(),
+      'artist_credit': artistCredit.map((c) => c.toJson()).toList(),
       'album': album?.toJson(),
       'listen_url': listenUrl,
       'position': position,
@@ -417,6 +509,8 @@ class Track {
       'is_playable': isPlayable,
       'mbid': mbid,
       'cover': cover?.toJson(),
+      if (artistCredit.isNotEmpty)
+        'artist_credit': artistCredit.map((c) => c.toJson()).toList(),
       if (artist != null)
         'artist': {
           'id': artist!.id,
@@ -429,6 +523,9 @@ class Track {
           'id': album!.id,
           'title': album!.title,
           'cover': album!.cover?.toJson(),
+          if (album!.artistCredit.isNotEmpty)
+            'artist_credit':
+                album!.artistCredit.map((c) => c.toJson()).toList(),
           if (album!.artist != null)
             'artist': {'id': album!.artist!.id, 'name': album!.artist!.name},
         },
@@ -454,13 +551,20 @@ class Track {
   String? get thumbCoverUrl =>
       cover?.urls.thumb ?? album?.cover?.urls.thumb ?? coverUrl;
 
-  String get artistName => artist?.name ?? 'Unknown Artist';
+  /// Multi-artist display string (falls back to primary artist name).
+  String get artistName =>
+      artistCredit.isNotEmpty
+          ? joinArtistCredits(artistCredit)
+          : (artist?.name ?? album?.artistName ?? 'Unknown Artist');
   String get albumTitle => album?.title ?? '';
 
   /// Duration in seconds from the first upload, if available.
   int? get duration => uploads.isNotEmpty ? uploads.first.duration : null;
 
-  bool get isPodcast => artist?.contentCategory == 'podcast';
+  bool get isPodcast =>
+      artist?.contentCategory == 'podcast' ||
+      (artistCredit.isNotEmpty &&
+          artistCredit.first.artist.contentCategory == 'podcast');
 }
 
 // ── Upload ──────────────────────────────────────────────────────────────
@@ -526,11 +630,12 @@ class Listening {
     return Listening(
       id: (json['id'] as num).toInt(),
       track: Track.fromJson(_toMap(trackRaw)),
-      created: json['created'] != null
-          ? DateTime.tryParse(json['created'] as String)
-          : (json['creation_date'] != null
-                ? DateTime.tryParse(json['creation_date'] as String)
-                : null),
+      created:
+          json['created'] != null
+              ? DateTime.tryParse(json['created'] as String)
+              : (json['creation_date'] != null
+                  ? DateTime.tryParse(json['creation_date'] as String)
+                  : null),
     );
   }
 }
@@ -587,12 +692,14 @@ class Playlist {
           const [],
       cover: parseCover(json['cover']),
       privacyLevel: json['privacy_level'] as String?,
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
-      modificationDate: json['modification_date'] != null
-          ? DateTime.tryParse(json['modification_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
+      modificationDate:
+          json['modification_date'] != null
+              ? DateTime.tryParse(json['modification_date'] as String)
+              : null,
     );
   }
 
@@ -632,9 +739,10 @@ class PlaylistTrack {
     return PlaylistTrack(
       track: Track.fromJson(_toMap(json['track'])),
       index: (json['index'] as num?)?.toInt(),
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
     );
   }
 }
@@ -652,9 +760,10 @@ class Favorite {
     return Favorite(
       id: (json['id'] as num).toInt(),
       track: Track.fromJson(_toMap(json['track'])),
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
     );
   }
 }
@@ -714,9 +823,10 @@ class Tag {
   factory Tag.fromJson(Map<String, dynamic> json) {
     return Tag(
       name: json['name'] as String? ?? '',
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
     );
   }
 }
@@ -803,9 +913,10 @@ class Channel {
       rssUrl: json['rss_url'] as String?,
       url: json['url'] as String?,
       downloadsCount: (json['downloads_count'] as num?)?.toInt(),
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
     );
   }
 
@@ -902,10 +1013,11 @@ class Radio {
     List<Map<String, dynamic>>? configList;
     final configRaw = json['config'];
     if (configRaw is List) {
-      configList = configRaw
-          .whereType<Map>()
-          .map((e) => Map<String, dynamic>.from(e))
-          .toList();
+      configList =
+          configRaw
+              .whereType<Map>()
+              .map((e) => Map<String, dynamic>.from(e))
+              .toList();
     } else if (configRaw is Map) {
       configList = [Map<String, dynamic>.from(configRaw)];
     }
@@ -925,9 +1037,10 @@ class Radio {
       id: (json['id'] as num).toInt(),
       isPublic: json['is_public'] as bool?,
       name: json['name'] as String? ?? '',
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
       user: userMap,
       config: configList,
       description: json['description'] as String?,
@@ -1030,9 +1143,8 @@ class RadioSession {
     if (u is int) {
       userId = u;
     } else if (u is Map && u.containsKey('id')) {
-      userId = (u['id'] is int)
-          ? u['id'] as int
-          : int.tryParse(u['id'].toString());
+      userId =
+          (u['id'] is int) ? u['id'] as int : int.tryParse(u['id'].toString());
     }
 
     int? custom;
@@ -1052,9 +1164,10 @@ class RadioSession {
       radioType: json['radio_type'] as String?,
       relatedObjectId: related,
       user: userId,
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
       customRadio: custom,
       config: cfg,
     );
@@ -1120,9 +1233,10 @@ class Library {
       privacyLevel: json['privacy_level'] as String? ?? 'me',
       uploadsCount: (json['uploads_count'] as num?)?.toInt() ?? 0,
       size: (json['size'] as num?)?.toInt() ?? 0,
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
     );
   }
 
@@ -1180,27 +1294,32 @@ class UploadForOwner {
     return UploadForOwner(
       uuid: json['uuid'] as String? ?? '',
       filename: json['filename'] as String?,
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
       mimetype: json['mimetype'] as String?,
-      library: json['library'] is Map<String, dynamic>
-          ? (json['library'] as Map<String, dynamic>)['uuid'] as String?
-          : json['library'] as String?,
+      library:
+          json['library'] is Map<String, dynamic>
+              ? (json['library'] as Map<String, dynamic>)['uuid'] as String?
+              : json['library'] as String?,
       importStatus: json['import_status'] as String? ?? 'pending',
-      importDetails: json['import_details'] is Map<String, dynamic>
-          ? json['import_details'] as Map<String, dynamic>
-          : {},
-      importMetadata: json['import_metadata'] is Map<String, dynamic>
-          ? json['import_metadata'] as Map<String, dynamic>
-          : null,
+      importDetails:
+          json['import_details'] is Map<String, dynamic>
+              ? json['import_details'] as Map<String, dynamic>
+              : {},
+      importMetadata:
+          json['import_metadata'] is Map<String, dynamic>
+              ? json['import_metadata'] as Map<String, dynamic>
+              : null,
       importReference: json['import_reference'] as String?,
       duration: asInt(json['duration']),
       bitrate: asInt(json['bitrate']),
       size: asInt(json['size']),
-      importDate: json['import_date'] != null
-          ? DateTime.tryParse(json['import_date'] as String)
-          : null,
+      importDate:
+          json['import_date'] != null
+              ? DateTime.tryParse(json['import_date'] as String)
+              : null,
     );
   }
 
@@ -1381,9 +1500,10 @@ class MeUser {
       privacyLevel: PrivacyLevel.fromString(json['privacy_level'] as String?),
       avatar: avatar,
       summaryText: summaryText,
-      dateJoined: json['date_joined'] != null
-          ? DateTime.tryParse(json['date_joined'] as String)
-          : null,
+      dateJoined:
+          json['date_joined'] != null
+              ? DateTime.tryParse(json['date_joined'] as String)
+              : null,
       isStaff: json['is_staff'] as bool? ?? false,
       isSuperuser: json['is_superuser'] as bool? ?? false,
       permissions: permissions,
@@ -1837,9 +1957,10 @@ class ManageLibrary {
       description: json['description'] as String?,
       domain: json['domain'] as String?,
       isLocal: json['is_local'] as bool? ?? false,
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
       privacyLevel: json['privacy_level'] as String? ?? 'me',
       uploadsCount: (json['uploads_count'] as num?)?.toInt() ?? 0,
       followersCount: (json['followers_count'] as num?)?.toInt(),
@@ -1981,9 +2102,10 @@ class ManageUpload {
       duration: asInt(json['duration']),
       bitrate: asInt(json['bitrate']),
       size: asInt(json['size']),
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
       trackTitle: trackTitle,
       artistName: artistName,
       albumTitle: albumTitle,
@@ -2023,9 +2145,10 @@ class ManageTag {
     return ManageTag(
       id: (json['id'] as num?)?.toInt() ?? 0,
       name: json['name'] as String? ?? '',
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
       tracksCount: (json['tracks_count'] as num?)?.toInt() ?? 0,
       albumsCount: (json['albums_count'] as num?)?.toInt() ?? 0,
       artistsCount: (json['artists_count'] as num?)?.toInt() ?? 0,
@@ -2111,9 +2234,10 @@ class ManageChannel {
     return ManageChannel(
       id: (json['id'] as num?)?.toInt() ?? 0,
       uuid: json['uuid'] as String? ?? '',
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
       name: name,
       contentCategory: contentCategory,
       tracksCount: tracksCount,
@@ -2253,12 +2377,14 @@ class ManageUser {
       isActive: json['is_active'] as bool? ?? true,
       isStaff: json['is_staff'] as bool? ?? false,
       isSuperuser: json['is_superuser'] as bool? ?? false,
-      dateJoined: json['date_joined'] != null
-          ? DateTime.tryParse(json['date_joined'] as String)
-          : null,
-      lastActivity: json['last_activity'] != null
-          ? DateTime.tryParse(json['last_activity'] as String)
-          : null,
+      dateJoined:
+          json['date_joined'] != null
+              ? DateTime.tryParse(json['date_joined'] as String)
+              : null,
+      lastActivity:
+          json['last_activity'] != null
+              ? DateTime.tryParse(json['last_activity'] as String)
+              : null,
       privacyLevel: json['privacy_level'] as String? ?? 'me',
       uploadQuota: (json['upload_quota'] as num?)?.toInt(),
       permissions: permissions,
@@ -2325,12 +2451,14 @@ class ManageInvitation {
     return ManageInvitation(
       id: (json['id'] as num?)?.toInt() ?? 0,
       code: json['code'] as String?,
-      creationDate: json['creation_date'] != null
-          ? DateTime.tryParse(json['creation_date'] as String)
-          : null,
-      expirationDate: json['expiration_date'] != null
-          ? DateTime.tryParse(json['expiration_date'] as String)
-          : null,
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
+      expirationDate:
+          json['expiration_date'] != null
+              ? DateTime.tryParse(json['expiration_date'] as String)
+              : null,
       ownerUsername: ownerUsername,
       invitedUsername: invitedUsername,
       usersCount: usersCount,

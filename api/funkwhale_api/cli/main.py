@@ -6,6 +6,7 @@ from rest_framework.exceptions import ValidationError
 from . import library  # noqa
 from . import media  # noqa
 from . import plugins  # noqa
+from . import tags  # noqa
 from . import users  # noqa
 from . import base
 

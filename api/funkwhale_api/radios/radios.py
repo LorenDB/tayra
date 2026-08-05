@@ -66,13 +66,13 @@ class SessionRadio(SimpleRadio):
             return (
                 Track.objects.all()
                 .with_playable_uploads(actor=None)
-                .select_related("artist", "album__artist", "attributed_to")
+                .prefetch_related("artist_credit__artist", "album__artist_credit__artist").select_related("attributed_to")
             )
         else:
             qs = (
                 Track.objects.all()
                 .with_playable_uploads(self.session.user.actor)
-                .select_related("artist", "album__artist", "attributed_to")
+                .prefetch_related("artist_credit__artist", "album__artist_credit__artist").select_related("attributed_to")
             )
 
         query = moderation_filters.get_filtered_content_query(
@@ -323,7 +323,7 @@ class ArtistRadio(RelatedObjectRadio):
 
     def get_queryset(self, **kwargs):
         qs = super().get_queryset(**kwargs)
-        return qs.filter(artist=self.session.related_object)
+        return qs.filter(artist_credit__artist=self.session.related_object)
 
 
 @registry.register(name="less-listened")

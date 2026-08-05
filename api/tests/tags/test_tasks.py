@@ -1,36 +1,51 @@
-from funkwhale_api.music import models as music_models
-from funkwhale_api.tags import tasks
+import uuid
+
+from funkwhale_api.tags import models, tasks
 
 
-def test_get_tags_from_foreign_key(factories):
-    rock_tag = factories["tags.Tag"](name="Rock")
-    rap_tag = factories["tags.Tag"](name="Rap")
-    artist = factories["music.Artist"]()
-    factories["music.Track"].create_batch(3, artist=artist, set_tags=["rock", "rap"])
-    factories["music.Track"].create_batch(
-        3, artist=artist, set_tags=["rock", "rap", "techno"]
+def test_update_musicbrainz_genre_creates_tags(factories, mocker):
+    mbid1 = str(uuid.uuid4())
+    mbid2 = str(uuid.uuid4())
+    mocker.patch(
+        "funkwhale_api.tags.tasks.fetch_musicbrainz_genre",
+        return_value=[
+            {"id": mbid1, "name": "rock"},
+            {"id": mbid2, "name": "jazz"},
+        ],
     )
 
-    result = tasks.get_tags_from_foreign_key(
-        ids=[artist.pk],
-        foreign_key_model=music_models.Track,
-        foreign_key_attr="artist",
+    result = tasks.update_musicbrainz_genre()
+
+    assert result["created"] == 2
+    assert result["fetched"] == 2
+    assert models.Tag.objects.filter(name="rock", mbid=mbid1).exists()
+    assert models.Tag.objects.filter(name="jazz", mbid=mbid2).exists()
+
+
+def test_update_musicbrainz_genre_idempotent(factories, mocker):
+    mbid = str(uuid.uuid4())
+    models.Tag.objects.create(name="ambient", mbid=mbid)
+    mocker.patch(
+        "funkwhale_api.tags.tasks.fetch_musicbrainz_genre",
+        return_value=[{"id": mbid, "name": "ambient"}],
     )
 
-    assert result == {artist.pk: [rock_tag.pk, rap_tag.pk]}
+    result = tasks.update_musicbrainz_genre()
+
+    assert result["created"] == 0
+    assert models.Tag.objects.filter(name="ambient").count() == 1
 
 
-def test_add_tags_batch(factories):
-    rock_tag = factories["tags.Tag"](name="Rock")
-    rap_tag = factories["tags.Tag"](name="Rap")
-    factories["tags.Tag"]()
-    artist = factories["music.Artist"]()
-
-    data = {artist.pk: [rock_tag.pk, rap_tag.pk]}
-
-    tasks.add_tags_batch(
-        data,
-        model=artist.__class__,
+def test_update_musicbrainz_genre_attaches_mbid_to_existing_name(factories, mocker):
+    mbid = str(uuid.uuid4())
+    models.Tag.objects.create(name="metal")
+    mocker.patch(
+        "funkwhale_api.tags.tasks.fetch_musicbrainz_genre",
+        return_value=[{"id": mbid, "name": "metal"}],
     )
 
-    assert artist.get_tags() == ["Rap", "Rock"]
+    result = tasks.update_musicbrainz_genre()
+
+    assert result["updated"] == 1
+    tag = models.Tag.objects.get(name="metal")
+    assert str(tag.mbid) == mbid

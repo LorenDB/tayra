@@ -476,27 +476,40 @@ class RssFeedSerializer(serializers.Serializer):
             }
 
     def validate_tags(self, v):
-        data = {}
+        """
+        Collect iTunes category/subcategory plus free-form tags.
+
+        A free-form tag named ``music`` marks the feed as a music channel
+        (see #2428 / content_category detection in save()).
+        """
+        data = {"tags": []}
+        tag_serializer = tags_serializers.TagNameField()
         for row in v:
-            if row.get("scheme") != "http://www.itunes.com/":
+            term = row.get("term")
+            if not term:
                 continue
-            term = row["term"]
-            if "parent" not in data and term in categories.ITUNES_CATEGORIES:
-                data["parent"] = term
-            elif "child" not in data and term in categories.ITUNES_SUBCATEGORIES:
-                data["child"] = term
-            elif (
-                term not in categories.ITUNES_SUBCATEGORIES
-                and term not in categories.ITUNES_CATEGORIES
-            ):
-                raw_tags = term.split(" ")
-                data["tags"] = []
-                tag_serializer = tags_serializers.TagNameField()
-                for tag in raw_tags:
+            if row.get("scheme") == "http://www.itunes.com/":
+                if "parent" not in data and term in categories.ITUNES_CATEGORIES:
+                    data["parent"] = term
+                    continue
+                if "child" not in data and term in categories.ITUNES_SUBCATEGORIES:
+                    data["child"] = term
+                    continue
+                # Extra iTunes categories or keywords — keep as regular tags.
+                for tag in term.split(" "):
                     try:
                         data["tags"].append(tag_serializer.to_internal_value(tag))
                     except Exception:
                         pass
+            else:
+                try:
+                    data["tags"].append(tag_serializer.to_internal_value(term))
+                except Exception:
+                    # Free-form feed tags may not match TagNameField (e.g. "music"
+                    # with special chars); still keep simple tokens for detection.
+                    cleaned = term.strip().lower()
+                    if cleaned and cleaned not in data["tags"]:
+                        data["tags"].append(cleaned)
 
         return data
 
@@ -515,7 +528,9 @@ class RssFeedSerializer(serializers.Serializer):
         real_rss_url = validated_data.get("atom_link", rss_url) or rss_url
         service_actor = actors.get_service_actor()
         author = validated_data.get("author_detail", {})
-        categories = validated_data.get("tags", {})
+        categories = validated_data.get("tags", {}) or {}
+        if "tags" not in categories:
+            categories["tags"] = []
         metadata = {
             "explicit": validated_data.get("itunes_explicit", False),
             "copyright": validated_data.get("rights"),
@@ -561,13 +576,20 @@ class RssFeedSerializer(serializers.Serializer):
 
         actor_defaults["last_fetch_date"] = timezone.now()
 
+        # Music vs podcast: presence of free-form tag "music" (Funkwhale #2428).
+        content_category = (
+            "music" if "music" in categories.get("tags", []) else "podcast"
+        )
+        if content_category == "music" and "music" in categories["tags"]:
+            categories["tags"] = [t for t in categories["tags"] if t != "music"]
+
         # create/update the artist profile
         artist, created = music_models.Artist.objects.update_or_create(
             **artist_kwargs,
             defaults={
                 "attributed_to": service_actor,
                 "name": validated_data["title"],
-                "content_category": "podcast",
+                "content_category": content_category,
             },
         )
 

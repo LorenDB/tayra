@@ -1017,6 +1017,12 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": crontab(day_of_week="1", minute="0", hour="2"),
         "options": {"expires": 60 * 60 * 24},
     },
+    # Official MusicBrainz genre catalog → Tag.mbid (see fw tags sync-musicbrainz-genres)
+    "tags.update_musicbrainz_genre": {
+        "task": "tags.update_musicbrainz_genre",
+        "schedule": crontab(day_of_month="2", minute="30", hour="3"),
+        "options": {"expires": 60 * 60 * 24},
+    },
     "federation.check_all_remote_instance_availability": {
         "task": "federation.check_all_remote_instance_availability",
         "schedule": crontab(

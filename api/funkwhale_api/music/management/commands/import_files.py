@@ -700,11 +700,7 @@ def handle_modified(event, stdout, library, in_place, **kwargs):
         to_update = (
             existing_candidates.in_place()
             .filter(source=source)
-            .select_related(
-                "track__attributed_to",
-                "track__artist",
-                "track__album__artist",
-            )
+            .select_related("track__attributed_to").prefetch_related("track__artist_credit__artist", "track__album__artist_credit__artist")
             .first()
         )
         if to_update:
@@ -839,7 +835,7 @@ def check_upload(stdout, upload):
                 "  Cannot update track metadata, track belongs to someone else"
             )
         else:
-            track = models.Track.objects.select_related("artist", "album__artist").get(
+            track = models.Track.objects.prefetch_related("artist_credit__artist", "album__artist_credit__artist").get(
                 pk=upload.track_id
             )
             try:

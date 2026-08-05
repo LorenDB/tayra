@@ -34,7 +34,7 @@ def get_valid_filepart(s):
 
 def get_track_path(track, suffix):
     parts = []
-    parts.append(get_valid_filepart(track.artist.name))
+    parts.append(get_valid_filepart(track.get_artist_credit_string))
     if track.album:
         parts.append(get_valid_filepart(track.album.title))
     track_part = get_valid_filepart(track.title) + "." + suffix
@@ -76,7 +76,7 @@ class GetArtistsSerializer(serializers.Serializer):
 
 class GetArtistSerializer(serializers.Serializer):
     def to_representation(self, artist):
-        albums = artist.albums.prefetch_related("tracks__uploads")
+        albums = models.Album.objects.filter(artist_credit__artist=artist).prefetch_related("tracks__uploads")
         payload = {
             "id": artist.pk,
             "name": artist.name,
@@ -108,7 +108,7 @@ def get_track_data(album, track, upload):
         "isDir": "false",
         "title": track.title,
         "album": album.title if album else "",
-        "artist": track.artist.name,
+        "artist": track.get_artist_credit_string,
         "track": track.position or 1,
         "discNumber": track.disc_number or 1,
         # Ugly fallback to mp3 but some subsonic clients fail if the value is empty or null, and we don't always
@@ -124,7 +124,10 @@ def get_track_data(album, track, upload):
         "duration": upload.duration or 0,
         "created": to_subsonic_date(track.creation_date),
         "albumId": album.pk if album else "",
-        "artistId": album.artist.pk if album else track.artist.pk,
+        "artistId": (
+            (album.get_artists_list()[0].pk if album and album.get_artists_list() else None)
+            or (track.get_artists_list()[0].pk if track.get_artists_list() else "")
+        ),
         "type": "music",
     }
     if album and album.attachment_cover_id:
@@ -143,9 +146,9 @@ def get_track_data(album, track, upload):
 def get_album2_data(album):
     payload = {
         "id": album.id,
-        "artistId": album.artist.id,
+        "artistId": album.get_artists_list()[0].id if album.get_artists_list() else "",
         "name": album.title,
-        "artist": album.artist.name,
+        "artist": album.get_artist_credit_string,
         "created": to_subsonic_date(album.creation_date),
         "duration": album.duration,
         "playCount": album.tracks.aggregate(l=Count("listenings"))["l"] or 0,
@@ -200,7 +203,7 @@ def get_starred_tracks_data(favorites):
     by_track_id = {f.track_id: f for f in favorites}
     tracks = (
         music_models.Track.objects.filter(pk__in=by_track_id.keys())
-        .select_related("album__artist")
+        .prefetch_related("album__artist_credit__artist")
         .prefetch_related("uploads")
     )
     tracks = tracks.order_by("-creation_date")
@@ -235,7 +238,7 @@ def get_playlist_data(playlist):
 def get_playlist_detail_data(playlist):
     data = get_playlist_data(playlist)
     qs = (
-        playlist.playlist_tracks.select_related("track__album__artist")
+        playlist.playlist_tracks.select_related("track__album").prefetch_related("track__album__artist_credit__artist")
         .prefetch_related("track__uploads")
         .order_by("index")
     )

@@ -251,6 +251,11 @@ class Actor(models.Model):
         follows = self.received_follows.filter(approved=True)
         return self.followers.filter(pk__in=follows.values_list("actor", flat=True))
 
+    def get_approved_followings(self):
+        """Actors this actor follows with an approved Follow."""
+        follows = self.emitted_follows.filter(approved=True)
+        return Actor.objects.filter(pk__in=follows.values_list("target", flat=True))
+
     def should_autoapprove_follow(self, actor):
         if self.get_channel():
             return True

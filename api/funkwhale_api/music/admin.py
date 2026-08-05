@@ -3,6 +3,17 @@ from funkwhale_api.common import admin
 from . import models
 
 
+@admin.register(models.ArtistCredit)
+class ArtistCreditAdmin(admin.ModelAdmin):
+    list_display = [
+        "artist",
+        "credit",
+        "joinphrase",
+        "creation_date",
+    ]
+    search_fields = ["artist__name", "credit"]
+
+
 @admin.register(models.Artist)
 class ArtistAdmin(admin.ModelAdmin):
     list_display = ["name", "mbid", "creation_date", "modification_date"]
@@ -11,22 +22,41 @@ class ArtistAdmin(admin.ModelAdmin):
 
 @admin.register(models.Album)
 class AlbumAdmin(admin.ModelAdmin):
-    list_display = ["title", "artist", "mbid", "release_date", "creation_date"]
-    search_fields = ["title", "artist__name", "mbid"]
+    list_display = ["title", "mbid", "release_date", "creation_date"]
+    search_fields = ["title", "mbid"]
     list_select_related = True
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "artist_credit":
+            object_id = request.resolver_match.kwargs.get("object_id")
+            kwargs["queryset"] = models.ArtistCredit.objects.filter(
+                albums__id=object_id
+            )
+
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 @admin.register(models.Track)
 class TrackAdmin(admin.ModelAdmin):
-    list_display = ["title", "artist", "album", "mbid"]
-    search_fields = ["title", "artist__name", "album__title", "mbid"]
-    list_select_related = ["album__artist", "artist"]
+    list_display = ["title", "album", "mbid", "artist"]
+    search_fields = ["title", "album__title", "mbid"]
+
+    def artist(self, obj):
+        return obj.get_artist_credit_string
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "artist_credit":
+            object_id = request.resolver_match.kwargs.get("object_id")
+            kwargs["queryset"] = models.ArtistCredit.objects.filter(
+                tracks__id=object_id
+            )
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 @admin.register(models.TrackActor)
 class TrackActorAdmin(admin.ModelAdmin):
     list_display = ["actor", "track", "upload", "internal"]
-    search_fields = ["actor__preferred_username", "track__name"]
+    search_fields = ["actor__preferred_username", "track__title"]
     list_select_related = ["actor", "track"]
 
 
@@ -57,6 +87,7 @@ class UploadAdmin(admin.ModelAdmin):
         "size",
         "bitrate",
         "import_status",
+        "library",
     ]
     list_select_related = ["track"]
     search_fields = [
@@ -64,7 +95,7 @@ class UploadAdmin(admin.ModelAdmin):
         "acoustid_track_id",
         "track__title",
         "track__album__title",
-        "track__artist__name",
+        "track__artist_credit__artist__name",
     ]
     list_filter = ["mimetype", "import_status", "library__privacy_level"]
 
@@ -86,7 +117,7 @@ class UploadVersionAdmin(admin.ModelAdmin):
         "upload__acoustid_track_id",
         "upload__track__title",
         "upload__track__album__title",
-        "upload__track__artist__name",
+        "upload__track__artist_credit__artist__name",
     ]
     list_filter = ["mimetype"]
 
@@ -103,7 +134,7 @@ launch_scan.short_description = "Launch scan"
 class LibraryAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "actor", "uuid", "privacy_level", "creation_date"]
     list_select_related = True
-    search_fields = ["actor__username", "name", "description"]
+    search_fields = ["uuid", "name", "actor__preferred_username"]
     list_filter = ["privacy_level"]
     actions = [launch_scan]
 

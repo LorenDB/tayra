@@ -40,12 +40,8 @@ def combined_recent(limit, **kwargs):
 def get_activity(user, limit=20):
     query = fields.privacy_level_query(user, lookup_field="user__privacy_level")
     querysets = [
-        Listening.objects.filter(query).select_related(
-            "track", "user", "track__artist", "track__album__artist"
-        ),
-        TrackFavorite.objects.filter(query).select_related(
-            "track", "user", "track__artist", "track__album__artist"
-        ),
+        Listening.objects.filter(query).select_related("track", "user").prefetch_related("track__artist_credit__artist", "track__album__artist_credit__artist"),
+        TrackFavorite.objects.filter(query).select_related("track", "user").prefetch_related("track__artist_credit__artist", "track__album__artist_credit__artist"),
     ]
     records = combined_recent(limit=limit, querysets=querysets)
     return [r["object"] for r in records]
