@@ -2473,3 +2473,122 @@ class ManageInvitation {
     return exp.isAfter(DateTime.now());
   }
 }
+
+// ── Share links ─────────────────────────────────────────────────────────
+
+/// Owner-facing share link from `GET/POST /api/v1/shares/`.
+class ShareLink {
+  final String uuid;
+  final String token;
+  final String url;
+  final String objectType;
+  final int objectId;
+  final String label;
+  final DateTime? creationDate;
+  final DateTime? expirationDate;
+
+  const ShareLink({
+    required this.uuid,
+    required this.token,
+    required this.url,
+    required this.objectType,
+    required this.objectId,
+    this.label = '',
+    this.creationDate,
+    this.expirationDate,
+  });
+
+  factory ShareLink.fromJson(Map<String, dynamic> json) {
+    return ShareLink(
+      uuid: json['uuid'] as String? ?? '',
+      token: json['token'] as String? ?? '',
+      url: json['url'] as String? ?? '',
+      objectType: json['object_type'] as String? ?? '',
+      objectId: (json['object_id'] as num?)?.toInt() ?? 0,
+      label: json['label'] as String? ?? '',
+      creationDate:
+          json['creation_date'] != null
+              ? DateTime.tryParse(json['creation_date'] as String)
+              : null,
+      expirationDate:
+          json['expiration_date'] != null
+              ? DateTime.tryParse(json['expiration_date'] as String)
+              : null,
+    );
+  }
+
+  bool get isExpired {
+    final exp = expirationDate;
+    if (exp == null) return false;
+    return !exp.isAfter(DateTime.now());
+  }
+}
+
+/// Unauthenticated payload from `GET /api/v1/shares/public/{token}/`.
+class PublicShare {
+  final String objectType;
+  final int objectId;
+  final DateTime? expirationDate;
+  final Album? album;
+  final Playlist? playlist;
+  final List<Track> tracks;
+
+  const PublicShare({
+    required this.objectType,
+    required this.objectId,
+    this.expirationDate,
+    this.album,
+    this.playlist,
+    this.tracks = const [],
+  });
+
+  factory PublicShare.fromJson(Map<String, dynamic> json) {
+    final objectType = json['object_type'] as String? ?? '';
+    final item = json['item'];
+    Album? album;
+    Playlist? playlist;
+    if (item is Map) {
+      final map = Map<String, dynamic>.from(item);
+      if (objectType == 'album') {
+        album = Album.fromJson(map);
+      } else if (objectType == 'playlist') {
+        playlist = Playlist.fromJson(map);
+      }
+    }
+
+    final tracks =
+        (json['tracks'] as List<dynamic>?)
+            ?.map((e) => Track.fromJson(_toMap(e)))
+            .toList() ??
+        const <Track>[];
+
+    return PublicShare(
+      objectType: objectType,
+      objectId: (json['object_id'] as num?)?.toInt() ?? 0,
+      expirationDate:
+          json['expiration_date'] != null
+              ? DateTime.tryParse(json['expiration_date'] as String)
+              : null,
+      album: album,
+      playlist: playlist,
+      tracks: tracks,
+    );
+  }
+
+  String get title {
+    if (album != null) return album!.title;
+    if (playlist != null) return playlist!.name;
+    return 'Shared music';
+  }
+
+  String? get subtitle {
+    if (album?.artist?.name != null) return album!.artist!.name;
+    if (playlist != null) return 'Playlist';
+    return null;
+  }
+
+  Cover? get cover => album?.cover ?? playlist?.cover;
+
+  String? get coverUrl =>
+      album?.coverUrl ?? playlist?.coverUrl ?? album?.thumbCoverUrl;
+}

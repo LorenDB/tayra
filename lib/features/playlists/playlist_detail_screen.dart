@@ -24,6 +24,7 @@ import 'package:tayra/features/player/queue_actions.dart';
 import 'package:tayra/core/widgets/playlist_mosaic.dart';
 import 'package:tayra/features/playlists/playlists_screen.dart';
 import 'package:tayra/core/widgets/dialog_utils.dart';
+import 'package:tayra/features/share/share_link_sheet.dart';
 
 class PlaylistDetailScreen extends ConsumerStatefulWidget {
   final int playlistId;
@@ -353,11 +354,8 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
 
     final api = ref.read(cachedFunkwhaleApiProvider);
     final allPt = await fetchAllPages<PlaylistTrack>(
-      (page) => api.getPlaylistTracks(
-        widget.playlistId,
-        page: page,
-        pageSize: 100,
-      ),
+      (page) =>
+          api.getPlaylistTracks(widget.playlistId, page: page, pageSize: 100),
     );
     return allPt.map((pt) => pt.track).toList();
   }
@@ -383,7 +381,9 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
     try {
       final allTracks = await _getAllPlaylistTracks();
       if (!mounted) return;
-      Analytics.track('playlist_shuffle_all', {'track_count': allTracks.length});
+      Analytics.track('playlist_shuffle_all', {
+        'track_count': allTracks.length,
+      });
       ref
           .read(playerProvider.notifier)
           .playTracks(
@@ -403,8 +403,7 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
       final allTracks = await _getAllPlaylistTracks();
       if (!mounted) return;
       final targetTrack = _playlistTracks[index].track;
-      final startIndex =
-          allTracks.indexWhere((t) => t.id == targetTrack.id);
+      final startIndex = allTracks.indexWhere((t) => t.id == targetTrack.id);
       if (startIndex == -1) return;
       ref
           .read(playerProvider.notifier)
@@ -533,6 +532,14 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                 ),
                 color: AppTheme.surfaceContainer,
                 onSelected: (value) async {
+                  if (value == 'share') {
+                    await showShareLinkSheet(
+                      context,
+                      objectType: 'playlist',
+                      objectId: playlist.id,
+                      title: playlist.name,
+                    );
+                  }
                   if (value == 'download') unawaited(toggleDownload());
                   if (value == 'play_next') {
                     final allTracks = await _getAllPlaylistTracks();
@@ -561,6 +568,13 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                 },
                 itemBuilder:
                     (_) => [
+                      const PopupMenuItem(
+                        value: 'share',
+                        child: PopupMenuRow(
+                          icon: Icons.ios_share_rounded,
+                          label: 'Share link',
+                        ),
+                      ),
                       const PopupMenuItem(
                         value: 'play_next',
                         child: PopupMenuRow(
@@ -645,9 +659,10 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                         child: _ActionButton(
                           icon: Icons.play_arrow_rounded,
                           label: 'Play All',
-                          onPressed: (_tracks.isNotEmpty && !_isPreparingAllTracks)
-                              ? _playAll
-                              : null,
+                          onPressed:
+                              (_tracks.isNotEmpty && !_isPreparingAllTracks)
+                                  ? _playAll
+                                  : null,
                           isPrimary: true,
                           isLoading: _isPreparingAllTracks,
                         ),
@@ -658,9 +673,10 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                         child: _ActionButton(
                           icon: Icons.shuffle_rounded,
                           label: 'Shuffle',
-                          onPressed: (_tracks.isNotEmpty && !_isPreparingAllTracks)
-                              ? _shuffleAll
-                              : null,
+                          onPressed:
+                              (_tracks.isNotEmpty && !_isPreparingAllTracks)
+                                  ? _shuffleAll
+                                  : null,
                           isPrimary: false,
                           isLoading: _isPreparingAllTracks,
                         ),
@@ -772,20 +788,19 @@ class _ActionButton extends StatelessWidget {
       onPressed: isLoading ? null : onPressed,
       isPrimary: isPrimary,
       useGradient: isPrimary && !isLoading,
-      iconWidget: isLoading
-          ? SizedBox(
-              width: 22,
-              height: 22,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation(
-                  isPrimary
-                      ? Colors.white
-                      : AppTheme.onBackgroundSubtle,
+      iconWidget:
+          isLoading
+              ? SizedBox(
+                width: 22,
+                height: 22,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation(
+                    isPrimary ? Colors.white : AppTheme.onBackgroundSubtle,
+                  ),
                 ),
-              ),
-            )
-          : null,
+              )
+              : null,
     );
   }
 }

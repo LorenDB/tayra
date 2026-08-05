@@ -1238,11 +1238,13 @@ class CachedFunkwhaleApi {
     bool? appendListenToken,
     AudioQuality? quality,
     bool forDownload = false,
+    String? shareToken,
   }) => _api.getStreamUrl(
     listenUrl,
     appendListenToken: appendListenToken,
     quality: quality,
     forDownload: forDownload,
+    shareToken: shareToken,
   );
 
   Map<String, String> get authHeaders => _api.authHeaders;

@@ -717,15 +717,17 @@ class FunkwhaleApi {
   /// disposition). Appends `quality=` when a tier is provided (after resolving
   /// [AudioQuality.auto] via [resolveStreamingQuality]).
   ///
-  /// Defaults to appending the listen token **only on web**, where media
-  /// elements cannot send `Authorization`. Native/desktop already send Bearer
-  /// headers, so embedding the token in query strings only leaks it into
-  /// logs, CDN caches, and crash dumps.
+  /// When [shareToken] is set, appends `share=` (secret share-link auth) and
+  /// skips the user listen token. Defaults to appending the listen token
+  /// **only on web**, where media elements cannot send `Authorization`.
+  /// Native/desktop already send Bearer headers, so embedding the token in
+  /// query strings only leaks it into logs, CDN caches, and crash dumps.
   String getStreamUrl(
     String listenUrl, {
     bool? appendListenToken,
     AudioQuality? quality,
     bool forDownload = false,
+    String? shareToken,
   }) {
     final absolute =
         listenUrl.startsWith('http') ? listenUrl : '$_baseUrl$listenUrl';
@@ -740,11 +742,15 @@ class FunkwhaleApi {
       params['quality'] = resolved.apiValue;
     }
 
-    final useToken = appendListenToken ?? kIsWeb;
-    if (useToken) {
-      final listenToken = _ref.read(authStateProvider).listenToken;
-      if (listenToken != null && listenToken.isNotEmpty) {
-        params.putIfAbsent('token', () => listenToken);
+    if (shareToken != null && shareToken.isNotEmpty) {
+      params['share'] = shareToken;
+    } else {
+      final useToken = appendListenToken ?? kIsWeb;
+      if (useToken) {
+        final listenToken = _ref.read(authStateProvider).listenToken;
+        if (listenToken != null && listenToken.isNotEmpty) {
+          params.putIfAbsent('token', () => listenToken);
+        }
       }
     }
 
@@ -1682,6 +1688,67 @@ class FunkwhaleApi {
       '$_baseUrl/api/v1/manage/users/invitations/action/',
       data: {'action': action, 'objects': ids},
     );
+  }
+
+  // ── Share links ─────────────────────────────────────────────────────
+
+  /// Create a secret share link for an album or playlist.
+  Future<ShareLink> createShareLink({
+    required String objectType,
+    required int objectId,
+    int? expiresInDays,
+    String? label,
+  }) async {
+    final response = await _dio.post(
+      '$_baseUrl/api/v1/shares/',
+      data: {
+        'object_type': objectType,
+        'object_id': objectId,
+        if (expiresInDays != null) 'expires_in_days': expiresInDays,
+        if (label != null && label.isNotEmpty) 'label': label,
+      },
+    );
+    return ShareLink.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  /// List the current user's share links, optionally filtered by object.
+  Future<PaginatedResponse<ShareLink>> getShareLinks({
+    String? objectType,
+    int? objectId,
+    int page = 1,
+    int pageSize = 50,
+  }) async {
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/shares/',
+      queryParameters: {
+        'page': page,
+        'page_size': pageSize,
+        if (objectType != null) 'object_type': objectType,
+        if (objectId != null) 'object_id': objectId,
+      },
+    );
+    return PaginatedResponse.fromJson(
+      response.data as Map<String, dynamic>,
+      ShareLink.fromJson,
+    );
+  }
+
+  /// Delete (revoke) a share link by UUID.
+  Future<void> deleteShareLink(String uuid) async {
+    await _dio.delete('$_baseUrl/api/v1/shares/$uuid/');
+  }
+
+  /// Resolve a public share by secret token (no auth required).
+  Future<PublicShare> getPublicShare(String token) async {
+    final response = await _dio.get(
+      '$_baseUrl/api/v1/shares/public/$token/',
+      options: Options(
+        headers: {'Accept': 'application/json'},
+        // Do not send Authorization — possession of the token is enough.
+        extra: const {'skip_auth': true},
+      ),
+    );
+    return PublicShare.fromJson(response.data as Map<String, dynamic>);
   }
 }
 

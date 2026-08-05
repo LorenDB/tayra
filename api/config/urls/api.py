@@ -6,6 +6,7 @@ from funkwhale_api.common import routers as common_routers
 from funkwhale_api.common import views as common_views
 from funkwhale_api.music import views
 from funkwhale_api.playlists import views as playlists_views
+from funkwhale_api.shares import views as shares_views
 from funkwhale_api.tags import views as tags_views
 
 router = common_routers.OptionalSlashRouter()
@@ -23,6 +24,7 @@ router.register(r"subscriptions", audio_views.SubscriptionsViewSet, "subscriptio
 router.register(r"albums", views.AlbumViewSet, "albums")
 router.register(r"licenses", views.LicenseViewSet, "licenses")
 router.register(r"playlists", playlists_views.PlaylistViewSet, "playlists")
+router.register(r"shares", shares_views.ShareLinkViewSet, "shares")
 router.register(r"mutations", common_views.MutationViewSet, "mutations")
 router.register(r"attachments", common_views.AttachmentViewSet, "attachments")
 v1_patterns = router.urls

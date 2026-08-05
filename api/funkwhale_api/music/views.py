@@ -31,6 +31,10 @@ from funkwhale_api.federation import routes
 from funkwhale_api.federation import tasks as federation_tasks
 from funkwhale_api.federation.authentication import SignatureAuthentication
 from funkwhale_api.tags.models import Tag, TaggedItem
+from funkwhale_api.shares.permissions import (
+    ShareOrScopePermission,
+    resolve_active_share,
+)
 from funkwhale_api.users.authentication import ScopedTokenAuthentication
 from funkwhale_api.users.oauth import permissions as oauth_permissions
 
@@ -724,10 +728,18 @@ class ListenMixin(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
         rest_settings.api_settings.DEFAULT_AUTHENTICATION_CLASSES
         + [SignatureAuthentication, ScopedTokenAuthentication]
     )
-    permission_classes = [oauth_permissions.ScopePermission]
+    # ShareOrScopePermission accepts valid ?share= tokens even when
+    # common__api_authentication_required is True; invalid share tokens fail closed.
+    permission_classes = [ShareOrScopePermission]
     required_scope = "libraries"
     anonymous_policy = "setting"
     lookup_field = "uuid"
+    throttling_scopes = {
+        "retrieve": {
+            "authenticated": "authenticated-retrieve",
+            "anonymous": "share-stream",
+        },
+    }
 
     @extend_schema(
         operation_id="get_track_file",
@@ -807,11 +819,23 @@ class ListenMixin(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
                     "Authorization (e.g. browser media elements)."
                 ),
             ),
+            OpenApiParameter(
+                name="share",
+                type=str,
+                location=OpenApiParameter.QUERY,
+                required=False,
+                description=(
+                    "Secret share-link token granting listen access to a "
+                    "specific album or playlist only."
+                ),
+            ),
         ],
         responses={
             200: {
                 "description": "Audio bytes (via reverse-proxy sendfile).",
-                "content": {"audio/*": {"schema": {"type": "string", "format": "binary"}}},
+                "content": {
+                    "audio/*": {"schema": {"type": "string", "format": "binary"}}
+                },
             },
             302: {"description": "Redirect to storage URL when PROXY_MEDIA is false."},
             404: {"description": "Track or playable upload not found."},
@@ -833,6 +857,54 @@ class ListenMixin(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
 def handle_stream(
     track, request, download, explicit_file, format, max_bitrate, quality=None
 ):
+    share_link = getattr(request, "share_link", None)
+    if share_link is None:
+        share_token = request.GET.get("share")
+        if share_token:
+            share_link = resolve_active_share(share_token)
+
+    if share_link is not None:
+        # Secret share: membership + sharer's playable uploads only.
+        # Re-resolve so revoked/expired/disabled-owner tokens fail even if a
+        # stale request.share_link was set earlier in the permission phase.
+        fresh = resolve_active_share(share_link.token)
+        if fresh is None:
+            return Response(status=404)
+        share_link = fresh
+        if not share_link.includes_track(track):
+            return Response(status=404)
+        actor = getattr(share_link.owner, "actor", None)
+        if actor is None:
+            return Response(status=404)
+        queryset = track.uploads.prefetch_related(
+            "track__album__artist", "track__artist"
+        )
+        if explicit_file:
+            queryset = queryset.filter(uuid=explicit_file)
+        queryset = queryset.playable_by(actor)
+        queryset = queryset.order_by(F("audio_file").desc(nulls_last=True))
+        upload = queryset.first()
+        if not upload:
+            return Response(status=404)
+        try:
+            max_bitrate = min(max(int(max_bitrate), 0), 320) or None
+        except (TypeError, ValueError):
+            max_bitrate = None
+        if max_bitrate:
+            max_bitrate = max_bitrate * 1000
+        # Share links are listen-only: never force Content-Disposition attachment.
+        return handle_serve(
+            upload=upload,
+            user=share_link.owner,
+            format=format,
+            max_bitrate=max_bitrate,
+            proxy_media=settings.PROXY_MEDIA,
+            download=False,
+            quality=quality,
+            allow_blocking_transcode=quality is None,
+            wsgi_request=request._request,
+        )
+
     actor = utils.get_actor_from_request(request)
     queryset = track.uploads.prefetch_related("track__album__artist_credit__artist", "track__artist_credit__artist")
     if explicit_file:

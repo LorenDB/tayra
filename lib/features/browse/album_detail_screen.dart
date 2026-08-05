@@ -23,6 +23,7 @@ import 'package:tayra/features/player/player_provider.dart';
 import 'package:tayra/features/player/queue_actions.dart';
 import 'package:tayra/features/playlists/add_to_playlist_sheet.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
+import 'package:tayra/features/share/share_link_sheet.dart';
 
 // ── Providers ───────────────────────────────────────────────────────────
 
@@ -59,12 +60,14 @@ class _AlbumTracksNotifier extends AsyncNotifier<List<Track>> {
 
   Future<List<Track>> getAllTracks() async {
     final api = ref.read(cachedFunkwhaleApiProvider);
-    final allTracks = await fetchAllPages((page) => api.getTracks(
-      album: albumId,
-      ordering: 'position',
-      pageSize: 100,
-      page: page,
-    ));
+    final allTracks = await fetchAllPages(
+      (page) => api.getTracks(
+        album: albumId,
+        ordering: 'position',
+        pageSize: 100,
+        page: page,
+      ),
+    );
     sortTracksByDiscAndPosition(allTracks);
     return allTracks;
   }
@@ -394,15 +397,17 @@ class _AlbumDetailBody extends ConsumerWidget {
                 dominantColor: dominantColor,
                 textColor: textColor,
                 onTap: () async {
-                  final allTracks = tracks.length >= album.tracksCount
-                      ? tracks
-                      : await ref
-                          .read(_albumTracksProvider(album.id).notifier)
-                          .getAllTracks();
+                  final allTracks =
+                      tracks.length >= album.tracksCount
+                          ? tracks
+                          : await ref
+                              .read(_albumTracksProvider(album.id).notifier)
+                              .getAllTracks();
                   if (!context.mounted) return;
                   final targetId = trackEntry.track.id;
-                  final startIndex =
-                      allTracks.indexWhere((t) => t.id == targetId);
+                  final startIndex = allTracks.indexWhere(
+                    (t) => t.id == targetId,
+                  );
                   if (startIndex == -1) return;
                   ref
                       .read(playerProvider.notifier)
@@ -474,9 +479,10 @@ class _AlbumHeader extends ConsumerWidget {
     Future<void> toggleDownload() async {
       // Ensure we have the full list of tracks (wait for paging to finish
       // if necessary) so downloads are queued for every track.
-      final tracks = await ref
-          .read(_albumTracksProvider(album.id).notifier)
-          .getAllTracks();
+      final tracks =
+          await ref
+              .read(_albumTracksProvider(album.id).notifier)
+              .getAllTracks();
       try {
         final current = ref.read(isManualAlbumProvider(album.id));
         final enabled = await toggleCollectionManualDownload(
@@ -540,9 +546,10 @@ class _AlbumHeader extends ConsumerWidget {
 
     Future<void> addAlbumToQueue() async {
       try {
-        final tracks = await ref
-            .read(_albumTracksProvider(album.id).notifier)
-            .getAllTracks();
+        final tracks =
+            await ref
+                .read(_albumTracksProvider(album.id).notifier)
+                .getAllTracks();
         final message = addTracksToQueue(ref, tracks);
         if (context.mounted) {
           ScaffoldMessenger.of(
@@ -561,9 +568,10 @@ class _AlbumHeader extends ConsumerWidget {
 
     Future<void> playAlbumNext() async {
       try {
-        final tracks = await ref
-            .read(_albumTracksProvider(album.id).notifier)
-            .getAllTracks();
+        final tracks =
+            await ref
+                .read(_albumTracksProvider(album.id).notifier)
+                .getAllTracks();
         final message = insertTracksToPlayNext(ref, tracks);
         if (context.mounted) {
           ScaffoldMessenger.of(
@@ -585,7 +593,9 @@ class _AlbumHeader extends ConsumerWidget {
         // ── Gradient glow background ──
         Container(
           height: topPadding + artSize + 100,
-          decoration: BoxDecoration(gradient: AppTheme.nowPlayingTint(glowColor)),
+          decoration: BoxDecoration(
+            gradient: AppTheme.nowPlayingTint(glowColor),
+          ),
         ),
 
         // ── Back button ──
@@ -608,6 +618,14 @@ class _AlbumHeader extends ConsumerWidget {
             onSelected: (value) async {
               if (value == 'edit') {
                 context.push('${GoRouterState.of(context).uri}/edit');
+              }
+              if (value == 'share') {
+                await showShareLinkSheet(
+                  context,
+                  objectType: 'album',
+                  objectId: album.id,
+                  title: album.title,
+                );
               }
               if (value == 'download') toggleDownload();
               if (value == 'play_next') playAlbumNext();
@@ -670,6 +688,13 @@ class _AlbumHeader extends ConsumerWidget {
                     child: PopupMenuRow(
                       icon: Icons.edit_rounded,
                       label: 'Edit album',
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: 'share',
+                    child: PopupMenuRow(
+                      icon: Icons.ios_share_rounded,
+                      label: 'Share link',
                     ),
                   ),
                   PopupMenuItem(
@@ -880,8 +905,7 @@ class _ActionButtons extends ConsumerStatefulWidget {
 class _ActionButtonsState extends ConsumerState<_ActionButtons> {
   bool _isLoadingAll = false;
 
-  bool get _hasTracks =>
-      (widget.tracksAsync.asData?.value ?? []).isNotEmpty;
+  bool get _hasTracks => (widget.tracksAsync.asData?.value ?? []).isNotEmpty;
 
   Future<List<Track>> _ensureAllTracks() async {
     final current = widget.tracksAsync.asData?.value ?? [];
@@ -920,31 +944,33 @@ class _ActionButtonsState extends ConsumerState<_ActionButtons> {
 
   @override
   Widget build(BuildContext context) {
-    final playIcon = _isLoadingAll
-        ? SizedBox(
-            width: 22,
-            height: 22,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation(
-                widget.dominantColor.computeLuminance() > 0.5
-                    ? Colors.black87
-                    : Colors.white,
+    final playIcon =
+        _isLoadingAll
+            ? SizedBox(
+              width: 22,
+              height: 22,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation(
+                  widget.dominantColor.computeLuminance() > 0.5
+                      ? Colors.black87
+                      : Colors.white,
+                ),
               ),
-            ),
-          )
-        : null;
+            )
+            : null;
 
-    final shuffleIcon = _isLoadingAll
-        ? SizedBox(
-            width: 20,
-            height: 20,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation(widget.textColor),
-            ),
-          )
-        : null;
+    final shuffleIcon =
+        _isLoadingAll
+            ? SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation(widget.textColor),
+              ),
+            )
+            : null;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -952,7 +978,10 @@ class _ActionButtonsState extends ConsumerState<_ActionButtons> {
         children: [
           Expanded(
             child: PillActionButton(
-              icon: _isLoadingAll ? Icons.play_arrow_rounded : Icons.play_arrow_rounded,
+              icon:
+                  _isLoadingAll
+                      ? Icons.play_arrow_rounded
+                      : Icons.play_arrow_rounded,
               label: _isLoadingAll ? 'Loading...' : 'Play All',
               onPressed: (_hasTracks && !_isLoadingAll) ? _playAll : null,
               color: widget.dominantColor,

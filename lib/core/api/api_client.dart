@@ -33,6 +33,12 @@ class AuthInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    // Public share resolve and similar must not send Bearer tokens.
+    if (options.extra['skip_auth'] == true) {
+      options.headers.remove('Authorization');
+      handler.next(options);
+      return;
+    }
     final authState = _ref.read(authStateProvider);
     if (authState.accessToken != null) {
       options.headers['Authorization'] = 'Bearer ${authState.accessToken}';
@@ -42,6 +48,10 @@ class AuthInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
+    if (err.requestOptions.extra['skip_auth'] == true) {
+      handler.next(err);
+      return;
+    }
     if (err.response?.statusCode == 401) {
       final authNotifier = _ref.read(authStateProvider.notifier);
       final success = await authNotifier.refreshToken();

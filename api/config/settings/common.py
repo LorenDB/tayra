@@ -278,6 +278,7 @@ LOCAL_APPS = (
     "funkwhale_api.history",
     "funkwhale_api.client_data",
     "funkwhale_api.playlists",
+    "funkwhale_api.shares.apps.SharesConfig",
     "funkwhale_api.subsonic",
     "funkwhale_api.tags",
 )
@@ -1289,6 +1290,14 @@ THROTTLING_RATES = {
     "anonymous-destroy": {
         "rate": THROTTLING_USER_RATES.get("anonymous-destroy", "1000/day"),
         "description": "Anonymous DELETE requests on resource detail",
+    },
+    "share-public": {
+        "rate": THROTTLING_USER_RATES.get("share-public", "60/hour"),
+        "description": "Public share-link resolve",
+    },
+    "share-stream": {
+        "rate": THROTTLING_USER_RATES.get("share-stream", "600/hour"),
+        "description": "Audio stream via share token",
     },
     "authenticated-update": {
         "rate": THROTTLING_USER_RATES.get("authenticated-update", "1000/hour"),
