@@ -14,7 +14,7 @@ class AlbumList2FilterSet(filters.FilterSet):
         ORDERING = {
             "random": "?",
             "newest": "-creation_date",
-            "alphabeticalByArtist": "artist__name",
+            "alphabeticalByArtist": "artist_credit__artist__name",
             "alphabeticalByName": "title",
         }
         if value not in ORDERING:

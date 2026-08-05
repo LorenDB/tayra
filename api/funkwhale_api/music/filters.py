@@ -123,7 +123,7 @@ class ArtistFilter(
         }
         hidden_content_fields_mapping = moderation_filters.USER_FILTER_CONFIG["ARTIST"]
         include_channels_field = "channel"
-        library_filter_field = "track__artist_credit__artist"
+        library_filter_field = "artist_credit__tracks__uploads__library"
 
     def filter_playable(self, queryset, name, value):
         actor = utils.get_actor_from_request(self.request)

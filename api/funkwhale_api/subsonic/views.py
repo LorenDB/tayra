@@ -441,7 +441,8 @@ class SubsonicViewSet(viewsets.GenericViewSet):
                 )
             )
             .with_tracks_count()
-            .order_by("artist__name")
+            .order_by("artist_credit__artist__name")
+            .distinct()
         )
         data = request.GET or request.POST
         filterset = filters.AlbumList2FilterSet(data, queryset=queryset)
@@ -451,11 +452,11 @@ class SubsonicViewSet(viewsets.GenericViewSet):
         type = data.get("type", "alphabeticalByArtist")
 
         if type == "alphabeticalByArtist":
-            queryset = queryset.order_by("artist__name")
+            queryset = queryset.order_by("artist_credit__artist__name").distinct()
         elif type == "random":
             queryset = queryset.order_by("?")
         elif type == "alphabeticalByName" or not type:
-            queryset = queryset.order_by("artist__title")
+            queryset = queryset.order_by("title")
         elif type == "recent" or not type:
             queryset = queryset.exclude(release_date=None).order_by("-release_date")
         elif type == "newest" or not type:
@@ -464,8 +465,8 @@ class SubsonicViewSet(viewsets.GenericViewSet):
             genre = data.get("genre")
             queryset = queryset.filter(
                 Q(tagged_items__tag__name=genre)
-                | Q(artist__tagged_items__tag__name=genre)
-            )
+                | Q(artist_credit__artist__tagged_items__tag__name=genre)
+            ).distinct()
         elif type == "byYear":
             try:
                 boundaries = [

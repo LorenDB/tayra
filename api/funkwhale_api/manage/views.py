@@ -84,8 +84,10 @@ class ManageArtistViewSet(
         music_models.Artist.objects.all()
         .order_by("-id")
         .select_related("attributed_to", "attachment_cover", "channel")
-        .annotate(_tracks_count=Count("tracks", distinct=True))
-        .annotate(_albums_count=Count("albums", distinct=True))
+        .annotate(
+            _tracks_count=Count("artist_credit__tracks", distinct=True),
+            _albums_count=Count("artist_credit__albums", distinct=True),
+        )
         .prefetch_related(music_views.TAG_PREFETCH)
     )
     serializer_class = serializers.ManageArtistSerializer
@@ -723,8 +725,14 @@ class ManageChannelViewSet(
                     music_models.Artist.objects.all()
                     .order_by("-id")
                     .select_related("attributed_to", "attachment_cover", "channel")
-                    .annotate(_tracks_count=Count("tracks"))
-                    .annotate(_albums_count=Count("albums"))
+                    .annotate(
+                        _tracks_count=Count(
+                            "artist_credit__tracks", distinct=True
+                        ),
+                        _albums_count=Count(
+                            "artist_credit__albums", distinct=True
+                        ),
+                    )
                     .prefetch_related(music_views.TAG_PREFETCH)
                 ),
             )

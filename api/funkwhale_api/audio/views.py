@@ -27,7 +27,8 @@ ARTIST_PREFETCH_QS = (
         "attachment_cover",
     )
     .prefetch_related(music_views.TAG_PREFETCH)
-    .annotate(_tracks_count=Count("tracks"))
+    # Track.artist FK was dropped; go through ArtistCredit M2M.
+    .annotate(_tracks_count=Count("artist_credit__tracks", distinct=True))
 )
 
 
@@ -103,7 +104,9 @@ class ChannelViewSet(
         queryset = super().get_queryset()
         if self.action == "retrieve":
             queryset = queryset.annotate(
-                _downloads_count=Sum("artist__tracks__downloads_count")
+                _downloads_count=Sum(
+                    "artist__artist_credit__tracks__downloads_count"
+                )
             )
         return queryset
 
