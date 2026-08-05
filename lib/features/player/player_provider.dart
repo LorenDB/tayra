@@ -862,6 +862,13 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// How many quality steps we've already taken on the current track.
   int _qualityFallbackSteps = 0;
 
+  /// Whether the current track has reached [ProcessingState.ready] at least
+  /// once (used to distinguish initial buffer from mid-track rebuffers).
+  bool _trackHasBeenReady = false;
+
+  /// Wall-clock when the latest mid-track rebuffer began.
+  DateTime? _rebufferStartedAt;
+
   /// Throttle podcast progress writes (aligned with 2s queue progress).
   int _lastPodcastProgressSeconds = -1;
 
@@ -1170,6 +1177,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
           state = state.copyWith(isLoading: isLoading);
 
           if (isLoading) {
+            // Mid-track rebuffer (after first ready), not initial load.
+            if (_trackHasBeenReady && _rebufferStartedAt == null) {
+              _rebufferStartedAt = DateTime.now();
+            }
+
             // Start / reset the watchdog: if still loading after 30 s, skip.
             _bufferingWatchdog?.cancel();
             _bufferingWatchdog = Timer(const Duration(seconds: 30), () {
@@ -1213,6 +1225,20 @@ class PlayerNotifier extends Notifier<PlayerState> {
               }
             });
           } else {
+            if (_rebufferStartedAt != null) {
+              final ms =
+                  DateTime.now().difference(_rebufferStartedAt!).inMilliseconds;
+              Analytics.track('playback_rebuffer', {
+                'ms_bucket': ttfaMsBucket(ms),
+                'quality': _activeStreamQuality.apiValue,
+                'platform': AppPlatform.isWeb ? 'web' : 'native',
+              });
+              _rebufferStartedAt = null;
+            }
+            if (ps == ProcessingState.ready ||
+                ps == ProcessingState.completed) {
+              _trackHasBeenReady = true;
+            }
             _bufferingWatchdog?.cancel();
             _bufferingWatchdog = null;
             _qualityFallbackWatchdog?.cancel();
@@ -1608,18 +1634,19 @@ class PlayerNotifier extends Notifier<PlayerState> {
     ).showSnackBar(SnackBar(content: Text('$label is not available offline')));
   }
 
-  /// Resolved streaming quality from user settings (platform-aware).
+  /// Resolved streaming quality from user settings + network.
   AudioQuality get _preferredStreamQuality {
     final preferred = ref.read(settingsProvider).streamingQuality;
-    return resolveStreamingQuality(preferred);
+    final metered = ref.read(isMeteredNetworkProvider);
+    return resolveStreamingQuality(preferred, onMeteredNetwork: metered);
   }
 
   /// Quality used for offline / background full-file downloads.
   AudioQuality get _preferredDownloadQuality {
     final preferred = ref.read(settingsProvider).downloadQuality;
-    return resolveStreamingQuality(
-      preferred == AudioQuality.auto ? AudioQuality.high : preferred,
-    );
+    final concrete =
+        preferred == AudioQuality.auto ? AudioQuality.high : preferred;
+    return resolveStreamingQuality(concrete);
   }
 
   /// Build a single [AudioSource] for a track, preferring cached local files.
@@ -1633,8 +1660,13 @@ class PlayerNotifier extends Notifier<PlayerState> {
       throw Exception('Track ${track.id} has no listen URL');
     }
 
+    final quality = qualityOverride ?? _preferredStreamQuality;
+
     if (probeCache && AppPlatform.supportsOfflineCache) {
-      final cachedFile = await _audioCache.getCachedAudio(track);
+      final cachedFile = await _audioCache.getCachedAudio(
+        track,
+        quality: quality,
+      );
       if (cachedFile != null) {
         return AudioSource.uri(cachedFile.uri);
       }
@@ -1645,7 +1677,6 @@ class PlayerNotifier extends Notifier<PlayerState> {
     }
 
     await _api.ensureListenToken();
-    final quality = qualityOverride ?? _preferredStreamQuality;
     final streamUrl = _api.getStreamUrl(listenUrl, quality: quality);
     // Web media cannot send custom headers; token is in the query string.
     final headers = AppPlatform.isWeb ? <String, String>{} : _api.authHeaders;
@@ -2699,9 +2730,21 @@ class PlayerNotifier extends Notifier<PlayerState> {
       await _api.ensureListenToken();
       _activeStreamQuality = _preferredStreamQuality;
       _qualityFallbackSteps = 0;
+      _trackHasBeenReady = false;
+      _rebufferStartedAt = null;
       if (_qualityFallbackTrackId != track.id) {
         _qualityFallbackTrackId = null;
       }
+      final ttfaStartedAt = DateTime.now();
+      final preferredSetting =
+          ref.read(settingsProvider).streamingQuality.apiValue;
+      final metered = ref.read(isMeteredNetworkProvider);
+      Analytics.track('playback_quality_selected', {
+        'quality': _activeStreamQuality.apiValue,
+        'preference': preferredSetting,
+        'metered': metered,
+        'platform': AppPlatform.isWeb ? 'web' : 'native',
+      });
       final streamUrl = _api.getStreamUrl(
         listenUrl,
         quality: _activeStreamQuality,
@@ -2726,7 +2769,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // Check audio cache first — play from local file if available (native only).
       final cachedFile =
           AppPlatform.supportsOfflineCache
-              ? await _audioCache.getCachedAudio(track)
+              ? await _audioCache.getCachedAudio(
+                track,
+                quality: _activeStreamQuality,
+              )
               : null;
       if (!_isCurrentLoad(loadEpoch)) return false;
       // Whether we ultimately streamed from server (so we know to kick off
@@ -2823,6 +2869,15 @@ class PlayerNotifier extends Notifier<PlayerState> {
       }
 
       if (!_isCurrentLoad(loadEpoch)) return false;
+
+      final ttfaMs = DateTime.now().difference(ttfaStartedAt).inMilliseconds;
+      Analytics.track('playback_ttfa', {
+        'ms_bucket': ttfaMsBucket(ttfaMs),
+        'quality': _activeStreamQuality.apiValue,
+        'from_cache': !streamedFromServer,
+        'auto_play': autoPlay,
+        'platform': AppPlatform.isWeb ? 'web' : 'native',
+      });
 
       // Do not full-file download the track that is currently streaming —
       // that competes with just_audio for bandwidth and hurts TTFA.
@@ -2940,7 +2995,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
         quality: downloadQuality,
         forDownload: true,
       );
-      await _cacheAudioAndNotify(track, streamUrl, headers);
+      await _cacheAudioAndNotify(
+        track,
+        streamUrl,
+        headers,
+        quality: downloadQuality,
+      );
     }
   }
 
@@ -2949,9 +3009,15 @@ class PlayerNotifier extends Notifier<PlayerState> {
   Future<void> _cacheAudioAndNotify(
     Track track,
     String streamUrl,
-    Map<String, String> headers,
-  ) async {
-    final file = await _audioCache.cacheAudio(track, streamUrl, headers);
+    Map<String, String> headers, {
+    AudioQuality quality = AudioQuality.high,
+  }) async {
+    final file = await _audioCache.cacheAudio(
+      track,
+      streamUrl,
+      headers,
+      quality: quality,
+    );
     if (file != null) {
       ref.read(cachedAudioTrackIdsProvider.notifier).add(track.id);
     }

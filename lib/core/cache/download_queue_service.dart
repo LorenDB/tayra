@@ -229,6 +229,7 @@ class DownloadQueueService {
                   forDownload: true,
                 ),
                 api.authHeaders,
+                quality: downloadQuality,
               );
               // cacheAudio returns null on failure (and swallows errors). Also
               // treat "already on disk" as success in case another concurrent

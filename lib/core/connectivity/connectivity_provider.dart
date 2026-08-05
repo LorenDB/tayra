@@ -1,5 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tayra/core/audio/audio_quality.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 
 export 'package:tayra/core/connectivity/server_reachability.dart'
@@ -62,15 +63,30 @@ final connectivityResultProvider = StreamProvider<List<ConnectivityResult>>((
 final hasNetworkProvider = Provider<bool>((ref) {
   final connectivity = ref.watch(connectivityResultProvider);
   return connectivity.when(
-    data: (results) => results.any(
-      (r) =>
-          r == ConnectivityResult.wifi ||
-          r == ConnectivityResult.mobile ||
-          r == ConnectivityResult.ethernet ||
-          r == ConnectivityResult.vpn,
-    ),
+    data:
+        (results) => results.any(
+          (r) =>
+              r == ConnectivityResult.wifi ||
+              r == ConnectivityResult.mobile ||
+              r == ConnectivityResult.ethernet ||
+              r == ConnectivityResult.vpn,
+        ),
     loading: () => true, // Optimistic until we know otherwise
     error: (_, e) => true,
+  );
+});
+
+/// True when the device appears to be on cellular-only (metered) connectivity.
+///
+/// Used for Auto streaming quality (prefer a lower rung on mobile data).
+/// Optimistic `false` while connectivity is still loading so first play on
+/// wifi is not incorrectly treated as metered.
+final isMeteredNetworkProvider = Provider<bool>((ref) {
+  final connectivity = ref.watch(connectivityResultProvider);
+  return connectivity.when(
+    data: isMeteredConnectivity,
+    loading: () => false,
+    error: (_, e) => false,
   );
 });
 

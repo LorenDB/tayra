@@ -4,6 +4,7 @@
 /// server-side). [AudioQuality.auto] is resolved client-side to a concrete tier.
 library;
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tayra/core/platform/app_platform.dart';
 
@@ -11,7 +12,7 @@ import 'package:tayra/core/platform/app_platform.dart';
 
 /// User-facing playback / download quality preference.
 enum AudioQuality {
-  /// Platform-aware default (web forces lossy; native prefers original).
+  /// Platform- and network-aware default.
   auto,
 
   /// Source file as uploaded (may be FLAC / high bitrate).
@@ -64,7 +65,7 @@ extension AudioQualityX on AudioQuality {
   String get subtitle {
     switch (this) {
       case AudioQuality.auto:
-        return 'Adapts to platform and network conditions';
+        return 'Adapts to platform and network (lower on cellular)';
       case AudioQuality.original:
         return 'Best quality (may use more data)';
       case AudioQuality.high:
@@ -92,6 +93,23 @@ extension AudioQualityX on AudioQuality {
     }
   }
 
+  /// Cache key segment for on-disk audio files (`audio_{id}_q_{this}`).
+  String get cacheKeySegment {
+    switch (this) {
+      case AudioQuality.auto:
+        // Auto must be resolved before caching.
+        return 'auto';
+      case AudioQuality.original:
+        return 'original';
+      case AudioQuality.high:
+        return 'high';
+      case AudioQuality.medium:
+        return 'medium';
+      case AudioQuality.low:
+        return 'low';
+    }
+  }
+
   static AudioQuality? tryParse(String? value) {
     if (value == null || value.isEmpty) return null;
     for (final q in AudioQuality.values) {
@@ -101,21 +119,74 @@ extension AudioQualityX on AudioQuality {
   }
 }
 
+// ── Cache keys ──────────────────────────────────────────────────────────
+
+/// Namespaced disk/DB key for a track at a concrete quality tier.
+///
+/// Format: `audio_{trackId}_q_{quality}` (e.g. `audio_42_q_high`).
+/// Legacy keys used `audio_{trackId}` only — [legacyAudioCacheKey].
+String audioCacheKey(int trackId, AudioQuality quality) {
+  final resolved = quality == AudioQuality.auto ? AudioQuality.high : quality;
+  return 'audio_${trackId}_q_${resolved.cacheKeySegment}';
+}
+
+/// Pre-quality-ladder cache key (still read as a fallback).
+String legacyAudioCacheKey(int trackId) => 'audio_$trackId';
+
+/// All quality-namespaced keys for [trackId] (excludes legacy).
+List<String> allQualityAudioCacheKeys(int trackId) {
+  return [
+    for (final q in AudioQuality.values)
+      if (q != AudioQuality.auto) audioCacheKey(trackId, q),
+  ];
+}
+
+// ── Network helpers ─────────────────────────────────────────────────────
+
+/// True when the active connection looks metered (cellular) and no
+/// unmetered interface (wifi / ethernet / vpn) is present.
+bool isMeteredConnectivity(List<ConnectivityResult> results) {
+  final hasUnmetered = results.any(
+    (r) =>
+        r == ConnectivityResult.wifi ||
+        r == ConnectivityResult.ethernet ||
+        r == ConnectivityResult.vpn,
+  );
+  if (hasUnmetered) return false;
+  return results.any((r) => r == ConnectivityResult.mobile);
+}
+
 // ── Resolution ──────────────────────────────────────────────────────────
 
 /// Resolve [preferred] into a concrete tier the server understands.
 ///
 /// - Web never uses [AudioQuality.original] (browser FLAC support is uneven).
-/// - [AudioQuality.auto] → original on native/desktop, high on web.
-AudioQuality resolveStreamingQuality(AudioQuality preferred) {
+/// - [AudioQuality.auto] on native: original on unmetered, medium on cellular.
+/// - [AudioQuality.auto] on web: high on unmetered, medium on cellular.
+AudioQuality resolveStreamingQuality(
+  AudioQuality preferred, {
+  bool? onMeteredNetwork,
+}) {
   if (preferred == AudioQuality.auto) {
+    final metered = onMeteredNetwork ?? false;
     if (kIsWeb || AppPlatform.isWeb) {
-      return AudioQuality.high;
+      return metered ? AudioQuality.medium : AudioQuality.high;
     }
-    return AudioQuality.original;
+    return metered ? AudioQuality.medium : AudioQuality.original;
   }
   if ((kIsWeb || AppPlatform.isWeb) && preferred == AudioQuality.original) {
     return AudioQuality.high;
   }
   return preferred;
+}
+
+/// Bucket a millisecond duration for non-PII analytics histograms.
+String ttfaMsBucket(int ms) {
+  if (ms < 250) return '0_250';
+  if (ms < 500) return '250_500';
+  if (ms < 1000) return '500_1000';
+  if (ms < 2000) return '1000_2000';
+  if (ms < 5000) return '2000_5000';
+  if (ms < 10000) return '5000_10000';
+  return '10000_plus';
 }

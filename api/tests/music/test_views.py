@@ -579,6 +579,67 @@ def test_listen_transcode(factories, now, logged_in_api_client, mocker, settings
     )
 
 
+def test_listen_quality_non_blocking_when_missing(
+    factories, logged_in_api_client, mocker, settings, preferences
+):
+    """quality= must not call sync encode; enqueue + serve original/fallback."""
+    preferences["music__transcoding_enabled"] = True
+    upload = factories["music.Upload"](
+        import_status="finished",
+        library__actor__user=logged_in_api_client.user,
+        bitrate=900000,
+        mimetype="audio/flac",
+    )
+    sync_encode = mocker.patch(
+        "funkwhale_api.music.quality.ensure_transcoded_version_sync"
+    )
+    delayed = mocker.patch(
+        "funkwhale_api.music.tasks.ensure_transcoded_version.delay"
+    )
+    url = reverse("api:v1:listen-detail", kwargs={"uuid": upload.track.uuid})
+    response = logged_in_api_client.get(
+        url, {"quality": "medium", "download": "false"}
+    )
+
+    assert response.status_code == 200
+    sync_encode.assert_not_called()
+    delayed.assert_called()
+    assert response.get("X-Audio-Quality-Pending") == "1"
+    assert response.get("X-Audio-Quality-Requested") == "medium"
+    # Cold library falls back to original until prewarm finishes.
+    assert response.get("X-Audio-Quality") == "original"
+
+
+def test_listen_quality_uses_ready_version(
+    factories, logged_in_api_client, mocker, settings, preferences
+):
+    preferences["music__transcoding_enabled"] = True
+    upload = factories["music.Upload"](
+        import_status="finished",
+        library__actor__user=logged_in_api_client.user,
+        bitrate=900000,
+        mimetype="audio/flac",
+    )
+    factories["music.UploadVersion"](
+        upload=upload,
+        mimetype="audio/mpeg",
+        bitrate=128000,
+        size=1024,
+    )
+    sync_encode = mocker.patch(
+        "funkwhale_api.music.quality.ensure_transcoded_version_sync"
+    )
+    url = reverse("api:v1:listen-detail", kwargs={"uuid": upload.track.uuid})
+    response = logged_in_api_client.get(
+        url, {"quality": "medium", "download": "false"}
+    )
+
+    assert response.status_code == 200
+    sync_encode.assert_not_called()
+    assert response.get("X-Audio-Quality") == "medium"
+    assert "X-Audio-Quality-Pending" not in response
+
+
 @pytest.mark.parametrize(
     "max_bitrate, expected",
     [

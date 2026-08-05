@@ -393,8 +393,7 @@ class _TrackMenuButton extends ConsumerWidget {
         try {
           final mgr = ref.read(cacheManagerProvider);
           await mgr.setManualDownloaded(CacheType.track, track.id, !isManual);
-          final key = 'audio_${track.id}';
-          unawaited(mgr.setFileProtected(key, !isManual));
+          unawaited(mgr.setAudioFilesProtected(track.id, !isManual));
           final manualNotifier = ref.read(manualTrackIdsProvider.notifier);
           if (!isManual) {
             manualNotifier.add(track.id);
@@ -418,13 +417,20 @@ class _TrackMenuButton extends ConsumerWidget {
               final headers = api.authHeaders;
               final audioSvc = ref.read(audioCacheServiceProvider);
               unawaited(
-                audioSvc.cacheAudio(track, streamUrl, headers).then((file) {
-                  if (file != null) {
-                    ref
-                        .read(cachedAudioTrackIdsProvider.notifier)
-                        .add(track.id);
-                  }
-                }),
+                audioSvc
+                    .cacheAudio(
+                      track,
+                      streamUrl,
+                      headers,
+                      quality: downloadQuality,
+                    )
+                    .then((file) {
+                      if (file != null) {
+                        ref
+                            .read(cachedAudioTrackIdsProvider.notifier)
+                            .add(track.id);
+                      }
+                    }),
               );
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('Download queued for "${track.title}"')),

@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:tayra/core/api/http_client_factory.dart';
 import 'package:tayra/core/api/models.dart';
+import 'package:tayra/core/audio/audio_quality.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 
 /// Service for caching audio files and cover art
@@ -24,9 +25,9 @@ class AudioCacheService {
     ),
   );
 
-  /// In-flight audio downloads by track id. Concurrent callers share the same
+  /// In-flight audio downloads by cache key. Concurrent callers share the same
   /// future instead of returning null and treating a race as failure.
-  final Map<int, Future<File?>> _audioFutures = {};
+  final Map<String, Future<File?>> _audioFutures = {};
 
   /// Cap concurrent cover downloads so list/page fetches cannot flood the
   /// network and disk while the user is scrolling.
@@ -67,34 +68,52 @@ class AudioCacheService {
     _dio.close(force: true);
   }
 
-  /// Get cached audio file for a track, or null if not cached
-  Future<File?> getCachedAudio(Track track) async {
-    final key = 'audio_${track.id}';
-    return await _cache.getFile(key);
+  /// Get a cached audio file for [track].
+  ///
+  /// When [quality] is set, prefers that tier's key, then any other quality
+  /// for the same track, then the legacy un-namespaced key.
+  Future<File?> getCachedAudio(Track track, {AudioQuality? quality}) async {
+    if (quality != null && quality != AudioQuality.auto) {
+      final preferred = await _cache.getFile(audioCacheKey(track.id, quality));
+      if (preferred != null) return preferred;
+    }
+
+    // Any quality-namespaced file is fine for offline / local play.
+    for (final key in allQualityAudioCacheKeys(track.id)) {
+      final file = await _cache.getFile(key);
+      if (file != null) return file;
+    }
+
+    // Legacy pre-ladder key.
+    return await _cache.getFile(legacyAudioCacheKey(track.id));
   }
 
-  /// Download and cache an audio file for a track.
+  /// Download and cache an audio file for a track at [quality].
   ///
-  /// Concurrent callers for the same track share one in-flight future.
+  /// Concurrent callers for the same track+quality share one in-flight future.
   Future<File?> cacheAudio(
     Track track,
     String streamUrl,
     Map<String, String> authHeaders, {
+    AudioQuality quality = AudioQuality.high,
     void Function(int, int)? onProgress,
   }) {
-    final existingFuture = _audioFutures[track.id];
+    final resolved = quality == AudioQuality.auto ? AudioQuality.high : quality;
+    final key = audioCacheKey(track.id, resolved);
+    final existingFuture = _audioFutures[key];
     if (existingFuture != null) return existingFuture;
 
     final future = _cacheAudioImpl(
       track,
       streamUrl,
       authHeaders,
+      quality: resolved,
       onProgress: onProgress,
     );
-    _audioFutures[track.id] = future;
+    _audioFutures[key] = future;
     future.whenComplete(() {
-      if (identical(_audioFutures[track.id], future)) {
-        _audioFutures.remove(track.id);
+      if (identical(_audioFutures[key], future)) {
+        _audioFutures.remove(key);
       }
     });
     return future;
@@ -104,20 +123,23 @@ class AudioCacheService {
     Track track,
     String streamUrl,
     Map<String, String> authHeaders, {
+    required AudioQuality quality,
     void Function(int, int)? onProgress,
   }) async {
     File? tempFile;
+    final key = audioCacheKey(track.id, quality);
     try {
-      // Check if already cached
-      final existing = await getCachedAudio(track);
+      // Check if already cached at this quality
+      final existing = await _cache.getFile(key);
       if (existing != null) return existing;
 
       // Create temp file to download to
       final tempDir = await getTemporaryDirectory();
-      final ext = _audioExtension(track);
+      final ext = _audioExtension(track, quality: quality);
       final tempPath = p.join(
         tempDir.path,
-        'download_audio_${track.id}_${DateTime.now().millisecondsSinceEpoch}$ext',
+        'download_audio_${track.id}_${quality.cacheKeySegment}_'
+        '${DateTime.now().millisecondsSinceEpoch}$ext',
       );
       tempFile = File(tempPath);
 
@@ -132,14 +154,17 @@ class AudioCacheService {
       // Cache the file. If the track or its album is manually marked as
       // downloaded, persist the file as protected immediately so the LRU
       // eviction skips it.
-      final key = 'audio_${track.id}';
       final isTrackManual = await _cache.isManualDownloaded(
         CacheType.track,
         track.id,
       );
-      final isAlbumManual = track.album != null
-          ? await _cache.isManualDownloaded(CacheType.album, track.album!.id)
-          : false;
+      final isAlbumManual =
+          track.album != null
+              ? await _cache.isManualDownloaded(
+                CacheType.album,
+                track.album!.id,
+              )
+              : false;
       final isProtected = isTrackManual || isAlbumManual;
       await _cache.putFile(
         key,
@@ -158,7 +183,8 @@ class AudioCacheService {
       return await _cache.getFile(key);
     } catch (e) {
       debugPrint(
-        'AudioCacheService: failed to cache audio for track ${track.id}: $e',
+        'AudioCacheService: failed to cache audio for track ${track.id} '
+        '(${quality.apiValue}): $e',
       );
       return null;
     } finally {
@@ -171,26 +197,18 @@ class AudioCacheService {
     }
   }
 
-  /// Check if an audio file is cached.
-  ///
-  /// The filesystem is the primary source of truth: if the file exists on
-  /// disk (matching `audio_<trackId>.*`) the track is considered cached,
-  /// regardless of whether a DB row is present.  This prevents false-negatives
-  /// caused by DB/filesystem divergence (e.g. a successful download where the
-  /// DB insert subsequently failed).
+  /// Check if any quality (or legacy) audio file is cached for [trackId].
   Future<bool> isAudioCached(int trackId) async {
-    // Filesystem check first — fast and authoritative.
     if (await _cache.audioFileExistsOnDisk(trackId)) return true;
-    // Fall back to DB in case the audio dir isn't readable for some reason.
-    final key = 'audio_$trackId';
-    final file = await _cache.getFile(key);
-    return file != null;
+    for (final key in allQualityAudioCacheKeys(trackId)) {
+      if (await _cache.getFile(key) != null) return true;
+    }
+    return await _cache.getFile(legacyAudioCacheKey(trackId)) != null;
   }
 
-  /// Delete cached audio for a track
+  /// Delete all cached audio qualities for a track (including legacy key).
   Future<void> deleteCachedAudio(int trackId) async {
-    final key = 'audio_$trackId';
-    await _cache.deleteFile(key);
+    await _cache.deleteAudioFilesOnDisk(trackId);
   }
 
   /// In-memory path cache so list tiles do not re-hit SQLite for the same URL
@@ -250,10 +268,8 @@ class AudioCacheService {
 
         // Create temp file to download to
         final tempDir = await getTemporaryDirectory();
-        final extension = p
-            .extension(coverUrl)
-            .split('?')
-            .first; // Remove query params
+        final extension =
+            p.extension(coverUrl).split('?').first; // Remove query params
         final tempPath = p.join(
           tempDir.path,
           'download_cover_${DateTime.now().millisecondsSinceEpoch}$extension',
@@ -311,10 +327,14 @@ class AudioCacheService {
 
   /// Derive a file extension for an audio track's temp download file.
   ///
-  /// Uses the MIME type from the track's first upload if available, so that
-  /// FLAC, Ogg/Opus, AAC, etc. get the right extension rather than always
-  /// `.mp3`.  Falls back to `.mp3` when no MIME type is known.
-  String _audioExtension(Track track) {
+  /// Lossy ladder qualities are always MP3. For original, uses the MIME type
+  /// from the track's first upload when available.
+  String _audioExtension(Track track, {AudioQuality? quality}) {
+    if (quality != null &&
+        quality != AudioQuality.original &&
+        quality != AudioQuality.auto) {
+      return '.mp3';
+    }
     final mime = track.uploads.isNotEmpty ? track.uploads.first.mimetype : null;
     if (mime == null) return '.mp3';
     const mimeToExt = {
@@ -360,8 +380,15 @@ class AudioCacheService {
     for (final track in tracksToCache) {
       if (track.listenUrl != null) {
         final streamUrl = getStreamUrl(track.listenUrl!);
-        // Fire and forget — don't await
-        unawaited(cacheAudio(track, streamUrl, authHeaders));
+        // Fire and forget — don't await (default high quality ladder).
+        unawaited(
+          cacheAudio(
+            track,
+            streamUrl,
+            authHeaders,
+            quality: AudioQuality.high,
+          ),
+        );
       }
     }
   }

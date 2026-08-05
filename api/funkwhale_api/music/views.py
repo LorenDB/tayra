@@ -731,7 +731,95 @@ class ListenMixin(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     anonymous_policy = "setting"
     lookup_field = "uuid"
 
-    @extend_schema(responses=bytes)
+    @extend_schema(
+        operation_id="get_track_file",
+        summary="Stream or download a track audio file",
+        description=(
+            "Authorize and serve progressive audio for a track. "
+            "Django checks library ACLs, then hands the body off via "
+            "X-Accel-Redirect / X-Sendfile (or a 302 when PROXY_MEDIA is off).\n\n"
+            "Prefer `quality=` for multi-bitrate progressive streaming. "
+            "When the requested quality is not ready yet, the server serves "
+            "the best available fallback and enqueues a background encode "
+            "(`X-Audio-Quality-Pending: 1`). Response headers:\n"
+            "- `X-Audio-Quality`: tier actually served\n"
+            "- `X-Audio-Quality-Requested`: requested tier (if any)\n"
+            "- `X-Audio-Quality-Pending`: set when a better derivative is building\n\n"
+            "Legacy params `to` and `max_bitrate` remain supported (may block "
+            "on cold encode). Playback clients should pass `download=false`."
+        ),
+        parameters=[
+            OpenApiParameter(
+                name="quality",
+                type=str,
+                location=OpenApiParameter.QUERY,
+                required=False,
+                enum=["original", "high", "medium", "low"],
+                description=(
+                    "Progressive quality ladder tier. Maps to server encode "
+                    "profiles (high≈256k MP3, medium≈128k, low≈96k). "
+                    "Non-blocking when the derivative is missing."
+                ),
+            ),
+            OpenApiParameter(
+                name="to",
+                type=str,
+                location=OpenApiParameter.QUERY,
+                required=False,
+                description=(
+                    "Legacy target format extension (e.g. mp3, ogg). "
+                    "May block on first encode if no cached version exists."
+                ),
+            ),
+            OpenApiParameter(
+                name="max_bitrate",
+                type=int,
+                location=OpenApiParameter.QUERY,
+                required=False,
+                description=(
+                    "Legacy max bitrate in kbps (clamped 0–320). "
+                    "Combined with `to` for on-demand transcoding."
+                ),
+            ),
+            OpenApiParameter(
+                name="download",
+                type=str,
+                location=OpenApiParameter.QUERY,
+                required=False,
+                enum=["true", "false"],
+                description=(
+                    "When true (default), sets Content-Disposition: attachment. "
+                    "Use false for inline progressive playback."
+                ),
+            ),
+            OpenApiParameter(
+                name="upload",
+                type=str,
+                location=OpenApiParameter.QUERY,
+                required=False,
+                description="Optional Upload UUID to pin a specific file.",
+            ),
+            OpenApiParameter(
+                name="token",
+                type=str,
+                location=OpenApiParameter.QUERY,
+                required=False,
+                description=(
+                    "Scoped listen token for clients that cannot send "
+                    "Authorization (e.g. browser media elements)."
+                ),
+            ),
+        ],
+        responses={
+            200: {
+                "description": "Audio bytes (via reverse-proxy sendfile).",
+                "content": {"audio/*": {"schema": {"type": "string", "format": "binary"}}},
+            },
+            302: {"description": "Redirect to storage URL when PROXY_MEDIA is false."},
+            404: {"description": "Track or playable upload not found."},
+            503: {"description": "Remote federated track unavailable."},
+        },
+    )
     def retrieve(self, request, *args, **kwargs):
         config = {
             "explicit_file": request.GET.get("upload"),
@@ -782,7 +870,6 @@ class AudioRenderer(renderers.JSONRenderer):
     media_type = "audio/*"
 
 
-@extend_schema_view(get=extend_schema(operation_id="get_track_file"))
 class ListenViewSet(ListenMixin):
     renderer_classes = [AudioRenderer]
 
@@ -795,7 +882,23 @@ class MP3Renderer(renderers.JSONRenderer):
 class StreamViewSet(ListenMixin):
     renderer_classes = [MP3Renderer]
 
-    @extend_schema(operation_id="get_track_stream", responses=bytes)
+    @extend_schema(
+        operation_id="get_track_stream",
+        summary="Stream a track as MP3",
+        description=(
+            "Convenience endpoint that forces MP3 (`to=mp3`) with "
+            "`download=false`. Prefer `/listen/{uuid}/?quality=…` for the "
+            "multi-quality progressive ladder."
+        ),
+        responses={
+            200: {
+                "description": "MP3 audio bytes.",
+                "content": {
+                    "audio/mpeg": {"schema": {"type": "string", "format": "binary"}}
+                },
+            }
+        },
+    )
     def retrieve(self, request, *args, **kwargs):
         config = {
             "explicit_file": None,
