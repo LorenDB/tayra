@@ -111,57 +111,87 @@ class PlaybackSettingsScreen extends ConsumerWidget {
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: AppTheme.surfaceContainer,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (ctx) {
+        // Cap height on short viewports (phones / non-desktop shell) so the
+        // option list scrolls instead of overflowing the modal.
+        final maxHeight = MediaQuery.sizeOf(ctx).height * 0.7;
+
         return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    color: AppTheme.onBackground,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              for (final q in options)
-                ListTile(
-                  title: Text(
-                    q.label,
-                    style: TextStyle(
-                      color: AppTheme.onBackground,
-                      fontWeight:
-                          q == current ? FontWeight.w600 : FontWeight.w400,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxHeight: maxHeight),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 12),
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: AppTheme.onBackgroundSubtle.withValues(
+                        alpha: 0.4,
+                      ),
+                      borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-                  subtitle: Text(
-                    q.subtitle,
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+                  child: Text(
+                    title,
                     style: const TextStyle(
-                      color: AppTheme.onBackgroundMuted,
-                      fontSize: 12,
+                      color: AppTheme.onBackground,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  trailing:
-                      q == current
-                          ? const Icon(
-                            Icons.check_rounded,
-                            color: AppTheme.primary,
-                          )
-                          : null,
-                  onTap: () {
-                    onSelected(q);
-                    Navigator.of(ctx).pop();
-                  },
                 ),
-              const SizedBox(height: 8),
-            ],
+                Flexible(
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      for (final q in options)
+                        ListTile(
+                          title: Text(
+                            q.label,
+                            style: TextStyle(
+                              color: AppTheme.onBackground,
+                              fontWeight:
+                                  q == current
+                                      ? FontWeight.w600
+                                      : FontWeight.w400,
+                            ),
+                          ),
+                          subtitle: Text(
+                            q.subtitle,
+                            style: const TextStyle(
+                              color: AppTheme.onBackgroundMuted,
+                              fontSize: 12,
+                            ),
+                          ),
+                          trailing:
+                              q == current
+                                  ? const Icon(
+                                    Icons.check_rounded,
+                                    color: AppTheme.primary,
+                                  )
+                                  : null,
+                          onTap: () {
+                            onSelected(q);
+                            Navigator.of(ctx).pop();
+                          },
+                        ),
+                      const SizedBox(height: 8),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
