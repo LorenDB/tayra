@@ -20,6 +20,12 @@ urlpatterns = [
     url(r"^users/token/?$", views.token_login, name="token_login"),
     # Complete password login after TOTP challenge
     url(r"^users/token/2fa/?$", views.token_login_2fa, name="token_login_2fa"),
+    # Authenticated password step-up challenge (H2)
+    url(
+        r"^users/password/confirm-challenge/?$",
+        views.password_confirm_challenge,
+        name="password_confirm_challenge",
+    ),
     # OIDC SSO
     url(r"^users/auth-methods/?$", oidc_views.auth_methods, name="auth_methods"),
     url(r"^users/oidc/login/?$", oidc_views.oidc_login, name="oidc_login"),

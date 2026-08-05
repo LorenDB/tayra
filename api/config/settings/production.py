@@ -70,7 +70,20 @@ SESSION_COOKIE_SECURE = env.bool(
 )
 CSRF_COOKIE_SECURE = env.bool("CSRF_COOKIE_SECURE", default=SESSION_COOKIE_SECURE)
 SESSION_COOKIE_HTTPONLY = True
-# SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)
+# M9: browser hardening when the pod is HTTPS. Behind a TLS-terminating proxy
+# SECURE_PROXY_SSL_HEADER (common.py) makes request.is_secure() true. Disable
+# redirect only if an outer proxy already enforces HTTPS exclusively.
+if FUNKWHALE_PROTOCOL == "https":
+    SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=False)
+    SECURE_HSTS_SECONDS = env.int("DJANGO_SECURE_HSTS_SECONDS", default=31536000)
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool(
+        "DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True
+    )
+    SECURE_HSTS_PRELOAD = env.bool("DJANGO_SECURE_HSTS_PRELOAD", default=False)
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+else:
+    SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=False)
+
 
 # SITE CONFIGURATION
 # ------------------------------------------------------------------------------

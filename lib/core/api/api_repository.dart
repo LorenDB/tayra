@@ -8,6 +8,7 @@ import 'package:tayra/core/api/json_isolate.dart';
 import 'package:tayra/core/api/models.dart';
 import 'package:tayra/core/audio/audio_quality.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
+import 'package:tayra/core/auth/password_transport.dart';
 
 // ── Repository provider ─────────────────────────────────────────────────
 
@@ -1206,18 +1207,70 @@ class FunkwhaleApi {
     return MeUser.fromJson(response.data as Map<String, dynamic>);
   }
 
+  /// POST `/api/v1/users/password/confirm-challenge/` then build a SCRAM proof.
+  ///
+  /// Used for authenticated step-up (change password/email, deactivate, 2FA
+  /// disable) so a static transport digest never leaves the client (H2).
+  /// [username] must match the authenticated account (AuthMessage binding).
+  Future<Map<String, String>> buildPasswordConfirmProof({
+    required String password,
+    required String username,
+  }) async {
+    final response = await _dio.post(
+      '$_baseUrl/api/v1/users/password/confirm-challenge/',
+    );
+    final data = response.data;
+    if (data is! Map) {
+      throw StateError('Password confirm challenge returned invalid body');
+    }
+    final challengeId = (data['challenge_id'] as String?) ?? '';
+    final serverNonce = (data['server_nonce'] as String?) ?? '';
+    final saltB64 = (data['salt'] as String?) ?? '';
+    final bindingHex = (data['instance_binding'] as String?) ?? '';
+    if (challengeId.isEmpty || serverNonce.isEmpty || saltB64.isEmpty) {
+      throw StateError('Password confirm challenge incomplete');
+    }
+    final iterations = clampTransportIterations(
+      (data['iterations'] as num?)?.toInt(),
+    );
+    final transportIters = clampTransportIterations(
+      (data['transport_iterations'] as num?)?.toInt(),
+    );
+    final binding =
+        bindingHex.isNotEmpty
+            ? instanceBindingFromHex(bindingHex)
+            : instanceBindingForServerUrl(_baseUrl);
+    final secret = transportSecret(
+      password,
+      binding,
+      iterations: transportIters,
+    );
+    final clientNonce = newClientNonce();
+    final proof = computeClientProof(
+      secret: secret,
+      salt: b64UrlDecode(saltB64),
+      iterations: iterations,
+      username: username,
+      clientNonce: clientNonce,
+      serverNonce: serverNonce,
+    );
+    return {
+      'challenge_id': challengeId,
+      'client_nonce': clientNonce,
+      'client_proof': proof,
+    };
+  }
+
   /// POST `/api/v1/users/me/deactivate/` — soft-disable own account.
   ///
-  /// [passwordDigest] should be the transport hash when the account has a
-  /// usable password (same as first-party login / 2FA disable). Pass null for
-  /// SSO-only accounts that have no password.
-  Future<void> deactivateMe({String? passwordDigest}) async {
+  /// [passwordProof] is the SCRAM step-up map from [buildPasswordConfirmProof].
+  /// Pass null for SSO-only accounts that have no password.
+  Future<void> deactivateMe({Map<String, String>? passwordProof}) async {
     await _dio.post(
       '$_baseUrl/api/v1/users/me/deactivate/',
       data: {
         'confirm': true,
-        if (passwordDigest != null && passwordDigest.isNotEmpty)
-          'password': passwordDigest,
+        if (passwordProof != null) ...passwordProof,
       },
     );
   }
@@ -1281,44 +1334,41 @@ class FunkwhaleApi {
     return TotpConfirmResult.fromJson(response.data as Map<String, dynamic>);
   }
 
-  /// POST `/api/v1/users/me/2fa/disable/` — disable with password + code.
-  ///
-  /// [password] should already be the transport digest when calling from the
-  /// account UI (same as first-party login).
+  /// POST `/api/v1/users/me/2fa/disable/` — disable with SCRAM step-up + code.
   Future<void> disableTotp({
-    required String passwordDigest,
+    required Map<String, String> passwordProof,
     required String code,
   }) async {
     await _dio.post(
       '$_baseUrl/api/v1/users/me/2fa/disable/',
-      data: {'password': passwordDigest, 'code': code},
+      data: {...passwordProof, 'code': code},
     );
   }
 
-  /// POST `/api/v1/auth/password/change/` — change password.
+  /// POST `/api/v1/auth/password/change/` — change password (SCRAM step-up).
   Future<void> changePassword({
-    required String oldPassword,
+    required Map<String, String> passwordProof,
     required String newPassword1,
     required String newPassword2,
   }) async {
     await _dio.post(
       '$_baseUrl/api/v1/auth/password/change/',
       data: {
-        'old_password': oldPassword,
+        ...passwordProof,
         'new_password1': newPassword1,
         'new_password2': newPassword2,
       },
     );
   }
 
-  /// POST `/api/v1/users/change-email/` — request email change (sends confirmation).
+  /// POST `/api/v1/users/change-email/` — request email change (SCRAM step-up).
   Future<void> changeEmail({
     required String email,
-    required String password,
+    required Map<String, String> passwordProof,
   }) async {
     await _dio.post(
       '$_baseUrl/api/v1/users/change-email/',
-      data: {'email': email, 'password': password},
+      data: {'email': email, ...passwordProof},
     );
   }
 

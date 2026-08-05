@@ -19,9 +19,29 @@ def _b64url_decode(s: str) -> bytes:
     return base64.urlsafe_b64decode(s + pad)
 
 
-def _password_confirm(password: str) -> str:
-    """Hex transport secret for password-confirmation endpoints."""
-    return transport_secret(password).hex()
+def _step_up_proof(api_client, password: str, username: str) -> dict:
+    """Authenticated SCRAM step-up proof for password-confirm endpoints (H2)."""
+    challenge = api_client.post(
+        reverse("api:v1:users:password_confirm_challenge"),
+        {},
+        format="json",
+    )
+    assert challenge.status_code == 200, challenge.content
+    data = challenge.json()
+    client_nonce = "step-up-cn"
+    proof = compute_client_proof(
+        transport_secret(password),
+        salt=_b64url_decode(data["salt"]),
+        iterations=int(data["iterations"]),
+        username=username,
+        client_nonce=client_nonce,
+        server_nonce=data["server_nonce"],
+    )
+    return {
+        "challenge_id": data["challenge_id"],
+        "client_nonce": client_nonce,
+        "client_proof": proof,
+    }
 
 
 def _login(api_client, username: str, password: str):
@@ -80,6 +100,34 @@ def test_totp_verify_roundtrip():
     # Replay same step rejected when last_used_step set
     ok2, _ = totp.verify_totp(secret, code, last_used_step=step)
     assert not ok2
+
+
+@pytest.mark.django_db
+def test_totp_secret_fernet_not_readable_without_key(settings):
+    """enc2: payload must not yield the base32 secret via base64 alone (H1)."""
+    secret = totp.generate_base32_secret()
+    protected = totp.protect_totp_secret(secret)
+    assert protected.startswith("enc2:")
+    assert secret not in protected
+    # Raw base64 of the Fernet token must not equal the plaintext secret.
+    blob = protected[len("enc2:") :]
+    assert secret.encode() not in blob.encode()
+    assert totp.reveal_totp_secret(protected) == secret
+    # Wrong SECRET_KEY cannot decrypt.
+    settings.SECRET_KEY = "x" * 50
+    assert totp.reveal_totp_secret(protected) == ""
+
+
+@pytest.mark.django_db
+def test_totp_secret_migrates_enc1_to_enc2(factories):
+    from django.core import signing
+
+    secret = totp.generate_base32_secret()
+    legacy = "enc1:" + signing.dumps(secret, salt="tayra-totp-device-secret")
+    assert totp.reveal_totp_secret(legacy) == secret
+    upgraded = totp.protect_totp_secret(legacy)
+    assert upgraded.startswith("enc2:")
+    assert totp.reveal_totp_secret(upgraded) == secret
 
 
 @pytest.mark.django_db
@@ -245,12 +293,10 @@ def test_setup_confirm_disable_flow(logged_in_api_client, factories):
 
     # Prefer a recovery code so we don't collide with confirm's last_used_step
     # within the same TOTP period.
+    proof = _step_up_proof(logged_in_api_client, "s3cret-pass", user.username)
     disable = logged_in_api_client.post(
         reverse("api:v1:users:users-me-2fa-disable"),
-        {
-            "password": _password_confirm("s3cret-pass"),
-            "code": recovery[0],
-        },
+        {**proof, "code": recovery[0]},
         format="json",
     )
     assert disable.status_code == 204, getattr(disable, "content", b"")
@@ -276,12 +322,10 @@ def test_force_2fa_blocks_disable_and_flags_me(logged_in_api_client, factories, 
     other.save()
     assert totp.needs_totp_setup(other) is True
 
+    proof = _step_up_proof(logged_in_api_client, "s3cret-pass", user.username)
     disable = logged_in_api_client.post(
         reverse("api:v1:users:users-me-2fa-disable"),
-        {
-            "password": _password_confirm("s3cret-pass"),
-            "code": totp.totp_at(secret),
-        },
+        {**proof, "code": totp.totp_at(secret)},
         format="json",
     )
     assert disable.status_code == 403

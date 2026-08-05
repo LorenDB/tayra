@@ -77,6 +77,15 @@ SCRAM_PREFIX = "tayra_scram$"
 _CHALLENGE_PREFIX = "login:challenge:"
 CHALLENGE_TTL = 120  # seconds
 
+# Authenticated password step-up (account mutations) — separate from login.
+_CONFIRM_PREFIX = "pwdconfirm:challenge:"
+CONFIRM_TTL = 120  # seconds
+
+# Per-account password lockout (M6) — keyed by normalized username.
+LOGIN_FAIL_LIMIT = 10
+LOGIN_FAIL_WINDOW = 15 * 60  # seconds
+LOGIN_LOCKOUT_SECONDS = 15 * 60
+
 # Lowercase hex SHA-256 (legacy wire digest).
 TRANSPORT_HASH_RE = re.compile(r"\A[0-9a-f]{64}\Z")
 
@@ -423,6 +432,8 @@ def create_login_challenge(username: str, user=None) -> Dict[str, Any]:
     payload = {
         "username": username,
         "server_nonce": server_nonce,
+        # Actual storage scheme (legacy_v1 | scram_v2) — never expose on the
+        # wire (M1); clients always use the public scram_v2 proof shape.
         "scheme": scheme,
         "user_id": getattr(user, "pk", None) if user is not None else None,
     }
@@ -431,7 +442,9 @@ def create_login_challenge(username: str, user=None) -> Dict[str, Any]:
     return {
         "challenge_id": challenge_id,
         "server_nonce": server_nonce,
-        "scheme": scheme,
+        # Public scheme is always scram_v2 so field values do not enumerate
+        # legacy vs migrated accounts (M1).
+        "scheme": "scram_v2",
         "salt": salt_b64,
         "iterations": iterations,
         "instance_binding": get_instance_binding_hex(),
@@ -454,5 +467,179 @@ def pop_login_challenge(challenge_id: str) -> Optional[Dict[str, Any]]:
         return None
     cache.delete(key)
     return payload
+
+
+# ── Password step-up challenges (H2) ─────────────────────────────────────
+
+
+def create_password_confirm_challenge(user) -> Dict[str, Any]:
+    """Mint a one-time SCRAM challenge for an authenticated password re-check.
+
+    Used by account mutation endpoints (change password/email, deactivate,
+    disable 2FA) so a static transport-secret hex never leaves the client.
+    """
+    if user is None or not getattr(user, "pk", None):
+        raise ValueError("user is required")
+    username = (getattr(user, "username", None) or "").strip()
+    challenge_id = secrets.token_urlsafe(32)
+    server_nonce = secrets.token_urlsafe(24)
+
+    encoded = getattr(user, "password", "") or ""
+    scheme = "scram_v2"
+    if is_scram_hash(encoded):
+        params = scram_public_params(encoded) or {}
+        salt_b64 = params.get("salt") or _fake_scram_params(username)["salt"]
+        iterations = int(params.get("iterations") or _iterations())
+    else:
+        # Legacy storage: client still builds a scram-shaped proof using a
+        # fake salt; verification falls back to upgrade_password plaintext.
+        scheme = "legacy_v1"
+        fake = _fake_scram_params(username or "anonymous")
+        salt_b64 = fake["salt"]
+        iterations = fake["iterations"]
+
+    cache.set(
+        f"{_CONFIRM_PREFIX}{challenge_id}",
+        {
+            "user_id": int(user.pk),
+            "username": username,
+            "server_nonce": server_nonce,
+            "scheme": scheme,
+        },
+        CONFIRM_TTL,
+    )
+    return {
+        "challenge_id": challenge_id,
+        "server_nonce": server_nonce,
+        "scheme": "scram_v2",
+        "salt": salt_b64,
+        "iterations": iterations,
+        "instance_binding": get_instance_binding_hex(),
+        "transport_iterations": _iterations(),
+        "expires_in": CONFIRM_TTL,
+    }
+
+
+def pop_password_confirm_challenge(challenge_id: str) -> Optional[Dict[str, Any]]:
+    """Load and consume a one-time password-confirm challenge."""
+    if not challenge_id:
+        return None
+    key = f"{_CONFIRM_PREFIX}{challenge_id}"
+    payload = cache.get(key)
+    if payload is None:
+        return None
+    claim_key = f"{key}:claimed"
+    if not cache.add(claim_key, 1, CONFIRM_TTL):
+        return None
+    cache.delete(key)
+    return payload
+
+
+def verify_password_confirm_proof(
+    user,
+    *,
+    challenge_id: str,
+    client_nonce: str,
+    client_proof: str,
+    upgrade_password: str = "",
+) -> bool:
+    """Verify a step-up SCRAM proof for *user* (consumes the challenge).
+
+    For legacy (non-SCRAM) password rows, ``upgrade_password`` must be the
+    account password; a successful check migrates storage to SCRAM.
+    """
+    if user is None or not getattr(user, "pk", None):
+        return False
+    challenge = pop_password_confirm_challenge(challenge_id)
+    if challenge is None:
+        return False
+    try:
+        if int(challenge.get("user_id")) != int(user.pk):
+            return False
+    except (TypeError, ValueError):
+        return False
+
+    server_nonce = challenge.get("server_nonce") or ""
+    scheme = challenge.get("scheme") or "scram_v2"
+    username = (challenge.get("username") or getattr(user, "username", "") or "").strip()
+    encoded = getattr(user, "password", "") or ""
+
+    if scheme == "scram_v2" and is_scram_hash(encoded):
+        if not client_nonce or not client_proof:
+            return False
+        return verify_client_proof(
+            encoded,
+            username=username,
+            client_nonce=client_nonce,
+            server_nonce=server_nonce,
+            client_proof_hex=client_proof,
+        )
+
+    # Legacy rows: require the real account password to re-verify and upgrade.
+    upgrade = upgrade_password or ""
+    if not upgrade:
+        return False
+    if not user.check_password(upgrade):
+        return False
+    try:
+        user.set_password(upgrade)
+        fields = ["password", "secret_key"]
+        if getattr(user, "subsonic_api_token", None):
+            fields.append("subsonic_api_token")
+        user.save(update_fields=fields)
+    except Exception:
+        return False
+    return True
+
+
+# ── Per-account login lockout (M6) ───────────────────────────────────────
+
+
+def _login_fail_key(username: str) -> str:
+    return f"login:fail:{(username or '').strip().lower()}"
+
+
+def _login_lock_key(username: str) -> str:
+    return f"login:lock:{(username or '').strip().lower()}"
+
+
+def is_login_locked(username: str) -> bool:
+    """True when this username is temporarily locked after failed logins."""
+    if not (username or "").strip():
+        return False
+    return bool(cache.get(_login_lock_key(username)))
+
+
+def record_login_failure(username: str) -> bool:
+    """
+    Record a failed password login for *username*.
+
+    Returns True if the account is now locked (or was already locked).
+    Uses the username string (not user id) so missing and present accounts
+    share the same counter — avoids an existence oracle.
+    """
+    if not (username or "").strip():
+        return False
+    if is_login_locked(username):
+        return True
+    key = _login_fail_key(username)
+    try:
+        count = cache.incr(key)
+    except ValueError:
+        cache.set(key, 1, LOGIN_FAIL_WINDOW)
+        count = 1
+    if count >= LOGIN_FAIL_LIMIT:
+        cache.set(_login_lock_key(username), 1, LOGIN_LOCKOUT_SECONDS)
+        cache.delete(key)
+        return True
+    return False
+
+
+def clear_login_failures(username: str) -> None:
+    """Clear failure counter and lockout after a successful password login."""
+    if not (username or "").strip():
+        return
+    cache.delete(_login_fail_key(username))
+    cache.delete(_login_lock_key(username))
 
 

@@ -178,30 +178,73 @@ def _default_issuer() -> str:
     return str(hostname)[:64]
 
 
-# At-rest encryption for TotpDevice.secret (Fernet-like via Django signing).
-_TOTP_SECRET_SALT = "tayra-totp-device-secret"
-_TOTP_SECRET_PREFIX = "enc1:"
+# At-rest encryption for TotpDevice.secret.
+# enc2: = Fernet (AEAD) — confidentiality + integrity.
+# enc1: = legacy django.core.signing (MAC only; payload was readable without
+#         SECRET_KEY). Still decryptable for migration; re-saved as enc2:.
+_TOTP_SECRET_SALT = "tayra-totp-device-secret"  # enc1 signing salt
+_TOTP_SECRET_PREFIX_V1 = "enc1:"
+_TOTP_SECRET_PREFIX = "enc2:"
+_TOTP_FERNET_SALT = b"tayra-totp-device-secret-v2"
+_TOTP_FERNET_INFO = b"totp-secret-encryption"
+
+
+def _totp_fernet():
+    """Fernet key derived from Django SECRET_KEY via HKDF-SHA256."""
+    from cryptography.fernet import Fernet
+    from cryptography.hazmat.primitives import hashes
+    from cryptography.hazmat.primitives.kdf.hkdf import HKDF
+
+    material = (getattr(settings, "SECRET_KEY", None) or "").encode("utf-8")
+    if not material:
+        raise ValueError("SECRET_KEY is required to protect TOTP secrets")
+    key = HKDF(
+        algorithm=hashes.SHA256(),
+        length=32,
+        salt=_TOTP_FERNET_SALT,
+        info=_TOTP_FERNET_INFO,
+    ).derive(material)
+    # Fernet expects urlsafe-base64-encoded 32-byte key.
+    import base64 as _b64
+
+    return Fernet(_b64.urlsafe_b64encode(key))
 
 
 def protect_totp_secret(secret: str) -> str:
-    """Encrypt a base32 TOTP secret for database storage."""
+    """Encrypt a base32 TOTP secret for database storage (Fernet AEAD)."""
     if not secret:
         return secret
     if secret.startswith(_TOTP_SECRET_PREFIX):
         return secret
-    return _TOTP_SECRET_PREFIX + signing.dumps(
-        secret, salt=_TOTP_SECRET_SALT
-    )
+    # Normalize legacy forms to plaintext before re-encrypting.
+    plain = reveal_totp_secret(secret) if secret.startswith(
+        _TOTP_SECRET_PREFIX_V1
+    ) else secret
+    if not plain:
+        return secret
+    token = _totp_fernet().encrypt(plain.encode("utf-8"))
+    return _TOTP_SECRET_PREFIX + token.decode("ascii")
 
 
 def reveal_totp_secret(stored: str) -> str:
-    """Decrypt a stored TOTP secret; accept legacy plaintext base32 rows."""
+    """Decrypt a stored TOTP secret; accept enc2, legacy enc1, and plaintext."""
     if not stored:
         return ""
     if stored.startswith(_TOTP_SECRET_PREFIX):
         try:
+            from cryptography.fernet import InvalidToken
+
+            return _totp_fernet().decrypt(
+                stored[len(_TOTP_SECRET_PREFIX) :].encode("ascii")
+            ).decode("utf-8")
+        except Exception:
+            return ""
+    if stored.startswith(_TOTP_SECRET_PREFIX_V1):
+        # Legacy MAC-only "encryption" — payload is recoverable without the key
+        # when verifying signature; keep support until rows are re-saved.
+        try:
             return signing.loads(
-                stored[len(_TOTP_SECRET_PREFIX) :], salt=_TOTP_SECRET_SALT
+                stored[len(_TOTP_SECRET_PREFIX_V1) :], salt=_TOTP_SECRET_SALT
             )
         except signing.BadSignature:
             return ""
@@ -403,8 +446,14 @@ def verify_user_totp(user, code: str) -> bool:
         except TotpDevice.DoesNotExist:
             return False
 
+        plain_secret = reveal_totp_secret(device.secret)
+        # Upgrade legacy enc1:/plaintext rows to Fernet enc2: on successful read.
+        if plain_secret and not (device.secret or "").startswith(_TOTP_SECRET_PREFIX):
+            device.secret = protect_totp_secret(plain_secret)
+            device.save(update_fields=["secret"])
+
         ok, step = verify_totp(
-            reveal_totp_secret(device.secret),
+            plain_secret,
             code,
             last_used_step=device.last_used_step,
         )

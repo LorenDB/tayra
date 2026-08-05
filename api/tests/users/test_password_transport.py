@@ -107,8 +107,8 @@ def test_set_password_stores_scram(factories):
     assert is_scram_hash(user.password)
     assert user.check_password("s3cret-pass")
     assert not user.check_password("wrong")
-    # Hex transport secret also verifies (password confirmation wire form).
-    assert user.check_password(transport_secret("s3cret-pass").hex())
+    # H2: hex transport secret is no longer accepted (password-equivalent).
+    assert not user.check_password(transport_secret("s3cret-pass").hex())
 
 
 @pytest.mark.django_db
@@ -302,12 +302,12 @@ def test_legacy_v1_login_requires_hmac_proof(api_client, factories):
         {"username": "legacy"},
         format="json",
     ).json()
-    assert challenge["scheme"] == "legacy_v1"
-    # Uniform public shape (anti-enumeration of field presence).
+    # M1: public scheme never leaks legacy storage state.
+    assert challenge["scheme"] == "scram_v2"
     assert challenge.get("salt")
     assert challenge.get("iterations")
 
-    # Digest alone (pre-fix) must fail.
+    # Digest alone (pre-fix) must fail with the generic credentials error.
     bare = api_client.post(
         reverse("api:v1:users:token_login"),
         {
@@ -318,30 +318,19 @@ def test_legacy_v1_login_requires_hmac_proof(api_client, factories):
         format="json",
     )
     assert bare.status_code == 400
-    assert bare.json()["error"] == "missing_proof"
+    assert bare.json()["error"] == "invalid_credentials"
 
-    # Fresh challenge after bare attempt consumed the first id.
+    # Preferred legacy upgrade: upgrade_password migrates without wire digest.
     challenge = api_client.post(
         reverse("api:v1:users:token_login_challenge"),
         {"username": "legacy"},
         format="json",
     ).json()
-    client_nonce = "legacy-cn"
-    proof = compute_legacy_client_proof(
-        digest,
-        username="legacy",
-        client_nonce=client_nonce,
-        server_nonce=challenge["server_nonce"],
-        challenge_id=challenge["challenge_id"],
-    )
     login = api_client.post(
         reverse("api:v1:users:token_login"),
         {
             "username": "legacy",
             "challenge_id": challenge["challenge_id"],
-            "password": digest,
-            "client_nonce": client_nonce,
-            "client_proof": proof,
             "upgrade_password": "s3cret-pass",
         },
         format="json",
@@ -353,7 +342,7 @@ def test_legacy_v1_login_requires_hmac_proof(api_client, factories):
     assert is_scram_hash(user.password)
     assert user.check_password("s3cret-pass")
 
-    # Next login is SCRAM (no longer legacy_v1).
+    # Next login is SCRAM (public scheme still scram_v2).
     challenge2 = api_client.post(
         reverse("api:v1:users:token_login_challenge"),
         {"username": "legacy"},
@@ -443,6 +432,7 @@ def test_legacy_v1_login_rejects_digest_without_upgrade_password(
         format="json",
     )
     assert resp.status_code == 400
-    assert resp.json()["error"] == "legacy_upgrade_required"
+    # Generic failure — do not leak legacy-vs-SCRAM storage state (M1).
+    assert resp.json()["error"] == "invalid_credentials"
     user.refresh_from_db()
     assert not is_scram_hash(user.password)

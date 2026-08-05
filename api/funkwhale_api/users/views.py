@@ -56,7 +56,16 @@ class VerifyEmailView(registration_views.VerifyEmailView):
 
 @extend_schema_view(post=extend_schema(operation_id="change_password"))
 class PasswordChangeView(rest_auth_views.PasswordChangeView):
+    """Change password; requires SCRAM step-up proof instead of old_password (H2)."""
+
     action = "password-change"
+    serializer_class = serializers.PasswordChangeSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"detail": "New password has been saved."})
 
 
 @extend_schema_view(post=extend_schema(operation_id="reset_password"))
@@ -368,27 +377,46 @@ class UserViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
                 status=400,
             )
 
-        password = request.data.get("password") or ""
         code = (
             request.data.get("code")
             or request.data.get("totp_code")
             or request.data.get("recovery_code")
             or ""
         )
-        password = str(password).strip()
         code = str(code).strip()
+        challenge_id = str(request.data.get("challenge_id") or "").strip()
+        client_nonce = str(request.data.get("client_nonce") or "").strip()
+        client_proof = str(request.data.get("client_proof") or "").strip()
+        upgrade = (
+            request.data.get("upgrade_password")
+            or request.data.get("upgradePassword")
+            or ""
+        )
 
-        if not password or not code:
+        if not code or not challenge_id or not client_proof:
             return Response(
                 {
                     "error": "missing_credentials",
-                    "detail": "Password and authenticator (or recovery) code are required.",
+                    "detail": (
+                        "Password confirmation challenge (challenge_id, "
+                        "client_proof) and authenticator (or recovery) code "
+                        "are required."
+                    ),
                 },
                 status=400,
             )
 
-        # Accept transport digest or plaintext via User.check_password.
-        if not user.check_password(password):
+        from funkwhale_api.users.password_transport import (
+            verify_password_confirm_proof,
+        )
+
+        if not verify_password_confirm_proof(
+            user,
+            challenge_id=challenge_id,
+            client_nonce=client_nonce,
+            client_proof=client_proof,
+            upgrade_password=str(upgrade) if upgrade is not None else "",
+        ):
             return Response(
                 {"error": "invalid_password", "detail": "Invalid password."},
                 status=400,
@@ -597,6 +625,37 @@ def _extract_login_proof_fields(raw: dict) -> dict:
 
 
 @extend_schema(
+    operation_id="password_confirm_challenge",
+    description=(
+        "Issue a one-time SCRAM challenge for authenticated password step-up "
+        "(change password/email, deactivate, disable 2FA). Never send the "
+        "account password or a static transport digest on those endpoints."
+    ),
+)
+@api_view(["POST"])
+def password_confirm_challenge(request):
+    """POST (authenticated) → one-time challenge for password re-verification."""
+    from funkwhale_api.users.password_transport import (
+        create_password_confirm_challenge,
+    )
+
+    user = getattr(request, "user", None)
+    if user is None or not user.is_authenticated:
+        return Response(status=403)
+    if not user.has_usable_password():
+        return Response(
+            {
+                "error": "no_password",
+                "detail": "This account has no password to confirm.",
+            },
+            status=400,
+        )
+    throttling.check_request(request, "login")
+    challenge = create_password_confirm_challenge(user)
+    return Response(challenge)
+
+
+@extend_schema(
     operation_id="token_login_challenge",
     description=(
         "Issue a one-time salted login challenge for first-party password login. "
@@ -659,9 +718,12 @@ def token_login_challenge(request):
 def token_login(request):
     """POST username + challenge-bound proof → OAuth tokens."""
     from funkwhale_api.users.password_transport import (
+        clear_login_failures,
+        is_login_locked,
         is_scram_hash,
         is_transport_password_hash,
         pop_login_challenge,
+        record_login_failure,
         upgrade_password_matches_legacy_digest,
         verify_client_proof,
         verify_legacy_client_proof,
@@ -686,6 +748,21 @@ def token_login(request):
                 "non_field_errors": [
                     "Username and a challenge-bound proof are required."
                 ],
+            },
+            status=400,
+        )
+
+    # M6: per-username lockout (same counter for missing/present accounts).
+    if is_login_locked(username):
+        _log_token_login(
+            "token_login locked meta=%s",
+            _safe_login_meta(meta),
+        )
+        return Response(
+            {
+                "error": "invalid_credentials",
+                "detail": "Unable to log in with provided credentials",
+                "non_field_errors": ["Unable to log in with provided credentials"],
             },
             status=400,
         )
@@ -771,55 +848,10 @@ def token_login(request):
                 client_proof_hex=client_proof,
             )
         elif usable and scheme == "legacy_v1":
-            # Legacy django_hash(v1_digest) rows: static digest alone is not
-            # enough — require an HMAC proof bound to this challenge, plus
-            # upgrade_password matching the digest so storage migrates to
-            # SCRAM. A stolen digest cannot complete login without the
-            # account password.
-            if not is_transport_password_hash(password):
-                _log_token_login(
-                    "token_login legacy plaintext_rejected meta=%s password_len=%s",
-                    _safe_login_meta(meta),
-                    len(password) if password else 0,
-                )
-                return Response(
-                    {
-                        "error": "password_not_hashed",
-                        "detail": (
-                            "Legacy login requires the tayra-login-v1 transport "
-                            "digest plus a challenge-bound HMAC proof."
-                        ),
-                        "non_field_errors": [
-                            "Password must be hashed client-side before login."
-                        ],
-                    },
-                    status=400,
-                )
-            if not client_nonce or not client_proof:
-                _log_token_login(
-                    "token_login legacy missing proof meta=%s",
-                    _safe_login_meta(meta),
-                )
-                return Response(
-                    {
-                        "error": "missing_proof",
-                        "detail": (
-                            "Legacy login requires client_nonce and client_proof "
-                            "binding the digest to the challenge."
-                        ),
-                        "non_field_errors": ["Login proof is required."],
-                    },
-                    status=400,
-                )
-            digest_ok = user.check_password(password)
-            proof_ok = verify_legacy_client_proof(
-                password,
-                client_proof,
-                username=username,
-                client_nonce=client_nonce,
-                server_nonce=server_nonce,
-                challenge_id=challenge_id,
-            )
+            # Legacy django_hash(v1_digest) rows. Preferred path: account
+            # password as upgrade_password (one TLS hop, then SCRAM). Digest +
+            # HMAC path kept for older clients. Never advertise legacy_v1 on
+            # the public challenge (M1).
             upgrade = ""
             if isinstance(raw, dict):
                 upgrade = (
@@ -828,39 +860,15 @@ def token_login(request):
                     or ""
                 )
             upgrade = str(upgrade) if upgrade is not None else ""
-            # Require a matching account password so we can migrate off the
-            # static digest. A stolen digest alone cannot complete login.
-            upgrade_ok = bool(
-                upgrade
-                and upgrade_password_matches_legacy_digest(upgrade, password)
-            )
-            password_ok = bool(digest_ok and proof_ok and upgrade_ok)
-            if digest_ok and proof_ok and not upgrade_ok:
-                _log_token_login(
-                    "token_login legacy missing_or_bad_upgrade meta=%s",
-                    _safe_login_meta(meta),
-                )
-                return Response(
-                    {
-                        "error": "legacy_upgrade_required",
-                        "detail": (
-                            "This account still uses a legacy password hash. "
-                            "Update the app and sign in again so the password "
-                            "can be upgraded (send upgrade_password)."
-                        ),
-                        "non_field_errors": [
-                            "Legacy password upgrade required. Update the app."
-                        ],
-                    },
-                    status=400,
-                )
-            if password_ok:
+
+            if upgrade and user.check_password(upgrade):
                 try:
                     user.set_password(upgrade)
                     fields = ["password", "secret_key"]
                     if user.subsonic_api_token:
                         fields.append("subsonic_api_token")
                     user.save(update_fields=fields)
+                    password_ok = True
                     _log_token_login(
                         "token_login legacy upgraded to SCRAM user_id=%s",
                         user.pk,
@@ -879,6 +887,48 @@ def token_login(request):
                         },
                         status=500,
                     )
+            elif is_transport_password_hash(password) and client_nonce and client_proof:
+                digest_ok = user.check_password(password)
+                proof_ok = verify_legacy_client_proof(
+                    password,
+                    client_proof,
+                    username=username,
+                    client_nonce=client_nonce,
+                    server_nonce=server_nonce,
+                    challenge_id=challenge_id,
+                )
+                upgrade_ok = bool(
+                    upgrade
+                    and upgrade_password_matches_legacy_digest(upgrade, password)
+                )
+                password_ok = bool(digest_ok and proof_ok and upgrade_ok)
+                if password_ok:
+                    try:
+                        user.set_password(upgrade)
+                        fields = ["password", "secret_key"]
+                        if user.subsonic_api_token:
+                            fields.append("subsonic_api_token")
+                        user.save(update_fields=fields)
+                        _log_token_login(
+                            "token_login legacy upgraded to SCRAM user_id=%s",
+                            user.pk,
+                        )
+                    except Exception:
+                        logger.exception(
+                            "token_login legacy SCRAM upgrade failed user_id=%s",
+                            user.pk,
+                        )
+                        return Response(
+                            {
+                                "error": "token_issue_failed",
+                                "detail": (
+                                    "Could not upgrade password storage. Try again."
+                                ),
+                            },
+                            status=500,
+                        )
+            else:
+                password_ok = False
         elif usable:
             # Scheme/storage mismatch (e.g. race after password change).
             password_ok = False
@@ -887,6 +937,7 @@ def token_login(request):
     # and unverified-email accounts — do not reveal account state or 2FA.
     # TOTP is still returned only after a correct password (protocol need).
     if user is None or not password_ok:
+        record_login_failure(username)
         _log_token_login(
             "token_login invalid_credentials scheme=%s meta=%s",
             scheme,
@@ -903,6 +954,7 @@ def token_login(request):
 
     if not user.is_active or user.should_verify_email():
         # Same wire response as bad credentials (no account-state oracle).
+        record_login_failure(username)
         _log_token_login(
             "token_login rejected_account_state scheme=%s meta=%s",
             scheme,
@@ -916,6 +968,8 @@ def token_login(request):
             },
             status=400,
         )
+
+    clear_login_failures(username)
 
     # TOTP second factor when the user has confirmed an authenticator.
     # Returning totp_required after a correct password is required for the

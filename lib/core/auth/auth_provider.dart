@@ -765,7 +765,6 @@ class AuthNotifier extends Notifier<AuthState> {
 
       final challengeId = challenge['challenge_id'] as String? ?? '';
       final serverNonce = challenge['server_nonce'] as String? ?? '';
-      final scheme = challenge['scheme'] as String? ?? 'scram_v2';
       if (challengeId.isEmpty) {
         state = state.copyWith(
           isLoading: false,
@@ -776,78 +775,62 @@ class AuthNotifier extends Notifier<AuthState> {
         return false;
       }
 
+      // Public challenge always uses the scram_v2 shape (M1). Legacy accounts
+      // must reset their password or sign in via a client that sends
+      // upgrade_password; the app never puts the account password on the wire.
+      final saltB64 = challenge['salt'] as String? ?? '';
+      final bindingHex = challenge['instance_binding'] as String? ?? '';
+      if (saltB64.isEmpty || serverNonce.isEmpty) {
+        state = state.copyWith(
+          isLoading: false,
+          error: 'Server returned an incomplete login challenge.',
+          clearPendingMfaToken: true,
+        );
+        Analytics.track('login_failed');
+        return false;
+      }
+      final int iterations;
+      final int transportIters;
+      try {
+        iterations = clampTransportIterations(
+          (challenge['iterations'] as num?)?.toInt(),
+        );
+        transportIters = clampTransportIterations(
+          (challenge['transport_iterations'] as num?)?.toInt(),
+        );
+      } on ArgumentError {
+        state = state.copyWith(
+          isLoading: false,
+          error: 'Server returned an invalid login challenge.',
+          clearPendingMfaToken: true,
+        );
+        Analytics.track('login_failed');
+        return false;
+      }
+      final binding =
+          bindingHex.isNotEmpty
+              ? instanceBindingFromHex(bindingHex)
+              : instanceBindingForServerUrl(url);
+      final secret = transportSecret(
+        password,
+        binding,
+        iterations: transportIters,
+      );
+      final clientNonce = newClientNonce();
+      final proof = computeClientProof(
+        secret: secret,
+        salt: b64UrlDecode(saltB64),
+        iterations: iterations,
+        username: user,
+        clientNonce: clientNonce,
+        serverNonce: serverNonce,
+      );
       final Map<String, dynamic> loginBody = {
         'username': user,
         'challenge_id': challengeId,
+        'client_nonce': clientNonce,
+        'client_proof': proof,
       };
-
-      if (scheme == 'legacy_v1') {
-        // Legacy storage: static v1 digest + HMAC proof bound to this
-        // challenge. Also send the account password as upgrade_password so
-        // the server can migrate the row to SCRAM (must match the digest).
-        final digest = legacyTransportDigest(password);
-        final clientNonce = newClientNonce();
-        loginBody['password'] = digest;
-        loginBody['client_nonce'] = clientNonce;
-        loginBody['client_proof'] = computeLegacyClientProof(
-          digestHex: digest,
-          username: user,
-          clientNonce: clientNonce,
-          serverNonce: serverNonce,
-          challengeId: challengeId,
-        );
-        loginBody['upgrade_password'] = password;
-      } else {
-        final saltB64 = challenge['salt'] as String? ?? '';
-        final bindingHex = challenge['instance_binding'] as String? ?? '';
-        if (saltB64.isEmpty || serverNonce.isEmpty) {
-          state = state.copyWith(
-            isLoading: false,
-            error: 'Server returned an incomplete login challenge.',
-            clearPendingMfaToken: true,
-          );
-          Analytics.track('login_failed');
-          return false;
-        }
-        final int iterations;
-        final int transportIters;
-        try {
-          iterations = clampTransportIterations(
-            (challenge['iterations'] as num?)?.toInt(),
-          );
-          transportIters = clampTransportIterations(
-            (challenge['transport_iterations'] as num?)?.toInt(),
-          );
-        } on ArgumentError {
-          state = state.copyWith(
-            isLoading: false,
-            error: 'Server returned an invalid login challenge.',
-            clearPendingMfaToken: true,
-          );
-          Analytics.track('login_failed');
-          return false;
-        }
-        final binding =
-            bindingHex.isNotEmpty
-                ? instanceBindingFromHex(bindingHex)
-                : instanceBindingForServerUrl(url);
-        final secret = transportSecret(
-          password,
-          binding,
-          iterations: transportIters,
-        );
-        final clientNonce = newClientNonce();
-        final proof = computeClientProof(
-          secret: secret,
-          salt: b64UrlDecode(saltB64),
-          iterations: iterations,
-          username: user,
-          clientNonce: clientNonce,
-          serverNonce: serverNonce,
-        );
-        loginBody['client_nonce'] = clientNonce;
-        loginBody['client_proof'] = proof;
-      }
 
       final response = await _dio.post(
         tokenEndpoint,

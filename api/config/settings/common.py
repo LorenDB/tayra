@@ -703,7 +703,8 @@ AUTHENTICATION_BACKENDS = (
 )
 # M15: never expose session cookies to JavaScript (XSS → session theft).
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_AGE = env.int("SESSION_COOKIE_AGE", default=3600 * 25 * 60)
+# Default 25 hours (was previously 3600*25*60 ≈ 62.5 days by mistake — M7).
+SESSION_COOKIE_AGE = env.int("SESSION_COOKIE_AGE", default=3600 * 25)
 
 # Some really nice defaults
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"
@@ -750,12 +751,17 @@ OAUTH2_PROVIDER = {
     "SCOPES": {s.id: s.label for s in scopes.SCOPES_BY_ID.values()},
     # Include first-party app scheme for native OAuth redirects (M2).
     "ALLOWED_REDIRECT_URI_SCHEMES": ["http", "https", "urn", "tayra"],
-    # we keep expired tokens for 15 days, for tracability
-    "REFRESH_TOKEN_EXPIRE_SECONDS": 3600 * 24 * 15,
+    # Keep expired refresh tokens briefly for audit; active refresh TTL is shorter.
+    "REFRESH_TOKEN_EXPIRE_SECONDS": env.int(
+        "REFRESH_TOKEN_EXPIRE_SECONDS", default=3600 * 24 * 7
+    ),
     "AUTHORIZATION_CODE_EXPIRE_SECONDS": 5 * 60,
     "ACCESS_TOKEN_EXPIRE_SECONDS": env.int(
         "ACCESS_TOKEN_EXPIRE_SECONDS", default=60 * 60 * 10
     ),
+    # M3: rotate refresh tokens on use so a stolen refresh token is single-use
+    # once the legitimate client refreshes. Client must persist the new token.
+    "ROTATE_REFRESH_TOKEN": True,
     "OAUTH2_SERVER_CLASS": "funkwhale_api.users.oauth.server.OAuth2Server",
     "PKCE_REQUIRED": _oauth_pkce_required,
 }
@@ -765,7 +771,8 @@ OAUTH2_PROVIDER_GRANT_MODEL = "users.Grant"
 OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL = "users.RefreshToken"
 OAUTH2_PROVIDER_ID_TOKEN_MODEL = "users.IdToken"
 
-SCOPED_TOKENS_MAX_AGE = 60 * 60 * 24 * 3
+# Listen tokens in ?token= (media URLs). Shorter TTL limits log/Referer exposure (M4).
+SCOPED_TOKENS_MAX_AGE = env.int("SCOPED_TOKENS_MAX_AGE", default=60 * 60 * 12)
 
 # LDAP AUTHENTICATION CONFIGURATION
 # ------------------------------------------------------------------------------

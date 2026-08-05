@@ -6,7 +6,6 @@ import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/api_repository.dart';
 import 'package:tayra/core/api/models.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
-import 'package:tayra/core/auth/password_transport.dart';
 import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/app_refresh_indicator.dart';
@@ -169,17 +168,15 @@ class AccountSettingsScreen extends ConsumerWidget {
     );
 
     try {
-      final serverUrl = ref.read(authStateProvider).serverUrl;
-      final passwordDigest =
-          result.password == null
-              ? null
-              : hashPasswordForTransport(
-                result.password!,
-                serverUrl: serverUrl,
-              );
-      await ref
-          .read(funkwhaleApiProvider)
-          .deactivateMe(passwordDigest: passwordDigest);
+      final api = ref.read(funkwhaleApiProvider);
+      Map<String, String>? passwordProof;
+      if (result.password != null) {
+        passwordProof = await api.buildPasswordConfirmProof(
+          password: result.password!,
+          username: user.username,
+        );
+      }
+      await api.deactivateMe(passwordProof: passwordProof);
       Analytics.track('account_deactivated');
       if (!context.mounted) return;
       Navigator.of(context, rootNavigator: true).pop(); // loading
@@ -517,25 +514,21 @@ class AccountSettingsScreen extends ConsumerWidget {
     newCtrl.dispose();
     confirmCtrl.dispose();
 
-    final serverUrl = ref.read(authStateProvider).serverUrl ?? '';
-    // Confirm with the instance-bound transport secret, not the account
-    // password (server User.check_password accepts either).
-    final oldDigest = hashPasswordForTransport(
-      oldPassword,
-      serverUrl: serverUrl,
-    );
-
     await _runSave(
       context,
       ref,
       action: () async {
-        await ref
-            .read(funkwhaleApiProvider)
-            .changePassword(
-              oldPassword: oldDigest,
-              newPassword1: newPassword,
-              newPassword2: confirmPassword,
-            );
+        final api = ref.read(funkwhaleApiProvider);
+        final me = await api.getMe();
+        final proof = await api.buildPasswordConfirmProof(
+          password: oldPassword,
+          username: me.username,
+        );
+        await api.changePassword(
+          passwordProof: proof,
+          newPassword1: newPassword,
+          newPassword2: confirmPassword,
+        );
       },
       successMessage: 'Password changed',
       analyticsEvent: 'account_password_changed',
@@ -636,19 +629,17 @@ class AccountSettingsScreen extends ConsumerWidget {
     emailCtrl.dispose();
     passwordCtrl.dispose();
 
-    final serverUrl = ref.read(authStateProvider).serverUrl ?? '';
-    final passwordDigest = hashPasswordForTransport(
-      password,
-      serverUrl: serverUrl,
-    );
-
     await _runSave(
       context,
       ref,
       action: () async {
-        await ref
-            .read(funkwhaleApiProvider)
-            .changeEmail(email: email, password: passwordDigest);
+        final api = ref.read(funkwhaleApiProvider);
+        final me = await api.getMe();
+        final proof = await api.buildPasswordConfirmProof(
+          password: password,
+          username: me.username,
+        );
+        await api.changeEmail(email: email, passwordProof: proof);
       },
       successMessage: 'Check your inbox to confirm the new email address',
       analyticsEvent: 'account_email_change_requested',

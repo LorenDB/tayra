@@ -466,8 +466,45 @@ def test_update_settings(logged_in_api_client, factories):
     assert logged_in_api_client.user.settings == {"foo": "bar", "theme": "dark"}
 
 
+def _step_up_proof(api_client, password: str, username: str) -> dict:
+    import base64
+
+    from funkwhale_api.users.password_transport import (
+        compute_client_proof,
+        transport_secret,
+    )
+
+    challenge = api_client.post(
+        reverse("api:v1:users:password_confirm_challenge"),
+        {},
+        format="json",
+    )
+    assert challenge.status_code == 200, challenge.content
+    data = challenge.json()
+    pad = "=" * (-len(data["salt"]) % 4)
+    salt = base64.urlsafe_b64decode(data["salt"] + pad)
+    client_nonce = "view-step-up"
+    proof = compute_client_proof(
+        transport_secret(password),
+        salt=salt,
+        iterations=int(data["iterations"]),
+        username=username,
+        client_nonce=client_nonce,
+        server_nonce=data["server_nonce"],
+    )
+    return {
+        "challenge_id": data["challenge_id"],
+        "client_nonce": client_nonce,
+        "client_proof": proof,
+    }
+
+
 def test_user_change_email_requires_valid_password(logged_in_api_client):
+    user = logged_in_api_client.user
+    user.set_password("mypassword")
+    user.save()
     url = reverse("api:v1:users:users-change-email")
+    # Missing step-up proof.
     payload = {"password": "invalid", "email": "test@new.email"}
     response = logged_in_api_client.post(url, payload)
 
@@ -477,8 +514,10 @@ def test_user_change_email_requires_valid_password(logged_in_api_client):
 def test_user_change_email(logged_in_api_client, mocker, mailoutbox):
     user = logged_in_api_client.user
     user.set_password("mypassword")
+    user.save()
     url = reverse("api:v1:users:users-change-email")
-    payload = {"password": "mypassword", "email": "test@new.email"}
+    proof = _step_up_proof(logged_in_api_client, "mypassword", user.username)
+    payload = {**proof, "email": "test@new.email"}
     response = logged_in_api_client.post(url, payload)
 
     address = user.emailaddress_set.latest("id")
@@ -494,9 +533,10 @@ def test_user_deactivate_requires_confirm(logged_in_api_client):
     user.set_password("mypassword")
     user.save()
     url = reverse("api:v1:users:users-me-deactivate")
+    proof = _step_up_proof(logged_in_api_client, "mypassword", user.username)
 
     response = logged_in_api_client.post(
-        url, {"password": "mypassword", "confirm": False}, format="json"
+        url, {**proof, "confirm": False}, format="json"
     )
 
     assert response.status_code == 400
@@ -509,9 +549,13 @@ def test_user_deactivate_requires_valid_password(logged_in_api_client):
     user.set_password("mypassword")
     user.save()
     url = reverse("api:v1:users:users-me-deactivate")
+    # Wrong password proof (challenge for real password, then forge fails
+    # when we send junk client_proof).
+    proof = _step_up_proof(logged_in_api_client, "mypassword", user.username)
+    proof["client_proof"] = "0" * 64
 
     response = logged_in_api_client.post(
-        url, {"password": "wrong", "confirm": True}, format="json"
+        url, {**proof, "confirm": True}, format="json"
     )
 
     assert response.status_code == 400
@@ -525,9 +569,10 @@ def test_user_deactivate(logged_in_api_client, factories):
     user.save()
     factories["users.AccessToken"](user=user)
     url = reverse("api:v1:users:users-me-deactivate")
+    proof = _step_up_proof(logged_in_api_client, "mypassword", user.username)
 
     response = logged_in_api_client.post(
-        url, {"password": "mypassword", "confirm": True}, format="json"
+        url, {**proof, "confirm": True}, format="json"
     )
 
     assert response.status_code == 204

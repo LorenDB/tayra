@@ -9,7 +9,6 @@ import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/api_repository.dart';
 import 'package:tayra/core/api/models.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
-import 'package:tayra/core/auth/password_transport.dart';
 import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/dialog_utils.dart';
@@ -351,15 +350,16 @@ class _TotpSettingsScreenState extends ConsumerState<TotpSettingsScreen> {
       _error = null;
     });
     try {
-      await ref
-          .read(funkwhaleApiProvider)
-          .disableTotp(
-            passwordDigest: hashPasswordForTransport(
-              passwordCtrl.text,
-              serverUrl: ref.read(authStateProvider).serverUrl,
-            ),
-            code: codeCtrl.text.trim(),
-          );
+      final api = ref.read(funkwhaleApiProvider);
+      final me = await api.getMe();
+      final proof = await api.buildPasswordConfirmProof(
+        password: passwordCtrl.text,
+        username: me.username,
+      );
+      await api.disableTotp(
+        passwordProof: proof,
+        code: codeCtrl.text.trim(),
+      );
       if (!mounted) return;
       setState(() => _busy = false);
       ref.invalidate(totpStatusProvider);

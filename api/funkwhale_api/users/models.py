@@ -274,18 +274,14 @@ class User(AbstractUser):
 
         # ── SCRAM storage (current scheme) ─────────────────────────────
         if is_scram_hash(encoded):
-            # Plaintext account password.
-            if verify_scram_secret(encoded, transport_secret(raw_password)):
-                return True
-            # Client sent hex transport secret (password confirmation).
+            # Plaintext account password only (admin/CLI/forms).
+            # Do NOT accept the hex transport_secret here: that value is a
+            # stable password-equivalent. Authenticated step-up uses a
+            # one-time SCRAM proof via verify_password_confirm_proof (H2).
             if is_transport_password_hash(raw_password):
-                try:
-                    secret = bytes.fromhex(raw_password)
-                except ValueError:
-                    secret = None
-                if secret is not None and verify_scram_secret(encoded, secret):
-                    return True
-            return False
+                return False
+            return verify_scram_secret(encoded, transport_secret(raw_password))
+
 
         # ── Legacy django_hash(v1_digest) / plain django rows ───────────
         def setter(value_for_storage):
@@ -414,8 +410,9 @@ class TotpDevice(models.Model):
     user = models.OneToOneField(
         User, related_name="totp_device", on_delete=models.CASCADE
     )
-    # Base32 shared secret, stored encrypted (enc1:… via totp.protect_totp_secret).
-    # Legacy plaintext base32 rows are still accepted by reveal_totp_secret.
+    # Base32 shared secret, stored encrypted (enc2: Fernet via totp.protect_totp_secret).
+    # Legacy enc1: (signed-only) and plaintext base32 rows are still readable
+    # by reveal_totp_secret and re-encrypted on the next protect() write.
     secret = models.CharField(max_length=512)
     confirmed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)

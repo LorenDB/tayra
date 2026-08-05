@@ -293,31 +293,83 @@ class PasswordResetConfirmSerializer(PRCS):
         return attrs
 
 
-class UserDeleteSerializer(serializers.Serializer):
-    password = serializers.CharField()
-    confirm = serializers.BooleanField()
+def _verify_step_up_password(user, attrs):
+    """Require a one-time SCRAM proof for password re-check (H2).
 
-    def validate_password(self, value):
-        if not self.instance.check_password(value):
-            raise serializers.ValidationError("Invalid password")
+    Accepts ``challenge_id`` / ``client_nonce`` / ``client_proof`` from a prior
+    ``POST /api/v1/users/password/confirm-challenge/``. Optional
+    ``upgrade_password`` migrates legacy rows. Bare transport-hex or static
+    password fields are no longer accepted on these endpoints.
+    """
+    from funkwhale_api.users.password_transport import verify_password_confirm_proof
+
+    challenge_id = (attrs.get("challenge_id") or "").strip()
+    client_nonce = (attrs.get("client_nonce") or "").strip()
+    client_proof = (attrs.get("client_proof") or "").strip()
+    upgrade = attrs.get("upgrade_password") or attrs.get("upgradePassword") or ""
+    upgrade = str(upgrade) if upgrade is not None else ""
+
+    if not challenge_id or not client_proof:
+        raise serializers.ValidationError(
+            {
+                "challenge_id": (
+                    "Password confirmation challenge required. "
+                    "POST /api/v1/users/password/confirm-challenge/ first."
+                )
+            }
+        )
+    if not verify_password_confirm_proof(
+        user,
+        challenge_id=challenge_id,
+        client_nonce=client_nonce,
+        client_proof=client_proof,
+        upgrade_password=upgrade,
+    ):
+        raise serializers.ValidationError(
+            {"client_proof": "Invalid password confirmation"}
+        )
+    return attrs
+
+
+class UserDeleteSerializer(serializers.Serializer):
+    confirm = serializers.BooleanField()
+    challenge_id = serializers.CharField(required=False, allow_blank=True)
+    client_nonce = serializers.CharField(required=False, allow_blank=True)
+    client_proof = serializers.CharField(required=False, allow_blank=True)
+    upgrade_password = serializers.CharField(
+        required=False, allow_blank=True, trim_whitespace=False
+    )
+    # Legacy field — rejected in validate (kept so clients get a clear error).
+    password = serializers.CharField(
+        required=False, allow_blank=True, trim_whitespace=False
+    )
 
     def validate_confirm(self, value):
         if not value:
             raise serializers.ValidationError("Please confirm deletion")
         return value
 
+    def validate(self, attrs):
+        return _verify_step_up_password(self.instance, attrs)
+
 
 class UserDeactivateSerializer(serializers.Serializer):
     """Confirm self-service account deactivation (soft-disable).
 
-    Password is required when the user has a usable password. SSO-only accounts
-    only need ``confirm=true`` (client should still use type-to-confirm UX).
+    Password step-up is required when the user has a usable password. SSO-only
+    accounts only need ``confirm=true`` (client should still use type-to-confirm UX).
     """
 
+    confirm = serializers.BooleanField()
+    challenge_id = serializers.CharField(required=False, allow_blank=True)
+    client_nonce = serializers.CharField(required=False, allow_blank=True)
+    client_proof = serializers.CharField(required=False, allow_blank=True)
+    upgrade_password = serializers.CharField(
+        required=False, allow_blank=True, trim_whitespace=False
+    )
     password = serializers.CharField(
         required=False, allow_blank=True, trim_whitespace=False
     )
-    confirm = serializers.BooleanField()
 
     def validate_confirm(self, value):
         if not value:
@@ -327,13 +379,7 @@ class UserDeactivateSerializer(serializers.Serializer):
     def validate(self, attrs):
         user = self.instance
         if user.has_usable_password():
-            password = attrs.get("password") or ""
-            if not password:
-                raise serializers.ValidationError(
-                    {"password": "Password is required to deactivate your account"}
-                )
-            if not user.check_password(password):
-                raise serializers.ValidationError({"password": "Invalid password"})
+            return _verify_step_up_password(user, attrs)
         return attrs
 
 
@@ -418,12 +464,16 @@ class TokenLoginSerializer(LoginSerializer):
 
 
 class UserChangeEmailSerializer(serializers.Serializer):
-    password = serializers.CharField()
     email = serializers.EmailField()
-
-    def validate_password(self, value):
-        if not self.instance.check_password(value):
-            raise serializers.ValidationError("Invalid password")
+    challenge_id = serializers.CharField(required=False, allow_blank=True)
+    client_nonce = serializers.CharField(required=False, allow_blank=True)
+    client_proof = serializers.CharField(required=False, allow_blank=True)
+    upgrade_password = serializers.CharField(
+        required=False, allow_blank=True, trim_whitespace=False
+    )
+    password = serializers.CharField(
+        required=False, allow_blank=True, trim_whitespace=False
+    )
 
     def validate_email(self, value):
         if (
@@ -434,6 +484,9 @@ class UserChangeEmailSerializer(serializers.Serializer):
             raise serializers.ValidationError("This e-mail address is already in use")
         return value
 
+    def validate(self, attrs):
+        return _verify_step_up_password(self.instance, attrs)
+
     def save(self, request):
         current, _ = allauth_models.EmailAddress.objects.get_or_create(
             user=request.user,
@@ -441,3 +494,42 @@ class UserChangeEmailSerializer(serializers.Serializer):
             defaults={"verified": False, "primary": True},
         )
         current.change(request, self.validated_data["email"], confirm=True)
+
+
+class PasswordChangeSerializer(serializers.Serializer):
+    """Change password using a one-time SCRAM step-up proof (H2)."""
+
+    challenge_id = serializers.CharField()
+    client_nonce = serializers.CharField()
+    client_proof = serializers.CharField()
+    new_password1 = serializers.CharField(trim_whitespace=False)
+    new_password2 = serializers.CharField(trim_whitespace=False)
+    upgrade_password = serializers.CharField(
+        required=False, allow_blank=True, trim_whitespace=False
+    )
+
+    def validate(self, attrs):
+        if attrs.get("new_password1") != attrs.get("new_password2"):
+            raise serializers.ValidationError(
+                {"new_password2": "The two password fields didn't match."}
+            )
+        user = self.context["request"].user
+        _verify_step_up_password(user, attrs)
+        # Run Django password validators on the new password.
+        from django.contrib.auth.password_validation import validate_password
+        from django.core.exceptions import ValidationError as DjangoValidationError
+
+        try:
+            validate_password(attrs["new_password1"], user=user)
+        except DjangoValidationError as exc:
+            raise serializers.ValidationError(
+                {"new_password1": list(exc.messages)}
+            )
+        return attrs
+
+    def save(self):
+        user = self.context["request"].user
+        user.set_password(self.validated_data["new_password1"])
+        user.save()
+        return user
+
