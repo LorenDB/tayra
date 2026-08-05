@@ -7,7 +7,6 @@ import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/app_refresh_indicator.dart';
 import 'package:tayra/core/widgets/cover_art.dart';
-import 'package:tayra/core/widgets/cover_art_editor.dart';
 import 'package:tayra/core/widgets/dialog_utils.dart';
 import 'package:tayra/core/widgets/shimmer_loading.dart';
 import 'package:tayra/core/widgets/error_state.dart';
@@ -136,102 +135,45 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
         );
   }
 
-  /// Edit cover art for a user-owned (custom) radio only.
-  Future<void> _editCustomRadioCover(models.Radio radio) async {
-    if (!radio.isCustom) return;
-
-    CoverArtSelection? selection;
-    final saved = await showShellDialog<bool>(
-      context: context,
-      builder: (dialogContext) {
-        return StatefulBuilder(
-          builder: (ctx, setDialogState) {
-            return AlertDialog(
-              backgroundColor: AppTheme.surfaceContainerHigh,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              title: Text(
-                'Cover art · ${radio.name}',
-                style: const TextStyle(
-                  color: AppTheme.onBackground,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              content: CoverArtEditor(
-                currentCover: radio.cover,
-                placeholderIcon: Icons.radio_rounded,
-                selection: selection,
-                onChanged: (sel) {
-                  setDialogState(() => selection = sel);
-                },
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(dialogContext).pop(false),
-                  child: const Text(
-                    'Cancel',
-                    style: TextStyle(color: AppTheme.onBackgroundMuted),
-                  ),
-                ),
-                TextButton(
-                  onPressed: selection == null || !selection!.hasChange
-                      ? null
-                      : () => Navigator.of(dialogContext).pop(true),
-                  child: const Text(
-                    'Save',
-                    style: TextStyle(color: AppTheme.primary),
-                  ),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-
-    if (saved != true || selection == null || !selection!.hasChange) return;
-
-    try {
-      final api = ref.read(cached_api.cachedFunkwhaleApiProvider);
-      final updated = await api.patchRadio(radio.id, {
-        'cover': selection!.uploaded?.uuid,
-      });
-      if (!mounted) return;
-      setState(() {
-        final idx = _userRadios.indexWhere((r) => r.id == radio.id);
-        if (idx >= 0) {
-          _userRadios[idx] = updated;
-        }
-      });
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Cover art updated')));
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to update cover art')),
-      );
+  /// Apply a radio returned from create/edit into local list state, then
+  /// revalidate from cache/network. Nested `/radios/...` routes dispose this
+  /// State while the builder is open, so the push Future often completes with
+  /// `!mounted` — create/edit still warm the radios list cache so the remount
+  /// path in [initState] sees the new item without a manual pull-to-refresh.
+  void _mergeUserRadio(models.Radio radio) {
+    final idx = _userRadios.indexWhere((r) => r.id == radio.id);
+    if (idx >= 0) {
+      _userRadios[idx] = radio;
+    } else {
+      _userRadios.insert(0, radio);
     }
   }
 
   Future<void> _openCreateRadio() async {
-    final changed = await context.push<bool>('/radios/new');
-    if (changed == true && mounted) {
-      await _loadRadios(forceRefresh: true);
+    final result = await context.push<Object?>('/radios/new');
+    if (!mounted) return;
+    if (result is models.Radio) {
+      setState(() => _mergeUserRadio(result));
     }
+    // Force network so we still refresh when the push result was only `true`
+    // or null (older callers) or when cache warm raced with this remount.
+    await _loadRadios(forceRefresh: true);
   }
 
   Future<void> _openEditRadio(models.Radio radio) async {
     if (!radio.isCustom) return;
-    final changed = await context.push<bool>(
+    final result = await context.push<Object?>(
       '/radios/${radio.id}/edit',
       extra: radio,
     );
-    if (changed == true && mounted) {
-      await _loadRadios(forceRefresh: true);
+    if (!mounted) return;
+    if (result is models.Radio) {
+      setState(() => _mergeUserRadio(result));
+    } else if (result == true) {
+      // Deleted from the edit screen — drop local row if still present.
+      setState(() => _userRadios.removeWhere((r) => r.id == radio.id));
     }
+    await _loadRadios(forceRefresh: true);
   }
 
   Future<void> _deleteCustomRadio(models.Radio radio) async {
@@ -239,38 +181,41 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
 
     final confirmed = await showShellDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppTheme.surfaceContainerHigh,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          'Delete radio?',
-          style: TextStyle(
-            color: AppTheme.onBackground,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        content: Text(
-          'Delete “${radio.name}”? Anyone with access will lose it. '
-          'This cannot be undone.',
-          style: const TextStyle(color: AppTheme.onBackgroundMuted),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: AppTheme.onBackgroundMuted),
+      builder:
+          (ctx) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text(
-              'Delete radio',
-              style: TextStyle(color: AppTheme.error),
+            title: const Text(
+              'Delete radio?',
+              style: TextStyle(
+                color: AppTheme.onBackground,
+                fontWeight: FontWeight.w700,
+              ),
             ),
+            content: Text(
+              'Delete “${radio.name}”? Anyone with access will lose it. '
+              'This cannot be undone.',
+              style: const TextStyle(color: AppTheme.onBackgroundMuted),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(color: AppTheme.onBackgroundMuted),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: const Text(
+                  'Delete radio',
+                  style: TextStyle(color: AppTheme.error),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
     );
 
     if (confirmed != true) return;
@@ -341,20 +286,6 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
                 onTap: () {
                   Navigator.of(ctx).pop();
                   unawaited(_openEditRadio(radio));
-                },
-              ),
-              ListTile(
-                leading: const Icon(
-                  Icons.image_outlined,
-                  color: AppTheme.onBackground,
-                ),
-                title: const Text(
-                  'Edit cover art',
-                  style: TextStyle(color: AppTheme.onBackground),
-                ),
-                onTap: () {
-                  Navigator.of(ctx).pop();
-                  unawaited(_editCustomRadioCover(radio));
                 },
               ),
               ListTile(
@@ -513,9 +444,8 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
               // Pre-programmed / system radios (no user) cannot be edited.
               onEdit: radio.isCustom ? () => _openEditRadio(radio) : null,
               onMore: radio.isCustom ? () => _showCustomRadioMenu(radio) : null,
-              onLongPress: radio.isCustom
-                  ? () => _showCustomRadioMenu(radio)
-                  : null,
+              onLongPress:
+                  radio.isCustom ? () => _showCustomRadioMenu(radio) : null,
             ),
           };
         },
@@ -535,14 +465,15 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
   }) {
     return ListTile(
       title: Text(title, style: const TextStyle(color: AppTheme.onBackground)),
-      subtitle: subtitle != null && subtitle.isNotEmpty
-          ? Text(
-              subtitle,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(color: AppTheme.onBackgroundMuted),
-            )
-          : null,
+      subtitle:
+          subtitle != null && subtitle.isNotEmpty
+              ? Text(
+                subtitle,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(color: AppTheme.onBackgroundMuted),
+              )
+              : null,
       leading: CoverArtWidget(
         // Rebuild when art changes after an in-app upload.
         key: ValueKey(coverUrl ?? 'radio-placeholder'),
@@ -566,23 +497,31 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
               ),
               onPressed: onMore,
             ),
-          if (isLoading)
-            const SizedBox(
-              width: 24,
-              height: 24,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: AppTheme.primary,
-              ),
-            )
-          else
-            IconButton(
-              icon: const Icon(
-                Icons.play_arrow_rounded,
-                color: AppTheme.primary,
-              ),
-              onPressed: onPlay,
-            ),
+          // Fixed 48×48 slot (default IconButton hit target) so swapping
+          // play ↔ spinner never shifts the more menu.
+          SizedBox(
+            width: 48,
+            height: 48,
+            child:
+                isLoading
+                    ? const Center(
+                      child: SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: AppTheme.primary,
+                        ),
+                      ),
+                    )
+                    : IconButton(
+                      icon: const Icon(
+                        Icons.play_arrow_rounded,
+                        color: AppTheme.primary,
+                      ),
+                      onPressed: onPlay,
+                    ),
+          ),
         ],
       ),
     );

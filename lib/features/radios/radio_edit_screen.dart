@@ -51,19 +51,22 @@ class _FilterDraft {
     final artists = <int, String>{};
     final ids = config['ids'];
     final names = config['names'];
-    final idList = ids is List
-        ? ids
-              .map((e) => e is num ? e.toInt() : int.tryParse('$e'))
-              .whereType<int>()
-              .toList()
-        : <int>[];
-    final nameList = names is List
-        ? names.map((e) => e?.toString() ?? '').toList()
-        : <String>[];
+    final idList =
+        ids is List
+            ? ids
+                .map((e) => e is num ? e.toInt() : int.tryParse('$e'))
+                .whereType<int>()
+                .toList()
+            : <int>[];
+    final nameList =
+        names is List
+            ? names.map((e) => e?.toString() ?? '').toList()
+            : <String>[];
     for (var i = 0; i < idList.length; i++) {
-      final name = i < nameList.length && nameList[i].isNotEmpty
-          ? nameList[i]
-          : 'Artist #${idList[i]}';
+      final name =
+          i < nameList.length && nameList[i].isNotEmpty
+              ? nameList[i]
+              : 'Artist #${idList[i]}';
       artists[idList[i]] = name;
     }
     return _FilterDraft(
@@ -228,10 +231,8 @@ class _RadioEditScreenState extends ConsumerState<RadioEditScreen> {
   }
 
   Future<void> _runValidation() async {
-    final configs = _filters
-        .where((f) => f.hasSelection)
-        .map((f) => f.toConfig())
-        .toList();
+    final configs =
+        _filters.where((f) => f.hasSelection).map((f) => f.toConfig()).toList();
     if (configs.isEmpty) {
       if (mounted) {
         setState(() {
@@ -267,9 +268,10 @@ class _RadioEditScreenState extends ConsumerState<RadioEditScreen> {
         } else if (anyCount) {
           // Per-filter counts are not a true intersection; still useful as a
           // rough signal that filters match library content.
-          _validationHint = total == 1
-              ? 'About 1 track matches the filters'
-              : 'About $total tracks match the filters';
+          _validationHint =
+              total == 1
+                  ? 'About 1 track matches the filters'
+                  : 'About $total tracks match the filters';
         } else {
           _validationHint = null;
         }
@@ -293,10 +295,8 @@ class _RadioEditScreenState extends ConsumerState<RadioEditScreen> {
       return false;
     }
 
-    final configs = _filters
-        .where((f) => f.hasSelection)
-        .map((f) => f.toConfig())
-        .toList();
+    final configs =
+        _filters.where((f) => f.hasSelection).map((f) => f.toConfig()).toList();
     if (configs.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -321,12 +321,13 @@ class _RadioEditScreenState extends ConsumerState<RadioEditScreen> {
 
     try {
       final api = ref.read(cachedFunkwhaleApiProvider);
+      final Radio savedRadio;
       if (widget.isCreate) {
-        await api.createRadio(body: body);
+        savedRadio = await api.createRadio(body: body);
         Analytics.track('radio_created');
       } else {
         // PATCH so omitted fields (e.g. cover when unchanged) stay intact.
-        await api.patchRadio(widget.radioId!, body);
+        savedRadio = await api.patchRadio(widget.radioId!, body);
         Analytics.track('radio_edited');
       }
       if (!mounted) return false;
@@ -339,7 +340,9 @@ class _RadioEditScreenState extends ConsumerState<RadioEditScreen> {
           content: Text(widget.isCreate ? 'Radio created' : 'Radio saved'),
         ),
       );
-      popPage(context, result: true, fallbackLocation: '/radios');
+      // Return the saved radio so the list can insert/update immediately even
+      // if the parent State was disposed during the nested route push.
+      popPage(context, result: savedRadio, fallbackLocation: '/radios');
       return true;
     } catch (e) {
       if (!mounted) return false;
@@ -357,38 +360,41 @@ class _RadioEditScreenState extends ConsumerState<RadioEditScreen> {
 
     final confirmed = await showShellDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppTheme.surfaceContainerHigh,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          'Delete radio?',
-          style: TextStyle(
-            color: AppTheme.onBackground,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        content: Text(
-          'Delete “${_nameController.text.trim().isEmpty ? 'this radio' : _nameController.text.trim()}”? '
-          'Anyone with access will lose it. This cannot be undone.',
-          style: const TextStyle(color: AppTheme.onBackgroundMuted),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: AppTheme.onBackgroundMuted),
+      builder:
+          (ctx) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text(
-              'Delete radio',
-              style: TextStyle(color: AppTheme.error),
+            title: const Text(
+              'Delete radio?',
+              style: TextStyle(
+                color: AppTheme.onBackground,
+                fontWeight: FontWeight.w700,
+              ),
             ),
+            content: Text(
+              'Delete “${_nameController.text.trim().isEmpty ? 'this radio' : _nameController.text.trim()}”? '
+              'Anyone with access will lose it. This cannot be undone.',
+              style: const TextStyle(color: AppTheme.onBackgroundMuted),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(color: AppTheme.onBackgroundMuted),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: const Text(
+                  'Delete radio',
+                  style: TextStyle(color: AppTheme.error),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
     );
 
     if (confirmed != true) return;
@@ -419,34 +425,37 @@ class _RadioEditScreenState extends ConsumerState<RadioEditScreen> {
 
     final discard = await showShellDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppTheme.surfaceContainerHigh,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        title: const Text(
-          'Unsaved changes',
-          style: TextStyle(color: AppTheme.onBackground),
-        ),
-        content: const Text(
-          'Save your changes before leaving?',
-          style: TextStyle(color: AppTheme.onBackgroundMuted),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text(
-              'Discard',
-              style: TextStyle(color: AppTheme.error),
+      builder:
+          (ctx) => AlertDialog(
+            backgroundColor: AppTheme.surfaceContainerHigh,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text(
-              'Save',
-              style: TextStyle(color: AppTheme.primary),
+            title: const Text(
+              'Unsaved changes',
+              style: TextStyle(color: AppTheme.onBackground),
             ),
+            content: const Text(
+              'Save your changes before leaving?',
+              style: TextStyle(color: AppTheme.onBackgroundMuted),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: const Text(
+                  'Discard',
+                  style: TextStyle(color: AppTheme.error),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: const Text(
+                  'Save',
+                  style: TextStyle(color: AppTheme.primary),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
     );
 
     if (discard == false) {
@@ -517,48 +526,51 @@ class _RadioEditScreenState extends ConsumerState<RadioEditScreen> {
               IconButton(
                 tooltip: 'Delete radio',
                 onPressed: _isDeleting || _isSaving ? null : _delete,
-                icon: _isDeleting
-                    ? const SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
+                icon:
+                    _isDeleting
+                        ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: AppTheme.error,
+                          ),
+                        )
+                        : const Icon(
+                          Icons.delete_outline_rounded,
                           color: AppTheme.error,
                         ),
-                      )
-                    : const Icon(
-                        Icons.delete_outline_rounded,
-                        color: AppTheme.error,
-                      ),
               ),
             TextButton(
               onPressed: _isSaving ? null : _save,
-              child: _isSaving
-                  ? const SizedBox(
-                      width: 16,
-                      height: 16,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: AppTheme.primary,
+              child:
+                  _isSaving
+                      ? const SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: AppTheme.primary,
+                        ),
+                      )
+                      : const Text(
+                        'Save',
+                        style: TextStyle(
+                          color: AppTheme.primary,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                        ),
                       ),
-                    )
-                  : const Text(
-                      'Save',
-                      style: TextStyle(
-                        color: AppTheme.primary,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
-                      ),
-                    ),
             ),
             const SizedBox(width: 4),
           ],
         ),
-        body: _isLoading
-            ? const ShimmerList(itemCount: 8)
-            : _loadError != null
-            ? InlineErrorState(message: _loadError!, onRetry: _loadRadio)
-            : _buildForm(),
+        body:
+            _isLoading
+                ? const ShimmerList(itemCount: 8)
+                : _loadError != null
+                ? InlineErrorState(message: _loadError!, onRetry: _loadRadio)
+                : _buildForm(),
       ),
     );
   }
@@ -659,10 +671,10 @@ class _RadioEditScreenState extends ConsumerState<RadioEditScreen> {
             style: TextStyle(
               color:
                   _validationHint!.toLowerCase().contains('no ') ||
-                      _validationHint!.toLowerCase().contains('invalid') ||
-                      _validationHint!.toLowerCase().contains('must')
-                  ? AppTheme.error
-                  : AppTheme.secondary,
+                          _validationHint!.toLowerCase().contains('invalid') ||
+                          _validationHint!.toLowerCase().contains('must')
+                      ? AppTheme.error
+                      : AppTheme.secondary,
               fontSize: 12,
             ),
           ),
@@ -708,15 +720,16 @@ class _RadioEditScreenState extends ConsumerState<RadioEditScreen> {
               });
               _scheduleValidation();
             },
-            onRemove: _filters.length <= 1
-                ? null
-                : () {
-                    setState(() {
-                      _filters.removeAt(i);
-                      _isDirty = true;
-                    });
-                    _scheduleValidation();
-                  },
+            onRemove:
+                _filters.length <= 1
+                    ? null
+                    : () {
+                      setState(() {
+                        _filters.removeAt(i);
+                        _isDirty = true;
+                      });
+                      _scheduleValidation();
+                    },
           ),
           const SizedBox(height: 10),
         ],
@@ -982,9 +995,10 @@ class _ArtistSearchDialogState extends ConsumerState<_ArtistSearchDialog> {
           .getArtists(page: 1, pageSize: 30, q: q.isEmpty ? null : q);
       if (!mounted) return;
       setState(() {
-        _results = res.results
-            .where((a) => !widget.alreadySelected.containsKey(a.id))
-            .toList();
+        _results =
+            res.results
+                .where((a) => !widget.alreadySelected.containsKey(a.id))
+                .toList();
         _loading = false;
       });
     } catch (_) {
@@ -1035,51 +1049,56 @@ class _ArtistSearchDialogState extends ConsumerState<_ArtistSearchDialog> {
             ),
             const SizedBox(height: 12),
             Expanded(
-              child: _loading
-                  ? const Center(
-                      child: CircularProgressIndicator(color: AppTheme.primary),
-                    )
-                  : _error != null
-                  ? Center(
-                      child: Text(
-                        _error!,
-                        style: const TextStyle(color: AppTheme.error),
-                      ),
-                    )
-                  : _results.isEmpty
-                  ? const Center(
-                      child: Text(
-                        'No artists found',
-                        style: TextStyle(color: AppTheme.onBackgroundMuted),
-                      ),
-                    )
-                  : ListView.builder(
-                      itemCount: _results.length,
-                      itemBuilder: (context, index) {
-                        final a = _results[index];
-                        return ListTile(
-                          dense: true,
-                          title: Text(
-                            a.name,
-                            style: const TextStyle(
-                              color: AppTheme.onBackground,
+              child:
+                  _loading
+                      ? const Center(
+                        child: CircularProgressIndicator(
+                          color: AppTheme.primary,
+                        ),
+                      )
+                      : _error != null
+                      ? Center(
+                        child: Text(
+                          _error!,
+                          style: const TextStyle(color: AppTheme.error),
+                        ),
+                      )
+                      : _results.isEmpty
+                      ? const Center(
+                        child: Text(
+                          'No artists found',
+                          style: TextStyle(color: AppTheme.onBackgroundMuted),
+                        ),
+                      )
+                      : ListView.builder(
+                        itemCount: _results.length,
+                        itemBuilder: (context, index) {
+                          final a = _results[index];
+                          return ListTile(
+                            dense: true,
+                            title: Text(
+                              a.name,
+                              style: const TextStyle(
+                                color: AppTheme.onBackground,
+                              ),
                             ),
-                          ),
-                          subtitle: a.tracksCount > 0
-                              ? Text(
-                                  '${a.tracksCount} tracks',
-                                  style: const TextStyle(
-                                    color: AppTheme.onBackgroundMuted,
-                                    fontSize: 12,
-                                  ),
-                                )
-                              : null,
-                          onTap: () => Navigator.of(
-                            context,
-                          ).pop(_ArtistPick(id: a.id, name: a.name)),
-                        );
-                      },
-                    ),
+                            subtitle:
+                                a.tracksCount > 0
+                                    ? Text(
+                                      '${a.tracksCount} tracks',
+                                      style: const TextStyle(
+                                        color: AppTheme.onBackgroundMuted,
+                                        fontSize: 12,
+                                      ),
+                                    )
+                                    : null,
+                            onTap:
+                                () => Navigator.of(
+                                  context,
+                                ).pop(_ArtistPick(id: a.id, name: a.name)),
+                          );
+                        },
+                      ),
             ),
           ],
         ),
@@ -1141,9 +1160,10 @@ class _TagSearchDialogState extends ConsumerState<_TagSearchDialog> {
           .getTags(page: 1, pageSize: 50, q: q.isEmpty ? null : q);
       if (!mounted) return;
       setState(() {
-        _results = res.results
-            .where((t) => !widget.alreadySelected.contains(t.name))
-            .toList();
+        _results =
+            res.results
+                .where((t) => !widget.alreadySelected.contains(t.name))
+                .toList();
         _loading = false;
       });
     } catch (_) {
@@ -1219,40 +1239,43 @@ class _TagSearchDialogState extends ConsumerState<_TagSearchDialog> {
             ],
             const SizedBox(height: 8),
             Expanded(
-              child: _loading
-                  ? const Center(
-                      child: CircularProgressIndicator(color: AppTheme.primary),
-                    )
-                  : _error != null
-                  ? Center(
-                      child: Text(
-                        _error!,
-                        style: const TextStyle(color: AppTheme.error),
-                      ),
-                    )
-                  : _results.isEmpty
-                  ? const Center(
-                      child: Text(
-                        'No tags found',
-                        style: TextStyle(color: AppTheme.onBackgroundMuted),
-                      ),
-                    )
-                  : ListView.builder(
-                      itemCount: _results.length,
-                      itemBuilder: (context, index) {
-                        final t = _results[index];
-                        return ListTile(
-                          dense: true,
-                          title: Text(
-                            t.name,
-                            style: const TextStyle(
-                              color: AppTheme.onBackground,
+              child:
+                  _loading
+                      ? const Center(
+                        child: CircularProgressIndicator(
+                          color: AppTheme.primary,
+                        ),
+                      )
+                      : _error != null
+                      ? Center(
+                        child: Text(
+                          _error!,
+                          style: const TextStyle(color: AppTheme.error),
+                        ),
+                      )
+                      : _results.isEmpty
+                      ? const Center(
+                        child: Text(
+                          'No tags found',
+                          style: TextStyle(color: AppTheme.onBackgroundMuted),
+                        ),
+                      )
+                      : ListView.builder(
+                        itemCount: _results.length,
+                        itemBuilder: (context, index) {
+                          final t = _results[index];
+                          return ListTile(
+                            dense: true,
+                            title: Text(
+                              t.name,
+                              style: const TextStyle(
+                                color: AppTheme.onBackground,
+                              ),
                             ),
-                          ),
-                          onTap: () => Navigator.of(context).pop(t.name),
-                        );
-                      },
-                    ),
+                            onTap: () => Navigator.of(context).pop(t.name),
+                          );
+                        },
+                      ),
             ),
           ],
         ),

@@ -89,9 +89,10 @@ class CachedFunkwhaleApi {
     T Function(Map<String, dynamic>) fromJson, {
     bool allowStale = false,
   }) async {
-    final cached = allowStale
-        ? await _cache.getMetadataStale(cacheKey)
-        : await _cache.getMetadata(cacheKey);
+    final cached =
+        allowStale
+            ? await _cache.getMetadataStale(cacheKey)
+            : await _cache.getMetadata(cacheKey);
     if (cached == null) return null;
     try {
       return fromJson(cached);
@@ -335,9 +336,8 @@ class CachedFunkwhaleApi {
     String? library,
     bool forceRefresh = false,
   }) async {
-    final tagSuffix = (tag != null && tag.isNotEmpty)
-        ? '_t${tag.join(',')}'
-        : '';
+    final tagSuffix =
+        (tag != null && tag.isNotEmpty) ? '_t${tag.join(',')}' : '';
     final durationSuffix = '_dmin${minDuration}_dmax$maxDuration';
     final librarySuffix = library != null ? '_lib$library' : '';
     final baseSuffix =
@@ -349,18 +349,19 @@ class CachedFunkwhaleApi {
       cacheType: CacheType.recentAlbums,
       fromJson: (j) => PaginatedResponse.fromJson(j, Album.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _albumToJson),
-      fetch: () => _api.getAlbums(
-        page: page,
-        pageSize: pageSize,
-        ordering: ordering,
-        artist: artist,
-        scope: scope,
-        q: q,
-        tag: tag,
-        minDuration: minDuration,
-        maxDuration: maxDuration,
-        library: library,
-      ),
+      fetch:
+          () => _api.getAlbums(
+            page: page,
+            pageSize: pageSize,
+            ordering: ordering,
+            artist: artist,
+            scope: scope,
+            q: q,
+            tag: tag,
+            minDuration: minDuration,
+            maxDuration: maxDuration,
+            library: library,
+          ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
       // List pages: rely on CachedNetworkImage; don't fan out cover downloads.
@@ -376,12 +377,13 @@ class CachedFunkwhaleApi {
       fetch: () => _api.getAlbum(id),
       ttl: const Duration(hours: 24),
       forceRefresh: forceRefresh,
-      coverUrls: (a) => [
-        a.coverUrl,
-        a.largeCoverUrl,
-        a.artist?.coverUrl,
-        ...a.tracks.map((t) => t.coverUrl),
-      ],
+      coverUrls:
+          (a) => [
+            a.coverUrl,
+            a.largeCoverUrl,
+            a.artist?.coverUrl,
+            ...a.tracks.map((t) => t.coverUrl),
+          ],
     );
   }
 
@@ -413,14 +415,15 @@ class CachedFunkwhaleApi {
       cacheType: CacheType.recentArtists,
       fromJson: (j) => PaginatedResponse.fromJson(j, Artist.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _artistToJson),
-      fetch: () => _api.getArtists(
-        page: page,
-        pageSize: pageSize,
-        ordering: ordering,
-        hasAlbums: hasAlbums,
-        scope: scope,
-        q: q,
-      ),
+      fetch:
+          () => _api.getArtists(
+            page: page,
+            pageSize: pageSize,
+            ordering: ordering,
+            hasAlbums: hasAlbums,
+            scope: scope,
+            q: q,
+          ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
     );
@@ -463,15 +466,16 @@ class CachedFunkwhaleApi {
       cacheType: CacheType.track,
       fromJson: (j) => PaginatedResponse.fromJson(j, Track.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _trackToJson),
-      fetch: () => _api.getTracks(
-        page: page,
-        pageSize: pageSize,
-        ordering: ordering,
-        album: album,
-        artist: artist,
-        scope: scope,
-        q: q,
-      ),
+      fetch:
+          () => _api.getTracks(
+            page: page,
+            pageSize: pageSize,
+            ordering: ordering,
+            album: album,
+            artist: artist,
+            scope: scope,
+            q: q,
+          ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
     );
@@ -505,12 +509,13 @@ class CachedFunkwhaleApi {
       cacheType: CacheType.tags,
       fromJson: (j) => PaginatedResponse.fromJson(j, Tag.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _tagToJson),
-      fetch: () => _api.getTags(
-        page: page,
-        pageSize: pageSize,
-        ordering: ordering,
-        q: q,
-      ),
+      fetch:
+          () => _api.getTags(
+            page: page,
+            pageSize: pageSize,
+            ordering: ordering,
+            q: q,
+          ),
       ttl: const Duration(hours: 6),
       forceRefresh: forceRefresh,
     );
@@ -527,11 +532,12 @@ class CachedFunkwhaleApi {
       fetch: () => _api.search(query),
       ttl: const Duration(minutes: 10),
       forceRefresh: forceRefresh,
-      coverUrls: (r) => [
-        ...r.albums.map((a) => a.coverUrl),
-        ...r.artists.map((a) => a.coverUrl),
-        ...r.tracks.map((t) => t.coverUrl),
-      ],
+      coverUrls:
+          (r) => [
+            ...r.albums.map((a) => a.coverUrl),
+            ...r.artists.map((a) => a.coverUrl),
+            ...r.tracks.map((t) => t.coverUrl),
+          ],
     );
   }
 
@@ -719,13 +725,15 @@ class CachedFunkwhaleApi {
       cacheType: CacheType.playlist,
       fromJson: (j) => PaginatedResponse.fromJson(j, Playlist.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _playlistToJson),
-      fetch: () =>
-          _api.getPlaylists(page: page, pageSize: pageSize, scope: scope),
+      fetch:
+          () => _api.getPlaylists(page: page, pageSize: pageSize, scope: scope),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
-      coverUrls: (r) => r.results
-          .expand((p) => <String?>[p.coverUrl, ...p.albumCovers])
-          .toList(),
+      coverUrls:
+          (r) =>
+              r.results
+                  .expand((p) => <String?>[p.coverUrl, ...p.albumCovers])
+                  .toList(),
     );
   }
 
@@ -885,18 +893,20 @@ class CachedFunkwhaleApi {
     return _cachedFetch(
       cacheKey: cacheKey,
       cacheType: CacheType.track,
-      fromJson: (j) => PaginatedResponse.fromJson(
-        j,
-        Listening.fromJson,
-        skipMalformed: true,
-      ),
+      fromJson:
+          (j) => PaginatedResponse.fromJson(
+            j,
+            Listening.fromJson,
+            skipMalformed: true,
+          ),
       toJson: (r) => _paginatedResponseToJson(r, _listeningToJson),
-      fetch: () => _api.getListenings(
-        page: page,
-        pageSize: pageSize,
-        ordering: ordering,
-        richOnly: richOnly,
-      ),
+      fetch:
+          () => _api.getListenings(
+            page: page,
+            pageSize: pageSize,
+            ordering: ordering,
+            richOnly: richOnly,
+          ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
     );
@@ -969,7 +979,9 @@ class CachedFunkwhaleApi {
 
   Future<Radio> patchRadio(int id, Map<String, dynamic> body) async {
     final res = await _api.patchRadio(id, body);
-    // Rewrite list pages in place so cover art updates without a restart.
+    // Rewrite list pages in place so cover art / metadata updates without a
+    // restart. If the radio is missing from every cached page, warm a fresh
+    // first page so remounted list UIs still see the edit.
     final upserted = await _upsertInPaginatedCaches(
       keyLike: 'radios_p%',
       cacheType: CacheType.radio,
@@ -977,10 +989,7 @@ class CachedFunkwhaleApi {
       itemJson: _radioToJson(res),
     );
     if (!upserted) {
-      // Radio wasn't in any cached page — drop list caches and notify so the
-      // radios screen reloads from the network.
-      await _cache.deleteMetadataLike('radios_p%');
-      _emitMetadataUpdate('radios_p1');
+      await _refreshRadiosListCache();
     }
     _scheduleCoverCaching(<String?>[res.coverUrl]);
     return res;
@@ -988,8 +997,11 @@ class CachedFunkwhaleApi {
 
   Future<Radio> createRadio({required Map<String, dynamic> body}) async {
     final res = await _api.createRadio(body: body);
-    await _cache.deleteMetadataLike('radios_p%');
-    _emitMetadataUpdate('radios_p1');
+    // Drop list pages and re-fetch page 1 so a remounted RadiosScreen (child
+    // route replaces the list under go_router) does not paint a pre-create
+    // cache entry. Emitting after the warm write drives any still-mounted
+    // listeners to re-read the fresh page.
+    await _refreshRadiosListCache();
     _scheduleCoverCaching(<String?>[res.coverUrl]);
     return res;
   }
@@ -1003,8 +1015,7 @@ class CachedFunkwhaleApi {
       itemJson: _radioToJson(res),
     );
     if (!upserted) {
-      await _cache.deleteMetadataLike('radios_p%');
-      _emitMetadataUpdate('radios_p1');
+      await _refreshRadiosListCache();
     }
     _scheduleCoverCaching(<String?>[res.coverUrl]);
     return res;
@@ -1012,7 +1023,20 @@ class CachedFunkwhaleApi {
 
   Future<void> deleteRadio(int id) async {
     await _api.deleteRadio(id);
+    await _refreshRadiosListCache();
+  }
+
+  /// Invalidate every radios list page, force-fetch the default first page,
+  /// then notify listeners. Used after create/delete where an in-place upsert
+  /// cannot represent the change.
+  Future<void> _refreshRadiosListCache() async {
     await _cache.deleteMetadataLike('radios_p%');
+    try {
+      // Match RadiosScreen's getRadios(page: 1, pageSize: 50) key.
+      await getRadios(page: 1, pageSize: 50, forceRefresh: true);
+    } catch (e) {
+      debugPrint('Cache: failed to warm radios list after write: $e');
+    }
     _emitMetadataUpdate('radios_p1');
   }
 
@@ -1243,13 +1267,14 @@ class CachedFunkwhaleApi {
       cacheType: CacheType.channel,
       fromJson: (j) => PaginatedResponse.fromJson(j, Channel.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _channelToJson),
-      fetch: () => _api.getChannels(
-        page: page,
-        pageSize: pageSize,
-        ordering: ordering,
-        q: q,
-        subscribed: subscribed,
-      ),
+      fetch:
+          () => _api.getChannels(
+            page: page,
+            pageSize: pageSize,
+            ordering: ordering,
+            q: q,
+            subscribed: subscribed,
+          ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
     );
@@ -1282,12 +1307,13 @@ class CachedFunkwhaleApi {
       cacheType: CacheType.track,
       fromJson: (j) => PaginatedResponse.fromJson(j, Track.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _trackToJson),
-      fetch: () => _api.getChannelTracks(
-        channelUuid: channelUuid,
-        page: page,
-        pageSize: pageSize,
-        ordering: ordering,
-      ),
+      fetch:
+          () => _api.getChannelTracks(
+            channelUuid: channelUuid,
+            page: page,
+            pageSize: pageSize,
+            ordering: ordering,
+          ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
     );
@@ -1337,14 +1363,15 @@ class CachedFunkwhaleApi {
       cacheType: CacheType.radio,
       fromJson: (j) => PaginatedResponse.fromJson(j, Radio.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _radioToJson),
-      fetch: () => _api.getRadios(
-        page: page,
-        pageSize: pageSize,
-        ordering: ordering,
-        q: q,
-        scope: scope,
-        name: name,
-      ),
+      fetch:
+          () => _api.getRadios(
+            page: page,
+            pageSize: pageSize,
+            ordering: ordering,
+            q: q,
+            scope: scope,
+            name: name,
+          ),
       ttl: const Duration(hours: 1),
       forceRefresh: forceRefresh,
       coverUrls: (r) => r.results.map((radio) => radio.coverUrl).toList(),
@@ -1384,8 +1411,8 @@ class CachedFunkwhaleApi {
       cacheType: CacheType.library,
       fromJson: (j) => PaginatedResponse.fromJson(j, Library.fromJson),
       toJson: (r) => _paginatedResponseToJson(r, _libraryToJson),
-      fetch: () =>
-          _api.getLibraries(page: page, pageSize: pageSize, scope: scope),
+      fetch:
+          () => _api.getLibraries(page: page, pageSize: pageSize, scope: scope),
       ttl: const Duration(hours: 6),
       forceRefresh: forceRefresh,
     );
@@ -1410,15 +1437,17 @@ class CachedFunkwhaleApi {
       'id': album.id,
       'title': album.title,
       'release_date': album.releaseDate,
-      'artist': album.artist != null
-          ? {
-              'id': album.artist!.id,
-              'name': album.artist!.name,
-              'cover': album.artist!.cover != null
-                  ? _coverToJson(album.artist!.cover!)
-                  : null,
-            }
-          : null,
+      'artist':
+          album.artist != null
+              ? {
+                'id': album.artist!.id,
+                'name': album.artist!.name,
+                'cover':
+                    album.artist!.cover != null
+                        ? _coverToJson(album.artist!.cover!)
+                        : null,
+              }
+              : null,
       'cover': album.cover != null ? _coverToJson(album.cover!) : null,
       'tracks_count': album.tracksCount,
       'duration': album.duration,
@@ -1458,32 +1487,36 @@ class CachedFunkwhaleApi {
       'disc_number': track.discNumber,
       'is_playable': track.isPlayable,
       'tags': track.tags,
-      'artist': track.artist != null
-          ? {'id': track.artist!.id, 'name': track.artist!.name}
-          : null,
-      'album': track.album != null
-          ? {
-              'id': track.album!.id,
-              'title': track.album!.title,
-              'cover': track.album!.cover != null
-                  ? _coverToJson(track.album!.cover!)
-                  : null,
-            }
-          : null,
+      'artist':
+          track.artist != null
+              ? {'id': track.artist!.id, 'name': track.artist!.name}
+              : null,
+      'album':
+          track.album != null
+              ? {
+                'id': track.album!.id,
+                'title': track.album!.title,
+                'cover':
+                    track.album!.cover != null
+                        ? _coverToJson(track.album!.cover!)
+                        : null,
+              }
+              : null,
       'listen_url': track.listenUrl,
       'cover': track.cover != null ? _coverToJson(track.cover!) : null,
-      'uploads': track.uploads
-          .map(
-            (u) => {
-              'uuid': u.uuid,
-              'duration': u.duration,
-              'bitrate': u.bitrate,
-              'size': u.size,
-              'mimetype': u.mimetype,
-              'listen_url': u.listenUrl,
-            },
-          )
-          .toList(),
+      'uploads':
+          track.uploads
+              .map(
+                (u) => {
+                  'uuid': u.uuid,
+                  'duration': u.duration,
+                  'bitrate': u.bitrate,
+                  'size': u.size,
+                  'mimetype': u.mimetype,
+                  'listen_url': u.listenUrl,
+                },
+              )
+              .toList(),
       'creation_date': track.creationDate?.toIso8601String(),
     };
   }
