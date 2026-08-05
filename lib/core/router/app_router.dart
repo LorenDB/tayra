@@ -13,6 +13,7 @@ import 'package:tayra/features/auth/presentation/signup_screen.dart';
 import 'package:tayra/features/home/home_screen.dart';
 import 'package:tayra/features/browse/browse_screen.dart';
 import 'package:tayra/features/radios/radios_screen.dart';
+import 'package:tayra/features/radios/radio_edit_screen.dart';
 import 'package:tayra/core/api/models.dart' as models;
 import 'package:tayra/features/podcasts/podcasts_screen.dart';
 import 'package:tayra/features/podcasts/podcast_detail_screen.dart';
@@ -318,10 +319,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/splash',
         name: 'splash',
         parentNavigatorKey: rootNavigatorKey,
-        builder:
-            (context, state) => const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            ),
+        builder: (context, state) =>
+            const Scaffold(body: Center(child: CircularProgressIndicator())),
       ),
       GoRoute(
         path: '/login',
@@ -399,9 +398,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/authorize',
         name: 'oauth-authorize',
         parentNavigatorKey: rootNavigatorKey,
-        builder:
-            (context, state) =>
-                OAuthAuthorizeScreen(query: state.uri.queryParameters),
+        builder: (context, state) =>
+            OAuthAuthorizeScreen(query: state.uri.queryParameters),
       ),
       // Main shell with bottom nav.  All tab routes are nested under the
       // home route ("/") so that navigating to a tab (via context.go) pushes
@@ -415,8 +413,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/',
             name: 'home',
-            pageBuilder:
-                (context, state) => const NoTransitionPage(child: HomeScreen()),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: HomeScreen()),
             routes: [
               GoRoute(
                 path: 'album/:id',
@@ -472,8 +470,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   GoRoute(
                     path: 'appearance',
                     name: 'appearance_settings',
-                    builder:
-                        (context, state) => const AppearanceSettingsScreen(),
+                    builder: (context, state) =>
+                        const AppearanceSettingsScreen(),
                   ),
                   GoRoute(
                     path: 'storage',
@@ -483,14 +481,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   GoRoute(
                     path: 'year-review-settings',
                     name: 'year_review_settings',
-                    builder:
-                        (context, state) => const YearReviewSettingsScreen(),
+                    builder: (context, state) =>
+                        const YearReviewSettingsScreen(),
                   ),
                   GoRoute(
                     path: 'developer',
                     name: 'developer_settings',
-                    builder:
-                        (context, state) => const DeveloperSettingsScreen(),
+                    builder: (context, state) =>
+                        const DeveloperSettingsScreen(),
                   ),
                 ],
               ),
@@ -508,8 +506,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                       );
                       if (year == null) return const HomeScreen();
                       final extra = state.extra;
-                      final startInStory =
-                          extra is Map ? extra['startInStory'] == true : false;
+                      final startInStory = extra is Map
+                          ? extra['startInStory'] == true
+                          : false;
                       return YearReviewScreen(
                         year: year,
                         startInStory: startInStory,
@@ -522,9 +521,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: 'artists',
                 name: 'artists',
-                pageBuilder:
-                    (context, state) =>
-                        const NoTransitionPage(child: ArtistsTabScreen()),
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage(child: ArtistsTabScreen()),
                 routes: [
                   GoRoute(
                     path: 'artist/:id',
@@ -540,9 +538,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: 'browse',
                 name: 'browse',
-                pageBuilder:
-                    (context, state) =>
-                        const NoTransitionPage(child: BrowseScreen()),
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage(child: BrowseScreen()),
                 routes: [
                   GoRoute(
                     path: 'artist/:id',
@@ -580,16 +577,32 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: 'radios',
                 name: 'radios',
-                pageBuilder:
-                    (context, state) =>
-                        const NoTransitionPage(child: RadiosScreen()),
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage(child: RadiosScreen()),
+                routes: [
+                  GoRoute(
+                    path: 'new',
+                    name: 'radio_create',
+                    builder: (context, state) => const RadioEditScreen(),
+                  ),
+                  GoRoute(
+                    path: ':id/edit',
+                    name: 'radio_edit',
+                    builder: (context, state) {
+                      final id = int.tryParse(state.pathParameters['id'] ?? '');
+                      if (id == null) return const RadiosScreen();
+                      final extra = state.extra;
+                      final seed = extra is models.Radio ? extra : null;
+                      return RadioEditScreen(radioId: id, initialRadio: seed);
+                    },
+                  ),
+                ],
               ),
               GoRoute(
                 path: 'podcasts',
                 name: 'podcasts',
-                pageBuilder:
-                    (context, state) =>
-                        const NoTransitionPage(child: PodcastsScreen()),
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage(child: PodcastsScreen()),
                 routes: [
                   GoRoute(
                     path: ':uuid',
@@ -619,9 +632,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: 'search',
                 name: 'search',
-                pageBuilder:
-                    (context, state) =>
-                        const NoTransitionPage(child: SearchScreen()),
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage(child: SearchScreen()),
                 routes: [
                   GoRoute(
                     path: 'album/:id',
@@ -659,16 +671,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: 'favorites',
                 name: 'favorites',
-                pageBuilder:
-                    (context, state) =>
-                        const NoTransitionPage(child: FavoritesScreen()),
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage(child: FavoritesScreen()),
               ),
               GoRoute(
                 path: 'playlists',
                 name: 'playlists',
-                pageBuilder:
-                    (context, state) =>
-                        const NoTransitionPage(child: PlaylistsScreen()),
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage(child: PlaylistsScreen()),
                 routes: [
                   GoRoute(
                     path: ':id',
@@ -765,8 +775,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   GoRoute(
                     path: 'invitations',
                     name: 'manage_invitations',
-                    builder:
-                        (context, state) => const ManageInvitationsScreen(),
+                    builder: (context, state) =>
+                        const ManageInvitationsScreen(),
                   ),
                   GoRoute(
                     path: ':id',
@@ -788,17 +798,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/now-playing',
         name: 'now_playing',
-        pageBuilder:
-            (context, state) => CustomTransitionPage(
-              child: const NowPlayingScreen(),
-              transitionsBuilder: (
-                context,
-                animation,
-                secondaryAnimation,
-                child,
-              ) {
-                return SlideTransition(
-                  position: Tween<Offset>(
+        pageBuilder: (context, state) => CustomTransitionPage(
+          child: const NowPlayingScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return SlideTransition(
+              position:
+                  Tween<Offset>(
                     begin: const Offset(0, 1),
                     end: Offset.zero,
                   ).animate(
@@ -807,25 +812,20 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                       curve: Curves.easeOutCubic,
                     ),
                   ),
-                  child: child,
-                );
-              },
-            ),
+              child: child,
+            );
+          },
+        ),
       ),
       GoRoute(
         path: '/queue',
         name: 'queue',
-        pageBuilder:
-            (context, state) => CustomTransitionPage(
-              child: const QueueScreen(),
-              transitionsBuilder: (
-                context,
-                animation,
-                secondaryAnimation,
-                child,
-              ) {
-                return SlideTransition(
-                  position: Tween<Offset>(
+        pageBuilder: (context, state) => CustomTransitionPage(
+          child: const QueueScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return SlideTransition(
+              position:
+                  Tween<Offset>(
                     begin: const Offset(0, 1),
                     end: Offset.zero,
                   ).animate(
@@ -834,10 +834,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                       curve: Curves.easeOutCubic,
                     ),
                   ),
-                  child: child,
-                );
-              },
-            ),
+              child: child,
+            );
+          },
+        ),
       ),
     ],
   );

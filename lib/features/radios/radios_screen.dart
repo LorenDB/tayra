@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/widgets/app_refresh_indicator.dart';
@@ -175,10 +176,9 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
                   ),
                 ),
                 TextButton(
-                  onPressed:
-                      selection == null || !selection!.hasChange
-                          ? null
-                          : () => Navigator.of(dialogContext).pop(true),
+                  onPressed: selection == null || !selection!.hasChange
+                      ? null
+                      : () => Navigator.of(dialogContext).pop(true),
                   child: const Text(
                     'Save',
                     style: TextStyle(color: AppTheme.primary),
@@ -216,13 +216,186 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
     }
   }
 
+  Future<void> _openCreateRadio() async {
+    final changed = await context.push<bool>('/radios/new');
+    if (changed == true && mounted) {
+      await _loadRadios(forceRefresh: true);
+    }
+  }
+
+  Future<void> _openEditRadio(models.Radio radio) async {
+    if (!radio.isCustom) return;
+    final changed = await context.push<bool>(
+      '/radios/${radio.id}/edit',
+      extra: radio,
+    );
+    if (changed == true && mounted) {
+      await _loadRadios(forceRefresh: true);
+    }
+  }
+
+  Future<void> _deleteCustomRadio(models.Radio radio) async {
+    if (!radio.isCustom) return;
+
+    final confirmed = await showShellDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppTheme.surfaceContainerHigh,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text(
+          'Delete radio?',
+          style: TextStyle(
+            color: AppTheme.onBackground,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        content: Text(
+          'Delete “${radio.name}”? Anyone with access will lose it. '
+          'This cannot be undone.',
+          style: const TextStyle(color: AppTheme.onBackgroundMuted),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: AppTheme.onBackgroundMuted),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text(
+              'Delete radio',
+              style: TextStyle(color: AppTheme.error),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    try {
+      await ref
+          .read(cached_api.cachedFunkwhaleApiProvider)
+          .deleteRadio(radio.id);
+      if (!mounted) return;
+      setState(() {
+        _userRadios.removeWhere((r) => r.id == radio.id);
+      });
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Radio deleted')));
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Failed to delete radio')));
+    }
+  }
+
+  void _showCustomRadioMenu(models.Radio radio) {
+    showShellModalBottomSheet<void>(
+      context: context,
+      backgroundColor: AppTheme.surfaceContainerHigh,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 8),
+              Container(
+                width: 36,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppTheme.onBackgroundSubtle,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.play_arrow_rounded,
+                  color: AppTheme.primary,
+                ),
+                title: const Text(
+                  'Play',
+                  style: TextStyle(color: AppTheme.onBackground),
+                ),
+                onTap: () {
+                  Navigator.of(ctx).pop();
+                  _playRadio(radio);
+                },
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.edit_rounded,
+                  color: AppTheme.onBackground,
+                ),
+                title: const Text(
+                  'Edit',
+                  style: TextStyle(color: AppTheme.onBackground),
+                ),
+                onTap: () {
+                  Navigator.of(ctx).pop();
+                  unawaited(_openEditRadio(radio));
+                },
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.image_outlined,
+                  color: AppTheme.onBackground,
+                ),
+                title: const Text(
+                  'Edit cover art',
+                  style: TextStyle(color: AppTheme.onBackground),
+                ),
+                onTap: () {
+                  Navigator.of(ctx).pop();
+                  unawaited(_editCustomRadioCover(radio));
+                },
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.delete_outline_rounded,
+                  color: AppTheme.error,
+                ),
+                title: const Text(
+                  'Delete',
+                  style: TextStyle(color: AppTheme.error),
+                ),
+                onTap: () {
+                  Navigator.of(ctx).pop();
+                  unawaited(_deleteCustomRadio(radio));
+                },
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final offlineFilterActive = ref.watch(offlineFilterActiveProvider);
+
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
         backgroundColor: AppTheme.background,
         title: const Text('Radios'),
+        actions: [
+          if (!offlineFilterActive)
+            IconButton(
+              tooltip: 'Create radio',
+              icon: const Icon(Icons.add_rounded, color: AppTheme.onBackground),
+              onPressed: _openCreateRadio,
+            ),
+        ],
       ),
       body: _buildBody(),
     );
@@ -269,28 +442,23 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
         items.add(_RadioListServer(radio));
       }
     }
-    if (_userRadios.isNotEmpty) {
-      items.add(const _RadioListHeader('Your radios'));
+
+    // Always show the "Your radios" section online so users can create one
+    // even when the list is empty.
+    items.add(const _RadioListHeader('Your radios'));
+    if (_userRadios.isEmpty) {
+      items.add(const _RadioListCreatePrompt());
+    } else {
       for (final radio in _userRadios) {
         items.add(_RadioListServer(radio));
       }
-    }
-
-    // Only truly empty when we have nothing at all (should not happen online
-    // while instance radios exist, but keep a safe empty state).
-    if (items.isEmpty) {
-      return const EmptyState(
-        icon: Icons.radio,
-        title: 'No radios found',
-        subtitle:
-            'Create one on your Funkwhale instance or try a different server',
-      );
     }
 
     return AppRefreshIndicator(
       onRefresh: () => _loadRadios(forceRefresh: true),
       child: ListView.builder(
         controller: _scrollController,
+        padding: const EdgeInsets.only(bottom: 24),
         itemCount: items.length,
         itemBuilder: (context, index) {
           final item = items[index];
@@ -302,6 +470,25 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
                 style: const TextStyle(
                   color: AppTheme.onBackgroundMuted,
                   fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            _RadioListCreatePrompt() => Padding(
+              padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+              child: OutlinedButton.icon(
+                onPressed: _openCreateRadio,
+                icon: const Icon(Icons.add_rounded, size: 18),
+                label: const Text('Create your own radio'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppTheme.primary,
+                  side: BorderSide(
+                    color: AppTheme.primary.withValues(alpha: 0.5),
+                  ),
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 12,
+                  ),
                 ),
               ),
             ),
@@ -323,9 +510,12 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
               coverUrl: radio.coverUrl,
               isLoading: loadingRadioId == radio.id,
               onPlay: () => _playRadio(radio),
-              // Pre-programmed / system radios (no user) cannot set custom art.
-              onEditCover:
-                  radio.isCustom ? () => _editCustomRadioCover(radio) : null,
+              // Pre-programmed / system radios (no user) cannot be edited.
+              onEdit: radio.isCustom ? () => _openEditRadio(radio) : null,
+              onMore: radio.isCustom ? () => _showCustomRadioMenu(radio) : null,
+              onLongPress: radio.isCustom
+                  ? () => _showCustomRadioMenu(radio)
+                  : null,
             ),
           };
         },
@@ -339,17 +529,20 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
     String? coverUrl,
     required bool isLoading,
     required VoidCallback onPlay,
-    VoidCallback? onEditCover,
+    VoidCallback? onEdit,
+    VoidCallback? onMore,
+    VoidCallback? onLongPress,
   }) {
     return ListTile(
       title: Text(title, style: const TextStyle(color: AppTheme.onBackground)),
-      subtitle:
-          subtitle != null
-              ? Text(
-                subtitle,
-                style: const TextStyle(color: AppTheme.onBackgroundMuted),
-              )
-              : null,
+      subtitle: subtitle != null && subtitle.isNotEmpty
+          ? Text(
+              subtitle,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(color: AppTheme.onBackgroundMuted),
+            )
+          : null,
       leading: CoverArtWidget(
         // Rebuild when art changes after an in-app upload.
         key: ValueKey(coverUrl ?? 'radio-placeholder'),
@@ -358,19 +551,20 @@ class _RadiosScreenState extends ConsumerState<RadiosScreen> {
         borderRadius: 8,
         placeholderIcon: Icons.radio_rounded,
       ),
-      onLongPress: onEditCover,
+      onTap: onEdit,
+      onLongPress: onLongPress,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (onEditCover != null)
+          if (onMore != null)
             IconButton(
-              tooltip: 'Edit cover art',
+              tooltip: 'More',
               icon: const Icon(
-                Icons.image_outlined,
+                Icons.more_vert_rounded,
                 color: AppTheme.onBackgroundSubtle,
                 size: 20,
               ),
-              onPressed: onEditCover,
+              onPressed: onMore,
             ),
           if (isLoading)
             const SizedBox(
@@ -402,6 +596,11 @@ sealed class _RadioListItem {
 class _RadioListHeader extends _RadioListItem {
   final String title;
   const _RadioListHeader(this.title);
+}
+
+/// Placeholder row when the user has no custom radios yet.
+class _RadioListCreatePrompt extends _RadioListItem {
+  const _RadioListCreatePrompt();
 }
 
 class _RadioListInstance extends _RadioListItem {

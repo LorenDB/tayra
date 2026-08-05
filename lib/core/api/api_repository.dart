@@ -353,8 +353,8 @@ class FunkwhaleApi {
       data: {'index': index},
       options: Options(
         contentType: Headers.jsonContentType,
-        validateStatus:
-            (status) => status != null && status >= 200 && status < 300,
+        validateStatus: (status) =>
+            status != null && status >= 200 && status < 300,
       ),
     );
     // Defensive: if validateStatus is ever relaxed, still fail closed.
@@ -726,8 +726,9 @@ class FunkwhaleApi {
     AudioQuality? quality,
     bool forDownload = false,
   }) {
-    final absolute =
-        listenUrl.startsWith('http') ? listenUrl : '$_baseUrl$listenUrl';
+    final absolute = listenUrl.startsWith('http')
+        ? listenUrl
+        : '$_baseUrl$listenUrl';
     final uri = Uri.parse(absolute);
     final params = Map<String, String>.from(uri.queryParameters);
 
@@ -871,16 +872,13 @@ class FunkwhaleApi {
     // plain list of radios. Be flexible and accept both shapes.
     final data = response.data;
     if (data is List<dynamic>) {
-      final results =
-          data.map<Radio>((e) {
-            if (e is Map<String, dynamic>) return Radio.fromJson(e);
-            if (e is List && e.isNotEmpty && e.first is Map<String, dynamic>) {
-              return Radio.fromJson(e.first as Map<String, dynamic>);
-            }
-            throw StateError(
-              'Unexpected radio list item type: ${e.runtimeType}',
-            );
-          }).toList();
+      final results = data.map<Radio>((e) {
+        if (e is Map<String, dynamic>) return Radio.fromJson(e);
+        if (e is List && e.isNotEmpty && e.first is Map<String, dynamic>) {
+          return Radio.fromJson(e.first as Map<String, dynamic>);
+        }
+        throw StateError('Unexpected radio list item type: ${e.runtimeType}');
+      }).toList();
       return PaginatedResponse(
         count: results.length,
         next: null,
@@ -930,10 +928,9 @@ class FunkwhaleApi {
   }
 
   Future<Track> getRadioTrack(int id) async {
-    final opts =
-        _lastRadioSessionCookie != null
-            ? Options(headers: {'cookie': _lastRadioSessionCookie})
-            : null;
+    final opts = _lastRadioSessionCookie != null
+        ? Options(headers: {'cookie': _lastRadioSessionCookie})
+        : null;
     final response = await _dio.get(
       '$_baseUrl/api/v1/radios/radios/$id/tracks/',
       options: opts,
@@ -983,22 +980,39 @@ class FunkwhaleApi {
     throw StateError('Unexpected radio track response: ${data.runtimeType}');
   }
 
-  Future<Filter> getRadioFilters() async {
+  Future<List<Filter>> getRadioFilters() async {
     final response = await _dio.get('$_baseUrl/api/v1/radios/radios/filters/');
     final data = response.data;
-    if (data is Map<String, dynamic>) return Filter.fromJson(data);
-    if (data is List && data.isNotEmpty && data.first is Map<String, dynamic>) {
-      return Filter.fromJson(data.first as Map<String, dynamic>);
+    if (data is List) {
+      return data
+          .whereType<Map>()
+          .map((e) => Filter.fromJson(Map<String, dynamic>.from(e)))
+          .toList();
+    }
+    if (data is Map<String, dynamic>) {
+      return [Filter.fromJson(data)];
     }
     throw StateError('Unexpected radio filters response: ${data.runtimeType}');
   }
 
-  Future<Radio> validateRadio(Map<String, dynamic> body) async {
+  /// Validates each filter and returns per-filter candidate counts/samples.
+  Future<List<RadioFilterValidation>> validateRadioFilters(
+    List<Map<String, dynamic>> filters,
+  ) async {
     final response = await _dio.post(
       '$_baseUrl/api/v1/radios/radios/validate/',
-      data: body,
+      data: {'filters': filters},
     );
-    return Radio.fromJson(response.data);
+    final data = response.data;
+    if (data is Map && data['filters'] is List) {
+      return (data['filters'] as List)
+          .whereType<Map>()
+          .map(
+            (e) => RadioFilterValidation.fromJson(Map<String, dynamic>.from(e)),
+          )
+          .toList();
+    }
+    throw StateError('Unexpected radio validate response: ${data.runtimeType}');
   }
 
   Future<RadioSession> createRadioSession(Map<String, dynamic> body) async {
@@ -1222,10 +1236,9 @@ class FunkwhaleApi {
     if (name != null) body['name'] = name;
     if (privacyLevel != null) body['privacy_level'] = privacyLevel.apiValue;
     if (summaryText != null) {
-      body['summary'] =
-          summaryText.trim().isEmpty
-              ? null
-              : {'text': summaryText, 'content_type': 'text/plain'};
+      body['summary'] = summaryText.trim().isEmpty
+          ? null
+          : {'text': summaryText, 'content_type': 'text/plain'};
     }
 
     final response = await _dio.patch(
