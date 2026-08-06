@@ -676,6 +676,9 @@ The URL from which your pod serves media files. Change this if you're hosting me
 files on a separate domain, or if you host Funkwhale on a non-standard port.
 """
 FILE_UPLOAD_PERMISSIONS = 0o644
+# Directories under MEDIA_ROOT must be traversable by the reverse proxy
+# (nginx opens files after X-Accel-Redirect as an unprivileged user).
+FILE_UPLOAD_DIRECTORY_PERMISSIONS = 0o755
 
 ATTACHMENTS_UNATTACHED_PRUNE_DELAY = env.int(
     "ATTACHMENTS_UNATTACHED_PRUNE_DELAY", default=3600 * 24

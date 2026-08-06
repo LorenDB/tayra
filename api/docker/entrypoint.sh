@@ -2,13 +2,28 @@
 # Drop privileges after fixing bind-mount ownership.
 #
 # compose must not force user: "1000:1000" — that skips the root branch and
-# leaves host-mounted static/media unfixable when they are root-owned
+# leaves host-mounted static/media unusable when they are root-owned
 # (common after an older root-run container or a root-created bind mount).
 
 set -eu
 
 STATIC_ROOT="${STATIC_ROOT:-/srv/funkwhale/data/static}"
 MEDIA_ROOT="${MEDIA_ROOT:-/srv/funkwhale/data/media}"
+
+# nginx (front) serves audio via X-Accel-Redirect as the unprivileged
+# ``nginx`` user. Media must be world-readable/traversable or nginx returns
+# 403 Permission denied *after* the API has already authorized the request
+# (share tokens, OAuth, etc.). Paths are only reachable via internal
+# ``/_protected/media/`` — not listed as a public directory index.
+_fix_media_readable_for_proxy() {
+  chmod a+rx "$MEDIA_ROOT" 2>/dev/null || true
+  for d in tracks transcoded attachments __sized__; do
+    if [ -d "$MEDIA_ROOT/$d" ]; then
+      find "$MEDIA_ROOT/$d" -type d -exec chmod a+rx {} + 2>/dev/null || true
+      find "$MEDIA_ROOT/$d" -type f -exec chmod a+r {} + 2>/dev/null || true
+    fi
+  done
+}
 
 if [ "$(id -u)" -eq 0 ]; then
   mkdir -p "$STATIC_ROOT" "$MEDIA_ROOT"
@@ -22,6 +37,14 @@ if [ "$(id -u)" -eq 0 ]; then
     echo "entrypoint: MEDIA_ROOT not writable by funkwhale; fixing ownership (may be slow)"
     chown -R funkwhale:funkwhale "$MEDIA_ROOT"
   fi
+  # Nested root-owned trees (docker exec as root, one-off tools) leave nginx
+  # unable to open files even when the top-level media dir is fine.
+  if find "$MEDIA_ROOT" -user root -print -quit 2>/dev/null | grep -q .; then
+    echo "entrypoint: fixing root-owned paths under MEDIA_ROOT (may be slow)"
+    chown -R funkwhale:funkwhale "$MEDIA_ROOT"
+  fi
+
+  _fix_media_readable_for_proxy
 
   exec su-exec funkwhale:funkwhale "$@"
 fi
