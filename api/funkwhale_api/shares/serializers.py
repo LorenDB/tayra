@@ -77,13 +77,17 @@ class ShareLinkSerializer(serializers.ModelSerializer):
 
 
 class ShareTrackSerializer(serializers.Serializer):
-    """Minimal track payload for public share resolve."""
+    """Minimal track payload for public share resolve.
+
+    Mirrors the core fields clients need for playback. Artists use the
+    multi-credit ``artist_credit`` shape (there is no Track.artist FK).
+    """
 
     id = serializers.IntegerField()
     title = serializers.CharField()
     position = serializers.IntegerField(allow_null=True)
     disc_number = serializers.IntegerField(allow_null=True)
-    artist = music_serializers.SimpleArtistSerializer()
+    artist_credit = music_serializers.ArtistCreditSerializer(many=True)
     album = music_serializers.TrackAlbumSerializer(allow_null=True)
     cover = music_serializers.CoverField(allow_null=True)
     listen_url = serializers.SerializerMethodField()
@@ -138,7 +142,16 @@ class PublicShareSerializer(serializers.Serializer):
         if obj is None:
             return None
         if link.object_type == models.ShareLink.OBJECT_ALBUM:
-            return music_serializers.AlbumSerializer(obj, context=self.context).data
+            # Re-fetch with relations AlbumSerializer needs.
+            album = (
+                music_models.Album.objects.filter(pk=obj.pk)
+                .select_related("attachment_cover", "attributed_to")
+                .prefetch_related("artist_credit__artist")
+                .first()
+            )
+            if album is None:
+                return None
+            return music_serializers.AlbumSerializer(album, context=self.context).data
         if link.object_type == models.ShareLink.OBJECT_PLAYLIST:
             return playlist_serializers.PlaylistSerializer(
                 obj, context=self.context
@@ -159,12 +172,14 @@ class PublicShareSerializer(serializers.Serializer):
             qs = raw
             track_ids = None
 
+        # Track/Album use artist_credit M2M — not a direct artist FK.
         qs = qs.select_related(
-            "artist",
             "album",
-            "album__artist",
             "album__attachment_cover",
             "attachment_cover",
+        ).prefetch_related(
+            "artist_credit__artist",
+            "album__artist_credit__artist",
         )
         if actor is not None:
             playable = music_models.Upload.objects.playable_by(actor)
