@@ -22,7 +22,7 @@ class TrackFavoriteViewSet(
     filterset_class = filters.TrackFavoriteFilter
     serializer_class = serializers.UserTrackFavoriteSerializer
     queryset = models.TrackFavorite.objects.all().select_related(
-        "user__actor__attachment_icon"
+        "user__avatar_attachment"
     )
     permission_classes = [
         oauth_permissions.ScopePermission,
@@ -54,9 +54,13 @@ class TrackFavoriteViewSet(
         queryset = queryset.filter(
             fields.privacy_level_query(self.request.user, "user__privacy_level")
         )
-        tracks = Track.objects.with_playable_uploads(
-            music_utils.get_actor_from_request(self.request)
-        ).select_related("attributed_to", "album__attachment_cover").prefetch_related("artist_credit__artist", "album__artist_credit__artist")
+        tracks = (
+            Track.objects.with_playable_uploads(
+                music_utils.get_user_from_request(self.request)
+            )
+            .select_related("album__attachment_cover")
+            .prefetch_related("artist_credit__artist", "album__artist_credit__artist")
+        )
         queryset = queryset.prefetch_related(Prefetch("track", queryset=tracks))
         return queryset
 

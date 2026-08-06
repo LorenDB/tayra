@@ -1,10 +1,10 @@
 # Create a channel
 
 ```{warning}
-Your channel's __Fediverse handle__ needs to be unique. This is how other {term}`Fediverse` software identifies your channel. You can't change the __Fediverse handle__ once you've created your channel.
+Your channel's __handle__ needs to be unique. This is how your channel is identified on the pod. You can't change the __handle__ once you've created your channel.
 ```
 
-Create a channel to start publishing your content on your {term}`Funkwhale pod <Pod>`. Users can access channel content from Funkwhale or other Fediverse software.
+Create a channel to start publishing your content on your {term}`Funkwhale pod <Pod>`. Users can access channel content from Funkwhale.
 
 You can create two types of channel:
 
@@ -27,7 +27,7 @@ To create an **Artist discography** channel:
 4. Select {guilabel}`+ Add new` next to the {guilabel}`Channels` header. A {guilabel}`Create channel` pop-up window appears.
 5. Select {guilabel}`Artist discography` and select {guilabel}`Next step`. The {guilabel}`Artist channel` form appears.
 6. Enter the {guilabel}`Name` of your channel. Users see this when they visit your channel page.
-7. Enter the {guilabel}`Fediverse handle` of your channel. This is how other Fediverse software identifies your channel.
+7. Enter the {guilabel}`Handle` of your channel. This is how your channel is identified on the pod.
 8. **Optional** – upload a {guilabel}`Channel picture`. Users see this when they visit your channel page. Select {guilabel}`Browse…` to open a file picker.
 9. **Optional** – add {guilabel}`Tags` that describe your channel. Start typing in the {guilabel}`Search…` input box to find existing tags. You can also create new tags by typing them in and selecting them or hitting {kbd}`⏎ Return`.
 10. **Optional** – enter a {guilabel}`Description` of your channel. You can {guilabel}`Write` using [Markdown](https://www.markdownguide.org/) syntax and {guilabel}`Preview` how it will look. Users see this when they visit your channel page.
@@ -44,7 +44,7 @@ To create an **Artist discography** channel:
 4. Select {guilabel}`+ Add new` next to the {guilabel}`Channels` header. A {guilabel}`Create channel` pop-up window appears.
 5. Select {guilabel}`Artist discography` and select {guilabel}`Next step`. The {guilabel}`Artist channel` form appears.
 6. Enter the {guilabel}`Name` of your channel. Users see this when they visit your channel page.
-7. Enter the {guilabel}`Fediverse handle` of your channel. This is how other Fediverse software identifies your channel.
+7. Enter the {guilabel}`Handle` of your channel. This is how your channel is identified on the pod.
 8. **Optional** – upload a {guilabel}`Channel picture`. Users see this when they visit your channel page. Select {guilabel}`Browse…` to open a file picker.
 9. **Optional** – add {guilabel}`Tags` that describe your channel. Start typing in the {guilabel}`Search…` input box to find existing tags. You can also create new tags by typing them in and selecting them or hitting {kbd}`⏎ Return`.
 10. **Optional** – enter a {guilabel}`Description` of your channel. You can {guilabel}`Write` using [Markdown](https://www.markdownguide.org/) syntax and {guilabel}`Preview` how it will look. Users see this when they visit your channel page.
@@ -70,7 +70,7 @@ To create a **Podcast** channel:
 4. Select {guilabel}`+ Add new` next to the {guilabel}`Channels` header. A {guilabel}`Create channel` pop-up window appears.
 5. Select {guilabel}`Podcasts` and select {guilabel}`Next step`. The {guilabel}`Podcast channel` form appears.
 6. Enter the {guilabel}`Name` of your channel. Users see this when they visit your channel page.
-7. Enter the {guilabel}`Fediverse handle` of your channel. This is how other Fediverse software identifies your channel.
+7. Enter the {guilabel}`Handle` of your channel. This is how your channel is identified on the pod.
 8. **Optional** – upload a {guilabel}`Channel picture`. Users see this when they visit your channel page. Select {guilabel}`Browse…` to open a file picker.
 9. **Optional** – add {guilabel}`Tags` that describe your channel. Start typing in the {guilabel}`Search…` input box to find existing tags. You can also create new tags by typing them in and selecting them or hitting {kbd}`⏎ Return`.
 10. Choose the {guilabel}`Language` of your podcast.
@@ -92,7 +92,7 @@ To create a **Podcast** channel:
 4. Select {guilabel}`+ Add new` next to the {guilabel}`Channels` header. A {guilabel}`Create channel` pop-up window appears.
 5. Select {guilabel}`Podcasts` and select {guilabel}`Next step`. The {guilabel}`Podcast channel` form appears.
 6. Enter the {guilabel}`Name` of your channel. Users see this when they visit your channel page.
-7. Enter the {guilabel}`Fediverse handle` of your channel. This is how other Fediverse software identifies your channel.
+7. Enter the {guilabel}`Handle` of your channel. This is how your channel is identified on the pod.
 8. **Optional** – upload a {guilabel}`Channel picture`. Users see this when they visit your channel page. Select {guilabel}`Browse…` to open a file picker.
 9. **Optional** – add {guilabel}`Tags` that describe your channel. Start typing in the {guilabel}`Search…` input box to find existing tags. You can also create new tags by typing them in and selecting them or hitting {kbd}`⏎ Return`.
 10. Choose the {guilabel}`Language` of your podcast.

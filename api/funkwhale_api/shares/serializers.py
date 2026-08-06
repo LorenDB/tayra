@@ -145,7 +145,7 @@ class PublicShareSerializer(serializers.Serializer):
             # Re-fetch with relations AlbumSerializer needs.
             album = (
                 music_models.Album.objects.filter(pk=obj.pk)
-                .select_related("attachment_cover", "attributed_to")
+                .select_related("attachment_cover")
                 .prefetch_related("artist_credit__artist")
                 .first()
             )
@@ -162,7 +162,6 @@ class PublicShareSerializer(serializers.Serializer):
         from django.db.models import Prefetch
 
         owner = link.owner
-        actor = getattr(owner, "actor", None)
 
         raw = link.track_queryset()
         if isinstance(raw, list):
@@ -181,23 +180,14 @@ class PublicShareSerializer(serializers.Serializer):
             "artist_credit__artist",
             "album__artist_credit__artist",
         )
-        if actor is not None:
-            playable = music_models.Upload.objects.playable_by(actor)
-            qs = qs.prefetch_related(
-                Prefetch(
-                    "uploads",
-                    queryset=playable.select_related("library"),
-                    to_attr="playable_uploads",
-                )
+        playable = music_models.Upload.objects.playable_by(owner)
+        qs = qs.prefetch_related(
+            Prefetch(
+                "uploads",
+                queryset=playable.select_related("library"),
+                to_attr="playable_uploads",
             )
-        else:
-            qs = qs.prefetch_related(
-                Prefetch(
-                    "uploads",
-                    queryset=music_models.Upload.objects.none(),
-                    to_attr="playable_uploads",
-                )
-            )
+        )
 
         if track_ids is not None:
             by_id = {t.pk: t for t in qs}

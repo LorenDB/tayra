@@ -11,10 +11,8 @@ Below is a diagram of Funkwhale's project setup.
       subgraph Entrypoints
       user[User] --> frontend[Funkwhale web app]
       user --> ffa[Funkwhale for Android]
-      user --> subsonic[Subsonic app]
       frontend --> proxy[Nginx/Apache reverse proxy]
       ffa --> proxy
-      subsonic --> proxy
       end
       subgraph Funkwhale backend
       proxy --> api[Django API server]
@@ -34,7 +32,7 @@ Select a link below to see information about each component.
 
 ## Entrypoints
 
-Users can access Funkwhale using a variety of entrypoints. They can make use of a Funkwhale application, a Subsonic-compatible application, or by calling the API directly. Each entrypoint interacts with the Funkwhale backend in the same way.
+Users can access Funkwhale using a variety of entrypoints. They can make use of a Funkwhale application or by calling the API directly. Each entrypoint interacts with the Funkwhale backend in the same way.
 
 ### Funkwhale web app
 
@@ -45,10 +43,6 @@ The Funkwhale web app interacts with the Funkwhale API to fetch and update data.
 ### Funkwhale for Android
 
 Funkwhale for Android is the Funkwhale collective's official Android app written in [Kotlin](https://kotlinlang.org/). It interacts with the Funkwhale API to fetch and update data and stores information for offline playback.
-
-### Subsonic app
-
-Funkwhale supports a limited subset of the [Subsonic API](http://www.subsonic.org/pages/api.jsp) to support existing Subsonic apps. These apps can request data stored on a Funkwhale server by calling these endpoints.
 
 ### Nginx/Apache reverse proxy
 
@@ -65,7 +59,6 @@ The Funkwhale backend is made up of a few components which are responsible for:
 
 1. Communicating with the user's entrypoint and actioning requests
 2. Maintaining data consistency
-3. Communicating with other Funkwhale pods (if federation is enabled)
 
 ### Django API server
 
@@ -94,8 +87,7 @@ Funkwhale has to handle a lot of tasks that take longer than the average HTTP re
 Some common tasks the Celery worker handles are:
 
 - Importing uploaded music to the database
-- Handling [ActivityPub](https://www.w3.org/TR/activitypub/) messages from other {term}`Fediverse` servers
-- Scanning new content on remote pods
+- Scanning new content on the pod
 
 ### Celery beat task scheduler
 

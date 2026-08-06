@@ -24,8 +24,6 @@ from dynamic_preferences.registries import global_preferences_registry
 from rest_framework.test import APIClient, APIRequestFactory
 
 from funkwhale_api.activity import record
-from funkwhale_api.federation import actors
-from funkwhale_api.moderation import mrf
 from funkwhale_api.music import licenses
 
 from . import utils as test_utils
@@ -87,8 +85,6 @@ def cache():
     """
     yield django_cache
     django_cache.clear()
-    if "service_actor" in actors._CACHE:
-        del actors._CACHE["service_actor"]
 
 
 @pytest.fixture(autouse=True)
@@ -286,19 +282,6 @@ def r_mock(requests_mock):
     yield requests_mock
 
 
-@pytest.fixture
-def authenticated_actor(factories, mocker):
-    """
-    Returns an authenticated ActivityPub actor
-    """
-    actor = factories["federation.Actor"]()
-    mocker.patch(
-        "funkwhale_api.federation.authentication.SignatureAuthentication.authenticate_actor",
-        return_value=actor,
-    )
-    yield actor
-
-
 @pytest.fixture(scope="session")
 def to_api_date():
     return test_utils.to_api_date
@@ -398,25 +381,6 @@ def rsa_small_key(settings):
 def a_responses():
     with aioresponses() as m:
         yield m
-
-
-@pytest.fixture
-def service_actor(db):
-    return actors.get_service_actor()
-
-
-@pytest.fixture
-def mrf_inbox_registry(mocker):
-    registry = mrf.Registry()
-    mocker.patch("funkwhale_api.moderation.mrf.inbox", registry)
-    return registry
-
-
-@pytest.fixture
-def mrf_outbox_registry(mocker):
-    registry = mrf.Registry()
-    mocker.patch("funkwhale_api.moderation.mrf.outbox", registry)
-    return registry
 
 
 @pytest.fixture(autouse=True)

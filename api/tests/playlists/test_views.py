@@ -16,8 +16,7 @@ def test_can_create_playlist_via_api(logged_in_api_client):
 
 
 def test_can_set_playlist_cover(logged_in_api_client, factories):
-    actor = logged_in_api_client.user.create_actor()
-    attachment = factories["common.Attachment"](actor=actor)
+    attachment = factories["common.Attachment"](uploaded_by=logged_in_api_client.user)
     playlist = factories["playlists.Playlist"](user=logged_in_api_client.user)
     url = reverse("api:v1:playlists-detail", kwargs={"pk": playlist.pk})
 
@@ -32,8 +31,7 @@ def test_can_set_playlist_cover(logged_in_api_client, factories):
 
 
 def test_can_clear_playlist_cover(logged_in_api_client, factories):
-    actor = logged_in_api_client.user.create_actor()
-    attachment = factories["common.Attachment"](actor=actor)
+    attachment = factories["common.Attachment"](uploaded_by=logged_in_api_client.user)
     playlist = factories["playlists.Playlist"](
         user=logged_in_api_client.user, attachment_cover=attachment
     )

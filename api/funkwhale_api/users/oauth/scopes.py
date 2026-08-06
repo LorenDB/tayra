@@ -9,9 +9,7 @@ class Scope:
 
 
 BASE_SCOPES = [
-    Scope(
-        "profile", "Access profile data (e-mail, username, avatar, subsonic password…)"
-    ),
+    Scope("profile", "Access profile data (e-mail, username, avatar, …)"),
     Scope("libraries", "Access uploads, libraries, and audio metadata"),
     Scope("edits", "Browse and submit edits on audio metadata"),
     Scope("follows", "Access library follows"),

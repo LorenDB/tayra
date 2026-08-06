@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 
-from funkwhale_api.federation.models import Actor
 from funkwhale_api.music.models import Library
+from funkwhale_api.users.models import User
 
 
 class Command(BaseCommand):
@@ -30,23 +30,23 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **kwargs):
-        actor, actor_created = Actor.objects.get_or_create(name=kwargs["username"])
+        user, user_created = User.objects.get_or_create(username=kwargs["username"])
 
-        if actor_created:
-            self.stdout.write("No existing actor found. New actor created.")
+        if user_created:
+            self.stdout.write("No existing user found. New user created.")
 
         library, created = Library.objects.get_or_create(
-            name=kwargs["name"], actor=actor, privacy_level=kwargs["privacy_level"]
+            name=kwargs["name"], owner=user, privacy_level=kwargs["privacy_level"]
         )
         if created:
             self.stdout.write(
                 "Created library {} for user {} with UUID {}".format(
-                    library.pk, actor.user.pk, library.uuid
+                    library.pk, user.pk, library.uuid
                 )
             )
         else:
             self.stdout.write(
                 "Found existing library {} for user {} with UUID {}".format(
-                    library.pk, actor.user.pk, library.uuid
+                    library.pk, user.pk, library.uuid
                 )
             )

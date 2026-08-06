@@ -1,47 +1,35 @@
 """
-Mirate instance files to a library #463. For each user that imported music on an
+Migrate instance files to a library #463. For each user that imported music on an
 instance, we will create a "default" library with related files and an instance-level
 visibility (unless instance has common__api_authentication_required set to False,
 in which case the libraries will be public).
 
 Files without any import job will be bounded to a "default" library on the first
-superuser account found. This should now happen though.
-
-This command will also generate federation ids for existing resources.
+superuser account found.
 
 """
 
-from django.conf import settings
-from django.db.models import CharField, F, Value, functions
-
 from funkwhale_api.common import preferences
-from funkwhale_api.federation import models as federation_models
 from funkwhale_api.music import models
 from funkwhale_api.users.models import User
 
 
 def create_libraries(open_api, stdout):
-    local_actors = federation_models.Actor.objects.exclude(user=None).only("pk", "user")
     privacy_level = "everyone" if open_api else "instance"
-    stdout.write(
-        "* Creating {} libraries with {} visibility".format(
-            len(local_actors), privacy_level
-        )
-    )
+    users = User.objects.all().only("pk")
+    stdout.write("* Creating libraries with {} visibility".format(privacy_level))
     libraries_by_user = {}
 
-    for a in local_actors:
+    for user in users:
         library, created = models.Library.objects.get_or_create(
-            name="default", actor=a, defaults={"privacy_level": privacy_level}
+            name="default", owner=user, defaults={"privacy_level": privacy_level}
         )
-        libraries_by_user[library.actor.user.pk] = library.pk
+        libraries_by_user[user.pk] = library.pk
         if created:
-            stdout.write(f"  * Created library {library.pk} for user {a.user.pk}")
+            stdout.write(f"  * Created library {library.pk} for user {user.pk}")
         else:
             stdout.write(
-                "  * Found existing library {} for user {}".format(
-                    library.pk, a.user.pk
-                )
+                "  * Found existing library {} for user {}".format(library.pk, user.pk)
             )
 
     return libraries_by_user
@@ -65,18 +53,13 @@ def update_uploads(libraries_by_user, stdout):
 
 def update_orphan_uploads(open_api, stdout):
     privacy_level = "everyone" if open_api else "instance"
-    first_superuser = (
-        User.objects.filter(is_superuser=True)
-        .exclude(actor=None)
-        .order_by("pk")
-        .first()
-    )
+    first_superuser = User.objects.filter(is_superuser=True).order_by("pk").first()
     if not first_superuser:
         stdout.write("* No superuser found, skipping update orphan uploads")
         return
     library, _ = models.Library.objects.get_or_create(
         name="default",
-        actor=first_superuser.actor,
+        owner=first_superuser,
         defaults={"privacy_level": privacy_level},
     )
     candidates = (
@@ -96,60 +79,8 @@ def update_orphan_uploads(open_api, stdout):
         stdout.write("* No orphaned uploads found")
 
 
-def set_fid(queryset, path, stdout):
-    model = queryset.model._meta.label
-    qs = queryset.filter(fid=None)
-    base_url = f"{settings.FUNKWHALE_URL}{path}"
-    stdout.write(f"* Assigning federation ids to {model} entries (path: {base_url})")
-    new_fid = functions.Concat(Value(base_url), F("uuid"), output_field=CharField())
-    total = qs.update(fid=new_fid)
-
-    stdout.write(f"  * {total} entries updated")
-
-
-def update_shared_inbox_url(stdout):
-    stdout.write("* Update shared inbox url for local actors...")
-    candidates = federation_models.Actor.objects.local()
-    url = federation_models.get_shared_inbox_url()
-    candidates.update(shared_inbox_url=url)
-
-
-def generate_actor_urls(part, stdout):
-    field = f"{part}_url"
-    stdout.write(f"* Update {field} for local actors...")
-
-    queryset = federation_models.Actor.objects.local().filter(**{field: None})
-    base_url = f"{settings.FUNKWHALE_URL}/federation/actors/"
-
-    new_field = functions.Concat(
-        Value(base_url),
-        F("preferred_username"),
-        Value(f"/{part}"),
-        output_field=CharField(),
-    )
-
-    queryset.update(**{field: new_field})
-
-
 def main(command, **kwargs):
     open_api = not preferences.get("common__api_authentication_required")
     libraries_by_user = create_libraries(open_api, command.stdout)
     update_uploads(libraries_by_user, command.stdout)
     update_orphan_uploads(open_api, command.stdout)
-
-    set_fid_params = [
-        (
-            models.Upload.objects.exclude(library__actor__user=None),
-            "/federation/music/uploads/",
-        ),
-        (models.Artist.objects.all(), "/federation/music/artists/"),
-        (models.Album.objects.all(), "/federation/music/albums/"),
-        (models.Track.objects.all(), "/federation/music/tracks/"),
-    ]
-    for qs, path in set_fid_params:
-        set_fid(qs, path, command.stdout)
-
-    update_shared_inbox_url(command.stdout)
-
-    for part in ["followers", "following"]:
-        generate_actor_urls(part, command.stdout)

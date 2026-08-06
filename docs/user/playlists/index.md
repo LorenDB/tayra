@@ -1,6 +1,6 @@
 # Playlists
 
-You can create and share playlists with the {term}`Fediverse`. Add content from all over the network to build playlists you love.
+You can create and share playlists on your pod. Add content to build playlists you love.
 
 ```{toctree}
 ---

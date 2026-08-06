@@ -4,28 +4,23 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('music', '0038_attributed_to'),
+        ("music", "0038_attributed_to"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='lyrics',
-            name='work',
+            model_name="lyrics",
+            name="work",
         ),
         migrations.RemoveField(
-            model_name='work',
-            name='from_activity',
-        ),
-        migrations.RemoveField(
-            model_name='track',
-            name='work',
+            model_name="track",
+            name="work",
         ),
         migrations.DeleteModel(
-            name='Lyrics',
+            name="Lyrics",
         ),
         migrations.DeleteModel(
-            name='Work',
+            name="Work",
         ),
     ]

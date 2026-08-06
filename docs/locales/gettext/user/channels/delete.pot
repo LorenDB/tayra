@@ -20,10 +20,6 @@ msgstr ""
 msgid "Delete a channel"
 msgstr ""
 
-#: ../../user/channels/delete.md:4
-msgid "Deleting a channel is irreversible. If you delete a channel you also delete the content associated with it. Users won't be able to access the channel any more. You can't re-use the channel's __Fediverse handle__ for another channel."
-msgstr ""
-
 #: ../../user/channels/delete.md:7
 msgid "If you want to delete your channel, follow these steps:"
 msgstr ""

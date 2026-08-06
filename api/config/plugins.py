@@ -225,12 +225,12 @@ def enable_conf(code, value, user):
 
 class LibraryField(serializers.UUIDField):
     def __init__(self, *args, **kwargs):
-        self.actor = kwargs.pop("actor")
+        self.user = kwargs.pop("user")
         super().__init__(*args, **kwargs)
 
     def to_internal_value(self, v):
         v = super().to_internal_value(v)
-        if not self.actor.libraries.filter(uuid=v).first():
+        if not self.user.libraries.filter(uuid=v).first():
             raise serializers.ValidationError("Invalid library id")
         return v
 
@@ -259,7 +259,7 @@ def get_serializer_from_conf_template(conf, source=False, user=None):
                 name = field_kwargs.pop("name")
                 self.fields[name] = mapping[field_kwargs.pop("type")](**field_kwargs)
             if source:
-                self.fields["library"] = LibraryField(actor=user.actor)
+                self.fields["library"] = LibraryField(user=user)
 
     for vname, v in validators.items():
         setattr(Serializer, f"validate_{vname}", v)

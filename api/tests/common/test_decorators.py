@@ -44,8 +44,7 @@ def test_mutations_route_create_success(factories, api_request, is_approved, moc
     licenses.load(licenses.LICENSES)
     on_commit = mocker.patch("funkwhale_api.common.utils.on_commit")
     user = factories["users.User"](permission_library=True)
-    actor = user.create_actor()
-    track = factories["music.Track"](title="foo", local=True)
+    track = factories["music.Track"](title="foo")
     view = V.as_view({"post": "mutations"})
 
     request = api_request.post(
@@ -68,7 +67,7 @@ def test_mutations_route_create_success(factories, api_request, is_approved, moc
 
     assert mutation.type == "update"
     assert mutation.payload == {"title": "bar", "license": "cc-by-nc-4.0"}
-    assert mutation.created_by == actor
+    assert mutation.created_by == user
     assert mutation.is_approved is is_approved
     assert mutation.is_applied is None
     assert mutation.target == track
@@ -98,7 +97,6 @@ def test_mutations_route_create_no_perm(factories, api_request, mocker, is_appro
     track = factories["music.Track"](title="foo")
     view = V.as_view({"post": "mutations"})
     user = factories["users.User"]()
-    actor = user.create_actor()
     has_perm = mocker.patch.object(mutations.registry, "has_perm", return_value=False)
     request = api_request.post(
         "/",
@@ -116,7 +114,7 @@ def test_mutations_route_create_no_perm(factories, api_request, mocker, is_appro
 
     assert response.status_code == 403
     has_perm.assert_called_once_with(
-        actor=actor,
+        user=user,
         obj=track,
         type="update",
         perm="approve" if is_approved else "suggest",

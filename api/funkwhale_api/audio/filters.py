@@ -3,8 +3,6 @@ from django.db.models import Q
 
 from funkwhale_api.common import fields
 from funkwhale_api.common import filters as common_filters
-from funkwhale_api.federation import actors
-from funkwhale_api.moderation import filters as moderation_filters
 
 from . import models
 
@@ -19,12 +17,10 @@ def filter_tags(queryset, name, value):
 TAG_FILTER = common_filters.MultipleQueryFilter(method=filter_tags)
 
 
-class ChannelFilter(moderation_filters.HiddenContentFilterSet):
-    q = fields.SearchFilter(
-        search_fields=["artist__name", "actor__summary", "actor__preferred_username"]
-    )
+class ChannelFilter(django_filters.FilterSet):
+    q = fields.SearchFilter(search_fields=["artist__name"])
     tag = TAG_FILTER
-    scope = common_filters.ActorScopeFilter(actor_field="attributed_to", distinct=True)
+    scope = common_filters.ActorScopeFilter(user_field="owner", distinct=True)
     subscribed = django_filters.BooleanFilter(
         field_name="_", method="filter_subscribed"
     )
@@ -41,17 +37,16 @@ class ChannelFilter(moderation_filters.HiddenContentFilterSet):
     class Meta:
         model = models.Channel
         fields = []
-        hidden_content_fields_mapping = moderation_filters.USER_FILTER_CONFIG["CHANNEL"]
 
     def filter_subscribed(self, queryset, name, value):
         if not self.request.user.is_authenticated:
             return queryset.none()
 
-        emitted_follows = self.request.user.actor.emitted_follows.exclude(
-            target__channel__isnull=True
+        subscriptions = models.ChannelSubscription.objects.filter(
+            user=self.request.user, approved=True
         )
 
-        query = Q(actor__in=emitted_follows.values_list("target", flat=True))
+        query = Q(pk__in=subscriptions.values_list("channel_id", flat=True))
 
         if value:
             return queryset.filter(query)
@@ -59,10 +54,7 @@ class ChannelFilter(moderation_filters.HiddenContentFilterSet):
             return queryset.exclude(query)
 
     def filter_external(self, queryset, name, value):
-        query = Q(
-            attributed_to=actors.get_service_actor(),
-            actor__preferred_username__startswith="rssfeed-",
-        )
+        query = Q(is_external_rss=True)
         if value:
             queryset = queryset.filter(query)
         else:

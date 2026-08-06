@@ -12,7 +12,6 @@ plugins_patterns = plugins.trigger_filter(plugins.URLS, [], enabled=True)
 api_patterns = [
     url("v1/", include("config.urls.api")),
     url("v2/", include("config.urls.api_v2")),
-    url("subsonic/", include("config.urls.subsonic")),
 ]
 
 
@@ -20,12 +19,6 @@ urlpatterns = [
     # Django Admin, use {% url 'admin:index' %}
     url(settings.ADMIN_URL, admin.site.urls),
     url(r"^api/", include((api_patterns, "api"), namespace="api")),
-    url(
-        r"^",
-        include(
-            ("funkwhale_api.federation.urls", "federation"), namespace="federation"
-        ),
-    ),
     url(r"^api/v1/auth/", include("funkwhale_api.users.rest_auth_urls")),
     url(r"^accounts/", include("allauth.urls")),
 ] + plugins_patterns

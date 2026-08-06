@@ -59,18 +59,18 @@ def test_apply_update_mutation(factories, mutations_registry, mocker):
 
 
 def test_db_serialize_update_mutation(factories, mutations_registry, mocker):
-    user = factories["users.User"](email="hello@test.email", with_actor=True)
+    library = factories["music.Library"]()
 
     class S(mutations.UpdateMutationSerializer):
         class Meta:
-            model = user.__class__
-            fields = ["actor"]
+            model = library.__class__
+            fields = ["owner"]
 
         def get_serialized_relations(self):
-            return {"actor": "full_username"}
+            return {"owner": "username"}
 
-    expected = {"actor": user.actor.full_username}
-    assert S().db_serialize({"actor": user.actor}) == expected
+    expected = {"owner": library.owner.username}
+    assert S().db_serialize({"owner": library.owner}) == expected
 
 
 def test_is_valid_mutation(factories, mutations_registry):
@@ -89,7 +89,6 @@ def test_is_valid_mutation(factories, mutations_registry):
 
 @pytest.mark.parametrize("perm", ["approve", "suggest"])
 def test_permissions(perm, factories, mutations_registry, mocker):
-    actor = factories["federation.Actor"].build()
     user = factories["users.User"].build()
 
     class S(mutations.UpdateMutationSerializer):
@@ -99,15 +98,15 @@ def test_permissions(perm, factories, mutations_registry, mocker):
 
     mutations_registry.connect("update", user.__class__)(S)
 
-    assert mutations_registry.has_perm(perm, "update", obj=user, actor=actor) is False
+    assert mutations_registry.has_perm(perm, "update", obj=user, user=user) is False
 
     checker = mocker.Mock(return_value=True)
     mutations_registry.connect("update", user.__class__, perm_checkers={perm: checker})(
         S
     )
 
-    assert mutations_registry.has_perm(perm, "update", obj=user, actor=actor) is True
-    checker.assert_called_once_with(obj=user, actor=actor)
+    assert mutations_registry.has_perm(perm, "update", obj=user, user=user) is True
+    checker.assert_called_once_with(obj=user, user=user)
 
 
 def test_model_apply(factories, mocker, now):

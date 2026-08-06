@@ -49,7 +49,7 @@ Notes:
 
 Stock compose uses a `front` service (nginx) that:
 
-1. Proxies `/api/`, `/federation/`, `/rest/`, `/.well-known/`, etc. to the API
+1. Proxies `/api/`, `/.well-known/`, etc. to the API
 2. Serves SPA files from `/usr/share/nginx/html` with `try_files … /index.html`
 
 ### Option 1 — volume mount over the Vue assets
@@ -86,7 +86,7 @@ Not required for authenticated listening.
 
 - OAuth app registration + token endpoints
 - Scoped listen tokens (`GET /api/v1/users/me/` → `tokens.listen`) for stream URLs
-- Media streaming, federation, Celery, Subsonic
+- Media streaming, Celery
 
 Third-party OAuth consent is served by the Tayra SPA at `/authorize` (Flutter UI → `/api/v1/oauth/authorize`). First-party login still uses password token and/or OOB. See [web-deferred-features.md](web-deferred-features.md).
 
@@ -95,7 +95,7 @@ Third-party OAuth consent is served by the Tayra SPA at `/authorize` (Flutter UI
 | Task | Tool |
 |---|---|
 | Users / some models | Django admin (`ADMIN_URL`) |
-| Imports, federation | `funkwhale-manage` CLI |
+| Imports | `funkwhale-manage` CLI |
 | Instance prefs | Env + Django |
 
 See [web-deferred-features.md](web-deferred-features.md) for the full gap list.

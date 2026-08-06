@@ -2,25 +2,27 @@
 
 import django.contrib.postgres.fields.jsonb
 from django.db import migrations
+
 import funkwhale_api.users.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('users', '0017_actor_avatar'),
+        ("users", "0016_auto_20190920_0857"),
     ]
 
     operations = [
         migrations.AlterModelManagers(
-            name='user',
+            name="user",
             managers=[
-                ('objects', funkwhale_api.users.models.UserManager()),
+                ("objects", funkwhale_api.users.models.UserManager()),
             ],
         ),
         migrations.AddField(
-            model_name='user',
-            name='settings',
-            field=django.contrib.postgres.fields.jsonb.JSONField(default=None, null=True, blank=True, max_length=50000),
+            model_name="user",
+            name="settings",
+            field=django.contrib.postgres.fields.jsonb.JSONField(
+                default=None, null=True, blank=True, max_length=50000
+            ),
         ),
     ]

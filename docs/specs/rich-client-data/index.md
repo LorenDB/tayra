@@ -21,7 +21,7 @@ As Tayra becomes the **primary web UI** (and remains a native app), web clients 
 3. **Namespaced client preferences** — multi-client, multi-device config with merge semantics (not a second opaque blob)
 4. **Playback progress** — podcast (and general) resume / completed state
 
-The design extends the existing `history` app for listenings, introduces a small multi-client `client_data` app for devices / preferences / progress, preserves backward compatibility with stock listening clients and ActivityPub, and defines migration APIs so standalone Tayra installs can upload local and Nextcloud-backed data upstream.
+The design extends the existing `history` app for listenings, introduces a small multi-client `client_data` app for devices / preferences / progress, preserves backward compatibility with stock listening clients, and defines migration APIs so standalone Tayra installs can upload local and Nextcloud-backed data upstream.
 
 ---
 
@@ -107,7 +107,7 @@ API: `ListeningViewSet` — create/list/retrieve only; write serializer fields `
 
 ### Non-Goals
 
-- Federating duration / device / progress over ActivityPub by default (privacy).
+- Federating duration / device / progress by default (privacy).
 - Storing offline audio blobs on the server.
 - Replacing Nextcloud for general file backup outside Funkwhale-owned data (Nextcloud becomes optional).
 - Full Django admin UX beyond basic list/search for ops.
@@ -152,7 +152,7 @@ flowchart TB
     TayraWeb[Tayra Web]
     TayraNative[Tayra Native]
     OtherClients[Other FW clients]
-    Legacy[Stock Vue / Subsonic plugins]
+    Legacy[Stock Funkwhale clients]
   end
 
   subgraph API["Django API"]
@@ -444,16 +444,15 @@ class ListeningSerializer(serializers.ModelSerializer):
         return data
 ```
 
-**Queryset:** extend `get_queryset` / list-retrieve path with `.select_related("source_device")` (in addition to existing user/actor selects) so owner reads do not N+1.
+**Queryset:** extend `get_queryset` / list-retrieve path with `.select_related("source_device")` (in addition to existing user selects) so owner reads do not N+1.
 
-Applies to **list and retrieve**. Nested `user` / `actor` / `track` payloads unchanged. Activity serializers remain thin (no code path through this serializer for federation).
+Applies to **list and retrieve**. Nested `user` / `track` payloads unchanged.
 
 **Required tests:**
 
 1. Owner list/retrieve includes rich fields; `source_device` is UUID string or `null` when unset (no 500).
 2. Another authenticated user with target `privacy_level=everyone` sees thin rows (no rich keys).
 3. Anonymous (when API auth not required) sees thin public rows.
-4. Activity payload / `ListeningActivitySerializer` unchanged.
 
 Filters (extend `ListeningFilter`):
 
@@ -592,7 +591,7 @@ Owner/self only (`request.user`); ignore or 403 other usernames. Staff impersona
 
 Document for UX: “Listening time only counts plays recorded with duration. Older server history may show plays without time until imported/enriched.”
 
-**Joins:** `track__artist` for artist name; `track__album` for album; cover via existing attachment serialization helpers (absolute URL via `federation.utils.full_url` or the same helper `TrackSerializer` uses). **Multi-artist** (`docs/specs/multi-artist/`) is a follow-up: v1 uses single `Track.artist` FK.
+**Joins:** `track__artist` for artist name; `track__album` for album; cover via existing attachment serialization helpers (the same absolute URL helpers `TrackSerializer` uses). **Multi-artist** (`docs/specs/multi-artist/`) is a follow-up: v1 uses single `Track.artist` FK.
 
 `limit` default **10**, max 50.
 
@@ -860,7 +859,6 @@ Update Tayra `oauth_scopes.dart` labels in client PR 9.
 
 - All `client_data` viewsets: authenticated owner only; no anonymous; no cross-user read.
 - Listenings: `privacy_level_query` for list/retrieve of others’ rows; rich fields stripped via `to_representation` ([K9](#key-decisions)).
-- Activity / federation: unchanged thin serializers.
 - Account deletion: CASCADE removes devices, prefs, progress, listenings.
 
 ---
@@ -1162,7 +1160,6 @@ Add a single `extra = JSONField` for client-specific keys without per-field migr
 | Looped single POST of historical dates | Medium | `creation_date_too_old` on create; import must use bulk |
 | Cross-user device/prefs access | High | Owner queryset filter |
 | Duration/device leakage in public REST | Medium | Serializer `to_representation` strip (list+retrieve) |
-| Duration/device in ActivityPub | Medium | Thin activity serializer unchanged |
 | Preference XSS in admin | Low | Opaque JSON |
 | Enumeration of progress | High | No public progress endpoints |
 
@@ -1195,11 +1192,9 @@ Add a single `extra = JSONField` for client-specific keys without per-field migr
 Resolved for v1 in [Resolved defaults](#resolved-defaults-for-v1) / K13–K17. Remaining non-blocking:
 
 1. **Retention default** when admin knob is added — keep forever or e.g. 5 years?
-2. **Subsonic scrobble path** — populate duration when Subsonic clients send it?
-3. **`User.settings` deprecation timeline** once Tayra is sole primary UI?
-4. **Queue multi-device handoff** — still non-goal?
-5. **v1.1 export dump** format (JSON archive vs paginated full export)?
-6. Opt-in federated duration later?
+2. **`User.settings` deprecation timeline** once Tayra is sole primary UI?
+3. **Queue multi-device handoff** — still non-goal?
+4. **v1.1 export dump** format (JSON archive vs paginated full export)?
 
 ---
 

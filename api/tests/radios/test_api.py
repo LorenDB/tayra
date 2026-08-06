@@ -1,6 +1,7 @@
 import pytest
 from django.urls import reverse
 
+from funkwhale_api.music import models as music_models
 from funkwhale_api.music.serializers import TrackSerializer
 from funkwhale_api.radios import filters, serializers
 
@@ -20,9 +21,11 @@ def test_can_list_config_options(logged_in_api_client):
 def test_can_validate_config(logged_in_api_client, factories):
     artist1 = factories["music.Artist"]()
     artist2 = factories["music.Artist"]()
-    factories["music.Track"].create_batch(3, artist=artist1)
-    factories["music.Track"].create_batch(3, artist=artist2)
-    candidates = artist1.tracks.order_by("pk")
+    factories["music.Track"].create_batch(3, artist_credit__artist=artist1)
+    factories["music.Track"].create_batch(3, artist_credit__artist=artist2)
+    candidates = music_models.Track.objects.filter(
+        artist_credit__artist=artist1
+    ).order_by("pk")
     f = {"filters": [{"type": "artist", "ids": [artist1.pk]}]}
     url = reverse("api:v1:radios:radios-validate")
     response = logged_in_api_client.post(url, f, format="json")
@@ -104,8 +107,7 @@ def test_user_can_edit_his_radio(logged_in_api_client, factories):
 
 
 def test_can_set_radio_cover(logged_in_api_client, factories):
-    actor = logged_in_api_client.user.create_actor()
-    attachment = factories["common.Attachment"](actor=actor)
+    attachment = factories["common.Attachment"](uploaded_by=logged_in_api_client.user)
     radio = factories["radios.Radio"](user=logged_in_api_client.user)
     url = reverse("api:v1:radios:radios-detail", kwargs={"pk": radio.pk})
 
@@ -120,8 +122,7 @@ def test_can_set_radio_cover(logged_in_api_client, factories):
 
 
 def test_can_clear_radio_cover(logged_in_api_client, factories):
-    actor = logged_in_api_client.user.create_actor()
-    attachment = factories["common.Attachment"](actor=actor)
+    attachment = factories["common.Attachment"](uploaded_by=logged_in_api_client.user)
     radio = factories["radios.Radio"](
         user=logged_in_api_client.user, attachment_cover=attachment
     )

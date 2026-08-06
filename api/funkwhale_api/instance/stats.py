@@ -77,15 +77,15 @@ def get_track_favorites():
 
 
 def get_tracks():
-    return models.Track.objects.local().count()
+    return models.Track.objects.count()
 
 
 def get_albums():
-    return models.Album.objects.local().count()
+    return models.Album.objects.count()
 
 
 def get_artists():
-    return models.Artist.objects.local().count()
+    return models.Artist.objects.count()
 
 
 def get_downloads():

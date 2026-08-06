@@ -272,14 +272,11 @@ LOCAL_APPS = (
     "funkwhale_api.music",
     "funkwhale_api.requests",
     "funkwhale_api.favorites",
-    "funkwhale_api.federation",
-    "funkwhale_api.moderation.apps.ModerationConfig",
     "funkwhale_api.radios",
     "funkwhale_api.history",
     "funkwhale_api.client_data",
     "funkwhale_api.playlists",
     "funkwhale_api.shares.apps.SharesConfig",
-    "funkwhale_api.subsonic",
     "funkwhale_api.tags",
 )
 
@@ -738,6 +735,7 @@ LOGIN_URL = "account_login"
 # OAuth configuration
 from funkwhale_api.users.oauth import scopes  # noqa
 
+
 def _oauth_pkce_required(client_id):
     """Require PKCE for public OAuth clients (M2). Confidential apps optional."""
     from oauth2_provider.models import get_application_model
@@ -985,11 +983,6 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": crontab(minute="0", hour="*"),
         "options": {"expires": 60 * 60},
     },
-    "federation.clean_music_cache": {
-        "task": "federation.clean_music_cache",
-        "schedule": crontab(minute="0", hour="*/2"),
-        "options": {"expires": 60 * 2},
-    },
     "music.clean_transcoding_cache": {
         "task": "music.clean_transcoding_cache",
         "schedule": crontab(minute="0", hour="*"),
@@ -1006,16 +999,6 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": crontab(minute="0", hour="0"),
         "options": {"expires": 60 * 60 * 24},
     },
-    "federation.refresh_nodeinfo_known_nodes": {
-        "task": "federation.refresh_nodeinfo_known_nodes",
-        "schedule": crontab(
-            **env.dict(
-                "SCHEDULE_FEDERATION_REFRESH_NODEINFO_KNOWN_NODES",
-                default={"minute": "0", "hour": "*"},
-            )
-        ),
-        "options": {"expires": 60 * 60},
-    },
     "music.library.schedule_remote_scan": {
         "task": "music.library.schedule_scan",
         "schedule": crontab(day_of_week="1", minute="0", hour="2"),
@@ -1026,16 +1009,6 @@ CELERY_BEAT_SCHEDULE = {
         "task": "tags.update_musicbrainz_genre",
         "schedule": crontab(day_of_month="2", minute="30", hour="3"),
         "options": {"expires": 60 * 60 * 24},
-    },
-    "federation.check_all_remote_instance_availability": {
-        "task": "federation.check_all_remote_instance_availability",
-        "schedule": crontab(
-            **env.dict(
-                "SCHEDULE_FEDERATION_CHECK_INTANCES_AVAILABILITY",
-                default={"minute": "0", "hour": "*"},
-            )
-        ),
-        "options": {"expires": 60 * 60},
     },
 }
 
@@ -1183,7 +1156,6 @@ REST_FRAMEWORK = {
         "rest_framework.parsers.JSONParser",
         "rest_framework.parsers.FormParser",
         "rest_framework.parsers.MultiPartParser",
-        "funkwhale_api.federation.parsers.ActivityParser",
     ),
     # M4: OAuth bearer tokens are the primary API auth. SessionAuthentication
     # stays for same-origin SPA / admin / authorize UI only — safe once CORS
@@ -1309,19 +1281,6 @@ THROTTLING_RATES = {
     "anonymous-update": {
         "rate": THROTTLING_USER_RATES.get("anonymous-update", "1000/day"),
         "description": "Anonymous PATCH and PUT requests on resource detail",
-    },
-    "subsonic": {
-        "rate": THROTTLING_USER_RATES.get("subsonic", "2000/hour"),
-        "description": "All subsonic API requests",
-    },
-    # potentially spammy / dangerous endpoints
-    "authenticated-reports": {
-        "rate": THROTTLING_USER_RATES.get("authenticated-reports", "100/day"),
-        "description": "Authenticated report submission",
-    },
-    "anonymous-reports": {
-        "rate": THROTTLING_USER_RATES.get("anonymous-reports", "10/day"),
-        "description": "Anonymous report submission",
     },
     "authenticated-oauth-app": {
         "rate": THROTTLING_USER_RATES.get("authenticated-oauth-app", "10/hour"),

@@ -55,9 +55,9 @@ class TrackAdmin(admin.ModelAdmin):
 
 @admin.register(models.TrackActor)
 class TrackActorAdmin(admin.ModelAdmin):
-    list_display = ["actor", "track", "upload", "internal"]
-    search_fields = ["actor__preferred_username", "track__title"]
-    list_select_related = ["actor", "track"]
+    list_display = ["user", "track", "upload", "internal"]
+    search_fields = ["user__username", "track__title"]
+    list_select_related = ["user", "track"]
 
 
 @admin.register(models.ImportBatch)
@@ -124,7 +124,7 @@ class UploadVersionAdmin(admin.ModelAdmin):
 
 def launch_scan(modeladmin, request, queryset):
     for library in queryset:
-        library.schedule_scan(actor=request.user.actor, force=True)
+        library.schedule_scan(user=request.user, force=True)
 
 
 launch_scan.short_description = "Launch scan"
@@ -132,9 +132,9 @@ launch_scan.short_description = "Launch scan"
 
 @admin.register(models.Library)
 class LibraryAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "actor", "uuid", "privacy_level", "creation_date"]
+    list_display = ["id", "name", "owner", "uuid", "privacy_level", "creation_date"]
     list_select_related = True
-    search_fields = ["uuid", "name", "actor__preferred_username"]
+    search_fields = ["uuid", "name", "owner__username"]
     list_filter = ["privacy_level"]
     actions = [launch_scan]
 
@@ -144,7 +144,7 @@ class LibraryScanAdmin(admin.ModelAdmin):
     list_display = [
         "id",
         "library",
-        "actor",
+        "submitted_by",
         "status",
         "creation_date",
         "modification_date",
@@ -154,5 +154,5 @@ class LibraryScanAdmin(admin.ModelAdmin):
         "errored_files",
     ]
     list_select_related = True
-    search_fields = ["actor__username", "library__name"]
+    search_fields = ["submitted_by__username", "library__name"]
     list_filter = ["status"]

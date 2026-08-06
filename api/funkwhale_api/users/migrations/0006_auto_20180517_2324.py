@@ -4,15 +4,9 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
-    dependencies = [("users", "0005_user_subsonic_api_token")]
+    dependencies = [("users", "0004_user_privacy_level")]
 
     operations = [
-        migrations.AddField(
-            model_name="user",
-            name="permission_federation",
-            field=models.BooleanField(default=False),
-        ),
         migrations.AddField(
             model_name="user",
             name="permission_library",

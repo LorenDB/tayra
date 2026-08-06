@@ -37,7 +37,7 @@ Edit at least:
 
 `FUNKWHALE_PROTOCOL` + `FUNKWHALE_HOSTNAME` are:
 
-1. Used by the **API** at runtime (federation, absolute links)
+1. Used by the **API** at runtime (absolute links)
 2. Passed as a **build arg** when building the front image so Tayra bakes that
    URL into the SPA
 
@@ -135,11 +135,6 @@ docker compose exec api python manage.py migrate music
 **Client:** ship a Tayra build that understands `artist_credit` in lockstep; older
 clients expecting top-level `artist` on tracks/albums will break.
 
-### Activity privacy
-
-No migration. After deploy, account privacy level `followers` is honored on
-listenings, favorites, and activity feeds (requires approved ActivityPub follows).
-
 (Use whatever management commands your image exposes; stock Funkwhale uses
 `funkwhale-manage` / `manage.py` depending on image entrypoint.)
 
@@ -233,7 +228,7 @@ make front-rebuild           # rebuild SPA image only
 |---|---|
 | Runtime front/pod URL from compose env only | SPA URL is **build-time** (`FUNKWHALE_URL` arg). Rebuild front after hostname changes. |
 | Runtime `config.js` / `window.location.origin` | Same family as above — not wired yet |
-| Admin / moderation / signup UIs | Django admin + CLI; see Tayra `doc/web-deferred-features.md` |
+| Admin / signup UIs | Django admin + CLI; see Tayra `doc/web-deferred-features.md` |
 | Stock Vue frontend | Removed in this fork |
 
 ## Troubleshooting
@@ -358,21 +353,6 @@ Tayra never sends the account password on the SCRAM login path. Login uses a
 one-time SCRAM-like proof bound to a server challenge. DevTools still shows
 the JSON body after TLS decryption; you should see hex proofs, not the typed
 password. Ensure users open the site via **HTTPS**.
-
-### Subsonic API (optional)
-
-Subsonic clients authenticate with a **token in the query string** (`u`, `p` or
-`s`/`t`) and the protocol mandates MD5 for the salted token form. Treat this
-as a legacy protocol surface:
-
-1. **TLS only** — never expose Subsonic over cleartext HTTP on a public network.
-2. **Disable when unused** — instance preference `subsonic__enabled` (or
-   equivalent admin setting). Prefer first-party Tayra OAuth for new clients.
-3. **Log redaction** — configure your reverse proxy / access logs so query
-   strings for `/rest/` (or Subsonic paths) are not stored; tokens in `p=` /
-   `t=` are password-equivalent for that user.
-4. **Rotate** — users can regenerate their Subsonic token from account
-   settings if a URL was leaked.
 
 **Browser CSP / CanvasKit blocked (gstatic.com)**  
 The front image must build with `--no-web-resources-cdn` (already in

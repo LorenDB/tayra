@@ -2,7 +2,6 @@ from funkwhale_api.common import models as common_models
 from funkwhale_api.common import mutations
 from funkwhale_api.common import serializers as common_serializers
 from funkwhale_api.common import utils as common_utils
-from funkwhale_api.federation import routes
 from funkwhale_api.tags import models as tags_models
 from funkwhale_api.tags import serializers as tags_serializers
 
@@ -11,17 +10,15 @@ from . import models
 NOOP = object()
 
 
-def can_suggest(obj, actor):
-    return obj.is_local
+def can_suggest(obj, user):
+    return True
 
 
-def can_approve(obj, actor):
-    if not obj.is_local or not actor.user:
+def can_approve(obj, user):
+    if not user or not user.is_authenticated:
         return False
 
-    return (
-        actor.id is not None and actor.id == obj.attributed_to_id
-    ) or actor.user.get_permissions()["library"]
+    return user.get_permissions()["library"]
 
 
 class TagMutation(mutations.UpdateMutationSerializer):
@@ -65,7 +62,7 @@ class DescriptionMutation(mutations.UpdateMutationSerializer):
 class CoverMutation(mutations.UpdateMutationSerializer):
     cover = common_serializers.RelatedField(
         "uuid",
-        queryset=common_models.Attachment.objects.all().local(),
+        queryset=common_models.Attachment.objects.all(),
         serializer=None,
     )
 
@@ -125,21 +122,6 @@ class TrackMutationSerializer(CoverMutation, TagMutation, DescriptionMutation):
         serialized_relations["license"] = "code"
         return serialized_relations
 
-    def post_apply(self, obj, validated_data):
-        artists = obj.get_artists_list()
-        channel = artists[0].get_channel() if artists else None
-        if channel:
-            upload = channel.library.uploads.filter(track=obj).first()
-            if upload:
-                routes.outbox.dispatch(
-                    {"type": "Update", "object": {"type": "Audio"}},
-                    context={"upload": upload},
-                )
-        else:
-            routes.outbox.dispatch(
-                {"type": "Update", "object": {"type": "Track"}}, context={"track": obj}
-            )
-
 
 @mutations.registry.connect(
     "update",
@@ -151,11 +133,6 @@ class ArtistMutationSerializer(CoverMutation, TagMutation, DescriptionMutation):
         model = models.Artist
         fields = ["name", "tags", "description", "cover"]
 
-    def post_apply(self, obj, validated_data):
-        routes.outbox.dispatch(
-            {"type": "Update", "object": {"type": "Artist"}}, context={"artist": obj}
-        )
-
 
 @mutations.registry.connect(
     "update",
@@ -166,8 +143,3 @@ class AlbumMutationSerializer(CoverMutation, TagMutation, DescriptionMutation):
     class Meta:
         model = models.Album
         fields = ["title", "release_date", "tags", "cover", "description"]
-
-    def post_apply(self, obj, validated_data):
-        routes.outbox.dispatch(
-            {"type": "Update", "object": {"type": "Album"}}, context={"album": obj}
-        )

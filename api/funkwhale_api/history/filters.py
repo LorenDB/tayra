@@ -4,15 +4,13 @@ import django_filters
 from django.utils import timezone
 
 from funkwhale_api.common import filters as common_filters
-from funkwhale_api.moderation import filters as moderation_filters
 
 from . import models
 
 
-class ListeningFilter(moderation_filters.HiddenContentFilterSet):
+class ListeningFilter(django_filters.FilterSet):
     username = django_filters.CharFilter("user__username")
-    domain = django_filters.CharFilter("user__actor__domain_id")
-    scope = common_filters.ActorScopeFilter(actor_field="user__actor", distinct=True)
+    scope = common_filters.ActorScopeFilter(user_field="user", distinct=True)
     track = django_filters.NumberFilter(field_name="track_id")
     creation_date_after = django_filters.IsoDateTimeFilter(
         field_name="creation_date", lookup_expr="gte"
@@ -28,9 +26,6 @@ class ListeningFilter(moderation_filters.HiddenContentFilterSet):
 
     class Meta:
         model = models.Listening
-        hidden_content_fields_mapping = moderation_filters.USER_FILTER_CONFIG[
-            "LISTENING"
-        ]
         fields = []
 
     def filter_rich_only(self, queryset, name, value):

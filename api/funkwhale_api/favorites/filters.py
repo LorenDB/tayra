@@ -1,19 +1,21 @@
+from django_filters import rest_framework as filters
+
 from funkwhale_api.common import fields
 from funkwhale_api.common import filters as common_filters
-from funkwhale_api.moderation import filters as moderation_filters
 
 from . import models
 
 
-class TrackFavoriteFilter(moderation_filters.HiddenContentFilterSet):
+class TrackFavoriteFilter(filters.FilterSet):
     q = fields.SearchFilter(
-        search_fields=["track__title", "track__artist_credit__artist__name", "track__album__title"]
+        search_fields=[
+            "track__title",
+            "track__artist_credit__artist__name",
+            "track__album__title",
+        ]
     )
-    scope = common_filters.ActorScopeFilter(actor_field="user__actor", distinct=True)
+    scope = common_filters.ActorScopeFilter(user_field="user", distinct=True)
 
     class Meta:
         model = models.TrackFavorite
         fields = []
-        hidden_content_fields_mapping = moderation_filters.USER_FILTER_CONFIG[
-            "TRACK_FAVORITE"
-        ]

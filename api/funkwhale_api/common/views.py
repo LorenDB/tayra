@@ -61,14 +61,14 @@ class MutationViewSet(
         if instance.is_applied:
             raise exceptions.PermissionDenied("You cannot delete an applied mutation")
 
-        actor = self.request.user.actor
-        is_owner = actor == instance.created_by
+        user = self.request.user
+        is_owner = user == instance.created_by
 
         if not any(
             [
                 is_owner,
                 mutations.registry.has_perm(
-                    perm="approve", type=instance.type, obj=instance.target, actor=actor
+                    perm="approve", type=instance.type, obj=instance.target, user=user
                 ),
             ]
         ):
@@ -85,15 +85,15 @@ class MutationViewSet(
             return response.Response(
                 {"error": "This mutation was already applied"}, status=403
             )
-        actor = self.request.user.actor
+        user = self.request.user
         can_approve = mutations.registry.has_perm(
-            perm="approve", type=instance.type, obj=instance.target, actor=actor
+            perm="approve", type=instance.type, obj=instance.target, user=user
         )
 
         if not can_approve:
             raise exceptions.PermissionDenied()
         previous_is_approved = instance.is_approved
-        instance.approved_by = actor
+        instance.approved_by = user
         instance.is_approved = True
         instance.save(update_fields=["approved_by", "is_approved"])
         utils.on_commit(tasks.apply_mutation.delay, mutation_id=instance.id)
@@ -115,15 +115,15 @@ class MutationViewSet(
             return response.Response(
                 {"error": "This mutation was already applied"}, status=403
             )
-        actor = self.request.user.actor
+        user = self.request.user
         can_approve = mutations.registry.has_perm(
-            perm="approve", type=instance.type, obj=instance.target, actor=actor
+            perm="approve", type=instance.type, obj=instance.target, user=user
         )
 
         if not can_approve:
             raise exceptions.PermissionDenied()
         previous_is_approved = instance.is_approved
-        instance.approved_by = actor
+        instance.approved_by = user
         instance.is_approved = False
         instance.save(update_fields=["approved_by", "is_approved"])
         utils.on_commit(
@@ -185,9 +185,7 @@ class AttachmentViewSet(
             from funkwhale_api.common.ssrf import UnsafeURLError
 
             if isinstance(exc, UnsafeURLError):
-                logger.warning(
-                    "Blocked SSRF attachment proxy for %s", instance.url
-                )
+                logger.warning("Blocked SSRF attachment proxy for %s", instance.url)
                 return response.Response(status=400)
             logger.exception("Error while fetching attachment %s", instance.url)
             return response.Response(status=500)
@@ -198,15 +196,10 @@ class AttachmentViewSet(
 
     def perform_create(self, serializer):
         user = self.request.user
-        actor = getattr(user, "actor", None)
-        # Cover assignment later filters by the request user's actor; ensure one
-        # exists so the uploaded attachment is "owned" and usable as a cover.
-        if actor is None and user.is_authenticated:
-            actor = user.create_actor()
-        return serializer.save(actor=actor)
+        return serializer.save(uploaded_by=user)
 
     def perform_destroy(self, instance):
-        if instance.actor is None or instance.actor != self.request.user.actor:
+        if instance.uploaded_by is None or instance.uploaded_by != self.request.user:
             raise exceptions.PermissionDenied()
         instance.delete()
 
@@ -319,7 +312,7 @@ class PluginViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         if not conf["enabled"]:
             return response.Response(status=405)
 
-        library = request.user.actor.libraries.get(uuid=conf["conf"]["library"])
+        library = request.user.libraries.get(uuid=conf["conf"]["library"])
         hook = [
             hook
             for p, hook in plugins._hooks.get(plugins.SCAN, [])

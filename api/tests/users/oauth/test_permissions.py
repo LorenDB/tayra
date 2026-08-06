@@ -162,11 +162,11 @@ def test_scope_permission_request_scopes_unauthenticated(mocker):
     should_allow.assert_not_called()
 
 
-def test_scope_permission_actor(mocker, factories, anonymous_user):
+def test_scope_permission_actor(mocker, anonymous_user):
     should_allow = mocker.patch.object(permissions, "should_allow")
     request = mocker.Mock(
         method="POST",
-        actor=factories["federation.Actor"](),
+        actor=mocker.Mock(),
         user=anonymous_user,
         scopes=None,
     )

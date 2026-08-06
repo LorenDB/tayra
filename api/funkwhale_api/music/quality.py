@@ -41,17 +41,15 @@ def ladder_bitrate_set():
 
 def is_ladder_version(version):
     """True if *version* matches a multi-quality ladder rung we retain forever."""
-    if not version:
+    if not version or not version.bitrate:
+        return False
+    if version.bitrate not in ladder_bitrate_set():
         return False
     fmt = utils.MIMETYPE_TO_EXTENSION.get(version.mimetype)
     if not fmt:
         return False
     for profile in QUALITY_PROFILES.values():
-        if profile["format"] != fmt:
-            continue
-        target = profile["bitrate"]
-        # Match the same 80–120% window used when looking up versions.
-        if version.bitrate and target * 0.8 <= version.bitrate <= target * 1.2:
+        if profile["format"] == fmt and profile["bitrate"] == version.bitrate:
             return True
     return False
 
@@ -381,9 +379,7 @@ def resolve_serve_file(upload, format=None, max_bitrate=None, quality=None):
 
 def serialize_audio_qualities(upload, track_listen_url=None):
     """Build audio_qualities list for API serializers."""
-    base = track_listen_url or (
-        upload.track.listen_url if upload.track_id else None
-    )
+    base = track_listen_url or (upload.track.listen_url if upload.track_id else None)
     if not base:
         return []
 

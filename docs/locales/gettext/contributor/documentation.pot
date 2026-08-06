@@ -96,10 +96,6 @@ msgstr ""
 msgid "Create a dummy `.env` file"
 msgstr ""
 
-#: ../../contributor/documentation.md:47
-msgid "Create a dummy federation network"
-msgstr ""
-
 #: ../../contributor/documentation.md:53
 msgid "Build the container"
 msgstr ""

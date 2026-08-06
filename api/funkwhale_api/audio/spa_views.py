@@ -5,8 +5,7 @@ from django.db.models import Q
 from django.urls import reverse
 from rest_framework import serializers
 
-from funkwhale_api.common import middleware, preferences, utils
-from funkwhale_api.federation import utils as federation_utils
+from funkwhale_api.common import utils
 from funkwhale_api.music import spa_views
 
 from . import models
@@ -14,25 +13,22 @@ from . import models
 
 def channel_detail(query, redirect_to_ap):
     queryset = models.Channel.objects.filter(query).select_related(
-        "artist__attachment_cover", "actor", "library"
+        "artist__attachment_cover", "library"
     )
     try:
         obj = queryset.get()
     except models.Channel.DoesNotExist:
         return []
 
-    if redirect_to_ap:
-        raise middleware.ApiRedirect(obj.actor.fid)
-
     obj_url = utils.join_url(
         settings.FUNKWHALE_URL,
         utils.spa_reverse(
-            "channel_detail", kwargs={"username": obj.actor.full_username}
+            "channel_detail", kwargs={"username": obj.preferred_username}
         ),
     )
     metas = [
         {"tag": "meta", "property": "og:url", "content": obj_url},
-        {"tag": "meta", "property": "og:title", "content": obj.get_artist_credit_string},
+        {"tag": "meta", "property": "og:title", "content": obj.artist.name},
         {"tag": "meta", "property": "og:type", "content": "profile"},
     ]
 
@@ -45,23 +41,13 @@ def channel_detail(query, redirect_to_ap):
             }
         )
 
-    if preferences.get("federation__enabled"):
-        metas.append(
-            {
-                "tag": "link",
-                "rel": "alternate",
-                "type": "application/activity+json",
-                "href": obj.actor.fid,
-            }
-        )
-
     metas.append(
         {
             "tag": "link",
             "rel": "alternate",
             "type": "application/rss+xml",
             "href": obj.get_rss_url(),
-            "title": f"{obj.get_artist_credit_string} - RSS Podcast Feed",
+            "title": f"{obj.artist.name} - RSS Podcast Feed",
         },
     )
 
@@ -92,13 +78,5 @@ def channel_detail_uuid(request, uuid, redirect_to_ap):
 
 
 def channel_detail_username(request, username, redirect_to_ap):
-    validator = federation_utils.get_actor_data_from_username
-    try:
-        username_data = validator(username)
-    except serializers.ValidationError:
-        return []
-    query = Q(
-        actor__domain=username_data["domain"],
-        actor__preferred_username__iexact=username_data["username"],
-    )
+    query = Q(preferred_username__iexact=username)
     return channel_detail(query, redirect_to_ap)

@@ -37,7 +37,9 @@ msgid "Entrypoints"
 msgstr ""
 
 #: ../../developer/architecture.md:37
-msgid "Users can access Funkwhale using a variety of entrypoints. They can make use of a Funkwhale application, a Subsonic-compatible application, or by calling the API directly. Each entrypoint interacts with the Funkwhale backend in the same way."
+msgid "Users can access Funkwhale using a variety of entrypoints. They can"
+" make use of a Funkwhale application or by calling the API directly."
+" Each entrypoint interacts with the Funkwhale backend in the same way."
 msgstr ""
 
 #: ../../developer/architecture.md:39
@@ -58,14 +60,6 @@ msgstr ""
 
 #: ../../developer/architecture.md:47
 msgid "Funkwhale for Android is the Funkwhale collective's official Android app written in [Kotlin](https://kotlinlang.org/). It interacts with the Funkwhale API to fetch and update data and stores information for offline playback."
-msgstr ""
-
-#: ../../developer/architecture.md:49
-msgid "Subsonic app"
-msgstr ""
-
-#: ../../developer/architecture.md:51
-msgid "Funkwhale supports a limited subset of the [Subsonic API](http://www.subsonic.org/pages/api.jsp) to support existing Subsonic apps. These apps can request data stored on a Funkwhale server by calling these endpoints."
 msgstr ""
 
 #: ../../developer/architecture.md:53
@@ -102,10 +96,6 @@ msgstr ""
 
 #: ../../developer/architecture.md:67
 msgid "Maintaining data consistency"
-msgstr ""
-
-#: ../../developer/architecture.md:68
-msgid "Communicating with other Funkwhale pods (if federation is enabled)"
 msgstr ""
 
 #: ../../developer/architecture.md:70
@@ -168,12 +158,8 @@ msgstr ""
 msgid "Importing uploaded music to the database"
 msgstr ""
 
-#: ../../developer/architecture.md:97
-msgid "Handling [ActivityPub](https://www.w3.org/TR/activitypub/) messages from other {term}`Fediverse` servers"
-msgstr ""
-
 #: ../../developer/architecture.md:98
-msgid "Scanning new content on remote pods"
+msgid "Scanning new content on the pod"
 msgstr ""
 
 #: ../../developer/architecture.md:100

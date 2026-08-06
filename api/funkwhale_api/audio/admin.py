@@ -8,8 +8,7 @@ class ChannelAdmin(admin.ModelAdmin):
     list_display = [
         "uuid",
         "artist",
-        "attributed_to",
-        "actor",
+        "owner",
         "library",
         "creation_date",
     ]

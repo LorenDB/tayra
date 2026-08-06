@@ -14,7 +14,7 @@ relevant.
 |---|---|
 | Online-only | No offline audio cache, download queue, or local library DB on web |
 | Single pod | `FUNKWHALE_URL` is compile-time; no multi-server picker |
-| Limited admin UI | Library admin (libraries, uploads, tags, channels) when `permissions.library`; instance settings + user management when `permissions.settings`; moderation stays out |
+| Limited admin UI | Library admin (libraries, uploads, tags, channels) when `permissions.library`; instance settings + user management when `permissions.settings` |
 | Registration UI | Signup, password reset, and email confirm are branded Tayra pages |
 | Hard fork | `../funkwhale` on `tayra_front`: Vue removed; Tayra is the front image |
 
@@ -22,9 +22,7 @@ relevant.
 
 | Feature | Where in Funkwhale | Escape hatch | Notes |
 |---|---|---|---|
-| Moderation (reports, domains, accounts, requests) | `/manage/moderation/*` | Django admin + moderator docs | Rare for small/private pods |
 | Plugins settings | `/settings/plugins` | Server-side plugin config | |
-| Remote content / federation browser | `/content/remote` | Federation still runs server-side | No follow/scan UI in Tayra |
 | Content libraries management | `/content/libraries` | Upload screen covers basic upload; not full library manager | |
 | User profiles / activity | `/@username`, profile activity | N/A for private pods | Nice-to-have |
 | Notifications | Vue notifications view | — | |

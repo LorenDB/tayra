@@ -4,7 +4,7 @@ from django.conf import settings
 from django.db.models import Q
 from django.urls import reverse
 
-from funkwhale_api.common import middleware, preferences, utils
+from funkwhale_api.common import middleware, utils
 from funkwhale_api.playlists import models as playlists_models
 
 from . import models, serializers
@@ -24,7 +24,11 @@ def get_twitter_card_metas(type, id):
 
 
 def library_track(request, pk, redirect_to_ap):
-    queryset = models.Track.objects.filter(pk=pk).select_related("album").prefetch_related("artist_credit__artist")
+    queryset = (
+        models.Track.objects.filter(pk=pk)
+        .select_related("album")
+        .prefetch_related("artist_credit__artist")
+    )
     try:
         obj = queryset.get()
     except models.Track.DoesNotExist:
@@ -34,28 +38,31 @@ def library_track(request, pk, redirect_to_ap):
     upload = playable_uploads.first()
 
     if redirect_to_ap:
-        redirect_url = upload.fid if upload else obj.fid
-        raise middleware.ApiRedirect(redirect_url)
+        raise middleware.ApiRedirect(obj.listen_url)
 
     track_url = utils.join_url(
         settings.FUNKWHALE_URL,
         utils.spa_reverse("library_track", kwargs={"pk": obj.pk}),
     )
+    artists = obj.get_artists_list()
     metas = [
         {"tag": "meta", "property": "og:url", "content": track_url},
         {"tag": "meta", "property": "og:title", "content": obj.title},
         {"tag": "meta", "property": "og:type", "content": "music.song"},
         {"tag": "meta", "property": "music:album:disc", "content": obj.disc_number},
         {"tag": "meta", "property": "music:album:track", "content": obj.position},
-        {
-            "tag": "meta",
-            "property": "music:musician",
-            "content": utils.join_url(
-                settings.FUNKWHALE_URL,
-                utils.spa_reverse("library_artist", kwargs={"pk": obj.artist.pk}),
-            ),
-        },
     ]
+    if artists:
+        metas.append(
+            {
+                "tag": "meta",
+                "property": "music:musician",
+                "content": utils.join_url(
+                    settings.FUNKWHALE_URL,
+                    utils.spa_reverse("library_artist", kwargs={"pk": artists[0].pk}),
+                ),
+            }
+        )
 
     if obj.album:
         metas.append(
@@ -93,15 +100,6 @@ def library_track(request, pk, redirect_to_ap):
                 "content": utils.join_url(settings.FUNKWHALE_URL, obj.listen_url),
             }
         )
-        if preferences.get("federation__enabled"):
-            metas.append(
-                {
-                    "tag": "link",
-                    "rel": "alternate",
-                    "type": "application/activity+json",
-                    "href": upload.fid,
-                }
-            )
         metas.append(
             {
                 "tag": "link",
@@ -119,32 +117,35 @@ def library_track(request, pk, redirect_to_ap):
 
 
 def library_album(request, pk, redirect_to_ap):
-    queryset = models.Album.objects.filter(pk=pk).prefetch_related("artist_credit__artist")
+    queryset = models.Album.objects.filter(pk=pk).prefetch_related(
+        "artist_credit__artist"
+    )
     try:
         obj = queryset.get()
     except models.Album.DoesNotExist:
         return []
 
-    if redirect_to_ap:
-        raise middleware.ApiRedirect(obj.fid)
-
     album_url = utils.join_url(
         settings.FUNKWHALE_URL,
         utils.spa_reverse("library_album", kwargs={"pk": obj.pk}),
     )
+    artists = obj.get_artists_list()
     metas = [
         {"tag": "meta", "property": "og:url", "content": album_url},
         {"tag": "meta", "property": "og:title", "content": obj.title},
         {"tag": "meta", "property": "og:type", "content": "music.album"},
-        {
-            "tag": "meta",
-            "property": "music:musician",
-            "content": utils.join_url(
-                settings.FUNKWHALE_URL,
-                utils.spa_reverse("library_artist", kwargs={"pk": obj.artist.pk}),
-            ),
-        },
     ]
+    if artists:
+        metas.append(
+            {
+                "tag": "meta",
+                "property": "music:musician",
+                "content": utils.join_url(
+                    settings.FUNKWHALE_URL,
+                    utils.spa_reverse("library_artist", kwargs={"pk": artists[0].pk}),
+                ),
+            }
+        )
 
     if obj.release_date:
         metas.append(
@@ -164,15 +165,6 @@ def library_album(request, pk, redirect_to_ap):
             }
         )
 
-    if preferences.get("federation__enabled"):
-        metas.append(
-            {
-                "tag": "link",
-                "rel": "alternate",
-                "type": "application/activity+json",
-                "href": obj.fid,
-            }
-        )
     if models.Upload.objects.filter(track__album=obj).playable_by(None).exists():
         metas.append(
             {
@@ -197,16 +189,16 @@ def library_artist(request, pk, redirect_to_ap):
     except models.Artist.DoesNotExist:
         return []
 
-    if redirect_to_ap:
-        raise middleware.ApiRedirect(obj.fid)
-
     artist_url = utils.join_url(
         settings.FUNKWHALE_URL,
         utils.spa_reverse("library_artist", kwargs={"pk": obj.pk}),
     )
     # we use latest album's cover as artist image
     latest_album = (
-        models.Album.objects.filter(artist_credit__artist=obj).exclude(attachment_cover=None).order_by("release_date").last()
+        models.Album.objects.filter(artist_credit__artist=obj)
+        .exclude(attachment_cover=None)
+        .order_by("release_date")
+        .last()
     )
     metas = [
         {"tag": "meta", "property": "og:url", "content": artist_url},
@@ -223,18 +215,11 @@ def library_artist(request, pk, redirect_to_ap):
             }
         )
 
-    if preferences.get("federation__enabled"):
-        metas.append(
-            {
-                "tag": "link",
-                "rel": "alternate",
-                "type": "application/activity+json",
-                "href": obj.fid,
-            }
-        )
-
     if (
-        models.Upload.objects.filter(Q(track__artist_credit__artist=obj) | Q(track__album__artist_credit__artist=obj))
+        models.Upload.objects.filter(
+            Q(track__artist_credit__artist=obj)
+            | Q(track__album__artist_credit__artist=obj)
+        )
         .playable_by(None)
         .exists()
     ):
@@ -320,9 +305,6 @@ def library_library(request, uuid, redirect_to_ap):
     except models.Library.DoesNotExist:
         return []
 
-    if redirect_to_ap:
-        raise middleware.ApiRedirect(obj.fid)
-
     library_url = utils.join_url(
         settings.FUNKWHALE_URL,
         utils.spa_reverse("library_library", kwargs={"uuid": obj.uuid}),
@@ -333,15 +315,5 @@ def library_library(request, uuid, redirect_to_ap):
         {"tag": "meta", "property": "og:title", "content": obj.name},
         {"tag": "meta", "property": "og:description", "content": obj.description},
     ]
-
-    if preferences.get("federation__enabled"):
-        metas.append(
-            {
-                "tag": "link",
-                "rel": "alternate",
-                "type": "application/activity+json",
-                "href": obj.fid,
-            }
-        )
 
     return metas

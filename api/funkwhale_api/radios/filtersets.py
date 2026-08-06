@@ -8,7 +8,7 @@ from . import models
 
 
 class RadioFilter(django_filters.FilterSet):
-    scope = common_filters.ActorScopeFilter(actor_field="user__actor", distinct=True)
+    scope = common_filters.ActorScopeFilter(user_field="user", distinct=True)
     q = filters.CharFilter(field_name="_", method="filter_q")
 
     class Meta:

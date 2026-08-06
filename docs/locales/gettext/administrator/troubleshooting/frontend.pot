@@ -21,7 +21,9 @@ msgid "Troubleshoot frontend issues"
 msgstr ""
 
 #: ../../administrator/troubleshooting/frontend.md:3
-msgid "The Funkwhale frontend is a {abbr}`SPA (Single Page Application)` written in [Vue.js](https://vuejs.org). It consumes the Funkwhale API to serve content and to federate with other Fediverse software."
+msgid "The Funkwhale frontend is a {abbr}`SPA (Single Page Application)`"
+" written in [Vue.js](https://vuejs.org). It consumes the Funkwhale API"
+" to serve content."
 msgstr ""
 
 #: ../../administrator/troubleshooting/frontend.md:5

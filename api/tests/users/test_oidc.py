@@ -325,7 +325,6 @@ def test_oidc_callback_auto_create(api_client, oidc_env, factories, settings):
     user = User.objects.get(username="newperson")
     assert user.email == "new@example.com"
     assert not user.has_usable_password()
-    assert user.actor_id is not None
     binding = OidcIdentity.objects.get(user=user)
     assert binding.subject == "newperson-sub"
     assert binding.issuer == DISCOVERY["issuer"]

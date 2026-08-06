@@ -6,7 +6,6 @@ from django.http import HttpResponse
 from django.urls import reverse
 
 from funkwhale_api.common import middleware, throttling, utils
-from funkwhale_api.federation import utils as federation_utils
 
 
 def test_spa_fallback_middleware_no_404(mocker):
@@ -46,7 +45,12 @@ def test_spa_middleware_should_fallback_true(mocker):
 
 @pytest.mark.parametrize(
     "path,expected",
-    [("/", True), ("/federation", False), ("/api", False), ("/an/spa/path/", True)],
+    [
+        ("/", True),
+        ("/.well-known", False),
+        ("/api", False),
+        ("/an/spa/path/", True),
+    ],
 )
 def test_should_fallback(path, expected, mocker):
     assert middleware.should_fallback_to_spa(path) is expected
@@ -294,7 +298,7 @@ def test_rewrite_manifest_json_url_rewrite_default_url(mocker, settings):
     settings.FUNKWHALE_SPA_REWRITE_MANIFEST = True
     settings.FUNKWHALE_SPA_REWRITE_MANIFEST_URL = None
     spa_html = "<html><head><link href=/manifest.json rel=manifest></head></html>"
-    expected_url = federation_utils.full_url(reverse("api:v1:instance:spa-manifest"))
+    expected_url = utils.full_url(reverse("api:v1:instance:spa-manifest"))
     request = mocker.Mock(path="/", META={})
     mocker.patch.object(middleware, "get_spa_html", return_value=spa_html)
     mocker.patch.object(
@@ -333,94 +337,14 @@ def test_spa_middleware_handles_api_redirect(mocker):
     assert response == api_view.return_value
 
 
-@pytest.mark.parametrize(
-    "accept_header, expected",
-    [
-        ("text/html", False),
-        ("application/activity+json", True),
-        ("", False),
-        ("noop", False),
-        ("text/html,application/activity+json", False),
-        ("application/activity+json,text/html", True),
-    ],
-)
-def test_get_request_head_tags_calls_view_with_proper_arg_when_accept_header_set(
-    accept_header, expected, mocker, fake_request
+def test_get_request_head_tags_calls_view_with_redirect_to_ap_false(
+    mocker, fake_request
 ):
-    request = fake_request.get("/", HTTP_ACCEPT=accept_header)
+    request = fake_request.get("/")
 
     view = mocker.Mock()
     match = mocker.Mock(args=["hello"], kwargs={"foo": "bar"}, func=view)
     mocker.patch.object(middleware.urls, "resolve", return_value=match)
 
     assert middleware.get_request_head_tags(request) == view.return_value
-    view.assert_called_once_with(request, "hello", foo="bar", redirect_to_ap=expected)
-
-
-@pytest.mark.parametrize(
-    "factory_name, factory_kwargs, route_name, route_arg_name, route_arg",
-    [
-        (
-            "federation.Actor",
-            {"local": True},
-            "actor_detail",
-            "username",
-            "preferred_username",
-        ),
-        (
-            "audio.Channel",
-            {"local": True},
-            "channel_detail",
-            "username",
-            "actor.preferred_username",
-        ),
-        (
-            "music.Artist",
-            {},
-            "library_artist",
-            "pk",
-            "pk",
-        ),
-        (
-            "music.Album",
-            {},
-            "library_album",
-            "pk",
-            "pk",
-        ),
-        (
-            "music.Track",
-            {},
-            "library_track",
-            "pk",
-            "pk",
-        ),
-        (
-            "music.Library",
-            {},
-            "library_library",
-            "uuid",
-            "uuid",
-        ),
-        # when a track as a public upload, we should redirect to the upload instead
-        ("music.Upload", {"playable": True}, "library_track", "pk", "track.pk"),
-    ],
-)
-def test_spa_views_raise_api_redirect_when_accept_json_set(
-    factory_name,
-    factory_kwargs,
-    route_name,
-    route_arg_name,
-    route_arg,
-    factories,
-    fake_request,
-):
-    obj = factories[factory_name](**factory_kwargs)
-    url = utils.spa_reverse(
-        route_name, kwargs={route_arg_name: utils.recursive_getattr(obj, route_arg)}
-    )
-    request = fake_request.get(url, HTTP_ACCEPT="application/activity+json")
-
-    with pytest.raises(middleware.ApiRedirect) as excinfo:
-        middleware.get_request_head_tags(request)
-    assert excinfo.value.url == obj.fid
+    view.assert_called_once_with(request, "hello", foo="bar", redirect_to_ap=False)

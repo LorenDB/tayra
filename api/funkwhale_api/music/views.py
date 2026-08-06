@@ -1,17 +1,15 @@
 import base64
-import datetime
 import logging
 import pathlib
 import urllib.parse
 
 import django.db.utils
-import requests.exceptions
 from django.conf import settings
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models import Count, F, Prefetch, Q, Sum
+from django.db.models import Count, F, Prefetch, Sum
 from django.utils import timezone
-from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import mixins, renderers
 from rest_framework import settings as rest_settings
 from rest_framework import views, viewsets
@@ -23,18 +21,11 @@ from funkwhale_api.common import permissions as common_permissions
 from funkwhale_api.common import preferences
 from funkwhale_api.common import utils as common_utils
 from funkwhale_api.common import views as common_views
-from funkwhale_api.federation import actors
-from funkwhale_api.federation import api_serializers as federation_api_serializers
-from funkwhale_api.federation import decorators as federation_decorators
-from funkwhale_api.federation import models as federation_models
-from funkwhale_api.federation import routes
-from funkwhale_api.federation import tasks as federation_tasks
-from funkwhale_api.federation.authentication import SignatureAuthentication
-from funkwhale_api.tags.models import Tag, TaggedItem
 from funkwhale_api.shares.permissions import (
     ShareOrScopePermission,
     resolve_active_share,
 )
+from funkwhale_api.tags.models import Tag, TaggedItem
 from funkwhale_api.users.authentication import ScopedTokenAuthentication
 from funkwhale_api.users.oauth import permissions as oauth_permissions
 
@@ -49,60 +40,11 @@ TAG_PREFETCH = Prefetch(
 )
 
 
-def get_libraries(filter_uploads):
-    def libraries(self, request, *args, **kwargs):
-        obj = self.get_object()
-        actor = utils.get_actor_from_request(request)
-        uploads = models.Upload.objects.all()
-        uploads = filter_uploads(obj, uploads)
-        uploads = uploads.playable_by(actor)
-        qs = models.Library.objects.filter(
-            pk__in=uploads.values_list("library", flat=True),
-            channel=None,
-        ).annotate(_uploads_count=Count("uploads"))
-        qs = qs.prefetch_related("actor")
-        page = self.paginate_queryset(qs)
-        if page is not None:
-            serializer = federation_api_serializers.LibrarySerializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        serializer = federation_api_serializers.LibrarySerializer(qs, many=True)
-        return Response(serializer.data)
-
-    return extend_schema(
-        responses=federation_api_serializers.LibrarySerializer(many=True),
-        parameters=[OpenApiParameter("id", location="query", exclude=True)],
-    )(action(methods=["get"], detail=True)(libraries))
-
-
 def refetch_obj(obj, queryset):
     """
-    Given an Artist/Album/Track instance, if the instance is from a remote pod,
-    will attempt to update local data with the latest ActivityPub representation.
+    Given an Artist/Album/Track instance, returns it as-is. Remote refetching
+    is no longer supported since federation was removed.
     """
-    if obj.is_local:
-        return obj
-
-    now = timezone.now()
-    limit = now - datetime.timedelta(minutes=settings.FEDERATION_OBJECT_FETCH_DELAY)
-    last_fetch = obj.fetches.order_by("-creation_date").first()
-    if last_fetch is not None and last_fetch.creation_date > limit:
-        # we fetched recently, no need to do it again
-        return obj
-
-    logger.info("Refetching %s:%s at %s…", obj._meta.label, obj.pk, obj.fid)
-    actor = actors.get_service_actor()
-    fetch = federation_models.Fetch.objects.create(actor=actor, url=obj.fid, object=obj)
-    try:
-        federation_tasks.fetch(fetch_id=fetch.pk)
-    except Exception:
-        logger.exception(
-            "Error while refetching %s:%s at %s…", obj._meta.label, obj.pk, obj.fid
-        )
-    else:
-        fetch.refresh_from_db()
-        if fetch.status == "finished":
-            obj = queryset.get(pk=obj.pk)
     return obj
 
 
@@ -124,9 +66,9 @@ class ArtistViewSet(
 ):
     queryset = (
         models.Artist.objects.all()
-        .prefetch_related("attributed_to", "attachment_cover")
+        .prefetch_related("attachment_cover")
         .prefetch_related(
-            "channel__actor",
+            "channel",
             "artist_credit__tracks",
         )
         .order_by("-id")
@@ -137,7 +79,6 @@ class ArtistViewSet(
     anonymous_policy = "setting"
     filterset_class = filters.ArtistFilter
 
-    fetches = federation_decorators.fetches_route()
     mutations = common_decorators.mutations_route(types=["update"])
 
     def get_object(self):
@@ -162,20 +103,14 @@ class ArtistViewSet(
             .select_related("attachment_cover")
             .prefetch_related("tracks", "artist_credit__artist")
         )
-        albums = albums.annotate_playable_by_actor(
-            utils.get_actor_from_request(self.request)
+        albums = albums.annotate_playable_by_user(
+            utils.get_user_from_request(self.request)
         )
         return queryset.prefetch_related(
             Prefetch("artist_credit__albums", queryset=albums),
             "artist_credit",
             TAG_PREFETCH,
         )
-
-    libraries = get_libraries(
-        lambda o, uploads: uploads.filter(
-            Q(track__artist_credit__artist=o) | Q(track__album__artist_credit__artist=o)
-        )
-    )
 
 
 class AlbumViewSet(
@@ -188,7 +123,7 @@ class AlbumViewSet(
     queryset = (
         models.Album.objects.all()
         .order_by("-creation_date")
-        .prefetch_related("artist_credit__artist__channel", "attributed_to", "attachment_cover")
+        .prefetch_related("artist_credit__artist__channel", "attachment_cover")
     )
     serializer_class = serializers.AlbumSerializer
     permission_classes = [oauth_permissions.ScopePermission]
@@ -196,7 +131,6 @@ class AlbumViewSet(
     anonymous_policy = "setting"
     filterset_class = filters.AlbumFilter
 
-    fetches = federation_decorators.fetches_route()
     mutations = common_decorators.mutations_route(types=["update"])
 
     def get_object(self):
@@ -222,18 +156,16 @@ class AlbumViewSet(
         queryset = super().get_queryset()
         if self.action in ["destroy"]:
             queryset = queryset.exclude(artist_credit__artist__channel=None).filter(
-                artist_credit__artist__attributed_to=self.request.user.actor
+                artist_credit__artist__channel__owner=self.request.user
             )
 
         tracks = models.Track.objects.all().prefetch_related("album")
-        tracks = tracks.annotate_playable_by_actor(
-            utils.get_actor_from_request(self.request)
+        tracks = tracks.annotate_playable_by_user(
+            utils.get_user_from_request(self.request)
         )
         return queryset.prefetch_related(
             Prefetch("tracks", queryset=tracks), TAG_PREFETCH
         )
-
-    libraries = get_libraries(lambda o, uploads: uploads.filter(track__album=o))
 
     def get_serializer_class(self):
         if self.action in ["create"]:
@@ -242,10 +174,6 @@ class AlbumViewSet(
 
     @transaction.atomic
     def perform_destroy(self, instance):
-        routes.outbox.dispatch(
-            {"type": "Delete", "object": {"type": "Album"}},
-            context={"album": instance},
-        )
         models.Album.objects.filter(pk=instance.pk).delete()
 
 
@@ -261,7 +189,7 @@ class LibraryViewSet(
     queryset = (
         models.Library.objects.all()
         .filter(channel=None)
-        .select_related("actor")
+        .select_related("owner")
         .order_by("-creation_date")
         .annotate(_uploads_count=Count("uploads"))
         .annotate(_size=Sum("uploads__size"))
@@ -274,7 +202,7 @@ class LibraryViewSet(
     filterset_class = filters.LibraryFilter
     required_scope = "libraries"
     anonymous_policy = "setting"
-    owner_field = "actor.user"
+    owner_field = "owner"
     owner_checks = ["write"]
 
     def get_queryset(self):
@@ -282,50 +210,19 @@ class LibraryViewSet(
         # allow retrieving a single library by uuid if request.user isn't
         # the owner. Any other get should be from the owner only
         if self.action not in ["retrieve", "list"]:
-            qs = qs.filter(actor=self.request.user.actor)
+            qs = qs.filter(owner=self.request.user)
         if self.action == "list":
-            actor = utils.get_actor_from_request(self.request)
-            qs = qs.viewable_by(actor)
+            user = utils.get_user_from_request(self.request)
+            qs = qs.viewable_by(user)
 
         return qs
 
     def perform_create(self, serializer):
-        serializer.save(actor=self.request.user.actor)
+        serializer.save(owner=self.request.user)
 
     @transaction.atomic
     def perform_destroy(self, instance):
-        routes.outbox.dispatch(
-            {"type": "Delete", "object": {"type": "Library"}},
-            context={"library": instance},
-        )
         instance.delete()
-
-    follows = action
-
-    @extend_schema(
-        responses=federation_api_serializers.LibraryFollowSerializer(many=True)
-    )
-    @action(
-        methods=["get"],
-        detail=True,
-    )
-    @transaction.non_atomic_requests
-    def follows(self, request, *args, **kwargs):
-        library = self.get_object()
-        queryset = (
-            library.received_follows.filter(target__actor=self.request.user.actor)
-            .prefetch_related("actor", "target__actor")
-            .order_by("-creation_date")
-        )
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = federation_api_serializers.LibraryFollowSerializer(
-                page, many=True, required=False
-            )
-            return self.get_paginated_response(serializer.data)
-
-        serializer = self.get_serializer(queryset, many=True, required=False)
-        return Response(serializer.data)
 
     # TODO quickfix, basically specifying the response would be None
     @extend_schema(responses=None)
@@ -401,7 +298,7 @@ class TrackViewSet(
     queryset = (
         models.Track.objects.all()
         .for_nested_serialization()
-        .prefetch_related("attributed_to", "attachment_cover")
+        .prefetch_related("attachment_cover")
         .order_by("-creation_date")
     )
     serializer_class = serializers.TrackSerializer
@@ -409,7 +306,6 @@ class TrackViewSet(
     required_scope = "libraries"
     anonymous_policy = "setting"
     filterset_class = filters.TrackFilter
-    fetches = federation_decorators.fetches_route()
     mutations = common_decorators.mutations_route(types=["update"])
 
     def get_object(self):
@@ -426,7 +322,7 @@ class TrackViewSet(
         queryset = super().get_queryset()
         if self.action in ["destroy"]:
             queryset = queryset.exclude(artist_credit__artist__channel=None).filter(
-                artist_credit__artist__attributed_to=self.request.user.actor
+                artist_credit__artist__channel__owner=self.request.user
             )
         filter_favorites = self.request.GET.get("favorites", None)
         user = self.request.user
@@ -434,11 +330,9 @@ class TrackViewSet(
             queryset = queryset.filter(track_favorites__user=user)
 
         queryset = queryset.with_playable_uploads(
-            utils.get_actor_from_request(self.request)
+            utils.get_user_from_request(self.request)
         )
         return queryset.prefetch_related(TAG_PREFETCH)
-
-    libraries = get_libraries(lambda o, uploads: uploads.filter(track=o))
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -447,11 +341,6 @@ class TrackViewSet(
 
     @transaction.atomic
     def perform_destroy(self, instance):
-        uploads = instance.uploads.order_by("id")
-        routes.outbox.dispatch(
-            {"type": "Delete", "object": {"type": "Audio"}},
-            context={"uploads": list(uploads)},
-        )
         instance.delete()
 
 
@@ -600,32 +489,6 @@ def handle_serve(
     if f.audio_file:
         file_path = get_file_path(f.audio_file)
 
-    elif f.source and (
-        f.source.startswith("http://") or f.source.startswith("https://")
-    ):
-        # we need to populate from cache
-        with transaction.atomic():
-            # why the transaction/select_for_update?
-            # this is because browsers may send multiple requests
-            # in a short time range, for partial content,
-            # thus resulting in multiple downloads from the remote
-            qs = f.__class__.objects.select_for_update()
-            f = qs.get(pk=f.pk)
-            if user.is_authenticated:
-                actor = user.actor
-            else:
-                actor = actors.get_service_actor()
-            try:
-                f.download_audio_from_remote(actor=actor)
-            except requests.exceptions.RequestException:
-                return Response({"detail": "Remote track is unavailable"}, status=503)
-        data = f.get_audio_data()
-        if data:
-            f.duration = data["duration"]
-            f.size = data["size"]
-            f.bitrate = data["bitrate"]
-            f.save(update_fields=["bitrate", "duration", "size"])
-        file_path = get_file_path(f.audio_file)
     elif f.source and f.source.startswith("file://"):
         file_path = get_file_path(f.source.replace("file://", "", 1))
     mt = f.mimetype
@@ -726,7 +589,7 @@ class ListenMixin(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     serializer_class = serializers.TrackSerializer
     authentication_classes = (
         rest_settings.api_settings.DEFAULT_AUTHENTICATION_CLASSES
-        + [SignatureAuthentication, ScopedTokenAuthentication]
+        + [ScopedTokenAuthentication]
     )
     # ShareOrScopePermission accepts valid ?share= tokens even when
     # common__api_authentication_required is True; invalid share tokens fail closed.
@@ -839,7 +702,7 @@ class ListenMixin(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
             },
             302: {"description": "Redirect to storage URL when PROXY_MEDIA is false."},
             404: {"description": "Track or playable upload not found."},
-            503: {"description": "Remote federated track unavailable."},
+            503: {"description": "Track unavailable."},
         },
     )
     def retrieve(self, request, *args, **kwargs):
@@ -873,9 +736,6 @@ def handle_stream(
         share_link = fresh
         if not share_link.includes_track(track):
             return Response(status=404)
-        actor = getattr(share_link.owner, "actor", None)
-        if actor is None:
-            return Response(status=404)
         # Same relation paths as the normal stream branch (artist_credit M2M,
         # not a legacy Album.artist / Track.artist FK).
         queryset = track.uploads.prefetch_related(
@@ -884,7 +744,7 @@ def handle_stream(
         )
         if explicit_file:
             queryset = queryset.filter(uuid=explicit_file)
-        queryset = queryset.playable_by(actor)
+        queryset = queryset.playable_by(share_link.owner)
         queryset = queryset.order_by(F("audio_file").desc(nulls_last=True))
         upload = queryset.first()
         if not upload:
@@ -908,8 +768,10 @@ def handle_stream(
             wsgi_request=request._request,
         )
 
-    actor = utils.get_actor_from_request(request)
-    queryset = track.uploads.prefetch_related("track__album__artist_credit__artist", "track__artist_credit__artist")
+    actor = utils.get_user_from_request(request)
+    queryset = track.uploads.prefetch_related(
+        "track__album__artist_credit__artist", "track__artist_credit__artist"
+    )
     if explicit_file:
         queryset = queryset.filter(uuid=explicit_file)
     queryset = queryset.playable_by(actor)
@@ -997,7 +859,7 @@ class UploadViewSet(
         models.Upload.objects.all()
         .order_by("-creation_date")
         .prefetch_related(
-            "library__actor",
+            "library__owner",
             "track__artist_credit__artist",
             "track__album__artist_credit__artist",
             "track__attachment_cover",
@@ -1010,7 +872,7 @@ class UploadViewSet(
     ]
     required_scope = "libraries"
     anonymous_policy = "setting"
-    owner_field = "library.actor.user"
+    owner_field = "library.owner"
     owner_checks = ["write"]
     filterset_class = filters.UploadFilter
     ordering_fields = (
@@ -1027,10 +889,10 @@ class UploadViewSet(
             # prevent updating an upload that is already processed
             qs = qs.filter(import_status="draft")
         if self.action != "retrieve":
-            qs = qs.filter(library__actor=self.request.user.actor)
+            qs = qs.filter(library__owner=self.request.user)
         else:
-            actor = utils.get_actor_from_request(self.request)
-            qs = qs.playable_by(actor)
+            user = utils.get_user_from_request(self.request)
+            qs = qs.playable_by(user)
         return qs
 
     @extend_schema(
@@ -1082,10 +944,6 @@ class UploadViewSet(
 
     @transaction.atomic
     def perform_destroy(self, instance):
-        routes.outbox.dispatch(
-            {"type": "Delete", "object": {"type": "Audio"}},
-            context={"uploads": [instance]},
-        )
         instance.delete()
 
 
@@ -1121,7 +979,11 @@ class Search(views.APIView):
     def get_tracks(self, query):
         query_obj = utils.get_fts_query(
             query,
-            fts_fields=["body_text", "album__body_text", "artist_credit__artist__body_text"],
+            fts_fields=[
+                "body_text",
+                "album__body_text",
+                "artist_credit__artist__body_text",
+            ],
             model=models.Track,
         )
         qs = (
@@ -1129,11 +991,10 @@ class Search(views.APIView):
             .filter(query_obj)
             .prefetch_related(
                 "artist_credit__artist",
-                "attributed_to",
                 Prefetch(
                     "album",
                     queryset=models.Album.objects.select_related(
-                        "attachment_cover", "attributed_to"
+                        "attachment_cover"
                     ).prefetch_related("artist_credit__artist", "tracks"),
                 ),
             )
@@ -1142,12 +1003,15 @@ class Search(views.APIView):
 
     def get_albums(self, query):
         query_obj = utils.get_fts_query(
-            query, fts_fields=["body_text", "artist_credit__artist__body_text"], model=models.Album
+            query,
+            fts_fields=["body_text", "artist_credit__artist__body_text"],
+            model=models.Album,
         )
         qs = (
             models.Album.objects.all()
             .filter(query_obj)
-            .select_related("attachment_cover", "attributed_to").prefetch_related("artist_credit__artist")
+            .select_related("attachment_cover")
+            .prefetch_related("artist_credit__artist")
             .prefetch_related("tracks__artist_credit__artist")
         )
         return common_utils.order_for_search(qs, "title")[: self.max_results]
@@ -1158,8 +1022,7 @@ class Search(views.APIView):
             models.Artist.objects.all()
             .filter(query_obj)
             .with_albums()
-            .prefetch_related("channel__actor")
-            .select_related("attributed_to")
+            .prefetch_related("channel")
         )
         return common_utils.order_for_search(qs, "name")[: self.max_results]
 

@@ -9,16 +9,14 @@ import urllib.parse
 
 from django import http, urls
 from django.conf import settings
-from django.contrib import auth
 from django.core.cache import caches
 from django.middleware import csrf
 from rest_framework import views
 
-from funkwhale_api.federation import utils as federation_utils
+from . import preferences, session, throttling
+from . import utils as common_utils
 
-from . import session, throttling, utils
-
-EXCLUDED_PATHS = ["/api", "/federation", "/.well-known"]
+EXCLUDED_PATHS = ["/api", "/.well-known"]
 
 logger = logging.getLogger(__name__)
 
@@ -33,9 +31,8 @@ def serve_spa(request):
     html = get_spa_html(settings.FUNKWHALE_SPA_HTML_ROOT)
     head, tail = html.split("</head>", 1)
     if settings.FUNKWHALE_SPA_REWRITE_MANIFEST:
-        new_url = (
-            settings.FUNKWHALE_SPA_REWRITE_MANIFEST_URL
-            or federation_utils.full_url(urls.reverse("api:v1:instance:spa-manifest"))
+        new_url = settings.FUNKWHALE_SPA_REWRITE_MANIFEST_URL or common_utils.full_url(
+            urls.reverse("api:v1:instance:spa-manifest")
         )
         title = preferences.get("instance__name")
         if title:
@@ -115,7 +112,7 @@ def get_spa_file(spa_url, name):
         return cached
 
     response = session.get_session().get(
-        utils.join_url(spa_url, name),
+        common_utils.join_url(spa_url, name),
     )
     response.raise_for_status()
     response.encoding = "utf-8"
@@ -142,14 +139,14 @@ def get_default_head_tags(path):
         {
             "tag": "meta",
             "property": "og:image",
-            "content": utils.join_url(
+            "content": common_utils.join_url(
                 settings.FUNKWHALE_URL, "/android-chrome-512x512.png"
             ),
         },
         {
             "tag": "meta",
             "property": "og:url",
-            "content": utils.join_url(settings.FUNKWHALE_URL, path),
+            "content": common_utils.join_url(settings.FUNKWHALE_URL, path),
         },
     ]
 
@@ -170,16 +167,8 @@ def render_tags(tags):
 
 
 def get_request_head_tags(request):
-    accept_header = request.headers.get("Accept") or None
-    redirect_to_ap = (
-        False
-        if not accept_header
-        else not federation_utils.should_redirect_ap_to_html(accept_header)
-    )
     match = urls.resolve(request.path, urlconf=settings.SPA_URLCONF)
-    return match.func(
-        request, *match.args, redirect_to_ap=redirect_to_ap, **match.kwargs
-    )
+    return match.func(request, *match.args, redirect_to_ap=False, **match.kwargs)
 
 
 class ApiRedirect(Exception):
@@ -262,25 +251,6 @@ def monkey_patch_rest_initialize_request():
 
 
 monkey_patch_rest_initialize_request()
-
-
-def monkey_patch_auth_get_user():
-    """
-    We need an actor on our users for many endpoints, so we monkey patch
-    auth.get_user to create it if it's missing
-    """
-    original = auth.get_user
-
-    def replacement(request):
-        r = original(request)
-        if not r.is_anonymous and not r.actor:
-            r.create_actor()
-        return r
-
-    setattr(auth, "get_user", replacement)
-
-
-monkey_patch_auth_get_user()
 
 
 class ThrottleStatusMiddleware:

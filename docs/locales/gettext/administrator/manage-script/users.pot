@@ -80,10 +80,6 @@ msgstr ""
 msgid "Remove a user's staff privileges"
 msgstr ""
 
-#: ../../administrator/manage-script/users.md:178
-msgid "Give a user moderation permissions"
-msgstr ""
-
 #: ../../administrator/manage-script/users.md:201
 msgid "Reset a user's password"
 msgstr ""

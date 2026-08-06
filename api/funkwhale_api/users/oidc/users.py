@@ -127,7 +127,9 @@ def _touch_identity(identity: users_models.OidcIdentity) -> None:
             last_login_at=timezone.now()
         )
     except Exception:
-        logger.exception("OIDC: failed updating last_login_at for identity %s", identity.pk)
+        logger.exception(
+            "OIDC: failed updating last_login_at for identity %s", identity.pk
+        )
 
 
 @transaction.atomic
@@ -174,9 +176,7 @@ def _first_time_link(*, user, issuer: str, subject: str) -> users_models.OidcIde
         )
     except IntegrityError:
         # Lost race on unique (issuer, subject).
-        identity = users_models.OidcIdentity.objects.get(
-            issuer=issuer, subject=subject
-        )
+        identity = users_models.OidcIdentity.objects.get(issuer=issuer, subject=subject)
         if identity.user_id != user.pk:
             raise OidcUserError(
                 "subject_conflict",
@@ -234,10 +234,5 @@ def _create_user(*, username: str, claims: Dict[str, Any]):
         logger.exception("OIDC auto-create: failed applying default permissions")
 
     user.save()
-    if not user.actor_id:
-        try:
-            user.create_actor()
-        except Exception:
-            logger.exception("OIDC auto-create: failed creating actor for %s", username)
     logger.info("OIDC auto-created user username=%s", username)
     return user

@@ -149,11 +149,9 @@ class MutationFilter(filters.FilterSet):
         config=search.SearchConfig(
             search_fields={
                 "summary": {"to": "summary"},
-                "fid": {"to": "fid"},
                 "type": {"to": "type"},
             },
             filter_fields={
-                "domain": {"to": "created_by__domain__name__iexact"},
                 "is_approved": get_null_boolean_filter("is_approved"),
                 "target": {"handler": filter_target},
                 "is_applied": get_boolean_filter("is_applied"),
@@ -172,7 +170,7 @@ class EmptyQuerySet(ValueError):
 
 class ActorScopeFilter(filters.CharFilter):
     def __init__(self, *args, **kwargs):
-        self.actor_field = kwargs.pop("actor_field")
+        self.user_field = kwargs.pop("user_field")
         self.library_field = kwargs.pop("library_field", None)
         super().__init__(*args, **kwargs)
 
@@ -185,61 +183,36 @@ class ActorScopeFilter(filters.CharFilter):
             return queryset.none()
 
         user = getattr(request, "user", None)
-        actor = getattr(user, "actor", None)
         scopes = [v.strip().lower() for v in value.split(",")]
         query = None
         for scope in scopes:
             try:
-                right_query = self.get_query(scope, user, actor)
+                right_query = self.get_query(scope, user)
             except ValueError:
                 return queryset.none()
             query = utils.join_queries_or(query, right_query)
 
         return queryset.filter(query).distinct()
 
-    def get_query(self, scope, user, actor):
-        from funkwhale_api.federation import models as federation_models
-
+    def get_query(self, scope, user):
         if scope == "me":
-            return self.filter_me(actor)
+            if not user or not user.is_authenticated:
+                raise EmptyQuerySet()
+            return Q(**{self.user_field: user})
         elif scope == "all":
             return Q(pk__gte=0)
 
         elif scope == "subscribed":
-            if not actor or self.library_field is None:
+            if not user or not user.is_authenticated or self.library_field is None:
                 raise EmptyQuerySet()
-            followed_libraries = federation_models.LibraryFollow.objects.filter(
-                approved=True, actor=user.actor
-            ).values_list("target_id", flat=True)
-            if not self.library_field:
-                predicate = "pk__in"
-            else:
-                predicate = f"{self.library_field}__in"
-            return Q(**{predicate: followed_libraries})
+            from funkwhale_api.audio.models import ChannelSubscription
 
-        elif scope.startswith("actor:"):
-            full_username = scope.split("actor:", 1)[1]
-            username, domain = full_username.split("@")
-            try:
-                actor = federation_models.Actor.objects.get(
-                    preferred_username__iexact=username,
-                    domain_id=domain,
-                )
-            except federation_models.Actor.DoesNotExist:
-                raise EmptyQuerySet()
-
-            return Q(**{self.actor_field: actor})
-        elif scope.startswith("domain:"):
-            domain = scope.split("domain:", 1)[1]
-            return Q(**{f"{self.actor_field}__domain_id": domain})
+            subscribed_libraries = ChannelSubscription.objects.filter(
+                approved=True, user=user
+            ).values_list("channel__library_id", flat=True)
+            return Q(**{f"{self.library_field}__in": subscribed_libraries})
         else:
             raise EmptyQuerySet()
-
-    def filter_me(self, actor):
-        if not actor:
-            raise EmptyQuerySet()
-
-        return Q(**{self.actor_field: actor})
 
 
 class CaseInsensitiveNameOrderingFilter(filters.OrderingFilter):

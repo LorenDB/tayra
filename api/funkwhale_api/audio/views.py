@@ -8,13 +8,7 @@ from rest_framework import permissions as rest_permissions
 from rest_framework import response, viewsets
 
 from funkwhale_api.common import locales, permissions, preferences
-from funkwhale_api.common import utils as common_utils
 from funkwhale_api.common.mixins import MultipleLookupDetailMixin
-from funkwhale_api.federation import actors
-from funkwhale_api.federation import models as federation_models
-from funkwhale_api.federation import routes
-from funkwhale_api.federation import tasks as federation_tasks
-from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.music import models as music_models
 from funkwhale_api.music import views as music_views
 from funkwhale_api.users.oauth import permissions as oauth_permissions
@@ -25,8 +19,7 @@ ARTIST_PREFETCH_QS = (
     music_models.Artist.objects.select_related(
         "description",
         "attachment_cover",
-    )
-    .prefetch_related(music_views.TAG_PREFETCH)
+    ).prefetch_related(music_views.TAG_PREFETCH)
     # Track.artist FK was dropped; go through ArtistCredit M2M.
     .annotate(_tracks_count=Count("artist_credit__tracks", distinct=True))
 )
@@ -62,11 +55,8 @@ class ChannelViewSet(
         },
         {
             "lookup_field": "username",
-            "validator": federation_utils.get_actor_data_from_username,
-            "get_query": lambda v: Q(
-                actor__domain=v["domain"],
-                actor__preferred_username__iexact=v["username"],
-            ),
+            "validator": lambda v: v,
+            "get_query": lambda v: Q(preferred_username__iexact=v),
         },
     ]
     filterset_class = filters.ChannelFilter
@@ -75,8 +65,7 @@ class ChannelViewSet(
         models.Channel.objects.all()
         .prefetch_related(
             "library",
-            "attributed_to",
-            "actor",
+            "owner",
             Prefetch("artist", queryset=ARTIST_PREFETCH_QS),
         )
         .order_by("-creation_date")
@@ -88,7 +77,7 @@ class ChannelViewSet(
     required_scope = "libraries"
     anonymous_policy = "setting"
     owner_checks = ["write"]
-    owner_field = "attributed_to.user"
+    owner_field = "owner"
     owner_exception = exceptions.PermissionDenied
 
     def get_serializer_class(self):
@@ -104,14 +93,12 @@ class ChannelViewSet(
         queryset = super().get_queryset()
         if self.action == "retrieve":
             queryset = queryset.annotate(
-                _downloads_count=Sum(
-                    "artist__artist_credit__tracks__downloads_count"
-                )
+                _downloads_count=Sum("artist__artist_credit__tracks__downloads_count")
             )
         return queryset
 
     def perform_create(self, serializer):
-        return serializer.save(attributed_to=self.request.user.actor)
+        return serializer.save(owner=self.request.user)
 
     def list(self, request, *args, **kwargs):
         if self.request.GET.get("output") == "opml":
@@ -144,22 +131,11 @@ class ChannelViewSet(
     )
     def subscribe(self, request, *args, **kwargs):
         object = self.get_object()
-        subscription = federation_models.Follow(actor=request.user.actor)
-        subscription.fid = subscription.get_federation_id()
-        subscription, created = SubscriptionsViewSet.queryset.get_or_create(
-            target=object.actor,
-            actor=request.user.actor,
-            defaults={
-                "approved": True,
-                "fid": subscription.fid,
-                "uuid": subscription.uuid,
-            },
+        subscription, created = models.ChannelSubscription.objects.get_or_create(
+            channel=object,
+            user=request.user,
+            defaults={"approved": True},
         )
-        # prefetch stuff
-        subscription = SubscriptionsViewSet.queryset.get(pk=subscription.pk)
-        if not object.actor.is_local:
-            routes.outbox.dispatch({"type": "Follow"}, context={"follow": subscription})
-
         data = serializers.SubscriptionSerializer(subscription).data
         return response.Response(data, status=201)
 
@@ -171,15 +147,10 @@ class ChannelViewSet(
     )
     def unsubscribe(self, request, *args, **kwargs):
         object = self.get_object()
-        follow_qs = request.user.actor.emitted_follows.filter(target=object.actor)
-        follow = follow_qs.first()
-        if follow:
-            if not object.actor.is_local:
-                routes.outbox.dispatch(
-                    {"type": "Undo", "object": {"type": "Follow"}},
-                    context={"follow": follow},
-                )
-            follow_qs.delete()
+        subscription_qs = models.ChannelSubscription.objects.filter(
+            channel=object, user=request.user
+        )
+        subscription_qs.delete()
         return response.Response(status=204)
 
     @decorators.action(
@@ -189,10 +160,8 @@ class ChannelViewSet(
     )
     def rss(self, request, *args, **kwargs):
         object = self.get_object()
-        if not object.attributed_to.is_local:
-            return response.Response({"detail": "Not found"}, status=404)
 
-        if object.attributed_to == actors.get_service_actor():
+        if object.is_external_rss:
             # external feed, we redirect to the canonical one
             return http.HttpResponseRedirect(object.rss_url)
 
@@ -263,19 +232,11 @@ class ChannelViewSet(
                     status=400,
                 )
 
-        subscription = federation_models.Follow(actor=request.user.actor)
-        subscription.fid = subscription.get_federation_id()
-        subscription, created = SubscriptionsViewSet.queryset.get_or_create(
-            target=channel.actor,
-            actor=request.user.actor,
-            defaults={
-                "approved": True,
-                "fid": subscription.fid,
-                "uuid": subscription.uuid,
-            },
+        subscription, created = models.ChannelSubscription.objects.get_or_create(
+            channel=channel,
+            user=request.user,
+            defaults={"approved": True},
         )
-        # prefetch stuff
-        subscription = SubscriptionsViewSet.queryset.get(pk=subscription.pk)
 
         return response.Response(
             serializers.SubscriptionSerializer(subscription).data, status=201
@@ -290,15 +251,12 @@ class ChannelViewSet(
             "partial_update",
         ]
         if self.request.user.is_authenticated:
-            context["actor"] = self.request.user.actor
+            context["user"] = self.request.user
         return context
 
     @transaction.atomic
     def perform_destroy(self, instance):
         instance.__class__.objects.filter(pk=instance.pk).delete()
-        common_utils.on_commit(
-            federation_tasks.remove_actor.delay, actor_id=instance.actor.pk
-        )
 
 
 class SubscriptionsViewSet(
@@ -310,12 +268,11 @@ class SubscriptionsViewSet(
     lookup_field = "uuid"
     serializer_class = serializers.SubscriptionSerializer
     queryset = (
-        federation_models.Follow.objects.exclude(target__channel__isnull=True)
+        models.ChannelSubscription.objects.all()
         .prefetch_related(
-            "target__channel__library",
-            "target__channel__attributed_to",
-            "actor",
-            Prefetch("target__channel__artist", queryset=ARTIST_PREFETCH_QS),
+            "channel__library",
+            "channel__owner",
+            Prefetch("channel__artist", queryset=ARTIST_PREFETCH_QS),
         )
         .order_by("-creation_date")
     )
@@ -328,7 +285,7 @@ class SubscriptionsViewSet(
 
     def get_queryset(self):
         qs = super().get_queryset()
-        return qs.filter(actor=self.request.user.actor)
+        return qs.filter(user=self.request.user)
 
     @extend_schema(
         responses=serializers.AllSubscriptionsSerializer(),
@@ -341,7 +298,7 @@ class SubscriptionsViewSet(
         to have a performant endpoint and avoid lots of queries just to display
         subscription status in the UI
         """
-        subscriptions = self.get_queryset().values("uuid", "target__channel__uuid")
+        subscriptions = self.get_queryset().values("uuid", "channel__uuid")
 
         payload = serializers.AllSubscriptionsSerializer(subscriptions).data
         return response.Response(payload, status=200)

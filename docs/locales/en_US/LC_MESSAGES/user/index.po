@@ -43,11 +43,10 @@ msgid "Publish your content on Funkwhale"
 msgstr ""
 
 #: ../../user_documentation/index.md:15
-msgid ""
-"Got a podcast you want to share with the world? Working on a new album? "
-"Funkwhale gives you the tools you need to share your creativity with the "
-"{term}`Fediverse`. Publish your work in [Channels](channels/index.md) to "
-"start building up your following."
+msgid "Got a podcast you want to share with the world? Working on a new album?"
+" Funkwhale gives you the tools you need to publish your own content."
+" Publish your work in [Channels](channels/index.md) to start building"
+" up your following."
 msgstr ""
 
 #: ../../user_documentation/index.md:17
@@ -102,13 +101,6 @@ msgstr ""
 msgid "Access Funkwhale from other apps"
 msgstr ""
 
-#: ../../user_documentation/index.md:35
-msgid ""
-"Funkwhale supports a subset of the Subsonic API. This means you can play "
-"your Funkwhale content on Subsonic apps. Learn more about how to do this "
-"in the [Subsonic](subsonic/index.md) section."
-msgstr ""
-
 #: ../../user_documentation/index.md:37
 msgid "Enhance your experience with plugins"
 msgstr ""
@@ -119,4 +111,3 @@ msgid ""
 " Check out our [Plugins](plugins/index.md) section for details about our "
 "plugins and how to use them."
 msgstr ""
-

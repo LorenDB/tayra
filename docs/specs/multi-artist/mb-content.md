@@ -69,7 +69,7 @@ classDiagram
         Content description
         List api_includes
         String api
-        String federation_namespace
+        String external_namespace
         MusicBrainz musicbrainz_model
         String musicbrainz_mapping
     }
@@ -85,7 +85,7 @@ classDiagram
         String copyright
         Attachment attachment_cover
         Integer downloads_count
-        String federation_namespace
+        String external_namespace
         String musicbrainz_model
         String api
         List api_includes
@@ -96,7 +96,7 @@ classDiagram
     }
     class Artist {
         String name
-        String federation_namespace
+        String external_namespace
         String musicbrainz_model
         Object musicbrainz_mapping
         Actor attributed_to

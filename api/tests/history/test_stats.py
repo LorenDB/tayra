@@ -154,7 +154,10 @@ def test_stats_mixed_null_and_non_null_durations(factories, logged_in_api_client
     assert data["top_tracks"][0]["title"] == "Song A"
     assert data["top_tracks"][0]["count"] == 2
     assert data["top_tracks"][0]["total_seconds"] == 150
-    assert data["top_tracks"][0]["artist_name"] == track_a.artist.name
+    assert (
+        data["top_tracks"][0]["artist_name"]
+        == track_a.artist_credit.first().artist.name
+    )
 
     track_ids = {t["track_id"] for t in data["top_tracks"]}
     assert track_ids == {track_a.pk}
@@ -188,12 +191,8 @@ def test_stats_estimated_prefers_finished_upload_duration(
     year = 2025
     track = factories["music.Track"]()
     # Earlier pending upload must not win when a finished one exists.
-    factories["music.Upload"](
-        track=track, duration=111, import_status="pending"
-    )
-    factories["music.Upload"](
-        track=track, duration=222, import_status="finished"
-    )
+    factories["music.Upload"](track=track, duration=111, import_status="pending")
+    factories["music.Upload"](track=track, duration=222, import_status="finished")
     # Rich row with null duration but device set (counts as rich; estimated uses upload).
     device = factories["client_data.ClientDevice"](user=user)
     factories["history.Listening"](

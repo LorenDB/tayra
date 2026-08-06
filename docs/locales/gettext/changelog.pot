@@ -745,10 +745,6 @@ msgstr ""
 msgid "Remove usage of deprecated Model and Serializer fields (#1663)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:222
-msgid "Skip refreshing local actors in celery federation.refresh_actor_data task - fixes disappearing avatars (!1873)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:224
 #: ../../../CHANGELOG.md:510
 #: ../../../CHANGELOG.md:743
@@ -810,10 +806,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:235
 msgid "Rewrote the architecture file (#1908)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:236
-msgid "Rewrote the federation developer documentation (#1911)"
 msgstr ""
 
 #: ../../../CHANGELOG.md:237
@@ -1241,10 +1233,6 @@ msgstr ""
 msgid "Fixed search behaviour in radio builder's filters (#733)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:337
-msgid "Fixed unpredictable subsonic search3 results (#1782)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:344
 msgid "Mathias Koehler"
 msgstr ""
@@ -1362,10 +1350,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:409
 msgid "Fixed single listening submission when repeating a song (#1312)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:410
-msgid "Fixed subsonic createPlaylist's endpoint doesn't update playlist (#1263)"
 msgstr ""
 
 #: ../../../CHANGELOG.md:411
@@ -1705,10 +1689,6 @@ msgstr ""
 msgid "Add a Maloja plugin to submit listenings"
 msgstr ""
 
-#: ../../../CHANGELOG.md:707
-msgid "Add artist cover art in subsonic API response (#1528)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:708
 msgid "Allow listen activities privacy level to be set public"
 msgstr ""
@@ -1723,14 +1703,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:711
 msgid "Change Start Radio to Play Radio (#1400)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:712
-msgid "Display toast when subsonic password is copied (#1496)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:713
-msgid "Expose more metadata in Subsonic's getAlbumList endpoint (#623)"
 msgstr ""
 
 #: ../../../CHANGELOG.md:714
@@ -1766,10 +1738,6 @@ msgstr ""
 msgid "Enable stepless adjustment of the volume slider (!1294)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:725
-msgid "Fix an error in a Subsonic methods that return lists of numbers/strings like getUser"
-msgstr ""
-
 #: ../../../CHANGELOG.md:726
 msgid "Fix showing too long radio descriptions (#1556)"
 msgstr ""
@@ -1792,14 +1760,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:731
 msgid "Fix the all in one docker image building process, related to #1503"
-msgstr ""
-
-#: ../../../CHANGELOG.md:732
-msgid "Fix crash in album moderation interface when missing cover (#1474)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:733
-msgid "Fix subsonic scrobble not triggering plugin hook (#1416)"
 msgstr ""
 
 #: ../../../CHANGELOG.md:734
@@ -2147,10 +2107,6 @@ msgstr ""
 msgid "Fix the scrobbler plugin submitting literal \"None\" as MusicBrainz ID (#1498)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:894
-msgid "Implement access control on the moderation views (#1494)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:895
 msgid "Prevent open redirect on login (#1492)"
 msgstr ""
@@ -2207,10 +2163,6 @@ msgstr ""
 msgid "Frontend build tooling is less dependent on `npm` or `yarn` being used (!1285)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:927
-msgid "Fixed a small discrepancy to the subsonic api 1374"
-msgstr ""
-
 #: ../../../CHANGELOG.md:929
 msgid "1.1 (2021-03-10)"
 msgstr ""
@@ -2230,11 +2182,6 @@ msgstr ""
 msgid "Added a ListenBrainz plugin to submit listenings"
 msgstr ""
 
-#: ../../../CHANGELOG.md:938
-#: ../../../CHANGELOG.md:1031
-msgid "Added ability to choose fediverse addresses from channel subscription page/podcast screen (#1294)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:939
 #: ../../../CHANGELOG.md:1032
 msgid "Added new search functions to allow users to more easily search for podcasts in the UI."
@@ -2248,11 +2195,6 @@ msgstr ""
 #: ../../../CHANGELOG.md:941
 #: ../../../CHANGELOG.md:1034
 msgid "Logarithmic scale for volume slider (#1222)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:942
-#: ../../../CHANGELOG.md:1035
-msgid "More user-friendly subsonic tokens (#1269)"
 msgstr ""
 
 #: ../../../CHANGELOG.md:943
@@ -2500,10 +2442,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:1011
 msgid "1.1-rc2 (2021-03-01)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:1019
-msgid "Revert fork replacement of http-signature since official package breaks federation"
 msgstr ""
 
 #: ../../../CHANGELOG.md:1022
@@ -2769,10 +2707,6 @@ msgstr ""
 msgid "Fixed \"scope=subscribed\" on albums, artists, uploads and libraries API (#1217)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:1199
-msgid "Fixed broken federation with pods using allow-listing (#1999)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:1200
 msgid "Fixed broken search when using (, \" or & chars (#1196)"
 msgstr ""
@@ -2873,10 +2807,6 @@ msgstr ""
 msgid "Fixed broken mimetype detection during import (#1165)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:1248
-msgid "Fixed crash when loading recent albums via Subsonic (#1158)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:1249
 msgid "Fixed crash with null help text in admin (#1161)"
 msgstr ""
@@ -2957,10 +2887,6 @@ msgstr ""
 msgid "Fixed crash on python 3.5 with cli importer (#1155)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:1287
-msgid "Fixed issue when displaying starred tracks on subsonic (#1082)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:1288
 msgid "Fixed mimetype detection issue that broke transcoding on some tracks (#1093). Run `python manage.py fix_uploads --mimetype` to set proper mimetypes on existing uploads."
 msgstr ""
@@ -3017,10 +2943,6 @@ msgstr ""
 msgid "Funkwhale 0.21 includes a brand new feature: Channels!"
 msgstr ""
 
-#: ../../../CHANGELOG.md:1327
-msgid "Channels can be used as a replacement to public libraries, to publish audio content, both musical and non-musical. They federate with other Funkwhale pods, but also other fediverse software, in particular Mastodon, Pleroma, Friendica and Reel2Bits, meaning people can subscribe to your channel from any of these software. To get started with publication, simply visit your profile and create a channel from there."
-msgstr ""
-
 #: ../../../CHANGELOG.md:1332
 msgid "Each Funkwhale channel also comes with RSS feed that is compatible with existing podcasting applications, like AntennaPod on Android and, within Funkwhale, you can also subscribe to any podcast from its RSS feed!"
 msgstr ""
@@ -3065,10 +2987,6 @@ msgstr ""
 msgid "Instance admins can now configure their pod so that registrations required manual approval from a moderator. This is especially useful on private or semi-private pods where you don't want to close registrations completely, but don't want spam or unwanted users to join your pod."
 msgstr ""
 
-#: ../../../CHANGELOG.md:1359
-msgid "When this is enabled and a new user register, their request is put in a moderation queue, and moderators are notified by email. When the request is approved or refused, the user is also notified by email."
-msgstr ""
-
 #: ../../../CHANGELOG.md:1362
 msgid "In addition, it's also possible to customize the sign-up form by:"
 msgstr ""
@@ -3083,10 +3001,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:1367
 msgid "Federated reports"
-msgstr ""
-
-#: ../../../CHANGELOG.md:1369
-msgid "It's now possible to send a copy of a report to the server hosting the reported object, in order to make moderation easier and more distributed."
 msgstr ""
 
 #: ../../../CHANGELOG.md:1371
@@ -3266,10 +3180,6 @@ msgstr ""
 msgid "Added two new radios to play your own content or a given library tracks"
 msgstr ""
 
-#: ../../../CHANGELOG.md:1514
-msgid "Advertise list of known nodes on /api/v1/federation/domains and in nodeinfo if stats sharing is enabled"
-msgstr ""
-
 #: ../../../CHANGELOG.md:1515
 msgid "Changed footer to use instance name if available, and append ellipses if instance URL/Name is too long (#1012)"
 msgstr ""
@@ -3298,10 +3208,6 @@ msgstr ""
 msgid "Remember display settings in Album, Artist, Radio and Playlist views (#391)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:1522
-msgid "Removed unnecessary \"Federation music needs approval\" setting (#959)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:1523
 msgid "Replaced our slow research logic by PostgreSQL full-text search (#994)"
 msgstr ""
@@ -3316,10 +3222,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:1526
 msgid "Support modifying album cover art through the web UI (#588)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:1527
-msgid "Use a dedicated scope for throttling subsonic to avoid intrusive rate-limiting"
 msgstr ""
 
 #: ../../../CHANGELOG.md:1528
@@ -3411,10 +3313,6 @@ msgstr ""
 msgid "Remove double spaces in ChannelForm"
 msgstr ""
 
-#: ../../../CHANGELOG.md:1553
-msgid "Deduplicate tags in Audio ActivityPub representation"
-msgstr ""
-
 #: ../../../CHANGELOG.md:1555
 msgid "Fix #1079: fixed z-index issues with dropdowns (#1079 and #1075)"
 msgstr ""
@@ -3425,14 +3323,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:1557
 msgid "Fixed broken channel save when description is too long"
-msgstr ""
-
-#: ../../../CHANGELOG.md:1558
-msgid "Fixed 500 error when federation is disabled and application+json is requested"
-msgstr ""
-
-#: ../../../CHANGELOG.md:1559
-msgid "Fixed minor subsonic API crash"
 msgstr ""
 
 #: ../../../CHANGELOG.md:1560
@@ -3670,10 +3560,6 @@ msgstr ""
 msgid "Reduce the number of simultaneous DB connections under some deployment scenario"
 msgstr ""
 
-#: ../../../CHANGELOG.md:1653
-msgid "Support byYear filtering in Subsonic API (#936)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:1657
 msgid "Ensure password input doesn't overflow outside of container (#933)"
 msgstr ""
@@ -3696,10 +3582,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:1662
 msgid "Fixed escaped pod name displayed on home/about page (#945)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:1663
-msgid "Fixed pagination in subsonic getSongsByGenre endpoint (#954)"
 msgstr ""
 
 #: ../../../CHANGELOG.md:1664
@@ -3743,10 +3625,6 @@ msgstr ""
 msgid "Starting with Funkwhale 0.20, Funkwhale will automatically extract genre information from uploaded files and associate it with the corresponding tracks in the form of tags (similar to Mastodon or Twitter hashtags). Please refer to [our tagging documentation](https://docs.funkwhale.audio/users/upload.html#tagging-files) for more information regarding the tagging process."
 msgstr ""
 
-#: ../../../CHANGELOG.md:1696
-msgid "Tags can also be associated with artists and albums, and updated after upload through the UI using the edit system released in Funkwhale 0.19. Tags are also fetched when retrieving content via federation."
-msgstr ""
-
 #: ../../../CHANGELOG.md:1700
 msgid "Tags are used in various places to enhance user experience:"
 msgstr ""
@@ -3763,10 +3641,6 @@ msgstr ""
 msgid "The custom radio builder now supports using tags"
 msgstr ""
 
-#: ../../../CHANGELOG.md:1705
-msgid "Subsonic apps that support genres - such as DSub or Ultrasonic - should display this information as well"
-msgstr ""
-
 #: ../../../CHANGELOG.md:1707
 msgid "If you are a pod admin and want to extract tags from already uploaded content, you run [this snippet](https://dev.funkwhale.audio/funkwhale/funkwhale/snippets/43) and [this snippet](https://dev.funkwhale.audio/funkwhale/funkwhale/snippets/44) in a `python manage.py shell`."
 msgstr ""
@@ -3781,10 +3655,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:1715
 msgid "By default, both anonymous and authenticated users can submit these reports. This makes sure moderators can receive and handle takedown requests and other reports for illegal content that may be sent by third-parties without an account on the pod. However, you can disable anonymous reports completely via your pod settings."
-msgstr ""
-
-#: ../../../CHANGELOG.md:1719
-msgid "Federation of the reports will be supported in a future release."
 msgstr ""
 
 #: ../../../CHANGELOG.md:1721
@@ -3806,10 +3676,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:1728
 msgid "Users can now delete their account themselves, without involving an administrator."
-msgstr ""
-
-#: ../../../CHANGELOG.md:1730
-msgid "The deletion process will remove any local data and objects associated with the account, but the username won't be able to new users to avoid impersonation. Deletion is also broadcasted to other known servers on the federation."
 msgstr ""
 
 #: ../../../CHANGELOG.md:1736
@@ -3870,10 +3736,6 @@ msgstr ""
 msgid "comprehensive statistics about your pod"
 msgstr ""
 
-#: ../../../CHANGELOG.md:1759
-msgid "some info about your pod configuration, such as registration and federation status or the default upload quota for new users"
-msgstr ""
-
 #: ../../../CHANGELOG.md:1761
 msgid "With this redesign, we've added a handful of additional pod settings:"
 msgstr ""
@@ -3896,14 +3758,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:1768
 msgid "We recommend taking a few moments to fill these accordingly to your needs, by visiting `/manage/settings`."
-msgstr ""
-
-#: ../../../CHANGELOG.md:1770
-msgid "Allow-list to restrict federation to trusted domains"
-msgstr ""
-
-#: ../../../CHANGELOG.md:1772
-msgid "The Allow-Listing feature grants pod moderators and administrators greater control over federation by allowing you to create a pod-wide allow-list."
 msgstr ""
 
 #: ../../../CHANGELOG.md:1776
@@ -4010,10 +3864,6 @@ msgstr ""
 msgid "Broken audio streaming when using S3/Minio and DSub [manual action required]"
 msgstr ""
 
-#: ../../../CHANGELOG.md:1892
-msgid "Some Subsonic clients, such as DSub, are sending an Authorization headers which was forwarded to the S3 storage when streaming, causing some issues. If you are using S3 or a compatible storage such as Minio, please add the following in your nginx `~ /_protected/media/(.+)` location:"
-msgstr ""
-
 #: ../../../CHANGELOG.md:1901
 msgid "And reload your nginx process."
 msgstr ""
@@ -4028,10 +3878,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:1908
 msgid "Admins can now add custom CSS from their pod settings (#879)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:1909
-msgid "Allow-list to restrict federation to trusted domains (#853)"
 msgstr ""
 
 #: ../../../CHANGELOG.md:1910
@@ -4108,10 +3954,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:1931
 msgid "New keyboard shortcuts added for enhanced control over audio player (#866)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:1932
-msgid "Now refetch remote ActivityPub artists, albums and tracks to avoid local stale data"
 msgstr ""
 
 #: ../../../CHANGELOG.md:1933
@@ -4202,20 +4044,12 @@ msgstr ""
 msgid "Fixed broken URL to artist and album on album and track pages (#871)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:1958
-msgid "Fixed empty contentType causing client crash in some Subsonic payloads (#893)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:1959
 msgid "Fixed import crashing with empty cover file or too long values on some fields"
 msgstr ""
 
 #: ../../../CHANGELOG.md:1960
 msgid "Fixed in-place imported files not playing under nginx when filename contains ? or % (#924)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:1961
-msgid "Fixed remaining transcoding issue with Subsonic API (#867)"
 msgstr ""
 
 #: ../../../CHANGELOG.md:1962
@@ -4286,16 +4120,8 @@ msgstr ""
 msgid "Redirect from / to /library when user is logged in (#864)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:2004
-msgid "Added a SUBSONIC_DEFAULT_TRANSCODING_FORMAT env var to support clients that don't provide the format parameter (#867)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:2005
 msgid "Added button to search for objects on Discogs (#368)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:2006
-msgid "Added copy-to-clipboard button with Subsonic password input (#814)"
 msgstr ""
 
 #: ../../../CHANGELOG.md:2007
@@ -4382,10 +4208,6 @@ msgstr ""
 msgid "With this release, everyone can suggest changes on track, album and artist pages. Users with the \"library\" permission can review suggested edits in a dedicated interface and apply/reject them."
 msgstr ""
 
-#: ../../../CHANGELOG.md:2053
-msgid "Approved edits are broadcasted via federation, to ensure other instances get the information too."
-msgstr ""
-
 #: ../../../CHANGELOG.md:2056
 msgid "Not all fields are currently modifiable using this feature. Especially, it's not possible to suggest a new album cover, or reassign a track to a different album or artist. Those will be implemented in a future release."
 msgstr ""
@@ -4450,10 +4272,6 @@ msgstr ""
 msgid "Radio suggestions will exclude tracks from hidden artists"
 msgstr ""
 
-#: ../../../CHANGELOG.md:2085
-msgid "Hidden artists won't appear in Subsonic apps"
-msgstr ""
-
 #: ../../../CHANGELOG.md:2087
 msgid "Results linked to hidden artists will continue to show up in search results and their profile page remains accessible."
 msgstr ""
@@ -4464,10 +4282,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:2091
 msgid "Funkwhale now support the OAuth2 authorization and authentication protocol which will allow third-party apps to interact with Funkwhale on behalf of users."
-msgstr ""
-
-#: ../../../CHANGELOG.md:2094
-msgid "This feature makes it possible to build third-party apps that have the same capabilities as Funkwhale's Web UI. The only exception at the moment is for actions that requires special permissions, such as modifying instance settings or moderation (but this will be enabled in a future release)."
 msgstr ""
 
 #: ../../../CHANGELOG.md:2099
@@ -4546,10 +4360,6 @@ msgstr ""
 msgid "Support embedding full artist discographies (#747)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:2144
-msgid "Support metadata update on tracks, albums and artists and broadcast those on the federation (#689)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:2145
 msgid "Support OAuth2 authorization for better integration with third-party apps (#752)"
 msgstr ""
@@ -4610,10 +4420,6 @@ msgstr ""
 msgid "Descriptions will now be shown underneath user libraries (#768)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:2166
-msgid "Don't store unhandled ActivityPub messages in database (#776)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:2167
 msgid "Enhanced the design of the embed wizard. (!619)"
 msgstr ""
@@ -4642,10 +4448,6 @@ msgstr ""
 msgid "Merged artist/album buttons with title text on artist and album pages (#725)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:2174
-msgid "Now honor maxBitrate parameter in Subsonic API (#802)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:2175
 msgid "Preload next track in queue (#572)"
 msgstr ""
@@ -4666,10 +4468,6 @@ msgstr ""
 msgid "The buttons displaying an icon now always show a little divider between the icon and the text. (!620)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:2180
-msgid "Use attributedTo instead of actor in library ActivityPub payload (#619)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:2181
 msgid "Use network/depends_on instead of links in docker-compose.yml (!716)"
 msgstr ""
@@ -4686,20 +4484,12 @@ msgstr ""
 msgid "Added env variable to set AWS region and signature version to serve media without proxy (#826)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:2188
-msgid "Allow users with dots in their usernames to request a subsonic password (#798)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:2189
 msgid "Better handling of featuring/multi-artist tracks tagged with MusicBrainz (#782)"
 msgstr ""
 
 #: ../../../CHANGELOG.md:2190
 msgid "Do not consider tracks as duplicates during import if they have different positions (#740)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:2191
-msgid "Ensure all our ActivityPub fetches are authenticated (#758)"
 msgstr ""
 
 #: ../../../CHANGELOG.md:2192
@@ -4906,16 +4696,8 @@ msgstr ""
 msgid "Fixed escaping issues in translated strings (#652)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:2276
-msgid "Fixed saving moderation policy when clicking on \"Cancel\" (#751)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:2277
 msgid "i18n: Update page title when changing the App's language. (#511)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:2278
-msgid "Include disc number in Subsonic responses (#765)"
 msgstr ""
 
 #: ../../../CHANGELOG.md:2279
@@ -4932,10 +4714,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:2286
 msgid "0.18.2 (2019-02-13)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:2292
-msgid "Added a 'fix_federation_ids' management command to deal with protocol/domain issues in federation IDs after deployments (#706)"
 msgstr ""
 
 #: ../../../CHANGELOG.md:2294
@@ -5018,10 +4796,6 @@ msgstr ""
 msgid "Hide pagination when there is only one page of results (#681)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:2399
-msgid "Include shared/public playlists in Subsonic API responses (#684)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:2400
 msgid "Use proper locale for date-related/duration strings (#670)"
 msgstr ""
@@ -5098,20 +4872,12 @@ msgstr ""
 msgid "After removal of our first, buggy transcoding implementation, we're proud to announce that this feature is back. It is enabled by default, and can be configured/disabled in your instance settings!"
 msgstr ""
 
-#: ../../../CHANGELOG.md:2439
-msgid "This feature works in the browser, with federated/non-federated tracks and using Subsonic clients. Transcoded tracks are generated on the fly, and cached for a configurable amount of time, to reduce the load on the server."
-msgstr ""
-
 #: ../../../CHANGELOG.md:2443
 msgid "Licensing and copyright information"
 msgstr ""
 
 #: ../../../CHANGELOG.md:2445
 msgid "Funkwhale is now able to parse copyright and license data from file and store this information. Apart from displaying it on each track detail page, no additional behaviour is currently implemented to use this new data, but this will change in future releases."
-msgstr ""
-
-#: ../../../CHANGELOG.md:2450
-msgid "License and copyright data is also broadcasted over federation."
 msgstr ""
 
 #: ../../../CHANGELOG.md:2452
@@ -5150,14 +4916,6 @@ msgstr ""
 msgid "Support for other licenses such as Art Libre or WTFPL will be added in future releases."
 msgstr ""
 
-#: ../../../CHANGELOG.md:2466
-msgid "Instance-level moderation tools"
-msgstr ""
-
-#: ../../../CHANGELOG.md:2468
-msgid "This release includes a first set of moderation tools that will give more control to admins about the way their instance federates with other instance and accounts on the network. Using these tools, it's now possible to:"
-msgstr ""
-
 #: ../../../CHANGELOG.md:2472
 msgid "Browse known accounts and domains, and associated data (storage size, software version, etc.)"
 msgstr ""
@@ -5168,10 +4926,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:2474
 msgid "Block or partially restrict interactions with any account or domain"
-msgstr ""
-
-#: ../../../CHANGELOG.md:2476
-msgid "All those features are usable using a brand new \"moderation\" permission, meaning you can appoint one or multiple moderators to help with this task."
 msgstr ""
 
 #: ../../../CHANGELOG.md:2479
@@ -5286,10 +5040,6 @@ msgstr ""
 msgid "Audio transcoding is back! (#272)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:2617
-msgid "First set of instance level moderation tools (#580, !521)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:2618
 msgid "Store licensing and copyright information from file metadata, if available (#308)"
 msgstr ""
@@ -5300,10 +5050,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:2623
 msgid "Added alternative funkwhale/all-in-one docker image (#614)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:2624
-msgid "Broadcast library updates (name, description, visibility) over federation"
 msgstr ""
 
 #: ../../../CHANGELOG.md:2625
@@ -5322,16 +5068,8 @@ msgstr ""
 msgid "The progress bar in the player now display loading state / buffer loading (#586)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:2630
-msgid "Added \"type: funkwhale\" and \"funkwhale-version\" in Subsonic responses (#573)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:2631
 msgid "Documented keyboard shortcuts, list is now available by pressing \"h\" or in the footer (#611)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:2632
-msgid "Documented which Subsonic endpoints are implemented (#575)"
 msgstr ""
 
 #: ../../../CHANGELOG.md:2633
@@ -5438,10 +5176,6 @@ msgstr ""
 msgid "Added a script to prune pre 0.17 federated tracks (#564)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:2664
-msgid "Advertise public libraries properly in ActivityPub representations (#553)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:2665
 msgid "Allow opus file upload (#598)"
 msgstr ""
@@ -5476,10 +5210,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:2673
 msgid "Fixed greyed tracks in radio builder and detail page (#637)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:2674
-msgid "Fixed inconsistencies in subsonic error responses (#616)"
 msgstr ""
 
 #: ../../../CHANGELOG.md:2675
@@ -5592,10 +5322,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:2722
 msgid "Fixed a few untranslated strings (#559)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:2723
-msgid "Fixed split album when importing from federation (#346)"
 msgstr ""
 
 #: ../../../CHANGELOG.md:2724
@@ -5784,10 +5510,6 @@ msgstr ""
 msgid "Fixed broken audio playback on Chrome and invisible volume control (#390)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:2942
-msgid "Fixed broken federation import on big imports due to missing transaction logic (#397)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:2944
 msgid "Fixed crash on artist pages when no cover is available (#457)"
 msgstr ""
@@ -5869,10 +5591,6 @@ msgstr ""
 msgid "Complete redesign of the library home and playlist pages (#284)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:2994
-msgid "Expose ActivityPub actors for users (#317)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:2995
 msgid "Implemented a basic but functional Github-like search on federated tracks list (#344)"
 msgstr ""
@@ -5949,10 +5667,6 @@ msgstr ""
 msgid "Fix notifications not closing when clicking on the cross (#366)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:3024
-msgid "Fix the most annoying offset in the whole fediverse (#369)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:3025
 msgid "Fixed persistent message in playlist modal (#304)"
 msgstr ""
@@ -5967,10 +5681,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:3029
 msgid "Remove parallelization of uploads during import to avoid crashing small servers (#382)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:3031
-msgid "Subsonic API login is now case insensitive (#339)"
 msgstr ""
 
 #: ../../../CHANGELOG.md:3032
@@ -6057,18 +5767,6 @@ msgstr ""
 msgid "The situation should be improved with this release, as Funkwhale is now able to store separately the track and album artist, and display it properly in the interface."
 msgstr ""
 
-#: ../../../CHANGELOG.md:3078
-msgid "Users now have an ActivityPub Actor [Manual action required]"
-msgstr ""
-
-#: ../../../CHANGELOG.md:3080
-msgid "In the process of implementing federation for user activity such as listening history, we are now making user profiles (a.k.a. ActivityPub actors) available through federation."
-msgstr ""
-
-#: ../../../CHANGELOG.md:3083
-msgid "This does not means the federation is working, but this is a needed step to implement it."
-msgstr ""
-
 #: ../../../CHANGELOG.md:3085
 msgid "Those profiles will be created automatically for new users, but you have to run a command to create them for existing users."
 msgstr ""
@@ -6103,10 +5801,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:3133
 msgid "Github does a pretty good job with that, using a structured but simple query system (See https://help.github.com/articles/searching-issues-and-pull-requests/#search-only-issues-or-pull-requests)."
-msgstr ""
-
-#: ../../../CHANGELOG.md:3136
-msgid "This release implements a limited but working subset of this query system. You can use it only on the federated tracks list (/manage/federation/tracks) at the moment, but depending on feedback it will be rolled-out on other pages as well."
 msgstr ""
 
 #: ../../../CHANGELOG.md:3139
@@ -6361,10 +6055,6 @@ msgstr ""
 msgid "Fixed admin menu not showing after login (#245)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:3301
-msgid "Fixed broken pagination in Subsonic API (#295)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:3302
 msgid "Fixed duplicated websocket connection on timeline (#287)"
 msgstr ""
@@ -6399,10 +6089,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:3325
 msgid "Following the recent switch made by PixelFed (https://github.com/dansup/pixelfed/issues/143), we decided along with the community to relicence Funkwhale under the AGPL-3 licence. We did this switch for various reasons:"
-msgstr ""
-
-#: ../../../CHANGELOG.md:3330
-msgid "This is better aligned with other fediverse software"
 msgstr ""
 
 #: ../../../CHANGELOG.md:3331
@@ -6517,10 +6203,6 @@ msgstr ""
 msgid "Removed alpha-state transcoding (#271)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:3427
-msgid "A few months ago, a basic transcoding feature was implemented. Due to the way this feature was designed, it was slow, CPU intensive on the server side, and very tightly coupled to the reverse-proxy configuration, preventing it to work Apache2, for instance. It was also not compatible with Subsonic clients."
-msgstr ""
-
 #: ../../../CHANGELOG.md:3432
 msgid "Based on that, we're currently removing support for transcoding **in its current state**. The work on a better designed transcoding feature can be tracked in https://dev.funkwhale.audio/funkwhale/funkwhale/issues/272."
 msgstr ""
@@ -6563,14 +6245,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:3503
 msgid "Can now use album covers from flac/mp3 metadata and separate file in track directory (#219)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:3505
-msgid "Implemented getCovertArt in Subsonic API to serve album covers (#258)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:3506
-msgid "Implemented scrobble endpoint of subsonic API, listenings are now tracked correctly from third party apps that use this endpoint (#260)"
 msgstr ""
 
 #: ../../../CHANGELOG.md:3508
@@ -6627,10 +6301,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:3528
 msgid "We now fetch album covers regardless of the import methods (#231)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:3532
-msgid "Added missing subsonic configuration block in deployment vhost files (#249)"
 msgstr ""
 
 #: ../../../CHANGELOG.md:3533
@@ -6737,18 +6407,6 @@ msgstr ""
 msgid "You have nothing to do to benefit from this, however, since Flac files tend to be a lot bigger than other files, you may want to increase the `client_max_body_size` value in your Nginx configuration if you plan to upload flac files."
 msgstr ""
 
-#: ../../../CHANGELOG.md:3651
-msgid "Missing subsonic configuration block in vhost files"
-msgstr ""
-
-#: ../../../CHANGELOG.md:3653
-msgid "Because of a missing block in the sample Nginx and Apache configurations, instances that were deployed after the 0.13 release are likely to be unable to answer to Subsonic clients (the missing bits were properly documented in the changelog)."
-msgstr ""
-
-#: ../../../CHANGELOG.md:3658
-msgid "Ensure you have the following snippets in your Nginx or Apache configuration if you plan to use the Subsonic API."
-msgstr ""
-
 #: ../../../CHANGELOG.md:3661
 msgid "Nginx:"
 msgstr ""
@@ -6811,10 +6469,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:3708
 msgid "Instance settings interface"
-msgstr ""
-
-#: ../../../CHANGELOG.md:3710
-msgid "Prior to this release, the only way to update instance settings (such as instance description, signup policy, federation configuration, etc.) was using the admin interface provided by Django (the back-end framework which power the API)."
 msgstr ""
 
 #: ../../../CHANGELOG.md:3714
@@ -6889,10 +6543,6 @@ msgstr ""
 msgid "0.12 (2018-05-09)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:3796
-msgid "Subsonic API implementation to offer compatibility with existing clients such as DSub (#75)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:3798
 msgid "Use nodeinfo standard for publishing instance information (#192)"
 msgstr ""
@@ -6909,28 +6559,8 @@ msgstr ""
 msgid "Up-to-date documentation for upgrading front-end files on docker setup (#132)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:3813
-msgid "Subsonic API"
-msgstr ""
-
-#: ../../../CHANGELOG.md:3815
-msgid "This release implements some core parts of the Subsonic API, which is widely deployed in various projects and supported by numerous clients."
-msgstr ""
-
-#: ../../../CHANGELOG.md:3818
-msgid "By offering this API in Funkwhale, we make it possible to access the instance library and listen to the music without from existing Subsonic clients, and without developping our own alternative clients for each and every platform."
-msgstr ""
-
-#: ../../../CHANGELOG.md:3822
-msgid "Most advanced Subsonic clients support offline caching of music files, playlist management and search, which makes them well-suited for nomadic use."
-msgstr ""
-
 #: ../../../CHANGELOG.md:3825
 msgid "Please see [our list of supported apps](https://funkwhale.audio/en_US/apps) for more information about supported clients and user instructions."
-msgstr ""
-
-#: ../../../CHANGELOG.md:3828
-msgid "At the instance-level, the Subsonic API is enabled by default, but require and additional endpoint to be added in you reverse-proxy configuration."
 msgstr ""
 
 #: ../../../CHANGELOG.md:3831
@@ -6941,28 +6571,12 @@ msgstr ""
 msgid "On Apache, add the following block:"
 msgstr ""
 
-#: ../../../CHANGELOG.md:3849
-msgid "The Subsonic can be disabled at the instance level from the django admin."
-msgstr ""
-
-#: ../../../CHANGELOG.md:3852
-msgid "Because of Subsonic's API design which assumes cleartext storing of user passwords, we chose to have a dedicated, separate password for that purpose. Users can generate this password from their settings page in the web client."
-msgstr ""
-
 #: ../../../CHANGELOG.md:3858
 msgid "Nodeinfo standard for instance information and stats"
 msgstr ""
 
 #: ../../../CHANGELOG.md:3861
 msgid "The ``/api/v1/instance/stats/`` endpoint which was used to display instance data in the about page is removed in favor of the new ``/api/v1/instance/nodeinfo/2.0/`` endpoint."
-msgstr ""
-
-#: ../../../CHANGELOG.md:3866
-msgid "In earlier version, we where using a custom endpoint and format for our instance information and statistics. While this was working, this was not compatible with anything else on the fediverse."
-msgstr ""
-
-#: ../../../CHANGELOG.md:3870
-msgid "We now offer a nodeinfo 2.0 endpoint which provides, in a single place, all the instance information such as library and user activity statistics, public instance settings (description, registration and federation status, etc.)."
 msgstr ""
 
 #: ../../../CHANGELOG.md:3874
@@ -7037,20 +6651,8 @@ msgstr ""
 msgid "Sample virtual-host file for Apache2 reverse-proxy (!165)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:3957
-msgid "Store high-level settings (such as federation or auth-related ones) in database (#186)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:3962
 msgid "Ensure in place imported files get a proper mimetype (#183)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:3963
-msgid "Federation cache suppression is now simpler and also deletes orphaned files (#189)"
-msgstr ""
-
-#: ../../../CHANGELOG.md:3965
-msgid "Fixed small UI glitches/bugs in federation tabs (#184)"
 msgstr ""
 
 #: ../../../CHANGELOG.md:3966
@@ -7079,22 +6681,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:3977
 msgid "Due to the work done in #186, the following environment variables have been deprecated:"
-msgstr ""
-
-#: ../../../CHANGELOG.md:3980
-msgid "FEDERATION_ENABLED"
-msgstr ""
-
-#: ../../../CHANGELOG.md:3981
-msgid "FEDERATION_COLLECTION_PAGE_SIZE"
-msgstr ""
-
-#: ../../../CHANGELOG.md:3982
-msgid "FEDERATION_MUSIC_NEEDS_APPROVAL"
-msgstr ""
-
-#: ../../../CHANGELOG.md:3983
-msgid "FEDERATION_ACTOR_FETCH_DELAY"
 msgstr ""
 
 #: ../../../CHANGELOG.md:3984
@@ -7258,10 +6844,6 @@ msgstr ""
 msgid "0.9.1 (2018-04-17)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:4114
-msgid "Allow null values for musicbrainz_id in Audio ActivityPub representation"
-msgstr ""
-
 #: ../../../CHANGELOG.md:4115
 msgid "Fixed broken permission check on library scanning and too aggressive page validation"
 msgstr ""
@@ -7290,10 +6872,6 @@ msgstr ""
 msgid "We now use a proper user agent including instance version and url during outgoing requests"
 msgstr ""
 
-#: ../../../CHANGELOG.md:4132
-msgid "Federation is here!"
-msgstr ""
-
 #: ../../../CHANGELOG.md:4134
 msgid "This is for real this time, and includes:"
 msgstr ""
@@ -7308,14 +6886,6 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:4138
 msgid "Searching across federated catalogs"
-msgstr ""
-
-#: ../../../CHANGELOG.md:4140
-msgid "Note that by default, federation is opt-in, on a per-instance basis: instances will request access to your catalog, and you can accept or refuse those requests. You can also revoke the access at any time."
-msgstr ""
-
-#: ../../../CHANGELOG.md:4144
-msgid "Documentation was updated with relevant instructions to use and benefit from this new feature: https://docs.funkwhale.audio/federation.html"
 msgstr ""
 
 #: ../../../CHANGELOG.md:4147
@@ -7382,10 +6952,6 @@ msgstr ""
 msgid "Better error messages in case of missing environment variables (#140)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:4200
-msgid "Implemented a @test@yourfunkwhaledomain bot to ensure federation works properly. Send it \"/ping\" and it will answer back :)"
-msgstr ""
-
 #: ../../../CHANGELOG.md:4202
 msgid "Queue shuffle now apply only to tracks after the current one (#97)"
 msgstr ""
@@ -7418,40 +6984,8 @@ msgstr ""
 msgid "Documented the upgrade process (#127)"
 msgstr ""
 
-#: ../../../CHANGELOG.md:4219
-msgid "Preparing for federation"
-msgstr ""
-
-#: ../../../CHANGELOG.md:4221
-msgid "Federation of music libraries is one of the most asked feature. While there is still a lot of work to do, this version includes the foundation that will enable funkwhale servers to communicate between each others, and with other federated software, such as Mastodon."
-msgstr ""
-
-#: ../../../CHANGELOG.md:4227
-msgid "Funkwhale will use ActivityPub as it's federation protocol."
-msgstr ""
-
-#: ../../../CHANGELOG.md:4229
-msgid "In order to prepare for federation (see #136 and #137), new API endpoints have been added under /federation and /.well-known/webfinger."
-msgstr ""
-
 #: ../../../CHANGELOG.md:4232
 msgid "For these endpoints to work, you will need to update your nginx configuration, and add the following snippets:"
-msgstr ""
-
-#: ../../../CHANGELOG.md:4246
-msgid "This will ensure federation endpoints will be reachable in the future. You can of course skip this part if you know you will not federate your instance."
-msgstr ""
-
-#: ../../../CHANGELOG.md:4249
-msgid "A new `FEDERATION_ENABLED` env var have also been added to control whether federation is enabled or not on the application side. This settings defaults to True, which should have no consequences at the moment, since actual federation is not implemented and the only available endpoints are for testing purposes."
-msgstr ""
-
-#: ../../../CHANGELOG.md:4255
-msgid "Add `FEDERATION_ENABLED=false` to your .env file to disable federation on the application side."
-msgstr ""
-
-#: ../../../CHANGELOG.md:4258
-msgid "To test and troubleshoot federation, we've added a bot account. This bot is available at @test@yourinstancedomain, and sending it \"/ping\", for example, via Mastodon, should trigger a response."
 msgstr ""
 
 #: ../../../CHANGELOG.md:4262

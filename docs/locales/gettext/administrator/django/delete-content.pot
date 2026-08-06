@@ -21,7 +21,8 @@ msgid "Delete content in the Django dashboard"
 msgstr ""
 
 #: ../../administrator/django/delete-content.md:4
-msgid "Deleting content using the Django dashboard isn't recommended. Use an object's [moderation page](../../moderator/content/delete.md) where possible."
+msgid "Deleting content using the Django dashboard isn't recommended. Use the"
+" Funkwhale app where possible."
 msgstr ""
 
 #: ../../administrator/django/delete-content.md:7

@@ -35,10 +35,9 @@ def test_can_list_mutations(logged_in_api_client, factories):
 
 
 def test_can_destroy_mutation_creator(logged_in_api_client, factories):
-    actor = logged_in_api_client.user.create_actor()
     track = factories["music.Track"]()
     mutation = factories["common.Mutation"](
-        target=track, type="update", payload={}, created_by=actor
+        target=track, type="update", payload={}, created_by=logged_in_api_client.user
     )
     url = reverse("api:v1:mutations-detail", kwargs={"uuid": mutation.uuid})
 
@@ -48,7 +47,6 @@ def test_can_destroy_mutation_creator(logged_in_api_client, factories):
 
 
 def test_can_destroy_mutation_not_creator(logged_in_api_client, factories):
-    logged_in_api_client.user.create_actor()
     track = factories["music.Track"]()
     mutation = factories["common.Mutation"](type="update", target=track, payload={})
     url = reverse("api:v1:mutations-detail", kwargs={"uuid": mutation.uuid})
@@ -61,7 +59,6 @@ def test_can_destroy_mutation_not_creator(logged_in_api_client, factories):
 
 
 def test_can_destroy_mutation_has_perm(logged_in_api_client, factories, mocker):
-    actor = logged_in_api_client.user.create_actor()
     track = factories["music.Track"]()
     mutation = factories["common.Mutation"](target=track, type="update", payload={})
     has_perm = mocker.patch(
@@ -73,7 +70,7 @@ def test_can_destroy_mutation_has_perm(logged_in_api_client, factories, mocker):
 
     assert response.status_code == 204
     has_perm.assert_called_once_with(
-        obj=mutation.target, type=mutation.type, perm="approve", actor=actor
+        obj=mutation.target, type=mutation.type, perm="approve", user=logged_in_api_client.user
     )
 
 
@@ -82,7 +79,6 @@ def test_can_approve_reject_mutation_with_perm(
     endpoint, expected, logged_in_api_client, factories, mocker
 ):
     on_commit = mocker.patch("funkwhale_api.common.utils.on_commit")
-    actor = logged_in_api_client.user.create_actor()
     track = factories["music.Track"]()
     mutation = factories["common.Mutation"](target=track, type="update", payload={})
     has_perm = mocker.patch(
@@ -94,7 +90,7 @@ def test_can_approve_reject_mutation_with_perm(
 
     assert response.status_code == 200
     has_perm.assert_called_once_with(
-        obj=mutation.target, type=mutation.type, perm="approve", actor=actor
+        obj=mutation.target, type=mutation.type, perm="approve", user=logged_in_api_client.user
     )
 
     if expected:
@@ -102,7 +98,7 @@ def test_can_approve_reject_mutation_with_perm(
     mutation.refresh_from_db()
 
     assert mutation.is_approved == expected
-    assert mutation.approved_by == actor
+    assert mutation.approved_by == logged_in_api_client.user
 
     on_commit.assert_any_call(
         signals.mutation_updated.send,
@@ -118,7 +114,6 @@ def test_cannot_approve_reject_applied_mutation(
     endpoint, expected, logged_in_api_client, factories, mocker
 ):
     on_commit = mocker.patch("funkwhale_api.common.utils.on_commit")
-    logged_in_api_client.user.create_actor()
     track = factories["music.Track"]()
     mutation = factories["common.Mutation"](
         target=track, type="update", payload={}, is_applied=True
@@ -142,7 +137,6 @@ def test_cannot_approve_reject_without_perm(
     endpoint, expected, logged_in_api_client, factories, mocker
 ):
     on_commit = mocker.patch("funkwhale_api.common.utils.on_commit")
-    logged_in_api_client.user.create_actor()
     track = factories["music.Track"]()
     mutation = factories["common.Mutation"](target=track, type="update", payload={})
     mocker.patch("funkwhale_api.common.mutations.registry.has_perm", return_value=False)
@@ -187,7 +181,9 @@ def test_rate_limit(logged_in_api_client, now_time, settings, mocker):
 def test_attachment_proxy_redirects_original(
     next, expected, factories, logged_in_api_client, mocker, avatar, r_mock, now
 ):
-    attachment = factories["common.Attachment"](file=None)
+    attachment = factories["common.Attachment"](
+        file=None, url="https://example.com/image.jpg"
+    )
 
     avatar_content = avatar.read()
     fetch_remote_attachment = mocker.spy(tasks, "fetch_remote_attachment")
@@ -229,7 +225,6 @@ def test_attachment_proxy_dont_crash_on_long_filename(
 
 
 def test_attachment_create(logged_in_api_client, avatar):
-    actor = logged_in_api_client.user.create_actor()
     url = reverse("api:v1:attachments-list")
     content = avatar.read()
     avatar.seek(0)
@@ -237,14 +232,13 @@ def test_attachment_create(logged_in_api_client, avatar):
     response = logged_in_api_client.post(url, payload)
 
     assert response.status_code == 201
-    attachment = actor.attachments.latest("id")
+    attachment = logged_in_api_client.user.attachments.latest("id")
     assert attachment.file.read() == content
     assert attachment.file.size == len(content)
 
 
 def test_attachment_destroy(factories, logged_in_api_client):
-    actor = logged_in_api_client.user.create_actor()
-    attachment = factories["common.Attachment"](actor=actor)
+    attachment = factories["common.Attachment"](uploaded_by=logged_in_api_client.user)
     url = reverse("api:v1:attachments-detail", kwargs={"uuid": attachment.uuid})
     response = logged_in_api_client.delete(url)
 
@@ -254,7 +248,6 @@ def test_attachment_destroy(factories, logged_in_api_client):
 
 
 def test_attachment_destroy_not_owner(factories, logged_in_api_client):
-    logged_in_api_client.user.create_actor()
     attachment = factories["common.Attachment"]()
     url = reverse("api:v1:attachments-detail", kwargs={"uuid": attachment.uuid})
     response = logged_in_api_client.delete(url)

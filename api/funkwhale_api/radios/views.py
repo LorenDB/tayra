@@ -48,7 +48,7 @@ class RadioViewSet(
     def tracks(self, request, *args, **kwargs):
         radio = self.get_object()
         tracks = radio.get_candidates().for_nested_serialization()
-        actor = music_utils.get_actor_from_request(self.request)
+        actor = music_utils.get_user_from_request(self.request)
         tracks = tracks.with_playable_uploads(actor)
         tracks = tracks.playable_by(actor)
         page = self.paginate_queryset(tracks)

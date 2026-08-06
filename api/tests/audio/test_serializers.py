@@ -10,9 +10,6 @@ from django.urls import reverse
 from funkwhale_api.audio import serializers
 from funkwhale_api.common import serializers as common_serializers
 from funkwhale_api.common import utils as common_utils
-from funkwhale_api.federation import actors
-from funkwhale_api.federation import serializers as federation_serializers
-from funkwhale_api.federation import utils as federation_utils
 
 if sys.version_info < (3, 9):
     from backports.zoneinfo import ZoneInfo
@@ -21,9 +18,9 @@ else:
 
 
 def test_channel_serializer_create(factories, mocker):
-    attributed_to = factories["federation.Actor"](local=True)
-    attachment = factories["common.Attachment"](actor=attributed_to)
-    request = mocker.Mock(user=mocker.Mock(actor=attributed_to))
+    user = factories["users.User"]()
+    attachment = factories["common.Attachment"](uploaded_by=user)
+    request = mocker.Mock(user=user)
     data = {
         "name": "My channel",
         "username": "mychannel",
@@ -34,14 +31,13 @@ def test_channel_serializer_create(factories, mocker):
     }
 
     serializer = serializers.ChannelCreateSerializer(
-        data=data, context={"actor": attributed_to, "request": request}
+        data=data, context={"user": user, "request": request}
     )
     assert serializer.is_valid(raise_exception=True) is True
 
-    channel = serializer.save(attributed_to=attributed_to)
+    channel = serializer.save(owner=user)
 
     assert channel.artist.name == data["name"]
-    assert channel.artist.attributed_to == attributed_to
     assert (
         sorted(channel.artist.tagged_items.values_list("tag__name", flat=True))
         == data["tags"]
@@ -52,17 +48,16 @@ def test_channel_serializer_create(factories, mocker):
     assert (
         channel.artist.description.content_type == data["description"]["content_type"]
     )
-    assert channel.attributed_to == attributed_to
-    assert channel.actor.preferred_username == data["username"]
-    assert channel.actor.name == data["name"]
+    assert channel.owner == user
+    assert channel.preferred_username == data["username"]
     assert channel.library.privacy_level == "everyone"
-    assert channel.library.actor == attributed_to
+    assert channel.library.owner == user
 
 
 def test_channel_serializer_create_honor_max_channels_setting(factories, preferences):
     preferences["audio__max_channels"] = 1
-    attributed_to = factories["federation.Actor"](local=True)
-    factories["audio.Channel"](attributed_to=attributed_to)
+    user = factories["users.User"]()
+    factories["audio.Channel"](owner=user)
     data = {
         "name": "My channel",
         "username": "mychannel",
@@ -71,26 +66,23 @@ def test_channel_serializer_create_honor_max_channels_setting(factories, prefere
         "content_category": "other",
     }
 
-    serializer = serializers.ChannelCreateSerializer(
-        data=data, context={"actor": attributed_to}
-    )
+    serializer = serializers.ChannelCreateSerializer(data=data, context={"user": user})
     with pytest.raises(serializers.serializers.ValidationError, match=r".*max.*"):
         assert serializer.is_valid(raise_exception=True)
 
 
 def test_channel_serializer_create_validates_username_uniqueness(factories):
-    attributed_to = factories["federation.Actor"](local=True)
+    user = factories["users.User"]()
+    factories["audio.Channel"](preferred_username="mychannel")
     data = {
         "name": "My channel",
-        "username": attributed_to.preferred_username.upper(),
+        "username": "MYCHANNEL",
         "description": {"text": "This is my channel", "content_type": "text/markdown"},
         "tags": ["hello", "world"],
         "content_category": "other",
     }
 
-    serializer = serializers.ChannelCreateSerializer(
-        data=data, context={"actor": attributed_to}
-    )
+    serializer = serializers.ChannelCreateSerializer(data=data, context={"user": user})
     with pytest.raises(
         serializers.serializers.ValidationError, match=r".*username is already taken.*"
     ):
@@ -98,7 +90,7 @@ def test_channel_serializer_create_validates_username_uniqueness(factories):
 
 
 def test_channel_serializer_create_validates_username_chars(factories):
-    attributed_to = factories["federation.Actor"](local=True)
+    user = factories["users.User"]()
     data = {
         "name": "My channel",
         "username": "hello world",
@@ -107,9 +99,7 @@ def test_channel_serializer_create_validates_username_chars(factories):
         "content_category": "other",
     }
 
-    serializer = serializers.ChannelCreateSerializer(
-        data=data, context={"actor": attributed_to}
-    )
+    serializer = serializers.ChannelCreateSerializer(data=data, context={"user": user})
     with pytest.raises(
         serializers.serializers.ValidationError, match=r".*Enter a valid username.*"
     ):
@@ -118,7 +108,7 @@ def test_channel_serializer_create_validates_username_chars(factories):
 
 def test_channel_serializer_create_validates_blacklisted_username(factories, settings):
     settings.ACCOUNT_USERNAME_BLACKLIST = ["forBidden"]
-    attributed_to = factories["federation.Actor"](local=True)
+    user = factories["users.User"]()
     data = {
         "name": "My channel",
         "username": "FORBIDDEN",
@@ -127,9 +117,7 @@ def test_channel_serializer_create_validates_blacklisted_username(factories, set
         "content_category": "other",
     }
 
-    serializer = serializers.ChannelCreateSerializer(
-        data=data, context={"actor": attributed_to}
-    )
+    serializer = serializers.ChannelCreateSerializer(data=data, context={"user": user})
     with pytest.raises(
         serializers.serializers.ValidationError, match=r".*username is already taken.*"
     ):
@@ -137,7 +125,7 @@ def test_channel_serializer_create_validates_blacklisted_username(factories, set
 
 
 def test_channel_serializer_create_podcast(factories):
-    attributed_to = factories["federation.Actor"](local=True)
+    user = factories["users.User"]()
 
     data = {
         # TODO: cover
@@ -149,22 +137,18 @@ def test_channel_serializer_create_podcast(factories):
         "metadata": {"itunes_category": "Sports", "language": "en"},
     }
 
-    serializer = serializers.ChannelCreateSerializer(
-        data=data, context={"actor": attributed_to}
-    )
+    serializer = serializers.ChannelCreateSerializer(data=data, context={"user": user})
     assert serializer.is_valid(raise_exception=True) is True
 
-    channel = serializer.save(attributed_to=attributed_to)
+    channel = serializer.save(owner=user)
     assert channel.metadata == data["metadata"]
 
 
 def test_channel_serializer_update(factories, mocker):
-    channel = factories["audio.Channel"](
-        artist__set_tags=["rock"], attributed_to__local=True
-    )
-    attributed_to = channel.attributed_to
-    attachment = factories["common.Attachment"](actor=attributed_to)
-    request = mocker.Mock(user=mocker.Mock(actor=attributed_to))
+    channel = factories["audio.Channel"](artist__set_tags=["rock"])
+    user = channel.owner
+    attachment = factories["common.Attachment"](uploaded_by=user)
+    request = mocker.Mock(user=user)
     data = {
         "name": "My channel",
         "description": {"text": "This is my channel", "content_type": "text/markdown"},
@@ -190,7 +174,6 @@ def test_channel_serializer_update(factories, mocker):
     )
     assert channel.artist.description.text == data["description"]["text"]
     assert channel.artist.description.content_type == "text/markdown"
-    assert channel.actor.name == data["name"]
 
 
 def test_channel_serializer_update_podcast(factories):
@@ -222,13 +205,9 @@ def test_channel_serializer_representation(factories, to_api_date):
         "artist": serializers.SimpleChannelArtistSerializer(channel.artist).data,
         "uuid": str(channel.uuid),
         "creation_date": to_api_date(channel.creation_date),
-        "actor": federation_serializers.APIActorSerializer(channel.actor).data,
-        "attributed_to": federation_serializers.APIActorSerializer(
-            channel.attributed_to
-        ).data,
         "metadata": {},
         "rss_url": channel.get_rss_url(),
-        "url": channel.actor.url,
+        "url": channel.get_absolute_url(),
         "downloads_count": 12,
     }
     expected["artist"]["description"] = common_serializers.ContentSerializer(
@@ -246,13 +225,9 @@ def test_channel_serializer_external_representation(factories, to_api_date):
         "artist": serializers.SimpleChannelArtistSerializer(channel.artist).data,
         "uuid": str(channel.uuid),
         "creation_date": to_api_date(channel.creation_date),
-        "actor": None,
-        "attributed_to": federation_serializers.APIActorSerializer(
-            channel.attributed_to
-        ).data,
         "metadata": {},
         "rss_url": channel.get_rss_url(),
-        "url": channel.actor.url,
+        "url": channel.get_absolute_url(),
         "downloads_count": 0,
     }
     expected["artist"]["description"] = common_serializers.ContentSerializer(
@@ -264,8 +239,8 @@ def test_channel_serializer_external_representation(factories, to_api_date):
 
 def test_channel_serializer_representation_subscriptions_count(factories, to_api_date):
     channel = factories["audio.Channel"]()
-    factories["federation.Follow"](target=channel.actor)
-    factories["federation.Follow"](target=channel.actor, approved=False)
+    factories["audio.Subscription"](channel=channel)
+    factories["audio.Subscription"](channel=channel, approved=False)
     serializer = serializers.ChannelSerializer(
         channel, context={"subscriptions_count": True}
     )
@@ -275,11 +250,10 @@ def test_channel_serializer_representation_subscriptions_count(factories, to_api
 def test_subscription_serializer(factories, to_api_date):
     subscription = factories["audio.Subscription"]()
     expected = {
-        "channel": serializers.ChannelSerializer(subscription.target.channel).data,
+        "channel": serializers.ChannelSerializer(subscription.channel).data,
         "uuid": str(subscription.uuid),
         "creation_date": to_api_date(subscription.creation_date),
         "approved": subscription.approved,
-        "fid": subscription.fid,
     }
 
     assert serializers.SubscriptionSerializer(subscription).data == expected
@@ -315,10 +289,10 @@ def test_rss_item_serializer(factories):
         "itunes:season": [{"value": upload.track.disc_number}],
         "itunes:episode": [{"value": upload.track.position}],
         "itunes:image": [{"href": upload.track.attachment_cover.download_url_original}],
-        "link": [{"value": federation_utils.full_url(upload.track.get_absolute_url())}],
+        "link": [{"value": common_utils.full_url(upload.track.get_absolute_url())}],
         "enclosure": [
             {
-                "url": federation_utils.full_url(
+                "url": common_utils.full_url(
                     reverse(
                         "api:v1:stream-detail", kwargs={"uuid": str(upload.track.uuid)}
                     )
@@ -389,11 +363,6 @@ def test_rss_channel_serializer(factories):
                 "rel": "self",
                 "type": "application/rss+xml",
             },
-            {
-                "href": channel.actor.fid,
-                "rel": "alternate",
-                "type": "application/activity+json",
-            },
         ],
     }
 
@@ -414,11 +383,7 @@ def test_rss_channel_serializer_placeholder_image(factories):
     )
 
     expected = [
-        {
-            "href": federation_utils.full_url(
-                static("images/podcasts-cover-placeholder.png")
-            )
-        }
+        {"href": common_utils.full_url(static("images/podcasts-cover-placeholder.png"))}
     ]
 
     assert serializers.rss_serialize_channel(channel)["itunes:image"] == expected
@@ -537,16 +502,15 @@ def test_rss_feed_serializer_create(db, now):
     channel = serializer.save(rss_url)
 
     assert channel.rss_url == "http://real.rss.url"
-    assert channel.attributed_to == actors.get_service_actor()
-    assert channel.library.actor == actors.get_service_actor()
+    assert channel.is_external_rss is True
+    assert channel.owner is None
+    assert channel.preferred_username.startswith("rssfeed-")
+    assert channel.library.owner is None
     assert channel.artist.name == "Hello"
-    assert channel.artist.attributed_to == actors.get_service_actor()
     assert channel.artist.description.content_type == "text/plain"
     assert channel.artist.description.text == "Some content"
     assert channel.artist.attachment_cover.url == "https://image.url"
     assert channel.artist.get_tags() == ["pop", "rock"]
-    assert channel.actor.url == "http://public.url"
-    assert channel.actor.last_fetch_date == now
     assert channel.metadata == {
         "explicit": True,
         "copyright": "2019 Tests",
@@ -608,17 +572,12 @@ def test_rss_feed_serializer_update(factories, now):
     channel.refresh_from_db()
 
     assert channel.rss_url == "http://real.rss.url"
-    assert channel.attributed_to == actors.get_service_actor()
-    assert channel.library.actor == actors.get_service_actor()
-    assert channel.library.fid is not None
+    assert channel.is_external_rss is True
     assert channel.artist.name == "Hello"
-    assert channel.artist.attributed_to == actors.get_service_actor()
     assert channel.artist.description.content_type == "text/plain"
     assert channel.artist.description.text == "Some content"
     assert channel.artist.attachment_cover.url == "https://image.url"
     assert channel.artist.get_tags() == ["pop", "rock"]
-    assert channel.actor.url == "http://public.url"
-    assert channel.actor.last_fetch_date == now
     assert channel.metadata == {
         "explicit": True,
         "copyright": "2019 Tests",
@@ -880,56 +839,6 @@ def test_get_channel_from_rss_url(db, r_mock, mocker):
     )
 
 
-def test_get_channel_from_rss_honor_mrf_inbox_before_http(
-    mrf_inbox_registry, factories, mocker
-):
-    apply = mocker.patch.object(mrf_inbox_registry, "apply", return_value=(None, False))
-    rss_url = "https://rss.domain/test"
-
-    with pytest.raises(serializers.FeedFetchException, match=r".*blocked.*"):
-        serializers.get_channel_from_rss_url(rss_url)
-
-    apply.assert_any_call({"id": rss_url})
-
-
-def test_get_channel_from_rss_honor_mrf_inbox_after_http(
-    mrf_inbox_registry, r_mock, mocker, db
-):
-    apply = mocker.patch.object(
-        mrf_inbox_registry,
-        "apply",
-        side_effect=[(True, False), (True, False), (None, False)],
-    )
-    rss_url = "https://rss.domain/test"
-    # the feed has a redirection, we check both urls
-    final_rss_url = "https://real.rss.domain/test"
-    public_url = "http://public.url"
-    xml_payload = """<?xml version="1.0" encoding="UTF-8"?>
-        <rss version="2.0">
-            <channel>
-                <title>Hello</title>
-                <description>Description</description>
-                <link>{}</link>
-                <atom:link rel="self" type="application/rss+xml" href="{}"/>
-                <language>en</language>
-                <copyright>2019 Tests</copyright>
-                <itunes:keywords>pop rock</itunes:keywords>
-            </channel>
-        </rss>
-    """.format(
-        public_url, final_rss_url
-    )
-
-    r_mock.get(rss_url, text=xml_payload)
-
-    with pytest.raises(serializers.FeedFetchException, match=r".*blocked.*"):
-        serializers.get_channel_from_rss_url(rss_url)
-
-    apply.assert_any_call({"id": rss_url})
-    apply.assert_any_call({"id": final_rss_url})
-    apply.assert_any_call({"id": public_url})
-
-
 def test_opml_serializer(factories, now):
     channels = [
         factories["audio.Channel"](),
@@ -968,7 +877,7 @@ def test_opml_outline_serializer(factories, now):
         "text": channel.artist.name,
         "type": "rss",
         "xmlUrl": channel.get_rss_url(),
-        "htmlUrl": channel.actor.url,
+        "htmlUrl": channel.get_absolute_url(),
     }
 
     assert serializers.get_opml_outline(channel) == expected
@@ -990,10 +899,6 @@ def test_rss_feed_validate_tags_keeps_music_sentinel():
 
 def test_rss_feed_save_sets_music_content_category(factories, mocker):
     """Feeds tagged 'music' create music channels, not podcasts."""
-    service = factories["federation.Actor"](local=True)
-    mocker.patch(
-        "funkwhale_api.federation.actors.get_service_actor", return_value=service
-    )
     s = serializers.RssFeedSerializer(
         data={
             "title": "Faircamp feed",
@@ -1007,16 +912,13 @@ def test_rss_feed_save_sets_music_content_category(factories, mocker):
     assert s.is_valid(), s.errors
     channel = s.save(rss_url="https://example.test/feed.xml")
     assert channel.artist.content_category == "music"
+    assert channel.is_external_rss is True
     # sentinel removed from stored tags
     names = list(channel.artist.tagged_items.values_list("tag__name", flat=True))
     assert "music" not in names
 
 
 def test_rss_feed_save_defaults_to_podcast(factories, mocker):
-    service = factories["federation.Actor"](local=True)
-    mocker.patch(
-        "funkwhale_api.federation.actors.get_service_actor", return_value=service
-    )
     s = serializers.RssFeedSerializer(
         data={
             "title": "Talk show",

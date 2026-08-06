@@ -9,9 +9,6 @@ from django.db import connection
 from django.db.models import Q
 from rest_framework import serializers
 
-from funkwhale_api.federation import fields as federation_fields
-from funkwhale_api.federation import models as federation_models
-from funkwhale_api.moderation import filters as moderation_filters
 from funkwhale_api.music.models import Artist, Library, Track, Upload
 from funkwhale_api.tags.models import Tag
 
@@ -65,21 +62,19 @@ class SessionRadio(SimpleRadio):
         if not self.session or not self.session.user:
             return (
                 Track.objects.all()
-                .with_playable_uploads(actor=None)
-                .prefetch_related("artist_credit__artist", "album__artist_credit__artist").select_related("attributed_to")
+                .with_playable_uploads(None)
+                .prefetch_related(
+                    "artist_credit__artist", "album__artist_credit__artist"
+                )
             )
         else:
-            qs = (
+            return (
                 Track.objects.all()
-                .with_playable_uploads(self.session.user.actor)
-                .prefetch_related("artist_credit__artist", "album__artist_credit__artist").select_related("attributed_to")
+                .with_playable_uploads(self.session.user)
+                .prefetch_related(
+                    "artist_credit__artist", "album__artist_credit__artist"
+                )
             )
-
-        query = moderation_filters.get_filtered_content_query(
-            config=moderation_filters.USER_FILTER_CONFIG["TRACK"],
-            user=self.session.user,
-        )
-        return qs.exclude(query)
 
     def get_queryset_kwargs(self):
         return {}
@@ -101,7 +96,7 @@ class SessionRadio(SimpleRadio):
             queryset = self.filter_from_session(queryset)
             if kwargs.pop("filter_playable", True):
                 queryset = queryset.playable_by(
-                    self.session.user.actor if self.session.user else None
+                    self.session.user if self.session.user else None
                 )
         queryset = self.filter_queryset(queryset)
         return queryset
@@ -124,17 +119,19 @@ class SessionRadio(SimpleRadio):
 class RandomRadio(SessionRadio):
     def get_queryset(self, **kwargs):
         qs = super().get_queryset(**kwargs)
-        return qs.filter(artist__content_category="music").order_by("?")
+        return qs.filter(artist_credit__artist__content_category="music").order_by("?")
 
 
 @registry.register(name="random_library")
 class RandomLibraryRadio(SessionRadio):
     def get_queryset(self, **kwargs):
         qs = super().get_queryset(**kwargs)
-        tracks_ids = self.session.user.actor.attributed_tracks.all().values_list(
-            "id", flat=True
+        tracks_ids = Upload.objects.filter(
+            library__owner=self.session.user
+        ).values_list("track", flat=True)
+        query = Q(artist_credit__artist__content_category="music") & Q(
+            pk__in=tracks_ids
         )
-        query = Q(artist__content_category="music") & Q(pk__in=tracks_ids)
         return qs.filter(query).order_by("?")
 
 
@@ -149,7 +146,9 @@ class FavoritesRadio(SessionRadio):
     def get_queryset(self, **kwargs):
         qs = super().get_queryset(**kwargs)
         track_ids = kwargs["user"].track_favorites.all().values_list("track", flat=True)
-        return qs.filter(pk__in=track_ids, artist__content_category="music")
+        return qs.filter(
+            pk__in=track_ids, artist_credit__artist__content_category="music"
+        )
 
 
 @registry.register(name="custom")
@@ -240,7 +239,7 @@ class TagRadio(RelatedObjectRadio):
         qs = super().get_queryset(**kwargs)
         query = (
             Q(tagged_items__tag=self.session.related_object)
-            | Q(artist__tagged_items__tag=self.session.related_object)
+            | Q(artist_credit__artist__tagged_items__tag=self.session.related_object)
             | Q(album__tagged_items__tag=self.session.related_object)
         )
         return qs.filter(query)
@@ -336,7 +335,7 @@ class LessListenedRadio(SessionRadio):
         qs = super().get_queryset(**kwargs)
         listened = self.session.user.listenings.all().values_list("track", flat=True)
         return (
-            qs.filter(artist__content_category="music")
+            qs.filter(artist_credit__artist__content_category="music")
             .exclude(pk__in=listened)
             .order_by("?")
         )
@@ -351,34 +350,13 @@ class LessListenedLibraryRadio(SessionRadio):
     def get_queryset(self, **kwargs):
         qs = super().get_queryset(**kwargs)
         listened = self.session.user.listenings.all().values_list("track", flat=True)
-        tracks_ids = self.session.user.actor.attributed_tracks.all().values_list(
-            "id", flat=True
+        tracks_ids = Upload.objects.filter(
+            library__owner=self.session.user
+        ).values_list("track", flat=True)
+        query = Q(artist_credit__artist__content_category="music") & Q(
+            pk__in=tracks_ids
         )
-        query = Q(artist__content_category="music") & Q(pk__in=tracks_ids)
         return qs.filter(query).exclude(pk__in=listened).order_by("?")
-
-
-@registry.register(name="actor-content")
-class ActorContentRadio(RelatedObjectRadio):
-    """
-    Play content from given actor libraries
-    """
-
-    model = federation_models.Actor
-    related_object_field = federation_fields.ActorRelatedField(required=True)
-
-    def get_related_object(self, value):
-        return value
-
-    def get_queryset(self, **kwargs):
-        qs = super().get_queryset(**kwargs)
-        actor_uploads = Upload.objects.filter(
-            library__actor=self.session.related_object,
-        )
-        return qs.filter(pk__in=actor_uploads.values("track"))
-
-    def get_related_object_id_repr(self, obj):
-        return obj.full_username
 
 
 @registry.register(name="library")
@@ -410,7 +388,7 @@ class RecentlyAdded(SessionRadio):
         date = datetime.date.today() - datetime.timedelta(days=30)
         qs = super().get_queryset(**kwargs)
         return qs.filter(
-            Q(artist__content_category="music"),
+            Q(artist_credit__artist__content_category="music"),
             Q(creation_date__gt=date),
         )
 

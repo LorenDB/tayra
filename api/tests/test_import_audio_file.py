@@ -18,7 +18,7 @@ def test_management_command_requires_a_valid_library_id(factories):
 
 
 def test_in_place_import_only_from_music_dir(factories, settings):
-    library = factories["music.Library"](actor__local=True)
+    library = factories["music.Library"]()
     settings.MUSIC_DIRECTORY_PATH = "/nope"
     path = os.path.join(DATA_DIR, "dummy_file.ogg")
     with pytest.raises(
@@ -30,7 +30,7 @@ def test_in_place_import_only_from_music_dir(factories, settings):
 
 
 def test_import_with_multiple_argument(factories, mocker):
-    library = factories["music.Library"](actor__local=True)
+    library = factories["music.Library"]()
     path1 = os.path.join(DATA_DIR, "dummy_file.ogg")
     path2 = os.path.join(DATA_DIR, "utf8-éà◌.ogg")
     mocked_filter = mocker.patch(
@@ -47,7 +47,7 @@ def test_import_with_multiple_argument(factories, mocker):
 )
 def test_import_files_stores_proper_data(factories, mocker, now, path):
     mocked_process = mocker.patch("funkwhale_api.music.tasks.process_upload")
-    library = factories["music.Library"](actor__local=True)
+    library = factories["music.Library"]()
     call_command(
         "import_files", str(library.uuid), path, async_=False, interactive=False
     )
@@ -65,7 +65,7 @@ def test_import_files_stores_proper_data(factories, mocker, now, path):
 
 
 def test_import_with_outbox_flag(factories, mocker):
-    library = factories["music.Library"](actor__local=True)
+    library = factories["music.Library"]()
     path = os.path.join(DATA_DIR, "dummy_file.ogg")
     mocked_process = mocker.patch("funkwhale_api.music.tasks.process_upload")
     call_command(
@@ -79,7 +79,7 @@ def test_import_with_outbox_flag(factories, mocker):
 
 
 def test_import_with_broadcast_flag(factories, mocker):
-    library = factories["music.Library"](actor__local=True)
+    library = factories["music.Library"]()
     path = os.path.join(DATA_DIR, "dummy_file.ogg")
     mocked_process = mocker.patch("funkwhale_api.music.tasks.process_upload")
     call_command(
@@ -93,7 +93,7 @@ def test_import_with_broadcast_flag(factories, mocker):
 
 
 def test_import_with_replace_flag(factories, mocker):
-    library = factories["music.Library"](actor__local=True)
+    library = factories["music.Library"]()
     path = os.path.join(DATA_DIR, "dummy_file.ogg")
     mocked_process = mocker.patch("funkwhale_api.music.tasks.process_upload")
     call_command(
@@ -107,7 +107,7 @@ def test_import_with_replace_flag(factories, mocker):
 
 
 def test_import_with_custom_reference(factories, mocker):
-    library = factories["music.Library"](actor__local=True)
+    library = factories["music.Library"]()
     path = os.path.join(DATA_DIR, "dummy_file.ogg")
     mocked_process = mocker.patch("funkwhale_api.music.tasks.process_upload")
     call_command(
@@ -126,7 +126,7 @@ def test_import_with_custom_reference(factories, mocker):
 
 
 def test_import_files_skip_if_path_already_imported(factories, mocker):
-    library = factories["music.Library"](actor__local=True)
+    library = factories["music.Library"]()
     path = os.path.join(DATA_DIR, "dummy_file.ogg")
 
     # existing one with same source
@@ -143,7 +143,7 @@ def test_import_files_skip_if_path_already_imported(factories, mocker):
 def test_import_files_in_place(factories, mocker, settings):
     settings.MUSIC_DIRECTORY_PATH = DATA_DIR
     mocked_process = mocker.patch("funkwhale_api.music.tasks.process_upload")
-    library = factories["music.Library"](actor__local=True)
+    library = factories["music.Library"]()
     path = os.path.join(DATA_DIR, "utf8-éà◌.ogg")
     call_command(
         "import_files",
@@ -315,7 +315,7 @@ def test_handle_modified_update_existing_path_if_found(tmpfile, factories, mocke
     )
     get_metadata = mocker.patch("funkwhale_api.music.models.Upload.get_metadata")
     library = factories["music.Library"]()
-    track = factories["music.Track"](attributed_to=library.actor)
+    track = factories["music.Track"]()
     upload = factories["music.Upload"](
         source="file://{}".format(event["path"]),
         track=track,
@@ -336,37 +336,9 @@ def test_handle_modified_update_existing_path_if_found(tmpfile, factories, mocke
     )
 
 
-def test_handle_modified_update_existing_path_if_found_and_attributed_to(
-    tmpfile, factories, mocker
-):
-    stdout = mocker.Mock()
-    event = {
-        "path": tmpfile.name,
-    }
-    update_track_metadata = mocker.patch(
-        "funkwhale_api.music.tasks.update_track_metadata"
-    )
-    library = factories["music.Library"]()
-    factories["music.Upload"](
-        source="file://{}".format(event["path"]),
-        checksum="old",
-        library=library,
-        track__attributed_to=factories["federation.Actor"](),
-        import_status="finished",
-        audio_file=None,
-    )
-    import_files.handle_modified(
-        event=event,
-        stdout=stdout,
-        library=library,
-        in_place=True,
-    )
-    update_track_metadata.assert_not_called()
-
-
 def test_import_files(factories, capsys):
     # smoke test to ensure the command run properly
-    library = factories["music.Library"](actor__local=True)
+    library = factories["music.Library"]()
     call_command(
         "import_files", str(library.uuid), DATA_DIR, interactive=False, recursive=True
     )

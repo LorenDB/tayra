@@ -65,12 +65,6 @@ def test_library_track(spa_html, no_api_auth, client, factories, settings):
         {
             "tag": "link",
             "rel": "alternate",
-            "type": "application/activity+json",
-            "href": upload.fid,
-        },
-        {
-            "tag": "link",
-            "rel": "alternate",
             "type": "application/json+oembed",
             "href": (
                 utils.join_url(settings.FUNKWHALE_URL, reverse("api:v1:oembed"))
@@ -133,12 +127,6 @@ def test_library_album(spa_html, no_api_auth, client, factories, settings):
         {
             "tag": "link",
             "rel": "alternate",
-            "type": "application/activity+json",
-            "href": album.fid,
-        },
-        {
-            "tag": "link",
-            "rel": "alternate",
             "type": "application/json+oembed",
             "href": (
                 utils.join_url(settings.FUNKWHALE_URL, reverse("api:v1:oembed"))
@@ -183,12 +171,6 @@ def test_library_artist(spa_html, no_api_auth, client, factories, settings):
             "tag": "meta",
             "property": "og:image",
             "content": album.attachment_cover.download_url_medium_square_crop,
-        },
-        {
-            "tag": "link",
-            "rel": "alternate",
-            "type": "application/activity+json",
-            "href": artist.fid,
         },
         {
             "tag": "link",
@@ -292,7 +274,7 @@ def test_library_playlist_empty(spa_html, no_api_auth, client, factories, settin
 
 
 def test_library_library(spa_html, no_api_auth, client, factories, settings):
-    library = factories["music.Library"]()
+    library = factories["music.Library"](description="hello world")
     url = f"/library/{library.uuid}"
 
     response = client.get(url)
@@ -305,12 +287,10 @@ def test_library_library(spa_html, no_api_auth, client, factories, settings):
         },
         {"tag": "meta", "property": "og:type", "content": "website"},
         {"tag": "meta", "property": "og:title", "content": library.name},
-        {"tag": "meta", "property": "og:description", "content": library.description},
         {
-            "tag": "link",
-            "rel": "alternate",
-            "type": "application/activity+json",
-            "href": library.fid,
+            "tag": "meta",
+            "property": "og:description",
+            "content": library.description,
         },
     ]
 

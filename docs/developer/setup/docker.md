@@ -55,12 +55,6 @@ To set up your Docker environment:
    STATIC_URL=http://localhost:8000/staticfiles/
    ```
 
-3. Create a network for federation support
-
-   ```sh
-   sudo docker network create federation
-   ```
-
 Once you've set everything up, you need to build the containers. Run this command any time there are upstream changes or dependency changes to ensure you're up-to-date.
 
 ```sh
@@ -121,74 +115,4 @@ If you want to destroy your containers, run the following:
 sudo docker compose -f dev.yml down -v
 ```
 
-## Set up federation support
-
-Working on federation features requires some additional setup. You need to do the following:
-
-1. Update your DNS resolver to resolve all your .dev hostnames locally
-2. Set up a reverse proxy (such as traefik) to catch .dev requests with a TLS certificate
-3. Set up two or more local instances
-
-To resolve hostnames locally, run the following:
-
-::::{tab-set}
-
-:::{tab-item} dnsmasq
-
-```sh
-echo "address=/test/172.17.0.1" | sudo tee /etc/dnsmasq.d/test.conf
-sudo systemctl restart dnsmasq
-```
-
-:::
-
-:::{tab-item} NetworkManager
-
-```sh
-echo "address=/test/172.17.0.1" | sudo tee /etc/NetworkManager/dnsmasq.d/test.conf
-sudo systemctl restart NetworkManager
-```
-
-:::
-
-::::
-
-To add a wildcard certificate, copy the test certificate from the `docker/ssl` folder. This certificate is a wildcard for `*.funkwhale.test`
-
-```sh
-sudo cp docker/ssl/test.crt /usr/local/share/ca-certificates/
-sudo update-ca-certificates
-```
-
-To run a reverse proxy for your app:
-
-1. Add the following configuration to your `.env` file:
-
-   ```text
-   # Remove any port binding so you can specify this per-instance
-   VUE_PORT_BINDING=
-   # Disable certificate validation
-   EXTERNAL_REQUESTS_VERIFY_SSL=false
-   # Ensure all links use https
-   FUNKWHALE_PROTOCOL=https
-   # Disable host ports binding for the nginx container so that traefik handles everything
-   NGINX_PORTS_MAPPING=80
-   ```
-
-2. Launch traefik using the bundled configuration:
-
-   ```sh
-   sudo docker compose -f docker/traefik.yml up -d
-   ```
-
-3. Set up as many different projects as you need. Make sure the `COMPOSE_PROJECT_NAME` and `VUE_PORT` variables are unique per instance
-
-   ```sh
-   export COMPOSE_PROJECT_NAME=node2
-   export VUE_PORT=1234  # this has to be unique for each instance
-   sudo docker compose -f dev.yml run --rm api funkwhale-manage migrate
-   sudo docker compose -f dev.yml run --rm api funkwhale-manage fw users create --superuser
-   sudo docker compose -f dev.yml up nginx api front nginx api celeryworker
-   ```
-
-You can access your project at `https://{COMPOSE_PROJECT_NAME}.funkwhale.test`.
+You can access your project at `http://localhost:8000`.

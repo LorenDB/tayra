@@ -6,7 +6,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 
 from funkwhale_api.common import serializers, utils
-from funkwhale_api.federation import utils as federation_utils
+
 from funkwhale_api.users import models
 
 
@@ -194,11 +194,11 @@ def test_attachment_serializer_existing_file(factories, to_api_date):
         "creation_date": to_api_date(attachment.creation_date),
         "urls": {
             "source": attachment.url,
-            "original": federation_utils.full_url(attachment.file.url),
-            "medium_square_crop": federation_utils.full_url(
+            "original": utils.full_url(attachment.file.url),
+            "medium_square_crop": utils.full_url(
                 attachment.file.crop["200x200"].url
             ),
-            "large_square_crop": federation_utils.full_url(
+            "large_square_crop": utils.full_url(
                 attachment.file.crop["600x600"].url
             ),
         },
@@ -224,11 +224,11 @@ def test_attachment_serializer_remote_file(factories, to_api_date):
         #
         "urls": {
             "source": attachment.url,
-            "original": federation_utils.full_url(proxy_url + "?next=original"),
-            "medium_square_crop": federation_utils.full_url(
+            "original": utils.full_url(proxy_url + "?next=original"),
+            "medium_square_crop": utils.full_url(
                 proxy_url + "?next=medium_square_crop"
             ),
-            "large_square_crop": federation_utils.full_url(
+            "large_square_crop": utils.full_url(
                 proxy_url + "?next=large_square_crop"
             ),
         },

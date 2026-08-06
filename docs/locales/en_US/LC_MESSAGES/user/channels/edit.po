@@ -22,14 +22,12 @@ msgid "Edit a channel"
 msgstr ""
 
 #: ../../user_documentation/channels/edit_channel.md:4
-msgid "You can't change a channel's __Fediverse handle__."
+msgid "You can't change a channel's __handle__."
 msgstr ""
 
 #: ../../user_documentation/channels/edit_channel.md:7
-msgid ""
-"Channels are like user profiles on other {term}`Fediverse` software. This"
-" means you can edit their details at any time to reflect changes you've "
-"made."
+msgid "Channels are like user profiles on the pod. This means you can edit"
+" their details at any time to reflect changes you've made."
 msgstr ""
 
 #: ../../user_documentation/channels/edit_channel.md:9
@@ -190,4 +188,3 @@ msgid ""
 " The changes also reflect on your podcast's {abbr}`RSS (Really Simple "
 "Syndication)` feed."
 msgstr ""
-

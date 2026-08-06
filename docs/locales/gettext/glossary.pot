@@ -29,7 +29,7 @@ msgid "Pod"
 msgstr ""
 
 #: ../../glossary.md:7
-msgid "A pod is an instance of Funkwhale running on a server. Pods can communicate with one another across the {term}`Fediverse`."
+msgid "A pod is an instance of Funkwhale running on a server."
 msgstr ""
 
 #: ../../glossary.md:3
@@ -58,10 +58,6 @@ msgstr ""
 
 #: ../../glossary.md:18
 msgid "Available permissions:"
-msgstr ""
-
-#: ../../glossary.md:20
-msgid "{guilabel}`Moderation` – Grants access to the {guilabel}`Moderation` menu. Enables the user to moderate users, domains, and the allow-list."
 msgstr ""
 
 #: ../../glossary.md:21
@@ -106,10 +102,6 @@ msgstr ""
 
 #: ../../glossary.md:38
 msgid "Channel glossary"
-msgstr ""
-
-#: ../../glossary.md:0
-msgid "Fediverse"
 msgstr ""
 
 #: ../../glossary.md:42

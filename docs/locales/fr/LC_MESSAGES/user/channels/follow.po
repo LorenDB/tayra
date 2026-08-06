@@ -66,15 +66,6 @@ msgstr ""
 msgid "Follow a remote channel"
 msgstr ""
 
-#: ../../user_documentation/channels/follow_channel.md:22
-msgid ""
-"To follow a channel located on another pod, you need its **Federation "
-"handle**. A **Federation handle** uses the following format: "
-"`@{username}@{domain}`. Once you have the channel's **Federation "
-"handle**, you can follow it from the {guilabel}`Channels` page. To do "
-"this:"
-msgstr ""
-
 #: ../../user_documentation/channels/follow_channel.md
 msgid "Desktop"
 msgstr "Bureau"
@@ -90,18 +81,6 @@ msgstr ""
 msgid ""
 "Select {guilabel}`+ Add new` at the top of the page. The "
 "{guilabel}`Subscriptions` screen appears."
-msgstr ""
-
-#: ../../user_documentation/channels/follow_channel.md:32
-#: ../../user_documentation/channels/follow_channel.md:45
-msgid "Select {guilabel}`Fediverse`."
-msgstr ""
-
-#: ../../user_documentation/channels/follow_channel.md:33
-#: ../../user_documentation/channels/follow_channel.md:46
-msgid ""
-"Enter the channel's **Federation handle** in the {guilabel}`Fediverse "
-"object` input."
 msgstr ""
 
 #: ../../user_documentation/channels/follow_channel.md:34

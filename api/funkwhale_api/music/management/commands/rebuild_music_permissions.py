@@ -4,8 +4,8 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.db.models import Q
 
-from funkwhale_api.federation.models import Actor
 from funkwhale_api.music.models import Library, TrackActor
+from funkwhale_api.users.models import User
 
 
 class Command(BaseCommand):
@@ -30,19 +30,18 @@ class Command(BaseCommand):
 
     @transaction.atomic
     def handle(self, *args, **options):
-        actor_ids = []
+        user_ids = []
         if options["username"]:
-            actors = Actor.objects.all().local(True)
-            actor_ids = list(
-                actors.filter(preferred_username__in=options["username"]).values_list(
+            user_ids = list(
+                User.objects.filter(username__in=options["username"]).values_list(
                     "id", flat=True
                 )
             )
-            if len(actor_ids) < len(options["username"]):
+            if len(user_ids) < len(options["username"]):
                 raise CommandError("Invalid username")
             print("Emptying permission table for specified users…")
             qs = TrackActor.objects.all().filter(
-                Q(actor__pk__in=actor_ids) | Q(actor=None)
+                Q(user__pk__in=user_ids) | Q(user=None)
             )
             qs._raw_delete(qs.db)
         else:
@@ -60,7 +59,7 @@ class Command(BaseCommand):
             )
             objs += TrackActor.get_objs(
                 library=library,
-                actor_ids=actor_ids,
+                actor_ids=user_ids,
                 upload_and_track_ids=[],
             )
         print("Committing changes…")

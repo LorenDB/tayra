@@ -2,17 +2,17 @@
 
 import django.contrib.postgres.fields.jsonb
 import django.core.serializers.json
-from django.db import migrations, models
 import django.db.models.deletion
 import django.utils.timezone
+from django.db import migrations, models
+
 import funkwhale_api.music.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ("federation", "0009_auto_20180822_1956"),
         ("music", "0029_auto_20180807_1748"),
+        ("users", "0001_initial"),
     ]
 
     operations = [
@@ -37,18 +37,8 @@ class Migration(migrations.Migration):
                     models.DateTimeField(default=django.utils.timezone.now),
                 ),
                 ("modification_date", models.DateTimeField(blank=True, null=True)),
-                (
-                    "actor",
-                    models.ForeignKey(
-                        blank=True,
-                        null=True,
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="federation.Actor",
-                    ),
-                ),
             ],
         ),
-        migrations.RemoveField(model_name="trackfile", name="library_track"),
         migrations.AddField(
             model_name="library",
             name="files_count",

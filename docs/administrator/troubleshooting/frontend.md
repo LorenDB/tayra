@@ -1,6 +1,6 @@
 # Troubleshoot frontend issues
 
-The Funkwhale frontend is a {abbr}`SPA (Single Page Application)` written in [Vue.js](https://vuejs.org). It consumes the Funkwhale API to serve content and to federate with other Fediverse software.
+The Funkwhale frontend is a {abbr}`SPA (Single Page Application)` written in [Vue.js](https://vuejs.org). It consumes the Funkwhale API to serve content.
 
 ## Tools
 

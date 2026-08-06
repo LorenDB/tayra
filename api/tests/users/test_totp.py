@@ -199,7 +199,7 @@ def test_recovery_code_hash_is_domain_separated():
 def test_totp_secret_protect_reveal_roundtrip():
     secret = totp.generate_base32_secret()
     stored = totp.protect_totp_secret(secret)
-    assert stored.startswith("enc1:")
+    assert stored.startswith("enc2:")
     assert stored != secret
     assert totp.reveal_totp_secret(stored) == secret
     # Legacy plaintext still works.

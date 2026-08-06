@@ -1,7 +1,6 @@
 import click
 from django.db import transaction
 
-from funkwhale_api.federation import models as federation_models
 from funkwhale_api.users import models, serializers, tasks
 
 from . import base, utils
@@ -47,8 +46,6 @@ def handler_create_user(
             setattr(user, f"permission_{permission}", True)
         else:
             utils.logger.warn("Unknown permission %s", permission)
-    utils.logger.debug("Creating actor…")
-    user.actor = models.create_actor(user)
     user.save()
     return user
 
@@ -57,25 +54,15 @@ def handler_create_user(
 def handler_delete_user(usernames, soft=True):
     for username in usernames:
         click.echo(f"Deleting {username}…")
-        actor = None
-        user = None
         try:
             user = models.User.objects.get(username=username)
         except models.User.DoesNotExist:
-            try:
-                actor = federation_models.Actor.objects.local().get(
-                    preferred_username=username
-                )
-            except federation_models.Actor.DoesNotExist:
-                click.echo("  Not found, skipping")
-                continue
+            click.echo("  Not found, skipping")
+            continue
 
-        actor = actor or user.actor
-        if user:
-            tasks.delete_account(user_id=user.pk)
+        tasks.delete_account(user_id=user.pk)
         if not soft:
-            click.echo("  Hard delete, removing actor")
-            actor.delete()
+            click.echo("  Hard delete, removing user")
         click.echo("  Done")
 
 

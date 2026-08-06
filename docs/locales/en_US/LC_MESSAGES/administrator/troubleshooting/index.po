@@ -51,10 +51,3 @@ msgstr ""
 #: ../../administrator_documentation/troubleshooting/index.md:10
 msgid "Imports – tracks you have added aren't being imported correctly"
 msgstr ""
-
-#: ../../administrator_documentation/troubleshooting/index.md:11
-msgid ""
-"Federation – your pod can't contact other fediverse servers or access "
-"federated content"
-msgstr ""
-

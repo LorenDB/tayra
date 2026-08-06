@@ -285,106 +285,24 @@ msgstr ""
 msgid "The maximum number of tracks a user can add to a playlist."
 msgstr ""
 
-#: ../../administrator/configuration/instance-settings.md:141
-msgid "Moderation"
-msgstr ""
-
 #: ../../administrator/configuration/instance-settings.md
 msgid "Enable allow-listing"
-msgstr ""
-
-#: ../../administrator/configuration/instance-settings.md:145
-msgid ""
-"Enable this setting to ensure your pod only communicates with pods you "
-"have added to your allow list. When this setting is disabled, your pod "
-"will communicate with all other servers not included in your deny list."
 msgstr ""
 
 #: ../../administrator/configuration/instance-settings.md:3
 msgid "Publish your allowed-domains list"
 msgstr ""
 
-#: ../../administrator/configuration/instance-settings.md:148
-msgid ""
-"Whether to make your list of allowed domains public. Enable this if you "
-"want users to check who you are federating with."
-msgstr ""
-
 #: ../../administrator/configuration/instance-settings.md:6
 msgid "Accountless report categories"
-msgstr ""
-
-#: ../../administrator/configuration/instance-settings.md:151
-msgid ""
-"A list of {term}`categories <Report categories>` that {term}`anonymous` "
-"users can submit."
-msgstr ""
-
-#: ../../administrator/configuration/instance-settings.md:158
-msgid "Federation"
-msgstr ""
-
-#: ../../administrator/configuration/instance-settings.md
-msgid "Federation enabled"
-msgstr ""
-
-#: ../../administrator/configuration/instance-settings.md:162
-msgid "Whether to enable federation features on your pod."
 msgstr ""
 
 #: ../../administrator/configuration/instance-settings.md:3
 msgid "Enable public index"
 msgstr ""
 
-#: ../../administrator/configuration/instance-settings.md:165
-msgid "Whether to allow other pods and bots to index public content on your pod."
-msgstr ""
-
-#: ../../administrator/configuration/instance-settings.md:6
-msgid "Federation collection page size"
-msgstr ""
-
-#: ../../administrator/configuration/instance-settings.md:168
-msgid "The number of items to display in ActivityPub collections."
-msgstr ""
-
 #: ../../administrator/configuration/instance-settings.md:9
 msgid "Music cache duration"
-msgstr ""
-
-#: ../../administrator/configuration/instance-settings.md:171
-msgid ""
-"The number of minutes you want to store local copies of federated tracks "
-"on your server. Funkwhale removes federated tracks that haven't been "
-"downloaded within this duration to save space."
-msgstr ""
-
-#: ../../administrator/configuration/instance-settings.md:12
-msgid "Federation actor fetch delay"
-msgstr ""
-
-#: ../../administrator/configuration/instance-settings.md:174
-msgid ""
-"The number of minutes the server waits before refetching actors on "
-"request authentication."
-msgstr ""
-
-#: ../../administrator/configuration/instance-settings.md:181
-msgid "Subsonic"
-msgstr ""
-
-#: ../../administrator/configuration/instance-settings.md
-msgid "Enabled Subsonic API"
-msgstr ""
-
-#: ../../administrator/configuration/instance-settings.md:185
-msgid ""
-"Whether to enable the Subsonic API. This controls whether users are able "
-"to connect to your pod using Subsonic apps."
-msgstr ""
-
-#: ../../administrator/configuration/instance-settings.md:192
-msgid "User Interface"
 msgstr ""
 
 #: ../../administrator/configuration/instance-settings.md
@@ -436,4 +354,3 @@ msgstr ""
 
 #~ msgid "{doc}`../../moderator_documentation/reports/handle_users`"
 #~ msgstr ""
-

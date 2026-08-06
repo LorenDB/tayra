@@ -117,13 +117,13 @@ flutter build web --release \
 | Task | Tool |
 |---|---|
 | Users / models | Django admin (`ADMIN_URL`) |
-| Imports / federation | `manage.py` / Funkwhale CLI inside the API container |
+| Imports | `manage.py` / Funkwhale CLI inside the API container |
 | Background jobs | Celery worker + beat |
 
 ## Deferred
 
 - Runtime-only pod URL via compose env (SPA URL is **build-time**; rebuild front after hostname changes)
-- Admin / moderation / signup UIs in Tayra
+- Admin / signup UIs in Tayra
 - Upstream Vue frontend (removed)
 
 See also [doc/web-deferred-features.md](doc/web-deferred-features.md).

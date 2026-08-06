@@ -1,9 +1,5 @@
 # Change your password
 
-```{warning}
-Changing your account password also changes your Subsonic API password. If you are using a Subsonic app, you need to update your password in the app as well.
-```
-
 You can update your account password whenever you need to. To do this:
 
 ::::{tab-set}

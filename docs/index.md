@@ -1,8 +1,6 @@
 # Welcome to Funkwhale's documentation
 
-Funkwhale is a self-hosted audio player and publication platform. It enables users to build libraries of existing content and publish their own.
-
-Funkwhale uses the [ActivityPub protocol](https://www.w3.org/TR/activitypub/) to talk to other apps across the {term}`Fediverse`. Users can share content between {term}`Funkwhale pods <Pod>` or with other Fediverse software.
+Funkwhale is a self-hosted audio player and publication platform. It enables users to build libraries of existing content and publish their own, on a single server ({term}`Pod`).
 
 ```{toctree}
 ---
@@ -20,7 +18,6 @@ user/playlists/index
 user/radios/index
 user/favorites/index
 user/reports/index
-user/subsonic/index
 user/plugins/index
 user/info/cli
 
@@ -49,23 +46,6 @@ administrator/troubleshooting/index
 ```{toctree}
 ---
 maxdepth: 1
-caption: Moderator documentation
-hidden: true
----
-
-moderator/index
-moderator/reports/index
-moderator/internal-users/index
-moderator/content/index
-moderator/domains/index
-moderator/external-users/index
-moderator/allow-listing/index
-
-```
-
-```{toctree}
----
-maxdepth: 1
 caption: Developer documentation
 hidden: true
 ---
@@ -76,7 +56,6 @@ developer/setup/index
 developer/contribute/index
 developer/workflows/index
 developer/api/index
-developer/federation/index
 developer/plugins/index
 
 ```
@@ -102,11 +81,9 @@ hidden: true
 ---
 
 specs/collections/index
-specs/nodeinfo21/index
 specs/offline-mode/index
 specs/quality-filter/index
 specs/multi-artist/index
-specs/user-follow/index
 specs/rich-client-data/index
 
 ```
@@ -168,27 +145,6 @@ Want to host your own Funkwhale pod? Our admin documentation guides you through 
 +++
 
 ```{button-link} administrator/index.html
-:ref-type: ref
-:color: primary
-:outline:
-:click-parent:
-:expand:
-
-Get started
-```
-
-:::
-:::{grid-item-card}
-:text-align: center
-
-{fa}`shield` Moderators
-^^^
-
-Keeping your users safe from harassment and spam or clearing illegal content? Check out our moderator docs.
-
-+++
-
-```{button-link} moderator/index.html
 :ref-type: ref
 :color: primary
 :outline:

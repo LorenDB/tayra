@@ -69,5 +69,4 @@ class ScopedTokenAuthentication(authentication.BaseAuthentication):
             raise exceptions.AuthenticationFailed("Invalid token")
 
         setattr(request, "scopes", scopes)
-        setattr(request, "actor", user.actor)
         return user, None

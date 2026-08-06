@@ -1,10 +1,10 @@
 # Edit a channel
 
 ```{note}
-You can't change a channel's __Fediverse handle__.
+You can't change a channel's __handle__.
 ```
 
-Channels are like user profiles on other {term}`Fediverse` software. This means you can edit their details at any time to reflect changes you've made.
+Channels are like user profiles on the pod. This means you can edit their details at any time to reflect changes you've made.
 
 You can change different details depending on what type of channel you are editing:
 

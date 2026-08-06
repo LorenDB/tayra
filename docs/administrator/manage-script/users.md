@@ -175,29 +175,6 @@ sudo docker compose run --rm api funkwhale-manage fw users set --no-staff --no-s
 :::
 ::::
 
-### Give a user moderation permissions
-
-::::{tab-set}
-
-:::{tab-item} Debian
-:sync: debian
-
-```{code-block} sh
-venv/bin/funkwhale-manage fw users set --permission-moderation <user>
-```
-
-:::
-
-:::{tab-item} Docker
-:sync: docker
-
-```{code-block} sh
-sudo docker compose run --rm api funkwhale-manage fw users set --permission-moderation <user>
-```
-
-:::
-::::
-
 ### Reset a user's password
 
 ::::{tab-set}

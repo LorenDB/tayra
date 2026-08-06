@@ -20,4 +20,4 @@ Funkwhale releases new updates regularly. To keep up-to-date with these changes,
 
 ## Manage your Funkwhale pod
 
-Funkwhale provides tools for managing content and users on your Funkwhale pod. In addition to the [frontend moderation tools](../moderator/index.md), pod admins can use some extra tools for more powerful administration. Check out our [guide to the Django dashboard](django/index.md) and our [management script](manage-script/index.md) to get started.
+Funkwhale provides tools for managing content and users on your Funkwhale pod. Pod admins can use some extra tools for more powerful administration. Check out our [guide to the Django dashboard](django/index.md) and our [management script](manage-script/index.md) to get started.

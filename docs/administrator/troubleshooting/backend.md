@@ -30,7 +30,7 @@ sudo tail -f /var/log/apache/error.log # Follow the error log
 
 ::::
 
-- **API logs** – check these if you are having issues with the Funkwhale app, federation, or imports.
+- **API logs** – check these if you are having issues with the Funkwhale app or imports.
 
 ::::{tab-set}
 
@@ -53,7 +53,7 @@ sudo docker compose logs -f --tail=50 api # Follow the last 50 messages
 :::
 ::::
 
-- **Celery logs** – check these if a federation or import task isn't working.
+- **Celery logs** – check these if an import task isn't working.
 
 ::::{tab-set}
 
@@ -108,14 +108,6 @@ If you're having issues importing files, try the following:
 - Make sure your files play in another media player.
 - Make sure your files are [tagged correctly](../../user/libraries/content/tag.md).
 - Check the Celery logs for errors during the import.
-
-### Federation issues
-
-If you are having issues accessing federated content, try the following:
-
-- Check that the remote library received your follow request and approved it.
-- Trigger a library scan in the Funkwhale frontend.
-- Check the Celery logs for errors during the scan.
 
 ### Memory tracing
 

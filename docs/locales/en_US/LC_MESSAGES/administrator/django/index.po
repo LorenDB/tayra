@@ -33,19 +33,8 @@ msgid ""
 "that gives pod admins access to more tools and data than the frontend."
 msgstr ""
 
-#: ../../administrator_documentation/django/index.md:5
-msgid "There are two ways to access the Django administration dashboard:"
-msgstr ""
-
 #: ../../administrator_documentation/django/index.md:7
 msgid ""
 "Navigate to `https://<yourdomain>/api/admin` and log in with your pod "
 "admin credentials."
 msgstr ""
-
-#: ../../administrator_documentation/django/index.md:8
-msgid ""
-"Navigate to an object's moderation page and select {guilabel}`View in "
-"Django's admin` from the dropdown menu."
-msgstr ""
-

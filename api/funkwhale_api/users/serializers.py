@@ -19,12 +19,8 @@ from rest_framework.exceptions import ValidationError
 from funkwhale_api.activity import serializers as activity_serializers
 from funkwhale_api.common import authentication as common_authentication
 from funkwhale_api.common import models as common_models
-from funkwhale_api.common import preferences
 from funkwhale_api.common import serializers as common_serializers
 from funkwhale_api.common import utils as common_utils
-from funkwhale_api.federation import models as federation_models
-from funkwhale_api.moderation import models as moderation_models
-from funkwhale_api.moderation import tasks as moderation_tasks
 
 from . import adapters
 from . import authentication as users_authentication
@@ -50,10 +46,6 @@ class RegisterSerializer(RS):
         required=False, allow_null=True, allow_blank=True
     )
 
-    def __init__(self, *args, **kwargs):
-        self.approval_enabled = preferences.get("moderation__signup_approval_enabled")
-        super().__init__(*args, **kwargs)
-
     def validate_invitation(self, value):
         if not value:
             return
@@ -72,41 +64,14 @@ class RegisterSerializer(RS):
         get_adapter().clean_password(data["password1"], user)
         return data
 
-    def validate_username(self, value):
-        username = super().validate_username(value)
-        duplicates = federation_models.Actor.objects.local().filter(
-            preferred_username__iexact=username
-        )
-        if duplicates.exists():
-            raise serializers.ValidationError(
-                "A user with that username already exists."
-            )
-        return username
-
     def save(self, request):
         user = super().save(request)
-        update_fields = ["actor"]
-        user.actor = models.create_actor(user)
-        user_request = None
-        if self.approval_enabled:
-            # manually approve users
-            user.is_active = False
-            user_request = moderation_models.UserRequest.objects.create(
-                submitter=user.actor,
-                type="signup",
-                metadata=None,
-            )
-            update_fields.append("is_active")
+        update_fields = []
         if self.validated_data.get("invitation"):
             user.invitation = self.validated_data.get("invitation")
             update_fields.append("invitation")
-        user.save(update_fields=update_fields)
-        if user_request:
-            common_utils.on_commit(
-                moderation_tasks.user_request_handle.delay,
-                user_request_id=user_request.pk,
-                new_status=user_request.status,
-            )
+        if update_fields:
+            user.save(update_fields=update_fields)
 
         return user
 
@@ -138,10 +103,10 @@ class UserWriteSerializer(serializers.ModelSerializer):
     summary = common_serializers.ContentSerializer(required=False, allow_null=True)
     avatar = common_serializers.RelatedField(
         "uuid",
-        queryset=common_models.Attachment.objects.all().local().attached(False),
+        queryset=common_models.Attachment.objects.all().attached(False),
         serializer=None,
         queryset_filter=lambda qs, context: qs.filter(
-            actor=context["request"].user.actor
+            uploaded_by=context["request"].user
         ),
         write_only=True,
     )
@@ -156,18 +121,16 @@ class UserWriteSerializer(serializers.ModelSerializer):
         ]
 
     def update(self, obj, validated_data):
-        if not obj.actor:
-            obj.create_actor()
         summary = validated_data.pop("summary", NOOP)
         avatar = validated_data.pop("avatar", NOOP)
 
         obj = super().update(obj, validated_data)
 
         if summary != NOOP:
-            common_utils.attach_content(obj.actor, "summary_obj", summary)
+            common_utils.attach_content(obj, "summary_obj", summary)
         if avatar != NOOP:
-            obj.actor.attachment_icon = avatar
-            obj.actor.save(update_fields=["attachment_icon"])
+            obj.avatar_attachment = avatar
+            obj.save(update_fields=["avatar_attachment"])
         return obj
 
     def to_representation(self, instance):
@@ -204,8 +167,7 @@ class UserReadSerializer(serializers.ModelSerializer):
 
     @extend_schema_field(OpenApiTypes.STR)
     def get_full_username(self, o):
-        if o.actor:
-            return o.actor.full_username
+        return o.full_username()
 
 
 class MeSerializer(UserReadSerializer):
@@ -228,12 +190,12 @@ class MeSerializer(UserReadSerializer):
         ]
 
     def get_quota_status(self, o):
-        return o.get_quota_status() if o.actor else 0
+        return o.get_quota_status()
 
     def get_summary(self, o):
-        if not o.actor or not o.actor.summary_obj:
+        if not o.summary_obj_id:
             return
-        return common_serializers.ContentSerializer(o.actor.summary_obj).data
+        return common_serializers.ContentSerializer(o.summary_obj).data
 
     def get_tokens(self, o):
         return {
@@ -522,9 +484,7 @@ class PasswordChangeSerializer(serializers.Serializer):
         try:
             validate_password(attrs["new_password1"], user=user)
         except DjangoValidationError as exc:
-            raise serializers.ValidationError(
-                {"new_password1": list(exc.messages)}
-            )
+            raise serializers.ValidationError({"new_password1": list(exc.messages)})
         return attrs
 
     def save(self):
@@ -532,4 +492,3 @@ class PasswordChangeSerializer(serializers.Serializer):
         user.set_password(self.validated_data["new_password1"])
         user.save()
         return user
-

@@ -13,12 +13,12 @@ def test_fetch_rss_feeds(factories, settings, now, mocker):
     fetch_rss_feed = mocker.patch.object(tasks.fetch_rss_feed, "delay")
     channels = [
         # recent, not fetched
-        factories["audio.Channel"](actor__last_fetch_date=now, external=True),
+        factories["audio.Channel"](creation_date=now, external=True),
         # old but not external, not fetched
-        factories["audio.Channel"](actor__last_fetch_date=prunable_date),
+        factories["audio.Channel"](creation_date=prunable_date),
         # old and external, fetched !
-        factories["audio.Channel"](actor__last_fetch_date=prunable_date, external=True),
-        factories["audio.Channel"](actor__last_fetch_date=prunable_date, external=True),
+        factories["audio.Channel"](creation_date=prunable_date, external=True),
+        factories["audio.Channel"](creation_date=prunable_date, external=True),
     ]
 
     tasks.fetch_rss_feeds()

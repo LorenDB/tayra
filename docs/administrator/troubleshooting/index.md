@@ -8,7 +8,6 @@ Issues usually fall into one of the following categories:
 - Backend – issues affecting one or more of the following:
   - API – tracks or data not being returned properly
   - Imports – tracks you have added aren't being imported correctly
-  - Federation – your pod can't contact other fediverse servers or access federated content
 
 ```{toctree}
 ---

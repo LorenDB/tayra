@@ -1,9 +1,7 @@
 import random
-import uuid
 
 import factory
 import persisting_theory
-from django.conf import settings
 from faker.providers import internet as internet_provider
 
 
@@ -313,15 +311,6 @@ class FunkwhaleProvider(internet_provider.Provider):
     Our own faker data generator, since built-in ones are sometimes
     not random enough
     """
-
-    def federation_url(self, prefix="", local=False):
-        def path_generator():
-            return f"{prefix}/{uuid.uuid4()}"
-
-        domain = settings.FEDERATION_HOSTNAME if local else self.domain_name()
-        protocol = "https"
-        path = path_generator()
-        return f"{protocol}://{domain}/{path}"
 
     def user_name(self):
         u = super().user_name()

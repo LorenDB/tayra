@@ -4,18 +4,17 @@ import pytest
 from django.urls import reverse
 
 from funkwhale_api.common import utils
-from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.music import serializers
 
 
-@pytest.mark.parametrize("attribute", ["uuid", "actor.full_username"])
+@pytest.mark.parametrize("attribute", ["uuid", "preferred_username"])
 def test_channel_detail(attribute, spa_html, no_api_auth, client, factories, settings):
     channel = factories["audio.Channel"](
         library__privacy_level="everyone", artist__with_cover=True
     )
     factories["music.Upload"](playable=True, library=channel.library)
     url = f"/channels/{utils.recursive_getattr(channel, attribute)}"
-    detail_url = f"/channels/{channel.actor.full_username}"
+    detail_url = f"/channels/{channel.preferred_username}"
 
     response = client.get(url)
 
@@ -32,12 +31,6 @@ def test_channel_detail(attribute, spa_html, no_api_auth, client, factories, set
             "tag": "meta",
             "property": "og:image",
             "content": channel.artist.attachment_cover.download_url_medium_square_crop,
-        },
-        {
-            "tag": "link",
-            "rel": "alternate",
-            "type": "application/activity+json",
-            "href": channel.actor.fid,
         },
         {
             "tag": "link",
@@ -92,7 +85,7 @@ def test_oembed_channel(factories, no_api_auth, api_client, settings):
         "width": 600,
         "title": artist.name,
         "description": artist.name,
-        "thumbnail_url": federation_utils.full_url(
+        "thumbnail_url": utils.full_url(
             artist.attachment_cover.file.crop["200x200"].url
         ),
         "thumbnail_height": 200,
@@ -101,7 +94,7 @@ def test_oembed_channel(factories, no_api_auth, api_client, settings):
             iframe_src
         ),
         "author_name": artist.name,
-        "author_url": federation_utils.full_url(
+        "author_url": utils.full_url(
             utils.spa_reverse("channel_detail", kwargs={"uuid": channel.uuid})
         ),
     }

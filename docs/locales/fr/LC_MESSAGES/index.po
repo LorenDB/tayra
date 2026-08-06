@@ -28,10 +28,6 @@ msgstr ""
 msgid "Admin documentation"
 msgstr ""
 
-#: ../../index.md:49
-msgid "Moderator documentation"
-msgstr ""
-
 #: ../../index.md:66
 msgid "Developer documentation"
 msgstr ""
@@ -60,11 +56,9 @@ msgid ""
 msgstr ""
 
 #: ../../index.md:5
-msgid ""
-"Funkwhale uses the [ActivityPub "
-"protocol](https://www.w3.org/TR/activitypub/) to talk to other apps "
-"across the {term}`Fediverse`. Users can share content between "
-"{term}`Funkwhale pods <Pod>` or with other Fediverse software."
+msgid "Funkwhale is a self-hosted audio player and publication platform. It"
+" enables users to build libraries of existing content and publish their"
+" own, on a single server ({term}`Pod`)."
 msgstr ""
 
 #: ../../index.md:125
@@ -90,16 +84,6 @@ msgstr ""
 msgid ""
 "Want to host your own Funkwhale pod? Our admin documentation guides you "
 "through the process."
-msgstr ""
-
-#: ../../index.md:167
-msgid "{fa}`shield` Moderators"
-msgstr ""
-
-#: ../../index.md:170
-msgid ""
-"Keeping your users safe from harassment and spam or clearing illegal "
-"content? Check out our moderator docs."
 msgstr ""
 
 #: ../../index.md:188

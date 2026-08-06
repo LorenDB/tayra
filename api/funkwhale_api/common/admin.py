@@ -52,7 +52,7 @@ class MutationAdmin(ModelAdmin):
 class AttachmentAdmin(ModelAdmin):
     list_display = [
         "uuid",
-        "actor",
+        "uploaded_by",
         "url",
         "file",
         "size",
@@ -61,5 +61,5 @@ class AttachmentAdmin(ModelAdmin):
         "last_fetch_date",
     ]
     list_select_related = True
-    search_fields = ["actor__domain__name"]
+    search_fields = ["uploaded_by__username"]
     list_filter = ["mimetype"]

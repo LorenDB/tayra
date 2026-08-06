@@ -17,8 +17,6 @@ from django.utils import timezone
 from versatileimagefield.fields import VersatileImageField
 from versatileimagefield.image_warmer import VersatileImageFieldWarmer
 
-from funkwhale_api.federation import utils as federation_utils
-
 from . import utils, validators
 
 logger = logging.getLogger(__name__)
@@ -77,18 +75,6 @@ class NullsLastQuerySet(models.QuerySet):
         self.query = query or NullsLastQuery(self.model)
 
 
-class LocalFromFidQuerySet:
-    def local(self, include=True):
-        host = settings.FEDERATION_HOSTNAME
-        query = models.Q(fid__startswith=f"http://{host}/") | models.Q(
-            fid__startswith=f"https://{host}/"
-        )
-        if include:
-            return self.filter(query)
-        else:
-            return self.filter(~query)
-
-
 class GenericTargetQuerySet(models.QuerySet):
     def get_for_target(self, target):
         content_type = ContentType.objects.get_for_model(target)
@@ -96,17 +82,16 @@ class GenericTargetQuerySet(models.QuerySet):
 
 
 class Mutation(models.Model):
-    fid = models.URLField(unique=True, max_length=500, db_index=True)
     uuid = models.UUIDField(unique=True, db_index=True, default=uuid.uuid4)
     created_by = models.ForeignKey(
-        "federation.Actor",
+        "users.User",
         related_name="created_mutations",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
     )
     approved_by = models.ForeignKey(
-        "federation.Actor",
+        "users.User",
         related_name="approved_mutations",
         on_delete=models.SET_NULL,
         null=True,
@@ -136,20 +121,6 @@ class Mutation(models.Model):
     target = GenericForeignKey("target_content_type", "target_id")
 
     objects = GenericTargetQuerySet.as_manager()
-
-    def get_federation_id(self):
-        if self.fid:
-            return self.fid
-
-        return federation_utils.full_url(
-            reverse("federation:edits-detail", kwargs={"uuid": self.uuid})
-        )
-
-    def save(self, **kwargs):
-        if not self.pk and not self.fid:
-            self.fid = self.get_federation_id()
-
-        return super().save(**kwargs)
 
     @transaction.atomic
     def apply(self):
@@ -181,7 +152,6 @@ class AttachmentQuerySet(models.QuerySet):
             "covered_artist",
             "covered_playlist",
             "covered_radio",
-            "iconed_actor",
         ]
         query = None
         for field in related_fields:
@@ -193,20 +163,14 @@ class AttachmentQuerySet(models.QuerySet):
 
         return self.filter(query)
 
-    def local(self, include=True):
-        if include:
-            return self.filter(actor__domain_id=settings.FEDERATION_HOSTNAME)
-        else:
-            return self.exclude(actor__domain_id=settings.FEDERATION_HOSTNAME)
-
 
 class Attachment(models.Model):
     # Remote URL where the attachment can be fetched
     url = models.URLField(max_length=500, null=True, blank=True)
     uuid = models.UUIDField(unique=True, db_index=True, default=uuid.uuid4)
-    # Actor associated with the attachment
-    actor = models.ForeignKey(
-        "federation.Actor",
+    # User who uploaded the attachment
+    uploaded_by = models.ForeignKey(
+        "users.User",
         related_name="attachments",
         on_delete=models.CASCADE,
         null=True,
@@ -242,7 +206,7 @@ class Attachment(models.Model):
 
     @property
     def is_local(self):
-        return federation_utils.is_local(self.fid)
+        return True
 
     def guess_mimetype(self):
         f = self.file
@@ -260,21 +224,21 @@ class Attachment(models.Model):
         if self.file:
             return utils.media_url(self.file.url)
         proxy_url = reverse("api:v1:attachments-proxy", kwargs={"uuid": self.uuid})
-        return federation_utils.full_url(proxy_url + "?next=original")
+        return utils.full_url(proxy_url + "?next=original")
 
     @property
     def download_url_medium_square_crop(self):
         if self.file:
             return utils.media_url(self.file.crop["200x200"].url)
         proxy_url = reverse("api:v1:attachments-proxy", kwargs={"uuid": self.uuid})
-        return federation_utils.full_url(proxy_url + "?next=medium_square_crop")
+        return utils.full_url(proxy_url + "?next=medium_square_crop")
 
     @property
     def download_url_large_square_crop(self):
         if self.file:
             return utils.media_url(self.file.crop["600x600"].url)
         proxy_url = reverse("api:v1:attachments-proxy", kwargs={"uuid": self.uuid})
-        return federation_utils.full_url(proxy_url + "?next=large_square_crop")
+        return utils.full_url(proxy_url + "?next=large_square_crop")
 
 
 class MutationAttachment(models.Model):
@@ -340,9 +304,7 @@ def warm_attachment_thumbnails(sender, instance, **kwargs):
         # Thumbnail generation must never fail the upload itself. Crops can be
         # rebuilt later via common scripts; a missing crop is preferable to a
         # 500 on POST /attachments/.
-        logger.exception(
-            "Failed to warm thumbnails for attachment %s", instance.pk
-        )
+        logger.exception("Failed to warm thumbnails for attachment %s", instance.pk)
 
 
 @receiver(models.signals.post_save, sender=Mutation)

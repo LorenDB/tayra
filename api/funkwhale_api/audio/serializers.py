@@ -11,7 +11,6 @@ from django.db import transaction
 from django.db.models import Q
 from django.templatetags.static import static
 from django.urls import reverse
-from django.utils import timezone
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
@@ -20,11 +19,6 @@ from funkwhale_api.common import locales, preferences
 from funkwhale_api.common import serializers as common_serializers
 from funkwhale_api.common import session
 from funkwhale_api.common import utils as common_utils
-from funkwhale_api.federation import actors
-from funkwhale_api.federation import models as federation_models
-from funkwhale_api.federation import serializers as federation_serializers
-from funkwhale_api.federation import utils as federation_utils
-from funkwhale_api.moderation import mrf
 from funkwhale_api.music import models as music_models
 from funkwhale_api.music.serializers import COVER_WRITE_FIELD, CoverField
 from funkwhale_api.tags import models as tags_models
@@ -74,9 +68,9 @@ class ChannelMetadataSerializer(serializers.Serializer):
 
 
 class ChannelCreateSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=federation_models.MAX_LENGTHS["ACTOR_NAME"])
+    name = serializers.CharField(max_length=255)
     username = serializers.CharField(
-        max_length=federation_models.MAX_LENGTHS["ACTOR_NAME"],
+        max_length=255,
         validators=[users_serializers.ASCIIUsernameValidator()],
     )
     description = common_serializers.ContentSerializer(allow_null=True)
@@ -88,7 +82,7 @@ class ChannelCreateSerializer(serializers.Serializer):
     cover = COVER_WRITE_FIELD
 
     def validate(self, validated_data):
-        existing_channels = self.context["actor"].owned_channels.count()
+        existing_channels = self.context["user"].owned_channels.count()
         if existing_channels >= preferences.get("audio__max_channels"):
             raise serializers.ValidationError(
                 "You have reached the maximum amount of allowed channels"
@@ -106,9 +100,7 @@ class ChannelCreateSerializer(serializers.Serializer):
         if value.lower() in [n.lower() for n in settings.ACCOUNT_USERNAME_BLACKLIST]:
             raise serializers.ValidationError("This username is already taken")
 
-        matching = federation_models.Actor.objects.local().filter(
-            preferred_username__iexact=value
-        )
+        matching = models.Channel.objects.filter(preferred_username__iexact=value)
         if matching.exists():
             raise serializers.ValidationError("This username is already taken")
         return value
@@ -120,7 +112,6 @@ class ChannelCreateSerializer(serializers.Serializer):
         cover = validated_data.pop("cover", None)
         description = validated_data.get("description")
         artist = music_models.Artist.objects.create(
-            attributed_to=validated_data["attributed_to"],
             name=validated_data["name"],
             content_category=validated_data["content_category"],
             attachment_cover=cover,
@@ -132,18 +123,15 @@ class ChannelCreateSerializer(serializers.Serializer):
 
         channel = models.Channel(
             artist=artist,
-            attributed_to=validated_data["attributed_to"],
+            owner=validated_data["owner"],
+            preferred_username=validated_data["username"],
             metadata=validated_data["metadata"],
-        )
-        channel.actor = models.generate_actor(
-            validated_data["username"],
-            name=validated_data["name"],
         )
 
         channel.library = music_models.Library.objects.create(
-            name=channel.actor.preferred_username,
+            name=validated_data["username"],
             privacy_level="everyone",
-            actor=validated_data["attributed_to"],
+            owner=validated_data["owner"],
         )
         channel.save()
         channel = views.ChannelViewSet.queryset.get(pk=channel.pk)
@@ -157,7 +145,7 @@ NOOP = object()
 
 
 class ChannelUpdateSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=federation_models.MAX_LENGTHS["ACTOR_NAME"])
+    name = serializers.CharField(max_length=255)
     description = common_serializers.ContentSerializer(allow_null=True)
     tags = tags_serializers.TagsListField()
     content_category = serializers.ChoiceField(
@@ -195,7 +183,6 @@ class ChannelUpdateSerializer(serializers.Serializer):
     def update(self, obj, validated_data):
         if validated_data.get("tags") is not None:
             tags_models.set_tags(obj.artist, *validated_data["tags"])
-        actor_update_fields = []
         artist_update_fields = []
 
         obj.metadata = validated_data["metadata"]
@@ -207,7 +194,6 @@ class ChannelUpdateSerializer(serializers.Serializer):
             )
 
         if "name" in validated_data:
-            actor_update_fields.append(("name", validated_data["name"]))
             artist_update_fields.append(("name", validated_data["name"]))
 
         if "content_category" in validated_data:
@@ -217,11 +203,6 @@ class ChannelUpdateSerializer(serializers.Serializer):
 
         if "cover" in validated_data:
             artist_update_fields.append(("attachment_cover", validated_data["cover"]))
-
-        if actor_update_fields:
-            for field, value in actor_update_fields:
-                setattr(obj.actor, field, value)
-            obj.actor.save(update_fields=[f for f, _ in actor_update_fields])
 
         if artist_update_fields:
             for field, value in artist_update_fields:
@@ -236,7 +217,6 @@ class ChannelUpdateSerializer(serializers.Serializer):
 
 class SimpleChannelArtistSerializer(serializers.Serializer):
     id = serializers.IntegerField()
-    fid = serializers.URLField()
     mbid = serializers.CharField()
     name = serializers.CharField()
     creation_date = serializers.DateTimeField()
@@ -254,9 +234,7 @@ class SimpleChannelArtistSerializer(serializers.Serializer):
 
 class ChannelSerializer(serializers.ModelSerializer):
     artist = SimpleChannelArtistSerializer()
-    actor = serializers.SerializerMethodField()
     downloads_count = serializers.SerializerMethodField()
-    attributed_to = federation_serializers.APIActorSerializer()
     rss_url = serializers.CharField(source="get_rss_url")
     url = serializers.SerializerMethodField()
 
@@ -265,8 +243,6 @@ class ChannelSerializer(serializers.ModelSerializer):
         fields = [
             "uuid",
             "artist",
-            "attributed_to",
-            "actor",
             "creation_date",
             "metadata",
             "rss_url",
@@ -281,25 +257,19 @@ class ChannelSerializer(serializers.ModelSerializer):
         return data
 
     def get_subscriptions_count(self, obj) -> int:
-        return obj.actor.received_follows.exclude(approved=False).count()
+        return obj.subscriptions.filter(approved=True).count()
 
     def get_downloads_count(self, obj) -> int:
         return getattr(obj, "_downloads_count", None) or 0
 
-    @extend_schema_field(federation_serializers.APIActorSerializer)
-    def get_actor(self, obj):
-        if obj.attributed_to == actors.get_service_actor():
-            return None
-        return federation_serializers.APIActorSerializer(obj.actor).data
-
     @extend_schema_field(OpenApiTypes.URI)
     def get_url(self, obj):
-        return obj.actor.url
+        return obj.get_absolute_url()
 
 
 class InlineSubscriptionSerializer(serializers.Serializer):
     uuid = serializers.UUIDField()
-    channel = serializers.UUIDField(source="target__channel__uuid")
+    channel = serializers.UUIDField(source="channel__uuid")
 
 
 class AllSubscriptionsSerializer(serializers.Serializer):
@@ -312,13 +282,12 @@ class AllSubscriptionsSerializer(serializers.Serializer):
 
 class SubscriptionSerializer(serializers.Serializer):
     approved = serializers.BooleanField(read_only=True)
-    fid = serializers.URLField(read_only=True)
     uuid = serializers.UUIDField(read_only=True)
     creation_date = serializers.DateTimeField(read_only=True)
 
     def to_representation(self, obj):
         data = super().to_representation(obj)
-        data["channel"] = ChannelSerializer(obj.target.channel).data
+        data["channel"] = ChannelSerializer(obj.channel).data
         return data
 
 
@@ -364,12 +333,6 @@ def retrieve_feed(url):
 
 @transaction.atomic
 def get_channel_from_rss_url(url, raise_exception=False):
-    # first, check if the url is blocked
-    is_valid, _ = mrf.inbox.apply({"id": url})
-    if not is_valid:
-        logger.warn("Feed fetch for url %s dropped by MRF", url)
-        raise BlockedFeedException("This feed or domain is blocked")
-
     # retrieve the XML payload at the given URL
     response = retrieve_feed(url)
 
@@ -377,22 +340,6 @@ def get_channel_from_rss_url(url, raise_exception=False):
     serializer = RssFeedSerializer(data=parsed_feed["feed"])
     if not serializer.is_valid(raise_exception=raise_exception):
         raise FeedFetchException(f"Invalid xml content: {serializer.errors}")
-
-    # second mrf check with validated data
-    urls_to_check = set()
-    atom_link = serializer.validated_data.get("atom_link")
-
-    if atom_link and atom_link != url:
-        urls_to_check.add(atom_link)
-
-    if serializer.validated_data["link"] != url:
-        urls_to_check.add(serializer.validated_data["link"])
-
-    for u in urls_to_check:
-        is_valid, _ = mrf.inbox.apply({"id": u})
-        if not is_valid:
-            logger.warn("Feed fetch for url %s dropped by MRF", u)
-            raise BlockedFeedException("This feed or domain is blocked")
 
     # now, we're clear, we can save the data
     channel = serializer.save(rss_url=url)
@@ -526,7 +473,6 @@ class RssFeedSerializer(serializers.Serializer):
         validated_data = self.validated_data
         # because there may be redirections from the original feed URL
         real_rss_url = validated_data.get("atom_link", rss_url) or rss_url
-        service_actor = actors.get_service_actor()
         author = validated_data.get("author_detail", {})
         categories = validated_data.get("tags", {}) or {}
         if "tags" not in categories:
@@ -540,12 +486,9 @@ class RssFeedSerializer(serializers.Serializer):
             "itunes_subcategory": categories.get("child"),
             "language": validated_data.get("language"),
         }
-        public_url = validated_data["link"]
         existing = (
             models.Channel.objects.external_rss()
-            .filter(
-                Q(rss_url=real_rss_url) | Q(rss_url=rss_url) | Q(actor__url=public_url)
-            )
+            .filter(Q(rss_url=real_rss_url) | Q(rss_url=rss_url))
             .first()
         )
         channel_defaults = {
@@ -554,27 +497,9 @@ class RssFeedSerializer(serializers.Serializer):
         }
         if existing:
             artist_kwargs = {"channel": existing}
-            actor_kwargs = {"channel": existing}
-            actor_defaults = {"url": public_url}
         else:
             artist_kwargs = {"pk": None}
-            actor_kwargs = {"pk": None}
             preferred_username = f"rssfeed-{uuid.uuid4()}"
-            actor_defaults = {
-                "preferred_username": preferred_username,
-                "type": "Application",
-                "domain": service_actor.domain,
-                "url": public_url,
-                "fid": federation_utils.full_url(
-                    reverse(
-                        "federation:actors-detail",
-                        kwargs={"preferred_username": preferred_username},
-                    )
-                ),
-            }
-            channel_defaults["attributed_to"] = service_actor
-
-        actor_defaults["last_fetch_date"] = timezone.now()
 
         # Music vs podcast: presence of free-form tag "music" (Funkwhale #2428).
         content_category = (
@@ -587,7 +512,6 @@ class RssFeedSerializer(serializers.Serializer):
         artist, created = music_models.Artist.objects.update_or_create(
             **artist_kwargs,
             defaults={
-                "attributed_to": service_actor,
                 "name": validated_data["title"],
                 "content_category": content_category,
             },
@@ -609,19 +533,11 @@ class RssFeedSerializer(serializers.Serializer):
         if created:
             channel_defaults["artist"] = artist
 
-        # create/update the actor
-        actor, created = federation_models.Actor.objects.update_or_create(
-            **actor_kwargs, defaults=actor_defaults
-        )
-        if created:
-            channel_defaults["actor"] = actor
-
         # create the library
         if not existing:
             channel_defaults["library"] = music_models.Library.objects.create(
-                actor=service_actor,
                 privacy_level=settings.PODCASTS_THIRD_PARTY_VISIBILITY,
-                name=actor_defaults["preferred_username"],
+                name=preferred_username,
             )
 
         # create/update the channel
@@ -629,6 +545,10 @@ class RssFeedSerializer(serializers.Serializer):
             pk=existing.pk if existing else None,
             defaults=channel_defaults,
         )
+        if created:
+            channel.is_external_rss = True
+            channel.preferred_username = preferred_username
+            channel.save(update_fields=["is_external_rss", "preferred_username"])
         return channel
 
 
@@ -776,7 +696,7 @@ class RssFeedItemSerializer(serializers.Serializer):
         else:
             existing_track = (
                 music_models.Track.objects.filter(
-                    uuid=expected_uuid, artist__channel=channel
+                    uuid=expected_uuid, artist_credit__artist__channel=channel
                 )
                 .select_related("description", "attachment_cover")
                 .first()
@@ -792,7 +712,6 @@ class RssFeedItemSerializer(serializers.Serializer):
                 "disc_number": validated_data.get("itunes_season", 1) or 1,
                 "position": validated_data.get("itunes_episode", 1) or 1,
                 "title": validated_data["title"],
-                "artist": channel.artist,
             }
         )
         if "rights" in validated_data:
@@ -828,6 +747,12 @@ class RssFeedItemSerializer(serializers.Serializer):
             **track_kwargs,
             defaults=track_defaults,
         )
+        if created or not track.artist_credit.filter(artist=channel.artist).exists():
+            artist_credit, _ = music_models.ArtistCredit.objects.get_or_create(
+                artist=channel.artist,
+                defaults={"credit": channel.artist.name, "joinphrase": "", "index": 0},
+            )
+            track.artist_credit.add(artist_credit)
         # optimisation for reducing SQL queries, because we cannot use select_related with
         # update or create, so we restore the cache by hand
         if existing_track:
@@ -898,11 +823,11 @@ def rss_serialize_item(upload):
         "itunes:episodeType": [{"value": "full"}],
         "itunes:season": [{"value": upload.track.disc_number or 1}],
         "itunes:episode": [{"value": upload.track.position or 1}],
-        "link": [{"value": federation_utils.full_url(upload.track.get_absolute_url())}],
+        "link": [{"value": common_utils.full_url(upload.track.get_absolute_url())}],
         "enclosure": [
             {
                 # we enforce MP3, since it's the only format supported everywhere
-                "url": federation_utils.full_url(
+                "url": common_utils.full_url(
                     reverse(
                         "api:v1:stream-detail", kwargs={"uuid": str(upload.track.uuid)}
                     )
@@ -936,7 +861,11 @@ def rss_serialize_channel(channel):
     metadata = channel.metadata or {}
     explicit = metadata.get("explicit", False)
     copyright = metadata.get("copyright", "All rights reserved")
-    owner_name = metadata.get("owner_name", channel.attributed_to.display_name)
+    if channel.owner:
+        default_owner_name = channel.owner.name or channel.owner.username
+    else:
+        default_owner_name = channel.artist.name
+    owner_name = metadata.get("owner_name", default_owner_name)
     owner_email = metadata.get("owner_email")
     itunes_category = metadata.get("itunes_category")
     itunes_subcategory = metadata.get("itunes_subcategory")
@@ -955,11 +884,6 @@ def rss_serialize_channel(channel):
                 "href": channel.get_rss_url(),
                 "rel": "self",
                 "type": "application/rss+xml",
-            },
-            {
-                "href": channel.actor.fid,
-                "rel": "alternate",
-                "type": "application/activity+json",
             },
         ],
     }
@@ -985,7 +909,7 @@ def rss_serialize_channel(channel):
             {"href": channel.artist.attachment_cover.download_url_original}
         ]
     else:
-        placeholder_url = federation_utils.full_url(
+        placeholder_url = common_utils.full_url(
             static("images/podcasts-cover-placeholder.png")
         )
         data["itunes:image"] = [{"href": placeholder_url}]
@@ -1013,7 +937,7 @@ def get_opml_outline(channel):
         "text": channel.artist.name,
         "type": "rss",
         "xmlUrl": channel.get_rss_url(),
-        "htmlUrl": channel.actor.url,
+        "htmlUrl": channel.get_absolute_url(),
     }
 
 

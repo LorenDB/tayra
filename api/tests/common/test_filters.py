@@ -48,9 +48,6 @@ def test_mutation_filter_is_approved(value, expected, factories):
         ("noop", 0, []),
         ("noop", 1, []),
         ("noop", 2, []),
-        ("actor:actor1@domain.test", 0, [0]),
-        ("actor:actor2@domain.test", 0, [1]),
-        ("domain:domain.test", 0, [0, 1]),
         ("subscribed", 0, [3]),
         ("subscribed", 1, []),
         ("subscribed", 2, []),
@@ -67,29 +64,26 @@ def test_actor_scope_filter(
     mocker,
     anonymous_user,
 ):
-    domain = factories["federation.Domain"](name="domain.test")
-    actor1 = factories["users.User"]().create_actor(
-        preferred_username="actor1", domain=domain
-    )
-    actor2 = factories["users.User"]().create_actor(
-        preferred_username="actor2", domain=domain
-    )
-    users = [actor1.user, actor2.user, anonymous_user]
+    user1 = factories["users.User"]()
+    user2 = factories["users.User"]()
+    users = [user1, user2, anonymous_user]
     followed_library = factories["music.Library"]()
+    followed_channel = factories["audio.Channel"](
+        library=followed_library, owner=user1
+    )
+    factories["audio.Subscription"](
+        channel=followed_channel, user=user1, approved=True
+    )
     tracks = [
-        factories["music.Upload"](library__actor=actor1, playable=True).track,
-        factories["music.Upload"](library__actor=actor2, playable=True).track,
+        factories["music.Upload"](library__owner=user1, playable=True).track,
+        factories["music.Upload"](library__owner=user2, playable=True).track,
         factories["music.Upload"](playable=True).track,
         factories["music.Upload"](playable=True, library=followed_library).track,
     ]
 
-    factories["federation.LibraryFollow"](
-        actor=actor1, target=followed_library, approved=True
-    )
-
     class FS(filters.filters.FilterSet):
         scope = filters.ActorScopeFilter(
-            actor_field="uploads__library__actor",
+            user_field="uploads__library__owner",
             library_field="uploads__library",
             distinct=True,
         )

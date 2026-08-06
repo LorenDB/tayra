@@ -34,21 +34,12 @@ msgid "Channels"
 msgstr ""
 
 #: ../../user_documentation/channels/index.md:3
-msgid ""
-"Use channels to publish your own audio content on Funkwhale. Channels "
-"enable you to create and share your creations with the whole "
-"{term}`Fediverse`."
+msgid "Use channels to publish your own audio content on Funkwhale. Channels"
+" enable you to create and share your creations on the pod."
 msgstr ""
 
 #: ../../user_documentation/channels/index.md:5
 msgid "Funkwhale supports two types of channel:"
-msgstr ""
-
-#: ../../user_documentation/channels/index.md:7
-msgid ""
-"**Podcasts** – broadcast your podcast over the Fediverse. Listeners can "
-"also use their favorite {term}`podcatcher` to listen to podcasts using "
-"{abbr}`RSS (Really Simple Syndication)`."
 msgstr ""
 
 #: ../../user_documentation/channels/index.md:8
@@ -58,4 +49,3 @@ msgstr ""
 #: ../../user_documentation/channels/index.md:10
 msgid "Follow the guides in this section to get started."
 msgstr ""
-

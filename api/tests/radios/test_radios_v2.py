@@ -3,17 +3,15 @@ import logging
 
 import random
 
-from django.core.cache import cache
 from django.urls import reverse
-
 from funkwhale_api.favorites.models import TrackFavorite
 from funkwhale_api.radios import models, radios_v2
 
 
 def test_can_get_track_for_session_from_api_v2(factories, logged_in_api_client):
-    actor = logged_in_api_client.user.create_actor()
+    user = logged_in_api_client.user
     track = factories["music.Upload"](
-        library__actor=actor, import_status="finished"
+        library__owner=user, import_status="finished"
     ).track
     url = reverse("api:v2:radios:sessions-list")
     response = logged_in_api_client.post(url, {"radio_type": "random"})
@@ -26,7 +24,7 @@ def test_can_get_track_for_session_from_api_v2(factories, logged_in_api_client):
     assert data[0]["id"] == track.pk
 
     next_track = factories["music.Upload"](
-        library__actor=actor, import_status="finished"
+        library__owner=user, import_status="finished"
     ).track
     response = logged_in_api_client.get(url, {"session": session.pk})
     data = json.loads(response.content.decode("utf-8"))
@@ -95,7 +93,9 @@ def test_can_get_choices_for_favorites_radio_v2(factories):
 
 def test_can_get_choices_for_custom_radio_v2(factories):
     artist = factories["music.Artist"]()
-    files = factories["music.Upload"].create_batch(5, track__artist=artist)
+    files = factories["music.Upload"].create_batch(
+        5, track__artist_credit__artist=artist
+    )
     tracks = [f.track for f in files]
     factories["music.Upload"].create_batch(5)
 

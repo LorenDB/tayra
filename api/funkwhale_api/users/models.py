@@ -9,11 +9,9 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import UserManager as BaseUserManager
 from django.db import models, transaction
 from django.db.models import JSONField
-from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-from django_auth_ldap.backend import populate_user as ldap_populate_user
 from oauth2_provider import models as oauth2_models
 from oauth2_provider import validators as oauth2_validators
 from versatileimagefield.fields import VersatileImageField
@@ -21,9 +19,6 @@ from versatileimagefield.fields import VersatileImageField
 from funkwhale_api.common import fields, preferences
 from funkwhale_api.common import utils as common_utils
 from funkwhale_api.common import validators as common_validators
-from funkwhale_api.federation import keys
-from funkwhale_api.federation import models as federation_models
-from funkwhale_api.federation import utils as federation_utils
 
 
 def get_token(length=5):
@@ -91,7 +86,7 @@ get_file_path = common_utils.ChunkedPath("users/avatars", preserve_file_name=Fal
 class UserQuerySet(models.QuerySet):
     def for_auth(self):
         """Optimization to avoid additional queries during authentication"""
-        qs = self.select_related("actor__domain")
+        qs = self.all()
         return qs.prefetch_related("plugins", "emailaddress_set")
 
 
@@ -112,13 +107,6 @@ class User(AbstractUser):
     # updated on logout or password change, to invalidate JWT
     secret_key = models.UUIDField(default=uuid.uuid4, null=True)
     privacy_level = fields.get_privacy_field()
-
-    # Unfortunately, Subsonic API assumes a MD5/password authentication
-    # scheme, which is weak in terms of security, and not achievable
-    # anyway since django use stronger schemes for storing passwords.
-    # Users that want to use the subsonic API from external client
-    # should set this token and use it as their password in such clients
-    subsonic_api_token = models.CharField(blank=True, null=True, max_length=255)
 
     # permissions
     permission_moderation = models.BooleanField(
@@ -159,15 +147,22 @@ class User(AbstractUser):
             ),
         ],
     )
-    actor = models.OneToOneField(
-        "federation.Actor",
-        related_name="user",
-        on_delete=models.SET_NULL,
+    upload_quota = models.PositiveIntegerField(null=True, blank=True)
+
+    avatar_attachment = models.ForeignKey(
+        "common.Attachment",
+        related_name="user_avatar",
         null=True,
         blank=True,
+        on_delete=models.SET_NULL,
     )
-
-    upload_quota = models.PositiveIntegerField(null=True, blank=True)
+    summary_obj = models.ForeignKey(
+        "common.Content",
+        related_name="user_summary",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
 
     settings = JSONField(default=None, null=True, blank=True, max_length=50000)
 
@@ -216,8 +211,7 @@ class User(AbstractUser):
     def revoke_auth_sessions(self):
         """Invalidate scoped tokens and OAuth grants so the user is logged out."""
         self.update_secret_key()
-        self.subsonic_api_token = None
-        self.save(update_fields=["secret_key", "subsonic_api_token"])
+        self.save(update_fields=["secret_key"])
         self.users_grant.all().delete()
         self.users_accesstoken.all().delete()
         self.users_refreshtoken.all().delete()
@@ -226,15 +220,10 @@ class User(AbstractUser):
         """Soft-disable the account and force logout (reversible by an admin)."""
         self.is_active = False
         self.update_secret_key()
-        self.subsonic_api_token = None
-        self.save(update_fields=["is_active", "secret_key", "subsonic_api_token"])
+        self.save(update_fields=["is_active", "secret_key"])
         self.users_grant.all().delete()
         self.users_accesstoken.all().delete()
         self.users_refreshtoken.all().delete()
-
-    def update_subsonic_api_token(self):
-        self.subsonic_api_token = get_token()
-        return self.subsonic_api_token
 
     def set_password(self, raw_password):
         # Store a SCRAM verifier over the instance-bound transport secret so
@@ -248,8 +237,6 @@ class User(AbstractUser):
         else:
             super().set_password(raw_password)
         self.update_secret_key()
-        if self.subsonic_api_token:
-            self.update_subsonic_api_token()
 
     def check_password(self, raw_password):
         """Accept plaintext (admin/CLI) or derived transport secret / legacy digest.
@@ -281,7 +268,6 @@ class User(AbstractUser):
             if is_transport_password_hash(raw_password):
                 return False
             return verify_scram_secret(encoded, transport_secret(raw_password))
-
 
         # ── Legacy django_hash(v1_digest) / plain django rows ───────────
         def setter(value_for_storage):
@@ -315,11 +301,6 @@ class User(AbstractUser):
             self.last_activity = now
             self.save(update_fields=["last_activity"])
 
-    def create_actor(self, **kwargs):
-        self.actor = create_actor(self, **kwargs)
-        self.save(update_fields=["actor"])
-        return self.actor
-
     def get_upload_quota(self):
         return (
             self.upload_quota
@@ -328,7 +309,26 @@ class User(AbstractUser):
         )
 
     def get_quota_status(self):
-        data = self.actor.get_current_usage()
+        from django.db.models import Sum
+
+        from funkwhale_api.music.models import Upload
+
+        data = {
+            "total": 0,
+            "draft": 0,
+            "skipped": 0,
+            "pending": 0,
+            "finished": 0,
+            "errored": 0,
+        }
+        rows = (
+            Upload.objects.filter(library__owner=self)
+            .values("import_status")
+            .annotate(total=Sum("size"))
+        )
+        for row in rows:
+            data[row["import_status"]] = row["total"] or 0
+            data["total"] += row["total"] or 0
         max_ = self.get_upload_quota()
         return {
             "max": max_,
@@ -352,12 +352,10 @@ class User(AbstractUser):
         return groups
 
     def full_username(self) -> str:
-        return f"{self.username}@{settings.FEDERATION_HOSTNAME}"
+        return self.username
 
     def get_avatar(self):
-        if not self.actor:
-            return
-        return self.actor.attachment_icon
+        return self.avatar_attachment
 
     @property
     def has_verified_primary_email(self) -> bool:
@@ -528,67 +526,3 @@ class RefreshToken(oauth2_models.AbstractRefreshToken):
 
 class IdToken(oauth2_models.AbstractIDToken):
     pass
-
-
-def get_actor_data(username, **kwargs):
-    slugified_username = federation_utils.slugify_username(username)
-    domain = kwargs.get("domain")
-    if not domain:
-        domain = federation_models.Domain.objects.get_or_create(
-            name=settings.FEDERATION_HOSTNAME
-        )[0]
-    return {
-        "preferred_username": slugified_username,
-        "domain": domain,
-        "type": "Person",
-        "name": kwargs.get("name", username),
-        "summary": kwargs.get("summary"),
-        "manually_approves_followers": False,
-        "fid": federation_utils.full_url(
-            reverse(
-                "federation:actors-detail",
-                kwargs={"preferred_username": slugified_username},
-            )
-        ),
-        "shared_inbox_url": federation_models.get_shared_inbox_url(),
-        "inbox_url": federation_utils.full_url(
-            reverse(
-                "federation:actors-inbox",
-                kwargs={"preferred_username": slugified_username},
-            )
-        ),
-        "outbox_url": federation_utils.full_url(
-            reverse(
-                "federation:actors-outbox",
-                kwargs={"preferred_username": slugified_username},
-            )
-        ),
-        "followers_url": federation_utils.full_url(
-            reverse(
-                "federation:actors-followers",
-                kwargs={"preferred_username": slugified_username},
-            )
-        ),
-        "following_url": federation_utils.full_url(
-            reverse(
-                "federation:actors-following",
-                kwargs={"preferred_username": slugified_username},
-            )
-        ),
-    }
-
-
-def create_actor(user, **kwargs):
-    args = get_actor_data(user.username)
-    args.update(kwargs)
-    private, public = keys.get_key_pair()
-    args["private_key"] = private.decode("utf-8")
-    args["public_key"] = public.decode("utf-8")
-
-    return federation_models.Actor.objects.create(user=user, **args)
-
-
-@receiver(ldap_populate_user)
-def init_ldap_user(sender, user, ldap_user, **kwargs):
-    if not user.actor:
-        user.actor = create_actor(user)

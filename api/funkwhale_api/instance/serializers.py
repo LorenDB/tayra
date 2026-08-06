@@ -1,7 +1,7 @@
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
-from funkwhale_api.federation.utils import full_url
+from funkwhale_api.common.utils import full_url
 
 
 class SoftwareSerializer(serializers.Serializer):
@@ -61,7 +61,6 @@ class TotalHoursSerializer(serializers.Serializer):
 
 
 class NodeInfoLibrarySerializer(serializers.Serializer):
-    federationEnabled = serializers.BooleanField()
     anonymousCanListen = serializers.BooleanField()
     tracks = TotalCountSerializer(default=0)
     artists = TotalCountSerializer(default=0)
@@ -74,14 +73,7 @@ class AllowListStatSerializer(serializers.Serializer):
     domains = serializers.ListField(child=serializers.CharField())
 
 
-class ReportTypeSerializer(serializers.Serializer):
-    type = serializers.CharField()
-    label = serializers.CharField()
-    anonymous = serializers.BooleanField()
-
-
 class EndpointsSerializer(serializers.Serializer):
-    knownNodes = serializers.URLField(default=None)
     channels = serializers.URLField(default=None)
     libraries = serializers.URLField(default=None)
 
@@ -101,7 +93,6 @@ class MetadataUsageSerializer(serializers.Serializer):
 
 
 class MetadataSerializer(serializers.Serializer):
-    actorId = serializers.CharField()
     private = serializers.SerializerMethodField()
     shortDescription = serializers.SerializerMethodField()
     longDescription = serializers.SerializerMethodField()
@@ -141,8 +132,8 @@ class MetadataSerializer(serializers.Serializer):
     def get_allowList(self, obj):
         return AllowListStatSerializer(
             {
-                "enabled": obj["preferences"].get("moderation__allow_list_enabled"),
-                "domains": obj["allowed_domains"] or None,
+                "enabled": None,
+                "domains": None,
             }
         ).data
 
@@ -153,7 +144,6 @@ class MetadataSerializer(serializers.Serializer):
 
 class Metadata20Serializer(MetadataSerializer):
     library = serializers.SerializerMethodField()
-    reportTypes = ReportTypeSerializer(source="report_types", many=True)
     endpoints = EndpointsSerializer()
     rules = serializers.SerializerMethodField()
     terms = serializers.SerializerMethodField()
@@ -167,7 +157,6 @@ class Metadata20Serializer(MetadataSerializer):
     @extend_schema_field(NodeInfoLibrarySerializer)
     def get_library(self, obj):
         data = obj["stats"] or {}
-        data["federationEnabled"] = obj["preferences"].get("federation__enabled")
         data["anonymousCanListen"] = not obj["preferences"].get(
             "common__api_authentication_required"
         )
@@ -193,7 +182,6 @@ class MetadataContentSerializer(serializers.Serializer):
 
 
 class Metadata21Serializer(MetadataSerializer):
-    languages = serializers.ListField(child=serializers.CharField())
     location = serializers.CharField()
     content = MetadataContentSerializer()
     features = serializers.ListField(child=serializers.CharField())

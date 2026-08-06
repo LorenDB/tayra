@@ -390,7 +390,7 @@ def test_set_plugin_source_conf_invalid(factories):
 
 
 def test_set_plugin_source_conf_valid(factories):
-    library = factories["music.Library"](actor__local=True)
+    library = factories["music.Library"]()
     _plugins = {}
     plugins.get_plugin_config(
         "test",
@@ -401,17 +401,17 @@ def test_set_plugin_source_conf_valid(factories):
     plugins.set_conf(
         "test",
         {"foo": True, "library": library.uuid},
-        user=library.actor.user,
+        user=library.owner,
         registry=_plugins,
     )
     conf = models.PluginConfiguration.objects.latest("id")
     assert conf.code == "test"
     assert conf.conf == {"foo": True, "library": str(library.uuid)}
-    assert conf.user == library.actor.user
+    assert conf.user == library.owner
 
 
 def test_can_trigger_scan(logged_in_api_client, mocker, factories):
-    library = factories["music.Library"](actor=logged_in_api_client.user.create_actor())
+    library = factories["music.Library"](owner=logged_in_api_client.user)
     plugin = plugins.get_plugin_config(
         name="test_plugin",
         description="Hello world",

@@ -35,7 +35,6 @@ Features:
 - Add NodeInfo 2.1 (#2085)
 - Add support for Funkwhale UI library.
 - Add support for Python 3.12
-- Allow moderators to set moderation languages (#2085)
 - Allow to set the instances server location (#2085)
 - Cache radio queryset into redis. New radio track endpoint for api v2 is /api/v2/radios/sessions/{radiosessionid}/tracks (#2135)
 - Create a testing environment in production for ListenBrainz recommendation engine (troi-recommendation-playground) (#1861)
@@ -576,7 +575,6 @@ Bugfixes:
 - Remove unused Footer component (#1660)
 - Remove usage of deprecated Model and Serializer fields (#1663)
 - Resolved an issue where queue text with mouse over has dark text on dark background (#2058) (2058)
-- Skip refreshing local actors in celery federation.refresh_actor_data task - fixes disappearing avatars (!1873)
 
 Documentation:
 
@@ -595,7 +593,6 @@ Documentation:
 - Remove unnecessary postgres variable in Docker migration guide (#2124).
 - Rewrote documentation contributor guide.
 - Rewrote the architecture file (#1908)
-- Rewrote the federation developer documentation (#1911)
 - Rewrote the plugins documentation (#1910)
 - Rewrote translators file
 - Updated API developer documentation (#1912, #1909)
@@ -850,7 +847,6 @@ Bugfixes:
 - Fix player cover image overlapping queue list
 - Fixed metadata handling for Various Artists albums (#1201)
 - Fixed search behaviour in radio builder's filters (#733)
-- Fixed unpredictable subsonic search3 results (#1782)
 
 Committers:
 
@@ -925,7 +921,6 @@ Bugfixes:
 - Fixed login form focusing reset password link instead of next input (#1373)
 - Fixed missing album contextual menu (#1791)
 - Fixed single listening submission when repeating a song (#1312)
-- Fixed subsonic createPlaylist's endpoint doesn't update playlist (#1263)
 - Resolve timeouts if nodeinfo and service actor is not known (#1714)
 
 Other:
@@ -1226,13 +1221,10 @@ Enhancements:
 - Add linting for Frontend code (#1602)
 - Add xmlns:content to feed schemas fixes #1535
 - Add a Maloja plugin to submit listenings
-- Add artist cover art in subsonic API response (#1528)
 - Allow listen activities privacy level to be set public
 - Allow running multi-container setup on non-root user inside docker (!1375) (fixes #1334)
 - Change volume dynamic range from 60dB to 40dB (fixes #1544)
 - Change Start Radio to Play Radio (#1400)
-- Display toast when subsonic password is copied (#1496)
-- Expose more metadata in Subsonic's getAlbumList endpoint (#623)
 - ListenBrainz: Submit media player and submission client information
 - Make "play in list" the default when interacting with individual tracks (#1274)
 - Prevent an uncontrolled exception when uploading a file without tags, and prints user friendly message (1275)
@@ -1244,15 +1236,12 @@ Bugfixes:
 
 - Add worker-src to nginx header to prevent issues (#1489)
 - Enable stepless adjustment of the volume slider (!1294)
-- Fix an error in a Subsonic methods that return lists of numbers/strings like getUser
 - Fix showing too long radio descriptions (#1556)
 - Fix X-Frame-Options HTTP header for embed and force it to SAMEORIGIN value for other pages (fix #1022)
 - Fix before last track starts playing when last track removed (#1485)
 - Fix delete account button is not disabled when missing password (#1591)
 - Fix omputed properties already defined in components data (#1649)
 - Fix the all in one docker image building process, related to #1503
-- Fix crash in album moderation interface when missing cover (#1474)
-- Fix subsonic scrobble not triggering plugin hook (#1416)
 - Improve formatting of RSS episode descriptions (#1405)
 - Only suggest typed tag once if it already exists
 - Partially fixed playing two tracks at same time (#1213)
@@ -1415,7 +1404,6 @@ Bugfixes:
 - Fix the scrobbler plugin submitting literal "None" as MusicBrainz ID (#1498)
 - Add worker-src to nginx header to prevent issues (#1489)
 - Only suggest typed tag once if it already exists
-- Implement access control on the moderation views (#1494)
 - Prevent open redirect on login (#1492)
 
 ## 1.1.2 (2021-05-19)
@@ -1450,7 +1438,6 @@ Bugfixes:
 - Fix tracks playing in the background without the ability to control them (#1213) (#1387)
 - Fixed track playback indicator to reset on queue end (#1380)
 - Frontend build tooling is less dependent on `npm` or `yarn` being used (!1285)
-- Fixed a small discrepancy to the subsonic api 1374
 
 ## 1.1 (2021-03-10)
 
@@ -1462,11 +1449,9 @@ Enhancements:
 - Add number of tracks and discs of an album to API (#1238)
 - Add spacing after "Play all" button in playlist view (!1271)
 - Added a ListenBrainz plugin to submit listenings
-- Added ability to choose fediverse addresses from channel subscription page/podcast screen (#1294)
 - Added new search functions to allow users to more easily search for podcasts in the UI.
 - Added padding to volume slider to ease mouse control (#1241)
 - Logarithmic scale for volume slider (#1222)
-- More user-friendly subsonic tokens (#1269)
 - Remove manual entry of Import Reference on front-end import (#1284)
 - Support AIFF file format (#1243)
 
@@ -1544,7 +1529,6 @@ Bugfixes:
 
 - Fixed follows from Pleroma with custom Emoji as Tag by ignoring not supported tag types #1342
 - Update pleroma JSON-LD Schema (#1341)
-- Revert fork replacement of http-signature since official package breaks federation
 - Pin twisted version to 20.3.0
 
 ## 1.1-rc1 (2021-02-24)
@@ -1557,11 +1541,9 @@ Enhancements:
 - Add number of tracks and discs of an album to API (#1238)
 - Add spacing after "Play all" button in playlist view (!1271)
 - Added a ListenBrainz plugin to submit listenings
-- Added ability to choose fediverse addresses from channel subscription page/podcast screen (#1294)
 - Added new search functions to allow users to more easily search for podcasts in the UI.
 - Added padding to volume slider to ease mouse control (#1241)
 - Logarithmic scale for volume slider (#1222)
-- More user-friendly subsonic tokens (#1269)
 - Remove manual entry of Import Reference on front-end import (#1284)
 - Replaced forked http-signature dependency with official package (#876)
 - Support AIFF file format (#1243)
@@ -1727,7 +1709,6 @@ Bugfixes:
 - Make channel card updated times more humanly readable, add internationalization (#1089)
 - Ensure search page reloads if another search is submitted in the sidebar (#1197)
 - Fixed "scope=subscribed" on albums, artists, uploads and libraries API (#1217)
-- Fixed broken federation with pods using allow-listing (#1999)
 - Fixed broken search when using (, " or & chars (#1196)
 - Fixed domains table hidden controls when no domains are found (#1198)
 

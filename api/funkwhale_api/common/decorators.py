@@ -52,7 +52,7 @@ def mutations_route(types):
             )
             serializer.is_valid(raise_exception=True)
             if not common_mutations.registry.has_perm(
-                actor=request.user.actor,
+                user=request.user,
                 type=serializer.validated_data["type"],
                 obj=obj,
                 perm="approve"
@@ -67,7 +67,7 @@ def mutations_route(types):
                 obj=obj,
             )
             mutation = serializer.save(
-                created_by=request.user.actor,
+                created_by=request.user,
                 target=obj,
                 payload=final_payload,
                 is_approved=serializer.validated_data.get("is_approved", None),

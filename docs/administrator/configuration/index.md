@@ -15,7 +15,6 @@ Frontend customization <frontend>
 optimize
 ldap
 change-url
-mrf
 rate-limiting
 
 ```

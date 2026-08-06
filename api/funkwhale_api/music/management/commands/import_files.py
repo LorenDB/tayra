@@ -253,14 +253,11 @@ class Command(BaseCommand):
         options["path"] = [os.path.abspath(path) for path in options["path"]]
         self.is_confirmed = False
         try:
-            library = models.Library.objects.select_related("actor__user").get(
+            library = models.Library.objects.select_related("owner").get(
                 uuid__startswith=options["library_id"]
             )
         except models.Library.DoesNotExist:
             raise CommandError("Invalid library id")
-
-        if not library.actor.get_user():
-            raise CommandError(f"Library {library.uuid} is not a local library")
 
         if options["in_place"]:
             self.stdout.write(
@@ -700,33 +697,25 @@ def handle_modified(event, stdout, library, in_place, **kwargs):
         to_update = (
             existing_candidates.in_place()
             .filter(source=source)
-            .select_related("track__attributed_to").prefetch_related("track__artist_credit__artist", "track__album__artist_credit__artist")
+            .select_related("track")
+            .prefetch_related(
+                "track__artist_credit__artist", "track__album__artist_credit__artist"
+            )
             .first()
         )
         if to_update:
-            if (
-                to_update.track.attributed_to
-                and to_update.track.attributed_to != library.actor
-            ):
-                stdout.write(
-                    "  Cannot update track metadata, track belongs to someone else"
-                )
-                return
+            stdout.write(
+                "  Updating existing file #{} with new metadata…".format(to_update.pk)
+            )
+            audio_metadata = to_update.get_metadata()
+            try:
+                tasks.update_track_metadata(audio_metadata, to_update.track)
+            except serializers.ValidationError as e:
+                stdout.write(f"  Invalid metadata: {e}")
             else:
-                stdout.write(
-                    "  Updating existing file #{} with new metadata…".format(
-                        to_update.pk
-                    )
-                )
-                audio_metadata = to_update.get_metadata()
-                try:
-                    tasks.update_track_metadata(audio_metadata, to_update.track)
-                except serializers.ValidationError as e:
-                    stdout.write(f"  Invalid metadata: {e}")
-                else:
-                    to_update.checksum = checksum
-                    to_update.save(update_fields=["checksum"])
-                return
+                to_update.checksum = checksum
+                to_update.save(update_fields=["checksum"])
+            return
 
     stdout.write("  Launching import for new file")
     create_upload(
@@ -830,26 +819,21 @@ def check_upload(stdout, upload):
                 upload.pk, upload.source
             )
         )
-        if upload.library.actor_id != upload.track.attributed_to_id:
+        track = models.Track.objects.prefetch_related(
+            "artist_credit__artist", "album__artist_credit__artist"
+        ).get(pk=upload.track_id)
+        try:
+            tasks.update_track_metadata(upload.get_metadata(), track)
+        except serializers.ValidationError as e:
+            stdout.write(f"  Invalid metadata: {e}")
+            return
+        except IntegrityError:
             stdout.write(
-                "  Cannot update track metadata, track belongs to someone else"
-            )
-        else:
-            track = models.Track.objects.prefetch_related("artist_credit__artist", "album__artist_credit__artist").get(
-                pk=upload.track_id
-            )
-            try:
-                tasks.update_track_metadata(upload.get_metadata(), track)
-            except serializers.ValidationError as e:
-                stdout.write(f"  Invalid metadata: {e}")
-                return
-            except IntegrityError:
-                stdout.write(
-                    "  Duplicate key violation for metadata. Skipping...\n{}".format(
-                        upload.source
-                    )
+                "  Duplicate key violation for metadata. Skipping...\n{}".format(
+                    upload.source
                 )
-                return
-            else:
-                upload.checksum = checksum
-                upload.save(update_fields=["checksum"])
+            )
+            return
+        else:
+            upload.checksum = checksum
+            upload.save(update_fields=["checksum"])

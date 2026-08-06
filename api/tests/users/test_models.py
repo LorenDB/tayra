@@ -1,29 +1,13 @@
 import datetime
 
 import pytest
-from django.urls import reverse
 
-from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.users import models
 
 
 def test__str__(factories):
     user = factories["users.User"](username="hello")
     assert user.__str__() == "hello"
-
-
-def test_changing_password_updates_subsonic_api_token_no_token(factories):
-    user = factories["users.User"](subsonic_api_token=None)
-    user.set_password("new")
-    assert user.subsonic_api_token is None
-
-
-def test_changing_password_updates_subsonic_api_token(factories):
-    user = factories["users.User"](subsonic_api_token="test")
-    user.set_password("new")
-
-    assert user.subsonic_api_token is not None
-    assert user.subsonic_api_token != "test"
 
 
 def test_get_permissions_superuser(factories):
@@ -138,50 +122,6 @@ def test_can_filter_closed_invitations(factories):
     assert list(models.Invitation.objects.order_by("id").open(False)) == [expired, used]
 
 
-def test_creating_actor_from_user(factories, settings):
-    user = factories["users.User"](username="Hello M. world")
-    actor = models.create_actor(user)
-
-    assert actor.preferred_username == "Hello_M_world"  # slugified
-    assert actor.domain.pk == settings.FEDERATION_HOSTNAME
-    assert actor.type == "Person"
-    assert actor.name == user.username
-    assert actor.manually_approves_followers is False
-    assert actor.fid == federation_utils.full_url(
-        reverse(
-            "federation:actors-detail",
-            kwargs={"preferred_username": actor.preferred_username},
-        )
-    )
-    assert actor.shared_inbox_url == federation_utils.full_url(
-        reverse("federation:shared-inbox")
-    )
-    assert actor.inbox_url == federation_utils.full_url(
-        reverse(
-            "federation:actors-inbox",
-            kwargs={"preferred_username": actor.preferred_username},
-        )
-    )
-    assert actor.outbox_url == federation_utils.full_url(
-        reverse(
-            "federation:actors-outbox",
-            kwargs={"preferred_username": actor.preferred_username},
-        )
-    )
-    assert actor.followers_url == federation_utils.full_url(
-        reverse(
-            "federation:actors-followers",
-            kwargs={"preferred_username": actor.preferred_username},
-        )
-    )
-    assert actor.following_url == federation_utils.full_url(
-        reverse(
-            "federation:actors-following",
-            kwargs={"preferred_username": actor.preferred_username},
-        )
-    )
-
-
 def test_get_channels_groups(factories):
     user = factories["users.User"](permission_library=True)
 
@@ -205,19 +145,15 @@ def test_user_quota_set_on_user(
     assert user.get_upload_quota() == expected
 
 
-def test_user_get_quota_status(factories, preferences, mocker):
-    user = factories["users.User"](upload_quota=66, with_actor=True)
-    mocker.patch(
-        "funkwhale_api.federation.models.Actor.get_current_usage",
-        return_value={
-            "total": 15 * 1000 * 1000,
-            "pending": 1 * 1000 * 1000,
-            "skipped": 2 * 1000 * 1000,
-            "errored": 3 * 1000 * 1000,
-            "finished": 4 * 1000 * 1000,
-            "draft": 5 * 1000 * 1000,
-        },
-    )
+def test_user_get_quota_status(factories, preferences):
+    user = factories["users.User"](upload_quota=66)
+    library = factories["music.Library"](owner=user)
+    factories["music.Upload"](library=library, import_status="pending", size=1_000_000)
+    factories["music.Upload"](library=library, import_status="skipped", size=2_000_000)
+    factories["music.Upload"](library=library, import_status="errored", size=3_000_000)
+    factories["music.Upload"](library=library, import_status="finished", size=4_000_000)
+    factories["music.Upload"](library=library, import_status="draft", size=5_000_000)
+
     assert user.get_quota_status() == {
         "max": 66,
         "remaining": 51,

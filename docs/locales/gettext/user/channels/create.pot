@@ -21,11 +21,15 @@ msgid "Create a channel"
 msgstr ""
 
 #: ../../user/channels/create.md:4
-msgid "Your channel's __Fediverse handle__ needs to be unique. This is how other {term}`Fediverse` software identifies your channel. You can't change the __Fediverse handle__ once you've created your channel."
+msgid "Your channel's __handle__ needs to be unique. This is how your channel"
+" is identified on the pod. You can't change the __handle__ once you've"
+" created your channel."
 msgstr ""
 
 #: ../../user/channels/create.md:7
-msgid "Create a channel to start publishing your content on your {term}`Funkwhale pod <Pod>`. Users can access channel content from Funkwhale or other Fediverse software."
+msgid "Create a channel to start publishing your content on your"
+" {term}`Funkwhale pod <Pod>`. Users can access channel content from"
+" Funkwhale."
 msgstr ""
 
 #: ../../user/channels/create.md:9
@@ -86,7 +90,8 @@ msgstr ""
 #: ../../user/channels/create.md:48
 #: ../../user/channels/create.md:74
 #: ../../user/channels/create.md:96
-msgid "Enter the {guilabel}`Fediverse handle` of your channel. This is how other Fediverse software identifies your channel."
+msgid "Enter the {guilabel}`Handle` of your channel. This is how your channel"
+" is identified on the pod."
 msgstr ""
 
 #: ../../user/channels/create.md:32

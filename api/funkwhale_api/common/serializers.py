@@ -210,7 +210,9 @@ def track_fields_for_update(*fields):
             obj = original_update(self, obj, validated_data)
             tracked_fields_after = {f: getattr(obj, f) for f in fields}
 
-            if tracked_fields_before != tracked_fields_after:
+            if tracked_fields_before != tracked_fields_after and hasattr(
+                self, "on_updated_fields"
+            ):
                 self.on_updated_fields(obj, tracked_fields_before, tracked_fields_after)
             return obj
 
@@ -293,15 +295,12 @@ class StripExifImageField(serializers.ImageField):
                 image_without_exif.save(output, **save_kwargs)
                 content = output.getvalue()
 
-        content_type = getattr(file_obj, "content_type", None) or mimetypes.guess_type(
-            file_obj.name or ""
-        )[0]
-        return SimpleUploadedFile(
-            file_obj.name, content, content_type=content_type
+        content_type = (
+            getattr(file_obj, "content_type", None)
+            or mimetypes.guess_type(file_obj.name or "")[0]
         )
+        return SimpleUploadedFile(file_obj.name, content, content_type=content_type)
 
-
-from funkwhale_api.federation import serializers as federation_serializers  # noqa
 
 TARGET_ID_TYPE_MAPPING = {
     "music.Track": ("id", "track"),
@@ -311,13 +310,13 @@ TARGET_ID_TYPE_MAPPING = {
 
 
 class APIMutationSerializer(serializers.ModelSerializer):
-    created_by = federation_serializers.APIActorSerializer(read_only=True)
+    created_by = serializers.SerializerMethodField()
+    approved_by = serializers.SerializerMethodField()
     target = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Mutation
         fields = [
-            "fid",
             "uuid",
             "type",
             "creation_date",
@@ -334,7 +333,6 @@ class APIMutationSerializer(serializers.ModelSerializer):
         read_only_fields = [
             "uuid",
             "creation_date",
-            "fid",
             "is_applied",
             "created_by",
             "approved_by",
@@ -349,6 +347,16 @@ class APIMutationSerializer(serializers.ModelSerializer):
 
         id_field, type = TARGET_ID_TYPE_MAPPING[target._meta.label]
         return {"type": type, "id": getattr(target, id_field), "repr": str(target)}
+
+    def get_created_by(self, obj):
+        if not obj.created_by_id:
+            return None
+        return {"id": obj.created_by_id, "username": obj.created_by.username}
+
+    def get_approved_by(self, obj):
+        if not obj.approved_by_id:
+            return None
+        return {"id": obj.approved_by_id, "username": obj.approved_by.username}
 
     def validate_type(self, value):
         if value not in self.context["registry"]:
@@ -375,7 +383,7 @@ class AttachmentSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         return models.Attachment.objects.create(
-            file=validated_data["file"], actor=validated_data["actor"]
+            file=validated_data["file"], uploaded_by=validated_data["uploaded_by"]
         )
 
 

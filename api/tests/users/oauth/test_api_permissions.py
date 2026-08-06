@@ -18,7 +18,6 @@ from funkwhale_api.users.oauth import scopes
         ("api:v1:tracks-mutations", {"pk": 42}, "read:edits", "get"),
         ("api:v1:tags-list", {}, "read:libraries", "get"),
         ("api:v1:licenses-list", {}, "read:libraries", "get"),
-        ("api:v1:moderation:content-filters-list", {}, "read:filters", "get"),
         ("api:v1:listen-detail", {"uuid": uuid.uuid4()}, "read:libraries", "get"),
         ("api:v1:uploads-list", {}, "read:libraries", "get"),
         ("api:v1:playlists-list", {}, "read:playlists", "get"),
@@ -26,14 +25,6 @@ from funkwhale_api.users.oauth import scopes
         ("api:v1:history:listenings-list", {}, "read:listenings", "get"),
         ("api:v1:radios:radios-list", {}, "read:radios", "get"),
         ("api:v1:oauth:grants-list", {}, "read:security", "get"),
-        ("api:v1:federation:inbox-list", {}, "read:notifications", "get"),
-        (
-            "api:v1:federation:libraries-detail",
-            {"uuid": uuid.uuid4()},
-            "read:libraries",
-            "get",
-        ),
-        ("api:v1:federation:library-follows-list", {}, "read:follows", "get"),
         ("api:v1:tags-list", {}, "read:libraries", "get"),
         # admin / privileged stuff
         ("api:v1:instance:admin-settings-list", {}, "read:instance:settings", "get"),
@@ -45,14 +36,6 @@ from funkwhale_api.users.oauth import scopes
         ),
         ("api:v1:manage:users:users-list", {}, "read:instance:users", "get"),
         ("api:v1:manage:library:uploads-list", {}, "read:instance:libraries", "get"),
-        ("api:v1:manage:accounts-list", {}, "read:instance:accounts", "get"),
-        ("api:v1:manage:federation:domains-list", {}, "read:instance:domains", "get"),
-        (
-            "api:v1:manage:moderation:instance-policies-list",
-            {},
-            "read:instance:policies",
-            "get",
-        ),
         ("api:v1:manage:library:artists-list", {}, "read:instance:libraries", "get"),
     ],
 )

@@ -20,11 +20,7 @@ def resolve_active_share(token: str) -> ShareLink | None:
     # Bound length to avoid pathological query keys / log spam.
     if len(token) > 64 or len(token) < 16:
         return None
-    link = (
-        ShareLink.objects.filter(token=token)
-        .select_related("owner", "owner__actor")
-        .first()
-    )
+    link = ShareLink.objects.filter(token=token).select_related("owner").first()
     if link is None or not link.is_active:
         return None
     owner = link.owner

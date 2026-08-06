@@ -149,15 +149,36 @@ def join_url(start, end):
     return start + end
 
 
+def full_url(path):
+    """
+    Given a relative path, return a full url
+    """
+    if path.startswith("http://") or path.startswith("https://"):
+        return path
+    root = settings.FUNKWHALE_URL
+    if path.startswith("/") and root.endswith("/"):
+        return root + path[1:]
+    elif not path.startswith("/") and not root.endswith("/"):
+        return root + "/" + path
+    else:
+        return root + path
+
+
+def is_local(url) -> bool:
+    if not url:
+        return True
+
+    d = settings.FEDERATION_HOSTNAME
+    return url.startswith(f"http://{d}/") or url.startswith(f"https://{d}/")
+
+
 def media_url(path):
     if settings.MEDIA_URL.startswith("http://") or settings.MEDIA_URL.startswith(
         "https://"
     ):
         return join_url(settings.MEDIA_URL, path)
 
-    from funkwhale_api.federation import utils as federation_utils
-
-    return federation_utils.full_url(path)
+    return full_url(path)
 
 
 def spa_reverse(name, args=[], kwargs={}):

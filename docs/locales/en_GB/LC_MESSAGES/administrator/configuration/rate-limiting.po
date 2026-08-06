@@ -178,14 +178,6 @@ msgstr ""
 msgid "Anonymous PATCH and PUT requests on resource details"
 msgstr ""
 
-#: ../../administrator/configuration/rate-limiting.md:50
-msgid "`subsonic`"
-msgstr ""
-
-#: ../../administrator/configuration/rate-limiting.md:51
-msgid "All Subsonic API requests"
-msgstr ""
-
 #: ../../administrator/configuration/rate-limiting.md:55
 msgid "User action endpoints"
 msgstr ""
@@ -349,4 +341,3 @@ msgstr ""
 #~ " the [`THROTTLING_RATES`](env_file.md#api-"
 #~ "configuration) environment variable."
 #~ msgstr ""
-

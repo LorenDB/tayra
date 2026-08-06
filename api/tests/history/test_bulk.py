@@ -186,7 +186,7 @@ def test_bulk_create_only_skips_match(factories, logged_in_api_client, mocker):
         user=logged_in_api_client.user,
         track=track,
         creation_date=when,
-        duration_seconds=None,
+        duration_seconds=100,
     )
     mocker.patch("config.plugins.trigger_hook")
 
@@ -209,12 +209,10 @@ def test_bulk_create_only_skips_match(factories, logged_in_api_client, mocker):
     assert response.data["created"] == 0
     assert response.data["enriched"] == 0
     assert response.data["skipped_duplicate"] == 1
-    assert models.Listening.objects.get().duration_seconds is None
+    assert models.Listening.objects.get().duration_seconds == 100
 
 
-def test_bulk_session_match_wins_over_window(
-    factories, logged_in_api_client, mocker
-):
+def test_bulk_session_match_wins_over_window(factories, logged_in_api_client, mocker):
     track = factories["music.Track"]()
     session_id = uuid.uuid4()
     # Existing session row far from import timestamp
@@ -304,9 +302,7 @@ def test_bulk_window_match_only_considers_rich_rows(
     assert rich.duration_seconds == 99
 
 
-def test_bulk_window_tie_break_closest_time(
-    factories, logged_in_api_client, mocker
-):
+def test_bulk_window_tie_break_closest_time(factories, logged_in_api_client, mocker):
     track = factories["music.Track"]()
     base = timezone.now() - datetime.timedelta(days=4)
     farther = factories["history.Listening"](
@@ -506,18 +502,14 @@ def test_bulk_batch_too_large(factories, logged_in_api_client):
         {"track": track.pk, "creation_date": _iso(when)}
         for _ in range(bulk_module.BULK_MAX_ITEMS + 1)
     ]
-    response = logged_in_api_client.post(
-        _bulk_url(), {"items": items}, format="json"
-    )
+    response = logged_in_api_client.post(_bulk_url(), {"items": items}, format="json")
 
     assert response.status_code == 400
     assert response.data["items"][0]["code"] == "batch_too_large"
 
 
 def test_bulk_empty_items(logged_in_api_client):
-    response = logged_in_api_client.post(
-        _bulk_url(), {"items": []}, format="json"
-    )
+    response = logged_in_api_client.post(_bulk_url(), {"items": []}, format="json")
     assert response.status_code == 400
     assert response.data["items"][0]["code"] == "empty_items"
 
@@ -551,7 +543,9 @@ def test_bulk_trigger_side_effects_rejected(factories, logged_in_api_client):
         format="json",
     )
     assert response.status_code == 400
-    assert response.data["trigger_side_effects"][0]["code"] == "side_effects_not_allowed"
+    assert (
+        response.data["trigger_side_effects"][0]["code"] == "side_effects_not_allowed"
+    )
 
 
 def test_bulk_requires_auth(api_client, factories, preferences):
@@ -567,9 +561,7 @@ def test_bulk_requires_auth(api_client, factories, preferences):
     assert response.status_code in (401, 403)
 
 
-def test_bulk_default_mode_is_enrich_or_create(
-    factories, logged_in_api_client, mocker
-):
+def test_bulk_default_mode_is_enrich_or_create(factories, logged_in_api_client, mocker):
     track = factories["music.Track"]()
     when = timezone.now() - datetime.timedelta(days=2)
     factories["history.Listening"](
@@ -647,12 +639,8 @@ def test_bulk_idempotent_rerun(factories, logged_in_api_client, mocker):
         }
     ]
 
-    first = logged_in_api_client.post(
-        _bulk_url(), {"items": items}, format="json"
-    )
-    second = logged_in_api_client.post(
-        _bulk_url(), {"items": items}, format="json"
-    )
+    first = logged_in_api_client.post(_bulk_url(), {"items": items}, format="json")
+    second = logged_in_api_client.post(_bulk_url(), {"items": items}, format="json")
 
     assert first.status_code == 200
     assert first.data["created"] == 1

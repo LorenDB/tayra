@@ -165,15 +165,6 @@ See [Rate limit API endpoints](rate-limiting.md) for a list of available endpoin
 
 ```
 
-### Federation configuration
-
-```{eval-rst}
-
-.. autodata:: config.settings.common.FEDERATION_OBJECT_FETCH_DELAY
-.. autodata:: config.settings.common.FEDERATION_DUPLICATE_FETCH_DELAY
-
-```
-
 ### Metadata configuration
 
 ```{eval-rst}
@@ -191,14 +182,6 @@ See [Rate limit API endpoints](rate-limiting.md) for a list of available endpoin
 .. autodata:: config.settings.common.PODCASTS_RSS_FEED_REFRESH_DELAY
 .. autodata:: config.settings.common.PODCASTS_RSS_FEED_MAX_ITEMS
 .. autodata:: config.settings.common.PODCASTS_THIRD_PARTY_VISIBILITY
-
-```
-
-### Subsonic configuration
-
-```{eval-rst}
-
-.. autodata:: config.settings.common.SUBSONIC_DEFAULT_TRANSCODING_FORMAT
 
 ```
 

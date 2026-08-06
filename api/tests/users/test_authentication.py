@@ -54,7 +54,6 @@ def test_authenticate_scoped_token_bad_secret_key(factories):
 
 def test_scope_token_authentication(fake_request, factories, mocker):
     user = factories["users.User"]()
-    actor = user.create_actor()
     authenticate_scoped_token = mocker.spy(authentication, "authenticate_scoped_token")
     token = authentication.generate_scoped_token(
         user_id=user.pk, user_secret=user.secret_key, scopes=["read"]
@@ -64,7 +63,6 @@ def test_scope_token_authentication(fake_request, factories, mocker):
 
     assert auth.authenticate(request) == (user, None)
     assert request.scopes == ["read"]
-    assert request.actor == actor
     authenticate_scoped_token.assert_called_once_with(token)
 
 

@@ -107,16 +107,3 @@ def test_is_url_safe_helper(block_private, mocker):
     )
     assert ssrf.is_url_safe("https://ok.example/") is True
     assert ssrf.is_url_safe("http://127.0.0.1/") is False
-
-
-def test_fetch_task_blocks_private_url(factories, settings, mocker):
-    settings.EXTERNAL_REQUESTS_BLOCK_PRIVATE_IPS = True
-    fetch = factories["federation.Fetch"](url="http://127.0.0.1/actor")
-    from funkwhale_api.federation import tasks
-
-    get_session = mocker.patch("funkwhale_api.common.session.get_session")
-    tasks.fetch(fetch_id=fetch.pk)
-    fetch.refresh_from_db()
-    assert fetch.status == "errored"
-    assert fetch.detail["error_code"] == "blocked"
-    get_session.assert_not_called()

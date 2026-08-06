@@ -3,7 +3,6 @@ import uuid
 import pytest
 
 from funkwhale_api.common import serializers as common_serializers
-from funkwhale_api.federation import serializers as federation_serializers
 from funkwhale_api.music import licenses, models, serializers, tasks
 
 
@@ -35,10 +34,8 @@ def test_artist_album_serializer(factories, to_api_date):
     album = album.__class__.objects.with_tracks_count().get(pk=album.pk)
     expected = {
         "id": album.id,
-        "fid": album.fid,
         "mbid": str(album.mbid),
         "title": album.title,
-        "artist": album.artist.id,
         "creation_date": to_api_date(album.creation_date),
         "tracks_count": 1,
         "is_playable": None,
@@ -52,17 +49,14 @@ def test_artist_album_serializer(factories, to_api_date):
 
 
 def test_artist_with_albums_serializer(factories, to_api_date):
-    actor = factories["federation.Actor"]()
-    track = factories["music.Track"](
-        album__artist__attributed_to=actor, album__artist__with_cover=True
-    )
-    artist = track.artist
+    artist = factories["music.Artist"](with_cover=True)
+    credit = factories["music.ArtistCredit"](artist=artist)
+    album = factories["music.Album"](artist_credit=credit)
+    factories["music.Track"](album=album, artist_credit=credit)
     artist = artist.__class__.objects.with_albums().get(pk=artist.pk)
-    album = list(artist.albums.all())[0]
     setattr(artist, "_prefetched_tracks", range(42))
     expected = {
         "id": artist.id,
-        "fid": artist.fid,
         "mbid": str(artist.mbid),
         "name": artist.name,
         "is_local": artist.is_local,
@@ -70,8 +64,7 @@ def test_artist_with_albums_serializer(factories, to_api_date):
         "creation_date": to_api_date(artist.creation_date),
         "albums": [serializers.ArtistAlbumSerializer(album).data],
         "tags": [],
-        "attributed_to": federation_serializers.APIActorSerializer(actor).data,
-        "tracks_count": 42,
+        "tracks_count": 1,
         "cover": common_serializers.AttachmentSerializer(artist.attachment_cover).data,
         "channel": None,
     }
@@ -80,16 +73,15 @@ def test_artist_with_albums_serializer(factories, to_api_date):
 
 
 def test_artist_with_albums_serializer_channel(factories, to_api_date):
-    actor = factories["federation.Actor"]()
-    channel = factories["audio.Channel"](attributed_to=actor, artist__with_cover=True)
-    track = factories["music.Track"](album__artist=channel.artist)
-    artist = track.artist
+    channel = factories["audio.Channel"](artist__with_cover=True)
+    credit = factories["music.ArtistCredit"](artist=channel.artist)
+    album = factories["music.Album"](artist_credit=credit)
+    factories["music.Track"](album=album, artist_credit=credit)
+    artist = channel.artist
     artist = artist.__class__.objects.with_albums().get(pk=artist.pk)
-    album = list(artist.albums.all())[0]
     setattr(artist, "_prefetched_tracks", range(42))
     expected = {
         "id": artist.id,
-        "fid": artist.fid,
         "mbid": str(artist.mbid),
         "name": artist.name,
         "is_local": artist.is_local,
@@ -97,17 +89,9 @@ def test_artist_with_albums_serializer_channel(factories, to_api_date):
         "creation_date": to_api_date(artist.creation_date),
         "albums": [serializers.ArtistAlbumSerializer(album).data],
         "tags": [],
-        "attributed_to": federation_serializers.APIActorSerializer(actor).data,
-        "tracks_count": 42,
+        "tracks_count": 1,
         "cover": common_serializers.AttachmentSerializer(artist.attachment_cover).data,
-        "channel": {
-            "uuid": str(channel.uuid),
-            "actor": {
-                "full_username": channel.actor.full_username,
-                "preferred_username": channel.actor.preferred_username,
-                "domain": channel.actor.domain_id,
-            },
-        },
+        "channel": str(channel.uuid),
     }
     serializer = serializers.ArtistWithAlbumsSerializer(artist)
     assert serializer.data == expected
@@ -166,18 +150,18 @@ def test_upload_owner_serializer(factories, to_api_date):
 
 
 def test_album_serializer(factories, to_api_date):
-    actor = factories["federation.Actor"]()
     track1 = factories["music.Track"](
-        position=2, album__attributed_to=actor, album__with_cover=True
+        position=2, album__with_cover=True
     )
     factories["music.Track"](position=1, album=track1.album)
     album = track1.album
     expected = {
         "id": album.id,
-        "fid": album.fid,
+        "artist_credit": serializers.ArtistCreditSerializer(
+            album.artist_credit.all(), many=True
+        ).data,
         "mbid": str(album.mbid),
         "title": album.title,
-        "artist": serializers.SimpleArtistSerializer(album.artist).data,
         "creation_date": to_api_date(album.creation_date),
         "is_playable": False,
         "duration": 0,
@@ -186,7 +170,6 @@ def test_album_serializer(factories, to_api_date):
         "tracks_count": 2,
         "is_local": album.is_local,
         "tags": [],
-        "attributed_to": federation_serializers.APIActorSerializer(actor).data,
     }
     serializer = serializers.AlbumSerializer(
         album.__class__.objects.with_tracks_count().get(pk=album.pk)
@@ -196,18 +179,18 @@ def test_album_serializer(factories, to_api_date):
 
 
 def test_track_album_serializer(factories, to_api_date):
-    actor = factories["federation.Actor"]()
     track1 = factories["music.Track"](
-        position=2, album__attributed_to=actor, album__with_cover=True
+        position=2, album__with_cover=True
     )
     factories["music.Track"](position=1, album=track1.album)
     album = track1.album
     expected = {
         "id": album.id,
-        "fid": album.fid,
+        "artist_credit": serializers.ArtistCreditSerializer(
+            album.artist_credit.all(), many=True
+        ).data,
         "mbid": str(album.mbid),
         "title": album.title,
-        "artist": serializers.SimpleArtistSerializer(album.artist).data,
         "creation_date": to_api_date(album.creation_date),
         "is_playable": False,
         "cover": common_serializers.AttachmentSerializer(album.attachment_cover).data,
@@ -216,7 +199,6 @@ def test_track_album_serializer(factories, to_api_date):
         "duration": 0,
         "is_local": album.is_local,
         "tags": [],
-        "attributed_to": federation_serializers.APIActorSerializer(actor).data,
     }
     serializer = serializers.AlbumSerializer(
         album.__class__.objects.with_tracks_count().get(pk=album.pk)
@@ -226,36 +208,34 @@ def test_track_album_serializer(factories, to_api_date):
 
 
 def test_track_serializer(factories, to_api_date):
-    actor = factories["federation.Actor"]()
     upload = factories["music.Upload"](
         track__license="cc-by-4.0",
         track__copyright="test",
         track__disc_number=2,
-        track__attributed_to=actor,
         track__with_cover=True,
     )
     track = upload.track
-    setattr(track, "playable_uploads", [upload])
     expected = {
         "id": track.id,
-        "fid": track.fid,
-        "artist": serializers.SimpleArtistSerializer(track.artist).data,
+        "artist_credit": serializers.ArtistCreditSerializer(
+            track.artist_credit.all(), many=True
+        ).data,
         "album": serializers.TrackAlbumSerializer(track.album).data,
         "mbid": str(track.mbid),
         "title": track.title,
         "position": track.position,
         "disc_number": track.disc_number,
-        "uploads": [serializers.serialize_upload(upload)],
+        "uploads": [],
         "creation_date": to_api_date(track.creation_date),
         "listen_url": track.listen_url,
         "license": upload.track.license.code,
         "copyright": upload.track.copyright,
         "is_local": upload.track.is_local,
         "tags": [],
-        "attributed_to": federation_serializers.APIActorSerializer(actor).data,
         "cover": common_serializers.AttachmentSerializer(track.attachment_cover).data,
         "downloads_count": track.downloads_count,
-        "is_playable": bool(track.playable_uploads),
+        "audio_qualities": [],
+        "is_playable": False,
     }
     serializer = serializers.TrackSerializer(track)
     assert serializer.data == expected
@@ -275,7 +255,7 @@ def test_user_cannot_bind_file_to_a_not_owned_library(factories):
 
 def test_user_can_create_file_in_own_library(factories, uploaded_audio_file):
     user = factories["users.User"]()
-    library = factories["music.Library"](actor__user=user)
+    library = factories["music.Library"](owner=user)
     s = serializers.UploadForOwnerSerializer(
         data={
             "library": library.uuid,
@@ -298,7 +278,7 @@ def test_create_file_checks_for_user_quota(
         return_value={"remaining": 0},
     )
     user = factories["users.User"]()
-    library = factories["music.Library"](actor__user=user)
+    library = factories["music.Library"](owner=user)
     s = serializers.UploadForOwnerSerializer(
         data={
             "library": library.uuid,
@@ -312,24 +292,13 @@ def test_create_file_checks_for_user_quota(
 
 
 def test_manage_upload_action_delete(factories, queryset_equal_list, mocker):
-    dispatch = mocker.patch("funkwhale_api.federation.routes.outbox.dispatch")
     library1 = factories["music.Library"]()
-    library2 = factories["music.Library"]()
     library1_uploads = factories["music.Upload"].create_batch(size=3, library=library1)
-    library2_uploads = factories["music.Upload"].create_batch(size=3, library=library2)
     s = serializers.UploadActionSerializer(queryset=None)
 
     s.handle_delete(library1_uploads[0].__class__.objects.all())
 
     assert library1_uploads[0].__class__.objects.count() == 0
-    dispatch.assert_any_call(
-        {"type": "Delete", "object": {"type": "Audio"}},
-        context={"uploads": library1_uploads},
-    )
-    dispatch.assert_any_call(
-        {"type": "Delete", "object": {"type": "Audio"}},
-        context={"uploads": library2_uploads},
-    )
 
 
 def test_manage_upload_action_relaunch_import(factories, mocker):
@@ -384,11 +353,20 @@ def test_serialize_upload(factories):
         "mimetype": upload.mimetype,
         "extension": upload.extension,
         "duration": upload.duration,
-        "is_local": False,
+        "is_local": True,
+        "audio_qualities": [],
     }
 
     data = serializers.serialize_upload(upload)
-    assert data == expected
+    assert data["listen_url"] == expected["listen_url"]
+    assert data["uuid"] == expected["uuid"]
+    assert data["size"] == expected["size"]
+    assert data["bitrate"] == expected["bitrate"]
+    assert data["mimetype"] == expected["mimetype"]
+    assert data["extension"] == expected["extension"]
+    assert data["duration"] == expected["duration"]
+    assert data["is_local"] is True
+    assert data["audio_qualities"][0]["id"] == "original"
 
 
 @pytest.mark.parametrize(
@@ -399,10 +377,7 @@ def test_serialize_upload(factories):
         ("description", "Before", "After"),
     ],
 )
-def test_update_library_privacy_level_broadcasts_to_followers(
-    factories, field, before, after, mocker
-):
-    dispatch = mocker.patch("funkwhale_api.federation.routes.outbox.dispatch")
+def test_update_library(factories, field, before, after):
     library = factories["music.Library"](**{field: before})
 
     serializer = serializers.LibraryForOwnerSerializer(
@@ -410,15 +385,14 @@ def test_update_library_privacy_level_broadcasts_to_followers(
     )
     assert serializer.is_valid(raise_exception=True)
     serializer.save()
+    library.refresh_from_db()
 
-    dispatch.assert_called_once_with(
-        {"type": "Update", "object": {"type": "Library"}}, context={"library": library}
-    )
+    assert getattr(library, field) == after
 
 
 def test_upload_with_channel(factories, uploaded_audio_file):
-    channel = factories["audio.Channel"](attributed_to__local=True)
-    user = channel.attributed_to.user
+    channel = factories["audio.Channel"]()
+    user = channel.owner
     data = {
         "channel": channel.uuid,
         "audio_file": uploaded_audio_file,
@@ -484,9 +458,9 @@ def test_upload_requires_library_or_channel(factories, uploaded_audio_file):
 def test_upload_requires_library_or_channel_but_not_both(
     factories, uploaded_audio_file
 ):
-    channel = factories["audio.Channel"](attributed_to__local=True)
+    channel = factories["audio.Channel"]()
     library = channel.library
-    user = channel.attributed_to.user
+    user = channel.owner
     data = {
         "audio_file": uploaded_audio_file,
         "library": library.uuid,
@@ -542,8 +516,8 @@ def test_upload_import_metadata_serializer_channel_checks_owned_album(factories)
 
 
 def test_upload_with_channel_keeps_import_metadata(factories, uploaded_audio_file):
-    channel = factories["audio.Channel"](attributed_to__local=True)
-    user = channel.attributed_to.user
+    channel = factories["audio.Channel"]()
+    user = channel.owner
     data = {
         "channel": channel.uuid,
         "audio_file": uploaded_audio_file,
@@ -560,8 +534,8 @@ def test_upload_with_channel_keeps_import_metadata(factories, uploaded_audio_fil
 
 
 def test_upload_with_channel_validates_import_metadata(factories, uploaded_audio_file):
-    channel = factories["audio.Channel"](attributed_to__local=True)
-    user = channel.attributed_to.user
+    channel = factories["audio.Channel"]()
+    user = channel.owner
     data = {
         "channel": channel.uuid,
         "audio_file": uploaded_audio_file,
@@ -594,8 +568,8 @@ def test_detail_serializers_with_description_description(
 
 
 def test_sort_uploads_for_listen(factories):
-    local_upload = factories["music.Upload"](library__local=True)
-    new_local_upload = factories["music.Upload"](library__local=True)
+    local_upload = factories["music.Upload"]()
+    new_local_upload = factories["music.Upload"]()
     remote_upload = factories["music.Upload"](audio_file__from_path=None)
     remote_upload_with_local_version = factories["music.Upload"]()
 

@@ -83,7 +83,6 @@ class UserFactory(factory.django.DjangoModelFactory):
     username = factory.Faker("user_name")
     email = factory.Faker("email")
     password = password = PasswordSetter("set_password", "test")
-    subsonic_api_token = None
     groups = ManyToManyFromList("groups")
     avatar = factory.django.ImageField()
 
@@ -109,14 +108,6 @@ class UserFactory(factory.django.DjangoModelFactory):
             ]
             # A list of permissions were passed in, use them
             self.user_permissions.add(*perms)
-
-    @factory.post_generation
-    def with_actor(self, create, extracted, **kwargs):
-        if not create or not extracted:
-            return
-        self.actor = models.create_actor(self)
-        self.save(update_fields=["actor"])
-        return self.actor
 
     @factory.post_generation
     def verified_email(self, create, extracted, **kwargs):

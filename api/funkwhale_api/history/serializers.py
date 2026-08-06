@@ -2,13 +2,11 @@ import datetime
 
 from django.db import IntegrityError, transaction
 from django.utils import timezone
-from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from funkwhale_api.activity import serializers as activity_serializers
 from funkwhale_api.client_data.models import ClientDevice
 from funkwhale_api.common.serializers import raise_coded_validation_error
-from funkwhale_api.federation import serializers as federation_serializers
 from funkwhale_api.music.serializers import TrackActivitySerializer, TrackSerializer
 from funkwhale_api.users.serializers import UserActivitySerializer, UserBasicSerializer
 
@@ -86,11 +84,8 @@ class ListeningSerializer(serializers.ModelSerializer):
 
         return super().create(validated_data)
 
-    @extend_schema_field(federation_serializers.APIActorSerializer)
     def get_actor(self, obj):
-        actor = obj.user.actor
-        if actor:
-            return federation_serializers.APIActorSerializer(actor).data
+        return UserBasicSerializer(obj.user).data
 
     def get_source_device(self, obj):
         if obj.source_device_id is None:
@@ -170,9 +165,8 @@ class ListeningWriteSerializer(serializers.ModelSerializer):
             )
 
     def _merge_existing_session(self, user, session_id, validated_data):
-        existing = (
-            models.Listening.objects.select_for_update()
-            .get(user=user, client_session_id=session_id)
+        existing = models.Listening.objects.select_for_update().get(
+            user=user, client_session_id=session_id
         )
         incoming = validated_data.get("duration_seconds")
         update_fields = []
@@ -198,9 +192,12 @@ class ListeningWriteSerializer(serializers.ModelSerializer):
         creation_date = validated_data.get("creation_date")
 
         # Session already known: skip insert age gate and merge (recovery path).
-        if session_id and models.Listening.objects.filter(
-            user=user, client_session_id=session_id
-        ).exists():
+        if (
+            session_id
+            and models.Listening.objects.filter(
+                user=user, client_session_id=session_id
+            ).exists()
+        ):
             with transaction.atomic():
                 return self._merge_existing_session(user, session_id, validated_data)
 
@@ -285,10 +282,7 @@ class ListeningUpdateSerializer(serializers.ModelSerializer):
         """
         user = self.context["user"]
         with transaction.atomic():
-            locked = (
-                models.Listening.objects.select_for_update()
-                .get(pk=instance.pk)
-            )
+            locked = models.Listening.objects.select_for_update().get(pk=instance.pk)
             update_fields = []
 
             if "duration_seconds" in validated_data:
@@ -334,6 +328,7 @@ class ListeningUpdateResponseSerializer(serializers.Serializer):
     source_device = serializers.UUIDField(allow_null=True)
     client_session_id = serializers.UUIDField(allow_null=True)
     updated_at = serializers.DateTimeField()
+
 
 class ListeningBulkItemSerializer(serializers.Serializer):
     track = serializers.IntegerField()

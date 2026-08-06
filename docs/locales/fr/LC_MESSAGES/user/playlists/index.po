@@ -31,12 +31,3 @@ msgstr "Gérer le contenu des listes de lecture"
 #: ../../user_documentation/playlists/index.md:1
 msgid "Playlists"
 msgstr "Listes de lecture"
-
-#: ../../user_documentation/playlists/index.md:3
-msgid ""
-"You can create and share playlists with the {term}`Fediverse`. Add "
-"content from all over the network to build playlists you love."
-msgstr ""
-"Vous pouvez créer et partager des listes de lecture avec le {term}`Fediverse`"
-". Ajoutez du contenu depuis tout le réseau pour créer les listes de lecture "
-"que vous aimez."

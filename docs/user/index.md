@@ -12,7 +12,7 @@ Some {term}`Funkwhale pods <Pod>` allow you to listen to music without signing u
 
 ## Publish your content on Funkwhale
 
-Got a podcast you want to share with the world? Working on a new album? Funkwhale gives you the tools you need to share your creativity with the {term}`Fediverse`. Publish your work in [Channels](channels/index.md) to start building up your following.
+Got a podcast you want to share with the world? Working on a new album? Funkwhale gives you the tools you need to publish your own content. Publish your work in [Channels](channels/index.md) to start building up your following.
 
 ## Upload your collection to Funkwhale
 
@@ -29,10 +29,6 @@ Want to listen to something new or enjoy an old favorite? Follow the guides in t
 ## Report content and users
 
 If you've come across something that doesn't abide by a pod's rules or the law, you can report it. Follow the guides in the [Reporting](reports/index.md) section to see how.
-
-## Access Funkwhale from other apps
-
-Funkwhale supports a subset of the Subsonic API. This means you can play your Funkwhale content on Subsonic apps. Learn more about how to do this in the [Subsonic](subsonic/index.md) section.
 
 ## Enhance your experience with plugins
 

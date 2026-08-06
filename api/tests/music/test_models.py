@@ -1,12 +1,10 @@
 import os
 
 import pytest
-from django.urls import reverse
 from django.utils import timezone
 
 from funkwhale_api.common import utils as common_utils
-from funkwhale_api.federation import utils as federation_utils
-from funkwhale_api.music import importers, models, tasks
+from funkwhale_api.music import importers, models
 
 DATA_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -247,9 +245,10 @@ def test_track_get_file_size(factories):
     assert upload.get_file_size() == 297745
 
 
-def test_track_get_file_size_in_place(factories):
+def test_track_get_file_size_in_place(factories, settings):
     name = "test.mp3"
     path = os.path.join(DATA_DIR, name)
+    settings.MUSIC_DIRECTORY_PATH = DATA_DIR
     upload = factories["music.Upload"](in_place=True, source=f"file://{path}")
 
     assert upload.get_file_size() == 297745
@@ -257,14 +256,14 @@ def test_track_get_file_size_in_place(factories):
 
 def test_library(factories):
     now = timezone.now()
-    actor = factories["federation.Actor"]()
     library = factories["music.Library"](
-        name="Hello world", description="hello", actor=actor, privacy_level="instance"
+        name="Hello world", description="hello", privacy_level="instance"
     )
 
     assert library.creation_date >= now
     assert library.uploads.count() == 0
     assert library.uuid is not None
+    assert library.owner is not None
 
 
 @pytest.mark.parametrize(
@@ -273,7 +272,7 @@ def test_library(factories):
 )
 def test_playable_by_correct_status(status, expected, factories):
     upload = factories["music.Upload"](
-        library__privacy_level="everyone", import_status=status, library__local=True
+        library__privacy_level="everyone", import_status=status
     )
     queryset = upload.library.uploads.playable_by(None)
     match = upload in list(queryset)
@@ -283,13 +282,12 @@ def test_playable_by_correct_status(status, expected, factories):
 @pytest.mark.parametrize(
     "privacy_level,expected", [("me", True), ("instance", True), ("everyone", True)]
 )
-def test_playable_by_correct_actor(privacy_level, expected, factories):
+def test_playable_by_owner(privacy_level, expected, factories):
     upload = factories["music.Upload"](
         library__privacy_level=privacy_level,
         import_status="finished",
-        library__local=True,
     )
-    queryset = upload.library.uploads.playable_by(upload.library.actor)
+    queryset = upload.library.uploads.playable_by(upload.library.owner)
     match = upload in list(queryset)
     assert match is expected
 
@@ -297,14 +295,13 @@ def test_playable_by_correct_actor(privacy_level, expected, factories):
 @pytest.mark.parametrize(
     "privacy_level,expected", [("me", False), ("instance", True), ("everyone", True)]
 )
-def test_playable_by_instance_actor(privacy_level, expected, factories):
+def test_playable_by_other_user(privacy_level, expected, factories):
     upload = factories["music.Upload"](
         library__privacy_level=privacy_level,
         import_status="finished",
-        library__local=True,
     )
-    instance_actor = factories["federation.Actor"](domain=upload.library.actor.domain)
-    queryset = upload.library.uploads.playable_by(instance_actor)
+    other_user = factories["users.User"]()
+    queryset = upload.library.uploads.playable_by(other_user)
     match = upload in list(queryset)
     assert match is expected
 
@@ -316,7 +313,6 @@ def test_playable_by_anonymous(privacy_level, expected, factories):
     upload = factories["music.Upload"](
         library__privacy_level=privacy_level,
         import_status="finished",
-        library__local=True,
     )
     queryset = upload.library.uploads.playable_by(None)
     match = upload in list(queryset)
@@ -324,15 +320,18 @@ def test_playable_by_anonymous(privacy_level, expected, factories):
 
 
 @pytest.mark.parametrize("approved", [True, False])
-def test_playable_by_follower(approved, factories):
+def test_playable_by_subscriber(approved, factories):
     upload = factories["music.Upload"](
-        library__privacy_level="me", import_status="finished", library__local=True
+        library__privacy_level="me", import_status="finished"
     )
-    actor = factories["federation.Actor"](local=True)
-    factories["federation.LibraryFollow"](
-        target=upload.library, actor=actor, approved=approved
+    channel = factories["audio.Channel"](
+        library=upload.library, owner=upload.library.owner
     )
-    queryset = upload.library.uploads.playable_by(actor)
+    user = factories["users.User"]()
+    factories["audio.Subscription"](
+        channel=channel, user=user, approved=approved
+    )
+    queryset = upload.library.uploads.playable_by(user)
     match = upload in list(queryset)
     expected = approved
     assert match is expected
@@ -341,34 +340,33 @@ def test_playable_by_follower(approved, factories):
 @pytest.mark.parametrize(
     "privacy_level,expected", [("me", True), ("instance", True), ("everyone", True)]
 )
-def test_track_playable_by_correct_actor(privacy_level, expected, factories):
-    upload = factories["music.Upload"](import_status="finished", library__local=True)
+def test_track_playable_by_owner(privacy_level, expected, factories):
+    upload = factories["music.Upload"](import_status="finished")
     queryset = models.Track.objects.playable_by(
-        upload.library.actor
-    ).annotate_playable_by_actor(upload.library.actor)
+        upload.library.owner
+    ).annotate_playable_by_user(upload.library.owner)
     match = upload.track in list(queryset)
     assert match is expected
     if expected:
-        assert bool(queryset.first().is_playable_by_actor) is expected
+        assert bool(queryset.first().is_playable_by_user) is expected
 
 
 @pytest.mark.parametrize(
     "privacy_level,expected", [("me", False), ("instance", True), ("everyone", True)]
 )
-def test_track_playable_by_instance_actor(privacy_level, expected, factories):
+def test_track_playable_by_other_user(privacy_level, expected, factories):
     upload = factories["music.Upload"](
         library__privacy_level=privacy_level,
         import_status="finished",
-        library__local=True,
     )
-    instance_actor = factories["federation.Actor"](domain=upload.library.actor.domain)
+    other_user = factories["users.User"]()
     queryset = models.Track.objects.playable_by(
-        instance_actor
-    ).annotate_playable_by_actor(instance_actor)
+        other_user
+    ).annotate_playable_by_user(other_user)
     match = upload.track in list(queryset)
     assert match is expected
     if expected:
-        assert bool(queryset.first().is_playable_by_actor) is expected
+        assert bool(queryset.first().is_playable_by_user) is expected
 
 
 @pytest.mark.parametrize(
@@ -378,47 +376,45 @@ def test_track_playable_by_anonymous(privacy_level, expected, factories):
     upload = factories["music.Upload"](
         library__privacy_level=privacy_level,
         import_status="finished",
-        library__local=True,
     )
-    queryset = models.Track.objects.playable_by(None).annotate_playable_by_actor(None)
+    queryset = models.Track.objects.playable_by(None).annotate_playable_by_user(None)
     match = upload.track in list(queryset)
     assert match is expected
     if expected:
-        assert bool(queryset.first().is_playable_by_actor) is expected
+        assert bool(queryset.first().is_playable_by_user) is expected
 
 
 @pytest.mark.parametrize(
     "privacy_level,expected", [("me", True), ("instance", True), ("everyone", True)]
 )
-def test_album_playable_by_correct_actor(privacy_level, expected, factories):
-    upload = factories["music.Upload"](import_status="finished", library__local=True)
+def test_album_playable_by_owner(privacy_level, expected, factories):
+    upload = factories["music.Upload"](import_status="finished")
 
     queryset = models.Album.objects.playable_by(
-        upload.library.actor
-    ).annotate_playable_by_actor(upload.library.actor)
+        upload.library.owner
+    ).annotate_playable_by_user(upload.library.owner)
     match = upload.track.album in list(queryset)
     assert match is expected
     if expected:
-        assert bool(queryset.first().is_playable_by_actor) is expected
+        assert bool(queryset.first().is_playable_by_user) is expected
 
 
 @pytest.mark.parametrize(
     "privacy_level,expected", [("me", False), ("instance", True), ("everyone", True)]
 )
-def test_album_playable_by_instance_actor(privacy_level, expected, factories):
+def test_album_playable_by_other_user(privacy_level, expected, factories):
     upload = factories["music.Upload"](
         library__privacy_level=privacy_level,
         import_status="finished",
-        library__local=True,
     )
-    instance_actor = factories["federation.Actor"](domain=upload.library.actor.domain)
+    other_user = factories["users.User"]()
     queryset = models.Album.objects.playable_by(
-        instance_actor
-    ).annotate_playable_by_actor(instance_actor)
+        other_user
+    ).annotate_playable_by_user(other_user)
     match = upload.track.album in list(queryset)
     assert match is expected
     if expected:
-        assert bool(queryset.first().is_playable_by_actor) is expected
+        assert bool(queryset.first().is_playable_by_user) is expected
 
 
 @pytest.mark.parametrize(
@@ -428,51 +424,48 @@ def test_album_playable_by_anonymous(privacy_level, expected, factories):
     upload = factories["music.Upload"](
         library__privacy_level=privacy_level,
         import_status="finished",
-        library__local=True,
     )
-    queryset = models.Album.objects.playable_by(None).annotate_playable_by_actor(None)
+    queryset = models.Album.objects.playable_by(None).annotate_playable_by_user(None)
     match = upload.track.album in list(queryset)
     assert match is expected
     if expected:
-        assert bool(queryset.first().is_playable_by_actor) is expected
+        assert bool(queryset.first().is_playable_by_user) is expected
 
 
 @pytest.mark.parametrize(
     "privacy_level,expected", [("me", True), ("instance", True), ("everyone", True)]
 )
-def test_artist_playable_by_correct_actor(privacy_level, expected, factories):
+def test_artist_playable_by_owner(privacy_level, expected, factories):
     upload = factories["music.Upload"](
         library__privacy_level=privacy_level,
         import_status="finished",
-        library__local=True,
     )
 
     queryset = models.Artist.objects.playable_by(
-        upload.library.actor
-    ).annotate_playable_by_actor(upload.library.actor)
+        upload.library.owner
+    ).annotate_playable_by_user(upload.library.owner)
     match = upload.track.artist in list(queryset)
     assert match is expected
     if expected:
-        assert bool(queryset.first().is_playable_by_actor) is expected
+        assert bool(queryset.first().is_playable_by_user) is expected
 
 
 @pytest.mark.parametrize(
     "privacy_level,expected", [("me", False), ("instance", True), ("everyone", True)]
 )
-def test_artist_playable_by_instance_actor(privacy_level, expected, factories):
+def test_artist_playable_by_other_user(privacy_level, expected, factories):
     upload = factories["music.Upload"](
         library__privacy_level=privacy_level,
         import_status="finished",
-        library__local=True,
     )
-    instance_actor = factories["federation.Actor"](domain=upload.library.actor.domain)
+    other_user = factories["users.User"]()
     queryset = models.Artist.objects.playable_by(
-        instance_actor
-    ).annotate_playable_by_actor(instance_actor)
+        other_user
+    ).annotate_playable_by_user(other_user)
     match = upload.track.artist in list(queryset)
     assert match is expected
     if expected:
-        assert bool(queryset.first().is_playable_by_actor) is expected
+        assert bool(queryset.first().is_playable_by_user) is expected
 
 
 @pytest.mark.parametrize(
@@ -482,13 +475,12 @@ def test_artist_playable_by_anonymous(privacy_level, expected, factories):
     upload = factories["music.Upload"](
         library__privacy_level=privacy_level,
         import_status="finished",
-        library__local=True,
     )
-    queryset = models.Artist.objects.playable_by(None).annotate_playable_by_actor(None)
+    queryset = models.Artist.objects.playable_by(None).annotate_playable_by_user(None)
     match = upload.track.artist in list(queryset)
     assert match is expected
     if expected:
-        assert bool(queryset.first().is_playable_by_actor) is expected
+        assert bool(queryset.first().is_playable_by_user) is expected
 
 
 def test_upload_listen_url(factories):
@@ -505,32 +497,30 @@ def test_upload_listen_url_no_download(factories):
     assert upload.listen_url_no_download == expected
 
 
-def test_library_schedule_scan(factories, now, mocker):
-    on_commit = mocker.patch("funkwhale_api.common.utils.on_commit")
+def test_library_schedule_scan(factories, now):
     library = factories["music.Library"](uploads_count=5)
 
-    scan = library.schedule_scan(library.actor)
+    scan = library.schedule_scan(library.owner)
 
     assert scan.creation_date >= now
     assert scan.status == "pending"
     assert scan.library == library
-    assert scan.actor == library.actor
+    assert scan.submitted_by == library.owner
     assert scan.total_files == 5
     assert scan.processed_files == 0
     assert scan.errored_files == 0
     assert scan.modification_date is None
 
-    on_commit.assert_called_once_with(
-        tasks.start_library_scan.delay, library_scan_id=scan.pk
-    )
-
 
 def test_library_schedule_scan_too_recent(factories, now):
-    scan = factories["music.LibraryScan"]()
-    result = scan.library.schedule_scan(scan.library.actor)
+    library = factories["music.Library"]()
+    models.LibraryScan.objects.create(
+        library=library, submitted_by=library.owner, status="finished"
+    )
+    result = library.schedule_scan(library.owner)
 
     assert result is None
-    assert scan.library.scans.count() == 1
+    assert library.scans.count() == 1
 
 
 def test_get_audio_data(factories):
@@ -539,40 +529,6 @@ def test_get_audio_data(factories):
     result = upload.get_audio_data()
 
     assert result == {"duration": 1, "bitrate": 112000, "size": 15918}
-
-
-def test_library_queryset_with_follows(factories):
-    library1 = factories["music.Library"]()
-    library2 = factories["music.Library"]()
-    follow = factories["federation.LibraryFollow"](target=library2)
-    qs = library1.__class__.objects.with_follows(follow.actor).order_by("pk")
-
-    l1 = list(qs)[0]
-    l2 = list(qs)[1]
-    assert l1._follows == []
-    assert l2._follows == [follow]
-
-
-@pytest.mark.parametrize(
-    "model,factory_args,namespace",
-    [
-        (
-            "music.Upload",
-            {"library__actor__local": True},
-            "federation:music:uploads-detail",
-        ),
-        ("music.Library", {"actor__local": True}, "federation:music:libraries-detail"),
-        ("music.Artist", {}, "federation:music:artists-detail"),
-        ("music.Album", {}, "federation:music:albums-detail"),
-        ("music.Track", {}, "federation:music:tracks-detail"),
-    ],
-)
-def test_fid_is_populated(factories, model, factory_args, namespace):
-    instance = factories[model](**factory_args, fid=None)
-
-    assert instance.fid == federation_utils.full_url(
-        reverse(namespace, kwargs={"uuid": instance.uuid})
-    )
 
 
 @pytest.mark.parametrize(
@@ -586,7 +542,8 @@ def test_fid_is_populated(factories, model, factory_args, namespace):
         ({"audio_file__filename": "test.None", "mimetype": "audio/x-flac"}, "flac"),
     ],
 )
-def test_upload_extension(factory_args, factories, expected):
+def test_upload_extension(factory_args, factories, expected, settings):
+    settings.MUSIC_DIRECTORY_PATH = "/"
     upload = factories["music.Upload"].build(**factory_args)
 
     assert upload.extension == expected
@@ -614,45 +571,13 @@ def test_track_order_for_album(factories):
     assert list(models.Track.objects.order_for_album()) == [t1, t3, t2, t4]
 
 
-@pytest.mark.parametrize("factory", ["music.Artist", "music.Album", "music.Track"])
-def test_queryset_local_entities(factories, settings, factory):
-    settings.FEDERATION_HOSTNAME = "test.com"
-    obj1 = factories[factory](fid="http://test.com/1")
-    obj2 = factories[factory](fid="https://test.com/2")
-    factories[factory](fid="https://test.coma/3")
-    factories[factory](fid="https://noope/3")
-
-    assert list(obj1.__class__.objects.local().order_by("id")) == [obj1, obj2]
-
-
-@pytest.mark.parametrize(
-    "federation_hostname, fid, expected",
-    [
-        ("test.domain", "http://test.domain/", True),
-        ("test.domain", None, True),
-        ("test.domain", "https://test.domain/", True),
-        ("test.otherdomain", "http://test.domain/", False),
-    ],
-)
-def test_api_model_mixin_is_local(federation_hostname, fid, expected, settings):
-    settings.FEDERATION_HOSTNAME = federation_hostname
-    obj = models.Track(fid=fid)
-    assert obj.is_local is expected
-
-
-def test_api_model_mixin_domain_name():
-    obj = models.Track(fid="https://test.domain:543/something")
-
-    assert obj.domain_name == "test.domain"
-
-
 @pytest.mark.parametrize(
     "initial, updated, expected",
     [
         ({"name": "hello"}, {"name": "world"}, False),
-        ({"privacy_level": "internal"}, {"name": "world"}, False),
-        ({"privacy_level": "internal"}, {"privacy_level": "me"}, True),
-        ({"privacy_level": "internal"}, {"privacy_level": "internal"}, False),
+        ({"privacy_level": "instance"}, {"name": "world"}, False),
+        ({"privacy_level": "instance"}, {"privacy_level": "me"}, True),
+        ({"privacy_level": "instance"}, {"privacy_level": "instance"}, False),
     ],
 )
 def test_saving_library_sets_privacy_level_updated_flag(
@@ -688,38 +613,38 @@ def test_saving_library_with_privacy_level_updated_flag(
         (
             "me",
             "everyone",
-            {"owner": [0], "follower": [0], "local_actor": [], None: []},
-            {"owner": [0], "follower": [0], "local_actor": [0], None: [0]},
+            {"owner": [0], "subscriber": [0], "other_user": [], None: []},
+            {"owner": [0], "subscriber": [0], "other_user": [0], None: [0]},
         ),
         (
             "me",
             "instance",
-            {"owner": [0], "follower": [0], "local_actor": [], None: []},
-            {"owner": [0], "follower": [0], "local_actor": [0], None: []},
+            {"owner": [0], "subscriber": [0], "other_user": [], None: []},
+            {"owner": [0], "subscriber": [0], "other_user": [0], None: []},
         ),
         (
             "instance",
             "me",
-            {"owner": [0], "follower": [0], "local_actor": [0], None: []},
-            {"owner": [0], "follower": [0], "local_actor": [], None: []},
+            {"owner": [0], "subscriber": [0], "other_user": [0], None: []},
+            {"owner": [0], "subscriber": [0], "other_user": [], None: []},
         ),
         (
             "instance",
             "everyone",
-            {"owner": [0], "follower": [0], "local_actor": [0], None: []},
-            {"owner": [0], "follower": [0], "local_actor": [0], None: [0]},
+            {"owner": [0], "subscriber": [0], "other_user": [0], None: []},
+            {"owner": [0], "subscriber": [0], "other_user": [0], None: [0]},
         ),
         (
             "everyone",
             "me",
-            {"owner": [0], "follower": [0], "local_actor": [0], None: [0]},
-            {"owner": [0], "follower": [0], "local_actor": [], None: []},
+            {"owner": [0], "subscriber": [0], "other_user": [0], None: [0]},
+            {"owner": [0], "subscriber": [0], "other_user": [], None: []},
         ),
         (
             "everyone",
             "instance",
-            {"owner": [0], "follower": [0], "local_actor": [0], None: [0]},
-            {"owner": [0], "follower": [0], "local_actor": [0], None: []},
+            {"owner": [0], "subscriber": [0], "other_user": [0], None: [0]},
+            {"owner": [0], "subscriber": [0], "other_user": [0], None: []},
         ),
     ],
 )
@@ -730,17 +655,18 @@ def test_update_library_privacy_level_create_entries(
     updated_playable_tracks,
     factories,
 ):
-    actors = {
-        "owner": factories["federation.Actor"](local=True),
-        "follower": factories["federation.Actor"](local=True),
-        "local_actor": factories["federation.Actor"](local=True),
+    users = {
+        "owner": factories["users.User"](),
+        "subscriber": factories["users.User"](),
+        "other_user": factories["users.User"](),
         None: None,
     }
     library = factories["music.Library"](
-        actor=actors["owner"], privacy_level=initial_privacy_level
+        owner=users["owner"], privacy_level=initial_privacy_level
     )
-    factories["federation.LibraryFollow"](
-        target=library, actor=actors["follower"], approved=True
+    channel = factories["audio.Channel"](library=library, owner=users["owner"])
+    factories["audio.Subscription"](
+        channel=channel, user=users["subscriber"], approved=True
     )
 
     tracks = [
@@ -748,16 +674,16 @@ def test_update_library_privacy_level_create_entries(
         factories["music.Upload"](library=library, import_status="pending").track,
     ]
 
-    for actor_name, expected in initial_playable_tracks.items():
-        actor = actors[actor_name]
+    for user_name, expected in initial_playable_tracks.items():
+        user = users[user_name]
         expected_tracks = [tracks[i] for i in expected]
-        assert list(models.Track.objects.playable_by(actor)) == expected_tracks
+        assert list(models.Track.objects.playable_by(user)) == expected_tracks
 
     library.privacy_level = updated_privacy_level
 
     models.TrackActor.create_entries(library)
 
-    for actor_name, expected in updated_playable_tracks.items():
-        actor = actors[actor_name]
+    for user_name, expected in updated_playable_tracks.items():
+        user = users[user_name]
         expected_tracks = [tracks[i] for i in expected]
-        assert list(models.Track.objects.playable_by(actor)) == expected_tracks
+        assert list(models.Track.objects.playable_by(user)) == expected_tracks

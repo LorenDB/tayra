@@ -1,12 +1,12 @@
 import pytest
 from django.urls import reverse
 
-from funkwhale_api.audio import categories, renderers, serializers, views
+from funkwhale_api.audio import categories, models, renderers, serializers, views
 from funkwhale_api.common import locales, utils
 
 
 def test_channel_create(logged_in_api_client):
-    actor = logged_in_api_client.user.create_actor()
+    user = logged_in_api_client.user
 
     data = {
         # TODO: cover
@@ -23,31 +23,30 @@ def test_channel_create(logged_in_api_client):
 
     assert response.status_code == 201
 
-    channel = views.ChannelViewSet.queryset.get(attributed_to=actor)
+    channel = views.ChannelViewSet.queryset.get(owner=user)
     expected = serializers.ChannelSerializer(
         channel, context={"subscriptions_count": True}
     ).data
 
     assert response.data == expected
     assert channel.artist.name == data["name"]
-    assert channel.artist.attributed_to == actor
     assert (
         sorted(channel.artist.tagged_items.values_list("tag__name", flat=True))
         == data["tags"]
     )
-    assert channel.attributed_to == actor
+    assert channel.owner == user
     assert channel.artist.description.text == data["description"]["text"]
     assert (
         channel.artist.description.content_type == data["description"]["content_type"]
     )
-    assert channel.actor.preferred_username == data["username"]
+    assert channel.preferred_username == data["username"]
     assert channel.library.privacy_level == "everyone"
-    assert channel.library.actor == actor
+    assert channel.library.owner == user
 
 
 @pytest.mark.parametrize(
     "field",
-    ["uuid", "actor.preferred_username", "actor.full_username"],
+    ["uuid", "preferred_username"],
 )
 def test_channel_detail(field, factories, logged_in_api_client):
     channel = factories["audio.Channel"](
@@ -107,8 +106,8 @@ def test_channel_list_opml(factories, logged_in_api_client, now):
 
 
 def test_channel_update(logged_in_api_client, factories):
-    actor = logged_in_api_client.user.create_actor()
-    channel = factories["audio.Channel"](attributed_to=actor)
+    user = logged_in_api_client.user
+    channel = factories["audio.Channel"](owner=user)
 
     data = {
         # TODO: cover
@@ -126,7 +125,6 @@ def test_channel_update(logged_in_api_client, factories):
 
 
 def test_channel_update_permission(logged_in_api_client, factories):
-    logged_in_api_client.user.create_actor()
     channel = factories["audio.Channel"]()
 
     data = {"name": "new name"}
@@ -137,25 +135,20 @@ def test_channel_update_permission(logged_in_api_client, factories):
     assert response.status_code == 403
 
 
-def test_channel_delete(logged_in_api_client, factories, mocker):
-    actor = logged_in_api_client.user.create_actor()
-    channel = factories["audio.Channel"](attributed_to=actor)
+def test_channel_delete(logged_in_api_client, factories):
+    user = logged_in_api_client.user
+    channel = factories["audio.Channel"](owner=user)
 
     url = reverse("api:v1:channels-detail", kwargs={"composite": channel.uuid})
-    on_commit = mocker.patch("funkwhale_api.common.utils.on_commit")
     response = logged_in_api_client.delete(url)
 
     assert response.status_code == 204
 
-    on_commit.assert_called_once_with(
-        views.federation_tasks.remove_actor.delay, actor_id=channel.actor.pk
-    )
     with pytest.raises(channel.DoesNotExist):
         channel.refresh_from_db()
 
 
 def test_channel_delete_permission(logged_in_api_client, factories):
-    logged_in_api_client.user.create_actor()
     channel = factories["audio.Channel"]()
 
     url = reverse("api:v1:channels-detail", kwargs={"composite": channel.uuid})
@@ -176,7 +169,7 @@ def test_channel_views_disabled_via_feature_flag(
 
 
 def test_channel_subscribe(factories, logged_in_api_client):
-    actor = logged_in_api_client.user.create_actor()
+    user = logged_in_api_client.user
     channel = factories["audio.Channel"](artist__description=None)
     url = reverse("api:v1:channels-subscribe", kwargs={"composite": channel.uuid})
 
@@ -184,22 +177,17 @@ def test_channel_subscribe(factories, logged_in_api_client):
 
     assert response.status_code == 201
 
-    subscription = actor.emitted_follows.select_related(
-        "target__channel__artist__description",
-        "target__channel__artist__attachment_cover",
-    ).latest("id")
-    setattr(subscription.target.channel.artist, "_tracks_count", 0)
-    setattr(subscription.target.channel.artist, "_prefetched_tagged_items", [])
-    assert subscription.fid == subscription.get_federation_id()
+    subscription = models.ChannelSubscription.objects.get(user=user, channel=channel)
+    setattr(subscription.channel.artist, "_tracks_count", 0)
+    setattr(subscription.channel.artist, "_prefetched_tagged_items", [])
     expected = serializers.SubscriptionSerializer(subscription).data
     assert response.data == expected
-    assert subscription.target == channel.actor
 
 
 def test_channel_unsubscribe(factories, logged_in_api_client):
-    actor = logged_in_api_client.user.create_actor()
+    user = logged_in_api_client.user
     channel = factories["audio.Channel"]()
-    subscription = factories["audio.Subscription"](target=channel.actor, actor=actor)
+    subscription = factories["audio.Subscription"](channel=channel, user=user)
     url = reverse("api:v1:channels-unsubscribe", kwargs={"composite": channel.uuid})
 
     response = logged_in_api_client.post(url)
@@ -210,47 +198,15 @@ def test_channel_unsubscribe(factories, logged_in_api_client):
         subscription.refresh_from_db()
 
 
-def test_channel_subscribe_remote(factories, logged_in_api_client, mocker):
-    dispatch = mocker.patch("funkwhale_api.federation.routes.outbox.dispatch")
-    actor = logged_in_api_client.user.create_actor()
-    channel_actor = factories["federation.Actor"]()
-    channel = factories["audio.Channel"](artist__description=None, actor=channel_actor)
-    url = reverse("api:v1:channels-subscribe", kwargs={"composite": channel.uuid})
-
-    response = logged_in_api_client.post(url)
-
-    assert response.status_code == 201
-    subscription = actor.emitted_follows.latest("id")
-    dispatch.assert_called_once_with(
-        {"type": "Follow"}, context={"follow": subscription}
-    )
-
-
-def test_channel_unsubscribe_remote(factories, logged_in_api_client, mocker):
-    dispatch = mocker.patch("funkwhale_api.federation.routes.outbox.dispatch")
-    actor = logged_in_api_client.user.create_actor()
-    channel_actor = factories["federation.Actor"]()
-    channel = factories["audio.Channel"](actor=channel_actor)
-    subscription = factories["audio.Subscription"](target=channel.actor, actor=actor)
-    url = reverse("api:v1:channels-unsubscribe", kwargs={"composite": channel.uuid})
-
-    response = logged_in_api_client.post(url)
-
-    assert response.status_code == 204
-    dispatch.assert_called_once_with(
-        {"type": "Undo", "object": {"type": "Follow"}}, context={"follow": subscription}
-    )
-
-
 def test_subscriptions_list(factories, logged_in_api_client):
-    actor = logged_in_api_client.user.create_actor()
+    user = logged_in_api_client.user
     channel = factories["audio.Channel"](
         artist__description=None, artist__with_cover=True
     )
-    subscription = factories["audio.Subscription"](target=channel.actor, actor=actor)
-    setattr(subscription.target.channel.artist, "_tracks_count", 0)
-    setattr(subscription.target.channel.artist, "_prefetched_tagged_items", [])
-    factories["audio.Subscription"](target=channel.actor)
+    subscription = factories["audio.Subscription"](channel=channel, user=user)
+    setattr(subscription.channel.artist, "_tracks_count", 0)
+    setattr(subscription.channel.artist, "_prefetched_tagged_items", [])
+    factories["audio.Subscription"](channel=channel)
     url = reverse("api:v1:subscriptions-list")
     expected = serializers.SubscriptionSerializer(subscription).data
     response = logged_in_api_client.get(url)
@@ -266,10 +222,10 @@ def test_subscriptions_list(factories, logged_in_api_client):
 
 
 def test_subscriptions_all(factories, logged_in_api_client):
-    actor = logged_in_api_client.user.create_actor()
+    user = logged_in_api_client.user
     channel = factories["audio.Channel"](artist__description=None)
-    subscription = factories["audio.Subscription"](target=channel.actor, actor=actor)
-    factories["audio.Subscription"](target=channel.actor)
+    subscription = factories["audio.Subscription"](channel=channel, user=user)
+    factories["audio.Subscription"](channel=channel)
     url = reverse("api:v1:subscriptions-all")
     response = logged_in_api_client.get(url)
 
@@ -312,17 +268,6 @@ def test_channel_rss_feed_redirects_for_external(factories, api_client, preferen
     assert response["Location"] == channel.rss_url
 
 
-def test_channel_rss_feed_remote(factories, api_client, preferences):
-    preferences["common__api_authentication_required"] = False
-    channel = factories["audio.Channel"]()
-
-    url = reverse("api:v1:channels-rss", kwargs={"composite": channel.uuid})
-
-    response = api_client.get(url)
-
-    assert response.status_code == 404
-
-
 def test_channel_rss_feed_authentication_required(factories, api_client, preferences):
     preferences["common__api_authentication_required"] = True
     channel = factories["audio.Channel"](local=True)
@@ -353,10 +298,8 @@ def test_channel_metadata_choices(factories, api_client):
     assert response.data == expected
 
 
-def test_subscribe_to_rss_feed_existing_channel(
-    factories, logged_in_api_client, mocker
-):
-    actor = logged_in_api_client.user.create_actor()
+def test_subscribe_to_rss_feed_existing_channel(factories, logged_in_api_client):
+    user = logged_in_api_client.user
     rss_url = "http://example.test/rss.url"
     channel = factories["audio.Channel"](rss_url=rss_url, external=True)
     url = reverse("api:v1:channels-rss_subscribe")
@@ -365,41 +308,31 @@ def test_subscribe_to_rss_feed_existing_channel(
 
     assert response.status_code == 201
 
-    subscription = actor.emitted_follows.select_related(
-        "target__channel__artist__description",
-        "target__channel__artist__attachment_cover",
-    ).latest("id")
+    subscription = models.ChannelSubscription.objects.get(user=user, channel=channel)
 
-    assert subscription.target == channel.actor
     assert subscription.approved is True
-    assert subscription.fid == subscription.get_federation_id()
-
-    setattr(subscription.target.channel.artist, "_tracks_count", 0)
-    setattr(subscription.target.channel.artist, "_prefetched_tagged_items", [])
 
     expected = serializers.SubscriptionSerializer(subscription).data
 
     assert response.data == expected
 
 
-def test_subscribe_to_rss_feed_existing_subscription(
-    factories, logged_in_api_client, mocker
-):
-    actor = logged_in_api_client.user.create_actor()
+def test_subscribe_to_rss_feed_existing_subscription(factories, logged_in_api_client):
+    user = logged_in_api_client.user
     rss_url = "http://example.test/rss.url"
     channel = factories["audio.Channel"](rss_url=rss_url, external=True)
-    factories["federation.Follow"](target=channel.actor, approved=True, actor=actor)
+    factories["audio.Subscription"](channel=channel, user=user)
     url = reverse("api:v1:channels-rss_subscribe")
 
     response = logged_in_api_client.post(url, {"url": rss_url})
 
     assert response.status_code == 201
 
-    assert channel.actor.received_follows.count() == 1
+    assert channel.subscriptions.filter(user=user).count() == 1
 
 
 def test_subscribe_to_rss_creates_channel(factories, logged_in_api_client, mocker):
-    logged_in_api_client.user.create_actor()
+    logged_in_api_client.user
     rss_url = "http://example.test/rss.url"
     channel = factories["audio.Channel"]()
     get_channel_from_rss_url = mocker.patch.object(
@@ -434,14 +367,11 @@ def test_refresh_channel_when_param_is_true(
 
 
 def test_can_filter_channels_through_api_scope(factories, logged_in_api_client):
-    channel = factories["audio.Channel"](
-        attributed_to__preferred_username="PauseLecturePod"
-    )
+    user = logged_in_api_client.user
+    channel = factories["audio.Channel"](owner=user)
     factories["audio.Channel"]()
     url = reverse("api:v1:channels-list")
-    response = logged_in_api_client.get(
-        url, {"scope": f"actor:{channel.attributed_to.full_username}"}
-    )
+    response = logged_in_api_client.get(url, {"scope": "me"})
 
     assert response.status_code == 200
     assert len(response.data["results"]) == 1

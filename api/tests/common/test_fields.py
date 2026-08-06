@@ -13,7 +13,8 @@ from funkwhale_api.users.factories import UserFactory
         (
             UserFactory.build(pk=1),
             Q(privacy_level__in=["instance", "everyone"])
-            | Q(privacy_level="me", user=UserFactory.build(pk=1)),
+            | Q(privacy_level="me", user=UserFactory.build(pk=1))
+            | Q(privacy_level="followers", user=UserFactory.build(pk=1)),
         ),
     ],
 )
@@ -71,8 +72,10 @@ def test_generic_relation_field_validation_error(payload, expected_error, factor
 
 def test_generic_relation_filter_target_type(factories):
     user = factories["users.User"]()
-    note = factories["moderation.Note"](target=user)
-    factories["moderation.Note"](target=factories["music.Artist"]())
+    note = factories["common.Mutation"](type="noop", target=user, payload={})
+    factories["common.Mutation"](
+        type="noop", target=factories["music.Artist"](), payload={}
+    )
     f = fields.GenericRelationFilter(
         "target",
         {
@@ -89,8 +92,10 @@ def test_generic_relation_filter_target_type(factories):
 
 def test_generic_relation_filter_target_type_and_id(factories):
     user = factories["users.User"]()
-    note = factories["moderation.Note"](target=user)
-    factories["moderation.Note"](target=factories["users.User"]())
+    note = factories["common.Mutation"](type="noop", target=user, payload={})
+    factories["common.Mutation"](
+        type="noop", target=factories["users.User"](), payload={}
+    )
     f = fields.GenericRelationFilter(
         "target",
         {

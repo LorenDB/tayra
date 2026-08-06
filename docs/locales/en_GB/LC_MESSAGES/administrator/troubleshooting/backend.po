@@ -53,24 +53,12 @@ msgstr "Nginx"
 msgid "Apache2"
 msgstr ""
 
-#: ../../administrator/troubleshooting/backend.md:33
-msgid ""
-"**API logs** – check these if you are having issues with the Funkwhale "
-"app, federation, or imports."
-msgstr ""
-
 #: ../../administrator/troubleshooting/backend.md
 msgid "Debian"
 msgstr ""
 
 #: ../../administrator/troubleshooting/backend.md
 msgid "Docker"
-msgstr ""
-
-#: ../../administrator/troubleshooting/backend.md:56
-msgid ""
-"**Celery logs** – check these if a federation or import task isn't "
-"working."
 msgstr ""
 
 #: ../../administrator/troubleshooting/backend.md:79
@@ -165,43 +153,6 @@ msgstr ""
 
 #: ../../administrator/troubleshooting/backend.md:110
 msgid "Check the Celery logs for errors during the import."
-msgstr ""
-
-#: ../../administrator/troubleshooting/backend.md:112
-msgid "Federation issues"
-msgstr ""
-
-#: ../../administrator/troubleshooting/backend.md:114
-msgid "If you are having issues accessing federated content, try the following:"
-msgstr ""
-
-#: ../../administrator/troubleshooting/backend.md:116
-msgid ""
-"Check that the remote library received your follow request and approved "
-"it."
-msgstr ""
-
-#: ../../administrator/troubleshooting/backend.md:117
-msgid "Trigger a library scan in the Funkwhale frontend."
-msgstr ""
-
-#: ../../administrator/troubleshooting/backend.md:118
-msgid "Check the Celery logs for errors during the scan."
-msgstr ""
-
-#: ../../administrator/troubleshooting/backend.md:120
-msgid "Memory tracing"
-msgstr ""
-
-#: ../../administrator/troubleshooting/backend.md:122
-msgid ""
-"If your Funkwhale server uses more memory than expected, you can check "
-"the footprint of requests. This requires a middleware to check memory "
-"allocation. To set up this middleware:"
-msgstr ""
-
-#: ../../administrator/troubleshooting/backend.md:124
-msgid "Add the middleware to your `.env` file."
 msgstr ""
 
 #: ../../administrator/troubleshooting/backend.md:130

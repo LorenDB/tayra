@@ -84,7 +84,7 @@ API Requires authentication
    Controls whether {term}`unauthenticated users <Anonymous>` can access content on your pod. If __enabled__, users need to have an account on your pod to access content. If __disabled__, users without an account can listen to content stored in public libraries.
 
    ```{seealso}
-   {doc}`../../moderator/content/library`.
+   {doc}`../../user/libraries/index`.
    ```
 
 Default permissions
@@ -94,7 +94,7 @@ Upload quota
    The default upload quota for users in MB. You can override this on a per-user basis.
 
    ```{seealso}
-   {doc}`../../moderator/reports/users`
+   {doc}`../../user/reports/index`
    ```
 
 ````
@@ -136,57 +136,6 @@ Max channels allowed per user
 
 Max tracks per playlist
    The maximum number of tracks a user can add to a playlist.
-
-```
-
----
-
-### Moderation
-
-```{glossary}
-
-Enable allow-listing
-   Enable this setting to ensure your pod only communicates with pods you have added to your allow list. When this setting is disabled, your pod will communicate with all other servers not included in your deny list.
-
-Publish your allowed-domains list
-   Whether to make your list of allowed domains public. Enable this if you want users to check who you are federating with.
-
-Accountless report categories
-   A list of {term}`categories <Report categories>` that {term}`anonymous` users can submit.
-
-```
-
----
-
-### Federation
-
-```{glossary}
-
-Federation enabled
-   Whether to enable federation features on your pod.
-
-Enable public index
-   Whether to allow other pods and bots to index public content on your pod.
-
-Federation collection page size
-   The number of items to display in ActivityPub collections.
-
-Music cache duration
-   The number of minutes you want to store local copies of federated tracks on your server. Funkwhale removes federated tracks that haven't been downloaded within this duration to save space.
-
-Federation actor fetch delay
-   The number of minutes the server waits before refetching actors on request authentication.
-
-```
-
----
-
-### Subsonic
-
-```{glossary}
-
-Enabled Subsonic API
-   Whether to enable the Subsonic API. This controls whether users are able to connect to your pod using Subsonic apps.
 
 ```
 

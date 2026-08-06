@@ -1,12 +1,9 @@
 import os
-from urllib.parse import urlparse
 
 import factory
-from django.conf import settings
 
 from funkwhale_api.common import factories as common_factories
 from funkwhale_api.factories import NoUpdateOnCreate, registry
-from funkwhale_api.federation import factories as federation_factories
 from funkwhale_api.music import licenses
 from funkwhale_api.tags import factories as tags_factories
 from funkwhale_api.users import factories as users_factories
@@ -63,17 +60,12 @@ class ArtistFactory(
 ):
     name = factory.Faker("name")
     mbid = factory.Faker("uuid4")
-    fid = factory.Faker("federation_url")
     playable = playable_factory("track__album__artist_credit__artist")
 
     class Meta:
         model = "music.Artist"
 
     class Params:
-        attributed = factory.Trait(
-            attributed_to=factory.SubFactory(federation_factories.ActorFactory)
-        )
-        local = factory.Trait(fid=factory.Faker("federation_url", local=True))
         with_cover = factory.Trait(
             attachment_cover=factory.SubFactory(common_factories.AttachmentFactory)
         )
@@ -103,20 +95,12 @@ class AlbumFactory(
     mbid = factory.Faker("uuid4")
     release_date = factory.Faker("date_object")
     release_group_id = factory.Faker("uuid4")
-    fid = factory.Faker("federation_url")
     playable = playable_factory("track__album")
 
     class Meta:
         model = "music.Album"
 
     class Params:
-        attributed = factory.Trait(
-            attributed_to=factory.SubFactory(federation_factories.ActorFactory)
-        )
-
-        local = factory.Trait(
-            fid=factory.Faker("federation_url", local=True),
-        )
         with_cover = factory.Trait(
             attachment_cover=factory.SubFactory(common_factories.AttachmentFactory)
         )
@@ -125,19 +109,24 @@ class AlbumFactory(
     def artist_credit(self, create, extracted, **kwargs):
         if not create:
             return
-        if urlparse(self.fid).netloc == settings.FEDERATION_HOSTNAME:
-            kwargs["artist__local"] = True
         if extracted:
             self.artist_credit.add(extracted)
         else:
             self.artist_credit.add(ArtistCreditFactory(**kwargs))
+
+    @factory.post_generation
+    def artist(self, create, extracted, **kwargs):
+        if not create:
+            return
+        if extracted:
+            self.artist_credit.clear()
+            self.artist_credit.add(ArtistCreditFactory(artist=extracted))
 
 
 @registry.register
 class TrackFactory(
     tags_factories.TaggableFactory, NoUpdateOnCreate, factory.django.DjangoModelFactory
 ):
-    fid = factory.Faker("federation_url")
     title = factory.Faker("sentence", nb_words=3)
     mbid = factory.Faker("uuid4")
     album = factory.SubFactory(AlbumFactory)
@@ -148,13 +137,6 @@ class TrackFactory(
         model = "music.Track"
 
     class Params:
-        attributed = factory.Trait(
-            attributed_to=factory.SubFactory(federation_factories.ActorFactory)
-        )
-
-        local = factory.Trait(
-            fid=factory.Faker("federation_url", local=True), album__local=True
-        )
         with_cover = factory.Trait(
             attachment_cover=factory.SubFactory(common_factories.AttachmentFactory)
         )
@@ -186,6 +168,16 @@ class TrackFactory(
         if created:
             self.save()
 
+    @factory.post_generation
+    def artist(self, created, extracted, **kwargs):
+        if not extracted:
+            return
+        self.artist_credit.clear()
+        if created:
+            self.artist_credit.add(ArtistCreditFactory(artist=extracted))
+        else:
+            self.artist_credit.add(ArtistCreditFactory.build(artist=extracted))
+
     # The @factory.post_generation is not used because we must
     # not redefine the builtin `license` function.
     def _license_post_generation(self, created, extracted, **kwargs):
@@ -200,10 +192,19 @@ class TrackFactory(
 
 
 @registry.register
+class LibraryFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
+    name = factory.Faker("name")
+    owner = factory.SubFactory(users_factories.UserFactory)
+    privacy_level = "everyone"
+
+    class Meta:
+        model = "music.Library"
+
+
+@registry.register
 class UploadFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
-    fid = factory.Faker("federation_url")
     track = factory.SubFactory(TrackFactory)
-    library = factory.SubFactory(federation_factories.MusicLibraryFactory)
+    library = factory.SubFactory(LibraryFactory)
     audio_file = factory.django.FileField(
         from_path=os.path.join(SAMPLES_PATH, "test.ogg")
     )
@@ -230,9 +231,7 @@ class UploadFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
 
         artists = list(self.track.artist_credit.all())
         artist = artists[0].artist if artists else ArtistFactory()
-        audio_factories.ChannelFactory(
-            library=self.library, artist=artist, **kwargs
-        )
+        audio_factories.ChannelFactory(library=self.library, artist=artist, **kwargs)
 
 
 @registry.register

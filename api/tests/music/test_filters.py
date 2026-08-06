@@ -12,31 +12,17 @@ def test_artist_filter_ordering(factories, mocker):
 
     qs = models.Artist.objects.all()
 
-    cf = factories["moderation.UserFilter"](for_artist=True)
-
     # Request con ordenamiento
     filterset = filters.ArtistFilter(
-        {"ordering": "name"}, request=mocker.Mock(user=cf.user), queryset=qs
+        {"ordering": "name"},
+        request=mocker.Mock(user=mocker.Mock(is_authenticated=False)),
+        queryset=qs,
     )
 
     expected_order = [artist3.name, artist4.name, artist1.name, artist2.name]
     actual_order = list(filterset.qs.values_list("name", flat=True))
 
     assert actual_order == expected_order
-
-
-def test_album_filter_hidden(factories, mocker, queryset_equal_list):
-    factories["music.Album"]()
-    cf = factories["moderation.UserFilter"](for_artist=True)
-
-    hidden_album = factories["music.Album"](artist=cf.target_artist)
-
-    qs = models.Album.objects.all()
-    filterset = filters.AlbumFilter(
-        {"hidden": "true"}, request=mocker.Mock(user=cf.user), queryset=qs
-    )
-
-    assert filterset.qs == [hidden_album]
 
 
 def test_album_filter_ordering_by_duration(factories, mocker):
@@ -80,45 +66,6 @@ def test_album_filter_min_max_duration(factories, mocker, queryset_equal_list):
         queryset=qs,
     )
     assert list(filterset.qs) == [mid]
-
-
-def test_artist_filter_hidden(factories, mocker, queryset_equal_list):
-    factories["music.Artist"]()
-    cf = factories["moderation.UserFilter"](for_artist=True)
-    hidden_artist = cf.target_artist
-
-    qs = models.Artist.objects.all()
-    filterset = filters.ArtistFilter(
-        {"hidden": "true"}, request=mocker.Mock(user=cf.user), queryset=qs
-    )
-
-    assert filterset.qs == [hidden_artist]
-
-
-def test_artist_filter_track_artist(factories, mocker, queryset_equal_list):
-    factories["music.Track"]()
-    cf = factories["moderation.UserFilter"](for_artist=True)
-    hidden_track = factories["music.Track"](artist=cf.target_artist)
-
-    qs = models.Track.objects.all()
-    filterset = filters.TrackFilter(
-        {"hidden": "true"}, request=mocker.Mock(user=cf.user), queryset=qs
-    )
-
-    assert filterset.qs == [hidden_track]
-
-
-def test_artist_filter_track_album_artist(factories, mocker, queryset_equal_list):
-    factories["music.Track"]()
-    cf = factories["moderation.UserFilter"](for_artist=True)
-    hidden_track = factories["music.Track"](album__artist=cf.target_artist)
-
-    qs = models.Track.objects.all()
-    filterset = filters.TrackFilter(
-        {"hidden": "true"}, request=mocker.Mock(user=cf.user), queryset=qs
-    )
-
-    assert filterset.qs == [hidden_track]
 
 
 @pytest.mark.parametrize(

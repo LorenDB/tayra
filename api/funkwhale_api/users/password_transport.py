@@ -178,9 +178,7 @@ def compute_legacy_client_proof(
     if not is_transport_password_hash(digest_hex):
         raise ValueError("digest_hex must be a 64-char lowercase hex string")
     key = bytes.fromhex(digest_hex)
-    msg = _legacy_auth_message(
-        username, client_nonce, server_nonce, challenge_id
-    )
+    msg = _legacy_auth_message(username, client_nonce, server_nonce, challenge_id)
     return hmac.new(key, msg, hashlib.sha256).hexdigest()
 
 
@@ -258,8 +256,7 @@ def create_scram_hash_from_secret(
     client_key = hmac.new(salted, _CLIENT_KEY_LABEL, hashlib.sha256).digest()
     stored_key = hashlib.sha256(client_key).digest()
     encoded = (
-        f"{SCRAM_PREFIX}{iterations}$"
-        f"{_b64encode(salt)}${_b64encode(stored_key)}"
+        f"{SCRAM_PREFIX}{iterations}$" f"{_b64encode(salt)}${_b64encode(stored_key)}"
     )
     if len(encoded) > 128:
         # Django AbstractBaseUser.password is varchar(128).
@@ -310,9 +307,7 @@ def verify_scram_secret(encoded: str, secret: bytes) -> bool:
 
 def _auth_message(username: str, client_nonce: str, server_nonce: str) -> bytes:
     # Simplified SCRAM AuthMessage (not full RFC GS2 header — first-party only).
-    return (
-        f"n={username},r={client_nonce},s={server_nonce}".encode("utf-8")
-    )
+    return f"n={username},r={client_nonce},s={server_nonce}".encode("utf-8")
 
 
 def compute_client_proof(
@@ -325,9 +320,7 @@ def compute_client_proof(
     server_nonce: str,
 ) -> str:
     """Return hex ClientProof for the given secret and challenge."""
-    salted = hashlib.pbkdf2_hmac(
-        "sha256", secret, salt, iterations, dklen=_KEY_LEN
-    )
+    salted = hashlib.pbkdf2_hmac("sha256", secret, salt, iterations, dklen=_KEY_LEN)
     client_key = hmac.new(salted, _CLIENT_KEY_LABEL, hashlib.sha256).digest()
     stored_key = hashlib.sha256(client_key).digest()
     auth_msg = _auth_message(username, client_nonce, server_nonce)
@@ -358,9 +351,7 @@ def verify_client_proof(
         return False
 
     auth_msg = _auth_message(username, client_nonce, server_nonce)
-    client_signature = hmac.new(
-        parsed["stored_key"], auth_msg, hashlib.sha256
-    ).digest()
+    client_signature = hmac.new(parsed["stored_key"], auth_msg, hashlib.sha256).digest()
     client_key = bytes(a ^ b for a, b in zip(client_proof, client_signature))
     stored_key = hashlib.sha256(client_key).digest()
     return hmac.compare_digest(stored_key, parsed["stored_key"])
@@ -561,7 +552,9 @@ def verify_password_confirm_proof(
 
     server_nonce = challenge.get("server_nonce") or ""
     scheme = challenge.get("scheme") or "scram_v2"
-    username = (challenge.get("username") or getattr(user, "username", "") or "").strip()
+    username = (
+        challenge.get("username") or getattr(user, "username", "") or ""
+    ).strip()
     encoded = getattr(user, "password", "") or ""
 
     if scheme == "scram_v2" and is_scram_hash(encoded):
@@ -584,8 +577,6 @@ def verify_password_confirm_proof(
     try:
         user.set_password(upgrade)
         fields = ["password", "secret_key"]
-        if getattr(user, "subsonic_api_token", None):
-            fields.append("subsonic_api_token")
         user.save(update_fields=fields)
     except Exception:
         return False
@@ -641,5 +632,3 @@ def clear_login_failures(username: str) -> None:
         return
     cache.delete(_login_fail_key(username))
     cache.delete(_login_lock_key(username))
-
-

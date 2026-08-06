@@ -16,7 +16,6 @@ Bugfixes:
 
 - Fix embedded player not working on channel series/album (#1175)
 - Fixed broken mimetype detection during import (#1165)
-- Fixed crash when loading recent albums via Subsonic (#1158)
 - Fixed crash with null help text in admin (#1161)
 - Fixed invalid metadata when importing multi-artists tracks/albums (#1104)
 - Fixed player crash when using Funkwhale as a PWA (#1157)
@@ -56,7 +55,6 @@ Bugfixes:
 - Fix playlist modal only listing 50 first playlists (#1087)
 - Fixed a wording issue on artist channel page (#1117)
 - Fixed crash on python 3.5 with cli importer (#1155)
-- Fixed issue when displaying starred tracks on subsonic (#1082)
 - Fixed mimetype detection issue that broke transcoding on some tracks (#1093). Run `python manage.py fix_uploads --mimetype` to set proper mimetypes on existing uploads.
 - Fixed page not refreshing when switching between My Library and Explore sections (#1091)
 - Fixed recursive CLI importing crashing under Python 3.5 (#1148, #1147)
@@ -98,9 +96,9 @@ https://docs.funkwhale.audio/administrator/upgrade/index.html, there are also ad
 Funkwhale 0.21 includes a brand new feature: Channels!
 
 Channels can be used as a replacement to public libraries,
-to publish audio content, both musical and non-musical. They federate with other Funkwhale pods, but also other
-fediverse software, in particular Mastodon, Pleroma, Friendica and Reel2Bits, meaning people can subscribe to your channel
-from any of these software. To get started with publication, simply visit your profile and create a channel from there.
+to publish audio content, both musical and non-musical. They are shared
+with all users on your pod. To get started with publication, simply visit
+your profile and create a channel from there.
 
 Each Funkwhale channel also comes with RSS feed that is compatible with existing podcasting applications, like AntennaPod
 on Android and, within Funkwhale, you can also subscribe to any podcast from its RSS feed!
@@ -129,19 +127,13 @@ Instance admins can now configure their pod so that registrations required manua
 is especially useful on private or semi-private pods where you don't want to close registrations completely,
 but don't want spam or unwanted users to join your pod.
 
-When this is enabled and a new user register, their request is put in a moderation queue, and moderators
+When this is enabled and a new user registers, their request is put in an approval queue, and moderators
 are notified by email. When the request is approved or refused, the user is also notified by email.
 
 In addition, it's also possible to customize the sign-up form by:
 
 - Providing a custom help text, in markdown format
 - Including additional fields in the form, for instance to ask the user why they want to join. Data collected through these fields is included in the sign-up request and viewable by the mods
-
-### Federated reports
-
-It's now possible to send a copy of a report to the server hosting the reported object, in order to make moderation easier and more distributed.
-
-This feature is inspired by Mastodon's current design, and should work with at least Funkwhale and Mastodon servers.
 
 ### Improved search performance
 
@@ -284,7 +276,6 @@ Enhancements:
 - Added support for CELERYD_CONCURRENCY env var to control the number of worker processes (#997)
 - Added the ability to sort albums by release date (#1013)
 - Added two new radios to play your own content or a given library tracks
-- Advertise list of known nodes on /api/v1/federation/domains and in nodeinfo if stats sharing is enabled
 - Changed footer to use instance name if available, and append ellipses if instance URL/Name is too long (#1012)
 - Favor local uploads when playing a track with multiple uploads (#1036)
 - Include only local content in nodeinfo stats, added downloads count
@@ -292,12 +283,10 @@ Enhancements:
 - Order the playlist columns by modification date in the Browse tab (#775)
 - Reduced size of funkwhale/funkwhale docker images thanks to multi-stage builds (!1042)
 - Remember display settings in Album, Artist, Radio and Playlist views (#391)
-- Removed unnecessary "Federation music needs approval" setting (#959)
 - Replaced our slow research logic by PostgreSQL full-text search (#994)
 - Support autoplay when loading embed frame from Mastodon and third-party websites (#1041)
 - Support filtering playlist by name and several additional UX improvements in playlists modal (#974)
 - Support modifying album cover art through the web UI (#588)
-- Use a dedicated scope for throttling subsonic to avoid intrusive rate-limiting
 - Use same markdown widget for all content fields (rules, description, reports, notes, etc.)
 - CLI Importer is now more reliable and less resource-hungry on large libraries
 - Add support custom domain for S3 storage
@@ -323,13 +312,10 @@ Bugfixes:
 - Resolve an issue where disc numbers were not taken into consideration when playing an album from the album card (#1006)
 - Set correct size for album covers in playlist cards (#680)
 - Remove double spaces in ChannelForm
-- Deduplicate tags in Audio ActivityPub representation
 - Add support custom domain for S3 storage
 - Fix #1079: fixed z-index issues with dropdowns (#1079 and #1075)
 - Exclude external podcasts from library home
 - Fixed broken channel save when description is too long
-- Fixed 500 error when federation is disabled and application+json is requested
-- Fixed minor subsonic API crash
 - Fixed broken local profile page when allow-list is enabled
 - Fixed issue with confirmation email not sending when signup-approval was enabled
 - Ensure 0 quota on user is honored
@@ -424,7 +410,6 @@ Enhancements:
 - Denormalized audio permission logic in a separate table to enhance performance
 - Placeholders will now be shown if no content is available across the application (#750)
 - Reduce the number of simultaneous DB connections under some deployment scenario
-- Support byYear filtering in Subsonic API (#936)
 
 Bugfixes:
 
@@ -434,7 +419,6 @@ Bugfixes:
 - Fix tag exclusion in custom radios (#950)
 - Fixed an issue with embed player CSS being purged during build (#935)
 - Fixed escaped pod name displayed on home/about page (#945)
-- Fixed pagination in subsonic getSongsByGenre endpoint (#954)
 - Fixed style glitches in dropdowns
 
 Documentation:
@@ -471,15 +455,13 @@ Please refer to [our tagging documentation](https://docs.funkwhale.audio/users/u
 for more information regarding the tagging process.
 
 Tags can also be associated with artists and albums, and updated after upload through the UI using
-the edit system released in Funkwhale 0.19. Tags are also fetched when retrieving content
-via federation.
+the edit system released in Funkwhale 0.19.
 
 Tags are used in various places to enhance user experience:
 
 - Tags are listed on tracks, albums and artist profiles
 - Each tag has a dedicated page were you can browse corresponding content and quickly start a radio
 - The custom radio builder now supports using tags
-- Subsonic apps that support genres - such as DSub or Ultrasonic - should display this information as well
 
 If you are a pod admin and want to extract tags from already uploaded content, you run [this snippet](https://dev.funkwhale.audio/funkwhale/funkwhale/snippets/43)
 and [this snippet](https://dev.funkwhale.audio/funkwhale/funkwhale/snippets/44) in a `python manage.py shell`.
@@ -493,20 +475,13 @@ By default, both anonymous and authenticated users can submit these reports. Thi
 takedown requests and other reports for illegal content that may be sent by third-parties without an account on the pod. However,
 you can disable anonymous reports completely via your pod settings.
 
-Federation of the reports will be supported in a future release.
-
-For more information about this feature, please check out our documentation:
-
-- [User documentation](https://docs.funkwhale.audio/moderator/reports.html)
-- [Moderator documentation](https://docs.funkwhale.audio/users/reports.html)
 
 ### Account deletion
 
 Users can now delete their account themselves, without involving an administrator.
 
 The deletion process will remove any local data and objects associated with the account,
-but the username won't be able to new users to avoid impersonation. Deletion is also broadcasted
-to other known servers on the federation.
+but the username won't be available to new users to avoid impersonation.
 
 For more information about this feature, please check out our documentation:
 
@@ -533,7 +508,7 @@ Additionally, the about page now includes:
 - your pod banner image, if any
 - your contact email, if any
 - comprehensive statistics about your pod
-- some info about your pod configuration, such as registration and federation status or the default upload quota for new users
+  - some info about your pod configuration, such as registration status or the default upload quota for new users
 
 With this redesign, we've added a handful of additional pod settings:
 
@@ -543,23 +518,6 @@ With this redesign, we've added a handful of additional pod settings:
 - Terms of service
 
 We recommend taking a few moments to fill these accordingly to your needs, by visiting `/manage/settings`.
-
-### Allow-list to restrict federation to trusted domains
-
-The Allow-Listing feature grants pod moderators
-and administrators greater control over federation
-by allowing you to create a pod-wide allow-list.
-
-When allow-listing is enabled, your pod's users will only
-be able to interact with pods included in the allow-list.
-Any messages, activity, uploads, or modifications to
-libraries and playlists will only be shared with pods
-on the allow-list. Pods which are not included in the
-allow-list will not have access to your pod's content
-or messages and will not be able to send anything to
-your pod.
-
-If you want to enable this feature on your pod, or learn more, please refer to [our documentation](https://docs.funkwhale.audio/moderator/listing.html)!
 
 ### Periodic message to incite people to support their pod and Funkwhale
 
@@ -664,26 +622,12 @@ is applied to the corresponding user account. By default, anonymous requests get
 You can disable the rate-limiting feature by adding `THROTTLING_ENABLED=false` to your `.env` file and restarting the
 services. If you are using the Funkwhale API in your project or app and want to know more about the limits, please consult https://docs.funkwhale.audio/swagger/.
 
-### Broken audio streaming when using S3/Minio and DSub [manual action required]
-
-Some Subsonic clients, such as DSub, are sending an Authorization headers which was forwarded
-to the S3 storage when streaming, causing some issues. If you are using S3 or a compatible storage
-such as Minio, please add the following in your nginx `~ /_protected/media/(.+)` location:
-
-```nginx
-# Needed to ensure DSub auth isn't forwarded to S3/Minio, see #932
-proxy_set_header Authorization "";
-```
-
-And reload your nginx process.
-
 ### Detail
 
 Features:
 
 - Added periodical message to incite people to support their pod and Funkwhale (#839)
 - Admins can now add custom CSS from their pod settings (#879)
-- Allow-list to restrict federation to trusted domains (#853)
 - Content and account reports (#890)
 - Dark theme (#756)
 - Enforce a configurable rate limit on the API to mitigate abuse (#261)
@@ -706,7 +650,6 @@ Enhancements:
 - Increase the security of JWT token generation by using DJANGO_SECRET_KEY as well as user-specific salt for the signature
 - Mods can now change a library visibility through the admin UI (#548)
 - New keyboard shortcuts added for enhanced control over audio player (#866)
-- Now refetch remote ActivityPub artists, albums and tracks to avoid local stale data
 - Numbers on the stats page will now be formatted in a human readable way and will update with the locale (#873)
 - Pickup folder.png and folder.jpg files for cover art when importing from CLI (#898)
 - Prevent usage of too weak passwords (#883)
@@ -732,10 +675,8 @@ Bugfixes:
 - Fixed broken external HTTPS request under some scenarios, because of missing PyOpenSSL
 - Fixed broken less listened radio (#912)
 - Fixed broken URL to artist and album on album and track pages (#871)
-- Fixed empty contentType causing client crash in some Subsonic payloads (#893)
 - Fixed import crashing with empty cover file or too long values on some fields
 - Fixed in-place imported files not playing under nginx when filename contains ? or % (#924)
-- Fixed remaining transcoding issue with Subsonic API (#867)
 - Fixed search usability issue when browsing artists, albums, radios and playlists (#902)
 - Improved performance of /artists, /albums and /tracks API endpoints by a factor 2 (#865)
 - Updated docs to ensure streaming works when using Minio/S3 and DSub (#932)
@@ -779,9 +720,7 @@ Enhancements:
 - The currently playing track is now highlighted with an orange play icon (#832)
 - Support for importing files with no album tag (#122)
 - Redirect from / to /library when user is logged in (#864)
-- Added a SUBSONIC_DEFAULT_TRANSCODING_FORMAT env var to support clients that don't provide the format parameter (#867)
 - Added button to search for objects on Discogs (#368)
-- Added copy-to-clipboard button with Subsonic password input (#814)
 - Added opus to the list of supported mimetypes and extensions (#868)
 - Aligned search headers with search results in the sidebar (#708)
 - Clicking on the currently selected playlist in the Playlist popup will now close the popup (#807)
@@ -829,8 +768,6 @@ With this release, everyone can suggest changes on track, album and artist pages
 with the "library" permission can review suggested edits in a dedicated interface
 and apply/reject them.
 
-Approved edits are broadcasted via federation, to ensure other instances get the information
-too.
 
 Not all fields are currently modifiable using this feature. Especially, it's not possible
 to suggest a new album cover, or reassign a track to a different album or artist. Those will
@@ -861,7 +798,6 @@ Content linked to hidden artists will not show up in the interface anymore. Espe
 - Starting a playlist will skip tracks from hidden artists
 - Recently favorited, recently listened and recently added widgets on the homepage won't include content from hidden artists
 - Radio suggestions will exclude tracks from hidden artists
-- Hidden artists won't appear in Subsonic apps
 
 Results linked to hidden artists will continue to show up in search results and their profile page remains accessible.
 
@@ -872,7 +808,7 @@ third-party apps to interact with Funkwhale on behalf of users.
 
 This feature makes it possible to build third-party apps that have the same capabilities
 as Funkwhale's Web UI. The only exception at the moment is for actions that requires
-special permissions, such as modifying instance settings or moderation (but this will be
+special permissions, such as modifying instance settings (but this will be
 enabled in a future release).
 
 If you want to start building an app on top of Funkwhale's API, please check-out
@@ -920,7 +856,6 @@ Features:
 - Display a confirmation dialog when adding duplicate songs to a playlist (#784)
 - Improved error handling and display during import (#252, #718, #583, #501, #544)
 - Support embedding full artist discographies (#747)
-- Support metadata update on tracks, albums and artists and broadcast those on the federation (#689)
 - Support OAuth2 authorization for better integration with third-party apps (#752)
 - Support S3-compatible storages for media files (#565)
 
@@ -942,7 +877,6 @@ Enhancements:
 
 - Bumped dependencies to latest versions (#815)
 - Descriptions will now be shown underneath user libraries (#768)
-- Don't store unhandled ActivityPub messages in database (#776)
 - Enhanced the design of the embed wizard. (!619)
 - Ensure the footer always stays at the bottom of the page
 - Expose an instance-level actor (service@domain) in nodeinfo endpoint (#689)
@@ -950,13 +884,11 @@ Enhancements:
 - Keep persistent connections to the database instead of recreating a new one for each request
 - Labels for privacy levels are now consistently grabbed from a common source instead of being hardcoded every time they are needed.
 - Merged artist/album buttons with title text on artist and album pages (#725)
-- Now honor maxBitrate parameter in Subsonic API (#802)
 - Preload next track in queue (#572)
 - Reduced app size for regular users by moving admin-related code in a dedicated chunk (#805)
 - Removed broken/instable lyrics feature (#799)
 - Show remaining storage space during import and prevent file upload if not enough space is remaining (#550)
 - The buttons displaying an icon now always show a little divider between the icon and the text. (!620)
-- Use attributedTo instead of actor in library ActivityPub payload (#619)
 - Use network/depends_on instead of links in docker-compose.yml (!716)
 
 Bugfixes:
@@ -964,10 +896,8 @@ Bugfixes:
 - Add missing command from contributing file (#754)
 - Add required envvar for dev environment (!668)
 - Added env variable to set AWS region and signature version to serve media without proxy (#826)
-- Allow users with dots in their usernames to request a subsonic password (#798)
 - Better handling of featuring/multi-artist tracks tagged with MusicBrainz (#782)
 - Do not consider tracks as duplicates during import if they have different positions (#740)
-- Ensure all our ActivityPub fetches are authenticated (#758)
 - Ensure correct track duration and playable status when browsing radios (#812)
 - Fixed alignment/size issue with some buttons (#702)
 - Fixed an encoding issue with instance name on about page (#828)
@@ -1053,9 +983,7 @@ Bugfixes:
 - Fixed constant and unpredictable reordering during file upload (#716)
 - Fixed delivering of local activities causing unintended side effects, such as rollbacking changes (#737)
 - Fixed escaping issues in translated strings (#652)
-- Fixed saving moderation policy when clicking on "Cancel" (#751)
 - i18n: Update page title when changing the App's language. (#511)
-- Include disc number in Subsonic responses (#765)
 - Do not send notification when rejecting a follow on a local library (#743)
 
 Documentation:
@@ -1070,7 +998,6 @@ https://docs.funkwhale.audio/administrator/upgrade/index.html
 
 Enhancements:
 
-- Added a 'fix_federation_ids' management command to deal with protocol/domain issues in federation
   IDs after deployments (#706)
 - Can now use a local file with FUNKWHALE_SPA_HTML_ROOT to avoid sending an HTTP request (#705)
 
@@ -1178,7 +1105,6 @@ Enhancements:
 - Disable makemigrations in production and misleading message when running migrate (#685)
 - Display progress during file upload
 - Hide pagination when there is only one page of results (#681)
-- Include shared/public playlists in Subsonic API responses (#684)
 - Use proper locale for date-related/duration strings (#670)
 
 Bugfixes:
@@ -1219,7 +1145,7 @@ After removal of our first, buggy transcoding implementation, we're proud to ann
 that this feature is back. It is enabled by default, and can be configured/disabled
 in your instance settings!
 
-This feature works in the browser, with federated/non-federated tracks and using Subsonic clients.
+This feature works in the browser, with tracks in your library.
 Transcoded tracks are generated on the fly, and cached for a configurable amount of time,
 to reduce the load on the server.
 
@@ -1230,7 +1156,6 @@ this information. Apart from displaying it on each track detail page,
 no additional behaviour is currently implemented to use this new data, but this
 will change in future releases.
 
-License and copyright data is also broadcasted over federation.
 
 License matching is done on the content of the `License` tag in the files,
 with a fallback on the `Copyright` tag.
@@ -1246,21 +1171,6 @@ Funkwhale will successfully extract licensing data for the following licenses:
 
 Support for other licenses such as Art Libre or WTFPL will be added in future releases.
 
-### Instance-level moderation tools
-
-This release includes a first set of moderation tools that will give more control
-to admins about the way their instance federates with other instance and accounts on the network.
-Using these tools, it's now possible to:
-
-- Browse known accounts and domains, and associated data (storage size, software version, etc.)
-- Purge data belonging to given accounts and domains
-- Block or partially restrict interactions with any account or domain
-
-All those features are usable using a brand new "moderation" permission, meaning
-you can appoint one or multiple moderators to help with this task.
-
-I'd like to thank all Mastodon contributors, because some of the these tools are heavily
-inspired from what's being done in Mastodon. Thank you so much!
 
 ### Iframe widget to embed public tracks and albums [manual action required]
 
@@ -1397,22 +1307,18 @@ Features:
 
 - Allow embedding of albums and tracks available in public libraries via an <iframe> (#578)
 - Audio transcoding is back! (#272)
-- First set of instance level moderation tools (#580, !521)
 - Store licensing and copyright information from file metadata, if available (#308)
 
 Enhancements:
 
 - Add UI elements for multi-disc albums (#631)
 - Added alternative funkwhale/all-in-one docker image (#614)
-- Broadcast library updates (name, description, visibility) over federation
 - Based Docker image on alpine to have a smaller (and faster to build) image
 - Improved front-end performance by stripping unused dependencies, reducing bundle size
   and enabling gzip compression
 - Improved accessibility by using main/section/nav tags and aria-labels in most critical places (#612)
 - The progress bar in the player now display loading state / buffer loading (#586)
-- Added "type: funkwhale" and "funkwhale-version" in Subsonic responses (#573)
 - Documented keyboard shortcuts, list is now available by pressing "h" or in the footer (#611)
-- Documented which Subsonic endpoints are implemented (#575)
 - Hide invitation code field during signup when it's not required (#410)
 - Importer will now pick embedded images in files with OTHER type if no COVER_FRONT is present
 - Improved keyboard accessibility on player, queue and various controls (#576)
@@ -1444,7 +1350,6 @@ Bugfixes:
 - Fix ".None" extension when downloading Flac file (#473)
 - Fixed None extension when downloading an in-place imported file (#621)
 - Added a script to prune pre 0.17 federated tracks (#564)
-- Advertise public libraries properly in ActivityPub representations (#553)
 - Allow opus file upload (#598)
 - Do not display "view on MusicBrainz" button if we miss the mbid (#422)
 - Do not try to create unaccent extension if it's already present (#663)
@@ -1454,7 +1359,6 @@ Bugfixes:
 - Fixed a styling inconsistency on about page when instance description was missing (#659)
 - Fixed a UI discrepancy in playlist tracks count (#647)
 - Fixed greyed tracks in radio builder and detail page (#637)
-- Fixed inconsistencies in subsonic error responses (#616)
 - Fixed incorrect icon for "next track" in player control (#613)
 - Fixed malformed search string when redirecting to LyricsWiki (#608)
 - Fixed missing track count on various library cards (#581)
@@ -1503,7 +1407,6 @@ Bugfixes:
   or adding tracks to queue (#464)
 - Fix broken icons in playlist editor (#515)
 - Fixed a few untranslated strings (#559)
-- Fixed split album when importing from federation (#346)
 - Fixed toggle mute in volume bar does not restore previous volume level (#514)
 - Fixed wrong env file URL and display bugs in deployment documentation (#520)
 - Fixed wrong title in PlayButton (#435)
@@ -1722,7 +1625,6 @@ Bugfixes:
   (#245)
 - Fixed audio mimetype not showing up on track detail and list (#459)
 - Fixed broken audio playback on Chrome and invisible volume control (#390)
-- Fixed broken federation import on big imports due to missing transaction
   logic (#397)
 - Fixed crash on artist pages when no cover is available (#457)
 - Fixed favorited status of tracks not appearing in interface (#398)
@@ -1774,7 +1676,6 @@ https://docs.funkwhale.audio/upgrading.html
 Features:
 
 - Complete redesign of the library home and playlist pages (#284)
-- Expose ActivityPub actors for users (#317)
 - Implemented a basic but functional Github-like search on federated tracks
   list (#344)
 - Internationalized interface as well as translations for Arabic, French,
@@ -1804,14 +1705,12 @@ Bugfixes:
 - Ensure images are not cropped in queue (#337)
 - Ensure we do not import artists with empty names (#351)
 - Fix notifications not closing when clicking on the cross (#366)
-- Fix the most annoying offset in the whole fediverse (#369)
 - Fixed persistent message in playlist modal (#304)
 - Fixed unfiltered results in favorites API (#384)
 - Raise a warning instead of crashing when getting a broken path in file import
   (#138)
 - Remove parallelization of uploads during import to avoid crashing small
   servers (#382)
-- Subsonic API login is now case insensitive (#339)
 - Validate Date header in HTTP Signatures (#328)
 
 Documentation:
@@ -1858,30 +1757,6 @@ in albums that contained a single track, for instance.
 The situation should be improved with this release, as Funkwhale is now able to
 store separately the track and album artist, and display it properly in the interface.
 
-### Users now have an ActivityPub Actor [Manual action required]
-
-In the process of implementing federation for user activity such as listening
-history, we are now making user profiles (a.k.a. ActivityPub actors) available through federation.
-
-This does not means the federation is working, but this is a needed step to implement it.
-
-Those profiles will be created automatically for new users, but you have to run a command
-to create them for existing users.
-
-On docker setups:
-
-```sh
-docker-compose run --rm api python manage.py script create_actors --no-input
-```
-
-On non-docker setups:
-
-```sh
-python manage.py script create_actors --no-input
-```
-
-This should only take a few seconds to run. It is safe to interrupt the process or rerun it multiple times.
-
 ### Image thumbnails [Manual action required]
 
 To reduce bandwidth usage on slow or limited connexions and improve performance
@@ -1908,7 +1783,7 @@ python manage.py script create_image_variations --no-input
 This should be quite fast but may take up to a few minutes depending on the number
 of albums you have in database. It is safe to interrupt the process or rerun it multiple times.
 
-### Improved search on federated tracks list
+### Improved search
 
 Having a powerful but easy-to-use search is important but difficult to achieve, especially
 if you do not want to have a real complex search interface.
@@ -1917,7 +1792,7 @@ Github does a pretty good job with that, using a structured but simple query sys
 (See https://help.github.com/articles/searching-issues-and-pull-requests/#search-only-issues-or-pull-requests).
 
 This release implements a limited but working subset of this query system. You can use it only on the federated
-tracks list (/manage/federation/tracks) at the moment, but depending on feedback it will be rolled-out on other pages as well.
+tracks list at the moment, but depending on feedback it will be rolled-out on other pages as well.
 
 This is the type of query you can run:
 
@@ -2081,7 +1956,6 @@ Bugfixes:
 
 - Ensure radios can only be edited and deleted by their owners (#311)
 - Fixed admin menu not showing after login (#245)
-- Fixed broken pagination in Subsonic API (#295)
 - Fixed duplicated websocket connection on timeline (#287)
 
 Documentation:
@@ -2110,7 +1984,7 @@ Following the recent switch made by PixelFed
 the community to relicence Funkwhale under the AGPL-3 licence. We did this
 switch for various reasons:
 
-- This is better aligned with other fediverse software
+- This is better aligned with other free software projects
 - It prohibits anyone to distribute closed-source and proprietary forks of Funkwhale
 
 As end users and instance owners, this does not change anything. You can
@@ -2210,7 +2084,7 @@ Documentation:
 A few months ago, a basic transcoding feature was implemented. Due to the way
 this feature was designed, it was slow, CPU intensive on the server side,
 and very tightly coupled to the reverse-proxy configuration, preventing
-it to work Apache2, for instance. It was also not compatible with Subsonic clients.
+it to work Apache2, for instance.
 
 Based on that, we're currently removing support for transcoding
 **in its current state**. The work on a better designed transcoding feature
@@ -2285,8 +2159,6 @@ Enhancements:
   component (#164)
 - Can now use album covers from flac/mp3 metadata and separate file in track
   directory (#219)
-- Implemented getCovertArt in Subsonic API to serve album covers (#258)
-- Implemented scrobble endpoint of subsonic API, listenings are now tracked
   correctly from third party apps that use this endpoint (#260)
 - Retructured music API to increase performance and remove useless endpoints
   (#224)
@@ -2312,7 +2184,6 @@ Bugfixes:
 
 Documentation:
 
-- Added missing subsonic configuration block in deployment vhost files (#249)
 - Moved upgrade doc under install doc in TOC (#251)
 
 Other:
@@ -2431,34 +2302,6 @@ tend to be a lot bigger than other files, you may want to increase the
 `client_max_body_size` value in your Nginx configuration if you plan
 to upload flac files.
 
-### Missing subsonic configuration block in vhost files
-
-Because of a missing block in the sample Nginx and Apache configurations,
-instances that were deployed after the 0.13 release are likely to be unable
-to answer to Subsonic clients (the missing bits were properly documented
-in the changelog).
-
-Ensure you have the following snippets in your Nginx or Apache configuration
-if you plan to use the Subsonic API.
-
-Nginx:
-
-```nginx
-location /rest/ {
-    include /etc/nginx/funkwhale_proxy.conf;
-    proxy_pass   http://funkwhale-api/api/subsonic/rest/;
-}
-```
-
-Apache2:
-
-```apache
-<Location "/rest">
-    ProxyPass ${funkwhale-api}/api/subsonic/rest
-    ProxyPassReverse ${funkwhale-api}/api/subsonic/rest
-  </Location>
-```
-
 ## 0.13 (2018-05-19)
 
 Upgrade instructions are available at
@@ -2491,7 +2334,7 @@ Bugfixes:
 ### Instance settings interface
 
 Prior to this release, the only way to update instance settings (such as
-instance description, signup policy, federation configuration, etc.) was using
+instance description, signup policy, etc.) was using
 the admin interface provided by Django (the back-end framework which power the API).
 
 This interface worked, but was not really-user friendly and intuitive.
@@ -2576,8 +2419,6 @@ https://docs.funkwhale.audio/upgrading.html
 
 Features:
 
-- Subsonic API implementation to offer compatibility with existing clients such
-  as DSub (#75)
 - Use nodeinfo standard for publishing instance information (#192)
 
 Enhancements:
@@ -2593,51 +2434,6 @@ Documentation:
 
 - Up-to-date documentation for upgrading front-end files on docker setup (#132)
 
-### Subsonic API
-
-This release implements some core parts of the Subsonic API, which is widely
-deployed in various projects and supported by numerous clients.
-
-By offering this API in Funkwhale, we make it possible to access the instance
-library and listen to the music without from existing Subsonic clients, and
-without developing our own alternative clients for each and every platform.
-
-Most advanced Subsonic clients support offline caching of music files,
-playlist management and search, which makes them well-suited for nomadic use.
-
-Please see [our list of supported apps](https://funkwhale.audio/apps)
-for more information about supported clients and user instructions.
-
-At the instance-level, the Subsonic API is enabled by default, but require
-and additional endpoint to be added in you reverse-proxy configuration.
-
-On nginx, add the following block:
-
-```nginx
-location /rest/ {
-    include /etc/nginx/funkwhale_proxy.conf;
-    proxy_pass   http://funkwhale-api/api/subsonic/rest/;
-}
-```
-
-On Apache, add the following block:
-
-```apache
-<Location "/rest">
-    ProxyPass ${funkwhale-api}/api/subsonic/rest
-    ProxyPassReverse ${funkwhale-api}/api/subsonic/rest
-</Location>
-```
-
-The Subsonic can be disabled at the instance level from the django admin.
-
-```{note}
-Because of Subsonic's API design which assumes cleartext storing of
-user passwords, we chose to have a dedicated, separate password
-for that purpose. Users can generate this password from their
-settings page in the web client.
-```
-
 ### Nodeinfo standard for instance information and stats
 
 ```{warning}
@@ -2648,11 +2444,11 @@ instance data in the about page is removed in favor of the new
 
 In earlier version, we where using a custom endpoint and format for
 our instance information and statistics. While this was working,
-this was not compatible with anything else on the fediverse.
+this was not compatible with anything else in the ecosystem.
 
 We now offer a nodeinfo 2.0 endpoint which provides, in a single place,
 all the instance information such as library and user activity statistics,
-public instance settings (description, registration and federation status, etc.).
+public instance settings (description, registration status, etc.).
 
 We offer two settings to manage nodeinfo in your Funkwhale instance:
 
@@ -2737,15 +2533,10 @@ Enhancements:
 - List pending requests by default, added a status filter for requests (#109)
 - More structured menus in sidebar, added labels with notifications
 - Sample virtual-host file for Apache2 reverse-proxy (!165)
-- Store high-level settings (such as federation or auth-related ones) in
-  database (#186)
 
 Bugfixes:
 
 - Ensure in place imported files get a proper mimetype (#183)
-- Federation cache suppression is now simpler and also deletes orphaned files
-  (#189)
-- Fixed small UI glitches/bugs in federation tabs (#184)
 - X-sendfile not working with in place import (#182)
 
 Documentation:
@@ -2760,10 +2551,6 @@ Documentation:
 Due to the work done in #186, the following environment variables have been
 deprecated:
 
-- FEDERATION_ENABLED
-- FEDERATION_COLLECTION_PAGE_SIZE
-- FEDERATION_MUSIC_NEEDS_APPROVAL
-- FEDERATION_ACTOR_FETCH_DELAY
 - PLAYLISTS_MAX_TRACKS
 - API_AUTHENTICATION_REQUIRED
 
@@ -2894,7 +2681,6 @@ MUSIC_DIRECTORY_SERVE_PATH=/srv/funkwhale/data/music
 
 Bugfixes:
 
-- Allow null values for musicbrainz_id in Audio ActivityPub representation
 - Fixed broken permission check on library scanning and too aggressive page
   validation
 
@@ -2911,21 +2697,6 @@ Enhancements:
 - User admin now includes signup and last login dates (#148)
 - We now use a proper user agent including instance version and url during
   outgoing requests
-
-### Federation is here!
-
-This is for real this time, and includes:
-
-- Following other Funkwhale libraries
-- Importing tracks from remote libraries (tracks are hotlinked, and only cached for a short amount of time)
-- Searching across federated catalogs
-
-Note that by default, federation is opt-in, on a per-instance basis:
-instances will request access to your catalog, and you can accept or refuse
-those requests. You can also revoke the access at any time.
-
-Documentation was updated with relevant instructions to use and benefit
-from this new feature: https://docs.funkwhale.audio/federation.html
 
 ### Preparing internationalization
 
@@ -2980,8 +2751,6 @@ Enhancements:
 - API endpoint for fetching instance activity and updated timeline to use this
   new endpoint (#141)
 - Better error messages in case of missing environment variables (#140)
-- Implemented a @test@yourfunkwhaledomain bot to ensure federation works
-  properly. Send it "/ping" and it will answer back :)
 - Queue shuffle now apply only to tracks after the current one (#97)
 - Removed player from queue tab and consistently show current track in queue
   (#131)
@@ -2998,49 +2767,6 @@ Bugfixes:
 Documentation:
 
 - Documented the upgrade process (#127)
-
-### Preparing for federation
-
-Federation of music libraries is one of the most asked feature.
-While there is still a lot of work to do, this version includes
-the foundation that will enable funkwhale servers to communicate
-between each others, and with other federated software, such as
-Mastodon.
-
-Funkwhale will use ActivityPub as it's federation protocol.
-
-In order to prepare for federation (see #136 and #137), new API endpoints
-have been added under /federation and /.well-known/webfinger.
-
-For these endpoints to work, you will need to update your nginx configuration,
-and add the following snippets:
-
-```nginx
-location /federation/ {
-    include /etc/nginx/funkwhale_proxy.conf;
-    proxy_pass   http://funkwhale-api/federation/;
-}
-location /.well-known/webfinger {
-    include /etc/nginx/funkwhale_proxy.conf;
-    proxy_pass   http://funkwhale-api/.well-known/webfinger;
-}
-```
-
-This will ensure federation endpoints will be reachable in the future.
-You can of course skip this part if you know you will not federate your instance.
-
-A new `FEDERATION_ENABLED` env var have also been added to control whether
-federation is enabled or not on the application side. This settings defaults
-to True, which should have no consequences at the moment, since actual
-federation is not implemented and the only available endpoints are for
-testing purposes.
-
-Add `FEDERATION_ENABLED=false` to your .env file to disable federation
-on the application side.
-
-To test and troubleshoot federation, we've added a bot account. This bot is available at @test@yourinstancedomain,
-and sending it "/ping", for example, via Mastodon, should trigger
-a response.
 
 ## 0.7 (2018-03-21)
 

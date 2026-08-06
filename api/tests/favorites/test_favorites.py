@@ -20,7 +20,6 @@ def test_user_can_get_his_favorites(
     api_request, factories, logged_in_api_client, client
 ):
     request = api_request.get("/")
-    logged_in_api_client.user.create_actor()
     favorite = factories["favorites.TrackFavorite"](user=logged_in_api_client.user)
     factories["favorites.TrackFavorite"]()
     url = reverse("api:v1:favorites:tracks-list")

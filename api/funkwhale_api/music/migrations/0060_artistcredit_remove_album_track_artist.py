@@ -1,24 +1,15 @@
 # Generated manually for ArtistCredit multi-artist support
 
-import django.contrib.postgres.search
-from django.db import migrations, models, connection
-import django.db.models.deletion
-import django.utils.timezone
 import uuid
 
-from funkwhale_api.federation import utils as federation_utils
-from django.conf import settings
+import django.contrib.postgres.search
+import django.db.models.deletion
+import django.utils.timezone
+from django.db import connection, migrations, models
 
 
 def skip(apps, schema_editor):
     pass
-
-
-def _artistcredit_fid(new_uuid):
-    # Avoid reverse() dependency on federation:music:artistcredit-detail
-    # so migration works even if that route is registered later.
-    base = getattr(settings, "FUNKWHALE_URL", "http://localhost").rstrip("/")
-    return f"{base}/federation/music/artistcredit/{new_uuid}"
 
 
 def save_artist_credit(obj, ArtistCredit):
@@ -85,7 +76,6 @@ def set_all_artists_credit(apps, schema_editor):
 class Migration(migrations.Migration):
     dependencies = [
         ("music", "0059_keep_transcoding_cache_by_default"),
-        ("federation", "0028_auto_20221027_1141"),
     ]
 
     operations = [
@@ -99,12 +89,6 @@ class Migration(migrations.Migration):
                         primary_key=True,
                         serialize=False,
                         verbose_name="ID",
-                    ),
-                ),
-                (
-                    "fid",
-                    models.URLField(
-                        db_index=True, max_length=500, null=True, unique=True
                     ),
                 ),
                 (
@@ -134,15 +118,6 @@ class Migration(migrations.Migration):
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="artist_credit",
                         to="music.artist",
-                    ),
-                ),
-                (
-                    "from_activity",
-                    models.ForeignKey(
-                        blank=True,
-                        null=True,
-                        on_delete=django.db.models.deletion.SET_NULL,
-                        to="federation.activity",
                     ),
                 ),
             ],

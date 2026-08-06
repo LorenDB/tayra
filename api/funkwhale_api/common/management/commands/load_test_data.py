@@ -1,12 +1,9 @@
 import math
 import random
 
-from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from funkwhale_api.federation import keys
-from funkwhale_api.federation import models as federation_models
 from funkwhale_api.music import models as music_models
 from funkwhale_api.tags import models as tags_models
 from funkwhale_api.users import models as users_models
@@ -22,26 +19,7 @@ def create_local_accounts(factories, count, dependencies):
         # is CPU intensive
         user.password = password
     users = users_models.User.objects.bulk_create(users, batch_size=BATCH_SIZE)
-    actors = []
-    domain = federation_models.Domain.objects.get_or_create(
-        name=settings.FEDERATION_HOSTNAME
-    )[0]
-    users = [u for u in users if u.pk]
-    private, public = keys.get_key_pair()
-    for user in users:
-        if not user.pk:
-            continue
-        actor = federation_models.Actor(
-            private_key=private.decode("utf-8"),
-            public_key=public.decode("utf-8"),
-            **users_models.get_actor_data(user.username, domain=domain)
-        )
-        actors.append(actor)
-    actors = federation_models.Actor.objects.bulk_create(actors, batch_size=BATCH_SIZE)
-    for user, actor in zip(users, actors):
-        user.actor = actor
-    users_models.User.objects.bulk_update(users, ["actor"])
-    return actors
+    return users
 
 
 def create_taggable_items(dependency):
@@ -72,31 +50,29 @@ CONFIG = [
         "id": "tracks",
         "model": music_models.Track,
         "factory": "music.Track",
-        "factory_kwargs": {"artist": None, "album": None},
+        "factory_kwargs": {"album": None},
         "depends_on": [
             {"field": "album", "id": "albums", "default_factor": 0.1},
-            {"field": "artist", "id": "artists", "default_factor": 0.05},
         ],
     },
     {
         "id": "albums",
         "model": music_models.Album,
         "factory": "music.Album",
-        "factory_kwargs": {"artist": None},
-        "depends_on": [{"field": "artist", "id": "artists", "default_factor": 0.3}],
+        "factory_kwargs": {},
     },
     {"id": "artists", "model": music_models.Artist, "factory": "music.Artist"},
     {
         "id": "local_accounts",
-        "model": federation_models.Actor,
+        "model": users_models.User,
         "handler": create_local_accounts,
     },
     {
         "id": "local_libraries",
         "model": music_models.Library,
         "factory": "music.Library",
-        "factory_kwargs": {"actor": None},
-        "depends_on": [{"field": "actor", "id": "local_accounts", "default_factor": 1}],
+        "factory_kwargs": {"owner": None},
+        "depends_on": [{"field": "owner", "id": "local_accounts", "default_factor": 1}],
     },
     {
         "id": "local_uploads",
@@ -108,9 +84,7 @@ CONFIG = [
                 "field": "library",
                 "id": "local_libraries",
                 "default_factor": 0.05,
-                "queryset": music_models.Library.objects.all().select_related(
-                    "actor__user"
-                ),
+                "queryset": music_models.Library.objects.all().select_related("owner"),
             },
             {"field": "track", "id": "tracks", "default_factor": 1},
         ],
@@ -317,6 +291,15 @@ class Command(BaseCommand):
                     value = picked_objects[picked_pks[i]]
                 setattr(obj, dependency["field"], value)
         if not handler:
-            objects = row["model"].objects.bulk_create(objects, batch_size=BATCH_SIZE)
+            # Some factories (e.g. music.Track) persist objects during
+            # build_batch to set many-to-many relations; only bulk_create
+            # the ones that are not already in the database.
+            already_created = [o for o in objects if o.pk is not None]
+            to_create = [o for o in objects if o.pk is None]
+            if to_create:
+                to_create = row["model"].objects.bulk_create(
+                    to_create, batch_size=BATCH_SIZE
+                )
+            objects = to_create + already_created
         results[row["id"]] = objects
         return objects

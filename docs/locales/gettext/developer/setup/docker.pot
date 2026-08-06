@@ -64,10 +64,6 @@ msgstr ""
 msgid "Add the following variables to load images and enable access to Django admin pages:"
 msgstr ""
 
-#: ../../developer/setup/docker.md:58
-msgid "Create a network for federation support"
-msgstr ""
-
 #: ../../developer/setup/docker.md:64
 msgid "Once you've set everything up, you need to build the containers. Run this command any time there are upstream changes or dependency changes to ensure you're up-to-date."
 msgstr ""
@@ -136,34 +132,6 @@ msgstr ""
 msgid "Once you're done with the containers, you can stop them all:"
 msgstr ""
 
-#: ../../developer/setup/docker.md:126
-msgid "If you want to destroy your containers, run the following:"
-msgstr ""
-
-#: ../../developer/setup/docker.md:132
-msgid "Set up federation support"
-msgstr ""
-
-#: ../../developer/setup/docker.md:134
-msgid "Working on federation features requires some additional setup. You need to do the following:"
-msgstr ""
-
-#: ../../developer/setup/docker.md:136
-msgid "Update your DNS resolver to resolve all your .dev hostnames locally"
-msgstr ""
-
-#: ../../developer/setup/docker.md:137
-msgid "Set up a reverse proxy (such as traefik) to catch .dev requests with a TLS certificate"
-msgstr ""
-
-#: ../../developer/setup/docker.md:138
-msgid "Set up two or more local instances"
-msgstr ""
-
-#: ../../developer/setup/docker.md:140
-msgid "To resolve hostnames locally, run the following:"
-msgstr ""
-
 #: ../../developer/setup/docker.md:0
 msgid "dnsmasq"
 msgstr ""
@@ -172,26 +140,6 @@ msgstr ""
 msgid "NetworkManager"
 msgstr ""
 
-#: ../../developer/setup/docker.md:164
-msgid "To add a wildcard certificate, copy the test certificate from the `docker/ssl` folder. This certificate is a wildcard for `*.funkwhale.test`"
-msgstr ""
-
-#: ../../developer/setup/docker.md:171
-msgid "To run a reverse proxy for your app:"
-msgstr ""
-
-#: ../../developer/setup/docker.md:173
-msgid "Add the following configuration to your `.env` file:"
-msgstr ""
-
-#: ../../developer/setup/docker.md:186
-msgid "Launch traefik using the bundled configuration:"
-msgstr ""
-
-#: ../../developer/setup/docker.md:192
-msgid "Set up as many different projects as you need. Make sure the `COMPOSE_PROJECT_NAME` and `VUE_PORT` variables are unique per instance"
-msgstr ""
-
 #: ../../developer/setup/docker.md:202
-msgid "You can access your project at `https://{COMPOSE_PROJECT_NAME}.funkwhale.test`."
+msgid "You can access your project at `http://localhost:8000`."
 msgstr ""

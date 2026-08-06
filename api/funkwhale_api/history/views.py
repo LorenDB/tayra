@@ -56,7 +56,7 @@ class ListeningViewSet(
 ):
     serializer_class = serializers.ListeningSerializer
     queryset = models.Listening.objects.all().select_related(
-        "user__actor__attachment_icon",
+        "user__avatar_attachment",
         "source_device",
     )
 
@@ -84,9 +84,7 @@ class ListeningViewSet(
             return serializers.ListeningBulkSerializer
         if self.request.method.lower() in ["head", "get", "options"]:
             return serializers.ListeningSerializer
-        if self.request.method.lower() == "patch" or getattr(
-            self, "action", None
-        ) in (
+        if self.request.method.lower() == "patch" or getattr(self, "action", None) in (
             "partial_update",
             "update",
             "by_session",
@@ -184,8 +182,12 @@ class ListeningViewSet(
             if str(rich_param).lower() not in ("0", "false", "no"):
                 queryset = queryset.rich()
         tracks = Track.objects.with_playable_uploads(
-            music_utils.get_actor_from_request(self.request)
-        ).select_related("attributed_to").prefetch_related("artist_credit__artist", "artist_credit__artist__attachment_cover", "album__artist_credit__artist")
+            music_utils.get_user_from_request(self.request)
+        ).prefetch_related(
+            "artist_credit__artist",
+            "artist_credit__artist__attachment_cover",
+            "album__artist_credit__artist",
+        )
         return queryset.prefetch_related(Prefetch("track", queryset=tracks))
 
     def get_serializer_context(self):

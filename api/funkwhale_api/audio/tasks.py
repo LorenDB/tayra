@@ -19,7 +19,7 @@ def fetch_rss_feeds():
     )
     candidates = (
         models.Channel.objects.external_rss()
-        .filter(actor__last_fetch_date__lte=limit)
+        .filter(creation_date__lte=limit)
         .values_list("rss_url", flat=True)
     )
 

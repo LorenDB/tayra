@@ -432,24 +432,6 @@ msgstr ""
 msgid "Default timeout for external requests."
 msgstr ""
 
-#: ../../administrator/configuration/env-file.md:168
-msgid "Federation configuration"
-msgstr ""
-
-#: ../../docstring config.settings.common.FEDERATION_OBJECT_FETCH_DELAY:1 of
-msgid ""
-"The delay in minutes before a remote object is automatically refetched "
-"when accessed in the UI."
-msgstr ""
-
-#: ../../docstring config.settings.common.FEDERATION_DUPLICATE_FETCH_DELAY:1 of
-msgid "The delay in seconds between two manual fetches of the same remote object."
-msgstr ""
-
-#: ../../administrator/configuration/env-file.md:177
-msgid "Metadata configuration"
-msgstr ""
-
 #: ../../docstring config.settings.common.TAGS_MAX_BY_OBJ:1 of
 msgid ""
 "Maximum number of tags that can be associated with an object. Extra tags "
@@ -475,10 +457,6 @@ msgstr ""
 msgid "Length of time in seconds to cache MusicBrainz results."
 msgstr ""
 
-#: ../../administrator/configuration/env-file.md:187
-msgid "Channels and podcast configuration"
-msgstr ""
-
 #: ../../docstring config.settings.common.PODCASTS_RSS_FEED_REFRESH_DELAY:1 of
 msgid "The delay in seconds between two fetch of RSS feeds."
 msgstr ""
@@ -502,19 +480,6 @@ msgstr ""
 
 #: ../../docstring config.settings.common.PODCASTS_THIRD_PARTY_VISIBILITY:7 of
 msgid "Changing this value only affect new podcasts."
-msgstr ""
-
-#: ../../administrator/configuration/env-file.md:197
-msgid "Subsonic configuration"
-msgstr ""
-
-#: ../../docstring config.settings.common.SUBSONIC_DEFAULT_TRANSCODING_FORMAT:1
-#: of
-msgid "The default format files are transcoded into when using the Subsonic API."
-msgstr ""
-
-#: ../../administrator/configuration/env-file.md:205
-msgid "Email configuration"
 msgstr ""
 
 #: ../../docstring config.settings.common.EMAIL_CONFIG:1 of
@@ -635,4 +600,3 @@ msgstr ""
 #~ "See {doc}`/administrator_documentation/configuration_docs/ldap`"
 #~ " for more information."
 #~ msgstr ""
-

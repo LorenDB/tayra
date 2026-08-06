@@ -10,11 +10,16 @@ from django.contrib.auth import get_user_model
 from django.middleware import csrf
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import mixins, viewsets
-from rest_framework.decorators import action, api_view, authentication_classes, permission_classes
+from rest_framework.decorators import (
+    action,
+    api_view,
+    authentication_classes,
+    permission_classes,
+)
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from funkwhale_api.common import authentication, preferences, throttling
+from funkwhale_api.common import authentication, throttling
 
 from . import models, serializers, tasks
 
@@ -79,7 +84,7 @@ class PasswordResetConfirmView(rest_auth_views.PasswordResetConfirmView):
 
 
 class UserViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
-    queryset = models.User.objects.all().select_related("actor__attachment_icon")
+    queryset = models.User.objects.all().select_related("avatar_attachment")
     serializer_class = serializers.UserWriteSerializer
     lookup_field = "username"
     lookup_value_regex = r"[a-zA-Z0-9-_.]+"
@@ -131,30 +136,6 @@ class UserViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
         new_settings = request.data
         request.user.set_settings(**new_settings)
         return Response(request.user.settings)
-
-    @action(
-        methods=["get", "post", "delete"],
-        required_scope="security",
-        url_path="subsonic-token",
-        detail=True,
-    )
-    def subsonic_token(self, request, *args, **kwargs):
-        if not self.request.user.username == kwargs.get("username"):
-            return Response(status=403)
-        if not preferences.get("subsonic__enabled"):
-            return Response(status=405)
-        if request.method.lower() == "get":
-            return Response(
-                {"subsonic_api_token": self.request.user.subsonic_api_token}
-            )
-        if request.method.lower() == "delete":
-            self.request.user.subsonic_api_token = None
-            self.request.user.save(update_fields=["subsonic_api_token"])
-            return Response(status=204)
-        self.request.user.update_subsonic_api_token()
-        self.request.user.save(update_fields=["subsonic_api_token"])
-        data = {"subsonic_api_token": self.request.user.subsonic_api_token}
-        return Response(data)
 
     @extend_schema(operation_id="change_email", responses={200: None, 403: None})
     @action(
@@ -329,9 +310,7 @@ class UserViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
             device.confirmed = True
             device.confirmed_at = timezone.now()
             device.last_used_step = step
-            device.save(
-                update_fields=["confirmed", "confirmed_at", "last_used_step"]
-            )
+            device.save(update_fields=["confirmed", "confirmed_at", "last_used_step"])
             codes = totp_mod.generate_recovery_codes()
             totp_mod.store_recovery_codes(user, codes)
 
@@ -373,7 +352,10 @@ class UserViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
 
         if not totp_mod.is_totp_enabled(user):
             return Response(
-                {"error": "not_enabled", "detail": "Two-factor authentication is not enabled."},
+                {
+                    "error": "not_enabled",
+                    "detail": "Two-factor authentication is not enabled.",
+                },
                 status=400,
             )
 
@@ -406,9 +388,7 @@ class UserViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
                 status=400,
             )
 
-        from funkwhale_api.users.password_transport import (
-            verify_password_confirm_proof,
-        )
+        from funkwhale_api.users.password_transport import verify_password_confirm_proof
 
         if not verify_password_confirm_proof(
             user,
@@ -456,9 +436,7 @@ def login(request):
     if request.method != "POST":
         return http.HttpResponse(status=405)
     data = request.POST if request.POST else getattr(request, "data", request.POST)
-    serializer = serializers.LoginSerializer(
-        data=data, context={"request": request}
-    )
+    serializer = serializers.LoginSerializer(data=data, context={"request": request})
     if not serializer.is_valid():
         return http.HttpResponse(
             json.dumps(serializer.errors), status=400, content_type="application/json"
@@ -633,11 +611,10 @@ def _extract_login_proof_fields(raw: dict) -> dict:
     ),
 )
 @api_view(["POST"])
+@permission_classes([])
 def password_confirm_challenge(request):
     """POST (authenticated) → one-time challenge for password re-verification."""
-    from funkwhale_api.users.password_transport import (
-        create_password_confirm_challenge,
-    )
+    from funkwhale_api.users.password_transport import create_password_confirm_challenge
 
     user = getattr(request, "user", None)
     if user is None or not user.is_authenticated:
@@ -855,38 +832,52 @@ def token_login(request):
             upgrade = ""
             if isinstance(raw, dict):
                 upgrade = (
-                    raw.get("upgrade_password")
-                    or raw.get("upgradePassword")
-                    or ""
+                    raw.get("upgrade_password") or raw.get("upgradePassword") or ""
                 )
             upgrade = str(upgrade) if upgrade is not None else ""
 
             if upgrade and user.check_password(upgrade):
-                try:
-                    user.set_password(upgrade)
-                    fields = ["password", "secret_key"]
-                    if user.subsonic_api_token:
-                        fields.append("subsonic_api_token")
-                    user.save(update_fields=fields)
-                    password_ok = True
-                    _log_token_login(
-                        "token_login legacy upgraded to SCRAM user_id=%s",
-                        user.pk,
+                proof_ok = True
+                if (
+                    client_nonce
+                    and client_proof
+                    and is_transport_password_hash(password)
+                ):
+                    # A supplied HMAC proof must still be bound to the popped
+                    # challenge (do not let a proof captured against another
+                    # challenge ride along a valid upgrade password).
+                    proof_ok = verify_legacy_client_proof(
+                        password,
+                        client_proof,
+                        username=username,
+                        client_nonce=client_nonce,
+                        server_nonce=server_nonce,
+                        challenge_id=challenge_id,
                     )
-                except Exception:
-                    logger.exception(
-                        "token_login legacy SCRAM upgrade failed user_id=%s",
-                        user.pk,
-                    )
-                    return Response(
-                        {
-                            "error": "token_issue_failed",
-                            "detail": (
-                                "Could not upgrade password storage. Try again."
-                            ),
-                        },
-                        status=500,
-                    )
+                if proof_ok:
+                    try:
+                        user.set_password(upgrade)
+                        fields = ["password", "secret_key"]
+                        user.save(update_fields=fields)
+                        password_ok = True
+                        _log_token_login(
+                            "token_login legacy upgraded to SCRAM user_id=%s",
+                            user.pk,
+                        )
+                    except Exception:
+                        logger.exception(
+                            "token_login legacy SCRAM upgrade failed user_id=%s",
+                            user.pk,
+                        )
+                        return Response(
+                            {
+                                "error": "token_issue_failed",
+                                "detail": (
+                                    "Could not upgrade password storage. Try again."
+                                ),
+                            },
+                            status=500,
+                        )
             elif is_transport_password_hash(password) and client_nonce and client_proof:
                 digest_ok = user.check_password(password)
                 proof_ok = verify_legacy_client_proof(
@@ -906,8 +897,6 @@ def token_login(request):
                     try:
                         user.set_password(upgrade)
                         fields = ["password", "secret_key"]
-                        if user.subsonic_api_token:
-                            fields.append("subsonic_api_token")
                         user.save(update_fields=fields)
                         _log_token_login(
                             "token_login legacy upgraded to SCRAM user_id=%s",
@@ -1135,8 +1124,7 @@ def token_login_2fa(request):
                     {
                         "error": "totp_locked",
                         "detail": (
-                            "Too many failed two-factor attempts. "
-                            "Try again later."
+                            "Too many failed two-factor attempts. " "Try again later."
                         ),
                         "non_field_errors": [
                             "Too many failed two-factor attempts. Try again later."

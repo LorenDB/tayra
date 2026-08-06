@@ -41,14 +41,14 @@ class Registry(persisting_theory.Registry):
         serializer.is_valid(raise_exception=True)
         return serializer.payload_serialize(serializer.validated_data)
 
-    def has_perm(self, perm, type, obj, actor):
+    def has_perm(self, perm, type, obj, user):
         if perm not in ["approve", "suggest"]:
             raise ValueError(f"Invalid permission {perm}")
         conf = self.get_conf(type, obj)
         checker = conf["perm_checkers"].get(perm)
         if not checker:
             return False
-        return checker(obj=obj, actor=actor)
+        return checker(obj=obj, user=user)
 
     def get_conf(self, type, obj):
         try:

@@ -1,7 +1,7 @@
 # Delete content in the Django dashboard
 
 ```{note}
-Deleting content using the Django dashboard isn't recommended. Use an object's [moderation page](../../moderator/content/delete.md) where possible.
+Deleting content using the Django dashboard isn't recommended. Use the Funkwhale app where possible.
 ```
 
 You can delete content from your pod in the Django dashboard. The dashboard gives you access to all data associated with the content.

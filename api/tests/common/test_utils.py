@@ -6,31 +6,31 @@ from funkwhale_api.common import utils
 
 
 def test_chunk_queryset(factories):
-    actors = factories["federation.Actor"].create_batch(size=4)
-    queryset = actors[0].__class__.objects.all()
+    users = factories["users.User"].create_batch(size=4)
+    queryset = users[0].__class__.objects.all()
     chunks = list(utils.chunk_queryset(queryset, 2))
 
-    assert list(chunks[0]) == actors[0:2]
-    assert list(chunks[1]) == actors[2:4]
+    assert list(chunks[0]) == users[0:2]
+    assert list(chunks[1]) == users[2:4]
 
 
 def test_update_prefix(factories):
-    actors = []
-    fid = "http://hello.world/actor/{}/"
+    artists = []
+    name = "http://hello.world/artist/{}/"
     for i in range(3):
-        actors.append(factories["federation.Actor"](fid=fid.format(i)))
+        artists.append(factories["music.Artist"](name=name.format(i)))
     noop = [
-        factories["federation.Actor"](fid="https://hello.world/actor/witness/"),
-        factories["federation.Actor"](fid="http://another.world/actor/witness/"),
-        factories["federation.Actor"](fid="http://foo.bar/actor/witness/"),
+        factories["music.Artist"](name="https://hello.world/artist/witness/"),
+        factories["music.Artist"](name="http://another.world/artist/witness/"),
+        factories["music.Artist"](name="http://foo.bar/artist/witness/"),
     ]
 
-    qs = actors[0].__class__.objects.filter(fid__startswith="http://hello.world")
+    qs = artists[0].__class__.objects.filter(name__startswith="http://hello.world")
     assert qs.count() == 3
 
     result = utils.replace_prefix(
-        actors[0].__class__.objects.all(),
-        "fid",
+        artists[0].__class__.objects.all(),
+        "name",
         "http://hello.world",
         "https://hello.world",
     )
@@ -38,14 +38,14 @@ def test_update_prefix(factories):
     assert result == 3
 
     for n in noop:
-        old = n.fid
+        old = n.name
         n.refresh_from_db()
-        assert old == n.fid
+        assert old == n.name
 
-    for n in actors:
-        old = n.fid
+    for n in artists:
+        old = n.name
         n.refresh_from_db()
-        assert n.fid == old.replace("http://", "https://")
+        assert n.name == old.replace("http://", "https://")
 
 
 @pytest.mark.parametrize(

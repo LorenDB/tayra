@@ -4,7 +4,6 @@ from django.urls import reverse
 
 from funkwhale_api.common import serializers as common_serializers
 from funkwhale_api.common import utils as common_utils
-from funkwhale_api.moderation import tasks as moderation_tasks
 from funkwhale_api.users.models import User
 
 
@@ -109,12 +108,12 @@ def test_can_fetch_data_from_api(api_client, factories):
     # login required
     assert response.status_code == 401
 
-    user = factories["users.User"](permission_library=True, with_actor=True)
+    user = factories["users.User"](permission_library=True)
     summary = {"content_type": "text/plain", "text": "Hello"}
-    summary_obj = common_utils.attach_content(user.actor, "summary_obj", summary)
+    summary_obj = common_utils.attach_content(user, "summary_obj", summary)
     avatar = factories["common.Attachment"]()
-    user.actor.attachment_icon = avatar
-    user.actor.save()
+    user.avatar_attachment = avatar
+    user.save()
     api_client.login(username=user.username, password="test")
     response = api_client.get(url)
     assert response.status_code == 200
@@ -137,7 +136,9 @@ def test_changing_password_updates_secret_key(logged_in_api_client):
     user = logged_in_api_client.user
     password = user.password
     secret_key = user.secret_key
+    proof = _step_up_proof(logged_in_api_client, "test", user.username)
     payload = {
+        **proof,
         "old_password": "test",
         "new_password1": "thisismypassword",
         "new_password2": "thisismypassword",
@@ -192,72 +193,8 @@ def test_user_can_patch_description(logged_in_api_client):
     assert response.status_code == 200
     user.refresh_from_db()
 
-    assert user.actor.summary_obj.content_type == payload["summary"]["content_type"]
-    assert user.actor.summary_obj.text == payload["summary"]["text"]
-
-
-def test_user_can_request_new_subsonic_token(logged_in_api_client):
-    user = logged_in_api_client.user
-    user.subsonic_api_token = "test"
-    user.save()
-
-    url = reverse(
-        "api:v1:users:users-subsonic-token", kwargs={"username": user.username}
-    )
-
-    response = logged_in_api_client.post(url)
-
-    assert response.status_code == 200
-    user.refresh_from_db()
-    assert user.subsonic_api_token != "test"
-    assert user.subsonic_api_token is not None
-    assert response.data == {"subsonic_api_token": user.subsonic_api_token}
-
-
-def test_user_can_get_subsonic_token(logged_in_api_client):
-    user = logged_in_api_client.user
-    user.subsonic_api_token = "test"
-    user.save()
-
-    url = reverse(
-        "api:v1:users:users-subsonic-token", kwargs={"username": user.username}
-    )
-
-    response = logged_in_api_client.get(url)
-
-    assert response.status_code == 200
-    assert response.data == {"subsonic_api_token": "test"}
-
-
-def test_user_can_request_new_subsonic_token_uncommon_username(logged_in_api_client):
-    user = logged_in_api_client.user
-    user.username = "firstname.lastname"
-    user.subsonic_api_token = "test"
-    user.save()
-
-    url = reverse(
-        "api:v1:users:users-subsonic-token", kwargs={"username": user.username}
-    )
-
-    response = logged_in_api_client.post(url)
-
-    assert response.status_code == 200
-
-
-def test_user_can_delete_subsonic_token(logged_in_api_client):
-    user = logged_in_api_client.user
-    user.subsonic_api_token = "test"
-    user.save()
-
-    url = reverse(
-        "api:v1:users:users-subsonic-token", kwargs={"username": user.username}
-    )
-
-    response = logged_in_api_client.delete(url)
-
-    assert response.status_code == 204
-    user.refresh_from_db()
-    assert user.subsonic_api_token is None
+    assert user.summary_obj.content_type == payload["summary"]["content_type"]
+    assert user.summary_obj.text == payload["summary"]["text"]
 
 
 @pytest.mark.parametrize("method", ["put", "patch"])
@@ -274,8 +211,7 @@ def test_user_cannot_patch_another_user(method, logged_in_api_client, factories)
 
 def test_user_can_patch_their_own_avatar(logged_in_api_client, factories):
     user = logged_in_api_client.user
-    actor = user.create_actor()
-    attachment = factories["common.Attachment"](actor=actor)
+    attachment = factories["common.Attachment"](uploaded_by=user)
     url = reverse("api:v1:users:users-detail", kwargs={"username": user.username})
     payload = {"avatar": attachment.uuid}
     response = logged_in_api_client.patch(url, payload)
@@ -283,30 +219,8 @@ def test_user_can_patch_their_own_avatar(logged_in_api_client, factories):
     assert response.status_code == 200
     user.refresh_from_db()
 
-    assert user.actor.attachment_icon == attachment
+    assert user.avatar_attachment == attachment
     assert "avatar" in response.data
-
-
-def test_creating_user_creates_actor_as_well(
-    api_client, factories, mocker, preferences
-):
-    actor = factories["federation.Actor"]()
-    url = reverse("rest_register")
-    data = {
-        "username": "test1",
-        "email": "test1@test.com",
-        "password1": "thisismypassword",
-        "password2": "thisismypassword",
-    }
-    preferences["users__registration_enabled"] = True
-    mocker.patch("funkwhale_api.users.models.create_actor", return_value=actor)
-    response = api_client.post(url, data)
-
-    assert response.status_code == 201
-
-    user = User.objects.get(username="test1")
-
-    assert user.actor == actor
 
 
 def test_creating_user_sends_confirmation_email(
@@ -353,69 +267,15 @@ def test_user_account_deletion_requires_confirmation(logged_in_api_client):
 def test_user_account_deletion_triggers_delete_account(logged_in_api_client, mocker):
     user = logged_in_api_client.user
     user.set_password("mypassword")
+    user.save()
     url = reverse("api:v1:users:users-me")
-    payload = {"password": "mypassword", "confirm": True}
+    proof = _step_up_proof(logged_in_api_client, "mypassword", user.username)
+    payload = {**proof, "confirm": True}
     delete_account = mocker.patch("funkwhale_api.users.tasks.delete_account.delay")
     response = logged_in_api_client.delete(url, payload)
 
     assert response.status_code == 204
     delete_account.assert_called_once_with(user_id=user.pk)
-
-
-def test_username_with_existing_local_account_are_invalid(
-    settings, preferences, factories, api_client
-):
-    actor = factories["users.User"]().create_actor()
-    user = actor.user
-    user.delete()
-    url = reverse("rest_register")
-    preferences["users__registration_enabled"] = True
-    settings.ACCOUNT_USERNAME_BLACKLIST = []
-    data = {
-        "username": user.username,
-        "email": "contact@funkwhale.io",
-        "password1": "testtest",
-        "password2": "testtest",
-    }
-
-    response = api_client.post(url, data)
-
-    assert response.status_code == 400
-    assert "username" in response.data
-
-
-def test_signup_with_approval_enabled(
-    preferences, factories, api_client, mocker, mailoutbox, settings
-):
-    url = reverse("rest_register")
-    data = {
-        "username": "test1",
-        "email": "test1@test.com",
-        "password1": "thisismypassword",
-        "password2": "thisismypassword",
-    }
-    preferences["users__registration_enabled"] = True
-    preferences["moderation__signup_approval_enabled"] = True
-    on_commit = mocker.patch("funkwhale_api.common.utils.on_commit")
-    response = api_client.post(url, data, format="json")
-    assert response.status_code == 201
-    u = User.objects.get(email="test1@test.com")
-    assert u.username == "test1"
-    assert u.is_active is False
-    user_request = u.actor.requests.latest("id")
-    assert user_request.type == "signup"
-    assert user_request.status == "pending"
-    assert user_request.metadata is None
-
-    on_commit.assert_any_call(
-        moderation_tasks.user_request_handle.delay,
-        user_request_id=user_request.pk,
-        new_status="pending",
-    )
-
-    confirmation_message = mailoutbox[-1]
-    assert "confirm" in confirmation_message.body
-    assert settings.FUNKWHALE_HOSTNAME in confirmation_message.body
 
 
 def test_login_via_api(api_client, factories):

@@ -46,9 +46,6 @@ This article contains a summary of the endpoints you can control using rate-limi
 * - `anonymous-update`
    - Anonymous PATCH and PUT requests on resource details
    - 1000 per day
-* - `subsonic`
-   - All Subsonic API requests
-   - 2000 per hour
 
 ```
 

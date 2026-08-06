@@ -94,10 +94,6 @@ msgstr ""
 msgid "Remove a user's staff privileges"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:178
-msgid "Give a user moderation permissions"
-msgstr ""
-
 #: ../../administrator_documentation/manage_script/users.md:201
 msgid "Reset a user's password"
 msgstr ""
@@ -137,4 +133,3 @@ msgid ""
 "There are extra options for deleting users. Check the command help for "
 "more options."
 msgstr ""
-

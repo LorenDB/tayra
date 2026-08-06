@@ -2,9 +2,12 @@ from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
-from funkwhale_api.federation import serializers as federation_serializers
 from funkwhale_api.music.models import Track
-from funkwhale_api.music.serializers import COVER_WRITE_FIELD, CoverField, TrackSerializer
+from funkwhale_api.music.serializers import (
+    COVER_WRITE_FIELD,
+    CoverField,
+    TrackSerializer,
+)
 from funkwhale_api.users.serializers import UserBasicSerializer
 
 from . import models
@@ -68,11 +71,8 @@ class PlaylistSerializer(serializers.ModelSerializer):
             instance.attachment_cover = validated_data.pop("cover")
         return super().update(instance, validated_data)
 
-    @extend_schema_field(federation_serializers.APIActorSerializer)
     def get_actor(self, obj):
-        actor = obj.user.actor
-        if actor:
-            return federation_serializers.APIActorSerializer(actor).data
+        return UserBasicSerializer(obj.user).data
 
     @extend_schema_field(OpenApiTypes.BOOL)
     def get_is_playable(self, obj):
@@ -102,21 +102,9 @@ class PlaylistSerializer(serializers.ModelSerializer):
         except AttributeError:
             return []
 
-        excluded_artists = []
-        try:
-            user = self.context["request"].user
-        except (KeyError, AttributeError):
-            user = None
-        if user and user.is_authenticated:
-            excluded_artists = list(
-                user.content_filters.values_list("target_artist", flat=True)
-            )
-
         covers = []
         max_covers = 5
         for plt in plts:
-            if any(a.id in excluded_artists for a in plt.track.album.get_artists_list()):
-                continue
             url = plt.track.album.attachment_cover.download_url_medium_square_crop
             if url in covers:
                 continue

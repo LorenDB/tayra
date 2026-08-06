@@ -3,7 +3,6 @@ import logging
 from pathlib import Path
 
 from cache_memoize import cache_memoize
-from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
 from drf_spectacular.utils import extend_schema
@@ -17,9 +16,6 @@ from rest_framework.response import Response
 from funkwhale_api import __version__ as funkwhale_version
 from funkwhale_api.common import preferences
 from funkwhale_api.common.renderers import ActivityStreamRenderer
-from funkwhale_api.federation.actors import get_service_actor
-from funkwhale_api.federation.models import Domain
-from funkwhale_api.moderation.models import REPORT_TYPES
 from funkwhale_api.music.utils import SUPPORTED_EXTENSIONS
 from funkwhale_api.users.oauth import permissions as oauth_permissions
 
@@ -101,17 +97,6 @@ class NodeInfo20(views.APIView):
     )
     def get(self, request):
         pref = preferences.all()
-        if (
-            pref["moderation__allow_list_public"]
-            and pref["moderation__allow_list_enabled"]
-        ):
-            allowed_domains = list(
-                Domain.objects.filter(allowed=True)
-                .order_by("name")
-                .values_list("name", flat=True)
-            )
-        else:
-            allowed_domains = None
 
         data = {
             "software": {"version": funkwhale_version},
@@ -120,27 +105,11 @@ class NodeInfo20(views.APIView):
             "stats": cache_memoize(600, prefix="memoize:instance:stats")(stats.get)()
             if pref["instance__nodeinfo_stats_enabled"]
             else None,
-            "actorId": get_service_actor().fid,
             "supportedUploadExtensions": SUPPORTED_EXTENSIONS,
-            "allowed_domains": allowed_domains,
-            "report_types": [
-                {
-                    "type": t,
-                    "label": l,
-                    "anonymous": t
-                    in pref.get("moderation__unauthenticated_report_types"),
-                }
-                for t, l in REPORT_TYPES
-            ],
+            "allowed_domains": None,
             "endpoints": {},
         }
 
-        if not pref.get("common__api_authentication_required"):
-            if pref.get("instance__nodeinfo_stats_enabled"):
-                data["endpoints"]["knownNodes"] = reverse(
-                    "api:v1:federation:domains-list"
-                )
-            # Public library/channel indexes are permanently disabled.
         serializer = self.serializer_class(data)
         return Response(
             serializer.data, status=200, content_type=NODEINFO_2_CONTENT_TYPE
@@ -155,17 +124,6 @@ class NodeInfo21(NodeInfo20):
     )
     def get(self, request):
         pref = preferences.all()
-        if (
-            pref["moderation__allow_list_public"]
-            and pref["moderation__allow_list_enabled"]
-        ):
-            allowed_domains = list(
-                Domain.objects.filter(allowed=True)
-                .order_by("name")
-                .values_list("name", flat=True)
-            )
-        else:
-            allowed_domains = None
 
         data = {
             "software": {"version": funkwhale_version},
@@ -174,10 +132,8 @@ class NodeInfo21(NodeInfo20):
             "stats": cache_memoize(600, prefix="memoize:instance:stats")(stats.get)()
             if pref["instance__nodeinfo_stats_enabled"]
             else None,
-            "actorId": get_service_actor().fid,
             "supportedUploadExtensions": SUPPORTED_EXTENSIONS,
-            "allowed_domains": allowed_domains,
-            "languages": pref.get("moderation__languages"),
+            "allowed_domains": None,
             "location": pref.get("instance__location"),
             "content": cache_memoize(600, prefix="memoize:instance:content")(
                 stats.get_content
@@ -194,9 +150,6 @@ class NodeInfo21(NodeInfo20):
 
         if not pref.get("common__api_authentication_required"):
             data["features"].append("anonymousCanListen")
-
-        if pref.get("federation__enabled"):
-            data["features"].append("federation")
 
         serializer = self.serializer_class(data)
         return Response(

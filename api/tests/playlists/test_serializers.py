@@ -1,4 +1,3 @@
-from funkwhale_api.federation import serializers as federation_serializers
 from funkwhale_api.playlists import serializers
 from funkwhale_api.users import serializers as users_serializers
 
@@ -73,7 +72,6 @@ def test_playlist_serializer_include_duration(tmpfile, factories):
 
 def test_playlist_serializer(factories, to_api_date):
     playlist = factories["playlists.Playlist"]()
-    actor = playlist.user.create_actor()
 
     expected = {
         "id": playlist.pk,
@@ -82,7 +80,7 @@ def test_playlist_serializer(factories, to_api_date):
         "is_playable": None,
         "creation_date": to_api_date(playlist.creation_date),
         "modification_date": to_api_date(playlist.modification_date),
-        "actor": federation_serializers.APIActorSerializer(actor).data,
+        "actor": users_serializers.UserBasicSerializer(playlist.user).data,
         "user": users_serializers.UserBasicSerializer(playlist.user).data,
         "duration": 0,
         "tracks_count": 0,

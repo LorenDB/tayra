@@ -4,6 +4,7 @@ import pytest
 from django.urls import reverse
 
 from funkwhale_api.users import models
+from funkwhale_api.users.oauth import serializers
 
 
 def test_apps_post(api_client, db):

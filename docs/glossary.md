@@ -5,7 +5,7 @@
 ```{glossary}
 
 Pod
-  A pod is an instance of Funkwhale running on a server. Pods can communicate with one another across the {term}`Fediverse`.
+  A pod is an instance of Funkwhale running on a server.
 
 Authenticated
   Users who have an account on a Funkwhale pod. These users provide their authentication information when accessing content.
@@ -18,7 +18,6 @@ Permissions
 
   Available permissions:
 
-  - {guilabel}`Moderation` – Grants access to the {guilabel}`Moderation` menu. Enables the user to moderate users, domains, and the allow-list.
   - {guilabel}`Manage library` – Grants access to the {guilabel}`Library` menu. Enables the user to make changes to library content. This includes deleting local objects and handling edit suggestions.
   - {guilabel}`Manage instance-level settings` – Grants access to the {guilabel}`Settings` menu. Enables the user to make changes to pod-level settings such as security settings and API behavior.
 
@@ -38,9 +37,6 @@ Report categories
 ## Channel glossary
 
 ```{glossary}
-
-Fediverse
-  A term used to refer to a collection of federated (interconnected) servers. These servers run software that enables users to publish and host their own content.
 
 Podcatcher
   A podcatcher is a piece of software that can read podcast feeds. Podcatchers enable listeners to follow and listen to podcast content.

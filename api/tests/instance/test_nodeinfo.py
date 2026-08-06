@@ -22,67 +22,30 @@ def test_nodeinfo_20(api_client):
             )
         },
         "metadata": {
-            "actorId": "https://test.federation/federation/actors/service",
             "private": False,
             "shortDescription": "",
             "longDescription": "",
-            "rules": "",
             "contactEmail": "",
-            "terms": "",
             "nodeName": "",
             "banner": None,
             "defaultUploadQuota": 1000,
+            "supportedUploadExtensions": SUPPORTED_EXTENSIONS,
+            "allowList": {"enabled": None, "domains": None},
+            "usage": {
+                "favorites": OrderedDict([("tracks", {"total": 0})]),
+                "listenings": OrderedDict([("total", 0)]),
+                "downloads": OrderedDict([("total", 0)]),
+            },
             "library": {
-                "federationEnabled": True,
                 "anonymousCanListen": False,
                 "tracks": OrderedDict([("total", 0)]),
                 "artists": OrderedDict([("total", 0)]),
                 "albums": OrderedDict([("total", 0)]),
                 "music": OrderedDict([("hours", 0)]),
             },
-            "supportedUploadExtensions": SUPPORTED_EXTENSIONS,
-            "allowList": {"enabled": False, "domains": None},
-            "reportTypes": [
-                OrderedDict(
-                    [
-                        ("type", "takedown_request"),
-                        ("label", "Takedown request"),
-                        ("anonymous", True),
-                    ]
-                ),
-                OrderedDict(
-                    [
-                        ("type", "invalid_metadata"),
-                        ("label", "Invalid metadata"),
-                        ("anonymous", False),
-                    ]
-                ),
-                OrderedDict(
-                    [
-                        ("type", "illegal_content"),
-                        ("label", "Illegal content"),
-                        ("anonymous", True),
-                    ]
-                ),
-                OrderedDict(
-                    [
-                        ("type", "offensive_content"),
-                        ("label", "Offensive content"),
-                        ("anonymous", False),
-                    ]
-                ),
-                OrderedDict(
-                    [("type", "other"), ("label", "Other"), ("anonymous", False)]
-                ),
-            ],
-            "endpoints": OrderedDict(
-                [("knownNodes", None), ("channels", None), ("libraries", None)]
-            ),
-            "usage": {
-                "favorites": OrderedDict([("tracks", {"total": 0})]),
-                "listenings": OrderedDict([("total", 0)]),
-                "downloads": OrderedDict([("total", 0)]),
-            },
+            "endpoints": OrderedDict([("channels", None), ("libraries", None)]),
+            "rules": "",
+            "terms": "",
         },
     }
 
@@ -106,15 +69,19 @@ def test_nodeinfo_21(api_client):
         "protocols": ["activitypub"],
         "services": OrderedDict([("inbound", ["atom1.0"]), ("outbound", ["atom1.0"])]),
         "openRegistrations": False,
-        "usage": {
-            "users": OrderedDict(
-                [("total", 0), ("activeHalfyear", 0), ("activeMonth", 0)]
-            ),
-            "localPosts": 0,
-            "localComments": 0,
-        },
+        "usage": OrderedDict(
+            [
+                (
+                    "users",
+                    OrderedDict(
+                        [("total", 0), ("activeHalfyear", 0), ("activeMonth", 0)]
+                    ),
+                ),
+                ("localPosts", 0),
+                ("localComments", 0),
+            ]
+        ),
         "metadata": {
-            "actorId": "https://test.federation/federation/actors/service",
             "private": False,
             "shortDescription": "",
             "longDescription": "",
@@ -123,7 +90,7 @@ def test_nodeinfo_21(api_client):
             "banner": None,
             "defaultUploadQuota": 1000,
             "supportedUploadExtensions": SUPPORTED_EXTENSIONS,
-            "allowList": {"enabled": False, "domains": None},
+            "allowList": {"enabled": None, "domains": None},
             "usage": OrderedDict(
                 [
                     ("favorites", OrderedDict([("tracks", {"total": 0})])),
@@ -132,8 +99,6 @@ def test_nodeinfo_21(api_client):
                 ]
             ),
             "location": "",
-            "languages": ["en"],
-            "features": ["channels", "podcasts", "federation"],
             "content": OrderedDict(
                 [
                     (
@@ -151,6 +116,7 @@ def test_nodeinfo_21(api_client):
                     ("topPodcastCategories", []),
                 ]
             ),
+            "features": ["channels", "podcasts", "client_data", "rich_listenings"],
             "codeOfConduct": "",
         },
     }

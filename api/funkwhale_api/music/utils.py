@@ -92,14 +92,10 @@ def get_audio_file_data(f):
     return d
 
 
-def get_actor_from_request(request):
-    actor = None
-    if hasattr(request, "actor"):
-        actor = request.actor
-    elif request.user.is_authenticated:
-        actor = request.user.actor
-
-    return actor
+def get_user_from_request(request):
+    if request.user.is_authenticated:
+        return request.user
+    return None
 
 
 def transcode_file(input, output, input_format=None, output_format="mp3", **kwargs):

@@ -1,8 +1,6 @@
 import datetime
 import logging
 import os
-import tempfile
-import urllib.parse
 import uuid
 
 import arrow
@@ -18,16 +16,12 @@ from django.db import models, transaction
 from django.db.models import Count, JSONField, Min, Prefetch, Sum
 from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
-from django.urls import reverse
 from django.utils import timezone
 
 from funkwhale_api import musicbrainz
 from funkwhale_api.common import fields
 from funkwhale_api.common import models as common_models
-from funkwhale_api.common import session
 from funkwhale_api.common import utils as common_utils
-from funkwhale_api.federation import models as federation_models
-from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.tags import models as tags_models
 
 from . import importers, metadata, utils
@@ -46,12 +40,8 @@ def empty_dict():
 
 
 class APIModelMixin(models.Model):
-    fid = models.URLField(unique=True, max_length=500, db_index=True, null=True)
     mbid = models.UUIDField(unique=True, db_index=True, null=True, blank=True)
     uuid = models.UUIDField(unique=True, db_index=True, default=uuid.uuid4)
-    from_activity = models.ForeignKey(
-        "federation.Activity", null=True, blank=True, on_delete=models.SET_NULL
-    )
     api_includes = []
     creation_date = models.DateTimeField(default=timezone.now, db_index=True)
     import_hooks = []
@@ -106,34 +96,9 @@ class APIModelMixin(models.Model):
                 self.musicbrainz_model, self.mbid
             )
 
-    def get_federation_id(self):
-        if self.fid:
-            return self.fid
-
-        return federation_utils.full_url(
-            reverse(
-                f"federation:music:{self.federation_namespace}-detail",
-                kwargs={"uuid": self.uuid},
-            )
-        )
-
-    def save(self, **kwargs):
-        if not self.pk and not self.fid:
-            self.fid = self.get_federation_id()
-
-        return super().save(**kwargs)
-
     @property
     def is_local(self) -> bool:
-        return federation_utils.is_local(self.fid)
-
-    @property
-    def domain_name(self):
-        if not self.fid:
-            return
-
-        parsed = urllib.parse.urlparse(self.fid)
-        return parsed.hostname
+        return True
 
     def get_tags(self):
         return list(sorted(self.tagged_items.values_list("tag__name", flat=True)))
@@ -166,7 +131,7 @@ class License(models.Model):
         logger.warning("%s do not match any registered license", self.code)
 
 
-class ArtistQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
+class ArtistQuerySet(models.QuerySet):
     def with_albums_count(self):
         return self.annotate(_albums_count=models.Count("artist_credit__albums"))
 
@@ -175,23 +140,23 @@ class ArtistQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
             models.Prefetch(
                 "artist_credit__albums",
                 queryset=Album.objects.with_tracks_count().select_related(
-                    "attachment_cover", "attributed_to"
+                    "attachment_cover"
                 ),
             )
         )
 
-    def annotate_playable_by_actor(self, actor):
+    def annotate_playable_by_user(self, user):
         tracks = (
-            Upload.objects.playable_by(actor)
+            Upload.objects.playable_by(user)
             .filter(track__artist_credit__artist=models.OuterRef("id"))
             .order_by("id")
             .values("id")[:1]
         )
         subquery = models.Subquery(tracks)
-        return self.annotate(is_playable_by_actor=subquery)
+        return self.annotate(is_playable_by_user=subquery)
 
-    def playable_by(self, actor, include=True):
-        tracks = Track.objects.playable_by(actor)
+    def playable_by(self, user, include=True):
+        tracks = Track.objects.playable_by(user)
         matches = self.filter(
             pk__in=tracks.values("artist_credit__artist_id")
         ).values_list("pk")
@@ -203,28 +168,12 @@ class ArtistQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
 
 class Artist(APIModelMixin):
     name = models.TextField()
-    federation_namespace = "artists"
     musicbrainz_model = "artist"
     musicbrainz_mapping = {
         "mbid": {"musicbrainz_field_name": "id"},
         "name": {"musicbrainz_field_name": "name"},
     }
-    # Music entities are attributed to actors, to validate that updates occur
-    # from an authorized account. On top of that, we consider the instance actor
-    # can update anything under it's own domain
-    attributed_to = models.ForeignKey(
-        "federation.Actor",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="attributed_artists",
-    )
     tagged_items = GenericRelation(tags_models.TaggedItem)
-    fetches = GenericRelation(
-        "federation.Fetch",
-        content_type_field="object_content_type",
-        object_id_field="object_id",
-    )
     description = models.ForeignKey(
         "common.Content", null=True, blank=True, on_delete=models.SET_NULL
     )
@@ -270,6 +219,10 @@ class Artist(APIModelMixin):
         except ObjectDoesNotExist:
             return None
 
+    @property
+    def albums(self):
+        return Album.objects.filter(artist_credit__artist=self)
+
     def get_tracks_count(self):
         return Track.objects.filter(artist_credit__artist=self).count()
 
@@ -313,8 +266,7 @@ def import_tracks(instance, cleaned_data, raw_data):
         importers.load(Track, track_cleaned_data, track_data, Track.import_hooks)
 
 
-
-class ArtistCreditQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
+class ArtistCreditQuerySet(models.QuerySet):
     def albums(self):
         albums_ids = self.prefetch_related("albums").values_list("albums", flat=True)
         return Album.objects.filter(id__in=albums_ids)
@@ -339,30 +291,28 @@ class ArtistCredit(APIModelMixin):
         blank=True,
     )
 
-    federation_namespace = "artistcredit"
-
     objects = ArtistCreditQuerySet.as_manager()
 
     class Meta:
         ordering = ["index", "credit"]
 
 
-class AlbumQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
+class AlbumQuerySet(models.QuerySet):
     def with_tracks_count(self):
         return self.annotate(_tracks_count=models.Count("tracks"))
 
-    def annotate_playable_by_actor(self, actor):
+    def annotate_playable_by_user(self, user):
         tracks = (
-            Upload.objects.playable_by(actor)
+            Upload.objects.playable_by(user)
             .filter(track__album=models.OuterRef("id"))
             .order_by("id")
             .values("id")[:1]
         )
         subquery = models.Subquery(tracks)
-        return self.annotate(is_playable_by_actor=subquery)
+        return self.annotate(is_playable_by_user=subquery)
 
-    def playable_by(self, actor, include=True):
-        tracks = Track.objects.playable_by(actor)
+    def playable_by(self, user, include=True):
+        tracks = Track.objects.playable_by(user)
         matches = self.filter(pk__in=tracks.values("album_id")).values_list("pk")
         if include:
             return self.filter(pk__in=matches)
@@ -407,22 +357,7 @@ class Album(APIModelMixin):
     TYPE_CHOICES = (("album", "Album"),)
     type = models.CharField(choices=TYPE_CHOICES, max_length=30, default="album")
 
-    # Music entities are attributed to actors, to validate that updates occur
-    # from an authorized account. On top of that, we consider the instance actor
-    # can update anything under it's own domain
-    attributed_to = models.ForeignKey(
-        "federation.Actor",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="attributed_albums",
-    )
     tagged_items = GenericRelation(tags_models.TaggedItem)
-    fetches = GenericRelation(
-        "federation.Fetch",
-        content_type_field="object_content_type",
-        object_id_field="object_id",
-    )
 
     description = models.ForeignKey(
         "common.Content", null=True, blank=True, on_delete=models.SET_NULL
@@ -430,7 +365,6 @@ class Album(APIModelMixin):
 
     api_includes = ["artist-credits", "recordings", "media", "release-groups"]
     api = musicbrainz.api.releases
-    federation_namespace = "albums"
     musicbrainz_model = "release"
     musicbrainz_mapping = {
         "mbid": {"musicbrainz_field_name": "id"},
@@ -495,6 +429,11 @@ class Album(APIModelMixin):
     def get_artists_list(self):
         return [ac.artist for ac in self.artist_credit.all()]
 
+    @property
+    def artist(self):
+        artists = self.get_artists_list()
+        return artists[0] if artists else None
+
 
 def import_tags(instance, cleaned_data, raw_data):
     MINIMUM_COUNT = 2
@@ -515,7 +454,7 @@ def import_album(v):
     return a
 
 
-class TrackQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
+class TrackQuerySet(models.QuerySet):
     def for_nested_serialization(self):
         return self.prefetch_related(
             "artist_credit",
@@ -528,34 +467,34 @@ class TrackQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
             ),
         )
 
-    def annotate_playable_by_actor(self, actor):
+    def annotate_playable_by_user(self, user):
         files = (
-            Upload.objects.playable_by(actor)
+            Upload.objects.playable_by(user)
             .filter(track=models.OuterRef("id"))
             .order_by("id")
             .values("id")[:1]
         )
         subquery = models.Subquery(files)
-        return self.annotate(is_playable_by_actor=subquery)
+        return self.annotate(is_playable_by_user=subquery)
 
-    def playable_by(self, actor, include=True):
+    def playable_by(self, user, include=True):
         if settings.MUSIC_USE_DENORMALIZATION:
-            if actor is not None:
-                query = models.Q(actor=None) | models.Q(actor=actor)
+            if user is not None:
+                query = models.Q(user=None) | models.Q(user=user)
             else:
-                query = models.Q(actor=None, internal=False)
+                query = models.Q(user=None, internal=False)
             if not include:
                 query = ~query
             return self.filter(pk__in=TrackActor.objects.filter(query).values("track"))
-        files = Upload.objects.playable_by(actor, include)
+        files = Upload.objects.playable_by(user, include)
         matches = self.filter(uploads__in=files).values_list("pk")
         if include:
             return self.filter(pk__in=matches)
         else:
             return self.exclude(pk__in=matches)
 
-    def with_playable_uploads(self, actor):
-        uploads = Upload.objects.playable_by(actor)
+    def with_playable_uploads(self, user):
+        uploads = Upload.objects.playable_by(user)
         return self.prefetch_related(
             models.Prefetch("uploads", queryset=uploads, to_attr="playable_uploads")
         )
@@ -592,13 +531,6 @@ class Track(APIModelMixin):
     # Music entities are attributed to actors, to validate that updates occur
     # from an authorized account. On top of that, we consider the instance actor
     # can update anything under it's own domain
-    attributed_to = models.ForeignKey(
-        "federation.Actor",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="attributed_tracks",
-    )
     copyright = models.TextField(null=True, blank=True)
     description = models.ForeignKey(
         "common.Content", null=True, blank=True, on_delete=models.SET_NULL
@@ -611,7 +543,6 @@ class Track(APIModelMixin):
         related_name="covered_track",
     )
     downloads_count = models.PositiveIntegerField(default=0)
-    federation_namespace = "tracks"
     musicbrainz_model = "recording"
     api = musicbrainz.api.recordings
     api_includes = ["artist-credits", "releases", "media", "tags"]
@@ -627,11 +558,6 @@ class Track(APIModelMixin):
     import_hooks = [import_tags]
     objects = TrackQuerySet.as_manager()
     tagged_items = GenericRelation(tags_models.TaggedItem)
-    fetches = GenericRelation(
-        "federation.Fetch",
-        content_type_field="object_content_type",
-        object_id_field="object_id",
-    )
 
     class Meta:
         ordering = ["album", "disc_number", "position"]
@@ -654,6 +580,11 @@ class Track(APIModelMixin):
 
     def get_artists_list(self):
         return [ac.artist for ac in self.artist_credit.all()]
+
+    @property
+    def artist(self):
+        artists = self.get_artists_list()
+        return artists[-1] if artists else None
 
     @property
     def full_name(self):
@@ -758,8 +689,8 @@ class UploadQuerySet(common_models.NullsLastQuerySet):
             query = ~query
         return self.filter(query)
 
-    def playable_by(self, actor, include=True):
-        libraries = Library.objects.viewable_by(actor)
+    def playable_by(self, user, include=True):
+        libraries = Library.objects.viewable_by(user)
 
         if include:
             return self.filter(
@@ -768,15 +699,6 @@ class UploadQuerySet(common_models.NullsLastQuerySet):
         return self.exclude(
             library__in=libraries, import_status__in=["finished", "skipped"]
         )
-
-    def local(self, include=True):
-        query = models.Q(library__actor__domain_id=settings.FEDERATION_HOSTNAME)
-        if not include:
-            query = ~query
-        return self.filter(query)
-
-    def for_federation(self):
-        return self.filter(import_status="finished", mimetype__startswith="audio/")
 
     def with_file(self):
         return self.exclude(audio_file=None).exclude(audio_file="")
@@ -795,11 +717,7 @@ def get_file_path(instance, filename):
     if isinstance(instance, UploadVersion):
         return common_utils.ChunkedPath("transcoded")(instance, filename)
 
-    if instance.library.actor.get_user():
-        return common_utils.ChunkedPath("tracks")(instance, filename)
-    else:
-        # we cache remote tracks in a different directory
-        return common_utils.ChunkedPath("federation_cache/tracks")(instance, filename)
+    return common_utils.ChunkedPath("tracks")(instance, filename)
 
 
 def get_import_reference():
@@ -807,7 +725,6 @@ def get_import_reference():
 
 
 class Upload(models.Model):
-    fid = models.URLField(unique=True, max_length=500, null=True, blank=True)
     uuid = models.UUIDField(unique=True, db_index=True, default=uuid.uuid4)
     track = models.ForeignKey(
         Track, related_name="uploads", on_delete=models.CASCADE, null=True, blank=True
@@ -835,7 +752,7 @@ class Upload(models.Model):
         on_delete=models.CASCADE,
     )
 
-    # metadata from federation
+    # metadata from imports
     metadata = JSONField(
         default=empty_dict, max_length=50000, encoder=DjangoJSONEncoder, blank=True
     )
@@ -856,9 +773,6 @@ class Upload(models.Model):
     import_details = JSONField(
         default=empty_dict, max_length=50000, encoder=DjangoJSONEncoder, blank=True
     )
-    from_activity = models.ForeignKey(
-        "federation.Activity", null=True, on_delete=models.SET_NULL, blank=True
-    )
     downloads_count = models.PositiveIntegerField(default=0)
 
     # stores checksums such as `sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`
@@ -868,55 +782,7 @@ class Upload(models.Model):
 
     @property
     def is_local(self) -> bool:
-        return federation_utils.is_local(self.fid)
-
-    @property
-    def domain_name(self):
-        if not self.fid:
-            return
-
-        parsed = urllib.parse.urlparse(self.fid)
-        return parsed.hostname
-
-    def download_audio_from_remote(self, actor):
-        from funkwhale_api.federation import signing
-
-        if actor:
-            auth = signing.get_auth(actor.private_key, actor.private_key_id)
-        else:
-            auth = None
-
-        remote_response = session.get_session().get(
-            self.source,
-            auth=auth,
-            stream=True,
-            timeout=20,
-            headers={"Content-Type": "application/octet-stream"},
-        )
-        with remote_response as r:
-            remote_response.raise_for_status()
-            extension = utils.get_ext_from_type(self.mimetype)
-            title_parts = []
-            title_parts.append(self.track.title)
-            if self.track.album:
-                title_parts.append(self.track.album.title)
-            title_parts.append(self.track.get_artist_credit_string)
-
-            title = " - ".join(title_parts)
-            filename = f"{title}.{extension}"
-            tmp_file = tempfile.TemporaryFile()
-            for chunk in r.iter_content(chunk_size=512):
-                tmp_file.write(chunk)
-            self.audio_file.save(filename, tmp_file, save=False)
-            self.save(update_fields=["audio_file"])
-
-    def get_federation_id(self):
-        if self.fid:
-            return self.fid
-
-        return federation_utils.full_url(
-            reverse("federation:music:uploads-detail", kwargs={"uuid": self.uuid})
-        )
+        return True
 
     @property
     def filename(self) -> str:
@@ -990,8 +856,6 @@ class Upload(models.Model):
                 if audio_file:
                     self.checksum = common_utils.get_file_hash(audio_file)
 
-        if not self.pk and not self.fid and self.library.actor.get_user():
-            self.fid = self.get_federation_id()
         return super().save(**kwargs)
 
     def get_metadata(self):
@@ -1147,7 +1011,6 @@ class ImportBatch(models.Model):
     IMPORT_BATCH_SOURCES = [
         ("api", "api"),
         ("shell", "shell"),
-        ("federation", "federation"),
     ]
     source = models.CharField(
         max_length=30, default="api", choices=IMPORT_BATCH_SOURCES
@@ -1190,13 +1053,6 @@ class ImportBatch(models.Model):
         if self.status == old_status:
             return
         self.save(update_fields=["status"])
-        if self.status != old_status and self.status == "finished":
-            from . import tasks
-
-            tasks.import_batch_notify_followers.delay(import_batch_id=self.pk)
-
-    def get_federation_id(self):
-        return federation_utils.full_url(f"/federation/music/import/batch/{self.uuid}")
 
 
 class ImportJob(models.Model):
@@ -1218,13 +1074,6 @@ class ImportJob(models.Model):
         upload_to="imports/%Y/%m/%d", max_length=255, null=True, blank=True
     )
 
-    library_track = models.ForeignKey(
-        "federation.LibraryTrack",
-        related_name="import_jobs",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-    )
     audio_file_size = models.IntegerField(null=True, blank=True)
 
     class Meta:
@@ -1242,60 +1091,46 @@ LIBRARY_PRIVACY_LEVEL_CHOICES = [
 
 
 class LibraryQuerySet(models.QuerySet):
-    def local(self, include=True):
-        query = models.Q(actor__domain_id=settings.FEDERATION_HOSTNAME)
-        if not include:
-            query = ~query
-        return self.filter(query)
+    def with_follows(self, user):
+        from funkwhale_api.audio.models import ChannelSubscription
 
-    def with_follows(self, actor):
         return self.prefetch_related(
             models.Prefetch(
-                "received_follows",
-                queryset=federation_models.LibraryFollow.objects.filter(actor=actor),
+                "channel__subscriptions",
+                queryset=ChannelSubscription.objects.filter(user=user),
                 to_attr="_follows",
             )
         )
 
-    def viewable_by(self, actor):
-        from funkwhale_api.federation.models import Follow, LibraryFollow
+    def viewable_by(self, user):
+        from funkwhale_api.audio.models import ChannelSubscription
 
-        if actor is None:
+        if user is None:
             return self.filter(privacy_level="everyone")
 
-        me_query = models.Q(privacy_level="me", actor=actor)
-        instance_query = models.Q(privacy_level="instance", actor__domain=actor.domain)
-        followed_libraries = LibraryFollow.objects.filter(
-            actor=actor, approved=True
-        ).values_list("target", flat=True)
-        followed_channels_libraries = (
-            Follow.objects.exclude(target__channel=None)
-            .filter(
-                actor=actor,
-                approved=True,
-            )
-            .values_list("target__channel__library", flat=True)
-        )
-        domains_reachable = federation_models.Domain.objects.filter(
-            reachable=True
-        ) | federation_models.Domain.objects.filter(name=settings.FUNKWHALE_HOSTNAME)
+        me_query = models.Q(privacy_level="me", owner=user)
+        instance_query = models.Q(privacy_level="instance")
+        subscribed_channels = ChannelSubscription.objects.filter(
+            user=user, approved=True
+        ).values_list("channel__library", flat=True)
 
         return self.filter(
             me_query
             | instance_query
             | models.Q(privacy_level="everyone")
-            | models.Q(pk__in=followed_libraries)
-            | models.Q(pk__in=followed_channels_libraries)
-            & models.Q(actor__domain__in=domains_reachable)
+            | models.Q(pk__in=subscribed_channels)
         )
 
 
-class Library(federation_models.FederationMixin):
+class Library(models.Model):
     uuid = models.UUIDField(unique=True, db_index=True, default=uuid.uuid4)
-    actor = models.ForeignKey(
-        "federation.Actor", related_name="libraries", on_delete=models.CASCADE
+    owner = models.ForeignKey(
+        "users.User",
+        related_name="libraries",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
     )
-    followers_url = models.URLField(max_length=500)
     creation_date = models.DateTimeField(default=timezone.now)
     name = models.CharField(max_length=100)
     description = models.TextField(max_length=5000, null=True, blank=True)
@@ -1308,32 +1143,14 @@ class Library(federation_models.FederationMixin):
     def __str__(self):
         return self.name
 
-    def get_moderation_url(self) -> str:
-        return f"/manage/library/libraries/{self.uuid}"
-
-    def get_federation_id(self) -> str:
-        return federation_utils.full_url(
-            reverse("federation:music:libraries-detail", kwargs={"uuid": self.uuid})
-        )
-
     def get_absolute_url(self) -> str:
         return f"/library/{self.uuid}"
 
-    def save(self, **kwargs):
-        if not self.pk and not self.fid and self.actor.is_local:
-            self.fid = self.get_federation_id()
-            self.followers_url = self.fid + "/followers"
+    @property
+    def is_local(self) -> bool:
+        return True
 
-        return super().save(**kwargs)
-
-    def should_autoapprove_follow(self, actor) -> bool:
-        if self.privacy_level == "everyone":
-            return True
-        if self.privacy_level == "instance" and actor.get_user():
-            return True
-        return False
-
-    def schedule_scan(self, actor, force=False):
+    def schedule_scan(self, user, force=False):
         latest_scan = (
             self.scans.exclude(status="errored").order_by("-creation_date").first()
         )
@@ -1346,10 +1163,7 @@ class Library(federation_models.FederationMixin):
         ):
             return
 
-        scan = self.scans.create(total_files=self.uploads_count, actor=actor)
-        from . import tasks
-
-        common_utils.on_commit(tasks.start_library_scan.delay, library_scan_id=scan.pk)
+        scan = self.scans.create(total_files=self.uploads_count, submitted_by=user)
         return scan
 
     def get_channel(self):
@@ -1371,8 +1185,8 @@ SCAN_STATUS = [
 
 
 class LibraryScan(models.Model):
-    actor = models.ForeignKey(
-        "federation.Actor", null=True, blank=True, on_delete=models.CASCADE
+    submitted_by = models.ForeignKey(
+        "users.User", null=True, blank=True, on_delete=models.CASCADE
     )
     library = models.ForeignKey(Library, related_name="scans", on_delete=models.CASCADE)
     total_files = models.PositiveIntegerField(default=0)
@@ -1390,8 +1204,8 @@ class TrackActor(models.Model):
     """
 
     id = models.BigAutoField(primary_key=True)
-    actor = models.ForeignKey(
-        "federation.Actor",
+    user = models.ForeignKey(
+        "users.User",
         on_delete=models.CASCADE,
         related_name="track_actor_items",
         blank=True,
@@ -1406,40 +1220,44 @@ class TrackActor(models.Model):
     internal = models.BooleanField(default=False, db_index=True)
 
     class Meta:
-        unique_together = ("track", "actor", "internal", "upload")
+        unique_together = ("track", "user", "internal", "upload")
 
     @classmethod
-    def get_objs(cls, library, actor_ids, upload_and_track_ids):
+    def get_objs(cls, library, user_ids, upload_and_track_ids):
+        from funkwhale_api.audio.models import ChannelSubscription
+
         upload_and_track_ids = upload_and_track_ids or library.uploads.filter(
             import_status="finished", track__isnull=False
         ).values_list("id", "track")
         objs = []
         if library.privacy_level == "me":
             if library.get_channel():
-                follow_queryset = library.channel.actor.received_follows
+                subscription_queryset = library.channel.subscriptions
             else:
-                follow_queryset = library.received_follows
-            follow_queryset = follow_queryset.filter(approved=True).exclude(
-                actor__user__isnull=True
-            )
-            if actor_ids:
-                follow_queryset = follow_queryset.filter(actor__pk__in=actor_ids)
-            final_actor_ids = list(follow_queryset.values_list("actor", flat=True))
+                subscription_queryset = ChannelSubscription.objects.filter(
+                    channel__library=library
+                )
+            subscription_queryset = subscription_queryset.filter(approved=True)
+            if user_ids:
+                subscription_queryset = subscription_queryset.filter(
+                    user__pk__in=user_ids
+                )
+            final_user_ids = list(subscription_queryset.values_list("user", flat=True))
 
-            owner = library.actor if library.actor.is_local else None
-            if owner and (not actor_ids or owner in final_actor_ids):
-                final_actor_ids.append(owner.pk)
-            for actor_id in final_actor_ids:
+            owner = library.owner
+            if owner and (not user_ids or owner.pk in final_user_ids):
+                final_user_ids.append(owner.pk)
+            for user_id in final_user_ids:
                 for upload_id, track_id in upload_and_track_ids:
                     objs.append(
-                        cls(actor_id=actor_id, track_id=track_id, upload_id=upload_id)
+                        cls(user_id=user_id, track_id=track_id, upload_id=upload_id)
                     )
 
         elif library.privacy_level == "instance":
             for upload_id, track_id in upload_and_track_ids:
                 objs.append(
                     cls(
-                        actor_id=None,
+                        user_id=None,
                         track_id=track_id,
                         upload_id=upload_id,
                         internal=True,
@@ -1447,7 +1265,7 @@ class TrackActor(models.Model):
                 )
         elif library.privacy_level == "everyone":
             for upload_id, track_id in upload_and_track_ids:
-                objs.append(cls(actor_id=None, track_id=track_id, upload_id=upload_id))
+                objs.append(cls(user_id=None, track_id=track_id, upload_id=upload_id))
         return objs
 
     @classmethod
@@ -1460,12 +1278,12 @@ class TrackActor(models.Model):
         if delete_existing:
             to_delete = cls.objects.filter(upload__library=library)
             if actor_ids:
-                to_delete = to_delete.filter(actor__pk__in=actor_ids)
+                to_delete = to_delete.filter(user__pk__in=actor_ids)
             # we don't use .delete() here because we don't want signals to fire
             to_delete._raw_delete(to_delete.db)
 
         objs = cls.get_objs(
-            library, actor_ids=actor_ids, upload_and_track_ids=upload_and_track_ids
+            library, user_ids=actor_ids, upload_and_track_ids=upload_and_track_ids
         )
         return cls.objects.bulk_create(objs, ignore_conflicts=True, batch_size=5000)
 

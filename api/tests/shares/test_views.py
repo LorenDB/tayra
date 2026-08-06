@@ -155,13 +155,13 @@ def test_anonymous_cannot_list_shares(api_client):
 @pytest.mark.django_db
 def test_public_resolve_album(api_client, factories, preferences):
     preferences["common__api_authentication_required"] = True
-    user = factories["users.User"](with_actor=True)
+    user = factories["users.User"]()
     album = factories["music.Album"]()
     track = factories["music.Track"](album=album)
     factories["music.Upload"](
         track=track,
         playable=True,
-        library__actor=user.actor,
+        library__owner=user,
         library__privacy_level="me",
     )
     link = factories["shares.ShareLink"](
@@ -181,14 +181,14 @@ def test_public_resolve_album(api_client, factories, preferences):
 
 @pytest.mark.django_db
 def test_public_resolve_playlist(api_client, factories):
-    user = factories["users.User"](with_actor=True)
+    user = factories["users.User"]()
     playlist = factories["playlists.Playlist"](user=user)
     track = factories["music.Track"]()
     factories["playlists.PlaylistTrack"](playlist=playlist, track=track, index=0)
     factories["music.Upload"](
         track=track,
         playable=True,
-        library__actor=user.actor,
+        library__owner=user,
         library__privacy_level="me",
     )
     link = factories["shares.ShareLink"](
@@ -237,13 +237,13 @@ def test_public_resolve_revoked_404(api_client, factories):
 @pytest.mark.django_db
 def test_stream_with_share_token_private_library(api_client, factories, preferences):
     preferences["common__api_authentication_required"] = True
-    user = factories["users.User"](with_actor=True)
+    user = factories["users.User"]()
     album = factories["music.Album"]()
     track = factories["music.Track"](album=album)
     upload = factories["music.Upload"](
         track=track,
         import_status="finished",
-        library__actor=user.actor,
+        library__owner=user,
         library__privacy_level="me",
     )
     link = factories["shares.ShareLink"](
@@ -261,20 +261,20 @@ def test_stream_with_share_token_private_library(api_client, factories, preferen
 @pytest.mark.django_db
 def test_stream_share_track_not_in_share_404(api_client, factories, preferences):
     preferences["common__api_authentication_required"] = True
-    user = factories["users.User"](with_actor=True)
+    user = factories["users.User"]()
     album = factories["music.Album"]()
     track_in = factories["music.Track"](album=album)
     track_out = factories["music.Track"]()
     factories["music.Upload"](
         track=track_in,
         import_status="finished",
-        library__actor=user.actor,
+        library__owner=user,
         library__privacy_level="me",
     )
     factories["music.Upload"](
         track=track_out,
         import_status="finished",
-        library__actor=user.actor,
+        library__owner=user,
         library__privacy_level="me",
     )
     link = factories["shares.ShareLink"](
@@ -288,13 +288,13 @@ def test_stream_share_track_not_in_share_404(api_client, factories, preferences)
 @pytest.mark.django_db
 def test_stream_after_delete_share_fails(api_client, factories, preferences):
     preferences["common__api_authentication_required"] = True
-    user = factories["users.User"](with_actor=True)
+    user = factories["users.User"]()
     album = factories["music.Album"]()
     track = factories["music.Track"](album=album)
     factories["music.Upload"](
         track=track,
         import_status="finished",
-        library__actor=user.actor,
+        library__owner=user,
         library__privacy_level="me",
     )
     link = factories["shares.ShareLink"](
@@ -327,15 +327,15 @@ def test_public_resolve_does_not_leak_unplayable_upload_uuids(api_client, factor
     A finished upload in someone else's private library must not appear as
     uploads[0] when the owner has no playable file for that track.
     """
-    owner = factories["users.User"](with_actor=True)
-    stranger = factories["users.User"](with_actor=True)
+    owner = factories["users.User"]()
+    stranger = factories["users.User"]()
     album = factories["music.Album"]()
     track = factories["music.Track"](album=album)
     # Only stranger has a finished private upload — owner cannot play it.
     private_upload = factories["music.Upload"](
         track=track,
         import_status="finished",
-        library__actor=stranger.actor,
+        library__owner=stranger,
         library__privacy_level="me",
     )
     link = factories["shares.ShareLink"](
@@ -356,13 +356,13 @@ def test_public_resolve_does_not_leak_unplayable_upload_uuids(api_client, factor
 @pytest.mark.django_db
 def test_inactive_owner_share_is_dead(api_client, factories, preferences):
     preferences["common__api_authentication_required"] = True
-    user = factories["users.User"](with_actor=True)
+    user = factories["users.User"]()
     album = factories["music.Album"]()
     track = factories["music.Track"](album=album)
     factories["music.Upload"](
         track=track,
         import_status="finished",
-        library__actor=user.actor,
+        library__owner=user,
         library__privacy_level="me",
     )
     link = factories["shares.ShareLink"](
@@ -384,13 +384,13 @@ def test_inactive_owner_share_is_dead(api_client, factories, preferences):
 def test_share_stream_forces_inline_not_attachment(api_client, factories, preferences):
     """Share holders listen only — download=true must not force attachment."""
     preferences["common__api_authentication_required"] = True
-    user = factories["users.User"](with_actor=True)
+    user = factories["users.User"]()
     album = factories["music.Album"]()
     track = factories["music.Track"](album=album)
     factories["music.Upload"](
         track=track,
         import_status="finished",
-        library__actor=user.actor,
+        library__owner=user,
         library__privacy_level="me",
     )
     link = factories["shares.ShareLink"](

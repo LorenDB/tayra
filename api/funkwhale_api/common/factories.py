@@ -1,14 +1,13 @@
 import factory
 
 from funkwhale_api.factories import NoUpdateOnCreate, registry
-from funkwhale_api.federation import factories as federation_factories
+from funkwhale_api.users import factories as users_factories
 
 
 @registry.register
 class MutationFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
-    fid = factory.Faker("federation_url")
     uuid = factory.Faker("uuid4")
-    created_by = factory.SubFactory(federation_factories.ActorFactory)
+    created_by = factory.SubFactory(users_factories.UserFactory)
     summary = factory.Faker("paragraph")
     type = "update"
 
@@ -18,9 +17,8 @@ class MutationFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
 
 @registry.register
 class AttachmentFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
-    url = factory.Faker("federation_url")
     uuid = factory.Faker("uuid4")
-    actor = factory.SubFactory(federation_factories.ActorFactory)
+    uploaded_by = factory.SubFactory(users_factories.UserFactory)
     file = factory.django.ImageField()
 
     class Meta:
