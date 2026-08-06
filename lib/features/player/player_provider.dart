@@ -1592,6 +1592,26 @@ class PlayerNotifier extends Notifier<PlayerState> {
   bool get _isGaplessEnabled =>
       !AppPlatform.isWeb && ref.read(settingsProvider).gaplessPlayback;
 
+  /// Replace the player's single audio source, stopping any previous playback
+  /// first on web so HTMLAudioElement does not keep the first track's audio.
+  Future<void> _replaceSingleAudioSource(
+    AudioSource source, {
+    Duration? initialPosition,
+  }) async {
+    final player = _handler.audioPlayer;
+    // Always clear multi-source / gapless state for single-track loads.
+    _gaplessActive = false;
+    if (AppPlatform.isWeb) {
+      try {
+        await player.stop();
+      } catch (_) {}
+      // Let the browser release the previous media resource before binding a
+      // new URL (otherwise UI can advance while the first stream keeps playing).
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+    }
+    await player.setAudioSource(source, initialPosition: initialPosition);
+  }
+
   /// Server listen: rich POST when client-data supported, else thin scrobble.
   Future<void> _recordServerListen(Track track) async {
     try {
@@ -2327,6 +2347,17 @@ class PlayerNotifier extends Notifier<PlayerState> {
       isLoading: true,
     );
 
+    // Web never uses multi-source playlists; stop any current HTML audio
+    // before loading so track changes cannot leave the first stream running.
+    if (AppPlatform.isWeb || !_isGaplessEnabled) {
+      _gaplessActive = false;
+      if (AppPlatform.isWeb) {
+        try {
+          await _handler.audioPlayer.stop();
+        } catch (_) {}
+      }
+    }
+
     if (_isGaplessEnabled && !_isOffline) {
       final loaded = await _loadGaplessSource(
         effectiveIndex,
@@ -2737,7 +2768,14 @@ class PlayerNotifier extends Notifier<PlayerState> {
     final loadEpoch = epoch ?? _loadEpoch;
     _needsReload = false;
     // Single-source load always replaces any multi-source playlist.
+    // On web, stop immediately so a previous track cannot keep audible
+    // while we resolve the next stream URL.
     _gaplessActive = false;
+    if (AppPlatform.isWeb) {
+      try {
+        await _handler.audioPlayer.stop();
+      } catch (_) {}
+    }
     try {
       final listenUrl = track.listenUrl;
       if (listenUrl == null) {
@@ -2817,7 +2855,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
           debugPrint(
             'PlayerNotifier._loadTrack: track ${track.id} — trying cached URI ${cachedFile.uri}',
           );
-          await _handler.audioPlayer.setAudioSource(
+          await _replaceSingleAudioSource(
             AudioSource.uri(cachedFile.uri),
             initialPosition: initialPosition,
           );
@@ -2827,7 +2865,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
             'PlayerNotifier._loadTrack: cached URI failed ($e1), trying file path ${cachedFile.path}',
           );
           try {
-            await _handler.audioPlayer.setAudioSource(
+            await _replaceSingleAudioSource(
               AudioSource.uri(Uri.file(cachedFile.path)),
               initialPosition: initialPosition,
             );
@@ -2850,7 +2888,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
           debugPrint(
             'PlayerNotifier._loadTrack: streaming track ${track.id} from server: $streamUrl',
           );
-          await _handler.audioPlayer.setAudioSource(
+          await _replaceSingleAudioSource(
             AudioSource.uri(
               Uri.parse(streamUrl),
               headers: headers,
@@ -2872,7 +2910,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
         debugPrint(
           'PlayerNotifier._loadTrack: streaming track ${track.id} from server: $streamUrl',
         );
-        await _handler.audioPlayer.setAudioSource(
+        await _replaceSingleAudioSource(
           AudioSource.uri(
             Uri.parse(streamUrl),
             headers: headers,
@@ -3105,7 +3143,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
       if (!_isCurrentLoad(epoch)) return;
 
-      await _handler.audioPlayer.setAudioSource(
+      await _replaceSingleAudioSource(
         AudioSource.uri(
           Uri.parse(streamUrl),
           headers: headers,
