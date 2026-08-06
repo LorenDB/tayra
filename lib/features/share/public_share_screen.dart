@@ -44,25 +44,34 @@ class _PublicShareScreenState extends ConsumerState<PublicShareScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      ref.read(shareSessionTokenProvider.notifier).setToken(widget.token);
-    });
+    // Activate immediately so stream URLs get ?share= before the first play.
+    // Do NOT clear on deactivate — navigating to /now-playing or /queue must
+    // keep the share credential for ongoing (and subsequent) stream loads.
+    ref.read(shareSessionTokenProvider.notifier).setToken(widget.token);
   }
 
   @override
-  void deactivate() {
-    // Clear share session when navigating away so streams stop using ?share=.
-    final current = ref.read(shareSessionTokenProvider);
-    if (current == widget.token) {
-      ref.read(shareSessionTokenProvider.notifier).clear();
+  void didUpdateWidget(covariant PublicShareScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.token != widget.token) {
+      ref.read(shareSessionTokenProvider.notifier).setToken(widget.token);
     }
-    super.deactivate();
   }
 
   Future<void> _playAll(PublicShare share, {int startIndex = 0}) async {
-    final playable = share.tracks.where((t) => t.listenUrl != null).toList();
-    if (playable.isEmpty) return;
+    // Re-assert session in case another screen cleared it.
+    ref.read(shareSessionTokenProvider.notifier).setToken(widget.token);
+    final playable =
+        share.tracks
+            .where((t) => t.listenUrl != null && t.listenUrl!.isNotEmpty)
+            .toList();
+    if (playable.isEmpty) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No playable tracks on this share')),
+      );
+      return;
+    }
     final safe = startIndex.clamp(0, playable.length - 1);
     await ref
         .read(playerProvider.notifier)
@@ -222,7 +231,12 @@ class _PublicShareScreenState extends ConsumerState<PublicShareScreen> {
                             if (!isAuth) ...[
                               const SizedBox(height: 12),
                               TextButton(
-                                onPressed: () => context.go('/login'),
+                                onPressed: () {
+                                  ref
+                                      .read(shareSessionTokenProvider.notifier)
+                                      .clear();
+                                  context.go('/login');
+                                },
                                 child: const Text('Sign in'),
                               ),
                             ],

@@ -9,6 +9,7 @@ import 'package:tayra/core/api/models.dart';
 import 'package:tayra/core/audio/audio_quality.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
 import 'package:tayra/core/auth/password_transport.dart';
+import 'package:tayra/core/platform/app_platform.dart';
 
 // ── Repository provider ─────────────────────────────────────────────────
 
@@ -29,7 +30,18 @@ class FunkwhaleApi {
   String? get lastRadioSessionCookie => _lastRadioSessionCookie;
 
   String get _baseUrl {
-    final serverUrl = _ref.read(authStateProvider).serverUrl ?? '';
+    var serverUrl = _ref.read(authStateProvider).serverUrl ?? '';
+    // Share visitors (and other logged-out same-origin web flows) may have no
+    // saved server URL — fall back so stream/API paths are absolute and work
+    // with browser media elements.
+    if (serverUrl.isEmpty) {
+      final hardcoded = AppPlatform.hardcodedPodUrl;
+      if (hardcoded != null && hardcoded.isNotEmpty) {
+        serverUrl = hardcoded;
+      } else if (kIsWeb) {
+        serverUrl = Uri.base.origin;
+      }
+    }
     return serverUrl.endsWith('/')
         ? serverUrl.substring(0, serverUrl.length - 1)
         : serverUrl;
@@ -742,7 +754,11 @@ class FunkwhaleApi {
       params['quality'] = resolved.apiValue;
     }
 
-    if (shareToken != null && shareToken.isNotEmpty) {
+    // Share credentials only apply while logged out. Once authenticated,
+    // prefer normal listen/Bearer auth so a leftover share session cannot
+    // pin streams to the share ACL.
+    final isAuth = _ref.read(authStateProvider).isAuthenticated;
+    if (!isAuth && shareToken != null && shareToken.isNotEmpty) {
       params['share'] = shareToken;
     } else {
       final useToken = appendListenToken ?? kIsWeb;

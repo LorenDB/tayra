@@ -26,6 +26,7 @@ import 'package:tayra/features/podcasts/podcast_progress_service.dart';
 import 'package:tayra/core/cache/cache_database.dart';
 import 'package:tayra/features/settings/settings_provider.dart';
 import 'package:tayra/features/share/share_session_provider.dart';
+import 'package:tayra/core/auth/auth_provider.dart';
 
 // ── Android Auto browse tree constants ──────────────────────────────────
 
@@ -1603,6 +1604,14 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// True when the app should not rely on network streaming.
   bool get _isOffline => ref.read(offlineStateProvider).isOffline;
 
+  /// Share-link stream credential for logged-out visitors only.
+  String? get _activeShareToken {
+    if (ref.read(authStateProvider).isAuthenticated) return null;
+    final token = ref.read(shareSessionTokenProvider);
+    if (token == null || token.isEmpty) return null;
+    return token;
+  }
+
   /// Whether [track] can be started without the network (local audio file).
   bool _isTrackCached(Track track) {
     return ref.read(offlineTrackIdsProvider).contains(track.id);
@@ -1677,8 +1686,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
       throw Exception('Track ${track.id} not available offline');
     }
 
-    final shareToken = ref.read(shareSessionTokenProvider);
-    if (shareToken == null || shareToken.isEmpty) {
+    final shareToken = _activeShareToken;
+    if (shareToken == null) {
       await _api.ensureListenToken();
     }
     final streamUrl = _api.getStreamUrl(
@@ -1689,7 +1698,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     // Web media cannot send custom headers; token is in the query string.
     // Share streams use ?share=; skip Bearer to avoid mixing auth modes.
     final headers =
-        (AppPlatform.isWeb || (shareToken != null && shareToken.isNotEmpty))
+        (AppPlatform.isWeb || shareToken != null)
             ? <String, String>{}
             : _api.authHeaders;
     return AudioSource.uri(Uri.parse(streamUrl), headers: headers);
@@ -2739,8 +2748,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
         throw Exception('Track has no listen URL');
       }
 
-      final shareToken = ref.read(shareSessionTokenProvider);
-      if (shareToken == null || shareToken.isEmpty) {
+      final shareToken = _activeShareToken;
+      if (shareToken == null) {
         await _api.ensureListenToken();
       }
       _activeStreamQuality = _preferredStreamQuality;
@@ -2768,7 +2777,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // Web media cannot send custom headers; token is in the query string.
       // Share streams use ?share= only (no Bearer).
       final headers =
-          (AppPlatform.isWeb || (shareToken != null && shareToken.isNotEmpty))
+          (AppPlatform.isWeb || shareToken != null)
               ? <String, String>{}
               : _api.authHeaders;
 
@@ -3000,9 +3009,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
     List<Track> tracks,
     int startIndex,
   ) async {
-    final shareToken = ref.read(shareSessionTokenProvider);
     // Skip background full-file cache for share visitors (no durable storage).
-    if (shareToken != null && shareToken.isNotEmpty) return;
+    if (_activeShareToken != null) return;
     final headers = _api.authHeaders;
     final epoch = _loadEpoch;
     final downloadQuality = _preferredDownloadQuality;
@@ -3081,8 +3089,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
     final epoch = ++_loadEpoch;
 
     try {
-      final shareToken = ref.read(shareSessionTokenProvider);
-      if (shareToken == null || shareToken.isEmpty) {
+      final shareToken = _activeShareToken;
+      if (shareToken == null) {
         await _api.ensureListenToken();
       }
       final streamUrl = _api.getStreamUrl(
@@ -3091,7 +3099,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
         shareToken: shareToken,
       );
       final headers =
-          (AppPlatform.isWeb || (shareToken != null && shareToken.isNotEmpty))
+          (AppPlatform.isWeb || shareToken != null)
               ? <String, String>{}
               : _api.authHeaders;
 

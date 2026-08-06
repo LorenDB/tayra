@@ -154,6 +154,8 @@ bool isPublicAuthPath(String path) {
   if (p == '/auth/sso/callback') return true;
   // Secret share links for albums / playlists (listen-only visitors)
   if (p.startsWith('/share/')) return true;
+  // Player surfaces used by share visitors (and harmless when empty while logged out)
+  if (p == '/now-playing' || p == '/queue') return true;
   return false;
 }
 
@@ -815,10 +817,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
         ],
       ),
-      // Full-screen routes (overlay the shell)
+      // Full-screen routes (overlay the shell — and share visitor stack)
       GoRoute(
         path: '/now-playing',
         name: 'now_playing',
+        parentNavigatorKey: rootNavigatorKey,
         pageBuilder:
             (context, state) => CustomTransitionPage(
               child: const NowPlayingScreen(),
@@ -846,6 +849,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/queue',
         name: 'queue',
+        parentNavigatorKey: rootNavigatorKey,
         pageBuilder:
             (context, state) => CustomTransitionPage(
               child: const QueueScreen(),
