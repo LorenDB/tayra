@@ -5,6 +5,22 @@ from django.db import migrations, models
 import django.db.models.deletion
 
 
+def assign_owners(apps, schema_editor):
+    # Existing libraries (pre-removal databases) are attributed to the first
+    # user instead of defaulting to a hardcoded pk, which would fail the FK
+    # check whenever user 1 does not exist.
+    Library = apps.get_model("music", "Library")
+    User = apps.get_model("users", "User")
+    first_user = User.objects.order_by("pk").first()
+    if first_user is None:
+        return
+    Library.objects.filter(owner_id=None).update(owner_id=first_user.pk)
+
+
+def unassign_owners(apps, schema_editor):
+    pass
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -20,9 +36,15 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='library',
             name='owner',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='libraries', to='users.user'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='libraries',
+                to='users.user',
+            ),
             preserve_default=False,
         ),
+        migrations.RunPython(assign_owners, unassign_owners),
         migrations.AddField(
             model_name='libraryscan',
             name='submitted_by',

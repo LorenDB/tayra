@@ -36,6 +36,9 @@ MODERATION_TABLES = [
     "moderation_userrequest",
 ]
 
+# NOTE: music_trackactor.actor_id is intentionally absent: it is renamed to
+# user_id by music.0063_trackactor_actor_to_user during `migrate`, and must
+# survive even if this script is run before that migration.
 ORPHANED_COLUMNS = {
     "audio_channel": ["actor_id", "attributed_to_id"],
     "common_attachment": ["actor_id"],
@@ -46,7 +49,6 @@ ORPHANED_COLUMNS = {
     "music_library": ["fid", "followers_url", "actor_id"],
     "music_libraryscan": ["actor_id"],
     "music_track": ["fid", "from_activity_id", "attributed_to_id"],
-    "music_trackactor": ["actor_id"],
     "music_upload": ["from_activity_id"],
     "users_user": ["subsonic_api_token", "actor_id"],
 }
