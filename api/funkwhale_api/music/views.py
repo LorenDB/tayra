@@ -876,8 +876,11 @@ def handle_stream(
         actor = getattr(share_link.owner, "actor", None)
         if actor is None:
             return Response(status=404)
+        # Same relation paths as the normal stream branch (artist_credit M2M,
+        # not a legacy Album.artist / Track.artist FK).
         queryset = track.uploads.prefetch_related(
-            "track__album__artist", "track__artist"
+            "track__album__artist_credit__artist",
+            "track__artist_credit__artist",
         )
         if explicit_file:
             queryset = queryset.filter(uuid=explicit_file)
