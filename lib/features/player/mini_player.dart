@@ -191,16 +191,18 @@ class MiniPlayer extends ConsumerWidget {
                       constraints: const BoxConstraints(minWidth: 36),
                     ),
                     isLoading
-                        ? IconButton(
-                            // Keep a pause/stop affordance while loading so the
-                            // user is not stuck waiting for the 30s watchdog.
-                            icon: const Icon(Icons.pause_rounded, size: 32),
-                            color: AppTheme.onBackground,
-                            tooltip: 'Pause',
-                            onPressed: () =>
-                                ref.read(playerProvider.notifier).pause(),
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(minWidth: 36),
+                        ? SizedBox(
+                            width: 36,
+                            child: Center(
+                              child: SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.5,
+                                  color: AppTheme.onBackground,
+                                ),
+                              ),
+                            ),
                           )
                         : IconButton(
                             icon: Icon(
