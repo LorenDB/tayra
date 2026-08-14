@@ -20,6 +20,7 @@ import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
 import 'package:tayra/core/platform/app_platform.dart';
 import 'package:tayra/features/favorites/favorites_provider.dart';
+import 'package:tayra/features/player/playback_errors.dart';
 import 'package:tayra/features/player/playback_listen_tracker.dart';
 import 'package:tayra/features/player/queue_persistence_service.dart';
 import 'package:tayra/features/podcasts/podcast_progress_service.dart';
@@ -1592,8 +1593,71 @@ class PlayerNotifier extends Notifier<PlayerState> {
   bool get _isGaplessEnabled =>
       !AppPlatform.isWeb && ref.read(settingsProvider).gaplessPlayback;
 
-  /// Replace the player's single audio source, stopping any previous playback
-  /// first on web so HTMLAudioElement does not keep the first track's audio.
+  /// Silence the current HTML audio without disposing the just_audio
+  /// platform player.
+  ///
+  /// [AudioPlayer.stop] calls `_setPlatformActive(false)`, which tears down
+  /// the `<audio>` element. A subsequent `play()` then races that removal
+  /// and Chrome rejects it with AbortError ("media was removed from the
+  /// document"). [pause] keeps the same element so [setAudioSource] can
+  /// swap the URL in place.
+  Future<void> _silenceWebAudio() async {
+    if (!AppPlatform.isWeb) return;
+    try {
+      await _handler.audioPlayer.pause();
+    } catch (_) {}
+  }
+
+  /// Start playback without waiting for the track to finish.
+  ///
+  /// just_audio's [AudioPlayer.play] future completes on pause / stop /
+  /// completion. On web that means "the whole track", so `await play()`
+  /// inside a load path treats the next skip's `pause()` as a failed
+  /// load. We only wait until `playing` is true (or a quick abort we
+  /// can retry), then detach the leftover future.
+  Future<void> _startPlayback() async {
+    final player = _handler.audioPlayer;
+    Object? lastError;
+
+    for (var attempt = 1; attempt <= 3; attempt++) {
+      try {
+        final playFuture = player.play();
+        unawaited(
+          playFuture.catchError((Object e, StackTrace st) {
+            if (!isPlayInterruptedError(e)) {
+              debugPrint('PlayerNotifier: play() failed: $e\n$st');
+            }
+          }),
+        );
+        // play() broadcasts playing=true before its first await.
+        if (player.playing) return;
+        await playFuture.timeout(const Duration(seconds: 5));
+        return;
+      } on TimeoutException {
+        // Still waiting on the web play-until-done future — audio has
+        // started (or will shortly). Do not treat this as a load failure.
+        return;
+      } catch (e) {
+        lastError = e;
+        if (!isPlayInterruptedError(e) || attempt == 3) break;
+        debugPrint(
+          'PlayerNotifier: play() aborted (attempt $attempt), retrying: $e',
+        );
+        try {
+          await player.pause();
+        } catch (_) {}
+        await Future<void>.delayed(Duration(milliseconds: 40 * attempt));
+      }
+    }
+
+    if (lastError != null && !isPlayInterruptedError(lastError)) {
+      throw lastError;
+    }
+  }
+
+  /// Replace the player's single audio source, pausing any previous
+  /// playback first on web so the HTMLAudioElement does not keep the
+  /// first track's audio after the UI advances.
   Future<void> _replaceSingleAudioSource(
     AudioSource source, {
     Duration? initialPosition,
@@ -1601,14 +1665,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     final player = _handler.audioPlayer;
     // Always clear multi-source / gapless state for single-track loads.
     _gaplessActive = false;
-    if (AppPlatform.isWeb) {
-      try {
-        await player.stop();
-      } catch (_) {}
-      // Let the browser release the previous media resource before binding a
-      // new URL (otherwise UI can advance while the first stream keeps playing).
-      await Future<void>.delayed(const Duration(milliseconds: 20));
-    }
+    await _silenceWebAudio();
     await player.setAudioSource(source, initialPosition: initialPosition);
   }
 
@@ -2197,7 +2254,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
           state = state.copyWith(currentIndex: nextIndex, isLoading: true);
           final loaded = await _loadGaplessSource(nextIndex);
           if (loaded) {
-            await _handler.audioPlayer.play();
+            await _startPlayback();
             state = state.copyWith(
               isLoading: false,
               isPlaying: _handler.audioPlayer.playing,
@@ -2347,15 +2404,13 @@ class PlayerNotifier extends Notifier<PlayerState> {
       isLoading: true,
     );
 
-    // Web never uses multi-source playlists; stop any current HTML audio
+    // Web never uses multi-source playlists; pause current HTML audio
     // before loading so track changes cannot leave the first stream running.
+    // Use pause (not stop) — stop() disposes the <audio> element and the
+    // next play() then fails with AbortError. See [_silenceWebAudio].
     if (AppPlatform.isWeb || !_isGaplessEnabled) {
       _gaplessActive = false;
-      if (AppPlatform.isWeb) {
-        try {
-          await _handler.audioPlayer.stop();
-        } catch (_) {}
-      }
+      await _silenceWebAudio();
     }
 
     if (_isGaplessEnabled && !_isOffline) {
@@ -2365,7 +2420,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       );
       if (!_isCurrentLoad(epoch)) return;
       if (loaded) {
-        await _handler.audioPlayer.play();
+        await _startPlayback();
         if (!_isCurrentLoad(epoch)) return;
         // Sync isPlaying immediately from the player rather than waiting for
         // playingStream to fire asynchronously — avoids a race where the button
@@ -2768,14 +2823,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
     final loadEpoch = epoch ?? _loadEpoch;
     _needsReload = false;
     // Single-source load always replaces any multi-source playlist.
-    // On web, stop immediately so a previous track cannot keep audible
-    // while we resolve the next stream URL.
+    // On web, pause immediately so a previous track cannot keep audible
+    // while we resolve the next stream URL. Do not stop() — that disposes
+    // the HTML audio element and races the upcoming play().
     _gaplessActive = false;
-    if (AppPlatform.isWeb) {
-      try {
-        await _handler.audioPlayer.stop();
-      } catch (_) {}
-    }
+    await _silenceWebAudio();
     try {
       final listenUrl = track.listenUrl;
       if (listenUrl == null) {
@@ -2932,7 +2984,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
           await _handler.audioPlayer.seek(initialPosition);
         }
         if (!_isCurrentLoad(loadEpoch)) return false;
-        await _handler.audioPlayer.play();
+        await _startPlayback();
       }
 
       if (!_isCurrentLoad(loadEpoch)) return false;
@@ -2985,6 +3037,24 @@ class PlayerNotifier extends Notifier<PlayerState> {
       return true;
     } catch (e, st) {
       if (!_isCurrentLoad(loadEpoch)) return false;
+      // Chrome/just_audio abort the play() promise when the element is
+      // paused, reloaded, or briefly detached. If the player is already
+      // running this is not a failed load — treating it as one pauses a
+      // track that actually started (and "recovers" only after a retry).
+      if (isPlayInterruptedError(e)) {
+        final ps = _handler.audioPlayer.processingState;
+        if (_handler.audioPlayer.playing ||
+            ps == ProcessingState.ready ||
+            ps == ProcessingState.buffering ||
+            ps == ProcessingState.loading) {
+          debugPrint(
+            'PlayerNotifier._loadTrack: ignoring play interrupt for '
+            'track ${track.id}: $e',
+          );
+          state = state.copyWith(isLoading: false);
+          return true;
+        }
+      }
       debugPrint(
         'PlayerNotifier._loadTrack: failed to load track ${track.id}: $e\n$st',
       );
@@ -3158,7 +3228,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       }
       if (!_isCurrentLoad(epoch)) return;
       if (wasPlaying) {
-        await _handler.audioPlayer.play();
+        await _startPlayback();
       }
 
       Analytics.track('audio_quality_fallback', {
@@ -3366,7 +3436,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
             if (!_isCurrentLoad(epoch)) return;
             // Only clear pending after a successful load so the user can retry.
             _pendingRestorePosition = null;
-            await _handler.audioPlayer.play();
+            await _startPlayback();
             // Sync isPlaying immediately — same race fix as in playTracks().
             state = state.copyWith(
               isLoading: false,
@@ -3400,7 +3470,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
         // the correct position.
         _pendingRestorePosition = null;
         // Start playback.
-        await _handler.audioPlayer.play();
+        await _startPlayback();
         state = state.copyWith(
           isLoading: false,
           isPlaying: _handler.audioPlayer.playing,
@@ -3451,7 +3521,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       _needsReload = false;
     }
 
-    await _handler.play();
+    await _startPlayback();
   }
 
   Future<void> pause() async {
@@ -3595,7 +3665,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
         final loaded = await _loadGaplessSource(newIndex);
         if (!_isCurrentLoad(epoch)) return;
         if (loaded) {
-          await _handler.audioPlayer.play();
+          await _startPlayback();
           state = state.copyWith(
             isLoading: false,
             isPlaying: _handler.audioPlayer.playing,
@@ -3614,7 +3684,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       final loaded = await _loadGaplessSource(newIndex);
       if (!_isCurrentLoad(epoch)) return;
       if (loaded) {
-        await _handler.audioPlayer.play();
+        await _startPlayback();
         // Sync isPlaying immediately — same race fix as in playTracks().
         state = state.copyWith(
           isLoading: false,
@@ -3709,7 +3779,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
         final loaded = await _loadGaplessSource(newIndex);
         if (!_isCurrentLoad(epoch)) return;
         if (loaded) {
-          await _handler.audioPlayer.play();
+          await _startPlayback();
           state = state.copyWith(
             isLoading: false,
             isPlaying: _handler.audioPlayer.playing,
@@ -3929,7 +3999,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     );
     if (!ok) return;
     if (wasPlaying) {
-      await _handler.audioPlayer.play();
+      await _startPlayback();
     }
     state = state.copyWith(isPlaying: _handler.audioPlayer.playing);
   }
