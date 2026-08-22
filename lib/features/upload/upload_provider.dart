@@ -583,9 +583,8 @@ class UploadNotifier extends Notifier<UploadState> {
   Future<void> loadLibraries() async {
     state = state.copyWith(loadingLibraries: true, libraryError: null);
     try {
-      final result = await ref
-          .read(cachedFunkwhaleApiProvider)
-          .getLibraries(scope: 'me');
+      // Uncached: the picker must not reuse browse/admin library lists.
+      final result = await _api.getLibraries(scope: 'me', pageSize: 200);
       final selected =
           result.results.isNotEmpty
               ? result.results.first.uuid

@@ -214,6 +214,15 @@ class LibraryViewSet(
         if self.action == "list":
             user = utils.get_user_from_request(self.request)
             qs = qs.viewable_by(user)
+            # Upload / "my libraries" listings pass scope=me. Apply the owner
+            # filter here so staff/admins (who can view instance and public
+            # libraries) still only see libraries they own.
+            scope = (self.request.query_params.get("scope") or "").strip().lower()
+            scopes = {part.strip() for part in scope.split(",") if part.strip()}
+            if "me" in scopes:
+                if not user:
+                    return qs.none()
+                qs = qs.filter(owner=user)
 
         return qs
 
