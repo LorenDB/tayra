@@ -40,6 +40,13 @@ import 'package:window_size/window_size.dart'
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Android: draw behind the system bars so screens with top gradients (now
+  // playing, album/artist detail) can backfill the status bar zone. SafeAreas
+  // and AppBars already handle the insets on every other screen.
+  if (AppPlatform.isAndroid) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  }
+
   // Path URLs so nginx try_files + deep links work as the primary pod UI.
   if (kIsWeb) {
     usePathUrlStrategy();

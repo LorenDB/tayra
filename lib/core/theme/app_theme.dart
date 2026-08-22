@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -165,6 +166,12 @@ class AppTheme {
         centerTitle: false,
         titleTextStyle: textTheme.headlineMedium,
         iconTheme: const IconThemeData(color: onBackground),
+        // Android edge-to-edge: keep the system bar zones transparent so the
+        // underlying screen (including top gradients) shows through them.
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: Colors.transparent,
+        ),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: surfaceContainer,

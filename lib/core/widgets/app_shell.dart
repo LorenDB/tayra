@@ -161,10 +161,7 @@ class AppShell extends ConsumerWidget {
             child: SafeArea(
               bottom: false,
               child: Column(
-                children: [
-                  const OfflineStatusBar(),
-                  Expanded(child: child),
-                ],
+                children: [const OfflineStatusBar(), Expanded(child: child)],
               ),
             ),
           ),
@@ -182,16 +179,17 @@ class AppShell extends ConsumerWidget {
       ),
 
       // Show mini-player or stash bar at bottom on medium (tablet) sizes
-      bottomNavigationBar: !isExpanded && (hasTrack || stashCount > 0)
-          ? Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if ((!hasTrack || queueCompleted) && stashCount > 0)
-                  _StashAccessBar(stashCount: stashCount),
-                if (hasTrack) const MiniPlayer(),
-              ],
-            )
-          : null,
+      bottomNavigationBar:
+          !isExpanded && (hasTrack || stashCount > 0)
+              ? Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if ((!hasTrack || queueCompleted) && stashCount > 0)
+                    _StashAccessBar(stashCount: stashCount),
+                  if (hasTrack) const MiniPlayer(),
+                ],
+              )
+              : null,
     );
   }
 
@@ -215,10 +213,7 @@ class AppShell extends ConsumerWidget {
       body: SafeArea(
         bottom: false,
         child: Column(
-          children: [
-            const OfflineStatusBar(),
-            Expanded(child: child),
-          ],
+          children: [const OfflineStatusBar(), Expanded(child: child)],
         ),
       ),
       bottomNavigationBar: Column(
@@ -239,56 +234,64 @@ class AppShell extends ConsumerWidget {
               child: SizedBox(
                 height: 56,
                 child: Row(
-                  children: primaryIndices.map((i) {
-                    final isSelected = i == currentIndex;
-                    return Expanded(
-                      child: Semantics(
-                        button: true,
-                        selected: isSelected,
-                        label: tabs[i].label,
-                        child: InkWell(
-                          onTap: () {
-                            final nested = shellNavigatorKey.currentState;
-                            if (nested != null) {
-                              nested.popUntil((route) => route is! PopupRoute);
-                            }
-                            try {
-                              Navigator.of(
-                                context,
-                                rootNavigator: true,
-                              ).popUntil((route) => route is! PopupRoute);
-                            } catch (_) {}
-                            context.go(paths[i]);
-                          },
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                isSelected ? tabs[i].activeIcon : tabs[i].icon,
-                                color: isSelected
-                                    ? AppTheme.primary
-                                    : AppTheme.onBackgroundSubtle,
-                                size: 22,
+                  children:
+                      primaryIndices.map((i) {
+                        final isSelected = i == currentIndex;
+                        return Expanded(
+                          child: Semantics(
+                            button: true,
+                            selected: isSelected,
+                            label: tabs[i].label,
+                            child: InkWell(
+                              onTap: () {
+                                final nested = shellNavigatorKey.currentState;
+                                if (nested != null) {
+                                  nested.popUntil(
+                                    (route) => route is! PopupRoute,
+                                  );
+                                }
+                                try {
+                                  Navigator.of(
+                                    context,
+                                    rootNavigator: true,
+                                  ).popUntil((route) => route is! PopupRoute);
+                                } catch (_) {}
+                                context.go(paths[i]);
+                              },
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    isSelected
+                                        ? tabs[i].activeIcon
+                                        : tabs[i].icon,
+                                    color:
+                                        isSelected
+                                            ? AppTheme.primary
+                                            : AppTheme.onBackgroundSubtle,
+                                    size: 22,
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    tabs[i].label,
+                                    style: TextStyle(
+                                      color:
+                                          isSelected
+                                              ? AppTheme.primary
+                                              : AppTheme.onBackgroundSubtle,
+                                      fontSize: 10,
+                                      fontWeight:
+                                          isSelected
+                                              ? FontWeight.w600
+                                              : FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const SizedBox(height: 2),
-                              Text(
-                                tabs[i].label,
-                                style: TextStyle(
-                                  color: isSelected
-                                      ? AppTheme.primary
-                                      : AppTheme.onBackgroundSubtle,
-                                  fontSize: 10,
-                                  fontWeight: isSelected
-                                      ? FontWeight.w600
-                                      : FontWeight.w400,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                    );
-                  }).toList(),
+                        );
+                      }).toList(),
                 ),
               ),
             ),
@@ -370,174 +373,184 @@ class _DesktopNavRail extends StatelessWidget {
     return Container(
       width: extended ? 200 : 64,
       color: AppTheme.surfaceContainer,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: extended ? 16 : 8),
-        child: Column(
-          children: [
-            const SizedBox(height: 8),
+      child: SafeArea(
+        right: false,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: extended ? 16 : 8),
+          child: Column(
+            children: [
+              const SizedBox(height: 8),
 
-            // Destinations - make this area scrollable so the sidebar doesn't
-            // overflow on very short windows (e.g. landscape phones).
-            Expanded(
-              child: SingleChildScrollView(
-                physics: const ClampingScrollPhysics(),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: List.generate(AppShell.tabs.length, (i) {
-                    final tab = AppShell.tabs[i];
-                    final isSelected = i == currentIndex;
-                    final indicatorColor = AppTheme.primary.withValues(
-                      alpha: 0.15,
-                    );
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 6.0),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(12),
-                          onTap: () => onDestinationSelected(i),
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 180),
-                            width: double.infinity,
-                            padding: EdgeInsets.symmetric(
-                              horizontal: extended ? 12 : 8,
-                              vertical: 10,
-                            ),
-                            decoration: isSelected
-                                ? BoxDecoration(
-                                    color: indicatorColor,
-                                    borderRadius: BorderRadius.circular(12),
-                                  )
-                                : null,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: extended
-                                  ? MainAxisAlignment.start
-                                  : MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  isSelected ? tab.activeIcon : tab.icon,
-                                  color: isSelected
-                                      ? AppTheme.primary
-                                      : AppTheme.onBackgroundSubtle,
-                                  size: 24,
-                                ),
-                                if (extended) ...[
-                                  const SizedBox(width: 12),
-                                  Text(
-                                    tab.label,
-                                    style: TextStyle(
-                                      color: isSelected
-                                          ? AppTheme.primary
-                                          : AppTheme.onBackgroundSubtle,
-                                      fontSize: 13,
-                                      fontWeight: isSelected
-                                          ? FontWeight.w600
-                                          : FontWeight.w400,
-                                    ),
+              // Destinations - make this area scrollable so the sidebar doesn't
+              // overflow on very short windows (e.g. landscape phones).
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const ClampingScrollPhysics(),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: List.generate(AppShell.tabs.length, (i) {
+                      final tab = AppShell.tabs[i];
+                      final isSelected = i == currentIndex;
+                      final indicatorColor = AppTheme.primary.withValues(
+                        alpha: 0.15,
+                      );
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6.0),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(12),
+                            onTap: () => onDestinationSelected(i),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 180),
+                              width: double.infinity,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: extended ? 12 : 8,
+                                vertical: 10,
+                              ),
+                              decoration:
+                                  isSelected
+                                      ? BoxDecoration(
+                                        color: indicatorColor,
+                                        borderRadius: BorderRadius.circular(12),
+                                      )
+                                      : null,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    extended
+                                        ? MainAxisAlignment.start
+                                        : MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    isSelected ? tab.activeIcon : tab.icon,
+                                    color:
+                                        isSelected
+                                            ? AppTheme.primary
+                                            : AppTheme.onBackgroundSubtle,
+                                    size: 24,
                                   ),
+                                  if (extended) ...[
+                                    const SizedBox(width: 12),
+                                    Text(
+                                      tab.label,
+                                      style: TextStyle(
+                                        color:
+                                            isSelected
+                                                ? AppTheme.primary
+                                                : AppTheme.onBackgroundSubtle,
+                                        fontSize: 13,
+                                        fontWeight:
+                                            isSelected
+                                                ? FontWeight.w600
+                                                : FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
                                 ],
-                              ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  }),
+                      );
+                    }),
+                  ),
                 ),
               ),
-            ),
 
-            // trailing search + settings full-width buttons
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(12),
-                  onTap: () => SearchScreen.show(context),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 180),
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: extended ? 12 : 8,
-                      vertical: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: extended
-                          ? MainAxisAlignment.start
-                          : MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.search_rounded,
-                          color: AppTheme.onBackgroundSubtle,
-                          size: 24,
-                        ),
-                        if (extended) ...[
-                          const SizedBox(width: 12),
-                          Text(
-                            'Search',
-                            style: TextStyle(
-                              color: AppTheme.onBackgroundSubtle,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                            ),
+              // trailing search + settings full-width buttons
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: () => SearchScreen.show(context),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 180),
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: extended ? 12 : 8,
+                        vertical: 10,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        mainAxisAlignment:
+                            extended
+                                ? MainAxisAlignment.start
+                                : MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.search_rounded,
+                            color: AppTheme.onBackgroundSubtle,
+                            size: 24,
                           ),
+                          if (extended) ...[
+                            const SizedBox(width: 12),
+                            Text(
+                              'Search',
+                              style: TextStyle(
+                                color: AppTheme.onBackgroundSubtle,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ],
-                      ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(12),
-                  onTap: () => context.push('/settings'),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 180),
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: extended ? 12 : 8,
-                      vertical: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: extended
-                          ? MainAxisAlignment.start
-                          : MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.settings_outlined,
-                          color: AppTheme.onBackgroundSubtle,
-                          size: 24,
-                        ),
-                        if (extended) ...[
-                          const SizedBox(width: 12),
-                          Text(
-                            'Settings',
-                            style: TextStyle(
-                              color: AppTheme.onBackgroundSubtle,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                            ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: () => context.push('/settings'),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 180),
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: extended ? 12 : 8,
+                        vertical: 10,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        mainAxisAlignment:
+                            extended
+                                ? MainAxisAlignment.start
+                                : MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.settings_outlined,
+                            color: AppTheme.onBackgroundSubtle,
+                            size: 24,
                           ),
+                          if (extended) ...[
+                            const SizedBox(width: 12),
+                            Text(
+                              'Settings',
+                              style: TextStyle(
+                                color: AppTheme.onBackgroundSubtle,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ],
-                      ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
