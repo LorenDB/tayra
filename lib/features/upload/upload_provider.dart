@@ -6,6 +6,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -118,6 +119,9 @@ enum UploadStatus {
 class UploadItem {
   final String localId;
   final String? filePath;
+
+  /// Raw file contents, used on web where no local filesystem path exists.
+  final Uint8List? bytes;
   final String fileName;
   final int fileSize;
 
@@ -144,6 +148,7 @@ class UploadItem {
   const UploadItem({
     required this.localId,
     this.filePath,
+    this.bytes,
     required this.fileName,
     required this.fileSize,
     this.existingTitle,
@@ -163,6 +168,12 @@ class UploadItem {
   });
 
   bool get hasPath => filePath != null && filePath!.isNotEmpty;
+
+  /// True when raw file contents are held in memory (web picks).
+  bool get hasData => bytes != null && bytes!.isNotEmpty;
+
+  /// True when the file can be uploaded (path on native, bytes on web).
+  bool get isUploadable => hasPath || hasData;
   bool get isBusy =>
       status == UploadItemStatus.embedding ||
       status == UploadItemStatus.uploading ||
@@ -182,6 +193,7 @@ class UploadItem {
   UploadItem copyWith({
     String? localId,
     Object? filePath = _sentinel,
+    Object? bytes = _sentinel,
     String? fileName,
     int? fileSize,
     Object? existingTitle = _sentinel,
@@ -202,6 +214,7 @@ class UploadItem {
     return UploadItem(
       localId: localId ?? this.localId,
       filePath: filePath == _sentinel ? this.filePath : filePath as String?,
+      bytes: bytes == _sentinel ? this.bytes : bytes as Uint8List?,
       fileName: fileName ?? this.fileName,
       fileSize: fileSize ?? this.fileSize,
       existingTitle:
@@ -348,7 +361,7 @@ class UploadState {
       hasFiles &&
       selectedLibraryUuid != null &&
       uploadStatus == UploadStatus.idle &&
-      items.every((i) => i.hasPath);
+      items.every((i) => i.isUploadable);
 
   bool get isLocked =>
       uploadStatus == UploadStatus.uploading ||
@@ -618,18 +631,22 @@ class UploadNotifier extends Notifier<UploadState> {
 
   Future<void> pickFiles() async {
     String? initialDirectory;
-    try {
-      final home =
-          Platform.environment['HOME'] ?? Platform.environment['USERPROFILE'];
-      if (home != null) {
-        final musicDir = p.join(home, 'Music');
-        if (await Directory(musicDir).exists()) initialDirectory = musicDir;
+    if (!kIsWeb) {
+      try {
+        final home =
+            Platform.environment['HOME'] ?? Platform.environment['USERPROFILE'];
+        if (home != null) {
+          final musicDir = p.join(home, 'Music');
+          if (await Directory(musicDir).exists()) initialDirectory = musicDir;
+        }
+      } catch (_) {
+        // ignore and allow file picker to fallback to its default
       }
-    } catch (_) {
-      // ignore and allow file picker to fallback to its default
     }
 
     // pickFiles allows multiple selection by default in file_picker ≥12.
+    // On web, files have no filesystem path (only a blob URL); bytes are
+    // read lazily per file below for tag reading and the multipart upload.
     final result = await FilePicker.pickFiles(
       type: FileType.custom,
       initialDirectory: initialDirectory,
@@ -652,19 +669,28 @@ class UploadNotifier extends Notifier<UploadState> {
 
     final items = <UploadItem>[];
     for (final file in result.files) {
-      if (file.path == null || file.path!.isEmpty) {
-        // Web / SAF without path — skip with a note; path is required for
-        // MultipartFile.fromFile and local tagging today.
-        developer.log(
-          'Skipping file without path: ${file.name}',
-          name: 'tayra.upload',
-        );
-        continue;
+      final hasLocalPath =
+          !kIsWeb && file.path != null && file.path!.isNotEmpty;
+      Uint8List? bytes;
+      if (!hasLocalPath) {
+        try {
+          bytes = await file.readAsBytes();
+        } catch (e) {
+          // Neither a usable path nor readable in-memory data — skip.
+          developer.log(
+            'Skipping unreadable file ${file.name}: $e',
+            name: 'tayra.upload',
+          );
+          continue;
+        }
       }
 
       AudioMetadata? tags;
       try {
-        tags = await readAudioMetadata(file.path!);
+        tags =
+            hasLocalPath
+                ? await readAudioMetadata(file.path!)
+                : await readAudioMetadataBytes(bytes!, file.name);
       } catch (_) {
         tags = null;
       }
@@ -672,7 +698,8 @@ class UploadNotifier extends Notifier<UploadState> {
       items.add(
         UploadItem(
           localId: _nextId(),
-          filePath: file.path,
+          filePath: hasLocalPath ? file.path : null,
+          bytes: bytes,
           fileName: file.name,
           fileSize: file.size,
           existingTitle: tags?.title,
@@ -1324,28 +1351,7 @@ class UploadNotifier extends Notifier<UploadState> {
     );
 
     try {
-      final meta = AudioMetadata(
-        title: recording.title,
-        artist: recording.artistName,
-        album: recording.albumTitle,
-        trackNumber: recording.trackNumber,
-        discNumber: recording.discNumber,
-        year: recording.year,
-        musicBrainzRecordingId: recording.id,
-        musicBrainzReleaseId: recording.releaseMbid,
-        coverArt:
-            (state.embedCoverArt &&
-                    state.coverArtStatus == CoverArtStatus.loaded &&
-                    state.coverArtBytes != null)
-                ? state.coverArtBytes
-                : null,
-        coverArtMime:
-            (state.embedCoverArt &&
-                    state.coverArtStatus == CoverArtStatus.loaded &&
-                    state.coverArtBytes != null)
-                ? state.coverArtMime
-                : null,
-      );
+      final meta = _mbMetadataFor(recording);
 
       final taggedBytes = await tagAudioFile(originalPath, meta);
       if (taggedBytes == null) return null;
@@ -1369,15 +1375,76 @@ class UploadNotifier extends Notifier<UploadState> {
     }
   }
 
+  /// Web variant of [_embedMetadata]: tags the in-memory copy of the file
+  /// instead of writing a temp file (dart:io is unavailable on web).
+  Uint8List? _embedMetadataBytes(UploadItem item, MbRecording recording) {
+    if (!_canEmbedTags(item.fileName) || item.bytes == null) {
+      developer.log(
+        'Tag embedding skipped: unsupported format (${item.fileName})',
+        name: 'tayra.upload',
+      );
+      return null;
+    }
+
+    try {
+      final tagged = tagAudioFileBytes(
+        item.bytes!,
+        item.fileName,
+        _mbMetadataFor(recording),
+      );
+      if (tagged == null) {
+        developer.log(
+          'Tag embedding skipped for ${item.fileName}',
+          name: 'tayra.upload',
+        );
+        return null;
+      }
+      developer.log(
+        'Embedded tags into in-memory copy of "${item.fileName}"',
+        name: 'tayra.upload',
+      );
+      return tagged;
+    } catch (e, st) {
+      developer.log(
+        'Tag embedding failed, falling back to original file: $e',
+        name: 'tayra.upload',
+        error: e,
+        stackTrace: st,
+      );
+      return null;
+    }
+  }
+
+  /// Builds tag payload from a MusicBrainz recording, including cover art
+  /// when enabled and loaded.
+  AudioMetadata _mbMetadataFor(MbRecording recording) {
+    final useCover =
+        state.embedCoverArt &&
+        state.coverArtStatus == CoverArtStatus.loaded &&
+        state.coverArtBytes != null;
+    return AudioMetadata(
+      title: recording.title,
+      artist: recording.artistName,
+      album: recording.albumTitle,
+      trackNumber: recording.trackNumber,
+      discNumber: recording.discNumber,
+      year: recording.year,
+      musicBrainzRecordingId: recording.id,
+      musicBrainzReleaseId: recording.releaseMbid,
+      coverArt: useCover ? state.coverArtBytes : null,
+      coverArtMime: useCover ? state.coverArtMime : null,
+    );
+  }
+
   // ── Upload ─────────────────────────────────────────────────────────────
 
   Future<void> upload() async {
     final libraryUuid = state.selectedLibraryUuid;
     if (libraryUuid == null || state.items.isEmpty) return;
-    if (state.items.any((i) => !i.hasPath)) {
+    if (state.items.any((i) => !i.isUploadable)) {
       state = state.copyWith(
         uploadError:
-            'One or more files have no accessible path and cannot be uploaded.',
+            'One or more files could not be read and cannot be uploaded.',
       );
       return;
     }
@@ -1493,7 +1560,8 @@ class UploadNotifier extends Notifier<UploadState> {
     }
 
     // Embed tags.
-    String uploadPath = item.filePath!;
+    String? uploadPath = item.hasPath ? item.filePath : null;
+    Uint8List? uploadBytes = item.bytes;
     if (recording != null) {
       _updateItem(
         item.localId,
@@ -1501,8 +1569,13 @@ class UploadNotifier extends Notifier<UploadState> {
       );
       state = state.copyWith(uploadStatus: UploadStatus.embedding);
 
-      final taggedPath = await _embedMetadata(item, recording);
-      if (taggedPath != null) uploadPath = taggedPath;
+      if (uploadPath != null) {
+        final taggedPath = await _embedMetadata(item, recording);
+        if (taggedPath != null) uploadPath = taggedPath;
+      } else if (uploadBytes != null) {
+        // Web: tag in-memory bytes directly (no dart:io temp files).
+        uploadBytes = _embedMetadataBytes(item, recording);
+      }
     }
 
     _updateItem(
@@ -1523,6 +1596,7 @@ class UploadNotifier extends Notifier<UploadState> {
     final upload = await _api.createUpload(
       libraryUuid: libraryUuid,
       filePath: uploadPath,
+      fileBytes: uploadBytes,
       fileName: item.fileName,
       importMetadata: importMetadata,
       onSendProgress: (sent, total) {

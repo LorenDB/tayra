@@ -1149,16 +1149,28 @@ class FunkwhaleApi {
 
   // ── Uploads ─────────────────────────────────────────────────────────
 
+  /// Uploads an audio file to a library.
+  ///
+  /// Provide exactly one of [filePath] (native platforms) or [fileBytes]
+  /// (web, where dart:io is unavailable).
   Future<UploadForOwner> createUpload({
     required String libraryUuid,
-    required String filePath,
+    String? filePath,
+    Uint8List? fileBytes,
     required String fileName,
     Map<String, dynamic>? importMetadata,
     void Function(int sent, int total)? onSendProgress,
   }) async {
+    assert(
+      (filePath != null) != (fileBytes != null),
+      'Provide exactly one of filePath or fileBytes',
+    );
     final formData = FormData.fromMap({
       'library': libraryUuid,
-      'audio_file': await MultipartFile.fromFile(filePath, filename: fileName),
+      'audio_file':
+          fileBytes != null
+              ? MultipartFile.fromBytes(fileBytes, filename: fileName)
+              : await MultipartFile.fromFile(filePath!, filename: fileName),
       if (importMetadata != null) 'import_metadata': jsonEncode(importMetadata),
     });
 

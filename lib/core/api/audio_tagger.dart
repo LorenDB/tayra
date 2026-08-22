@@ -40,8 +40,64 @@ class AudioMetadata {
 /// `null` when the format is not supported.
 Future<Uint8List?> tagAudioFile(String filePath, AudioMetadata meta) async {
   final bytes = await File(filePath).readAsBytes();
-  final ext = filePath.split('.').last.toLowerCase();
+  return _tagByExtension(bytes, _extensionOf(filePath), meta);
+}
 
+/// Tags raw audio [bytes] with the given metadata. Returns tagged bytes or
+/// `null` when the format is not supported.
+///
+/// Web-safe: does not touch dart:io.
+Uint8List? tagAudioFileBytes(
+  Uint8List bytes,
+  String fileName,
+  AudioMetadata meta,
+) {
+  return _tagByExtension(bytes, _extensionOf(fileName), meta);
+}
+
+/// Reads basic tags from an audio file. Returns `null` when the format is
+/// unsupported or no tags can be parsed. Failures are non-fatal.
+Future<AudioMetadata?> readAudioMetadata(String filePath) async {
+  try {
+    final bytes = await File(filePath).readAsBytes();
+    return await _readByExtension(bytes, _extensionOf(filePath));
+  } catch (e, st) {
+    developer.log(
+      'AudioTagger: failed to read metadata from $filePath: $e',
+      name: 'tayra.tagger',
+      error: e,
+      stackTrace: st,
+    );
+    return null;
+  }
+}
+
+/// Reads basic tags from raw audio [bytes]. Returns `null` when the format
+/// is unsupported or no tags can be parsed. Failures are non-fatal.
+///
+/// Web-safe: does not touch dart:io.
+Future<AudioMetadata?> readAudioMetadataBytes(
+  Uint8List bytes,
+  String fileName,
+) async {
+  try {
+    return await _readByExtension(bytes, _extensionOf(fileName));
+  } catch (e, st) {
+    developer.log(
+      'AudioTagger: failed to read metadata from $fileName: $e',
+      name: 'tayra.tagger',
+      error: e,
+      stackTrace: st,
+    );
+    return null;
+  }
+}
+
+String _extensionOf(String fileNameOrPath) {
+  return fileNameOrPath.split('.').last.toLowerCase();
+}
+
+Uint8List? _tagByExtension(Uint8List bytes, String ext, AudioMetadata meta) {
   switch (ext) {
     case 'mp3':
       return _tagMp3(bytes, meta);
@@ -61,33 +117,19 @@ Future<Uint8List?> tagAudioFile(String filePath, AudioMetadata meta) async {
   }
 }
 
-/// Reads basic tags from an audio file. Returns `null` when the format is
-/// unsupported or no tags can be parsed. Failures are non-fatal.
-Future<AudioMetadata?> readAudioMetadata(String filePath) async {
-  try {
-    final bytes = await File(filePath).readAsBytes();
-    final ext = filePath.split('.').last.toLowerCase();
-    switch (ext) {
-      case 'mp3':
-        return _readMp3(bytes);
-      case 'flac':
-        return _readFlac(bytes);
-      case 'ogg':
-      case 'oga':
-        return _readOgg(bytes, _OggCodec.vorbis);
-      case 'opus':
-        return _readOgg(bytes, _OggCodec.opus);
-      default:
-        return null;
-    }
-  } catch (e, st) {
-    developer.log(
-      'AudioTagger: failed to read metadata from $filePath: $e',
-      name: 'tayra.tagger',
-      error: e,
-      stackTrace: st,
-    );
-    return null;
+Future<AudioMetadata?> _readByExtension(Uint8List bytes, String ext) async {
+  switch (ext) {
+    case 'mp3':
+      return _readMp3(bytes);
+    case 'flac':
+      return _readFlac(bytes);
+    case 'ogg':
+    case 'oga':
+      return _readOgg(bytes, _OggCodec.vorbis);
+    case 'opus':
+      return _readOgg(bytes, _OggCodec.opus);
+    default:
+      return null;
   }
 }
 
