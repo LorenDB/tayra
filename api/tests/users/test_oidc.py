@@ -431,6 +431,84 @@ def test_redirect_allowlist_helpers(settings):
     assert not oidc_redirects.is_allowed_client_redirect("javascript:alert(1)")
 
 
+def test_redirect_allowlist_loopback(settings):
+    """RFC 8252 §7.3: any-port loopback redirect targets are allowed."""
+    assert oidc_redirects.is_allowed_client_redirect(
+        "http://127.0.0.1:41235/sso/callback"
+    )
+    assert oidc_redirects.is_allowed_client_redirect(
+        "http://localhost:9/sso/callback"
+    )
+    assert oidc_redirects.is_allowed_client_redirect("http://[::1]:5001/cb")
+    # Loopback is host-bound, not origin-bound: other ports/hosts stay closed.
+    assert not oidc_redirects.is_allowed_client_redirect(
+        "https://127.0.0.1.example/cb"
+    )
+    assert not oidc_redirects.is_allowed_client_redirect("http://10.0.0.1:5/cb")
+    assert not oidc_redirects.is_allowed_client_redirect(
+        "http://127.0.0.1:5@evil.example/cb"
+    )
+
+
+@pytest.mark.django_db
+def test_oidc_login_allows_loopback_redirect(api_client, oidc_env):
+    with mock.patch(
+        "funkwhale_api.users.oidc.client.fetch_discovery",
+        return_value=DISCOVERY,
+    ):
+        response = api_client.get(
+            reverse("api:v1:users:oidc_login"),
+            {"client_redirect": "http://127.0.0.1:41235/sso/callback"},
+        )
+    assert response.status_code in (302, 301)
+
+
+@pytest.mark.django_db
+def test_oidc_login_rejects_non_loopback_port_forward(api_client, oidc_env):
+    response = api_client.get(
+        reverse("api:v1:users:oidc_login"),
+        {"client_redirect": "http://192.168.1.10:41235/sso/callback"},
+    )
+    assert response.status_code == 400
+    assert response.json()["error"] == "invalid_redirect"
+
+
+@pytest.mark.django_db
+def test_oidc_callback_oob_page_echoes_state(api_client, oidc_env, factories):
+    """OOB result page must echo client state so the app can validate it."""
+    factories["users.User"](username="alice")
+    nonce = "nonce-oob-state"
+    state = oidc_session.store_login_state(
+        client_redirect="urn:ietf:wg:oauth:2.0:oob",
+        client_state="client-state-echo",
+        nonce=nonce,
+        code_verifier="v",
+        tx_binding="tx-oob-state",
+    )
+    with mock.patch(
+        "funkwhale_api.users.oidc.client.fetch_discovery",
+        return_value=DISCOVERY,
+    ), mock.patch(
+        "funkwhale_api.users.oidc.client.exchange_code",
+        return_value={"id_token": "x"},
+    ), mock.patch(
+        "funkwhale_api.users.oidc.client.validate_id_token",
+        return_value={
+            "iss": DISCOVERY["issuer"],
+            "sub": "alice-sub",
+            "preferred_username": "alice",
+            "nonce": nonce,
+        },
+    ):
+        response = api_client.get(
+            reverse("api:v1:users:oidc_callback"),
+            {"code": "c", "state": state},
+        )
+    assert response.status_code == 200
+    body = response.content.decode()
+    assert "client-state-echo" in body
+
+
 def _claims(sub="sub-1", iss="https://idp.example.com", **extra):
     data = {"iss": iss, "sub": sub}
     data.update(extra)

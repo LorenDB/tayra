@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +11,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
 import 'package:tayra/core/auth/password_transport.dart';
+import 'package:tayra/core/auth/sso_redirect_server.dart'
+    if (dart.library.js_interop) 'package:tayra/core/auth/sso_redirect_server_stub.dart';
 import 'package:tayra/core/platform/app_platform.dart';
 import 'package:tayra/core/router/app_router.dart';
 import 'package:tayra/core/theme/app_theme.dart';
@@ -19,6 +23,18 @@ class LoginScreen extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
+
+/// How the one-time SSO code is expected to come back to the app.
+enum _SsoHandoff {
+  /// `tayra://sso/callback` deep link (mobile; handled by [DeepLinkService]).
+  deeplink,
+
+  /// `http://127.0.0.1:<port>/sso/callback` (desktop loopback receiver).
+  loopback,
+
+  /// Browser copy/paste fallback.
+  oob,
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
@@ -41,6 +57,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   /// OIDC login CSRF state for native OOB (M3; OOB page does not echo state).
   String? _ssoClientState;
+
+  /// Desktop loopback receiver while an SSO attempt is in flight.
+  LoopbackRedirectServer? _loopbackServer;
+
+  /// How the SSO code is expected to arrive on this attempt.
+  _SsoHandoff _ssoHandoff = _SsoHandoff.oob;
+
+  /// True while step 1 is the legacy OAuth authorization-code paste flow
+  /// (as opposed to an OIDC SSO handoff).
+  bool _isOauthFlow = false;
 
   AuthMethods _authMethods = AuthMethods.disabled;
   bool _authMethodsLoading = false;
@@ -83,6 +109,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     _passwordController.dispose();
     _codeController.dispose();
     _totpController.dispose();
+    unawaited(_loopbackServer?.close());
+    _loopbackServer = null;
     super.dispose();
   }
 
@@ -515,17 +543,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             size: 32,
                           ),
                           const SizedBox(height: 12),
-                          Text(
-                            _ssoOob
-                                ? 'Sign in with SSO in your browser'
-                                : 'Authorize in your browser',
-                            style: textTheme.titleMedium,
-                          ),
+                          Text(switch (_ssoHandoff) {
+                            _SsoHandoff.deeplink ||
+                            _SsoHandoff.loopback => 'Sign in with SSO',
+                            _SsoHandoff.oob when !_isOauthFlow =>
+                              'Sign in with SSO in your browser',
+                            _SsoHandoff.oob => 'Authorize in your browser',
+                          }, style: textTheme.titleMedium),
                           const SizedBox(height: 8),
                           Text(
-                            _ssoOob
-                                ? 'Complete SSO in the browser, then paste the sign-in code below.'
-                                : 'Log in and authorize the app, then paste the code below.',
+                            switch (_ssoHandoff) {
+                              _SsoHandoff.deeplink =>
+                                'Complete SSO in the browser — Tayra will '
+                                    'finish signing in automatically.',
+                              _SsoHandoff.loopback =>
+                                'Complete SSO in the browser — this window '
+                                    'will finish signing in automatically.',
+                              _SsoHandoff.oob when _isOauthFlow =>
+                                'Log in and authorize the app, then paste '
+                                    'the code below.',
+                              _SsoHandoff.oob =>
+                                'Complete SSO in the browser, then paste the '
+                                    'sign-in code below.',
+                            },
                             style: textTheme.bodySmall,
                             textAlign: TextAlign.center,
                           ),
@@ -554,25 +594,27 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 24),
-                    TextField(
-                      controller: _codeController,
-                      decoration: InputDecoration(
-                        hintText:
-                            _ssoOob
-                                ? 'Paste sign-in code'
-                                : 'Paste authorization code',
-                        prefixIcon: const Icon(
-                          Icons.key,
-                          color: AppTheme.onBackgroundSubtle,
+                    if (_ssoOob || _isOauthFlow) ...[
+                      TextField(
+                        controller: _codeController,
+                        decoration: InputDecoration(
+                          hintText:
+                              _isOauthFlow
+                                  ? 'Paste authorization code'
+                                  : 'Paste sign-in code',
+                          prefixIcon: const Icon(
+                            Icons.key,
+                            color: AppTheme.onBackgroundSubtle,
+                          ),
                         ),
+                        style: const TextStyle(color: AppTheme.onBackground),
+                        textInputAction: TextInputAction.go,
+                        autocorrect: false,
+                        enableSuggestions: false,
+                        onSubmitted: (_) => _submitCode(),
                       ),
-                      style: const TextStyle(color: AppTheme.onBackground),
-                      textInputAction: TextInputAction.go,
-                      autocorrect: false,
-                      enableSuggestions: false,
-                      onSubmitted: (_) => _submitCode(),
-                    ),
-                    const SizedBox(height: 16),
+                      const SizedBox(height: 16),
+                    ],
                     if (authState.error != null) ...[
                       Text(
                         authState.error!,
@@ -581,32 +623,40 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                       const SizedBox(height: 16),
                     ],
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: authState.isLoading ? null : _submitCode,
-                        child:
-                            authState.isLoading
-                                ? const SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Colors.white,
-                                  ),
-                                )
-                                : const Text('Sign In'),
+                    if (_ssoOob || _isOauthFlow) ...[
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: authState.isLoading ? null : _submitCode,
+                          child:
+                              authState.isLoading
+                                  ? const SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                  : const Text('Sign In'),
+                        ),
                       ),
-                    ),
+                    ],
                     const SizedBox(height: 12),
                     TextButton(
-                      onPressed:
-                          () => setState(() {
-                            _step = 0;
-                            _ssoOob = false;
-                          }),
-                      child: const Text(
-                        'Back to password login',
+                      onPressed: () {
+                        setState(() {
+                          _step = 0;
+                          _ssoOob = false;
+                          _isOauthFlow = false;
+                        });
+                        unawaited(_loopbackServer?.close());
+                        _loopbackServer = null;
+                      },
+                      child: Text(
+                        _ssoOob || _isOauthFlow
+                            ? 'Back to password login'
+                            : 'Cancel sign-in',
                         style: TextStyle(color: AppTheme.onBackgroundMuted),
                       ),
                     ),
@@ -662,6 +712,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       setState(() {
         _step = 1;
         _ssoOob = false;
+        _ssoHandoff = _SsoHandoff.oob;
+        _isOauthFlow = true;
       });
       _openAuthUrl();
     }
@@ -703,8 +755,31 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     } catch (_) {}
 
     final notifier = ref.read(authStateProvider.notifier);
-    final clientRedirect =
-        kIsWeb ? _webSsoCallbackUrl() : 'urn:ietf:wg:oauth:2.0:oob';
+
+    // Pick the handoff the platform supports best: OS deep link on mobile,
+    // loopback receiver on desktop, copy/paste as the universal fallback.
+    final _SsoHandoff handoff;
+    String clientRedirect;
+    LoopbackRedirectServer? loopback;
+    if (AppPlatform.isMobile) {
+      handoff = _SsoHandoff.deeplink;
+      clientRedirect = 'tayra://sso/callback';
+    } else if (AppPlatform.isDesktop) {
+      final srv = LoopbackRedirectServer();
+      final url = await srv.start();
+      if (url != null) {
+        loopback = srv;
+        handoff = _SsoHandoff.loopback;
+        clientRedirect = url;
+      } else {
+        handoff = _SsoHandoff.oob;
+        clientRedirect = 'urn:ietf:wg:oauth:2.0:oob';
+      }
+    } else {
+      handoff = _SsoHandoff.oob;
+      clientRedirect =
+          kIsWeb ? _webSsoCallbackUrl() : 'urn:ietf:wg:oauth:2.0:oob';
+    }
 
     // Native OOB must prove the same tx binding when redeeming the code (H3).
     // Web relies on the HttpOnly oidc_tx cookie set by the API.
@@ -712,7 +787,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     // M3: login CSRF state — echoed by the API on redirect / required on redeem.
     final clientState = newOidcClientState();
-    await notifier.storeOidcPendingState(clientState);
+
+    try {
+      await notifier.storeOidcPendingState(clientState);
+      // Persist the full binding (server + tx + mode) so the redeem survives
+      // Android killing the backgrounded app while the browser is open.
+      await notifier.storeOidcBinding(
+        serverUrl: prefsServer.replaceAll(RegExp(r'/$'), ''),
+        txBinding: txBinding ?? '',
+        redirectMode: handoff == _SsoHandoff.loopback ? clientRedirect : null,
+      );
+    } catch (_) {}
 
     final loginPath = _authMethods.oidcLoginPath;
     var loginUrl = notifier.buildOidcLoginUrl(
@@ -737,10 +822,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (!kIsWeb) {
       setState(() {
         _step = 1;
-        _ssoOob = true;
+        _ssoOob = handoff == _SsoHandoff.oob;
         _ssoTxBinding = txBinding;
         _ssoClientState = clientState;
+        _ssoHandoff = handoff;
+        _isOauthFlow = false;
       });
+      // Drop any previous attempt's receiver before listening anew.
+      unawaited(_loopbackServer?.close());
+      _loopbackServer = loopback;
+      if (handoff == _SsoHandoff.loopback && loopback != null) {
+        unawaited(_awaitLoopbackCode(loopback));
+      }
+      // Deep-link handoffs are completed by [DeepLinkService].
     }
 
     await launchUrl(
@@ -749,6 +843,41 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           kIsWeb ? LaunchMode.platformDefault : LaunchMode.externalApplication,
       webOnlyWindowName: kIsWeb ? '_self' : null,
     );
+  }
+
+  /// Wait for the desktop loopback redirect and finish SSO with it.
+  Future<void> _awaitLoopbackCode(LoopbackRedirectServer server) async {
+    Uri callback;
+    try {
+      callback = await server.wait();
+    } catch (_) {
+      return; // closed / timed out / superseded by a new attempt
+    }
+    if (!mounted) return;
+
+    final error = callback.queryParameters['error'];
+    if (error != null && error.isNotEmpty) {
+      ref
+          .read(authStateProvider.notifier)
+          .setTransientError('SSO sign-in failed ($error).');
+      return;
+    }
+    final code = callback.queryParameters['code'];
+    if (code == null || code.isEmpty) return;
+
+    setState(() {
+      _step = 1;
+      _ssoHandoff = _SsoHandoff.loopback;
+    });
+    await ref
+        .read(authStateProvider.notifier)
+        .completeOidcLogin(
+          code: code,
+          clientState: callback.queryParameters['state'],
+          allowRestore: true,
+        );
+    unawaited(server.close());
+    if (identical(_loopbackServer, server)) _loopbackServer = null;
   }
 
   String _webSsoCallbackUrl() {
@@ -769,12 +898,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (_ssoOob) {
       final server = _currentServer();
       if (server.isEmpty) return;
-      await ref.read(authStateProvider.notifier).completeOidcLogin(
+      await ref
+          .read(authStateProvider.notifier)
+          .completeOidcLogin(
             serverUrl: server,
             code: _codeController.text,
             txBinding: _ssoTxBinding,
-            // OOB HTML does not echo state; use the value generated at start (M3).
+            // OOB HTML does not echo state; use the value generated at start
+            // (M3). allowRestore recovers after the process was killed.
             clientState: _ssoClientState,
+            allowRestore: true,
           );
       return;
     }

@@ -16,7 +16,9 @@ from typing import Any, Dict, Optional
 from django.core.cache import cache
 
 STATE_TTL = 60 * 10  # 10 minutes
-CODE_TTL = 60 * 2  # 2 minutes
+# Long enough for a user to switch windows / copy the code by hand; short
+# enough to keep the one-time window tight.
+CODE_TTL = 60 * 10  # 10 minutes
 STATE_PREFIX = "oidc:state:"
 CODE_PREFIX = "oidc:code:"
 

@@ -12,6 +12,7 @@ import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/api/client_data_service.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
+import 'package:tayra/core/auth/deep_link_service.dart';
 import 'package:tayra/core/cache/auto_offline_coordinator.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/core/cache/download_queue_service.dart';
@@ -132,6 +133,12 @@ void main() async {
   // Eagerly initialize the PlayerNotifier to wire up the onPlayTracks callback.
   // This ensures Android Auto can start playback even when launched in the background.
   container.read(playerProvider);
+
+  // Handle tayra:// deep links so SSO finishes without pasting a code.
+  // Lives for the whole process; no dispose needed.
+  unawaited(
+    DeepLinkService(container.read(authStateProvider.notifier)).start(),
+  );
 
   // After remote prefs pull, reload SettingsNotifier from SharedPreferences.
   container.read(clientDataServiceProvider).onPreferencesApplied = () async {

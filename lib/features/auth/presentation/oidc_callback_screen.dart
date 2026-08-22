@@ -66,17 +66,7 @@ class _OidcCallbackScreenState extends ConsumerState<OidcCallbackScreen> {
         );
     if (!mounted) return;
     if (ok) {
-      // Restore deep link saved before the IdP full-page redirect, if any.
-      var dest = '/';
-      try {
-        final prefs = await SharedPreferences.getInstance();
-        final saved = prefs.getString(kPostLoginRedirectKey);
-        await prefs.remove(kPostLoginRedirectKey);
-        final safe = safeInternalPath(saved);
-        if (safe != null) dest = safe;
-      } catch (_) {}
-      if (!mounted) return;
-      context.go(dest);
+      await _goPostLogin();
       return;
     }
     final authError = ref.read(authStateProvider).error;
@@ -97,6 +87,23 @@ class _OidcCallbackScreenState extends ConsumerState<OidcCallbackScreen> {
     if (saved != null && saved.isNotEmpty) return saved;
     final pending = ref.read(authStateProvider).pendingServerUrl;
     return pending;
+  }
+
+  /// Native deep-link entry (`tayra://sso/callback`) is handled by
+  /// [DeepLinkService], which restores the binding persisted at SSO start.
+
+  Future<void> _goPostLogin() async {
+    // Restore deep link saved before the IdP full-page redirect, if any.
+    var dest = '/';
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final saved = prefs.getString(kPostLoginRedirectKey);
+      await prefs.remove(kPostLoginRedirectKey);
+      final safe = safeInternalPath(saved);
+      if (safe != null) dest = safe;
+    } catch (_) {}
+    if (!mounted) return;
+    context.go(dest);
   }
 
   static String _humanizeError(String code) {

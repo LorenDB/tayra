@@ -54,15 +54,35 @@ def _error_redirect(client_redirect: str, error: str, client_state: str = ""):
 
 def _success_redirect(client_redirect: str, code: str, client_state: str = ""):
     if client_redirect in OOB_REDIRECTS:
-        return _oob_code_response(code)
+        return _oob_code_response(code, client_state)
     params = {"code": code}
     if client_state:
         params["state"] = client_state
     return HttpResponseRedirect(_append_query(client_redirect, params))
 
 
-def _oob_code_response(code: str) -> HttpResponse:
+_OOB_PAGE_STYLES = """    body { font-family: system-ui, sans-serif; background: #000; color: #eee;
+           max-width: 32rem; margin: 3rem auto; padding: 0 1rem; }
+    code { display: block; word-break: break-all; background: #111;
+            border: 1px solid #333; padding: 1rem; border-radius: 8px;
+            color: #0af; font-size: 0.95rem; }
+    p { line-height: 1.5; color: #bbb; }
+    button { background: #0992f2; color: #fff; border: 0; border-radius: 8px;
+             padding: 0.6rem 1.4rem; font-size: 1rem; cursor: pointer; }"""
+
+
+def _oob_code_response(code: str, client_state: str = "") -> HttpResponse:
     safe = escape(code)
+    state_script = ""
+    if client_state:
+        safe_state = escape(client_state)
+        state_script = (
+            "<script>"
+            "var p=new URLSearchParams(location.search);"
+            f"p.set('state','{safe_state}');"
+            "history.replaceState(null,'',location.pathname+'?'+p);"
+            "</script>"
+        )
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -70,18 +90,15 @@ def _oob_code_response(code: str) -> HttpResponse:
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>SSO login code — Tayra</title>
   <style>
-    body {{ font-family: system-ui, sans-serif; background: #000; color: #eee;
-           max-width: 32rem; margin: 3rem auto; padding: 0 1rem; }}
-    code {{ display: block; word-break: break-all; background: #111;
-            border: 1px solid #333; padding: 1rem; border-radius: 8px;
-            color: #0af; font-size: 0.95rem; }}
-    p {{ line-height: 1.5; color: #bbb; }}
+{_OOB_PAGE_STYLES}
   </style>
 </head>
 <body>
   <h1>Sign-in code</h1>
   <p>Copy this code into Tayra to finish signing in. It expires in a few minutes.</p>
   <code id="code">{safe}</code>
+  <p><button type="button" onclick="var c=document.getElementById('code').textContent.trim();navigator.clipboard.writeText(c).then(function(){{this.textContent='Copied!'}}.bind(this),function(){{}})">Copy code</button></p>
+  {state_script}
 </body>
 </html>
 """

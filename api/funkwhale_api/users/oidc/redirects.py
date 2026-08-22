@@ -26,6 +26,19 @@ OOB_REDIRECTS = frozenset(
 # First-party native / desktop custom scheme (path optional).
 _APP_SCHEMES = frozenset({"tayra"})
 
+_LOOPBACK_HOSTS = frozenset({"127.0.0.1", "::1", "localhost"})
+
+
+def _is_loopback_origin(scheme: str, netloc: str) -> bool:
+    """True for http(s) loopback origins (RFC 8252 §7.3 native clients)."""
+    if scheme not in ("http", "https"):
+        return False
+    # netloc minus a possible port; lowercased host part.
+    host = netloc.rsplit(":", 1)[0].strip("[]").lower()
+    if not host:
+        return False
+    return host in _LOOPBACK_HOSTS
+
 
 def _origin_tuple(scheme: str, netloc: str) -> Tuple[str, str]:
     return (scheme.lower(), netloc.lower())
@@ -115,6 +128,12 @@ def is_allowed_client_redirect(value: str) -> bool:
     if not parsed.netloc or "@" in parsed.netloc:
         return False
 
+    # Loopback redirect (RFC 8252 §7.3): any port is fine, only the loopback
+    # host matters — the OS already prevents other local apps from claiming
+    # 127.0.0.1 ports while the client's listener is bound.
+    if _is_loopback_origin(scheme, parsed.netloc):
+        return True
+
     candidate = _origin_tuple(scheme, parsed.netloc)
     if candidate in allowed_redirect_origins():
         return True
@@ -127,4 +146,5 @@ def describe_allowed_redirects() -> List[str]:
     items = sorted(f"{s}://{h}" for s, h in allowed_redirect_origins())
     items.extend(sorted(OOB_REDIRECTS))
     items.append("tayra://…")
+    items.append("http://127.0.0.1:<port>…")
     return items

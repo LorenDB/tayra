@@ -265,6 +265,16 @@ class AuthNotifier extends Notifier<AuthState> {
   /// Prefs key for OIDC login CSRF `state` (M3). Cleared after validation.
   static const keyOidcPendingState = 'oidc_pending_state';
 
+  /// Prefs keys for the native SSO handoff (deep link / loopback / OOB).
+  ///
+  /// Persisted at SSO start so the exchange survives Android killing the
+  /// backgrounded app while the user is in the browser — without these, a
+  /// pasted (or deep-linked) code can never be redeemed because the tx
+  /// binding and client state died with the process.
+  static const keyOidcPendingServer = 'oidc_pending_server';
+  static const keyOidcPendingTx = 'oidc_pending_tx';
+  static const keyOidcPendingRedirect = 'oidc_pending_redirect';
+
   /// OOB paste-code fallback (still PKCE-bound). Prefer tayra:// when deep links
   /// are wired; OOB remains for the authorization-code paste UX (M2).
   static const _redirectUri = 'urn:ietf:wg:oauth:2.0:oob';
@@ -520,14 +530,57 @@ class AuthNotifier extends Notifier<AuthState> {
     await prefs.setString(keyOidcPendingState, stateValue);
   }
 
+  /// Persist the native SSO handoff binding (server + tx + redirect mode).
+  ///
+  /// Called at SSO start; cleared after a successful redeem or a hard
+  /// validation failure. Survives process death so the code the browser
+  /// returns (deep link, loopback, or paste) can still be redeemed.
+  Future<void> storeOidcBinding({
+    required String serverUrl,
+    required String txBinding,
+    String? redirectMode,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(keyOidcPendingServer, serverUrl);
+    await prefs.setString(keyOidcPendingTx, txBinding);
+    if (redirectMode == null || redirectMode.isEmpty) {
+      await prefs.remove(keyOidcPendingRedirect);
+    } else {
+      await prefs.setString(keyOidcPendingRedirect, redirectMode);
+    }
+  }
+
+  Future<void> clearOidcBinding() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(keyOidcPendingServer);
+    await prefs.remove(keyOidcPendingTx);
+    await prefs.remove(keyOidcPendingRedirect);
+  }
+
+  /// Surface a non-network SSO failure (deep link / loopback handoff) in the
+  /// login UI without touching credentials.
+  void setTransientError(String message) {
+    state = state.copyWith(isLoading: false, error: message);
+  }
+
   /// Validate callback `state` against the value stored in [storeOidcPendingState].
   ///
   /// Returns false when missing or mismatched (login CSRF). Always clears the
   /// stored value so it cannot be reused.
-  Future<bool> validateAndClearOidcState(String? callbackState) async {
+  ///
+  /// When [allowRestore] is set, a lost in-memory state (process killed while
+  /// the browser was open) is recovered from the persisted copy so the redeem
+  /// can still succeed. A genuine mismatch still fails and clears everything.
+  Future<bool> validateAndClearOidcState(
+    String? callbackState, {
+    bool allowRestore = false,
+  }) async {
     final prefs = await SharedPreferences.getInstance();
-    final expected = prefs.getString(keyOidcPendingState);
+    var expected = prefs.getString(keyOidcPendingState);
     await prefs.remove(keyOidcPendingState);
+    if ((expected == null || expected.isEmpty) && allowRestore) {
+      expected = prefs.getString(keyOidcPendingTx);
+    }
     if (expected == null || expected.isEmpty) {
       // No pending state (stale tab / direct navigation) — reject.
       return false;
@@ -541,7 +594,13 @@ class AuthNotifier extends Notifier<AuthState> {
     for (var i = 0; i < expected.length; i++) {
       diff |= expected.codeUnitAt(i) ^ callbackState.codeUnitAt(i);
     }
-    return diff == 0;
+    if (diff != 0) {
+      // Mismatch: drop the persisted binding too so a stale code cannot be
+      // replayed against a fresh SSO attempt's state.
+      await clearOidcBinding();
+      return false;
+    }
+    return true;
   }
 
   /// Complete OIDC SSO by exchanging a one-time code for first-party tokens.
@@ -551,19 +610,54 @@ class AuthNotifier extends Notifier<AuthState> {
   ///
   /// [clientState] must match the value sent to [buildOidcLoginUrl] / stored
   /// via [storeOidcPendingState] (M3 login CSRF).
+  ///
+  /// Native callers that lost their in-memory binding (process killed while
+  /// the browser was open) may omit [txBinding] / [clientState] / pass
+  /// [serverUrl] as null — the values persisted at SSO start are restored.
   Future<bool> completeOidcLogin({
-    required String serverUrl,
+    String? serverUrl,
     required String code,
     String? txBinding,
     String? clientState,
+    bool allowRestore = false,
   }) async {
     state = state.copyWith(isLoading: true, error: null);
-    final url = _normalizeServerUrl(serverUrl);
+
+    final prefs = await SharedPreferences.getInstance();
+    var url = serverUrl != null ? _normalizeServerUrl(serverUrl) : '';
+    var tx = txBinding;
+    var clientSt = clientState;
+    if (allowRestore) {
+      final savedServer = prefs.getString(keyOidcPendingServer);
+      if (url.isEmpty && savedServer != null && savedServer.isNotEmpty) {
+        url = _normalizeServerUrl(savedServer);
+      }
+      tx ??= prefs.getString(keyOidcPendingTx);
+      if (clientSt == null || clientSt.isEmpty) {
+        // The OOB page does not echo state; recover the value generated at
+        // start so validation can proceed. validateAndClearOidcState applies
+        // the same fallback, so this only helps error reporting below.
+        clientSt = prefs.getString(keyOidcPendingTx);
+      }
+    }
+    if (url.isEmpty) {
+      state = state.copyWith(
+        isLoading: false,
+        error: 'Could not determine server URL for SSO. Sign in again.',
+      );
+      Analytics.track('login_sso_failed');
+      return false;
+    }
+
     final endpoint =
         kIsWeb ? '/api/v1/users/oidc/token/' : '$url/api/v1/users/oidc/token/';
 
-    final stateOk = await validateAndClearOidcState(clientState);
+    final stateOk = await validateAndClearOidcState(
+      clientSt,
+      allowRestore: allowRestore,
+    );
     if (!stateOk) {
+      await clearOidcBinding();
       state = state.copyWith(
         isLoading: false,
         error: 'SSO session mismatch. Start sign-in again from the login page.',
@@ -575,7 +669,7 @@ class AuthNotifier extends Notifier<AuthState> {
     try {
       final body = <String, dynamic>{
         'code': code.trim(),
-        if (txBinding != null && txBinding.isNotEmpty) 'tx': txBinding,
+        if (tx != null && tx.isNotEmpty) 'tx': tx,
       };
       final response = await _dio.post(
         endpoint,
@@ -595,13 +689,15 @@ class AuthNotifier extends Notifier<AuthState> {
       final payload = _asJsonMap(response.data);
 
       // Confirmed TOTP is required after SSO when the local account has 2FA
-      // (same wire shape as password login).
+      // (same wire shape as password login). The exchange code was consumed,
+      // so drop the SSO handoff binding.
       if (response.statusCode == 401 &&
           payload != null &&
           (payload['error'] == 'totp_required' ||
               payload['code'] == 'totp_required')) {
         final mfa = payload['mfa_token'] as String?;
         if (mfa != null && mfa.isNotEmpty) {
+          await clearOidcBinding();
           state = state.copyWith(
             isLoading: false,
             serverUrl: url,
@@ -614,16 +710,23 @@ class AuthNotifier extends Notifier<AuthState> {
       }
 
       if (response.statusCode != 200 || payload == null) {
-        state = state.copyWith(
-          isLoading: false,
-          error: _formatOidcError(payload, response.statusCode),
-        );
+        final error = _formatOidcError(payload, response.statusCode);
+        // Expired / wrong code is retryable from the same screen (paste a
+        // fresh one) — keep the binding so the tx still matches. Anything
+        // else (user mismatch, disabled account, server config) is terminal.
+        final retryable =
+            payload != null &&
+            (payload['error'] == 'invalid_code' ||
+                payload['error'] == 'missing_code');
+        if (!retryable) await clearOidcBinding();
+        state = state.copyWith(isLoading: false, error: error);
         Analytics.track('login_sso_failed');
         return false;
       }
 
       final accessToken = payload['access_token'] as String?;
       if (accessToken == null || accessToken.isEmpty) {
+        await clearOidcBinding();
         state = state.copyWith(
           isLoading: false,
           error: 'Server did not return an access token.',
@@ -650,6 +753,7 @@ class AuthNotifier extends Notifier<AuthState> {
         totpSetupRequired: payload['totp_setup_required'] == true,
       );
       await _saveAuth();
+      await clearOidcBinding();
       if (state.listenToken == null || state.listenToken!.isEmpty) {
         await ensureListenToken();
       }
