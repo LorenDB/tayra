@@ -1,3 +1,4 @@
+import io
 import os
 import pathlib
 import tempfile
@@ -39,6 +40,31 @@ def test_get_audio_file_data(name, expected):
         result = utils.get_audio_file_data(f)
 
     assert result == expected
+
+
+def test_get_audio_file_data_truncated_ogg_returns_none():
+    # truncated Ogg Vorbis files used to crash with IndexError in mutagen's
+    # comment-header parsing (framing bit read past EOF)
+    path = os.path.join(DATA_DIR, "test.ogg")
+    with open(path, "rb") as f:
+        raw = f.read()
+
+    for cut in range(0, len(raw)):
+        result = utils.get_audio_file_data(io.BytesIO(raw[:cut]))
+        # must never raise; None (unparseable) or valid metadata are both fine
+        assert result is None or isinstance(result, dict)
+
+
+def test_get_audio_file_data_garbage_returns_none():
+    assert utils.get_audio_file_data(io.BytesIO(b"\x00\x01\x02" * 500)) is None
+
+
+def test_get_audio_file_data_mutagen_indexerror_returns_none(mocker):
+    # any parser can raise a bare IndexError; it must not bubble up
+    mocker.patch("mutagen.File", side_effect=IndexError("bytearray index out of range"))
+    f = io.BytesIO(b"\x00" * 100)
+
+    assert utils.get_audio_file_data(f) is None
 
 
 def test_guess_mimetype_dont_crash_with_s3(factories, mocker, settings):
