@@ -1423,19 +1423,20 @@ sftp = ["paramiko (>=1.10.0)"]
 
 [[package]]
 name = "django-versatileimagefield"
-version = "2.2"
+version = "3.1"
 description = "A drop-in replacement for django's ImageField that provides a flexible, intuitive and easily-extensible interface for creating new images from the one assigned to the field."
 optional = false
 python-versions = "*"
 groups = ["main"]
 files = [
-    {file = "django-versatileimagefield-2.2.tar.gz", hash = "sha256:6569d5c3e13c69ab8912ba5100084aa5abcdcffb8d1f5abc085b226e7bbd65b3"},
-    {file = "django_versatileimagefield-2.2-py2.py3-none-any.whl", hash = "sha256:03766f4d2332f192978879fdb196e18c53e6ccef6c55c5c26b59747b76a97288"},
+    {file = "django-versatileimagefield-3.1.tar.gz", hash = "sha256:3390e20048098e897bf299b0360763d10cd089665b7aef8eba900eecbaead0d8"},
+    {file = "django_versatileimagefield-3.1-py2.py3-none-any.whl", hash = "sha256:dfdffa11a0d4c169e44f164481d2b26f94a0a00517216ee85748324c2f96a669"},
 ]
 
 [package.dependencies]
-Pillow = ">=2.4.0"
-python-magic = ">=0.4.15,<1.0.0"
+Django = ">=3.0"
+Pillow = ">=6.2.0"
+python-magic = ">=0.4.22,<1.0.0"
 
 [[package]]
 name = "djangorestframework"
@@ -4798,4 +4799,4 @@ typesense = ["typesense"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.8,<3.12"
-content-hash = "888654fdb9f03c0f970f3b1542894a249b1adf6a3c94ca23f6e1874feab830b2"
+content-hash = "870b714c7e5358eedce77f0158e39907a288fb46e3a1273378ef023997e79107"
