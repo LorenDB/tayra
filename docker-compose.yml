@@ -83,11 +83,11 @@ services:
       - worker
       - --loglevel=INFO
       - --concurrency=${CELERYD_CONCURRENCY:-0}
-      # consume the default queue plus the dedicated transcode queue so ffmpeg
-      # encodes never starve imports; transcodes run at lower priority
+      # Consume the default queue (imports, etc.) and the transcode queue.
+      # Do not use celery-multi `-Q:1=` / `-Q:2=` here: `celery worker` treats
+      # `-Q:2=transcode` as a queue named `:2=transcode` and drops `celery`,
+      # so process_upload never runs.
       - --queues=celery,transcode
-      - -Q:1=celery
-      - -Q:2=transcode
     volumes:
       - "${MUSIC_DIRECTORY_SERVE_PATH:-./data/music}:${MUSIC_DIRECTORY_PATH:-/music}:ro"
       - "${MEDIA_HOST_PATH:-./data/media}:${MEDIA_ROOT:-/srv/funkwhale/data/media}"
