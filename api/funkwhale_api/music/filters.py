@@ -216,6 +216,7 @@ class UploadFilter(audio_filters.IncludeChannelsFilterSet):
         distinct=True,
         library_field="library",
     )
+    uuid = filters.UUIDFilter("uuid")
     import_status = common_filters.MultipleQueryFilter(coerce=str, distinct=False)
     q = fields.SmartSearchFilter(
         config=search.SearchConfig(
@@ -241,6 +242,7 @@ class UploadFilter(audio_filters.IncludeChannelsFilterSet):
             "import_status",
             "mimetype",
             "import_reference",
+            "uuid",
         ]
         include_channels_field = "track__artist_credit__artist__channel"
 

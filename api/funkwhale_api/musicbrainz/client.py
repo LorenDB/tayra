@@ -7,6 +7,22 @@ from funkwhale_api import __version__
 _api = musicbrainzngs
 _api.set_useragent("funkwhale", str(__version__), settings.FUNKWHALE_URL)
 _api.set_hostname(settings.MUSICBRAINZ_HOSTNAME)
+# musicbrainzngs urlopen calls have no timeout of their own; a hung lookup
+# would pin process_upload until Celery's hard kill, leaving the upload pending.
+try:
+    import musicbrainzngs.musicbrainz as _mb_mod
+
+    _orig_urlopen = getattr(_mb_mod, "urlopen", None)
+    if _orig_urlopen is not None:
+        _timeout = getattr(settings, "EXTERNAL_REQUESTS_TIMEOUT", 10)
+
+        def _urlopen_with_timeout(req, *args, **kwargs):
+            kwargs.setdefault("timeout", _timeout)
+            return _orig_urlopen(req, *args, **kwargs)
+
+        _mb_mod.urlopen = _urlopen_with_timeout
+except Exception:
+    pass
 
 
 def clean_artist_search(query, **kwargs):

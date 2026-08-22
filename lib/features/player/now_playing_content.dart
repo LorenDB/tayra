@@ -435,7 +435,12 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
 
   Widget _buildPanelHeader(Track track, PlayerState playerState) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 8, 8),
+      padding: EdgeInsets.fromLTRB(
+        16,
+        16 + MediaQuery.viewPaddingOf(context).top,
+        8,
+        8,
+      ),
       child: Row(
         children: [
           const Text(

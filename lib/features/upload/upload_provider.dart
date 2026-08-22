@@ -513,6 +513,10 @@ const _maxPollAttempts = 100;
 /// Stop polling after this many consecutive network/server errors.
 const _maxConsecutivePollErrors = 5;
 
+/// Stop polling an item after this many successful polls that still cannot
+/// find the upload (avoids a silent 5-minute wait on a bad reference).
+const _maxPollMisses = 10;
+
 // ── Upload notifier ──────────────────────────────────────────────────────
 
 class UploadNotifier extends Notifier<UploadState> {
@@ -520,6 +524,7 @@ class UploadNotifier extends Notifier<UploadState> {
   Timer? _pollingTimer;
   int _pollAttempts = 0;
   int _consecutivePollErrors = 0;
+  final Map<String, int> _pollMisses = {};
 
   /// Incremented on every reset/new upload so in-flight _pollOnce calls can
   /// detect they belong to a stale session and discard their results.
@@ -1647,6 +1652,7 @@ class UploadNotifier extends Notifier<UploadState> {
     _pollingTimer?.cancel();
     _pollAttempts = 0;
     _consecutivePollErrors = 0;
+    _pollMisses.clear();
     _pollGeneration++;
     final generation = _pollGeneration;
     developer.log(
@@ -1687,9 +1693,11 @@ class UploadNotifier extends Notifier<UploadState> {
           (i) => i.copyWith(
             status: UploadItemStatus.errored,
             errorDetail:
-                'Import timed out after ${elapsed ~/ 60} min. '
-                'The file was uploaded but the server did not finish processing it. '
-                'Check your library manually.',
+                'Import timed out after ${elapsed ~/ 60} min '
+                '(last status: ${item.importStatus ?? 'unknown'}). '
+                'The file reached the server but processing never completed. '
+                'Check Manage → Library → Uploads, or server celery logs for '
+                'this upload${item.uploadedUuid != null ? ' (${item.uploadedUuid})' : ''}.',
           ),
         );
       }
@@ -1700,20 +1708,40 @@ class UploadNotifier extends Notifier<UploadState> {
     try {
       var anySuccess = false;
       for (final item in pending) {
-        final ref = item.importReference;
-        if (ref == null) continue;
-
-        final upload = await _api.getUploadByReference(ref);
+        UploadForOwner? upload;
+        if (item.uploadedUuid != null && item.uploadedUuid!.isNotEmpty) {
+          upload = await _api.getUploadByUuid(item.uploadedUuid!);
+        }
+        if (upload == null && item.importReference != null) {
+          upload = await _api.getUploadByReference(item.importReference!);
+        }
         if (generation != _pollGeneration) return;
 
         if (upload == null) {
+          final misses = (_pollMisses[item.localId] ?? 0) + 1;
+          _pollMisses[item.localId] = misses;
           developer.log(
-            'Poll #$_pollAttempts: ${item.fileName} not found yet',
+            'Poll #$_pollAttempts: ${item.fileName} not found '
+            '(miss $misses/$_maxPollMisses, uuid=${item.uploadedUuid}, '
+            'ref=${item.importReference})',
             name: 'tayra.upload',
           );
+          if (misses >= _maxPollMisses) {
+            _updateItem(
+              item.localId,
+              (i) => i.copyWith(
+                status: UploadItemStatus.errored,
+                errorDetail:
+                    'Upload was accepted but the server never returned it '
+                    'while checking import status. Check Manage → Library → '
+                    'Uploads for ${item.fileName}.',
+              ),
+            );
+          }
           continue;
         }
 
+        _pollMisses.remove(item.localId);
         anySuccess = true;
         developer.log(
           'Poll #$_pollAttempts: ${item.fileName} '
@@ -1884,6 +1912,11 @@ class UploadNotifier extends Notifier<UploadState> {
           suffix.isNotEmpty ? '$c $suffix' : c,
         'track_uuid_not_found' =>
           'The specified MusicBrainz track was not found on the server.',
+        'import_timeout' =>
+          suffix.isNotEmpty
+              ? suffix
+              : 'Import exceeded the server time limit. The file was received; '
+                  'relaunch it from Manage → Library → Uploads.',
         'unknown_error' =>
           suffix.isNotEmpty
               ? 'Server error during import: $suffix'

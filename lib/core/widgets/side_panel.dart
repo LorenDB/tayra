@@ -151,7 +151,12 @@ class _StashInboxPanel extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
+          padding: EdgeInsets.fromLTRB(
+            8,
+            16 + MediaQuery.viewPaddingOf(context).top,
+            8,
+            8,
+          ),
           child: Row(
             children: [
               if (onBack != null)
@@ -189,29 +194,31 @@ class _StashInboxPanel extends ConsumerWidget {
         ),
         const Divider(color: AppTheme.divider, height: 1),
         Expanded(
-          child: stashes.isEmpty
-              ? const Center(
-                  child: Text(
-                    'No stashed queues',
-                    style: TextStyle(
-                      color: AppTheme.onBackgroundMuted,
-                      fontSize: 14,
+          child:
+              stashes.isEmpty
+                  ? const Center(
+                    child: Text(
+                      'No stashed queues',
+                      style: TextStyle(
+                        color: AppTheme.onBackgroundMuted,
+                        fontSize: 14,
+                      ),
                     ),
+                  )
+                  : ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: stashes.length,
+                    itemBuilder:
+                        (context, index) => StashedQueueTile(
+                          stash: stashes[index],
+                          onRestored: () {
+                            // If a parent provided an onBack handler, invoke it so
+                            // the panel returns to the queue view after restoring
+                            // a stash.
+                            if (onBack != null) onBack!();
+                          },
+                        ),
                   ),
-                )
-              : ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: stashes.length,
-                  itemBuilder: (context, index) => StashedQueueTile(
-                    stash: stashes[index],
-                    onRestored: () {
-                      // If a parent provided an onBack handler, invoke it so
-                      // the panel returns to the queue view after restoring
-                      // a stash.
-                      if (onBack != null) onBack!();
-                    },
-                  ),
-                ),
         ),
       ],
     );

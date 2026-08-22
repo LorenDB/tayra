@@ -1195,9 +1195,19 @@ class FunkwhaleApi {
   /// import_status "finished" or "skipped" — it 404s while the upload is
   /// still pending or errored.
   Future<UploadForOwner?> getUploadByReference(String importReference) async {
+    return _getOwnedUpload({'import_reference': importReference});
+  }
+
+  /// Same list endpoint as [getUploadByReference], filtered by upload UUID.
+  /// Retrieve (`GET /uploads/<uuid>/`) 404s while the import is still pending.
+  Future<UploadForOwner?> getUploadByUuid(String uuid) async {
+    return _getOwnedUpload({'uuid': uuid});
+  }
+
+  Future<UploadForOwner?> _getOwnedUpload(Map<String, dynamic> filters) async {
     final response = await _dio.get(
       '$_baseUrl/api/v1/uploads/',
-      queryParameters: {'import_reference': importReference, 'page_size': 1},
+      queryParameters: {...filters, 'page_size': 1},
     );
     final results = response.data['results'] as List<dynamic>? ?? [];
     if (results.isEmpty) return null;

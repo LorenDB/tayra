@@ -357,6 +357,17 @@ class _FileRow extends StatelessWidget {
                 minHeight: 3,
               ),
             ],
+            if (item.status == UploadItemStatus.pollingImport) ...[
+              const SizedBox(height: 4),
+              Text(
+                'Waiting on server import'
+                '${item.importStatus != null ? ' (${item.importStatus})' : ''}…',
+                style: const TextStyle(
+                  color: AppTheme.onBackgroundSubtle,
+                  fontSize: 11,
+                ),
+              ),
+            ],
             if (item.errorDetail != null) ...[
               const SizedBox(height: 4),
               Text(

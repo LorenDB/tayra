@@ -84,7 +84,7 @@ def get_type_from_ext(extension):
 def get_audio_file_data(f):
     try:
         data = mutagen.File(f)
-    except (IndexError, mutagen._util.MutagenError):
+    except (IndexError, mutagen._util.MutagenError, OSError, ValueError):
         # truncated/corrupt files can crash parsers (e.g. Ogg Vorbis reading
         # past EOF); treat them as unparseable instead of erroring out
         return

@@ -157,8 +157,12 @@ class AppShell extends ConsumerWidget {
           ),
 
           // ── Main content area ──
+          // top: false so album/artist/now-playing gradients can paint into
+          // the status bar zone. Screens with AppBars or viewPadding already
+          // keep their chrome below the system icons.
           Expanded(
             child: SafeArea(
+              top: false,
               bottom: false,
               child: Column(
                 children: [const OfflineStatusBar(), Expanded(child: child)],
@@ -211,6 +215,7 @@ class AppShell extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppTheme.background,
       body: SafeArea(
+        top: false,
         bottom: false,
         child: Column(
           children: [const OfflineStatusBar(), Expanded(child: child)],

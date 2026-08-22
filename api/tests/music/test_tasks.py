@@ -335,6 +335,70 @@ def test_process_upload_picks_ignore_non_pending_uploads(import_status, factorie
         tasks.process_upload(upload_id=upload.pk)
 
 
+def test_process_upload_uncaught_exception_marks_upload_errored(factories, mocker):
+    upload = factories["music.Upload"](track=None)
+    mocker.patch(
+        "funkwhale_api.music.tasks.get_track_from_import_metadata",
+        side_effect=RuntimeError("boom"),
+    )
+
+    with pytest.raises(RuntimeError):
+        tasks.process_upload(upload_id=upload.pk)
+
+    upload.refresh_from_db()
+    assert upload.import_status == "errored"
+    assert upload.import_details["error_code"] == "unknown_error"
+    assert "boom" in str(upload.import_details.get("detail", ""))
+
+
+def test_process_upload_soft_timeout_marks_upload_errored(factories, mocker):
+    from celery.exceptions import SoftTimeLimitExceeded
+
+    upload = factories["music.Upload"](track=None)
+    mocker.patch(
+        "funkwhale_api.music.tasks.get_track_from_import_metadata",
+        side_effect=SoftTimeLimitExceeded(),
+    )
+
+    with pytest.raises(SoftTimeLimitExceeded):
+        tasks.process_upload(upload_id=upload.pk)
+
+    upload.refresh_from_db()
+    assert upload.import_status == "errored"
+    assert upload.import_details["error_code"] == "import_timeout"
+
+
+def test_process_upload_get_audio_data_failure_still_finishes(factories, mocker):
+    track = factories["music.Track"](album__with_cover=True)
+    upload = factories["music.Upload"](
+        track=None, import_metadata={"funkwhale": {"track": {"uuid": str(track.uuid)}}}
+    )
+    mocker.patch(
+        "funkwhale_api.music.models.Upload.get_audio_data",
+        side_effect=OSError("mutagen exploded"),
+    )
+
+    tasks.process_upload(upload_id=upload.pk)
+
+    upload.refresh_from_db()
+    assert upload.import_status == "finished"
+    assert upload.track == track
+
+
+def test_process_upload_on_failure_marks_pending_upload(factories):
+    upload = factories["music.Upload"](import_status="pending")
+    tasks._process_upload_on_failure(
+        RuntimeError("worker killed"),
+        "task-id",
+        (),
+        {"upload_id": upload.pk},
+        None,
+    )
+    upload.refresh_from_db()
+    assert upload.import_status == "errored"
+    assert upload.import_details["error_code"] == "unknown_error"
+
+
 def test_process_upload_corrupt_file_marks_upload_errored(temp_signal, factories, tmp_path):
     # unparseable/corrupt files used to crash the task inside mutagen,
     # leaving the upload stuck in "pending" forever

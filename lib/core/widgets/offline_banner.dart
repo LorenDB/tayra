@@ -51,7 +51,12 @@ class _OfflineSuggestionBanner extends ConsumerWidget {
             bottom: BorderSide(color: AppTheme.divider, width: 0.5),
           ),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        padding: EdgeInsets.fromLTRB(
+          16,
+          10 + MediaQuery.paddingOf(context).top,
+          16,
+          10,
+        ),
         child: Row(
           children: [
             const Icon(
@@ -87,8 +92,11 @@ class _OfflineSuggestionBanner extends ConsumerWidget {
             ),
             const SizedBox(width: 4),
             InkWell(
-              onTap: () =>
-                  ref.read(offlineStateProvider.notifier).dismissSuggestion(),
+              onTap:
+                  () =>
+                      ref
+                          .read(offlineStateProvider.notifier)
+                          .dismissSuggestion(),
               borderRadius: BorderRadius.circular(12),
               child: const Padding(
                 padding: EdgeInsets.all(4),
@@ -142,16 +150,22 @@ class _OfflineStatusChip extends ConsumerWidget {
     return Material(
       color: AppTheme.surfaceContainerHigh,
       child: InkWell(
-        onTap: (filterEnabled || forcedOffline)
-            ? () => _showOfflineOptions(context, ref, offlineState)
-            : null,
+        onTap:
+            (filterEnabled || forcedOffline)
+                ? () => _showOfflineOptions(context, ref, offlineState)
+                : null,
         child: Container(
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(color: AppTheme.divider, width: 0.5),
             ),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: EdgeInsets.fromLTRB(
+            16,
+            8 + MediaQuery.paddingOf(context).top,
+            16,
+            8,
+          ),
           child: Row(
             children: [
               Icon(icon, color: color, size: 16),

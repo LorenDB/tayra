@@ -12,6 +12,8 @@ from django.utils import timezone
 from musicbrainzngs import ResponseError
 from requests.exceptions import HTTPError
 
+from celery.exceptions import SoftTimeLimitExceeded
+
 from funkwhale_api import musicbrainz
 from funkwhale_api.common import channels, preferences
 from funkwhale_api.common import utils as common_utils
@@ -111,7 +113,47 @@ def fail_import(upload, error_code, detail=None, **fields):
         )
 
 
-@celery.app.task(name="music.process_upload")
+def _mark_pending_upload_failed(upload_id, error_code, detail):
+    """Mark an upload errored if it is still pending (used from task failure)."""
+    try:
+        upload = models.Upload.objects.get(pk=upload_id, import_status="pending")
+    except models.Upload.DoesNotExist:
+        logger.info(
+            "process_upload failure handler: upload %s is missing or no longer pending",
+            upload_id,
+        )
+        return
+    logger.error(
+        "Marking upload %s as errored (%s): %s", upload_id, error_code, detail
+    )
+    fail_import(upload, error_code, detail=detail)
+
+
+def _process_upload_on_failure(exc, task_id, args, kwargs, einfo):
+    """Celery callback so hard time-limits / worker crashes don't leave pending uploads."""
+    upload_id = kwargs.get("upload_id")
+    if upload_id is None:
+        logger.error(
+            "music.process_upload failed without upload_id (task_id=%s): %s",
+            task_id,
+            exc,
+        )
+        return
+    detail = f"{type(exc).__name__}: {exc}"
+    logger.error(
+        "music.process_upload failed (task_id=%s upload_id=%s): %s",
+        task_id,
+        upload_id,
+        detail,
+    )
+    _mark_pending_upload_failed(upload_id, "unknown_error", detail)
+
+
+@celery.app.task(
+    name="music.process_upload",
+    soft_time_limit=270,
+    on_failure=_process_upload_on_failure,
+)
 @celery.require_instance(
     models.Upload.objects.filter(import_status="pending").select_related(
         "library__owner",
@@ -124,6 +166,35 @@ def process_upload(upload, update_denormalization=True):
     Main handler to process uploads submitted by user and create the corresponding
     metadata (tracks/artists/albums) in our DB.
     """
+    try:
+        _process_upload_impl(upload, update_denormalization=update_denormalization)
+    except SoftTimeLimitExceeded:
+        logger.error(
+            "process_upload exceeded soft time limit for upload %s", upload.pk
+        )
+        if upload.import_status == "pending":
+            fail_import(
+                upload,
+                "import_timeout",
+                detail=(
+                    "Import exceeded the server time limit before finishing. "
+                    "The file was received; relaunch the import from library "
+                    "admin if the track is missing."
+                ),
+            )
+        raise
+    except Exception as exc:
+        logger.exception("process_upload failed for upload %s", upload.pk)
+        try:
+            upload.refresh_from_db(fields=["import_status"])
+        except Exception:
+            pass
+        if getattr(upload, "import_status", None) == "pending":
+            fail_import(upload, "unknown_error", detail=str(exc))
+        raise
+
+
+def _process_upload_impl(upload, update_denormalization=True):
     from . import serializers
 
     channel = upload.library.get_channel()
@@ -208,6 +279,8 @@ def process_upload(upload, update_denormalization=True):
         )
     except UploadImportError as e:
         return fail_import(upload, e.code)
+    except SoftTimeLimitExceeded:
+        raise
     except Exception as e:
         fail_import(upload, "unknown_error", detail=str(e))
         raise
@@ -243,7 +316,12 @@ def process_upload(upload, update_denormalization=True):
         return
 
     # all is good, let's finalize the import
-    audio_data = upload.get_audio_data()
+    try:
+        audio_data = upload.get_audio_data()
+    except Exception as e:
+        # Duration/bitrate are optional; never leave the import pending for this.
+        logger.warning("get_audio_data failed for upload %s: %s", upload.pk, e)
+        audio_data = None
     if audio_data:
         upload.duration = audio_data["duration"]
         upload.size = audio_data["size"]
@@ -264,18 +342,30 @@ def process_upload(upload, update_denormalization=True):
         common_utils.update_modification_date(channel.artist)
 
     if update_denormalization:
-        models.TrackActor.create_entries(
-            library=upload.library,
-            upload_and_track_ids=[(upload.pk, upload.track_id)],
-            delete_existing=False,
-        )
+        try:
+            models.TrackActor.create_entries(
+                library=upload.library,
+                upload_and_track_ids=[(upload.pk, upload.track_id)],
+                delete_existing=False,
+            )
+        except Exception:
+            logger.exception(
+                "TrackActor.create_entries failed after import finished for upload %s",
+                upload.pk,
+            )
 
-    # update album cover, if needed
+    # update album cover, if needed (must not block or revert a finished import)
     if track.album and not track.album.attachment_cover:
-        populate_album_cover(
-            track.album,
-            source=final_metadata.get("upload_source"),
-        )
+        try:
+            populate_album_cover(
+                track.album,
+                source=final_metadata.get("upload_source"),
+            )
+        except Exception:
+            logger.exception(
+                "populate_album_cover failed after import finished for upload %s",
+                upload.pk,
+            )
 
     if broadcast:
         signals.upload_import_status_updated.send(
