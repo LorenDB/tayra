@@ -83,6 +83,11 @@ services:
       - worker
       - --loglevel=INFO
       - --concurrency=${CELERYD_CONCURRENCY:-0}
+      # consume the default queue plus the dedicated transcode queue so ffmpeg
+      # encodes never starve imports; transcodes run at lower priority
+      - --queues=celery,transcode
+      - -Q:1=celery
+      - -Q:2=transcode
     volumes:
       - "${MUSIC_DIRECTORY_SERVE_PATH:-./data/music}:${MUSIC_DIRECTORY_PATH:-/music}:ro"
       - "${MEDIA_HOST_PATH:-./data/media}:${MEDIA_ROOT:-/srv/funkwhale/data/media}"

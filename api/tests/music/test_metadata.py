@@ -1,4 +1,5 @@
 import datetime
+import io
 import os
 import uuid
 
@@ -39,6 +40,24 @@ def test_can_get_metadata_from_ogg_file(field, value):
     data = metadata.Metadata(path)
 
     assert data.get(field) == value
+
+
+def test_metadata_truncated_ogg_raises_value_error():
+    # truncated Ogg Vorbis files used to escape as IndexError from mutagen's
+    # comment-header parsing (framing bit read past EOF)
+    with open(os.path.join(DATA_DIR, "test.ogg"), "rb") as f:
+        raw = f.read()
+
+    for cut in range(0, len(raw)):
+        with pytest.raises(ValueError):
+            metadata.Metadata(io.BytesIO(raw[:cut]))
+
+
+def test_metadata_mutagen_indexerror_raises_value_error(mocker):
+    mocker.patch("mutagen.File", side_effect=IndexError("bytearray index out of range"))
+
+    with pytest.raises(ValueError):
+        metadata.Metadata(io.BytesIO(b"\x00" * 100))
 
 
 def test_can_get_metadata_all():

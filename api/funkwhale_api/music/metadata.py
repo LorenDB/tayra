@@ -352,7 +352,13 @@ ALL_FIELDS = [
 
 class Metadata(Mapping):
     def __init__(self, filething, kind=mutagen.File):
-        self._file = kind(filething)
+        try:
+            self._file = kind(filething)
+        except (IndexError, mutagen._util.MutagenError) as e:
+            # truncated/corrupt files can crash parsers (e.g. Ogg Vorbis
+            # reading past EOF); raise ValueError so callers treat it as a
+            # bad file instead of an unexpected crash
+            raise ValueError(f"Cannot parse metadata from {filething}") from e
         if self._file is None:
             raise ValueError(f"Cannot parse metadata from {filething}")
         if len(self._file) == 0:

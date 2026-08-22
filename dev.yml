@@ -61,6 +61,11 @@ services:
       - --app=funkwhale_api.taskapp
       - worker
       - --loglevel=INFO
+      # consume the default queue plus the dedicated transcode queue so ffmpeg
+      # encodes never starve imports; transcodes run at lower priority
+      - --queues=celery,transcode
+      - -Q:1=celery
+      - -Q:2=transcode
     volumes:
       - "./api:/app"
     networks:

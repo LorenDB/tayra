@@ -971,6 +971,14 @@ Example:
 
 # Your common stuff: Below this line define 3rd party library settings
 CELERY_TASK_DEFAULT_RATE_LIMIT = 1
+# Heavy ffmpeg encodes run on a dedicated queue so they never delay imports or
+# other user-facing tasks; workers must consume both queues (compose
+# celeryworker command lists them explicitly).
+CELERY_TASK_ROUTES = {
+    "music.ensure_transcoded_version": {"queue": "transcode"},
+    "music.prewarm_upload_qualities": {"queue": "transcode"},
+    "music.schedule_quality_prewarm": {"queue": "transcode"},
+}
 CELERY_TASK_TIME_LIMIT = 300
 CELERY_BEAT_SCHEDULE = {
     "audio.fetch_rss_feeds": {

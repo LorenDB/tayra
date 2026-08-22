@@ -335,6 +335,39 @@ def test_process_upload_picks_ignore_non_pending_uploads(import_status, factorie
         tasks.process_upload(upload_id=upload.pk)
 
 
+def test_process_upload_corrupt_file_marks_upload_errored(temp_signal, factories, tmp_path):
+    # unparseable/corrupt files used to crash the task inside mutagen,
+    # leaving the upload stuck in "pending" forever
+    with open(os.path.join(DATA_DIR, "test.ogg"), "rb") as f:
+        raw = f.read()
+    # cut inside the Ogg comment header so mutagen cannot parse the file
+    truncated = tmp_path / "truncated.ogg"
+    truncated.write_bytes(raw[:100])
+
+    upload = factories["music.Upload"](
+        track=None, audio_file__from_path=str(truncated)
+    )
+
+    with temp_signal(signals.upload_import_status_updated):
+        tasks.process_upload(upload_id=upload.pk)
+
+    upload.refresh_from_db()
+
+    assert upload.import_status == "errored"
+    assert upload.import_details["error_code"] == "invalid_metadata"
+
+
+def test_transcode_tasks_routed_to_dedicated_queue():
+    # heavy ffmpeg encodes must never share the queue that serves imports
+    for name in (
+        "music.ensure_transcoded_version",
+        "music.prewarm_upload_qualities",
+        "music.schedule_quality_prewarm",
+    ):
+        task = tasks.celery.app.tasks[name]
+        assert task.queue == "transcode", name
+
+
 def test_upload_import_track_uuid(now, factories):
     track = factories["music.Track"](album__with_cover=True)
     upload = factories["music.Upload"](

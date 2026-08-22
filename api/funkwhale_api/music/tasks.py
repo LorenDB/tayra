@@ -159,7 +159,12 @@ def process_upload(upload, update_denormalization=True):
     if use_file_metadata:
         audio_file = upload.get_audio_file()
 
-        m = metadata.Metadata(audio_file)
+        try:
+            m = metadata.Metadata(audio_file)
+        except ValueError as e:
+            # unparseable/corrupt file: mark the upload errored instead of
+            # crashing the task and leaving it stuck in "pending"
+            return fail_import(upload, "invalid_metadata", detail=str(e))
         try:
             serializer = metadata.TrackMetadataSerializer(data=m)
             serializer.is_valid()
@@ -779,6 +784,7 @@ def clean_transcoding_cache():
     ignore_result=True,
     soft_time_limit=900,
     time_limit=960,
+    queue="transcode",
 )
 def ensure_transcoded_version(upload_id, format, max_bitrate=None):
     """Create a progressive derivative for *upload_id* if missing (ffmpeg)."""
@@ -824,7 +830,11 @@ def ensure_transcoded_version(upload_id, format, max_bitrate=None):
         raise
 
 
-@celery.app.task(name="music.prewarm_upload_qualities", ignore_result=True)
+@celery.app.task(
+    name="music.prewarm_upload_qualities",
+    ignore_result=True,
+    queue="transcode",
+)
 def prewarm_upload_qualities(upload_id, tiers=None):
     """Enqueue quality-ladder rungs for faster first play."""
     from . import quality as quality_mod
@@ -860,7 +870,11 @@ def _upload_needs_quality_prewarm(upload, tiers=None):
     return False
 
 
-@celery.app.task(name="music.schedule_quality_prewarm", ignore_result=True)
+@celery.app.task(
+    name="music.schedule_quality_prewarm",
+    ignore_result=True,
+    queue="transcode",
+)
 def schedule_quality_prewarm(max_enqueue=100):
     """Scan the library and enqueue missing quality-ladder encodes.
 
