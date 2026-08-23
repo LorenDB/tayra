@@ -229,31 +229,80 @@ def _process_upload_impl(upload, update_denormalization=True):
 
     if use_file_metadata:
         audio_file = upload.get_audio_file()
+        if audio_file is not None:
+            try:
+                audio_file.seek(0)
+            except Exception:
+                pass
 
+        file_tags = None
+        parse_error = None
         try:
             m = metadata.Metadata(audio_file)
         except ValueError as e:
-            # unparseable/corrupt file: mark the upload errored instead of
-            # crashing the task and leaving it stuck in "pending"
-            return fail_import(upload, "invalid_metadata", detail=str(e))
-        try:
-            serializer = metadata.TrackMetadataSerializer(data=m)
-            serializer.is_valid()
-        except Exception as e:
-            fail_import(upload, "unknown_error", detail=str(e))
-            raise
-        if not serializer.is_valid():
-            detail = serializer.errors
-            metadata_dump = None
-            try:
-                metadata_dump = m.all()
-            except Exception as e:
-                logger.warn("Cannot dump metadata for file %s: %s", audio_file, str(e))
-            return fail_import(
-                upload, "invalid_metadata", detail=detail, file_metadata=metadata_dump
+            parse_error = str(e)
+            logger.warning(
+                "Could not parse embedded tags for upload %s (%s): %s",
+                upload.pk,
+                getattr(getattr(upload, "audio_file", None), "name", None),
+                e,
             )
+        else:
+            try:
+                serializer = metadata.TrackMetadataSerializer(data=m)
+                serializer.is_valid()
+            except Exception as e:
+                fail_import(upload, "unknown_error", detail=str(e))
+                raise
+            if serializer.is_valid():
+                file_tags = serializer.validated_data
+            else:
+                parse_error = serializer.errors
+                metadata_dump = None
+                try:
+                    metadata_dump = m.all()
+                except Exception as e:
+                    logger.warn(
+                        "Cannot dump metadata for file %s: %s", audio_file, str(e)
+                    )
+                # Prefer form/MusicBrainz metadata over a hard fail when tags
+                # are incomplete but the client already sent title/mbid.
+                if not (
+                    forced_values.get("title")
+                    or forced_values.get("mbid")
+                    or getter(internal_config, "funkwhale", "track", "uuid")
+                ):
+                    return fail_import(
+                        upload,
+                        "invalid_metadata",
+                        detail=parse_error,
+                        file_metadata=metadata_dump,
+                    )
+
+        if file_tags is None and (
+            forced_values.get("title")
+            or forced_values.get("mbid")
+            or getter(internal_config, "funkwhale", "track", "uuid")
+        ):
+            logger.info(
+                "Using client import_metadata for upload %s after tag parse failure: %s",
+                upload.pk,
+                parse_error,
+            )
+            file_tags = {}
+        if file_tags is None:
+            return fail_import(
+                upload,
+                "invalid_metadata",
+                detail=parse_error
+                or "Could not read tags from this file. Tag it with MusicBrainz Picard "
+                "or use MusicBrainz lookup before uploading.",
+            )
+
         check_mbid = preferences.get("music__only_allow_musicbrainz_tagged_files")
-        if check_mbid and not serializer.validated_data.get("mbid"):
+        if check_mbid and not (
+            file_tags.get("mbid") or forced_values.get("mbid")
+        ):
             return fail_import(
                 upload,
                 "missing_musicbrainz_id",
@@ -265,7 +314,7 @@ def _process_upload_impl(upload, update_denormalization=True):
             )
 
         final_metadata = collections.ChainMap(
-            additional_data, serializer.validated_data, internal_config
+            additional_data, file_tags, internal_config
         )
     else:
         final_metadata = collections.ChainMap(

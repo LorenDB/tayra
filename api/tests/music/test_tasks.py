@@ -399,6 +399,26 @@ def test_process_upload_on_failure_marks_pending_upload(factories):
     assert upload.import_details["error_code"] == "unknown_error"
 
 
+def test_process_upload_falls_back_to_import_metadata_when_tags_unreadable(
+    factories, mocker
+):
+    mocker.patch(
+        "funkwhale_api.music.metadata.Metadata",
+        side_effect=ValueError("Cannot parse metadata from track.ogg"),
+    )
+    track = factories["music.Track"](album__with_cover=True)
+    upload = factories["music.Upload"](
+        track=None,
+        import_metadata={"funkwhale": {"track": {"uuid": str(track.uuid)}}},
+    )
+
+    tasks.process_upload(upload_id=upload.pk)
+
+    upload.refresh_from_db()
+    assert upload.import_status == "finished"
+    assert upload.track == track
+
+
 def test_process_upload_corrupt_file_marks_upload_errored(temp_signal, factories, tmp_path):
     # unparseable/corrupt files used to crash the task inside mutagen,
     # leaving the upload stuck in "pending" forever

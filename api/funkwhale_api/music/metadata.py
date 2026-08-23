@@ -1,13 +1,21 @@
 import base64
 import datetime
 import logging
+import os
 from collections.abc import Mapping
 
 import arrow
+import mutagen
 import mutagen._util
+import mutagen.aiff
+import mutagen.asf
 import mutagen.flac
+import mutagen.mp3
+import mutagen.mp4
+import mutagen.oggopus
 import mutagen.oggtheora
 import mutagen.oggvorbis
+import mutagen.wave
 from rest_framework import serializers
 
 from funkwhale_api.tags import models as tags_models
@@ -331,6 +339,8 @@ CONF = {
 
 CONF["MP3"] = CONF["ID3"]
 CONF["AIFF"] = CONF["ID3"]
+# mutagen.wave.WAVE stores tags as ID3
+CONF["WAVE"] = CONF["ID3"]
 
 ALL_FIELDS = [
     "position",
@@ -350,19 +360,155 @@ ALL_FIELDS = [
 ]
 
 
+# mutagen.File() aborts the whole probe if one candidate raises IndexError
+# (instead of HeaderNotFoundError). Retry remaining types so a mis-sniffed
+# Ogg/Opus/MP3 still imports.
+_EXPLICIT_KINDS = (
+    mutagen.mp3.MP3,
+    mutagen.flac.FLAC,
+    mutagen.mp4.MP4,
+    mutagen.oggvorbis.OggVorbis,
+    mutagen.oggopus.OggOpus,
+    mutagen.oggtheora.OggTheora,
+    mutagen.aiff.AIFF,
+    mutagen.wave.WAVE,
+    mutagen.asf.ASF,
+)
+
+_KIND_BY_EXT = {
+    ".mp3": mutagen.mp3.MP3,
+    ".flac": mutagen.flac.FLAC,
+    ".m4a": mutagen.mp4.MP4,
+    ".mp4": mutagen.mp4.MP4,
+    ".aac": mutagen.mp4.MP4,
+    ".ogg": mutagen.oggvorbis.OggVorbis,
+    ".oga": mutagen.oggvorbis.OggVorbis,
+    ".opus": mutagen.oggopus.OggOpus,
+    ".aiff": mutagen.aiff.AIFF,
+    ".aif": mutagen.aiff.AIFF,
+    ".wav": mutagen.wave.WAVE,
+    ".wma": mutagen.asf.ASF,
+}
+
+_PARSE_ERRORS = (IndexError, mutagen._util.MutagenError, OSError, ValueError)
+
+
+def _seek0(filething):
+    seek = getattr(filething, "seek", None)
+    if not callable(seek):
+        return
+    try:
+        seek(0)
+    except Exception:
+        pass
+
+
+def _label(filething):
+    if isinstance(filething, (str, os.PathLike)):
+        return os.path.basename(str(filething))
+    for attr in ("name", "path"):
+        value = getattr(filething, attr, None)
+        if value:
+            return os.path.basename(str(value))
+    return filething.__class__.__name__
+
+
+def _kind_candidates(filename):
+    ext = os.path.splitext(filename or "")[1].lower()
+    preferred = _KIND_BY_EXT.get(ext)
+    ordered = []
+    if preferred is not None:
+        ordered.append(preferred)
+        # .ogg is used for Vorbis, Opus, and Theora
+        if ext in {".ogg", ".oga"}:
+            ordered.extend(
+                [mutagen.oggopus.OggOpus, mutagen.oggtheora.OggTheora]
+            )
+    for kind in _EXPLICIT_KINDS:
+        if kind not in ordered:
+            ordered.append(kind)
+    return ordered
+
+
+def _try_open(kind, source):
+    _seek0(source)
+    try:
+        parsed = kind(source)
+    except _PARSE_ERRORS:
+        return None
+    return parsed
+
+
+def load_mutagen_file(filething, kind=mutagen.File):
+    """Open an audio file with mutagen, retrying types after parser crashes."""
+    _seek0(filething)
+
+    if kind is not mutagen.File:
+        parsed = _try_open(kind, filething)
+        if parsed is None:
+            raise ValueError(f"Cannot parse metadata from {_label(filething)}")
+        return parsed
+
+    last_error = None
+    try:
+        parsed = mutagen.File(filething)
+        if parsed is not None:
+            return parsed
+    except _PARSE_ERRORS as e:
+        last_error = e
+        logger.debug("mutagen.File failed for %s: %s", _label(filething), e)
+
+    path = None
+    if not isinstance(filething, (str, os.PathLike)):
+        candidate = getattr(filething, "path", None)
+        if candidate and os.path.isfile(candidate):
+            path = candidate
+            try:
+                parsed = mutagen.File(path)
+                if parsed is not None:
+                    return parsed
+            except _PARSE_ERRORS as e:
+                last_error = e
+
+    filename = None
+    if isinstance(filething, (str, os.PathLike)):
+        filename = str(filething)
+    else:
+        filename = path or getattr(filething, "name", None)
+
+    sources = [filething]
+    if path and path not in sources:
+        sources.append(path)
+
+    for source in sources:
+        for explicit in _kind_candidates(filename):
+            parsed = _try_open(explicit, source)
+            if parsed is not None:
+                return parsed
+
+    suffix = f": {last_error}" if last_error else ""
+    raise ValueError(
+        f"Cannot parse metadata from {_label(filething)}{suffix}"
+    )
+
+
 class Metadata(Mapping):
     def __init__(self, filething, kind=mutagen.File):
         try:
-            self._file = kind(filething)
+            self._file = load_mutagen_file(filething, kind=kind)
+        except ValueError:
+            raise
         except (IndexError, mutagen._util.MutagenError) as e:
             # truncated/corrupt files can crash parsers (e.g. Ogg Vorbis
             # reading past EOF); raise ValueError so callers treat it as a
             # bad file instead of an unexpected crash
-            raise ValueError(f"Cannot parse metadata from {filething}") from e
+            raise ValueError(
+                f"Cannot parse metadata from {_label(filething)}"
+            ) from e
         if self._file is None:
-            raise ValueError(f"Cannot parse metadata from {filething}")
+            raise ValueError(f"Cannot parse metadata from {_label(filething)}")
         if len(self._file) == 0:
-            raise ValueError(f"No tags found in {filething}")
+            raise ValueError(f"No tags found in {_label(filething)}")
         self.fallback = self.load_fallback(filething, self._file)
         ft = self.get_file_type(self._file)
         try:

@@ -60,6 +60,14 @@ def test_metadata_mutagen_indexerror_raises_value_error(mocker):
         metadata.Metadata(io.BytesIO(b"\x00" * 100))
 
 
+def test_metadata_retries_explicit_type_after_file_probe_crash(mocker):
+    # mutagen.File aborts the probe on IndexError; we still open via OggOpus
+    mocker.patch("mutagen.File", side_effect=IndexError("framing bit past EOF"))
+    path = os.path.join(DATA_DIR, "test.opus")
+    data = metadata.Metadata(path)
+    assert data.get("title") == "Peer Gynt Suite no. 1, op. 46: I. Morning"
+
+
 def test_can_get_metadata_all():
     path = os.path.join(DATA_DIR, "test.ogg")
     data = metadata.Metadata(path)

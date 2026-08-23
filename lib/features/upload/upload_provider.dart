@@ -1929,6 +1929,14 @@ class UploadNotifier extends Notifier<UploadState> {
   }
 
   String _formatInvalidMetadata(dynamic detail, String suffix) {
+    final combined = '$detail $suffix'.toLowerCase();
+    if (combined.contains('cannot parse metadata') ||
+        combined.contains('no tags found') ||
+        combined.contains('unsupported format')) {
+      return 'Could not read tags from this file. Tag it with MusicBrainz '
+          'Picard or use MusicBrainz lookup before uploading.';
+    }
+
     final fields = <String>[];
     if (detail is Map) {
       for (final key in detail.keys) {
