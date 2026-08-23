@@ -227,6 +227,58 @@ def test_get_track_reuses_album_by_release_mbid(factories):
     assert track != existing
 
 
+def test_get_track_reuses_tagged_library_album_for_untagged_late_track(factories):
+    """Partial MBID-tagged album, then a later file without a release MBID."""
+    user = factories["users.User"]()
+    library = factories["music.Library"](owner=user)
+    album = factories["music.Album"](title="Shared Album")
+    existing = factories["music.Track"](album=album)
+    factories["music.Upload"](
+        track=existing, library=library, import_status="finished"
+    )
+
+    metadata = {
+        "title": "Late addition",
+        "artists": [{"name": existing.artist.name}],
+        "album": {"title": "Shared Album"},
+        "position": 9,
+    }
+    track = tasks.get_track_from_import_metadata(metadata, attributed_to=user)
+
+    assert track.album == album
+    assert track != existing
+
+
+def test_get_track_does_not_reuse_recording_mbid_from_another_album(factories):
+    user = factories["users.User"]()
+    library = factories["music.Library"](owner=user)
+    other_album = factories["music.Album"](title="Compilation")
+    recording_mbid = uuid.uuid4()
+    other = factories["music.Track"](
+        album=other_album, mbid=recording_mbid, title="Same Recording"
+    )
+    factories["music.Upload"](track=other, library=library, import_status="finished")
+
+    target = factories["music.Album"](title="Studio Album")
+    existing = factories["music.Track"](album=target)
+    factories["music.Upload"](
+        track=existing, library=library, import_status="finished"
+    )
+
+    metadata = {
+        "title": "Same Recording",
+        "mbid": str(recording_mbid),
+        "artists": [{"name": existing.artist.name}],
+        "album": {"title": "Studio Album", "mbid": str(target.mbid)},
+        "position": 4,
+    }
+    track = tasks.get_track_from_import_metadata(metadata, attributed_to=user)
+
+    assert track.album == target
+    assert track != other
+    assert track.mbid == recording_mbid
+
+
 def test_get_track_does_not_merge_distinct_album_mbids_by_title(factories):
     user = factories["users.User"]()
     library = factories["music.Library"](owner=user)

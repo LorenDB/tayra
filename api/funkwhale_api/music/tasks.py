@@ -483,6 +483,35 @@ def _enrich_metadata_from_forced(file_tags, forced_values):
     return tags
 
 
+def _album_mbid_compatible(album_mbid):
+    """Match untagged albums, or the same release MBID — never a different one."""
+    mbid_ok = Q(mbid__isnull=True)
+    if album_mbid:
+        mbid_ok |= Q(mbid=album_mbid)
+    return mbid_ok
+
+
+def _pick_library_album(candidates, album_mbid):
+    """Choose a same-titled library album to attach a later upload to.
+
+    Distinct release MBIDs stay separate. An untagged late track may join the
+    single remaining candidate (typically the already-imported MBID release).
+    """
+    if not candidates:
+        return None
+    if album_mbid:
+        candidates = [c for c in candidates if c.mbid is None or c.mbid == album_mbid]
+        if not candidates:
+            return None
+        return sort_candidates(candidates, ["mbid"])[0]
+
+    mbids = {c.mbid for c in candidates if c.mbid}
+    if len(mbids) > 1:
+        # Ambiguous: several tagged editions share the title.
+        return None
+    return sort_candidates(candidates, ["mbid"])[0]
+
+
 def _find_existing_album(
     album_title, album_mbid, album_artists_credits, attributed_to=None
 ):
@@ -495,30 +524,29 @@ def _find_existing_album(
     if not album_title:
         return None
 
-    # Same-titled albums that already have a *different* release MBID must
-    # stay distinct. Untagged albums in the same library can still receive a
-    # later MBID-tagged track (partial album, then missing tracks).
-    mbid_ok = Q(mbid__isnull=True)
-    if album_mbid:
-        mbid_ok |= Q(mbid=album_mbid)
-
-    if album_artists_credits:
-        existing = models.Album.objects.filter(
-            mbid_ok,
-            title__iexact=album_title,
-            artist_credit__in=album_artists_credits,
-        ).distinct()
-        if existing:
-            return sort_candidates(existing, ["mbid"])[0]
-
+    # Prefer the uploader's own library so a later (possibly untagged) file
+    # joins the album they already started, not a same-titled release elsewhere.
     if attributed_to is not None:
         existing = models.Album.objects.filter(
-            mbid_ok,
             title__iexact=album_title,
             tracks__uploads__library__owner=attributed_to,
         ).distinct()
-        if existing:
-            return sort_candidates(existing, ["mbid"])[0]
+        picked = _pick_library_album(list(existing), album_mbid)
+        if picked:
+            return picked
+
+    # Same-titled albums that already have a *different* release MBID must
+    # stay distinct. Untagged albums can still receive a later MBID-tagged
+    # track (partial album, then missing tracks).
+    if album_artists_credits:
+        existing = models.Album.objects.filter(
+            _album_mbid_compatible(album_mbid),
+            title__iexact=album_title,
+            artist_credit__in=album_artists_credits,
+        ).distinct()
+        picked = _pick_library_album(list(existing), album_mbid)
+        if picked:
+            return picked
 
     return None
 
@@ -774,11 +802,15 @@ def _get_track(data, attributed_to=None, query_mb=True, **forced_values):
         position=position,
         disc_number=disc_number,
     )
+    # Recording MBIDs are reused across releases; never match a recording on
+    # a different album or the missing track is skipped as a duplicate.
     if track_mbid:
         if album_mbid:
             query |= Q(mbid=track_mbid, album__mbid=album_mbid)
+        elif album is not None:
+            query |= Q(mbid=track_mbid, album=album)
         else:
-            query |= Q(mbid=track_mbid)
+            query |= Q(mbid=track_mbid, album__isnull=True)
     defaults = {
         "title": track_title,
         "album": album,
