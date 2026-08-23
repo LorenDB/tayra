@@ -1211,7 +1211,10 @@ class UploadNotifier extends Notifier<UploadState> {
   // ── MB record fetching ─────────────────────────────────────────────────
 
   /// Fetches a full recording by MBID, including track/disc position and year.
-  Future<MbRecording?> _fetchMbRecording(String mbid) async {
+  Future<MbRecording?> _fetchMbRecording(
+    String mbid, {
+    String? preferredReleaseMbid,
+  }) async {
     try {
       final response = await _mbDio.get(
         'https://musicbrainz.org/ws/2/recording/$mbid',
@@ -1235,7 +1238,16 @@ class UploadNotifier extends Notifier<UploadState> {
       int? year;
 
       if (releases.isNotEmpty) {
-        final rel = releases.first as Map<String, dynamic>;
+        Map<String, dynamic> rel = releases.first as Map<String, dynamic>;
+        if (preferredReleaseMbid != null && preferredReleaseMbid.isNotEmpty) {
+          for (final candidate in releases) {
+            final map = candidate as Map<String, dynamic>;
+            if (map['id'] == preferredReleaseMbid) {
+              rel = map;
+              break;
+            }
+          }
+        }
         albumTitle = rel['title'] as String?;
         releaseMbid = rel['id'] as String?;
 
@@ -1419,6 +1431,15 @@ class UploadNotifier extends Notifier<UploadState> {
     }
   }
 
+  bool _fileAlreadyHasMbTags(UploadItem item, MbRecording recording) {
+    final release = recording.releaseMbid;
+    final taggedRelease = item.selectedMbRecording?.releaseMbid;
+    return item.mbRecordingId == recording.id &&
+        release != null &&
+        release.isNotEmpty &&
+        taggedRelease == release;
+  }
+
   /// Builds tag payload from a MusicBrainz recording, including cover art
   /// when enabled and loaded.
   AudioMetadata _mbMetadataFor(MbRecording recording) {
@@ -1538,8 +1559,16 @@ class UploadNotifier extends Notifier<UploadState> {
       recording = item.selectedMbRecording;
       final mbid = item.mbRecordingId ?? recording?.id;
       if (mbid != null && mbid.isNotEmpty) {
-        if (recording == null || recording.id != mbid) {
-          recording = await _fetchMbRecording(mbid);
+        final needsRelease =
+            recording == null ||
+            recording.id != mbid ||
+            recording.releaseMbid == null ||
+            recording.releaseMbid!.isEmpty;
+        if (needsRelease) {
+          recording = await _fetchMbRecording(
+            mbid,
+            preferredReleaseMbid: recording?.releaseMbid,
+          );
         }
         if (recording == null) {
           _updateItem(
@@ -1563,10 +1592,17 @@ class UploadNotifier extends Notifier<UploadState> {
       }
     }
 
-    // Embed tags.
+    // Embed tags only when we are applying a new MusicBrainz match or cover.
+    // Re-tagging already-Picard-tagged files can pick the wrong release from
+    // a recording lookup and split the track onto a new album.
     String? uploadPath = item.hasPath ? item.filePath : null;
     Uint8List? uploadBytes = item.bytes;
-    if (recording != null) {
+    final shouldEmbed =
+        recording != null &&
+        ((state.embedCoverArt &&
+                state.coverArtStatus == CoverArtStatus.loaded) ||
+            !_fileAlreadyHasMbTags(item, recording));
+    if (shouldEmbed) {
       _updateItem(
         item.localId,
         (i) => i.copyWith(status: UploadItemStatus.embedding),
@@ -1605,10 +1641,15 @@ class UploadNotifier extends Notifier<UploadState> {
     } else if (item.existingTitle != null && item.existingTitle!.trim().isNotEmpty) {
       importMetadata = {
         'title': item.existingTitle,
+        if (item.mbRecordingId != null && item.mbRecordingId!.isNotEmpty)
+          'mbid': item.mbRecordingId,
         if (item.existingTrackNumber != null) 'position': item.existingTrackNumber,
         if (item.existingDiscNumber != null) 'disc_number': item.existingDiscNumber,
         if (item.existingAlbum != null && item.existingAlbum!.isNotEmpty)
           'album_title': item.existingAlbum,
+        if (item.selectedMbRecording?.releaseMbid != null &&
+            item.selectedMbRecording!.releaseMbid!.isNotEmpty)
+          'album_mbid': item.selectedMbRecording!.releaseMbid,
         if (item.existingArtist != null && item.existingArtist!.isNotEmpty)
           'artist_name': item.existingArtist,
       };

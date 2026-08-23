@@ -181,6 +181,52 @@ def test_get_track_reuses_existing_library_album_without_mbid(factories):
     assert track != existing
 
 
+def test_get_track_attaches_mbid_track_to_untagged_library_album(factories):
+    user = factories["users.User"]()
+    library = factories["music.Library"](owner=user)
+    album = factories["music.Album"](mbid=None, title="Shared Album")
+    existing = factories["music.Track"](album=album)
+    factories["music.Upload"](
+        track=existing, library=library, import_status="finished"
+    )
+    album_mbid = uuid.uuid4()
+
+    metadata = {
+        "title": "Missing track",
+        "mbid": str(uuid.uuid4()),
+        "artists": [{"name": existing.artist.name}],
+        "album": {"title": "Shared Album", "mbid": str(album_mbid)},
+        "position": 8,
+    }
+    track = tasks.get_track_from_import_metadata(metadata, attributed_to=user)
+
+    assert track.album == album
+    album.refresh_from_db()
+    assert album.mbid == album_mbid
+
+
+def test_get_track_reuses_album_by_release_mbid(factories):
+    user = factories["users.User"]()
+    library = factories["music.Library"](owner=user)
+    album = factories["music.Album"](title="Shared Album")
+    existing = factories["music.Track"](album=album)
+    factories["music.Upload"](
+        track=existing, library=library, import_status="finished"
+    )
+
+    metadata = {
+        "title": "Missing track",
+        "mbid": str(uuid.uuid4()),
+        "artists": [{"name": existing.artist.name}],
+        "album": {"title": "Shared Album", "mbid": str(album.mbid)},
+        "position": 8,
+    }
+    track = tasks.get_track_from_import_metadata(metadata, attributed_to=user)
+
+    assert track.album == album
+    assert track != existing
+
+
 def test_get_track_does_not_merge_distinct_album_mbids_by_title(factories):
     user = factories["users.User"]()
     library = factories["music.Library"](owner=user)

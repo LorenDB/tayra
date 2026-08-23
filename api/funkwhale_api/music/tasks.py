@@ -491,27 +491,32 @@ def _find_existing_album(
         existing = models.Album.objects.filter(mbid=album_mbid)
         if existing:
             return sort_candidates(existing, ["mbid"])[0]
-        # Distinct release MBID must not collapse onto a same-titled album.
-        return None
 
     if not album_title:
         return None
 
+    # Same-titled albums that already have a *different* release MBID must
+    # stay distinct. Untagged albums in the same library can still receive a
+    # later MBID-tagged track (partial album, then missing tracks).
+    mbid_ok = Q(mbid__isnull=True)
+    if album_mbid:
+        mbid_ok |= Q(mbid=album_mbid)
+
     if album_artists_credits:
         existing = models.Album.objects.filter(
-            title__iexact=album_title, artist_credit__in=album_artists_credits
+            mbid_ok,
+            title__iexact=album_title,
+            artist_credit__in=album_artists_credits,
         ).distinct()
         if existing:
             return sort_candidates(existing, ["mbid"])[0]
 
     if attributed_to is not None:
-        existing = (
-            models.Album.objects.filter(
-                title__iexact=album_title,
-                tracks__uploads__library__owner=attributed_to,
-            )
-            .distinct()
-        )
+        existing = models.Album.objects.filter(
+            mbid_ok,
+            title__iexact=album_title,
+            tracks__uploads__library__owner=attributed_to,
+        ).distinct()
         if existing:
             return sort_candidates(existing, ["mbid"])[0]
 

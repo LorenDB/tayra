@@ -1104,8 +1104,25 @@ class CachedFunkwhaleApi {
   /// Invalidate all cached track and album list pages. Call this after a
   /// successful upload so browse screens show the newly imported content.
   Future<void> invalidateTrackAndAlbumCaches() async {
+    final keys = <String>{
+      ...await _cache.listMetadataKeysLike('tracks_p%'),
+      ...await _cache.listMetadataKeysLike('albums_p%'),
+      ...await _cache.listMetadataKeysLike('album_%'),
+      ...await _cache.listMetadataKeysLike('artists_p%'),
+      ...await _cache.listMetadataKeysLike('artist_%'),
+      ...await _cache.listMetadataKeysLike('search_%'),
+    };
     await _cache.deleteMetadataLike('tracks_p%');
     await _cache.deleteMetadataLike('albums_p%');
+    await _cache.deleteMetadataLike('album_%');
+    await _cache.deleteMetadataLike('artists_p%');
+    await _cache.deleteMetadataLike('artist_%');
+    await _cache.deleteMetadataLike('search_%');
+    for (final key in keys) {
+      if (!_metadataUpdates.isClosed) {
+        _metadataUpdates.add(key);
+      }
+    }
   }
 
   // ── Pass-through methods ────────────────────────────────────────────

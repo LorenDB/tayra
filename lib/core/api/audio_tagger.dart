@@ -196,14 +196,17 @@ AudioMetadata? _readMp3(Uint8List data) {
       discNumber = _parseLeadingInt(_decodeId3Text(frameData));
     } else if (id == 'TDRC' || id == 'TYER' || id == 'TDAT') {
       year ??= _parseLeadingInt(_decodeId3Text(frameData));
+    } else if (id == 'UFID' && mbRecordingId == null) {
+      mbRecordingId = _decodeId3Ufid(frameData);
     } else if (id == 'TXXX') {
       final txxx = _decodeId3Txxx(frameData);
       if (txxx == null) continue;
-      final desc = txxx.$1.toLowerCase();
-      if (desc.contains('musicbrainz') && desc.contains('recording')) {
+      final desc = txxx.$1.toLowerCase().trim();
+      if (desc == 'musicbrainz recording id' ||
+          desc == 'musicbrainz track id') {
         mbRecordingId = txxx.$2;
-      } else if (desc.contains('musicbrainz') &&
-          (desc.contains('album') || desc.contains('release'))) {
+      } else if (desc == 'musicbrainz album id' ||
+          desc == 'musicbrainz release id') {
         mbReleaseId = txxx.$2;
       }
     }
@@ -247,6 +250,22 @@ String? _decodeId3Text(Uint8List frameData) {
   } catch (_) {
     return null;
   }
+}
+
+String? _decodeId3Ufid(Uint8List frameData) {
+  // Picard stores the recording MBID as UFID with owner musicbrainz.org.
+  final nul = frameData.indexOf(0);
+  if (nul <= 0 || nul + 1 >= frameData.length) return null;
+  final owner = latin1.decode(
+    frameData.sublist(0, nul),
+    allowInvalid: true,
+  );
+  if (!owner.toLowerCase().contains('musicbrainz.org')) return null;
+  final id = utf8
+      .decode(frameData.sublist(nul + 1), allowMalformed: true)
+      .replaceAll(RegExp(r'\x00+$'), '')
+      .trim();
+  return id.isEmpty ? null : id;
 }
 
 (String, String)? _decodeId3Txxx(Uint8List frameData) {
