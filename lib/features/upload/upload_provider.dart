@@ -1594,6 +1594,23 @@ class UploadNotifier extends Notifier<UploadState> {
         'title': recording.title,
         'mbid': recording.id,
         if (recording.trackNumber != null) 'position': recording.trackNumber,
+        if (recording.discNumber != null) 'disc_number': recording.discNumber,
+        if (recording.albumTitle != null && recording.albumTitle!.isNotEmpty)
+          'album_title': recording.albumTitle,
+        if (recording.releaseMbid != null && recording.releaseMbid!.isNotEmpty)
+          'album_mbid': recording.releaseMbid,
+        if (recording.artistName != null && recording.artistName!.isNotEmpty)
+          'artist_name': recording.artistName,
+      };
+    } else if (item.existingTitle != null && item.existingTitle!.trim().isNotEmpty) {
+      importMetadata = {
+        'title': item.existingTitle,
+        if (item.existingTrackNumber != null) 'position': item.existingTrackNumber,
+        if (item.existingDiscNumber != null) 'disc_number': item.existingDiscNumber,
+        if (item.existingAlbum != null && item.existingAlbum!.isNotEmpty)
+          'album_title': item.existingAlbum,
+        if (item.existingArtist != null && item.existingArtist!.isNotEmpty)
+          'artist_name': item.existingArtist,
       };
     }
 

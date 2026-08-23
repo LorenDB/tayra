@@ -417,8 +417,12 @@ class ImportMetadataSerializer(serializers.Serializer):
         max_length=5000, required=False, allow_null=True
     )
     mbid = serializers.UUIDField(required=False, allow_null=True)
+    album_title = serializers.CharField(max_length=500, required=False, allow_null=True)
+    album_mbid = serializers.UUIDField(required=False, allow_null=True)
+    artist_name = serializers.CharField(max_length=500, required=False, allow_null=True)
     copyright = serializers.CharField(max_length=500, required=False, allow_null=True)
     position = serializers.IntegerField(min_value=1, required=False, allow_null=True)
+    disc_number = serializers.IntegerField(min_value=1, required=False, allow_null=True)
     tags = tags_serializers.TagsListField(required=False)
     license = common_serializers.RelatedField(
         "code", LicenseSerializer(), required=False, allow_null=True

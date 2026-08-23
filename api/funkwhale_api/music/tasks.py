@@ -299,6 +299,8 @@ def _process_upload_impl(upload, update_denormalization=True):
                 "or use MusicBrainz lookup before uploading.",
             )
 
+        file_tags = _enrich_metadata_from_forced(file_tags, forced_values)
+
         check_mbid = preferences.get("music__only_allow_musicbrainz_tagged_files")
         if check_mbid and not (
             file_tags.get("mbid") or forced_values.get("mbid")
@@ -449,6 +451,71 @@ def get_owned_duplicates(upload, track):
         .values_list("uuid", flat=True)
         .order_by("creation_date")
     )
+
+
+def _enrich_metadata_from_forced(file_tags, forced_values):
+    """Fill gaps in parsed file tags from client-supplied import_metadata."""
+    tags = dict(file_tags or {})
+    if "title" not in tags and forced_values.get("title"):
+        tags["title"] = forced_values["title"]
+    if "mbid" not in tags and forced_values.get("mbid"):
+        tags["mbid"] = forced_values["mbid"]
+    if "position" not in tags and forced_values.get("position"):
+        tags["position"] = forced_values["position"]
+    if "disc_number" not in tags and forced_values.get("disc_number"):
+        tags["disc_number"] = forced_values["disc_number"]
+    if not tags.get("artists") and forced_values.get("artist_name"):
+        tags["artists"] = [{"name": forced_values["artist_name"]}]
+
+    album = tags.get("album")
+    if not isinstance(album, dict):
+        album = {}
+    else:
+        album = dict(album)
+    if forced_values.get("album_title") and (
+        not album.get("title") or album.get("title") == metadata.UNKNOWN_ALBUM
+    ):
+        album["title"] = forced_values["album_title"]
+    if forced_values.get("album_mbid") and not album.get("mbid"):
+        album["mbid"] = forced_values["album_mbid"]
+    if album:
+        tags["album"] = album
+    return tags
+
+
+def _find_existing_album(
+    album_title, album_mbid, album_artists_credits, attributed_to=None
+):
+    """Reuse an album already in the library when MBIDs were not available."""
+    if album_mbid:
+        existing = models.Album.objects.filter(mbid=album_mbid)
+        if existing:
+            return sort_candidates(existing, ["mbid"])[0]
+        # Distinct release MBID must not collapse onto a same-titled album.
+        return None
+
+    if not album_title:
+        return None
+
+    if album_artists_credits:
+        existing = models.Album.objects.filter(
+            title__iexact=album_title, artist_credit__in=album_artists_credits
+        ).distinct()
+        if existing:
+            return sort_candidates(existing, ["mbid"])[0]
+
+    if attributed_to is not None:
+        existing = (
+            models.Album.objects.filter(
+                title__iexact=album_title,
+                tracks__uploads__library__owner=attributed_to,
+            )
+            .distinct()
+        )
+        if existing:
+            return sort_candidates(existing, ["mbid"])[0]
+
+    return None
 
 
 def get_best_candidate_or_create(model, query, defaults, sort_fields):
@@ -629,13 +696,8 @@ def _get_track(data, attributed_to=None, query_mb=True, **forced_values):
         if "album" in data:
             album_data = data["album"]
             album_title = album_data["title"]
-
-            if album_mbid:
-                query = Q(mbid=album_mbid)
-            else:
-                query = Q(
-                    title__iexact=album_title, artist_credit__in=album_artists_credits
-                )
+            if not album_mbid:
+                album_mbid = album_data.get("mbid")
 
             defaults = {
                 "title": album_title,
@@ -645,9 +707,18 @@ def _get_track(data, attributed_to=None, query_mb=True, **forced_values):
             if album_data.get("fdate"):
                 defaults["creation_date"] = album_data.get("fdate")
 
-            album, created = get_best_candidate_or_create(
-                models.Album, query, defaults=defaults, sort_fields=["mbid"]
+            album = _find_existing_album(
+                album_title,
+                album_mbid,
+                album_artists_credits,
+                attributed_to=attributed_to,
             )
+            created = album is None
+            if created:
+                album = models.Album.objects.create(**defaults)
+            elif album.mbid is None and album_mbid:
+                album.mbid = album_mbid
+                album.save(update_fields=["mbid"])
             album.artist_credit.set(album_artists_credits)
             if created:
                 tags_models.add_tags(album, *album_data.get("tags", []))
@@ -718,6 +789,10 @@ def _get_track(data, attributed_to=None, query_mb=True, **forced_values):
     track, created = get_best_candidate_or_create(
         models.Track, query, defaults=defaults, sort_fields=["mbid"]
     )
+
+    if album is not None and track.album_id is None:
+        track.album = album
+        track.save(update_fields=["album"])
 
     if created:
         tags = (

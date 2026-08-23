@@ -160,6 +160,69 @@ def test_can_create_track_from_file_metadata_mbid_existing_album_artist(
     assert track.artist == artist
 
 
+def test_get_track_reuses_existing_library_album_without_mbid(factories):
+    user = factories["users.User"]()
+    library = factories["music.Library"](owner=user)
+    album = factories["music.Album"](mbid=None, title="Shared Album")
+    existing = factories["music.Track"](album=album)
+    factories["music.Upload"](
+        track=existing, library=library, import_status="finished"
+    )
+
+    metadata = {
+        "title": "Late addition",
+        "artists": [{"name": existing.artist.name}],
+        "album": {"title": "Shared Album"},
+        "position": 9,
+    }
+    track = tasks.get_track_from_import_metadata(metadata, attributed_to=user)
+
+    assert track.album == album
+    assert track != existing
+
+
+def test_get_track_does_not_merge_distinct_album_mbids_by_title(factories):
+    user = factories["users.User"]()
+    library = factories["music.Library"](owner=user)
+    album = factories["music.Album"](title="Shared Album")
+    existing = factories["music.Track"](album=album)
+    factories["music.Upload"](
+        track=existing, library=library, import_status="finished"
+    )
+
+    metadata = {
+        "title": "Other release",
+        "artists": [{"name": existing.artist.name}],
+        "album": {"title": "Shared Album", "mbid": str(uuid.uuid4())},
+        "position": 1,
+    }
+    track = tasks.get_track_from_import_metadata(metadata, attributed_to=user)
+
+    assert track.album != album
+
+
+def test_get_track_assigns_album_when_existing_track_has_none(factories):
+    album = factories["music.Album"]()
+    track = factories["music.Track"](
+        album=None,
+        mbid="f269d497-1cc0-4ae4-a0c4-157ec7d73fcb",
+        title="Orphan",
+    )
+    metadata = {
+        "title": "Orphan",
+        "mbid": str(track.mbid),
+        "artists": [{"name": track.artist.name}],
+        "album": {"title": album.title, "mbid": str(album.mbid)},
+        "position": track.position or 1,
+    }
+
+    result = tasks.get_track_from_import_metadata(metadata)
+
+    assert result.pk == track.pk
+    result.refresh_from_db()
+    assert result.album == album
+
+
 def test_can_create_track_from_file_metadata_distinct_release_mbid(factories):
     """Cf https://dev.funkwhale.audio/funkwhale/funkwhale/issues/772"""
     artist = factories["music.Artist"]()
@@ -417,6 +480,42 @@ def test_process_upload_falls_back_to_import_metadata_when_tags_unreadable(
     upload.refresh_from_db()
     assert upload.import_status == "finished"
     assert upload.track == track
+
+
+def test_process_upload_fallback_uses_album_title_from_import_metadata(
+    factories, mocker
+):
+    mocker.patch(
+        "funkwhale_api.music.metadata.Metadata",
+        side_effect=ValueError("Cannot parse metadata from track.ogg"),
+    )
+    mocker.patch(
+        "funkwhale_api.music.models.Upload.get_audio_data",
+        return_value={"size": 23, "duration": 42, "bitrate": 66},
+    )
+    user = factories["users.User"]()
+    library = factories["music.Library"](owner=user)
+    album = factories["music.Album"](mbid=None, title="Already Here")
+    existing = factories["music.Track"](album=album)
+    factories["music.Upload"](
+        track=existing, library=library, import_status="finished"
+    )
+    upload = factories["music.Upload"](
+        track=None,
+        library=library,
+        import_metadata={
+            "title": "Bonus track",
+            "album_title": "Already Here",
+            "artist_name": existing.artist.name,
+            "position": 12,
+        },
+    )
+
+    tasks.process_upload(upload_id=upload.pk)
+
+    upload.refresh_from_db()
+    assert upload.import_status == "finished"
+    assert upload.track.album == album
 
 
 def test_process_upload_corrupt_file_marks_upload_errored(temp_signal, factories, tmp_path):
