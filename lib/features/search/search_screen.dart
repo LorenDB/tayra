@@ -539,7 +539,12 @@ class _ArtistChip extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             CoverArtWidget(
-              imageUrl: artist.coverUrl,
+              imageUrl:
+                  artist.coverUrlFor(
+                    64,
+                    MediaQuery.devicePixelRatioOf(context),
+                  ) ??
+                  artist.coverUrl,
               size: 64,
               borderRadius: 32,
               placeholderIcon: Icons.person_rounded,

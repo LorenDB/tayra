@@ -195,18 +195,19 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
       );
     }
 
-    final imageUrl = track.largeCoverUrl ?? track.coverUrl;
+    final imageUrl = _coverUrlFor(track);
 
     // Use the unconditional provider for the glow so it remains tinted even
     // when the user disables dynamic accents. Other UI elements will use the
     // regular provider which respects the accessibility setting.
+    // The cache key is the URL itself. Aliasing it to the 200px crop stores
+    // the large file under the thumbnail key and the next list paints that
+    // entry, or the other way around.
     final glowPaletteAsync = ref.watch(
-      paletteColorsProviderUnconditional(
-        encodePaletteKey(imageUrl, track.album?.coverUrl),
-      ),
+      paletteColorsProviderUnconditional(encodePaletteKey(imageUrl, null)),
     );
     final paletteAsync = ref.watch(
-      paletteColorsProvider(encodePaletteKey(imageUrl, track.album?.coverUrl)),
+      paletteColorsProvider(encodePaletteKey(imageUrl, null)),
     );
     final accentColor = paletteAsync.maybeWhen(
       data: (color) => color,
@@ -465,8 +466,16 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
     );
   }
 
+  String? _coverUrlFor(Track track) {
+    final dpr = MediaQuery.devicePixelRatioOf(context);
+    final logical = MediaQuery.sizeOf(context).shortestSide;
+    return track.coverUrlFor(logical, dpr) ??
+        track.largeCoverUrl ??
+        track.coverUrl;
+  }
+
   Widget _buildScreenAlbumArt(Track track, Color glowColor, double outerSize) {
-    final imageUrl = track.largeCoverUrl ?? track.coverUrl;
+    final imageUrl = _coverUrlFor(track);
     final artSize = outerSize * (280.0 / 320.0);
     final superSonicActive = isSuperSonicMusic(track.mbid);
     final glowAnim = _glowAnimation;
@@ -585,7 +594,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
   }
 
   Widget _buildPanelAlbumArt(Track track, Color glowColor) {
-    final imageUrl = track.largeCoverUrl ?? track.coverUrl;
+    final imageUrl = _coverUrlFor(track);
     final superSonicActive = isSuperSonicMusic(track.mbid);
 
     return AspectRatio(

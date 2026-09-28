@@ -554,8 +554,7 @@ class _EditTrackTile extends StatelessWidget {
           children: [
             // Cover art
             CoverArtWidget(
-              imageUrl: track.coverUrl,
-              cacheKey: track.album?.coverUrl ?? track.coverUrl,
+              imageUrl: track.thumbCoverUrl,
               size: 44,
               borderRadius: 6,
             ),

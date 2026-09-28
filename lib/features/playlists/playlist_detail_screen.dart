@@ -636,7 +636,12 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                           ).join('|'),
                     ),
                     covers: playlist.albumCovers,
-                    customCoverUrl: playlist.customCoverUrl,
+                    customCoverUrl:
+                        playlist.customCoverUrlFor(
+                          120,
+                          MediaQuery.devicePixelRatioOf(context),
+                        ) ??
+                        playlist.customCoverUrl,
                     size: 120,
                     borderRadius: 12,
                   ),

@@ -822,7 +822,10 @@ class _PodcastCoverBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final coverUrl = channel.coverUrl;
+    final size = MediaQuery.sizeOf(context);
+    final dpr = MediaQuery.devicePixelRatioOf(context);
+    final logical = size.width > size.height ? size.width : size.height;
+    final coverUrl = channel.coverUrlFor(logical, dpr) ?? channel.coverUrl;
     return Stack(
       fit: StackFit.expand,
       children: [

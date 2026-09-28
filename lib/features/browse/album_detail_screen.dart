@@ -213,11 +213,12 @@ class AlbumDetailScreen extends ConsumerWidget {
               },
             ),
         data: (album) {
-          final imageUrl = album.largeCoverUrl ?? album.coverUrl;
-          // Use an encoded key that includes the preferred cache key which
-          // allows the palette generator to reuse the cached image bytes.
+          final dpr = MediaQuery.devicePixelRatioOf(context);
+          // Same 240px the header paints, so the accent is sampled from the
+          // rendition on screen rather than from a 200px thumbnail.
+          final imageUrl = album.coverUrlFor(240, dpr) ?? album.coverUrl;
           final paletteAsync = ref.watch(
-            paletteColorsProvider(encodePaletteKey(imageUrl, album.coverUrl)),
+            paletteColorsProvider(encodePaletteKey(imageUrl, null)),
           );
           final dominantColor = paletteAsync.maybeWhen(
             data: (color) => color,
@@ -759,12 +760,12 @@ class _AlbumHeader extends ConsumerWidget {
                 ],
               ),
               child: CoverArtWidget(
-                imageUrl: album.largeCoverUrl ?? album.coverUrl,
-                // If a smaller cover was already cached (albums list), prefer
-                // that cache entry so the detail page can show the image
-                // immediately even when a different (larger) URL is used by
-                // the server.
-                cacheKey: album.coverUrl,
+                imageUrl:
+                    album.coverUrlFor(
+                      artSize,
+                      MediaQuery.devicePixelRatioOf(context),
+                    ) ??
+                    album.coverUrl,
                 size: artSize,
                 borderRadius: 12,
               ),

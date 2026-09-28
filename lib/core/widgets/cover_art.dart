@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:ui' as ui;
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +19,10 @@ import 'package:tayra/core/widgets/local_file_image.dart';
 ///
 /// Decodes images at approximately [size] × device pixel ratio so list/grid
 /// scroll does not pay full-resolution decode cost for tiny tiles.
+///
+/// Thumbnail-sized files (the 200px and 600px Funkwhale crops) are decoded
+/// at their native size. Asking the JPEG codec to scale both axes paints
+/// some of those files as a mostly gray bitmap.
 class CoverArtWidget extends ConsumerStatefulWidget {
   final String? imageUrl;
   final double size;
@@ -23,9 +30,8 @@ class CoverArtWidget extends ConsumerStatefulWidget {
   final IconData placeholderIcon;
   final BoxShadow? shadow;
 
-  /// Optional cache key to force using an alternative cache entry
-  /// (useful when the detail view requests a larger URL but a smaller
-  /// version was already cached under a different URL).
+  /// Disk-cache id for [imageUrl]. Must name the same bytes as [imageUrl].
+  /// A different key makes the larger rendition reuse a smaller file forever.
   final String? cacheKey;
 
   const CoverArtWidget({
@@ -138,36 +144,122 @@ class _CoverArtWidgetState extends ConsumerState<CoverArtWidget> {
         boxShadow: widget.shadow != null ? [widget.shadow!] : null,
       ),
       clipBehavior: Clip.antiAlias,
-      child: localPath != null
-          ? buildLocalFileImage(
-              path: localPath,
-              width: widget.size,
-              height: widget.size,
-              decodePx: decodePx,
-              errorBuilder: (context, error, stackTrace) => placeholder,
-            )
-          : (url != null && url.isNotEmpty)
-          ? Image(
-              image: ResizeImage(
-                CachedNetworkImageProvider(url, cacheKey: widget.cacheKey),
-                width: decodePx,
-                height: decodePx,
-                allowUpscaling: false,
-                policy: ResizeImagePolicy.fit,
-              ),
-              fit: BoxFit.cover,
-              width: widget.size,
-              height: widget.size,
-              gaplessPlayback: true,
-              filterQuality: FilterQuality.low,
-              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                if (wasSynchronouslyLoaded || frame != null) return child;
-                return placeholder;
-              },
-              errorBuilder: (context, error, stackTrace) => placeholder,
-            )
-          : placeholder,
+      child:
+          localPath != null
+              ? buildLocalFileImage(
+                path: localPath,
+                width: widget.size,
+                height: widget.size,
+                decodePx: decodePx,
+                errorBuilder: (context, error, stackTrace) => placeholder,
+              )
+              : (url != null && url.isNotEmpty)
+              ? Image(
+                image: _ReliableCoverImage(
+                  CachedNetworkImageProvider(
+                    url,
+                    // A cache key that does not match the URL aliases a large
+                    // rendition onto a previously stored thumbnail.
+                    cacheKey:
+                        widget.cacheKey == null || widget.cacheKey == url
+                            ? widget.cacheKey
+                            : null,
+                  ),
+                  decodePx,
+                ),
+                fit: BoxFit.cover,
+                width: widget.size,
+                height: widget.size,
+                gaplessPlayback: true,
+                filterQuality: FilterQuality.low,
+                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                  if (wasSynchronouslyLoaded || frame != null) return child;
+                  return placeholder;
+                },
+                errorBuilder: (context, error, stackTrace) => placeholder,
+              )
+              : placeholder,
     );
+  }
+}
+
+/// Decode size for a cover.
+///
+/// Files that already fit in 1024px (medium and large Funkwhale crops) are
+/// decoded natively. Scaling those JPEGs, especially on both axes, is what
+/// returns a mostly gray bitmap. Larger originals are scaled on one axis
+/// only, down to [maxDecodePx].
+ui.TargetImageSize coverDecodeTarget({
+  required int intrinsicWidth,
+  required int intrinsicHeight,
+  required int maxDecodePx,
+}) {
+  if (intrinsicWidth <= 1024 && intrinsicHeight <= 1024) {
+    return const ui.TargetImageSize();
+  }
+  if (intrinsicWidth <= maxDecodePx && intrinsicHeight <= maxDecodePx) {
+    return const ui.TargetImageSize();
+  }
+  if (intrinsicWidth >= intrinsicHeight) {
+    final width = maxDecodePx.clamp(1, intrinsicWidth);
+    return ui.TargetImageSize(width: width);
+  }
+  final height = maxDecodePx.clamp(1, intrinsicHeight);
+  return ui.TargetImageSize(height: height);
+}
+
+class _ReliableCoverKey {
+  final CachedNetworkImageProvider inner;
+  final int maxDecodePx;
+
+  const _ReliableCoverKey(this.inner, this.maxDecodePx);
+
+  @override
+  bool operator ==(Object other) =>
+      other is _ReliableCoverKey &&
+      other.inner == inner &&
+      other.maxDecodePx == maxDecodePx;
+
+  @override
+  int get hashCode => Object.hash(inner, maxDecodePx);
+}
+
+class _ReliableCoverImage extends ImageProvider<_ReliableCoverKey> {
+  final CachedNetworkImageProvider inner;
+  final int maxDecodePx;
+
+  const _ReliableCoverImage(this.inner, this.maxDecodePx);
+
+  @override
+  Future<_ReliableCoverKey> obtainKey(ImageConfiguration configuration) {
+    return SynchronousFuture(_ReliableCoverKey(inner, maxDecodePx));
+  }
+
+  @override
+  ImageStreamCompleter loadImage(
+    _ReliableCoverKey key,
+    ImageDecoderCallback decode,
+  ) {
+    final completer = key.inner.loadImage(key.inner, (buffer, {getTargetSize}) {
+      return decode(
+        buffer,
+        getTargetSize:
+            (width, height) => coverDecodeTarget(
+              intrinsicWidth: width,
+              intrinsicHeight: height,
+              maxDecodePx: key.maxDecodePx,
+            ),
+      );
+    });
+    completer.addEphemeralErrorListener((
+      Object exception,
+      StackTrace? stackTrace,
+    ) {
+      scheduleMicrotask(() {
+        PaintingBinding.instance.imageCache.evict(key);
+      });
+    });
+    return completer;
   }
 }
 

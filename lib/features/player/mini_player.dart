@@ -48,7 +48,7 @@ class MiniPlayer extends ConsumerWidget {
 
     final imageUrl = track.coverUrl;
     final paletteAsync = ref.watch(
-      paletteColorsProvider(encodePaletteKey(imageUrl, track.album?.coverUrl)),
+      paletteColorsProvider(encodePaletteKey(imageUrl, null)),
     );
     final accentColor = paletteAsync.maybeWhen(
       data: (color) => color,
@@ -123,27 +123,29 @@ class MiniPlayer extends ConsumerWidget {
                           color: AppTheme.surfaceContainerHigh,
                         ),
                         clipBehavior: Clip.antiAlias,
-                        child: track.coverUrl != null
-                            ? CachedNetworkImage(
-                                imageUrl: track.coverUrl!,
-                                fit: BoxFit.cover,
-                                placeholder: (context, url) => const Icon(
+                        child:
+                            track.coverUrl != null
+                                ? CachedNetworkImage(
+                                  imageUrl: track.coverUrl!,
+                                  fit: BoxFit.cover,
+                                  placeholder:
+                                      (context, url) => const Icon(
+                                        Icons.album,
+                                        color: AppTheme.onBackgroundSubtle,
+                                        size: 24,
+                                      ),
+                                  errorWidget:
+                                      (context, url, error) => const Icon(
+                                        Icons.album,
+                                        color: AppTheme.onBackgroundSubtle,
+                                        size: 24,
+                                      ),
+                                )
+                                : const Icon(
                                   Icons.album,
                                   color: AppTheme.onBackgroundSubtle,
                                   size: 24,
                                 ),
-                                errorWidget: (context, url, error) =>
-                                    const Icon(
-                                      Icons.album,
-                                      color: AppTheme.onBackgroundSubtle,
-                                      size: 24,
-                                    ),
-                              )
-                            : const Icon(
-                                Icons.album,
-                                color: AppTheme.onBackgroundSubtle,
-                                size: 24,
-                              ),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -179,55 +181,64 @@ class MiniPlayer extends ConsumerWidget {
                     // Controls
                     IconButton(
                       icon: const Icon(Icons.skip_previous_rounded, size: 28),
-                      color: canSkipPrevious
-                          ? AppTheme.onBackground
-                          : AppTheme.onBackgroundSubtle,
+                      color:
+                          canSkipPrevious
+                              ? AppTheme.onBackground
+                              : AppTheme.onBackgroundSubtle,
                       tooltip: 'Previous',
-                      onPressed: canSkipPrevious
-                          ? () =>
-                                ref.read(playerProvider.notifier).skipPrevious()
-                          : null,
+                      onPressed:
+                          canSkipPrevious
+                              ? () =>
+                                  ref
+                                      .read(playerProvider.notifier)
+                                      .skipPrevious()
+                              : null,
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(minWidth: 36),
                     ),
                     isLoading
                         ? SizedBox(
-                            width: 36,
-                            child: Center(
-                              child: SizedBox(
-                                width: 18,
-                                height: 18,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.5,
-                                  color: AppTheme.onBackground,
-                                ),
+                          width: 36,
+                          child: Center(
+                            child: SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.5,
+                                color: AppTheme.onBackground,
                               ),
                             ),
-                          )
-                        : IconButton(
-                            icon: Icon(
-                              isPlaying
-                                  ? Icons.pause_rounded
-                                  : Icons.play_arrow_rounded,
-                              size: 32,
-                            ),
-                            color: AppTheme.onBackground,
-                            tooltip: isPlaying ? 'Pause' : 'Play',
-                            onPressed: () => ref
-                                .read(playerProvider.notifier)
-                                .togglePlayPause(),
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(minWidth: 36),
                           ),
+                        )
+                        : IconButton(
+                          icon: Icon(
+                            isPlaying
+                                ? Icons.pause_rounded
+                                : Icons.play_arrow_rounded,
+                            size: 32,
+                          ),
+                          color: AppTheme.onBackground,
+                          tooltip: isPlaying ? 'Pause' : 'Play',
+                          onPressed:
+                              () =>
+                                  ref
+                                      .read(playerProvider.notifier)
+                                      .togglePlayPause(),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(minWidth: 36),
+                        ),
                     IconButton(
                       icon: const Icon(Icons.skip_next_rounded, size: 28),
-                      color: hasNext
-                          ? AppTheme.onBackground
-                          : AppTheme.onBackgroundSubtle,
+                      color:
+                          hasNext
+                              ? AppTheme.onBackground
+                              : AppTheme.onBackgroundSubtle,
                       tooltip: 'Next',
-                      onPressed: hasNext
-                          ? () => ref.read(playerProvider.notifier).skipNext()
-                          : null,
+                      onPressed:
+                          hasNext
+                              ? () =>
+                                  ref.read(playerProvider.notifier).skipNext()
+                              : null,
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(minWidth: 36),
                     ),

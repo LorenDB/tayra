@@ -1,3 +1,4 @@
+import io
 import os
 
 import django_filters
@@ -6,7 +7,6 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 
 from funkwhale_api.common import serializers, utils
-
 from funkwhale_api.users import models
 
 
@@ -171,6 +171,26 @@ def test_track_fields_for_update(mocker):
     )
 
 
+def test_strip_exif_preserves_color():
+    image = PIL.Image.new("RGB", (16, 16), (210, 20, 30))
+    payload = io.BytesIO()
+    image.save(payload, format="JPEG", quality=95)
+    uploaded = SimpleUploadedFile(
+        "red.jpg", payload.getvalue(), content_type="image/jpeg"
+    )
+    field = serializers.StripExifImageField()
+
+    cleaned = PIL.Image.open(io.BytesIO(field.to_internal_value(uploaded).read()))
+    pixel = cleaned.getpixel((1, 1))
+    assert pixel[0] > 160
+    assert pixel[1] < 80
+    assert pixel[2] < 80
+    # Re-encoded baseline 4:2:0, which the Flutter JPEG scaler can downscale.
+    from PIL import JpegImagePlugin
+
+    assert JpegImagePlugin.get_sampling(cleaned) == 2
+
+
 def test_strip_exif_field():
     source_path = os.path.join(os.path.dirname(__file__), "exif.jpg")
     source = PIL.Image.open(source_path)
@@ -195,12 +215,8 @@ def test_attachment_serializer_existing_file(factories, to_api_date):
         "urls": {
             "source": attachment.url,
             "original": utils.full_url(attachment.file.url),
-            "medium_square_crop": utils.full_url(
-                attachment.file.crop["200x200"].url
-            ),
-            "large_square_crop": utils.full_url(
-                attachment.file.crop["600x600"].url
-            ),
+            "medium_square_crop": utils.full_url(attachment.file.crop["200x200"].url),
+            "large_square_crop": utils.full_url(attachment.file.crop["600x600"].url),
         },
     }
 
@@ -228,9 +244,7 @@ def test_attachment_serializer_remote_file(factories, to_api_date):
             "medium_square_crop": utils.full_url(
                 proxy_url + "?next=medium_square_crop"
             ),
-            "large_square_crop": utils.full_url(
-                proxy_url + "?next=large_square_crop"
-            ),
+            "large_square_crop": utils.full_url(proxy_url + "?next=large_square_crop"),
         },
     }
 

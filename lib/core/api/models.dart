@@ -56,6 +56,46 @@ class CoverUrls {
   /// Smallest useful crop for list/grid thumbnails (decode-cheap).
   String? get thumb =>
       smallSquareCrop ?? mediumSquareCrop ?? largeSquareCrop ?? original;
+
+  /// Funkwhale square crops are 200px (medium) and 600px (large).
+  static const int mediumSquarePx = 200;
+  static const int largeSquarePx = 600;
+
+  /// Smallest rendition that still covers [physicalPx] device pixels.
+  ///
+  /// Widgets wider than the 200px crop must not keep using it: the client
+  /// then scales a soft thumbnail up. The original is only used when the
+  /// server did not generate a large crop.
+  String? urlForPhysicalPx(int physicalPx) {
+    if (physicalPx <= mediumSquarePx) {
+      return _firstUrl([
+        mediumSquareCrop,
+        largeSquareCrop,
+        original,
+        smallSquareCrop,
+      ]);
+    }
+    return _firstUrl([
+      largeSquareCrop,
+      original,
+      mediumSquareCrop,
+      smallSquareCrop,
+    ]);
+  }
+
+  /// [logicalPx] is the widget's layout size; [devicePixelRatio] converts
+  /// it to the pixels the screen will actually show.
+  String? urlForBox(double logicalPx, double devicePixelRatio) {
+    final px = (logicalPx * devicePixelRatio).round();
+    return urlForPhysicalPx(px < 1 ? 1 : px);
+  }
+}
+
+String? _firstUrl(List<String?> urls) {
+  for (final url in urls) {
+    if (url != null && url.isNotEmpty) return url;
+  }
+  return null;
 }
 
 class Cover {
@@ -169,10 +209,27 @@ class Artist {
   String? get coverUrl =>
       cover?.urls.best ?? (albums.isNotEmpty ? albums.first.coverUrl : null);
 
+  String? get largeCoverUrl =>
+      cover?.urls.large ??
+      (albums.isNotEmpty ? albums.first.largeCoverUrl : null);
+
+  /// Lock screen and Android Auto. The 600px crop is sharp enough there
+  /// without shipping a multi-megapixel original through the media session.
+  String? get mediaArtUrl => largeCoverUrl ?? coverUrl;
+
   /// Thumbnail-sized cover for dense lists/grids.
   String? get thumbCoverUrl =>
       cover?.urls.thumb ??
       (albums.isNotEmpty ? albums.first.thumbCoverUrl : null);
+
+  String? coverUrlFor(double logicalPx, double devicePixelRatio) {
+    final own = cover?.urls.urlForBox(logicalPx, devicePixelRatio);
+    if (own != null) return own;
+    if (albums.isNotEmpty) {
+      return albums.first.coverUrlFor(logicalPx, devicePixelRatio);
+    }
+    return null;
+  }
 }
 
 // ── Artist credit (multi-artist) ────────────────────────────────────────
@@ -362,8 +419,14 @@ class Album {
   String? get coverUrl => cover?.urls.best;
   String? get largeCoverUrl => cover?.urls.large;
 
+  /// Lock screen and Android Auto. See [Artist.mediaArtUrl].
+  String? get mediaArtUrl => largeCoverUrl ?? coverUrl;
+
   /// Thumbnail-sized cover for dense lists/grids.
   String? get thumbCoverUrl => cover?.urls.thumb;
+
+  String? coverUrlFor(double logicalPx, double devicePixelRatio) =>
+      cover?.urls.urlForBox(logicalPx, devicePixelRatio);
 
   String get releaseYear {
     if (releaseDate == null) return '';
@@ -547,9 +610,18 @@ class Track {
 
   String? get largeCoverUrl => cover?.urls.large ?? album?.cover?.urls.large;
 
+  /// Lock screen and Android Auto. See [Artist.mediaArtUrl].
+  String? get mediaArtUrl => largeCoverUrl ?? coverUrl;
+
   /// Thumbnail-sized cover for dense track lists.
   String? get thumbCoverUrl =>
       cover?.urls.thumb ?? album?.cover?.urls.thumb ?? coverUrl;
+
+  String? coverUrlFor(double logicalPx, double devicePixelRatio) {
+    final own = cover?.urls.urlForBox(logicalPx, devicePixelRatio);
+    if (own != null) return own;
+    return album?.coverUrlFor(logicalPx, devicePixelRatio);
+  }
 
   /// Multi-artist display string (falls back to primary artist name).
   String get artistName =>
@@ -708,6 +780,9 @@ class Playlist {
   /// Use this when deciding whether to show custom art vs a mosaic of
   /// [albumCovers].
   String? get customCoverUrl => cover?.urls.best;
+
+  String? customCoverUrlFor(double logicalPx, double devicePixelRatio) =>
+      cover?.urls.urlForBox(logicalPx, devicePixelRatio);
 
   /// Custom cover first, otherwise the first derived album cover.
   String? get coverUrl =>
@@ -932,6 +1007,10 @@ class Channel {
   String get name => artist.name;
   String? get description => artist.descriptionText;
   String? get coverUrl => artist.coverUrl;
+
+  String? coverUrlFor(double logicalPx, double devicePixelRatio) =>
+      artist.cover?.urls.urlForBox(logicalPx, devicePixelRatio);
+
   bool get isPodcast => artist.contentCategory == 'podcast';
 }
 
@@ -1063,6 +1142,9 @@ class Radio {
 
   String? get coverUrl => cover?.urls.best;
   String? get thumbCoverUrl => cover?.urls.thumb ?? coverUrl;
+
+  String? coverUrlFor(double logicalPx, double devicePixelRatio) =>
+      cover?.urls.urlForBox(logicalPx, devicePixelRatio);
 }
 
 /// Per-filter result from `POST /api/v1/radios/radios/validate/`.
@@ -2591,4 +2673,8 @@ class PublicShare {
 
   String? get coverUrl =>
       album?.coverUrl ?? playlist?.coverUrl ?? album?.thumbCoverUrl;
+
+  String? coverUrlFor(double logicalPx, double devicePixelRatio) =>
+      album?.coverUrlFor(logicalPx, devicePixelRatio) ??
+      playlist?.customCoverUrlFor(logicalPx, devicePixelRatio);
 }

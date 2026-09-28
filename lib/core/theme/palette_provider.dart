@@ -39,16 +39,15 @@ final paletteColorsProvider = FutureProvider.family<Color, String?>((
   if (imageUrl == null || imageUrl.isEmpty) return AppTheme.primary;
 
   try {
-    // Wrap with ResizeImage so palette generation decodes a separate 100×100
-    // ui.Image instead of sharing the GPU texture that CoverArtWidget renders.
-    // Without this, PaletteGenerator.fromImageProvider resolves the same
-    // cached GPU texture that is concurrently being composited, causing Skia's
+    // Separate 100px-wide decode so palette generation does not share the
+    // GPU texture CoverArtWidget is compositing. Sharing it trips Skia's
     // "GrBackendTextureImageGenerator: Trying to use texture on two GrContexts!"
-    // assertion on some devices.
+    // assertion on some devices. Only the width is set: scaling both axes
+    // makes the JPEG codec return a gray bitmap, and the accent sampled
+    // from that is gray too.
     final imageProvider = ResizeImage(
       CachedNetworkImageProvider(imageUrl, cacheKey: cacheKey),
       width: 100,
-      height: 100,
       allowUpscaling: false,
     );
     final palette = await PaletteGenerator.fromImageProvider(
@@ -77,7 +76,6 @@ final paletteColorsProviderUnconditional =
         final imageProvider = ResizeImage(
           CachedNetworkImageProvider(imageUrl, cacheKey: cacheKey),
           width: 100,
-          height: 100,
           allowUpscaling: false,
         );
         final palette = await PaletteGenerator.fromImageProvider(

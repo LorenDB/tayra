@@ -123,7 +123,7 @@ class ListenRecord {
       artistName: track.artistName,
       albumId: track.album?.id,
       albumTitle: track.albumTitle,
-      coverUrl: track.coverUrl,
+      coverUrl: track.mediaArtUrl,
       durationSeconds: listenedSeconds ?? track.duration,
       listenedAt: DateTime.now(),
       sourceDevice: 'local',

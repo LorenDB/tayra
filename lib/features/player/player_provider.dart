@@ -689,7 +689,8 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
       id: '${_BrowseIds.albumPrefix}${album.id}',
       title: album.title,
       artist: album.artist?.name,
-      artUri: album.coverUrl != null ? Uri.tryParse(album.coverUrl!) : null,
+      artUri:
+          album.mediaArtUrl != null ? Uri.tryParse(album.mediaArtUrl!) : null,
       playable: false,
       extras: {
         AndroidContentStyle.playableHintKey:
@@ -702,7 +703,8 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
     return MediaItem(
       id: '${_BrowseIds.artistPrefix}${artist.id}',
       title: artist.name,
-      artUri: artist.coverUrl != null ? Uri.tryParse(artist.coverUrl!) : null,
+      artUri:
+          artist.mediaArtUrl != null ? Uri.tryParse(artist.mediaArtUrl!) : null,
       playable: false,
       extras: {
         AndroidContentStyle.browsableHintKey:
@@ -730,7 +732,8 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
       title: track.title,
       artist: track.artistName,
       album: track.albumTitle,
-      artUri: track.coverUrl != null ? Uri.tryParse(track.coverUrl!) : null,
+      artUri:
+          track.mediaArtUrl != null ? Uri.tryParse(track.mediaArtUrl!) : null,
       duration:
           track.duration != null ? Duration(seconds: track.duration!) : null,
       playable: true,
@@ -745,7 +748,8 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
       title: track.title,
       artist: track.artistName,
       album: track.albumTitle,
-      artUri: track.coverUrl != null ? Uri.tryParse(track.coverUrl!) : null,
+      artUri:
+          track.mediaArtUrl != null ? Uri.tryParse(track.mediaArtUrl!) : null,
       duration:
           track.duration != null ? Duration(seconds: track.duration!) : null,
       playable: true,
@@ -1897,7 +1901,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
         title: track.title,
         artist: track.artistName,
         album: track.albumTitle,
-        artUri: track.coverUrl != null ? Uri.tryParse(track.coverUrl!) : null,
+        artUri:
+            track.mediaArtUrl != null ? Uri.tryParse(track.mediaArtUrl!) : null,
         duration:
             track.duration != null ? Duration(seconds: track.duration!) : null,
       ),
@@ -2877,7 +2882,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
         title: track.title,
         artist: track.artistName,
         album: track.albumTitle,
-        artUri: track.coverUrl != null ? Uri.tryParse(track.coverUrl!) : null,
+        artUri:
+            track.mediaArtUrl != null ? Uri.tryParse(track.mediaArtUrl!) : null,
         duration:
             track.duration != null ? Duration(seconds: track.duration!) : null,
       );
@@ -3008,10 +3014,14 @@ class PlayerNotifier extends Notifier<PlayerState> {
         );
       }
 
-      // Cache cover art in the background (fire-and-forget).
-      final coverUrl = track.coverUrl;
-      if (coverUrl != null) {
-        _audioCache.cacheCoverArt(coverUrl);
+      // Cache the list thumbnail and the larger media-session rendition.
+      // Fire-and-forget; failures are logged inside the cache service.
+      final coverUrls = <String>{
+        if (track.thumbCoverUrl != null) track.thumbCoverUrl!,
+        if (track.mediaArtUrl != null) track.mediaArtUrl!,
+      };
+      for (final url in coverUrls) {
+        _audioCache.cacheCoverArt(url);
       }
 
       // Record listening history only if auto-playing.

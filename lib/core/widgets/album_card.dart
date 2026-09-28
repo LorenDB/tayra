@@ -54,12 +54,12 @@ class AlbumCard extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final double maxWidth = constraints.maxWidth;
-        final double availableForArt = constraints.maxHeight.isFinite
-            ? constraints.maxHeight - _reservedHeightForText
-            : maxWidth;
-        final double artSize = math
-            .max(0.0, math.min(maxWidth, availableForArt))
-            .toDouble();
+        final double availableForArt =
+            constraints.maxHeight.isFinite
+                ? constraints.maxHeight - _reservedHeightForText
+                : maxWidth;
+        final double artSize =
+            math.max(0.0, math.min(maxWidth, availableForArt)).toDouble();
 
         return _AlbumCardBody(
           album: album,
@@ -90,6 +90,11 @@ class _AlbumCardBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dpr = MediaQuery.devicePixelRatioOf(context);
+    final imageUrl =
+        album.coverUrlFor(artSize, dpr) ??
+        album.thumbCoverUrl ??
+        album.coverUrl;
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -99,17 +104,17 @@ class _AlbumCardBody extends StatelessWidget {
           Stack(
             children: [
               CoverArtWidget(
-                imageUrl: album.thumbCoverUrl ?? album.coverUrl,
-                cacheKey: album.thumbCoverUrl ?? album.coverUrl,
+                imageUrl: imageUrl,
                 size: artSize,
                 borderRadius: 10,
-                shadow: showShadow
-                    ? BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.4),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
-                      )
-                    : null,
+                shadow:
+                    showShadow
+                        ? BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.4),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        )
+                        : null,
               ),
               if (showGradientOverlay)
                 Positioned(

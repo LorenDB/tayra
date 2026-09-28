@@ -180,6 +180,7 @@ class _ArtistCard extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final imageSize = constraints.maxWidth;
+        final dpr = MediaQuery.devicePixelRatioOf(context);
 
         return GestureDetector(
           // Stay on the Artists tab route so the shell keeps Artists highlighted
@@ -188,7 +189,7 @@ class _ArtistCard extends StatelessWidget {
           child: Column(
             children: [
               CoverArtWidget(
-                imageUrl: artist.coverUrl,
+                imageUrl: artist.coverUrlFor(imageSize, dpr) ?? artist.coverUrl,
                 size: imageSize,
                 borderRadius: imageSize / 2,
                 placeholderIcon: Icons.person,

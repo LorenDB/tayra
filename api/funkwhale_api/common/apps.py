@@ -18,3 +18,9 @@ class CommonConfig(AppConfig):
         plugins.startup.autodiscover([p + ".funkwhale_ready" for p in settings.PLUGINS])
         for p in plugins._plugins.values():
             p["settings"] = plugins.load_settings(p["name"], p["settings"])
+
+        # Registers over the stock crop sizer. Also imported via
+        # common/versatileimagefield.py when that package autodiscover runs.
+        from .image_renditions import install_safe_image_sizers
+
+        install_safe_image_sizers()

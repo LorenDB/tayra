@@ -226,8 +226,12 @@ class _ArtistHeader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final dpr = MediaQuery.devicePixelRatioOf(context);
     const headerHeight = 340.0;
     const imageSize = 160.0;
+    final backgroundUrl =
+        artist.coverUrlFor(screenWidth, dpr) ?? artist.coverUrl;
+    final avatarUrl = artist.coverUrlFor(imageSize, dpr) ?? artist.coverUrl;
     final topPadding = MediaQuery.of(context).viewPadding.top;
     final showPurge = ref.watch(
       settingsProvider.select((s) => s.effectiveShowPurgeCacheOption),
@@ -238,10 +242,10 @@ class _ArtistHeader extends ConsumerWidget {
       child: Stack(
         children: [
           // ── Blurred background image ──
-          if (artist.coverUrl != null)
+          if (backgroundUrl != null)
             Positioned.fill(
               child: CachedNetworkImage(
-                imageUrl: artist.coverUrl!,
+                imageUrl: backgroundUrl,
                 fit: BoxFit.cover,
                 width: screenWidth,
                 height: headerHeight,
@@ -326,8 +330,7 @@ class _ArtistHeader extends ConsumerWidget {
             top: topPadding + 56,
             left: (screenWidth - imageSize) / 2,
             child: CoverArtWidget(
-              imageUrl: artist.coverUrl,
-              cacheKey: artist.coverUrl,
+              imageUrl: avatarUrl,
               size: imageSize,
               borderRadius: imageSize / 2,
               placeholderIcon: Icons.person,
@@ -513,8 +516,12 @@ class _AlbumListItem extends StatelessWidget {
           child: Row(
             children: [
               CoverArtWidget(
-                imageUrl: album.coverUrl,
-                cacheKey: album.coverUrl,
+                imageUrl:
+                    album.coverUrlFor(
+                      64,
+                      MediaQuery.devicePixelRatioOf(context),
+                    ) ??
+                    album.coverUrl,
                 size: 64,
                 borderRadius: 8,
               ),

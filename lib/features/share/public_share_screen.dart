@@ -113,7 +113,8 @@ class _PublicShareScreenState extends ConsumerState<PublicShareScreen> {
             });
           }
 
-          final coverUrl = share.coverUrl;
+          final dpr = MediaQuery.devicePixelRatioOf(context);
+          final coverUrl = share.coverUrlFor(200, dpr) ?? share.coverUrl;
           final playable =
               share.tracks.where((t) => t.listenUrl != null).toList();
 
