@@ -12,8 +12,9 @@ import os
 import subprocess
 import tempfile
 
-from django.core.files.base import ContentFile
-from django.db import transaction
+from django.core.files import File
+from django.core.files.storage import default_storage
+from django.db import IntegrityError, transaction
 from django.utils import timezone
 
 from . import utils
@@ -224,15 +225,91 @@ def transcode_with_ffmpeg(input_path, output_path, output_format, bitrate_bps):
     return output_path
 
 
-@transaction.atomic
+class _VersionAlreadyStored(Exception):
+    """Another worker committed this derivative while we were encoding."""
+
+    def __init__(self, version):
+        self.version = version
+        super().__init__(version.pk)
+
+
+def _delete_storage_name(name):
+    if not name:
+        return
+    try:
+        default_storage.delete(name)
+    except Exception:
+        logger.debug("Could not delete orphan transcode %s", name, exc_info=True)
+
+
+def persist_encoded_version(
+    upload, mimetype, format, bitrate, source_path, download_name
+):
+    """Store an already-encoded file as an UploadVersion.
+
+    The file is copied into storage before the short transaction that inserts
+    the row. Inserting an ``UploadVersion`` takes a key-share lock on the
+    parent upload; that lock must not be held across ffmpeg.
+    """
+    size = os.path.getsize(source_path)
+    if size <= 0:
+        raise RuntimeError(f"Encoded file is empty ({source_path})")
+
+    existing = find_transcoded_version(upload, format, max_bitrate=bitrate)
+    if existing:
+        return existing
+
+    version = upload.versions.model(
+        upload_id=upload.pk,
+        mimetype=mimetype,
+        bitrate=bitrate,
+        size=size,
+        accessed_date=timezone.now(),
+    )
+    stored_name = None
+    try:
+        with open(source_path, "rb") as raw:
+            version.audio_file.save(download_name, File(raw), save=False)
+        stored_name = version.audio_file.name
+        with transaction.atomic():
+            # Serialize creators of this upload. The critical section is the
+            # insert only — the encode already finished.
+            locked = type(upload).objects.select_for_update().get(pk=upload.pk)
+            current = find_transcoded_version(locked, format, max_bitrate=bitrate)
+            if current is not None:
+                raise _VersionAlreadyStored(current)
+            version.upload_id = locked.pk
+            version.save()
+        return version
+    except _VersionAlreadyStored as exc:
+        _delete_storage_name(stored_name)
+        logger.info(
+            "Duplicate transcode for upload %s %s @ %s; keeping version %s",
+            upload.pk,
+            format,
+            bitrate,
+            exc.version.pk,
+        )
+        return exc.version
+    except IntegrityError:
+        _delete_storage_name(stored_name)
+        current = find_transcoded_version(upload, format, max_bitrate=bitrate)
+        if current is not None:
+            return current
+        raise
+    except Exception:
+        _delete_storage_name(stored_name)
+        raise
+
+
 def create_transcoded_version_ffmpeg(upload, mimetype, format, bitrate):
     """
     Create and persist an UploadVersion using ffmpeg (not pydub).
 
-    Safe to call from Celery or a last-resort request path.
+    ffmpeg runs before any database insert. Safe to call from Celery or a
+    last-resort request path without blocking other listens of this upload.
     """
     bitrate = min(bitrate or 320000, upload.bitrate or 320000)
-    # Re-check under lock to avoid duplicate work.
     existing = find_transcoded_version(upload, format, max_bitrate=bitrate)
     if existing:
         return existing
@@ -242,43 +319,25 @@ def create_transcoded_version_ffmpeg(upload, mimetype, format, bitrate):
         # Fall back to pydub path if we only have a file-like.
         return upload.create_transcoded_version(mimetype, format, bitrate)
 
-    version = upload.versions.create(mimetype=mimetype, bitrate=bitrate, size=0)
-    base = os.path.splitext(os.path.basename(input_path))[0]
-    new_name = f"{base}.{format}"
-
-    # Placeholder so FileField has a name/path on local storage.
-    version.audio_file.save(new_name, ContentFile(b""), save=True)
-    output_path = version.audio_file.path
-
+    base = os.path.splitext(os.path.basename(input_path))[0] or "audio"
+    fd, tmp_path = tempfile.mkstemp(suffix=f".{format}")
+    os.close(fd)
     try:
-        # Write to a sibling temp then replace, so a failed encode leaves size=0.
-        fd, tmp_path = tempfile.mkstemp(
-            suffix=f".{format}", dir=os.path.dirname(output_path) or None
+        transcode_with_ffmpeg(input_path, tmp_path, format, bitrate)
+        return persist_encoded_version(
+            upload,
+            mimetype,
+            format,
+            bitrate,
+            tmp_path,
+            download_name=f"{base}.{format}",
         )
-        os.close(fd)
-        try:
-            transcode_with_ffmpeg(input_path, tmp_path, format, bitrate)
-            os.replace(tmp_path, output_path)
-        finally:
-            if os.path.exists(tmp_path):
-                try:
-                    os.remove(tmp_path)
-                except OSError:
-                    pass
-
-        version.size = os.path.getsize(output_path)
-        version.accessed_date = timezone.now()
-        version.save(update_fields=["size", "accessed_date"])
-        return version
-    except Exception:
-        # Clean up empty/failed version row + file
-        try:
-            if version.audio_file:
-                version.audio_file.delete(save=False)
-        except Exception:
-            pass
-        version.delete()
-        raise
+    finally:
+        if os.path.exists(tmp_path):
+            try:
+                os.remove(tmp_path)
+            except OSError:
+                pass
 
 
 def ensure_transcoded_version_sync(upload, format, max_bitrate=None):

@@ -1,6 +1,7 @@
 import datetime
 import logging
 import os
+import tempfile
 import uuid
 
 import arrow
@@ -10,9 +11,8 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.postgres.indexes import GinIndex
 from django.contrib.postgres.search import SearchVectorField
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.files.base import ContentFile
 from django.core.serializers.json import DjangoJSONEncoder
-from django.db import models, transaction
+from django.db import models
 from django.db.models import Count, JSONField, Min, Prefetch, Sum
 from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
@@ -904,28 +904,45 @@ class Upload(models.Model):
 
         return self.create_transcoded_version(mimetype, format, bitrate=max_bitrate)
 
-    @transaction.atomic
     def create_transcoded_version(self, mimetype, format, bitrate):
-        # we create the version with an empty file, then
-        # we'll write to it
-        f = ContentFile(b"")
-        bitrate = min(bitrate or 320000, self.bitrate or 320000)
-        version = self.versions.create(mimetype=mimetype, bitrate=bitrate, size=0)
-        # we keep the same name, but we update the extension
-        new_name = (
-            os.path.splitext(os.path.basename(self.audio_file.name))[0] + f".{format}"
-        )
-        version.audio_file.save(new_name, f)
-        utils.transcode_audio(
-            audio=self.get_audio_segment(),
-            output=version.audio_file,
-            output_format=utils.MIMETYPE_TO_EXTENSION[mimetype],
-            bitrate=str(bitrate),
-        )
-        version.size = version.audio_file.size
-        version.save(update_fields=["size"])
+        """Encode with pydub, then store the derivative.
 
-        return version
+        The encode finishes before the UploadVersion row is inserted, so the
+        upload row is not locked for the duration of the encode.
+        """
+        from . import quality as quality_mod
+
+        bitrate = min(bitrate or 320000, self.bitrate or 320000)
+        audio = self.get_audio_segment()
+        if audio is None:
+            raise ValueError("No audio data available to transcode")
+
+        source_name = (
+            os.path.basename(self.audio_file.name) if self.audio_file else "audio"
+        )
+        base = os.path.splitext(source_name)[0] or "audio"
+        fd, tmp_path = tempfile.mkstemp(suffix=f".{format}")
+        os.close(fd)
+        try:
+            audio.export(
+                tmp_path,
+                format=utils.MIMETYPE_TO_EXTENSION[mimetype],
+                bitrate=str(bitrate),
+            )
+            return quality_mod.persist_encoded_version(
+                self,
+                mimetype,
+                format,
+                bitrate,
+                tmp_path,
+                download_name=f"{base}.{format}",
+            )
+        finally:
+            if os.path.exists(tmp_path):
+                try:
+                    os.remove(tmp_path)
+                except OSError:
+                    pass
 
     @property
     def in_place_path(self):

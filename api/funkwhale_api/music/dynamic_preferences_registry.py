@@ -44,9 +44,11 @@ class AutoPrewarmQualities(types.BooleanPreference):
     name = "auto_prewarm_qualities"
     verbose_name = "Background multi-quality transcoding"
     help_text = (
-        "When enabled, Celery periodically encodes progressive quality "
-        "variants (high/medium/low MP3) for all finished uploads so clients "
-        "can start playback faster without waiting on first request."
+        "When enabled, Celery encodes high/medium/low MP3 variants in the "
+        "background so the first play does not wait on a cold encode. On a "
+        "large library this keeps ffmpeg busy and can make the server slow. "
+        "Turn it off here, or on the server with: "
+        "funkwhale-manage fw music transcode-status --disable-prewarm"
     )
     default = True
 

@@ -489,11 +489,10 @@ def handle_serve(
     from . import quality as quality_mod
     from . import tasks as music_tasks
 
-    f = upload
-    # we update the accessed_date
+    # Stamp "now" here, but write accessed_date only after any encode.
+    # Updating the upload row takes a row lock; doing it before ffmpeg held
+    # that lock for the whole encode and blocked every other listen.
     now = timezone.now()
-    upload.accessed_date = now
-    upload.save(update_fields=["accessed_date"])
     f = upload
     if f.audio_file:
         file_path = get_file_path(f.audio_file)
@@ -563,6 +562,10 @@ def handle_serve(
                 file_path = get_file_path(f.audio_file)
                 mt = getattr(f, "mimetype", None) or mt
                 served_quality = resolved.get("served_quality") or "original"
+
+    upload.accessed_date = now
+    upload.save(update_fields=["accessed_date"])
+
     if not proxy_media and f.audio_file:
         # we simply issue a 302 redirect to the real URL
         response = Response(status=302)
