@@ -700,6 +700,24 @@ class UploadQuerySet(common_models.NullsLastQuerySet):
             library__in=libraries, import_status__in=["finished", "skipped"]
         )
 
+    def shareable_by(self, user):
+        """Uploads *user* may republish through a share link.
+
+        Own libraries of any privacy, plus libraries already public to
+        everyone. Other users' instance libraries and channel subscriptions
+        stay playable in-app and must not ride an anonymous share token.
+        """
+        if user is None or not getattr(user, "is_authenticated", False):
+            return self.none()
+        if not getattr(user, "pk", None):
+            return self.none()
+        libraries = Library.objects.filter(
+            models.Q(owner=user) | models.Q(privacy_level="everyone")
+        )
+        return self.filter(
+            library__in=libraries, import_status__in=["finished", "skipped"]
+        )
+
     def with_file(self):
         return self.exclude(audio_file=None).exclude(audio_file="")
 

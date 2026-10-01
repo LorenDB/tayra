@@ -802,28 +802,22 @@ def token_login(request):
         usable = user.has_usable_password()
 
         if usable and scheme == "scram_v2" and is_scram_hash(user.password):
-            if not client_nonce or not client_proof:
+            if client_nonce and client_proof:
+                password_ok = verify_client_proof(
+                    user.password,
+                    username=username,
+                    client_nonce=client_nonce,
+                    server_nonce=server_nonce,
+                    client_proof_hex=client_proof,
+                )
+            else:
+                # Same wire error as a bad password. A distinct missing_proof
+                # status would tell the caller this username has a SCRAM row.
                 _log_token_login(
                     "token_login missing proof meta=%s",
                     _safe_login_meta(meta),
                 )
-                return Response(
-                    {
-                        "error": "missing_proof",
-                        "detail": (
-                            "SCRAM login requires client_nonce and client_proof."
-                        ),
-                        "non_field_errors": ["Login proof is required."],
-                    },
-                    status=400,
-                )
-            password_ok = verify_client_proof(
-                user.password,
-                username=username,
-                client_nonce=client_nonce,
-                server_nonce=server_nonce,
-                client_proof_hex=client_proof,
-            )
+                password_ok = False
         elif usable and scheme == "legacy_v1":
             # Legacy django_hash(v1_digest) rows. Preferred path: account
             # password as upgrade_password (one TLS hop, then SCRAM). Digest +

@@ -167,9 +167,7 @@ def test_album_view_filter_query(param, factories, api_request):
         assert val.title.find(param) != -1
 
 
-def test_can_serve_upload(
-    factories, logged_in_api_client, settings, preferences
-):
+def test_can_serve_upload(factories, logged_in_api_client, settings, preferences):
     preferences["common__api_authentication_required"] = True
     upload = factories["music.Upload"](
         library__privacy_level="everyone", import_status="finished"
@@ -184,9 +182,7 @@ def test_can_serve_upload(
     )
 
 
-def test_can_serve_upload_deny_anonymous(
-    factories, settings, api_client, preferences
-):
+def test_can_serve_upload_deny_anonymous(factories, settings, api_client, preferences):
     preferences["common__api_authentication_required"] = True
     upload = factories["music.Upload"](
         import_status="finished", library__privacy_level="instance"
@@ -561,13 +557,9 @@ def test_listen_quality_non_blocking_when_missing(
     sync_encode = mocker.patch(
         "funkwhale_api.music.quality.ensure_transcoded_version_sync"
     )
-    delayed = mocker.patch(
-        "funkwhale_api.music.tasks.ensure_transcoded_version.delay"
-    )
+    delayed = mocker.patch("funkwhale_api.music.tasks.ensure_transcoded_version.delay")
     url = reverse("api:v1:listen-detail", kwargs={"uuid": upload.track.uuid})
-    response = logged_in_api_client.get(
-        url, {"quality": "medium", "download": "false"}
-    )
+    response = logged_in_api_client.get(url, {"quality": "medium", "download": "false"})
 
     assert response.status_code == 200
     sync_encode.assert_not_called()
@@ -598,9 +590,7 @@ def test_listen_quality_uses_ready_version(
         "funkwhale_api.music.quality.ensure_transcoded_version_sync"
     )
     url = reverse("api:v1:listen-detail", kwargs={"uuid": upload.track.uuid})
-    response = logged_in_api_client.get(
-        url, {"quality": "medium", "download": "false"}
-    )
+    response = logged_in_api_client.get(url, {"quality": "medium", "download": "false"})
 
     assert response.status_code == 200
     sync_encode.assert_not_called()
@@ -708,14 +698,28 @@ def test_user_can_list_their_library(factories, logged_in_api_client):
     assert response.data["results"][0]["uuid"] == str(library.uuid)
 
 
-def test_user_can_retrieve_another_user_library(factories, logged_in_api_client):
-    library = factories["music.Library"]()
+@pytest.mark.parametrize("privacy_level", ["everyone", "instance"])
+def test_user_can_retrieve_another_user_library(
+    privacy_level, factories, logged_in_api_client
+):
+    library = factories["music.Library"](privacy_level=privacy_level)
 
     url = reverse("api:v1:libraries-detail", kwargs={"uuid": library.uuid})
     response = logged_in_api_client.get(url)
 
     assert response.status_code == 200
     assert response.data["uuid"] == str(library.uuid)
+
+
+def test_user_cannot_retrieve_another_users_private_library(
+    factories, logged_in_api_client
+):
+    library = factories["music.Library"](privacy_level="me")
+
+    url = reverse("api:v1:libraries-detail", kwargs={"uuid": library.uuid})
+    response = logged_in_api_client.get(url)
+
+    assert response.status_code == 404
 
 
 def test_user_can_list_public_libraries(factories, api_client, preferences):

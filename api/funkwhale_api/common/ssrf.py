@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import ipaddress
 import socket
+import threading
 from typing import Optional, Set
 from urllib.parse import urljoin, urlparse
 
@@ -90,18 +91,174 @@ def _hostname_blocked(hostname: str) -> bool:
     if host in _BLOCKED_HOSTNAMES or host in _METADATA_HOSTNAMES:
         return True
     # Reject trailing .local / .localhost / .internal (mDNS / internal zones).
-    if host.endswith(".local") or host.endswith(".localhost") or host.endswith(
-        ".internal"
+    if (
+        host.endswith(".local")
+        or host.endswith(".localhost")
+        or host.endswith(".internal")
     ):
         return True
     return False
+
+
+# Captured before the pin wrapper replaces socket.getaddrinfo. Validation
+# must always see a fresh lookup so a private answer is still rejected.
+_real_getaddrinfo = socket.getaddrinfo
+_pin_state = threading.local()
+_resolved_ips = threading.local()
+
+
+def _normalize_host_token(hostname: str) -> str:
+    host = (hostname or "").strip().lower().rstrip(".")
+    if host.startswith("[") and host.endswith("]"):
+        host = host[1:-1]
+    return host
+
+
+def _raw_url_hostname(url: str) -> str:
+    """Host as written in the URL, before ``urlparse().hostname`` rewrites it.
+
+    ``str.encode('idna')`` is IDNA2003 (``straße`` → ``strasse``). urllib3
+    resolves the idna-package A-label (``straße`` → ``xn--strae-oqa``). The
+    raw netloc keeps the Unicode form both encodings are derived from.
+    """
+    netloc = urlparse(url).netloc
+    if "@" in netloc:
+        netloc = netloc.rsplit("@", 1)[-1]
+    if netloc.startswith("["):
+        end = netloc.find("]")
+        return netloc[1:end] if end != -1 else netloc
+    if netloc.count(":") == 1:
+        return netloc.rsplit(":", 1)[0]
+    return netloc
+
+
+def _urllib3_hostname(host: str) -> Optional[str]:
+    """Hostname urllib3 passes to ``getaddrinfo`` (per-label idna A-labels)."""
+    try:
+        import idna
+    except ImportError:
+        return None
+    labels = []
+    try:
+        for label in host.split("."):
+            if label and any(ord(char) >= 128 for char in label):
+                labels.append(
+                    idna.encode(label, strict=True, std3_rules=True).decode("ascii")
+                )
+            else:
+                labels.append(label)
+    except idna.IDNAError:
+        return None
+    encoded = ".".join(labels)
+    return encoded or None
+
+
+def _host_keys(hostname: str) -> Set[str]:
+    host = _normalize_host_token(hostname)
+    if not host:
+        return set()
+    keys = {host}
+    # Callers (and urlparse on some versions) use the stdlib IDNA2003 form.
+    try:
+        keys.add(host.encode("idna").decode("ascii"))
+    except UnicodeError:
+        pass
+    # requests/urllib3 connect with the idna-package label, which differs.
+    connect_name = _urllib3_hostname(host)
+    if connect_name:
+        keys.add(connect_name)
+    return keys
+
+
+def _remember_allowed(
+    hostname: str, ips: Set[ipaddress._BaseAddress], *, url: Optional[str] = None
+) -> None:
+    bag = getattr(_resolved_ips, "by_host", None)
+    if bag is None:
+        bag = {}
+        _resolved_ips.by_host = bag
+    frozen = frozenset(ips)
+    keys = _host_keys(hostname)
+    if url:
+        keys |= _host_keys(_raw_url_hostname(url))
+    for key in keys:
+        bag[key] = frozen
+
+
+def _pin_for_url(url: str) -> None:
+    bag = getattr(_resolved_ips, "by_host", None) or {}
+    keys = _host_keys(urlparse(url).hostname or "")
+    keys |= _host_keys(_raw_url_hostname(url))
+    ips = None
+    for key in keys:
+        ips = bag.get(key)
+        if ips:
+            break
+    if not ips:
+        _pin_state.hosts = None
+        return
+    _pin_state.hosts = {key: ips for key in keys}
+
+
+def _clear_pin() -> None:
+    _pin_state.hosts = None
+
+
+def _addrinfo_for_ips(ips, port, family, socktype, proto):
+    try:
+        port_i = 0 if port is None else int(port)
+    except (TypeError, ValueError):
+        port_i = 0
+    results = []
+    for ip in ips:
+        if isinstance(ip, ipaddress.IPv4Address):
+            if family not in (0, socket.AF_UNSPEC, socket.AF_INET):
+                continue
+            fam = socket.AF_INET
+            sockaddr = (str(ip), port_i)
+        else:
+            if family not in (0, socket.AF_UNSPEC, socket.AF_INET6):
+                continue
+            fam = socket.AF_INET6
+            sockaddr = (str(ip), port_i, 0, 0)
+        results.append((fam, socktype or socket.SOCK_STREAM, proto or 0, "", sockaddr))
+    if not results:
+        raise socket.gaierror(socket.EAI_NONAME, "Name or service not known")
+    return results
+
+
+def _pinned_getaddrinfo(host, port, family=0, type=0, proto=0, flags=0):
+    mapping = getattr(_pin_state, "hosts", None)
+    if not mapping or host is None:
+        return _real_getaddrinfo(host, port, family, type, proto, flags)
+    if isinstance(host, bytes):
+        host = host.decode("ascii", "surrogateescape")
+    ips = None
+    for key in _host_keys(str(host)):
+        ips = mapping.get(key)
+        if ips:
+            break
+    if ips is None:
+        # This hop already has a validated address set. A name we did not
+        # predict (another IDNA form) must not consult live DNS: that lookup
+        # is the rebinding window.
+        unique = {frozenset(value) for value in mapping.values()}
+        if len(unique) != 1:
+            raise socket.gaierror(socket.EAI_NONAME, "Name or service not known")
+        ips = next(iter(unique))
+    return _addrinfo_for_ips(ips, port, family, type, proto)
+
+
+def _install_getaddrinfo_pin() -> None:
+    if socket.getaddrinfo is not _pinned_getaddrinfo:
+        socket.getaddrinfo = _pinned_getaddrinfo
 
 
 def _resolve_ips(hostname: str, port: int) -> Set[ipaddress._BaseAddress]:
     """Resolve *hostname* to a set of IP addresses (A + AAAA)."""
     ips: Set[ipaddress._BaseAddress] = set()
     try:
-        for family, _type, _proto, _canon, sockaddr in socket.getaddrinfo(
+        for family, _type, _proto, _canon, sockaddr in _real_getaddrinfo(
             hostname, port, type=socket.SOCK_STREAM
         ):
             addr = sockaddr[0]
@@ -109,7 +266,9 @@ def _resolve_ips(hostname: str, port: int) -> Set[ipaddress._BaseAddress]:
             if ip is not None:
                 ips.add(ip)
     except socket.gaierror as exc:
-        raise UnsafeURLError(f"Cannot resolve host for outbound request: {hostname}") from exc
+        raise UnsafeURLError(
+            f"Cannot resolve host for outbound request: {hostname}"
+        ) from exc
     if not ips:
         raise UnsafeURLError(f"No addresses resolved for host: {hostname}")
     return ips
@@ -170,11 +329,14 @@ def validate_external_url(url: str, *, allow_webfinger: bool = False) -> str:
     if ip_literal is not None:
         if _is_blocked_ip(ip_literal):
             raise UnsafeURLError("URL points to a blocked IP address")
+        _remember_allowed(hostname, {ip_literal}, url=url)
         return url
 
-    for resolved in _resolve_ips(hostname, port):
+    resolved_ips = _resolve_ips(hostname, port)
+    for resolved in resolved_ips:
         if _is_blocked_ip(resolved):
             raise UnsafeURLError("URL hostname resolves to a blocked IP address")
+    _remember_allowed(hostname, resolved_ips, url=url)
 
     return url
 
@@ -194,6 +356,7 @@ def safe_request(session, method: str, url: str, **kwargs):
     *session* is a :class:`requests.Session` (or compatible). Auto-redirects
     are disabled; each ``Location`` is validated before the next hop.
     """
+    _install_getaddrinfo_pin()
     max_redirects = int(kwargs.pop("max_redirects", 5))
     # Caller may have set allow_redirects; we always manage redirects ourselves.
     kwargs.pop("allow_redirects", None)
@@ -202,9 +365,16 @@ def safe_request(session, method: str, url: str, **kwargs):
     history = []
 
     for _ in range(max_redirects + 1):
-        response = _session_raw_request(
-            session, method, current, allow_redirects=False, **kwargs
-        )
+        # Pin the addresses that just passed validation so the TCP connect
+        # cannot follow a second DNS answer (rebinding). Host/SNI stay on
+        # *current*. The pin is cleared before the next redirect is checked.
+        _pin_for_url(current)
+        try:
+            response = _session_raw_request(
+                session, method, current, allow_redirects=False, **kwargs
+            )
+        finally:
+            _clear_pin()
         # Attach redirect history like requests does.
         if history:
             response.history = list(history)
@@ -214,9 +384,7 @@ def safe_request(session, method: str, url: str, **kwargs):
             if not location:
                 return response
             # Relative redirects resolve against the current URL.
-            next_url = (
-                urljoin(response.url, location) if response.url else location
-            )
+            next_url = urljoin(response.url, location) if response.url else location
             try:
                 current = validate_external_url(next_url)
             except UnsafeURLError:
@@ -236,6 +404,8 @@ def safe_request(session, method: str, url: str, **kwargs):
 
     raise UnsafeURLError("Too many redirects for outbound request")
 
+
+_install_getaddrinfo_pin()
 
 
 def is_url_safe(url: str, *, allow_webfinger: bool = False) -> bool:

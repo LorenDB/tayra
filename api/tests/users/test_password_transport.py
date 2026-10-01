@@ -1,5 +1,4 @@
 import hashlib
-import hmac
 
 import pytest
 from django.core.cache import cache
@@ -134,9 +133,7 @@ def test_token_login_scram_challenge_flow(api_client, factories):
     user.save()
 
     challenge_url = reverse("api:v1:users:token_login_challenge")
-    challenge = api_client.post(
-        challenge_url, {"username": "alice"}, format="json"
-    )
+    challenge = api_client.post(challenge_url, {"username": "alice"}, format="json")
     assert challenge.status_code == 200, challenge.content
     data = challenge.json()
     assert data["scheme"] == "scram_v2"
@@ -192,6 +189,36 @@ def test_token_login_scram_challenge_flow(api_client, factories):
     )
     assert again.status_code == 400
     assert again.json()["error"] == "invalid_challenge"
+
+
+@pytest.mark.django_db
+def test_token_login_missing_proof_is_not_an_account_oracle(api_client, factories):
+    """A challenge plus no proof must not reveal whether the username exists."""
+    user = factories["users.User"](username="alice")
+    user.set_password("s3cret-pass")
+    user.save()
+
+    def login_without_proof(username):
+        challenge = api_client.post(
+            reverse("api:v1:users:token_login_challenge"),
+            {"username": username},
+            format="json",
+        )
+        assert challenge.status_code == 200, challenge.content
+        data = challenge.json()
+        return api_client.post(
+            reverse("api:v1:users:token_login"),
+            {"username": username, "challenge_id": data["challenge_id"]},
+            format="json",
+        )
+
+    real = login_without_proof("alice")
+    ghost = login_without_proof("nobody-here")
+    assert real.status_code == ghost.status_code == 400
+    assert real.json()["error"] == "invalid_credentials"
+    assert ghost.json()["error"] == "invalid_credentials"
+    assert "missing_proof" not in real.content.decode()
+    assert "missing_proof" not in ghost.content.decode()
 
 
 @pytest.mark.django_db
@@ -395,9 +422,7 @@ def test_legacy_v1_digest_not_reusable_across_challenges(api_client, factories):
 
 
 @pytest.mark.django_db
-def test_legacy_v1_login_rejects_digest_without_upgrade_password(
-    api_client, factories
-):
+def test_legacy_v1_login_rejects_digest_without_upgrade_password(api_client, factories):
     """Stolen digest + HMAC is not enough; upgrade_password is required."""
     from django.contrib.auth.hashers import make_password
 

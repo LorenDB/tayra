@@ -180,7 +180,7 @@ class PublicShareSerializer(serializers.Serializer):
             "artist_credit__artist",
             "album__artist_credit__artist",
         )
-        playable = music_models.Upload.objects.playable_by(owner)
+        playable = music_models.Upload.objects.shareable_by(owner)
         qs = qs.prefetch_related(
             Prefetch(
                 "uploads",

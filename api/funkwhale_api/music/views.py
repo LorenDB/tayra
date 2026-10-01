@@ -207,22 +207,23 @@ class LibraryViewSet(
 
     def get_queryset(self):
         qs = super().get_queryset()
-        # allow retrieving a single library by uuid if request.user isn't
-        # the owner. Any other get should be from the owner only
+        # Writes stay owner-only. List and retrieve both use viewable_by so a
+        # known UUID cannot disclose a private library's name or counts.
         if self.action not in ["retrieve", "list"]:
             qs = qs.filter(owner=self.request.user)
-        if self.action == "list":
+        if self.action in ["retrieve", "list"]:
             user = utils.get_user_from_request(self.request)
             qs = qs.viewable_by(user)
             # Upload / "my libraries" listings pass scope=me. Apply the owner
             # filter here so staff/admins (who can view instance and public
             # libraries) still only see libraries they own.
-            scope = (self.request.query_params.get("scope") or "").strip().lower()
-            scopes = {part.strip() for part in scope.split(",") if part.strip()}
-            if "me" in scopes:
-                if not user:
-                    return qs.none()
-                qs = qs.filter(owner=user)
+            if self.action == "list":
+                scope = (self.request.query_params.get("scope") or "").strip().lower()
+                scopes = {part.strip() for part in scope.split(",") if part.strip()}
+                if "me" in scopes:
+                    if not user:
+                        return qs.none()
+                    qs = qs.filter(owner=user)
 
         return qs
 
@@ -739,7 +740,7 @@ def handle_stream(
             share_link = resolve_active_share(share_token)
 
     if share_link is not None:
-        # Secret share: membership + sharer's playable uploads only.
+        # Secret share: membership + uploads the sharer may republish.
         # Re-resolve so revoked/expired/disabled-owner tokens fail even if a
         # stale request.share_link was set earlier in the permission phase.
         fresh = resolve_active_share(share_link.token)
@@ -756,7 +757,7 @@ def handle_stream(
         )
         if explicit_file:
             queryset = queryset.filter(uuid=explicit_file)
-        queryset = queryset.playable_by(share_link.owner)
+        queryset = queryset.shareable_by(share_link.owner)
         queryset = queryset.order_by(F("audio_file").desc(nulls_last=True))
         upload = queryset.first()
         if not upload:

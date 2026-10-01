@@ -54,7 +54,7 @@ def assert_can_share(user, object_type: str, object_id: int):
     Validate that *user* may create a share for the given object.
 
     - Album: any authenticated user (album catalog is not privacy-filtered on
-      retrieve; stream ACL still uses the sharer's playable uploads).
+      retrieve; stream ACL still uses the sharer's shareable uploads).
     - Playlist: only the playlist owner, and the playlist must be visible to them.
     """
     if object_type == ShareLink.OBJECT_ALBUM:

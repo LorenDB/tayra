@@ -235,12 +235,88 @@ def test_public_resolve_revoked_404(api_client, factories):
 
 
 @pytest.mark.django_db
+def test_share_does_not_republish_other_users_instance_upload(
+    api_client, factories, preferences
+):
+    """An album share must not hand out another user's instance-only audio."""
+    preferences["common__api_authentication_required"] = True
+    sharer = factories["users.User"]()
+    stranger = factories["users.User"]()
+    album = factories["music.Album"]()
+    track = factories["music.Track"](album=album)
+    private_upload = factories["music.Upload"](
+        track=track,
+        import_status="finished",
+        library__owner=stranger,
+        library__privacy_level="instance",
+    )
+    link = factories["shares.ShareLink"](
+        owner=sharer, object_type="album", object_id=album.pk
+    )
+
+    stream = reverse("api:v1:listen-detail", kwargs={"uuid": track.uuid})
+    response = api_client.get(stream, {"share": link.token, "download": "false"})
+    assert response.status_code == 404
+
+    public = reverse("api:v1:shares-public", kwargs={"token": link.token})
+    resolved = api_client.get(public)
+    assert resolved.status_code == 200
+    assert str(private_upload.uuid) not in str(resolved.data)
+    assert resolved.data["tracks"][0]["uploads"] == []
+
+
+@pytest.mark.django_db
+def test_share_stream_allows_owners_instance_library(
+    api_client, factories, preferences
+):
+    preferences["common__api_authentication_required"] = True
+    user = factories["users.User"]()
+    album = factories["music.Album"]()
+    track = factories["music.Track"](album=album)
+    factories["music.Upload"](
+        track=track,
+        import_status="finished",
+        library__owner=user,
+        library__privacy_level="instance",
+    )
+    link = factories["shares.ShareLink"](
+        owner=user, object_type="album", object_id=album.pk
+    )
+    url = reverse("api:v1:listen-detail", kwargs={"uuid": track.uuid})
+    response = api_client.get(url, {"share": link.token, "download": "false"})
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_share_stream_allows_another_users_everyone_library(
+    api_client, factories, preferences
+):
+    preferences["common__api_authentication_required"] = True
+    sharer = factories["users.User"]()
+    stranger = factories["users.User"]()
+    album = factories["music.Album"]()
+    track = factories["music.Track"](album=album)
+    factories["music.Upload"](
+        track=track,
+        import_status="finished",
+        library__owner=stranger,
+        library__privacy_level="everyone",
+    )
+    link = factories["shares.ShareLink"](
+        owner=sharer, object_type="album", object_id=album.pk
+    )
+    url = reverse("api:v1:listen-detail", kwargs={"uuid": track.uuid})
+    response = api_client.get(url, {"share": link.token, "download": "false"})
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
 def test_stream_with_share_token_private_library(api_client, factories, preferences):
     preferences["common__api_authentication_required"] = True
     user = factories["users.User"]()
     album = factories["music.Album"]()
     track = factories["music.Track"](album=album)
-    upload = factories["music.Upload"](
+    factories["music.Upload"](
         track=track,
         import_status="finished",
         library__owner=user,

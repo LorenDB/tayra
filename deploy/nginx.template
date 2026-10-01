@@ -85,6 +85,7 @@ server {
     add_header Content-Security-Policy "default-src 'self'; connect-src https: wss: http: ws: 'self'; script-src 'self' 'wasm-unsafe-eval' blob:; worker-src 'self' blob:; style-src https: http: 'self' 'unsafe-inline'; img-src https: http: 'self' data: blob:; font-src https: http: 'self' data:; media-src https: http: 'self' data: blob:; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'";
     add_header Referrer-Policy "strict-origin-when-cross-origin";
     add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
     add_header Service-Worker-Allowed "/";
 
     location /api/ {
@@ -126,6 +127,7 @@ server {
         alias ${FUNKWHALE_FRONTEND_PATH}/embed.html;
         add_header Content-Security-Policy "connect-src https: http: 'self'; default-src 'self'; script-src 'self' unpkg.com; style-src https: http: 'self' 'unsafe-inline'; img-src https: http: 'self' data:; font-src https: http: 'self' data:; object-src 'none'; media-src https: http: 'self' data:; base-uri 'self'";
         add_header Referrer-Policy "strict-origin-when-cross-origin";
+        add_header X-Content-Type-Options "nosniff" always;
 
         expires 1d;
     }
@@ -141,18 +143,21 @@ server {
     location /media/__sized__/ {
         alias ${MEDIA_ROOT}/__sized__/;
         add_header Access-Control-Allow-Origin '*';
+        add_header X-Content-Type-Options "nosniff" always;
     }
 
     # Allow direct access to only specific subdirectories in /media
     location /media/attachments/ {
         alias ${MEDIA_ROOT}/attachments/;
         add_header Access-Control-Allow-Origin '*';
+        add_header X-Content-Type-Options "nosniff" always;
     }
 
     # Allow direct access to only specific subdirectories in /media
     location /media/dynamic_preferences/ {
         alias ${MEDIA_ROOT}/dynamic_preferences/;
         add_header Access-Control-Allow-Origin '*';
+        add_header X-Content-Type-Options "nosniff" always;
     }
 
     # This is an internal location that is used to serve
@@ -167,6 +172,7 @@ server {
 #       proxy_set_header Authorization "";                                  # S3
 #       proxy_pass $1;                                                      # S3
         add_header Access-Control-Allow-Origin '*';
+        add_header X-Content-Type-Options "nosniff" always;
     }
 
     location /_protected/music/ {
@@ -177,6 +183,7 @@ server {
         internal;
         alias   ${MUSIC_DIRECTORY_PATH}/;
         add_header Access-Control-Allow-Origin '*';
+        add_header X-Content-Type-Options "nosniff" always;
     }
 
     location /manifest.json {
