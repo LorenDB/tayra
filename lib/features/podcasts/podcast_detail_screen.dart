@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:tayra/core/api/api_errors.dart';
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart' as cached_api;
@@ -118,7 +119,9 @@ class _PodcastDetailScreenState extends ConsumerState<PodcastDetailScreen> {
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        if (_episodes.isEmpty) _error = 'Failed to load episodes: $e';
+        if (_episodes.isEmpty) {
+          _error = 'Failed to load episodes. ${describeLoadError(e)}';
+        }
         _isLoading = false;
       });
     }
@@ -208,6 +211,9 @@ class _PodcastDetailScreenState extends ConsumerState<PodcastDetailScreen> {
         Analytics.track('podcast_episode_resumed');
       }
     }
+    // Looking up the resume point can involve the network; the screen may
+    // have been left meanwhile.
+    if (!mounted) return;
     await ref
         .read(playerProvider.notifier)
         .playTracks(
@@ -247,7 +253,11 @@ class _PodcastDetailScreenState extends ConsumerState<PodcastDetailScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not update subscription: $e')),
+          SnackBar(
+            content: Text(
+              'Could not update subscription. ${describeLoadError(e)}',
+            ),
+          ),
         );
       }
     } finally {

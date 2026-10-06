@@ -40,6 +40,10 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
   String? _error;
   StreamSubscription<String>? _cacheSub;
 
+  /// Bumped whenever the list is replaced wholesale, so a "load more" that
+  /// was in flight for the old list is not appended to the new one.
+  int _listGeneration = 0;
+
   // Cached offline-filtered view so scrolling doesn't re-filter every build.
   List<Favorite> _displayCache = const [];
   bool? _displayOfflineActive;
@@ -173,6 +177,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
         forceRefresh: forceRefresh,
       );
       if (!mounted) return;
+      _listGeneration++;
       setState(() {
         _favorites
           ..clear()
@@ -180,6 +185,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
         _currentPage = 1;
         _hasMore = response.next != null;
         _isLoading = false;
+        _isLoadingMore = false;
         _invalidateDisplayCache();
       });
       _loadMoreIfNeeded();
@@ -200,12 +206,13 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
     if (_isLoadingMore || !_hasMore) return;
 
     setState(() => _isLoadingMore = true);
+    final generation = _listGeneration;
 
     try {
       final api = ref.read(cachedFunkwhaleApiProvider);
       final nextPage = _currentPage + 1;
       final response = await api.getFavorites(page: nextPage);
-      if (!mounted) return;
+      if (!mounted || generation != _listGeneration) return;
       setState(() {
         _favorites.addAll(response.results);
         _currentPage = nextPage;
@@ -215,7 +222,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
       });
       _loadMoreIfNeeded();
     } catch (e) {
-      if (!mounted) return;
+      if (!mounted || generation != _listGeneration) return;
       setState(() => _isLoadingMore = false);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Failed to load more favorites')),
@@ -256,12 +263,14 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
         return;
       }
       // Keep the local list in sync so subsequent plays see the full set.
+      _listGeneration++;
       setState(() {
         _favorites
           ..clear()
           ..addAll(all);
         _currentPage = 1;
         _hasMore = false;
+        _isLoadingMore = false;
         _invalidateDisplayCache();
       });
       final tracks = all.map((f) => f.track).toList();

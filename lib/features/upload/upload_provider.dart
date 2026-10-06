@@ -530,6 +530,12 @@ class UploadNotifier extends Notifier<UploadState> {
   /// detect they belong to a stale session and discard their results.
   int _pollGeneration = 0;
 
+  /// A status poll is still asking the server about pending uploads. A poll
+  /// makes one or two requests per pending file, so with a large batch it can
+  /// outlast the timer interval; overlapping polls would count the same
+  /// "not found yet" answer several times and give up on a slow import early.
+  bool _pollInFlight = false;
+
   /// Temporary tagged files to clean up after upload.
   final List<File> _tempTaggedFiles = [];
 
@@ -547,6 +553,7 @@ class UploadNotifier extends Notifier<UploadState> {
     ref.onDispose(() {
       _pollingTimer?.cancel();
       _cleanupTempFiles();
+      _mbDio.close(force: true);
     });
 
     Future.microtask(_init);
@@ -1727,6 +1734,16 @@ class UploadNotifier extends Notifier<UploadState> {
 
   Future<void> _pollOnce(int generation) async {
     if (generation != _pollGeneration) return;
+    if (_pollInFlight) return;
+    _pollInFlight = true;
+    try {
+      await _pollPending(generation);
+    } finally {
+      _pollInFlight = false;
+    }
+  }
+
+  Future<void> _pollPending(int generation) async {
     _pollAttempts++;
 
     final pending =
@@ -2045,6 +2062,7 @@ class UploadNotifier extends Notifier<UploadState> {
     _pollGeneration++;
     _pollAttempts = 0;
     _consecutivePollErrors = 0;
+    _pollMisses.clear();
     _cleanupTempFiles();
     state = const UploadState();
     Future.microtask(_init);

@@ -5,6 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tayra/core/auth/password_transport.dart';
 
 void main() {
+  _offThreadTests();
+
   test('clampTransportIterations accepts normal values and rejects extremes', () {
     expect(clampTransportIterations(null), transportIterations);
     expect(clampTransportIterations(0), transportIterations);
@@ -142,5 +144,81 @@ void main() {
     expect(challenge.length, greaterThan(20));
     expect(pkceCodeChallengeS256(verifier), challenge);
     expect(pkceCodeChallengeS256(newPkceCodeVerifier()), isNot(challenge));
+  });
+}
+
+// ── Off-UI-thread derivation ────────────────────────────────────────────
+
+ClientProofRequest _proofRequest({int transportIters = 300, int iters = 500}) {
+  return ClientProofRequest(
+    password: 'correct horse battery staple',
+    instanceBinding: instanceBindingForServerUrl('https://pod.example'),
+    transportIterations: transportIters,
+    salt: List<int>.generate(16, (i) => i * 7 + 1),
+    iterations: iters,
+    username: 'alice',
+    clientNonce: 'client-nonce',
+    serverNonce: 'server-nonce',
+  );
+}
+
+String _referenceProof(ClientProofRequest r) {
+  return computeClientProof(
+    secret: transportSecret(
+      r.password,
+      r.instanceBinding,
+      iterations: r.transportIterations,
+    ),
+    salt: r.salt,
+    iterations: r.iterations,
+    username: r.username,
+    clientNonce: r.clientNonce,
+    serverNonce: r.serverNonce,
+  );
+}
+
+void _offThreadTests() {
+  test('yielding PBKDF2 matches the reference at chunk boundaries', () async {
+    final password = utf8.encode('pw');
+    final salt = utf8.encode('salt');
+    // Below, exactly at, and just past a yield point, plus a second block.
+    for (final iterations in [1, 2, 7, 8, 9, 64]) {
+      for (final length in [32, 48]) {
+        final expected = pbkdf2HmacSha256(
+          password: password,
+          salt: salt,
+          iterations: iterations,
+          length: length,
+        );
+        final actual = await pbkdf2HmacSha256Yielding(
+          password: password,
+          salt: salt,
+          iterations: iterations,
+          length: length,
+          yieldEvery: 8,
+        );
+        expect(actual, expected, reason: 'iterations=$iterations len=$length');
+      }
+    }
+  });
+
+  test('background and yielding proofs equal the synchronous one', () async {
+    final request = _proofRequest();
+    final expected = _referenceProof(request);
+
+    expect(await deriveClientProofYielding(request), expected);
+    expect(await deriveClientProof(request), expected);
+  });
+
+  test('proof depends on both iteration counts', () async {
+    final base = await deriveClientProofYielding(_proofRequest());
+    expect(
+      await deriveClientProofYielding(_proofRequest(transportIters: 301)),
+      isNot(base),
+    );
+    expect(
+      await deriveClientProofYielding(_proofRequest(iters: 501)),
+      isNot(base),
+    );
   });
 }

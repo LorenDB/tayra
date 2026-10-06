@@ -7,7 +7,8 @@ import 'package:tayra/core/api/models.dart';
 ///
 /// [fetcher] is called with the current page number (1-indexed) and must
 /// return a [PaginatedResponse]. Iteration stops when [PaginatedResponse.next]
-/// is `null`.
+/// is `null`, or when a page comes back empty (a server that keeps advertising
+/// a next page without sending anything would otherwise loop forever).
 ///
 /// Example:
 /// ```dart
@@ -23,7 +24,7 @@ Future<List<T>> fetchAllPages<T>(
   while (true) {
     final response = await fetcher(page);
     all.addAll(response.results);
-    if (response.next == null) break;
+    if (response.next == null || response.results.isEmpty) break;
     page++;
   }
   return all;
@@ -31,13 +32,17 @@ Future<List<T>> fetchAllPages<T>(
 
 // ── Duration formatting ──────────────────────────────────────────────────
 
-/// Formats [seconds] as `m:ss` (e.g. `3:07`).
+/// Formats [seconds] as `m:ss` (e.g. `3:07`), or `h:mm:ss` from one hour up
+/// (e.g. `1:15:03`) so podcast episodes do not read as `75:03`.
 ///
 /// Used for individual track durations in track rows and the seek bar.
 String formatTrackDuration(int seconds) {
-  final m = seconds ~/ 60;
-  final s = seconds % 60;
-  return '$m:${s.toString().padLeft(2, '0')}';
+  if (seconds < 0) seconds = 0;
+  final h = seconds ~/ 3600;
+  final m = (seconds % 3600) ~/ 60;
+  final ss = (seconds % 60).toString().padLeft(2, '0');
+  if (h > 0) return '$h:${m.toString().padLeft(2, '0')}:$ss';
+  return '$m:$ss';
 }
 
 /// Formats [totalSeconds] as a human-readable total duration.

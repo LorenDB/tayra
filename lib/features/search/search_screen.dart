@@ -35,6 +35,10 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   final TextEditingController _controller = TextEditingController();
   Timer? _debounce;
   SearchResult? _result;
+
+  /// The query [_result] answers. Results are only kept on screen after a
+  /// failure if they belong to the query that failed.
+  String _resultQuery = '';
   bool _isLoading = false;
   String? _error;
   String _lastQuery = '';
@@ -101,6 +105,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     if (trimmed.isEmpty) {
       setState(() {
         _result = null;
+        _resultQuery = '';
         _isLoading = false;
         _error = null;
         _lastQuery = '';
@@ -151,12 +156,20 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       if (query != _lastQuery) return;
       setState(() {
         _result = result;
+        _resultQuery = query;
         _isLoading = false;
       });
     } catch (e) {
       if (!mounted) return;
       if (query != _lastQuery) return;
       setState(() {
+        // A failed background refresh of the results already on screen can
+        // be ignored. Results for an earlier query cannot stand in for this
+        // one: they would be shown under the new search term.
+        if (_resultQuery != query) {
+          _result = null;
+          _resultQuery = '';
+        }
         if (_result == null) {
           _error = 'Search failed. Please try again.';
         }

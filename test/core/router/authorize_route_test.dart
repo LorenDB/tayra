@@ -7,16 +7,16 @@ void main() {
     return GoRouter(
       initialLocation: '/splash',
       routes: [
-        GoRoute(path: '/splash', builder: (_, __) => const Text('splash')),
-        GoRoute(path: '/login', builder: (_, __) => const Text('login')),
+        GoRoute(path: '/splash', builder: (_, _) => const Text('splash')),
+        GoRoute(path: '/login', builder: (_, _) => const Text('login')),
         GoRoute(
           path: '/authorize',
           builder: (_, state) =>
               Text('auth:${state.uri.queryParameters['client_id']}'),
         ),
         ShellRoute(
-          builder: (_, __, child) => child,
-          routes: [GoRoute(path: '/', builder: (_, __) => const Text('home'))],
+          builder: (_, _, child) => child,
+          routes: [GoRoute(path: '/', builder: (_, _) => const Text('home'))],
         ),
       ],
     );

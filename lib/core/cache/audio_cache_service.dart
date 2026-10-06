@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
+import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
@@ -229,8 +231,10 @@ class AudioCacheService {
       if (await file.exists()) return file;
       _coverPathMemory.remove(coverUrl);
     }
-    final key = coverCacheKey(coverUrl);
-    final file = await _cache.getFile(key);
+    final file =
+        await _cache.getFile(coverCacheKey(coverUrl)) ??
+        // Covers cached before keys became content hashes.
+        await _cache.getFile(legacyCoverCacheKey(coverUrl));
     _coverPathMemory[coverUrl] = file?.path;
     return file;
   }
@@ -323,6 +327,7 @@ class AudioCacheService {
     _coverPathMemory.remove(coverUrl);
     _coverFutures.remove(coverUrl);
     await _cache.deleteFile(coverCacheKey(coverUrl));
+    await _cache.deleteFile(legacyCoverCacheKey(coverUrl));
   }
 
   /// Derive a file extension for an audio track's temp download file.
@@ -362,10 +367,26 @@ class AudioCacheService {
   /// may include query parameters to request resized variants.  Use the
   /// full path _and_ query string when present so different thumbnail
   /// sizes get separate cache keys instead of colliding.
+  ///
+  /// The key is a SHA-1 of that string. [String.hashCode] is only 30 bits
+  /// wide in the VM (so a few thousand covers already risk two URLs sharing
+  /// a file) and is not guaranteed to stay the same across Dart releases.
   String coverCacheKey(String url) {
+    final digest = sha1.convert(utf8.encode(_coverKeySource(url)));
+    return 'cover_$digest';
+  }
+
+  /// Key format used before [coverCacheKey] became a content hash. Only read
+  /// (and deleted), never written, so covers cached by earlier versions keep
+  /// working offline.
+  @visibleForTesting
+  String legacyCoverCacheKey(String url) {
+    return 'cover_${_coverKeySource(url).hashCode.toRadixString(16)}';
+  }
+
+  String _coverKeySource(String url) {
     final uri = Uri.parse(url);
-    final pathAndQuery = uri.path + (uri.hasQuery ? '?${uri.query}' : '');
-    return 'cover_${pathAndQuery.hashCode.toRadixString(16)}';
+    return uri.path + (uri.hasQuery ? '?${uri.query}' : '');
   }
 
   /// Pre-cache tracks from an album (background operation)

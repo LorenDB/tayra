@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/http_client_factory.dart';
@@ -22,23 +23,35 @@ class AuthInterceptor extends Interceptor {
   /// Long-lived Dio for retrying requests after a token refresh. Kept as a
   /// field (rather than constructed per 401) so its connection pool — and
   /// the DNS/TCP/TLS work behind it — is reused across retries.
-  final Dio _retryDio = createDio(
-    BaseOptions(
-      connectTimeout: const Duration(seconds: 15),
-      receiveTimeout: const Duration(seconds: 30),
-    ),
-  );
+  final Dio _retryDio;
 
-  AuthInterceptor(this._ref);
+  AuthInterceptor(this._ref, {Dio? retryDio})
+    : _retryDio =
+          retryDio ??
+          createDio(
+            BaseOptions(
+              connectTimeout: const Duration(seconds: 15),
+              receiveTimeout: const Duration(seconds: 30),
+            ),
+          );
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+  void onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     // Public share resolve and similar must not send Bearer tokens.
     if (options.extra['skip_auth'] == true) {
       options.headers.remove('Authorization');
       handler.next(options);
       return;
     }
+    // A token already known to be expired would only earn a 401 and a
+    // replay. Refresh it first; if that is not possible the request goes out
+    // as it is and the 401 path below decides what happens.
+    try {
+      await _ref.read(authStateProvider.notifier).ensureFreshAccessToken();
+    } catch (_) {}
     final authState = _ref.read(authStateProvider);
     if (authState.accessToken != null) {
       options.headers['Authorization'] = 'Bearer ${authState.accessToken}';
@@ -48,42 +61,67 @@ class AuthInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    if (err.requestOptions.extra['skip_auth'] == true) {
+    if (err.requestOptions.extra['skip_auth'] == true ||
+        err.response?.statusCode != 401) {
       handler.next(err);
       return;
     }
-    if (err.response?.statusCode == 401) {
-      final authNotifier = _ref.read(authStateProvider.notifier);
-      final success = await authNotifier.refreshToken();
-      if (success) {
-        final authState = _ref.read(authStateProvider);
-        err.requestOptions.headers['Authorization'] =
-            'Bearer ${authState.accessToken}';
-        try {
-          final opts = err.requestOptions;
-          // FormData streams can only be finalized once. Clone before retry so
-          // multipart uploads (attachments, audio) survive token refresh.
-          if (opts.data is FormData) {
-            opts.data = (opts.data as FormData).clone();
-          }
-          final response = await _retryDio.fetch(opts);
-          handler.resolve(response);
+
+    final currentToken = _ref.read(authStateProvider).accessToken;
+    // Not signed in (or signed out while the request was in flight): there
+    // is no session to refresh or to end.
+    if (currentToken == null) {
+      handler.next(err);
+      return;
+    }
+
+    final authNotifier = _ref.read(authStateProvider.notifier);
+    if (!wasSentWithToken(err.requestOptions, currentToken)) {
+      // Another request refreshed the token while this one was in flight.
+      // Replay with the token now in use; refreshing again would rotate
+      // (and revoke) a token other requests are relying on.
+    } else {
+      switch (await authNotifier.refreshAccessToken()) {
+        case TokenRefreshOutcome.refreshed:
+          break;
+        case TokenRefreshOutcome.rejected:
+          await authNotifier.logoutAutomatically();
+          handler.next(err);
           return;
-        } catch (e) {
-          // Surface the retry failure (not the original 401) so callers and
-          // analytics see the real error after a successful token rotation.
-          if (e is DioException) {
-            handler.next(e);
-          } else {
-            handler.next(err);
-          }
+        case TokenRefreshOutcome.unavailable:
+          // The token endpoint could not be reached. Fail this request, but
+          // keep the session: it is probably still valid.
+          handler.next(err);
           return;
-        }
-      } else {
-        await authNotifier.logoutAutomatically();
       }
     }
-    handler.next(err);
+
+    final accessToken = _ref.read(authStateProvider).accessToken;
+    if (accessToken == null) {
+      handler.next(err);
+      return;
+    }
+    final opts = err.requestOptions;
+    opts.headers['Authorization'] = 'Bearer $accessToken';
+    try {
+      // FormData streams can only be finalized once. Clone before retry so
+      // multipart uploads (attachments, audio) survive token refresh.
+      if (opts.data is FormData) {
+        opts.data = (opts.data as FormData).clone();
+      }
+      final response = await _retryDio.fetch(opts);
+      handler.resolve(response);
+    } catch (e) {
+      // Surface the retry failure (not the original 401) so callers and
+      // analytics see the real error after a successful token rotation.
+      handler.next(e is DioException ? e : err);
+    }
+  }
+
+  /// Whether [options] went out carrying [accessToken] as its Bearer token.
+  @visibleForTesting
+  static bool wasSentWithToken(RequestOptions options, String accessToken) {
+    return options.headers['Authorization'] == 'Bearer $accessToken';
   }
 }
 

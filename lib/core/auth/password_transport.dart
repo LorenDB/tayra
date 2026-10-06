@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
+import 'package:flutter/foundation.dart';
 
 /// Client-side password transport for first-party login (H2).
 ///
@@ -223,6 +224,21 @@ String computeClientProof({
     iterations: iterations,
     length: _keyLen,
   );
+  return _proofFromSaltedSecret(
+    salted,
+    username: username,
+    clientNonce: clientNonce,
+    serverNonce: serverNonce,
+  );
+}
+
+/// The cheap tail of [computeClientProof], after the PBKDF2 pass.
+String _proofFromSaltedSecret(
+  List<int> salted, {
+  required String username,
+  required String clientNonce,
+  required String serverNonce,
+}) {
   final clientKey = _hmacSha256(salted, utf8.encode(_clientKeyLabel));
   final storedKey = sha256.convert(clientKey).bytes;
   final authMsg = utf8.encode(
@@ -234,6 +250,131 @@ String computeClientProof({
     (i) => clientKey[i] ^ clientSignature[i],
   );
   return _toHex(clientProof);
+}
+
+// ── Proof derivation off the UI thread ──────────────────────────────────
+
+/// Everything needed to derive a login / password-confirmation proof. Plain
+/// data, so it can be handed to a background isolate.
+class ClientProofRequest {
+  final String password;
+  final List<int> instanceBinding;
+
+  /// PBKDF2 iterations for the instance-bound transport secret.
+  final int transportIterations;
+
+  final List<int> salt;
+
+  /// PBKDF2 iterations for the salted proof key.
+  final int iterations;
+
+  final String username;
+  final String clientNonce;
+  final String serverNonce;
+
+  const ClientProofRequest({
+    required this.password,
+    required this.instanceBinding,
+    required this.transportIterations,
+    required this.salt,
+    required this.iterations,
+    required this.username,
+    required this.clientNonce,
+    required this.serverNonce,
+  });
+}
+
+/// Derive the SCRAM-like client proof for [request] without freezing the UI.
+///
+/// The proof takes two PBKDF2 passes of a few hundred thousand iterations
+/// each, which is seconds of CPU in pure Dart: long enough on the UI isolate
+/// to stall the login spinner and, on a slow phone, to trip Android's
+/// "not responding" watchdog. On native the work runs in a background
+/// isolate. The web has no isolates, so there the derivation hands control
+/// back to the event loop at intervals, which keeps the page painting.
+///
+/// Same result as [transportSecret] followed by [computeClientProof].
+Future<String> deriveClientProof(ClientProofRequest request) {
+  if (kIsWeb) return deriveClientProofYielding(request);
+  return compute(_deriveClientProofSync, request);
+}
+
+String _deriveClientProofSync(ClientProofRequest request) {
+  final secret = transportSecret(
+    request.password,
+    request.instanceBinding,
+    iterations: request.transportIterations,
+  );
+  return computeClientProof(
+    secret: secret,
+    salt: request.salt,
+    iterations: request.iterations,
+    username: request.username,
+    clientNonce: request.clientNonce,
+    serverNonce: request.serverNonce,
+  );
+}
+
+/// [deriveClientProof] on the calling isolate, yielding between chunks of
+/// PBKDF2 work. Exposed for tests; use [deriveClientProof].
+@visibleForTesting
+Future<String> deriveClientProofYielding(ClientProofRequest request) async {
+  final secret = await pbkdf2HmacSha256Yielding(
+    password: utf8.encode(request.password),
+    salt: <int>[...utf8.encode(_domainV2), ...request.instanceBinding],
+    iterations: request.transportIterations,
+  );
+  final salted = await pbkdf2HmacSha256Yielding(
+    password: secret,
+    salt: request.salt,
+    iterations: request.iterations,
+  );
+  return _proofFromSaltedSecret(
+    salted,
+    username: request.username,
+    clientNonce: request.clientNonce,
+    serverNonce: request.serverNonce,
+  );
+}
+
+/// [pbkdf2HmacSha256] that returns to the event loop every [yieldEvery]
+/// iterations. Same output; for platforms where the work cannot be moved to
+/// another isolate.
+@visibleForTesting
+Future<Uint8List> pbkdf2HmacSha256Yielding({
+  required List<int> password,
+  required List<int> salt,
+  required int iterations,
+  int length = _keyLen,
+  int yieldEvery = 1024,
+}) async {
+  final hmac = Hmac(sha256, password);
+  final blockCount = (length + 31) ~/ 32;
+  final out = BytesBuilder(copy: false);
+
+  for (var block = 1; block <= blockCount; block++) {
+    final blockSalt = BytesBuilder(copy: false)
+      ..add(salt)
+      ..add([
+        (block >> 24) & 0xff,
+        (block >> 16) & 0xff,
+        (block >> 8) & 0xff,
+        block & 0xff,
+      ]);
+    var u = hmac.convert(blockSalt.toBytes()).bytes;
+    final t = List<int>.from(u);
+    for (var i = 1; i < iterations; i++) {
+      u = hmac.convert(u).bytes;
+      for (var j = 0; j < t.length; j++) {
+        t[j] ^= u[j];
+      }
+      if (i % yieldEvery == 0) {
+        await Future<void>.delayed(Duration.zero);
+      }
+    }
+    out.add(t);
+  }
+  return Uint8List.fromList(out.toBytes().sublist(0, length));
 }
 
 /// Cryptographically random client nonce for SCRAM login.

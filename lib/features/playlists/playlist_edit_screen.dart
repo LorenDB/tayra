@@ -152,18 +152,20 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
       Analytics.track('playlist_track_removed');
       ref.invalidate(playlistsProvider);
     } catch (e) {
-      _tracks.insert(index, removed);
+      if (!mounted) return;
+      // Put it back where it was (the list may have changed size meanwhile).
+      _tracks.insert(index.clamp(0, _tracks.length), removed);
       setState(() {});
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Failed to remove track')));
-      }
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Failed to remove track')));
     }
   }
 
-  /// Reorder callback for [ReorderableListView.onReorder] — [newIndex]
-  /// is already adjusted for the removed item at [oldIndex].
+  /// Reorder callback for [ReorderableListView.onReorderItem] — [newIndex]
+  /// is already adjusted for the removed item at [oldIndex]. (The older
+  /// `onReorder` passes the unadjusted index: wired to that, dragging a track
+  /// down landed it one row too far, and dropping it at the end threw.)
   Future<void> _reorderTrack(int oldIndex, int newIndex) async {
     if (oldIndex == newIndex) return;
 
@@ -177,14 +179,16 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
       Analytics.track('playlist_track_reordered');
     } catch (e) {
       if (!mounted) return;
-      _tracks.removeAt(newIndex);
-      _tracks.insert(oldIndex, moved);
-      setState(() {});
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to reorder track')),
-        );
+      // Undo by identity: other edits may have shifted the indices since.
+      final at = _tracks.indexOf(moved);
+      if (at >= 0) {
+        _tracks.removeAt(at);
+        _tracks.insert(oldIndex.clamp(0, _tracks.length), moved);
       }
+      setState(() {});
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Failed to reorder track')));
     }
   }
 
@@ -525,7 +529,7 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
           onRemove: () => _removeTrack(index),
         );
       },
-      onReorder: _reorderTrack,
+      onReorderItem: _reorderTrack,
     );
   }
 }

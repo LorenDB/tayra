@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:tayra/core/router/app_router.dart';
@@ -22,6 +23,7 @@ import 'package:tayra/core/platform/app_platform.dart';
 import 'package:tayra/features/favorites/favorites_provider.dart';
 import 'package:tayra/features/player/playback_errors.dart';
 import 'package:tayra/features/player/playback_listen_tracker.dart';
+import 'package:tayra/features/player/playback_recovery.dart';
 import 'package:tayra/features/player/queue_persistence_service.dart';
 import 'package:tayra/features/podcasts/podcast_progress_service.dart';
 import 'package:tayra/core/cache/cache_database.dart';
@@ -272,8 +274,19 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
   /// this to prevent spurious interruption events from auto-resuming.
   void Function()? onUserPaused;
 
+  /// Callback invoked when playback is requested from outside the app UI
+  /// (notification, lock screen, headset button, MPRIS). The PlayerNotifier
+  /// sets this so those requests get the same recovery as the in-app button:
+  /// a restored or finished queue is loaded first, and a stale or failed
+  /// source is reloaded instead of resumed.
+  Future<void> Function()? onPlayRequested;
+
   @override
-  Future<void> play() => _player.play();
+  Future<void> play() {
+    final requestPlay = onPlayRequested;
+    if (requestPlay != null) return requestPlay();
+    return _player.play();
+  }
 
   @override
   Future<void> pause() {
@@ -283,8 +296,20 @@ class FunkwhaleAudioHandler extends BaseAudioHandler
 
   @override
   Future<void> stop() async {
+    // An explicit stop counts as a pause for auto-resume decisions.
+    onUserPaused?.call();
     await _player.stop();
-    return super.stop();
+    // Not super.stop(): it adds an idle state to [playbackState] directly,
+    // and a subject that has a stream piped into it (see the constructor)
+    // rejects that with a StateError. Stopping the player already sends an
+    // idle event down the pipe, which is what turns the notification off;
+    // wait for it to arrive.
+    await playbackState
+        .firstWhere((s) => s.processingState == AudioProcessingState.idle)
+        .timeout(
+          const Duration(seconds: 2),
+          onTimeout: () => playbackState.value,
+        );
   }
 
   @override
@@ -851,10 +876,14 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// loaded via [AudioPlayer.setAudioSources].
   bool _gaplessActive = false;
 
-  /// Watchdog timer that fires if the player stays in loading/buffering for
-  /// too long without transitioning to ready.  Restarted on every buffering
-  /// event; cancelled when the player reaches a non-buffering state.
-  Timer? _bufferingWatchdog;
+  /// Fires once when the current attempt's deadline is reached.
+  /// Rescheduled from the attempt's original start, never extended by
+  /// another buffering signal for the same epoch.
+  Timer? _attemptDeadlineTimer;
+
+  /// Foreground idle check. Desktop playback can go stale without a
+  /// lifecycle pause, so this does not wait for [onAppResumed].
+  Timer? _idleCheckTimer;
 
   /// Shorter timer used for quality step-down on sustained buffering.
   Timer? _qualityFallbackWatchdog;
@@ -884,10 +913,6 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
   late final PodcastProgressService _podcastProgress;
 
-  /// Timestamp recorded when the app enters the background (paused lifecycle
-  /// state). Used by [onAppResumed] to detect stale audio sources.
-  DateTime? _appPausedAt;
-
   /// Whether playback was active when an audio interruption (e.g. phone call)
   /// began. Used to decide whether to auto-resume when the interruption ends.
   bool _wasPlayingBeforeInterruption = false;
@@ -912,6 +937,45 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// without restarting the app.
   bool _needsReload = false;
 
+  /// Deadline for the load that is allowed to raise the spinner.
+  PlaybackAttempt? _attempt;
+
+  /// Load epoch whose audio source has been installed. Ready/error events
+  /// from an older source must not end the attempt that is still resolving.
+  int? _sourceCommittedEpoch;
+
+  /// After an attempt is abandoned, late buffering from that source must
+  /// not raise the spinner again. Cleared by the next [_beginLoad].
+  bool _suppressLoadingSignals = false;
+
+  /// True once [_handler] has been assigned. The state setter runs for
+  /// test doubles that never construct a platform player.
+  bool _handlerBound = false;
+
+  /// Last time playback made progress, or the time playback was paused.
+  DateTime? _lastProgressAt;
+
+  /// Last time the reported position moved forward.
+  DateTime? _lastAdvanceAt;
+
+  /// Previous position sample used to detect forward progress.
+  Duration? _lastObservedPosition;
+
+  /// Current source is a local file, so recovery must not push it onto
+  /// the network.
+  bool _playingFromLocalCache = false;
+
+  /// The user asked for audio (play, skip, or a queue start) and a later
+  /// connectivity return may retry once unless they paused.
+  bool _userIntendedPlay = false;
+
+  /// The single automatic connectivity retry for the current user play
+  /// has been consumed.
+  bool _connectivityRetryConsumed = false;
+
+  /// Previous normalized network snapshot. Identical follow-ups are no-ops.
+  PlaybackNetworkSnapshot? _lastNetwork;
+
   /// Last position (in whole seconds) at which the queue was saved.
   /// Prevents multiple saves within the same 2-second window.
   int _lastSavedPositionSeconds = -1;
@@ -924,24 +988,423 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// superseded request cannot apply state or start the wrong track.
   int _loadEpoch = 0;
 
-  /// Serializes gapless playlist mutations (add/insert) so concurrent
-  /// futures cannot reorder sources relative to [PlayerState.queue].
+  /// Serializes gapless playlist edits (tail append, add, insert, remove,
+  /// move) so the player's playlist replays the same changes, in the same
+  /// order, as [PlayerState.queue].
   Future<void> _gaplessMutationChain = Future<void>.value();
+
+  /// Identifies the multi-source playlist the player currently holds (or is
+  /// building). Bumped whenever that playlist is replaced or dropped, so an
+  /// edit queued for an older playlist is discarded instead of being applied
+  /// to its replacement. Unlike [_loadEpoch] this does not change on a skip
+  /// within the same playlist.
+  int _gaplessGeneration = 0;
+
+  /// Generation whose initial sources are still being installed. Queue edits
+  /// made meanwhile are queued behind that install rather than lost.
+  int? _gaplessBuildGeneration;
 
   /// Guards against re-entrant [ProcessingState.completed] handling.
   bool _handlingCompletion = false;
 
-  int _beginLoad() => ++_loadEpoch;
+  int _beginLoad({PlaybackAttemptKind kind = PlaybackAttemptKind.play}) {
+    final epoch = ++_loadEpoch;
+    _suppressLoadingSignals = false;
+    _sourceCommittedEpoch = null;
+    if (kind == PlaybackAttemptKind.play) {
+      _userIntendedPlay = true;
+      _connectivityRetryConsumed = false;
+    }
+    // A new attempt restarts the idle clock so a reload cannot chain
+    // another idle reload on the next timer tick.
+    _lastProgressAt = DateTime.now();
+    _lastAdvanceAt = null;
+    _attempt = anchorAttemptDeadline(
+      current: null,
+      epoch: epoch,
+      now: _lastProgressAt!,
+      kind: kind,
+    );
+    _scheduleAttemptDeadline();
+    return epoch;
+  }
 
-  bool _isCurrentLoad(int epoch) => epoch == _loadEpoch;
+  bool _isCurrentLoad(int epoch) =>
+      mayApplyLoadResult(completionEpoch: epoch, currentEpoch: _loadEpoch);
 
-  void _enqueueGaplessMutation(Future<void> Function() op) {
-    _gaplessMutationChain = _gaplessMutationChain.then((_) => op()).catchError((
-      Object e,
-      StackTrace st,
-    ) {
-      debugPrint('PlayerNotifier: gapless mutation failed: $e\n$st');
+  /// Another loading/buffering signal for the current epoch. The deadline
+  /// stays where [anchorAttemptDeadline] put it unless [loadingSignalStartsNewAttempt]
+  /// says this signal is a new attempt.
+  void _noteLoadingSignal() {
+    if (_suppressLoadingSignals) return;
+    final now = DateTime.now();
+    final startNew = loadingSignalStartsNewAttempt(
+      current: _attempt,
+      epoch: _loadEpoch,
+      now: now,
+      isLoading: state.isLoading,
+    );
+    final anchored = anchorAttemptDeadline(
+      current: startNew ? null : _attempt,
+      epoch: _loadEpoch,
+      now: now,
+      kind:
+          startNew
+              ? PlaybackAttemptKind.play
+              : (_attempt?.kind ?? PlaybackAttemptKind.play),
+    );
+    final startedNewAttempt = !identical(anchored, _attempt);
+    _attempt = anchored;
+    if (startedNewAttempt || _attemptDeadlineTimer == null) {
+      _scheduleAttemptDeadline();
+    }
+  }
+
+  void _scheduleAttemptDeadline() {
+    _attemptDeadlineTimer?.cancel();
+    final attempt = _attempt;
+    if (attempt == null || _suppressLoadingSignals) {
+      _attemptDeadlineTimer = null;
+      return;
+    }
+    final now = DateTime.now();
+    final remaining = attempt.deadlineAt.difference(now);
+    if (remaining <= Duration.zero) {
+      _attemptDeadlineTimer = null;
+      _onAttemptDeadline();
+      return;
+    }
+    _attemptDeadlineTimer = Timer(remaining, _onAttemptDeadline);
+  }
+
+  void _onAttemptDeadline() {
+    final now = DateTime.now();
+    // A load that has already been idle past the stale threshold (the
+    // deadline timer was frozen while the process was suspended) is reloaded
+    // rather than left paused on the dead pipeline.
+    if (!_autoResumeBlocked &&
+        decideStaleIdle(_progressSnapshot(now)) ==
+            PlaybackIdleAction.reloadNow) {
+      unawaited(_reloadFromLastPosition(kind: PlaybackAttemptKind.play));
+      return;
+    }
+    final outcome = stallOutcomeIfExpired(
+      attempt: _attempt,
+      isLoading: state.isLoading,
+      now: now,
+    );
+    if (outcome == null) {
+      // Timer fired slightly early. Arm whatever budget is left.
+      if (_attempt != null && state.isLoading) {
+        final retryIn = _attempt!.deadlineAt.difference(DateTime.now());
+        if (retryIn > Duration.zero) {
+          _attemptDeadlineTimer = Timer(retryIn, _onAttemptDeadline);
+        }
+      }
+      return;
+    }
+    _applyStallOutcome(outcome, notifyUser: true);
+  }
+
+  void _applyStallOutcome(
+    PlaybackStallOutcome outcome, {
+    required bool notifyUser,
+    String? message,
+  }) {
+    if (!shouldApplyStallOutcome(outcome: outcome, currentEpoch: _loadEpoch)) {
+      return;
+    }
+    _loadEpoch++;
+    _suppressLoadingSignals = true;
+    _attempt = null;
+    _attemptDeadlineTimer?.cancel();
+    _attemptDeadlineTimer = null;
+    _qualityFallbackWatchdog?.cancel();
+    _qualityFallbackWatchdog = null;
+    if (outcome.markStaleForReload) _needsReload = true;
+    _retireGaplessPlaylist();
+    if (outcome.pause) {
+      _handler.audioPlayer.pause().catchError((_) {});
+    }
+    if (outcome.clearSpinner || outcome.pause) {
+      state = state.copyWith(
+        isLoading: outcome.clearSpinner ? false : state.isLoading,
+        isPlaying: outcome.pause ? false : state.isPlaying,
+      );
+    }
+    if (notifyUser) {
+      final title = state.currentTrack?.title ?? 'track';
+      _showPlayerSnack(
+        message ?? 'Unable to load "$title". Tap play to retry.',
+      );
+    }
+  }
+
+  /// Drop the spinner and leave the source so the next play reloads it.
+  ///
+  /// The user gave up on this attempt, so it is treated like a pause: a
+  /// later connectivity change must not start it again on its own.
+  void cancelOrRetryLoad() {
+    if (!state.isLoading && _attempt == null) return;
+    _userPaused = true;
+    _markPausedProgress(DateTime.now());
+    _applyStallOutcome(
+      abandonPlaybackAttempt(epoch: _loadEpoch),
+      notifyUser: false,
+    );
+  }
+
+  void _finishAttemptSuccessfully() {
+    _attempt = null;
+    _attemptDeadlineTimer?.cancel();
+    _attemptDeadlineTimer = null;
+    _qualityFallbackWatchdog?.cancel();
+    _qualityFallbackWatchdog = null;
+  }
+
+  /// The source for [epoch] is now the one the platform player will report on.
+  /// If that source is already ready, the attempt's deadline ends here.
+  void _markSourceCommitted(int epoch) {
+    if (!_isCurrentLoad(epoch)) return;
+    _sourceCommittedEpoch = epoch;
+    final ps = _handler.audioPlayer.processingState;
+    if (ps == ProcessingState.ready || ps == ProcessingState.completed) {
+      _finishAttemptSuccessfully();
+      if (state.isLoading) {
+        state = state.copyWith(isLoading: false);
+      }
+    }
+  }
+
+  /// Close an attempt that kept the playlist already loaded (gapless seek) or
+  /// gave up without installing a replacement.
+  ///
+  /// [ignoreFurtherSignals] drops late platform events until the next attempt.
+  /// Used when the load failed and the next play must reload.
+  void _settleRetainedSource({
+    required int epoch,
+    required bool seekSucceeded,
+    bool ignoreFurtherSignals = false,
+  }) {
+    if (!_isCurrentLoad(epoch)) return;
+    final ps = _handler.audioPlayer.processingState;
+    final settlement = settleRetainedSourceAttempt(
+      seekSucceeded: seekSucceeded,
+      sourceReady:
+          ps == ProcessingState.ready || ps == ProcessingState.completed,
+    );
+    if (settlement.acceptPlatformEvents) {
+      _sourceCommittedEpoch = epoch;
+    }
+    if (settlement.finishAttempt) {
+      _finishAttemptSuccessfully();
+    }
+    if (ignoreFurtherSignals) {
+      _suppressLoadingSignals = true;
+    }
+    if (settlement.clearSpinner && state.isLoading) {
+      state = state.copyWith(isLoading: false);
+    }
+  }
+
+  bool get _currentSourceCommitted => _sourceCommittedEpoch == _loadEpoch;
+
+  /// Audio must not be started on the app's own initiative: the user paused
+  /// or stopped, or something else (a call, another app) holds audio focus.
+  bool get _autoResumeBlocked => _userPaused || _interrupted;
+
+  bool _positionIsAdvancing(DateTime now) {
+    final advancedAt = _lastAdvanceAt;
+    if (advancedAt == null) return false;
+    return now.difference(advancedAt) <= const Duration(seconds: 5);
+  }
+
+  void _observePlaybackProgress(Duration position, DateTime now) {
+    final previous = _lastObservedPosition;
+    _lastObservedPosition = position;
+    if (previous != null &&
+        position > previous + const Duration(milliseconds: 400)) {
+      _lastProgressAt = now;
+      _lastAdvanceAt = now;
+      return;
+    }
+    _lastProgressAt ??= now;
+  }
+
+  void _markPausedProgress(DateTime now) {
+    _lastAdvanceAt = null;
+    _lastProgressAt = now;
+  }
+
+  PlaybackProgressSnapshot _progressSnapshot(DateTime now) {
+    return PlaybackProgressSnapshot(
+      now: now,
+      lastProgressAt: _lastProgressAt,
+      positionAdvancing: _positionIsAdvancing(now),
+      playingFromLocalCache: _playingFromLocalCache,
+      networkBacked: !_playingFromLocalCache && state.currentTrack != null,
+      attemptStuckLoading: state.isLoading,
+      lifecycleWasPaused: false,
+    );
+  }
+
+  Future<void> _applyIdleDecision(DateTime now) async {
+    final action = decideStaleIdle(_progressSnapshot(now));
+    if (action == PlaybackIdleAction.none) return;
+    if (action == PlaybackIdleAction.reloadNow && !_autoResumeBlocked) {
+      await _reloadFromLastPosition(kind: PlaybackAttemptKind.play);
+      return;
+    }
+    _needsReload = true;
+    if (action == PlaybackIdleAction.reloadNow && state.isLoading) {
+      _applyStallOutcome(
+        abandonPlaybackAttempt(epoch: _loadEpoch),
+        notifyUser: false,
+      );
+    }
+  }
+
+  Duration _resumePosition() {
+    final reported = _handler.audioPlayer.position;
+    if (reported > state.position) return reported;
+    return state.position;
+  }
+
+  Future<void> _reloadFromLastPosition({
+    required PlaybackAttemptKind kind,
+  }) async {
+    final track = state.currentTrack;
+    if (track == null) {
+      _needsReload = true;
+      return;
+    }
+    // A restored queue has no source yet: the player reports zero, and the
+    // resume point is the pending one.
+    final pending = _pendingRestorePosition;
+    final position = pending ?? _resumePosition();
+    final epoch = _beginLoad(kind: kind);
+    state = state.copyWith(isLoading: true);
+    final loaded = await _loadAndPlay(
+      track,
+      initialPosition: position,
+      epoch: epoch,
+    );
+    if (pending == null || !loaded || !_isCurrentLoad(epoch)) return;
+    // Same hand-over as play(): only stop ignoring position events once the
+    // player reports the resume point, so a stale zero cannot replace it.
+    await _handler.audioPlayer.positionStream
+        .firstWhere((p) => p >= position)
+        .timeout(const Duration(seconds: 5), onTimeout: () => position);
+    if (!_isCurrentLoad(epoch)) return;
+    if (_pendingRestorePosition == pending) _pendingRestorePosition = null;
+  }
+
+  bool _isLocalAudioSource(AudioSource source) {
+    if (source is UriAudioSource) {
+      final scheme = source.uri.scheme;
+      return scheme == 'file' || scheme == 'content';
+    }
+    return false;
+  }
+
+  /// Items of a gapless playlist can mix cached files and streams, so the
+  /// "playing from a local file" fact has to follow the current item.
+  void _syncLocalSourceFlag(int index) {
+    final sources = _handler.audioPlayer.audioSources;
+    if (index < 0 || index >= sources.length) return;
+    _playingFromLocalCache = _isLocalAudioSource(sources[index]);
+  }
+
+  PlaybackTransportPhase _transportPhase(DateTime now) {
+    if (state.isLoading || (_attempt != null && !_suppressLoadingSignals)) {
+      return PlaybackTransportPhase.attempting;
+    }
+    if (state.isPlaying && _positionIsAdvancing(now)) {
+      return PlaybackTransportPhase.playing;
+    }
+    return PlaybackTransportPhase.idle;
+  }
+
+  void _handleConnectivity(List<ConnectivityResult> results) {
+    final now = DateTime.now();
+    final current = PlaybackNetworkSnapshot.fromResults(results);
+    final action = decidePlaybackConnectivity(
+      PlaybackConnectivityContext(
+        previous: _lastNetwork,
+        current: current,
+        phase: _transportPhase(now),
+        userIntendedPlay: _userIntendedPlay,
+        userPaused: _autoResumeBlocked,
+        positionAdvancing: _positionIsAdvancing(now),
+        playingFromLocalCache: _playingFromLocalCache,
+        connectivityRetryConsumed: _connectivityRetryConsumed,
+      ),
+    );
+    _lastNetwork = current;
+    switch (action) {
+      case PlaybackConnectivityAction.none:
+        return;
+      case PlaybackConnectivityAction.abandonAttempt:
+        _applyStallOutcome(
+          abandonPlaybackAttempt(epoch: _loadEpoch),
+          notifyUser: false,
+        );
+        return;
+      case PlaybackConnectivityAction.retryOnce:
+        _connectivityRetryConsumed = true;
+        unawaited(
+          _reloadFromLastPosition(kind: PlaybackAttemptKind.connectivityRetry),
+        );
+        return;
+    }
+  }
+
+  /// Whether queue edits must be mirrored into the player's playlist: one is
+  /// loaded, or one is being installed and will pick the edits up afterwards.
+  bool get _mirrorsGaplessPlaylist =>
+      _gaplessActive || _gaplessBuildGeneration == _gaplessGeneration;
+
+  /// The player is leaving multi-source mode. Edits still queued for the old
+  /// playlist, and a build still in flight, must not touch what replaces it.
+  void _retireGaplessPlaylist() {
+    _gaplessActive = false;
+    _gaplessGeneration++;
+  }
+
+  void _chainGaplessWork(Future<void> Function() work) {
+    _gaplessMutationChain = _gaplessMutationChain
+        .then((_) => work())
+        .catchError((Object e, StackTrace st) {
+          debugPrint('PlayerNotifier: gapless mutation failed: $e\n$st');
+        });
+  }
+
+  /// Queue an edit of the player's gapless playlist. Edits run one at a time
+  /// in the order the queue changed. [op] receives a check that turns false
+  /// once the playlist it was queued for has been replaced or dropped; a
+  /// replacement is always built from the live queue, so the edit is already
+  /// part of it.
+  void _enqueueGaplessMutation(
+    Future<void> Function(bool Function() isCurrent) op,
+  ) {
+    final generation = _gaplessGeneration;
+    bool isCurrent() => generation == _gaplessGeneration && _gaplessActive;
+    _chainGaplessWork(() async {
+      if (!isCurrent()) return;
+      await op(isCurrent);
     });
+  }
+
+  /// Seek the loaded gapless playlist to [index]. Throws when the player's
+  /// playlist does not hold that item, so callers can rebuild it from the
+  /// queue. [AudioPlayer.seekToNext] is not used for skips: under
+  /// [LoopMode.one] it resolves to the current item.
+  Future<void> _seekGaplessTo(int index) async {
+    final loaded = _handler.audioPlayer.audioSources.length;
+    if (index < 0 || index >= loaded) {
+      throw RangeError.range(index, 0, loaded - 1, 'index');
+    }
+    await _handler.audioPlayer.seek(Duration.zero, index: index);
   }
 
   void _showPlayerSnack(String message) {
@@ -953,6 +1416,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
   @override
   PlayerState build() {
     _handler = ref.read(audioHandlerProvider);
+    _handlerBound = true;
     _audioCache = ref.read(audioCacheServiceProvider);
     _podcastProgress = PodcastProgressService(CacheDatabase.instance);
     _listenTracker = PlaybackListenTracker(
@@ -989,15 +1453,39 @@ class PlayerNotifier extends Notifier<PlayerState> {
     _init();
     Future.microtask(() => _restoreQueue());
     Future.microtask(() => _loadPlaybackSpeed());
+    _idleCheckTimer?.cancel();
+    _idleCheckTimer = Timer.periodic(const Duration(seconds: 15), (_) {
+      unawaited(_applyIdleDecision(DateTime.now()));
+    });
+    ref.read(connectivityResultProvider).whenData((results) {
+      _lastNetwork = PlaybackNetworkSnapshot.fromResults(results);
+    });
+    ref.listen(connectivityResultProvider, (previous, next) {
+      next.whenData(_handleConnectivity);
+    });
+    ref.listen(authStateProvider.select((s) => s.isAuthenticated), (
+      previous,
+      next,
+    ) {
+      if (previous == true && !next) {
+        unawaited(_handleSignedOut());
+      } else if (previous == false && next) {
+        _handleSignedIn();
+      }
+    });
     ref.onDispose(() {
       unawaited(
-        _listenTracker.dispose(position: _handler.audioPlayer.position),
+        _listenTracker
+            .dispose(position: _handler.audioPlayer.position)
+            .catchError((_) {}),
       );
       for (final sub in _subscriptions) {
         sub.cancel();
       }
-      _bufferingWatchdog?.cancel();
-      _bufferingWatchdog = null;
+      _attemptDeadlineTimer?.cancel();
+      _attemptDeadlineTimer = null;
+      _idleCheckTimer?.cancel();
+      _idleCheckTimer = null;
       _qualityFallbackWatchdog?.cancel();
       _qualityFallbackWatchdog = null;
       _radioFetchTimer?.cancel();
@@ -1011,6 +1499,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
   @override
   set state(PlayerState value) {
     super.state = value;
+    if (!_handlerBound) return;
     _handler.hasNext = value.hasNext;
     _handler.hasPrevious = value.hasPrevious;
   }
@@ -1063,10 +1552,15 @@ class PlayerNotifier extends Notifier<PlayerState> {
     // Wire up track completion.
     _handler.onTrackCompleted = _onTrackCompleted;
 
+    // Notification / headset / MPRIS play uses the same path as the in-app
+    // button so a restored queue or a broken source is (re)loaded first.
+    _handler.onPlayRequested = play;
+
     // Prevent spurious interruption events from auto-resuming after the user
     // explicitly pauses via external media controls (earbuds, notification).
     _handler.onUserPaused = () {
       _userPaused = true;
+      _markPausedProgress(DateTime.now());
     };
 
     // Listen to playback state.
@@ -1077,6 +1571,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
         // Guard against the playingStream overwriting isPlaying back to true
         // after _onTrackCompleted has set it to false.
         if (isPlaying && state.queueCompleted) {
+          return;
+        }
+        // An abandoned attempt's late play() must not show the spinner's
+        // successor as playing, or start audio the user already gave up on.
+        if (_suppressLoadingSignals && isPlaying) {
           return;
         }
         state = state.copyWith(isPlaying: isPlaying);
@@ -1111,17 +1610,20 @@ class PlayerNotifier extends Notifier<PlayerState> {
         if (_pendingRestorePosition != null) {
           return;
         }
-        // When the queue has ended (not playing, at index 0, position already
-        // reset) ignore any trailing position events from the completed player
-        // so they don't overwrite the reset back to Duration.zero.
+        // A finished source keeps reporting its end position. While playback
+        // is parked on one with the position already reset (radio waiting for
+        // its next track), keep the reset instead of jumping back to the end.
+        // Checking the processing state keeps this from swallowing a seek
+        // made while paused at the very start of a track.
         if (!state.isPlaying &&
-            state.currentIndex == 0 &&
             state.position == Duration.zero &&
-            position > Duration.zero) {
+            position > Duration.zero &&
+            _handler.audioPlayer.processingState == ProcessingState.completed) {
           return;
         }
 
         final now = DateTime.now();
+        _observePlaybackProgress(position, now);
         final shouldPublishUi =
             _lastPositionUiPublish == null ||
             now.difference(_lastPositionUiPublish!) >= _positionUiMinInterval ||
@@ -1179,85 +1681,82 @@ class PlayerNotifier extends Notifier<PlayerState> {
             'PlayerNotifier: processingState=$ps, playing=${playerState.playing}',
           );
 
-          final isLoading =
-              ps == ProcessingState.loading || ps == ProcessingState.buffering;
-          state = state.copyWith(isLoading: isLoading);
+          if (_suppressLoadingSignals) {
+            _qualityFallbackWatchdog?.cancel();
+            _qualityFallbackWatchdog = null;
+            if (state.isLoading) {
+              state = state.copyWith(isLoading: false);
+            }
+            return;
+          }
 
-          if (isLoading) {
+          final playerLoading =
+              ps == ProcessingState.loading || ps == ProcessingState.buffering;
+          if (playerLoading) {
             // Mid-track rebuffer (after first ready), not initial load.
             if (_trackHasBeenReady && _rebufferStartedAt == null) {
               _rebufferStartedAt = DateTime.now();
             }
+            // Same attempt: this does not move the deadline. A rebuffer
+            // after ready starts a new one because the previous attempt
+            // was cleared on the way to ready.
+            _noteLoadingSignal();
+            if (!state.isLoading) {
+              state = state.copyWith(isLoading: true);
+            }
 
-            // Start / reset the watchdog: if still loading after 30 s, skip.
-            _bufferingWatchdog?.cancel();
-            _bufferingWatchdog = Timer(const Duration(seconds: 30), () {
-              if (state.isLoading) {
-                debugPrint(
-                  'PlayerNotifier: track load timed out after 30 s '
-                  '(processingState=$ps). Attempting recovery.',
-                );
-                _handler.audioPlayer.pause().catchError((_) {});
-                state = state.copyWith(isLoading: false);
-                // Do NOT auto-skip when a track stays stuck in loading/buffering.
-                // Instead inform the user and pause playback so they can act.
-                final ctx = shellNavigatorKey.currentContext;
-                if (ctx != null) {
-                  final title = state.currentTrack?.title ?? 'track';
-                  ScaffoldMessenger.of(ctx).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Unable to load "$title". Tap play to retry.',
-                      ),
-                    ),
-                  );
-                } else {
-                  debugPrint(
-                    'PlayerNotifier: no navigation context to show SnackBar',
-                  );
-                }
-                // Ensure player is stopped and internal flags reflect paused state.
-                _gaplessActive = false;
-                // Source is likely stale; reload on next play().
-                _needsReload = true;
-                state = state.copyWith(isLoading: false, isPlaying: false);
-              }
-            });
-
-            // Quality fallback: after sustained buffering, step down one tier.
+            // Quality step-down keeps its own shorter timer. Starting a
+            // step-down bumps the load epoch, which anchors a new deadline
+            // instead of extending this one.
             _qualityFallbackWatchdog?.cancel();
             _qualityFallbackWatchdog = Timer(const Duration(seconds: 8), () {
-              if (state.isLoading) {
+              if (state.isLoading && !_suppressLoadingSignals) {
                 unawaited(_tryQualityFallback());
               }
             });
-          } else {
-            if (_rebufferStartedAt != null) {
-              final ms =
-                  DateTime.now().difference(_rebufferStartedAt!).inMilliseconds;
-              Analytics.track('playback_rebuffer', {
-                'ms_bucket': ttfaMsBucket(ms),
-                'quality': _activeStreamQuality.apiValue,
-                'platform': AppPlatform.isWeb ? 'web' : 'native',
-              });
-              _rebufferStartedAt = null;
+            return;
+          }
+
+          if (_rebufferStartedAt != null) {
+            final ms =
+                DateTime.now().difference(_rebufferStartedAt!).inMilliseconds;
+            Analytics.track('playback_rebuffer', {
+              'ms_bucket': ttfaMsBucket(ms),
+              'quality': _activeStreamQuality.apiValue,
+              'platform': AppPlatform.isWeb ? 'web' : 'native',
+            });
+            _rebufferStartedAt = null;
+          }
+          if (ps == ProcessingState.ready || ps == ProcessingState.completed) {
+            _trackHasBeenReady = true;
+            // Ready from the previous source must not cancel the deadline
+            // of an attempt that has not installed its source yet.
+            if (_currentSourceCommitted) {
+              _finishAttemptSuccessfully();
+              if (state.isLoading) {
+                state = state.copyWith(isLoading: false);
+              }
             }
-            if (ps == ProcessingState.ready ||
-                ps == ProcessingState.completed) {
-              _trackHasBeenReady = true;
-            }
-            _bufferingWatchdog?.cancel();
-            _bufferingWatchdog = null;
-            _qualityFallbackWatchdog?.cancel();
-            _qualityFallbackWatchdog = null;
+            return;
+          }
+
+          // Idle while we are still resolving a token or probing cache:
+          // keep the spinner and the attempt deadline.
+          if (_attempt != null && state.isLoading) return;
+          if (state.isLoading) {
+            state = state.copyWith(isLoading: false);
           }
         },
         onError: (Object e) {
           debugPrint('PlayerNotifier: playerStateStream error: $e');
-          _bufferingWatchdog?.cancel();
-          _bufferingWatchdog = null;
-          _qualityFallbackWatchdog?.cancel();
-          _qualityFallbackWatchdog = null;
+          if (_suppressLoadingSignals) {
+            if (state.isLoading) {
+              state = state.copyWith(isLoading: false);
+            }
+            return;
+          }
+          if (_attempt != null && !_currentSourceCommitted) return;
+          _finishAttemptSuccessfully();
           state = state.copyWith(isLoading: false);
         },
       ),
@@ -1269,31 +1768,25 @@ class PlayerNotifier extends Notifier<PlayerState> {
     _subscriptions.add(
       _handler.audioPlayer.errorStream.listen((error) {
         debugPrint('PlayerNotifier: audioPlayer error: $error');
-        _bufferingWatchdog?.cancel();
-        _bufferingWatchdog = null;
-        _qualityFallbackWatchdog?.cancel();
-        _qualityFallbackWatchdog = null;
+        // Abandoned and failed loads suppress late errors until the next
+        // attempt. An uncommitted attempt is still resolving its source, so
+        // an error from the previous source is not this attempt.
+        if (_suppressLoadingSignals) return;
+        if (_attempt != null && !_currentSourceCommitted) return;
         // Try one quality step-down before giving up to the user.
+        // The step-down is its own attempt and does not extend this deadline.
         if (ref.read(settingsProvider).autoQualityFallback &&
-            _activeStreamQuality.lowerTier != null) {
+            _activeStreamQuality.lowerTier != null &&
+            !_suppressLoadingSignals) {
           unawaited(_tryQualityFallback());
           return;
         }
-        _gaplessActive = false;
-        // Mark the source as broken so the next play() reloads it from the
-        // current position instead of no-op'ing on the stale source.
-        _needsReload = true;
-        _handler.audioPlayer.pause().catchError((_) {});
-        state = state.copyWith(isLoading: false, isPlaying: false);
-        final ctx = shellNavigatorKey.currentContext;
-        if (ctx != null && ctx.mounted) {
-          final title = state.currentTrack?.title ?? 'track';
-          ScaffoldMessenger.of(ctx).showSnackBar(
-            SnackBar(
-              content: Text('Unable to play "$title". Tap play to retry.'),
-            ),
-          );
-        }
+        final title = state.currentTrack?.title ?? 'track';
+        _applyStallOutcome(
+          abandonPlaybackAttempt(epoch: _loadEpoch),
+          notifyUser: true,
+          message: 'Unable to play "$title". Tap play to retry.',
+        );
       }),
     );
 
@@ -1311,6 +1804,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
             index >= 0 &&
             index < state.queue.length) {
           state = state.copyWith(currentIndex: index);
+          _syncLocalSourceFlag(index);
 
           final newTrack = state.currentTrack;
           if (newTrack != null) {
@@ -1425,11 +1919,23 @@ class PlayerNotifier extends Notifier<PlayerState> {
     });
   }
 
-  /// Restore the queue state from persistent storage on app launch.
+  /// Whether a queue restore is currently reading from storage.
+  bool _restoringQueue = false;
+
+  /// Restore the queue state from persistent storage (on app launch, and
+  /// after signing back in with nothing queued).
   Future<void> _restoreQueue() async {
+    if (_restoringQueue) return;
+    _restoringQueue = true;
+    final epochAtStart = _loadEpoch;
     try {
       final savedState = await QueuePersistenceService.restoreQueue();
       if (savedState == null || savedState.queue.isEmpty) return;
+
+      // Playback may already have been requested (Android Auto, a media
+      // button, a share link) while the saved queue was being read. Never
+      // replace a live queue with the stored one.
+      if (state.queue.isNotEmpty || _loadEpoch != epochAtStart) return;
 
       // Validate current index is within bounds
       final validIndex = savedState.currentIndex.clamp(
@@ -1442,11 +1948,22 @@ class PlayerNotifier extends Notifier<PlayerState> {
           validIndex >= 0 && validIndex < savedState.queue.length
               ? savedState.queue[validIndex]
               : null;
-      final trackDuration =
-          savedState.duration ??
-          (currentTrack?.duration != null
+      final metadataDuration =
+          currentTrack?.duration != null
               ? Duration(seconds: currentTrack!.duration!)
-              : null);
+              : null;
+      // A completed queue points back at its first track, while the saved
+      // duration can still be the last track's. Prefer the track's own.
+      final trackDuration =
+          savedState.isCompleted
+              ? (metadataDuration ?? savedState.duration)
+              : (savedState.duration ?? metadataDuration);
+
+      // When the queue completed at save time, the persisted position is the
+      // end of the last track — not a valid resume point. Reset to zero so
+      // playback starts from the beginning of track 0 on restore.
+      final restorePosition =
+          savedState.isCompleted ? Duration.zero : savedState.position;
 
       // Restore queue and playback state
       state = state.copyWith(
@@ -1455,16 +1972,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
         currentIndex: validIndex,
         isShuffled: savedState.isShuffled,
         loopMode: _parseLoopMode(savedState.loopMode),
-        position: savedState.position,
+        position: restorePosition,
         duration: trackDuration ?? Duration.zero,
         queueCompleted: savedState.isCompleted,
       );
-
-      // When the queue completed at save time, the persisted position is the
-      // end of the last track — not a valid resume point. Reset to zero so
-      // playback starts from the beginning of track 0 on restore.
-      final restorePosition =
-          savedState.isCompleted ? Duration.zero : savedState.position;
 
       // Restore the saved playback position so it can be seeked to once the
       // user taps play.  We intentionally do NOT call setAudioSource here
@@ -1479,8 +1990,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
     } catch (e) {
       // Failed to restore - clear corrupted state
       await QueuePersistenceService.clearQueue();
-      _gaplessActive = false;
-      state = const PlayerState();
+      if (state.queue.isEmpty) {
+        _retireGaplessPlaylist();
+        state = PlayerState(playbackSpeed: state.playbackSpeed);
+      }
+    } finally {
+      _restoringQueue = false;
     }
   }
 
@@ -1668,7 +2183,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }) async {
     final player = _handler.audioPlayer;
     // Always clear multi-source / gapless state for single-track loads.
-    _gaplessActive = false;
+    _retireGaplessPlaylist();
     await _silenceWebAudio();
     await player.setAudioSource(source, initialPosition: initialPosition);
   }
@@ -1714,6 +2229,32 @@ class PlayerNotifier extends Notifier<PlayerState> {
       if (offlineIds.contains(queue[i].id)) return i;
     }
     return null;
+  }
+
+  /// Offline skip-next target: the next track with local audio, wrapping to
+  /// the start under [LoopMode.all]. Null when there is no other such track.
+  int? _nextOfflineIndex({required bool canWrap}) {
+    var index = _findPlayableIndex(state.queue, state.currentIndex + 1);
+    if (index == null && canWrap) {
+      index = _findPlayableIndex(state.queue, 0);
+      // Avoid restarting the same track if it's the only offline one.
+      if (index == state.currentIndex) index = null;
+    }
+    return index;
+  }
+
+  /// Offline skip-previous target, mirroring [_nextOfflineIndex].
+  int? _previousOfflineIndex({required bool canWrap}) {
+    var index = _findPlayableIndex(
+      state.queue,
+      state.currentIndex - 1,
+      step: -1,
+    );
+    if (index == null && canWrap) {
+      index = _findPlayableIndex(state.queue, state.queue.length - 1, step: -1);
+      if (index == state.currentIndex) index = null;
+    }
+    return index;
   }
 
   void _showOfflineUnavailableSnack(String? title) {
@@ -1769,7 +2310,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
     final shareToken = _activeShareToken;
     if (shareToken == null) {
-      await _api.ensureListenToken();
+      await _api.ensureStreamAuth();
     }
     final streamUrl = _api.getStreamUrl(
       listenUrl,
@@ -1801,29 +2342,55 @@ class PlayerNotifier extends Notifier<PlayerState> {
     // playlists (just_audio marks gapless unsupported on web). Always fall
     // back so each skip reloads via [setAudioSource].
     if (AppPlatform.isWeb) {
-      _gaplessActive = false;
+      _retireGaplessPlaylist();
       return false;
     }
 
     // Offline: gapless would mix stream URLs for uncached tracks and stall.
     // Force the single-track path which skips uncached items.
     if (_isOffline) {
-      _gaplessActive = false;
+      _retireGaplessPlaylist();
       return false;
     }
 
+    final queue = state.queue;
+    if (queue.isEmpty || startIndex < 0 || startIndex >= queue.length) {
+      _retireGaplessPlaylist();
+      return false;
+    }
+
+    final sourceEpoch = _loadEpoch;
+    // This build replaces whatever playlist the player holds. Edits queued
+    // for the old one are dropped; [queue] already contains them.
+    final generation = ++_gaplessGeneration;
+    _gaplessBuildGeneration = generation;
+    bool isCurrentPlaylist() => generation == _gaplessGeneration;
+
+    // Window: current track + next two. Probe cache for these; others use
+    // stream URLs without serial disk checks so start is faster.
+    const windowAhead = 2;
+    final windowEnd = (startIndex + 1 + windowAhead).clamp(0, queue.length);
+
+    // Hold queue edits made from here on until the playlist is installed and
+    // its tail appended, so they land on top of it in the order they happened.
+    final installed = Completer<bool>();
+    _chainGaplessWork(() async {
+      // Bounded: a load the platform never answers must not hold every later
+      // playlist edit hostage. If it does land after this, the playlist just
+      // keeps its start window and is rebuilt when the player runs out.
+      final ok = await installed.future.timeout(
+        _gaplessInstallWait,
+        onTimeout: () => false,
+      );
+      if (!ok) return;
+      await _appendGaplessTail(
+        queue,
+        fromIndex: windowEnd,
+        isCurrent: () => isCurrentPlaylist() && _gaplessActive,
+      );
+    });
+
     try {
-      final queue = state.queue;
-      if (queue.isEmpty || startIndex < 0 || startIndex >= queue.length) {
-        _gaplessActive = false;
-        return false;
-      }
-
-      // Window: current track + next two. Probe cache for these; others use
-      // stream URLs without serial disk checks so start is faster.
-      const windowAhead = 2;
-      final windowEnd = (startIndex + 1 + windowAhead).clamp(0, queue.length);
-
       Future<AudioSource> buildAt(int i) {
         final inWindow = i >= startIndex && i < windowEnd;
         return _audioSourceForTrack(queue[i], probeCache: inWindow);
@@ -1833,6 +2400,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
       final initialSources = await Future.wait(
         List.generate(windowEnd, buildAt),
       );
+      // Only a newer playlist (or a single-track load) cancels the install.
+      // A skip that raced this build acted on the old playlist, which no
+      // longer matches the queue; installing this one puts them back in step.
+      if (!isCurrentPlaylist()) return false;
 
       // Update notification metadata for the starting track.
       _updateMediaItemForTrack(queue[startIndex]);
@@ -1845,6 +2416,15 @@ class PlayerNotifier extends Notifier<PlayerState> {
         initialIndex: startIndex,
         initialPosition: initialPosition,
       );
+      if (!isCurrentPlaylist()) return false;
+
+      // The player now holds this playlist, even when the request that built
+      // it has been superseded: keep mirroring the queue into it.
+      _gaplessActive = true;
+      installed.complete(true);
+      if (!_isCurrentLoad(sourceEpoch)) return false;
+      _playingFromLocalCache = _isLocalAudioSource(initialSources[startIndex]);
+      _markSourceCommitted(sourceEpoch);
 
       // Explicitly seek so the positionStream reliably reports the correct
       // position before play() is called (see comment in _loadTrack).
@@ -1855,40 +2435,65 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // Sync the player's loop mode so it can handle looping natively.
       _handler.audioPlayer.setLoopMode(state.loopMode);
 
-      _gaplessActive = true;
-
-      // Append remaining tracks without blocking first audio.
-      if (windowEnd < queue.length) {
-        unawaited(_appendGaplessTail(queue, fromIndex: windowEnd));
-      }
-
       return true;
     } catch (e) {
       debugPrint('Failed to build gapless source: $e');
-      _gaplessActive = false;
+      // A newer playlist build or a single-track load already took over.
+      if (!isCurrentPlaylist()) return false;
+      _retireGaplessPlaylist();
+      if (!_isCurrentLoad(sourceEpoch)) return false;
+      _playingFromLocalCache = false;
       // Source failed to load; reload on next play() attempt.
       _needsReload = true;
       return false;
+    } finally {
+      if (_gaplessBuildGeneration == generation) {
+        _gaplessBuildGeneration = null;
+      }
+      if (!installed.isCompleted) installed.complete(false);
     }
   }
 
-  /// Append remaining gapless sources after the initial window is playing.
+  /// How long queued playlist edits wait for a playlist to be installed.
+  /// Comfortably past [playbackAttemptDeadline], after which the attempt has
+  /// been abandoned anyway.
+  static const Duration _gaplessInstallWait = Duration(seconds: 45);
+
+  /// Sources appended per platform call while filling in the rest of a
+  /// gapless playlist. Batching keeps a several-thousand-track queue from
+  /// needing one round trip per track.
+  static const int _gaplessTailChunk = 32;
+
+  /// Append the rest of [queue] once the initial window is installed. Runs on
+  /// the playlist edit chain, so queue edits made meanwhile apply after it.
   Future<void> _appendGaplessTail(
     List<Track> queue, {
     required int fromIndex,
+    required bool Function() isCurrent,
   }) async {
-    final epoch = _loadEpoch;
-    for (var i = fromIndex; i < queue.length; i++) {
-      if (!_isCurrentLoad(epoch) || !_gaplessActive) return;
+    for (
+      var start = fromIndex;
+      start < queue.length;
+      start += _gaplessTailChunk
+    ) {
+      if (!isCurrent()) return;
+      final end = (start + _gaplessTailChunk).clamp(0, queue.length);
       try {
-        final source = await _audioSourceForTrack(queue[i], probeCache: false);
-        if (!_isCurrentLoad(epoch) || !_gaplessActive) return;
-        await _handler.audioPlayer.addAudioSource(source);
+        final sources = await Future.wait([
+          for (var i = start; i < end; i++)
+            _audioSourceForTrack(queue[i], probeCache: false),
+        ]);
+        if (!isCurrent()) return;
+        await _handler.audioPlayer.addAudioSources(sources);
       } catch (e) {
+        // Leaving a gap would shift every later index against the queue, so
+        // stop here. Playback rebuilds from the queue when the player runs
+        // out of sources (see [_handleTrackCompleted]).
         debugPrint(
-          'PlayerNotifier: failed to append gapless source for '
-          'track ${queue[i].id}: $e',
+          'PlayerNotifier: stopped appending gapless sources at '
+          'track ${queue[start].id}: $e',
         );
+        return;
       }
     }
   }
@@ -1913,7 +2518,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
   int? _radioSessionId;
   int? _radioId;
   Timer? _radioFetchTimer;
-  bool _isPrefetchingRadioTrack = false;
+
+  /// Identity of the radio "next track" request in flight, if any.
+  Object? _radioFetchInFlight;
 
   Future<Track?> _parseTrackFromRaw(dynamic raw) async {
     try {
@@ -2030,7 +2637,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
   Future<void> startRadio(int radioId) async {
     state = state.copyWith(loadingRadioId: radioId);
     try {
-      Analytics.track('radio_start_requested', {'radio_id': radioId});
+      // Radio / playlist / track ids are left out of analytics on purpose:
+      // events count feature use, not what is being listened to.
+      Analytics.track('radio_start_requested');
       // related_object_id must be sent as an integer. Sending it as a
       // string caused a server 500 on some Funkwhale instances.
       RadioSession session;
@@ -2071,10 +2680,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
       _radioSessionId = session.id;
       _radioId = radioId;
-      Analytics.track('radio_session_created', {
-        'radio_id': radioId,
-        'used_session': true,
-      });
+      Analytics.track('radio_session_created', {'used_session': true});
 
       // Fetch the first track (raw) and try to parse it.
       final rawFirst = await _api.postNextRadioTrackRaw(_radioSessionId!);
@@ -2091,10 +2697,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       await playTracks([first], source: 'radio');
       state = state.copyWith(clearLoadingRadioId: true);
       _startRadioFetchTimer();
-      Analytics.track('radio_started', {
-        'radio_id': radioId,
-        'source': 'session',
-      });
+      Analytics.track('radio_started', {'source': 'session'});
     } catch (e) {
       // If session creation fails (500 on some servers) fall back to a
       // session-less strategy: repeatedly call the radio sample endpoint
@@ -2109,10 +2712,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
         await playTracks([first], source: 'radio-fallback');
         state = state.copyWith(clearLoadingRadioId: true);
-        Analytics.track('radio_started', {
-          'radio_id': radioId,
-          'source': 'fallback',
-        });
+        Analytics.track('radio_started', {'source': 'fallback'});
 
         // Start the periodic radio fetch timer (also prefetches one track).
         _startRadioFetchTimer();
@@ -2188,90 +2788,161 @@ class PlayerNotifier extends Notifier<PlayerState> {
     _radioFetchTimer = null;
     _radioSessionId = null;
     _radioId = null;
-    _isPrefetchingRadioTrack = false;
+    _radioFetchInFlight = null;
     Analytics.track('radio_stopped');
+  }
+
+  /// Ask the server for the next radio track and append it to the queue.
+  /// One request at a time; a track that arrives after the radio was stopped
+  /// or replaced is discarded rather than added to whatever is playing now.
+  Future<void> _fetchNextRadioTrack() async {
+    if (_radioFetchInFlight != null) return;
+    final sessionId = _radioSessionId;
+    final radioId = _radioId;
+    if (sessionId == null && radioId == null) return;
+
+    final request = Object();
+    _radioFetchInFlight = request;
+    try {
+      Track? track;
+      if (sessionId != null) {
+        final raw = await _api.postNextRadioTrackRaw(sessionId);
+        track = await _parseTrackFromRaw(raw);
+      } else if (radioId != null) {
+        track = await _api.getRadioTrack(radioId);
+      }
+      if (_radioSessionId != sessionId || _radioId != radioId) return;
+      if (track != null) addToQueue([track]);
+    } finally {
+      if (identical(_radioFetchInFlight, request)) _radioFetchInFlight = null;
+    }
   }
 
   Future<void> _maybePrefetchRadioTrack() async {
     if (_radioSessionId == null && _radioId == null) return;
-    if (_isPrefetchingRadioTrack) return;
     if (state.currentIndex < state.queue.length - 1) return;
-
-    _isPrefetchingRadioTrack = true;
-
     try {
-      if (_radioSessionId != null) {
-        final raw = await _api.postNextRadioTrackRaw(_radioSessionId!);
-        final t = await _parseTrackFromRaw(raw);
-        if (t != null) addToQueue([t]);
-      } else if (_radioId != null) {
-        final t = await _api.getRadioTrack(_radioId!);
-        addToQueue([t]);
-      }
-    } catch (_) {
-    } finally {
-      _isPrefetchingRadioTrack = false;
-    }
+      await _fetchNextRadioTrack();
+    } catch (_) {}
   }
 
-  /// Periodic timer that keeps the radio queue populated and handles
-  /// resuming playback when the gapless source runs dry before a fetch
-  /// completes.
+  /// Radio: the player finished its last source before the next track had
+  /// been fetched. Continue with the track that has since been queued.
+  Future<void> _continueRadioAt(int nextIndex) async {
+    if (nextIndex < 0 || nextIndex >= state.queue.length) return;
+    final epoch = _beginLoad();
+    final track = state.queue[nextIndex];
+    state = state.copyWith(currentIndex: nextIndex, isLoading: true);
+
+    if (_isGaplessEnabled && !_isOffline) {
+      final loaded = await _loadGaplessSource(nextIndex);
+      if (!_isCurrentLoad(epoch)) return;
+      if (loaded) {
+        await _startPlayback();
+        if (!_isCurrentLoad(epoch)) return;
+        state = state.copyWith(
+          isLoading: false,
+          isPlaying: _handler.audioPlayer.playing,
+        );
+        await _activateListenForTrack(track);
+        await _recordServerListen(track);
+        _saveQueue();
+        return;
+      }
+    }
+
+    await _loadAndPlay(track, epoch: epoch);
+    if (!_isCurrentLoad(epoch)) return;
+    _saveQueue();
+  }
+
+  /// How often a running radio tops up its queue and checks whether playback
+  /// ran dry. Adjustable so tests need not wait on real seconds.
+  @visibleForTesting
+  static Duration radioFetchInterval = const Duration(seconds: 4);
+
+  /// Periodic timer that keeps the radio queue populated and resumes
+  /// playback when the player ran out of audio before a fetch completed.
   void _startRadioFetchTimer() {
     _radioFetchTimer?.cancel();
-    _radioFetchTimer = Timer.periodic(const Duration(seconds: 4), (_) async {
-      if (_isPrefetchingRadioTrack) return;
+    _radioFetchTimer = Timer.periodic(radioFetchInterval, (_) async {
+      if (_radioFetchInFlight != null) return;
       try {
         // Keep at least one track ahead of the currently playing track.
         final ahead = state.queue.length - state.currentIndex - 1;
         if (ahead < 1) {
-          _isPrefetchingRadioTrack = true;
-          try {
-            if (_radioSessionId != null) {
-              final raw = await _api.postNextRadioTrackRaw(_radioSessionId!);
-              final t = await _parseTrackFromRaw(raw);
-              if (t != null) addToQueue([t]);
-            } else if (_radioId != null) {
-              final t = await _api.getRadioTrack(_radioId!);
-              addToQueue([t]);
-            }
-          } finally {
-            _isPrefetchingRadioTrack = false;
-          }
+          await _fetchNextRadioTrack();
         }
 
-        // If playback stalled (gapless source ran dry before we could
-        // append the next track), rebuild and resume.  Don't auto-resume
-        // when the user explicitly paused playback.
+        // If playback ran dry (the last source finished before the next
+        // track could be appended), continue with the queue as it is now.
+        // Don't auto-resume when the user paused or audio focus is held
+        // elsewhere.
         //
         // We gate on processingState == completed rather than just
         // !state.isPlaying so that a pause, an audio interruption, or a
         // brief playingStream flicker from a playback-device change on
         // Android (which can transiently report isPlaying=false while the
         // source stays in the ready state) doesn't spuriously resume the
-        // radio.  Only a genuinely-exhausted gapless source ends up in the
-        // completed state.
+        // radio.  Only a genuinely-exhausted source ends up in the completed
+        // state. A load already in flight (the normal advance when the next
+        // track was ready) is left alone.
         if (_handler.audioPlayer.processingState == ProcessingState.completed &&
-            state.hasNext &&
-            _gaplessActive &&
-            !_userPaused) {
-          final nextIndex = state.currentIndex + 1;
-          state = state.copyWith(currentIndex: nextIndex, isLoading: true);
-          final loaded = await _loadGaplessSource(nextIndex);
-          if (loaded) {
-            await _startPlayback();
-            state = state.copyWith(
-              isLoading: false,
-              isPlaying: _handler.audioPlayer.playing,
-            );
-            final track = state.queue[nextIndex];
-            await _activateListenForTrack(track);
-            await _recordServerListen(track);
-            _saveQueue();
-          }
+            state.currentIndex < state.queue.length - 1 &&
+            !state.isPlaying &&
+            !state.isLoading &&
+            !_autoResumeBlocked) {
+          await _continueRadioAt(state.currentIndex + 1);
         }
       } catch (_) {}
     });
+  }
+
+  /// Forget the active queue and silence the player. [epoch] is the load
+  /// that owns the reset. [forgetPersisted] also removes the stored copy, so
+  /// the queue does not come back on the next launch.
+  Future<void> _dropActiveQueue({
+    required int epoch,
+    required bool forgetPersisted,
+  }) async {
+    _settleRetainedSource(epoch: epoch, seekSucceeded: false);
+    _playingFromLocalCache = false;
+    _needsReload = false;
+    // Nothing is left to play, so nothing may be auto-resumed either.
+    _userIntendedPlay = false;
+    _pendingRestorePosition = null;
+    _pendingRestoreListenSession = null;
+    _retireGaplessPlaylist();
+    _podcastChannelUuid = null;
+    // Clearing the active queue means it's no longer the restored stash.
+    _activeStashName = null;
+    // The speed is a player setting, not part of the queue being cleared.
+    state = PlayerState(playbackSpeed: state.playbackSpeed);
+    await _handler.audioPlayer.stop();
+    if (forgetPersisted) {
+      await QueuePersistenceService.clearQueue();
+    }
+  }
+
+  /// The session ended (manual logout or an expired one). Stop audio and
+  /// drop the queue from memory: it belongs to the account that was signed
+  /// in, and its streams can no longer be authorized.
+  ///
+  /// The stored copy is the auth layer's call: a manual logout has already
+  /// wiped it, while an expired session keeps it so signing back in to the
+  /// same server picks the queue up again (see [_handleSignedIn]).
+  Future<void> _handleSignedOut() async {
+    final epoch = _beginLoad();
+    final position = _handler.audioPlayer.position;
+    await stopRadio();
+    await _dropActiveQueue(epoch: epoch, forgetPersisted: false);
+    await _finalizeListenAt(position);
+  }
+
+  /// Signed in with nothing queued: bring back the queue stored for this
+  /// account, if there is one.
+  void _handleSignedIn() {
+    if (state.queue.isEmpty) unawaited(_restoreQueue());
   }
 
   /// Play a list of tracks starting at the given index.
@@ -2310,13 +2981,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     }
 
     if (tracks.isEmpty) {
-      _gaplessActive = false;
-      _podcastChannelUuid = null;
-      state = const PlayerState();
-      await _handler.audioPlayer.stop();
-      await QueuePersistenceService.clearQueue();
-      // Clearing the active queue means it's no longer the restored stash.
-      _activeStashName = null;
+      await _dropActiveQueue(epoch: epoch, forgetPersisted: true);
       return;
     }
 
@@ -2327,6 +2992,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     }
 
     _pendingRestorePosition = null;
+    _pendingRestoreListenSession = null;
     // If this play request is not a stash restore, the active stash name
     // should not be preserved (we only keep it when restoring a stash).
     if (source != 'stash_restore') {
@@ -2387,8 +3053,13 @@ class PlayerNotifier extends Notifier<PlayerState> {
           isLoading: false,
           isPlaying: false,
         );
-        _gaplessActive = false;
+        _retireGaplessPlaylist();
         _showOfflineUnavailableSnack(startTrack.title);
+        _settleRetainedSource(
+          epoch: epoch,
+          seekSucceeded: false,
+          ignoreFurtherSignals: true,
+        );
         _saveQueue();
         return;
       }
@@ -2414,7 +3085,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     // Use pause (not stop) — stop() disposes the <audio> element and the
     // next play() then fails with AbortError. See [_silenceWebAudio].
     if (AppPlatform.isWeb || !_isGaplessEnabled) {
-      _gaplessActive = false;
+      _retireGaplessPlaylist();
       await _silenceWebAudio();
     }
 
@@ -2446,7 +3117,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
         );
       }
     } else {
-      _gaplessActive = false;
+      _retireGaplessPlaylist();
       await _loadAndPlay(
         effectiveStart,
         initialPosition: initialPosition,
@@ -2470,8 +3141,16 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }
 
   /// Add tracks to the end of the queue.
+  ///
+  /// With nothing queued there is no current track to append after, so this
+  /// starts playback like [playNext] and [insertTracksNext] do.
   void addToQueue(List<Track> tracks) {
     if (tracks.isEmpty) return;
+    if (state.queue.isEmpty || state.currentIndex < 0) {
+      playTracks(tracks, source: 'add_to_queue');
+      return;
+    }
+
     state = state.copyWith(queue: [...state.queue, ...tracks]);
     // When shuffled, keep the base (unshuffled) queue in sync by appending
     // the same tracks so the source of truth contains every active track.
@@ -2481,15 +3160,14 @@ class PlayerNotifier extends Notifier<PlayerState> {
       );
     }
     // Sync gapless source in order (serialized).
-    if (_gaplessActive) {
+    if (_mirrorsGaplessPlaylist) {
       final toAdd = List<Track>.from(tracks);
-      _enqueueGaplessMutation(() async {
-        for (final track in toAdd) {
-          try {
-            final source = await _audioSourceForTrack(track);
-            await _handler.audioPlayer.addAudioSource(source);
-          } catch (_) {}
-        }
+      _enqueueGaplessMutation((isCurrent) async {
+        final sources = [
+          for (final track in toAdd) await _audioSourceForTrack(track),
+        ];
+        if (!isCurrent()) return;
+        await _handler.audioPlayer.addAudioSources(sources);
       });
     }
     _saveQueue();
@@ -2513,20 +3191,16 @@ class PlayerNotifier extends Notifier<PlayerState> {
     newQueue.insertAll(insertIndex, tracks);
     state = state.copyWith(queue: newQueue);
 
-    // Sync gapless source by inserting audio sources sequentially so order
-    // matches [state.queue] even when building sources is async.
-    if (_gaplessActive) {
+    // Sync gapless source: one insert so the order matches [state.queue]
+    // even though building the sources is async.
+    if (_mirrorsGaplessPlaylist) {
       final toInsert = List<Track>.from(tracks);
-      final startIdx = insertIndex;
-      _enqueueGaplessMutation(() async {
-        var idx = startIdx;
-        for (final track in toInsert) {
-          try {
-            final source = await _audioSourceForTrack(track);
-            await _handler.audioPlayer.insertAudioSource(idx, source);
-            idx++;
-          } catch (_) {}
-        }
+      _enqueueGaplessMutation((isCurrent) async {
+        final sources = [
+          for (final track in toInsert) await _audioSourceForTrack(track),
+        ];
+        if (!isCurrent()) return;
+        await _handler.audioPlayer.insertAudioSources(insertIndex, sources);
       });
     }
 
@@ -2547,7 +3221,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
   /// Insert a track to play next.
   void playNext(Track track) {
-    if (state.queue.isEmpty) {
+    if (state.queue.isEmpty || state.currentIndex < 0) {
       playTracks([track], source: 'play_next');
       return;
     }
@@ -2556,13 +3230,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
     newQueue.insert(insertIndex, track);
     state = state.copyWith(queue: newQueue);
     // Sync gapless source (serialized with other mutations).
-    if (_gaplessActive) {
-      final idx = insertIndex;
-      _enqueueGaplessMutation(() async {
-        try {
-          final source = await _audioSourceForTrack(track);
-          await _handler.audioPlayer.insertAudioSource(idx, source);
-        } catch (_) {}
+    if (_mirrorsGaplessPlaylist) {
+      _enqueueGaplessMutation((isCurrent) async {
+        final source = await _audioSourceForTrack(track);
+        if (!isCurrent()) return;
+        await _handler.audioPlayer.insertAudioSource(insertIndex, source);
       });
     }
     // When shuffled, keep the base queue in sync by inserting after the
@@ -2579,9 +3251,23 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }
 
   /// Remove track at index from the queue.
+  ///
+  /// Removing the current track moves on to the track that takes its place
+  /// (the next one, or the previous one at the end of the queue). Audio keeps
+  /// going only if the user had it going: a paused queue stays paused.
   void removeFromQueue(int index) {
     if (index < 0 || index >= state.queue.length) return;
+
+    // Removing the only track empties the queue. That is the same as
+    // clearing it: stop playback and forget the persisted queue as well.
+    if (state.queue.length == 1) {
+      unawaited(playTracks(const [], source: 'queue_emptied'));
+      Analytics.track('remove_from_queue');
+      return;
+    }
+
     final wasCurrentTrack = index == state.currentIndex;
+    final oldLength = state.queue.length;
     final removedTrack = state.queue[index];
     final newQueue = List<Track>.from(state.queue);
     newQueue.removeAt(index);
@@ -2610,33 +3296,173 @@ class PlayerNotifier extends Notifier<PlayerState> {
       }
     }
 
+    if (!wasCurrentTrack) {
+      state = state.copyWith(
+        queue: newQueue,
+        unshuffledQueue: newUnshuffled,
+        currentIndex: newIndex,
+      );
+      // Sync gapless source.
+      if (_mirrorsGaplessPlaylist) {
+        _enqueueGaplessMutation(
+          (_) => _handler.audioPlayer.removeAudioSourceAt(index),
+        );
+      }
+      _saveQueue();
+      Analytics.track('remove_from_queue');
+      return;
+    }
+
+    // The current track is going away. Whether audio continues depends on
+    // what the user wanted before the removal, not on the instant state: a
+    // track that failed to load is paused by the app, and removing it should
+    // carry on with the next one.
+    final resume =
+        !_autoResumeBlocked &&
+        (state.isPlaying || state.isLoading || _userIntendedPlay);
+    final nothingLoaded = _pendingRestorePosition != null;
+    final mirrored = _mirrorsGaplessPlaylist;
+    final replacement = newQueue[newIndex];
+
     state = state.copyWith(
       queue: newQueue,
       unshuffledQueue: newUnshuffled,
       currentIndex: newIndex,
+      position: Duration.zero,
+      duration:
+          replacement.duration != null
+              ? Duration(seconds: replacement.duration!)
+              : Duration.zero,
     );
-    // Sync gapless source.
-    if (_gaplessActive) {
-      _handler.audioPlayer.removeAudioSourceAt(index);
-    }
-    // If the removed track was the one currently playing, start playing the
-    // new current track (or stop if the queue became empty).
-    if (wasCurrentTrack) {
-      if (newQueue.isEmpty) {
-        _handler.audioPlayer.stop();
-        state = state.copyWith(isPlaying: false, isLoading: false);
-      } else if (_gaplessActive) {
-        unawaited(
-          _handler.audioPlayer.seek(Duration.zero, index: newIndex).then((_) {
-            return _handler.audioPlayer.play();
-          }),
+
+    if (nothingLoaded || (!mirrored && !resume)) {
+      // No source is loaded (restored or finished queue), or audio is paused
+      // on a single source. Leave the player alone and load the replacement
+      // on the next play, from its start.
+      if (!nothingLoaded) {
+        unawaited(_finalizeCurrentListen());
+        if (_handler.mediaItem.value != null) {
+          _updateMediaItemForTrack(replacement);
+        }
+      }
+      _pendingRestorePosition = Duration.zero;
+      _pendingRestoreListenSession = null;
+      if (state.isLoading) state = state.copyWith(isLoading: false);
+    } else {
+      final epoch = _beginLoad();
+      if (mirrored) {
+        _enqueueGaplessMutation(
+          (isCurrent) => _dropCurrentGaplessItem(
+            removedIndex: index,
+            oldLength: oldLength,
+            resume: resume,
+            epoch: epoch,
+            isCurrent: isCurrent,
+          ),
         );
       } else {
-        unawaited(_loadAndPlay(newQueue[newIndex]));
+        state = state.copyWith(isLoading: true);
+        unawaited(() async {
+          await _finalizeCurrentListen();
+          if (!_isCurrentLoad(epoch)) return;
+          await _loadAndPlay(replacement, epoch: epoch);
+          if (_isCurrentLoad(epoch)) _saveQueue();
+        }());
       }
     }
     _saveQueue();
     Analytics.track('remove_from_queue');
+  }
+
+  /// Gapless: the queue's current track was removed and [state] already
+  /// points at its replacement. Steps the player onto the replacement before
+  /// dropping the removed item, so the playlist never loses its current item
+  /// (when that item is the last one, losing it ends playback and looks like
+  /// the queue finished). Indices are those of the playlist before removal.
+  Future<void> _dropCurrentGaplessItem({
+    required int removedIndex,
+    required int oldLength,
+    required bool resume,
+    required int epoch,
+    required bool Function() isCurrent,
+  }) async {
+    final player = _handler.audioPlayer;
+    final target =
+        removedIndex < oldLength - 1 ? removedIndex + 1 : removedIndex - 1;
+    // If the user navigated elsewhere since the removal, only the playlist
+    // edit is still wanted; playback already belongs to that navigation.
+    final ownsPlayback = _isCurrentLoad(epoch);
+    if (ownsPlayback) {
+      await _finalizeCurrentListen();
+      if (!isCurrent()) return;
+    }
+
+    var edited = false;
+    _ignorePlayerIndexUpdates = true;
+    try {
+      if (ownsPlayback && _isCurrentLoad(epoch)) await _seekGaplessTo(target);
+      await player.removeAudioSourceAt(removedIndex);
+      edited = true;
+    } catch (e) {
+      debugPrint('removeFromQueue: could not edit gapless playlist: $e');
+    } finally {
+      _ignorePlayerIndexUpdates = false;
+    }
+    if (!isCurrent()) return;
+
+    if (!edited) {
+      // The playlist no longer matches the queue; rebuild it from the queue.
+      if (!_isCurrentLoad(epoch)) {
+        await _reloadGaplessPreservingPlayback();
+        return;
+      }
+      state = state.copyWith(isLoading: true);
+      final loaded = await _loadGaplessSource(state.currentIndex);
+      if (!_isCurrentLoad(epoch)) return;
+      if (!loaded) {
+        _settleRetainedSource(
+          epoch: epoch,
+          seekSucceeded: false,
+          ignoreFurtherSignals: true,
+        );
+        state = state.copyWith(isLoading: false, isPlaying: false);
+        return;
+      }
+      if (resume) await _startPlayback();
+      if (!_isCurrentLoad(epoch)) return;
+      state = state.copyWith(isLoading: false, isPlaying: player.playing);
+    } else {
+      if (!_isCurrentLoad(epoch)) return;
+      _settleRetainedSource(epoch: epoch, seekSucceeded: true);
+      _syncLocalSourceFlag(state.currentIndex);
+      if (resume && !player.playing) {
+        await _startPlayback();
+        if (!_isCurrentLoad(epoch)) return;
+        state = state.copyWith(isPlaying: player.playing);
+      }
+    }
+
+    final track = state.currentTrack;
+    if (track == null) return;
+    _updateMediaItemForTrack(track);
+    await _activateListenForTrack(track);
+    if (player.playing) await _recordServerListen(track);
+    if (_isCurrentLoad(epoch)) _saveQueue();
+  }
+
+  /// After the playlist was reshuffled, adopt the player's index if it
+  /// settled on a different slot for the same playing track.
+  void _reconcileIndexWithPlayer() {
+    final playerIndex = _handler.audioPlayer.currentIndex;
+    final current = state.currentTrack;
+    if (playerIndex != null &&
+        playerIndex != state.currentIndex &&
+        playerIndex >= 0 &&
+        playerIndex < state.queue.length &&
+        current != null &&
+        state.queue[playerIndex].id == current.id) {
+      state = state.copyWith(currentIndex: playerIndex);
+    }
   }
 
   /// Reorder tracks in the queue.
@@ -2676,38 +3502,33 @@ class PlayerNotifier extends Notifier<PlayerState> {
       newCurrentIndex++;
     }
 
-    // Suppress player index stream while the playlist reshuffles so a
-    // transient native index can't be misread as "skipped to next track".
-    _ignorePlayerIndexUpdates = true;
     state = state.copyWith(queue: newQueue, currentIndex: newCurrentIndex);
 
-    if (_gaplessActive) {
-      unawaited(() async {
+    if (_mirrorsGaplessPlaylist) {
+      _enqueueGaplessMutation((isCurrent) async {
+        // Suppress player index stream while the playlist reshuffles so a
+        // transient native index can't be misread as "skipped to next track".
+        _ignorePlayerIndexUpdates = true;
+        var moved = false;
         try {
           // Reshuffles the playlist only — does not seek or restart the
           // currently playing item when that item is the one being moved.
           await _handler.audioPlayer.moveAudioSource(oldIndex, insertIndex);
+          moved = true;
         } catch (e, st) {
           debugPrint('reorderQueue moveAudioSource failed: $e');
           debugPrintStack(stackTrace: st);
         } finally {
           _ignorePlayerIndexUpdates = false;
-          // Reconcile if the player settled on a different index for the
-          // same playing track (should match, but be defensive).
-          final playerIndex = _handler.audioPlayer.currentIndex;
-          final current = state.currentTrack;
-          if (playerIndex != null &&
-              playerIndex != state.currentIndex &&
-              playerIndex >= 0 &&
-              playerIndex < state.queue.length &&
-              current != null &&
-              state.queue[playerIndex].id == current.id) {
-            state = state.copyWith(currentIndex: playerIndex);
-          }
         }
-      }());
-    } else {
-      _ignorePlayerIndexUpdates = false;
+        if (!isCurrent()) return;
+        if (moved) {
+          _reconcileIndexWithPlayer();
+        } else {
+          // The playlist no longer matches the queue; rebuild it.
+          await _reloadGaplessPreservingPlayback();
+        }
+      });
     }
     _saveQueue();
     Analytics.track('reorder_queue');
@@ -2755,11 +3576,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
   /// Restore a previously stashed queue by [id], replacing the active queue.
   Future<void> restoreStash(String id) async {
     final stashes = await QueuePersistenceService.loadStashes();
-    final stash = stashes.firstWhere(
-      (s) => s.id == id,
-      orElse: () => throw StateError('Stash not found'),
-    );
-    if (stash.queue.isEmpty) return;
+    // Already restored or deleted (e.g. a double tap): nothing to do.
+    final stash = stashes.where((s) => s.id == id).firstOrNull;
+    if (stash == null || stash.queue.isEmpty) return;
 
     // Remember the stash name on the active queue so re-stashing preserves it.
     _activeStashName = stash.name;
@@ -2827,11 +3646,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }) async {
     final loadEpoch = epoch ?? _loadEpoch;
     _needsReload = false;
+    _playingFromLocalCache = false;
     // Single-source load always replaces any multi-source playlist.
     // On web, pause immediately so a previous track cannot keep audible
     // while we resolve the next stream URL. Do not stop() — that disposes
     // the HTML audio element and races the upcoming play().
-    _gaplessActive = false;
+    _retireGaplessPlaylist();
     await _silenceWebAudio();
     try {
       final listenUrl = track.listenUrl;
@@ -2845,7 +3665,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
       final shareToken = _activeShareToken;
       if (shareToken == null) {
-        await _api.ensureListenToken();
+        await _api.ensureStreamAuth();
       }
       _activeStreamQuality = _preferredStreamQuality;
       _qualityFallbackSteps = 0;
@@ -2980,6 +3800,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
       }
 
       if (!_isCurrentLoad(loadEpoch)) return false;
+      _playingFromLocalCache = !streamedFromServer;
+      _markSourceCommitted(loadEpoch);
 
       if (autoPlay) {
         // Explicitly seek after the source is loaded so the positionStream
@@ -3042,8 +3864,16 @@ class PlayerNotifier extends Notifier<PlayerState> {
         unawaited(_handler.audioPlayer.setLoopMode(LoopMode.off));
       }
 
-      // Successfully loaded.
-      state = state.copyWith(isLoading: false);
+      // Successfully loaded. A newer attempt may have started during the
+      // listen-history write; do not clear its spinner.
+      if (!_isCurrentLoad(loadEpoch)) return false;
+      // Take isPlaying from the player rather than waiting for playingStream:
+      // when the play intent was already set (the previous source simply
+      // finished) play() is a no-op and the stream never emits.
+      state = state.copyWith(
+        isLoading: false,
+        isPlaying: autoPlay ? _handler.audioPlayer.playing : null,
+      );
       return true;
     } catch (e, st) {
       if (!_isCurrentLoad(loadEpoch)) return false;
@@ -3061,7 +3891,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
             'PlayerNotifier._loadTrack: ignoring play interrupt for '
             'track ${track.id}: $e',
           );
-          state = state.copyWith(isLoading: false);
+          _settleRetainedSource(epoch: loadEpoch, seekSucceeded: true);
+          final stillOpening =
+              ps == ProcessingState.buffering || ps == ProcessingState.loading;
+          if (!stillOpening && state.isLoading) {
+            state = state.copyWith(isLoading: false);
+          }
           return true;
         }
       }
@@ -3093,10 +3928,15 @@ class PlayerNotifier extends Notifier<PlayerState> {
       try {
         await _handler.audioPlayer.stop();
       } catch (_) {}
-      _gaplessActive = false;
+      _retireGaplessPlaylist();
       // Source failed to load (e.g. no network); reload on next play().
       _needsReload = true;
       state = state.copyWith(isPlaying: false);
+      _settleRetainedSource(
+        epoch: loadEpoch,
+        seekSucceeded: false,
+        ignoreFurtherSignals: true,
+      );
       return false;
     }
   }
@@ -3129,8 +3969,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
   ) async {
     // Skip background full-file cache for share visitors (no durable storage).
     if (_activeShareToken != null) return;
-    final headers = _api.authHeaders;
     final epoch = _loadEpoch;
+    await _api.ensureStreamAuth();
+    if (!_isCurrentLoad(epoch)) return;
+    final headers = _api.authHeaders;
     final downloadQuality = _preferredDownloadQuality;
     // Cache only a few tracks after startIndex (current track is streaming).
     final upcoming = tracks.skip(startIndex + 1).take(_preCacheAheadLimit);
@@ -3203,13 +4045,13 @@ class PlayerNotifier extends Notifier<PlayerState> {
     _qualityFallbackWatchdog = null;
 
     // Disable gapless for this reload so we can re-set a single source.
-    _gaplessActive = false;
-    final epoch = ++_loadEpoch;
+    _retireGaplessPlaylist();
+    final epoch = _beginLoad(kind: PlaybackAttemptKind.qualityStepDown);
 
     try {
       final shareToken = _activeShareToken;
       if (shareToken == null) {
-        await _api.ensureListenToken();
+        await _api.ensureStreamAuth();
       }
       final streamUrl = _api.getStreamUrl(
         track.listenUrl!,
@@ -3233,6 +4075,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
       );
 
       if (!_isCurrentLoad(epoch)) return;
+      // The step-down always streams, even if the failing source was a file.
+      _playingFromLocalCache = false;
+      _markSourceCommitted(epoch);
       if (position > Duration.zero) {
         await _handler.audioPlayer.seek(position);
       }
@@ -3247,7 +4092,14 @@ class PlayerNotifier extends Notifier<PlayerState> {
       });
     } catch (e) {
       debugPrint('PlayerNotifier: quality fallback failed: $e');
-      _needsReload = true;
+      if (_isCurrentLoad(epoch)) {
+        _needsReload = true;
+        _settleRetainedSource(
+          epoch: epoch,
+          seekSucceeded: false,
+          ignoreFurtherSignals: true,
+        );
+      }
     }
   }
 
@@ -3307,44 +4159,31 @@ class PlayerNotifier extends Notifier<PlayerState> {
         // Use index check (not hasNext) — hasNext wraps under LoopMode.all
         // which is wrong for radio prefetch continuation.
         if (state.currentIndex < state.queue.length - 1) {
-          final nextIndex = state.currentIndex + 1;
-          state = state.copyWith(currentIndex: nextIndex, isLoading: true);
-          unawaited(
-            _loadGaplessSource(nextIndex).then((loaded) {
-              if (!loaded) {
-                state = state.copyWith(isLoading: false, isPlaying: false);
-                return;
-              }
-              _handler.audioPlayer.play();
-              state = state.copyWith(
-                isLoading: false,
-                isPlaying: _handler.audioPlayer.playing,
-              );
-              final track = state.queue[nextIndex];
-              _activateListenForTrack(track);
-              unawaited(_recordServerListen(track));
-              _saveQueue();
-            }),
-          );
+          unawaited(_continueRadioAt(state.currentIndex + 1));
           return;
         }
         state = state.copyWith(isPlaying: false);
         return;
       }
 
-      // Wrap back to track 0; the seek is deferred to play() so that we
-      // don't accidentally resume playback (seeking while playing=true
-      // on a ConcatenatingAudioSource restarts immediately).
-      // Reset position to zero so it isn't persisted as the end-of-track
-      // position, which would cause a seek to an arbitrary offset when
-      // the queue is later restored from storage.
-      state = state.copyWith(
-        isPlaying: false,
-        currentIndex: 0,
-        position: Duration.zero,
-        queueCompleted: true,
-      );
-      _saveQueue();
+      // A complete playlist only finishes on its last item. If the player
+      // stopped earlier, its playlist fell behind the queue (an append
+      // failed or was cut short). Carry on with the next track; the skip
+      // rebuilds the playlist from the queue when the player lacks it.
+      //
+      // The player's own index is the reference: ours can lag while index
+      // updates are held back during a reorder.
+      final finishedAt =
+          _handler.audioPlayer.currentIndex ?? state.currentIndex;
+      if (finishedAt >= 0 && finishedAt < state.queue.length - 1) {
+        if (finishedAt != state.currentIndex) {
+          state = state.copyWith(currentIndex: finishedAt);
+        }
+        unawaited(skipNext());
+        return;
+      }
+
+      _parkCompletedQueue();
       return;
     }
 
@@ -3396,26 +4235,59 @@ class PlayerNotifier extends Notifier<PlayerState> {
           state = state.copyWith(isPlaying: false, position: Duration.zero);
         } else {
           // Wrap back to track 0 so the play button resumes from the beginning.
-          state = state.copyWith(
-            isPlaying: false,
-            currentIndex: 0,
-            position: Duration.zero,
-            queueCompleted: true,
-          );
-          // Don't touch the audio player here — play() already handles
-          // ProcessingState.completed correctly (reloads or seeks as needed).
-          // The completed player emits no new position events, so position: zero
-          // in state above is stable and will hold until the user presses play.
-          _saveQueue(); // Save final state when queue ends
+          _parkCompletedQueue();
         }
         break;
     }
   }
 
+  /// The queue ran out with looping off. Point the UI back at the first
+  /// track (or [index], offline: the first one with local audio), paused, and
+  /// put the player in the same "nothing loaded yet" state as a queue
+  /// restored from storage.
+  ///
+  /// just_audio keeps `playing` true on a finished source and stays parked on
+  /// the last item. Left like that, anything acting on the player directly
+  /// would hit the wrong track: a seek scrubs (and restarts) the last track
+  /// while the UI shows the first, and a later load starts audio without
+  /// [PlayerState.isPlaying] ever turning true because play() is a no-op when
+  /// the intent is already set. Pausing and reloading on demand keeps play,
+  /// seek, skip and jump on their ordinary paths.
+  void _parkCompletedQueue({int index = 0}) {
+    final first =
+        index >= 0 && index < state.queue.length ? state.queue[index] : null;
+    // A finished queue is not an interrupted play: nothing may restart it
+    // without the user asking.
+    _userIntendedPlay = false;
+    _retireGaplessPlaylist();
+    _pendingRestorePosition = Duration.zero;
+    _pendingRestoreListenSession = null;
+    // Reset position to zero so it isn't persisted as the end-of-track
+    // position, which would cause a seek to an arbitrary offset when the
+    // queue is later restored from storage.
+    state = state.copyWith(
+      isPlaying: false,
+      isLoading: false,
+      currentIndex: first != null ? index : state.currentIndex,
+      position: Duration.zero,
+      duration:
+          first?.duration != null
+              ? Duration(seconds: first!.duration!)
+              : Duration.zero,
+      queueCompleted: true,
+    );
+    unawaited(_handler.audioPlayer.pause().catchError((_) {}));
+    _saveQueue(); // Save final state when queue ends
+  }
+
   Future<void> play() async {
+    // Nothing queued (an external play request can arrive at any time).
+    if (state.currentTrack == null) return;
     // User-initiated play always clears interruption / paused state.
     _interrupted = false;
     _userPaused = false;
+    _userIntendedPlay = true;
+    _connectivityRetryConsumed = false;
     if (state.queueCompleted) {
       state = state.copyWith(queueCompleted: false);
     }
@@ -3454,6 +4326,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
               position: seekTo,
             );
             await _activateListenForTrack(track, position: seekTo);
+            await _recordServerListen(track);
             return;
           }
         }
@@ -3508,11 +4381,21 @@ class PlayerNotifier extends Notifier<PlayerState> {
           _updateMediaItemForTrack(track);
           unawaited(_activateListenForTrack(track));
         } else {
+          final epoch = _beginLoad();
           state = state.copyWith(isLoading: true);
-          await _loadAndPlay(track);
+          await _loadAndPlay(track, epoch: epoch);
         }
         return;
       }
+    }
+
+    // Long idle (including foreground idle) reloads a network source from
+    // the last position instead of resuming a dead pipeline. A local file
+    // or playback that is still advancing leaves the source alone.
+    final idleAction = decideStaleIdle(_progressSnapshot(DateTime.now()));
+    if (idleAction == PlaybackIdleAction.reloadNow ||
+        idleAction == PlaybackIdleAction.reloadOnNextPlay) {
+      _needsReload = true;
     }
 
     // If the previously loaded source broke (e.g. a mid-stream network drop
@@ -3523,9 +4406,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
       final track = state.currentTrack;
       if (track != null) {
         _needsReload = false;
-        state = state.copyWith(isLoading: true);
-        final position = _handler.audioPlayer.position;
-        await _loadAndPlay(track, initialPosition: position);
+        await _reloadFromLastPosition(kind: PlaybackAttemptKind.play);
         return;
       }
       _needsReload = false;
@@ -3536,6 +4417,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
   Future<void> pause() async {
     _userPaused = true;
+    _markPausedProgress(DateTime.now());
     await _handler.pause();
     // Force podcast progress upload on pause (mirror listening duration force).
     final track = state.currentTrack;
@@ -3551,16 +4433,22 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }
 
   /// Called when the app enters the background (paused/inactive lifecycle).
+  ///
+  /// Stops the "position is advancing" window so a suspended stream is not
+  /// treated as healthy playback. A source that is already paused keeps its
+  /// existing idle clock.
   void onAppPaused() {
-    _appPausedAt = DateTime.now();
+    final now = DateTime.now();
+    if (_positionIsAdvancing(now)) {
+      _markPausedProgress(now);
+    }
   }
 
   /// Called when the app returns to the foreground (resumed lifecycle).
   ///
-  /// If the audio player is stuck in loading/buffering after a meaningful
-  /// background period (≥ 3 s), the underlying network connection is likely
-  /// stale.  We cancel the watchdog and reload the current track so the user
-  /// doesn't have to wait for the 30-second timeout or restart the app.
+  /// Stale-source recovery uses time since playback last made progress.
+  /// The same decision runs from the foreground idle timer when the process
+  /// never leaves the resumed lifecycle.
   Future<void> onAppResumed() async {
     // Clear any lingering interruption flag. Android's audio-focus system can
     // fire an interruptionEvent.begin while the app is backgrounded (treating
@@ -3570,33 +4458,9 @@ class PlayerNotifier extends Notifier<PlayerState> {
     // refuse every tap.  The user returning to the app is a reliable signal
     // that any previous interruption is over.
     _interrupted = false;
-
-    final pausedAt = _appPausedAt;
-    _appPausedAt = null;
-    if (pausedAt == null) return;
-
-    final backgroundDuration = DateTime.now().difference(pausedAt);
-    final ps = _handler.audioPlayer.processingState;
-    final stuckLoading =
-        state.isLoading ||
-        ps == ProcessingState.loading ||
-        ps == ProcessingState.buffering;
-
-    if (backgroundDuration.inSeconds >= 3 && stuckLoading) {
-      debugPrint(
-        'PlayerNotifier.onAppResumed: stuck loading after '
-        '${backgroundDuration.inSeconds}s in background — reloading track',
-      );
-      final track = state.currentTrack;
-      if (track != null) {
-        _bufferingWatchdog?.cancel();
-        _bufferingWatchdog = null;
-        _qualityFallbackWatchdog?.cancel();
-        _qualityFallbackWatchdog = null;
-        final position = _handler.audioPlayer.position;
-        await _loadAndPlay(track, initialPosition: position);
-      }
-    }
+    final now = DateTime.now();
+    _observePlaybackProgress(_handler.audioPlayer.position, now);
+    await _applyIdleDecision(now);
   }
 
   Future<void> togglePlayPause() async {
@@ -3620,6 +4484,20 @@ class PlayerNotifier extends Notifier<PlayerState> {
     if (!hasLinearNext && !canWrap && !(_isOffline && state.queue.isNotEmpty)) {
       return;
     }
+    // Offline with no other locally available track: there is nowhere to go.
+    // Decided before anything is torn down so a track that is still playing
+    // (and its listen session) is left untouched.
+    if (_isOffline && _nextOfflineIndex(canWrap: canWrap) == null) {
+      if (_handler.audioPlayer.processingState == ProcessingState.completed) {
+        // The last available track just finished.
+        _parkCompletedQueue(
+          index: _findPlayableIndex(state.queue, 0) ?? state.currentIndex,
+        );
+      } else {
+        _showPlayerSnack('No other tracks are available offline');
+      }
+      return;
+    }
     final epoch = _beginLoad();
     _userPaused = false;
     _pendingRestorePosition = null;
@@ -3631,18 +4509,12 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
     // Offline: jump to the next track that has local audio.
     if (_isOffline) {
-      var newIndex = _findPlayableIndex(state.queue, state.currentIndex + 1);
-      if (newIndex == null && canWrap) {
-        newIndex = _findPlayableIndex(state.queue, 0);
-        // Avoid restarting the same track if it's the only offline one.
-        if (newIndex == state.currentIndex) newIndex = null;
-      }
+      final newIndex = _nextOfflineIndex(canWrap: canWrap);
       if (newIndex == null) {
-        state = state.copyWith(isPlaying: false, queueCompleted: true);
-        _saveQueue();
+        _settleRetainedSource(epoch: epoch, seekSucceeded: false);
         return;
       }
-      _gaplessActive = false;
+      _retireGaplessPlaylist();
       state = state.copyWith(currentIndex: newIndex, isLoading: true);
       await _loadAndPlay(state.queue[newIndex], epoch: epoch);
       _saveQueue();
@@ -3651,43 +4523,21 @@ class PlayerNotifier extends Notifier<PlayerState> {
     }
 
     var newIndex = state.currentIndex + 1;
-    var wrapped = false;
     if (newIndex >= state.queue.length) {
-      if (!canWrap) return;
+      if (!canWrap) {
+        _settleRetainedSource(epoch: epoch, seekSucceeded: false);
+        return;
+      }
       newIndex = 0;
-      wrapped = true;
     }
+    final track = state.queue[newIndex];
 
     if (_gaplessActive) {
       state = state.copyWith(currentIndex: newIndex);
-      _updateMediaItemForTrack(state.queue[newIndex]);
-      try {
-        if (wrapped) {
-          // Wrap to first track by index rather than seekToNext.
-          await _handler.audioPlayer.seek(Duration.zero, index: newIndex);
-        } else {
-          await _handler.audioPlayer.seekToNext();
-        }
-      } catch (_) {
-        // The gapless source may not yet have the next child (e.g. radio
-        // tracks are added asynchronously).  Rebuild from the queue.
-        state = state.copyWith(isLoading: true);
-        final loaded = await _loadGaplessSource(newIndex);
-        if (!_isCurrentLoad(epoch)) return;
-        if (loaded) {
-          await _startPlayback();
-          state = state.copyWith(
-            isLoading: false,
-            isPlaying: _handler.audioPlayer.playing,
-          );
-        } else {
-          state = state.copyWith(isLoading: false);
-          return;
-        }
-      }
-      if (!_isCurrentLoad(epoch)) return;
-      await _activateListenForTrack(state.queue[newIndex]);
-      await _recordServerListen(state.queue[newIndex]);
+      _updateMediaItemForTrack(track);
+      if (!await _playGaplessIndex(newIndex, epoch)) return;
+      await _activateListenForTrack(track);
+      await _recordServerListen(track);
     } else if (_isGaplessEnabled) {
       // Gapless was just turned on — build the full playlist from this track.
       state = state.copyWith(currentIndex: newIndex, isLoading: true);
@@ -3695,19 +4545,20 @@ class PlayerNotifier extends Notifier<PlayerState> {
       if (!_isCurrentLoad(epoch)) return;
       if (loaded) {
         await _startPlayback();
+        if (!_isCurrentLoad(epoch)) return;
         // Sync isPlaying immediately — same race fix as in playTracks().
         state = state.copyWith(
           isLoading: false,
           isPlaying: _handler.audioPlayer.playing,
         );
-        await _activateListenForTrack(state.queue[newIndex]);
-        await _recordServerListen(state.queue[newIndex]);
+        await _activateListenForTrack(track);
+        await _recordServerListen(track);
       } else {
-        await _loadAndPlay(state.queue[newIndex], epoch: epoch);
+        await _loadAndPlay(track, epoch: epoch);
       }
     } else {
       state = state.copyWith(currentIndex: newIndex, isLoading: true);
-      await _loadAndPlay(state.queue[newIndex], epoch: epoch);
+      await _loadAndPlay(track, epoch: epoch);
     }
 
     if (!_isCurrentLoad(epoch)) return;
@@ -3715,16 +4566,74 @@ class PlayerNotifier extends Notifier<PlayerState> {
     Analytics.track('skip_next');
   }
 
+  /// Move the loaded gapless playlist to [index] and play it, as a
+  /// single-source skip would. When the player does not hold that item (radio
+  /// tracks are appended asynchronously, and an append can be cut short) the
+  /// playlist is rebuilt from the queue instead.
+  ///
+  /// Returns false when the move failed or a newer request superseded it.
+  Future<bool> _playGaplessIndex(int index, int epoch) async {
+    var rebuilt = false;
+    try {
+      await _seekGaplessTo(index);
+      if (!_isCurrentLoad(epoch)) return false;
+      // The playlist did not change. Commit it so a buffering seek can
+      // end on ready, and finish immediately when it is already ready.
+      _settleRetainedSource(epoch: epoch, seekSucceeded: true);
+      _syncLocalSourceFlag(index);
+    } catch (_) {
+      if (!_isCurrentLoad(epoch)) return false;
+      state = state.copyWith(isLoading: true);
+      final loaded = await _loadGaplessSource(index);
+      if (!_isCurrentLoad(epoch)) return false;
+      if (!loaded) {
+        _settleRetainedSource(
+          epoch: epoch,
+          seekSucceeded: false,
+          ignoreFurtherSignals: true,
+        );
+        state = state.copyWith(isLoading: false);
+        return false;
+      }
+      rebuilt = true;
+    }
+
+    await _startPlayback();
+    if (!_isCurrentLoad(epoch)) return false;
+    state = state.copyWith(
+      isLoading: rebuilt ? false : null,
+      isPlaying: _handler.audioPlayer.playing,
+    );
+    return true;
+  }
+
+  /// Seek back to the start of the current track. With no source loaded yet
+  /// (restored or finished queue) this moves the pending resume point.
+  Future<void> _restartCurrentTrack() async {
+    if (_pendingRestorePosition != null) {
+      _pendingRestorePosition = Duration.zero;
+      state = state.copyWith(position: Duration.zero);
+      unawaited(_saveQueueProgress(position: Duration.zero));
+      return;
+    }
+    await _handler.audioPlayer.seek(Duration.zero);
+  }
+
   Future<void> skipPrevious() async {
     if (state.position.inSeconds > 3) {
-      await _handler.audioPlayer.seek(Duration.zero);
+      await _restartCurrentTrack();
       return;
     }
     final canWrap = state.loopMode == LoopMode.all && state.queue.isNotEmpty;
     if (!state.hasPrevious &&
         !canWrap &&
         !(_isOffline && state.queue.isNotEmpty)) {
-      await _handler.audioPlayer.seek(Duration.zero);
+      await _restartCurrentTrack();
+      return;
+    }
+    // Offline with no earlier locally available track: restart this one.
+    if (_isOffline && _previousOfflineIndex(canWrap: canWrap) == null) {
+      await _restartCurrentTrack();
       return;
     }
 
@@ -3739,24 +4648,14 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
     // Offline: jump to the previous track that has local audio.
     if (_isOffline) {
-      var newIndex = _findPlayableIndex(
-        state.queue,
-        state.currentIndex - 1,
-        step: -1,
-      );
-      if (newIndex == null && canWrap) {
-        newIndex = _findPlayableIndex(
-          state.queue,
-          state.queue.length - 1,
-          step: -1,
-        );
-        if (newIndex == state.currentIndex) newIndex = null;
-      }
+      final newIndex = _previousOfflineIndex(canWrap: canWrap);
       if (newIndex == null) {
         await _handler.audioPlayer.seek(Duration.zero);
+        if (!_isCurrentLoad(epoch)) return;
+        _settleRetainedSource(epoch: epoch, seekSucceeded: true);
         return;
       }
-      _gaplessActive = false;
+      _retireGaplessPlaylist();
       state = state.copyWith(currentIndex: newIndex, isLoading: true);
       await _loadAndPlay(state.queue[newIndex], epoch: epoch);
       _saveQueue();
@@ -3765,46 +4664,26 @@ class PlayerNotifier extends Notifier<PlayerState> {
     }
 
     var newIndex = state.currentIndex - 1;
-    var wrapped = false;
     if (newIndex < 0) {
       if (!canWrap) {
         await _handler.audioPlayer.seek(Duration.zero);
+        if (!_isCurrentLoad(epoch)) return;
+        _settleRetainedSource(epoch: epoch, seekSucceeded: true);
         return;
       }
       newIndex = state.queue.length - 1;
-      wrapped = true;
     }
+    final track = state.queue[newIndex];
 
     if (_gaplessActive) {
       state = state.copyWith(currentIndex: newIndex);
-      _updateMediaItemForTrack(state.queue[newIndex]);
-      try {
-        if (wrapped) {
-          await _handler.audioPlayer.seek(Duration.zero, index: newIndex);
-        } else {
-          await _handler.audioPlayer.seekToPrevious();
-        }
-      } catch (_) {
-        state = state.copyWith(isLoading: true);
-        final loaded = await _loadGaplessSource(newIndex);
-        if (!_isCurrentLoad(epoch)) return;
-        if (loaded) {
-          await _startPlayback();
-          state = state.copyWith(
-            isLoading: false,
-            isPlaying: _handler.audioPlayer.playing,
-          );
-        } else {
-          state = state.copyWith(isLoading: false);
-          return;
-        }
-      }
-      if (!_isCurrentLoad(epoch)) return;
-      await _activateListenForTrack(state.queue[newIndex]);
-      await _recordServerListen(state.queue[newIndex]);
+      _updateMediaItemForTrack(track);
+      if (!await _playGaplessIndex(newIndex, epoch)) return;
+      await _activateListenForTrack(track);
+      await _recordServerListen(track);
     } else {
       state = state.copyWith(currentIndex: newIndex, isLoading: true);
-      await _loadAndPlay(state.queue[newIndex], epoch: epoch);
+      await _loadAndPlay(track, epoch: epoch);
     }
 
     if (!_isCurrentLoad(epoch)) return;
@@ -3813,7 +4692,14 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }
 
   Future<void> seekTo(Duration position) async {
-    await _handler.seek(position);
+    if (_pendingRestorePosition != null) {
+      // No source is loaded yet (restored or finished queue), so there is
+      // nothing to seek. Move the resume point instead; play() starts there.
+      _pendingRestorePosition = position;
+      state = state.copyWith(position: position, queueCompleted: false);
+    } else {
+      await _handler.seek(position);
+    }
     _saveQueue(); // Save position
     // Force podcast progress after seek so multi-device resume sees the jump.
     final track = state.currentTrack;
@@ -3825,9 +4711,10 @@ class PlayerNotifier extends Notifier<PlayerState> {
     Analytics.track('seek', {'position_seconds': position.inSeconds});
   }
 
-  /// Relative seek (used for podcast −15s / +30s controls).
+  /// Relative seek (used for podcast −10s / +30s controls).
   Future<void> seekBy(Duration delta) async {
-    final current = _handler.audioPlayer.position;
+    // Before the first play after a restore the player still reports zero.
+    final current = _pendingRestorePosition ?? _handler.audioPlayer.position;
     final total = state.duration;
     var target = current + delta;
     if (target.isNegative) target = Duration.zero;
@@ -3909,8 +4796,11 @@ class PlayerNotifier extends Notifier<PlayerState> {
     // currently playing item is not reloaded (avoids stutter / seek-back).
     // Full setAudioSources rebuild was the previous approach and interrupted
     // playback even when initialPosition was preserved.
-    if (_gaplessActive) {
-      unawaited(_reorderGaplessPlaylist(oldQueue, state.queue));
+    if (_mirrorsGaplessPlaylist) {
+      final newQueue = state.queue;
+      _enqueueGaplessMutation(
+        (isCurrent) => _reorderGaplessPlaylist(oldQueue, newQueue, isCurrent),
+      );
     }
 
     _saveQueue();
@@ -3926,6 +4816,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
   Future<void> _reorderGaplessPlaylist(
     List<Track> oldQueue,
     List<Track> newQueue,
+    bool Function() isCurrent,
   ) async {
     if (oldQueue.length != newQueue.length || oldQueue.isEmpty) {
       await _reloadGaplessPreservingPlayback();
@@ -3968,6 +4859,8 @@ class PlayerNotifier extends Notifier<PlayerState> {
       // arrangement[i] = original (oldQueue) index currently at player slot i
       final arrangement = List<int>.generate(oldQueue.length, (i) => i);
       for (var target = 0; target < desiredOldIndices.length; target++) {
+        // The playlist was replaced (built from the already-reordered queue).
+        if (!isCurrent()) return;
         final want = desiredOldIndices[target];
         if (arrangement[target] == want) continue;
         final from = arrangement.indexOf(want);
@@ -3978,16 +4871,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
 
       // Reconcile app currentIndex with the player if needed (should match
       // the playing track's new slot after the moves).
-      final playerIndex = _handler.audioPlayer.currentIndex;
-      final current = state.currentTrack;
-      if (playerIndex != null &&
-          playerIndex != state.currentIndex &&
-          playerIndex >= 0 &&
-          playerIndex < state.queue.length &&
-          current != null &&
-          state.queue[playerIndex].id == current.id) {
-        state = state.copyWith(currentIndex: playerIndex);
-      }
+      _reconcileIndexWithPlayer();
     } catch (e, st) {
       debugPrint('reorderGaplessPlaylist failed: $e');
       debugPrintStack(stackTrace: st);
@@ -4057,23 +4941,54 @@ class PlayerNotifier extends Notifier<PlayerState> {
     }
   }
 
-  /// Jump to a specific index in the queue.
+  /// Jump to a specific index in the queue and play it.
   Future<void> jumpTo(int index) async {
     if (index < 0 || index >= state.queue.length) return;
+    final epoch = _beginLoad();
     _pendingRestorePosition = null;
+    _userPaused = false;
+    if (state.queueCompleted) {
+      state = state.copyWith(queueCompleted: false);
+    }
     await _finalizeCurrentListen();
+    if (!_isCurrentLoad(epoch)) return;
+    if (index >= state.queue.length) {
+      // The queue shrank while the previous listen was being closed.
+      _settleRetainedSource(epoch: epoch, seekSucceeded: false);
+      return;
+    }
+    final track = state.queue[index];
 
-    if (_gaplessActive) {
+    if (_gaplessActive && !_isOffline) {
       state = state.copyWith(currentIndex: index);
-      _updateMediaItemForTrack(state.queue[index]);
-      await _handler.audioPlayer.seek(Duration.zero, index: index);
-      await _activateListenForTrack(state.queue[index]);
-      await _recordServerListen(state.queue[index]);
+      _updateMediaItemForTrack(track);
+      if (!await _playGaplessIndex(index, epoch)) return;
+      await _activateListenForTrack(track);
+      await _recordServerListen(track);
+    } else if (_isGaplessEnabled && !_isOffline) {
+      // No playlist is loaded (restored queue, or gapless was just turned
+      // on): build it from this track, as a skip does.
+      state = state.copyWith(currentIndex: index, isLoading: true);
+      final loaded = await _loadGaplessSource(index);
+      if (!_isCurrentLoad(epoch)) return;
+      if (loaded) {
+        await _startPlayback();
+        if (!_isCurrentLoad(epoch)) return;
+        state = state.copyWith(
+          isLoading: false,
+          isPlaying: _handler.audioPlayer.playing,
+        );
+        await _activateListenForTrack(track);
+        await _recordServerListen(track);
+      } else {
+        await _loadAndPlay(track, epoch: epoch);
+      }
     } else {
       state = state.copyWith(currentIndex: index, isLoading: true);
-      await _loadAndPlay(state.queue[index]);
+      await _loadAndPlay(track, epoch: epoch);
     }
 
+    if (!_isCurrentLoad(epoch)) return;
     _saveQueue();
     Analytics.track('jump_to_queue', {'index': index});
   }
@@ -4106,24 +5021,13 @@ class PlayerNotifier extends Notifier<PlayerState> {
   }) async {
     try {
       // Fetch all tracks for the playlist, paginating through all pages.
-      final allTracks = <Track>[];
-      int page = 1;
-      while (true) {
-        final response = await _api.getPlaylistTracks(
-          playlistId,
-          page: page,
-          pageSize: 50,
-        );
-        allTracks.addAll(response.results.map((pt) => pt.track));
-        if (response.next == null) break;
-        page++;
-      }
+      final playlistTracks = await fetchAllPages(
+        (page) => _api.getPlaylistTracks(playlistId, page: page, pageSize: 50),
+      );
+      final allTracks = playlistTracks.map((pt) => pt.track).toList();
       if (allTracks.isEmpty) return;
       await playTracks(allTracks, source: 'wear-playlist', shuffle: shuffled);
-      Analytics.track('wear_start_playlist', {
-        'playlist_id': playlistId,
-        'shuffled': shuffled,
-      });
+      Analytics.track('wear_start_playlist', {'shuffled': shuffled});
     } catch (e) {
       debugPrint('Wear startPlaylist failed: $e');
     }
@@ -4134,7 +5038,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     final radioId = extras['radioId'] as int?;
     if (radioId == null) return;
     startRadio(radioId);
-    Analytics.track('wear_start_radio', {'radio_id': radioId});
+    Analytics.track('wear_start_radio');
   }
 
   /// Handle "startRadioShuffled" custom action from the watch.
@@ -4144,10 +5048,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     final radioId = extras['radioId'] as int?;
     if (radioId == null) return;
     startRadio(radioId);
-    Analytics.track('wear_start_radio', {
-      'radio_id': radioId,
-      'shuffled': true,
-    });
+    Analytics.track('wear_start_radio', {'shuffled': true});
   }
 
   /// Handle "startInstanceRadio" custom action from the watch.
@@ -4238,7 +5139,7 @@ class PlayerNotifier extends Notifier<PlayerState> {
     if (track == null) return;
     try {
       ref.read(favoriteTrackIdsProvider.notifier).toggle(track.id);
-      Analytics.track('wear_toggle_favorite', {'track_id': track.id});
+      Analytics.track('wear_toggle_favorite');
     } catch (e) {
       debugPrint('Wear toggleFavorite failed: $e');
     }

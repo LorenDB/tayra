@@ -60,6 +60,9 @@ class DownloadQueueService {
   final CacheDatabase _db;
   bool _running = false;
 
+  /// Bound variables per statement, kept under old SQLite's limit of 999.
+  static const int _sqlVariableChunk = 500;
+
   DownloadQueueService(this._db);
 
   // ── Public API ───────────────────────────────────────────────────────────
@@ -79,18 +82,37 @@ class DownloadQueueService {
     final db = await _db.database;
     final now = DateTime.now().millisecondsSinceEpoch;
 
-    // Batch-check which IDs are already queued or downloading.
-    final placeholders = trackIds.map((_) => '?').join(',');
-    final existing = await db.rawQuery(
-      "SELECT track_id FROM download_queue WHERE track_id IN ($placeholders)"
-      " AND status IN ('queued', 'downloading')",
-      trackIds,
-    );
-    final existingIds = existing.map((r) => r['track_id'] as int).toSet();
+    // Batch-check which IDs are already queued or downloading. Chunked:
+    // SQLite before 3.32 (Android 11 and older) rejects statements with more
+    // than 999 bound variables, and a large playlist or favorites list can
+    // easily exceed that.
+    final existingIds = <int>{};
+    for (var start = 0; start < trackIds.length; start += _sqlVariableChunk) {
+      final end =
+          start + _sqlVariableChunk < trackIds.length
+              ? start + _sqlVariableChunk
+              : trackIds.length;
+      final chunk = trackIds.sublist(start, end);
+      final placeholders = List.filled(chunk.length, '?').join(',');
+      final existing = await db.rawQuery(
+        "SELECT track_id FROM download_queue WHERE track_id IN ($placeholders)"
+        " AND status IN ('queued', 'downloading')",
+        chunk,
+      );
+      existingIds.addAll(existing.map((r) => r['track_id'] as int));
+    }
 
     await db.transaction((txn) async {
       for (final id in trackIds) {
         if (existingIds.contains(id)) continue;
+        // Re-queueing a track that failed earlier replaces its failed row;
+        // otherwise every retry (favorites are reconciled on each launch)
+        // would leave another one behind.
+        await txn.delete(
+          'download_queue',
+          where: "track_id = ? AND status = 'failed'",
+          whereArgs: [id],
+        );
         await txn.insert('download_queue', {
           'track_id': id,
           'status': 'queued',
@@ -221,6 +243,9 @@ class DownloadQueueService {
               Analytics.track('download_started');
               final downloadQuality =
                   ref.read(settingsProvider).downloadQuality;
+              // The download goes out with a plain Bearer header; nothing
+              // refreshes an expired token for it.
+              await api.ensureStreamAuth();
               final file = await audioSvc.cacheAudio(
                 track,
                 api.getStreamUrl(

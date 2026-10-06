@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tayra/core/api/api_errors.dart';
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
@@ -42,19 +43,9 @@ final _artistTracksProvider = FutureProvider.family<List<Track>, int>((
     (key) => key.startsWith('tracks_p') && key.contains('_ar$artistId'),
   );
   final api = ref.watch(cachedFunkwhaleApiProvider);
-  final allTracks = <Track>[];
-  int page = 1;
-  while (true) {
-    final response = await api.getTracks(
-      artist: artistId,
-      pageSize: 100,
-      page: page,
-    );
-    allTracks.addAll(response.results);
-    if (response.next == null) break;
-    page++;
-  }
-  return allTracks;
+  return fetchAllPages(
+    (page) => api.getTracks(artist: artistId, pageSize: 100, page: page),
+  );
 });
 
 // ── Screen ──────────────────────────────────────────────────────────────
@@ -75,7 +66,7 @@ class ArtistDetailScreen extends ConsumerWidget {
         error:
             (error, stack) => DetailPageErrorBody(
               title: 'Failed to load artist',
-              message: error.toString(),
+              message: describeLoadError(error),
               onRetry: () => ref.invalidate(_artistDetailProvider(artistId)),
             ),
         data:
@@ -447,7 +438,8 @@ class _ArtistActionButtons extends ConsumerWidget {
       ref
           .read(playerProvider.notifier)
           .playTracks(tracks, source: 'artist_detail_play_all');
-      Analytics.track('artist_play_all', {'artist_id': artist.id});
+      // Which artist is not recorded: usage counts only, per analytics policy.
+      Analytics.track('artist_play_all');
     }
 
     void startArtistRadio() {
@@ -458,7 +450,7 @@ class _ArtistActionButtons extends ConsumerWidget {
             -(artist.id),
             relatedObjectId: artist.id.toString(),
           );
-      Analytics.track('artist_radio_start', {'artist_id': artist.id});
+      Analytics.track('artist_radio_start');
     }
 
     return Padding(

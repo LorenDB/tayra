@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:tayra/core/api/server_url.dart';
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/auth/auth_provider.dart';
 import 'package:tayra/core/auth/password_transport.dart';
@@ -738,15 +739,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     // Persist server URL so OOB exchange / native callback can find it.
     // Also stash any deep-link `from=` so the OIDC return path can restore it
     // after the full-page IdP round-trip on web.
-    final prefsServer = server.startsWith('http') ? server : 'https://$server';
+    final prefsServer = normalizeServerUrl(server);
     final from = GoRouterState.of(context).uri.queryParameters['from'];
     final safeFrom = safeInternalPath(from);
     try {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(
-        'server_url',
-        prefsServer.replaceAll(RegExp(r'/$'), ''),
-      );
+      await prefs.setString('server_url', prefsServer);
       if (safeFrom != null) {
         await prefs.setString(kPostLoginRedirectKey, safeFrom);
       } else {
@@ -814,9 +812,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       loginUrl =
           '${base.scheme}://${base.host}${base.hasPort ? ':${base.port}' : ''}$loginUrl';
     } else if (!loginUrl.startsWith('http')) {
-      final normalized = server.startsWith('http') ? server : 'https://$server';
-      final origin = normalized.replaceAll(RegExp(r'/$'), '');
-      loginUrl = '$origin$loginUrl';
+      loginUrl = '${normalizeServerUrl(server)}$loginUrl';
     }
 
     if (!kIsWeb) {

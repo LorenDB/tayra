@@ -139,7 +139,12 @@ void main() async {
 
   // Eagerly initialize the PlayerNotifier to wire up the onPlayTracks callback.
   // This ensures Android Auto can start playback even when launched in the background.
-  container.read(playerProvider);
+  //
+  // Listen rather than read: Riverpod pauses a provider's own subscriptions
+  // while nothing is listening to it, and the player reacts to connectivity
+  // and sign-out through those. With only widgets listening, they would go
+  // quiet whenever no player UI is on screen (background launch, login).
+  container.listen(playerProvider, (previous, next) {});
 
   // Handle tayra:// deep links so SSO finishes without pasting a code.
   // Lives for the whole process; no dispose needed.

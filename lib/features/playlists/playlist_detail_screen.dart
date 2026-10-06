@@ -252,7 +252,8 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
         if (!mounted || generation != _loadGeneration) return;
         accumulated.addAll(response.results);
         setState(() => _playlistTracks = List<PlaylistTrack>.from(accumulated));
-        if (response.next == null) break;
+        // An empty page that still advertises a next one would loop forever.
+        if (response.next == null || response.results.isEmpty) break;
         page++;
       }
       final isManual = ref.read(isManualPlaylistProvider(widget.playlistId));
@@ -532,38 +533,38 @@ class _PlaylistDetailScreenState extends ConsumerState<PlaylistDetailScreen> {
                 ),
                 color: AppTheme.surfaceContainer,
                 onSelected: (value) async {
-                  if (value == 'share') {
-                    await showShareLinkSheet(
-                      context,
-                      objectType: 'playlist',
-                      objectId: playlist.id,
-                      title: playlist.name,
-                    );
-                  }
-                  if (value == 'download') unawaited(toggleDownload());
-                  if (value == 'play_next') {
-                    final allTracks = await _getAllPlaylistTracks();
-                    if (!mounted) return;
-                    final message = insertTracksToPlayNext(ref, allTracks);
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(SnackBar(content: Text(message)));
-                  }
-                  if (value == 'add_queue') {
-                    final allTracks = await _getAllPlaylistTracks();
-                    if (!mounted) return;
-                    final message = addTracksToQueue(ref, allTracks);
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(SnackBar(content: Text(message)));
-                  }
-                  if (value == 'edit') {
-                    context
-                        .push('/playlists/${playlist.id}/edit')
-                        .then((_) => _loadData(forceRefresh: true));
-                  }
-                  if (value == 'delete') {
-                    unawaited(_confirmDeletePlaylist(context, playlist));
+                  switch (value) {
+                    case 'share':
+                      await showShareLinkSheet(
+                        context,
+                        objectType: 'playlist',
+                        objectId: playlist.id,
+                        title: playlist.name,
+                      );
+                    case 'download':
+                      unawaited(toggleDownload());
+                    case 'play_next':
+                      final messenger = ScaffoldMessenger.of(context);
+                      final allTracks = await _getAllPlaylistTracks();
+                      if (!mounted) return;
+                      final message = insertTracksToPlayNext(ref, allTracks);
+                      messenger.showSnackBar(SnackBar(content: Text(message)));
+                    case 'add_queue':
+                      final messenger = ScaffoldMessenger.of(context);
+                      final allTracks = await _getAllPlaylistTracks();
+                      if (!mounted) return;
+                      final message = addTracksToQueue(ref, allTracks);
+                      messenger.showSnackBar(SnackBar(content: Text(message)));
+                    case 'edit':
+                      unawaited(
+                        context.push('/playlists/${playlist.id}/edit').then((
+                          _,
+                        ) {
+                          if (mounted) _loadData(forceRefresh: true);
+                        }),
+                      );
+                    case 'delete':
+                      unawaited(_confirmDeletePlaylist(context, playlist));
                   }
                 },
                 itemBuilder:

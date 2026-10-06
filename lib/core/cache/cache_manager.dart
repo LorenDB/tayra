@@ -127,6 +127,14 @@ class CacheManager {
   Timer? _lastAccessedFlushTimer;
   static const Duration _lastAccessedFlushInterval = Duration(seconds: 5);
 
+  final StreamController<int> _removedAudioTrackIds =
+      StreamController<int>.broadcast();
+
+  /// Track ids whose last cached audio file was just deleted through
+  /// [deleteFile] — in practice by eviction, which runs here out of sight of
+  /// the code that tracks "which tracks are downloaded" in memory.
+  Stream<int> get removedAudioTrackIds => _removedAudioTrackIds.stream;
+
   // Singleton pattern
   CacheManager._();
   static final CacheManager instance = CacheManager._();
@@ -509,12 +517,19 @@ class CacheManager {
     final db = await _db.database;
     final results = await db.query(
       'cache_files',
-      columns: ['file_path', 'resource_parent_type', 'resource_parent_id'],
+      columns: [
+        'file_path',
+        'file_type',
+        'resource_id',
+        'resource_parent_type',
+        'resource_parent_id',
+      ],
       where: 'cache_key = ?',
       whereArgs: [key],
     );
 
     int? parentAlbumId;
+    int? audioTrackId;
     if (results.isNotEmpty) {
       final row = results.first;
       final filePath = row['file_path'] as String;
@@ -525,11 +540,25 @@ class CacheManager {
       if (row['resource_parent_type'] == CacheType.album.name) {
         parentAlbumId = row['resource_parent_id'] as int?;
       }
+      if (row['file_type'] == FileType.audio.name) {
+        audioTrackId = row['resource_id'] as int?;
+      }
     }
 
     await db.delete('cache_files', where: 'cache_key = ?', whereArgs: [key]);
     if (parentAlbumId != null) {
       await maybeRemoveOfflineAlbumIndex(parentAlbumId);
+    }
+    if (audioTrackId != null) {
+      // Another quality of the same track may still be cached.
+      final remaining = await db.query(
+        'cache_files',
+        columns: ['cache_key'],
+        where: 'file_type = ? AND resource_id = ?',
+        whereArgs: [FileType.audio.name, audioTrackId],
+        limit: 1,
+      );
+      if (remaining.isEmpty) _removedAudioTrackIds.add(audioTrackId);
     }
   }
 
@@ -1169,6 +1198,9 @@ class CacheManager {
       await db.delete('cache_favorites');
       await db.delete('download_queue');
       await db.delete('offline_album_index');
+      // Resume positions and played marks are per account too. Left behind,
+      // the next sign-in would show them and sync them up as its own.
+      await db.delete('podcast_episode_progress');
     }
   }
 

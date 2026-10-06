@@ -647,8 +647,32 @@ class CachedFunkwhaleApi {
         await PendingFavoriteOps.enqueue(trackId: trackId, add: false);
         return;
       }
+      if (_isAlreadyNotFavorite(e)) {
+        // Unfavorited elsewhere since our copy was fetched: the outcome the
+        // user asked for already holds.
+        await _applyFavoriteLocally(trackId, add: false);
+        await PendingFavoriteOps.remove(trackId);
+        return;
+      }
       rethrow;
     }
+  }
+
+  /// The server answers a remove for a track that is not (or no longer) a
+  /// favorite with 400, or 404 if the track itself is gone.
+  static bool _isAlreadyNotFavorite(DioException e) {
+    final status = e.response?.statusCode;
+    return status == 400 || status == 404;
+  }
+
+  /// Whether a failed favorite write may succeed if simply tried again
+  /// later (no response, server-side trouble, throttling, or a session that
+  /// needs renewing) as opposed to the server refusing the change itself.
+  static bool _isRetryableFavoriteFailure(DioException e) {
+    if (_isNetworkFailure(e)) return true;
+    final status = e.response?.statusCode;
+    if (status == null) return true;
+    return status >= 500 || status == 401 || status == 408 || status == 429;
   }
 
   Future<void> _applyFavoriteLocally(int trackId, {required bool add}) async {
@@ -663,9 +687,9 @@ class CachedFunkwhaleApi {
   }
 
   static bool _isNetworkFailure(DioException e) {
-    return e.type == DioExceptionType.connectionTimeout ||
-        e.type == DioExceptionType.sendTimeout ||
-        e.type == DioExceptionType.receiveTimeout ||
+    // Timeouts are matched by name so a kind added by a newer Dio
+    // (transformTimeout already was) counts too.
+    return e.type.name.endsWith('Timeout') ||
         e.type == DioExceptionType.connectionError ||
         e.type == DioExceptionType.unknown;
   }
@@ -689,6 +713,22 @@ class CachedFunkwhaleApi {
           await _api.removeFavorite(op.trackId);
           await _cache.removeFavorite(op.trackId);
         }
+        await PendingFavoriteOps.remove(op.trackId);
+        synced++;
+      } on DioException catch (e) {
+        debugPrint(
+          'CachedFunkwhaleApi: pending favorite sync failed for '
+          '${op.trackId}: $e',
+        );
+        if (_isRetryableFavoriteFailure(e)) {
+          // Keep this op and everything after it for a later attempt.
+          break;
+        }
+        // The server refused this change for good (the track was deleted,
+        // or it is already not a favorite). Retrying can never succeed, and
+        // keeping the op would block every later one behind it. Drop it and
+        // bring the local set back in line with the server.
+        await _cache.removeFavorite(op.trackId);
         await PendingFavoriteOps.remove(op.trackId);
         synced++;
       } catch (e) {
@@ -1268,6 +1308,8 @@ class CachedFunkwhaleApi {
 
   Future<void> ensureListenToken({bool force = false}) =>
       _api.ensureListenToken(force: force);
+
+  Future<void> ensureStreamAuth() => _api.ensureStreamAuth();
 
   // ── Channels / Podcasts ──────────────────────────────────────────────
 

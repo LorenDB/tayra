@@ -408,28 +408,29 @@ class _TrackMenuButton extends ConsumerWidget {
             if (track.listenUrl != null) {
               final downloadQuality =
                   ref.read(settingsProvider).downloadQuality;
-              final streamUrl = api.getStreamUrl(
-                track.listenUrl!,
-                quality: downloadQuality,
-                forDownload: true,
-              );
-              final headers = api.authHeaders;
               final audioSvc = ref.read(audioCacheServiceProvider);
+              // Resolved now: the download outlives this row, and a disposed
+              // widget's ref can no longer be read when it finishes.
+              final cachedIds = ref.read(cachedAudioTrackIdsProvider.notifier);
               unawaited(
-                audioSvc
-                    .cacheAudio(
-                      track,
-                      streamUrl,
-                      headers,
+                () async {
+                  // The download goes out with a plain Bearer header; make
+                  // sure the token it carries has not expired.
+                  await api.ensureStreamAuth();
+                  final file = await audioSvc.cacheAudio(
+                    track,
+                    api.getStreamUrl(
+                      track.listenUrl!,
                       quality: downloadQuality,
-                    )
-                    .then((file) {
-                      if (file != null) {
-                        ref
-                            .read(cachedAudioTrackIdsProvider.notifier)
-                            .add(track.id);
-                      }
-                    }),
+                      forDownload: true,
+                    ),
+                    api.authHeaders,
+                    quality: downloadQuality,
+                  );
+                  if (file != null) cachedIds.add(track.id);
+                }().catchError((Object e) {
+                  debugPrint('Track download failed: $e');
+                }),
               );
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('Download queued for "${track.title}"')),
@@ -490,13 +491,17 @@ class _TrackMenuButton extends ConsumerWidget {
       case 'purge_cache':
         try {
           final mgr = CacheManager.instance;
+          // Resolved before the awaits: the row may be gone by the time the
+          // files are deleted, and its ref with it.
+          final cachedIds = ref.read(cachedAudioTrackIdsProvider.notifier);
+          final manualIds = ref.read(manualTrackIdsProvider.notifier);
           await mgr.deleteMetadata('track_${track.id}');
           await mgr.deleteAudioFilesOnDisk(track.id);
           if (track.album != null) {
             await mgr.deleteMetadataLike('tracks_p%_al${track.album!.id}_%');
           }
-          ref.read(cachedAudioTrackIdsProvider.notifier).remove(track.id);
-          ref.read(manualTrackIdsProvider.notifier).remove(track.id);
+          cachedIds.remove(track.id);
+          manualIds.remove(track.id);
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -516,19 +521,24 @@ class _TrackMenuButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // No provider watches here — keeps the menu icon out of rebuild storms.
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: enabled ? () => _openMenu(context, ref) : null,
-      child: SizedBox(
-        width: 28,
-        height: 28,
-        child: Icon(
-          Icons.more_vert,
-          size: 18,
-          color:
-              enabled
-                  ? AppTheme.onBackgroundSubtle
-                  : AppTheme.onBackgroundSubtle.withValues(alpha: 0.4),
+    return Semantics(
+      button: true,
+      enabled: enabled,
+      label: 'More options for ${track.title}',
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: enabled ? () => _openMenu(context, ref) : null,
+        child: SizedBox(
+          width: 28,
+          height: 28,
+          child: Icon(
+            Icons.more_vert,
+            size: 18,
+            color:
+                enabled
+                    ? AppTheme.onBackgroundSubtle
+                    : AppTheme.onBackgroundSubtle.withValues(alpha: 0.4),
+          ),
         ),
       ),
     );

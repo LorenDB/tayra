@@ -28,7 +28,7 @@ def denormalize(apps, schema_editor):
         )
         objs += TrackActor.get_objs(
             library=library,
-            actor_ids=[],
+            user_ids=[],
             upload_and_track_ids=[],
         )
     print("Commiting changes…")

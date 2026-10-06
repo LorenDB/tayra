@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:tayra/core/api/server_url.dart';
 import 'package:tayra/core/api/http_client_factory.dart';
 
 /// Unauthenticated account registration (`POST /api/v1/auth/registration/`).
@@ -13,12 +14,7 @@ class SignupService {
 
   final Dio _dio;
 
-  String _normalizeServerUrl(String serverUrl) {
-    var url = serverUrl.trim();
-    if (!url.startsWith('http')) url = 'https://$url';
-    if (url.endsWith('/')) url = url.substring(0, url.length - 1);
-    return url;
-  }
+  String _normalizeServerUrl(String serverUrl) => normalizeServerUrl(serverUrl);
 
   /// Base URL for API paths. Web prefers same-origin relative URLs.
   String _apiBase(String? serverUrl) {

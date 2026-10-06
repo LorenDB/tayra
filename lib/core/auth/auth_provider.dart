@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/http_client_factory.dart';
+import 'package:tayra/core/api/server_url.dart';
 import 'package:tayra/core/auth/password_transport.dart';
 import 'package:tayra/core/cache/cache_manager.dart';
 import 'package:tayra/core/cache/pending_favorite_ops.dart';
@@ -95,6 +96,11 @@ class AuthState {
   /// Ephemeral PKCE code_verifier for the OAuth authorization-code fallback (M2).
   final String? codeVerifier;
 
+  /// When the access token stops being accepted, from the token response's
+  /// `expires_in`. Null when the server did not say (or for sessions saved
+  /// before this was tracked); the token is then only refreshed on a 401.
+  final DateTime? accessTokenExpiresAt;
+
   const AuthState({
     this.serverUrl,
     this.accessToken,
@@ -109,6 +115,7 @@ class AuthState {
     this.pendingMfaToken,
     this.totpSetupRequired = false,
     this.codeVerifier,
+    this.accessTokenExpiresAt,
   });
 
   bool get isAuthenticated => accessToken != null && serverUrl != null;
@@ -142,6 +149,8 @@ class AuthState {
     bool? totpSetupRequired,
     String? codeVerifier,
     bool clearCodeVerifier = false,
+    DateTime? accessTokenExpiresAt,
+    bool clearAccessTokenExpiry = false,
   }) {
     return AuthState(
       serverUrl: serverUrl ?? this.serverUrl,
@@ -164,8 +173,26 @@ class AuthState {
       totpSetupRequired: totpSetupRequired ?? this.totpSetupRequired,
       codeVerifier:
           clearCodeVerifier ? null : (codeVerifier ?? this.codeVerifier),
+      accessTokenExpiresAt:
+          clearAccessTokenExpiry
+              ? null
+              : (accessTokenExpiresAt ?? this.accessTokenExpiresAt),
     );
   }
+}
+
+/// Result of asking the server for a new access token.
+enum TokenRefreshOutcome {
+  /// A new access token is in use.
+  refreshed,
+
+  /// The server refused the refresh token (expired, revoked, or none is
+  /// stored). The session is over and the user has to sign in again.
+  rejected,
+
+  /// The token endpoint could not be reached or answered with a temporary
+  /// error. The session may well still be valid; try again later.
+  unavailable,
 }
 
 // ── Auth change notifier for router ─────────────────────────────────────
@@ -209,6 +236,18 @@ final authChangeNotifierProvider = Provider<AuthChangeNotifier>((ref) {
 
 // ── Auth notifier ───────────────────────────────────────────────────────
 
+/// HTTP client for the auth endpoints themselves (login, token exchange and
+/// refresh). Deliberately separate from the API client: it carries no auth
+/// interceptor, so a token refresh can never recurse into itself.
+final authHttpClientProvider = Provider<Dio>((ref) {
+  return createDio(
+    BaseOptions(
+      connectTimeout: const Duration(seconds: 15),
+      receiveTimeout: const Duration(seconds: 30),
+    ),
+  );
+});
+
 final authStateProvider = NotifierProvider<AuthNotifier, AuthState>(
   AuthNotifier.new,
 );
@@ -235,20 +274,19 @@ final authStateListenerProvider = Provider<void>((ref) {
 class AuthNotifier extends Notifier<AuthState> {
   /// In-flight token refresh future. If a refresh is already in progress,
   /// concurrent callers share this future instead of launching a second one.
-  Future<bool>? _refreshFuture;
+  Future<TokenRefreshOutcome>? _refreshFuture;
 
   /// In-flight automatic logout (multiple concurrent 401s share one).
   Future<void>? _autoLogoutFuture;
 
+  /// When an ahead-of-use refresh last found the token endpoint unreachable.
+  DateTime? _proactiveRefreshFailedAt;
+  static const _proactiveRefreshBackoff = Duration(seconds: 30);
+
   /// Single Dio for all OAuth calls (app registration, code exchange, token
   /// refresh) so they reuse one connection pool instead of opening a fresh
   /// socket — and DNS lookup — per call.
-  final Dio _dio = createDio(
-    BaseOptions(
-      connectTimeout: const Duration(seconds: 15),
-      receiveTimeout: const Duration(seconds: 30),
-    ),
-  );
+  Dio get _dio => ref.read(authHttpClientProvider);
 
   @override
   AuthState build() {
@@ -261,6 +299,12 @@ class AuthNotifier extends Notifier<AuthState> {
   static const _keyRefreshToken = 'refresh_token';
   static const _keyClientId = 'client_id';
   static const _keyClientSecret = 'client_secret';
+
+  /// Access token expiry (ms since epoch). Not a secret, so always in prefs.
+  static const _keyAccessTokenExpiresAt = 'access_token_expires_at';
+
+  /// How long before its stated expiry an access token is treated as stale.
+  static const _accessTokenRefreshMargin = Duration(minutes: 2);
 
   /// Prefs key for OIDC login CSRF `state` (M3). Cleared after validation.
   static const keyOidcPendingState = 'oidc_pending_state';
@@ -431,12 +475,17 @@ class AuthNotifier extends Notifier<AuthState> {
       }
 
       if (accessToken != null) {
+        final expiresAtMs = prefs.getInt(_keyAccessTokenExpiresAt);
         state = AuthState(
           serverUrl: serverUrl,
           accessToken: accessToken,
           refreshTokenValue: refreshToken,
           clientId: clientId,
           clientSecret: clientSecret,
+          accessTokenExpiresAt:
+              expiresAtMs != null
+                  ? DateTime.fromMillisecondsSinceEpoch(expiresAtMs)
+                  : null,
         );
         // Fire-and-forget: stream auth for web / gapless sources.
         unawaited(ensureListenToken());
@@ -457,12 +506,7 @@ class AuthNotifier extends Notifier<AuthState> {
     }
   }
 
-  String _normalizeServerUrl(String serverUrl) {
-    var url = serverUrl.trim();
-    if (!url.startsWith('http')) url = 'https://$url';
-    if (url.endsWith('/')) url = url.substring(0, url.length - 1);
-    return url;
-  }
+  String _normalizeServerUrl(String serverUrl) => normalizeServerUrl(serverUrl);
 
   /// Discover available login methods (`GET /api/v1/users/auth-methods/`).
   ///
@@ -740,6 +784,7 @@ class AuthNotifier extends Notifier<AuthState> {
         await _clearAllUserData();
       }
 
+      final expiresAt = _expiryFromTokenPayload(payload);
       state = state.copyWith(
         serverUrl: url,
         accessToken: accessToken,
@@ -751,6 +796,8 @@ class AuthNotifier extends Notifier<AuthState> {
         clearPendingServerUrl: true,
         clearPendingMfaToken: true,
         totpSetupRequired: payload['totp_setup_required'] == true,
+        accessTokenExpiresAt: expiresAt,
+        clearAccessTokenExpiry: expiresAt == null,
       );
       await _saveAuth();
       await clearOidcBinding();
@@ -915,19 +962,19 @@ class AuthNotifier extends Notifier<AuthState> {
           bindingHex.isNotEmpty
               ? instanceBindingFromHex(bindingHex)
               : instanceBindingForServerUrl(url);
-      final secret = transportSecret(
-        password,
-        binding,
-        iterations: transportIters,
-      );
       final clientNonce = newClientNonce();
-      final proof = computeClientProof(
-        secret: secret,
-        salt: b64UrlDecode(saltB64),
-        iterations: iterations,
-        username: user,
-        clientNonce: clientNonce,
-        serverNonce: serverNonce,
+      // Two PBKDF2 passes: seconds of CPU, kept off the UI thread.
+      final proof = await deriveClientProof(
+        ClientProofRequest(
+          password: password,
+          instanceBinding: binding,
+          transportIterations: transportIters,
+          salt: b64UrlDecode(saltB64),
+          iterations: iterations,
+          username: user,
+          clientNonce: clientNonce,
+          serverNonce: serverNonce,
+        ),
       );
       final Map<String, dynamic> loginBody = {
         'username': user,
@@ -1104,6 +1151,7 @@ class AuthNotifier extends Notifier<AuthState> {
     }
 
     final setupRequired = data['totp_setup_required'] == true;
+    final expiresAt = _expiryFromTokenPayload(data);
 
     state = state.copyWith(
       serverUrl: url,
@@ -1117,10 +1165,23 @@ class AuthNotifier extends Notifier<AuthState> {
       clearPendingMfaToken: true,
       totpSetupRequired: setupRequired,
       error: null,
+      accessTokenExpiresAt: expiresAt,
+      clearAccessTokenExpiry: expiresAt == null,
     );
     await _saveAuth();
     Analytics.track('login_success');
     return true;
+  }
+
+  /// Absolute expiry from a token response's `expires_in` (seconds), or null
+  /// when the server did not include one.
+  static DateTime? _expiryFromTokenPayload(dynamic data) {
+    final map = _asJsonMap(data);
+    if (map == null) return null;
+    final raw = map['expires_in'];
+    final seconds = raw is num ? raw.toInt() : int.tryParse('$raw');
+    if (seconds == null || seconds <= 0) return null;
+    return DateTime.now().add(Duration(seconds: seconds));
   }
 
   /// Coerce Dio response data into a JSON map (web sometimes yields a String).
@@ -1273,6 +1334,7 @@ class AuthNotifier extends Notifier<AuthState> {
 
       final accessToken = response.data['access_token'] as String;
       final refreshToken = response.data['refresh_token'] as String?;
+      final expiresAt = _expiryFromTokenPayload(response.data);
 
       // If we were auto-logged-out and the user is signing into a different
       // server, clear the stale cache from the previous server before
@@ -1291,6 +1353,8 @@ class AuthNotifier extends Notifier<AuthState> {
         clearPendingServerUrl: true,
         clearListenToken: true,
         clearCodeVerifier: true,
+        accessTokenExpiresAt: expiresAt,
+        clearAccessTokenExpiry: expiresAt == null,
       );
 
       await _saveAuth();
@@ -1312,48 +1376,117 @@ class AuthNotifier extends Notifier<AuthState> {
   ///
   /// If a refresh is already in flight (e.g. from a concurrent 401), the
   /// existing future is returned so that only one refresh request is made.
-  Future<bool> refreshToken() {
+  ///
+  /// The outcome separates "the server refused this session" from "the token
+  /// endpoint could not be reached". Only the former ends the session; a
+  /// timeout or a 5xx must not sign the user out.
+  Future<TokenRefreshOutcome> refreshAccessToken() {
     _refreshFuture ??= _doRefreshToken().whenComplete(() {
       _refreshFuture = null;
     });
     return _refreshFuture!;
   }
 
-  Future<bool> _doRefreshToken() async {
-    if (state.refreshTokenValue == null) return false;
+  /// [refreshAccessToken] reduced to "is a fresh token in use now".
+  Future<bool> refreshToken() async {
+    return await refreshAccessToken() == TokenRefreshOutcome.refreshed;
+  }
 
+  /// Refresh the access token ahead of use when it is known to have expired
+  /// (or is about to).
+  ///
+  /// Media streams and downloads are fetched outside the API client, so no
+  /// 401 handler refreshes the token they are sent with. Call this before
+  /// building such a request. Does nothing when the expiry is unknown.
+  Future<void> ensureFreshAccessToken() async {
+    final expiresAt = state.accessTokenExpiresAt;
+    if (!state.isAuthenticated || expiresAt == null) return;
+    final now = DateTime.now();
+    if (now.isBefore(expiresAt.subtract(_accessTokenRefreshMargin))) return;
+    // The token endpoint just failed to answer: don't put that wait in
+    // front of every request. A 401 still triggers a refresh on demand.
+    final failedAt = _proactiveRefreshFailedAt;
+    if (failedAt != null &&
+        now.difference(failedAt) < _proactiveRefreshBackoff) {
+      return;
+    }
+    final outcome = await refreshAccessToken();
+    _proactiveRefreshFailedAt =
+        outcome == TokenRefreshOutcome.unavailable ? DateTime.now() : null;
+  }
+
+  Future<TokenRefreshOutcome> _doRefreshToken() async {
+    final refreshTokenValue = state.refreshTokenValue;
+    if (refreshTokenValue == null || refreshTokenValue.isEmpty) {
+      return TokenRefreshOutcome.rejected;
+    }
+
+    final Response<dynamic> response;
     try {
       // Public clients refresh without client_secret (M2).
       final data = <String, dynamic>{
         'grant_type': 'refresh_token',
-        'refresh_token': state.refreshTokenValue,
+        'refresh_token': refreshTokenValue,
         'client_id': state.clientId,
       };
       final secret = state.clientSecret;
       if (secret != null && secret.isNotEmpty) {
         data['client_secret'] = secret;
       }
-      final response = await _dio.post(
+      response = await _dio.post(
         '${state.serverUrl}/api/v1/oauth/token/',
         data: data,
         options: Options(contentType: Headers.formUrlEncodedContentType),
       );
-
-      final accessToken = response.data['access_token'] as String;
-      final refreshTokenNew = response.data['refresh_token'] as String?;
-
-      state = state.copyWith(
-        accessToken: accessToken,
-        refreshTokenValue: refreshTokenNew ?? state.refreshTokenValue,
-        clearListenToken: true,
-      );
-
-      await _saveAuth();
-      await ensureListenToken();
-      return true;
+    } on DioException catch (e) {
+      return isRefreshRejection(e.response?.statusCode)
+          ? TokenRefreshOutcome.rejected
+          : TokenRefreshOutcome.unavailable;
     } catch (_) {
-      return false;
+      return TokenRefreshOutcome.unavailable;
     }
+
+    final payload = _asJsonMap(response.data);
+    final accessToken = payload?['access_token'];
+    if (payload == null || accessToken is! String || accessToken.isEmpty) {
+      // A 2xx without a token is a broken answer (e.g. a proxy error page),
+      // not a verdict on the refresh token.
+      return TokenRefreshOutcome.unavailable;
+    }
+    // The user signed out while the request was in flight.
+    if (!state.isAuthenticated) return TokenRefreshOutcome.unavailable;
+
+    final refreshTokenNew = payload['refresh_token'] as String?;
+    final expiresAt = _expiryFromTokenPayload(payload);
+    state = state.copyWith(
+      accessToken: accessToken,
+      refreshTokenValue: refreshTokenNew ?? state.refreshTokenValue,
+      clearListenToken: true,
+      accessTokenExpiresAt: expiresAt,
+      clearAccessTokenExpiry: expiresAt == null,
+    );
+
+    // The new tokens are in use from here on. Storage or listen-token
+    // trouble afterwards must not be reported as a failed refresh.
+    try {
+      await _saveAuth();
+    } catch (e, stack) {
+      assert(() {
+        debugPrint('AuthNotifier: could not persist refreshed tokens: $e');
+        debugPrint('$stack');
+        return true;
+      }());
+    }
+    await ensureListenToken();
+    return TokenRefreshOutcome.refreshed;
+  }
+
+  /// Whether an HTTP status from the token endpoint means the refresh token
+  /// itself was refused (OAuth `invalid_grant` / `invalid_client`), as
+  /// opposed to a temporary condition such as throttling or a server error.
+  @visibleForTesting
+  static bool isRefreshRejection(int? statusCode) {
+    return statusCode == 400 || statusCode == 401 || statusCode == 403;
   }
 
   /// Manual logout triggered by the user. Clears all cached data immediately.
@@ -1404,6 +1537,7 @@ class AuthNotifier extends Notifier<AuthState> {
     await prefs.remove(_keyRefreshToken);
     await prefs.remove(_keyClientId);
     await prefs.remove(_keyClientSecret);
+    await prefs.remove(_keyAccessTokenExpiresAt);
     if (_useSecureStorage) {
       await _storage.delete(key: _keyAccessToken);
       await _storage.delete(key: _keyRefreshToken);
@@ -1429,6 +1563,8 @@ class AuthNotifier extends Notifier<AuthState> {
     }
     try {
       await QueuePersistenceService.clearQueue();
+      // Stashed queues are the previous account's listening too.
+      await QueuePersistenceService.clearStashes();
     } catch (e, st) {
       debugPrint('logout: QueuePersistenceService.clearQueue failed: $e\n$st');
     }
@@ -1439,6 +1575,10 @@ class AuthNotifier extends Notifier<AuthState> {
     }
     try {
       await SettingsNotifier.clearSettings();
+      // The stored values are gone; bring the in-memory settings back to
+      // their defaults too, or the next account keeps running with the
+      // previous one's choices (forced offline mode, say) until a restart.
+      await ref.read(settingsProvider.notifier).reloadFromPrefs();
     } catch (e, st) {
       debugPrint('logout: SettingsNotifier.clearSettings failed: $e\n$st');
     }
@@ -1451,6 +1591,15 @@ class AuthNotifier extends Notifier<AuthState> {
   Future<void> _saveAuth() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keyServerUrl, state.serverUrl!);
+    final expiresAt = state.accessTokenExpiresAt;
+    if (expiresAt != null) {
+      await prefs.setInt(
+        _keyAccessTokenExpiresAt,
+        expiresAt.millisecondsSinceEpoch,
+      );
+    } else {
+      await prefs.remove(_keyAccessTokenExpiresAt);
+    }
     if (_useSecureStorage) {
       await _storage.write(key: _keyAccessToken, value: state.accessToken);
       if (state.refreshTokenValue != null) {

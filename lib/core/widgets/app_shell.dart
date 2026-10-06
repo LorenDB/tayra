@@ -227,12 +227,12 @@ class AppShell extends ConsumerWidget {
           if ((!hasTrack || queueCompleted) && stashCount > 0)
             _StashAccessBar(stashCount: stashCount),
           if (hasTrack) const MiniPlayer(),
-          Container(
-            decoration: const BoxDecoration(
-              color: AppTheme.surfaceContainer,
-              border: Border(
-                top: BorderSide(color: AppTheme.divider, width: 0.5),
-              ),
+          // Material (not a plain coloured box) so the tabs' ink ripples are
+          // painted on this surface instead of underneath it.
+          Material(
+            color: AppTheme.surfaceContainer,
+            shape: const Border(
+              top: BorderSide(color: AppTheme.divider, width: 0.5),
             ),
             child: SafeArea(
               top: false,

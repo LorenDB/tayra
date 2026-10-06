@@ -1,6 +1,11 @@
 from django.db import models
 from django.utils import timezone
 
+# A track counts as completed once playback has reached 9/10 of its known
+# duration. Kept as a fraction so the check stays in integer arithmetic.
+COMPLETED_THRESHOLD_NUM = 9
+COMPLETED_THRESHOLD_DEN = 10
+
 
 class ClientDevice(models.Model):
     """Per-install device registry for multi-client rich data APIs."""

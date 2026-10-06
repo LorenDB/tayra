@@ -59,7 +59,7 @@ class Command(BaseCommand):
             )
             objs += TrackActor.get_objs(
                 library=library,
-                actor_ids=user_ids,
+                user_ids=user_ids,
                 upload_and_track_ids=[],
             )
         print("Committing changes…")

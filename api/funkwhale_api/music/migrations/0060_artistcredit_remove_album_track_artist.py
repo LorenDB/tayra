@@ -23,7 +23,6 @@ def save_artist_credit(obj, ArtistCredit):
         index=0,
         defaults={
             "uuid": new_uuid,
-            "fid": _artistcredit_fid(new_uuid),
         },
     )
     return (obj.pk, artist_credit.pk)

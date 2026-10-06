@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tayra/core/api/api_errors.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -112,7 +113,8 @@ class _AlbumTracksNotifier extends AsyncNotifier<List<Track>> {
         allTracks.addAll(response.results);
         sortTracksByDiscAndPosition(allTracks);
         state = AsyncData(List<Track>.unmodifiable(allTracks));
-        if (response.next == null) break;
+        // An empty page that still advertises a next one would loop forever.
+        if (response.next == null || response.results.isEmpty) break;
         page++;
       }
     } catch (e, st) {
@@ -206,7 +208,7 @@ class AlbumDetailScreen extends ConsumerWidget {
         error:
             (error, stack) => DetailPageErrorBody(
               title: 'Failed to load album',
-              message: error.toString(),
+              message: describeLoadError(error),
               onRetry: () {
                 ref.invalidate(_albumDetailProvider(albumId));
                 ref.read(_albumTracksProvider(albumId).notifier).reload();
@@ -358,7 +360,7 @@ class _AlbumDetailBody extends ConsumerWidget {
                   padding: const EdgeInsets.all(24),
                   child: Center(
                     child: Text(
-                      'Failed to load tracks: $error',
+                      'Failed to load tracks. ${describeLoadError(error)}',
                       style: const TextStyle(
                         color: AppTheme.onBackgroundMuted,
                         fontSize: 13,

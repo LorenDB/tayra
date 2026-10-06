@@ -785,6 +785,19 @@ class FunkwhaleApi {
   Future<void> ensureListenToken({bool force = false}) =>
       _ref.read(authStateProvider.notifier).ensureListenToken(force: force);
 
+  /// Make sure the credentials a stream or download request is about to be
+  /// sent with are usable: an access token that has not expired (the Bearer
+  /// header on native) and the scoped listen token (the `?token=` on web).
+  ///
+  /// These requests are made by the platform player or a bare downloader, so
+  /// nothing else would refresh an expired access token for them. Call this
+  /// right before [getStreamUrl] / [authHeaders].
+  Future<void> ensureStreamAuth() async {
+    final auth = _ref.read(authStateProvider.notifier);
+    await auth.ensureFreshAccessToken();
+    await auth.ensureListenToken();
+  }
+
   // ── Channels (Podcasts) ─────────────────────────────────────────────
 
   /// List channels. [contentCategory] defaults to `podcast` for the podcasts
@@ -1290,19 +1303,19 @@ class FunkwhaleApi {
         bindingHex.isNotEmpty
             ? instanceBindingFromHex(bindingHex)
             : instanceBindingForServerUrl(_baseUrl);
-    final secret = transportSecret(
-      password,
-      binding,
-      iterations: transportIters,
-    );
     final clientNonce = newClientNonce();
-    final proof = computeClientProof(
-      secret: secret,
-      salt: b64UrlDecode(saltB64),
-      iterations: iterations,
-      username: username,
-      clientNonce: clientNonce,
-      serverNonce: serverNonce,
+    // Two PBKDF2 passes: seconds of CPU, kept off the UI thread.
+    final proof = await deriveClientProof(
+      ClientProofRequest(
+        password: password,
+        instanceBinding: binding,
+        transportIterations: transportIters,
+        salt: b64UrlDecode(saltB64),
+        iterations: iterations,
+        username: username,
+        clientNonce: clientNonce,
+        serverNonce: serverNonce,
+      ),
     );
     return {
       'challenge_id': challengeId,

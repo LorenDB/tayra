@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tayra/core/api/api_errors.dart';
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/api_repository.dart';
 import 'package:tayra/core/api/models.dart';
@@ -75,9 +76,11 @@ class _ShareLinkSheetState extends ConsumerState<_ShareLinkSheet> {
     } catch (e) {
       if (!mounted) return;
       setState(() => _loading = false);
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Could not load share links: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Could not load share links. ${describeLoadError(e)}'),
+        ),
+      );
     }
   }
 
@@ -116,7 +119,7 @@ class _ShareLinkSheetState extends ConsumerState<_ShareLinkSheet> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Could not create link: $e'),
+          content: Text('Could not create link. ${describeLoadError(e)}'),
           backgroundColor: AppTheme.error,
         ),
       );
@@ -176,7 +179,7 @@ class _ShareLinkSheetState extends ConsumerState<_ShareLinkSheet> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Could not revoke: $e'),
+          content: Text('Could not revoke. ${describeLoadError(e)}'),
           backgroundColor: AppTheme.error,
         ),
       );
@@ -233,7 +236,7 @@ class _ShareLinkSheetState extends ConsumerState<_ShareLinkSheet> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: DropdownButtonFormField<int?>(
-                      value: _expiresInDays,
+                      initialValue: _expiresInDays,
                       dropdownColor: AppTheme.surfaceContainerHigh,
                       decoration: InputDecoration(
                         isDense: true,

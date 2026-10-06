@@ -15,6 +15,7 @@ import 'package:tayra/core/easter_eggs/super_sonic_ids.dart';
 import 'package:tayra/core/router/navigation_utils.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/theme/palette_provider.dart';
+import 'package:tayra/features/player/play_control_button.dart';
 import 'package:tayra/features/player/player_provider.dart';
 import 'package:tayra/features/favorites/favorites_provider.dart';
 
@@ -167,10 +168,14 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
 
   void _onSeekEnd(double value) {
     final duration = ref.read(playerProvider).duration;
-    final position = Duration(
-      milliseconds: (value * duration.inMilliseconds).round(),
-    );
-    ref.read(playerProvider.notifier).seekTo(position);
+    // Until the duration is known the slider has no scale; a drag would
+    // otherwise be read as "seek to zero".
+    if (duration > Duration.zero) {
+      final position = Duration(
+        milliseconds: (value * duration.inMilliseconds).round(),
+      );
+      ref.read(playerProvider.notifier).seekTo(position);
+    }
     setState(() {
       _isSeeking = false;
     });
@@ -404,6 +409,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
           IconButton(
             icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 32),
             color: AppTheme.onBackground,
+            tooltip: 'Close',
             onPressed: () => popPage(context),
           ),
           const Text(
@@ -424,6 +430,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
               IconButton(
                 icon: const Icon(Icons.queue_music_rounded, size: 26),
                 color: AppTheme.onBackgroundMuted,
+                tooltip: 'Queue',
                 onPressed:
                     widget.onQueuePressed ?? () => context.push('/queue'),
               ),
@@ -876,13 +883,15 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
           if (isPodcast)
             _buildSkipControl(
               icon: Icons.replay_10_rounded,
+              tooltip: 'Back 10 seconds',
               enabled: true,
-              onPressed: () => notifier.seekBy(const Duration(seconds: -15)),
+              onPressed: () => notifier.seekBy(const Duration(seconds: -10)),
               iconSize: skipSize - 4,
             )
           else
             _buildSecondaryControl(
               icon: Icons.shuffle_rounded,
+              tooltip: playerState.isShuffled ? 'Shuffle: on' : 'Shuffle: off',
               isActive: playerState.isShuffled,
               onPressed: () => notifier.toggleShuffle(),
               iconSize: iconSize - 10,
@@ -894,21 +903,23 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
           SizedBox(width: spacing),
           _buildSkipControl(
             icon: Icons.skip_previous_rounded,
+            tooltip: 'Previous',
             enabled:
                 playerState.hasPrevious || playerState.position.inSeconds > 3,
             onPressed: () => notifier.skipPrevious(),
             iconSize: skipSize,
           ),
           SizedBox(width: spacing),
-          _buildPlayPauseButton(
-            playerState,
-            accentColor,
-            playButtonSize,
-            iconSize + 4,
+          PlaybackPlayButton(
+            variant: PlaybackPlayButtonVariant.emphasis,
+            size: playButtonSize,
+            iconSize: iconSize + 4,
+            accentColor: accentColor,
           ),
           SizedBox(width: spacing),
           _buildSkipControl(
             icon: Icons.skip_next_rounded,
+            tooltip: 'Next',
             enabled: playerState.hasNext,
             onPressed: () => notifier.skipNext(),
             iconSize: skipSize,
@@ -917,6 +928,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
           if (isPodcast)
             _buildSkipControl(
               icon: Icons.forward_30_rounded,
+              tooltip: 'Forward 30 seconds',
               enabled: true,
               onPressed: () => notifier.seekBy(const Duration(seconds: 30)),
               iconSize: skipSize - 4,
@@ -932,66 +944,16 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
     );
   }
 
-  Widget _buildPlayPauseButton(
-    PlayerState playerState,
-    Color accentColor,
-    double size,
-    double iconSize,
-  ) {
-    if (playerState.isLoading) {
-      return Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(shape: BoxShape.circle, color: accentColor),
-        child: Center(
-          child: SizedBox(
-            width: iconSize * 0.44,
-            height: iconSize * 0.44,
-            child: CircularProgressIndicator(
-              strokeWidth: 2.5,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      );
-    }
-
-    return GestureDetector(
-      onTap: () => ref.read(playerProvider.notifier).togglePlayPause(),
-      child: Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: accentColor,
-          boxShadow: [
-            BoxShadow(
-              color: accentColor.withValues(alpha: 0.4),
-              blurRadius: size * 0.25,
-              spreadRadius: 1,
-              offset: Offset(0, size * 0.0625),
-            ),
-          ],
-        ),
-        child: Icon(
-          playerState.isPlaying
-              ? Icons.pause_rounded
-              : Icons.play_arrow_rounded,
-          color: Colors.white,
-          size: iconSize,
-        ),
-      ),
-    );
-  }
-
   Widget _buildSkipControl({
     required IconData icon,
+    required String tooltip,
     required bool enabled,
     required VoidCallback onPressed,
     required double iconSize,
   }) {
     return IconButton(
       icon: Icon(icon, size: iconSize),
+      tooltip: tooltip,
       color: enabled ? AppTheme.onBackground : AppTheme.onBackgroundSubtle,
       onPressed: enabled ? onPressed : null,
       padding: EdgeInsets.zero,
@@ -1004,6 +966,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
 
   Widget _buildSecondaryControl({
     required IconData icon,
+    required String tooltip,
     required bool isActive,
     required VoidCallback onPressed,
     required double iconSize,
@@ -1024,6 +987,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
           Center(
             child: IconButton(
               icon: Icon(icon, size: iconSize),
+              tooltip: tooltip,
               color:
                   isActive ? effectiveActiveColor : AppTheme.onBackgroundSubtle,
               onPressed: onPressed,
@@ -1064,22 +1028,26 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
   }) {
     final IconData icon;
     final Color color;
+    final String tooltip;
 
     switch (loopMode) {
       case LoopMode.off:
         icon = Icons.repeat_rounded;
         color = AppTheme.onBackgroundSubtle;
+        tooltip = 'Repeat: off';
         break;
       case LoopMode.all:
         icon = Icons.repeat_rounded;
         // Use the app primary color for the repeat button instead of the
         // dynamic album-art accent color.
         color = AppTheme.primary;
+        tooltip = 'Repeat: all';
         break;
       case LoopMode.one:
         icon = Icons.repeat_one_rounded;
         // Use the app primary color for the repeat-one button as well.
         color = AppTheme.primary;
+        tooltip = 'Repeat: one';
         break;
     }
 
@@ -1094,6 +1062,7 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
           Center(
             child: IconButton(
               icon: Icon(icon, size: iconSize),
+              tooltip: tooltip,
               color: color,
               onPressed:
                   () => ref.read(playerProvider.notifier).toggleLoopMode(),
@@ -1128,17 +1097,18 @@ class _NowPlayingContentState extends ConsumerState<NowPlayingContent>
 
 // ── Speed button ─────────────────────────────────────────────────────────
 
+/// Shortest decimal form of a playback speed: `1`, `1.5`, `0.75`, `2`.
+String formatPlaybackSpeed(double speed) {
+  final text = speed.toStringAsFixed(2);
+  return text.replaceFirst(RegExp(r'\.?0+$'), '');
+}
+
 class _SpeedButton extends ConsumerWidget {
   final double speed;
 
   const _SpeedButton({required this.speed});
 
-  String _label(double s) {
-    if (s == 1.0) return '1×';
-    final text = s.toString();
-    // Remove trailing zero: "1.50" → "1.5"
-    return '${text.endsWith('0') ? text.substring(0, text.length - 1) : text}×';
-  }
+  String _label(double s) => '${formatPlaybackSpeed(s)}×';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

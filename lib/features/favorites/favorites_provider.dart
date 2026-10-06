@@ -43,13 +43,35 @@ class FavoriteTrackIdsNotifier extends Notifier<Set<int>> {
 
   CachedFunkwhaleApi get _api => ref.read(cachedFunkwhaleApiProvider);
 
+  /// Full reloads currently reading the favorites list.
+  int _loadsInFlight = 0;
+
+  /// What the user toggled while a reload was in flight (track id → is now a
+  /// favorite). A reload's snapshot can predate those taps, so they are
+  /// applied on top of it instead of being overwritten.
+  final Map<int, bool> _togglesDuringLoad = {};
+
+  Set<int> _withTogglesDuringLoad(Set<int> ids) {
+    if (_togglesDuringLoad.isEmpty) return ids;
+    final merged = Set<int>.from(ids);
+    _togglesDuringLoad.forEach((trackId, isFavorite) {
+      if (isFavorite) {
+        merged.add(trackId);
+      } else {
+        merged.remove(trackId);
+      }
+    });
+    return merged;
+  }
+
   Future<void> _load() async {
+    _loadsInFlight++;
     try {
       // Seed with cached IDs immediately so heart icons appear while loading
       final cached = await _api.getCachedFavoriteTrackIds();
-      if (cached.isNotEmpty) state = cached;
+      if (cached.isNotEmpty) state = _withTogglesDuringLoad(cached);
       // Then overwrite with fresh data from the network (or keep cache offline)
-      final ids = await _api.getAllFavoriteTrackIds();
+      final ids = _withTogglesDuringLoad(await _api.getAllFavoriteTrackIds());
       state = ids;
       // Best-effort: flush any ops that were pending before this session.
       if (!_api.isOffline) {
@@ -59,18 +81,27 @@ class FavoriteTrackIdsNotifier extends Notifier<Set<int>> {
       unawaited(
         ref.read(autoOfflineCoordinatorProvider).reconcileFavorites(ids),
       );
-    } catch (_) {}
+    } catch (_) {
+    } finally {
+      _loadsInFlight--;
+      if (_loadsInFlight == 0) _togglesDuringLoad.clear();
+    }
   }
 
   Future<void> _syncPending() async {
+    _loadsInFlight++;
     try {
       final synced = await _api.syncPendingFavorites();
       if (synced > 0) {
         // Refresh local set from cache (already updated during sync).
         final cached = await _api.getCachedFavoriteTrackIds();
-        state = cached;
+        state = _withTogglesDuringLoad(cached);
       }
-    } catch (_) {}
+    } catch (_) {
+    } finally {
+      _loadsInFlight--;
+      if (_loadsInFlight == 0) _togglesDuringLoad.clear();
+    }
   }
 
   Future<void> toggle(int trackId) async {
@@ -81,6 +112,7 @@ class FavoriteTrackIdsNotifier extends Notifier<Set<int>> {
     } else {
       state = Set<int>.from(state)..add(trackId);
     }
+    if (_loadsInFlight > 0) _togglesDuringLoad[trackId] = !isFav;
 
     try {
       if (isFav) {
@@ -96,6 +128,7 @@ class FavoriteTrackIdsNotifier extends Notifier<Set<int>> {
       Analytics.track('favorite_toggled', {'added': !isFav});
     } catch (_) {
       // Hard failure (e.g. 4xx) — revert and surface the error.
+      _togglesDuringLoad.remove(trackId);
       if (isFav) {
         state = Set<int>.from(state)..add(trackId);
       } else {

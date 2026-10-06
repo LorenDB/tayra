@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tayra/core/api/api_errors.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
@@ -285,7 +286,7 @@ class _AlbumsScreenState extends ConsumerState<AlbumsScreen>
         error:
             (error, stack) => CenteredErrorView(
               title: 'Failed to load offline albums',
-              message: error.toString(),
+              message: describeLoadError(error),
               onRetry: () => ref.invalidate(offlineAlbumsProvider),
             ),
         data: (albums) {
@@ -313,7 +314,7 @@ class _AlbumsScreenState extends ConsumerState<AlbumsScreen>
       error:
           (error, stack) => CenteredErrorView(
             title: 'Failed to load albums',
-            message: error.toString(),
+            message: describeLoadError(error),
             onRetry: () => ref.invalidate(albumsPageProvider(1)),
           ),
       data: (response) {

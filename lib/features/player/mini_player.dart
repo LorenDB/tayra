@@ -8,6 +8,7 @@ import 'package:tayra/core/easter_eggs/super_sonic_aura.dart';
 import 'package:tayra/core/easter_eggs/super_sonic_ids.dart';
 import 'package:tayra/core/theme/app_theme.dart';
 import 'package:tayra/core/theme/palette_provider.dart';
+import 'package:tayra/features/player/play_control_button.dart';
 import 'package:tayra/features/player/player_provider.dart';
 
 /// Persistent mini-player bar shown above the bottom nav.
@@ -20,31 +21,25 @@ class MiniPlayer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Select only the fields that affect the static parts of the mini-player
-    // (track identity, playback state). Progress is handled by a child widget
-    // so position ticks don't rebuild the whole bar.
-    final (
-      track,
-      isPlaying,
-      isLoading,
-      hasNext,
-      hasPrevious,
-      positionSecs,
-    ) = ref.watch(
+    // Select only the fields that affect the track row. The play control
+    // watches loading itself, and progress is a child widget, so position
+    // ticks don't rebuild the bar.
+    // The position only matters as "far enough in to restart the track", so
+    // select that fact rather than the second counter (which would rebuild
+    // the bar every second).
+    final (track, hasNext, hasPrevious, pastRestartPoint) = ref.watch(
       playerProvider.select(
         (s) => (
           s.currentTrack,
-          s.isPlaying,
-          s.isLoading,
           s.hasNext,
           s.hasPrevious,
-          s.position.inSeconds,
+          s.position.inSeconds > 3,
         ),
       ),
     );
 
     if (track == null) return const SizedBox.shrink();
-    final canSkipPrevious = hasPrevious || positionSecs > 3;
+    final canSkipPrevious = hasPrevious || pastRestartPoint;
 
     final imageUrl = track.coverUrl;
     final paletteAsync = ref.watch(
@@ -196,37 +191,9 @@ class MiniPlayer extends ConsumerWidget {
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(minWidth: 36),
                     ),
-                    isLoading
-                        ? SizedBox(
-                          width: 36,
-                          child: Center(
-                            child: SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2.5,
-                                color: AppTheme.onBackground,
-                              ),
-                            ),
-                          ),
-                        )
-                        : IconButton(
-                          icon: Icon(
-                            isPlaying
-                                ? Icons.pause_rounded
-                                : Icons.play_arrow_rounded,
-                            size: 32,
-                          ),
-                          color: AppTheme.onBackground,
-                          tooltip: isPlaying ? 'Pause' : 'Play',
-                          onPressed:
-                              () =>
-                                  ref
-                                      .read(playerProvider.notifier)
-                                      .togglePlayPause(),
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(minWidth: 36),
-                        ),
+                    const PlaybackPlayButton(
+                      variant: PlaybackPlayButtonVariant.mini,
+                    ),
                     IconButton(
                       icon: const Icon(Icons.skip_next_rounded, size: 28),
                       color:

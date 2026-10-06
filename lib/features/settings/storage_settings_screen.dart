@@ -112,7 +112,11 @@ class StorageSettingsScreen extends ConsumerWidget {
               ref
                   .read(settingsProvider.notifier)
                   .setCacheSizeLimit(sizeMB)
-                  .then((_) => ref.invalidate(cacheStatsProvider));
+                  .then((_) {
+                    // Applying a smaller limit can take a while (it evicts
+                    // files); the screen may be gone by then, and its ref too.
+                    if (context.mounted) ref.invalidate(cacheStatsProvider);
+                  });
             },
           ),
           SettingsActionTile(
@@ -134,6 +138,7 @@ class StorageSettingsScreen extends ConsumerWidget {
                 await CacheManager.instance.clearAudio();
                 if (!context.mounted) return;
                 ref.invalidate(cacheStatsProvider);
+                _refreshDownloadState(ref);
                 Analytics.track('cache_audio_cleared');
               }
             },
@@ -162,6 +167,7 @@ class StorageSettingsScreen extends ConsumerWidget {
                 await ListenHistoryService.clearRemote();
                 if (!context.mounted) return;
                 ref.invalidate(cacheStatsProvider);
+                _refreshDownloadState(ref);
                 ref.invalidate(availableYearsProvider);
                 ref.invalidate(totalListenCountProvider);
                 Analytics.track('cache_all_cleared');
@@ -172,6 +178,22 @@ class StorageSettingsScreen extends ConsumerWidget {
       ),
     );
   }
+}
+
+/// Bring the in-memory "what is downloaded" sets back in line with the cache
+/// after files were deleted wholesale. Without this, rows keep their
+/// downloaded badge and offline mode keeps offering tracks whose audio is
+/// gone until the app is restarted.
+void _refreshDownloadState(WidgetRef ref) {
+  ref.read(cachedAudioTrackIdsProvider.notifier).refresh();
+  ref.read(manualTrackIdsProvider.notifier).refresh();
+  ref.read(manualAlbumIdsProvider.notifier).refresh();
+  ref.read(manualPlaylistIdsProvider.notifier).refresh();
+  ref.invalidate(offlineAlbumIdsProvider);
+  ref.invalidate(offlineAlbumsProvider);
+  ref.invalidate(cachedAlbumsProvider);
+  ref.invalidate(offlineArtistIdsProvider);
+  ref.invalidate(offlineArtistsProvider);
 }
 
 // ── Podcast episode count ───────────────────────────────────────────────
@@ -463,8 +485,21 @@ class _CacheSizeLimitTile extends StatefulWidget {
 }
 
 class _CacheSizeLimitTileState extends State<_CacheSizeLimitTile> {
+  static const double _minMB = 500;
+  static const double _maxMB = 5000;
+
+  /// Value under the thumb while it is being dragged. The limit is only
+  /// applied when the drag ends: applying it evicts cached audio down to the
+  /// new size, so passing over small values on the way to another one must
+  /// not delete anything.
+  double? _dragValue;
+
   @override
   Widget build(BuildContext context) {
+    final shownMB =
+        (_dragValue ?? widget.currentLimitMB.toDouble())
+            .clamp(_minMB, _maxMB)
+            .toDouble();
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -497,7 +532,7 @@ class _CacheSizeLimitTileState extends State<_CacheSizeLimitTile> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      formatDecimalMegabytes(widget.currentLimitMB),
+                      formatDecimalMegabytes(shownMB.round()),
                       style: const TextStyle(
                         color: AppTheme.primary,
                         fontSize: 12,
@@ -511,17 +546,22 @@ class _CacheSizeLimitTileState extends State<_CacheSizeLimitTile> {
           ),
           const SizedBox(height: 12),
           Slider(
-            value: widget.currentLimitMB.toDouble(),
-            min: 500,
-            max: 5000,
-            divisions: 19,
+            value: shownMB,
+            min: _minMB,
+            max: _maxMB,
+            // 250 MB steps, so the stops land on round sizes (the old 19
+            // divisions gave 236.8 MB steps: 736 MB, 973 MB, …).
+            divisions: 18,
+            label: formatDecimalMegabytes(shownMB.round()),
             activeColor: AppTheme.primary,
             inactiveColor: AppTheme.surfaceContainerHigh,
-            onChanged: (value) => widget.onChanged(value.toInt()),
+            onChanged: (value) => setState(() => _dragValue = value),
             onChangeEnd: (value) {
-              Analytics.track('cache_size_limit_changed', {
-                'size_mb': value.toInt(),
-              });
+              final sizeMB = value.round();
+              setState(() => _dragValue = null);
+              if (sizeMB == widget.currentLimitMB) return;
+              widget.onChanged(sizeMB);
+              Analytics.track('cache_size_limit_changed', {'size_mb': sizeMB});
             },
           ),
           const Padding(

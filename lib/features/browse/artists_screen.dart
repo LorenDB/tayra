@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tayra/core/api/api_errors.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/cache/cache_provider.dart';
 import 'package:tayra/core/connectivity/connectivity_provider.dart';
@@ -65,7 +66,7 @@ class _ArtistsScreenState extends ConsumerState<ArtistsScreen>
         error:
             (error, stack) => CenteredErrorView(
               title: 'Failed to load offline artists',
-              message: error.toString(),
+              message: describeLoadError(error),
               onRetry: () => ref.invalidate(offlineArtistsProvider),
             ),
         data: (artists) {
@@ -93,7 +94,7 @@ class _ArtistsScreenState extends ConsumerState<ArtistsScreen>
       error:
           (error, stack) => CenteredErrorView(
             title: 'Failed to load artists',
-            message: error.toString(),
+            message: describeLoadError(error),
             onRetry: () => ref.invalidate(artistsPageProvider(1)),
           ),
       data: (response) {

@@ -19,6 +19,15 @@ class Analytics {
   // Track whether we've initialised Aptabase to avoid re-initialising.
   static bool _aptabaseInitialised = false;
 
+  /// The initialisation in flight, shared by everyone who asks meanwhile so
+  /// the plugin is never initialised twice at once.
+  static Future<void>? _initFuture;
+
+  /// Failed initialisation attempts. After a few, stop retrying on every
+  /// event for the rest of the session.
+  static int _initFailures = 0;
+  static const int _maxInitAttempts = 3;
+
   /// Load persisted analytics preference from shared preferences.
   static Future<void> loadEnabledFromPrefs() async {
     // If the DO_NOT_TRACK environment variable is set it must take
@@ -80,7 +89,7 @@ class Analytics {
   /// Initialise Aptabase if analytics are enabled and we haven't initialised
   /// it yet. This centralises the init parameters so callers don't need to
   /// duplicate them.
-  static Future<void> initializeIfEnabled() async {
+  static Future<void> initializeIfEnabled() {
     // Respect the DO_NOT_TRACK environment override here as well to avoid
     // initialising Aptabase in environments that explicitly opt-out. Only
     // '1' or 'true' are considered opt-out values.
@@ -89,11 +98,21 @@ class Analytics {
       if (env != null) {
         final v = env.trim().toLowerCase();
         final disabled = v == '1' || v == 'true';
-        if (disabled) return;
+        if (disabled) return Future<void>.value();
       }
     } catch (_) {}
 
-    if (!_enabled || _aptabaseInitialised) return;
+    if (!_enabled ||
+        _aptabaseInitialised ||
+        _initFailures >= _maxInitAttempts) {
+      return Future<void>.value();
+    }
+    return _initFuture ??= _initialize().whenComplete(() {
+      _initFuture = null;
+    });
+  }
+
+  static Future<void> _initialize() async {
     try {
       // Keep the same key/host used elsewhere in the app.
       await Aptabase.init(
@@ -103,6 +122,17 @@ class Analytics {
       _aptabaseInitialised = true;
     } catch (_) {
       // Swallow init failures; analytics must not crash the app.
+      _initFailures++;
+    }
+  }
+
+  /// Hand one sanitised event to Aptabase. The plugin reports failures on
+  /// the returned future, which a plain try/catch around the call misses.
+  static void _send(String name, Map<String, dynamic> props) {
+    try {
+      Aptabase.instance.trackEvent(name, props).catchError((Object _) {});
+    } catch (_) {
+      // Swallow any analytics failures so callers stay free of try/catch.
     }
   }
 
@@ -163,13 +193,16 @@ class Analytics {
       }
 
       // Fire-and-forget; analytics must not crash the app.
-      // If Aptabase wasn't initialised earlier (e.g. user enabled analytics at
-      // runtime but init hasn't completed), attempt to initialise quickly.
-      if (!_aptabaseInitialised) {
-        // don't await - best-effort init
-        initializeIfEnabled();
+      if (_aptabaseInitialised) {
+        _send(name, safe);
+        return;
       }
-      Aptabase.instance.trackEvent(name, safe);
+      // Not initialised yet (events during startup, or analytics was just
+      // switched on). The plugin throws when asked to track before its init
+      // has finished, so finish that first and send afterwards.
+      initializeIfEnabled().then((_) {
+        if (_aptabaseInitialised && _enabled) _send(name, safe);
+      });
     } catch (_) {
       // Swallow any analytics failures so callers stay free of try/catch.
     }

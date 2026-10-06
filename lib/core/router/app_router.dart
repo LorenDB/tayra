@@ -747,8 +747,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                         name: 'manage_library_detail',
                         builder: (context, state) {
                           final uuid = state.pathParameters['uuid'] ?? '';
-                          if (uuid.isEmpty)
+                          if (uuid.isEmpty) {
                             return const ManageLibrariesScreen();
+                          }
                           return ManageLibraryDetailScreen(uuid: uuid);
                         },
                       ),

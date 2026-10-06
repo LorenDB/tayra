@@ -431,7 +431,7 @@ class _QueueScreenState extends ConsumerState<QueueScreen> {
                 ),
                 const Spacer(),
                 Text(
-                  '${queue.length - currentIndex - 1} tracks',
+                  pluralizeTrack(queue.length - currentIndex - 1),
                   style: const TextStyle(
                     color: AppTheme.onBackgroundSubtle,
                     fontSize: 11,
@@ -574,65 +574,21 @@ class _QueueActions extends ConsumerWidget {
 Future<void> _saveQueueAsPlaylist(
   BuildContext context,
   WidgetRef ref,
-  List queue,
+  List<Track> queue,
 ) async {
-  final nameController = TextEditingController();
-  final name = await showShellDialog<String?>(
+  final name = await showTextPromptDialog(
     context: context,
-    builder:
-        (d) => AlertDialog(
-          backgroundColor: AppTheme.surfaceContainerHigh,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          title: const Text(
-            'Save Queue as Playlist',
-            style: TextStyle(
-              color: AppTheme.onBackground,
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          content: TextField(
-            controller: nameController,
-            autofocus: true,
-            style: const TextStyle(color: AppTheme.onBackground),
-            decoration: const InputDecoration(
-              hintText: 'Playlist name',
-              filled: true,
-              fillColor: AppTheme.surfaceContainer,
-            ),
-            onSubmitted: (_) => Navigator.of(d).pop(nameController.text.trim()),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(d).pop(null),
-              child: const Text(
-                'Cancel',
-                style: TextStyle(color: AppTheme.onBackgroundMuted),
-              ),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(d).pop(nameController.text.trim()),
-              child: const Text(
-                'Create',
-                style: TextStyle(
-                  color: AppTheme.primary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ],
-        ),
+    title: 'Save Queue as Playlist',
+    hintText: 'Playlist name',
+    confirmLabel: 'Create',
+    textCapitalization: TextCapitalization.sentences,
   );
-  nameController.dispose();
-
   if (name == null || name.isEmpty) return;
 
   final api = ref.read(cachedFunkwhaleApiProvider);
   try {
     final playlist = await api.createPlaylist(name: name);
-    final trackIds = queue.map((t) => t.id).whereType<int>().toList();
+    final trackIds = queue.map((t) => t.id).toList();
     if (trackIds.isNotEmpty) {
       await api.addTracksToPlaylist(playlist.id, trackIds);
     }
@@ -1523,7 +1479,7 @@ class StashedQueueTile extends ConsumerWidget {
                   onSelected: (value) async {
                     switch (value) {
                       case 'rename':
-                        _showRenameDialog(context, ref);
+                        await _showRenameDialog(context, ref);
                         break;
                       case 'save_playlist':
                         await _convertToPlaylist(context, ref);
@@ -1574,84 +1530,24 @@ class StashedQueueTile extends ConsumerWidget {
     );
   }
 
-  void _showRenameDialog(BuildContext context, WidgetRef ref) {
-    final controller = TextEditingController(text: stash.name ?? '');
-    // Ensure the text is selected when the dialog opens so users can replace
-    // the stash name quickly. Use a post-frame callback to run after layout.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      try {
-        controller.selection = TextSelection(
-          baseOffset: 0,
-          extentOffset: controller.text.length,
-        );
-      } catch (_) {}
-    });
-    showShellDialog(
+  Future<void> _showRenameDialog(BuildContext context, WidgetRef ref) async {
+    // An empty name is allowed: it clears the custom name and the tile falls
+    // back to the current track's title.
+    final name = await showTextPromptDialog(
       context: context,
-      builder:
-          (d) => AlertDialog(
-            backgroundColor: AppTheme.surfaceContainerHigh,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            title: const Text(
-              'Rename Stash',
-              style: TextStyle(
-                color: AppTheme.onBackground,
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            content: TextField(
-              controller: controller,
-              autofocus: true,
-              style: const TextStyle(color: AppTheme.onBackground),
-              decoration: const InputDecoration(
-                hintText: 'Name',
-                filled: true,
-                fillColor: AppTheme.surfaceContainer,
-              ),
-              onSubmitted: (_) async {
-                Navigator.of(d).pop();
-                await QueuePersistenceService.renameStash(
-                  stash.id,
-                  controller.text.trim().isEmpty
-                      ? null
-                      : controller.text.trim(),
-                );
-                ref.invalidate(stashedQueuesProvider);
-              },
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(d).pop(),
-                child: const Text(
-                  'Cancel',
-                  style: TextStyle(color: AppTheme.onBackgroundMuted),
-                ),
-              ),
-              TextButton(
-                onPressed: () async {
-                  Navigator.of(d).pop();
-                  await QueuePersistenceService.renameStash(
-                    stash.id,
-                    controller.text.trim().isEmpty
-                        ? null
-                        : controller.text.trim(),
-                  );
-                  ref.invalidate(stashedQueuesProvider);
-                },
-                child: const Text(
-                  'Save',
-                  style: TextStyle(
-                    color: AppTheme.primary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ],
-          ),
-    ).whenComplete(controller.dispose);
+      title: 'Rename Stash',
+      hintText: 'Name',
+      initialText: stash.name ?? '',
+      confirmLabel: 'Save',
+      allowEmpty: true,
+      textCapitalization: TextCapitalization.sentences,
+    );
+    if (name == null) return;
+    await QueuePersistenceService.renameStash(
+      stash.id,
+      name.isEmpty ? null : name,
+    );
+    ref.invalidate(stashedQueuesProvider);
   }
 
   Future<void> _confirmDelete(BuildContext context, WidgetRef ref) async {
@@ -1702,74 +1598,20 @@ class StashedQueueTile extends ConsumerWidget {
   }
 
   Future<void> _convertToPlaylist(BuildContext context, WidgetRef ref) async {
-    final nameController = TextEditingController(text: stash.name ?? '');
-    // Preselect the suggested playlist name when the dialog opens.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      try {
-        nameController.selection = TextSelection(
-          baseOffset: 0,
-          extentOffset: nameController.text.length,
-        );
-      } catch (_) {}
-    });
-    final name = await showShellDialog<String?>(
+    final playlistName = await showTextPromptDialog(
       context: context,
-      builder:
-          (d) => AlertDialog(
-            backgroundColor: AppTheme.surfaceContainerHigh,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            title: const Text(
-              'Create Playlist',
-              style: TextStyle(
-                color: AppTheme.onBackground,
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            content: TextField(
-              controller: nameController,
-              autofocus: true,
-              decoration: const InputDecoration(
-                hintText: 'Playlist name',
-                filled: true,
-                fillColor: AppTheme.surfaceContainer,
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(d).pop(null),
-                child: const Text(
-                  'Cancel',
-                  style: TextStyle(color: AppTheme.onBackgroundMuted),
-                ),
-              ),
-              TextButton(
-                onPressed:
-                    () => Navigator.of(d).pop(nameController.text.trim()),
-                child: const Text(
-                  'Create & Add',
-                  style: TextStyle(
-                    color: AppTheme.primary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ],
-          ),
+      title: 'Create Playlist',
+      hintText: 'Playlist name',
+      initialText: stash.name ?? '',
+      confirmLabel: 'Create',
+      textCapitalization: TextCapitalization.sentences,
     );
-    nameController.dispose();
-
-    if (name == null) return;
-
-    final playlistName = name.trim();
-    if (playlistName.isEmpty) return;
+    if (playlistName == null || playlistName.isEmpty) return;
 
     final api = ref.read(cachedFunkwhaleApiProvider);
     try {
       final playlist = await api.createPlaylist(name: playlistName);
-      final trackIds = stash.queue.map((t) => t.id).whereType<int>().toList();
+      final trackIds = stash.queue.map((t) => t.id).toList();
       if (trackIds.isNotEmpty) {
         await api.addTracksToPlaylist(playlist.id, trackIds);
       }

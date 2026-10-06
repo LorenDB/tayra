@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+import 'package:tayra/core/api/server_url.dart';
 import 'package:tayra/core/platform/app_platform_io.dart'
     if (dart.library.html) 'package:tayra/core/platform/app_platform_web.dart'
     as impl;
@@ -56,12 +57,7 @@ abstract final class AppPlatform {
   static String? get hardcodedPodUrl {
     final url = funkwhaleUrl.trim();
     if (url.isEmpty) return null;
-    var normalized = url;
-    if (!normalized.startsWith('http')) normalized = 'https://$normalized';
-    if (normalized.endsWith('/')) {
-      normalized = normalized.substring(0, normalized.length - 1);
-    }
-    return normalized;
+    return normalizeServerUrl(url);
   }
 
   /// Device / host name for OAuth app registration labels.

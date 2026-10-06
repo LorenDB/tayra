@@ -71,6 +71,20 @@ final cachedAudioTrackIdsProvider =
 
 class CachedAudioTrackIdsNotifier extends IntIdSetNotifier {
   @override
+  Set<int> build() {
+    // Ids are added here as downloads finish, but eviction happens inside
+    // the cache manager. Without hearing about it this set only ever grows:
+    // once the cache is full, every newly cached track pushes an old one out
+    // while its "downloaded" badge and offline availability stay behind.
+    final removals = ref
+        .read(cacheManagerProvider)
+        .removedAudioTrackIds
+        .listen(remove);
+    ref.onDispose(removals.cancel);
+    return super.build();
+  }
+
+  @override
   Future<Iterable<int>> loadIds() =>
       ref.read(cacheManagerProvider).getCachedAudioTrackIds();
 }

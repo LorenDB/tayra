@@ -29,6 +29,10 @@ mixin PaginatedGridMixin<T, W extends ConsumerStatefulWidget>
   bool hasMore = true;
   bool isLoadingMore = false;
 
+  /// Bumped whenever the list is reset (refresh, filter change). A page that
+  /// was requested for the previous list must not be appended to the new one.
+  int _listGeneration = 0;
+
   /// Fetch the given page from the API / provider cache.
   Future<PaginatedResponse<T>> fetchPage(int page);
 
@@ -84,21 +88,21 @@ mixin PaginatedGridMixin<T, W extends ConsumerStatefulWidget>
     setState(() => isLoadingMore = true);
 
     final nextPage = _currentPage + 1;
+    final generation = _listGeneration;
     try {
       final result = await fetchPage(nextPage);
 
-      if (mounted) {
-        setState(() {
-          items.addAll(result.results);
-          _currentPage = nextPage;
-          hasMore = result.next != null;
-          isLoadingMore = false;
-        });
-        _loadMoreIfNeeded();
-      }
+      if (!mounted || generation != _listGeneration) return;
+      setState(() {
+        items.addAll(result.results);
+        _currentPage = nextPage;
+        hasMore = result.next != null;
+        isLoadingMore = false;
+      });
+      _loadMoreIfNeeded();
     } catch (_) {
       // Reset the gate so a later scroll (or pull-to-refresh) can retry.
-      if (mounted) {
+      if (mounted && generation == _listGeneration) {
         setState(() => isLoadingMore = false);
       }
     }
@@ -107,6 +111,7 @@ mixin PaginatedGridMixin<T, W extends ConsumerStatefulWidget>
   /// Reset pagination state without fetching. Call when filters change so the
   /// next build re-seeds from the newly-invalidated provider.
   void resetPagination() {
+    _listGeneration++;
     setState(() {
       items.clear();
       _currentPage = 1;
@@ -124,8 +129,16 @@ mixin PaginatedGridMixin<T, W extends ConsumerStatefulWidget>
       // cached data rather than hanging.
     }
     invalidatePage(1);
-    final result = await fetchPage(1);
+    final PaginatedResponse<T> result;
+    try {
+      result = await fetchPage(1);
+    } catch (_) {
+      // Nothing to show instead (offline with no cached copy, say). Keep
+      // what is on screen rather than failing the refresh gesture.
+      return;
+    }
     if (mounted) {
+      _listGeneration++;
       setState(() {
         items
           ..clear()
@@ -134,6 +147,7 @@ mixin PaginatedGridMixin<T, W extends ConsumerStatefulWidget>
         hasMore = result.next != null;
         isLoadingMore = false;
       });
+      _loadMoreIfNeeded();
     }
   }
 

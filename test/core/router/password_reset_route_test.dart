@@ -47,7 +47,7 @@ void main() {
           GoRoute(
             path: '/login',
             parentNavigatorKey: rootKey,
-            builder: (_, __) => const Text('login'),
+            builder: (_, _) => const Text('login'),
           ),
           GoRoute(
             path: '/auth/password/reset/confirm/:uid/:token',
@@ -66,7 +66,7 @@ void main() {
           GoRoute(
             path: '/auth/password/reset',
             parentNavigatorKey: rootKey,
-            builder: (_, __) => const Text('request'),
+            builder: (_, _) => const Text('request'),
           ),
           GoRoute(
             path: '/auth/email/confirm/:key',
@@ -81,9 +81,9 @@ void main() {
                 Text('email-query:${state.uri.queryParameters['key']}'),
           ),
           ShellRoute(
-            builder: (_, __, child) => child,
+            builder: (_, _, child) => child,
             routes: [
-              GoRoute(path: '/', builder: (_, __) => const Text('home')),
+              GoRoute(path: '/', builder: (_, _) => const Text('home')),
             ],
           ),
         ],

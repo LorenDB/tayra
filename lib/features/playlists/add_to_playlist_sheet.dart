@@ -4,6 +4,7 @@ import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/api_utils.dart';
 import 'package:tayra/core/api/cached_api_repository.dart';
 import 'package:tayra/core/theme/app_theme.dart';
+import 'package:tayra/core/widgets/dialog_utils.dart';
 import 'package:tayra/features/playlists/playlists_screen.dart';
 
 /// Shows a bottom sheet listing user playlists to add one or more tracks to.
@@ -327,80 +328,19 @@ class _AddToPlaylistSheetState extends ConsumerState<_AddToPlaylistSheet> {
     }
   }
 
-  void _showCreateDialog(BuildContext context) {
-    final nameController = TextEditingController();
-    // Preselect when the dialog is shown so the user can immediately type
-    // a new playlist name.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      try {
-        nameController.selection = TextSelection(
-          baseOffset: 0,
-          extentOffset: nameController.text.length,
-        );
-      } catch (_) {}
-    });
-
-    showDialog<bool>(
+  Future<void> _showCreateDialog(BuildContext context) async {
+    final name = await showTextPromptDialog(
       context: context,
-      builder: (dialogContext) {
-        return AlertDialog(
-          backgroundColor: AppTheme.surfaceContainerHigh,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          title: const Text(
-            'New Playlist',
-            style: TextStyle(
-              color: AppTheme.onBackground,
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          content: TextField(
-            controller: nameController,
-            autofocus: true,
-            style: const TextStyle(color: AppTheme.onBackground, fontSize: 15),
-            decoration: const InputDecoration(
-              hintText: 'Playlist name',
-              filled: true,
-              fillColor: AppTheme.surfaceContainer,
-            ),
-            textCapitalization: TextCapitalization.sentences,
-            onSubmitted: (_) => _createAndAdd(nameController, dialogContext),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
-              child: const Text(
-                'Cancel',
-                style: TextStyle(color: AppTheme.onBackgroundMuted),
-              ),
-            ),
-            TextButton(
-              onPressed: () => _createAndAdd(nameController, dialogContext),
-              child: const Text(
-                'Create & Add',
-                style: TextStyle(
-                  color: AppTheme.primary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    ).whenComplete(nameController.dispose);
+      title: 'New Playlist',
+      hintText: 'Playlist name',
+      confirmLabel: 'Create & Add',
+      textCapitalization: TextCapitalization.sentences,
+    );
+    if (name == null || name.isEmpty || !mounted) return;
+    await _createAndAdd(name);
   }
 
-  Future<void> _createAndAdd(
-    TextEditingController controller,
-    BuildContext dialogContext,
-  ) async {
-    final name = controller.text.trim();
-    if (name.isEmpty) return;
-
-    Navigator.of(dialogContext).pop();
-
+  Future<void> _createAndAdd(String name) async {
     setState(() => _isCreating = true);
 
     try {

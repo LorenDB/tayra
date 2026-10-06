@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tayra/core/api/api_errors.dart';
 import 'package:tayra/core/analytics/analytics.dart';
 import 'package:tayra/core/api/cached_api_repository.dart' as cached_api;
 import 'package:tayra/core/api/models.dart' as models;
@@ -161,7 +162,9 @@ class _PodcastsScreenState extends ConsumerState<PodcastsScreen> {
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        if (_channels.isEmpty) _error = 'Failed to load podcasts: $e';
+        if (_channels.isEmpty) {
+          _error = 'Failed to load podcasts. ${describeLoadError(e)}';
+        }
         _isLoading = false;
       });
     }
@@ -283,9 +286,9 @@ class _PodcastsScreenState extends ConsumerState<PodcastsScreen> {
       }
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Could not subscribe: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not subscribe. ${describeLoadError(e)}')),
+      );
     }
   }
 

@@ -95,7 +95,12 @@ flutter test test/path/to/test_file.dart                 # single file
 flutter test test/path/to/test_file.dart --name "name"   # single test by name
 ```
 
-Test coverage is minimal (placeholder only). Add tests for new features: widget tests for screens, unit tests for business logic. Place tests in `test/` mirroring `lib/` structure; name files `*_test.dart`. Use `flutter_test` and `mockito`.
+Coverage is partial. Add tests for new features: widget tests for screens, unit tests for business logic. Place tests in `test/` mirroring `lib/` structure; name files `*_test.dart`. Use `flutter_test` and `mockito`.
+
+Shared test support:
+
+- **Player behaviour** — `test/features/player/player_harness.dart` runs the real `PlayerNotifier` and the real just_audio `AudioPlayer` against a fake native player (`test/support/fake_audio_platform.dart`), so queue, skip, completion, radio and recovery logic can be tested without a device. Any change to `player_provider.dart` should come with a scenario there.
+- **HTTP** — `test/support/scripted_http_adapter.dart` scripts Dio responses (see the auth interceptor and token refresh tests).
 
 ## Project Structure
 

@@ -1,4 +1,6 @@
 // 'dart:ui' import not needed; palette generation uses Flutter image providers.
+import 'dart:math' as math;
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -178,11 +180,18 @@ double _contrastOnBlack(Color color) {
   return (l + 0.05) / 0.05;
 }
 
+/// WCAG contrast ratio of [color] against pure black (1.0 – 21.0).
+@visibleForTesting
+double contrastOnBlack(Color color) => _contrastOnBlack(color);
+
 double _relativeLuminance(Color color) {
+  // sRGB → linear light. The exponent is 2.4; squaring instead overstates
+  // the luminance of mid-tones by up to a third, so colours passed as
+  // "4.5:1" were really nearer 3.7:1.
   double linearize(double v) {
     return v <= 0.03928
         ? v / 12.92
-        : ((v + 0.055) / 1.055) * ((v + 0.055) / 1.055);
+        : math.pow((v + 0.055) / 1.055, 2.4).toDouble();
   }
 
   final r = linearize(color.r);
